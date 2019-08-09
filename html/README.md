@@ -3,7 +3,7 @@
 ## Проект
 
 Проект разработан на фреймворке Vue v2.6.10.
-Внедрено SSR(server-side rendering), SPA(single-page aplication), PWA.
+Внедрено SSR(server-side rendering), SPA(single-page application), PWA(progressive web app).
 Приложение на стеке технологий:
 
 -   Babel
@@ -30,7 +30,6 @@
 2. yarn: https://yarnpkg.com/en/
 
 ```bash
-
 # устанавливаем зависимости
 yarn install
 
@@ -77,12 +76,12 @@ yarn add -D <имя модуля>
 yarn <имя скрипта>
 ```
 
-**dev**: Запускает development-сборку и стартует сервер,
-**start**: Старт сервера с production-сборкой,
-**start:host**: Старт сервера с production-сборкой, хост через переменные окружения в файле .env.json,
-**rebuild**: Запускает production-сборку серверной и клиентской частей,
-**build:client**: Запускает production-сборку клиентской части,
-**build:server**: Запускает production-сборку серверной части,
-**analyze**: Запускает production-сборку серверной части и запускает webpack-bundle-analyzer,
-**eslint**: Запускает eslint для фикса и проверки js файлов,
-**stylelint**: Запускает eslint для фикса и проверки css файлов
+-   **dev**: Запускает development-сборку и стартует сервер,
+-   **start**: Старт сервера с production-сборкой,
+-   **start:host**: Старт сервера с production-сборкой, хост через переменные окружения в файле .env.json,
+-   **rebuild**: Запускает production-сборку серверной и клиентской частей,
+-   **build:client**: Запускает production-сборку клиентской части,
+-   **build:server**: Запускает production-сборку серверной части,
+-   **analyze**: Запускает production-сборку серверной части и запускает webpack-bundle-analyzer,
+-   **eslint**: Запускает eslint для фикса и проверки .js файлов,
+-   **stylelint**: Запускает eslint для фикса и проверки .css файлов
