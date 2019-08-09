@@ -22,6 +22,7 @@ const setupDevServer = require('./build/setup-dev-server');
 const app = express();
 
 function createRenderer(bundle, options) {
+    logger.info('creating bundle renderer...');
     // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer
     return createBundleRenderer(
         bundle,
@@ -59,6 +60,7 @@ if (isProd) {
     // In development: setup the dev server with watch and hot-reload,
     // and create a new renderer on bundle / index template update.
     readyPromise = setupDevServer(app, templatePath, (bundle, options) => {
+        logger.info('setup dev server...');
         renderer = createRenderer(bundle, options);
     });
 }
@@ -90,6 +92,7 @@ function render(req, res) {
 
     const handleError = err => {
         if (err.url) {
+            logger.info(`redirect: ${err.url}`);
             res.redirect(err.url);
         } else if (err.code === 404) {
             res.status(404).send('404 | Page Not Found');
@@ -104,13 +107,15 @@ function render(req, res) {
     const context = {
         title: 'IBT',
         url: req.url,
+        req,
+        res,
     };
 
     renderer.renderToString(context, (err, html) => {
         if (err) return handleError(err);
 
         res.send(html);
-        if (!isProd) logger.info(`whole request: ${Date.now() - s}ms`);
+        if (!isProd) logger.success(`whole request: ${Date.now() - s}ms`);
     });
 }
 
@@ -120,9 +125,13 @@ let port = process.env.PORT || 8080;
 let host = process.env.HOST || 'localhost';
 
 if (process.env.CONFIG) {
-    const env = require(path.resolve(__dirname, process.env.CONFIG));
-    port = env.PORT;
-    host = env.HOST;
+    try {
+        const env = require(path.resolve(__dirname, process.env.CONFIG));
+        port = env.PORT;
+        host = env.HOST;
+    } catch (error) {
+        logger.error(error);
+    }
 }
 
 app.listen(port, host, () => {
