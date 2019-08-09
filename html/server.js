@@ -115,7 +115,7 @@ function render(req, res) {
         if (err) return handleError(err);
 
         res.send(html);
-        if (!isProd) logger.success(`whole request: ${Date.now() - s}ms`);
+        if (!isProd) logger.success(`whole request: ${Date.now() - s}ms`, req.url);
     });
 }
 
