@@ -1,7 +1,7 @@
 import createApp from './app';
 import ServiceLocator from './services/ServiceLocator';
 import progress from './services/ProgressService';
-import { BrowserLogger } from './services/LogService';
+import BrowserLogger from './services/LogService/BrowserLogger';
 import { BrowserCookie } from './services/CookieService';
 import EventService from './services/EventService';
 

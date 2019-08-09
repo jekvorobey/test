@@ -5,7 +5,7 @@ const webpack = require('webpack');
 const chokidar = require('chokidar');
 const clientConfig = require('./webpack.client.config');
 const serverConfig = require('./webpack.server.config');
-const { ExpressLogger } = require('../src/services/LogService');
+const ExpressLogger = require('../src/services/LogService/ExpressLogger');
 
 const logger = new ExpressLogger();
 

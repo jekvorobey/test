@@ -10,6 +10,10 @@ const imageminMozJpeg = require('imagemin-mozjpeg');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const BrotliPlugin = require('brotli-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
+const presets = [];
+if (process.env.ANALYZE) presets.push(new BundleAnalyzerPlugin());
 
 const base = require('./webpack.base.config');
 
@@ -166,6 +170,7 @@ module.exports = merge(base, {
                       },
                   ],
               }),
+              ...presets,
           ]
         : [
               new CopyWebpackPlugin([

@@ -14,7 +14,7 @@ const useMicroCache = process.env.MICRO_CACHE !== 'false';
 const serverInfo =
     `express/${require('express/package.json').version} ` +
     `vue-server-renderer/${require('vue-server-renderer/package.json').version}`;
-const { ExpressLogger } = require('./src/services/LogService');
+const ExpressLogger = require('./src/services/LogService/ExpressLogger');
 
 const logger = new ExpressLogger();
 const setupDevServer = require('./build/setup-dev-server');

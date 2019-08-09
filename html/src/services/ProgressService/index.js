@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import ProgressBar from '../components/ProgressBar/ProgressBar.vue';
+import ProgressBar from '../../components/ProgressBar/ProgressBar.vue';
 
 const progress = new Vue(ProgressBar).$mount();
 Vue.prototype.$progress = progress;
