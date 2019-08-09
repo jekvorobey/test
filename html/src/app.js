@@ -1,11 +1,15 @@
 import Vue from 'vue';
 import { sync } from 'vuex-router-sync';
-import App from './App.vue';
-import media from './plugins/MediaPlugin';
 import createStore from './store';
 import createRouter from './router';
+
+import i18n from './plugins/i18n';
+import media from './plugins/media';
+
 import titleMixin from './util/title';
 import * as filters from './util/filters';
+
+import App from './App.vue';
 
 // mixin for handling title
 Vue.mixin(titleMixin);
@@ -38,6 +42,7 @@ export default function createApp() {
         router,
         store,
         mq: media,
+        i18n,
         render: h => h(App),
     });
 

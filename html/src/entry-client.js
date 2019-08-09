@@ -3,6 +3,7 @@ import ServiceLocator from './services/ServiceLocator';
 import progress from './services/ProgressService';
 import { BrowserLogger } from './services/LogService';
 import { BrowserCookie } from './services/CookieService';
+import EventService from './services/EventService';
 
 const { app, router, store } = createApp();
 
@@ -10,6 +11,7 @@ ServiceLocator.createInstance()
     .register('progress', () => progress)
     .register('router', () => router)
     .register('store', () => store)
+    .register('events', () => EventService)
     .register('logger', () => new BrowserLogger())
     .register('cookie', () => new BrowserCookie());
 

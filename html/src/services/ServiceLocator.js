@@ -41,6 +41,10 @@ module.exports = class ServiceLocator {
         return ServiceLocator.instance().get('store');
     }
 
+    static $events() {
+        return ServiceLocator.instance().get('events');
+    }
+
     static $progress() {
         return ServiceLocator.instance().get('progress');
     }
