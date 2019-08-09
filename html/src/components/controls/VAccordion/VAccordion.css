@@ -1,0 +1,14 @@
+.v-accordion {
+    &__item {
+        &-btn {
+            width: 100%;
+            cursor: pointer;
+            text-align: initial;
+            text-transform: none;
+        }
+
+        &-panel {
+            overflow: hidden;
+        }
+    }
+}

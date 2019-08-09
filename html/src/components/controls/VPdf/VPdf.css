@@ -1,0 +1,25 @@
+.v-pdf {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &__panel {
+        background: var(--cl-elem-grey);
+    }
+
+    &__document {
+        border: 2px solid var(--cl-grey);
+        background: var(--cl-grey);
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+        height: 100%;
+    }
+
+    &__page {
+        display: block;
+        margin: calc(var(--gs) * 2) auto;
+        transition: all var(--time) ease-in-out;
+    }
+}

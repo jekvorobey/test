@@ -1,0 +1,9 @@
+.v-sticky {
+    position: relative;
+
+    &__container {
+        top: 0;
+        position: sticky;
+        z-index: 1;
+    }
+}

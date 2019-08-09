@@ -1,0 +1,38 @@
+.v-increment {
+    display: inline-flex;
+
+    &__input,
+    &__btn {
+        background: var(--cl-global-invert);
+    }
+
+    &__btn {
+        padding: 0 var(--gs);
+        color: var(--cl-cyan);
+        cursor: pointer;
+        user-select: none;
+        border: 1px solid var(--cl-divider-grey);
+
+        &:first-child {
+            border-top-left-radius: calc(var(--gs) / 2);
+            border-bottom-left-radius: calc(var(--gs) / 2);
+            border-right: none;
+        }
+
+        &:last-child {
+            border-top-right-radius: calc(var(--gs) / 2);
+            border-bottom-right-radius: calc(var(--gs) / 2);
+            border-left: none;
+        }
+    }
+
+    &__input {
+        padding: var(--gs) !important;
+        border-radius: 0 !important;
+        border-top: 1px solid var(--cl-divider-grey);
+        border-bottom: 1px solid var(--cl-divider-grey);
+        color: var(--cl-global);
+        font-size: 16px;
+        text-align: center;
+    }
+}

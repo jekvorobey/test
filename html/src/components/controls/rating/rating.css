@@ -1,0 +1,76 @@
+.vue-stars {
+    display: inline-flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    line-height: 1em;
+}
+.vue-stars label {
+    display: block;
+    padding: 0 !important;
+    width: 34px;
+    text-align: center;
+    color: #fd0;
+    text-shadow: 0 0 0.3em #ff0;
+    margin: 0 !important;
+    line-height: 0 !important;
+
+    &::before,
+    &::after {
+        content: none !important;
+    }
+
+    span {
+        display: block;
+    }
+}
+.vue-stars input,
+.vue-stars label .inactive,
+.vue-stars input:checked ~ label .active,
+.vue-stars.notouch:not(.readonly):hover label .inactive,
+.vue-stars.notouch:not(.readonly) label:hover ~ label .active {
+    display: none;
+}
+.vue-stars input:checked ~ label .inactive,
+.vue-stars.notouch:not(.readonly):hover label .active,
+.vue-stars.notouch:not(.readonly) label:hover ~ label .inactive {
+    display: inline;
+}
+.vue-stars.notouch:not(.readonly):hover label {
+    color: #dd0;
+    text-shadow: 0 0 0.3em #ff0;
+}
+.vue-stars input:checked ~ label,
+.vue-stars.notouch:not(.readonly) label:hover ~ label {
+    color: #999;
+    text-shadow: none;
+}
+
+.readonly label {
+    width: 11px;
+    height: 11px;
+    pointer-events: none;
+}
+
+@supports (color: var(--prop)) {
+    .vue-stars label {
+        color: var(--active-color);
+        text-shadow: 0 0 0.3em var(--shadow-color);
+    }
+    .vue-stars.notouch:not(.readonly):hover label {
+        color: var(--hover-color);
+        text-shadow: 0 0 0.3em var(--shadow-color);
+    }
+    .vue-stars input:checked ~ label,
+    .vue-stars.notouch:not(.readonly) label:hover ~ label {
+        color: var(--inactive-color);
+    }
+}
+
+.rating {
+    fill: var(--cl-magenta);
+
+    .readonly & {
+        width: 11px;
+        height: 11px;
+    }
+}

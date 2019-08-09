@@ -1,0 +1,16 @@
+.v-tabs {
+    &__header {
+        display: flex;
+        background: var(--cl-elem-grey);
+        overflow: auto;
+
+        &-item {
+            padding: 0 calc(var(--gs) * 2);
+            text-transform: initial;
+        }
+    }
+
+    &__panel {
+        position: relative;
+    }
+}
