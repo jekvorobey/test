@@ -26,8 +26,8 @@
 
 Должны быть установлены глобально:
 
-1. node.js: https://nodejs.org/en/
-2. yarn: https://yarnpkg.com/en/
+1. node.js - https://nodejs.org/en/
+2. yarn - https://yarnpkg.com/en/
 
 ```bash
 # устанавливаем зависимости
@@ -76,12 +76,12 @@ yarn add -D <имя модуля>
 yarn <имя скрипта>
 ```
 
--   **dev**: Запускает development-сборку и стартует сервер,
--   **start**: Старт сервера с production-сборкой,
--   **start:host**: Старт сервера с production-сборкой, хост через переменные окружения в файле .env.json,
--   **rebuild**: Запускает production-сборку серверной и клиентской частей,
--   **build:client**: Запускает production-сборку клиентской части,
--   **build:server**: Запускает production-сборку серверной части,
--   **analyze**: Запускает production-сборку серверной части и запускает webpack-bundle-analyzer,
--   **eslint**: Запускает eslint для фикса и проверки .js файлов,
--   **stylelint**: Запускает eslint для фикса и проверки .css файлов
+-   **dev** - Запускает development-сборку и стартует сервер;
+-   **start** - Старт сервера с production-сборкой;
+-   **start:host** - Старт сервера с production-сборкой, хост через переменные окружения в файле .env.json;
+-   **rebuild** - Запускает production-сборку серверной и клиентской частей;
+-   **build:client** - Запускает production-сборку клиентской части;
+-   **build:server** - Запускает production-сборку серверной части;
+-   **analyze** - Запускает production-сборку клиентской части и запускает webpack-bundle-analyzer;
+-   **eslint** - Запускает eslint для фикса и проверки .js файлов;
+-   **stylelint** - Запускает eslint для фикса и проверки .css файлов;
