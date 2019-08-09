@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([["lang-en"],{176:function(o,n,s){"use strict";s.r(n),n.default={header:{links:{top:"Top",new:"New",show:"Show",ask:"Ask",job:"Jobs"}}}}}]);
-//# sourceMappingURL=6afd53f632832eff0b61.js.map
