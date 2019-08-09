@@ -33,7 +33,7 @@ function createRenderer(bundle, options) {
                 maxAge: 1000 * 60 * 15,
             }),
             // this is only needed when vue-server-renderer is npm-linked
-            basedir: resolve('./dist'),
+            basedir: path.resolve(__dirname),
             // recommended for performance
             runInNewContext: false,
         })
@@ -115,7 +115,7 @@ function render(req, res) {
         if (err) return handleError(err);
 
         res.send(html);
-        logger.success(`whole request: ${Date.now() - s}ms`);
+        if (isProd) logger.success(`whole request: ${Date.now() - s}ms`);
     });
 }
 
