@@ -70,15 +70,15 @@ module.exports = merge(base, {
               new CopyWebpackPlugin([
                   {
                       from: path.resolve(__dirname, '../src/assets/images/icons'),
-                      to: path.resolve(__dirname, '../dist/images/icons'),
+                      to: path.resolve(__dirname, '../../public/assets/images/icons'),
                   },
                   {
                       from: path.resolve(__dirname, '../src/assets/favicon.ico'),
-                      to: path.resolve(__dirname, '../dist/favicon.ico'),
+                      to: path.resolve(__dirname, '../../public/assets/favicon.ico'),
                   },
                   {
                       from: path.resolve(__dirname, '../manifest.json'),
-                      to: path.resolve(__dirname, '../dist/manifest.json'),
+                      to: path.resolve(__dirname, '../../public/assets/manifest.json'),
                   },
               ]),
               new MiniCssExtractPlugin({
@@ -171,15 +171,15 @@ module.exports = merge(base, {
               new CopyWebpackPlugin([
                   {
                       from: path.resolve(__dirname, '../src/assets/images/icons'),
-                      to: path.resolve(__dirname, '../dist/images/icons'),
+                      to: path.resolve(__dirname, '../public/assets/images/icons'),
                   },
                   {
                       from: path.resolve(__dirname, '../src/assets/favicon.ico'),
-                      to: path.resolve(__dirname, '../dist/favicon.ico'),
+                      to: path.resolve(__dirname, '../public/assets/favicon.ico'),
                   },
                   {
                       from: path.resolve(__dirname, '../manifest.json'),
-                      to: path.resolve(__dirname, '../dist/manifest.json'),
+                      to: path.resolve(__dirname, '../public/assets/manifest.json'),
                   },
               ]),
               // strip dev-only code in Vue source

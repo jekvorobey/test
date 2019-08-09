@@ -9,8 +9,8 @@ module.exports = {
     mode: process.env.NODE_ENV,
     devtool: isProd ? 'source-map' : 'eval',
     output: {
-        path: path.resolve(__dirname, '../dist'),
-        publicPath: '/dist/',
+        path: path.resolve(__dirname, '../../public/assets'),
+        publicPath: '/assets/',
         filename: isProd ? '[chunkhash].js' : '[name].js',
     },
     resolve: {
