@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["lang-en"],{179:function(s,e,n){"use strict";n.r(e),e.default={header:{links:{new:"New",stocks:"Stocks",collections:"Collections",brands:"Brands",classes:"Master-classes"}}}}}]);
