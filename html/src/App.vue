@@ -1,10 +1,11 @@
 <template>
-    <div id="app">
+    <div id="app" class="fake-vue-body">
         <layout-header />
-        <main class="wrap-main">
+        <main>
             <transition name="fade" mode="out-in">
                 <router-view class="view" />
             </transition>
+            <div class="footer-spacer" />
         </main>
         <layout-footer />
     </div>
@@ -46,21 +47,19 @@ export default {
 <style src="./assets/styles/base.css"></style>
 <style src="./assets/styles/animation.css"></style>
 <style src="./assets/styles/fonts.css"></style>
-<style>
-body {
-    background-color: var(--cl-divider-grey);
-    padding: 55px 0;
-    overflow-y: scroll;
-}
 
+<style>
 .view {
     margin: 0 auto;
     position: relative;
 }
 </style>
+
 <style lang="postcss">
+@import './assets/styles/helpers.css';
+
 body {
-    font-family: 'Roboto', Arial, sans-serif;
+    font-family: var(--base-font);
 }
 </style>
 

@@ -1,11 +1,11 @@
 export default {
     header: {
         links: {
-            top: 'Топ',
-            new: 'Новые',
-            show: 'Премьеры',
-            ask: 'Вопросы',
-            job: 'Работа',
+            new: 'Новинки',
+            stocks: 'Акции',
+            collections: 'Подборки',
+            brands: 'Бренды',
+            classes: 'Мастер-классы',
         },
     },
 };

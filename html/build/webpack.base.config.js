@@ -7,7 +7,7 @@ const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
     mode: process.env.NODE_ENV,
-    devtool: isProd ? 'source-map' : 'eval',
+    devtool: isProd ? false : 'source-map',
     output: {
         path: path.resolve(__dirname, '../../public/assets'),
         publicPath: '/assets/',

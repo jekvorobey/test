@@ -7,18 +7,19 @@
     --grid-columns: 12;
 
     /* Глобальные цвета проекта. */
-    --cl-black: #000;
-    --cl-white: #fff;
+    --cl-black: #000000;
+    --cl-white: #ffffff;
 
     /* Основные цвета проекта и текста */
-    --cl-global: #212529;
-    --cl-global-invert: #fff;
-    --cl-grey: #989898;
+    --cl-global: #141116;
+    --cl-global-invert: #ffffff;
+    --cl-grey: #999999;
     --cl-elem-grey: #f6f6f6;
-    --cl-divider-grey: #dfdfdf;
+    --cl-divider-grey: #cccccc;
 
     /* Цвета проекта */
-    --cl-orange: #ff6600;
+    --cl-red: #f12828;
+    --cl-gold: #ffd338;
 
     /* Основные размеры для элементов */
     --field-height: 40px;
@@ -38,7 +39,10 @@
     --timing-function: cubic-bezier(0.3, 0.76, 0.36, 0.93);
 
     /* Шрифты */
-    --montserrat: 'montserrat', sans-serif;
+    --base-font: 'Roboto', Arial, sans-serif;
+
+    /* Максимальная длина контейнера */
+    --container-max-width: 1224px;
 
     /* Точки адаптива */
     --mobile-sm-size-min: 320px;

@@ -1,10 +1,15 @@
 <template>
-    <a class="link" v-if="tag === 'a'" v-bind="$attrs" v-on="$listeners">
+    <router-link class="link" v-if="to" :to="to" :tag="tag" v-on="handlers">
+        <v-svg v-if="iconName && placement === 'before'" :name="iconName" :modifier="iconModifier" />
+        <slot />
+        <v-svg v-if="iconName && placement === 'after'" :name="iconName" :modifier="iconModifier" />
+    </router-link>
+    <a class="link" v-else-if="tag === 'a'" v-on="handlers">
         <v-svg v-if="iconName && placement === 'before'" :name="iconName" :modifier="iconModifier" />
         <slot />
         <v-svg v-if="iconName && placement === 'after'" :name="iconName" :modifier="iconModifier" />
     </a>
-    <button class="link" v-else-if="tag === 'button'" :type="type" v-bind="$attrs" v-on="$listeners">
+    <button class="link" v-else :type="type" v-on="handlers">
         <v-svg v-if="iconName && placement === 'before'" :name="iconName" :modifier="iconModifier" />
         <slot />
         <v-svg v-if="iconName && placement === 'after'" :name="iconName" :modifier="iconModifier" />
@@ -47,6 +52,35 @@ export default {
                 return validTags.indexOf(value) !== -1;
             },
         },
+        to: {
+            type: [String, Object],
+        },
+    },
+
+    computed: {
+        handlers() {
+            const keys = Object.keys(this.$listeners);
+            const handlers = {};
+            keys.forEach(k => (handlers[k] = e => this.$emit(k, e)));
+            return handlers;
+        },
     },
 };
 </script>
+
+<style src="./critical.css"></style>
+<style lang="postcss">
+.link {
+    &:hover {
+    }
+}
+
+.link.is-disabled,
+.is-disabled .link,
+.link[disabled] {
+    color: var(--cl-lg-grey);
+    fill: var(--cl-lg-grey);
+    border-color: var(--cl-lg-grey);
+    pointer-events: none;
+}
+</style>

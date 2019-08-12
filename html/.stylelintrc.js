@@ -8,6 +8,8 @@ module.exports = {
     ],
     ignoreFiles: ['node_modules/**/*.*', 'dist/**/*.*', '../public/**/*.*', 'build/**/*.*', 'docs/**/*.*'],
     rules: {
+        /* в IE 11 лучше чтобы цвета были в длинной форме */
+        'color-hex-length': null,
         /* Не имеет смысла в postcss, т.к. в нём все комментарии многострочные, и это правило будет мешать закомменчивать код. */
         'comment-empty-line-before': null,
         /* font-family используется для полифилла object-fit, а соблюдение самого правила легко отслеживается. */
