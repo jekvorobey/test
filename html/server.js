@@ -5,15 +5,15 @@ const express = require('express');
 const favicon = require('serve-favicon');
 const compression = require('compression');
 const microcache = require('route-cache');
-const { createBundleRenderer } = require('vue-server-renderer');
+const expressVersion = require('express/package.json').version;
+const serverRendererVersion = require('vue-server-renderer/package.json').version;
+const { createBundleRenderer } = require('./build/custom-vue-server-renderer');
 
 const resolve = file => path.resolve(__dirname, file);
 
 const isProd = process.env.NODE_ENV === 'production';
 const useMicroCache = process.env.MICRO_CACHE !== 'false';
-const serverInfo =
-    `express/${require('express/package.json').version} ` +
-    `vue-server-renderer/${require('vue-server-renderer/package.json').version}`;
+const serverInfo = `express/${expressVersion} vue-server-renderer/${serverRendererVersion}`;
 const ExpressLogger = require('./src/services/LogService/ExpressLogger');
 
 const logger = new ExpressLogger();
@@ -21,9 +21,15 @@ const setupDevServer = require('./build/setup-dev-server');
 
 const app = express();
 
+if (serverRendererVersion !== '2.6.10')
+    logger.warn(
+        'В файле custom-vue-server-renderer изменен порядок применения тегов стилей для <link> и <style> в методе renderStyles. Необходимо обновить код в файле custom-vue-server-renderer, ибо версия vue-server-renderer изменилась и надо добавить правки'
+    );
+
 function createRenderer(bundle, options) {
     logger.info('creating bundle renderer...');
     // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer
+
     return createBundleRenderer(
         bundle,
         Object.assign(options, {

@@ -4,7 +4,7 @@
         <transition name="slide-left">
             <ul v-if="isOpen" class="ui-kit-panel">
                 <li v-for="(item, index) in links" :key="index">
-                    <router-link :to="item.to">{{ item.desc }}</router-link>
+                    <v-link :to="item.to">{{ item.desc }}</v-link>
                 </li>
             </ul>
         </transition>
@@ -18,13 +18,15 @@
 </template>
 
 <script>
+import VLink from '../../components/controls/VLink/VLink.vue';
+
 import UiKitColors from './UiKitColors.vue';
 import UiKitBase from './UiKitBase.vue';
 import UiKitButtons from './UiKitButtons.vue';
 import UiKitRadioButtons from './UiKitRadioButtons.vue';
 import UiKitIcons from './UiKitIcons.vue';
 import UiKitCalendar from './UiKitCalendar.vue';
-import UiKitCheckBoxes from './UiKitCheckBoxes.vue';
+import UiKitCheckboxes from './UiKitCheckboxes.vue';
 import UiKitDropzones from './UiKitDropzones.vue';
 import UiKitForms from './UiKitForms.vue';
 import UiKitPaginations from './UiKitPaginations.vue';
@@ -36,17 +38,20 @@ import UiKitTabs from './UiKitTabs.vue';
 import UiKitTables from './UiKitTables.vue';
 import UiKitSelects from './UiKitSelects.vue';
 import UiKitLinks from './UiKitLinks.vue';
+import UiKitList from './UiKitList.vue';
 
 export default {
     name: 'ui-kit',
     components: {
+        VLink,
+
         UiKitColors,
         UiKitBase,
         UiKitButtons,
         UiKitRadioButtons,
         UiKitIcons,
         UiKitCalendar,
-        UiKitCheckBoxes,
+        UiKitCheckboxes,
         UiKitDropzones,
         UiKitForms,
         UiKitPaginations,
@@ -58,6 +63,7 @@ export default {
         UiKitTables,
         UiKitSelects,
         UiKitLinks,
+        UiKitList,
     },
 
     data() {
@@ -69,12 +75,24 @@ export default {
                     desc: 'Базовые стили',
                 },
                 {
-                    to: 'icons',
-                    desc: 'Иконки',
+                    to: 'list',
+                    desc: 'Списки',
                 },
                 {
                     to: 'colors',
                     desc: 'Цвета',
+                },
+                {
+                    to: 'icons',
+                    desc: 'Иконки',
+                },
+                {
+                    to: 'links',
+                    desc: 'Ссылки',
+                },
+                {
+                    to: 'buttons',
+                    desc: 'Кнопки',
                 },
                 {
                     to: 'radio-buttons',
@@ -87,14 +105,6 @@ export default {
                 {
                     to: 'switches',
                     desc: 'Переключатели',
-                },
-                {
-                    to: 'buttons',
-                    desc: 'Кнопки',
-                },
-                {
-                    to: 'links',
-                    desc: 'Ссылки',
                 },
                 {
                     to: 'forms',

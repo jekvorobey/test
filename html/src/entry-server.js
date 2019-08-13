@@ -2,7 +2,6 @@ import createApp from './app';
 import ServiceLocator from './services/ServiceLocator';
 import ExpressLogger from './services/LogService/ExpressLogger';
 import { ExpressCookie } from './services/CookieService';
-import EventService from './services/EventService';
 
 // This exported function will be called by `bundleRenderer`.
 // This is where we perform data-prefetching to determine the
@@ -16,7 +15,6 @@ export default context => {
         ServiceLocator.createInstance()
             .register('router', () => router)
             .register('store', () => store)
-            .register('events', () => EventService)
             .register('logger', () => new ExpressLogger())
             .register('cookie', () => new ExpressCookie(context.req, context.res));
 

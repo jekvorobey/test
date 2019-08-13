@@ -47,6 +47,9 @@ export default {
 <style src="./assets/styles/base.css"></style>
 <style src="./assets/styles/animation.css"></style>
 <style src="./assets/styles/fonts.css"></style>
+<style src="./assets/styles/helpers.css"></style>
+<style src="./assets/styles/icons.css"></style>
+<style src="./assets/styles/list.css"></style>
 
 <style>
 .view {
@@ -56,8 +59,6 @@ export default {
 </style>
 
 <style lang="postcss">
-@import './assets/styles/helpers.css';
-
 body {
     font-family: var(--base-font);
 }

@@ -12,7 +12,6 @@
 
     &__middle {
         background-color: var(--cl-global);
-        color: var(--cl-white);
 
         &-inner {
             padding: var(--gs) 0;
@@ -22,6 +21,7 @@
 
         &-link {
             text-transform: uppercase;
+            color: var(--cl-white);
         }
     }
 }

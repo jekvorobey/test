@@ -2,3 +2,15 @@
     font-size: 12px;
     line-height: 16px;
 }
+
+.text-medium {
+    font-weight: 500;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.text-grey {
+    color: var(--cl-grey);
+}
