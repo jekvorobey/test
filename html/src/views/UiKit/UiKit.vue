@@ -152,7 +152,9 @@ export default {
 
     beforeRouteUpdate(to, from, next) {
         this.isOpen = false;
+        this.$progress.start();
         next();
+        this.$progress.finish();
     },
 
     computed: {

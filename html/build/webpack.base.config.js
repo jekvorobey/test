@@ -70,7 +70,7 @@ module.exports = {
                 include: path.resolve(__dirname, '../src/assets/fonts'),
                 use: [
                     {
-                        loader: 'file-loader',
+                        loader: 'url-loader',
                         options: {
                             name: isProd ? 'fonts/[hash:20].[ext]' : 'fonts/[name].[ext]',
                             limit: 10 * 1024,

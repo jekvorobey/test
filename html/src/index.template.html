@@ -11,8 +11,13 @@
         <link rel="shortcut icon" sizes="48x48" href="/assets/favicon.ico" />
         <link rel="apple-touch-icon" sizes="120x120" href="/assets/images/icons/logo-120.png" />
         <link rel="manifest" href="/manifest.json" />
+        {{{ renderResourceHints() }}}
+        {{{ fonts }}}
+        {{{ renderStyles() }}}
     </head>
     <body>
         <!--vue-ssr-outlet-->
+        {{{ renderState() }}} 
+        {{{ renderScripts() }}}
     </body>
 </html>
