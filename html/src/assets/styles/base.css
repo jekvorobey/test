@@ -14,7 +14,7 @@
 } */
 
 :focus {
-    outline: 1px solid var(--cl-cyan);
+    outline: 1px solid var(--cl-gold);
 }
 
 .js-focus-visible :focus:not(.focus-visible) {
@@ -261,10 +261,6 @@ fieldset {
 
     &::-ms-clear {
         display: none;
-    }
-
-    &.parsley-error {
-        border-color: var(--cl-cyan);
     }
 }
 
