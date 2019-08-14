@@ -4,7 +4,7 @@
             Базовые стили и элементы
         </h2>
 
-        <p class="ui-kit-section__desc">Roboto <br />Используйте переменные var(--roboto) <br /></p>
+        <p class="ui-kit-section__desc">Roboto <br />переменная var(--base-font) <br /></p>
 
         <h1>H1 Roboto Regular 24px / 32px</h1>
 

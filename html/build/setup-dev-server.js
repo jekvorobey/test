@@ -33,6 +33,14 @@ module.exports = function setupDevServer(app, templatePath, cb) {
             cb(bundle, {
                 template,
                 clientManifest,
+                inject: false,
+                shouldPreload(file, type) {
+                    // type is inferred based on the file extension.
+                    // https://fetch.spec.whatwg.org/#concept-request-destination
+                    if (type === 'script' || type === 'style') return true;
+                    if (type === 'font') return /\.woff2$/.test(file);
+                    return false;
+                },
             });
         }
     };

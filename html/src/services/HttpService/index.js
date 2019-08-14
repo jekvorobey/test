@@ -26,3 +26,5 @@ export default class HttpService {
      */
     get(path, data) {}
 }
+
+/* eslint-enable no-console */

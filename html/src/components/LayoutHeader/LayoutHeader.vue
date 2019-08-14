@@ -11,6 +11,7 @@
                     <v-link class="header__middle-link" to="/show">{{ $t('header.links.collections') }}</v-link>
                     <v-link class="header__middle-link" to="/ask">{{ $t('header.links.brands') }}</v-link>
                     <v-link class="header__middle-link" to="/job">{{ $t('header.links.classes') }}</v-link>
+                    <v-link class="header__middle-link" to="/ui-kit">ui-kit</v-link>
                 </nav>
             </div>
         </div>

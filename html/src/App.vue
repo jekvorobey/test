@@ -5,7 +5,6 @@
             <transition name="fade" mode="out-in">
                 <router-view class="view" />
             </transition>
-            <div class="footer-spacer" />
         </main>
         <layout-footer />
     </div>

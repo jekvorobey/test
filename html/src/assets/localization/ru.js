@@ -8,4 +8,11 @@ export default {
             classes: 'Мастер-классы',
         },
     },
+
+    validation: {
+        errors: {
+            required: 'Обязательное поле',
+            email: 'Формат name@domain.com',
+        },
+    },
 };

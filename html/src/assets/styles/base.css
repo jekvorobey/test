@@ -285,6 +285,7 @@ textarea {
 a,
 :--btn,
 :--input {
+    font-family: var(--base-font);
     &:disabled,
     &.is-disabled {
         cursor: default;

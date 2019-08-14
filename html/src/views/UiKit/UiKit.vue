@@ -71,6 +71,10 @@ export default {
             isOpen: false,
             links: [
                 {
+                    to: '/',
+                    desc: 'Главная',
+                },
+                {
                     to: 'base',
                     desc: 'Базовые стили',
                 },
