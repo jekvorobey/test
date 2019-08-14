@@ -52,7 +52,6 @@
 
 <script>
 import inputMixin from './inputMixin';
-import autosize from 'autosize';
 
 const validTags = ['input', 'textarea'];
 
