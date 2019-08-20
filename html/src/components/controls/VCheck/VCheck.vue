@@ -145,7 +145,7 @@ input[type='radio'] {
             cursor: default;
 
             &::before {
-                border-color: var(--cl-grey);
+                border-color: var(--cl-global);
             }
         }
     }
@@ -157,10 +157,6 @@ input[type='radio'] {
 
         & + label::before {
             border-color: var(--cl-global);
-        }
-
-        &:disabled + label::after {
-            background-color: var(--cl-global);
         }
     }
 }
@@ -179,6 +175,16 @@ input[type='checkbox'] {
             background-image: svg-load('../../../assets/images/sprites/check-small.svg', 'fill: #fff');
             background-color: var(--cl-blue);
             transform: scale(0);
+        }
+    }
+
+    &:disabled + label {
+        color: var(--cl-grey);
+        cursor: default;
+
+        &::after,
+        &::before {
+            opacity: 0.4;
         }
     }
 }
