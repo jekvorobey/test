@@ -19,6 +19,8 @@
 <script>
 import './VCheck.css';
 
+let count = 0;
+
 export default {
     name: 'v-check',
     inheritAttrs: false,
@@ -48,7 +50,7 @@ export default {
     data() {
         return {
             m_checked: undefined,
-            inputId: `v-check-${this._uid}`,
+            inputId: `v-check-${count++}`,
         };
     },
     computed: {
@@ -90,3 +92,123 @@ export default {
     },
 };
 </script>
+
+
+<style lang="postcss">
+input[type='checkbox'],
+input[type='radio'] {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+
+    & + label {
+        position: relative;
+        display: block;
+        margin-bottom: calc(var(--gs) * 2);
+        padding-left: 28px;
+        font-size: 14px;
+        line-height: 1.2;
+        cursor: pointer;
+
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            display: block;
+            box-sizing: border-box;
+            transition: opacity var(--time) ease;
+        }
+
+        &::before {
+            content: '';
+            top: 0;
+            left: 0;
+            width: 17px;
+            height: 17px;
+            border: 2px solid var(--cl-global);
+            background: var(--cl-white);
+        }
+
+        &:last-of-type {
+            margin-bottom: calc(var(--gs) * 3);
+        }
+
+        &.is-invalid {
+            &:last-of-type {
+                margin-bottom: var(--gs);
+            }
+        }
+    }
+
+    &:disabled {
+        & + label {
+            color: var(--cl-grey);
+            cursor: default;
+
+            &::before {
+                border-color: var(--cl-grey);
+            }
+        }
+    }
+
+    &:checked {
+        & + label::after {
+            transform: scale(1);
+        }
+
+        & + label::before {
+            border-color: var(--cl-global);
+        }
+
+        &:disabled + label::after {
+            background-color: var(--cl-global);
+        }
+    }
+}
+
+input[type='checkbox'] {
+    & + label {
+        &::after {
+            top: 0;
+            left: 0;
+            width: 17px;
+            height: 17px;
+            transition: all var(--time) ease;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+            background-size: 12px 9px;
+            background-image: svg-load('../../../assets/images/sprites/check-small.svg', 'fill: #fff');
+            background-color: var(--cl-blue);
+            transform: scale(0);
+        }
+    }
+}
+
+input[type='radio'] {
+    & + label {
+        &::before,
+        &::after {
+            border-radius: 50%;
+        }
+
+        &::after {
+            top: 4.5px;
+            left: 4.5px;
+            width: 8px;
+            height: 8px;
+            background: var(--cl-global);
+            transform: scale(0);
+            transition: all var(--time) ease;
+        }
+    }
+
+    &:checked {
+        &:disabled + label::before {
+            border-color: var(--cl-grey);
+        }
+
+        &:disabled + label::after {
+            background: var(--cl-grey);
+        }
+    }
+}
+</style>
