@@ -5,6 +5,14 @@
         </h2>
 
         <p class="text-grey">
+            Logo
+        </p>
+        <p>
+            <v-svg name="logo-text" width="128" height="48" />
+            <v-svg name="logo" width="32" height="32" />
+        </p>
+
+        <p class="text-grey">
             Обычные
         </p>
         <p>
@@ -126,6 +134,9 @@
     </section>
 </template>
 <script>
+import '../../assets/images/sprites/logo.svg';
+import '../../assets/images/sprites/logo-text.svg';
+
 import '../../assets/images/sprites/plus.svg';
 import '../../assets/images/sprites/minus.svg';
 import '../../assets/images/sprites/arrow-down.svg';
