@@ -17,3 +17,29 @@ export default {
     serverCacheKey: props => (props.modifier ? `${props.name}-${props.modifier}` : props.name),
 };
 </script>
+
+<style lang="postcss">
+.icon {
+    &--rotate {
+        &-deg45 {
+            transform: rotate(45deg);
+        }
+
+        &-deg90 {
+            transform: rotate(90deg);
+        }
+
+        &-deg180 {
+            transform: rotate(180deg);
+        }
+
+        &-deg270 {
+            transform: rotate(270deg);
+        }
+
+        &-deg360 {
+            transform: rotate(360deg);
+        }
+    }
+}
+</style>

@@ -35,6 +35,7 @@ body {
     height: 100vh;
     position: relative;
     color: var(--cl-global);
+    fill: var(--cl-global);
     vertical-align: top;
     backface-visibility: hidden;
 }
