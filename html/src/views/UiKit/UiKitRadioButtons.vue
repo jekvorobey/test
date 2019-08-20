@@ -7,12 +7,17 @@
             Мастер радиобаттоны
         </p>
         <form>
-            <v-check v-model="radio_checked" type="radio" name="radio-1" value="По умолчанию">По умолчанию</v-check>
-            <v-check v-model="radio_checked" type="radio" name="radio-1" value="2" disabled>Disabled</v-check>
-            <v-check v-model="radio_checked" type="radio" name="radio-1" value="Мастер радиобаттоны">
+            <v-check id="radio-1" v-model="radio_checked" type="radio" name="radio-1" value="По умолчанию">
+                По умолчанию
+            </v-check>
+            <v-check id="radio-2" v-model="radio_checked" type="radio" name="radio-1" value="2" disabled>
+                Disabled
+            </v-check>
+            <v-check id="radio-3" v-model="radio_checked" type="radio" name="radio-1" value="Мастер радиобаттоны">
                 Мастер радиобаттоны
             </v-check>
             <v-check
+                id="radio-4"
                 v-model="radio_checked"
                 type="radio"
                 name="radio-1"
@@ -20,7 +25,7 @@
             >
                 Радиобаттон с длинным текстом включен и не задизейблен
             </v-check>
-            <v-check checked type="radio" name="radio-2" value="Выбран, но задизеблен" disabled>
+            <v-check id="radio-5" checked type="radio" name="radio-2" value="Выбран, но задизеблен" disabled>
                 Выбран, но задизеблен
             </v-check>
         </form>

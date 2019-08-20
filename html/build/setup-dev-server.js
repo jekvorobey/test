@@ -41,7 +41,6 @@ module.exports = function setupDevServer(app, templatePath, cb) {
                     if (type === 'font') return /\.woff2$/.test(file);
                     return false;
                 },
-                runInNewContext: false,
             });
         }
     };

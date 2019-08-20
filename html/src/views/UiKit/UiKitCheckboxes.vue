@@ -7,12 +7,13 @@
             Мастер чекбоксы
         </p>
         <form>
-            <v-check v-model="checkbox_checked1" name="checkbox-1" value="1">По умолчанию</v-check>
-            <v-check v-model="checkbox_checked2" name="checkbox-2" value="2" disabled>Disabled</v-check>
-            <v-check v-model="checkbox_checked3" name="checkbox-3" value="3">
+            <v-check id="checkbox-1" v-model="checkbox_checked1" name="checkbox-1" value="1">По умолчанию</v-check>
+            <v-check id="checkbox-2" v-model="checkbox_checked2" name="checkbox-2" value="2" disabled>Disabled</v-check>
+            <v-check id="checkbox-3" v-model="checkbox_checked3" name="checkbox-3" value="3">
                 Мастер чекбоксы
             </v-check>
             <v-check
+                id="checkbox-4"
                 v-model="checkbox_checked4"
                 name="checkbox-4"
                 value="чекбокс с длинным текстом включен и не задизейблен"
@@ -20,6 +21,7 @@
                 чекбокс с длинным текстом включен и не задизейблен
             </v-check>
             <v-check
+                id="checkbox-5"
                 v-model="checkbox_checked5"
                 name="checkbox-5"
                 value="чекбокс с длинным текстом включен и не задизейблен"
@@ -32,9 +34,9 @@
             <p>Выбрано Мастер чекбоксы: {{ checkbox_checked3 }}</p>
             <p>Выбрано чекбокс с длинным текстом включен и не задизейблен: {{ checkbox_checked4 }}</p>
 
-            <v-check v-model="checkboxes_checked" name="checkboxes" value="1">1</v-check>
-            <v-check v-model="checkboxes_checked" name="checkboxes" value="2">2</v-check>
-            <v-check v-model="checkboxes_checked" name="checkboxes" value="3">3</v-check>
+            <v-check id="checkbox-6" v-model="checkboxes_checked" name="checkboxes" value="1">1</v-check>
+            <v-check id="checkbox-7" v-model="checkboxes_checked" name="checkboxes" value="2">2</v-check>
+            <v-check id="checkbox-8" v-model="checkboxes_checked" name="checkboxes" value="3">3</v-check>
 
             <p>Выбрано: {{ checkboxes_checked }}</p>
         </form>

@@ -3,14 +3,14 @@
         <input
             class="v-check__input"
             v-bind="$attrs"
-            :id="inputId"
+            :id="id"
             :type="type"
             :checked="shouldBeChecked"
             :value="value"
             :name="name"
             @change="updateInput"
         />
-        <label class="v-check__label" :for="inputId">
+        <label class="v-check__label" :for="id">
             <slot />
         </label>
     </div>
@@ -19,10 +19,8 @@
 <script>
 import './VCheck.css';
 
-let count = 0;
-
 export default {
-    serverCacheKey: props => `${props.type}-${props.name}-${props.value}`,
+    serverCacheKey: props => `${props.id}-${props.type}-${props.name}-${props.value}`,
     name: 'v-check',
     inheritAttrs: false,
     model: {
@@ -32,6 +30,10 @@ export default {
     props: {
         modelValue: {},
         checked: {},
+        id: {
+            type: [Number, String],
+            required: true,
+        },
         name: {
             type: String,
             required: true,
@@ -52,7 +54,6 @@ export default {
     data() {
         return {
             m_checked: undefined,
-            inputId: `v-check-${count++}`,
         };
     },
     computed: {
@@ -209,13 +210,13 @@ input[type='radio'] {
         }
     }
 
-    &:checked {
-        &:disabled + label::before {
-            border-color: var(--cl-grey);
-        }
+    &:disabled + label {
+        color: var(--cl-grey);
+        cursor: default;
 
-        &:disabled + label::after {
-            background: var(--cl-grey);
+        &::after,
+        &::before {
+            opacity: 0.4;
         }
     }
 }
