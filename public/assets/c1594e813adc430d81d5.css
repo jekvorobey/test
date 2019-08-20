@@ -1,4 +1,0 @@
-.is-disabled .link,.link.is-disabled,.link[disabled]{color:var(--cl-lg-grey);fill:var(--cl-lg-grey);border-color:var(--cl-lg-grey);pointer-events:none}
-
-.footer{background-color:#141116;display:block;position:relative;margin-top:auto;min-width:320px}
-body{font-family:Roboto,Arial,sans-serif}

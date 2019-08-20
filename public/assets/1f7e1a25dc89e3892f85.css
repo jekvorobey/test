@@ -1,0 +1,5 @@
+.icon--rotate-deg45{-webkit-transform:rotate(45deg);transform:rotate(45deg)}.icon--rotate-deg90{-webkit-transform:rotate(90deg);transform:rotate(90deg)}.icon--rotate-deg180{-webkit-transform:rotate(180deg);transform:rotate(180deg)}.icon--rotate-deg270{-webkit-transform:rotate(270deg);transform:rotate(270deg)}.icon--rotate-deg360{-webkit-transform:rotate(1turn);transform:rotate(1turn)}
+.is-disabled .link,.link.is-disabled,.link[disabled]{color:var(--cl-lg-grey);fill:var(--cl-lg-grey);border-color:var(--cl-lg-grey);pointer-events:none}
+
+.footer{background-color:#141116;display:block;position:relative;margin-top:auto;min-width:320px}
+body{font-family:Roboto,Arial,sans-serif}
