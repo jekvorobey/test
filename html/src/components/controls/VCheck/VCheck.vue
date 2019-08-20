@@ -22,6 +22,7 @@ import './VCheck.css';
 let count = 0;
 
 export default {
+    serverCacheKey: props => `${props.type}-${props.name}-${props.value}`,
     name: 'v-check',
     inheritAttrs: false,
     model: {
@@ -33,6 +34,7 @@ export default {
         checked: {},
         name: {
             type: String,
+            required: true,
         },
         value: {
             type: [Number, String],
