@@ -1,5 +1,5 @@
 <template>
-    <div class="v-check">
+    <div class="v-check" :class="{ 'is-switch': isSwitch }">
         <input
             class="v-check__input"
             v-bind="$attrs"
@@ -49,6 +49,9 @@ export default {
                 // Значение должно соответствовать одной из этих строк
                 return ['checkbox', 'radio'].indexOf(value) !== -1;
             },
+        },
+        isSwitch: {
+            type: Boolean,
         },
     },
     data() {
@@ -131,10 +134,6 @@ input[type='radio'] {
             background: var(--cl-white);
         }
 
-        &:last-of-type {
-            margin-bottom: calc(var(--gs) * 3);
-        }
-
         &.is-invalid {
             &:last-of-type {
                 margin-bottom: var(--gs);
@@ -190,6 +189,46 @@ input[type='checkbox'] {
             opacity: 0.4;
         }
     }
+
+    .v-check.is-switch & {
+        & + label {
+            position: relative;
+            display: block;
+            padding-left: calc(var(--gs) * 8);
+            line-height: 1.7;
+            cursor: pointer;
+
+            &::after {
+                top: 12px;
+                left: 6px;
+                transform: translateY(-50%);
+                width: calc(var(--gs) * 2);
+                height: calc(var(--gs) * 2);
+                border-radius: 50%;
+                transition: background-color 0.2s ease, left 0.2s ease;
+                background: var(--cl-global);
+                background-size: unset;
+                background-image: unset;
+            }
+
+            &::before {
+                top: 0;
+                left: 0;
+                width: calc(var(--gs) * 6);
+                height: calc(var(--gs) * 3);
+                border: 2px solid var(--cl-global);
+                border-radius: 12px;
+                background-color: var(--cl-white);
+            }
+        }
+
+        &:checked + label {
+            &::after {
+                left: 26px;
+                background-color: var(--cl-red);
+            }
+        }
+    }
 }
 
 input[type='radio'] {
@@ -202,8 +241,8 @@ input[type='radio'] {
         &::after {
             top: 4.5px;
             left: 4.5px;
-            width: 8px;
-            height: 8px;
+            width: var(--gs);
+            height: var(--gs);
             background: var(--cl-global);
             transform: scale(0);
             transition: all var(--time) ease;
