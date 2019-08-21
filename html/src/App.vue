@@ -42,12 +42,8 @@ export default {
 };
 </script>
 
-<style src="./assets/styles/normalize.css"></style>
-<style src="./assets/styles/base.css"></style>
-<style src="./assets/styles/animation.css"></style>
-<style src="./assets/styles/fonts.css"></style>
-<style src="./assets/styles/helpers.css"></style>
-<style src="./assets/styles/list.css"></style>
+<style src="./App.css"></style>
+
 
 <style>
 .view {
