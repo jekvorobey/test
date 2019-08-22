@@ -9,6 +9,7 @@
 
 <script>
 import noUiSlider from 'nouislider';
+import './VRange.css';
 
 export default {
     name: 'v-range',
@@ -58,5 +59,3 @@ export default {
     },
 };
 </script>
-
-<style lang="postcss" src="./VRange.postcss"></style>

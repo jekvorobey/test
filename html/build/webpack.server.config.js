@@ -22,7 +22,8 @@ module.exports = merge(base, {
     module: {
         rules: [
             {
-                test: /\.postcss$/,
+                test: /\.css$/,
+                exclude: [/\.critical\.css$/],
                 use: isProd
                     ? [
                           CssExtractPlugin.loader,

@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import './VTabs.css';
+
 const keys = {
     end: 35,
     home: 36,
@@ -54,8 +56,6 @@ const orientation = {
     horizontal: 'horizontal',
     vertical: 'vertical',
 };
-
-import './VTabs.css';
 
 export default {
     name: 'v-tabs',

@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import './ProgressBar.critical.css';
+
 export default {
     data() {
         return {
@@ -86,5 +88,3 @@ export default {
     },
 };
 </script>
-
-<style src="./critical.css"/>

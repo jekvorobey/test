@@ -1,4 +1,4 @@
-import createApp from './app';
+import createApp from './app/app';
 import ServiceLocator from './services/ServiceLocator';
 import ExpressLogger from './services/LogService/ExpressLogger';
 import { ExpressCookie } from './services/CookieService';

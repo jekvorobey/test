@@ -45,7 +45,6 @@
 
 <script>
 import VSvg from '../VSvg/VSvg.vue';
-
 import '../../../../images/sprite/arrow-down.svg';
 import './VSelect.css';
 

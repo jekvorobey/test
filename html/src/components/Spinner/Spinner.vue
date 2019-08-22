@@ -7,70 +7,11 @@
 </template>
 
 <script>
+import './Spinner.css';
+
 export default {
     name: 'spinner',
     props: ['show'],
     serverCacheKey: props => props.show,
 };
 </script>
-
-<style lang="postcss">
-:root {
-    --spinner-offset: 126px;
-    --spinner-duration: 1.4s;
-}
-
-.spinner {
-    transition: opacity 0.15s ease;
-    animation: rotator var(--spinner-duration) linear infinite;
-    animation-play-state: paused;
-
-    &.show {
-        animation-play-state: running;
-    }
-
-    &.v-enter,
-    &.v-leave-active {
-        opacity: 0;
-    }
-
-    &.v-enter-active,
-    &.v-leave {
-        opacity: 1;
-    }
-}
-
-@keyframes rotator {
-    0% {
-        transform: scale(0.5) rotate(0deg);
-    }
-
-    100% {
-        transform: scale(0.5) rotate(270deg);
-    }
-}
-
-.spinner .path {
-    stroke: #ff6600;
-    stroke-dasharray: var(--spinner-offset);
-    stroke-dashoffset: 0;
-    transform-origin: center;
-    animation: dash var(--spinner-duration) ease-in-out infinite;
-}
-
-@keyframes dash {
-    0% {
-        stroke-dashoffset: var(--spinner-offset);
-    }
-
-    50% {
-        stroke-dashoffset: calc(var(--spinner-offset) / 2);
-        transform: rotate(135deg);
-    }
-
-    100% {
-        stroke-dashoffset: var(--spinner-offset);
-        transform: rotate(450deg);
-    }
-}
-</style>

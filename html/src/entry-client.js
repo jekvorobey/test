@@ -1,4 +1,4 @@
-import createApp from './app';
+import createApp from './app/app';
 import ServiceLocator from './services/ServiceLocator';
 import progress from './services/ProgressService';
 import BrowserLogger from './services/LogService/BrowserLogger';

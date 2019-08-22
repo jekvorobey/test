@@ -24,6 +24,9 @@
 <script>
 import VLink from '../controls/VLink/VLink.vue';
 
+import './LayoutHeader.critical.css';
+import './LayoutHeader.css';
+
 export default {
     name: 'layout-header',
     components: {
@@ -31,10 +34,4 @@ export default {
     },
 };
 </script>
-
-<style src="./critical.css"></style>
-<style lang="postcss">
-.header {
-}
-</style>
 

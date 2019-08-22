@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import { sync } from 'vuex-router-sync';
-import createStore from './store';
-import createRouter from './router';
+import createStore from '../store';
+import createRouter from '../router';
 
-import i18n from './plugins/i18n';
-import media from './plugins/media';
+import i18n from '../plugins/i18n';
+import media from '../plugins/media';
 
-import titleMixin from './util/title';
-import * as filters from './util/filters';
+import titleMixin from '../util/title';
+import * as filters from '../util/filters';
 
 import App from './App.vue';
 

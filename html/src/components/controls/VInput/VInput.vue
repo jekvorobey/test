@@ -52,6 +52,7 @@
 
 <script>
 import inputMixin from './inputMixin';
+import './VInput.css';
 
 const validTags = ['input', 'textarea'];
 
@@ -116,85 +117,3 @@ export default {
     },
 };
 </script>
-
-<style lang="postcss">
-.v-input {
-    position: relative;
-    padding-top: calc(var(--gs) * 2);
-
-    &--float &__label {
-        position: absolute;
-        top: 16px;
-        left: 16px;
-        line-height: 2.5rem;
-        -webkit-transition: all 0.2s ease;
-        transition: all 0.2s ease;
-    }
-
-    &--active &__label {
-        top: 0;
-        color: var(--cl-global);
-        font-size: 0.75rem;
-        line-height: 1rem;
-    }
-
-    &--active &__input {
-        border-bottom-color: var(--cl-global);
-    }
-
-    &--invalid &__input {
-        border-bottom-color: var(--cl-red);
-    }
-
-    &--disabled &__input {
-        color: var(--cl-divider-grey);
-        border-bottom-color: var(--cl-divider-grey);
-    }
-
-    &--disabled &__label {
-        color: var(--cl-divider-grey);
-    }
-
-    &--disabled &__error {
-        display: none;
-    }
-
-    &__label {
-        cursor: text;
-        color: var(--cl-grey);
-    }
-
-    &__input {
-        width: 100%;
-        min-height: 40px;
-        padding: 8px 16px;
-        border: none;
-        border-bottom: 2px solid var(--cl-grey);
-        color: var(--cl-global);
-        font-size: 0.875rem;
-        line-height: 1.375rem;
-        background-color: transparent;
-        transition: all var(--time) var(--timing-function);
-        overflow: hidden;
-
-        &:focus {
-            outline: none;
-        }
-    }
-
-    &__container {
-        position: relative;
-        display: flex;
-    }
-
-    &__error {
-        position: relative;
-        min-height: calc(var(--gs) * 3);
-        padding: 0 16px;
-        font-size: 12px;
-        line-height: calc(var(--gs) * 3);
-        color: var(--cl-red);
-        overflow: hidden;
-    }
-}
-</style>

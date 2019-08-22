@@ -1,0 +1,7 @@
+.footer {
+    background-color: var(--cl-global);
+    display: block;
+    position: relative;
+    margin-top: auto;
+    min-width: 320px;
+}

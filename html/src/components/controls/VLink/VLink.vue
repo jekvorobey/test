@@ -22,6 +22,9 @@ import VSvg from '../VSvg/VSvg.vue';
 const placements = ['before', 'after'];
 const validTags = ['a', 'button'];
 
+import './VLink.critical.css';
+import './VLink.css';
+
 /**
  * Базовый класс для линка, поддерживает SVG
  */
@@ -67,20 +70,3 @@ export default {
     },
 };
 </script>
-
-<style src="./critical.css"></style>
-<style lang="postcss">
-.link {
-    &:hover {
-    }
-}
-
-.link.is-disabled,
-.is-disabled .link,
-.link[disabled] {
-    color: var(--cl-lg-grey);
-    fill: var(--cl-lg-grey);
-    border-color: var(--cl-lg-grey);
-    pointer-events: none;
-}
-</style>

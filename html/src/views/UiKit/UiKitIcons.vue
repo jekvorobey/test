@@ -210,6 +210,7 @@ import '../../assets/images/sprites/apps/app-store.svg';
 import '../../assets/images/sprites/apps/google-play.svg';
 
 import VSvg from '../../components/controls/VSvg/VSvg.vue';
+import './UiKitIcons.css';
 
 export default {
     name: 'ui-kit-icons',
@@ -218,20 +219,3 @@ export default {
     },
 };
 </script>
-
-<style lang="postcss">
-.ui-kit-icons {
-    p {
-        display: flex;
-        align-items: center;
-        &.app {
-            background: #111111;
-            padding: calc(var(--gs) * 5);
-        }
-    }
-
-    svg + svg {
-        margin-left: var(--gs);
-    }
-}
-</style>

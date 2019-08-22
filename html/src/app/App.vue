@@ -27,11 +27,14 @@ import 'lazysizes/plugins/parent-fit/ls.parent-fit';
 import 'lazysizes/plugins/respimg/ls.respimg';
 import 'focus-visible';
 
+import './App.critical.css';
+import './App.css';
+
 /**
  * Базовые компоненты страницы
  */
-import LayoutHeader from './components/LayoutHeader/LayoutHeader.vue';
-import LayoutFooter from './components/LayoutFooter/LayoutFooter.vue';
+import LayoutHeader from '../components/LayoutHeader/LayoutHeader.vue';
+import LayoutFooter from '../components/LayoutFooter/LayoutFooter.vue';
 
 export default {
     name: 'app',
@@ -41,22 +44,6 @@ export default {
     },
 };
 </script>
-
-<style src="./App.css"></style>
-
-
-<style>
-.view {
-    margin: 0 auto;
-    position: relative;
-}
-</style>
-
-<style lang="postcss">
-body {
-    font-family: var(--base-font);
-}
-</style>
 
 
 

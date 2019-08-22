@@ -1,0 +1,44 @@
+@import '../assets/styles/normalize.css';
+@import '../assets/styles/animation.css';
+
+.fake-vue-body {
+    display: flex;
+    flex-direction: column;
+    background: var(--cl-white);
+    padding-top: 100px;
+    height: 100%;
+}
+
+.container {
+    position: relative;
+    min-width: var(--mobile-sm-size-min);
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 calc(var(--gs) * 11);
+
+    @media (--desktop) {
+        padding: 0 calc(var(--gs) * 5);
+    }
+
+    @media (--tablet-lg) {
+        padding: 0 calc(var(--gs) * 4);
+    }
+
+    @media (--tablet) {
+        padding: 0 calc(var(--gs) * 2);
+    }
+}
+
+.section {
+    position: relative;
+
+    &__hl {
+        margin: 0 0 var(--g) 0;
+        text-align: center;
+    }
+}
+
+.view {
+    margin: 0 auto;
+    position: relative;
+}

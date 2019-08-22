@@ -1,0 +1,14 @@
+.ui-kit-icons {
+    p {
+        display: flex;
+        align-items: center;
+        &.app {
+            background: #111111;
+            padding: calc(var(--gs) * 5);
+        }
+    }
+
+    svg + svg {
+        margin-left: var(--gs);
+    }
+}
