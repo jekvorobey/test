@@ -1,17 +1,19 @@
-.v-increment {
+.v-counter {
     display: inline-flex;
+    width: 144px;
 
     &__input,
     &__btn {
         background: var(--cl-global-invert);
+        border: 1px solid transparent !important;
     }
 
     &__btn {
+        display: flex;
         padding: 0 var(--gs);
         color: var(--cl-cyan);
         cursor: pointer;
         user-select: none;
-        border: 1px solid var(--cl-divider-grey);
 
         &:first-child {
             border-top-left-radius: calc(var(--gs) / 2);
@@ -27,10 +29,9 @@
     }
 
     &__input {
+        width: 100% !important;
         padding: var(--gs) !important;
         border-radius: 0 !important;
-        border-top: 1px solid var(--cl-divider-grey);
-        border-bottom: 1px solid var(--cl-divider-grey);
         color: var(--cl-global);
         font-size: 16px;
         text-align: center;

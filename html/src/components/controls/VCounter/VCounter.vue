@@ -1,43 +1,46 @@
 <template>
-    <div class="v-increment">
-        <button class="v-increment__btn"  
-                ref="decrement"
-                type="button"
-                @click="onBtnClick($event, 'decrement')"
-        >
-            <slot name="decrement">&minus;</slot>
+    <div class="v-counter">
+        <button class="v-counter__btn" ref="decrement" type="button" @click="onBtnClick($event, 'decrement')">
+            <slot name="decrement">
+                <v-svg name="minus" width="24" height="24" />
+            </slot>
         </button>
-        <input ref="input" 
-               class="v-increment__input" 
-               type="number" 
-               :min="min"
-               :max="max"
-               :value="value_internal"
-               v-bind="$attrs"
-               @change="onChange"/>
-        <button class="v-increment__btn" 
-                ref="increment"  
-                type="button"
-                @click="onBtnClick($event, 'increment')"
-        >
-            <slot name="increment">&plus;</slot>
+        <input
+            ref="input"
+            class="v-counter__input"
+            type="number"
+            :min="min"
+            :max="max"
+            :value="value_internal"
+            v-bind="$attrs"
+            @change="onChange"
+        />
+        <button class="v-counter__btn" ref="increment" type="button" @click="onBtnClick($event, 'increment')">
+            <slot name="increment">
+                <v-svg name="plus" width="24" height="24" />
+            </slot>
         </button>
     </div>
 </template>
 
 <script>
-import './VIncrement.css';
+import './VCounter.css';
+import VSvg from '../VSvg/VSvg.vue';
 
 const actionType = {
     decrement: 'decrement',
     increment: 'increment',
 };
 
-const pressHoldEvent = new CustomEvent('pressHold');
+let pressHoldEvent = null;
+if (typeof document !== 'undefined') pressHoldEvent = new CustomEvent('pressHold');
 
 export default {
-    name: 'v-increment',
+    name: 'v-counter',
     inheritAttrs: false,
+    components: {
+        VSvg,
+    },
     model: {
         prop: 'value',
         event: 'input',
