@@ -6,7 +6,13 @@
                 <label class="v-range__label">
                     <slot name="label" :index="index">{{ isSingle ? '' : index === 0 ? 'от' : 'до' }}</slot>
                 </label>
-                <input class="v-range__input" type="number" :value="value" @change="onInput($event, index)" />
+                <input
+                    class="v-range__input"
+                    type="number"
+                    :value="value"
+                    :name="name"
+                    @change="onInputChange($event, index)"
+                />
             </span>
         </div>
     </div>
@@ -43,6 +49,10 @@ export default {
             default() {
                 return undefined;
             },
+        },
+        name: {
+            type: String,
+            default: undefined,
         },
     },
     data() {
@@ -101,7 +111,7 @@ export default {
         },
     },
     methods: {
-        onInput(e, index) {
+        onInputChange(e, index) {
             this.value_internal[index] = Number(e.target.value);
             this.slider.set(this.value_internal);
         },
