@@ -229,8 +229,14 @@ fieldset {
 }
 
 input[type='number'] {
-    /* Прячет стрелки управления поля number в Firefox */
+    width: calc(var(--gs) * 9);
+    height: calc(var(--gs) * 4);
+    padding: 0 8px;
+    border: 1px solid var(--cl-global);
+    line-height: calc(var(--gs) * 4);
+    text-align: center;
 
+    /* Прячет стрелки управления поля number в Firefox */
     appearance: textfield;
 
     /* Прячет стрелки управления поля number в Chrome, Safari и Opera */
