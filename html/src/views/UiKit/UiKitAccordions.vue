@@ -3,7 +3,36 @@
         <h2 class="ui-kit-section__hl">
             Аккордионы
         </h2>
-        <v-accordion key-value="id" :items="items" :item-disabled="item => item.disabled">
+        <p class="text-grey">
+            Обычный Аккордион с одиночным выбором
+        </p>
+        <v-accordion key-value="id" :items="items">
+            <template v-slot:content="{ item }">
+                <div style="padding: 16px;">{{ item.content }}</div>
+            </template>
+        </v-accordion>
+        <br />
+        <br />
+        <p class="text-grey">
+            Обычный c disabled вкладкой
+        </p>
+        <v-accordion key-value="id" :items="items" :item-disabled="item => item.isDisabled">
+            <template v-slot:content="{ item }">
+                <div style="padding: 16px;">{{ item.content }}</div>
+            </template>
+        </v-accordion>
+        <br />
+        <br />
+        <p class="text-grey">
+            Аккордион с множественным выбором
+        </p>
+        <v-accordion
+            key-value="id"
+            :items="items"
+            :item-disabled="item => item.isDisabled"
+            :item-expanded="item => item.isExpanded"
+            :item-toggled="item => (item.isExpanded = !item.isExpanded)"
+        >
             <template v-slot:content="{ item }">
                 <div style="padding: 16px;">{{ item.content }}</div>
             </template>
@@ -25,17 +54,22 @@ export default {
                     id: 1,
                     title: 'Вкладка 1',
                     content: 'Контент 1',
+                    isExpanded: false,
+                    isDisabled: false,
                 },
                 {
                     id: 2,
                     title: 'Вкладка 2',
                     content: 'Контент 2',
+                    isExpanded: true,
+                    isDisabled: false,
                 },
                 {
                     id: 3,
                     title: 'Вкладка 3',
                     content: 'Контент 3',
-                    disabled: true,
+                    isExpanded: false,
+                    isDisabled: true,
                 },
             ],
         };

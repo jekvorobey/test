@@ -4,8 +4,8 @@
             v-for="(item, index) in items"
             class="v-accordion__item"
             :class="[
-                { 'v-accordion__item--expanded': internal_expanded === item },
-                { 'v-accordion__item--disabled': itemDisabled(item) },
+                { 'v-accordion__item--expanded': isExpanded(item) },
+                { 'v-accordion__item--disabled': isDisabled(item) },
             ]"
             :key="item[keyField] || index"
         >
@@ -13,27 +13,22 @@
                 class="v-accordion__item-btn"
                 :id="`v-accordion-header${index}`"
                 :aria-controls="`v-accordion-panel${index}`"
-                :aria-expanded="internal_expanded === item"
+                :aria-expanded="isExpanded(item)"
                 ref="header"
                 @click="toggleSelection(item)"
                 @keydown="headerKeyDown"
-                :disabled="itemDisabled(item)"
+                :disabled="isDisabled(item)"
             >
                 <slot
                     name="header"
                     :item="item"
                     :index="index"
-                    :isExpanded="internal_expanded === item"
-                    :isDisabled="itemDisabled(item)"
+                    :isExpanded="isExpanded(item)"
+                    :isDisabled="isDisabled(item)"
                 >
                     {{ item.title }}
                 </slot>
-                <v-svg
-                    :class="{ 'icon--rotate-deg180': internal_expanded === item }"
-                    name="arrow-down"
-                    width="24"
-                    height="24"
-                />
+                <v-svg :class="{ 'icon--rotate-deg180': isExpanded(item) }" name="arrow-down" width="24" height="24" />
             </button>
             <transition @before-enter="beforeEnter" @enter="enter" @leave="leave" :css="false">
                 <div
@@ -41,15 +36,15 @@
                     role="region"
                     :id="`v-accordion-panel${index}`"
                     :aria-labelledby="`v-accordion-header${index}`"
-                    :aria-hidden="internal_expanded !== item"
-                    v-show="internal_expanded === item"
+                    :aria-hidden="!isExpanded(item)"
+                    v-show="isExpanded(item)"
                 >
                     <slot
                         name="content"
                         :item="item"
                         :index="index"
-                        :isExpanded="internal_expanded === item"
-                        :isDisabled="itemDisabled(item)"
+                        :isExpanded="isExpanded(item)"
+                        :isDisabled="isDisabled(item)"
                         :toggleSelection="toggleSelection"
                     >
                         <span>{{ item.content }}</span>
@@ -84,7 +79,15 @@ export default {
         },
         itemDisabled: {
             type: Function,
-            default: () => false,
+            default: null,
+        },
+        itemExpanded: {
+            type: Function,
+            default: null,
+        },
+        itemToggled: {
+            type: Function,
+            default: null,
         },
         name: {
             type: String,
@@ -96,7 +99,7 @@ export default {
     },
     data() {
         return {
-            internal_expanded: null,
+            internal_expanded: this.items.find(item => item.isExpanded),
         };
     },
     methods: {
@@ -115,7 +118,20 @@ export default {
         },
 
         toggleSelection(item) {
+            if (this.itemToggled) {
+                this.itemToggled(item);
+                this.$forceUpdate();
+                return;
+            }
             this.internal_expanded = this.internal_expanded !== item ? item : null;
+        },
+
+        isExpanded(item) {
+            return this.itemExpanded ? this.itemExpanded(item) : this.internal_expanded === item;
+        },
+
+        isDisabled(item) {
+            return this.itemDisabled ? this.itemDisabled(item) : false;
         },
 
         headerKeyDown(e) {
