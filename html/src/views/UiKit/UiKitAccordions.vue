@@ -23,18 +23,18 @@ export default {
             items: [
                 {
                     id: 1,
-                    title: 'Lalala1',
-                    content: 'Lalala1',
+                    title: 'Вкладка 1',
+                    content: 'Контент 1',
                 },
                 {
                     id: 2,
-                    title: 'Lalala2',
-                    content: 'Lalala2',
+                    title: 'Вкладка 2',
+                    content: 'Контент 2',
                 },
                 {
                     id: 3,
-                    title: 'Lalala3',
-                    content: 'Lalala3',
+                    title: 'Вкладка 3',
+                    content: 'Контент 3',
                     disabled: true,
                 },
             ],
