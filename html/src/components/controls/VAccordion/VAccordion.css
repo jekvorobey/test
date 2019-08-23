@@ -39,5 +39,9 @@
             border-color: var(--cl-grey) !important;
             color: var(--cl-grey) !important;
         }
+
+        &--disabled &-panel {
+            border-color: var(--cl-grey) !important;
+        }
     }
 }

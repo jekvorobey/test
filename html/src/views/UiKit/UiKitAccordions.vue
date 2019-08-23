@@ -24,27 +24,34 @@
         <br />
         <br />
         <p class="text-grey">
-            Аккордион с множественным выбором
+            Аккордион с множественным выбором и скрытием вкладки disabled
         </p>
         <v-accordion
             key-value="id"
             :items="items"
             :item-disabled="item => item.isDisabled"
-            :item-expanded="item => item.isExpanded"
+            :item-expanded="item => item.isExpanded && !item.isDisabled"
             :item-toggled="item => (item.isExpanded = !item.isExpanded)"
         >
             <template v-slot:content="{ item }">
                 <div style="padding: 16px;">{{ item.content }}</div>
             </template>
         </v-accordion>
+        <br />
+        <br />
+        <v-button @click="items[2].isDisabled = !items[2].isDisabled">
+            {{ items[2].isDisabled ? 'Enable item 3' : 'Disable item 3' }}
+        </v-button>
     </section>
 </template>
 <script>
 import VAccordion from '../../components/controls/VAccordion/VAccordion.vue';
+import VButton from '../../components/controls/VButton/VButton.vue';
 
 export default {
     name: 'ui-kit-accordions',
     components: {
+        VButton,
         VAccordion,
     },
     data() {
