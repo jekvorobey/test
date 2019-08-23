@@ -68,11 +68,12 @@ export default {
         },
     },
     data() {
+        const value = this.value < this.max ? this.value : this.max;
         return {
             pressHoldDuration: 20,
             timerID: null,
             counter: 0,
-            value_internal: Number(this.value),
+            value_internal: Number(value),
         };
     },
     methods: {

@@ -1,14 +1,43 @@
 .v-accordion {
     &__item {
+        & + & {
+            margin-top: calc(var(--gs) * 3);
+        }
+
         &-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: calc(var(--gs) * 2);
             width: 100%;
-            cursor: pointer;
-            text-align: initial;
+            border: 1px solid var(--cl-global);
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 24px;
             text-transform: none;
+            cursor: pointer;
         }
 
         &-panel {
             overflow: hidden;
+            border: 1px solid var(--cl-global);
+            transition: all var(--time) var(--timing-function);
+        }
+
+        &--expanded &-panel {
+            border-top: none;
+        }
+
+        &:hover &-btn {
+            fill: var(--cl-dark-blue);
+            border-color: var(--cl-dark-blue);
+            color: var(--cl-dark-blue);
+        }
+
+        &--disabled &-btn {
+            fill: var(--cl-grey) !important;
+            border-color: var(--cl-grey) !important;
+            color: var(--cl-grey) !important;
         }
     }
 }

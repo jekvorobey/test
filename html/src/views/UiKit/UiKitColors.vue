@@ -48,6 +48,14 @@
                     var(--cl-gold)
                 </p>
             </div>
+            <div class="ui-kit-colors__col">
+                <div class="ui-kit-colors__name" style="background-color:  #0f41c3;" />
+                <p class="ui-kit-colors__desc">
+                    Тёмно-синий<br />
+                    #0f41c3 <br />
+                    var(--cl-dark-blue)
+                </p>
+            </div>
         </div>
     </section>
 </template>

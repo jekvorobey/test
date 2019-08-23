@@ -3,7 +3,10 @@
         <div
             v-for="(item, index) in items"
             class="v-accordion__item"
-            :class="{ 'v-accordion__item--expanded': internal_expanded === item }"
+            :class="[
+                { 'v-accordion__item--expanded': internal_expanded === item },
+                { 'v-accordion__item--disabled': itemDisabled(item) },
+            ]"
             :key="item[keyField] || index"
         >
             <button
@@ -25,34 +28,48 @@
                 >
                     {{ item.title }}
                 </slot>
+                <v-svg
+                    :class="{ 'icon--rotate-deg180': internal_expanded === item }"
+                    name="arrow-down"
+                    width="24"
+                    height="24"
+                />
             </button>
-            <div
-                class="v-accordion__item-panel"
-                role="region"
-                :id="`v-accordion-panel${index}`"
-                :aria-labelledby="`v-accordion-header${index}`"
-                :aria-hidden="internal_expanded !== item"
-            >
-                <slot
-                    name="content"
-                    :item="item"
-                    :index="index"
-                    :isExpanded="internal_expanded === item"
-                    :isDisabled="itemDisabled(item)"
-                    :toggleSelection="toggleSelection"
+            <transition @before-enter="beforeEnter" @enter="enter" @leave="leave" :css="false">
+                <div
+                    class="v-accordion__item-panel"
+                    role="region"
+                    :id="`v-accordion-panel${index}`"
+                    :aria-labelledby="`v-accordion-header${index}`"
+                    :aria-hidden="internal_expanded !== item"
+                    v-show="internal_expanded === item"
                 >
-                    {{ item.content }}
-                </slot>
-            </div>
+                    <slot
+                        name="content"
+                        :item="item"
+                        :index="index"
+                        :isExpanded="internal_expanded === item"
+                        :isDisabled="itemDisabled(item)"
+                        :toggleSelection="toggleSelection"
+                    >
+                        <span>{{ item.content }}</span>
+                    </slot>
+                </div>
+            </transition>
         </div>
     </transition-group>
 </template>
 
 <script>
+import VSvg from '../VSvg/VSvg.vue';
 import './VAccordion.css';
+import { setTimeout } from 'timers';
 
 export default {
     name: 'v-accordion',
+    components: {
+        VSvg,
+    },
     props: {
         keyField: String,
         isSingle: {
@@ -83,6 +100,20 @@ export default {
         };
     },
     methods: {
+        beforeEnter(el) {
+            el.style.height = 0;
+        },
+
+        enter(el, done) {
+            el.style.height = el.scrollHeight + 'px';
+            setTimeout(done, 250);
+        },
+
+        leave(el, done) {
+            el.style.height = 0;
+            setTimeout(done, 150);
+        },
+
         toggleSelection(item) {
             this.internal_expanded = this.internal_expanded !== item ? item : null;
         },

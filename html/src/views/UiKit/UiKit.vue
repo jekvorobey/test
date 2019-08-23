@@ -39,6 +39,7 @@ import UiKitTables from './UiKitTables.vue';
 import UiKitSelects from './UiKitSelects.vue';
 import UiKitLinks from './UiKitLinks.vue';
 import UiKitList from './UiKitList.vue';
+import UiKitAccordions from './UiKitAccordions.vue';
 
 import './UiKit.css';
 
@@ -66,6 +67,7 @@ export default {
         UiKitSelects,
         UiKitLinks,
         UiKitList,
+        UiKitAccordions,
     },
 
     data() {
@@ -143,6 +145,10 @@ export default {
                 {
                     to: 'tabs',
                     desc: 'Табы',
+                },
+                {
+                    to: 'accordions',
+                    desc: 'Аккордионы',
                 },
                 {
                     to: 'tooltips',
