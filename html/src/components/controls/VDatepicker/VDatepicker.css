@@ -1,0 +1,474 @@
+@import '../../../../node_modules/flatpickr/dist/flatpickr.css';
+
+/*
+Переопределение стилей плагина flatpickr:
+https://flatpickr.js.org/
+
+Повторяет структуру исходной таблицы стилей:
+\node_modules\flatpickr\src\style\flatpickr.styl
+
+Календарю проставляется минимальная ширина контентной области.
+Расчёт размеров ячеек идёт от этой ширины.
+
+Для инлайнового режима расчёт размеров прописан отдельно.
+Предполагается, что ширина такого календаря - 100% и ячейки сжимаются на адаптиве.
+Ограничение ширины через max-width также поддерживается.
+
+Основные цвета для настройки вынесены в переменные.
+
+Стилизация не учитывает блоки с неделями и временем.
+При необходимости стили для них придётся прописать отдельно.
+*/
+
+:root {
+    /* Ширина календаря (320px - поля страницы) */
+    --flatpickr-calendar-width: calc((var(--gs) * 40) - (var(--gs) * 3) * 2);
+
+    /* Ширина полей календаря */
+    --flatpickr-calendar-padding: calc((var(--gs)) / 2);
+
+    /* Ширина контентной области: ширина календаря - ширина полей календаря */
+    --flatpickr-content-width: calc(var(--flatpickr-calendar-width) - var(--flatpickr-calendar-padding) * 2);
+
+    /* Высота строки с месяцами */
+    --flatpickr-months-height: calc(var(--gs) * 4);
+
+    /* Высота строки с днями недели */
+    --flatpickr-weekdays-height: calc(var(--gs) * 4);
+
+    /* Отступ между ячейками дней */
+    --flatpickr-day-gutter: calc((var(--gs)) / 2);
+
+    /* Ширина ячейки: (ширина контентной области - 6 внутренних отступов) / 7 - 1px (погрешность) */
+    --flatpickr-day-width: calc((var(--flatpickr-content-width) - var(--flatpickr-day-gutter) * 6) / 7 - 1px);
+
+    /* Высота ячейки: 80% от ширины */
+    --flatpickr-day-height: calc(var(--flatpickr-day-width) * 0.8);
+
+    /* Размер поинтера календаря */
+    --flatpickr-arrow-size: var(--gs);
+
+    /* Ширина бордеров календаря */
+    --flatpickr-calendar-bd-width: 2px;
+
+    /* Ширина календаря в инлайновом режиме */
+    --flatpickr-calendar-inline-width: 100%;
+
+    /* Ширина ячейки в инлайновом режиме: (100% - 6 внутренних отступов) / 7 - 1px (погрешность) */
+    --flatpickr-day-inline-width: calc((100% - var(--flatpickr-day-gutter) * 6) / 7 - 1px);
+
+    /* Высота ячейки в инлайновом режиме (фиксированная, т.к. проценты для высоты не сработают) */
+    --flatpickr-day-inline-height: calc(var(--gs) * 5);
+
+    /* Цвет бордеров календаря */
+    --flatpickr-calendar-bd: var(--cl-black);
+
+    /* Цвет фона календаря */
+    --flatpickr-calendar-bg: var(--cl-white);
+
+    /* Цвет текста календаря */
+    --flatpickr-calendar-cl: var(--cl-black);
+
+    /* Цвет фона ячейки */
+    --flatpickr-day-bg: var(--cl-lg-grey);
+
+    /* Цвет текста ячейки */
+    --flatpickr-day-cl: var(--cl-black);
+
+    /* Цвет фона ячейки под ховером */
+    --flatpickr-hover-bg: var(--cl-red);
+
+    /* Цвет текста ячейки под ховером */
+    --flatpickr-hover-cl: var(--cl-white);
+
+    /* Цвет фона выбранной ячейки */
+    --flatpickr-selected-bg: var(--cl-red);
+
+    /* Цвет текста выбранной ячейки */
+    --flatpickr-selected-cl: var(--cl-white);
+
+    /* Цвет фона задизейбленной ячейки */
+    --flatpickr-disabled-bg: var(--cl-lg-grey);
+
+    /* Цвет фона задизейбленной ячейки */
+    --flatpickr-disabled-cl: var(--cl-grey);
+
+    /* Цвет фона ячейки в диапазоне */
+    --flatpickr-range-bg: var(--cl-grey);
+
+    /* Цвет текста ячейки в диапазоне */
+    --flatpickr-range-cl: var(--cl-black);
+
+    /* Цвет фона ячейки сегодняшнего дня */
+    --flatpickr-today-bg: var(--cl-lg-grey);
+
+    /* Цвет фона ячейки сегодняшнего дня */
+    --flatpickr-today-cl: var(--cl-black);
+}
+
+.flatpickr-calendar {
+    width: var(--flatpickr-calendar-width);
+    padding: var(--flatpickr-calendar-padding);
+    border: var(--flatpickr-calendar-bd-width) solid var(--flatpickr-calendar-bd);
+    background-color: var(--flatpickr-calendar-bg);
+    box-shadow: none;
+
+    &::before {
+        border-width: var(--flatpickr-arrow-size);
+        margin: 0 calc(-1 * var(--flatpickr-arrow-size));
+    }
+
+    &::after {
+        border-width: calc(var(--flatpickr-arrow-size) - var(--flatpickr-calendar-bd-width) - 1px);
+        margin: 0 calc(-1 * var(--flatpickr-arrow-size) + var(--flatpickr-calendar-bd-width) + 1px);
+    }
+
+    &.arrowTop {
+        border-radius: 0 0 5px 5px; /* Смещение календаря относительно инпута для комфортного ручного ввода */
+        margin-top: -4px;
+        &::before {
+            border-bottom-color: var(--flatpickr-calendar-bd);
+        }
+        &::after {
+            border-bottom-color: var(--flatpickr-calendar-bg);
+        }
+    }
+
+    &.arrowBottom {
+        border-radius: 5px 5px 0 0;
+
+        /* Смещение календаря относительно инпута для комфортного ручного ввода */
+        margin-top: -9px;
+
+        &::before {
+            border-top-color: var(--flatpickr-calendar-bd);
+        }
+
+        &::after {
+            border-top-color: var(--flatpickr-calendar-bg);
+        }
+    }
+
+    &.open,
+    &.inline {
+        max-height: none;
+    }
+
+    &.inline {
+        width: var(--flatpickr-calendar-inline-width);
+    }
+}
+
+.flatpickr-months {
+    position: relative;
+    height: var(--flatpickr-months-height);
+
+    .flatpickr-month {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: var(--flatpickr-months-height);
+        color: var(--flatpickr-calendar-cl);
+        fill: var(--flatpickr-calendar-cl);
+    }
+
+    .flatpickr-prev-month,
+    .flatpickr-next-month {
+        position: static;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: var(--flatpickr-months-height);
+        height: 100%;
+        padding: 0;
+        color: var(--flatpickr-calendar-cl);
+        fill: var(--flatpickr-calendar-cl);
+
+        &.disabled {
+            /* Перекрываем display: none, который не подходит для статичного позиционирования */
+            display: flex;
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        &.flatpickr-prev-month {
+            .icon {
+                /* Позволяет использовать одну иконку для двух элементов */
+                transform: rotate(180deg);
+            }
+        }
+
+        &:hover {
+            .icon {
+                fill: var(--cl-red);
+            }
+        }
+    }
+}
+.flatpickr-current-month {
+    position: static;
+    width: 100%;
+    height: auto;
+    padding: 0;
+
+    span.cur-month {
+        /* inline немного увеличивает полезную область под месяц, что повышает удобство скролла */
+        display: inline;
+        margin-left: 0;
+    }
+
+    input.cur-year {
+        font-weight: 700;
+
+        &[disabled] {
+            color: inherit;
+        }
+    }
+}
+
+.flatpickr-weekdays {
+    height: var(--flatpickr-weekdays-height);
+}
+
+span.flatpickr-weekday {
+    flex-basis: var(--flatpickr-day-width);
+    width: var(--flatpickr-day-width);
+    max-width: var(--flatpickr-day-width);
+    color: var(--flatpickr-calendar-cl);
+
+    .flatpickr-calendar.inline & {
+        flex-basis: var(--flatpickr-day-inline-width);
+        width: var(--flatpickr-day-inline-width);
+        max-width: var(--flatpickr-day-inline-width);
+    }
+
+    &:not(:nth-child(7n)) {
+        margin-right: var(--flatpickr-day-gutter);
+    }
+
+    &:not(:nth-last-child(-n + 7)) {
+        margin-bottom: var(--flatpickr-day-gutter);
+    }
+}
+
+.flatpickr-days {
+    width: 100%;
+}
+
+.dayContainer {
+    justify-content: flex-start;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.flatpickr-day {
+    flex-basis: var(--flatpickr-day-width);
+    width: var(--flatpickr-day-width);
+    max-width: var(--flatpickr-day-width);
+    height: calc(var(--flatpickr-day-height));
+    border: none;
+    border-radius: 0;
+    color: var(--flatpickr-day-cl);
+    line-height: calc(var(--flatpickr-day-height));
+    background-color: var(--flatpickr-day-bg);
+
+    .flatpickr-calendar.inline & {
+        flex-basis: var(--flatpickr-day-inline-width);
+        width: var(--flatpickr-day-inline-width);
+        max-width: var(--flatpickr-day-inline-width);
+        height: calc(var(--flatpickr-day-inline-height));
+        line-height: calc(var(--flatpickr-day-inline-height));
+    }
+
+    &:not(:nth-child(7n)) {
+        margin-right: var(--flatpickr-day-gutter);
+    }
+
+    &:not(:nth-last-child(-n + 7)) {
+        margin-bottom: var(--flatpickr-day-gutter);
+    }
+
+    &,
+    &.prevMonthDay,
+    &.nextMonthDay {
+        &.inRange,
+        &.today.inRange {
+            color: var(--flatpickr-range-cl);
+            background-color: var(--flatpickr-range-bg);
+        }
+
+        &:hover {
+            color: var(--flatpickr-hover-cl);
+            background-color: var(--flatpickr-hover-bg);
+        }
+    }
+
+    &.today {
+        border-bottom: 2px solid var(--cl-red);
+        color: var(--flatpickr-today-cl);
+        background-color: var(--flatpickr-today-bg);
+
+        &.inRange {
+            border-color: var(--cl-red);
+        }
+
+        &:hover {
+            border-color: transparent;
+            color: var(--flatpickr-hover-cl);
+            background-color: var(--flatpickr-hover-bg);
+        }
+    }
+
+    &.selected,
+    &.startRange,
+    &.endRange {
+        &,
+        &.inRange,
+        &:focus,
+        &:hover,
+        &.prevMonthDay,
+        &.nextMonthDay {
+            color: var(--flatpickr-selected-cl);
+            background: var(--flatpickr-selected-bg);
+            border-color: var(--flatpickr-selected-bg);
+        }
+
+        &.startRange,
+        &.endRange,
+        &.startRange.endRange {
+            border-radius: 0;
+        }
+
+        &.startRange + .endRange:not(:nth-child(7n + 1)) {
+            box-shadow: none;
+        }
+    }
+
+    &.inRange {
+        box-shadow: none;
+    }
+
+    &.disabled,
+    &.disabled:hover,
+    &.prevMonthDay,
+    &.nextMonthDay,
+    &.notAllowed,
+    &.notAllowed.prevMonthDay,
+    &.notAllowed.nextMonthDay {
+        color: var(--flatpickr-disabled-cl);
+        background-color: var(--flatpickr-disabled-bg);
+    }
+
+    &.disabled,
+    &.disabled:hover {
+        color: var(--flatpickr-disabled-cl);
+    }
+}
+
+.rangeMode .flatpickr-day {
+    margin-top: 0;
+}
+
+.flatpickr-rContainer {
+    width: 100%;
+}
+
+/* Маркер для примера с кастомным рендером */
+.flatpickr-marker {
+    /* Размер маркера */
+    --marker-size: 4px;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: var(--marker-size);
+    height: var(--marker-size);
+    background: var(--cl-black);
+
+    &--weekend {
+        background: var(--cl-red);
+    }
+}
+
+/* /Маркер для примера с кастомным рендером */
+
+.v-datepicker {
+    position: relative;
+    padding-top: calc(var(--gs) * 2);
+
+    &--float &__label {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        line-height: 2.5rem;
+        -webkit-transition: all 0.2s ease;
+        transition: all 0.2s ease;
+    }
+
+    &--active &__label {
+        top: 0;
+        color: var(--cl-global);
+        font-size: 0.75rem;
+        line-height: 1rem;
+    }
+
+    &--active &__input {
+        border-bottom-color: var(--cl-global);
+    }
+
+    &--invalid &__input {
+        border-bottom-color: var(--cl-red);
+    }
+
+    &--disabled &__input {
+        color: var(--cl-divider-grey);
+        border-bottom-color: var(--cl-divider-grey);
+    }
+
+    &--disabled &__label {
+        color: var(--cl-divider-grey);
+    }
+
+    &--disabled &__error {
+        display: none;
+    }
+
+    &__label {
+        cursor: text;
+        color: var(--cl-grey);
+    }
+
+    &__input {
+        width: 100%;
+        min-height: 40px;
+        padding: 8px 16px;
+        border: none;
+        border-bottom: 2px solid var(--cl-grey);
+        color: var(--cl-global);
+        font-size: 0.875rem;
+        line-height: 1.375rem;
+        background-color: transparent;
+        transition: all var(--time) var(--timing-function);
+        overflow: hidden;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    &__container {
+        position: relative;
+        display: flex;
+    }
+
+    &__error {
+        position: relative;
+        min-height: calc(var(--gs) * 3);
+        padding: 0 16px;
+        font-size: 12px;
+        line-height: calc(var(--gs) * 3);
+        color: var(--cl-red);
+        overflow: hidden;
+    }
+}

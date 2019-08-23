@@ -25,7 +25,7 @@ import UiKitBase from './UiKitBase.vue';
 import UiKitButtons from './UiKitButtons.vue';
 import UiKitRadioButtons from './UiKitRadioButtons.vue';
 import UiKitIcons from './UiKitIcons.vue';
-import UiKitCalendar from './UiKitCalendar.vue';
+import UiKitDatepicker from './UiKitDatepicker.vue';
 import UiKitCheckboxes from './UiKitCheckboxes.vue';
 import UiKitDropzones from './UiKitDropzones.vue';
 import UiKitForms from './UiKitForms.vue';
@@ -53,7 +53,7 @@ export default {
         UiKitButtons,
         UiKitRadioButtons,
         UiKitIcons,
-        UiKitCalendar,
+        UiKitDatepicker,
         UiKitCheckboxes,
         UiKitDropzones,
         UiKitForms,
@@ -127,7 +127,7 @@ export default {
                     desc: 'Дропзоны',
                 },
                 {
-                    to: 'calendar',
+                    to: 'datepicker',
                     desc: 'Календари',
                 },
                 {

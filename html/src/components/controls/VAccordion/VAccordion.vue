@@ -58,7 +58,6 @@
 <script>
 import VSvg from '../VSvg/VSvg.vue';
 import './VAccordion.css';
-import { setTimeout } from 'timers';
 
 export default {
     name: 'v-accordion',
