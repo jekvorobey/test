@@ -1,5 +1,6 @@
 <template>
     <div
+        v-show="initialized"
         class="v-datepicker"
         :class="[
             { 'v-datepicker--float': float },
@@ -30,23 +31,40 @@
                 {{ error }}
             </slot>
         </div>
-
-        <div ref="datepicker"></div>
+        <div v-show="!disabled" ref="datepicker"></div>
     </div>
 </template>
 <script>
 import flatpickr from 'flatpickr';
 import inputMixin from '../VInput/inputMixin';
+import '../../../assets/images/sprites/arrow-small.svg';
 import './VDatepicker.css';
 
 const validModes = ['single', 'multiple', 'range'];
 
 export default {
-    name: 'v-input',
+    name: 'v-datepicker',
     inheritAttrs: false,
     mixins: [inputMixin],
     props: {
-        value: {},
+        value: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
+        disable: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
+        enable: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
         disabled: {
             type: Boolean,
             default: false,
@@ -71,10 +89,15 @@ export default {
                 return validModes.indexOf(value) !== -1;
             },
         },
+        locale: {
+            type: String,
+            default: 'ru',
+        },
     },
     data() {
         return {
             inputId: `v-input-id-${this._uid}`,
+            initialized: false,
             internal_value: this.value,
             focus: false,
             open: false,
@@ -92,6 +115,19 @@ export default {
         mode(value) {
             this.engine.set('mode', value);
         },
+
+        locale(value) {
+            this.engine.set('locale', value);
+            this.reinit();
+        },
+
+        disable(value) {
+            this.engine.set('disable', value);
+        },
+
+        enable(value) {
+            this.engine.set('enable', value);
+        },
     },
     computed: {
         active() {
@@ -99,36 +135,60 @@ export default {
         },
     },
     methods: {
-        setFocus(bool) {
-            this.focus = bool;
+        setFocus(value) {
+            this.focus = value;
+        },
+
+        reinit() {
+            const config = Object.assign({}, this.engine.config);
+            this.destroy();
+            this.init();
+        },
+
+        init() {
+            const { input, datepicker } = this.$refs;
+            const that = this;
+            const config = {
+                defaultDate: this.internal_value,
+                mode: this.mode,
+                disableMobile: true,
+                allowInput: this.allowInput,
+                inline: this.inline,
+                locale: this.locale,
+                nextArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
+                prevArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
+                onChange(selectedDates, dateStr, instance) {
+                    that.internal_value = selectedDates;
+                },
+                onOpen() {
+                    that.open = true;
+                },
+                onClose() {
+                    that.open = false;
+                },
+                onReady() {
+                    that.initialized = true;
+                },
+            };
+
+            if (this.inline) config.appendTo = datepicker;
+            if (this.disable && this.disable.length > 0) config.disable = this.disable;
+            if (this.enable && this.enable.length > 0) config.enable = this.enable;
+            this.engine = flatpickr(input, config);
+        },
+
+        destroy() {
+            if (!this.engine) return;
+            this.initialized = false;
+            this.engine.destroy();
+            this.engine = null;
         },
     },
     mounted() {
-        const { input, datepicker } = this.$refs;
-        const that = this;
-        const config = {
-            defaultDate: this.internal_value,
-            mode: this.mode,
-            disableMobile: true,
-            allowInput: this.allowInput,
-            inline: this.inline,
-
-            onChange(selectedDates, dateStr, instance) {
-                that.internal_value = selectedDates;
-            },
-            onOpen() {
-                that.open = true;
-            },
-            onClose() {
-                that.open = false;
-            },
-        };
-
-        if (this.inline) config.appendTo = datepicker;
-        this.engine = flatpickr(input, config);
+        this.init();
     },
     beforeDestroy() {
-        this.engine.destroy();
+        this.destroy();
     },
 };
 </script>

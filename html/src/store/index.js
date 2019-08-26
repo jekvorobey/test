@@ -13,7 +13,7 @@ Vue.use(Vuex);
 export default function createStore() {
     return new Vuex.Store({
         strict: process.env.NODE_ENV !== 'production',
-        state: {},
+        state: { locale: 'ru' },
         getters,
         mutations,
         actions,

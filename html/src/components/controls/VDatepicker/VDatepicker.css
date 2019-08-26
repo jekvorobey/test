@@ -43,13 +43,13 @@ https://flatpickr.js.org/
     --flatpickr-day-width: calc((var(--flatpickr-content-width) - var(--flatpickr-day-gutter) * 6) / 7 - 1px);
 
     /* Высота ячейки: 80% от ширины */
-    --flatpickr-day-height: calc(var(--flatpickr-day-width) * 0.8);
+    --flatpickr-day-height: calc(var(--gs) * 3);
 
     /* Размер поинтера календаря */
     --flatpickr-arrow-size: var(--gs);
 
     /* Ширина бордеров календаря */
-    --flatpickr-calendar-bd-width: 2px;
+    --flatpickr-calendar-bd-width: 1px;
 
     /* Ширина календаря в инлайновом режиме */
     --flatpickr-calendar-inline-width: 100%;
@@ -70,19 +70,19 @@ https://flatpickr.js.org/
     --flatpickr-calendar-cl: var(--cl-black);
 
     /* Цвет фона ячейки */
-    --flatpickr-day-bg: var(--cl-lg-grey);
+    --flatpickr-day-bg: var(--cl-white);
 
     /* Цвет текста ячейки */
     --flatpickr-day-cl: var(--cl-black);
 
     /* Цвет фона ячейки под ховером */
-    --flatpickr-hover-bg: var(--cl-red);
+    --flatpickr-hover-bg: var(--cl-dark-blue);
 
     /* Цвет текста ячейки под ховером */
     --flatpickr-hover-cl: var(--cl-white);
 
     /* Цвет фона выбранной ячейки */
-    --flatpickr-selected-bg: var(--cl-red);
+    --flatpickr-selected-bg: var(--cl-dark-blue);
 
     /* Цвет текста выбранной ячейки */
     --flatpickr-selected-cl: var(--cl-white);
@@ -100,7 +100,7 @@ https://flatpickr.js.org/
     --flatpickr-range-cl: var(--cl-black);
 
     /* Цвет фона ячейки сегодняшнего дня */
-    --flatpickr-today-bg: var(--cl-lg-grey);
+    --flatpickr-today-bg: var(--cl-white);
 
     /* Цвет фона ячейки сегодняшнего дня */
     --flatpickr-today-cl: var(--cl-black);
@@ -110,6 +110,7 @@ https://flatpickr.js.org/
     width: var(--flatpickr-calendar-width);
     padding: var(--flatpickr-calendar-padding);
     border: var(--flatpickr-calendar-bd-width) solid var(--flatpickr-calendar-bd);
+    border-radius: 0;
     background-color: var(--flatpickr-calendar-bg);
     box-shadow: none;
 
@@ -124,7 +125,6 @@ https://flatpickr.js.org/
     }
 
     &.arrowTop {
-        border-radius: 0 0 5px 5px; /* Смещение календаря относительно инпута для комфортного ручного ввода */
         margin-top: -4px;
         &::before {
             border-bottom-color: var(--flatpickr-calendar-bd);
@@ -191,16 +191,31 @@ https://flatpickr.js.org/
             opacity: 0;
         }
 
+        &.flatpickr-prev-month,
+        &.flatpickr-next-month {
+            svg {
+                width: calc(var(--gs) * 3);
+                height: calc(var(--gs) * 3);
+            }
+        }
+
+        &.flatpickr-next-month {
+            .icon {
+                /* Позволяет использовать одну иконку для двух элементов */
+                transform: rotate(270deg);
+            }
+        }
+
         &.flatpickr-prev-month {
             .icon {
                 /* Позволяет использовать одну иконку для двух элементов */
-                transform: rotate(180deg);
+                transform: rotate(90deg);
             }
         }
 
         &:hover {
             .icon {
-                fill: var(--cl-red);
+                fill: var(--cl-dark-blue);
             }
         }
     }
@@ -235,6 +250,9 @@ span.flatpickr-weekday {
     width: var(--flatpickr-day-width);
     max-width: var(--flatpickr-day-width);
     color: var(--flatpickr-calendar-cl);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: normal;
 
     .flatpickr-calendar.inline & {
         flex-basis: var(--flatpickr-day-inline-width);
@@ -266,19 +284,19 @@ span.flatpickr-weekday {
     flex-basis: var(--flatpickr-day-width);
     width: var(--flatpickr-day-width);
     max-width: var(--flatpickr-day-width);
-    height: calc(var(--flatpickr-day-height));
+    height: var(--flatpickr-day-height);
     border: none;
     border-radius: 0;
     color: var(--flatpickr-day-cl);
-    line-height: calc(var(--flatpickr-day-height));
+    line-height: var(--flatpickr-day-height);
     background-color: var(--flatpickr-day-bg);
 
     .flatpickr-calendar.inline & {
         flex-basis: var(--flatpickr-day-inline-width);
         width: var(--flatpickr-day-inline-width);
         max-width: var(--flatpickr-day-inline-width);
-        height: calc(var(--flatpickr-day-inline-height));
-        line-height: calc(var(--flatpickr-day-inline-height));
+        height: var(--flatpickr-day-inline-height);
+        line-height: var(--flatpickr-day-inline-height);
     }
 
     &:not(:nth-child(7n)) {
@@ -374,23 +392,6 @@ span.flatpickr-weekday {
     width: 100%;
 }
 
-/* Маркер для примера с кастомным рендером */
-.flatpickr-marker {
-    /* Размер маркера */
-    --marker-size: 4px;
-
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: var(--marker-size);
-    height: var(--marker-size);
-    background: var(--cl-black);
-
-    &--weekend {
-        background: var(--cl-red);
-    }
-}
-
 /* /Маркер для примера с кастомным рендером */
 
 .v-datepicker {
@@ -428,10 +429,6 @@ span.flatpickr-weekday {
 
     &--disabled &__label {
         color: var(--cl-divider-grey);
-    }
-
-    &--disabled &__error {
-        display: none;
     }
 
     &__label {
