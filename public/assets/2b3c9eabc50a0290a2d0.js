@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([["lang-en"],{168:function(e,s,n){"use strict";n.r(s),s.default={header:{links:{new:"New",stocks:"Stocks",collections:"Collections",brands:"Brands",classes:"Master-classes"}},validation:{errors:{required:"Required",email:"name@domain.com format"}}}}}]);
