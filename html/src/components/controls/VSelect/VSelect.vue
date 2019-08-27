@@ -326,7 +326,7 @@ export default {
             return (this.singleValue || this.singleValue === 0) && !this.visibleValues.length;
         },
         isPlaceholderVisible() {
-            return !this.internalValue.length && (!this.searchable || !this.isOpen);
+            return !this.internalValue.length && !this.isOpen;
         },
         visibleValues() {
             return this.multiple ? this.internalValue.slice(0, this.limit) : [];
