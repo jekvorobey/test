@@ -441,7 +441,7 @@ span.flatpickr-weekday {
         min-height: 40px;
         padding: 8px 16px;
         border: none;
-        border-bottom: 2px solid var(--cl-grey);
+        border-bottom: 1px solid var(--cl-grey);
         color: var(--cl-global);
         font-size: 0.875rem;
         line-height: 1.375rem;
