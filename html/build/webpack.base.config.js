@@ -44,9 +44,9 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(jpe?g|png)$/,
+                test: /\.(jpe?g|png|svg)$/,
                 include: path.resolve(__dirname, '../src/assets/images'),
-                exclude: path.resolve(__dirname, '../src/assets/images/responsive'),
+                exclude: [path.resolve(__dirname, '../src/assets/images/sprites')],
                 use: [
                     {
                         loader: 'url-loader',

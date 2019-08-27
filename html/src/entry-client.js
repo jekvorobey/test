@@ -17,7 +17,15 @@ ServiceLocator.createInstance()
 
 // prime the store with server-initialized state.
 // the state is determined during SSR and inlined in the page markup.
-if (window.__INITIAL_STATE__) store.replaceState(window.__INITIAL_STATE__);
+if (window.__INITIAL_STATE__) {
+    // Вставляем данные в стор
+    store.replaceState(window.__INITIAL_STATE__);
+
+    // удаляем тег скрипта с данными, и чистим их в переменной
+    const appEl = document.getElementById('app');
+    appEl.nextElementSibling.remove();
+    delete window.__INITIAL_STATE__;
+}
 
 router.onReady(() =>
     // actually mount to DOM
