@@ -24,7 +24,7 @@
                 @blur="setFocus(false)"
                 autocomplete="off"
             />
-            <slot name="after" />
+            <div class="v-datepicker__icon" />
         </div>
         <div :id="`${inputId}-alert`" class="error-message v-datepicker__error" role="alert">
             <slot name="error" :error="error">

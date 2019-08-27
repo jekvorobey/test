@@ -438,7 +438,7 @@ span.flatpickr-weekday {
     &__input {
         width: 100%;
         min-height: calc(var(--gs) * 5);
-        padding: var(--gs) calc(var(--gs) * 2);
+        padding: var(--gs) calc(var(--gs) * 5) var(--gs) calc(var(--gs) * 2);
         border: none;
         border-bottom: 1px solid var(--cl-grey);
         color: var(--cl-global);
@@ -456,6 +456,24 @@ span.flatpickr-weekday {
     &__container {
         position: relative;
         display: flex;
+    }
+
+    &__icon {
+        pointer-events: none;
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 24px;
+
+        &::after {
+            position: absolute;
+            content: '';
+            width: 24px;
+            height: 24px;
+            background-image: svg-load('../../../assets/images/sprites/datepicker.svg');
+        }
     }
 
     &__error {
