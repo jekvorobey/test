@@ -2,10 +2,10 @@
     <section class="section ui-kit-section">
         <h2 class="ui-kit-section__hl">
             Тултипы
-            <a href="https://github.com/Akryum/v-tooltip#usage" target="_blank" rel="noopener noreferrer">
-                https://github.com/Akryum/v-tooltip#usage
-            </a>
         </h2>
+        <a href="https://github.com/Akryum/v-tooltip#component" target="_blank" rel="noopener noreferrer">
+            https://github.com/Akryum/v-tooltip#component
+        </a>
         <p class="text-grey">
             Мастер тултип placement="bottom"
         </p>
