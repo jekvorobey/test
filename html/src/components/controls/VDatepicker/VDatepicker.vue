@@ -37,7 +37,6 @@
 <script>
 import flatpickr from 'flatpickr';
 import inputMixin from '../VInput/inputMixin';
-import '../../../assets/images/sprites/arrow-small.svg';
 import './VDatepicker.css';
 
 const validModes = ['single', 'multiple', 'range'];

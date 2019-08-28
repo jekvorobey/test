@@ -1,16 +1,47 @@
 .v-tabs {
     &__header {
         display: flex;
-        background: var(--cl-elem-grey);
         overflow: auto;
+        height: calc(var(--gs) * 6);
+        border-bottom: 1px solid var(--cl-global);
 
         &-item {
-            padding: 0 calc(var(--gs) * 2);
+            padding: 0 var(--gs);
+            min-width: 184px;
             text-transform: initial;
+            border: 1px solid var(--cl-global);
+            border-bottom: none;
+            border-top-left-radius: calc(var(--gs) / 2);
+            border-top-right-radius: calc(var(--gs) / 2);
+
+            & + & {
+                margin-left: calc(var(--gs) * 2);
+            }
+
+            &:hover {
+                border-color: var(--cl-dark-blue);
+                color: var(--cl-dark-blue);
+                fill: var(--cl-dark-blue);
+            }
+
+            &.is-active,
+            &:focus {
+                border-color: var(--cl-global);
+                color: var(--cl-white);
+                background-color: var(--cl-global);
+            }
+
+            &:disabled {
+                border-color: var(--cl-grey);
+                color: var(--cl-grey);
+                background: var(--cl-white);
+                fill: var(--cl-grey);
+            }
         }
     }
 
     &__panel {
         position: relative;
+        padding: calc(var(--gs) * 2) 0;
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="v-tabs" v-bind="$attrs">
+    <div class="v-tabs">
         <div class="v-tabs__header" role="tablist" :aria-orientation="orientation" :aria-label="ariaLabel">
             <button
                 class="v-tabs__header-item"
@@ -20,19 +20,18 @@
                 @focus="e => onTabFocus(e, index)"
                 :disabled="item.disabled === true"
             >
-                <slot name="tab" :item="item" :index="index" :active="internal_active_tab === index">
+                <slot :name="`tab-${index}`" :item="item" :index="index" :active="internal_active_tab === index">
                     {{ item.title }}
                 </slot>
             </button>
         </div>
         <div
             class="v-tabs__panel"
-            tabindex="0"
             role="tabpanel"
             :id="`v-tab--panel${selectedItem[keyField] || internal_active_tab}`"
             :aria-labelledby="`v-tab-${selectedItem[keyField] || internal_active_tab}`"
         >
-            <slot name="panel" :item="selectedItem" :index="internal_active_tab">
+            <slot :name="`panel-${internal_active_tab}`" :item="selectedItem" :index="internal_active_tab">
                 {{ selectedItem[keyValue] }}
             </slot>
         </div>
@@ -59,7 +58,6 @@ const orientation = {
 
 export default {
     name: 'v-tabs',
-    inheritAttrs: false,
     props: {
         ariaLabel: {
             type: String,
@@ -200,18 +198,27 @@ export default {
         // depening on key pressed
         switchTabOnArrowPress(e) {
             const { keyCode } = e;
-
+            let nextItem = null;
             switch (keyCode) {
                 case keys.up:
                 case keys.left:
-                    if (this.internal_active_tab > 0) this.activateTab(this.internal_active_tab - 1, true);
-                    else this.focusFirstTab();
+                    if (this.internal_active_tab > 0) {
+                        for (let i = this.internal_active_tab; i >= 0; --i) {
+                            nextItem = this.items[i];
+                            if (nextItem.disabled) continue;
+                            else this.activateTab(i, true);
+                        }
+                    } else this.focusFirstTab();
                     break;
                 case keys.down:
                 case keys.right:
-                    if (this.internal_active_tab < this.items.length - 1)
-                        this.activateTab(this.internal_active_tab + 1, true);
-                    else this.focusLastTab();
+                    if (this.internal_active_tab > this.items.length - 1) {
+                        for (let i = this.internal_active_tab; i < this.items.length; ++i) {
+                            nextItem = this.items[i];
+                            if (nextItem.disabled) continue;
+                            else this.activateTab(i, true);
+                        }
+                    } else this.focusLastTab();
                     break;
             }
         },

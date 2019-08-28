@@ -1,0 +1,13 @@
+.ui-kit-tabs {
+    &__form {
+        &-cols {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        &-col {
+            width: calc(50% - var(--gs));
+        }
+    }
+}
