@@ -23,7 +23,7 @@ if (window.__INITIAL_STATE__) {
 
     // удаляем тег скрипта с данными, и чистим их в переменной
     const appEl = document.getElementById('app');
-    appEl.nextElementSibling.remove();
+    appEl.parentElement.removeChild(appEl.nextElementSibling);
     delete window.__INITIAL_STATE__;
 }
 
