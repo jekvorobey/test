@@ -12,7 +12,7 @@
         <p class="text-grey">
             Шаг 20
         </p>
-        <v-counter v-model="value1" min="1" max="200" step="20" />
+        <v-counter v-model="value1" min="0" max="200" step="20" />
     </section>
 </template>
 <script>

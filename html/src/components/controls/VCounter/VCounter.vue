@@ -12,6 +12,7 @@
             :min="min"
             :max="max"
             :value="value_internal"
+            :step="step"
             v-bind="$attrs"
             @change="onChange"
         />
