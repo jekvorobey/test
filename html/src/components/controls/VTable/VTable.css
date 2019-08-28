@@ -17,8 +17,7 @@
 
         &-th,
         &-td {
-            min-height: calc(var(--gs) * 5);
-            padding-left: var(--gs);
+            padding: var(--gs);
         }
 
         &-th {
