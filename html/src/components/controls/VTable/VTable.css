@@ -1,0 +1,29 @@
+.v-table {
+    border-collapse: collapse;
+    width: 100%;
+
+    &__row {
+        & + & {
+            border-top: 1px solid var(--cl-divider-grey);
+        }
+
+        &:last-child {
+            border-bottom: 1px solid var(--cl-divider-grey);
+        }
+
+        &--head {
+            background: var(--cl-divider-grey);
+        }
+
+        &-th,
+        &-td {
+            min-height: calc(var(--gs) * 5);
+            padding-left: var(--gs);
+        }
+
+        &-th {
+            text-align: left;
+            font-weight: normal;
+        }
+    }
+}
