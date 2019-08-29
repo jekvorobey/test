@@ -43,7 +43,7 @@
     --base-font: 'Roboto', Arial, sans-serif;
 
     /* Максимальная длина контейнера */
-    --container-max-width: 1224px;
+    --container-max-width: 1432px;
 
     /* Точки адаптива */
     --mobile-sm-size-min: 320px;
