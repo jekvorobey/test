@@ -4,7 +4,7 @@
             Дропзоны
         </h2>
 
-        <h3>
+        <!-- <h3>
             Dropzone
         </h3>
         <p class="text-grey">
@@ -28,7 +28,7 @@
 
         <v-dropzone style="width: 400px;" id="foo" ref="el" :options="options" :destroyDropzone="true">
             Сканы паспортов
-        </v-dropzone>
+        </v-dropzone> -->
 
         <h3>
             Filepound
@@ -68,13 +68,14 @@
     </section>
 </template>
 <script>
-import VDropzone from '../../components/controls/VDropzone/VDropzone.vue';
+// Dropzone не работает в IE 11
+//import VDropzone from '../../components/controls/VDropzone/VDropzone.vue';
 import VFilepond, { origin, status, fileStatus } from '../../components/controls/VFilepond/VFilepond.vue';
 
 export default {
     name: 'ui-kit-dropzones',
     components: {
-        VDropzone,
+        //VDropzone,
         VFilepond,
     },
     data() {

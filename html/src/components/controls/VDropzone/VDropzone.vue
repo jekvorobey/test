@@ -21,12 +21,6 @@ export default {
     components: {
         dropzone,
     },
-    data() {
-        return {};
-    },
-    methods: {
-        onInit() {},
-    },
 };
 </script>
 
