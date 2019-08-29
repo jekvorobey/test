@@ -39,7 +39,7 @@
                     </span>
                 </div>
                 <div class="header__middle-cart">
-                    <div>
+                    <div class="header__middle-cart-sum">
                         <v-svg name="account-middle" width="20" height="20" />
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <v-svg name="wishlist-middle" width="20" height="20" style="fill: #ffffff;" />
