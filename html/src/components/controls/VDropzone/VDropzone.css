@@ -1,0 +1,82 @@
+@import '../../../../node_modules/nuxt-dropzone/dropzone.css';
+
+.v-dropzone {
+    .vue-dropzone {
+        margin-top: calc(var(--gs) * 1.5);
+        border: 1px dotted var(--cl-grey);
+        font-family: var(--base-font);
+        letter-spacing: normal;
+        border-radius: 4px;
+
+        &:hover {
+            background-color: transparent;
+        }
+    }
+
+    .dropzone {
+        .dz-preview {
+            margin: 0;
+            min-height: calc(var(--gs) * 3);
+            width: 100%;
+
+            .dz-progress {
+                position: relative;
+                height: 4px;
+                left: unset;
+                top: unset;
+                width: 100%;
+                margin: 0;
+                background: transparent;
+                border-radius: 0;
+                overflow: hidden;
+
+                .dz-upload {
+                    background: var(--cl-divider-grey);
+                }
+            }
+
+            .dz-remove {
+                position: relative;
+                color: #fff;
+                margin-left: var(--gs);
+                padding: 0;
+                border: none;
+                opacity: 1;
+
+                &::after {
+                    display: block;
+                    content: '';
+                    width: 20px;
+                    height: 20px;
+                    background-repeat: no-repeat;
+                    background-image: svg-load(
+                        '../../../assets/images/sprites/cross-small.svg',
+                        stroke: var(--cl-grey)
+                    );
+                }
+            }
+        }
+
+        .dz-details {
+            display: flex;
+            flex-wrap: wrap;
+            min-width: unset;
+            max-width: unset;
+            opacity: 1;
+            padding: 0;
+            line-height: inherit;
+            background-color: transparent;
+            color: var(--cl-global);
+
+            .dz-size {
+                font-size: inherit;
+                margin: 0;
+                color: var(--cl-grey);
+            }
+        }
+    }
+
+    &__label {
+        color: var(--cl-global);
+    }
+}

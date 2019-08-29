@@ -4,11 +4,6 @@
             Селекты
         </h2>
         <div style="width: 50%;">
-            <!-- <v-select v-model="value" :items="items" placeholder="Выберите вариант..." :error="error">
-                Вид деятельности
-            </v-select> -->
-        </div>
-        <div style="width: 50%;">
             <v-select v-model="value" :options="items" :error="error" :searchable="false" :disabled="disabled">
                 Вид деятельности
                 <template v-slot:error="{ error }">

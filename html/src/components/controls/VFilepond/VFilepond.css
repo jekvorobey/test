@@ -1,0 +1,61 @@
+@import '../../../../node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+@import '../../../../node_modules/filepond/dist/filepond.css';
+
+.v-filepond {
+    &__wrapper {
+        padding-top: calc(var(--gs) * 1.5);
+    }
+
+    .filepond--root {
+        font-family: var(--base-font);
+
+        &:not(text) {
+            font-size: unset;
+        }
+    }
+
+    .filepond--file {
+        color: var(--cl-global);
+    }
+
+    .filepond--item-panel {
+        background-color: var(--cl-white);
+    }
+
+    .filepond--image-preview-wrapper {
+        background: transparent;
+    }
+
+    .filepond--image-preview {
+        background: var(--cl-white);
+    }
+
+    .filepond--image-preview-overlay svg {
+        display: none;
+    }
+
+    /* error state color */
+    [data-filepond-item-state*='error'] .filepond--item-panel,
+    [data-filepond-item-state*='invalid'] .filepond--item-panel {
+        background-color: red;
+    }
+
+    [data-filepond-item-state='processing-complete'] .filepond--item-panel {
+        background-color: green;
+    }
+
+    /* bordered drop area */
+    .filepond--panel-root {
+        background-color: transparent;
+        border: 2px dotted var(--cl-grey);
+    }
+
+    .filepond--drop-label {
+        color: var(--cl-grey);
+    }
+
+    .filepond--label-action {
+        text-decoration: none;
+        color: var(--cl-global);
+    }
+}
