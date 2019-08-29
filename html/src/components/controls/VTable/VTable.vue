@@ -3,7 +3,7 @@
         <slot />
         <thead>
             <tr class="v-table__row v-table__row--head">
-                <th class="v-table__row-th" v-for="key in columns">
+                <th class="v-table__row-th" :key="key" v-for="key in columns">
                     <slot :name="`column-${key}`">
                         {{ key }}
                     </slot>
@@ -11,8 +11,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="v-table__row" v-for="item in items">
-                <td class="v-table__row-td" v-for="key in columns">
+            <tr class="v-table__row" :key="item[keyField] || index" v-for="(item, index) in items">
+                <td :key="key" class="v-table__row-td" v-for="key in columns">
                     <slot :name="`cell-${key}`" :item="item" :value="item[key]">
                         {{ item[key] }}
                     </slot>
@@ -31,6 +31,9 @@ import './VTable.css';
 export default {
     name: 'v-table',
     props: {
+        keyField: {
+            type: String,
+        },
         items: {
             type: Array,
             default() {
