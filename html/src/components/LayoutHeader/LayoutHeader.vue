@@ -1,5 +1,5 @@
 <template>
-    <header class="header">
+    <header class="header" :class="{ 'header--scroll': scroll }">
         <div class="header__top">
             <div class="container header__top-container">
                 <div class="text-medium header__top-city">
@@ -26,7 +26,12 @@
                 <div class="text-grey header__middle-search">
                     <v-svg name="search-middle" width="20" height="20" />&nbsp;Искать...
                 </div>
-                <div class="text-sm text-grey header__middle-middle">
+                <div v-if="scroll" class="text-sm text-grey header__middle-middle">
+                    <span class="header__middle-middle-item">
+                        <v-svg name="logo" width="32" height="32" />
+                    </span>
+                </div>
+                <div v-else class="text-sm text-grey header__middle-middle">
                     <span class="header__middle-middle-item">Онлайн-платформа</span>
                     &nbsp;
                     <span class="header__middle-middle-item">
@@ -47,12 +52,16 @@
                         <span class="text-medium">15 780 ₽</span>&nbsp;
                         <v-svg name="cart-middle" width="20" height="20" style="fill: #ffffff;" />
                     </div>
-                    <div class="text-sm text-grey header__middle-cart-discount">До бесплатной доставки — 890 ₽</div>
+                    <transition name="slide-in-bottom">
+                        <div v-if="!scroll" class="text-sm text-grey header__middle-cart-discount">
+                            До бесплатной доставки — 890 ₽
+                        </div>
+                    </transition>
                 </div>
             </div>
         </div>
         <div class="header__bottom">
-            <div class="container">
+            <div class="container header__bottom-container">
                 <nav class="header__bottom-inner">
                     <v-link class="header__bottom-link" to="/top">{{ $t('header.links.new') }}</v-link>
                     <v-link class="header__bottom-link" to="/new">{{ $t('header.links.stocks') }}</v-link>
@@ -70,6 +79,7 @@
 import VSvg from '../controls/VSvg/VSvg.vue';
 import VLink from '../controls/VLink/VLink.vue';
 
+import '../../assets/images/sprites/logo.svg';
 import '../../assets/images/sprites/logo-text.svg';
 
 import '../../assets/images/sprites/cart-middle.svg';
@@ -90,6 +100,22 @@ export default {
     components: {
         VSvg,
         VLink,
+    },
+    data() {
+        return {
+            scroll: false,
+        };
+    },
+    methods: {
+        onScroll() {
+            this.scroll = document.body.scrollTop > 50 || document.documentElement.scrollTop > 50;
+        },
+    },
+    mounted() {
+        document.addEventListener('scroll', this.onScroll);
+    },
+    beforeDestroy() {
+        document.removeEventListener('scroll', this.onScroll);
     },
 };
 </script>
