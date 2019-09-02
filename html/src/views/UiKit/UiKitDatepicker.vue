@@ -25,13 +25,10 @@
                 Дата3
             </v-datepicker>
         </form>
-        <button @click="changeLocale('en')">Change EN</button>
-        <button @click="changeLocale('ru')">Change RU</button>
     </section>
 </template>
 <script>
 import VDatepicker from '../../components/controls/VDatepicker/VDatepicker.vue';
-import { loadLanguageAsync } from '../../plugins/i18n';
 import { mapState } from 'vuex';
 
 export default {
@@ -56,11 +53,6 @@ export default {
     },
     computed: {
         ...mapState(['locale']),
-    },
-    methods: {
-        changeLocale(locale) {
-            loadLanguageAsync(locale);
-        },
     },
 };
 </script>

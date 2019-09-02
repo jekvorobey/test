@@ -2,10 +2,6 @@ import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
 
-/**
- * Function for create store instance.
- * Функция создания экземпляра стора.
- */
 export default {
     name: 'item_list',
     namespaced: true,

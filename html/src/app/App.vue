@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="fake-vue-body">
+    <div id="app" class="fake-vue-body" :class="{ 'fake-vue-body--scroll': scroll }">
         <layout-header />
         <main>
             <transition name="fade" mode="out-in">
@@ -36,11 +36,36 @@ import './App.css';
 import LayoutHeader from '../components/LayoutHeader/LayoutHeader.vue';
 import LayoutFooter from '../components/LayoutFooter/LayoutFooter.vue';
 
+import { MIN_SCROLL_VALUE } from '../constants';
+import { mapState, mapActions } from 'vuex';
+
 export default {
     name: 'app',
     components: {
         LayoutHeader,
         LayoutFooter,
+    },
+
+    computed: {
+        ...mapState(['scroll']),
+    },
+
+    methods: {
+        ...mapActions(['SET_SCROLL']),
+
+        onScroll() {
+            this.SET_SCROLL(
+                document.body.scrollTop > MIN_SCROLL_VALUE || document.documentElement.scrollTop > MIN_SCROLL_VALUE
+            );
+        },
+    },
+
+    mounted() {
+        document.addEventListener('scroll', this.onScroll);
+    },
+
+    beforeDestroy() {
+        document.removeEventListener('scroll', this.onScroll);
     },
 };
 </script>

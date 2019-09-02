@@ -27,7 +27,7 @@ body {
 }
 
 body {
-    background-color: var(--cl-white);
+    background-color: var(--cl-grey);
     font-size: 14px;
     line-height: 24px;
     overflow-x: hidden;
@@ -219,6 +219,8 @@ fieldset {
 }
 
 :--input {
+    font-size: 14px;
+    line-height: 22px;
     border-radius: 0;
 
     /* Прячет крестик очистки поля в IE */

@@ -1,0 +1,31 @@
+.search-filter {
+    display: flex;
+    align-items: center;
+    background: var(--cl-white);
+    transition: width var(--time) var(--timing-function);
+
+    &--active {
+        width: 100% !important;
+    }
+
+    &__input {
+        border: 0;
+        padding: var(--gs);
+        flex: 1;
+    }
+
+    &__icon {
+        flex: none;
+        margin-right: calc(var(--gs) * 1.5);
+    }
+
+    &__clear {
+        display: none;
+        height: 20px;
+        margin-left: calc(var(--gs) * 1.5);
+    }
+
+    &--active &__clear {
+        display: block;
+    }
+}

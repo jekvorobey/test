@@ -1,3 +1,5 @@
+const { serviceName } = require('../constants');
+
 let locatorInstance;
 module.exports = class ServiceLocator {
     constructor() {
@@ -38,34 +40,34 @@ module.exports = class ServiceLocator {
     }
 
     static $store() {
-        return ServiceLocator.instance().get('store');
+        return ServiceLocator.instance().get(serviceName.STORE);
     }
 
     static $events() {
-        return ServiceLocator.instance().get('events');
+        return ServiceLocator.instance().get(serviceName.EVENTS);
     }
 
     static $progress() {
-        return ServiceLocator.instance().get('progress');
+        return ServiceLocator.instance().get(serviceName.PROGRESS);
     }
 
     static $logger() {
-        return ServiceLocator.instance().get('logger');
+        return ServiceLocator.instance().get(serviceName.LOGGER);
     }
 
     static $router() {
-        return ServiceLocator.instance().get('router');
+        return ServiceLocator.instance().get(serviceName.ROUTER);
     }
 
     static $http() {
-        return ServiceLocator.instance().get('http');
+        return ServiceLocator.instance().get(serviceName.HTTP);
     }
 
     static $config() {
-        return ServiceLocator.instance().get('config');
+        return ServiceLocator.instance().get(serviceName.CONFIG);
     }
 
     static $cookie() {
-        return ServiceLocator.instance().get('cookie');
+        return ServiceLocator.instance().get(serviceName.COOKIE);
     }
 };

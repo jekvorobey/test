@@ -1,3 +1,4 @@
+import { serviceName } from './constants';
 import createApp from './app/app';
 import ServiceLocator from './services/ServiceLocator';
 import ExpressLogger from './services/LogService/ExpressLogger';
@@ -13,10 +14,10 @@ export default context => {
         const { app, router, store } = createApp();
 
         ServiceLocator.createInstance()
-            .register('router', () => router)
-            .register('store', () => store)
-            .register('logger', () => new ExpressLogger())
-            .register('cookie', () => new ExpressCookie(context.req, context.res));
+            .register(serviceName.ROUTER, () => router)
+            .register(serviceName.STORE, () => store)
+            .register(serviceName.LOGGER, () => new ExpressLogger())
+            .register(serviceName.COOKIE, () => new ExpressCookie(context.req, context.res));
 
         const { url } = context;
         const { fullPath } = router.resolve(url).route;

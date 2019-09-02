@@ -1,3 +1,4 @@
+import { serviceName } from './constants';
 import createApp from './app/app';
 import ServiceLocator from './services/ServiceLocator';
 import progress from './services/ProgressService';
@@ -8,12 +9,12 @@ import EventService from './services/EventService';
 const { app, router, store } = createApp();
 
 ServiceLocator.createInstance()
-    .register('progress', () => progress)
-    .register('router', () => router)
-    .register('store', () => store)
-    .register('events', () => EventService)
-    .register('logger', () => new BrowserLogger())
-    .register('cookie', () => new BrowserCookie());
+    .register(serviceName.PROGRESS, () => progress)
+    .register(serviceName.ROUTER, () => router)
+    .register(serviceName.STORE, () => store)
+    .register(serviceName.EVENTS, () => EventService)
+    .register(serviceName.LOGGER, () => new BrowserLogger())
+    .register(serviceName.COOKIE, () => new BrowserCookie());
 
 // prime the store with server-initialized state.
 // the state is determined during SSR and inlined in the page markup.

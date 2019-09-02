@@ -34,7 +34,7 @@
     --time: 200ms;
 
     /* Время для анимаций появления, исчезновения */
-    --animation-time: 200ms;
+    --animation-time: 400ms;
 
     /* http://cubic-bezier.com/#.3,.76,.36,.93 */
     --timing-function: cubic-bezier(0.3, 0.76, 0.36, 0.93);

@@ -4,6 +4,8 @@ import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
 
+import modalModule from './modules/Modal';
+
 Vue.use(Vuex);
 
 /**
@@ -13,9 +15,14 @@ Vue.use(Vuex);
 export default function createStore() {
     return new Vuex.Store({
         strict: process.env.NODE_ENV !== 'production',
-        state: { locale: 'ru' },
+        state: {
+            locale: 'ru',
+            scroll: false,
+            search: false,
+        },
         getters,
         mutations,
         actions,
+        modules: [modalModule],
     });
 }

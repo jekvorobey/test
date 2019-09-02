@@ -6,6 +6,12 @@
                 <li v-for="(item, index) in links" :key="index">
                     <v-link :to="item.to">{{ item.desc }}</v-link>
                 </li>
+                <li>
+                    <v-link @click="onChangeLang('en')">Язык: English</v-link>
+                </li>
+                <li>
+                    <v-link @click="onChangeLang('ru')">Язык: Russian</v-link>
+                </li>
             </ul>
         </transition>
 
@@ -41,6 +47,7 @@ import UiKitLinks from './UiKitLinks.vue';
 import UiKitList from './UiKitList.vue';
 import UiKitAccordions from './UiKitAccordions.vue';
 
+import { loadLanguageAsync } from '../../plugins/i18n';
 import './UiKit.css';
 
 export default {
@@ -175,7 +182,11 @@ export default {
         },
     },
 
-    methods: {},
+    methods: {
+        onChangeLang(lang) {
+            loadLanguageAsync(lang);
+        },
+    },
 
     title() {
         return 'ui-kit';
