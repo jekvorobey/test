@@ -1,7 +1,10 @@
 <template>
     <div class="search-filter" :class="{ 'search-filter--active': search }">
-        <v-svg class="search-filter__icon" name="search-middle" width="20" height="20" />
+        <label class="search-filter__label" :for="inputId">
+            <v-svg name="search-middle" width="20" height="20" />
+        </label>
         <input
+            :id="inputId"
             class="search-filter__input"
             v-model="searchString"
             @focus="onSearchFocus"
@@ -26,6 +29,13 @@ export default {
     name: 'search-filter',
     components: {
         VSvg,
+    },
+
+    props: {
+        inputId: {
+            type: [Number, String],
+            required: true,
+        },
     },
 
     data() {

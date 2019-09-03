@@ -8,15 +8,17 @@
         width: 100% !important;
     }
 
+    &__label {
+        display: flex;
+        cursor: pointer;
+        flex: none;
+        margin-right: calc(var(--gs) * 1.5);
+    }
+
     &__input {
         border: 0;
         padding: var(--gs);
         flex: 1;
-    }
-
-    &__icon {
-        flex: none;
-        margin-right: calc(var(--gs) * 1.5);
     }
 
     &__clear {

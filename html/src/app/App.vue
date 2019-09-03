@@ -1,12 +1,12 @@
 <template>
     <div id="app" class="fake-vue-body" :class="{ 'fake-vue-body--scroll': scroll }">
-        <layout-header />
+        <v-header />
         <main>
             <transition name="fade" mode="out-in">
                 <router-view class="view" />
             </transition>
         </main>
-        <layout-footer />
+        <v-footer />
     </div>
 </template>
 
@@ -33,8 +33,8 @@ import './App.css';
 /**
  * Базовые компоненты страницы
  */
-import LayoutHeader from '../components/LayoutHeader/LayoutHeader.vue';
-import LayoutFooter from '../components/LayoutFooter/LayoutFooter.vue';
+import VHeader from '../components/VHeader/VHeader.vue';
+import VFooter from '../components/VFooter/VFooter.vue';
 
 import { MIN_SCROLL_VALUE } from '../constants';
 import { mapState, mapActions } from 'vuex';
@@ -42,8 +42,8 @@ import { mapState, mapActions } from 'vuex';
 export default {
     name: 'app',
     components: {
-        LayoutHeader,
-        LayoutFooter,
+        VHeader,
+        VFooter,
     },
 
     computed: {

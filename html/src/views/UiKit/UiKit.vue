@@ -7,10 +7,10 @@
                     <v-link :to="item.to">{{ item.desc }}</v-link>
                 </li>
                 <li>
-                    <v-link @click="onChangeLang('en')">Язык: English</v-link>
+                    <v-link @click="SET_LOCALE('en')">Язык: English</v-link>
                 </li>
                 <li>
-                    <v-link @click="onChangeLang('ru')">Язык: Russian</v-link>
+                    <v-link @click="SET_LOCALE('ru')">Язык: Russian</v-link>
                 </li>
             </ul>
         </transition>
@@ -47,7 +47,7 @@ import UiKitLinks from './UiKitLinks.vue';
 import UiKitList from './UiKitList.vue';
 import UiKitAccordions from './UiKitAccordions.vue';
 
-import { loadLanguageAsync } from '../../plugins/i18n';
+import { mapActions } from 'vuex';
 import './UiKit.css';
 
 export default {
@@ -183,9 +183,7 @@ export default {
     },
 
     methods: {
-        onChangeLang(lang) {
-            loadLanguageAsync(lang);
-        },
+        ...mapActions(['SET_LOCALE']),
     },
 
     title() {

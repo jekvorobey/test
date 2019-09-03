@@ -42,6 +42,7 @@ input[type='radio'] {
         & + label {
             color: var(--cl-grey);
             cursor: default;
+            pointer-events: none;
 
             &::before {
                 border-color: var(--cl-global);

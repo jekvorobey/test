@@ -56,8 +56,8 @@ img {
 }
 
 a {
-    color: var(--cl-global);
-    fill: var(--cl-global);
+    color: inherit;
+    fill: inherit;
     text-decoration: none;
     transition: all var(--time) var(--timing-function);
 
@@ -91,16 +91,6 @@ i {
 
 p {
     margin: 0 0 calc(var(--g) / 2);
-
-    @media (--tablet-lg) {
-        font-size: 15px;
-    }
-
-    @media (--tablet) {
-        font-size: 13px;
-        line-height: 20px;
-        margin-bottom: calc(var(--gs) * 0.5);
-    }
 }
 
 :--heading {
@@ -140,11 +130,11 @@ h6 {
 hr {
     background: none;
     border: none;
-    border-bottom: 1px solid var(--cl-divider-grey);
+    border-bottom: 1px solid var(--cl-grey);
     display: block;
     position: relative;
     height: 1px;
-    margin: calc(var(--g) / 2) 0;
+    margin: calc(var(--gs) * 3) 0;
     line-height: 0;
     font-size: 0;
 }
@@ -204,12 +194,12 @@ fieldset {
     line-height: 24px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    color: var(--cl-global);
-    fill: var(--cl-global);
+    color: inherit;
+    fill: inherit;
 
     &:hover {
-        color: var(--cl-global);
-        fill: var(--cl-global);
+        color: inherit;
+        fill: inherit;
     }
 
     &:disabled {

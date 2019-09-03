@@ -5,6 +5,7 @@
         }
 
         &-btn {
+            color: inherit;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -19,6 +20,7 @@
         }
 
         &-panel {
+            color: inherit;
             overflow: hidden;
             border: 1px solid var(--cl-global);
             transition: all var(--time) var(--timing-function);

@@ -13,7 +13,7 @@ export default {
             search: 'Find...',
             platform: 'online-platform',
             professionals: 'for beauty industry <br /> professionals',
-            free_delivery: 'Before free delivery — {n} ₽',
+            free_delivery: 'To free shipping — {n} ₽',
         },
         links: {
             new: 'New',
@@ -22,6 +22,36 @@ export default {
             brands: 'Brands',
             classes: 'Master-classes',
         },
+    },
+
+    footer: {
+        links: {
+            purchase: 'How to purchase',
+            payment: 'Payment and delivery',
+            refund: 'Purchase refund',
+            guarantee: 'Guarantees',
+            qna: 'Question and answers',
+            about_company: 'About company',
+            about_us: 'About us',
+            partners: 'For partners',
+            feedback: 'Feedback',
+            vacancy: 'Vacancy',
+        },
+
+        made_by: 'Made by Greensight',
+        rights: '© 2019 «Shamelessly Talented».<br/> All rights reserved.',
+        terms_of_use: 'Terms of use',
+        offer: 'Public offer',
+    },
+
+    socials: {
+        socials: 'We are in social networks',
+        facebook: 'Facebook',
+        vkontakte: 'VKontakte',
+        twitter: 'Twitter',
+        ok: 'Odnoklasniki',
+        youtube: 'Youtube',
+        instagram: 'Instagram',
     },
 
     validation: {

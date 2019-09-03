@@ -28,8 +28,12 @@
     max-height: 80vh;
     overflow: auto;
 
+    @media (--tablet-lg) {
+        top: 79px;
+    }
+
     @media (--tablet) {
-        top: 86px;
+        top: 71px;
     }
 }
 
