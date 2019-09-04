@@ -47,7 +47,9 @@ module.exports = {
         'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
         /* отключено, иногда нужно для сервисных полей */
         'no-underscore-dangle': 'off',
-        /* отключено правило реджекта только для ошибок в промисах*/
+        /* отключено правило реджекта только для ошибок в промисах */
         'prefer-promise-reject-errors': 'off',
+        /* отключаем правило для camelcase */
+        camelcase: 'off',
     },
 };
