@@ -95,6 +95,7 @@ function render(req, res) {
         // const env = JSON.parse(fs.readFileSync(path.resolve(app_root, '.env.json')).toString());
 
         const context = {
+            title: 'IBT',
             url: req.url,
             req,
             res,
