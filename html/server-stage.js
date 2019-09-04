@@ -25,7 +25,6 @@ if (serverRendererVersion !== '2.6.10')
     );
 
 function createRenderer(bundle, options) {
-    logger.info('creating bundle renderer...');
     // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer
 
     return createBundleRenderer(
