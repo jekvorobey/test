@@ -39,35 +39,35 @@ module.exports = class ServiceLocator {
         return this.services[name] ? this.services[name].instance : null;
     }
 
-    static $store() {
+    static get $store() {
         return ServiceLocator.instance().get(serviceName.STORE);
     }
 
-    static $events() {
+    static get $events() {
         return ServiceLocator.instance().get(serviceName.EVENTS);
     }
 
-    static $progress() {
+    static get $progress() {
         return ServiceLocator.instance().get(serviceName.PROGRESS);
     }
 
-    static $logger() {
+    static get $logger() {
         return ServiceLocator.instance().get(serviceName.LOGGER);
     }
 
-    static $router() {
+    static get $router() {
         return ServiceLocator.instance().get(serviceName.ROUTER);
     }
 
-    static $http() {
+    static get $http() {
         return ServiceLocator.instance().get(serviceName.HTTP);
     }
 
-    static $config() {
+    static get $config() {
         return ServiceLocator.instance().get(serviceName.CONFIG);
     }
 
-    static $cookie() {
+    static get $cookie() {
         return ServiceLocator.instance().get(serviceName.COOKIE);
     }
 };

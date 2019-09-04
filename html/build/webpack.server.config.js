@@ -5,7 +5,8 @@ const VueSSRServerPlugin = require('vue-server-renderer/server-plugin');
 const base = require('./webpack.base.config');
 const CssExtractPlugin = require('./ServerMiniCssExtractPlugin');
 
-const isProd = process.env.NODE_ENV === 'production';
+const mode = process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
+const isProd = mode === 'production';
 
 module.exports = merge(base, {
     target: 'node',

@@ -22,7 +22,7 @@
 
 <script>
 import itemListModule from '../../store/modules/ItemList';
-import ServiceLocator from '../../services/ServiceLocator';
+import { $store, $progress } from '../../services/ServiceLocator';
 import './UserDetail.css';
 
 export default {
@@ -49,20 +49,17 @@ export default {
             return;
         }
 
-        const store = ServiceLocator.$store();
-        const progress = ServiceLocator.$progress();
-        const register = !!store._modulesNamespaceMap[`${itemListModule.name}/`];
+        const register = !!$store._modulesNamespaceMap[`${itemListModule.name}/`];
         if (!register) {
-            store.registerModule(itemListModule.name, itemListModule, {
-                preserveState: !!store.state.item_list,
+            $store.registerModule(itemListModule.name, itemListModule, {
+                preserveState: !!$store.state.item_list,
             });
         }
 
-        if (!store.state.item_list.users[to.params.id]) {
-            progress.start();
-            store.dispatch(`${itemListModule.name}/FETCH_USER`, { id: to.params.id }).then(user => {
-                progress.finish();
-                next();
+        if (!$store.state.item_list.users[to.params.id]) {
+            $progress.start();
+            $store.dispatch(`${itemListModule.name}/FETCH_USER`, { id: to.params.id }).then(user => {
+                next(vm => $progress.finish());
             });
         } else next();
     },

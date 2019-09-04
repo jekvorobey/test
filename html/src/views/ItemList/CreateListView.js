@@ -1,5 +1,5 @@
 import itemListModule from '../../store/modules/ItemList';
-import ServiceLocator from '../../services/ServiceLocator';
+import { $store, $progress } from '../../services/ServiceLocator';
 
 const ItemList = () => import(/* webpackChunkName: "item-list" */ './ItemList.vue');
 
@@ -31,19 +31,16 @@ export default function createListView(type) {
                 return;
             }
 
-            const store = ServiceLocator.$store();
-            const progress = ServiceLocator.$progress();
-            const register = !!store._modulesNamespaceMap[`${itemListModule.name}/`];
+            const register = !!$store._modulesNamespaceMap[`${itemListModule.name}/`];
             if (!register) {
-                store.registerModule(itemListModule.name, itemListModule, {
-                    preserveState: !!store.state.item_list,
+                $store.registerModule(itemListModule.name, itemListModule, {
+                    preserveState: !!$store.state.item_list,
                 });
             }
 
-            progress.start();
-            store.dispatch('item_list/FETCH_LIST_DATA', { type }).then(() => {
-                progress.finish();
-                next();
+            $progress.start();
+            $store.dispatch('item_list/FETCH_LIST_DATA', { type }).then(() => {
+                next(() => $progress.finish());
             });
         },
 

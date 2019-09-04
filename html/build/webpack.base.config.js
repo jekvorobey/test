@@ -3,10 +3,11 @@ const webpack = require('webpack');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 
-const isProd = process.env.NODE_ENV === 'production';
+const mode = process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
+const isProd = mode === 'production';
 
 module.exports = {
-    mode: process.env.NODE_ENV,
+    mode,
     devtool: isProd ? false : 'source-map',
     output: {
         path: path.resolve(__dirname, '../../public/assets'),

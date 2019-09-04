@@ -4,7 +4,7 @@ import createStore from '../store';
 import createRouter from '../router';
 
 import i18n from '../plugins/i18n';
-import media from '../plugins/media';
+import mq from '../plugins/media';
 
 import titleMixin from '../util/title';
 import * as filters from '../util/filters';
@@ -41,7 +41,7 @@ export default function createApp() {
     const app = new Vue({
         router,
         store,
-        mq: media,
+        mq,
         i18n,
         render: h => h(App),
     });

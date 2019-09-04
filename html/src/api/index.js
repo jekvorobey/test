@@ -1,9 +1,8 @@
 // this is aliased in webpack config based on server/client build
 // eslint-disable-next-line
 import createAPI from 'create-api';
-import ServiceLocator from '../services/ServiceLocator';
+import { $logger } from '../services/ServiceLocator';
 
-const logger = ServiceLocator.$logger();
 const logRequests = !!process.env.DEBUG_API;
 
 const api = createAPI({
@@ -25,10 +24,10 @@ function warmCache() {
 }
 
 function fetch(child) {
-    if (logRequests) logger.info(`fetching ${child}...`);
+    if (logRequests) $logger.info(`fetching ${child}...`);
     const cache = api.cachedItems;
     if (cache && cache.has(child)) {
-        if (logRequests) logger.info(`cache hit for ${child}.`);
+        if (logRequests) $logger.info(`cache hit for ${child}.`);
         return Promise.resolve(cache.get(child));
     }
     return new Promise((resolve, reject) => {
@@ -39,7 +38,7 @@ function fetch(child) {
                 // mark the timestamp when this item is cached
                 if (val) val.__lastUpdated = Date.now();
                 if (cache) cache.set(child, val);
-                if (logRequests) logger.info(`fetched ${child}.`);
+                if (logRequests) $logger.info(`fetched ${child}.`);
                 resolve(val);
             },
             reject

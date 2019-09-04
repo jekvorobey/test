@@ -19,11 +19,12 @@ export default context => {
             .register(serviceName.LOGGER, () => new ExpressLogger())
             .register(serviceName.COOKIE, () => new ExpressCookie(context.req, context.res));
 
+        const { $logger } = ServiceLocator;
         const { url } = context;
         const { fullPath } = router.resolve(url).route;
 
         if (fullPath !== url) {
-            ServiceLocator.$logger().error(`full path ${fullPath} doesn't match ${url}`);
+            $logger.error(`full path ${fullPath} doesn't match ${url}`);
             reject({ url: fullPath });
         }
 
@@ -40,7 +41,6 @@ export default context => {
                 // serialized and injected into the HTML as `window.__INITIAL_STATE__`.
                 context.state = store.state;
             };
-
             resolve(app);
         }, reject);
     });

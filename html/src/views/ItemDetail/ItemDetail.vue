@@ -31,7 +31,7 @@ import Spinner from '../../components/Spinner/Spinner.vue';
 import Comment from '../../components/Comment/Comment.vue';
 
 import itemListModule from '../../store/modules/ItemList';
-import ServiceLocator from '../../services/ServiceLocator';
+import { $store, $progress } from '../../services/ServiceLocator';
 
 import './ItemDetail.css';
 
@@ -64,19 +64,17 @@ export default {
             return;
         }
 
-        const store = ServiceLocator.$store();
-        const progress = ServiceLocator.$progress();
-        const register = !!store._modulesNamespaceMap[`${itemListModule.name}/`];
+        const register = !!$store._modulesNamespaceMap[`${itemListModule.name}/`];
         if (!register)
-            store.registerModule(itemListModule.name, itemListModule, {
-                preserveState: !!store.state.item_list,
+            $store.registerModule(itemListModule.name, itemListModule, {
+                preserveState: !!$store.state.item_list,
             });
-        progress.start();
-        if (!store.state.item_list.items[to.params.id]) {
-            store.dispatch(`${itemListModule.name}/FETCH_ITEMS`, { ids: [to.params.id] }).then(() => {
-                next(vm => progress.finish());
+        $progress.start();
+        if (!$store.state.item_list.items[to.params.id]) {
+            $store.dispatch(`${itemListModule.name}/FETCH_ITEMS`, { ids: [to.params.id] }).then(() => {
+                next(vm => $progress.finish());
             });
-        } else next(vm => progress.finish());
+        } else next(vm => $progress.finish());
     },
 
     beforeRouteUpdate(to, from, next) {

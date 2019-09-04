@@ -17,7 +17,8 @@ if (process.env.ANALYZE) presets.push(new BundleAnalyzerPlugin());
 
 const base = require('./webpack.base.config');
 
-const isProd = process.env.NODE_ENV === 'production';
+const mode = process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
+const isProd = mode === 'production';
 
 module.exports = merge(base, {
     entry: {
@@ -141,7 +142,7 @@ module.exports = merge(base, {
               }),
               // strip dev-only code in Vue source
               new webpack.DefinePlugin({
-                  'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+                  'process.env.NODE_ENV': JSON.stringify(mode),
                   'process.env.VUE_ENV': '"client"',
               }),
               new VueSSRClientPlugin(),
@@ -190,7 +191,7 @@ module.exports = merge(base, {
               ]),
               // strip dev-only code in Vue source
               new webpack.DefinePlugin({
-                  'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+                  'process.env.NODE_ENV': JSON.stringify(mode),
                   'process.env.VUE_ENV': '"client"',
               }),
               new VueSSRClientPlugin(),
