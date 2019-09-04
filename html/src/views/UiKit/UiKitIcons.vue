@@ -8,8 +8,21 @@
             Logo
         </p>
         <p>
-            <v-svg name="logo-text" width="128" height="48" />
-            <v-svg name="logo" width="32" height="32" />
+            <span style="padding: 0 8px; background: orange;">
+                <v-svg name="logo-text" width="128" height="48" />
+            </span>
+            <span style="padding: 0 8px; background: orange;">
+                <v-svg name="logo" width="32" height="32" />
+            </span>
+            <span style="padding: 0 8px; background: orange; fill: white;">
+                <v-svg name="logo-text" width="128" height="48" />
+            </span>
+            <span style="padding: 0 8px; background: orange; fill: white;">
+                <v-svg name="logo" width="32" height="32" />
+            </span>
+            <span style="padding: 0 8px; background: orange;">
+                <v-svg name="logo-w" width="32" height="32" />
+            </span>
         </p>
 
         <p class="text-grey">
@@ -133,6 +146,7 @@
 </template>
 <script>
 import '../../assets/images/sprites/logo.svg';
+import '../../assets/images/sprites/logo-w.svg';
 import '../../assets/images/sprites/logo-text.svg';
 
 import '../../assets/images/sprites/plus.svg';
