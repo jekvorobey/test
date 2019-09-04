@@ -16,7 +16,7 @@
 
 <script>
 import VButton from '../controls/VButton/VButton.vue';
-import './Component.css';
+import './Comment.css';
 
 export default {
     name: 'comment',
