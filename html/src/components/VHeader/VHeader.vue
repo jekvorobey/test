@@ -45,10 +45,10 @@
                             <div class="v-header__middle-cart-sum">
                                 <v-svg name="account-middle" width="20" height="20" />
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <v-svg name="wishlist-middle" width="20" height="20" style="fill: #ffffff;" />
+                                <v-svg name="wishlist-middle" width="20" height="20" />
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <span class="text-medium">15 780 ₽</span>&nbsp;
-                                <v-svg name="cart-middle" width="20" height="20" style="fill: #ffffff;" />
+                                <v-svg name="cart-middle" width="20" height="20" />
                             </div>
                             <transition name="slide-in-bottom">
                                 <div v-if="!scroll" class="text-sm text-grey v-header__middle-cart-discount">

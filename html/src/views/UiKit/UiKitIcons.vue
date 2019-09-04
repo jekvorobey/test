@@ -18,9 +18,9 @@
         <p>
             <v-svg name="plus" width="24" height="24" />
             <v-svg name="minus" width="24" height="24" />
-            <v-svg class="icon--rotate-deg90" name="arrow-down" width="24" height="24" />
-            <v-svg class="icon--rotate-deg270" name="arrow-down" width="24" height="24" />
-            <v-svg class="icon--rotate-deg180" name="arrow-down" width="24" height="24" />
+            <v-svg modifier="icon--rotate-deg90" name="arrow-down" width="24" height="24" />
+            <v-svg modifier="icon--rotate-deg270" name="arrow-down" width="24" height="24" />
+            <v-svg modifier="icon--rotate-deg180" name="arrow-down" width="24" height="24" />
             <v-svg name="arrow-down" width="24" height="24" />
             <v-svg name="datepicker" width="24" height="24" />
             <v-svg name="cross" width="24" height="24" />
@@ -41,7 +41,6 @@
             <v-svg name="count-small" width="18" height="18" />
             <v-svg name="eye" width="17" height="16" />
             <v-svg name="wishlist-middle" width="17" height="18" />
-            <v-svg style="fill: white;" name="wishlist-middle" width="17" height="18" />
             <v-svg name="add-to-cart-small" width="27" height="18" />
         </p>
 
@@ -54,7 +53,6 @@
             <v-svg name="cart-middle" width="20" height="20" />
             <v-svg name="good-middle" width="20" height="20" />
             <v-svg name="wishlist-middle" width="20" height="20" />
-            <v-svg style="fill: white;" name="wishlist-middle" width="20" height="20" />
             <v-svg name="cross" width="20" height="20" />
             <v-svg name="info-middle" width="20" height="20" />
             <v-svg name="question-middle" width="20" height="20" />

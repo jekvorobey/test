@@ -30,7 +30,6 @@ import './VLink.css';
  */
 export default {
     name: 'v-link',
-    inheritAttrs: false,
     components: {
         VSvg,
     },

@@ -1,5 +1,5 @@
 <template>
-    <svg class="icon" :class="{ [`icon--${modifier || name}`]: modifier || name }">
+    <svg class="icon" :class="modifier">
         <use v-bind="{ 'xlink:href': `#icon-${name}` }"></use>
     </svg>
 </template>

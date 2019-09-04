@@ -36,7 +36,14 @@
             <div class="v-footer__row">
                 <v-link class="v-footer__link">{{ $t('footer.terms_of_use') }}</v-link>
                 <v-link class="v-footer__link">{{ $t('footer.offer') }}</v-link>
-                <p class="v-footer__made-by">{{ $t('footer.made_by') }}</p>
+                <v-link
+                    class="v-footer__link v-footer__made-by v-footer__col"
+                    href="https://greensight.ru/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    {{ $t('footer.made_by') }}
+                </v-link>
             </div>
         </div>
 
@@ -70,7 +77,14 @@
             <hr />
             <v-link class="v-footer__link v-footer__col">{{ $t('footer.terms_of_use') }}</v-link>
             <v-link class="v-footer__link v-footer__col">{{ $t('footer.offer') }}</v-link>
-            <p class="v-footer__made-by v-footer__col">{{ $t('footer.made_by') }}</p>
+            <v-link
+                class="v-footer__link v-footer__made-by v-footer__col"
+                href="https://greensight.ru/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                {{ $t('footer.made_by') }}
+            </v-link>
         </div>
     </footer>
 </template>
