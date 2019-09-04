@@ -76,7 +76,7 @@
             <v-svg name="twitter" width="32" height="32" />
             <v-svg name="ok" width="32" height="32" />
             <v-svg name="google" width="32" height="32" />
-            <v-svg name="yandex" width="32" height="32" />
+            <v-svg name="yandex" width="40" height="40" />
             <v-svg name="vkontakte" width="40" height="40" />
             <v-svg name="facebook" width="40" height="40" />
             <v-svg name="whatsup" width="40" height="40" />
