@@ -1,0 +1,22 @@
+.product-card {
+    width: 96px;
+
+    &__img {
+        height: 96px;
+        margin-bottom: calc(var(--gs) * 1.5);
+    }
+
+    &__link {
+        text-transform: none;
+        margin-bottom: var(--gs);
+    }
+
+    &__prices {
+        display: flex;
+    }
+
+    &__price {
+        flex: 1;
+        display: inline-block;
+    }
+}

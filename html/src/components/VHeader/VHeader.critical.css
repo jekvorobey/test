@@ -17,7 +17,6 @@
 
     &__mobile {
         background-color: var(--cl-global);
-        color: var(--cl-white);
         fill: var(--cl-white);
 
         @media (--tablet-lg-min) {
@@ -130,6 +129,7 @@
     }
 
     &__middle {
+        position: relative;
         background-color: var(--cl-white);
         height: calc(var(--gs) * 7.5);
         line-height: calc(var(--gs) * 7.5);

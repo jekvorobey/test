@@ -25,7 +25,6 @@
             <div class="v-header__middle">
                 <div class="container v-header__middle-container">
                     <search-filter input-id="desktop-search" class="v-header__middle-search" />
-
                     <div v-if="!search && scroll" class="text-sm text-grey v-header__middle-middle">
                         <span class="v-header__middle-middle-item">
                             <v-svg name="logo" width="32" height="32" />
@@ -97,6 +96,9 @@
                 </div>
             </transition>
         </div>
+        <transition name="fade">
+            <search-panel v-if="search" class="v-header__middle-search-panel" />
+        </transition>
     </header>
 </template>
 
@@ -105,6 +107,7 @@ import VSvg from '../controls/VSvg/VSvg.vue';
 import VLink from '../controls/VLink/VLink.vue';
 import VBurger from '../controls/VBurger/VBurger.vue';
 
+import SearchPanel from '../SearchPanel/SearchPanel.vue';
 import SearchFilter from '../SearchFilter/SearchFilter.vue';
 
 import '../../assets/images/sprites/logo.svg';
@@ -132,6 +135,7 @@ export default {
         VLink,
         VBurger,
 
+        SearchPanel,
         SearchFilter,
     },
 
@@ -143,6 +147,10 @@ export default {
 
     computed: {
         ...mapState(['scroll', 'search']),
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
     },
 
     methods: {

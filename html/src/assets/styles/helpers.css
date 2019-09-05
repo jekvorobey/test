@@ -14,3 +14,7 @@
 .text-grey {
     color: var(--cl-grey);
 }
+
+.text-strike {
+    text-decoration: line-through;
+}
