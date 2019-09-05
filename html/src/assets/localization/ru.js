@@ -1,6 +1,6 @@
-import flatPickrAll from 'flatpickr/dist/l10n';
+import flatPickrRu from 'flatpickr/dist/l10n/ru';
 
-export const flatpickrLocale = flatPickrAll.ru;
+export const flatpickrLocale = flatPickrRu;
 export default {
     header: {
         top: {

@@ -1,4 +1,4 @@
-class BaseCookie {
+export default class BaseCookie {
     constructor(cookieString) {
         this.cookieString = `${cookieString}`;
     }
@@ -47,38 +47,5 @@ class BaseCookie {
         /* eslint-enable */
 
         return updatedCookie;
-    }
-}
-
-export class BrowserCookie extends BaseCookie {
-    constructor() {
-        super(document.cookie);
-    }
-
-    set(name, value, props) {
-        document.cookie = this.prepareSetCookieString(name, value, props);
-    }
-
-    remove(name) {
-        this.set(name, null, { expires: -1 });
-    }
-}
-
-export class ExpressCookie extends BaseCookie {
-    constructor(req, res) {
-        super(req.headers.cookie);
-        this.req = req;
-        this.res = res;
-    }
-
-    set(name, value, props) {
-        let cookies = this.res.getHeader('Set-Cookie');
-        if (!cookies) cookies = [this.prepareSetCookieString(name, value, props)];
-        else cookies.push(this.prepareSetCookieString(name, value, props));
-        this.res.setHeader('Set-Cookie', cookies);
-    }
-
-    remove(name) {
-        this.set(name, null, { expires: -1 });
     }
 }

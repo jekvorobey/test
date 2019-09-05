@@ -36,7 +36,7 @@ import './App.css';
 import VHeader from '../components/VHeader/VHeader.vue';
 import VFooter from '../components/VFooter/VFooter.vue';
 
-import { MIN_SCROLL_VALUE } from '../constants';
+import { MIN_SCROLL_VALUE, eventName } from '../constants';
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -61,11 +61,11 @@ export default {
     },
 
     mounted() {
-        document.addEventListener('scroll', this.onScroll);
+        document.addEventListener(eventName.SCROLL, this.onScroll);
     },
 
     beforeDestroy() {
-        document.removeEventListener('scroll', this.onScroll);
+        document.removeEventListener(eventName.SCROLL, this.onScroll);
     },
 };
 </script>

@@ -2,7 +2,7 @@ import { serviceName } from './constants';
 import createApp from './app/app';
 import ServiceLocator from './services/ServiceLocator';
 import ExpressLogger from './services/LogService/ExpressLogger';
-import { ExpressCookie } from './services/CookieService';
+import ExpressCookie from './services/CookieService/ExpressCookie';
 
 // This exported function will be called by `bundleRenderer`.
 // This is where we perform data-prefetching to determine the

@@ -2,7 +2,11 @@
  * Сюда пишем все константы проекта
  */
 
-export const MIN_SCROLL_VALUE = 10;
+export const MIN_SCROLL_VALUE = 60;
+
+/**
+ * Имена сервисов
+ */
 export const serviceName = Object.freeze({
     PROGRESS: 'progress',
     ROUTER: 'router',
@@ -12,4 +16,12 @@ export const serviceName = Object.freeze({
     COOKIE: 'cookie',
     HTTP: 'http',
     CONFIG: 'config',
+});
+
+/**
+ * Имена событий
+ */
+export const eventName = Object.freeze({
+    SCROLL: 'scroll',
+    RESIZE: 'resize',
 });

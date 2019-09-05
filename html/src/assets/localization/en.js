@@ -1,6 +1,6 @@
-import flatPickrAll from 'flatpickr/dist/l10n';
+import flatPickrEn from 'flatpickr/dist/l10n/default';
 
-export const flatpickrLocale = flatPickrAll.en;
+export const flatpickrLocale = flatPickrEn;
 export default {
     header: {
         top: {
