@@ -3,6 +3,7 @@ import createApp from './app/app';
 import ServiceLocator from './services/ServiceLocator';
 import BrowserLogger from './services/LogService/BrowserLogger';
 import BrowserCookie from './services/CookieService/BrowserCookie';
+import HttpService from './services/HttpService/MockService';
 import events from './services/EventService';
 import progress from './services/ProgressService';
 
@@ -14,7 +15,8 @@ ServiceLocator.createInstance()
     .register(serviceName.ROUTER, () => router)
     .register(serviceName.STORE, () => store)
     .register(serviceName.LOGGER, () => new BrowserLogger())
-    .register(serviceName.COOKIE, () => new BrowserCookie());
+    .register(serviceName.COOKIE, () => new BrowserCookie())
+    .register(serviceName.HTTP, () => new HttpService());
 
 // prime the store with server-initialized state.
 // the state is determined during SSR and inlined in the page markup.

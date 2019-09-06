@@ -1,37 +1,39 @@
 <template>
     <div class="search-panel">
         <div class="container search-panel__container">
-            <ul class="search-panel__categories">
-                <li :key="category.id" v-for="category in categories">
-                    <v-link href="/">{{ category.name }}</v-link>
-                </li>
-            </ul>
-            <ul v-if="!isTabletLg" class="search-panel__products">
-                <product-card
-                    class="search-panel__products-card"
-                    v-for="product in products"
-                    tag="li"
-                    :key="product.id"
-                    :product-id="product.id"
-                    :name="product.name"
-                    :href="product.href"
-                    :price="product.price"
-                    :old-price="product.oldPrice"
-                />
-            </ul>
-            <div v-else class="search-panel__products-slider" v-swiper="options">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide" :key="product.id" v-for="product in products">
+            <div v-if="suggestions.categories && suggestions.categories.length > 0" class="search-panel__categories">
+                <transition-group tag="ul" name="item" class="search-panel__categories-list">
+                    <li key="title" class="text-bold">Категории</li>
+                    <li :key="category.id" v-for="category in suggestions.categories">
+                        <v-link class="search-panel__categories-link" href="#">{{ category.name }}</v-link>
+                    </li>
+                </transition-group>
+            </div>
+            <div v-if="suggestions.products && suggestions.products.length > 0" class="search-panel__products">
+                <h3>Популярные товары</h3>
+                <transition-group tag="ul" name="item" v-if="!isTabletLg" class="search-panel__products-list">
+                    <li class="search-panel__products-card" v-for="product in suggestions.products" :key="product.id">
                         <product-card
-                            class="search-panel__products-card"
                             :product-id="product.id"
                             :name="product.name"
                             :href="product.href"
                             :price="product.price"
                             :old-price="product.oldPrice"
                         />
-                    </div>
-                    <div class="swiper-pagination"></div>
+                    </li>
+                </transition-group>
+            </div>
+        </div>
+        <div v-if="isTabletLg" class="search-panel__products-slider" v-swiper:searchSwiper="sliderOptions">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" :key="product.id" v-for="product in suggestions.products">
+                    <product-card
+                        :product-id="product.id"
+                        :name="product.name"
+                        :href="product.href"
+                        :price="product.price"
+                        :old-price="product.oldPrice"
+                    />
                 </div>
             </div>
         </div>
@@ -50,7 +52,7 @@ if (process.env.VUE_ENV === 'client') {
 }
 
 import './SearchPanel.css';
-import { mapState, mapActions } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
     name: 'search-panel',
@@ -61,149 +63,37 @@ export default {
     props: {},
     data() {
         return {
-            options: {
-                slidesPerView: 5,
+            sliderOptions: {
+                slidesPerView: 6,
+                slidesOffsetBefore: 24,
+                freeMode: true,
+                freeModeSticky: true,
+                grabCursor: true,
                 breakpoints: {
                     768: {
-                        slidesPerView: 4,
+                        slidesPerView: 4.5,
                     },
                     480: {
-                        slidesPerView: 3,
+                        slidesPerView: 3.5,
                     },
-                    380: {
-                        slidesPerView: 2,
+                    360: {
+                        slidesPerView: 2.5,
                     },
                 },
             },
-            mounted: false,
-            categories: [
-                {
-                    id: 1,
-                    name: 'Шампунь',
-                },
-                {
-                    id: 2,
-                    name: 'Шампунь для жирных волос',
-                },
-                {
-                    id: 3,
-                    name: 'Шампунь для вьющихся волос',
-                },
-                {
-                    id: 4,
-                    name: 'Шампунь-спрей',
-                },
-                {
-                    id: 5,
-                    name: 'Восстанавливающий шампунь',
-                },
-                {
-                    id: 6,
-                    name: 'Шампунь для окрашенных волос',
-                },
-                {
-                    id: 7,
-                    name: 'Шампунь для объема',
-                },
-                {
-                    id: 8,
-                    name: 'Шампунь для мужчин',
-                },
-            ],
-            products: [
-                {
-                    id: 1,
-                    name: 'EvoСухой шампунь-спрей Water Killer, 200 мл',
-                    price: '1 900 ₽',
-                    oldPrice: '1 600 ₽',
-                },
-                {
-                    id: 2,
-                    name: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
-                    price: '1 900 ₽',
-                    oldPrice: '1 600 ₽',
-                },
-                {
-                    id: 3,
-                    name: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
-                    price: '1 900 ₽',
-                    oldPrice: '1 600 ₽',
-                },
-                {
-                    id: 4,
-                    name: 'Alterna Шампунь лифтинг для объема, 200 мл',
-                },
-                {
-                    id: 5,
-                    name: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
-                    price: '1 900 ₽',
-                    oldPrice: '1 600 ₽',
-                },
-                {
-                    id: 6,
-                    name: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
-                    price: '1 900 ₽',
-                    oldPrice: '1 600 ₽',
-                },
-                {
-                    id: 7,
-                    name: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
-                    price: '1 900 ₽',
-                    oldPrice: '1 600 ₽',
-                },
-                {
-                    id: 8,
-                    name: 'R+Co Шампунь для совершенства волос, 240 мл',
-                    price: '1 900 ₽',
-                    oldPrice: '1 600 ₽',
-                },
-                {
-                    id: 9,
-                    name: 'Alterna Шампунь лифтинг для объема, 200 мл',
-                    price: '1 900 ₽',
-                    oldPrice: '1 600 ₽',
-                },
-                {
-                    id: 10,
-                    name: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
-                    price: '1 900 ₽',
-                    oldPrice: '1 600 ₽',
-                },
-                {
-                    id: 11,
-                    name: 'Alterna Шампунь лифтинг для объема, 200 мл',
-                    price: '1 900 ₽',
-                    oldPrice: '1 600 ₽',
-                },
-                {
-                    id: 12,
-                    name: 'Evo Сухой шампунь-спрей Water Killer, 200 мл',
-                    price: '1 900 ₽',
-                    oldPrice: '1 600 ₽',
-                },
-                {
-                    id: 13,
-                    name: 'Evo Сухой шампунь-спрей Water Killer, 200 мл',
-                    price: '1 900 ₽',
-                    oldPrice: '1 600 ₽',
-                },
-                {
-                    id: 14,
-                    name: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
-                    price: '1 900 ₽',
-                    oldPrice: '1 600 ₽',
-                },
-            ],
         };
     },
     computed: {
+        ...mapState('search', ['suggestions']),
+
         isTabletLg() {
             return this.$mq.tabletLg;
         },
     },
-    methods: {},
-    mounted() {
-        this.mounted = true;
+    watch: {
+        suggestions(value) {
+            this.$nextTick(() => this.searchSwiper.slideTo(0, 0));
+        },
     },
 };
 </script>

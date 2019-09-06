@@ -39,11 +39,7 @@ export default function createRouter() {
             // Возвращаем промис, который срабатывает на 50 мс после того, как срабатывает анимация нового компонента
             return new Promise(resolve => {
                 setTimeout(() => {
-                    if (to.hash) {
-                        resolve({
-                            selector: to.hash,
-                        });
-                    }
+                    if (to.hash) resolve({ selector: to.hash });
                     if (savedPosition) resolve(savedPosition);
                     resolve({ x: 0, y: 0 });
                 }, 250);

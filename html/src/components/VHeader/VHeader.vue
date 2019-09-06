@@ -146,7 +146,8 @@ export default {
     },
 
     computed: {
-        ...mapState(['scroll', 'search']),
+        ...mapState(['scroll']),
+        ...mapState('search', ['search']),
 
         isTabletLg() {
             return this.$mq.tabletLg;
@@ -154,7 +155,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(['SET_SEARCH']),
+        ...mapActions('search', ['SET_SEARCH']),
     },
 };
 </script>

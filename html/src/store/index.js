@@ -4,7 +4,8 @@ import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
 
-import modalModule from './modules/Modal';
+import modal from './modules/Modal';
+import search from './modules/Search';
 
 Vue.use(Vuex);
 
@@ -18,11 +19,10 @@ export default function createStore() {
         state: {
             locale: 'ru',
             scroll: false,
-            search: false,
         },
         getters,
         mutations,
         actions,
-        modules: [modalModule],
+        modules: { modal, search },
     });
 }

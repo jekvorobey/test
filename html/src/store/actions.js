@@ -10,8 +10,4 @@ export default {
     SET_SCROLL({ commit }, payload) {
         commit('SET_SCROLL', payload);
     },
-
-    SET_SEARCH({ commit }, payload) {
-        commit('SET_SEARCH', payload);
-    },
 };

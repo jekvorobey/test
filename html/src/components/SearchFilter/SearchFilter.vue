@@ -4,11 +4,11 @@
             <v-svg name="search-middle" width="20" height="20" />
         </label>
         <input
-            :id="inputId"
             class="search-filter__input"
             v-model="searchString"
-            @focus="onSearchFocus"
+            :id="inputId"
             :placeholder="searchPlaceholder"
+            @focus.self="SET_SEARCH(true)"
         />
         <button class="search-filter__clear" @click="onClearClick">
             <v-svg name="cross" width="20" height="20" />
@@ -45,22 +45,24 @@ export default {
     },
 
     computed: {
-        ...mapState(['search']),
+        ...mapState('search', ['search']),
+
         searchPlaceholder() {
             return this.$t('header.middle.search');
         },
     },
 
+    watch: {
+        searchString(value) {
+            this.SEARCH(value);
+        },
+    },
+
     methods: {
-        ...mapActions(['SET_SEARCH']),
+        ...mapActions('search', ['SEARCH', 'SET_SEARCH']),
 
         onClearClick() {
-            this.searchString = '';
             this.SET_SEARCH(false);
-        },
-
-        onSearchFocus() {
-            this.SET_SEARCH(true);
         },
     },
 };

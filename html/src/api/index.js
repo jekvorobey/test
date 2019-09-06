@@ -1,7 +1,7 @@
 // this is aliased in webpack config based on server/client build
 // eslint-disable-next-line
 import createAPI from 'create-api';
-import { $logger } from '../services/ServiceLocator';
+import { $logger, $http } from '../services/ServiceLocator';
 
 const logRequests = !!process.env.DEBUG_API;
 
@@ -76,4 +76,8 @@ export function watchList(type, cb) {
     return () => {
         ref.off('value', handler);
     };
+}
+
+export function search(string) {
+    return $http.get('/search', string);
 }
