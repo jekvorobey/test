@@ -88,7 +88,7 @@ module.exports = merge(base, {
                   },
               ]),
               new MiniCssExtractPlugin({
-                  filename: isProd ? '[name].[chunkhash].css' : '[name].css',
+                  filename: isProd ? '[chunkhash].css' : '[name].css',
               }),
               /* На финальной сборке под бэк происходит сжатие статических ассетов через GZIP и Brotli. Сервер должен быть настроен таким образом, чтобы тянуть эти файлы вместо генерации своих. Такой подход позволяет не тратить время сервера на обработку заведомо неизменяемых ассетов и применять максимальные уровни сжатия. */
               new CompressionPlugin({
