@@ -12,7 +12,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, '../../public/assets'),
         publicPath: '/assets/',
-        filename: isProd ? '[chunkhash].js' : '[name].js',
+        filename: isProd ? '[name].[chunkhash].js' : '[name].js',
     },
     resolve: {
         alias: {
@@ -52,7 +52,7 @@ module.exports = {
                     {
                         loader: 'url-loader',
                         options: {
-                            name: isProd ? 'images/[hash:20].[ext]' : 'images/[name].[ext]',
+                            name: isProd ? 'images/[name].[hash:20].[ext]' : 'images/[name].[ext]',
                             limit: 10 * 1024,
                         },
                     },
@@ -73,7 +73,7 @@ module.exports = {
                     {
                         loader: 'url-loader',
                         options: {
-                            name: isProd ? 'fonts/[hash:20].[ext]' : 'fonts/[name].[ext]',
+                            name: isProd ? 'fonts/[name].[hash:20].[ext]' : 'fonts/[name].[ext]',
                             limit: 10 * 1024,
                         },
                     },
