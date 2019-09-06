@@ -2,7 +2,7 @@
     <div class="search-panel">
         <div class="container search-panel__container">
             <div v-if="suggestions.categories && suggestions.categories.length > 0" class="search-panel__categories">
-                <transition-group tag="ul" name="item" class="search-panel__categories-list">
+                <transition-group tag="ul" name="item" class="search-panel__categories-list" appear>
                     <li key="title" class="text-bold">Категории</li>
                     <li :key="category.id" v-for="category in suggestions.categories">
                         <v-link class="search-panel__categories-link" href="#">{{ category.name }}</v-link>
@@ -11,7 +11,7 @@
             </div>
             <div v-if="suggestions.products && suggestions.products.length > 0" class="search-panel__products">
                 <h3>Популярные товары</h3>
-                <transition-group tag="ul" name="item" v-if="!isTabletLg" class="search-panel__products-list">
+                <transition-group tag="ul" name="item" v-if="!isTabletLg" class="search-panel__products-list" appear>
                     <li class="search-panel__products-card" v-for="product in suggestions.products" :key="product.id">
                         <product-card
                             :product-id="product.id"
@@ -92,7 +92,7 @@ export default {
     },
     watch: {
         suggestions(value) {
-            this.$nextTick(() => this.searchSwiper.slideTo(0, 0));
+            this.$nextTick(() => this.searchSwiper && this.searchSwiper.slideTo(0, 0));
         },
     },
 };
