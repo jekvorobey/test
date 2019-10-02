@@ -36,14 +36,18 @@ export default function createRouter() {
         fallback: false,
         // eslint-disable-next-line no-unused-vars
         scrollBehavior: (to, from, savedPosition) => {
+            if (to.hash) return { selector: to.hash };
+            if (savedPosition) return savedPosition;
+            return { x: 0, y: 0 };
+
             // Возвращаем промис, который срабатывает на 50 мс после того, как срабатывает анимация нового компонента
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    if (to.hash) resolve({ selector: to.hash });
-                    if (savedPosition) resolve(savedPosition);
-                    resolve({ x: 0, y: 0 });
-                }, 250);
-            });
+            // return new Promise(resolve => {
+            //     setTimeout(() => {
+            //         if (to.hash) resolve({ selector: to.hash });
+            //         if (savedPosition) resolve(savedPosition);
+            //         resolve({ x: 0, y: 0 });
+            //     }, 250);
+            // });
         },
         routes,
     });

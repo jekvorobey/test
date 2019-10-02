@@ -2,9 +2,9 @@
     <div id="app" class="fake-vue-body" :class="{ 'fake-vue-body--scroll': scroll }">
         <v-header />
         <main>
-            <transition name="fade" mode="out-in">
-                <router-view class="view" />
-            </transition>
+            <!-- <transition name="fade" mode="out-in"> -->
+            <router-view class="view" />
+            <!-- </transition> -->
         </main>
         <v-footer />
     </div>

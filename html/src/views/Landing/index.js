@@ -3,7 +3,7 @@
  */
 
 /**
- * Модуль компонента ItemDetail
+ * Модуль компонента Landing
  */
 export default {
     /**
@@ -11,9 +11,9 @@ export default {
      */
     routes: [
         {
-            name: 'main',
+            name: 'landing',
             path: '/',
-            component: () => import(/* webpackChunkName: "main-view" */ './Main.vue'),
+            component: () => import(/* webpackChunkName: "landing-view" */ './Landing.vue'),
         },
     ],
 };
