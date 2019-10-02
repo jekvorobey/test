@@ -81,3 +81,7 @@ export function watchList(type, cb) {
 export function search(string) {
     return $http.get('/search', string);
 }
+
+export function getProducts(string) {
+    return $http.get('/products', string);
+}
