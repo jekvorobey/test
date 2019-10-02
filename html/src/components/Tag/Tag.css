@@ -1,0 +1,6 @@
+.tag {
+    width: fit-content;
+    text-align: center;
+    padding: calc(var(--gs) / 2);
+    border: 1px solid var(--cl-global);
+}

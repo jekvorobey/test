@@ -42,10 +42,15 @@
         margin-bottom: calc(var(--gs) * 5);
     }
 
-    &__products-slider {
-        height: 512px;
-        background: lightgoldenrodyellow;
+    &__products {
         margin-bottom: calc(var(--gs) * 7);
+
+        &-link {
+            line-height: 28px;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
     }
 
     &__category-banners {

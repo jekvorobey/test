@@ -1,9 +1,11 @@
 .product-card {
-    width: 96px;
-
     &__img {
-        height: 96px;
         margin-bottom: calc(var(--gs) * 1.5);
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     }
 
     &__link {

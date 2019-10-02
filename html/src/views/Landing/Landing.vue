@@ -26,11 +26,46 @@
             <section class="section landing-view__products">
                 <h2 class="landing-view____products-hl">Новинки</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
+
+                <div v-swiper:newProductsSwiper="swiperOption">
+                    <div class="swiper-wrapper">
+                        <catalog-product-card
+                            class="swiper-slide"
+                            v-for="product in newProducts"
+                            :key="product.id"
+                            :product-id="product.id"
+                            :name="product.name"
+                            :href="product.href"
+                            :image="product.image"
+                            :price="product.price"
+                            :old-price="product.oldPrice"
+                            :tags="product.tags"
+                        />
+                    </div>
+                </div>
             </section>
 
-            <div class="landing-view__products">
-                Слайдер с товарами
-            </div>
+            <section class="section landing-view__products">
+                <h2 class="landing-view____products-hl">Бестселлеры</h2>
+                <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
+
+                <div v-swiper:bestsellerProductsSwiper="swiperOption">
+                    <div class="swiper-wrapper">
+                        <catalog-product-card
+                            class="swiper-slide"
+                            v-for="product in bestsellerProducts"
+                            :key="product.id"
+                            :product-id="product.id"
+                            :name="product.name"
+                            :href="product.href"
+                            :image="product.image"
+                            :price="product.price"
+                            :old-price="product.oldPrice"
+                            :tags="product.tags"
+                        />
+                    </div>
+                </div>
+            </section>
 
             <div class="landing-view__category-banners">
                 <div class="landing-view__category-banner">
@@ -44,9 +79,27 @@
                 </div>
             </div>
 
-            <div class="landing-view__products">
-                Слайдер с товарами
-            </div>
+            <section class="section landing-view__products">
+                <h2 class="landing-view____products-hl">585 покупателей на сайте сейчас выбирают</h2>
+                <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
+
+                <div v-swiper:searchingProductsSwiper="swiperOption">
+                    <div class="swiper-wrapper">
+                        <catalog-product-card
+                            class="swiper-slide"
+                            v-for="product in bestsellerProducts"
+                            :key="product.id"
+                            :product-id="product.id"
+                            :name="product.name"
+                            :href="product.href"
+                            :image="product.image"
+                            :price="product.price"
+                            :old-price="product.oldPrice"
+                            :tags="product.tags"
+                        />
+                    </div>
+                </div>
+            </section>
 
             <div class="landing-view__brands-slider">
                 Слайдер с брендами
@@ -60,13 +113,17 @@
 </template>
 
 <script>
-import { $store, $progress } from '../../services/ServiceLocator';
+import { $store, $progress, $logger } from '../../services/ServiceLocator';
+import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
+import landingModule from '../../store/modules/Landing';
+
+import { mapState } from 'vuex';
 
 import './Landing.css';
 
 export default {
     name: 'landing',
-    components: {},
+    components: { CatalogProductCard },
     metaInfo: {
         title: 'landing',
         titleTemplate: '%s - Welcome!',
@@ -76,52 +133,16 @@ export default {
     },
     data() {
         return {
-            categoryLinks: [
-                {
-                    id: 1,
-                    title: 'Уход за волосами',
-                    to: '/',
-                },
-                {
-                    id: 2,
-                    title: 'Для лица и тела',
-                    to: '/',
-                },
-                {
-                    id: 3,
-                    title: 'Для рук и ног',
-                    to: '/',
-                },
-                {
-                    id: 4,
-                    title: 'Макияж',
-                    to: '/',
-                },
-                {
-                    id: 5,
-                    title: 'Для ногтей',
-                    to: '/',
-                },
-                {
-                    id: 6,
-                    title: 'Инструменты',
-                    to: '/',
-                },
-                {
-                    id: 7,
-                    title: 'Аксессуары',
-                    to: '/',
-                },
-                {
-                    id: 8,
-                    title: 'Мужская коллекция',
-                    to: '/',
-                },
-            ],
+            swiperOption: {
+                slidesPerView: 4,
+                spaceBetween: 24,
+            },
         };
     },
 
-    computed: {},
+    computed: {
+        ...mapState('landing', ['newProducts', 'bestsellerProducts', 'categoryLinks']),
+    },
 
     methods: {},
 
@@ -132,23 +153,14 @@ export default {
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
 
-        if (process.env.VUE_ENV === 'server') {
-            next();
-            return;
-        }
+        const register = !!$store._modulesNamespaceMap[`${landingModule.name}/`];
+        if (!register)
+            $store.registerModule(landingModule.name, landingModule, {
+                preserveState: !!$store.state.landing,
+            });
 
-        // const register = !!$store._modulesNamespaceMap[`${itemListModule.name}/`];
-        // if (!register)
-        //     $store.registerModule(itemListModule.name, itemListModule, {
-        //         preserveState: !!$store.state.item_list,
-        //     });
-        // $progress.start();
-        // if (!$store.state.item_list.items[to.params.id]) {
-        //     $store.dispatch(`${itemListModule.name}/FETCH_ITEMS`, { ids: [to.params.id] }).then(() => {
-        //         next(vm => $progress.finish());
-        //     });
-        // } else next(vm => $progress.finish());
-        next();
+        $progress.start();
+        $store.dispatch(`${landingModule.name}/FETCH_LANDING_DATA`).then(() => next(vm => $progress.finish()));
     },
 
     beforeRouteUpdate(to, from, next) {
@@ -159,23 +171,15 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        // if (!this.$store.state.item_list.items[to.params.id]) {
-        //     this.$progress.start();
-        //     this.fetchItems().then(() => {
-        //         this.$progress.finish();
-        //         next();
-        //     });
-        // } else next();
-        next();
+        this.$progress.start();
+        this.$store.dispatch(`${landingModule.name}/FETCH_LANDING_DATA`).then(() => next(vm => $progress.finish()));
     },
 
     // Server-side only
     // This will be called by the server renderer automatically
-    serverPrefetch() {
-        // return the Promise from the action
-        // so that the component waits before rendering
-        //this.$store.registerModule(itemListModule.name, itemListModule);
-        return Promise.resolve();
-    },
+    //serverPrefetch() {
+    // return the Promise from the action
+    // so that the component waits before rendering
+    //},
 };
 </script>
