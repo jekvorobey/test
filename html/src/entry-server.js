@@ -3,6 +3,8 @@ import createApp from './app/app';
 import ServiceLocator from './services/ServiceLocator';
 import ExpressLogger from './services/LogService/ExpressLogger';
 import ExpressCookie from './services/CookieService/ExpressCookie';
+import MockHttpService from './services/HttpService/MockService';
+import MockProgressService from './services/ProgressService/MockService';
 
 // This exported function will be called by `bundleRenderer`.
 // This is where we perform data-prefetching to determine the
@@ -16,6 +18,8 @@ export default context => {
         ServiceLocator.createInstance()
             .register(serviceName.ROUTER, () => router)
             .register(serviceName.STORE, () => store)
+            .register(serviceName.PROGRESS, () => new MockProgressService())
+            .register(serviceName.HTTP, () => new MockHttpService())
             .register(serviceName.LOGGER, () => new ExpressLogger())
             .register(serviceName.COOKIE, () => new ExpressCookie(context.req, context.res));
 
