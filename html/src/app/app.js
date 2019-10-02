@@ -1,10 +1,28 @@
+/**
+ * Basic polyfills and libs for application
+ * Полифилы и базовые либы приложения
+ */
+import 'core-js/modules/es.promise';
+import 'core-js/modules/es.array.iterator';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+import 'custom-event-polyfill';
+import 'intersection-observer';
+import 'lazysizes/plugins/object-fit/ls.object-fit';
+import 'lazysizes';
+import 'lazysizes/plugins/parent-fit/ls.parent-fit';
+import 'lazysizes/plugins/respimg/ls.respimg';
+import 'focus-visible';
+
 import Vue from 'vue';
+
 import { sync } from 'vuex-router-sync';
 import createStore from '../store';
 import createRouter from '../router';
 
 import i18n from '../plugins/i18n';
 import mq from '../plugins/media';
+import '../plugins/meta';
 
 import titleMixin from '../util/title';
 import * as filters from '../util/filters';

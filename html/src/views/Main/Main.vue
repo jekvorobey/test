@@ -16,12 +16,16 @@ import './Main.css';
 export default {
     name: 'main',
     components: {},
-    title() {
-        return 'main';
+    metaInfo: {
+        title: 'Main',
+        titleTemplate: '%s - Welcome!',
+        htmlAttrs: {
+            lang: 'ru',
+        },
     },
     data() {
         return {
-            links,
+            links: [],
         };
     },
 

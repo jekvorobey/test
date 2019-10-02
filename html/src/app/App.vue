@@ -11,22 +11,6 @@
 </template>
 
 <script>
-/**
- * Basic polyfills and libs for application
- * Полифилы и базовые либы приложения
- */
-import 'core-js/modules/es.promise';
-import 'core-js/modules/es.array.iterator';
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-import 'custom-event-polyfill';
-import 'intersection-observer';
-import 'lazysizes/plugins/object-fit/ls.object-fit';
-import 'lazysizes';
-import 'lazysizes/plugins/parent-fit/ls.parent-fit';
-import 'lazysizes/plugins/respimg/ls.respimg';
-import 'focus-visible';
-
 import './App.critical.css';
 import './App.css';
 

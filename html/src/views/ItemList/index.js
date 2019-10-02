@@ -22,6 +22,5 @@ export default {
         { name: 'show', path: '/show/:page(\\d+)?', component: createListView('show') },
         { name: 'ask', path: '/ask/:page(\\d+)?', component: createListView('ask') },
         { name: 'job', path: '/job/:page(\\d+)?', component: createListView('job') },
-        { path: '/', redirect: '/top' },
     ],
 };
