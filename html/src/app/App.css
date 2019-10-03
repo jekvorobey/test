@@ -7,3 +7,12 @@
 body {
     font-family: var(--base-font);
 }
+
+.blur-up {
+    filter: blur(5px);
+}
+
+.blur-up.lazyloaded {
+    filter: blur(0);
+    transition: filter 400ms, -webkit-filter 400ms;
+}

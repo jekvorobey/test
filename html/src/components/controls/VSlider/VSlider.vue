@@ -1,15 +1,17 @@
 <template>
-    <div class="v-slider" v-swiper:slider="options">
-        <div class="swiper-wrapper">
-            <slot />
+    <transition name="fade-in" appear>
+        <div v-show="show" class="v-slider" v-swiper:slider="options">
+            <div class="swiper-wrapper">
+                <slot />
+            </div>
+            <button class="swiper-button-prev">
+                <v-svg name="arrow-small" width="24" height="24" />
+            </button>
+            <button class="swiper-button-next">
+                <v-svg name="arrow-small" width="24" height="24" />
+            </button>
         </div>
-        <button class="swiper-button-prev">
-            <v-svg name="arrow-small" width="24" height="24" />
-        </button>
-        <button class="swiper-button-next">
-            <v-svg name="arrow-small" width="24" height="24" />
-        </button>
-    </div>
+    </transition>
 </template>
 
 <script>
@@ -24,6 +26,9 @@ export default {
     components: {
         VSvg,
     },
+
+    serverCacheKey: props => props.name,
+
     props: {
         name: {
             type: String,
@@ -32,10 +37,38 @@ export default {
         options: {
             type: Object,
             default() {
-                return {};
+                return {
+                    init: false,
+                    grabCursor: true,
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                };
             },
         },
     },
-    serverCacheKey: props => props.name,
+
+    data() {
+        return {
+            show: false,
+        };
+    },
+
+    methods: {
+        initialized() {
+            this.show = true;
+        },
+    },
+
+    mounted() {
+        this.slider.on('init', this.initialized);
+        this.slider.init();
+    },
+
+    beforeDestroy() {
+        this.slider.clearEvents();
+        this.slider.destroy();
+    },
 };
 </script>

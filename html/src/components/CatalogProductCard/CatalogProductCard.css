@@ -33,6 +33,8 @@
 
     &__img {
         display: block;
+        width: 100%;
+        min-height: 230px;
 
         img {
             width: 100%;

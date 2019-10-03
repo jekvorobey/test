@@ -47,6 +47,57 @@ const categories = [
     },
 ];
 
+const productCategories = [
+    {
+        id: 1,
+        name: 'Уход за волосами',
+        to: '/',
+        image: 'https://via.placeholder.com/150x150',
+    },
+    {
+        id: 2,
+        name: 'Для лица и тела',
+        to: '/',
+        image: 'https://via.placeholder.com/150x150',
+    },
+    {
+        id: 3,
+        name: 'Для рук и ног',
+        to: '/',
+        image: 'https://via.placeholder.com/150x150',
+    },
+    {
+        id: 4,
+        name: 'Макияж',
+        to: '/',
+        image: 'https://via.placeholder.com/150x150',
+    },
+    {
+        id: 5,
+        name: 'Для ногтей',
+        to: '/',
+        image: 'https://via.placeholder.com/150x150',
+    },
+    {
+        id: 6,
+        name: 'Инструменты',
+        to: '/',
+        image: 'https://via.placeholder.com/150x150',
+    },
+    {
+        id: 7,
+        name: 'Аксессуары',
+        to: '/',
+        image: 'https://via.placeholder.com/150x150',
+    },
+    {
+        id: 8,
+        name: 'Мужская коллекция',
+        to: '/',
+        image: 'https://via.placeholder.com/150x150',
+    },
+];
+
 const products = [
     {
         id: 1,
@@ -212,6 +263,9 @@ export default class MockHttpService {
                     break;
                 case '/products':
                     setTimeout(() => resolve(products), 300);
+                    break;
+                case '/categories':
+                    setTimeout(() => resolve(productCategories), 300);
                     break;
                 default:
                     reject();

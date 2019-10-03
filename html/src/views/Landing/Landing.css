@@ -38,7 +38,6 @@
 
     &__category-cards {
         height: 208px;
-        background: lightblue;
         margin-bottom: calc(var(--gs) * 5);
     }
 
@@ -60,6 +59,10 @@
             .swiper-button-next {
                 top: 35%;
             }
+        }
+
+        &-card {
+            width: calc(100% / 4);
         }
     }
 

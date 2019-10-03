@@ -1,0 +1,7 @@
+import lazysizes from 'lazysizes';
+import 'lazysizes/plugins/object-fit/ls.object-fit';
+import 'lazysizes/plugins/parent-fit/ls.parent-fit';
+import 'lazysizes/plugins/respimg/ls.respimg';
+import 'lazysizes/plugins/blur-up/ls.blur-up';
+
+lazysizes.cfg.blurupMode = 'auto';

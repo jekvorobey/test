@@ -85,3 +85,7 @@ export function search(string) {
 export function getProducts(string) {
     return $http.get('/products', string);
 }
+
+export function getCategories(string) {
+    return $http.get('/categories', string);
+}

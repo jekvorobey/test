@@ -1,7 +1,7 @@
 <template>
     <div class="catalog-product-card" @mouseover="mouseOver = true" @mouseleave="mouseOver = false">
         <v-link class="catalog-product-card__img" :to="href">
-            <img class="lazyload" :data-src="image" :alt="name" />
+            <img class="blur-up lazyload" :data-src="image" alt="" />
         </v-link>
         <div class="catalog-product-card__body">
             <transition name="fade-absolute">
@@ -63,6 +63,7 @@ import './CatalogProductCard.css';
 
 export default {
     name: 'catalog-product-card',
+
     components: {
         VSvg,
         VLink,
@@ -70,6 +71,7 @@ export default {
 
         Tag,
     },
+
     props: {
         tags: {
             type: Array,
@@ -111,12 +113,15 @@ export default {
             default: null,
         },
     },
+
     data() {
         return {
             mouseOver: false,
         };
     },
+
     computed: {},
+
     methods: {},
 };
 </script>

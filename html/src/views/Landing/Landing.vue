@@ -2,8 +2,8 @@
     <section class="section landing-view">
         <div class="container">
             <ul class="landing-view__categories">
-                <li :key="link.id" v-for="link in categoryLinks">
-                    <router-link :to="link.to">{{ link.title }}</router-link>
+                <li :key="category.id" v-for="category in categories">
+                    <router-link to="/">{{ category.name }}</router-link>
                 </li>
             </ul>
 
@@ -19,17 +19,25 @@
                 <div class="landing-view__banners-right">слайдер с баннерами</div>
             </div>
 
-            <div class="landing-view__category-cards">
-                карточки категорий
-            </div>
+            <section class="section landing-view__category-cards">
+                <v-slider class="landing-view__category-slider" name="categories" :options="categoryOptions">
+                    <category-card
+                        class="swiper-slide landing-view__category-card"
+                        v-for="category in categories"
+                        :key="category.id"
+                        :name="category.name"
+                        :image="category.image"
+                    />
+                </v-slider>
+            </section>
 
             <section class="section landing-view__products">
                 <h2 class="landing-view____products-hl">Новинки</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
-                <v-slider class="landing-view__products-slider" name="new-products" :options="swiperOption">
+                <v-slider class="landing-view__products-slider" name="new-products" :options="productOptions">
                     <catalog-product-card
-                        class="swiper-slide"
+                        class="swiper-slide landing-view__products-card"
                         v-for="product in newProducts"
                         :key="product.id"
                         :product-id="product.id"
@@ -48,7 +56,7 @@
                 <h2 class="landing-view____products-hl">Бестселлеры</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
-                <v-slider class="landing-view__products-slider" name="bestseller-products" :options="swiperOption">
+                <v-slider class="landing-view__products-slider" name="bestseller-products" :options="productOptions">
                     <catalog-product-card
                         class="swiper-slide"
                         v-for="product in bestsellerProducts"
@@ -81,7 +89,7 @@
                 <h2 class="landing-view____products-hl">585 покупателей на сайте сейчас выбирают</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
-                <v-slider class="landing-view__products-slider" name="featured-products" :options="swiperOption">
+                <v-slider class="landing-view__products-slider" name="featured-products" :options="productOptions">
                     <catalog-product-card
                         class="swiper-slide"
                         v-for="product in featuredProducts"
@@ -115,6 +123,7 @@ import { $store, $progress, $logger } from '../../services/ServiceLocator';
 import VSvg from '../../components/controls/VSvg/VSvg.vue';
 import VSlider from '../../components/controls/VSlider/VSlider.vue';
 
+import CategoryCard from '../../components/CategoryCard/CategoryCard.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 
 import landingModule from '../../store/modules/Landing';
@@ -125,7 +134,8 @@ import './Landing.css';
 
 export default {
     name: 'landing',
-    components: { VSvg, VSlider, CatalogProductCard },
+    components: { VSvg, VSlider, CategoryCard, CatalogProductCard },
+
     metaInfo: {
         title: 'landing',
         titleTemplate: '%s - Welcome!',
@@ -133,12 +143,27 @@ export default {
             lang: 'ru',
         },
     },
+
     data() {
         return {
-            swiperOption: {
+            categoryOptions: {
+                init: false,
+                slidesPerView: 6,
+                spaceBetween: 24,
+                grabCursor: true,
+
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            },
+
+            productOptions: {
+                init: false,
                 slidesPerView: 4,
                 spaceBetween: 24,
                 grabCursor: true,
+
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
@@ -148,7 +173,7 @@ export default {
     },
 
     computed: {
-        ...mapState('landing', ['newProducts', 'bestsellerProducts', 'featuredProducts', 'categoryLinks']),
+        ...mapState('landing', ['newProducts', 'bestsellerProducts', 'featuredProducts', 'categories']),
     },
 
     methods: {},

@@ -8,11 +8,8 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import 'custom-event-polyfill';
 import 'intersection-observer';
-import 'lazysizes/plugins/object-fit/ls.object-fit';
-import 'lazysizes';
-import 'lazysizes/plugins/parent-fit/ls.parent-fit';
-import 'lazysizes/plugins/respimg/ls.respimg';
 import 'focus-visible';
+import '../assets/scripts/lazysizes';
 
 import Vue from 'vue';
 
