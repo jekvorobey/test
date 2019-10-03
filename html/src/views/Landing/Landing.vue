@@ -27,44 +27,42 @@
                 <h2 class="landing-view____products-hl">Новинки</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
-                <div v-swiper:newProductsSwiper="swiperOption">
-                    <div class="swiper-wrapper">
-                        <catalog-product-card
-                            class="swiper-slide"
-                            v-for="product in newProducts"
-                            :key="product.id"
-                            :product-id="product.id"
-                            :name="product.name"
-                            :href="product.href"
-                            :image="product.image"
-                            :price="product.price"
-                            :old-price="product.oldPrice"
-                            :tags="product.tags"
-                        />
-                    </div>
-                </div>
+                <v-slider class="landing-view__products-slider" name="new-products" :options="swiperOption">
+                    <catalog-product-card
+                        class="swiper-slide"
+                        v-for="product in newProducts"
+                        :key="product.id"
+                        :product-id="product.id"
+                        :name="product.name"
+                        :href="product.href"
+                        :image="product.image"
+                        :price="product.price"
+                        :old-price="product.oldPrice"
+                        :tags="product.tags"
+                        :rating="product.rating"
+                    />
+                </v-slider>
             </section>
 
             <section class="section landing-view__products">
                 <h2 class="landing-view____products-hl">Бестселлеры</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
-                <div v-swiper:bestsellerProductsSwiper="swiperOption">
-                    <div class="swiper-wrapper">
-                        <catalog-product-card
-                            class="swiper-slide"
-                            v-for="product in bestsellerProducts"
-                            :key="product.id"
-                            :product-id="product.id"
-                            :name="product.name"
-                            :href="product.href"
-                            :image="product.image"
-                            :price="product.price"
-                            :old-price="product.oldPrice"
-                            :tags="product.tags"
-                        />
-                    </div>
-                </div>
+                <v-slider class="landing-view__products-slider" name="bestseller-products" :options="swiperOption">
+                    <catalog-product-card
+                        class="swiper-slide"
+                        v-for="product in bestsellerProducts"
+                        :key="product.id"
+                        :product-id="product.id"
+                        :name="product.name"
+                        :href="product.href"
+                        :image="product.image"
+                        :price="product.price"
+                        :old-price="product.oldPrice"
+                        :tags="product.tags"
+                        :rating="product.rating"
+                    />
+                </v-slider>
             </section>
 
             <div class="landing-view__category-banners">
@@ -83,22 +81,21 @@
                 <h2 class="landing-view____products-hl">585 покупателей на сайте сейчас выбирают</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
-                <div v-swiper:searchingProductsSwiper="swiperOption">
-                    <div class="swiper-wrapper">
-                        <catalog-product-card
-                            class="swiper-slide"
-                            v-for="product in bestsellerProducts"
-                            :key="product.id"
-                            :product-id="product.id"
-                            :name="product.name"
-                            :href="product.href"
-                            :image="product.image"
-                            :price="product.price"
-                            :old-price="product.oldPrice"
-                            :tags="product.tags"
-                        />
-                    </div>
-                </div>
+                <v-slider class="landing-view__products-slider" name="featured-products" :options="swiperOption">
+                    <catalog-product-card
+                        class="swiper-slide"
+                        v-for="product in featuredProducts"
+                        :key="product.id"
+                        :product-id="product.id"
+                        :name="product.name"
+                        :href="product.href"
+                        :image="product.image"
+                        :price="product.price"
+                        :old-price="product.oldPrice"
+                        :tags="product.tags"
+                        :rating="product.rating"
+                    />
+                </v-slider>
             </section>
 
             <div class="landing-view__brands-slider">
@@ -114,16 +111,21 @@
 
 <script>
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
-import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
-import landingModule from '../../store/modules/Landing';
 
+import VSvg from '../../components/controls/VSvg/VSvg.vue';
+import VSlider from '../../components/controls/VSlider/VSlider.vue';
+
+import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
+
+import landingModule from '../../store/modules/Landing';
 import { mapState } from 'vuex';
 
+import '../../assets/images/sprites/arrow-small.svg';
 import './Landing.css';
 
 export default {
     name: 'landing',
-    components: { CatalogProductCard },
+    components: { VSvg, VSlider, CatalogProductCard },
     metaInfo: {
         title: 'landing',
         titleTemplate: '%s - Welcome!',
@@ -136,12 +138,17 @@ export default {
             swiperOption: {
                 slidesPerView: 4,
                 spaceBetween: 24,
+                grabCursor: true,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
             },
         };
     },
 
     computed: {
-        ...mapState('landing', ['newProducts', 'bestsellerProducts', 'categoryLinks']),
+        ...mapState('landing', ['newProducts', 'bestsellerProducts', 'featuredProducts', 'categoryLinks']),
     },
 
     methods: {},

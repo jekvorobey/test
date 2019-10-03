@@ -1,0 +1,43 @@
+.v-slider {
+    position: relative;
+
+    .swiper-button-next,
+    .swiper-button-prev {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        fill: var(--cl-global);
+        height: 44px;
+        width: 44px;
+        border-radius: 50%;
+        transition: all 0.2s ease-in;
+
+        &:hover {
+            opacity: 0.8;
+            background: var(--cl-global);
+            fill: var(--cl-white);
+        }
+    }
+
+    .swiper-button-next {
+        background-image: none;
+        right: 0;
+
+        .icon {
+            transform: rotate(270deg);
+        }
+    }
+
+    .swiper-button-prev {
+        background-image: none;
+        left: 0;
+
+        .icon {
+            transform: rotate(90deg);
+        }
+    }
+
+    .swiper-button-disabled {
+        display: none;
+    }
+}

@@ -1,18 +1,47 @@
 <template>
-    <div class="catalog-product-card">
-        <div class="catalog-product-card__img">
+    <div class="catalog-product-card" @mouseover="mouseOver = true" @mouseleave="mouseOver = false">
+        <v-link class="catalog-product-card__img" :to="href">
             <img class="lazyload" :data-src="image" :alt="name" />
-        </div>
-        <div class="catalog-product-card__prices">
-            <div class="catalog-product-card__price">{{ oldPrice ? `от ${price}` : price }}</div>
-            <div v-show="oldPrice" class="text-sm text-grey text-strike catalog-product-card__price">
-                от {{ oldPrice }}
-            </div>
+        </v-link>
+        <div class="catalog-product-card__body">
+            <transition name="fade-absolute">
+                <div key="full" v-if="mouseOver" class="catalog-product-card__body-left">
+                    <div class="catalog-product-card__controls">
+                        <v-svg name="eye" width="18" height="18" />
+                        <v-svg name="wishlist-middle" width="18" height="18" />
+                    </div>
+                    <div class="catalog-product-card__prices">
+                        <div class="catalog-product-card__price">{{ oldPrice ? `от ${price}` : price }}</div>
+                        <div v-show="oldPrice" class="text-sm text-grey text-strike catalog-product-card__price">
+                            от {{ oldPrice }}
+                        </div>
+                    </div>
+                    <v-rating class="catalog-product-card__rating" :value="rating" readonly>
+                        <template v-slot:activeLabel>
+                            <v-svg name="star-small" width="12" height="12" />
+                        </template>
+                        <template v-slot:inactiveLabel>
+                            <v-svg name="star-empty-small" width="12" height="12" />
+                        </template>
+                    </v-rating>
+                    <v-link class="link--sm catalog-product-card__link" :to="href">{{ name }}</v-link>
+                </div>
+                <div key="normal" v-else class="catalog-product-card__body-left">
+                    <div class="catalog-product-card__prices">
+                        <div class="catalog-product-card__price">{{ oldPrice ? `от ${price}` : price }}</div>
+                        <div v-show="oldPrice" class="text-sm text-grey text-strike catalog-product-card__price">
+                            от {{ oldPrice }}
+                        </div>
+                    </div>
+                    <v-link class="link--sm catalog-product-card__link" :to="href">{{ name }}</v-link>
+                </div>
+            </transition>
+
             <button class="catalog-product-card__btn">
                 <v-svg name="add-to-cart-small" width="27" height="18" />
             </button>
         </div>
-        <v-link class="link--sm catalog-product-card__link" :href="href">{{ name }}</v-link>
+
         <div class="catalog-product-card__tags">
             <tag class="text-sm catalog-product-card__tags-tag" v-for="(tag, index) in tags" :key="index" :text="tag" />
         </div>
@@ -22,9 +51,14 @@
 <script>
 import VSvg from '../controls/VSvg/VSvg.vue';
 import VLink from '../controls/VLink/VLink.vue';
+import VRating from '../controls/VRating/VRating.vue';
 import Tag from '../Tag/Tag.vue';
 
+import '../../assets/images/sprites/star-empty-small.svg';
+import '../../assets/images/sprites/star-small.svg';
 import '../../assets/images/sprites/add-to-cart-small.svg';
+import '../../assets/images/sprites/wishlist-middle.svg';
+import '../../assets/images/sprites/eye.svg';
 import './CatalogProductCard.css';
 
 export default {
@@ -32,6 +66,7 @@ export default {
     components: {
         VSvg,
         VLink,
+        VRating,
 
         Tag,
     },
@@ -61,6 +96,11 @@ export default {
             type: String,
         },
 
+        rating: {
+            type: Number,
+            default: 0,
+        },
+
         price: {
             type: [String, Number],
             default: null,
@@ -72,7 +112,9 @@ export default {
         },
     },
     data() {
-        return {};
+        return {
+            mouseOver: false,
+        };
     },
     computed: {},
     methods: {},

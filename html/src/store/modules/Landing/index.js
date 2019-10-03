@@ -50,6 +50,7 @@ export default {
         ],
         newProducts: [],
         bestsellerProducts: [],
+        featuredProducts: [],
     },
     actions,
     mutations,

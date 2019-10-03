@@ -1,7 +1,39 @@
 .catalog-product-card {
     position: relative;
 
+    &:hover &__btn {
+        background-color: var(--cl-global);
+        fill: var(--cl-white);
+    }
+
+    &__body {
+        display: grid;
+        grid-template-columns: calc(100% - 40px) 40px;
+        grid-template-rows: auto;
+        position: absolute;
+
+        &-left {
+            padding-top: calc(var(--gs) * 1.5);
+        }
+    }
+
+    &:hover &__controls {
+        display: flex;
+    }
+
+    &__controls {
+        display: none;
+        align-items: center;
+        padding-bottom: calc(var(--gs) * 1.5);
+
+        .icon + .icon {
+            margin-left: var(--gs);
+        }
+    }
+
     &__img {
+        display: block;
+
         img {
             width: 100%;
             height: 100%;
@@ -10,6 +42,8 @@
     }
 
     &__link {
+        font-size: 14px;
+        line-height: 22px;
         text-transform: none;
         margin-bottom: var(--gs);
     }
@@ -17,6 +51,7 @@
     &__prices {
         display: flex;
         align-items: center;
+        margin-bottom: var(--gs);
     }
 
     &__price {
@@ -27,9 +62,12 @@
     }
 
     &__btn {
-        margin-left: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 40px;
         height: 40px;
+        border-radius: 50%;
     }
 
     &__tags {
@@ -42,5 +80,10 @@
                 margin-top: var(--gs);
             }
         }
+    }
+
+    &__rating {
+        width: 100%;
+        margin-bottom: var(--gs);
     }
 }

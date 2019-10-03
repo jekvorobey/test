@@ -1,8 +1,8 @@
 <template>
     <div ref="ratingEl" class="vue-stars" :class="{ readonly: readonly, notouch: notouch }" :style="mapCssProps">
-        <input :id="`vue-stars-${_uid}-0`" type="radio" :checked="valueInt === 0" :name="name" value="0" />
+        <input :id="`vue-stars-${name}-0`" type="radio" :checked="valueInt === 0" :name="name" value="0" />
         <span :key="x" v-for="x in max">
-            <label :for="`vue-stars-${_uid}-${x}`">
+            <label :for="`vue-stars-${name}-${x}`">
                 <span v-if="valueInt >= x">
                     <slot name="activeLabel">{{ getActiveLabel(x) }}</slot>
                 </span>
@@ -13,42 +13,37 @@
             <input
                 v-if="!readonly"
                 ref="input"
-                :id="`vue-stars-${_uid}-${x}`"
+                :id="`vue-stars-${name}-${x}`"
                 type="radio"
                 :checked="valueInt === x"
                 :name="name"
                 :value="x"
                 @change="updateInput(x)"
             />
-            <input
-                v-if="readonly"
-                ref="input"
-                :id="`vue-stars-${_uid}-${x}`"
-                type="radio"
-                :checked="valueInt === x"
-                :name="name"
-                :value="x"
-                disabled
-            />
         </span>
     </div>
 </template>
 <script>
-import './rating.css';
+import './VRating.css';
 
 export default {
-    name: 'vue-stars',
+    name: 'v-rating',
     props: {
         max: { type: Number, required: false, default: 5 },
         value: { type: Number, required: false, default: 0 },
         name: { type: String, required: false, default: 'rating' },
         char: { type: String, required: false, default: '★' },
-        inactiveChar: { type: String, required: false, default: null },
+        inactiveChar: { type: String, required: false, default: '' },
         readonly: { type: Boolean, required: false, default: false },
         activeColor: { type: String, required: false, default: '#FD0' },
         inactiveColor: { type: String, required: false, default: '#999' },
         shadowColor: { type: String, required: false, default: '#FF0' },
         hoverColor: { type: String, required: false, default: '#DD0' },
+    },
+    data() {
+        return {
+            notouch: true,
+        };
     },
     computed: {
         valueInt() {
@@ -60,10 +55,6 @@ export default {
         inactiveRatingChars() {
             /* Default to ratingChars if no inactive characters have been provided */
             return this.inactiveChar ? Array.from(this.inactiveChar) : this.ratingChars;
-        },
-        notouch() {
-            /* For iPhone specifically but really any touch device, there is no true hover state, disabled any pseudo-hover activity. */
-            return !('ontouchstart' in document.documentElement);
         },
         mapCssProps() {
             return {
@@ -86,6 +77,10 @@ export default {
             const s = this.inactiveRatingChars;
             return s[Math.min(s.length - 1, x - 1)];
         },
+    },
+
+    beforeMount() {
+        this.notouch = !('ontouchstart' in document.documentElement);
     },
 };
 </script>

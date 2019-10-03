@@ -3,6 +3,10 @@
     flex-flow: row nowrap;
     align-items: flex-start;
     line-height: 1em;
+
+    span + span {
+        margin-left: calc(var(--gs) / 2);
+    }
 }
 .vue-stars label {
     display: block;
@@ -63,14 +67,5 @@
     .vue-stars input:checked ~ label,
     .vue-stars.notouch:not(.readonly) label:hover ~ label {
         color: var(--inactive-color);
-    }
-}
-
-.rating {
-    fill: var(--cl-magenta);
-
-    .readonly & {
-        width: 11px;
-        height: 11px;
     }
 }

@@ -24,32 +24,30 @@
                 </transition-group>
             </div>
         </div>
-        <div v-if="isTabletLg" class="search-panel__products-slider" v-swiper:searchSwiper="sliderOptions">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide" :key="product.id" v-for="product in suggestions.products">
-                    <product-card
-                        :product-id="product.id"
-                        :name="product.name"
-                        :href="product.href"
-                        :price="product.price"
-                        :old-price="product.oldPrice"
-                    />
-                </div>
-            </div>
-        </div>
+        <v-slider
+            v-if="isTabletLg"
+            class="search-panel__products-slider"
+            name="search-panel-slider"
+            :options="sliderOptions"
+        >
+            <product-card
+                class="swiper-slide"
+                v-for="product in suggestions.products"
+                :key="product.id"
+                :product-id="product.id"
+                :name="product.name"
+                :href="product.href"
+                :price="product.price"
+                :old-price="product.oldPrice"
+            />
+        </v-slider>
     </div>
 </template>
 
 <script>
-import Vue from 'vue';
+import VSlider from '../controls/VSlider/VSlider.vue';
 import VLink from '../controls/VLink/VLink.vue';
 import ProductCard from '../ProductCard/ProductCard.vue';
-import 'swiper/dist/css/swiper.css';
-
-if (process.env.VUE_ENV === 'client') {
-    const VueAwesomeSwiper = require('vue-awesome-swiper/dist/ssr');
-    Vue.use(VueAwesomeSwiper);
-}
 
 import './SearchPanel.css';
 import { mapState } from 'vuex';
@@ -58,6 +56,7 @@ export default {
     name: 'search-panel',
     components: {
         VLink,
+        VSlider,
         ProductCard,
     },
     props: {},

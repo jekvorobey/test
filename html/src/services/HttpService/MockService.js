@@ -56,6 +56,8 @@ const products = [
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         tags: ['Новинка', '-15%'],
+        type: 'simple',
+        rating: 5,
     },
     {
         id: 2,
@@ -65,6 +67,8 @@ const products = [
         price: '1 900 ₽',
         oldPrice: null,
         tags: ['-15%'],
+        type: 'simple',
+        rating: 1,
     },
     {
         id: 3,
@@ -74,6 +78,8 @@ const products = [
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         tags: ['Новинка'],
+        type: 'simple',
+        rating: 3,
     },
     {
         id: 4,
@@ -82,6 +88,7 @@ const products = [
         image: product4,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
+        rating: 2,
     },
     {
         id: 5,
@@ -90,6 +97,8 @@ const products = [
         image: product5,
         price: '1 900 ₽',
         oldPrice: null,
+        type: 'complicate',
+        rating: 2,
     },
     {
         id: 6,
@@ -98,6 +107,8 @@ const products = [
         image: product6,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
+        type: 'simple',
+        rating: 3,
     },
     {
         id: 7,
@@ -106,6 +117,8 @@ const products = [
         image: product7,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
+        type: 'complicate',
+        rating: 3,
     },
     {
         id: 8,
@@ -114,6 +127,8 @@ const products = [
         image: product8,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
+        type: 'complicate',
+        rating: 5,
     },
     {
         id: 9,
@@ -122,6 +137,8 @@ const products = [
         image: product9,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
+        type: 'complicate',
+        rating: 5,
     },
     {
         id: 10,
@@ -130,6 +147,8 @@ const products = [
         image: product10,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
+        type: 'complicate',
+        rating: 5,
     },
     {
         id: 11,
@@ -138,6 +157,8 @@ const products = [
         image: product11,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
+        type: 'complicate',
+        rating: 5,
     },
     {
         id: 12,
@@ -146,6 +167,8 @@ const products = [
         image: product12,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
+        type: 'complicate',
+        rating: 3,
     },
 ];
 
@@ -158,7 +181,6 @@ export default class MockHttpService {
      */
     post(path, data) {
         return new Promise((resolve, reject) => {
-            console.log('post', path, data);
             resolve();
         });
     }
@@ -171,7 +193,6 @@ export default class MockHttpService {
      */
     get(path, data) {
         return new Promise((resolve, reject) => {
-            console.log('get', path, data);
             switch (path) {
                 case '/search':
                     if (data) {
