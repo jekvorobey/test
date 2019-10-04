@@ -112,7 +112,7 @@
 
                 <v-slider class="landing-view__brands-slider" name="popular-brands" :options="brandsOptions">
                     <brand-card
-                        class="swiper-slide"
+                        class="swiper-slide landing-view__brands-card"
                         v-for="brand in brands"
                         :key="brand.id"
                         :brand-id="brand.id"
@@ -186,7 +186,8 @@ export default {
             brandsOptions: {
                 init: false,
                 slidesPerView: 6,
-                spaceBetween: 64,
+                slidesOffsetBefore: 24,
+                slidesOffsetAfter: 24,
                 grabCursor: true,
 
                 navigation: {

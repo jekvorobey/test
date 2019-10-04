@@ -123,6 +123,10 @@
             top: 0;
             right: 0;
         }
+
+        &-card {
+            height: calc(var(--gs) * 8);
+        }
     }
 
     &__instagram {

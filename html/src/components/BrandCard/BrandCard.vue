@@ -1,6 +1,6 @@
 <template>
     <div class="brand-card">
-        <router-link to="/">
+        <router-link class="brand-card__img" to="/">
             <img class="blur-up lazyload" :data-src="image" :alt="name" />
         </router-link>
     </div>
