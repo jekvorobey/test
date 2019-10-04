@@ -1,6 +1,6 @@
 <template>
     <transition name="fade-in" appear>
-        <div v-show="show" class="v-slider" v-swiper:slider="options">
+        <div v-show="initialized" class="v-slider" v-swiper:slider="options">
             <div class="swiper-wrapper">
                 <slot />
             </div>
@@ -34,6 +34,7 @@ export default {
             type: String,
             required: true,
         },
+
         options: {
             type: Object,
             default() {
@@ -47,24 +48,35 @@ export default {
                 };
             },
         },
+
+        shouldInitialize: {
+            type: Boolean,
+            default: true,
+        },
     },
 
     data() {
         return {
-            show: false,
+            initialized: false,
         };
     },
 
     methods: {
-        initialized() {
-            this.show = true;
+        initialize() {
+            this.initialized = true;
+        },
+    },
+
+    watch: {
+        shouldInitialize(value) {
+            if (value && !this.initialized) this.slider.init();
         },
     },
 
     mounted() {
         if (this.slider) {
-            this.slider.on('init', this.initialized);
-            this.slider.init();
+            this.slider.on('init', this.initialize);
+            if (this.shouldInitialize) this.slider.init();
         }
     },
 

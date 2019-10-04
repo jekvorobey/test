@@ -33,11 +33,16 @@
                 </v-slider>
             </section>
 
-            <section class="section landing-view__products">
+            <section class="section landing-view__products" id="new" v-observe-visibility="onChangedVisibility">
                 <h2 class="landing-view__products-hl">Новинки</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
-                <v-slider class="landing-view__products-slider" name="new-products" :options="productOptions">
+                <v-slider
+                    class="landing-view__products-slider"
+                    name="new-products"
+                    :options="productOptions"
+                    :should-initialize="slidersVisibility.new"
+                >
                     <catalog-product-card
                         class="swiper-slide landing-view__products-card"
                         v-for="product in newProducts"
@@ -54,11 +59,16 @@
                 </v-slider>
             </section>
 
-            <section class="section landing-view__products">
+            <section class="section landing-view__products" id="bestsellers" v-observe-visibility="onChangedVisibility">
                 <h2 class="landing-view__products-hl">Бестселлеры</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
-                <v-slider class="landing-view__products-slider" name="bestseller-products" :options="productOptions">
+                <v-slider
+                    class="landing-view__products-slider"
+                    name="bestseller-products"
+                    :options="productOptions"
+                    :should-initialize="slidersVisibility.bestsellers"
+                >
                     <catalog-product-card
                         class="swiper-slide"
                         v-for="product in bestsellerProducts"
@@ -85,11 +95,16 @@
                 />
             </section>
 
-            <section class="section landing-view__products">
+            <section class="section landing-view__products" id="featured" v-observe-visibility="onChangedVisibility">
                 <h2 class="landing-view__products-hl">585 покупателей на сайте сейчас выбирают</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
-                <v-slider class="landing-view__products-slider" name="featured-products" :options="productOptions">
+                <v-slider
+                    class="landing-view__products-slider"
+                    name="featured-products"
+                    :options="productOptions"
+                    :should-initialize="slidersVisibility.featured"
+                >
                     <catalog-product-card
                         class="swiper-slide"
                         v-for="product in featuredProducts"
@@ -106,11 +121,16 @@
                 </v-slider>
             </section>
 
-            <section class="section landing-view__brands">
+            <section class="section landing-view__brands" id="brands" v-observe-visibility="onChangedVisibility">
                 <h2 class="landing-view__brands-hl">Популярные бренды</h2>
                 <router-link class="landing-view__brands-link" to="/">Смотреть все</router-link>
 
-                <v-slider class="landing-view__brands-slider" name="popular-brands" :options="brandsOptions">
+                <v-slider
+                    class="landing-view__brands-slider"
+                    name="popular-brands"
+                    :options="brandsOptions"
+                    :should-initialize="slidersVisibility.brands"
+                >
                     <brand-card
                         class="swiper-slide landing-view__brands-card"
                         v-for="brand in brands"
@@ -155,6 +175,7 @@ import CatalogProductCard from '../../components/CatalogProductCard/CatalogProdu
 import landingModule from '../../store/modules/Landing';
 import { mapState } from 'vuex';
 
+import '../../plugins/observer';
 import '../../assets/images/sprites/socials/instagram-bw.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import './Landing.css';
@@ -183,6 +204,13 @@ export default {
 
     data() {
         return {
+            slidersVisibility: {
+                brands: false,
+                featured: false,
+                bestsellers: false,
+                new: false,
+            },
+
             brandsOptions: {
                 init: false,
                 slidesPerView: 6,
@@ -238,7 +266,12 @@ export default {
         }),
     },
 
-    methods: {},
+    methods: {
+        onChangedVisibility(isVisible, { target }) {
+            //if (isVisible && this.slidersVisibility[target.id] !== isVisible)
+            //    this.slidersVisibility[target.id] = isVisible;
+        },
+    },
 
     beforeMount() {},
 
