@@ -268,8 +268,8 @@ export default {
 
     methods: {
         onChangedVisibility(isVisible, { target }) {
-            //if (isVisible && this.slidersVisibility[target.id] !== isVisible)
-            //    this.slidersVisibility[target.id] = isVisible;
+            if (isVisible && this.slidersVisibility[target.id] !== isVisible)
+                this.slidersVisibility[target.id] = isVisible;
         },
     },
 
