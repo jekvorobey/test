@@ -1,14 +1,18 @@
 <template>
     <section class="section landing-view">
-        <div class="container">
-            <ul class="landing-view__categories">
-                <li :key="category.id" v-for="category in categories">
-                    <router-link to="/">{{ category.name }}</router-link>
-                </li>
-            </ul>
-
-            <section class="landing-view__banners">
-                <div class="landing-view__banners-left">
+        <section>
+            <div class="container">
+                <ul class="landing-view__categories">
+                    <li :key="category.id" v-for="category in categories">
+                        <router-link to="/">{{ category.name }}</router-link>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section class="section">
+            <div class="container landing-view__banners">
+                <div class="landing-view__banners-left">слайдер с баннерами</div>
+                <div class="landing-view__banners-right">
                     <banner-card
                         class="landing-view__banners-card"
                         v-for="banner in mainBanners"
@@ -18,10 +22,11 @@
                         :image="banner.image"
                     />
                 </div>
-                <div class="landing-view__banners-right">слайдер с баннерами</div>
-            </section>
+            </div>
+        </section>
 
-            <section class="section landing-view__category-cards">
+        <section class="section">
+            <div class="container landing-view__category-cards">
                 <v-slider class="landing-view__category-slider" name="categories" :options="categoryOptions">
                     <category-card
                         class="swiper-slide landing-view__category-card"
@@ -31,9 +36,11 @@
                         :image="category.image"
                     />
                 </v-slider>
-            </section>
+            </div>
+        </section>
 
-            <section class="section landing-view__products" id="new" v-observe-visibility="onChangedVisibility">
+        <section class="section" id="new" v-observe-visibility="onChangedVisibility">
+            <div class="container landing-view__products">
                 <h2 class="landing-view__products-hl">Новинки</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
@@ -57,9 +64,11 @@
                         :rating="product.rating"
                     />
                 </v-slider>
-            </section>
+            </div>
+        </section>
 
-            <section class="section landing-view__products" id="bestsellers" v-observe-visibility="onChangedVisibility">
+        <section class="section" id="bestsellers" v-observe-visibility="onChangedVisibility">
+            <div class="container landing-view__products">
                 <h2 class="landing-view__products-hl">Бестселлеры</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
@@ -70,7 +79,7 @@
                     :should-initialize="slidersVisibility.bestsellers"
                 >
                     <catalog-product-card
-                        class="swiper-slide"
+                        class="swiper-slide landing-view__products-card"
                         v-for="product in bestsellerProducts"
                         :key="product.id"
                         :product-id="product.id"
@@ -83,9 +92,11 @@
                         :rating="product.rating"
                     />
                 </v-slider>
-            </section>
+            </div>
+        </section>
 
-            <section class="landing-view__middle-banners">
+        <section class="section">
+            <div class="container landing-view__middle-banners">
                 <banner-card
                     class="landing-view__middle-banners-card"
                     v-for="banner in middleBanners"
@@ -93,9 +104,11 @@
                     :image="banner.image"
                     :title="banner.title"
                 />
-            </section>
+            </div>
+        </section>
 
-            <section class="section landing-view__products" id="featured" v-observe-visibility="onChangedVisibility">
+        <section class="section" id="featured" v-observe-visibility="onChangedVisibility">
+            <div class="container landing-view__products">
                 <h2 class="landing-view__products-hl">585 покупателей на сайте сейчас выбирают</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
@@ -106,7 +119,7 @@
                     :should-initialize="slidersVisibility.featured"
                 >
                     <catalog-product-card
-                        class="swiper-slide"
+                        class="swiper-slide landing-view__products-card"
                         v-for="product in featuredProducts"
                         :key="product.id"
                         :product-id="product.id"
@@ -119,9 +132,11 @@
                         :rating="product.rating"
                     />
                 </v-slider>
-            </section>
+            </div>
+        </section>
 
-            <section class="section landing-view__brands" id="brands" v-observe-visibility="onChangedVisibility">
+        <section class="section landing-view__brands" id="brands" v-observe-visibility="onChangedVisibility">
+            <div class="container">
                 <h2 class="landing-view__brands-hl">Популярные бренды</h2>
                 <router-link class="landing-view__brands-link" to="/">Смотреть все</router-link>
 
@@ -139,9 +154,11 @@
                         :image="brand.image"
                     />
                 </v-slider>
-            </section>
+            </div>
+        </section>
 
-            <section class="landing-view__instagram">
+        <section class="landing-view__instagram">
+            <div class="container">
                 <h2 class="landing-view__instagram-hl">Insta Beauty</h2>
                 <a class="landing-view__instagram-link" href="/">
                     <v-svg name="instagram-bw" width="22" height="22" />&nbsp;&nbsp;Подписаться на нас
@@ -154,8 +171,8 @@
                         :image="item.image"
                     />
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
     </section>
 </template>
 
@@ -211,6 +228,27 @@ export default {
                 new: false,
             },
 
+            categoryOptions: {
+                init: false,
+                slidesPerView: 6,
+                spaceBetween: 24,
+                grabCursor: true,
+
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+
+                breakpoints: {
+                    320: {
+                        slidesOffsetBefore: 24,
+                        slidesOffsetAfter: 24,
+                        slidesPerView: 3,
+                        spaceBetween: 16,
+                    },
+                },
+            },
+
             brandsOptions: {
                 init: false,
                 slidesPerView: 6,
@@ -225,23 +263,21 @@ export default {
                 },
             },
 
-            categoryOptions: {
-                init: false,
-                slidesPerView: 6,
-                spaceBetween: 24,
-                grabCursor: true,
-
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-            },
-
             productOptions: {
                 init: false,
                 slidesPerView: 4,
                 spaceBetween: 24,
                 grabCursor: true,
+                roundLengths: true,
+
+                breakpoints: {
+                    320: {
+                        slidesOffsetBefore: 24,
+                        slidesOffsetAfter: 24,
+                        slidesPerView: 2.25,
+                        spaceBetween: 24,
+                    },
+                },
 
                 navigation: {
                     nextEl: '.swiper-button-next',

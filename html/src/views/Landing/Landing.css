@@ -1,16 +1,26 @@
 .landing-view {
-    padding-top: calc(var(--gs) * 1.5);
     padding-bottom: calc(var(--gs) * 14);
 
     &__categories {
         display: flex;
         justify-content: space-between;
-        margin-bottom: calc(var(--gs) * 1.5);
+        padding: calc(var(--gs) * 1.5) 0;
+
+        @media (--tablet-lg) {
+            display: none;
+        }
     }
 
     &__banners {
         display: flex;
         margin-bottom: calc(var(--gs) * 5);
+
+        @media (--tablet) {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr auto;
+            padding: 0;
+        }
 
         &-card {
             height: 200px;
@@ -48,46 +58,81 @@
             & + & {
                 margin-top: calc(var(--gs) * 2);
             }
+
+            @media (--tablet) {
+                height: 144px;
+                width: 100%;
+
+                .banner-card__content-title {
+                    font-size: 14px;
+                    line-height: 22px;
+                }
+
+                .banner-card__content-btn {
+                    opacity: 1;
+                }
+            }
         }
 
         &-left {
-            margin-right: calc(var(--gs) * 3);
-            width: 32%;
+            flex: 1;
+            background: lightcoral;
+
+            @media (--tablet) {
+                height: 400px;
+                width: 100%;
+                margin-bottom: calc(var(--gs) * 2);
+            }
         }
 
         &-right {
-            flex: 1;
-            background: lightcoral;
-        }
-    }
+            margin-left: calc(var(--gs) * 3);
+            width: 32%;
 
-    &__main-banner {
-        height: 200px;
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        & + & {
-            margin-top: calc(var(--gs) * 1.5);
+            @media (--tablet) {
+                width: 100%;
+                margin-left: 0;
+                padding: 0 calc(var(--gs) * 3);
+            }
         }
     }
 
     &__category-cards {
-        height: 208px;
         margin-bottom: calc(var(--gs) * 5);
+
+        @media (--tablet) {
+            padding: 0;
+            margin-bottom: calc(var(--gs) * 4);
+        }
     }
 
     &__products {
         margin-bottom: calc(var(--gs) * 7);
         height: 512px;
 
+        @media (--tablet) {
+            padding: 0;
+            height: 357px;
+            margin-bottom: calc(var(--gs) * 5);
+        }
+
+        &-hl {
+            @media (--tablet) {
+                padding: 0 calc(var(--gs) * 3);
+            }
+        }
+
         &-link {
             line-height: 28px;
             position: absolute;
             top: 0;
-            right: 0;
+            right: 108px;
+
+            @media (--tablet) {
+                top: 100%;
+                right: unset;
+                left: calc(var(--gs) * 3);
+            }
         }
 
         &-slider {
@@ -101,6 +146,9 @@
 
         &-card {
             width: calc(100% / 4);
+            .catalog-product-card__img {
+                padding-top: calc(var(--gs) * 4);
+            }
         }
     }
 
@@ -121,7 +169,13 @@
             line-height: 28px;
             position: absolute;
             top: 0;
-            right: 0;
+            right: 108px;
+
+            @media (--tablet) {
+                top: 100%;
+                right: unset;
+                left: calc(var(--gs) * 3);
+            }
         }
 
         &-card {

@@ -8,6 +8,14 @@
         width: 100%;
         padding: calc(var(--gs) * 2);
 
+        @media (--tablet) {
+            padding: 0 calc(var(--gs) * 1.5);
+            min-height: auto;
+            font-size: 14px;
+            line-height: 22px;
+            margin-bottom: var(--gs);
+        }
+
         img {
             width: 100%;
             height: 100%;

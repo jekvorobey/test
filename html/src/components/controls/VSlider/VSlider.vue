@@ -68,7 +68,7 @@ export default {
 
     beforeDestroy() {
         if (this.slider) {
-            this.slider.destroy();
+            this.slider.destroy(true, false);
             this.slider = null;
         }
     },
