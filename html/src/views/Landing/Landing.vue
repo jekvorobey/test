@@ -214,6 +214,7 @@ export default {
             brandsOptions: {
                 init: false,
                 slidesPerView: 6,
+                spaceBetween: 64,
                 slidesOffsetBefore: 24,
                 slidesOffsetAfter: 24,
                 grabCursor: true,
