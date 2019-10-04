@@ -1,5 +1,11 @@
 .v-slider {
     position: relative;
+    opacity: 0;
+    transition: opacity var(--animation-time) ease-in;
+
+    &.swiper-container-initialized {
+        opacity: 1;
+    }
 
     .swiper-button-next,
     .swiper-button-prev {

@@ -1,17 +1,15 @@
 <template>
-    <transition name="fade-in" appear>
-        <div v-show="initialized" class="v-slider" v-swiper:slider="options">
-            <div class="swiper-wrapper">
-                <slot />
-            </div>
-            <button class="swiper-button-prev">
-                <v-svg name="arrow-small" width="24" height="24" />
-            </button>
-            <button class="swiper-button-next">
-                <v-svg name="arrow-small" width="24" height="24" />
-            </button>
+    <div class="v-slider" v-swiper:slider="options">
+        <div class="swiper-wrapper">
+            <slot />
         </div>
-    </transition>
+        <button class="swiper-button-prev">
+            <v-svg name="arrow-small" width="24" height="24" />
+        </button>
+        <button class="swiper-button-next">
+            <v-svg name="arrow-small" width="24" height="24" />
+        </button>
+    </div>
 </template>
 
 <script>
@@ -52,18 +50,6 @@ export default {
         shouldInitialize: {
             type: Boolean,
             default: true,
-        },
-    },
-
-    data() {
-        return {
-            initialized: false,
-        };
-    },
-
-    methods: {
-        initialize() {
-            this.initialized = true;
         },
     },
 

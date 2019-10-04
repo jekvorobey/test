@@ -4,6 +4,8 @@
 
     &__img {
         display: block;
+        min-height: 150px;
+        width: 100%;
         padding: calc(var(--gs) * 2);
 
         img {
