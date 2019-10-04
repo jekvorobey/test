@@ -62,13 +62,17 @@ export default {
     },
 
     mounted() {
-        this.slider.on('init', this.initialized);
-        this.slider.init();
+        if (this.slider) {
+            this.slider.on('init', this.initialized);
+            this.slider.init();
+        }
     },
 
     beforeDestroy() {
-        this.slider.clearEvents();
-        this.slider.destroy();
+        if (this.slider) {
+            this.slider.destroy();
+            this.slider = null;
+        }
     },
 };
 </script>

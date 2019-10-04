@@ -11,7 +11,21 @@ import product10 from '../../assets/images/mock/product10.png';
 import product11 from '../../assets/images/mock/product11.png';
 import product12 from '../../assets/images/mock/product12.png';
 
-/* eslint-disable no-console */
+import instagram1 from '../../assets/images/mock/insta1.png';
+import instagram2 from '../../assets/images/mock/insta2.png';
+import instagram3 from '../../assets/images/mock/insta3.png';
+import instagram4 from '../../assets/images/mock/insta4.png';
+import instagram5 from '../../assets/images/mock/insta5.png';
+import instagram6 from '../../assets/images/mock/insta6.png';
+import instagram7 from '../../assets/images/mock/insta7.png';
+import instagram8 from '../../assets/images/mock/insta8.png';
+
+import brand1 from '../../assets/images/mock/brand1.png';
+import brand2 from '../../assets/images/mock/brand2.png';
+import brand3 from '../../assets/images/mock/brand3.png';
+import brand4 from '../../assets/images/mock/brand4.png';
+import brand5 from '../../assets/images/mock/brand5.png';
+
 const categories = [
     {
         id: 1,
@@ -44,6 +58,110 @@ const categories = [
     {
         id: 8,
         name: 'Шампунь для мужчин',
+    },
+];
+
+const instagrams = [
+    {
+        id: 1,
+        image: instagram1,
+    },
+    {
+        id: 2,
+        image: instagram2,
+    },
+    {
+        id: 3,
+        image: instagram3,
+    },
+    {
+        id: 4,
+        image: instagram4,
+    },
+    {
+        id: 5,
+        image: instagram5,
+    },
+    {
+        id: 6,
+        image: instagram6,
+    },
+    {
+        id: 7,
+        image: instagram7,
+    },
+    {
+        id: 8,
+        image: instagram8,
+    },
+];
+
+const mainBanners = [
+    {
+        id: 1,
+        title: 'Стильные аксессуары для волос Kela с кристаллами и покрытием',
+        image: 'https://via.placeholder.com/350x200',
+    },
+    {
+        id: 2,
+        title: 'Встречайте обновленный бренд Christina Fitzgerald',
+        image: 'https://via.placeholder.com/350x200',
+    },
+];
+
+const middleBanners = [
+    {
+        id: 1,
+        title: 'Стайлинги для летних укладок',
+        image: instagram7,
+    },
+    {
+        id: 2,
+        title: 'Косметика для лица и тела',
+        image: instagram3,
+    },
+    {
+        id: 3,
+        title: 'Натуральный макияж Aveda',
+        image: instagram1,
+    },
+];
+
+const brands = [
+    {
+        id: 1,
+        name: 'Brand1',
+        image: brand1,
+    },
+    {
+        id: 2,
+        name: 'Brand2',
+        image: brand2,
+    },
+    {
+        id: 3,
+        name: 'Brand3',
+        image: brand3,
+    },
+    {
+        id: 4,
+        name: 'Brand4',
+        image: brand4,
+    },
+    {
+        id: 5,
+        name: 'Brand5',
+        image: brand5,
+    },
+    {
+        id: 6,
+        name: 'Brand6',
+        image: brand1,
+    },
+    {
+        id: 7,
+        name: 'Brand7',
+        image: brand2,
     },
 ];
 
@@ -266,6 +384,15 @@ export default class MockHttpService {
                     break;
                 case '/categories':
                     setTimeout(() => resolve(productCategories), 300);
+                    break;
+                case '/banners':
+                    setTimeout(() => resolve({ mainBanners, middleBanners }), 300);
+                    break;
+                case '/instagram':
+                    setTimeout(() => resolve(instagrams), 300);
+                    break;
+                case '/brands':
+                    setTimeout(() => resolve(brands), 300);
                     break;
                 default:
                     reject();

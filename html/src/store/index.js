@@ -4,6 +4,7 @@ import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
 
+import auth from './modules/Auth';
 import modal from './modules/Modal';
 import search from './modules/Search';
 
@@ -23,6 +24,6 @@ export default function createStore() {
         getters,
         mutations,
         actions,
-        modules: { modal, search },
+        modules: { modal, search, auth },
     });
 }

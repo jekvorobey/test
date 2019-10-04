@@ -1,19 +1,57 @@
-import { getProducts, getCategories } from '../../../api';
 import { $logger } from '../../../services/ServiceLocator';
-import { SET_BESTSELLER_PRODUCTS, SET_NEW_PRODUCTS, SET_FEATURED_PRODUCTS, SET_CATEGORIES } from './mutations';
+import { getProducts, getCategories, getBanners, getBrands, getInstagram } from '../../../api';
+import {
+    SET_BESTSELLER_PRODUCTS,
+    SET_NEW_PRODUCTS,
+    SET_FEATURED_PRODUCTS,
+    SET_CATEGORIES,
+    SET_BANNERS,
+    SET_BRANDS,
+    SET_INSTAGRAM,
+} from './mutations';
 
 export const FETCH_LANDING_DATA = 'FETCH_LANDING_DATA';
 export const FETCH_NEW_PRODUCTS = 'FETCH_NEW_PRODUCTS';
 export const FETCH_BESTSELLER_PRODUCTS = 'FETCH_BESTSELLER_PRODUCTS';
 export const FETCH_FEATURED_PRODUCTS = 'FETCH_FEATURED_PRODUCTS';
 export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
+export const FETCH_BANNERS = 'FETCH_BANNERS';
+export const FETCH_BRANDS = 'FETCH_BRANDS';
+export const FETCH_INSTAGRAM = 'FETCH_INSTAGRAM';
 
 export default {
+    FETCH_INSTAGRAM({ commit }) {
+        return getInstagram()
+            .then(data => commit(SET_INSTAGRAM, data))
+            .catch(error => {
+                $logger.error(`FETCH_INSTAGRAM error: ${error}`);
+                return [];
+            });
+    },
+
+    FETCH_BRANDS({ commit }) {
+        return getBrands()
+            .then(data => commit(SET_BRANDS, data))
+            .catch(error => {
+                $logger.error(`FETCH_BRANDS error: ${error}`);
+                return [];
+            });
+    },
+
+    FETCH_BANNERS({ commit }) {
+        return getBanners()
+            .then(data => commit(SET_BANNERS, data))
+            .catch(error => {
+                $logger.error(`FETCH_BANNERS error: ${error}`);
+                return [];
+            });
+    },
+
     FETCH_CATEGORIES({ commit }) {
         return getCategories()
             .then(data => commit(SET_CATEGORIES, data))
             .catch(error => {
-                $logger.error(`SET_CATEGORIES error: ${error}`);
+                $logger.error(`FETCH_CATEGORIES error: ${error}`);
                 return [];
             });
     },
@@ -51,6 +89,9 @@ export default {
             dispatch(FETCH_BESTSELLER_PRODUCTS),
             dispatch(FETCH_FEATURED_PRODUCTS),
             dispatch(FETCH_CATEGORIES),
+            dispatch(FETCH_BANNERS),
+            dispatch(FETCH_BRANDS),
+            dispatch(FETCH_INSTAGRAM),
         ]);
     },
 };

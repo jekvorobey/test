@@ -89,3 +89,15 @@ export function getProducts(string) {
 export function getCategories(string) {
     return $http.get('/categories', string);
 }
+
+export function getBanners(string) {
+    return $http.get('/banners', string);
+}
+
+export function getBrands(string) {
+    return $http.get('/brands', string);
+}
+
+export function getInstagram(string) {
+    return $http.get('/instagram', string);
+}

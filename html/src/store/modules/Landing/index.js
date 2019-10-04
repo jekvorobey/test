@@ -6,10 +6,13 @@ export default {
     name: 'landing',
     namespaced: true,
     state: {
+        banners: { mainBanners: [], middleBanners: [] },
+        brands: [],
         categories: [],
         newProducts: [],
         bestsellerProducts: [],
         featuredProducts: [],
+        instagramItems: [],
     },
     actions,
     mutations,

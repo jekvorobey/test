@@ -7,17 +7,19 @@
                 </li>
             </ul>
 
-            <div class="landing-view__banners">
+            <section class="landing-view__banners">
                 <div class="landing-view__banners-left">
-                    <div class="landing-view__main-banner">
-                        <img class="lazyload" data-src="https://via.placeholder.com/150x150" />
-                    </div>
-                    <div class="landing-view__main-banner">
-                        <img class="lazyload" data-src="https://via.placeholder.com/150x150" />
-                    </div>
+                    <banner-card
+                        class="landing-view__banners-card"
+                        v-for="banner in mainBanners"
+                        :key="banner.id"
+                        :banner-id="banner.id"
+                        :title="banner.title"
+                        :image="banner.image"
+                    />
                 </div>
                 <div class="landing-view__banners-right">слайдер с баннерами</div>
-            </div>
+            </section>
 
             <section class="section landing-view__category-cards">
                 <v-slider class="landing-view__category-slider" name="categories" :options="categoryOptions">
@@ -32,7 +34,7 @@
             </section>
 
             <section class="section landing-view__products">
-                <h2 class="landing-view____products-hl">Новинки</h2>
+                <h2 class="landing-view__products-hl">Новинки</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
                 <v-slider class="landing-view__products-slider" name="new-products" :options="productOptions">
@@ -53,7 +55,7 @@
             </section>
 
             <section class="section landing-view__products">
-                <h2 class="landing-view____products-hl">Бестселлеры</h2>
+                <h2 class="landing-view__products-hl">Бестселлеры</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
                 <v-slider class="landing-view__products-slider" name="bestseller-products" :options="productOptions">
@@ -73,20 +75,18 @@
                 </v-slider>
             </section>
 
-            <div class="landing-view__category-banners">
-                <div class="landing-view__category-banner">
-                    <img class="lazyload" data-src="https://via.placeholder.com/150x150" />
-                </div>
-                <div class="landing-view__category-banner">
-                    <img class="lazyload" data-src="https://via.placeholder.com/150x150" />
-                </div>
-                <div class="landing-view__category-banner">
-                    <img class="lazyload" data-src="https://via.placeholder.com/150x150" />
-                </div>
-            </div>
+            <section class="landing-view__middle-banners">
+                <banner-card
+                    class="landing-view__middle-banners-card"
+                    v-for="banner in middleBanners"
+                    :key="banner.id"
+                    :image="banner.image"
+                    :title="banner.title"
+                />
+            </section>
 
             <section class="section landing-view__products">
-                <h2 class="landing-view____products-hl">585 покупателей на сайте сейчас выбирают</h2>
+                <h2 class="landing-view__products-hl">585 покупателей на сайте сейчас выбирают</h2>
                 <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
 
                 <v-slider class="landing-view__products-slider" name="featured-products" :options="productOptions">
@@ -106,13 +106,35 @@
                 </v-slider>
             </section>
 
-            <div class="landing-view__brands-slider">
-                Слайдер с брендами
-            </div>
+            <section class="section landing-view__brands">
+                <h2 class="landing-view__brands-hl">Популярные бренды</h2>
+                <router-link class="landing-view__brands-link" to="/">Смотреть все</router-link>
 
-            <div class="landing-view__instagram">
-                Панель с инстаграмом
-            </div>
+                <v-slider class="landing-view__brands-slider" name="popular-brands" :options="brandsOptions">
+                    <brand-card
+                        class="swiper-slide"
+                        v-for="brand in brands"
+                        :key="brand.id"
+                        :brand-id="brand.id"
+                        :image="brand.image"
+                    />
+                </v-slider>
+            </section>
+
+            <section class="landing-view__instagram">
+                <h2 class="landing-view__instagram-hl">Insta Beauty</h2>
+                <a class="landing-view__instagram-link" href="/">
+                    <v-svg name="instagram-bw" width="22" height="22" />&nbsp;&nbsp;Подписаться на нас
+                </a>
+                <div class="landing-view__instagram-grid">
+                    <instagram-card
+                        v-for="item in instagramItems"
+                        :key="item.id"
+                        :instagram-card-id="item.id"
+                        :image="item.image"
+                    />
+                </div>
+            </section>
         </div>
     </section>
 </template>
@@ -121,20 +143,35 @@
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 
 import VSvg from '../../components/controls/VSvg/VSvg.vue';
+import VLink from '../../components/controls/VLink/VLink.vue';
 import VSlider from '../../components/controls/VSlider/VSlider.vue';
 
+import BrandCard from '../../components/BrandCard/BrandCard.vue';
+import BannerCard from '../../components/BannerCard/BannerCard.vue';
 import CategoryCard from '../../components/CategoryCard/CategoryCard.vue';
+import InstagramCard from '../../components/InstagramCard/InstagramCard.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 
 import landingModule from '../../store/modules/Landing';
 import { mapState } from 'vuex';
 
+import '../../assets/images/sprites/socials/instagram-bw.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import './Landing.css';
 
 export default {
     name: 'landing',
-    components: { VSvg, VSlider, CategoryCard, CatalogProductCard },
+
+    components: {
+        VSvg,
+        VLink,
+        VSlider,
+        BrandCard,
+        BannerCard,
+        CategoryCard,
+        InstagramCard,
+        CatalogProductCard,
+    },
 
     metaInfo: {
         title: 'landing',
@@ -146,6 +183,18 @@ export default {
 
     data() {
         return {
+            brandsOptions: {
+                init: false,
+                slidesPerView: 6,
+                spaceBetween: 64,
+                grabCursor: true,
+
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            },
+
             categoryOptions: {
                 init: false,
                 slidesPerView: 6,
@@ -173,7 +222,19 @@ export default {
     },
 
     computed: {
-        ...mapState('landing', ['newProducts', 'bestsellerProducts', 'featuredProducts', 'categories']),
+        ...mapState('landing', [
+            'newProducts',
+            'bestsellerProducts',
+            'featuredProducts',
+            'categories',
+            'banners',
+            'brands',
+            'instagramItems',
+        ]),
+        ...mapState('landing', {
+            mainBanners: state => state.banners.mainBanners,
+            middleBanners: state => state.banners.middleBanners,
+        }),
     },
 
     methods: {},
