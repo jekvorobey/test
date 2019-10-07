@@ -9,6 +9,10 @@
     min-height: 100vh;
     overflow: hidden;
 
+    @supports (grid-template-columns: auto) {
+        transition: padding-top var(--time) var(--timing-function);
+    }
+
     &--scroll {
         padding-top: 96px;
         @media (--tablet-lg) {
