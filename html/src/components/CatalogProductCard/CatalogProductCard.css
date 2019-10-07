@@ -6,25 +6,33 @@
         fill: var(--cl-white);
     }
 
-    &__body {
-        display: grid;
-        grid-template-columns: calc(100% - 40px) 40px;
-        grid-template-rows: auto;
-        position: absolute;
+    &__wrapper {
+        position: relative;
+    }
 
-        &-left {
-            padding-top: calc(var(--gs) * 1.5);
+    &__body {
+        display: flex;
+        flex-direction: column;
+
+        &-top {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-rows: auto;
+
+            @media (--tablet-lg) {
+                padding-bottom: var(--gs);
+            }
         }
     }
 
-    &:hover &__controls {
-        display: flex;
-    }
-
     &__controls {
-        display: none;
+        display: flex;
         align-items: center;
-        padding-bottom: calc(var(--gs) * 1.5);
+        height: calc(var(--gs) * 5);
+
+        @media (--tablet-lg) {
+            display: none;
+        }
 
         .icon + .icon {
             margin-left: var(--gs);
@@ -36,7 +44,7 @@
         width: 100%;
         min-height: 230px;
 
-        @media (--tablet) {
+        @media (--tablet-lg) {
             min-height: auto;
         }
 
@@ -52,18 +60,32 @@
         line-height: 22px;
         text-transform: none;
         margin-bottom: var(--gs);
+
+        @media (--tablet-lg) {
+            font-size: 12px;
+            line-height: 16px;
+        }
     }
 
     &__prices {
         display: flex;
         align-items: center;
-        margin-bottom: var(--gs);
+
+        @media (--tablet-lg) {
+            padding-top: calc(var(--gs) * 1.5);
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
 
     &__price {
         text-align: left;
+
         & + & {
             margin-left: var(--gs);
+            @media (--tablet-lg) {
+                margin-left: 0;
+            }
         }
     }
 
@@ -90,6 +112,10 @@
 
     &__rating {
         width: 100%;
-        margin-bottom: var(--gs);
+        margin: calc(var(--gs) * 1.5) 0;
+
+        @media (--tablet-lg) {
+            display: none;
+        }
     }
 }

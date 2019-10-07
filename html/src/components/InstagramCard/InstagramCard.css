@@ -1,12 +1,15 @@
 .instagram-card {
     position: relative;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
 
     &:hover &__content {
         opacity: 1;
     }
 
     &__img {
-        height: 240px;
+        height: 100%;
 
         img {
             width: 100%;

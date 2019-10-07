@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Variables from '../assets/scripts/variables';
+import { breakpoints } from '../constants';
 
 const MQ = 'GREENSIGHT_MEDIA_MQ';
 const MQMAP = 'GREENSIGHT_MEDIA_MQ_MAP';
@@ -79,11 +79,11 @@ if (!Vue.prototype.hasOwnProperty('$mq')) Vue.use(MediaPlugin);
 
 export default {
     mobileSm: `(max-width: ${360 - 1}px)`,
-    mobile: `(max-width: ${Variables.breakpoints.mobile - 1}px)`,
-    mobileLg: `(max-width: ${Variables.breakpoints.mobileLg - 1}px)`,
-    tablet: `(max-width: ${Variables.breakpoints.tablet - 1}px)`,
-    tabletLg: `(max-width: ${Variables.breakpoints.tabletLg - 1}px)`,
-    desktop: `(max-width: ${Variables.breakpoints.desktop - 1}px)`,
-    desktopLg: `(max-width: ${Variables.breakpoints.desktopLg - 1}px)`,
-    desktopXl: `(max-width: ${Variables.breakpoints.desktopXl - 1}px)`,
+    mobile: `(max-width: ${breakpoints.mobile - 1}px)`,
+    mobileLg: `(max-width: ${breakpoints.mobileLg - 1}px)`,
+    tablet: `(max-width: ${breakpoints.tablet - 1}px)`,
+    tabletLg: `(max-width: ${breakpoints.tabletLg - 1}px)`,
+    desktop: `(max-width: ${breakpoints.desktop - 1}px)`,
+    desktopLg: `(max-width: ${breakpoints.desktopLg - 1}px)`,
+    desktopXl: `(max-width: ${breakpoints.desktopXl - 1}px)`,
 };

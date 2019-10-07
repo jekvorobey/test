@@ -25,3 +25,17 @@ export const eventName = Object.freeze({
     SCROLL: 'scroll',
     RESIZE: 'resize',
 });
+
+/**
+ * Брейкпоинты проекта.
+ */
+export const breakpoints = Object.freeze({
+    mobileSm: 320,
+    mobile: 480,
+    mobileLg: 640,
+    tablet: 768,
+    tabletLg: 1024,
+    desktop: 1280,
+    desktopLg: 1600,
+    desktopXl: 1920,
+});

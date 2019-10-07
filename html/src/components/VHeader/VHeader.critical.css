@@ -62,7 +62,12 @@
     }
 
     &--scroll &__top {
-        height: 0;
+        display: none;
+
+        @supports (grid-template-columns: auto) {
+            display: block;
+            height: 0;
+        }
     }
 
     &--scroll &__middle {

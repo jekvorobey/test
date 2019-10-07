@@ -39,23 +39,19 @@
                         <span class="v-header__middle-middle-item" v-html="$t('header.middle.professionals')" />
                     </div>
 
-                    <transition name="fade-in">
-                        <div v-if="!search" class="v-header__middle-cart">
-                            <div class="v-header__middle-cart-sum">
-                                <v-svg name="account-middle" width="20" height="20" />
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <v-svg name="wishlist-middle" width="20" height="20" />
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <span class="text-medium">15 780 ₽</span>&nbsp;
-                                <v-svg name="cart-middle" width="20" height="20" />
-                            </div>
-                            <transition name="slide-in-bottom">
-                                <div v-if="!scroll" class="text-sm text-grey v-header__middle-cart-discount">
-                                    {{ $t('header.middle.free_delivery', { n: 890 }) }}
-                                </div>
-                            </transition>
+                    <div v-show="!search" class="v-header__middle-cart">
+                        <div class="v-header__middle-cart-sum">
+                            <v-svg name="account-middle" width="20" height="20" />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <v-svg name="wishlist-middle" width="20" height="20" />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="text-medium">15 780 ₽</span>&nbsp;
+                            <v-svg name="cart-middle" width="20" height="20" />
                         </div>
-                    </transition>
+                        <div v-show="!scroll" class="text-sm text-grey v-header__middle-cart-discount">
+                            {{ $t('header.middle.free_delivery', { n: 890 }) }}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="v-header__bottom">

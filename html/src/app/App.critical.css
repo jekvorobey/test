@@ -7,7 +7,6 @@
     background: var(--cl-white);
     padding-top: 130px;
     min-height: 100vh;
-    transition: padding-top var(--time) ease;
     overflow: hidden;
 
     &--scroll {

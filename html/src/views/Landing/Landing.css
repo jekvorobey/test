@@ -1,6 +1,10 @@
 .landing-view {
     padding-bottom: calc(var(--gs) * 14);
 
+    @media (--tablet-min) and (--tablet-lg) {
+        padding-top: calc(var(--gs) * 3);
+    }
+
     &__categories {
         display: flex;
         justify-content: space-between;
@@ -8,6 +12,43 @@
 
         @media (--tablet-lg) {
             display: none;
+        }
+    }
+
+    &__section {
+        .container {
+            @media (--tablet) {
+                padding-bottom: calc(var(--gs) * 2);
+            }
+        }
+
+        &-hl {
+            @media (--tablet) {
+                padding: 0 calc(var(--gs) * 3);
+            }
+        }
+
+        &-link {
+            line-height: 28px;
+            position: absolute;
+            top: 0;
+            right: 108px;
+
+            @media (--desktop) {
+                right: calc(var(--gs) * 5);
+            }
+
+            @media (--tablet-lg) {
+                right: calc(var(--gs) * 4);
+                font-size: 11px;
+                line-height: 16px;
+            }
+
+            @media (--tablet) {
+                top: 100%;
+                right: unset;
+                left: calc(var(--gs) * 3);
+            }
         }
     }
 
@@ -74,22 +115,28 @@
             }
         }
 
-        &-left {
+        &-right {
             flex: 1;
             background: lightcoral;
 
             @media (--tablet) {
+                order: 0;
                 height: 400px;
                 width: 100%;
                 margin-bottom: calc(var(--gs) * 2);
             }
         }
 
-        &-right {
-            margin-left: calc(var(--gs) * 3);
+        &-left {
+            margin-right: calc(var(--gs) * 3);
             width: 32%;
 
+            @media (--tablet-lg) {
+                margin-right: calc(var(--gs) * 2);
+            }
+
             @media (--tablet) {
+                order: 1;
                 width: 100%;
                 margin-left: 0;
                 padding: 0 calc(var(--gs) * 3);
@@ -108,31 +155,10 @@
 
     &__products {
         margin-bottom: calc(var(--gs) * 7);
-        height: 512px;
 
         @media (--tablet) {
             padding: 0;
-            height: 357px;
             margin-bottom: calc(var(--gs) * 5);
-        }
-
-        &-hl {
-            @media (--tablet) {
-                padding: 0 calc(var(--gs) * 3);
-            }
-        }
-
-        &-link {
-            line-height: 28px;
-            position: absolute;
-            top: 0;
-            right: 108px;
-
-            @media (--tablet) {
-                top: 100%;
-                right: unset;
-                left: calc(var(--gs) * 3);
-            }
         }
 
         &-slider {
@@ -140,12 +166,13 @@
 
             .swiper-button-prev,
             .swiper-button-next {
-                top: 35%;
+                top: 170px;
             }
         }
 
         &-card {
             width: calc(100% / 4);
+
             .catalog-product-card__img {
                 padding-top: calc(var(--gs) * 4);
             }
@@ -157,33 +184,44 @@
         justify-content: space-between;
         margin-bottom: calc(var(--gs) * 9);
 
+        @media (--tablet) {
+            flex-direction: column;
+
+            &-card + &-card {
+                margin-top: calc(var(--gs) * 4);
+            }
+        }
+
         &-card {
             width: calc(calc(100% / 3) - calc(48px / 3));
+
+            @media (--tablet) {
+                width: 100%;
+            }
         }
     }
 
     &__brands {
         margin-bottom: calc(var(--gs) * 8);
 
-        &-link {
-            line-height: 28px;
-            position: absolute;
-            top: 0;
-            right: 108px;
-
-            @media (--tablet) {
-                top: 100%;
-                right: unset;
-                left: calc(var(--gs) * 3);
-            }
-        }
-
-        &-card {
-            height: calc(var(--gs) * 8);
+        @media (--tablet) {
+            padding: 0;
+            margin-bottom: calc(var(--gs) * 5);
         }
     }
 
     &__instagram {
+        @media (--tablet) {
+            padding: 0;
+        }
+
+        &-link,
+        &-hl {
+            @media (--tablet) {
+                padding: 0 calc(var(--gs) * 3);
+            }
+        }
+
         &-link {
             display: flex;
             line-height: 22px;
@@ -195,6 +233,11 @@
             grid-template-columns: 1fr 1fr 1fr 1fr;
             grid-template-rows: 1fr 1fr;
             grid-gap: calc(var(--gs) * 3);
+
+            @media (--tablet-lg) {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr 1fr 1fr 1fr;
+            }
         }
     }
 }

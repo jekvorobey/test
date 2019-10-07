@@ -11,8 +11,7 @@
         </section>
         <section class="section">
             <div class="container landing-view__banners">
-                <div class="landing-view__banners-left">слайдер с баннерами</div>
-                <div class="landing-view__banners-right">
+                <div class="landing-view__banners-left">
                     <banner-card
                         class="landing-view__banners-card"
                         v-for="banner in mainBanners"
@@ -22,10 +21,11 @@
                         :image="banner.image"
                     />
                 </div>
+                <div class="landing-view__banners-right">слайдер с баннерами</div>
             </div>
         </section>
 
-        <section class="section">
+        <section class="section landing-view__section">
             <div class="container landing-view__category-cards">
                 <v-slider class="landing-view__category-slider" name="categories" :options="categoryOptions">
                     <category-card
@@ -39,10 +39,17 @@
             </div>
         </section>
 
-        <section class="section" id="new" v-observe-visibility="onChangedVisibility">
+        <section
+            class="section landing-view__section"
+            id="new"
+            v-observe-visibility="{
+                callback: onChangedVisibility,
+                once: true,
+            }"
+        >
             <div class="container landing-view__products">
-                <h2 class="landing-view__products-hl">Новинки</h2>
-                <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
+                <h2 class="landing-view__section-hl">Новинки</h2>
+                <v-link class="landing-view__section-link" to="/">Смотреть все</v-link>
 
                 <v-slider
                     class="landing-view__products-slider"
@@ -67,10 +74,17 @@
             </div>
         </section>
 
-        <section class="section" id="bestsellers" v-observe-visibility="onChangedVisibility">
+        <section
+            class="section landing-view__section"
+            id="bestsellers"
+            v-observe-visibility="{
+                callback: onChangedVisibility,
+                once: true,
+            }"
+        >
             <div class="container landing-view__products">
-                <h2 class="landing-view__products-hl">Бестселлеры</h2>
-                <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
+                <h2 class="landing-view__section-hl">Бестселлеры</h2>
+                <v-link class="landing-view__section-link" to="/">Смотреть все</v-link>
 
                 <v-slider
                     class="landing-view__products-slider"
@@ -95,7 +109,7 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="section landing-view__section">
             <div class="container landing-view__middle-banners">
                 <banner-card
                     class="landing-view__middle-banners-card"
@@ -107,10 +121,17 @@
             </div>
         </section>
 
-        <section class="section" id="featured" v-observe-visibility="onChangedVisibility">
+        <section
+            class="section landing-view__section"
+            id="featured"
+            v-observe-visibility="{
+                callback: onChangedVisibility,
+                once: true,
+            }"
+        >
             <div class="container landing-view__products">
-                <h2 class="landing-view__products-hl">585 покупателей на сайте сейчас выбирают</h2>
-                <router-link class="landing-view__products-link" to="/">Смотреть все</router-link>
+                <h2 class="landing-view__section-hl">585 покупателей на сайте сейчас выбирают</h2>
+                <v-link class="landing-view__section-link" to="/">Смотреть все</v-link>
 
                 <v-slider
                     class="landing-view__products-slider"
@@ -135,10 +156,17 @@
             </div>
         </section>
 
-        <section class="section landing-view__brands" id="brands" v-observe-visibility="onChangedVisibility">
-            <div class="container">
-                <h2 class="landing-view__brands-hl">Популярные бренды</h2>
-                <router-link class="landing-view__brands-link" to="/">Смотреть все</router-link>
+        <section
+            class="section landing-view__section"
+            id="brands"
+            v-observe-visibility="{
+                callback: onChangedVisibility,
+                once: true,
+            }"
+        >
+            <div class="container landing-view__brands">
+                <h2 class="landing-view__section-hl">Популярные бренды</h2>
+                <v-link class="landing-view__section-link" to="/">Смотреть все</v-link>
 
                 <v-slider
                     class="landing-view__brands-slider"
@@ -157,14 +185,39 @@
             </div>
         </section>
 
-        <section class="landing-view__instagram">
-            <div class="container">
+        <section
+            class="section landing-view__section"
+            id="instagram"
+            v-observe-visibility="{
+                callback: onChangedVisibility,
+                once: true,
+            }"
+        >
+            <div class="container landing-view__instagram">
                 <h2 class="landing-view__instagram-hl">Insta Beauty</h2>
                 <a class="landing-view__instagram-link" href="/">
                     <v-svg name="instagram-bw" width="22" height="22" />&nbsp;&nbsp;Подписаться на нас
                 </a>
-                <div class="landing-view__instagram-grid">
+
+                <v-slider
+                    v-if="isTabletLg"
+                    class="landing-view__instagram-slider"
+                    name="instagram"
+                    :options="instagramOptions"
+                    :should-initialize="slidersVisibility.instagram"
+                >
                     <instagram-card
+                        class="swiper-slide landing-view__instagram-card"
+                        v-for="item in instagramItems"
+                        :key="item.id"
+                        :instagram-card-id="item.id"
+                        :image="item.image"
+                    />
+                </v-slider>
+
+                <div v-else class="landing-view__instagram-grid">
+                    <instagram-card
+                        class="landing-view__instagram-card"
                         v-for="item in instagramItems"
                         :key="item.id"
                         :instagram-card-id="item.id"
@@ -191,11 +244,107 @@ import CatalogProductCard from '../../components/CatalogProductCard/CatalogProdu
 
 import landingModule from '../../store/modules/Landing';
 import { mapState } from 'vuex';
+import { breakpoints } from '../../constants';
 
 import '../../plugins/observer';
 import '../../assets/images/sprites/socials/instagram-bw.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import './Landing.css';
+
+const tablet = breakpoints.tablet - 1;
+const tabletLg = breakpoints.tabletLg - 1;
+
+const categoryOptions = {
+    init: false,
+    slidesPerView: 6,
+    grabCursor: true,
+
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+
+    breakpoints: {
+        [tabletLg]: {
+            slidesPerView: 4,
+            spaceBetween: 24,
+        },
+
+        [tablet]: {
+            slidesOffsetBefore: 24,
+            slidesOffsetAfter: 24,
+            slidesPerView: 3,
+            spaceBetween: 16,
+        },
+    },
+};
+
+const brandsOptions = {
+    init: false,
+    slidesPerView: 6,
+    spaceBetween: 64,
+    grabCursor: true,
+
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+
+    breakpoints: {
+        [tabletLg]: {
+            slidesPerView: 4,
+            spaceBetween: 24,
+        },
+
+        [tablet]: {
+            slidesOffsetBefore: 24,
+            slidesOffsetAfter: 24,
+            slidesPerView: 2.5,
+            spaceBetween: 30,
+        },
+    },
+};
+
+const instagramOptions = {
+    init: false,
+    slidesPerView: 1.5,
+    spaceBetween: 24,
+    grabCursor: true,
+
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+
+    breakpoints: {
+        [tablet]: {
+            slidesOffsetBefore: 24,
+            slidesOffsetAfter: 24,
+            slidesPerView: 1.5,
+        },
+    },
+};
+
+const productOptions = {
+    init: false,
+    slidesPerView: 4,
+    spaceBetween: 24,
+    grabCursor: true,
+    roundLengths: true,
+
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+
+    breakpoints: {
+        [tablet]: {
+            slidesOffsetBefore: 24,
+            slidesOffsetAfter: 24,
+            slidesPerView: 2.3,
+        },
+    },
+};
 
 export default {
     name: 'landing',
@@ -204,6 +353,7 @@ export default {
         VSvg,
         VLink,
         VSlider,
+
         BrandCard,
         BannerCard,
         CategoryCard,
@@ -222,67 +372,11 @@ export default {
     data() {
         return {
             slidersVisibility: {
+                instagram: false,
                 brands: false,
                 featured: false,
                 bestsellers: false,
                 new: false,
-            },
-
-            categoryOptions: {
-                init: false,
-                slidesPerView: 6,
-                spaceBetween: 24,
-                grabCursor: true,
-
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-
-                breakpoints: {
-                    320: {
-                        slidesOffsetBefore: 24,
-                        slidesOffsetAfter: 24,
-                        slidesPerView: 3,
-                        spaceBetween: 16,
-                    },
-                },
-            },
-
-            brandsOptions: {
-                init: false,
-                slidesPerView: 6,
-                spaceBetween: 64,
-                slidesOffsetBefore: 24,
-                slidesOffsetAfter: 24,
-                grabCursor: true,
-
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-            },
-
-            productOptions: {
-                init: false,
-                slidesPerView: 4,
-                spaceBetween: 24,
-                grabCursor: true,
-                roundLengths: true,
-
-                breakpoints: {
-                    320: {
-                        slidesOffsetBefore: 24,
-                        slidesOffsetAfter: 24,
-                        slidesPerView: 2.25,
-                        spaceBetween: 24,
-                    },
-                },
-
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
             },
         };
     },
@@ -297,10 +391,35 @@ export default {
             'brands',
             'instagramItems',
         ]),
+
         ...mapState('landing', {
             mainBanners: state => state.banners.mainBanners,
             middleBanners: state => state.banners.middleBanners,
         }),
+
+        categoryOptions() {
+            return categoryOptions;
+        },
+
+        bannersOptions() {
+            return bannersOptions;
+        },
+
+        productOptions() {
+            return productOptions;
+        },
+
+        brandsOptions() {
+            return brandsOptions;
+        },
+
+        instagramOptions() {
+            return instagramOptions;
+        },
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
     },
 
     methods: {

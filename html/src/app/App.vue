@@ -20,6 +20,7 @@ import './App.css';
 import VHeader from '../components/VHeader/VHeader.vue';
 import VFooter from '../components/VFooter/VFooter.vue';
 
+import Helpers from '../assets/scripts/helpers';
 import { MIN_SCROLL_VALUE, eventName } from '../constants';
 import { mapState, mapActions } from 'vuex';
 
@@ -45,11 +46,9 @@ export default {
     },
 
     mounted() {
-        document.addEventListener(eventName.SCROLL, this.onScroll);
-    },
-
-    beforeDestroy() {
-        document.removeEventListener(eventName.SCROLL, this.onScroll);
+        const onSetScrollDebounce = Helpers.debounce(this.onScroll, 20);
+        document.addEventListener(eventName.SCROLL, onSetScrollDebounce, true);
+        this.$on('hook:beforeDestroy', () => document.removeEventListener(eventName.SCROLL, onSetScrollDebounce));
     },
 };
 </script>
