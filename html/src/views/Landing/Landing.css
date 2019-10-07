@@ -66,6 +66,11 @@
         &-card {
             height: 200px;
 
+            @media (--tablet) {
+                height: 144px;
+                width: 100%;
+            }
+
             .banner-card__content {
                 position: absolute;
                 top: 0;
@@ -80,10 +85,25 @@
                 }
             }
 
+            .banner-card__content-title {
+                @media (--tablet) {
+                    font-size: 14px;
+                    line-height: 22px;
+                }
+            }
+
             .banner-card__content-btn {
                 border: none;
                 opacity: 0;
                 transition: all 0.2s ease-in-out;
+
+                @media (orientation: landscape) and (--desktop) {
+                    opacity: 1;
+                }
+
+                @media (--tablet-lg) {
+                    opacity: 1;
+                }
             }
 
             .banner-card__content:hover .banner-card__content-btn {
@@ -98,20 +118,6 @@
 
             & + & {
                 margin-top: calc(var(--gs) * 2);
-            }
-
-            @media (--tablet) {
-                height: 144px;
-                width: 100%;
-
-                .banner-card__content-title {
-                    font-size: 14px;
-                    line-height: 22px;
-                }
-
-                .banner-card__content-btn {
-                    opacity: 1;
-                }
             }
         }
 
