@@ -17,6 +17,8 @@ import './App.css';
 /**
  * Базовые компоненты страницы
  */
+
+import VButton from '../components/controls/VButton/VButton.vue';
 import VHeader from '../components/VHeader/VHeader.vue';
 import VFooter from '../components/VFooter/VFooter.vue';
 

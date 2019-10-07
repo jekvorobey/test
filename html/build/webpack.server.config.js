@@ -57,6 +57,7 @@ module.exports = merge(base, {
     }),
     plugins: isProd
         ? [
+              new webpack.HashedModuleIdsPlugin(),
               new CssExtractPlugin({
                   filename: isProd ? '[name].[chunkhash].css' : '[name].css',
               }),
