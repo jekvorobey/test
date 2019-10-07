@@ -21,7 +21,18 @@
                         :image="banner.image"
                     />
                 </div>
-                <div class="landing-view__banners-right">слайдер с баннерами</div>
+                <div class="landing-view__banners-right">
+                    <v-slider class="landing-view__banners-slider" name="banners" :options="bannersOptions">
+                        <banner-card
+                            class="swiper-slide landing-view__banners-card"
+                            v-for="banner in sliderBanners"
+                            :key="banner.id"
+                            :banner-id="banner.id"
+                            :title="banner.title"
+                            :image="banner.image"
+                        />
+                    </v-slider>
+                </div>
             </div>
         </section>
 
@@ -254,6 +265,17 @@ import './Landing.css';
 const tablet = breakpoints.tablet - 1;
 const tabletLg = breakpoints.tabletLg - 1;
 
+const bannersOptions = {
+    init: false,
+    slidesPerView: 1,
+    grabCursor: true,
+
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+};
+
 const categoryOptions = {
     init: false,
     slidesPerView: 6,
@@ -394,6 +416,7 @@ export default {
 
         ...mapState('landing', {
             mainBanners: state => state.banners.mainBanners,
+            sliderBanners: state => state.banners.sliderBanners,
             middleBanners: state => state.banners.middleBanners,
         }),
 

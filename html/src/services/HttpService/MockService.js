@@ -386,7 +386,7 @@ export default class MockHttpService {
                     setTimeout(() => resolve(productCategories), 300);
                     break;
                 case '/banners':
-                    setTimeout(() => resolve({ mainBanners, middleBanners }), 300);
+                    setTimeout(() => resolve({ mainBanners, sliderBanners: mainBanners, middleBanners }), 300);
                     break;
                 case '/instagram':
                     setTimeout(() => resolve(instagrams), 300);
