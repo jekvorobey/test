@@ -228,7 +228,11 @@
                     />
                 </v-slider>
 
-                <div v-else-if="!isTabletLg && slidersVisibility.instagram" class="landing-view__instagram-grid">
+                <div
+                    v-else-if="!isTabletLg && slidersVisibility.instagram"
+                    class="landing-view__instagram-grid"
+                    :class="{ 'landing-view__instagram-grid--initialized': slidersVisibility.instagram }"
+                >
                     <instagram-card
                         class="landing-view__instagram-card"
                         v-for="item in instagramItems"

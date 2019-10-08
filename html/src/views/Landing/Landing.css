@@ -258,10 +258,16 @@
             grid-template-columns: 1fr 1fr 1fr 1fr;
             grid-template-rows: 1fr 1fr;
             grid-gap: calc(var(--gs) * 3);
+            opacity: 0;
+            transition: all var(--animation-time) ease-in;
 
             @media (--tablet-lg) {
                 grid-template-columns: 1fr 1fr;
                 grid-template-rows: 1fr 1fr 1fr 1fr;
+            }
+
+            &--initialized {
+                opacity: 1;
             }
         }
     }
