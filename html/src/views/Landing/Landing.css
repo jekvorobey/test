@@ -126,8 +126,7 @@
         }
 
         &-right {
-            flex: 1;
-            width: 1px;
+            width: calc(72% - calc(var(--gs) * 3));
 
             @media (--tablet) {
                 order: 0;
