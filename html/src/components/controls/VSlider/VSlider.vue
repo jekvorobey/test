@@ -59,9 +59,15 @@ export default {
         },
     },
 
+    methods: {
+        onEndReached() {
+            this.$emit('reachEnd');
+        },
+    },
+
     mounted() {
         if (this.slider) {
-            this.slider.on('init', this.initialize);
+            this.slider.on('reachEnd', this.onEndReached);
             if (this.shouldInitialize) this.slider.init();
         }
     },

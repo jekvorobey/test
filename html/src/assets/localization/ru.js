@@ -60,4 +60,17 @@ export default {
             email: 'Формат name@domain.com',
         },
     },
+
+    landing: {
+        showAll: 'Смотреть все',
+        subscribe: 'Подписаться на нас',
+
+        title: {
+            new: 'Новинки',
+            bestseller: 'Бестселлеры',
+            featured: '{n} покупателей на сайте сейчас выбирают',
+            brand: 'Популярные бренды',
+            instagram: 'Insta Beauty',
+        },
+    },
 };

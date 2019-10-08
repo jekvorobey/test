@@ -60,4 +60,17 @@ export default {
             email: 'name@domain.com format',
         },
     },
+
+    landing: {
+        showAll: 'Show all',
+        subscribe: 'Subscrube',
+
+        title: {
+            new: 'New',
+            bestseller: 'Bestsellers',
+            featured: '{n} Customers on the site are now choosing these',
+            brand: 'Popular brands',
+            instagram: 'Insta Beauty',
+        },
+    },
 };

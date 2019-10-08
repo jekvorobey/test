@@ -2,8 +2,6 @@
  * Basic polyfills and libs for application
  * Полифилы и базовые либы приложения
  */
-import 'core-js/modules/es.promise';
-import 'core-js/modules/es.array.iterator';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import 'custom-event-polyfill';

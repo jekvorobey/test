@@ -33,6 +33,14 @@
                 </v-rating>
                 <v-link class="link--sm catalog-product-card__link" :to="href">{{ name }}</v-link>
             </div>
+            <div class="catalog-product-card__tags">
+                <tag
+                    class="text-sm catalog-product-card__tags-tag"
+                    v-for="(tag, index) in tags"
+                    :key="index"
+                    :text="tag"
+                />
+            </div>
         </div>
     </div>
 </template>

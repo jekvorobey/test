@@ -26,16 +26,16 @@
                 <div class="container v-header__middle-container">
                     <search-filter input-id="desktop-search" class="v-header__middle-search" />
                     <div v-if="!search && scroll" class="text-sm text-grey v-header__middle-middle">
-                        <span class="v-header__middle-middle-item">
+                        <v-link class="v-header__middle-middle-item" to="/">
                             <v-svg name="logo" width="32" height="32" />
-                        </span>
+                        </v-link>
                     </div>
 
                     <div v-else-if="!search" class="text-sm text-grey v-header__middle-middle">
                         <span class="v-header__middle-middle-item" v-html="$t('header.middle.platform')" />
-                        <a class="v-header__middle-middle-item" href="/">
+                        <v-link class="v-header__middle-middle-item" to="/">
                             <v-svg name="logo-text" width="115" height="42" />
-                        </a>
+                        </v-link>
                         <span class="v-header__middle-middle-item" v-html="$t('header.middle.professionals')" />
                     </div>
 
