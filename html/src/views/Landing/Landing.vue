@@ -483,8 +483,12 @@ export default {
                 preserveState: !!$store.state.landing,
             });
 
-        $progress.start();
-        $store.dispatch(`${landingModule.name}/FETCH_LANDING_DATA`).then(() => next(vm => $progress.finish()));
+        if ($store.state.landing.load) {
+            next();
+        } else {
+            $progress.start();
+            $store.dispatch(`${landingModule.name}/FETCH_LANDING_DATA`).then(() => next(vm => $progress.finish()));
+        }
     },
 
     beforeRouteUpdate(to, from, next) {

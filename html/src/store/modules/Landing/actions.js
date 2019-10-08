@@ -8,6 +8,7 @@ import {
     SET_BANNERS,
     SET_BRANDS,
     SET_INSTAGRAM,
+    SET_LOAD,
 } from './mutations';
 
 export const FETCH_LANDING_DATA = 'FETCH_LANDING_DATA';
@@ -83,7 +84,7 @@ export default {
             });
     },
 
-    FETCH_LANDING_DATA({ dispatch }) {
+    FETCH_LANDING_DATA({ dispatch, commit }) {
         return Promise.all([
             dispatch(FETCH_NEW_PRODUCTS),
             dispatch(FETCH_BESTSELLER_PRODUCTS),
@@ -92,6 +93,6 @@ export default {
             dispatch(FETCH_BANNERS),
             dispatch(FETCH_BRANDS),
             dispatch(FETCH_INSTAGRAM),
-        ]);
+        ]).then(() => commit(SET_LOAD, true));
     },
 };

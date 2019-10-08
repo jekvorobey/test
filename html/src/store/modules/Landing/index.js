@@ -6,6 +6,7 @@ export default {
     name: 'landing',
     namespaced: true,
     state: {
+        load: false,
         banners: { mainBanners: [], middleBanners: [] },
         brands: [],
         categories: [],

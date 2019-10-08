@@ -5,6 +5,7 @@ export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_BANNERS = 'SET_BANNERS';
 export const SET_BRANDS = 'SET_BRANDS';
 export const SET_INSTAGRAM = 'SET_INSTAGRAM';
+export const SET_LOAD = 'SET_LOAD';
 
 export default {
     SET_INSTAGRAM(state, payload) {
@@ -33,5 +34,9 @@ export default {
 
     SET_CATEGORIES(state, payload) {
         state.categories = payload;
+    },
+
+    SET_LOAD(state, payload) {
+        state.load = payload;
     },
 };
