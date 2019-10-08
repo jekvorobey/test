@@ -16,6 +16,7 @@ export default {
             free_delivery: 'To free shipping — {n} ₽',
         },
         links: {
+            catalog: 'Catalog',
             new: 'New',
             stocks: 'Stocks',
             collections: 'Collections',

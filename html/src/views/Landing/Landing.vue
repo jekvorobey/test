@@ -247,8 +247,6 @@
 </template>
 
 <script>
-import { $store, $progress, $logger } from '../../services/ServiceLocator';
-
 import VSvg from '../../components/controls/VSvg/VSvg.vue';
 import VLink from '../../components/controls/VLink/VLink.vue';
 import VSlider from '../../components/controls/VSlider/VSlider.vue';
@@ -260,6 +258,7 @@ import InstagramCard from '../../components/InstagramCard/InstagramCard.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 
 import landingModule from '../../store/modules/Landing';
+import { $store, $progress, $logger } from '../../services/ServiceLocator';
 import { mapState } from 'vuex';
 import { breakpoints } from '../../constants';
 
@@ -377,7 +376,7 @@ const productOptions = {
 const productsSize = 6;
 
 export default {
-    name: 'landing',
+    name: 'Landing',
 
     components: {
         VSvg,

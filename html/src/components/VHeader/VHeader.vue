@@ -57,6 +57,7 @@
             <div class="v-header__bottom">
                 <div class="container v-header__bottom-container">
                     <nav class="v-header__bottom-inner">
+                        <v-link class="v-header__bottom-link" to="/catalog">{{ $t('header.links.catalog') }}</v-link>
                         <v-link class="v-header__bottom-link" to="/top">{{ $t('header.links.new') }}</v-link>
                         <v-link class="v-header__bottom-link" to="/new">{{ $t('header.links.stocks') }}</v-link>
                         <v-link class="v-header__bottom-link" to="/show">{{ $t('header.links.collections') }}</v-link>

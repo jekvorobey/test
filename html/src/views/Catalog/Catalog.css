@@ -1,0 +1,99 @@
+.catalog-view {
+    &__breadcrumbs {
+        margin-top: calc(var(--gs) * 2.5);
+        margin-bottom: calc(var(--gs) * 2);
+    }
+
+    &__header {
+        text-align: center;
+        margin-bottom: calc(var(--gs) * 2);
+
+        &-hl {
+            margin-bottom: 0;
+        }
+
+        &-text {
+            font-size: 14px;
+            line-height: 22px;
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: 256px 1fr;
+        grid-template-rows: 1fr;
+        grid-gap: calc(var(--gs) * 7);
+    }
+
+    &__side-panel {
+        background: lightblue;
+        height: 200px;
+
+        &-categories {
+        }
+
+        &-price {
+        }
+
+        &-brands {
+        }
+    }
+
+    &__main {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        grid-template-columns: 1fr 232px;
+        grid-gap: calc(var(--gs) * 9) calc(var(--gs) * 3);
+
+        &-tags {
+            grid-row: 1;
+            grid-column: 1;
+            padding-right: calc(var(--gs) * 3);
+
+            &-item {
+                display: inline-flex;
+                line-height: calc(var(--gs) * 3);
+                padding-left: var(--gs);
+                border: 1px solid var(--cl-global);
+                margin-right: calc(var(--gs) / 2);
+                margin-bottom: var(--gs);
+            }
+        }
+
+        &-sort {
+            grid-row: 1;
+            grid-column: 2;
+            padding-top: 0;
+
+            .multiselect__select {
+                top: 0;
+            }
+        }
+
+        &-grid {
+            display: flex;
+            flex-wrap: wrap;
+            grid-row: 2;
+            grid-column-start: 1;
+            grid-column-end: 3;
+            -ms-grid-column-span: 3;
+
+            &-item {
+                width: calc(100% / 3);
+            }
+
+            &-item:nth-child(3n - 1) &-card {
+                margin: auto;
+            }
+
+            &-item:nth-child(3n) &-card {
+                margin-left: auto;
+            }
+
+            &-card {
+                width: calc(100% - calc(calc(var(--gs) * 3 * 2) / 3));
+                padding-bottom: calc(var(--gs) * 7);
+            }
+        }
+    }
+}
