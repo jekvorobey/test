@@ -1,0 +1,9 @@
+.catalog-filter {
+    position: relative;
+
+    &__categories {
+        &-item {
+            text-transform: uppercase;
+        }
+    }
+}

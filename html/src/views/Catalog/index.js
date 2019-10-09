@@ -2,6 +2,8 @@
  * @Module
  */
 
+const CatalogAsync = () => import(/* webpackChunkName: "catalog-view" */ './Catalog.vue');
+
 /**
  * Модуль компонента Catalog
  */
@@ -11,9 +13,9 @@ export default {
      */
     routes: [
         {
-            name: 'catalog',
-            path: '/catalog',
-            component: () => import(/* webpackChunkName: "catalog-view" */ './Catalog.vue'),
+            path: '/catalog/:code',
+            component: CatalogAsync,
+            exact: true,
         },
     ],
 };

@@ -14,7 +14,7 @@
         <section class="section">
             <div class="container catalog-view__grid">
                 <div class="catalog-view__side-panel">
-                    Сайд панель с фильтрами
+                    <catalog-filter />
                 </div>
                 <div class="catalog-view__main">
                     <ul class="catalog-view__main-tags">
@@ -50,7 +50,7 @@
                         :searchable="false"
                         :allowEmpty="false"
                     />
-                    <ul class="catalog-view__main-grid">
+                    <transition-group tag="ul" name="item" class="catalog-view__main-grid" appear>
                         <li class="catalog-view__main-grid-item" v-for="product in items" :key="product.id">
                             <catalog-product-card
                                 class="catalog-view__main-grid-card"
@@ -64,7 +64,7 @@
                                 :rating="product.rating"
                             />
                         </li>
-                    </ul>
+                    </transition-group>
                 </div>
             </div>
         </section>
@@ -74,20 +74,25 @@
 <script>
 import VSvg from '../../components/controls/VSvg/VSvg.vue';
 import VSelect from '../../components/controls/VSelect/VSelect.vue';
+import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 
-import catalogModule from '../../store/modules/Catalog';
+import catalogModule, { ITEMS } from '../../store/modules/Catalog';
+import { FETCH_ITEMS, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
 
+export const DISPATCH_FETCH_CATALOG_DATA = `${catalogModule.name}/${FETCH_CATALOG_DATA}`;
+
 export default {
-    name: 'Catalog',
+    name: 'catalog',
     components: {
         VSvg,
         VSelect,
 
+        CatalogFilter,
         CatalogProductCard,
     },
 
@@ -100,7 +105,11 @@ export default {
     },
 
     computed: {
-        ...mapState('catalog', ['items']),
+        ...mapState(catalogModule.name, [ITEMS]),
+    },
+
+    methods: {
+        ...mapActions(catalogModule.name, [FETCH_ITEMS]),
     },
 
     beforeRouteEnter(to, from, next) {
@@ -108,17 +117,25 @@ export default {
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
 
+        const {
+            params: { code },
+        } = to;
+
+        // регистрируем модуль, если такого нет
         const register = !!$store._modulesNamespaceMap[`${catalogModule.name}/`];
         if (!register)
             $store.registerModule(catalogModule.name, catalogModule, {
                 preserveState: !!$store.state.catalog,
             });
 
-        if ($store.state.catalog.load) {
-            next();
-        } else {
+        const { categoryCode } = $store.state.catalog;
+
+        // если все загружено, пропускаем
+        if (categoryCode === code) next();
+        else {
+            // если нет - фетчим
             $progress.start();
-            $store.dispatch(`${catalogModule.name}/FETCH_CATALOG_DATA`).then(() => next(vm => $progress.finish()));
+            $store.dispatch(DISPATCH_FETCH_CATALOG_DATA, { code }).then(() => next(vm => $progress.finish()));
         }
     },
 
@@ -130,8 +147,20 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        this.$progress.start();
-        this.$store.dispatch(`${catalogModule.name}/FETCH_CATALOG_DATA`).then(() => next(vm => $progress.finish()));
+        const {
+            params: { code },
+        } = to;
+
+        const { categoryCode } = $store.state.catalog;
+
+        if (categoryCode === code) next();
+        else {
+            this.$progress.start();
+            this.FETCH_ITEMS({ code }).then(() => {
+                this.$progress.finish();
+                next();
+            });
+        }
     },
 };
 </script>

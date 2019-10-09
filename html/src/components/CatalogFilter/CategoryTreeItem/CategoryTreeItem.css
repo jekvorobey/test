@@ -1,0 +1,30 @@
+.category-tree-item {
+    position: relative;
+    text-transform: none;
+
+    .router-link-exact-active {
+        font-weight: bold;
+    }
+
+    &__label {
+        font-size: 14px;
+        line-height: 24px;
+    }
+
+    &__link {
+        &--active {
+            border-bottom: 1px solid var(--cl-global);
+        }
+    }
+
+    &__list {
+        padding-left: calc(var(--gs) * 3);
+        padding-top: calc(var(--gs) * 1.5);
+        padding-bottom: calc(var(--gs) * 1.5);
+    }
+
+    &__list &__list {
+        padding-top: var(--gs);
+        padding-bottom: 0;
+    }
+}

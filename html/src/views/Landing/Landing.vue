@@ -376,7 +376,7 @@ const productOptions = {
 const productsSize = 6;
 
 export default {
-    name: 'Landing',
+    name: 'landing',
 
     components: {
         VSvg,

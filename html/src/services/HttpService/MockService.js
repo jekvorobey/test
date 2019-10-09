@@ -169,49 +169,89 @@ const productCategories = [
     {
         id: 1,
         name: 'Уход за волосами',
-        to: '/',
+        code: null,
         image: 'https://via.placeholder.com/150x150',
     },
     {
         id: 2,
         name: 'Для лица и тела',
-        to: '/',
+        code: null,
         image: 'https://via.placeholder.com/150x150',
     },
     {
         id: 3,
         name: 'Для рук и ног',
-        to: '/',
+        code: null,
         image: 'https://via.placeholder.com/150x150',
     },
     {
         id: 4,
         name: 'Макияж',
-        to: '/',
+        code: 'makiyazh-4',
         image: 'https://via.placeholder.com/150x150',
+        items: [
+            {
+                id: 9,
+                name: 'Для лица',
+                code: null,
+            },
+            {
+                id: 10,
+                name: 'Для глаз',
+                code: null,
+            },
+            {
+                id: 11,
+                name: 'Для бровей',
+                code: null,
+            },
+            {
+                id: 12,
+                name: 'Для губ',
+                code: 'dlya-gub-12',
+
+                items: [
+                    {
+                        id: 13,
+                        name: 'Блеск для губ',
+                        code: 'blesk-dlya-gub-13',
+                    },
+                    {
+                        id: 14,
+                        name: 'Губная помада',
+                        code: 'gubnaya-pomada-14',
+                    },
+                    {
+                        id: 15,
+                        name: 'Карандаши для губ',
+                        code: 'karandashi-dlya-gub-15',
+                    },
+                ],
+            },
+        ],
     },
     {
         id: 5,
         name: 'Для ногтей',
-        to: '/',
+        code: null,
         image: 'https://via.placeholder.com/150x150',
     },
     {
         id: 6,
         name: 'Инструменты',
-        to: '/',
+        code: null,
         image: 'https://via.placeholder.com/150x150',
     },
     {
         id: 7,
         name: 'Аксессуары',
-        to: '/',
+        code: null,
         image: 'https://via.placeholder.com/150x150',
     },
     {
         id: 8,
         name: 'Мужская коллекция',
-        to: '/',
+        code: null,
         image: 'https://via.placeholder.com/150x150',
     },
 ];
@@ -339,6 +379,39 @@ const products = [
         type: 'complicate',
         rating: 3,
     },
+    {
+        id: 13,
+        name: 'EvoСухой шампунь-спрей Water Killer, 200 мл',
+        description: 'EvoСухой шампунь-спрей Water Killer, 200 мл',
+        image: product1,
+        price: '1 900 ₽',
+        oldPrice: '1 600 ₽',
+        tags: ['Новинка', '-15%'],
+        type: 'simple',
+        rating: 5,
+    },
+    {
+        id: 14,
+        name: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
+        description: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
+        image: product2,
+        price: '1 900 ₽',
+        oldPrice: null,
+        tags: ['-15%'],
+        type: 'simple',
+        rating: 1,
+    },
+    {
+        id: 15,
+        name: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
+        description: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
+        image: product3,
+        price: '1 900 ₽',
+        oldPrice: '1 600 ₽',
+        tags: ['Новинка'],
+        type: 'simple',
+        rating: 3,
+    },
 ];
 
 export default class MockHttpService {
@@ -360,7 +433,7 @@ export default class MockHttpService {
      * @param {*} data
      * @returns {Promise<Object>}
      */
-    get(path, data) {
+    get(path, data = {}) {
         return new Promise((resolve, reject) => {
             switch (path) {
                 case '/search':
@@ -380,7 +453,25 @@ export default class MockHttpService {
                         });
                     break;
                 case '/products':
-                    setTimeout(() => resolve(products), 300);
+                    switch (data.code) {
+                        case 'blesk-dlya-gub-13':
+                            setTimeout(() => resolve(products.slice(3, 5)), 300);
+                            break;
+                        case 'gubnaya-pomada-14':
+                            setTimeout(() => resolve(products.slice(5, 8)), 300);
+                            break;
+                        case 'karandashi-dlya-gub-15':
+                            setTimeout(() => resolve(products.slice(8, 10)), 300);
+                            break;
+                        case 'dlya-gub-12':
+                            setTimeout(() => resolve(products.slice(3, 11)), 300);
+                            break;
+                        case 'makiyazh-4':
+                            setTimeout(() => resolve(products), 300);
+                            break;
+                        default:
+                            setTimeout(() => reject(), 300);
+                    }
                     break;
                 case '/categories':
                     setTimeout(() => resolve(productCategories), 300);
