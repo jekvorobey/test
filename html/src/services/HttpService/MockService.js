@@ -470,7 +470,7 @@ export default class MockHttpService {
                             setTimeout(() => resolve(products), 300);
                             break;
                         default:
-                            setTimeout(() => reject(), 300);
+                            setTimeout(() => resolve(products), 300);
                     }
                     break;
                 case '/categories':
