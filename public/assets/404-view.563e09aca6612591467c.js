@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[1],{"69lC":function(n,t,e){},"79eC":function(n,t,e){"use strict";e.r(t);e("69lC");var s={name:"404"},i=e("KHd+"),c=Object(i.a)(s,(function(){var n=this.$createElement;return(this._self._c||n)("section",{staticClass:"section 404-view"},[this._v("\n    404\n")])}),[],!1,null,null,null);t.default=c.exports}}]);
