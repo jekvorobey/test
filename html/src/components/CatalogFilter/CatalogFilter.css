@@ -2,8 +2,31 @@
     position: relative;
 
     &__categories {
+        margin-bottom: calc(var(--gs) * 4);
+
         &-item {
             text-transform: uppercase;
         }
+    }
+
+    &__filters {
+        margin-bottom: calc(var(--gs) * 4);
+        .v-accordion__item-btn {
+            padding: 0;
+            border: none;
+        }
+
+        .v-accordion__item-panel {
+            padding-top: calc(var(--gs) * 2);
+            border: none;
+        }
+
+        .v-accordion__item + .v-accordion__item {
+            margin-top: calc(var(--gs) * 4);
+        }
+    }
+
+    &__clear-btn {
+        margin-bottom: calc(var(--gs) * 4);
     }
 }

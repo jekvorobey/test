@@ -36,8 +36,10 @@ export default function createRouter() {
         fallback: false,
         // eslint-disable-next-line no-unused-vars
         scrollBehavior: (to, from, savedPosition) => {
+            if (!savedPosition && to.meta.skipScroll) return null;
             if (to.hash) return { selector: to.hash };
             if (savedPosition) return savedPosition;
+
             return { x: 0, y: 0 };
 
             // Возвращаем промис, который срабатывает на 50 мс после того, как срабатывает анимация нового компонента

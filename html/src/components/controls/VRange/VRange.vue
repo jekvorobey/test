@@ -26,11 +26,11 @@ import { setTimeout } from 'timers';
 export default {
     name: 'v-range',
     props: {
+        initialValue: {
+            type: Array,
+        },
         value: {
             type: Array,
-            default() {
-                return [0];
-            },
         },
         min: {
             type: Number,
@@ -56,12 +56,13 @@ export default {
         },
     },
     data() {
-        const isSingle = this.value.length < 2;
+        const value = this.value || this.initialValue || [];
+        const isSingle = value.length < 2;
         return {
             isSingle,
-            value_internal: this.value,
+            value_internal: value,
             options: {
-                start: this.value,
+                start: value,
                 connect: isSingle ? 'lower' : true,
                 step: this.step,
                 range: {

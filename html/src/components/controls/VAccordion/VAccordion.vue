@@ -28,7 +28,12 @@
                 >
                     {{ item.title }}
                 </slot>
-                <v-svg :class="{ 'icon--rotate-deg180': isExpanded(item) }" name="arrow-down" width="24" height="24" />
+                <v-svg
+                    :class="{ 'icon--rotate-deg180': isExpanded(item) }"
+                    name="arrow-down-small"
+                    width="24"
+                    height="24"
+                />
             </button>
             <transition @before-enter="beforeEnter" @enter="enter" @leave="leave" :css="false">
                 <div
@@ -57,6 +62,8 @@
 
 <script>
 import VSvg from '../VSvg/VSvg.vue';
+
+import '../../../assets/images/sprites/arrow-down-small.svg';
 import './VAccordion.css';
 
 export default {

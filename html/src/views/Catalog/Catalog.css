@@ -26,15 +26,10 @@
     }
 
     &__side-panel {
-        height: 200px;
-
         &-categories {
         }
 
-        &-price {
-        }
-
-        &-brands {
+        &-filters {
         }
     }
 
@@ -56,6 +51,12 @@
                 border: 1px solid var(--cl-global);
                 margin-right: calc(var(--gs) / 2);
                 margin-bottom: var(--gs);
+            }
+
+            &-delete-btn {
+                display: flex;
+                align-items: center;
+                padding: 0;
             }
         }
 

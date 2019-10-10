@@ -14,33 +14,15 @@
         <section class="section">
             <div class="container catalog-view__grid">
                 <div class="catalog-view__side-panel">
-                    <catalog-filter />
+                    <catalog-filter class="catalog-view__side-panel-filters" />
                 </div>
                 <div class="catalog-view__main">
                     <ul class="catalog-view__main-tags">
-                        <li class="catalog-view__main-tags-item">
-                            L’Oreal Paris&nbsp;<v-svg name="cross-small" width="24" height="24" />
-                        </li>
-                        <li class="catalog-view__main-tags-item">
-                            Pupa&nbsp;<v-svg name="cross-small" width="24" height="24" />
-                        </li>
-                        <li class="catalog-view__main-tags-item">
-                            Maybelline&nbsp;<v-svg name="cross-small" width="24" height="24" />
-                        </li>
-                        <li class="catalog-view__main-tags-item">
-                            Vivienne Sabo&nbsp;<v-svg name="cross-small" width="24" height="24" />
-                        </li>
-                        <li class="catalog-view__main-tags-item">
-                            L’Oreal Paris&nbsp;<v-svg name="cross-small" width="24" height="24" />
-                        </li>
-                        <li class="catalog-view__main-tags-item">
-                            Pupa&nbsp;<v-svg name="cross-small" width="24" height="24" />
-                        </li>
-                        <li class="catalog-view__main-tags-item">
-                            Maybelline&nbsp;<v-svg name="cross-small" width="24" height="24" />
-                        </li>
-                        <li class="catalog-view__main-tags-item">
-                            Vivienne Sabo&nbsp;<v-svg name="cross-small" width="24" height="24" />
+                        <li class="catalog-view__main-tags-item" v-for="tag in activeTags" :key="tag.code">
+                            {{ tag.name }}&nbsp;
+                            <button class="catalog-view__main-tags-delete-btn" @click="onClickDeleteTag(tag.code)">
+                                <v-svg name="cross-small" width="24" height="24" />
+                            </button>
                         </li>
                     </ul>
                     <v-select
@@ -73,14 +55,16 @@
 
 <script>
 import VSvg from '../../components/controls/VSvg/VSvg.vue';
-import VSelect from '../../components/controls/VSelect/VSelect.vue';
 import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
+import VSelect from '../../components/controls/VSelect/VSelect.vue';
 
 import catalogModule, { ITEMS } from '../../store/modules/Catalog';
+import { ACTIVE_TAGS } from '../../store/modules/Catalog/getters';
 import { FETCH_ITEMS, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
-import { mapState, mapActions } from 'vuex';
+
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
 
@@ -105,11 +89,34 @@ export default {
     },
 
     computed: {
+        ...mapGetters(catalogModule.name, [ACTIVE_TAGS]),
         ...mapState(catalogModule.name, [ITEMS]),
+        ...mapState('route', {
+            code: state => state.params.code,
+        }),
     },
 
     methods: {
         ...mapActions(catalogModule.name, [FETCH_ITEMS]),
+
+        onClickDeleteTag(value) {
+            let {
+                path,
+                params: { pathMatch },
+            } = this.$route;
+            const filterSegment = 'filters';
+            const segments = pathMatch ? pathMatch.split('/') : [];
+
+            if (!path.includes(value)) return;
+            else {
+                const index = segments.indexOf(value);
+                if (index !== -1) segments.splice(index, 1);
+                if (segments.length === 1) segments.splice(0, 1);
+            }
+
+            path = `/catalog/${this.code}`.concat(...segments.map(s => `/${s}`));
+            this.$router.replace({ path });
+        },
     },
 
     beforeRouteEnter(to, from, next) {

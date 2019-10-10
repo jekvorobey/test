@@ -13,9 +13,19 @@ export default {
      */
     routes: [
         {
-            path: '/catalog/:code',
+            path: '/catalog/:code/',
             component: CatalogAsync,
             exact: true,
+            meta: {
+                skipScroll: true,
+            },
+        },
+        {
+            path: '/catalog/:code/*',
+            component: CatalogAsync,
+            meta: {
+                skipScroll: true,
+            },
         },
     ],
 };
