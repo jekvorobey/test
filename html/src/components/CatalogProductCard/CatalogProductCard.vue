@@ -1,7 +1,7 @@
 <template>
     <div class="catalog-product-card">
-        <v-link class="catalog-product-card__img" :to="href">
-            <img class="blur-up lazyload" :data-src="image" :alt="name" />
+        <v-link class="catalog-product-card__img" :to="href" :title="name">
+            <img class="blur-up lazyload" :data-src="image" alt />
         </v-link>
         <div class="catalog-product-card__body">
             <div class="catalog-product-card__body-top">

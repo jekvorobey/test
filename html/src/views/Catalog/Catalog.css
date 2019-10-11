@@ -102,6 +102,12 @@
                 width: calc(100% - calc(calc(var(--gs) * 3 * 2) / 3));
                 padding-bottom: calc(var(--gs) * 7);
                 margin: 0;
+
+                .catalog-product-card {
+                    &__img {
+                        min-height: 270px;
+                    }
+                }
             }
         }
     }

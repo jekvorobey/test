@@ -44,7 +44,6 @@
                         @before-enter="onBeforeEnterItems"
                         @enter="onEnterItems"
                         @leave="onLeaveItems"
-                        appear
                     >
                         <li
                             class="catalog-view__main-grid-item"
