@@ -2,7 +2,7 @@
  * @Module
  */
 
-const NotFoundAsync = () => import(/* webpackChunkName: "404-view" */ './404.vue');
+const NotFoundAsync = () => import(/* webpackChunkName: "not-found-view" */ './NotFound.vue');
 
 /**
  * Модуль компонента 404

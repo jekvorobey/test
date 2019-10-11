@@ -1,4 +1,4 @@
-.catalog-view {
+.not-found {
     &__breadcrumbs {
         margin-top: calc(var(--gs) * 2.5);
         margin-bottom: calc(var(--gs) * 2);
