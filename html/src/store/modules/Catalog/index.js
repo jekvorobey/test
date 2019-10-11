@@ -24,17 +24,6 @@ export default {
                 type: 'range',
                 max: 1000,
                 min: 0,
-                format: {
-                    // 'to' the formatted value. Receives a number.
-                    to(value) {
-                        return Math.round(value);
-                    },
-                    // 'from' the formatted value.
-                    // Receives a string, should return a number.
-                    from(value) {
-                        return Number(value);
-                    },
-                },
             },
             {
                 id: 2,

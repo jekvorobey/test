@@ -60,7 +60,7 @@ export default {
         const isSingle = value.length < 2;
         return {
             isSingle,
-            value_internal: value,
+            value_internal: null,
             options: {
                 start: value,
                 connect: isSingle ? 'lower' : true,
@@ -74,8 +74,8 @@ export default {
         };
     },
     watch: {
-        value_internal(value) {
-            this.$emit('input', value);
+        value_internal(value, oldValue) {
+            if (oldValue) this.$emit('input', value);
         },
 
         value() {
@@ -116,10 +116,12 @@ export default {
             this.value_internal[index] = Number(e.target.value);
             this.slider.set(this.value_internal);
         },
+
         onChange(values, handle, unencoded, tap, positions) {
             this.value_internal = values;
         },
     },
+
     mounted() {
         const { body } = this.$refs;
         this.slider = noUiSlider.create(body, this.options);

@@ -390,11 +390,11 @@ export default {
         CatalogProductCard,
     },
 
-    metaInfo: {
-        title: 'landing',
-        titleTemplate: '%s - Welcome!',
-        htmlAttrs: {
-            lang: 'ru',
+    head: {
+        title: {
+            inner: 'landing',
+            separator: '-',
+            complement: ' Welcome!',
         },
     },
 
@@ -503,7 +503,9 @@ export default {
         // Также имеется доступ в `this` к экземпляру компонента.
 
         this.$progress.start();
-        this.$store.dispatch(`${landingModule.name}/FETCH_LANDING_DATA`).then(() => next(vm => $progress.finish()));
+        this.$store
+            .dispatch(`${landingModule.name}/FETCH_LANDING_DATA`)
+            .then(() => next(vm => this.$progress.finish()));
     },
 
     // Server-side only

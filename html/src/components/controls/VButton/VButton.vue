@@ -4,7 +4,7 @@
         <slot />
         <v-svg v-if="iconName && placement === 'after'" :name="iconName" :modifier="iconModifier" />
     </a>
-    <router-link class="btn" v-else-if="to" v-on="handlers">
+    <router-link class="btn" v-else-if="to" :to="to" v-on="handlers">
         <v-svg v-if="iconName && placement === 'before'" :name="iconName" :modifier="iconModifier" />
         <slot />
         <v-svg v-if="iconName && placement === 'after'" :name="iconName" :modifier="iconModifier" />

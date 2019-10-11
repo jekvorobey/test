@@ -3167,11 +3167,6 @@ deepmerge@1.3.2:
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-1.3.2.tgz#1663691629d4dbfe364fa12a2a4f0aa86aa3a050"
   integrity sha1-FmNpFinU2/42T6EqKk8KqGqjoFA=
 
-deepmerge@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.0.0.tgz#3e3110ca29205f120d7cb064960a39c3d2087c09"
-  integrity sha512-YZ1rOP5+kHor4hMAH+HRQnBQHg+wvS1un1hAOuIcxcBy0hzcUf6Jg2a1w65kpoOUnurOfZbERwjI1TfZxNjcww==
-
 define-properties@^1.1.2, define-properties@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/define-properties/-/define-properties-1.1.3.tgz#cf88da6cbee26fe6db7094f61d870cbd84cee9f1"
@@ -10372,6 +10367,11 @@ vue-filepond@^5.1.3:
   resolved "https://registry.yarnpkg.com/vue-filepond/-/vue-filepond-5.1.3.tgz#de9bb492492f143e6877a65e9fa1bd8efb55671d"
   integrity sha512-XUq92twmXwUzKQZw43dMQyRrOZSqvipzSGMY1Km+UNZwQcV5fqvzymtc3JpsLbAdYMkxK1xtmyulJ4Xs7BnrzA==
 
+vue-head@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/vue-head/-/vue-head-2.1.2.tgz#ad3c39f464e3960042b064c00e4739674e61e291"
+  integrity sha512-rE9IOe6pxmMy9nXVTobkByA7l3SUQf29I5fNy0WtfL5AxJ7vLXq3sL+CCtARwiZi/WJZyy32MgsoRbeDsanqhg==
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
@@ -10392,13 +10392,6 @@ vue-loader@^15.7.1:
     loader-utils "^1.1.0"
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
-
-vue-meta@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/vue-meta/-/vue-meta-2.3.0.tgz#7f4af99b02c7a1811ad332110839f0c8ab1c4ea3"
-  integrity sha512-pLfbtVco5HXWQ6byjK+KdmGZJFaXcE441Dt1UmuQmT1lyX05QLRZo5laDYSHZdgGyHyiUsykZAKVBRXBCvDa6w==
-  dependencies:
-    deepmerge "^4.0.0"
 
 vue-multiselect@^2.1.6:
   version "2.1.6"

@@ -11,13 +11,22 @@
 
     &__filters {
         margin-bottom: calc(var(--gs) * 4);
+
+        &-range,
+        &-check {
+            padding-top: calc(var(--gs) * 2);
+        }
+
+        &-range {
+            padding: 0 var(--gs);
+        }
+
         .v-accordion__item-btn {
             padding: 0;
             border: none;
         }
 
         .v-accordion__item-panel {
-            padding-top: calc(var(--gs) * 2);
             border: none;
         }
 

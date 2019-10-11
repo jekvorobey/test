@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import VueMeta from 'vue-meta';
 
-Vue.use(VueMeta, {
-    refreshOnceOnNavigation: true,
-});
+if (process.env.VUE_ENV === 'client') {
+    const VueHead = require('vue-head');
+    Vue.use(VueHead);
+}
