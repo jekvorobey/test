@@ -17,14 +17,19 @@
                     <catalog-filter class="catalog-view__side-panel-filters" />
                 </div>
                 <div class="catalog-view__main">
-                    <ul class="catalog-view__main-tags">
-                        <li class="catalog-view__main-tags-item" v-for="tag in activeTags" :key="tag.code">
+                    <transition-group tag="ul" class="catalog-view__main-tags" name="tag-item">
+                        <li
+                            :data-index="index"
+                            class="catalog-view__main-tags-item"
+                            v-for="(tag, index) in activeTags"
+                            :key="tag.code"
+                        >
                             {{ tag.name }}&nbsp;
                             <button class="catalog-view__main-tags-delete-btn" @click="onClickDeleteTag(tag.code)">
                                 <v-svg name="cross-small" width="24" height="24" />
                             </button>
                         </li>
-                    </ul>
+                    </transition-group>
                     <v-select
                         class="catalog-view__main-sort"
                         v-model="sortValue"
