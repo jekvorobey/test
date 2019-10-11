@@ -99,21 +99,6 @@ export default {
         },
     },
 
-    watch: {
-        // values: {
-        //     handler(val, oldVal) {
-        //         let paths = val.brand ? val.brand.map(b => `/${b}`) : [];
-        //         let path =
-        //             paths.length > 0
-        //                 ? '/catalog/'.concat(this.code, '/filters', ...paths)
-        //                 : '/catalog/'.concat(this.code);
-        //         if (this.$route.path === path) return;
-        //         this.$router.replace({ path, meta: { skipScroll: true } });
-        //     },
-        //     deep: true,
-        // },
-    },
-
     computed: {
         ...mapGetters('catalog', ['filterSegments']),
         ...mapState('catalog', ['categories', 'filters']),

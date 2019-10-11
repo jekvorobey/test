@@ -32,8 +32,21 @@
                         :searchable="false"
                         :allowEmpty="false"
                     />
-                    <transition-group tag="ul" name="item" class="catalog-view__main-grid" appear>
-                        <li class="catalog-view__main-grid-item" v-for="product in items" :key="product.id">
+                    <transition-group
+                        tag="ul"
+                        class="catalog-view__main-grid"
+                        name="catalog-item"
+                        @before-enter="onBeforeEnterItems"
+                        @enter="onEnterItems"
+                        @leave="onLeaveItems"
+                        appear
+                    >
+                        <li
+                            class="catalog-view__main-grid-item"
+                            :data-index="index"
+                            v-for="(product, index) in items"
+                            :key="product.id"
+                        >
                             <catalog-product-card
                                 class="catalog-view__main-grid-card"
                                 :product-id="product.id"
@@ -59,6 +72,7 @@ import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import VSelect from '../../components/controls/VSelect/VSelect.vue';
 
+import '../../plugins/velocity';
 import catalogModule, { ITEMS } from '../../store/modules/Catalog';
 import { ACTIVE_TAGS } from '../../store/modules/Catalog/getters';
 import { FETCH_ITEMS, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
@@ -98,6 +112,26 @@ export default {
 
     methods: {
         ...mapActions(catalogModule.name, [FETCH_ITEMS]),
+
+        onBeforeEnterItems(el) {
+            requestAnimationFrame(() => {
+                el.style.opacity = 0;
+            });
+        },
+
+        onEnterItems(el, done) {
+            const delay = el.dataset.index * 150;
+            setTimeout(() => {
+                this.$velocity(el, { opacity: 1 }, { complete: done });
+            }, delay);
+        },
+
+        onLeaveItems(el, done) {
+            requestAnimationFrame(() => {
+                el.style.opacity = 0;
+                done();
+            });
+        },
 
         onClickDeleteTag(value) {
             let {
