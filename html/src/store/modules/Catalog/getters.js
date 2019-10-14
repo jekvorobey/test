@@ -1,6 +1,8 @@
 export const FILTER_SEGMENTS = 'filterSegments';
 export const ACTIVE_TAGS = 'activeTags';
 export const ACTIVE_CATEGORY = 'activeCategory';
+export const ACTIVE_PAGE = 'activePage';
+export const PAGES_COUNT = 'pagesCount';
 
 function getCategoryByCode(items, code) {
     if (items) {
@@ -20,8 +22,17 @@ function getCategoryByCode(items, code) {
 
 const rangeRegx = /from_\d*_to_\d*/;
 const numberRegx = /\d+/g;
+const pageSize = 9;
 
 export default {
+    [ACTIVE_PAGE](state, getters, { route }) {
+        return route.query.page ? Number(route.query.page) : 1;
+    },
+
+    [PAGES_COUNT](state) {
+        return Math.ceil(state.range / pageSize);
+    },
+
     [ACTIVE_CATEGORY](
         state,
         getters,

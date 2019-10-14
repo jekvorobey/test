@@ -49,8 +49,8 @@
 
 <script>
 import VButton from '../controls/VButton/VButton.vue';
-import VCheck from '../controls/VCheck/VCheck.vue';
 import VRange from '../controls/VRange/VRange.vue';
+import VCheck from '../controls/VCheck/VCheck.vue';
 import VAccordion from '../controls/VAccordion/VAccordion.vue';
 import CategoryTreeItem from './CategoryTreeItem/CategoryTreeItem.vue';
 

@@ -43,14 +43,10 @@
                         name="catalog-item"
                         @before-enter="onBeforeEnterItems"
                         @enter="onEnterItems"
+                        @after-enter="onAfterEnterItems"
                         @leave="onLeaveItems"
                     >
-                        <li
-                            class="catalog-view__main-grid-item"
-                            :data-index="index"
-                            v-for="(product, index) in items"
-                            :key="product.id"
-                        >
+                        <li class="catalog-view__main-grid-item" v-for="product in items" :key="product.id">
                             <catalog-product-card
                                 class="catalog-view__main-grid-card"
                                 :product-id="product.id"
@@ -64,6 +60,20 @@
                             />
                         </li>
                     </transition-group>
+                    <div class="catalog-view__main-controls" v-if="pagesCount > 1">
+                        <v-button
+                            v-if="activePage < pagesCount"
+                            class="btn--outline catalog-view__main-controls-btn"
+                            :to="{ path: $route.path, query: { page: activePage + 1 } }"
+                        >
+                            Показать ещё
+                        </v-button>
+                        <v-pagination
+                            :value="activePage"
+                            :page-count="pagesCount"
+                            @input="$router.push({ path: $route.path, query: { page: $event } })"
+                        />
+                    </div>
                 </div>
             </div>
         </section>
@@ -72,13 +82,18 @@
 
 <script>
 import VSvg from '../../components/controls/VSvg/VSvg.vue';
+import VButton from '../../components/controls/VButton/VButton.vue';
+import VCheck from '../../components/controls/VCheck/VCheck.vue';
+import VPagination from '../../components/controls/VPagination/VPagination.vue';
+import VRange from '../../components/controls/VRange/VRange.vue';
+import VSelect from '../../components/controls/VSelect/VSelect.vue';
+
 import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
-import VSelect from '../../components/controls/VSelect/VSelect.vue';
 
 import '../../plugins/velocity';
 import catalogModule, { ITEMS } from '../../store/modules/Catalog';
-import { ACTIVE_TAGS, ACTIVE_CATEGORY } from '../../store/modules/Catalog/getters';
+import { ACTIVE_TAGS, ACTIVE_CATEGORY, ACTIVE_PAGE, PAGES_COUNT } from '../../store/modules/Catalog/getters';
 import { FETCH_ITEMS, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
@@ -88,11 +103,16 @@ import './Catalog.css';
 
 export const DISPATCH_FETCH_CATALOG_DATA = `${catalogModule.name}/${FETCH_CATALOG_DATA}`;
 
+const itemAnimationDelayDelta = 70;
+let counter = 0;
+
 export default {
     name: 'catalog',
     components: {
         VSvg,
+        VButton,
         VSelect,
+        VPagination,
 
         CatalogFilter,
         CatalogProductCard,
@@ -107,7 +127,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(catalogModule.name, [ACTIVE_TAGS, ACTIVE_CATEGORY]),
+        ...mapGetters(catalogModule.name, [ACTIVE_TAGS, ACTIVE_CATEGORY, ACTIVE_PAGE, PAGES_COUNT]),
         ...mapState(catalogModule.name, [ITEMS]),
         ...mapState('route', {
             code: state => state.params.code,
@@ -118,16 +138,23 @@ export default {
         ...mapActions(catalogModule.name, [FETCH_ITEMS]),
 
         onBeforeEnterItems(el) {
+            el.dataset.index = counter;
+            counter += 1;
             requestAnimationFrame(() => {
                 el.style.opacity = 0;
             });
         },
 
         onEnterItems(el, done) {
-            const delay = el.dataset.index * 150;
+            const delay = el.dataset.index * 100;
             setTimeout(() => {
                 this.$velocity(el, { opacity: 1 }, { complete: done });
             }, delay);
+        },
+
+        onAfterEnterItems(el) {
+            delete el.dataset.index;
+            counter = 0;
         },
 
         onLeaveItems(el, done) {

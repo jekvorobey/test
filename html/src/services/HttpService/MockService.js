@@ -455,22 +455,22 @@ export default class MockHttpService {
                 case '/products':
                     switch (data.code) {
                         case 'blesk-dlya-gub-13':
-                            setTimeout(() => resolve(products.slice(3, 5)), 300);
+                            setTimeout(() => resolve({ items: products.slice(3, 5), range: 2 }), 300);
                             break;
                         case 'gubnaya-pomada-14':
-                            setTimeout(() => resolve(products.slice(5, 8)), 300);
+                            setTimeout(() => resolve({ items: products.slice(8, 10), range: 3 }), 300);
                             break;
                         case 'karandashi-dlya-gub-15':
-                            setTimeout(() => resolve(products.slice(8, 10)), 300);
+                            setTimeout(() => resolve({ items: products.slice(8, 10), range: 2 }), 300);
                             break;
                         case 'dlya-gub-12':
-                            setTimeout(() => resolve(products.slice(3, 11)), 300);
+                            setTimeout(() => resolve({ items: products.slice(3, 11), range: 8 }), 300);
                             break;
                         case 'makiyazh-4':
-                            setTimeout(() => resolve(products), 300);
+                            setTimeout(() => resolve({ items: products, range: 16 }), 300);
                             break;
                         default:
-                            setTimeout(() => resolve(products), 300);
+                            setTimeout(() => resolve({ items: products, range: 16 }), 300);
                     }
                     break;
                 case '/categories':

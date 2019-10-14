@@ -7,6 +7,7 @@ export const CATEGORY_CODE = 'categoryCode';
 export const CATEGORIES = 'categories';
 export const ITEMS = 'items';
 export const FILTERS = 'filters';
+export const RANGE = 'range';
 
 export default {
     name: 'catalog',
@@ -16,6 +17,7 @@ export default {
         [CATEGORY_CODE]: null,
         [CATEGORIES]: [],
         [ITEMS]: [],
+        [RANGE]: 0,
         [FILTERS]: [
             {
                 id: 1,

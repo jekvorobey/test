@@ -3,8 +3,9 @@ export const SET_PARAMS = 'SET_PARAMS';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 
 export default {
-    SET_ITEMS(state, payload = []) {
-        state.items = payload;
+    SET_ITEMS(state, { items, range } = { items: [], range: 0 }) {
+        state.items = items || [];
+        state.range = range || 0;
     },
 
     SET_PARAMS(state, { id, code } = {}) {
