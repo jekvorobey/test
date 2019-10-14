@@ -49,24 +49,20 @@ export default {
         state,
         getters,
         {
-            route: {
-                params: { pathMatch },
-            },
+            route: { path },
         }
     ) {
         const segments = {};
-        if (pathMatch) {
-            const urlSegments = pathMatch.split('/').slice(1);
-            for (let i = 0; i < urlSegments.length; i++) {
-                const segment = urlSegments[i];
-                const name = segment.split('-')[0];
-                if (rangeRegx.test(segment)) {
-                    const numbers = segment.match(numberRegx);
-                    segments[name] = numbers.map(n => +n);
-                } else {
-                    if (!segments[name]) segments[name] = {};
-                    segments[name][segment] = segment;
-                }
+        const urlSegments = path.split('/').slice(4);
+        for (let i = 0; i < urlSegments.length; i++) {
+            const segment = urlSegments[i];
+            const name = segment.split('-')[0];
+            if (rangeRegx.test(segment)) {
+                const numbers = segment.match(numberRegx);
+                segments[name] = numbers.map(n => +n);
+            } else {
+                if (!segments[name]) segments[name] = {};
+                segments[name][segment] = segment;
             }
         }
         return segments;

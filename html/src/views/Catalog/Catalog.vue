@@ -98,6 +98,7 @@ import { FETCH_ITEMS, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/act
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 
+import Helpers from '../../assets/scripts/helpers';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
 
@@ -165,22 +166,17 @@ export default {
         },
 
         onClickDeleteTag(value) {
-            let {
-                path,
-                params: { pathMatch },
-            } = this.$route;
-            const filterSegment = 'filters';
-            const segments = pathMatch ? pathMatch.split('/') : [];
+            let { path } = this.$route;
+            const segments = path.split('/').slice(4);
 
-            if (!path.includes(value)) return;
+            if (!segments.includes(value)) return;
             else {
                 const index = segments.indexOf(value);
                 if (index !== -1) segments.splice(index, 1);
-                if (segments.length === 1) segments.splice(0, 1);
             }
 
-            path = `/catalog/${this.code}`.concat(...segments.map(s => `/${s}`));
-            this.$router.replace({ path });
+            const basePath = segments.length > 0 ? `/catalog/${this.code}/filters` : `/catalog/${this.code}`;
+            this.$router.replace({ path: basePath.concat(...segments.map(s => `/${s}`)) });
         },
     },
 
@@ -224,15 +220,18 @@ export default {
         } = to;
 
         const { categoryCode } = this.$store.state.catalog;
-
-        if (categoryCode === code) next();
-        else {
+        if (categoryCode !== code) {
             this.$progress.start();
-            this.FETCH_ITEMS({ code }).then(() => {
-                this.$progress.finish();
-                next();
-            });
-        }
+            this.FETCH_ITEMS({ code }).then(() => this.$progress.finish());
+        } else this.debounce_FETCH_ITEMS(code);
+        next();
+    },
+
+    beforeMount() {
+        this.debounce_FETCH_ITEMS = Helpers.debounce(code => {
+            this.$progress.start();
+            this.FETCH_ITEMS({ code }).then(() => this.$progress.finish());
+        }, 500);
     },
 };
 </script>

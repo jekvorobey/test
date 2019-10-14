@@ -83,30 +83,22 @@ export default {
 
     methods: {
         onCheckChange(e, name, value) {
-            let {
-                path,
-                params: { pathMatch },
-            } = this.$route;
-            const filterSegment = 'filters';
-            const segments = pathMatch ? pathMatch.split('/') : [];
+            let { path } = this.$route;
+            const segments = path.split('/').slice(4);
 
             if (e) {
                 if (segments.includes(value)) return;
-                else {
-                    if (segments.length === 0) segments.push(filterSegment);
-                    segments.push(value);
-                }
+                else segments.push(value);
             } else {
-                if (!path.includes(value)) return;
+                if (!segments.includes(value)) return;
                 else {
                     const index = segments.indexOf(value);
                     if (index !== -1) segments.splice(index, 1);
-                    if (segments.length === 1) segments.splice(0, 1);
                 }
             }
 
-            path = `/catalog/${this.code}`.concat(...segments.map(s => `/${s}`));
-            this.$router.replace({ path });
+            const basePath = segments.length > 0 ? `/catalog/${this.code}/filters` : `/catalog/${this.code}`;
+            this.$router.replace({ path: basePath.concat(...segments.map(s => `/${s}`)) });
         },
 
         onRangeChange(e, name) {
