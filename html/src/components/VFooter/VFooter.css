@@ -39,6 +39,7 @@
         }
 
         &-title {
+            text-transform: uppercase;
             line-height: 20px;
             font-weight: bold;
             margin-bottom: calc(var(--gs) * 4);
@@ -69,7 +70,7 @@
 
     &__link {
         font-weight: normal;
-        font-size: 14px;
+        font-size: 16px;
         fill: var(--cl-white);
         color: var(--cl-white);
         text-transform: none;

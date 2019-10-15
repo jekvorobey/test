@@ -136,8 +136,8 @@
     &__middle {
         position: relative;
         background-color: var(--cl-white);
-        height: calc(var(--gs) * 7.5);
-        line-height: calc(var(--gs) * 7.5);
+        height: calc(var(--gs) * 11);
+        line-height: calc(var(--gs) * 11);
 
         &-container,
         &-search,
@@ -160,12 +160,13 @@
         }
 
         &-middle {
+            flex-direction: column;
             text-transform: uppercase;
 
-            &-item {
-                & + & {
-                    margin-left: calc(var(--gs) * 4);
-                }
+            &-text {
+                font-size: 10px;
+                line-height: 14px;
+                font-style: italic;
             }
         }
 
@@ -185,6 +186,7 @@
     }
 
     &__bottom {
+        padding: calc(var(--gs) / 2);
         background-color: var(--cl-global);
 
         &-container,

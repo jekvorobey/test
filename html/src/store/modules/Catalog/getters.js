@@ -1,3 +1,6 @@
+import { getCatalogRouteSegments, getCatalogRouteCategoryCode } from '../../../util/catalog';
+
+export const ROUTE_SEGMENTS = 'routeSegments';
 export const FILTER_SEGMENTS = 'filterSegments';
 export const ACTIVE_TAGS = 'activeTags';
 export const ACTIVE_CATEGORY = 'activeCategory';
@@ -41,19 +44,23 @@ export default {
         }
     ) {
         const { categories } = state;
-        const categoryCode = path.split('/').slice(2, 3)[0];
+        const categoryCode = getCatalogRouteCategoryCode(path);
         return getCategoryByCode(categories, categoryCode);
     },
 
-    [FILTER_SEGMENTS](
+    [ROUTE_SEGMENTS](
         state,
         getters,
         {
             route: { path },
         }
     ) {
+        return getCatalogRouteSegments(path);
+    },
+
+    [FILTER_SEGMENTS](state, getters) {
         const segments = {};
-        const urlSegments = path.split('/').slice(4);
+        const urlSegments = getters[ROUTE_SEGMENTS];
         for (let i = 0; i < urlSegments.length; i++) {
             const segment = urlSegments[i];
             const name = segment.split('-')[0];

@@ -13,8 +13,8 @@ export default {
      */
     routes: [
         {
-            path: '/catalog/:code',
-            alias: '/catalog/:code/*',
+            path: '/catalog/:code?',
+            alias: '/catalog/:code?/filters*',
             component: CatalogAsync,
             meta: {
                 skipScroll: true,

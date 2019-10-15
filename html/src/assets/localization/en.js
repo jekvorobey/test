@@ -11,9 +11,7 @@ export default {
         },
         middle: {
             search: 'Find...',
-            platform: 'online-platform',
-            professionals: 'for beauty industry <br /> professionals',
-            free_delivery: 'To free shipping — {n} ₽',
+            professionals: 'for beauty industry professionals',
         },
         links: {
             catalog: 'Catalog',

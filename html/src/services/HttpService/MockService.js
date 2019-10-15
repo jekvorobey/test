@@ -169,19 +169,19 @@ const productCategories = [
     {
         id: 1,
         name: 'Уход за волосами',
-        code: null,
+        code: 'uhod-za-volosami',
         image: 'https://via.placeholder.com/150x150',
     },
     {
         id: 2,
         name: 'Для лица и тела',
-        code: null,
+        code: 'dlya-litsa-i-tela',
         image: 'https://via.placeholder.com/150x150',
     },
     {
         id: 3,
         name: 'Для рук и ног',
-        code: null,
+        code: 'dlya-ruk-i-nog',
         image: 'https://via.placeholder.com/150x150',
     },
     {
@@ -193,17 +193,17 @@ const productCategories = [
             {
                 id: 9,
                 name: 'Для лица',
-                code: null,
+                code: 'dlya-litsa-9',
             },
             {
                 id: 10,
                 name: 'Для глаз',
-                code: null,
+                code: 'dlya-glaz-10',
             },
             {
                 id: 11,
                 name: 'Для бровей',
-                code: null,
+                code: 'dlya-brovey-11',
             },
             {
                 id: 12,
@@ -233,25 +233,25 @@ const productCategories = [
     {
         id: 5,
         name: 'Для ногтей',
-        code: null,
+        code: 'dlya-nogtei',
         image: 'https://via.placeholder.com/150x150',
     },
     {
         id: 6,
         name: 'Инструменты',
-        code: null,
+        code: 'instrumenti',
         image: 'https://via.placeholder.com/150x150',
     },
     {
         id: 7,
         name: 'Аксессуары',
-        code: null,
+        code: 'aksesuari',
         image: 'https://via.placeholder.com/150x150',
     },
     {
         id: 8,
         name: 'Мужская коллекция',
-        code: null,
+        code: 'muzhskaya-kolecia',
         image: 'https://via.placeholder.com/150x150',
     },
 ];
@@ -458,16 +458,16 @@ export default class MockHttpService {
                             setTimeout(() => resolve({ items: products.slice(3, 5), range: 2 }), 300);
                             break;
                         case 'gubnaya-pomada-14':
-                            setTimeout(() => resolve({ items: products.slice(8, 10), range: 3 }), 300);
-                            break;
-                        case 'karandashi-dlya-gub-15':
                             setTimeout(() => resolve({ items: products.slice(8, 10), range: 2 }), 300);
                             break;
+                        case 'karandashi-dlya-gub-15':
+                            setTimeout(() => resolve({ items: products.slice(4, 6), range: 2 }), 300);
+                            break;
                         case 'dlya-gub-12':
-                            setTimeout(() => resolve({ items: products.slice(3, 11), range: 8 }), 300);
+                            setTimeout(() => resolve({ items: products.slice(5, 11), range: 6 }), 300);
                             break;
                         case 'makiyazh-4':
-                            setTimeout(() => resolve({ items: products, range: 16 }), 300);
+                            setTimeout(() => resolve({ items: products.slice(3, 11), range: 8 }), 300);
                             break;
                         default:
                             setTimeout(() => resolve({ items: products, range: 16 }), 300);

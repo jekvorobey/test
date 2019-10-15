@@ -2,10 +2,11 @@
     <li class="category-tree-item">
         <div class="category-tree-item__label">
             <router-link
-                v-if="item.code"
+                v-if="item.code !== undefined"
                 :to="url"
                 class="category-tree-item__link"
                 :class="{ 'category-tree-item__link--active': isActive }"
+                :exact="item.code === ''"
             >
                 {{ item.name }}
             </router-link>
@@ -55,7 +56,7 @@ export default {
 
     computed: {
         isActive() {
-            return isActive(this.$route.params.code, this.item);
+            return isActive(this.$route.params.code || '', this.item);
         },
 
         url() {

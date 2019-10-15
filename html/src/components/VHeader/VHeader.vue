@@ -22,34 +22,27 @@
                     </button>
                 </div>
             </div>
-            <div class="v-header__middle">
+            <div class="v-header__middle" v-if="!scroll">
                 <div class="container v-header__middle-container">
                     <search-filter input-id="desktop-search" class="v-header__middle-search" />
-                    <div v-if="!search && scroll" class="text-sm text-grey v-header__middle-middle">
-                        <v-link class="v-header__middle-middle-item" to="/">
-                            <v-svg name="logo" width="32" height="32" />
-                        </v-link>
-                    </div>
 
-                    <div v-else-if="!search" class="text-sm text-grey v-header__middle-middle">
-                        <span class="v-header__middle-middle-item" v-html="$t('header.middle.platform')" />
-                        <v-link class="v-header__middle-middle-item" to="/">
-                            <v-svg name="logo-text" width="115" height="42" />
+                    <div v-if="!search" class="text-sm text-grey v-header__middle-middle">
+                        <v-link class="v-header__middle-middle-link" to="/">
+                            <v-svg name="logo-text" width="341" height="35" />
                         </v-link>
-                        <span class="v-header__middle-middle-item" v-html="$t('header.middle.professionals')" />
+                        <span class="v-header__middle-middle-text">
+                            {{ $t('header.middle.professionals') }}
+                        </span>
                     </div>
 
                     <div v-show="!search" class="v-header__middle-cart">
                         <div class="v-header__middle-cart-sum">
-                            <v-svg name="account-middle" width="20" height="20" />
+                            <v-svg name="account-middle" width="18" height="20" />
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <v-svg name="wishlist-middle" width="20" height="20" />
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <span class="text-medium">15 780 ₽</span>&nbsp;
                             <v-svg name="cart-middle" width="20" height="20" />
-                        </div>
-                        <div v-show="!scroll" class="text-sm text-grey v-header__middle-cart-discount">
-                            {{ $t('header.middle.free_delivery', { n: 890 }) }}
                         </div>
                     </div>
                 </div>

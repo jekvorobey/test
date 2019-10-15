@@ -3,6 +3,11 @@
         <ul class="catalog-filter__categories">
             <category-tree-item
                 class="catalog-filter__categories-item"
+                :item="defaultCategory"
+                :key="defaultCategory.id"
+            />
+            <category-tree-item
+                class="catalog-filter__categories-item"
                 :item="category"
                 v-for="(category, index) in categories"
                 :key="category.id || index"
@@ -55,7 +60,7 @@
                 </div>
             </template>
         </v-accordion>
-        <v-button class="btn--outline catalog-filter__clear-btn" :to="{ path: code ? `/catalog/${code}` : '/' }">
+        <v-button class="btn--outline catalog-filter__clear-btn" :to="{ path: code ? `/catalog/${code}` : '/catalog' }">
             Очистить фильтры
         </v-button>
     </div>
@@ -69,6 +74,7 @@ import VAccordion from '../controls/VAccordion/VAccordion.vue';
 import CategoryTreeItem from './CategoryTreeItem/CategoryTreeItem.vue';
 
 import _debounce from 'lodash/debounce';
+import { concatCatalogRoutePath } from '../../util/catalog';
 import { mapState, mapGetters } from 'vuex';
 import './CatalogFilter.css';
 
@@ -97,33 +103,30 @@ export default {
 
     methods: {
         onRadioChange(e, name, value) {
-            let { path } = this.$route;
-            let segments = path.split('/').slice(4);
-            if (!segments.includes(value)) segments.push(value);
-            const radioRegexp = new RegExp(`^${name}-`);
-            segments = segments.filter(s => s === value || !s.match(radioRegexp));
+            let { routeSegments } = this;
 
-            const basePath = segments.length > 0 ? `/catalog/${this.code}/filters` : `/catalog/${this.code}`;
-            this.$router.replace({ path: basePath.concat(...segments.map(s => `/${s}`)) });
+            if (!routeSegments.includes(value)) routeSegments.push(value);
+            const radioRegexp = new RegExp(`^${name}-`);
+            routeSegments = routeSegments.filter(s => s === value || !s.match(radioRegexp));
+
+            this.$router.replace({ path: concatCatalogRoutePath(this.code, routeSegments) });
         },
 
         onCheckChange(e, name, value) {
-            let { path } = this.$route;
-            const segments = path.split('/').slice(4);
+            let { routeSegments } = this;
 
             if (e) {
-                if (segments.includes(value)) return;
-                else segments.push(value);
+                if (routeSegments.includes(value)) return;
+                else routeSegments.push(value);
             } else {
-                if (!segments.includes(value)) return;
+                if (!routeSegments.includes(value)) return;
                 else {
-                    const index = segments.indexOf(value);
-                    if (index !== -1) segments.splice(index, 1);
+                    const index = routeSegments.indexOf(value);
+                    if (index !== -1) routeSegments.splice(index, 1);
                 }
             }
 
-            const basePath = segments.length > 0 ? `/catalog/${this.code}/filters` : `/catalog/${this.code}`;
-            this.$router.replace({ path: basePath.concat(...segments.map(s => `/${s}`)) });
+            this.$router.replace({ path: concatCatalogRoutePath(this.code, routeSegments) });
         },
 
         onRangeChange(e, name) {
@@ -132,7 +135,15 @@ export default {
     },
 
     computed: {
-        ...mapGetters('catalog', ['filterSegments']),
+        defaultCategory() {
+            return {
+                id: 'all',
+                code: '',
+                name: 'Все категории',
+            };
+        },
+
+        ...mapGetters('catalog', ['filterSegments', 'routeSegments']),
         ...mapState('catalog', ['categories', 'filters']),
         ...mapState('route', {
             code: state => state.params.code,
@@ -141,26 +152,23 @@ export default {
 
     beforeMount() {
         this.debounce_rangeChange = _debounce((e, name) => {
-            let { path } = this.$route;
-            const segments = path.split('/').slice(4);
+            let { routeSegments } = this;
             const segment = `${name}-from_${e[0]}_to_${e[1]}`;
             const rangeRegex = new RegExp(`^${name}-`);
 
             let currentIndex = -1;
-            for (let i = 0; i < segments.length; i++) {
-                if (segments[i].match(rangeRegex)) {
+            for (let i = 0; i < routeSegments.length; i++) {
+                if (routeSegments[i].match(rangeRegex)) {
                     currentIndex = i;
                     break;
                 }
             }
 
             if (currentIndex !== -1) {
-                if (segments[currentIndex] === segment) return;
-                segments.splice(currentIndex, 1, segment);
-            } else segments.push(segment);
-
-            const basePath = segments.length > 0 ? `/catalog/${this.code}/filters` : `/catalog/${this.code}`;
-            this.$router.replace({ path: basePath.concat(...segments.map(s => `/${s}`)) });
+                if (routeSegments[currentIndex] === segment) return;
+                routeSegments.splice(currentIndex, 1, segment);
+            } else routeSegments.push(segment);
+            this.$router.replace({ path: concatCatalogRoutePath(this.code, routeSegments) });
         }, 500);
     },
 };

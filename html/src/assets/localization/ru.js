@@ -11,8 +11,7 @@ export default {
         },
         middle: {
             search: 'Искать...',
-            platform: 'онлайн-платформа',
-            professionals: 'Для профессионалов <br /> бьюти-индустрии',
+            professionals: 'Для профессионалов бьюти-индустрии',
             free_delivery: 'До бесплатной доставки — {n} ₽',
         },
         links: {
