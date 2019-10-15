@@ -2,13 +2,8 @@
  * Basic polyfills and libs for application
  * Полифилы и базовые либы приложения
  */
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-import 'custom-event-polyfill';
-import 'intersection-observer';
-import 'focus-visible';
-import '../assets/scripts/lazysizes';
 
+import '../assets/scripts/common';
 import Vue from 'vue';
 
 import { sync } from 'vuex-router-sync';

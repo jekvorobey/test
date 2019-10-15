@@ -1,4 +1,4 @@
-import { serviceName } from './constants';
+import { serviceName } from './assets/scripts/constants';
 import createApp from './app/app';
 import ServiceLocator from './services/ServiceLocator';
 import ExpressLogger from './services/LogService/ExpressLogger';

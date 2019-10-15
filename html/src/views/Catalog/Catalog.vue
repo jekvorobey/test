@@ -91,20 +91,19 @@ import VSelect from '../../components/controls/VSelect/VSelect.vue';
 import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 
-import '../../plugins/velocity';
 import catalogModule, { ITEMS } from '../../store/modules/Catalog';
 import { ACTIVE_TAGS, ACTIVE_CATEGORY, ACTIVE_PAGE, PAGES_COUNT } from '../../store/modules/Catalog/getters';
 import { FETCH_ITEMS, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 
-import Helpers from '../../assets/scripts/helpers';
+import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
 
 export const DISPATCH_FETCH_CATALOG_DATA = `${catalogModule.name}/${FETCH_CATALOG_DATA}`;
 
-const itemAnimationDelayDelta = 70;
+const itemAnimationDelayDelta = 100;
 let counter = 0;
 
 export default {
@@ -136,21 +135,33 @@ export default {
     },
 
     methods: {
-        ...mapActions(catalogModule.name, [FETCH_ITEMS]),
+        ...mapActions(catalogModule.name, [FETCH_ITEMS, FETCH_CATALOG_DATA]),
 
         onBeforeEnterItems(el) {
             el.dataset.index = counter;
             counter += 1;
-            requestAnimationFrame(() => {
-                el.style.opacity = 0;
+            el.style.opacity = 0;
+        },
+
+        itemAnimation(el, delay) {
+            return new Promise((resolve, reject) => {
+                try {
+                    setTimeout(() => {
+                        requestAnimationFrame(() => {
+                            el.style.opacity = 1;
+                            resolve();
+                        });
+                    }, delay);
+                } catch (error) {
+                    reject(error);
+                }
             });
         },
 
-        onEnterItems(el, done) {
-            const delay = el.dataset.index * 100;
-            setTimeout(() => {
-                this.$velocity(el, { opacity: 1 }, { complete: done });
-            }, delay);
+        async onEnterItems(el, done) {
+            const delay = el.dataset.index * itemAnimationDelayDelta;
+            await this.itemAnimation(el, delay);
+            done();
         },
 
         onAfterEnterItems(el) {
@@ -180,7 +191,7 @@ export default {
         },
     },
 
-    beforeRouteEnter(to, from, next) {
+    async beforeRouteEnter(to, from, next) {
         // вызывается до подтверждения пути, соответствующего этому компоненту.
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
@@ -201,9 +212,15 @@ export default {
         // если все загружено, пропускаем
         if (categoryCode === code) next();
         else {
-            // если нет - фетчим
-            $progress.start();
-            $store.dispatch(DISPATCH_FETCH_CATALOG_DATA, { code }).then(() => next(vm => $progress.finish()));
+            try {
+                // если нет - фетчим
+                $progress.start();
+                await $store.dispatch(DISPATCH_FETCH_CATALOG_DATA, { code });
+                next(vm => $progress.finish());
+            } catch (error) {
+                $progress.fail();
+                $logger.error(error);
+            }
         }
     },
 
@@ -215,22 +232,28 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        const {
-            params: { code },
-        } = to;
-
-        const { categoryCode } = this.$store.state.catalog;
-        if (categoryCode !== code) {
-            this.$progress.start();
-            this.FETCH_ITEMS({ code }).then(() => this.$progress.finish());
-        } else this.debounce_FETCH_ITEMS(code);
+        this.debounce_fetchCatalog(to, from);
         next();
     },
 
     beforeMount() {
-        this.debounce_FETCH_ITEMS = Helpers.debounce(code => {
-            this.$progress.start();
-            this.FETCH_ITEMS({ code }).then(() => this.$progress.finish());
+        this.debounce_fetchCatalog = _debounce(async (to, from) => {
+            try {
+                const { categoryCode } = this.$store.state.catalog;
+                const {
+                    params: { code },
+                } = to;
+
+                this.$progress.start();
+
+                if (categoryCode !== code) await this[FETCH_CATALOG_DATA]({ code });
+                else await this[FETCH_ITEMS]({ code });
+
+                this.$progress.finish();
+            } catch (error) {
+                $logger.error('debounce_fetchCatalog', error);
+                this.$progress.fail();
+            }
         }, 500);
     },
 };

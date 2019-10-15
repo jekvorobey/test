@@ -1,4 +1,4 @@
-const { serviceName } = require('../constants');
+const { serviceName } = require('../assets/scripts/constants');
 
 let locatorInstance;
 module.exports = class ServiceLocator {

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
-import Helpers from './helpers';
+import Helpers from '../util/helpers';
 
 /**
  * Class
@@ -78,10 +78,10 @@ function disableScroll(targetElement, options) {
         typeof document !== 'undefined' ? document.scrollingElement || document.documentElement || document.body : null;
     if (bodyElement) {
         setTimeout(() => {
-            Helpers.addClass(bodyElement, 'html-modal-open');
-            Helpers.addClass(document.querySelector('.header-main__top'), 'html-modal-open');
-            Helpers.addClass(document.querySelector('.header-main__panel'), 'html-modal-open');
-            Helpers.addClass(document.querySelector('.footer-main'), 'html-modal-open');
+            // Helpers.addClass(bodyElement, 'html-modal-open');
+            // Helpers.addClass(document.querySelector('.header-main__top'), 'html-modal-open');
+            // Helpers.addClass(document.querySelector('.header-main__panel'), 'html-modal-open');
+            // Helpers.addClass(document.querySelector('.footer-main'), 'html-modal-open');
         }, 0);
     }
     disableBodyScroll(targetElement, options);
@@ -97,10 +97,10 @@ function enableScroll(targetElement) {
         typeof document !== 'undefined' ? document.scrollingElement || document.documentElement || document.body : null;
     if (bodyElement) {
         setTimeout(() => {
-            Helpers.removeClass(bodyElement, 'html-modal-open');
-            Helpers.removeClass(document.querySelector('.header-main__top'), 'html-modal-open');
-            Helpers.removeClass(document.querySelector('.header-main__panel'), 'html-modal-open');
-            Helpers.removeClass(document.querySelector('.footer-main'), 'html-modal-open');
+            // Helpers.removeClass(bodyElement, 'html-modal-open');
+            // Helpers.removeClass(document.querySelector('.header-main__top'), 'html-modal-open');
+            // Helpers.removeClass(document.querySelector('.header-main__panel'), 'html-modal-open');
+            // Helpers.removeClass(document.querySelector('.footer-main'), 'html-modal-open');
         }, 0);
     }
     enableBodyScroll(targetElement);

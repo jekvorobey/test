@@ -29,12 +29,26 @@
                 <div class="catalog-filter__filters-check" v-else-if="item.type === 'check'">
                     <v-check
                         v-for="option in item.items"
-                        :id="item.name + option.id"
+                        :id="`${item.name}-${option.id}`"
                         :value="option.code"
                         :key="option.id"
                         :name="item.name"
                         :checked="filterSegments[item.name] && filterSegments[item.name][option.code]"
                         @change="onCheckChange($event, item.name, option.code)"
+                    >
+                        {{ option.name }}
+                    </v-check>
+                </div>
+                <div class="catalog-filter__filters-check" v-else-if="item.type === 'radio'">
+                    <v-check
+                        v-for="option in item.items"
+                        :id="`${item.name}-${option.id}`"
+                        type="radio"
+                        :value="option.code"
+                        :key="option.id"
+                        :name="item.name"
+                        :checked="filterSegments[item.name] && filterSegments[item.name][option.code]"
+                        @change="onRadioChange($event, item.name, option.code)"
                     >
                         {{ option.name }}
                     </v-check>
@@ -54,7 +68,7 @@ import VCheck from '../controls/VCheck/VCheck.vue';
 import VAccordion from '../controls/VAccordion/VAccordion.vue';
 import CategoryTreeItem from './CategoryTreeItem/CategoryTreeItem.vue';
 
-import Helpers from '../../assets/scripts/helpers';
+import _debounce from 'lodash/debounce';
 import { mapState, mapGetters } from 'vuex';
 import './CatalogFilter.css';
 
@@ -82,6 +96,17 @@ export default {
     },
 
     methods: {
+        onRadioChange(e, name, value) {
+            let { path } = this.$route;
+            let segments = path.split('/').slice(4);
+            if (!segments.includes(value)) segments.push(value);
+            const radioRegexp = new RegExp(`^${name}-`);
+            segments = segments.filter(s => s === value || !s.match(radioRegexp));
+
+            const basePath = segments.length > 0 ? `/catalog/${this.code}/filters` : `/catalog/${this.code}`;
+            this.$router.replace({ path: basePath.concat(...segments.map(s => `/${s}`)) });
+        },
+
         onCheckChange(e, name, value) {
             let { path } = this.$route;
             const segments = path.split('/').slice(4);
@@ -102,7 +127,7 @@ export default {
         },
 
         onRangeChange(e, name) {
-            this.debounce_OnRangeChange(e, name);
+            this.debounce_rangeChange(e, name);
         },
     },
 
@@ -115,18 +140,15 @@ export default {
     },
 
     beforeMount() {
-        this.debounce_OnRangeChange = Helpers.debounce((e, name) => {
-            let {
-                path,
-                params: { pathMatch },
-            } = this.$route;
-            const filterSegment = 'filters';
-            const segments = pathMatch ? pathMatch.split('/') : [];
+        this.debounce_rangeChange = _debounce((e, name) => {
+            let { path } = this.$route;
+            const segments = path.split('/').slice(4);
             const segment = `${name}-from_${e[0]}_to_${e[1]}`;
+            const rangeRegex = new RegExp(`^${name}-`);
 
             let currentIndex = -1;
             for (let i = 0; i < segments.length; i++) {
-                if (segments[i].includes(name)) {
+                if (segments[i].match(rangeRegex)) {
                     currentIndex = i;
                     break;
                 }
@@ -135,13 +157,10 @@ export default {
             if (currentIndex !== -1) {
                 if (segments[currentIndex] === segment) return;
                 segments.splice(currentIndex, 1, segment);
-            } else {
-                if (segments.length === 0) segments.push(filterSegment);
-                segments.push(segment);
-            }
+            } else segments.push(segment);
 
-            path = `/catalog/${this.code}`.concat(...segments.map(s => `/${s}`));
-            this.$router.replace({ path });
+            const basePath = segments.length > 0 ? `/catalog/${this.code}/filters` : `/catalog/${this.code}`;
+            this.$router.replace({ path: basePath.concat(...segments.map(s => `/${s}`)) });
         }, 500);
     },
 };

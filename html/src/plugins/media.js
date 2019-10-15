@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { breakpoints } from '../constants';
+import { breakpoints } from '../assets/scripts/constants';
 
 const MQ = 'GREENSIGHT_MEDIA_MQ';
 const MQMAP = 'GREENSIGHT_MEDIA_MQ_MAP';

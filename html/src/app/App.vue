@@ -22,8 +22,8 @@ import VButton from '../components/controls/VButton/VButton.vue';
 import VHeader from '../components/VHeader/VHeader.vue';
 import VFooter from '../components/VFooter/VFooter.vue';
 
-import Helpers from '../assets/scripts/helpers';
-import { MIN_SCROLL_VALUE, eventName } from '../constants';
+import _debounce from 'lodash/debounce';
+import { MIN_SCROLL_VALUE, eventName } from '../assets/scripts/constants';
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -48,7 +48,7 @@ export default {
     },
 
     mounted() {
-        const onSetScrollDebounce = Helpers.debounce(this.onScroll, 20);
+        const onSetScrollDebounce = _debounce(this.onScroll, 20);
         document.addEventListener(eventName.SCROLL, onSetScrollDebounce, true);
         this.$on('hook:beforeDestroy', () => document.removeEventListener(eventName.SCROLL, onSetScrollDebounce));
     },

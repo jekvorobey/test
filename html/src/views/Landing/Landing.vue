@@ -260,7 +260,7 @@ import CatalogProductCard from '../../components/CatalogProductCard/CatalogProdu
 import landingModule from '../../store/modules/Landing';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 import { mapState } from 'vuex';
-import { breakpoints } from '../../constants';
+import { breakpoints } from '../../assets/scripts/constants';
 
 import '../../plugins/observer';
 import '../../assets/images/sprites/socials/instagram-bw.svg';

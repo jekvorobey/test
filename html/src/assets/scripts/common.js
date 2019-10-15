@@ -1,3 +1,8 @@
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+import 'custom-event-polyfill';
+import 'intersection-observer';
+import 'focus-visible';
 import lazysizes from 'lazysizes';
 import 'lazysizes/plugins/object-fit/ls.object-fit';
 import 'lazysizes/plugins/parent-fit/ls.parent-fit';

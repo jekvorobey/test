@@ -78,7 +78,7 @@ export default {
                 id: 4,
                 title: 'Эффекты',
                 name: 'effect',
-                type: 'check',
+                type: 'radio',
                 items: [
                     {
                         id: 1,

@@ -1,10 +1,10 @@
+import _debounce from 'lodash/debounce';
 import { search } from '../../../api';
-import Helpers from '../../../assets/scripts/helpers';
 
-const debounceSuggestion = Helpers.debounce(
-    (commit, payload) => search(payload).then(resp => commit('SET_SEARCH_SUGGESTION', resp)),
-    500
-);
+const debounce_Suggestion = _debounce(async (commit, payload) => {
+    const resp = await search(payload);
+    commit('SET_SEARCH_SUGGESTION', resp);
+}, 500);
 
 export default {
     SET_SEARCH({ commit }, payload) {
@@ -12,6 +12,6 @@ export default {
     },
 
     SEARCH({ commit }, payload) {
-        return debounceSuggestion(commit, payload);
+        return debounce_Suggestion(commit, payload);
     },
 };

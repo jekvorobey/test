@@ -42,7 +42,7 @@
 <script>
 import VButton from '../../components/controls/VButton/VButton.vue';
 import VInput from '../../components/controls/VInput/VInput.vue';
-import { validationMixin, required, password, email, minLength, sameAs, tel } from '../../assets/scripts/validation';
+import validationMixin, { required, password, email, minLength, sameAs, tel } from '../../plugins/validation';
 
 export default {
     name: 'ui-kit-forms',
