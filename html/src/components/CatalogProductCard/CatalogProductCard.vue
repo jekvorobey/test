@@ -1,61 +1,48 @@
 <template>
     <div class="catalog-product-card">
-        <v-link class="catalog-product-card__img" :to="href" :title="name">
+        <div class="catalog-product-card__img">
             <img class="blur-up lazyload" :data-src="image" alt />
-        </v-link>
-        <div class="catalog-product-card__body">
-            <div class="catalog-product-card__body-top">
-                <div>
-                    <div class="catalog-product-card__controls">
-                        <v-svg name="eye" width="18" height="18" />
-                        <v-svg name="wishlist-middle" width="18" height="18" />
-                    </div>
-                    <div class="catalog-product-card__prices">
-                        <div class="catalog-product-card__price">{{ oldPrice ? `от ${price}` : price }}</div>
-                        <div v-show="oldPrice" class="text-sm text-grey text-strike catalog-product-card__price">
-                            от {{ oldPrice }}
-                        </div>
-                    </div>
-                </div>
-
-                <button class="catalog-product-card__btn">
-                    <v-svg name="add-to-cart-small" width="27" height="18" />
-                </button>
-            </div>
-            <div class="catalog-product-card__body-bottom">
-                <v-rating class="catalog-product-card__rating" :value="rating" readonly>
-                    <template v-slot:activeLabel>
-                        <v-svg name="star-small" width="12" height="12" />
-                    </template>
-                    <template v-slot:inactiveLabel>
-                        <v-svg name="star-empty-small" width="12" height="12" />
-                    </template>
-                </v-rating>
-                <v-link class="link--sm catalog-product-card__link" :to="href">{{ name }}</v-link>
-            </div>
-            <div class="catalog-product-card__tags">
-                <tag
-                    class="text-sm catalog-product-card__tags-tag"
-                    v-for="(tag, index) in tags"
-                    :key="index"
-                    :text="tag"
-                />
+            <div class="catalog-product-card__controls">
+                <v-button class="btn--outline catalog-product-card__controls-btn">Купить</v-button>
+                <v-link class="catalog-product-card__controls-link">Быстрый просмотр</v-link>
             </div>
         </div>
+        <div class="catalog-product-card__body">
+            <div class="catalog-product-card__prices">
+                <div class="text-bold catalog-product-card__price">{{ oldPrice ? `от ${price}` : price }}</div>
+                <div v-show="oldPrice" class="text-sm text-grey text-strike catalog-product-card__price">
+                    от {{ oldPrice }}
+                </div>
+            </div>
+            <v-link class="link--sm catalog-product-card__link" :to="href">{{ name }}</v-link>
+            <v-rating class="catalog-product-card__rating" :value="rating" readonly>
+                <template v-slot:activeLabel>
+                    <v-svg name="star-small" width="12" height="12" />
+                </template>
+                <template v-slot:inactiveLabel>
+                    <v-svg name="star-empty-small" width="12" height="12" />
+                </template>
+            </v-rating>
+        </div>
+        <div class="catalog-product-card__tags">
+            <tag class="text-sm catalog-product-card__tags-tag" v-for="(tag, index) in tags" :key="index" :text="tag" />
+        </div>
+        <v-link class="catalog-product-card__wishlist-btn">
+            <v-svg name="wishlist-middle" width="18" height="20" />
+        </v-link>
     </div>
 </template>
 
 <script>
 import VSvg from '../controls/VSvg/VSvg.vue';
 import VLink from '../controls/VLink/VLink.vue';
+import VButton from '../controls/VButton/VButton.vue';
 import VRating from '../controls/VRating/VRating.vue';
 import Tag from '../Tag/Tag.vue';
 
 import '../../assets/images/sprites/star-empty-small.svg';
 import '../../assets/images/sprites/star-small.svg';
-import '../../assets/images/sprites/add-to-cart-small.svg';
 import '../../assets/images/sprites/wishlist-middle.svg';
-import '../../assets/images/sprites/eye.svg';
 import './CatalogProductCard.css';
 
 export default {
@@ -64,6 +51,7 @@ export default {
     components: {
         VSvg,
         VLink,
+        VButton,
         VRating,
 
         Tag,

@@ -2,7 +2,7 @@
     <section class="section ui-kit">
         <button class="ui-kit-panel-btn" @click="isOpen = !isOpen">|||</button>
         <transition name="slide-left">
-            <ul v-if="isOpen" class="ui-kit-panel">
+            <ul v-if="isOpen" class="ui-kit-panel" :class="{ 'ui-kit-panel--scroll': scroll }">
                 <li v-for="(item, index) in links" :key="index">
                     <v-link :to="item.to">{{ item.desc }}</v-link>
                 </li>
@@ -47,7 +47,7 @@ import UiKitLinks from './UiKitLinks.vue';
 import UiKitList from './UiKitList.vue';
 import UiKitAccordions from './UiKitAccordions.vue';
 
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import './UiKit.css';
 
 export default {
@@ -177,9 +177,10 @@ export default {
     },
 
     computed: {
-        type() {
-            return this.$route.params.type;
-        },
+        ...mapState(['scroll']),
+        ...mapState('route', {
+            type: state => state.params.type,
+        }),
     },
 
     methods: {

@@ -1,13 +1,13 @@
 .btn {
     display: inline-block;
     position: relative;
-    height: calc(var(--gs) * 6);
-    padding: 0 calc(var(--gs) * 3);
+    font-size: 14px;
+    line-height: 24px;
+    padding: 6px calc(var(--gs) * 3);
     clear: both;
     transition: all var(--time) var(--timing-function);
-    border: 1px solid var(--cl-global);
+    border: 2px solid var(--cl-global);
     border-radius: 0;
-    line-height: calc(var(--gs) * 6);
     background: var(--cl-global);
     text-align: center;
     text-transform: uppercase;

@@ -13,14 +13,17 @@
     /* Основные цвета проекта и текста */
     --cl-global: #141116;
     --cl-global-invert: #ffffff;
-    --cl-grey: #999999;
+    --cl-grey: #7d7d7d;
     --cl-elem-grey: #f6f6f6;
     --cl-divider-grey: #cccccc;
 
     /* Цвета проекта */
     --cl-red: #f12828;
     --cl-gold: #ffd338;
-    --cl-dark-blue: #0f41c3;
+    --cl-olive: #7d5426;
+    --cl-dark-blue: #254364;
+    --cl-dark-cherry: #3b1c2a;
+    --cl-dirty-green: #d1d8c8;
 
     /* Основные размеры для элементов */
     --field-height: 40px;

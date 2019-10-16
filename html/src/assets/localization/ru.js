@@ -15,7 +15,7 @@ export default {
             free_delivery: 'До бесплатной доставки — {n} ₽',
         },
         links: {
-            catalog: 'Каталог товаров',
+            catalog: 'Каталог',
             new: 'Новинки',
             stocks: 'Акции',
             collections: 'Подборки',

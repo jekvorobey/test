@@ -1,128 +1,113 @@
 <template>
     <section class="section landing-view">
-        <section>
-            <div class="container">
-                <ul class="landing-view__categories">
-                    <li :key="category.id" v-for="category in categories">
-                        <router-link to="/">{{ category.name }}</router-link>
-                    </li>
-                </ul>
-            </div>
-        </section>
         <section class="section">
             <div class="container landing-view__banners">
-                <div class="landing-view__banners-left">
+                <v-slider class="landing-view__banners-slider" name="banners" :options="bannersOptions">
                     <banner-card
-                        class="landing-view__banners-card"
-                        v-for="banner in mainBanners"
+                        class="swiper-slide landing-view__banners-card"
+                        v-for="banner in banners"
                         :key="banner.id"
                         :banner-id="banner.id"
                         :title="banner.title"
                         :image="banner.image"
                     />
-                </div>
-                <div class="landing-view__banners-right">
-                    <v-slider class="landing-view__banners-slider" name="banners" :options="bannersOptions">
-                        <banner-card
-                            class="swiper-slide landing-view__banners-card"
-                            v-for="banner in sliderBanners"
-                            :key="banner.id"
-                            :banner-id="banner.id"
-                            :title="banner.title"
-                            :image="banner.image"
-                        />
-                    </v-slider>
-                </div>
+                </v-slider>
             </div>
         </section>
 
         <section class="section landing-view__section">
-            <div class="container landing-view__category-cards">
-                <v-slider class="landing-view__category-slider" name="categories" :options="categoryOptions">
+            <div class="container landing-view__categories">
+                <div class="landing-view__categories-grid">
                     <category-card
-                        class="swiper-slide landing-view__category-card"
+                        class="landing-view__categories-card"
                         v-for="category in categories"
                         :key="category.id"
                         :name="category.name"
                         :image="category.image"
                     />
-                </v-slider>
-            </div>
-        </section>
-
-        <section
-            class="section landing-view__section"
-            id="new"
-            v-observe-visibility="{
-                callback: onChangedVisibility,
-                once: true,
-            }"
-        >
-            <div class="container landing-view__products">
-                <h2 class="landing-view__section-hl">{{ $t('landing.title.new') }}</h2>
-                <v-link class="landing-view__section-link" to="/">{{ $t('landing.showAll') }}</v-link>
-
-                <v-slider
-                    class="landing-view__products-slider"
-                    name="new-products"
-                    :options="productOptions"
-                    :should-initialize="slidersVisibility.new"
-                    @reachEnd="onEndReached('new')"
-                >
-                    <catalog-product-card
-                        class="swiper-slide landing-view__products-card"
-                        v-for="product in newProducts"
-                        :key="product.id"
-                        :product-id="product.id"
-                        :name="product.name"
-                        :href="product.href"
-                        :image="product.image"
-                        :price="product.price"
-                        :old-price="product.oldPrice"
-                        :tags="product.tags"
-                        :rating="product.rating"
-                    />
-                </v-slider>
-            </div>
-        </section>
-
-        <section
-            class="section landing-view__section"
-            id="bestseller"
-            v-observe-visibility="{
-                callback: onChangedVisibility,
-                once: true,
-            }"
-        >
-            <div class="container landing-view__products">
-                <h2 class="landing-view__section-hl">{{ $t('landing.title.bestseller') }}</h2>
-                <v-link class="landing-view__section-link" to="/">{{ $t('landing.showAll') }}</v-link>
-
-                <v-slider
-                    v-if="slidersVisibility.bestseller"
-                    class="landing-view__products-slider"
-                    name="bestseller-products"
-                    :options="productOptions"
-                    @reachEnd="onEndReached('bestseller')"
-                >
-                    <catalog-product-card
-                        class="swiper-slide landing-view__products-card"
-                        v-for="product in bestsellerProducts"
-                        :key="product.id"
-                        :product-id="product.id"
-                        :name="product.name"
-                        :href="product.href"
-                        :image="product.image"
-                        :price="product.price"
-                        :old-price="product.oldPrice"
-                        :tags="product.tags"
-                        :rating="product.rating"
-                    />
-                </v-slider>
+                </div>
             </div>
         </section>
 
         <section class="section landing-view__section">
+            <div class="container landing-view__products ">
+                <h2 class="landing-view__section-hl">{{ $t('landing.title.new') }}</h2>
+                <v-button class="btn--outline landing-view__section-link" to="/">{{ $t('landing.showAll') }}</v-button>
+                <div class="landing-view__products-grid">
+                    <div class="landing-view__products-cards">
+                        <catalog-product-card
+                            class="landing-view__products-card"
+                            v-for="product in newProducts.items"
+                            :key="product.id"
+                            :product-id="product.id"
+                            :name="product.name"
+                            :href="product.href"
+                            :image="product.image"
+                            :price="product.price"
+                            :old-price="product.oldPrice"
+                            :tags="product.tags"
+                            :rating="product.rating"
+                        />
+                    </div>
+
+                    <div class="landing-view__products-banner">
+                        <img
+                            class="lazyload blur-up landing-view__products-banner-img"
+                            :data-src="newProducts.banner.image"
+                        />
+                        <div class="landing-view__products-banner-panel">
+                            <div class="landing-view__products-banner-panel-title">
+                                {{ newProducts.banner.title }}
+                            </div>
+                            <v-button class="btn--outline landing-view__products-banner-panel-btn">
+                                {{ newProducts.banner.btnText }}
+                            </v-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section landing-view__section">
+            <div class="container landing-view__products landing-view__products--inverse">
+                <h2 class="landing-view__section-hl">{{ $t('landing.title.bestseller') }}</h2>
+                <v-button class="btn--outline landing-view__section-link" to="/">{{ $t('landing.showAll') }}</v-button>
+                <div class="landing-view__products-grid">
+                    <div class="landing-view__products-cards">
+                        <catalog-product-card
+                            class="landing-view__products-card"
+                            v-for="product in bestsellerProducts.items"
+                            :key="product.id"
+                            :product-id="product.id"
+                            :name="product.name"
+                            :href="product.href"
+                            :image="product.image"
+                            :price="product.price"
+                            :old-price="product.oldPrice"
+                            :tags="product.tags"
+                            :rating="product.rating"
+                        />
+                    </div>
+
+                    <div class="landing-view__products-banner">
+                        <img
+                            class="lazyload blur-up landing-view__products-banner-img"
+                            :data-src="bestsellerProducts.banner.image"
+                        />
+                        <div class="landing-view__products-banner-panel">
+                            <div class="landing-view__products-banner-panel-title">
+                                {{ bestsellerProducts.banner.title }}
+                            </div>
+                            <v-button class="btn--outline landing-view__products-banner-panel-btn">
+                                {{ bestsellerProducts.banner.btnText }}
+                            </v-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- <section class="section landing-view__section">
             <div class="container landing-view__middle-banners">
                 <banner-card
                     class="landing-view__middle-banners-card"
@@ -136,42 +121,6 @@
 
         <section
             class="section landing-view__section"
-            id="featured"
-            v-observe-visibility="{
-                callback: onChangedVisibility,
-                once: true,
-            }"
-        >
-            <div class="container landing-view__products">
-                <h2 class="landing-view__section-hl">{{ $t('landing.title.featured', { n: 585 }) }}</h2>
-                <v-link class="landing-view__section-link" to="/">{{ $t('landing.showAll') }}</v-link>
-
-                <v-slider
-                    v-if="slidersVisibility.featured"
-                    class="landing-view__products-slider"
-                    name="featured-products"
-                    :options="productOptions"
-                    @reachEnd="onEndReached('featured')"
-                >
-                    <catalog-product-card
-                        class="swiper-slide landing-view__products-card"
-                        v-for="product in featuredProducts"
-                        :key="product.id"
-                        :product-id="product.id"
-                        :name="product.name"
-                        :href="product.href"
-                        :image="product.image"
-                        :price="product.price"
-                        :old-price="product.oldPrice"
-                        :tags="product.tags"
-                        :rating="product.rating"
-                    />
-                </v-slider>
-            </div>
-        </section>
-
-        <section
-            class="section landing-view__section"
             id="brands"
             v-observe-visibility="{
                 callback: onChangedVisibility,
@@ -180,7 +129,7 @@
         >
             <div class="container landing-view__brands">
                 <h2 class="landing-view__section-hl">{{ $t('landing.title.brand') }}</h2>
-                <v-link class="landing-view__section-link" to="/">{{ $t('landing.showAll') }}</v-link>
+                <v-button class="landing-view__section-link" to="/">{{ $t('landing.showAll') }}</v-button>
 
                 <v-slider
                     v-if="slidersVisibility.brands"
@@ -242,13 +191,13 @@
                     />
                 </div>
             </div>
-        </section>
+        </section> -->
     </section>
 </template>
 
 <script>
 import VSvg from '../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../components/controls/VLink/VLink.vue';
+import VButton from '../../components/controls/VButton/VButton.vue';
 import VSlider from '../../components/controls/VSlider/VSlider.vue';
 
 import BrandCard from '../../components/BrandCard/BrandCard.vue';
@@ -380,7 +329,7 @@ export default {
 
     components: {
         VSvg,
-        VLink,
+        VButton,
         VSlider,
 
         BrandCard,
@@ -417,42 +366,18 @@ export default {
     },
 
     computed: {
-        ...mapState('landing', ['categories', 'brands', 'instagramItems']),
-
-        ...mapState('landing', {
-            mainBanners: state => state.banners.mainBanners,
-            sliderBanners: state => state.banners.sliderBanners,
-            middleBanners: state => state.banners.middleBanners,
-
-            bestsellerLength: state => state.bestsellerProducts.length,
-            featuredLength: state => state.featuredProducts.length,
-            newLength: state => state.newProducts.length,
-
-            bestsellerProducts(state) {
-                return state.bestsellerProducts.slice(0, this.sliderSize.bestseller);
-            },
-            featuredProducts(state) {
-                return state.featuredProducts.slice(0, this.sliderSize.featured);
-            },
-            newProducts(state) {
-                return state.newProducts.slice(0, this.sliderSize.new);
-            },
-        }),
-
-        categoryOptions() {
-            return categoryOptions;
-        },
+        ...mapState('landing', [
+            'categories',
+            'brands',
+            'instagramItems',
+            'bestsellerProducts',
+            'featuredProducts',
+            'newProducts',
+            'banners',
+        ]),
 
         bannersOptions() {
             return bannersOptions;
-        },
-
-        productOptions() {
-            return productOptions;
-        },
-
-        brandsOptions() {
-            return brandsOptions;
         },
 
         instagramOptions() {

@@ -41,7 +41,7 @@ export default {
 
     FETCH_BANNERS({ commit }) {
         return getBanners()
-            .then(data => commit(SET_BANNERS, data))
+            .then(data => commit(SET_BANNERS, data.slice(2, 5)))
             .catch(error => {
                 $logger.error(`FETCH_BANNERS error: ${error}`);
                 return [];
@@ -58,8 +58,13 @@ export default {
     },
 
     FETCH_FEATURED_PRODUCTS({ commit }) {
-        return getProducts()
-            .then(data => commit(SET_FEATURED_PRODUCTS, data.items))
+        return Promise.all([getProducts(), getBanners()])
+            .then(data => {
+                commit(SET_FEATURED_PRODUCTS, {
+                    items: data[0] ? data[0].items.slice(4, 8) : [],
+                    banner: data[1][2] ? data[1][2] : {},
+                });
+            })
             .catch(error => {
                 $logger.error(`FETCH_FEATURED_PRODUCTS error: ${error}`);
                 return [];
@@ -67,8 +72,13 @@ export default {
     },
 
     FETCH_NEW_PRODUCTS({ commit }) {
-        return getProducts()
-            .then(data => commit(SET_NEW_PRODUCTS, data.items))
+        return Promise.all([getProducts(), getBanners()])
+            .then(data => {
+                commit(SET_NEW_PRODUCTS, {
+                    items: data[0] ? data[0].items.slice(0, 4) : [],
+                    banner: data[1][0] ? data[1][0] : {},
+                });
+            })
             .catch(error => {
                 $logger.error(`FETCH_NEW_PRODUCTS error: ${error}`);
                 return [];
@@ -76,8 +86,13 @@ export default {
     },
 
     FETCH_BESTSELLER_PRODUCTS({ commit }) {
-        return getProducts()
-            .then(data => commit(SET_BESTSELLER_PRODUCTS, data.items))
+        return Promise.all([getProducts(), getBanners()])
+            .then(data => {
+                commit(SET_BESTSELLER_PRODUCTS, {
+                    items: data[0] ? data[0].items.slice(4, 8) : [],
+                    banner: data[1][1] ? data[1][1] : {},
+                });
+            })
             .catch(error => {
                 $logger.error(`FETCH_BESTSELLER_PRODUCTS error: ${error}`);
                 return [];

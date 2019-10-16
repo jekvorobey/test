@@ -1,16 +1,28 @@
 .category-card {
     position: relative;
     text-align: center;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+
+    @media (--tablet-lg) {
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    @media (--tablet-lg) {
+        font-size: 10px;
+    }
 
     &__img {
         display: block;
-        min-height: 150px;
         width: 100%;
-        padding: calc(var(--gs) * 2);
+        padding: 0 var(--gs);
+        margin-bottom: calc(var(--gs) * 2);
 
         @media (--tablet) {
             padding: 0 calc(var(--gs) * 1.5);
-            min-height: auto;
             font-size: 14px;
             line-height: 22px;
             margin-bottom: var(--gs);
@@ -20,7 +32,10 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 50%;
+
+            @media (--tablet) {
+                width: 64px;
+            }
         }
     }
 }

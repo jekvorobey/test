@@ -26,6 +26,21 @@ import brand3 from '../../assets/images/mock/brand3.png';
 import brand4 from '../../assets/images/mock/brand4.png';
 import brand5 from '../../assets/images/mock/brand5.png';
 
+import category1 from '../../assets/images/mock/category1.png';
+import category2 from '../../assets/images/mock/category2.png';
+import category3 from '../../assets/images/mock/category3.png';
+import category4 from '../../assets/images/mock/category4.png';
+import category5 from '../../assets/images/mock/category5.png';
+import category6 from '../../assets/images/mock/category6.png';
+import category7 from '../../assets/images/mock/category7.png';
+import category8 from '../../assets/images/mock/category8.png';
+
+import banner1 from '../../assets/images/mock/banner1.png';
+import banner2 from '../../assets/images/mock/banner2.png';
+import banner3 from '../../assets/images/mock/banner3.png';
+import banner4 from '../../assets/images/mock/banner4.png';
+import banner5 from '../../assets/images/mock/banner5.png';
+
 const categories = [
     {
         id: 1,
@@ -93,6 +108,36 @@ const instagrams = [
     {
         id: 8,
         image: instagram8,
+    },
+];
+
+const banners = [
+    {
+        id: 1,
+        title: 'Новая коллекция косметики Aveda',
+        btnText: 'Смотреть товары',
+        image: banner1,
+    },
+    {
+        id: 2,
+        title: '20 средств для ухода за молодой кожей',
+        btnText: 'Посмотреть',
+        image: banner2,
+    },
+    {
+        id: 3,
+        title: 'Встречайте обновленный бренд Christina Fitzgerald',
+        image: banner3,
+    },
+    {
+        id: 4,
+        title: 'Встречайте обновленный бренд Christina Fitzgerald',
+        image: banner4,
+    },
+    {
+        id: 5,
+        title: 'Встречайте обновленный бренд Christina Fitzgerald',
+        image: banner5,
     },
 ];
 
@@ -168,27 +213,27 @@ const brands = [
 const productCategories = [
     {
         id: 1,
-        name: 'Уход за волосами',
-        code: 'uhod-za-volosami',
-        image: 'https://via.placeholder.com/150x150',
+        name: 'Для волос',
+        code: 'dlya-volos',
+        image: category1,
     },
     {
         id: 2,
         name: 'Для лица и тела',
         code: 'dlya-litsa-i-tela',
-        image: 'https://via.placeholder.com/150x150',
+        image: category2,
     },
     {
         id: 3,
         name: 'Для рук и ног',
         code: 'dlya-ruk-i-nog',
-        image: 'https://via.placeholder.com/150x150',
+        image: category3,
     },
     {
         id: 4,
         name: 'Макияж',
         code: 'makiyazh-4',
-        image: 'https://via.placeholder.com/150x150',
+        image: category4,
         items: [
             {
                 id: 9,
@@ -234,25 +279,25 @@ const productCategories = [
         id: 5,
         name: 'Для ногтей',
         code: 'dlya-nogtei',
-        image: 'https://via.placeholder.com/150x150',
+        image: category5,
     },
     {
         id: 6,
         name: 'Инструменты',
         code: 'instrumenti',
-        image: 'https://via.placeholder.com/150x150',
+        image: category6,
     },
     {
         id: 7,
         name: 'Аксессуары',
         code: 'aksesuari',
-        image: 'https://via.placeholder.com/150x150',
+        image: category7,
     },
     {
         id: 8,
-        name: 'Мужская коллекция',
-        code: 'muzhskaya-kolecia',
-        image: 'https://via.placeholder.com/150x150',
+        name: 'Для мужчин',
+        code: 'dlya-muzhchin',
+        image: category8,
     },
 ];
 
@@ -477,7 +522,7 @@ export default class MockHttpService {
                     setTimeout(() => resolve(productCategories), 300);
                     break;
                 case '/banners':
-                    setTimeout(() => resolve({ mainBanners, sliderBanners: mainBanners, middleBanners }), 300);
+                    setTimeout(() => resolve(banners), 300);
                     break;
                 case '/instagram':
                     setTimeout(() => resolve(instagrams), 300);

@@ -22,7 +22,7 @@
     position: fixed;
     background: var(--cl-white);
     z-index: 100;
-    top: 139px;
+    top: 205px;
     padding: calc(var(--gs) * 2) calc(var(--gs) * 4);
     border: 1px solid var(--cl-global);
     max-height: 80vh;
@@ -32,8 +32,8 @@
         top: 79px;
     }
 
-    @media (--tablet) {
-        top: 71px;
+    &--scroll {
+        top: 87px;
     }
 }
 

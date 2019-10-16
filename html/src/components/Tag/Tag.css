@@ -1,7 +1,9 @@
 .tag {
-    width: fit-content;
-    text-align: center;
-    padding: calc(var(--gs) / 2);
-    border: 1px solid var(--cl-global);
+    font-size: 13px;
+    line-height: 16px;
+    padding: calc(var(--gs) / 2) var(--gs);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
     pointer-events: none;
+    font-weight: bold;
 }

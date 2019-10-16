@@ -7,12 +7,21 @@ export default {
     namespaced: true,
     state: {
         load: false,
-        banners: { mainBanners: [], middleBanners: [] },
+        banners: [],
         brands: [],
         categories: [],
-        newProducts: [],
-        bestsellerProducts: [],
-        featuredProducts: [],
+        newProducts: {
+            banner: {},
+            items: [],
+        },
+        bestsellerProducts: {
+            banner: {},
+            items: [],
+        },
+        featuredProducts: {
+            banner: {},
+            items: [],
+        },
         instagramItems: [],
     },
     actions,

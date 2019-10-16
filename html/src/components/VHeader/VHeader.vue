@@ -36,13 +36,14 @@
                     </div>
 
                     <div v-show="!search" class="v-header__middle-cart">
-                        <div class="v-header__middle-cart-sum">
-                            <v-svg name="account-middle" width="18" height="20" />
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <v-svg name="wishlist-middle" width="20" height="20" />
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <span class="text-medium">15 780 ₽</span>&nbsp;
-                            <v-svg name="cart-middle" width="20" height="20" />
+                        <v-svg class="v-header__middle-cart-item" name="account-middle" width="18" height="20" />
+                        <v-svg class="v-header__middle-cart-item" name="wishlist-middle" width="20" height="20" />
+                        <div class="v-header__middle-cart-item">
+                            <span class="text-medium v-header__middle-cart-sum">15 780 ₽</span>&nbsp;
+                            <span class="text-medium v-header__middle-cart-icon">
+                                <v-svg name="cart-middle" width="20" height="24" />
+                                <span class="text-bold v-header__middle-cart-count">3</span>
+                            </span>
                         </div>
                     </div>
                 </div>

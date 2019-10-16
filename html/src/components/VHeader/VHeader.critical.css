@@ -98,7 +98,7 @@
         background-color: var(--header-top-bg);
         height: 30px;
         line-height: 30px;
-        transition: height var(--time) var(--timing-function);
+        transition: height var(--time) ease-in;
         overflow: hidden;
 
         &-container,
@@ -142,7 +142,7 @@
         &-container,
         &-search,
         &-cart,
-        &-cart-sum,
+        &-cart,
         &-middle,
         &-middle-item {
             display: flex;
@@ -171,22 +171,40 @@
         }
 
         &-cart {
-            flex-direction: column;
             line-height: 30px;
+            &-item {
+                & + & {
+                    margin-left: calc(var(--gs) * 2);
+                }
 
-            &-sum {
-                align-self: flex-end;
+                &:last-child {
+                    display: flex;
+                    align-items: center;
+                }
             }
 
-            &-discount {
-                font-size: 10px;
-                align-self: flex-end;
+            &-sum {
+                line-height: 24px;
+                margin-right: var(--gs);
+            }
+
+            &-icon {
+                display: flex;
+                position: relative;
+            }
+
+            &-count {
+                position: absolute;
+                font-size: 12px;
+                line-height: 15px;
+                left: 50%;
+                top: 60%;
+                transform: translate(-50%, -45%);
             }
         }
     }
 
     &__bottom {
-        padding: calc(var(--gs) / 2);
         background-color: var(--cl-global);
 
         &-container,
@@ -201,7 +219,7 @@
 
         &-inner {
             flex: 1;
-            padding: var(--gs) 0;
+            padding: calc(var(--gs) * 1.5) 0;
             justify-content: space-between;
         }
 
