@@ -82,8 +82,7 @@
     &__body {
         display: flex;
         flex-direction: column;
-        padding-top: calc(var(--gs) * 2);
-        padding-bottom: calc(var(--gs) * 3);
+        padding: calc(var(--gs) * 2);
         flex-grow: 1;
 
         @media (--tablet) {
