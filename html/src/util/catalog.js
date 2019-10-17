@@ -1,4 +1,4 @@
-const catalogPathRegx = /(?<=filters\/)(.*)/;
+const catalogPathRegx = /^.*filters\//;
 
 export function concatCatalogRoutePath(categoryCode, segments) {
     const baseRoute = categoryCode ? `/catalog/${categoryCode}` : '/catalog';
@@ -8,7 +8,7 @@ export function concatCatalogRoutePath(categoryCode, segments) {
 
 export function getCatalogRouteSegments(path) {
     const matches = path.match(catalogPathRegx);
-    return Array.isArray(matches) ? matches[0].split('/') : [];
+    return Array.isArray(matches) ? path.replace(matches[0], '').split('/') : [];
 }
 
 export function getCatalogRouteCategoryCode(path) {
