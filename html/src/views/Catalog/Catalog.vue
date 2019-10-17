@@ -91,8 +91,15 @@ import VSelect from '../../components/controls/VSelect/VSelect.vue';
 import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 
+import { concatCatalogRoutePath } from '../../util/catalog';
 import catalogModule, { ITEMS } from '../../store/modules/Catalog';
-import { ACTIVE_TAGS, ACTIVE_CATEGORY, ACTIVE_PAGE, PAGES_COUNT } from '../../store/modules/Catalog/getters';
+import {
+    ACTIVE_TAGS,
+    ACTIVE_CATEGORY,
+    ACTIVE_PAGE,
+    PAGES_COUNT,
+    ROUTE_SEGMENTS,
+} from '../../store/modules/Catalog/getters';
 import { FETCH_ITEMS, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
@@ -127,7 +134,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(catalogModule.name, [ACTIVE_TAGS, ACTIVE_CATEGORY, ACTIVE_PAGE, PAGES_COUNT]),
+        ...mapGetters(catalogModule.name, [ACTIVE_TAGS, ACTIVE_CATEGORY, ACTIVE_PAGE, PAGES_COUNT, ROUTE_SEGMENTS]),
         ...mapState(catalogModule.name, [ITEMS]),
         ...mapState('route', {
             code: state => state.params.code,
@@ -177,17 +184,15 @@ export default {
         },
 
         onClickDeleteTag(value) {
-            let { path } = this.$route;
-            const segments = path.split('/').slice(4);
+            let { routeSegments, code } = this;
 
-            if (!segments.includes(value)) return;
+            if (!routeSegments.includes(value)) return;
             else {
-                const index = segments.indexOf(value);
-                if (index !== -1) segments.splice(index, 1);
+                const index = routeSegments.indexOf(value);
+                if (index !== -1) routeSegments.splice(index, 1);
             }
 
-            const basePath = segments.length > 0 ? `/catalog/${this.code}/filters` : `/catalog/${this.code}`;
-            this.$router.replace({ path: basePath.concat(...segments.map(s => `/${s}`)) });
+            this.$router.replace({ path: concatCatalogRoutePath(code, routeSegments) });
         },
     },
 

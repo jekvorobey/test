@@ -52,7 +52,7 @@
                 <div class="container v-header__bottom-container">
                     <nav class="v-header__bottom-inner">
                         <!-- захардкоженый линк на каталог -->
-                        <v-link class="v-header__bottom-link" to="/catalog/makiyazh-4">
+                        <v-link class="v-header__bottom-link" to="/catalog">
                             {{ $t('header.links.catalog') }}
                         </v-link>
                         <v-link class="v-header__bottom-link" to="/top">{{ $t('header.links.new') }}</v-link>

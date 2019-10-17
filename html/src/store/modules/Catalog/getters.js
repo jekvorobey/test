@@ -1,4 +1,4 @@
-import { getCatalogRouteSegments, getCatalogRouteCategoryCode } from '../../../util/catalog';
+import { getCategoryByCode, mapFilterSegments } from '../../../util/catalog';
 
 export const ROUTE_SEGMENTS = 'routeSegments';
 export const FILTER_SEGMENTS = 'filterSegments';
@@ -7,24 +7,6 @@ export const ACTIVE_CATEGORY = 'activeCategory';
 export const ACTIVE_PAGE = 'activePage';
 export const PAGES_COUNT = 'pagesCount';
 
-function getCategoryByCode(items, code) {
-    if (items) {
-        let item = null;
-        let found = null;
-
-        for (let i = 0; i < items.length; i++) {
-            item = items[i];
-            if (item.code === code) return item;
-
-            found = getCategoryByCode(item.items, code);
-            if (found) return found;
-        }
-    }
-    return null;
-}
-
-const rangeRegx = /from_\d*_to_\d*/;
-const numberRegx = /\d+/g;
 const pageSize = 9;
 
 export default {
@@ -40,39 +22,30 @@ export default {
         state,
         getters,
         {
-            route: { path },
+            route: {
+                params: { code },
+            },
         }
     ) {
         const { categories } = state;
-        const categoryCode = getCatalogRouteCategoryCode(path);
-        return getCategoryByCode(categories, categoryCode);
+        return getCategoryByCode(categories, code);
     },
 
     [ROUTE_SEGMENTS](
         state,
         getters,
         {
-            route: { path },
+            route: {
+                params: { pathMatch },
+            },
         }
     ) {
-        return getCatalogRouteSegments(path);
+        return pathMatch ? pathMatch.split('/') : [];
     },
 
     [FILTER_SEGMENTS](state, getters) {
-        const segments = {};
         const urlSegments = getters[ROUTE_SEGMENTS];
-        for (let i = 0; i < urlSegments.length; i++) {
-            const segment = urlSegments[i];
-            const name = segment.split('-')[0];
-            if (rangeRegx.test(segment)) {
-                const numbers = segment.match(numberRegx);
-                segments[name] = numbers.map(n => +n);
-            } else {
-                if (!segments[name]) segments[name] = {};
-                segments[name][segment] = segment;
-            }
-        }
-        return segments;
+        return mapFilterSegments(urlSegments);
     },
 
     [ACTIVE_TAGS](state, getters) {
