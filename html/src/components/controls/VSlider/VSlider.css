@@ -3,12 +3,20 @@
     opacity: 0;
     transition: opacity var(--animation-time) ease-in;
 
+    &__controls {
+        position: absolute;
+        display: flex;
+        bottom: 48px;
+        z-index: 10;
+    }
+
     &.swiper-container-initialized {
         opacity: 1;
     }
 
     .swiper-button-next,
     .swiper-button-prev {
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -18,7 +26,7 @@
         border-radius: 50%;
         transition: all 0.2s ease-in;
 
-        @media (--tablet) {
+        @media (--tablet-lg) {
             display: none;
         }
 
@@ -49,5 +57,29 @@
 
     .swiper-button-disabled {
         display: none;
+    }
+
+    .swiper-pagination {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        margin: 0 var(--gs);
+        top: 0;
+        left: 0;
+    }
+
+    .swiper-pagination-bullet {
+        margin: 0 var(--gs);
+        width: calc(var(--gs) / 2);
+        height: calc(var(--gs) / 2);
+        background-color: var(--cl-grey);
+        transition: all var(--time) ease-in;
+
+        &-active {
+            background-color: var(--cl-global);
+            transform: scale(2);
+        }
     }
 }

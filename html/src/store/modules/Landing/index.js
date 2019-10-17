@@ -8,6 +8,7 @@ export default {
     state: {
         load: false,
         banners: [],
+        middleBanners: [],
         brands: [],
         categories: [],
         newProducts: {

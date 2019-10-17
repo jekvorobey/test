@@ -67,7 +67,7 @@ export default {
         title: {
             new: 'New',
             bestseller: 'Bestsellers',
-            featured: '{n} Customers on the site are now choosing these',
+            featured: 'Look on the site now',
             brand: 'Popular brands',
             instagram: 'Insta Beauty',
         },

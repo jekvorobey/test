@@ -3,12 +3,16 @@
         <div class="swiper-wrapper">
             <slot />
         </div>
-        <button class="swiper-button-prev">
-            <v-svg name="arrow-small" width="24" height="24" />
-        </button>
-        <button class="swiper-button-next">
-            <v-svg name="arrow-small" width="24" height="24" />
-        </button>
+
+        <div class="v-slider__controls">
+            <button class="swiper-button-prev">
+                <v-svg name="arrow-small" width="24" height="24" />
+            </button>
+            <div class="swiper-pagination" />
+            <button class="swiper-button-next">
+                <v-svg name="arrow-small" width="24" height="24" />
+            </button>
+        </div>
     </div>
 </template>
 

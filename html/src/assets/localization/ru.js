@@ -68,7 +68,7 @@ export default {
         title: {
             new: 'Новинки',
             bestseller: 'Бестселлеры',
-            featured: '{n} покупателей на сайте сейчас выбирают',
+            featured: 'Смотрят на сайте сейчас',
             brand: 'Популярные бренды',
             instagram: 'Insta Beauty',
         },

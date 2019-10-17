@@ -114,29 +114,41 @@ const instagrams = [
 const banners = [
     {
         id: 1,
+        type: '',
         title: 'Новая коллекция косметики Aveda',
         btnText: 'Смотреть товары',
         image: banner1,
     },
     {
         id: 2,
+        type: 'Подборка',
         title: '20 средств для ухода за молодой кожей',
         btnText: 'Посмотреть',
         image: banner2,
     },
     {
         id: 3,
-        title: 'Встречайте обновленный бренд Christina Fitzgerald',
-        image: banner3,
+        type: 'Подборка',
+        title: '20 средств для ухода за молодой кожей',
+        btnText: 'Посмотреть',
+        image: banner1,
     },
     {
         id: 4,
-        title: 'Встречайте обновленный бренд Christina Fitzgerald',
-        image: banner4,
+        title: 'Лучшие стайлинги для летних укладок в новом сезоне только для тебя',
+        btnText: 'Смотреть товары',
+        image: banner3,
     },
     {
         id: 5,
-        title: 'Встречайте обновленный бренд Christina Fitzgerald',
+        title: 'Новейшая косметика для лица и тела с омолаживающим эффектом',
+        btnText: 'Смотреть товары',
+        image: banner4,
+    },
+    {
+        id: 6,
+        title: ' Натуральный макияж Aveda, который подойдёт для каждой девушки',
+        btnText: 'Смотреть товары',
         image: banner5,
     },
 ];

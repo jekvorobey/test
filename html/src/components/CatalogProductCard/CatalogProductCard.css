@@ -16,7 +16,7 @@
         border-color: var(--cl-divider-grey);
 
         img {
-            opacity: 0.3;
+            opacity: 0.6;
         }
     }
 
@@ -27,7 +27,7 @@
     }
 
     &__img {
-        display: block;
+        display: flex;
         position: relative;
         width: 100%;
         background: var(--cl-elem-grey);
@@ -37,6 +37,10 @@
 
         @media (--tablet-lg) {
             min-height: auto;
+        }
+
+        @media (--tablet) {
+            padding: var(--gs) 0;
         }
 
         img {
@@ -58,12 +62,20 @@
             min-width: 160px;
             margin-bottom: var(--gs);
             background: var(--cl-elem-grey);
+
+            @media (--tablet-lg) {
+                min-width: auto;
+            }
         }
 
         &-link {
             font-size: 12px;
             line-height: 24px;
             font-weight: 500px;
+
+            @media (--tablet-lg) {
+                display: none;
+            }
         }
     }
 
@@ -74,14 +86,8 @@
         padding-bottom: calc(var(--gs) * 3);
         flex-grow: 1;
 
-        &-top {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            grid-template-rows: auto;
-
-            @media (--tablet-lg) {
-                padding-bottom: var(--gs);
-            }
+        @media (--tablet) {
+            padding: var(--gs);
         }
     }
 
@@ -92,11 +98,6 @@
         line-height: 24px;
         flex-grow: 1;
         margin-bottom: var(--gs);
-
-        @media (--tablet-lg) {
-            font-size: 12px;
-            line-height: 16px;
-        }
     }
 
     &__prices {
@@ -106,9 +107,7 @@
         margin-bottom: var(--gs);
 
         @media (--tablet-lg) {
-            padding-top: calc(var(--gs) * 1.5);
             flex-direction: column;
-            align-items: flex-start;
         }
     }
 
@@ -127,6 +126,10 @@
         position: absolute;
         top: 20px;
         left: 20px;
+
+        @media (--tablet) {
+            display: none;
+        }
     }
 
     &__rating {
@@ -134,10 +137,6 @@
         justify-content: center;
         opacity: 0;
         height: calc(var(--gs) * 2);
-
-        @media (--tablet-lg) {
-            display: none;
-        }
     }
 
     &__wishlist-btn {

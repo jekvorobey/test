@@ -35,7 +35,7 @@
 
         &-container {
             display: flex;
-            padding: 0 var(--gs);
+            padding: calc(var(--gs) / 2) var(--gs);
         }
 
         &-link {

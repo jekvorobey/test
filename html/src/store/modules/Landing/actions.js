@@ -5,6 +5,7 @@ import {
     SET_NEW_PRODUCTS,
     SET_FEATURED_PRODUCTS,
     SET_CATEGORIES,
+    SET_MIDDLE_BANNERS,
     SET_BANNERS,
     SET_BRANDS,
     SET_INSTAGRAM,
@@ -41,7 +42,10 @@ export default {
 
     FETCH_BANNERS({ commit }) {
         return getBanners()
-            .then(data => commit(SET_BANNERS, data.slice(2, 5)))
+            .then(data => {
+                commit(SET_BANNERS, data.slice(2, 5));
+                commit(SET_MIDDLE_BANNERS, data.slice(3, 6));
+            })
             .catch(error => {
                 $logger.error(`FETCH_BANNERS error: ${error}`);
                 return [];
@@ -61,7 +65,7 @@ export default {
         return Promise.all([getProducts(), getBanners()])
             .then(data => {
                 commit(SET_FEATURED_PRODUCTS, {
-                    items: data[0] ? data[0].items.slice(4, 8) : [],
+                    items: data[0] ? data[0].items.slice(8, 12) : [],
                     banner: data[1][2] ? data[1][2] : {},
                 });
             })

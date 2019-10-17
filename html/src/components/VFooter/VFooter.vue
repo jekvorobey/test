@@ -3,9 +3,9 @@
         <div class="container v-footer__container v-footer__container--desktop">
             <div class="v-footer__row">
                 <div class="v-footer__col v-footer__col--rights">
-                    <a class="v-footer__logo" href="/">
-                        <v-svg name="logo-text" width="128" height="48" />
-                    </a>
+                    <v-link class="v-footer__logo" to="/">
+                        <v-svg name="logo-default" width="128" height="48" />
+                    </v-link>
                     <p class="v-footer__rights" v-html="$t('footer.rights')" />
                 </div>
                 <div class="v-footer__col" :key="index" v-for="(col, index) in links">
@@ -100,7 +100,7 @@ import '../../assets/images/sprites/socials/vkontakte-bw.svg';
 import '../../assets/images/sprites/socials/youtube-bw.svg';
 
 import '../../assets/images/sprites/logo.svg';
-import '../../assets/images/sprites/logo-text.svg';
+import '../../assets/images/sprites/logo-default.svg';
 
 import './VFooter.css';
 

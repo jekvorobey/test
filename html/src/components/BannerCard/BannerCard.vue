@@ -2,12 +2,9 @@
     <div class="banner-card">
         <div class="banner-card__img" to="/">
             <img class="blur-up lazyload" :data-src="image" alt="" />
+            <v-button class="btn--outline banner-card__img-btn" to>{{ buttonText || 'Перейти' }}</v-button>
         </div>
-
-        <div class="banner-card__content">
-            <div class="banner-card__content-title">{{ title }}</div>
-            <v-button class="banner-card__content-btn">Смотреть товары</v-button>
-        </div>
+        <div class="banner-card__title">{{ title }}</div>
     </div>
 </template>
 

@@ -3,14 +3,9 @@
         <section class="section">
             <div class="container landing-view__banners">
                 <v-slider class="landing-view__banners-slider" name="banners" :options="bannersOptions">
-                    <banner-card
-                        class="swiper-slide landing-view__banners-card"
-                        v-for="banner in banners"
-                        :key="banner.id"
-                        :banner-id="banner.id"
-                        :title="banner.title"
-                        :image="banner.image"
-                    />
+                    <div class="swiper-slide landing-view__banners-card" v-for="banner in banners" :key="banner.id">
+                        <img class="blur-up lazyload landing-view__banners-card-img" :data-src="banner.image" alt />
+                    </div>
                 </v-slider>
             </div>
         </section>
@@ -32,7 +27,7 @@
         <section class="section landing-view__section">
             <div class="container landing-view__products ">
                 <h2 class="landing-view__section-hl">{{ $t('landing.title.new') }}</h2>
-                <v-button class="btn--outline landing-view__section-link" to="/">{{ $t('landing.showAll') }}</v-button>
+
                 <div class="landing-view__products-grid">
                     <div class="landing-view__products-cards">
                         <catalog-product-card
@@ -48,6 +43,9 @@
                             :tags="product.tags"
                             :rating="product.rating"
                         />
+                        <v-button class="btn--outline landing-view__section-link" to="/">
+                            {{ $t('landing.showAll') }}
+                        </v-button>
                     </div>
 
                     <div class="landing-view__products-banner">
@@ -71,7 +69,7 @@
         <section class="section landing-view__section">
             <div class="container landing-view__products landing-view__products--inverse">
                 <h2 class="landing-view__section-hl">{{ $t('landing.title.bestseller') }}</h2>
-                <v-button class="btn--outline landing-view__section-link" to="/">{{ $t('landing.showAll') }}</v-button>
+
                 <div class="landing-view__products-grid">
                     <div class="landing-view__products-cards">
                         <catalog-product-card
@@ -87,6 +85,9 @@
                             :tags="product.tags"
                             :rating="product.rating"
                         />
+                        <v-button class="btn--outline landing-view__section-link" to="/">
+                            {{ $t('landing.showAll') }}
+                        </v-button>
                     </div>
 
                     <div class="landing-view__products-banner">
@@ -95,6 +96,9 @@
                             :data-src="bestsellerProducts.banner.image"
                         />
                         <div class="landing-view__products-banner-panel">
+                            <div class="landing-view__products-banner-panel-type">
+                                {{ bestsellerProducts.banner.type }}
+                            </div>
                             <div class="landing-view__products-banner-panel-title">
                                 {{ bestsellerProducts.banner.title }}
                             </div>
@@ -107,7 +111,7 @@
             </div>
         </section>
 
-        <!-- <section class="section landing-view__section">
+        <section class="section landing-view__section">
             <div class="container landing-view__middle-banners">
                 <banner-card
                     class="landing-view__middle-banners-card"
@@ -115,11 +119,57 @@
                     :key="banner.id"
                     :image="banner.image"
                     :title="banner.title"
+                    :button-text="banner.btnText"
                 />
             </div>
         </section>
 
-        <section
+        <section class="section landing-view__section">
+            <div class="container landing-view__products">
+                <h2 class="landing-view__section-hl">{{ $t('landing.title.featured') }}</h2>
+
+                <div class="landing-view__products-grid">
+                    <div class="landing-view__products-cards">
+                        <catalog-product-card
+                            class="landing-view__products-card"
+                            v-for="product in featuredProducts.items"
+                            :key="product.id"
+                            :product-id="product.id"
+                            :name="product.name"
+                            :href="product.href"
+                            :image="product.image"
+                            :price="product.price"
+                            :old-price="product.oldPrice"
+                            :tags="product.tags"
+                            :rating="product.rating"
+                        />
+                        <v-button class="btn--outline landing-view__section-link" to="/">
+                            {{ $t('landing.showAll') }}
+                        </v-button>
+                    </div>
+
+                    <div class="landing-view__products-banner">
+                        <img
+                            class="lazyload blur-up landing-view__products-banner-img"
+                            :data-src="featuredProducts.banner.image"
+                        />
+                        <div class="landing-view__products-banner-panel">
+                            <div class="landing-view__products-banner-panel-type">
+                                {{ featuredProducts.banner.type }}
+                            </div>
+                            <div class="landing-view__products-banner-panel-title">
+                                {{ featuredProducts.banner.title }}
+                            </div>
+                            <v-button class="btn--outline landing-view__products-banner-panel-btn">
+                                {{ featuredProducts.banner.btnText }}
+                            </v-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- <section
             class="section landing-view__section"
             id="brands"
             v-observe-visibility="{
@@ -146,24 +196,14 @@
                     />
                 </v-slider>
             </div>
-        </section>
+        </section> -->
 
-        <section
-            class="section landing-view__section"
-            id="instagram"
-            v-observe-visibility="{
-                callback: onChangedVisibility,
-                once: true,
-            }"
-        >
+        <section class="section landing-view__section">
             <div class="container landing-view__instagram">
-                <h2 class="landing-view__instagram-hl">{{ $t('landing.title.instagram') }}</h2>
-                <a class="landing-view__instagram-link" href="/">
-                    <v-svg name="instagram-bw" width="22" height="22" />&nbsp;&nbsp;{{ $t('landing.subscribe') }}
-                </a>
+                <h2 class="landing-view__section-hl">{{ $t('landing.title.instagram') }}</h2>
 
                 <v-slider
-                    v-if="isTabletLg && slidersVisibility.instagram"
+                    v-if="isTabletLg"
                     class="landing-view__instagram-slider"
                     name="instagram"
                     :options="instagramOptions"
@@ -177,10 +217,14 @@
                     />
                 </v-slider>
 
+                <v-button class="btn--outline landing-view__section-link landing-view__instagram-link">
+                    {{ $t('landing.subscribe') }}
+                </v-button>
+
                 <div
-                    v-else-if="!isTabletLg && slidersVisibility.instagram"
+                    v-if="!isTabletLg"
                     class="landing-view__instagram-grid"
-                    :class="{ 'landing-view__instagram-grid--initialized': slidersVisibility.instagram }"
+                    :class="{ 'landing-view__instagram-grid--initialized': true }"
                 >
                     <instagram-card
                         class="landing-view__instagram-card"
@@ -191,7 +235,7 @@
                     />
                 </div>
             </div>
-        </section> -->
+        </section>
     </section>
 </template>
 
@@ -209,82 +253,36 @@ import CatalogProductCard from '../../components/CatalogProductCard/CatalogProdu
 import landingModule from '../../store/modules/Landing';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 import { mapState } from 'vuex';
-import { breakpoints } from '../../assets/scripts/constants';
 
 import '../../plugins/observer';
 import '../../assets/images/sprites/socials/instagram-bw.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import './Landing.css';
 
-const tablet = breakpoints.tablet - 1;
-const tabletLg = breakpoints.tabletLg - 1;
-
 const bannersOptions = {
-    init: false,
     slidesPerView: 1,
     grabCursor: true,
-
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+    loop: true,
+    autoplay: {
+        delay: 10000,
     },
-};
-
-const categoryOptions = {
-    init: false,
-    slidesPerView: 6,
-    grabCursor: true,
 
     navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
     },
 
-    breakpoints: {
-        [tabletLg]: {
-            slidesPerView: 4,
-            spaceBetween: 24,
-        },
-
-        [tablet]: {
-            slidesOffsetBefore: 24,
-            slidesOffsetAfter: 24,
-            slidesPerView: 3,
-            spaceBetween: 16,
-        },
-    },
-};
-
-const brandsOptions = {
-    init: false,
-    slidesPerView: 6,
-    spaceBetween: 64,
-    grabCursor: true,
-
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-    },
-
-    breakpoints: {
-        [tabletLg]: {
-            slidesPerView: 4,
-            spaceBetween: 24,
-        },
-
-        [tablet]: {
-            slidesOffsetBefore: 24,
-            slidesOffsetAfter: 24,
-            slidesPerView: 2.5,
-            spaceBetween: 30,
-        },
+    pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
     },
 };
 
 const instagramOptions = {
-    init: false,
+    spaceBetween: 16,
+    slidesOffsetBefore: 16,
+    slidesOffsetAfter: 16,
     slidesPerView: 1.5,
-    spaceBetween: 24,
     grabCursor: true,
 
     navigation: {
@@ -292,37 +290,11 @@ const instagramOptions = {
         prevEl: '.swiper-button-prev',
     },
 
-    breakpoints: {
-        [tablet]: {
-            slidesOffsetBefore: 24,
-            slidesOffsetAfter: 24,
-            slidesPerView: 1.5,
-        },
+    pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
     },
 };
-
-const productOptions = {
-    init: false,
-    slidesPerView: 4,
-    spaceBetween: 24,
-    grabCursor: true,
-    roundLengths: true,
-
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-    },
-
-    breakpoints: {
-        [tablet]: {
-            slidesOffsetBefore: 24,
-            slidesOffsetAfter: 24,
-            slidesPerView: 2.3,
-        },
-    },
-};
-
-const productsSize = 6;
 
 export default {
     name: 'landing',
@@ -351,16 +323,6 @@ export default {
         return {
             slidersVisibility: {
                 instagram: false,
-                brands: false,
-                featured: false,
-                bestseller: false,
-                new: false,
-            },
-
-            sliderSize: {
-                featured: productsSize,
-                bestseller: productsSize,
-                new: productsSize,
             },
         };
     },
@@ -373,6 +335,7 @@ export default {
             'bestsellerProducts',
             'featuredProducts',
             'newProducts',
+            'middleBanners',
             'banners',
         ]),
 
@@ -390,10 +353,6 @@ export default {
     },
 
     methods: {
-        onEndReached(id) {
-            if (this.sliderSize[id] < this[`${id}Length`]) this.sliderSize[id] += productsSize;
-        },
-
         onChangedVisibility(isVisible, { target }) {
             if (isVisible && this.slidersVisibility[target.id] !== isVisible)
                 this.slidersVisibility[target.id] = isVisible;
