@@ -187,7 +187,7 @@
 
         <section class="section landing-view__section">
             <div class="container landing-view__instagram">
-                <h2 class="landing-view__section-hl">{{ $t('landing.title.instagram') }}</h2>
+                <h2 class="landing-view__section-hl landing-view__instagram-hl">{{ $t('landing.title.instagram') }}</h2>
 
                 <v-slider
                     v-if="isTabletLg"
