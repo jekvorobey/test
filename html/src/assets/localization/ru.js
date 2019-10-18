@@ -12,7 +12,6 @@ export default {
         middle: {
             search: 'Искать...',
             professionals: 'Для профессионалов бьюти-индустрии',
-            free_delivery: 'До бесплатной доставки — {n} ₽',
         },
         links: {
             catalog: 'Каталог',
@@ -71,6 +70,10 @@ export default {
             featured: 'Смотрят на сайте сейчас',
             brand: 'Популярные бренды',
             instagram: 'Insta Beauty',
+        },
+
+        brands: {
+            showAll: 'Показать все',
         },
     },
 };

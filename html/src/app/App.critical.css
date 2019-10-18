@@ -36,6 +36,10 @@
     @media (--tablet-lg) {
         padding: 0 calc(var(--gs) * 3);
     }
+
+    @media (--tablet) {
+        padding: 0 calc(var(--gs) * 2);
+    }
 }
 
 .section {

@@ -71,5 +71,9 @@ export default {
             brand: 'Popular brands',
             instagram: 'Insta Beauty',
         },
+
+        brands: {
+            showAll: 'Show all',
+        },
     },
 };

@@ -169,6 +169,20 @@
             </div>
         </section>
 
+        <section class="section landing-view__section landing-view__section--grey">
+            <div class="container landing-view__brands">
+                <h2 class="landing-view__section-hl landing-view__brands-hl">
+                    {{ $t('landing.title.brand') }}
+                </h2>
+                <popular-brands
+                    class="landing-view__brands-list"
+                    :items="brands"
+                    :rest-count="10"
+                    :btn-text="$t('landing.brands.showAll')"
+                />
+            </div>
+        </section>
+
         <!-- <section
             class="section landing-view__section"
             id="brands"
@@ -249,16 +263,17 @@ import BannerCard from '../../components/BannerCard/BannerCard.vue';
 import CategoryCard from '../../components/CategoryCard/CategoryCard.vue';
 import InstagramCard from '../../components/InstagramCard/InstagramCard.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
+import PopularBrands from '../../components/PopularBrands/PopularBrands.vue';
 
+import { mapState } from 'vuex';
 import landingModule from '../../store/modules/Landing';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
-import { mapState } from 'vuex';
+import { breakpoints } from '../../assets/scripts/constants';
 
 import '../../plugins/observer';
 import '../../assets/images/sprites/socials/instagram-bw.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import './Landing.css';
-import { breakpoints } from '../../assets/scripts/constants';
 
 const bannersOptions = {
     slidesPerView: 1,
@@ -319,6 +334,8 @@ export default {
         CategoryCard,
         InstagramCard,
         CatalogProductCard,
+
+        PopularBrands,
     },
 
     head: {
