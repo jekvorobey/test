@@ -14,6 +14,10 @@
             font-weight: bold;
             letter-spacing: 0.05em;
 
+            @media (--tablet-lg) {
+                padding-left: calc(var(--gs) * 3);
+            }
+
             @media (--tablet) {
                 padding: 0 calc(var(--gs) * 3);
                 text-align: center;
@@ -30,7 +34,7 @@
             }
 
             @media (--tablet-lg) {
-                right: calc(var(--gs) * 4);
+                right: calc(var(--gs) * 3);
             }
 
             @media (--tablet) {
@@ -296,9 +300,16 @@
     &__instagram {
         position: relative;
 
+        @media (--tablet-lg) {
+            padding: 0;
+        }
+
         @media (--tablet) {
             text-align: center;
-            padding: 0;
+        }
+
+        &-hl {
+            padding-left: calc(var(--gs) * 3);
         }
 
         &-link {

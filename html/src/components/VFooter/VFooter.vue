@@ -47,38 +47,46 @@
             </div>
         </div>
 
-        <div class="container v-footer__container v-footer__container--mobile">
-            <v-accordion
-                class="v-footer__accordion v-footer__col"
-                key-value="id"
-                :items="links"
-                :item-expanded="item => !!item.isExpanded"
-                :item-toggled="item => (item.isExpanded = !item.isExpanded)"
-            >
-                <template v-slot:content="{ item }">
-                    <ul class="v-footer__links">
-                        <li class="v-footer__links-item" :key="link.id" v-for="link in item.items" :title="link.key">
-                            <a class="v-footer__link" :href="link.href">{{ link.label }}</a>
-                        </li>
-                    </ul>
-                </template>
-            </v-accordion>
-            <div class="v-footer__col">
-                <p class="v-footer__col-title">{{ socials.name }}</p>
-                <ul class="v-footer__socials">
-                    <li class="v-footer__socials-item" :key="link.id" v-for="link in socials.items" :title="link.name">
-                        <a class="v-footer__link" :href="link.href">
-                            <v-svg :name="link.icon" width="24" height="24" />
-                        </a>
+        <v-accordion
+            class="v-footer__accordion v-footer__col"
+            key-field="id"
+            :items="links"
+            :item-expanded="item => !!item.isExpanded"
+            :item-toggled="item => (item.isExpanded = !item.isExpanded)"
+        >
+            <template v-slot:content="{ item }">
+                <ul class="v-footer__links">
+                    <li class="v-footer__links-item" :key="link.id" v-for="link in item.items" :title="link.key">
+                        <a class="v-footer__link" :href="link.href">{{ link.label }}</a>
                     </li>
                 </ul>
-                <p class="v-footer__rights" v-html="$t('footer.rights')" />
-            </div>
-            <hr />
-            <v-link class="v-footer__link v-footer__col">{{ $t('footer.terms_of_use') }}</v-link>
-            <v-link class="v-footer__link v-footer__col">{{ $t('footer.offer') }}</v-link>
+            </template>
+
+            <template v-slot:icon="{ isExpanded }">
+                <v-svg :class="{ 'icon--rotate-deg180': isExpanded }" name="arrow-down" width="24" height="24" />
+            </template>
+        </v-accordion>
+
+        <div class="container v-footer__container v-footer__container--mobile v-footer__col">
+            <p class="v-footer__col-title">{{ socials.name }}</p>
+            <ul class="v-footer__socials">
+                <li class="v-footer__socials-item" :key="link.id" v-for="link in socials.items" :title="link.name">
+                    <a class="v-footer__link" :href="link.href">
+                        <v-svg :name="link.icon" width="24" height="24" />
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="v-footer__container v-footer__container--mobile v-footer__col v-footer__mobile-links">
+            <v-link class="v-footer__link">{{ $t('footer.terms_of_use') }}</v-link>
+            <v-link class="v-footer__link">{{ $t('footer.offer') }}</v-link>
+        </div>
+
+        <div class="container v-footer__container v-footer__container--mobile v-footer__col">
+            <p class="v-footer__rights" v-html="$t('footer.rights')" />
             <v-link
-                class="v-footer__link v-footer__made-by v-footer__col"
+                class="v-footer__link v-footer__link--made-by"
                 href="https://greensight.ru/"
                 target="_blank"
                 rel="noopener noreferrer"

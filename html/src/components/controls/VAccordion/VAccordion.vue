@@ -19,21 +19,17 @@
                 @keydown="headerKeyDown"
                 :disabled="isDisabled(item)"
             >
-                <slot
-                    name="header"
-                    :item="item"
-                    :index="index"
-                    :isExpanded="isExpanded(item)"
-                    :isDisabled="isDisabled(item)"
-                >
+                <slot name="header" :item="item" :index="index" :isDisabled="isDisabled(item)">
                     {{ item.title }}
                 </slot>
-                <v-svg
-                    :class="{ 'icon--rotate-deg180': isExpanded(item) }"
-                    name="arrow-down-small"
-                    width="24"
-                    height="24"
-                />
+                <slot name="icon" :isExpanded="isExpanded(item)">
+                    <v-svg
+                        :class="{ 'icon--rotate-deg180': isExpanded(item) }"
+                        name="arrow-down-small"
+                        width="24"
+                        height="24"
+                    />
+                </slot>
             </button>
             <transition @before-enter="beforeEnter" @enter="enter" @leave="leave" :css="false">
                 <div

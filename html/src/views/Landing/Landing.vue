@@ -258,6 +258,7 @@ import '../../plugins/observer';
 import '../../assets/images/sprites/socials/instagram-bw.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import './Landing.css';
+import { breakpoints } from '../../assets/scripts/constants';
 
 const bannersOptions = {
     slidesPerView: 1,
@@ -279,9 +280,10 @@ const bannersOptions = {
 };
 
 const instagramOptions = {
-    spaceBetween: 16,
-    slidesOffsetBefore: 16,
-    slidesOffsetAfter: 16,
+    spaceBetween: 24,
+    slidesOffsetBefore: 24,
+    slidesOffsetAfter: 24,
+
     slidesPerView: 1.5,
     grabCursor: true,
 
@@ -293,6 +295,14 @@ const instagramOptions = {
     pagination: {
         el: '.swiper-pagination',
         type: 'bullets',
+    },
+
+    breakpoints: {
+        [breakpoints.tablet - 1]: {
+            spaceBetween: 16,
+            slidesOffsetBefore: 16,
+            slidesOffsetAfter: 16,
+        },
     },
 };
 
