@@ -6,8 +6,7 @@ module.exports = {
         node: true,
     },
     extends: [
-        /* Набор правил AirBnB: https://github.com/airbnb/javascript
-        base-версия исключает правила, касающиеся использования React. */
+        /* Набор правил AirBnB: https://github.com/airbnb/javascript*/
         'airbnb-base',
         /* Отключает правила ESLint, конфликтующие с Prettier,
         и позволяет использовать Prettier в качестве форматтера ESLint. */
