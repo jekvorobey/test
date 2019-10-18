@@ -125,13 +125,12 @@
 
     &__categories {
         margin-bottom: calc(var(--gs) * 7);
-        padding-bottom: calc(var(--gs) * 6);
-        border-bottom: 1px solid var(--cl-divider-grey);
 
         @media (--tablet) {
             padding: 0 var(--gs);
             padding-bottom: calc(var(--gs) * 4);
             margin-bottom: calc(var(--gs) * 3);
+            border-bottom: 1px solid var(--cl-divider-grey);
         }
 
         &-grid {
@@ -139,6 +138,8 @@
             grid-template-columns: repeat(8, 1fr);
             grid-template-rows: 1fr;
             grid-gap: 40px;
+            padding-bottom: calc(var(--gs) * 6);
+            border-bottom: 1px solid var(--cl-divider-grey);
 
             @media (--desktop-lg) {
                 grid-template-columns: repeat(8, 1fr);
@@ -150,6 +151,8 @@
                 grid-template-columns: repeat(4, minmax(64px, 1fr));
                 grid-template-rows: 1fr 1fr;
                 grid-gap: 16px;
+                padding-bottom: 0;
+                border-bottom-color: transparent;
             }
         }
     }

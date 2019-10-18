@@ -124,11 +124,17 @@
 
     &__tags {
         position: absolute;
-        top: 20px;
-        left: 20px;
 
         @media (--tablet) {
-            display: none;
+            top: 8px;
+            left: 12px;
+        }
+
+        &-item {
+            @media (--tablet) {
+                font-size: 10px;
+                line-height: 16px;
+            }
         }
     }
 
@@ -144,5 +150,10 @@
         position: absolute;
         top: 20px;
         right: 20px;
+
+        @media (--tablet) {
+            top: 8px;
+            right: 12px;
+        }
     }
 }
