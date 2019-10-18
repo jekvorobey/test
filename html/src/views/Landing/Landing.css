@@ -1,5 +1,5 @@
 .landing-view {
-    padding-bottom: calc(var(--gs) * 14);
+    padding-bottom: calc(var(--gs) * 10);
 
     @media (--tablet-lg) {
         padding-top: 0;

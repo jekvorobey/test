@@ -24,11 +24,6 @@ module.exports = merge(base, {
     entry: {
         app: './src/entry-client.js',
     },
-    resolve: {
-        alias: {
-            'create-api': './create-api-client.js',
-        },
-    },
     module: {
         rules: [
             {
