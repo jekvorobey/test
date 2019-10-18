@@ -94,6 +94,7 @@
                         <img
                             class="lazyload blur-up landing-view__products-banner-img"
                             :data-src="bestsellerProducts.banner.image"
+                            alt
                         />
                         <div class="landing-view__products-banner-panel">
                             <div class="landing-view__products-banner-panel-type">
