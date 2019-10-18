@@ -271,8 +271,7 @@ const instagramOptions = {
     spaceBetween: 24,
     slidesOffsetBefore: 24,
     slidesOffsetAfter: 24,
-
-    slidesPerView: 1.5,
+    slidesPerView: 2.5,
     grabCursor: true,
 
     navigation: {
@@ -287,6 +286,7 @@ const instagramOptions = {
 
     breakpoints: {
         [breakpoints.tablet - 1]: {
+            slidesPerView: 1.5,
             spaceBetween: 16,
             slidesOffsetBefore: 16,
             slidesOffsetAfter: 16,
