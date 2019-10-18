@@ -113,14 +113,16 @@
 
         <section class="section landing-view__section">
             <div class="container landing-view__middle-banners">
-                <banner-card
-                    class="landing-view__middle-banners-card"
-                    v-for="banner in middleBanners"
-                    :key="banner.id"
-                    :image="banner.image"
-                    :title="banner.title"
-                    :button-text="banner.btnText"
-                />
+                <div class="landing-view__middle-banners-grid">
+                    <banner-card
+                        class="landing-view__middle-banners-card"
+                        v-for="banner in middleBanners"
+                        :key="banner.id"
+                        :image="banner.image"
+                        :title="banner.title"
+                        :button-text="banner.btnText"
+                    />
+                </div>
             </div>
         </section>
 
@@ -182,35 +184,6 @@
                 />
             </div>
         </section>
-
-        <!-- <section
-            class="section landing-view__section"
-            id="brands"
-            v-observe-visibility="{
-                callback: onChangedVisibility,
-                once: true,
-            }"
-        >
-            <div class="container landing-view__brands">
-                <h2 class="landing-view__section-hl">{{ $t('landing.title.brand') }}</h2>
-                <v-button class="landing-view__section-link" to="/">{{ $t('landing.showAll') }}</v-button>
-
-                <v-slider
-                    v-if="slidersVisibility.brands"
-                    class="landing-view__brands-slider"
-                    name="popular-brands"
-                    :options="brandsOptions"
-                >
-                    <brand-card
-                        class="swiper-slide landing-view__brands-card"
-                        v-for="brand in brands"
-                        :key="brand.id"
-                        :brand-id="brand.id"
-                        :image="brand.image"
-                    />
-                </v-slider>
-            </div>
-        </section> -->
 
         <section class="section landing-view__section">
             <div class="container landing-view__instagram">
