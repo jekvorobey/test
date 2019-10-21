@@ -7,22 +7,6 @@ export function concatCatalogRoutePath(categoryCode, segments) {
     return basePath.concat(...segments.map(s => `/${s}`));
 }
 
-export function getCategoryByCode(items, code) {
-    if (items) {
-        let item = null;
-        let found = null;
-
-        for (let i = 0; i < items.length; i++) {
-            item = items[i];
-            if (item.code === code) return item;
-
-            found = getCategoryByCode(item.items, code);
-            if (found) return found;
-        }
-    }
-    return null;
-}
-
 export function mapFilterSegments(urlSegments) {
     const segments = {};
     for (let i = 0; i < urlSegments.length; i++) {
@@ -39,4 +23,20 @@ export function mapFilterSegments(urlSegments) {
     return segments;
 }
 
-export default { concatCatalogRoutePath, getCategoryByCode, mapFilterSegments };
+export function getActiveCategories(code, item, activeItems = []) {
+    if (item.code === code) return item;
+
+    if (Array.isArray(item.items)) {
+        for (let i = 0; i < item.items.length; i++) {
+            const child = item.items[i];
+            const found = getActiveCategories(code, child, activeItems);
+            if (found) {
+                activeItems.unshift(found);
+                return item;
+            }
+        }
+    }
+    return false;
+}
+
+export default { concatCatalogRoutePath, mapFilterSegments };

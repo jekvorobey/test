@@ -15,17 +15,11 @@ import mq from '../plugins/media';
 import '../plugins/meta';
 
 import titleMixin from '../util/title';
-import * as filters from '../util/filters';
 
 import App from './App.vue';
 
 // mixin for handling title
 Vue.mixin(titleMixin);
-
-// register global utility filters.
-Object.keys(filters).forEach(key => {
-    Vue.filter(key, filters[key]);
-});
 
 // Expose a factory function that creates a fresh set of store, router,
 // app instances on each call (which is called for each SSR request)

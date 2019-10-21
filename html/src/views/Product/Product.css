@@ -1,0 +1,18 @@
+.product-view {
+    &__breadcrumbs {
+        margin-top: calc(var(--gs) * 2);
+        margin-bottom: calc(var(--gs) * 1.5);
+        display: flex;
+        font-size: 11px;
+        line-height: 24px;
+        color: var(--cl-grey);
+        text-transform: uppercase;
+
+        &-item + &-item {
+            &::before {
+                content: '/';
+                margin: 0 var(--gs);
+            }
+        }
+    }
+}

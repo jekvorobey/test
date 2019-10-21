@@ -8,11 +8,13 @@ export const CATEGORIES = 'categories';
 export const ITEMS = 'items';
 export const FILTERS = 'filters';
 export const RANGE = 'range';
+export const BANNER = 'banner';
 
 export default {
     name: 'catalog',
     namespaced: true,
     state: {
+        [BANNER]: {},
         [CATEGORY_ID]: null,
         [CATEGORY_CODE]: null,
         [CATEGORIES]: [],

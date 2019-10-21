@@ -3,11 +3,6 @@
         <ul class="catalog-filter__categories">
             <category-tree-item
                 class="catalog-filter__categories-item"
-                :item="defaultCategory"
-                :key="defaultCategory.id"
-            />
-            <category-tree-item
-                class="catalog-filter__categories-item"
                 :item="category"
                 v-for="(category, index) in categories"
                 :key="category.id || index"
@@ -16,8 +11,8 @@
         <v-accordion
             class="catalog-filter__filters"
             key-value="id"
-            :items="filters"
-            :item-expanded="item => item.isExpanded"
+            :items="accordionFilters"
+            :item-expanded="item => item.isExpanded === true"
             :item-toggled="item => (item.isExpanded = !item.isExpanded)"
         >
             <template v-slot:content="{ item }">
@@ -135,19 +130,16 @@ export default {
     },
 
     computed: {
-        defaultCategory() {
-            return {
-                id: 'all',
-                code: '',
-                name: 'Все категории',
-            };
-        },
-
         ...mapGetters('catalog', ['filterSegments', 'routeSegments']),
         ...mapState('catalog', ['categories', 'filters']),
         ...mapState('route', {
             code: state => state.params.code,
         }),
+
+        accordionFilters() {
+            this.filters.forEach(f => (f.isExpanded = true));
+            return this.filters;
+        },
     },
 
     beforeMount() {

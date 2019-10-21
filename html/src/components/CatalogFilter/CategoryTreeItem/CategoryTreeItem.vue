@@ -1,16 +1,18 @@
 <template>
-    <li class="category-tree-item">
+    <li
+        class="category-tree-item"
+        :class="[{ 'category-tree-item--root': depth === 0 }, { 'category-tree-item--active': isActive }]"
+    >
         <div class="category-tree-item__label">
             <router-link
                 v-if="item.code !== undefined"
                 :to="url"
                 class="category-tree-item__link"
-                :class="{ 'category-tree-item__link--active': isActive }"
                 :exact="item.code === ''"
             >
                 {{ item.name }}
             </router-link>
-            <span v-else class="category-tree-item__link" :class="{ 'category-tree-item__link--active': isActive }">
+            <span v-else class="category-tree-item__link">
                 {{ item.name }}
             </span>
         </div>
@@ -28,10 +30,8 @@
 
 <script>
 import './CategoryTreeItem.css';
-
-function isActive(code, item) {
-    return item.code === code || (Array.isArray(item.items) && item.items.some(i => isActive(code, i)));
-}
+import { ACTIVE_CATEGORIES } from '../../../store/modules/Catalog/getters';
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'category-tree-item',
@@ -55,8 +55,10 @@ export default {
     },
 
     computed: {
+        ...mapGetters('catalog', [ACTIVE_CATEGORIES]),
+
         isActive() {
-            return isActive(this.$route.params.code || '', this.item);
+            return this[ACTIVE_CATEGORIES].includes(this.item);
         },
 
         url() {

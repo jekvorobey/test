@@ -124,6 +124,8 @@
 
     &__tags {
         position: absolute;
+        top: 20px;
+        left: 20px;
 
         @media (--tablet) {
             top: 8px;

@@ -8,6 +8,10 @@ export function getProducts(string) {
     return $http.get('/products', string);
 }
 
+export function getCatalogItems(string) {
+    return $http.get('/catalog/items', string);
+}
+
 export function getCategories(string) {
     return $http.get('/categories', string);
 }

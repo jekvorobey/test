@@ -1,4 +1,4 @@
-import { getCategoryByCode, mapFilterSegments } from '../../../util/catalog';
+import { mapFilterSegments, getActiveCategories } from '../../../util/catalog';
 
 export const ROUTE_SEGMENTS = 'routeSegments';
 export const FILTER_SEGMENTS = 'filterSegments';
@@ -6,10 +6,33 @@ export const ACTIVE_TAGS = 'activeTags';
 export const ACTIVE_CATEGORY = 'activeCategory';
 export const ACTIVE_PAGE = 'activePage';
 export const PAGES_COUNT = 'pagesCount';
+export const ACTIVE_CATEGORIES = 'activeCategories';
 
 const pageSize = 9;
 
 export default {
+    [ACTIVE_CATEGORIES](
+        { categories },
+        getters,
+        {
+            route: {
+                params: { code },
+            },
+        }
+    ) {
+        const activeCategories = [];
+        let found = null;
+        for (let i = 0; i < categories.length; i++) {
+            const rootCategory = categories[i];
+            found = getActiveCategories(code, rootCategory, activeCategories);
+            if (found) {
+                activeCategories.unshift(found);
+                break;
+            }
+        }
+        return activeCategories;
+    },
+
     [ACTIVE_PAGE](state, getters, { route }) {
         return route.query.page ? Number(route.query.page) : 1;
     },
@@ -18,17 +41,8 @@ export default {
         return Math.ceil(state.range / pageSize);
     },
 
-    [ACTIVE_CATEGORY](
-        state,
-        getters,
-        {
-            route: {
-                params: { code },
-            },
-        }
-    ) {
-        const { categories } = state;
-        return getCategoryByCode(categories, code);
+    [ACTIVE_CATEGORY](state, { activeCategories }) {
+        return activeCategories[activeCategories.length - 1];
     },
 
     [ROUTE_SEGMENTS](

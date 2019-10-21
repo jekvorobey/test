@@ -41,6 +41,8 @@ import banner3 from '../../assets/images/mock/banner3.png';
 import banner4 from '../../assets/images/mock/banner4.png';
 import banner5 from '../../assets/images/mock/banner5.png';
 
+import productBanner1 from '../../assets/images/mock/productBanner1.png';
+
 const categories = [
     {
         id: 1,
@@ -114,55 +116,68 @@ const instagrams = [
 const banners = [
     {
         id: 1,
-        type: '',
+        upperText: '',
+        type: 'banner',
         title: 'Новая коллекция косметики Aveda',
         btnText: 'Смотреть товары',
         image: banner1,
     },
     {
         id: 2,
-        type: 'Подборка',
+        upperText: 'Подборка',
+        type: 'banner',
         title: '20 средств для ухода за молодой кожей',
         btnText: 'Посмотреть',
         image: banner2,
     },
     {
         id: 3,
-        type: 'Подборка',
+        upperText: 'Подборка',
+        type: 'banner',
         title: '20 средств для ухода за молодой кожей',
         btnText: 'Посмотреть',
         image: banner1,
     },
     {
         id: 4,
+        type: 'banner',
         title: 'Лучшие стайлинги для летних укладок в новом сезоне только для тебя',
         btnText: 'Смотреть товары',
         image: banner3,
     },
     {
         id: 5,
+        type: 'banner',
         title: 'Новейшая косметика для лица и тела с омолаживающим эффектом',
         btnText: 'Смотреть товары',
         image: banner4,
     },
     {
         id: 6,
+        type: 'banner',
         title: ' Натуральный макияж Aveda, который подойдёт для каждой девушки',
         btnText: 'Смотреть товары',
         image: banner5,
     },
 ];
 
-const mainBanners = [
+const productBanners = [
     {
         id: 1,
-        title: 'Стильные аксессуары для волос Kela с кристаллами и покрытием',
-        image: 'https://via.placeholder.com/350x200',
+        type: 'banner',
+        upperText: 'Подборка',
+        title: 'Новая коллекция косметики Tom Ford',
+        btnText: 'Смотреть товары',
+        image: productBanner1,
     },
+
     {
         id: 2,
-        title: 'Встречайте обновленный бренд Christina Fitzgerald',
-        image: 'https://via.placeholder.com/350x200',
+        type: 'banner',
+        upperText: 'Подборка',
+        title: '20 средств для ухода за молодой кожей',
+        btnText: 'Смотреть товары',
+        image: banner2,
     },
 ];
 
@@ -373,155 +388,171 @@ const products = [
         id: 1,
         name: 'EvoСухой шампунь-спрей Water Killer, 200 мл',
         description: 'EvoСухой шампунь-спрей Water Killer, 200 мл',
+        code: '1',
         image: product1,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         tags: ['Новинка', '-15%'],
-        type: 'simple',
+        type: 'product',
         rating: 5,
     },
     {
         id: 2,
         name: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
         description: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
+        code: '2',
         image: product2,
         price: '1 900 ₽',
         oldPrice: null,
         tags: ['-15%'],
-        type: 'simple',
+        type: 'product',
         rating: 1,
     },
     {
         id: 3,
         name: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
         description: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
+        code: '3',
         image: product3,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         tags: ['Новинка'],
-        type: 'simple',
+        type: 'product',
         rating: 3,
     },
     {
         id: 4,
         name: 'Alterna Шампунь лифтинг для объема, 200 мл',
         description: 'Alterna Шампунь лифтинг для объема, 200 мл',
+        code: '4',
         image: product4,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
+        type: 'product',
         rating: 2,
     },
     {
         id: 5,
         name: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
         description: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
+        code: '5',
         image: product5,
         price: '1 900 ₽',
         oldPrice: null,
-        type: 'complicate',
+        type: 'product',
         rating: 2,
     },
     {
         id: 6,
         name: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
         description: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
+        code: '6',
         image: product6,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
-        type: 'simple',
+        type: 'product',
         rating: 3,
     },
     {
         id: 7,
         name: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
         description: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
+        code: '7',
         image: product7,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
-        type: 'complicate',
+        type: 'product',
         rating: 3,
     },
     {
         id: 8,
         name: 'R+Co Шампунь для совершенства волос, 240 мл',
         description: 'R+Co Шампунь для совершенства волос, 240 мл',
+        code: '8',
         image: product8,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
-        type: 'complicate',
+        type: 'product',
         rating: 5,
     },
     {
         id: 9,
         name: 'Alterna Шампунь лифтинг для объема, 200 мл',
         description: 'Alterna Шампунь лифтинг для объема, 200 мл',
+        code: '9',
         image: product9,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
-        type: 'complicate',
+        type: 'product',
         rating: 5,
     },
     {
         id: 10,
         name: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
         description: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
+        code: '10',
         image: product10,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
-        type: 'complicate',
+        type: 'product',
         rating: 5,
     },
     {
         id: 11,
         name: 'Alterna Шампунь лифтинг для объема, 200 мл',
         description: 'Alterna Шампунь лифтинг для объема, 200 мл',
+        code: '11',
         image: product11,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
-        type: 'complicate',
+        type: 'product',
         rating: 5,
     },
     {
         id: 12,
         name: 'Evo Сухой шампунь-спрей Water Killer, 200 мл',
         description: 'Evo Сухой шампунь-спрей Water Killer, 200 мл',
+        code: '12',
         image: product12,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
-        type: 'complicate',
+        type: 'product',
         rating: 3,
     },
     {
         id: 13,
         name: 'EvoСухой шампунь-спрей Water Killer, 200 мл',
         description: 'EvoСухой шампунь-спрей Water Killer, 200 мл',
+        code: '13',
         image: product1,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         tags: ['Новинка', '-15%'],
-        type: 'simple',
+        type: 'product',
         rating: 5,
     },
     {
         id: 14,
         name: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
         description: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
+        code: '14',
         image: product2,
         price: '1 900 ₽',
         oldPrice: null,
         tags: ['-15%'],
-        type: 'simple',
+        type: 'product',
         rating: 1,
     },
     {
         id: 15,
         name: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
         description: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
+        code: '15',
         image: product3,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         tags: ['Новинка'],
-        type: 'simple',
+        type: 'product',
         rating: 3,
     },
 ];
@@ -585,6 +616,49 @@ export default class MockHttpService {
                             setTimeout(() => resolve({ items: products, range: 16 }), 300);
                     }
                     break;
+                case '/catalog/items':
+                    switch (data.code) {
+                        case 'blesk-dlya-gub-13':
+                            setTimeout(() => resolve({ items: products.slice(3, 5), range: 2 }), 300);
+                            break;
+                        case 'gubnaya-pomada-14':
+                            setTimeout(() => resolve({ items: products.slice(8, 10), range: 2 }), 300);
+                            break;
+                        case 'karandashi-dlya-gub-15':
+                            setTimeout(() => resolve({ items: products.slice(4, 6), range: 2 }), 300);
+                            break;
+                        case 'dlya-gub-12':
+                            setTimeout(
+                                () =>
+                                    resolve({
+                                        items: [...products.slice(5, 9), productBanners[1], ...products.slice(9, 11)],
+                                        range: 6,
+                                    }),
+                                300
+                            );
+                            break;
+                        case 'makiyazh-4':
+                            setTimeout(
+                                () =>
+                                    resolve({
+                                        items: [...products.slice(3, 7), productBanners[0], ...products.slice(7, 11)],
+                                        range: 8,
+                                    }),
+                                300
+                            );
+                            break;
+                        default:
+                            setTimeout(
+                                () =>
+                                    resolve({
+                                        items: [...products.slice(0, 7), productBanners[0], ...products.slice(7, 13)],
+                                        range: 13,
+                                    }),
+                                300
+                            );
+                    }
+                    break;
+
                 case '/categories':
                     setTimeout(() => resolve(productCategories), 300);
                     break;

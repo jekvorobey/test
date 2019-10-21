@@ -24,14 +24,19 @@
         .v-accordion__item-btn {
             padding: 0;
             border: none;
+            padding-bottom: calc(var(--gs) * 2);
+            font-size: 20px;
+            line-height: 24px;
+            font-weight: 500;
         }
 
         .v-accordion__item-panel {
             border: none;
         }
 
-        .v-accordion__item + .v-accordion__item {
-            margin-top: calc(var(--gs) * 4);
+        .v-accordion__item {
+            padding-top: calc(var(--gs) * 4);
+            border-top: 1px solid var(--cl-divider-grey);
         }
     }
 

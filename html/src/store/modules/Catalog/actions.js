@@ -1,5 +1,5 @@
 import { $logger } from '../../../services/ServiceLocator';
-import { getProducts, getCategories } from '../../../api';
+import { getCatalogItems, getCategories } from '../../../api';
 import { SET_ITEMS, SET_CATEGORIES, SET_PARAMS } from './mutations';
 
 export const FETCH_ITEMS = 'FETCH_ITEMS';
@@ -17,7 +17,7 @@ export default {
     },
 
     [FETCH_ITEMS]({ commit }, payload) {
-        return getProducts(payload)
+        return getCatalogItems(payload)
             .then(data => {
                 commit(SET_ITEMS, data);
                 commit(SET_PARAMS, payload);

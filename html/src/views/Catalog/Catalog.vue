@@ -1,22 +1,43 @@
 <template>
     <section class="section catalog-view">
         <div class="container">
-            <ul class="section catalog-view__breadcrumbs">
-                <li>Губная помада</li>
-            </ul>
+            <transition-group tag="ol" class="section catalog-view__breadcrumbs" name="fade-in">
+                <li class="catalog-view__breadcrumbs-item" key="main">
+                    <router-link to="/">{{ 'Главная' }}</router-link>
+                </li>
+                <li class="catalog-view__breadcrumbs-item" key="all">
+                    <router-link to="/catalog">{{ 'Каталог' }}</router-link>
+                </li>
+
+                <li class="catalog-view__breadcrumbs-item" v-for="category in activeCategories" :key="category.id">
+                    <router-link :to="`/catalog/${category.code}`">
+                        {{ category.name }}
+                    </router-link>
+                </li>
+            </transition-group>
         </div>
-        <section class="section catalog-view__header">
-            <div class="container">
-                <h1 class="catalog-view__header-hl">{{ activeCategory ? activeCategory.name : 'Каталог' }}</h1>
-                <p class="text-grey catalog-view__header-text">489 товаров</p>
-            </div>
-        </section>
         <section class="section">
             <div class="container catalog-view__grid">
                 <div class="catalog-view__side-panel">
                     <catalog-filter class="catalog-view__side-panel-filters" />
                 </div>
                 <div class="catalog-view__main">
+                    <div class="catalog-view__main-header">
+                        <div class="catalog-view__main-header-title">
+                            <h1 class="catalog-view__main-header-hl">
+                                {{ activeCategory ? activeCategory.name : 'Каталог' }}
+                            </h1>
+                            <p class="text-grey catalog-view__main-header-text">489 товаров</p>
+                        </div>
+                        <v-select
+                            class="catalog-view__main-header-sort"
+                            v-model="sortValue"
+                            :options="sortOptions"
+                            :searchable="false"
+                            :allowEmpty="false"
+                        />
+                    </div>
+
                     <transition-group tag="ul" class="catalog-view__main-tags" name="tag-item">
                         <li
                             :data-index="index"
@@ -30,13 +51,7 @@
                             </button>
                         </li>
                     </transition-group>
-                    <v-select
-                        class="catalog-view__main-sort"
-                        v-model="sortValue"
-                        :options="sortOptions"
-                        :searchable="false"
-                        :allowEmpty="false"
-                    />
+
                     <transition-group
                         tag="ul"
                         class="catalog-view__main-grid"
@@ -46,17 +61,32 @@
                         @after-enter="onAfterEnterItems"
                         @leave="onLeaveItems"
                     >
-                        <li class="catalog-view__main-grid-item" v-for="product in items" :key="product.id">
+                        <li
+                            class="catalog-view__main-grid-item"
+                            v-for="item in items"
+                            :key="`${item.id}-${item.type}`"
+                            :class="{ [`catalog-view__main-grid-item--${item.type}`]: item.type }"
+                        >
                             <catalog-product-card
+                                v-if="item.type === 'product'"
                                 class="catalog-view__main-grid-card"
-                                :product-id="product.id"
-                                :name="product.name"
-                                :href="product.href"
-                                :image="product.image"
-                                :price="product.price"
-                                :old-price="product.oldPrice"
-                                :tags="product.tags"
-                                :rating="product.rating"
+                                :product-id="item.id"
+                                :name="item.name"
+                                :href="`/catalog${activeCategory ? `/${activeCategory.code}` : ''}/${item.code}`"
+                                :image="item.image"
+                                :price="item.price"
+                                :old-price="item.oldPrice"
+                                :tags="item.tags"
+                                :rating="item.rating"
+                            />
+                            <catalog-banner-card
+                                v-if="item.type === 'banner'"
+                                class="catalog-view__main-grid-card"
+                                :banner-id="item.id"
+                                :title="item.title"
+                                :image="item.image"
+                                :upper-text="item.upperText"
+                                :btn-text="item.btnText"
                             />
                         </li>
                     </transition-group>
@@ -90,6 +120,7 @@ import VSelect from '../../components/controls/VSelect/VSelect.vue';
 
 import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
+import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
 
 import { concatCatalogRoutePath } from '../../util/catalog';
 import catalogModule, { ITEMS } from '../../store/modules/Catalog';
@@ -99,6 +130,7 @@ import {
     ACTIVE_PAGE,
     PAGES_COUNT,
     ROUTE_SEGMENTS,
+    ACTIVE_CATEGORIES,
 } from '../../store/modules/Catalog/getters';
 import { FETCH_ITEMS, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -123,6 +155,7 @@ export default {
 
         CatalogFilter,
         CatalogProductCard,
+        CatalogBannerCard,
     },
 
     data() {
@@ -134,7 +167,14 @@ export default {
     },
 
     computed: {
-        ...mapGetters(catalogModule.name, [ACTIVE_TAGS, ACTIVE_CATEGORY, ACTIVE_PAGE, PAGES_COUNT, ROUTE_SEGMENTS]),
+        ...mapGetters(catalogModule.name, [
+            ACTIVE_TAGS,
+            ACTIVE_CATEGORY,
+            ACTIVE_PAGE,
+            PAGES_COUNT,
+            ROUTE_SEGMENTS,
+            ACTIVE_CATEGORIES,
+        ]),
         ...mapState(catalogModule.name, [ITEMS]),
         ...mapState('route', {
             code: state => state.params.code,

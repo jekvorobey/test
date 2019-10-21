@@ -48,20 +48,14 @@
                         </v-button>
                     </div>
 
-                    <div class="landing-view__products-banner">
-                        <img
-                            class="lazyload blur-up landing-view__products-banner-img"
-                            :data-src="newProducts.banner.image"
-                        />
-                        <div class="landing-view__products-banner-panel">
-                            <div class="landing-view__products-banner-panel-title">
-                                {{ newProducts.banner.title }}
-                            </div>
-                            <v-button class="btn--outline landing-view__products-banner-panel-btn">
-                                {{ newProducts.banner.btnText }}
-                            </v-button>
-                        </div>
-                    </div>
+                    <catalog-banner-card
+                        class="landing-view__products-banner"
+                        :banner-id="newProducts.banner.id"
+                        :btn-text="newProducts.banner.btnText"
+                        :title="newProducts.banner.title"
+                        :upper-text="newProducts.banner.upperText"
+                        :image="newProducts.banner.image"
+                    />
                 </div>
             </div>
         </section>
@@ -90,24 +84,14 @@
                         </v-button>
                     </div>
 
-                    <div class="landing-view__products-banner">
-                        <img
-                            class="lazyload blur-up landing-view__products-banner-img"
-                            :data-src="bestsellerProducts.banner.image"
-                            alt
-                        />
-                        <div class="landing-view__products-banner-panel">
-                            <div class="landing-view__products-banner-panel-type">
-                                {{ bestsellerProducts.banner.type }}
-                            </div>
-                            <div class="landing-view__products-banner-panel-title">
-                                {{ bestsellerProducts.banner.title }}
-                            </div>
-                            <v-button class="btn--outline landing-view__products-banner-panel-btn">
-                                {{ bestsellerProducts.banner.btnText }}
-                            </v-button>
-                        </div>
-                    </div>
+                    <catalog-banner-card
+                        class="landing-view__products-banner"
+                        :banner-id="bestsellerProducts.banner.id"
+                        :btn-text="bestsellerProducts.banner.btnText"
+                        :title="bestsellerProducts.banner.title"
+                        :upper-text="bestsellerProducts.banner.upperText"
+                        :image="bestsellerProducts.banner.image"
+                    />
                 </div>
             </div>
         </section>
@@ -150,24 +134,14 @@
                             {{ $t('landing.showAll') }}
                         </v-button>
                     </div>
-
-                    <div class="landing-view__products-banner">
-                        <img
-                            class="lazyload blur-up landing-view__products-banner-img"
-                            :data-src="featuredProducts.banner.image"
-                        />
-                        <div class="landing-view__products-banner-panel">
-                            <div class="landing-view__products-banner-panel-type">
-                                {{ featuredProducts.banner.type }}
-                            </div>
-                            <div class="landing-view__products-banner-panel-title">
-                                {{ featuredProducts.banner.title }}
-                            </div>
-                            <v-button class="btn--outline landing-view__products-banner-panel-btn">
-                                {{ featuredProducts.banner.btnText }}
-                            </v-button>
-                        </div>
-                    </div>
+                    <catalog-banner-card
+                        class="landing-view__products-banner"
+                        :banner-id="featuredProducts.banner.id"
+                        :btn-text="featuredProducts.banner.btnText"
+                        :title="featuredProducts.banner.title"
+                        :upper-text="featuredProducts.banner.upperText"
+                        :image="featuredProducts.banner.image"
+                    />
                 </div>
             </div>
         </section>
@@ -237,6 +211,7 @@ import BannerCard from '../../components/BannerCard/BannerCard.vue';
 import CategoryCard from '../../components/CategoryCard/CategoryCard.vue';
 import InstagramCard from '../../components/InstagramCard/InstagramCard.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
+import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
 import PopularBrands from '../../components/PopularBrands/PopularBrands.vue';
 
 import { mapState } from 'vuex';
@@ -308,6 +283,7 @@ export default {
         CategoryCard,
         InstagramCard,
         CatalogProductCard,
+        CatalogBannerCard,
 
         PopularBrands,
     },

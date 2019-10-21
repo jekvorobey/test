@@ -25,7 +25,7 @@
                 <slot name="icon" :isExpanded="isExpanded(item)">
                     <v-svg
                         :class="{ 'icon--rotate-deg180': isExpanded(item) }"
-                        name="arrow-down-small"
+                        name="arrow-down"
                         width="24"
                         height="24"
                     />
@@ -59,7 +59,7 @@
 <script>
 import VSvg from '../VSvg/VSvg.vue';
 
-import '../../../assets/images/sprites/arrow-down-small.svg';
+import '../../../assets/images/sprites/arrow-down.svg';
 import './VAccordion.css';
 
 export default {
