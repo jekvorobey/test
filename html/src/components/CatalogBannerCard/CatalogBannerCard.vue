@@ -2,11 +2,14 @@
     <div class="catalog-banner-card">
         <img class="lazyload blur-up catalog-banner-card__img" :data-src="image" />
         <div class="catalog-banner-card__panel">
-            <div class="catalog-banner-card__panel-upper-text">
+            <div v-if="upperText" class="catalog-banner-card__panel-upper-text">
                 {{ upperText }}
             </div>
             <div class="catalog-banner-card__panel-title">
                 {{ title }}
+            </div>
+            <div v-if="bottomText" class="catalog-banner-card__panel-bottom-text">
+                {{ bottomText }}
             </div>
             <v-button class="btn--outline catalog-banner-card__panel-btn">
                 {{ btnText }}
@@ -32,6 +35,10 @@ export default {
         },
 
         upperText: {
+            type: String,
+        },
+
+        bottomText: {
             type: String,
         },
 

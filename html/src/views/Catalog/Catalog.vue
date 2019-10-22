@@ -1,20 +1,29 @@
 <template>
     <section class="section catalog-view">
-        <div class="container">
+        <div class="container catalog-view__header">
             <transition-group tag="ol" class="section catalog-view__breadcrumbs" name="fade-in">
                 <li class="catalog-view__breadcrumbs-item" key="main">
                     <router-link to="/">{{ 'Главная' }}</router-link>
                 </li>
+
                 <li class="catalog-view__breadcrumbs-item" key="all">
                     <router-link to="/catalog">{{ 'Каталог' }}</router-link>
                 </li>
 
                 <li class="catalog-view__breadcrumbs-item" v-for="category in activeCategories" :key="category.id">
-                    <router-link :to="`/catalog/${category.code}`">
-                        {{ category.name }}
-                    </router-link>
+                    <router-link :to="`/catalog/${category.code}`">{{ category.name }}</router-link>
                 </li>
             </transition-group>
+
+            <catalog-banner-card
+                class="catalog-view__banner"
+                :banner-id="banner.id"
+                :image="banner.image"
+                :upper-text="banner.upperText"
+                :bottom-text="banner.bottomText"
+                :title="banner.title"
+                :btn-text="banner.btnText"
+            />
         </div>
         <section class="section">
             <div class="container catalog-view__grid">
@@ -123,7 +132,7 @@ import CatalogProductCard from '../../components/CatalogProductCard/CatalogProdu
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
 
 import { concatCatalogRoutePath } from '../../util/catalog';
-import catalogModule, { ITEMS } from '../../store/modules/Catalog';
+import catalogModule, { ITEMS, BANNER } from '../../store/modules/Catalog';
 import {
     ACTIVE_TAGS,
     ACTIVE_CATEGORY,
@@ -175,7 +184,7 @@ export default {
             ROUTE_SEGMENTS,
             ACTIVE_CATEGORIES,
         ]),
-        ...mapState(catalogModule.name, [ITEMS]),
+        ...mapState(catalogModule.name, [ITEMS, BANNER]),
         ...mapState('route', {
             code: state => state.params.code,
         }),

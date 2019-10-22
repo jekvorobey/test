@@ -2,6 +2,8 @@
     <li
         class="category-tree-item"
         :class="[{ 'category-tree-item--root': depth === 0 }, { 'category-tree-item--active': isActive }]"
+        @mouseover="onMouseOver(true)"
+        @mouseleave="onMouseOver(false)"
     >
         <div class="category-tree-item__label">
             <router-link
@@ -16,15 +18,17 @@
                 {{ item.name }}
             </span>
         </div>
-        <ul class="category-tree-item__list" v-if="hasChildren" v-show="isOpen">
-            <category-tree-item
-                class="category-tree-item__item"
-                v-for="(item, index) in item.items"
-                :key="item.id || index"
-                :item="item"
-                :depth="depth + 1"
-            />
-        </ul>
+        <transition name="slide-right">
+            <ul class="category-tree-item__list" v-if="hasChildren && (isHover || isActive)">
+                <category-tree-item
+                    class="category-tree-item__item"
+                    v-for="(item, index) in item.items"
+                    :key="item.id || index"
+                    :item="item"
+                    :depth="depth + 1"
+                />
+            </ul>
+        </transition>
     </li>
 </template>
 
@@ -50,7 +54,7 @@ export default {
 
     data() {
         return {
-            isOpen: true,
+            isHover: false,
         };
     },
 
@@ -67,6 +71,12 @@ export default {
 
         hasChildren() {
             return this.item && Array.isArray(this.item.items);
+        },
+    },
+
+    methods: {
+        onMouseOver(value) {
+            this.isHover = value;
         },
     },
 };

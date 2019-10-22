@@ -40,6 +40,7 @@ import banner2 from '../../assets/images/mock/banner2.png';
 import banner3 from '../../assets/images/mock/banner3.png';
 import banner4 from '../../assets/images/mock/banner4.png';
 import banner5 from '../../assets/images/mock/banner5.png';
+import banner6 from '../../assets/images/mock/banner6.png';
 
 import productBanner1 from '../../assets/images/mock/productBanner1.png';
 
@@ -158,6 +159,14 @@ const banners = [
         title: ' Натуральный макияж Aveda, который подойдёт для каждой девушки',
         btnText: 'Смотреть товары',
         image: banner5,
+    },
+    {
+        id: 7,
+        type: 'banner',
+        title: 'Водостойкая губная помада L’Oreal Paris',
+        bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
+        btnText: 'Смотреть товары',
+        image: banner6,
     },
 ];
 
