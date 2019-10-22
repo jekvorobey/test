@@ -11,44 +11,44 @@
         <v-accordion
             class="catalog-filter__filters"
             key-value="id"
-            :items="filters"
+            :items="accordionFilters"
             :item-expanded="item => item.isExpanded === true"
             :item-toggled="item => (item.isExpanded = !item.isExpanded)"
         >
-            <template v-slot:content="{ item }">
-                <div class="catalog-filter__filters-range" v-if="item.type === 'range'">
+            <template v-slot:content="{ item: filter }">
+                <div class="catalog-filter__filters-range" v-if="filter.item.type === 'range'">
                     <v-range
-                        :initialValue="[item.min, item.max]"
-                        :value="filterSegments[item.name] || [item.min, item.max]"
-                        :max="item.max"
-                        :min="item.min"
+                        :initialValue="[filter.item.min, filter.item.max]"
+                        :value="filterSegments[filter.item.name] || [filter.item.min, filter.item.max]"
+                        :max="filter.item.max"
+                        :min="filter.item.min"
                         :format="format"
-                        @input="onRangeChange($event, item.name)"
+                        @input="onRangeChange($event, filter.item.name)"
                     />
                 </div>
-                <div class="catalog-filter__filters-check" v-else-if="item.type === 'check'">
+                <div class="catalog-filter__filters-check" v-else-if="filter.item.type === 'check'">
                     <v-check
-                        v-for="option in item.items"
-                        :id="`${item.name}-${option.id}`"
+                        v-for="option in filter.item.items"
+                        :id="`${filter.item.name}-${option.id}`"
                         :value="option.code"
                         :key="option.id"
-                        :name="item.name"
-                        :checked="filterSegments[item.name] && filterSegments[item.name][option.code]"
-                        @change="onCheckChange($event, item.name, option.code)"
+                        :name="filter.item.name"
+                        :checked="filterSegments[filter.item.name] && filterSegments[filter.item.name][option.code]"
+                        @change="onCheckChange($event, filter.item.name, option.code)"
                     >
                         {{ option.name }}
                     </v-check>
                 </div>
-                <div class="catalog-filter__filters-check" v-else-if="item.type === 'radio'">
+                <div class="catalog-filter__filters-check" v-else-if="filter.item.type === 'radio'">
                     <v-check
-                        v-for="option in item.items"
-                        :id="`${item.name}-${option.id}`"
+                        v-for="option in filter.item.items"
+                        :id="`${filter.item.name}-${option.id}`"
                         type="radio"
                         :value="option.code"
                         :key="option.id"
-                        :name="item.name"
-                        :checked="filterSegments[item.name] && filterSegments[item.name][option.code]"
-                        @change="onRadioChange($event, item.name, option.code)"
+                        :name="filter.item.name"
+                        :checked="filterSegments[filter.item.name] && filterSegments[filter.item.name][option.code]"
+                        @change="onRadioChange($event, filter.item.name, option.code)"
                     >
                         {{ option.name }}
                     </v-check>
@@ -135,6 +135,18 @@ export default {
         ...mapState('route', {
             code: state => state.params.code,
         }),
+
+        accordionFilters() {
+            return this.filters && this.filters.length > 0
+                ? this.filters.map(item => {
+                      return {
+                          isExpanded: true,
+                          title: item.title,
+                          item,
+                      };
+                  })
+                : [];
+        },
     },
 
     beforeMount() {
