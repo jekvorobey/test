@@ -8676,7 +8676,11 @@ TemplateRenderer.prototype.renderScripts = function renderScripts(context) {
 
             return isJS(file);
         });
-        const needed = [initial[0]].concat(async, initial.slice(1));
+        // old
+        //const needed = [initial[0]].concat(async, initial.slice(1));
+
+        // new
+        const needed = [...initial].concat(async);
         return needed
             .map(function(ref) {
                 const { file } = ref;
