@@ -131,10 +131,12 @@ export default {
 
     destroyed() {
         setTimeout(() => {
-            this.slider.off('update');
-            this.slider.off('change');
-            this.slider.destroy();
-            this.slider = null;
+            if (this.slider) {
+                this.slider.off('update');
+                this.slider.off('change');
+                this.slider.destroy();
+                this.slider = null;
+            }
         }, 250);
     },
 };

@@ -46,17 +46,32 @@
                         @after-enter="onAfterEnterItems"
                         @leave="onLeaveItems"
                     >
-                        <li class="brand-view__main-grid-item" v-for="product in items" :key="product.id">
+                        <li
+                            class="brand-view__main-grid-item"
+                            v-for="item in items"
+                            :key="`${item.id}-${item.type}`"
+                            :class="{ [`brand-view__main-grid-item--${item.type}`]: item.type }"
+                        >
                             <catalog-product-card
+                                v-if="item.type === 'product'"
                                 class="brand-view__main-grid-card"
-                                :product-id="product.id"
-                                :name="product.name"
-                                :href="product.href"
-                                :image="product.image"
-                                :price="product.price"
-                                :old-price="product.oldPrice"
-                                :tags="product.tags"
-                                :rating="product.rating"
+                                :product-id="item.id"
+                                :name="item.name"
+                                :href="`/catalog${activeCategory ? `/${activeCategory.code}` : ''}/${item.code}`"
+                                :image="item.image"
+                                :price="item.price"
+                                :old-price="item.oldPrice"
+                                :tags="item.tags"
+                                :rating="item.rating"
+                            />
+                            <catalog-banner-card
+                                v-if="item.type === 'banner'"
+                                class="brand-view__main-grid-card"
+                                :banner-id="item.id"
+                                :title="item.title"
+                                :image="item.image"
+                                :upper-text="item.upperText"
+                                :btn-text="item.btnText"
                             />
                         </li>
                     </transition-group>
@@ -90,10 +105,11 @@ import VSelect from '../../components/controls/VSelect/VSelect.vue';
 
 import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
+import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
 
-import brandModule, { ITEMS } from '../../store/modules/Brand';
-import { ACTIVE_TAGS, ACTIVE_CATEGORY, ACTIVE_PAGE, PAGES_COUNT } from '../../store/modules/Brand/getters';
-import { FETCH_ITEMS, FETCH_CATALOG_DATA } from '../../store/modules/Brand/actions';
+import catalogModule, { ITEMS } from '../../store/modules/Catalog';
+import { ACTIVE_TAGS, ACTIVE_CATEGORY, ACTIVE_PAGE, PAGES_COUNT } from '../../store/modules/Catalog/getters';
+import { FETCH_ITEMS, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 
@@ -101,7 +117,7 @@ import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/cross-small.svg';
 import './Brand.css';
 
-export const DISPATCH_FETCH_CATALOG_DATA = `${brandModule.name}/${FETCH_CATALOG_DATA}`;
+export const DISPATCH_FETCH_CATALOG_DATA = `${catalogModule.name}/${FETCH_CATALOG_DATA}`;
 
 const itemAnimationDelayDelta = 100;
 let counter = 0;
@@ -116,6 +132,7 @@ export default {
 
         CatalogFilter,
         CatalogProductCard,
+        CatalogBannerCard,
     },
 
     data() {
@@ -127,8 +144,8 @@ export default {
     },
 
     computed: {
-        ...mapGetters(brandModule.name, [ACTIVE_TAGS, ACTIVE_CATEGORY, ACTIVE_PAGE, PAGES_COUNT]),
-        ...mapState(brandModule.name, [ITEMS]),
+        ...mapGetters(catalogModule.name, [ACTIVE_TAGS, ACTIVE_CATEGORY, ACTIVE_PAGE, PAGES_COUNT]),
+        ...mapState(catalogModule.name, [ITEMS]),
         ...mapState('route', {
             brandCode: state => state.params.brandCode,
             code: state => state.params.code,
@@ -136,7 +153,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(brandModule.name, [FETCH_ITEMS, FETCH_CATALOG_DATA]),
+        ...mapActions(catalogModule.name, [FETCH_ITEMS, FETCH_CATALOG_DATA]),
 
         onBeforeEnterItems(el) {
             el.dataset.index = counter;
@@ -205,13 +222,13 @@ export default {
         } = to;
 
         // регистрируем модуль, если такого нет
-        const register = !!$store._modulesNamespaceMap[`${brandModule.name}/`];
+        const register = !!$store._modulesNamespaceMap[`${catalogModule.name}/`];
         if (!register)
-            $store.registerModule(brandModule.name, brandModule, {
-                preserveState: !!$store.state.brand,
+            $store.registerModule(catalogModule.name, catalogModule, {
+                preserveState: !!$store.state.catalog,
             });
 
-        const { categoryCode } = $store.state.brand;
+        const { categoryCode } = $store.state.catalog;
 
         // если все загружено, пропускаем
         if (categoryCode === code) next();
@@ -243,7 +260,7 @@ export default {
     beforeMount() {
         this.debounce_fetchCatalog = _debounce(async (to, from) => {
             try {
-                const { categoryCode } = this.$store.state.brand;
+                const { categoryCode } = this.$store.state.catalog;
                 const {
                     params: { code },
                 } = to;
