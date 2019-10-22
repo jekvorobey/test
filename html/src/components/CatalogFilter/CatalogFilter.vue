@@ -137,9 +137,11 @@ export default {
         }),
 
         accordionFilters() {
-            return this.filters.map(item => {
-                return { isExpanded: true, title: item.title, item };
-            });
+            return this.filters && this.filters.length > 0
+                ? this.filters.map(item => {
+                      return { isExpanded: true, title: item.title, item };
+                  })
+                : [];
         },
     },
 
