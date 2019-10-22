@@ -8426,18 +8426,8 @@ function createMapper(clientManifest) {
     // map server-side moduleIds to client-side files
     return function mapper(moduleIds) {
         const res = new Set();
-        //commented
-        for (let i = 0; i < moduleIds.length; i++) {
-            const mapped = map.get(moduleIds[i]);
-            if (mapped) {
-                for (let j = 0; j < mapped.length; j++) {
-                    res.add(mapped[j]);
-                }
-            }
-        }
-
-        // // new
-        // for (let i = moduleIds.length - 1; i >= 0; i--) {
+        // //commented
+        // for (let i = 0; i < moduleIds.length; i++) {
         //     const mapped = map.get(moduleIds[i]);
         //     if (mapped) {
         //         for (let j = 0; j < mapped.length; j++) {
@@ -8445,6 +8435,16 @@ function createMapper(clientManifest) {
         //         }
         //     }
         // }
+
+        // new
+        for (let i = moduleIds.length - 1; i >= 0; i--) {
+            const mapped = map.get(moduleIds[i]);
+            if (mapped) {
+                for (let j = 0; j < mapped.length; j++) {
+                    res.add(mapped[j]);
+                }
+            }
+        }
         return Array.from(res);
     };
 }
