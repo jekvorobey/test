@@ -245,7 +245,7 @@ export default {
         },
     },
 
-    async beforeRouteEnter(to, from, next) {
+    beforeRouteEnter(to, from, next) {
         // вызывается до подтверждения пути, соответствующего этому компоненту.
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
@@ -266,15 +266,15 @@ export default {
         // если все загружено, пропускаем
         if (categoryCode === code) next();
         else {
-            try {
-                // если нет - фетчим
-                $progress.start();
-                await $store.dispatch(DISPATCH_FETCH_CATALOG_DATA, { code });
-                next(vm => $progress.finish());
-            } catch (error) {
-                $progress.fail();
-                $logger.error(error);
-            }
+            // если нет - фетчим
+            $progress.start();
+            $store
+                .dispatch(DISPATCH_FETCH_CATALOG_DATA, { code })
+                .then(() => next(vm => $progress.finish()))
+                .catch(error => {
+                    $progress.fail();
+                    $logger.error(error);
+                });
         }
     },
 
