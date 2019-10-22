@@ -104,44 +104,44 @@ module.exports = merge(base, {
                       level: 9,
                   },
               }),
-              //   new BrotliPlugin({
-              //       test: /\.(js|css|svg)$/,
-              //       asset: '[path].br[query]',
-              //       threshold: 1024,
-              //       minRatio: 0.8,
-              //       quality: 11,
-              //   }),
-              //   new ImageminWebpPlugin({
-              //       config: [
-              //           {
-              //               test: /\.(jpe?g|png)$/,
-              //               options: {
-              //                   quality: 80,
-              //                   method: 6,
-              //               },
-              //           },
-              //       ],
-              //   }),
-              //   /* imagemin-webpack-plugin выполняет все работы по сжатию изображений. */
-              //   new ImageminPlugin({
-              //       /* Для jpeg используется lossy сжатие через mozJpeg. */
-              //       jpegtran: null,
-              //       /* Для png используется lossy сжатие через pngQuant. */
-              //       optipng: null,
-              //       /* gif не обрабатывается. Используйте WebM с фолбеком в mp4 (только придётся прописать лоадер). */
-              //       gifsicle: null,
-              //       /* Под web нет смысла задавать высокое качество, но если будет слишком низко, то можно поднять. */
-              //       pngquant: {
-              //           quality: '65-90',
-              //           /* Выставлено максимальное качество сжатия, т.к. на проде мы никуда не спешим. */
-              //           speed: 1,
-              //       },
-              //       plugins: [
-              //           imageminMozJpeg({
-              //               quality: 75,
-              //           }),
-              //       ],
-              //   }),
+              new BrotliPlugin({
+                  test: /\.(js|css|svg)$/,
+                  asset: '[path].br[query]',
+                  threshold: 1024,
+                  minRatio: 0.8,
+                  quality: 11,
+              }),
+              new ImageminWebpPlugin({
+                  config: [
+                      {
+                          test: /\.(jpe?g|png)$/,
+                          options: {
+                              quality: 80,
+                              method: 6,
+                          },
+                      },
+                  ],
+              }),
+              /* imagemin-webpack-plugin выполняет все работы по сжатию изображений. */
+              new ImageminPlugin({
+                  /* Для jpeg используется lossy сжатие через mozJpeg. */
+                  jpegtran: null,
+                  /* Для png используется lossy сжатие через pngQuant. */
+                  optipng: null,
+                  /* gif не обрабатывается. Используйте WebM с фолбеком в mp4 (только придётся прописать лоадер). */
+                  gifsicle: null,
+                  /* Под web нет смысла задавать высокое качество, но если будет слишком низко, то можно поднять. */
+                  pngquant: {
+                      quality: '65-90',
+                      /* Выставлено максимальное качество сжатия, т.к. на проде мы никуда не спешим. */
+                      speed: 1,
+                  },
+                  plugins: [
+                      imageminMozJpeg({
+                          quality: 75,
+                      }),
+                  ],
+              }),
               // strip dev-only code in Vue source
               new webpack.DefinePlugin({
                   'process.env.NODE_ENV': JSON.stringify(mode),
