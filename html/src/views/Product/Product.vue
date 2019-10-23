@@ -17,26 +17,29 @@
                 </li> -->
             </transition-group>
         </div>
-        <section class="section"></section>
+        <section class="section">
+            <div class="container product-view__grid">
+                <div class="product-view__grid-gallery">
+                    <div class="product-view__grid-gallery-item" v-for="item in product.media" :key="item.id">
+                        <img class="blur-up lazyload" :data-src="item.image" alt=""/>
+                    </div>
+                </div>
+                <div class="product-view__grid-detail" >
+                    <div>{{ product.title }}</div>
+                </div>
+            </div>
+        </section>
     </section>
 </template>
 
 <script>
-import productModule, { ITEMS } from '../../store/modules/Product';
-import {
-    ACTIVE_TAGS,
-    ACTIVE_CATEGORY,
-    ACTIVE_PAGE,
-    PAGES_COUNT,
-    ROUTE_SEGMENTS,
-    ACTIVE_CATEGORIES,
-} from '../../store/modules/Product/getters';
-import { FETCH_ITEMS, FETCH_PRODUCT_DATA } from '../../store/modules/Product/actions';
+import productModule, { PRODUCT } from '../../store/modules/Product';
+import { } from '../../store/modules/Product/getters';
+import { FETCH_PRODUCT_DATA } from '../../store/modules/Product/actions';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 
 import _debounce from 'lodash/debounce';
-import '../../assets/images/sprites/cross-small.svg';
 import './Product.css';
 
 export const DISPATCH_FETCH_PRODUCT_DATA = `${productModule.name}/${FETCH_PRODUCT_DATA}`;
@@ -51,15 +54,15 @@ export default {
 
     computed: {
         ...mapGetters(productModule.name, []),
-        ...mapState(productModule.name, []),
-        ...mapState('route', []),
+        ...mapState(productModule.name, [ PRODUCT ]),
+        ...mapState('route', { code: state => state.params.code }),
     },
 
     methods: {
         ...mapActions(productModule.name, [FETCH_PRODUCT_DATA]),
     },
 
-    async beforeRouteEnter(to, from, next) {
+    beforeRouteEnter(to, from, next) {
         // вызывается до подтверждения пути, соответствующего этому компоненту.
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
@@ -75,20 +78,18 @@ export default {
                 preserveState: !!$store.state.product,
             });
 
-        const { productCode } = $store.state.product;
+        const { code: productCode } = $store.state.product;
 
         // если все загружено, пропускаем
         if (productCode === code) next();
         else {
-            try {
-                // если нет - фетчим
-                $progress.start();
-                await $store.dispatch(DISPATCH_FETCH_PRODUCT_DATA, { code });
-                next(vm => $progress.finish());
-            } catch (error) {
-                $progress.fail();
-                $logger.error(error);
-            }
+            $progress.start();
+            $store.dispatch(DISPATCH_FETCH_PRODUCT_DATA, { code })
+                .then(() => next(vm => $progress.finish()))
+                .catch(() => {
+                    $progress.fail();
+                    $logger.error(error);
+                });
         }
     },
 

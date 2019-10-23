@@ -44,6 +44,11 @@ import banner6 from '../../assets/images/mock/banner6.png';
 
 import productBanner1 from '../../assets/images/mock/productBanner1.png';
 
+import productDetail1 from '../../assets/images/mock/productDetail1.png';
+import productDetail2 from '../../assets/images/mock/productDetail2.png';
+import productDetail3 from '../../assets/images/mock/productDetail3.png';
+import productDetail4 from '../../assets/images/mock/productDetail4.png';
+
 const categories = [
     {
         id: 1,
@@ -190,21 +195,67 @@ const productBanners = [
     },
 ];
 
-const middleBanners = [
+const productsDetails = [
     {
         id: 1,
-        title: 'Стайлинги для летних укладок',
-        image: instagram7,
-    },
-    {
-        id: 2,
-        title: 'Косметика для лица и тела',
-        image: instagram3,
-    },
-    {
-        id: 3,
-        title: 'Натуральный макияж Aveda',
-        image: instagram1,
+        code: '4',
+        title: 'Губная помада TOM FORD Matte Lip Color, 27, Bruised Plum',
+        rating: 4,
+        reviews: 12,
+        vendorCode: 148333731,
+        media: [
+            {
+                id: 1,
+                type: 'image',
+                image: productDetail1,
+            },
+            {
+                id: 2,
+                type: 'image',
+                image: productDetail2,
+            },
+            {
+                id: 3,
+                type: 'preview',
+                image: productDetail3,
+            },
+            {
+                id: 4,
+                type: 'video',
+                image: productDetail4,
+            },
+        ],
+        option: {
+            id: 1,
+            type: 'color',
+            code: 'red',
+            value: '27, Bruised Plum',
+        },
+        options: [
+            {
+                id: 1,
+                type: 'color',
+                code: 'orange',
+                title: '22, Orange',
+                value: '#F05033',
+            },
+
+            {
+                id: 2,
+                type: 'color',
+                code: 'red',
+                title: '27, Red',
+                value: '#C4101C',
+            },
+
+            {
+                id: 3,
+                type: 'color',
+                code: 'bruised-plum',
+                title: '27, Bruised Plum',
+                value: '#6F0E3C',
+            },
+        ],
     },
 ];
 
@@ -679,6 +730,12 @@ export default class MockHttpService {
                     break;
                 case '/brands':
                     setTimeout(() => resolve(brands), 300);
+                    break;
+                case '/product':
+                    switch (data.code) {
+                        default:
+                            setTimeout(() => resolve(productsDetails[0]), 300);
+                    }
                     break;
                 default:
                     reject();

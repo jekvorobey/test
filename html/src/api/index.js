@@ -27,3 +27,7 @@ export function getBrands(string) {
 export function getInstagram(string) {
     return $http.get('/instagram', string);
 }
+
+export function getProduct(string) {
+    return $http.get('/product', string);
+}
