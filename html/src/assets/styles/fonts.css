@@ -10,15 +10,6 @@
 
 @font-face {
     font-family: 'Futura PT';
-    font-weight: 300;
-    font-display: swap;
-    src: url('../fonts/FuturaPT/FuturaPT-Light.woff2') format('woff2'),
-        url('../fonts/FuturaPT/FuturaPT-Light.woff') format('woff'),
-        url('../fonts/FuturaPT/FuturaPT-Light.ttf') format('ttf');
-}
-
-@font-face {
-    font-family: 'Futura PT';
     font-weight: 500;
     font-display: swap;
     src: url('../fonts/FuturaPT/FuturaPT-Medium.woff2') format('woff2'),
