@@ -8677,7 +8677,7 @@ TemplateRenderer.prototype.renderScripts = function renderScripts(context) {
             return isJS(file);
         });
         // old
-        //const needed = [initial[0]].concat(async, initial.slice(1));
+        // const needed = [initial[0]].concat(async, initial.slice(1));
 
         // new
         const needed = [...initial].concat(async);
