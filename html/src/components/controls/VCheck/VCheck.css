@@ -78,6 +78,20 @@ input[type='checkbox'] {
         }
     }
 
+    &:indeterminate + label {
+        &::after {
+            top: 0;
+            left: 0;
+            width: 17px;
+            height: 17px;
+            transition: all var(--time) ease;
+            background-size: 12px 9px;
+            background-image: none;
+            background-color: var(--cl-global);
+            transform: scale(0.5);
+        }
+    }
+
     &:disabled + label {
         color: var(--cl-grey);
         cursor: default;

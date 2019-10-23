@@ -2,6 +2,7 @@
     <div class="v-check" :class="{ 'is-switch': isSwitch }">
         <input
             class="v-check__input"
+            ref="input"
             v-bind="$attrs"
             :id="id"
             :type="type"
@@ -18,6 +19,8 @@
 
 <script>
 import './VCheck.css';
+
+const validTypes = ['checkbox', 'radio'];
 
 export default {
     serverCacheKey: props => `${props.id}-${props.type}-${props.name}-${props.value}`,
@@ -47,8 +50,11 @@ export default {
             default: 'checkbox',
             validator(value) {
                 // Значение должно соответствовать одной из этих строк
-                return ['checkbox', 'radio'].indexOf(value) !== -1;
+                return validTypes.indexOf(value) !== -1;
             },
+        },
+        indeterminate: {
+            type: Boolean,
         },
         isSwitch: {
             type: Boolean,
@@ -71,12 +77,18 @@ export default {
             // this.modelValue === undefined
             if (this.m_checked === undefined)
                 return (this.m_checked = typeof this.checked === 'string' ? true : !!this.checked);
-            else return this.m_checked;
+            else return this.m_checked && !this.indeterminate;
         },
     },
     watch: {
-        checked(v) {
-            this.m_checked = v;
+        checked(value, old) {
+            // чтобы чекбокс правильно обновлялся
+            this.$nextTick(() => this.m_checked = value);
+        },
+
+        indeterminate(value) {
+            const { input } = this.$refs;
+            if(input) input.indeterminate = value;
         },
     },
     methods: {

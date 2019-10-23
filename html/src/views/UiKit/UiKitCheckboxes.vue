@@ -34,9 +34,11 @@
             <p>Выбрано Мастер чекбоксы: {{ checkbox_checked3 }}</p>
             <p>Выбрано чекбокс с длинным текстом включен и не задизейблен: {{ checkbox_checked4 }}</p>
 
-            <v-check id="checkbox-6" v-model="checkboxes_checked" name="checkboxes" value="1">1</v-check>
-            <v-check id="checkbox-7" v-model="checkboxes_checked" name="checkboxes" value="2">2</v-check>
-            <v-check id="checkbox-8" v-model="checkboxes_checked" name="checkboxes" value="3">3</v-check>
+            <v-check id="checkbox-6" v-model="checkboxes_checked" name="checkboxes" :value="values.first">{{values.first}}</v-check>
+            <v-check id="checkbox-7" v-model="checkboxes_checked" name="checkboxes" :value="values.second">{{values.second}}</v-check>
+            <v-check id="checkbox-8" v-model="checkboxes_checked" name="checkboxes" :value="values.third">{{values.third}}</v-check>
+
+            <v-check id="checkbox-all" :checked="allChecked" @change="onChange" name="all" value="all" :indeterminate="indeterminate">Все выбраны</v-check>
 
             <p>Выбрано: {{ checkboxes_checked }}</p>
         </form>
@@ -58,7 +60,26 @@ export default {
             checkbox_checked4: false,
             checkbox_checked5: true,
             checkboxes_checked: [],
+            values: {
+                first: 'first',
+                second: 'second',
+                third: 'third',
+            }
         };
+    },
+    computed: {
+        indeterminate() {
+            return this.checkboxes_checked.length > 0 && this.checkboxes_checked.length !== Object.keys(this.values).length;
+        },
+        allChecked() {
+            return this.checkboxes_checked.length > 0 && this.checkboxes_checked.every(v => !!this.values[v]);
+        },
+    },
+    methods: {
+        onChange() {
+            if(this.checkboxes_checked.length > 0) this.checkboxes_checked = [];
+            else this.checkboxes_checked = [...Object.values(this.values)];
+        },
     },
 };
 </script>
