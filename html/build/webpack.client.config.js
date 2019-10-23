@@ -94,7 +94,7 @@ module.exports = merge(base, {
               }),
               /* На финальной сборке под бэк происходит сжатие статических ассетов через GZIP и Brotli. Сервер должен быть настроен таким образом, чтобы тянуть эти файлы вместо генерации своих. Такой подход позволяет не тратить время сервера на обработку заведомо неизменяемых ассетов и применять максимальные уровни сжатия. */
               new CompressionPlugin({
-                  test: /\.(js|css|svg)$/,
+                  test: /\.(js|css|svg|ttf)$/,
                   filename: '[path].gz[query]',
                   threshold: 1024,
                   minRatio: 0.8,
@@ -105,7 +105,7 @@ module.exports = merge(base, {
                   },
               }),
               new BrotliPlugin({
-                  test: /\.(js|css|svg)$/,
+                  test: /\.(js|css|svg|ttf)$/,
                   asset: '[path].br[query]',
                   threshold: 1024,
                   minRatio: 0.8,
