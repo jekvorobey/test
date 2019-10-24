@@ -76,4 +76,10 @@ export default {
             showAll: 'Показать все',
         },
     },
+
+    product: {
+        vendorCode: 'Артикул {code}',
+        review: '{n} отзывов',
+        bonus: '{n} бонусов',
+    },
 };

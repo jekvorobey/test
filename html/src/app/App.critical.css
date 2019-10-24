@@ -7,10 +7,9 @@
     background: var(--cl-white);
     padding-top: 166px;
     min-height: 100vh;
-    overflow: hidden;
 
     @supports (grid-template-columns: auto) {
-        transition: padding-top var(--time) var(--timing-function);
+        transition: padding-top 500ms var(--timing-function);
     }
 
     &--scroll {

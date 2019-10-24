@@ -76,4 +76,10 @@ export default {
             showAll: 'Show all',
         },
     },
+
+    product: {
+        vendorCode: 'Vendor Code {code}',
+        review: '{n} reviews',
+        bonus: '{n} bonuses',
+    },
 };

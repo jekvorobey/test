@@ -13,9 +13,11 @@ import './VSvg.css';
 export default {
     name: 'v-svg',
     props: {
+        id: { default: 'id' },
         name: { type: String, default: null },
         modifier: { type: String, default: null },
     },
-    serverCacheKey: props => (props.modifier ? `${props.name}-${props.modifier}` : props.name),
+    serverCacheKey: props =>
+        props.modifier ? `${props.id}-${props.name}-${props.modifier}` : `${props.id}-${props.name}`,
 };
 </script>

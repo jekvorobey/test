@@ -98,7 +98,6 @@
         background-color: var(--header-top-bg);
         height: 30px;
         line-height: 30px;
-        transition: height var(--time) ease-in;
         overflow: hidden;
 
         &-container,
