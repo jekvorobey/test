@@ -335,7 +335,7 @@ export default {
                 preserveState: !!$store.state.product,
             });
 
-        const { code: productCode } = $store.state.product;
+        const { productCode } = $store.state.product;
 
         // если все загружено, пропускаем
         if (productCode === code) next();
