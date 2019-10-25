@@ -1,0 +1,49 @@
+.v-html {
+    ul {
+        & > li {
+            line-height: inherit;
+            padding-left: calc(var(--gs) * 2.5);
+            &::before {
+                content: '';
+                background: var(--cl-global);
+                display: inline-block;
+                position: absolute;
+                top: 9px;
+                left: 0;
+                width: var(--gs);
+                height: var(--gs);
+                border-radius: 50%;
+            }
+
+            &:not(:last-child) {
+                margin-bottom: calc(var(--gs) / 2);
+            }
+
+            & ol,
+            & ul {
+                margin: var(--gs) 0;
+            }
+        }
+    }
+
+    ol {
+        counter-reset: olCounter;
+
+        & > li,
+        ol > li {
+            padding-left: calc(var(--gs) * 2);
+
+            &::before {
+                content: counter(olCounter) '.';
+                position: absolute;
+                top: 0;
+                left: 0;
+                counter-increment: olCounter;
+            }
+
+            &:not(:last-child) {
+                margin-bottom: calc(var(--gs) / 2);
+            }
+        }
+    }
+}

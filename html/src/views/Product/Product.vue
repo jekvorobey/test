@@ -47,7 +47,7 @@
                             </template>
                         </v-rating>
                         <div class="text-grey product-view__header-detail-info-review">
-                            {{ $t('product.review', { n: product.reviews }) }}
+                            {{ $t('product.review', { n: product.reviewsCount }) }}
                         </div>
                         <div class="text-grey product-view__header-detail-info-code">
                             {{ $t('product.vendorCode', { code: product.vendorCode }) }}
@@ -125,119 +125,15 @@
                     </div>
                 </div>
             </div>
-
-            <!-- <div class="container product-view__grid">
-                <div class="product-view__grid-gallery">
-                    <div
-                        class="product-view__grid-gallery-item"
-                        :class="{ [`product-view__grid-gallery-item--${item.type}`]: item.type }"
-                        v-for="item in product.media"
-                        :key="item.id"
-                    >
-                        <img :src="item.image" alt="" />
-                    </div>
-                </div>
-                <div class="product-view__grid-detail">
-                    <h1 class="product-view__grid-detail-hl">
-                        {{ product.title }}
-                    </h1>
-                    <div class="product-view__grid-detail-info">
-                        <v-rating class="product-view__grid-detail-info-rating" :value="product.rating">
-                            <template v-slot:activeLabel>
-                                <v-svg name="star-small" width="12" height="12" />
-                            </template>
-                            <template v-slot:inactiveLabel>
-                                <v-svg name="star-empty-small" width="12" height="12" />
-                            </template>
-                        </v-rating>
-                        <div class="text-grey product-view__grid-detail-info-review">
-                            {{ $t('product.review', { n: product.reviews }) }}
-                        </div>
-                        <div class="text-grey product-view__grid-detail-info-code">
-                            {{ $t('product.vendorCode', { code: product.vendorCode }) }}
-                        </div>
-                    </div>
-
-                    <div class="product-view__grid-detail-section product-view__grid-detail-options">
-                        <div class="product-view__grid-detail-options-selected">
-                            <div>{{ product.option.title }}</div>
-                            <div class="text-grey text-sm">16 оттенков</div>
-                        </div>
-                        <div class="product-view__grid-detail-options-list">
-                            <div
-                                class="product-view__grid-detail-options-item"
-                                :class="{
-                                    'product-view__grid-detail-options-item--selected':
-                                        option.value === product.option.value,
-                                }"
-                                v-for="option in product.options"
-                                :key="option.id"
-                            >
-                                <div
-                                    class="product-view__grid-detail-options-item-square"
-                                    :style="[{ backgroundColor: option.value, outlineColor: option.value }]"
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-view__grid-detail-section">
-                        <div class="product-view__grid-detail-price-panel">
-                            <div class="product-view__grid-detail-price-panel-prices">
-                                <div class="text-bold product-view__grid-detail-price-panel-current">
-                                    {{ product.price }}₽
-                                </div>
-                                <div class="text-grey text-strike product-view__grid-detail-price-panel-old">
-                                    {{ product.oldPrice }}₽
-                                </div>
-                            </div>
-                            <div class="text-grey product-view__grid-detail-price-panel-bonus">
-                                +{{ $t('product.bonus', { n: product.bonus }) }}
-                            </div>
-                        </div>
-                        <div class="product-view__grid-detail-control-panel">
-                            <v-button class="product-view__grid-detail-control-panel-btn">
-                                Добавить в корзину
-                            </v-button>
-                            <v-link class="product-view__grid-detail-control-panel-wishlist">
-                                <v-svg id="product-wishlist" name="wishlist-middle" width="20" height="18" />
-                                &nbsp;В избранное
-                            </v-link>
-                        </div>
-                    </div>
-
-                    <div class="product-view__grid-detail-section">
-                        <p>Получить в г. Москва</p>
-                        <p>Экспресс доставка курьером — 550 ₽, сегодня, 21 июня</p>
-                        <p>Доставка курьером — 350 ₽, завтра, 22 июня</p>
-                        <p>Из пунктов выдачи или постаматов — бесплатно, 23 июня</p>
-                    </div>
-
-                    <div class="product-view__grid-detail-section">
-                        <p class="text-bold">
-                            Описание и характеристики
-                        </p>
-                        <p>
-                            Двадцать три насыщенных, ярких оттенка помады воплощают в себе современную интерпретацию
-                            классики от Тома Форда. Редкое экзотическое масло муру-муру из Бразилии и масло цветков
-                            ромашки создают кремовую текстуру и обеспечивают...
-                        </p>
-                        <v-link>Подробнее</v-link>
-                    </div>
-                    <div>
-                        <span><img :src="mockImg" /><v-link>&nbsp;&nbsp;&nbsp;На страницу бренда</v-link></span>
-                    </div>
-                </div>
-            </div> -->
         </section>
-        <section class="section">
+        <section class="section product-view__section">
             <div class="container product-view__socials">
                 <div class="product-view__socials-inner">Подписаться</div>
             </div>
         </section>
-        <section class="section">
+        <section class="section product-view__section">
             <div class="container product-view__profitable">
-                <h2>Выгодный комплект</h2>
+                <h2 class="product-view__section-hl">Выгодный комплект</h2>
                 <div class="product-view__profitable-grid">
                     <ul class="product-view__profitable-list">
                         <li
@@ -258,8 +154,116 @@
                             />
                         </li>
                     </ul>
-                    <div></div>
+                    <div class="product-view__profitable-total" />
+                    <div class="product-view__profitable-price-panel">
+                        <div class="product-view__profitable-price-panel-prices">
+                            <div class="text-bold product-view__profitable-price-panel-price">
+                                {{ product.profitable.price }}&nbsp;₽
+                            </div>
+                            <div class="text-grey text-strike product-view__profitable-price-panel-old">
+                                {{ product.profitable.oldPrice }}&nbsp;₽
+                            </div>
+                        </div>
+                        <div class="text-grey product-view__profitable-price-panel-profit">
+                            Вы сэкономите&nbsp;{{ product.profitable.oldPrice - product.profitable.price }}&nbsp;₽
+                        </div>
+                        <v-button class="product-view__profitable-price-panel-btn">Добавить в корзину</v-button>
+                    </div>
                 </div>
+            </div>
+        </section>
+        <section v-if="product.description" class="section product-view__section product-view__info">
+            <div class="container product-view__info-container">
+                <div class="product-view__info-header">
+                    <h2 class="product-view__section-hl">Описание</h2>
+                    <v-html class="product-view__info-text" v-html="product.description.content" />
+                </div>
+                <div class="product-view__info-media">
+                    <img class="blur-up lazyload" :data-src="product.description.image" />
+                </div>
+            </div>
+        </section>
+        <section v-if="product.howto" class="section product-view__info">
+            <div class="container product-view__info-container">
+                <div class="product-view__info-header">
+                    <h2 class="product-view__section-hl">Способ применения</h2>
+                    <v-html class="product-view__info-text" v-html="product.howto.content" />
+                </div>
+                <div class="product-view__info-media">
+                    <img class="blur-up lazyload" :data-src="product.howto.image" />
+                </div>
+            </div>
+        </section>
+
+        <section v-if="product.howto" class="section product-view__section product-view__characteristics">
+            <div class="container">
+                <h2 class="product-view__section-hl">Характеристики</h2>
+                <ul class="product-view__characteristics-list">
+                    <li
+                        class="product-view__characteristics-item"
+                        v-for="item in product.characteristics"
+                        :key="item.id"
+                    >
+                        <div class="product-view__characteristics-item-title">{{ item.title }}</div>
+                        <div class="product-view__characteristics-item-value">{{ item.value }}</div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section v-if="product.masterClasses" class="section product-view__masterclass">
+            <div class="container">
+                <h2 class="product-view__section-hl">Мастер-классы с этим продуктом</h2>
+                <v-button class="btn--outline product-view__section-link">
+                    {{ $t('product.showAll') }}
+                </v-button>
+                <ul class="product-view__masterclass-list">
+                    <li class="product-view__masterclass-item" v-for="item in product.masterClasses" :key="item.id">
+                        <img class="blur-up lazyload" :data-src="item.image" />
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section product-view__section">
+            <div class="container product-view__reviews">
+                <div class="product-view__reviews-inner">
+                    <div class="product-view__reviews-header">
+                        <h2 class="product-view__section-hl product-view__reviews-header-hl">
+                            Отзывы<span class="text-grey product-view__reviews-header-hl-count">12</span>
+                        </h2>
+                        <div class="product-view__section-header-rating">
+                            Средняя оценка&nbsp;
+                            <span class="product-view__reviews-header-rating-count">
+                                {{ product.reviews.middleRating }}
+                            </span>
+                            <v-rating :value="product.reviews.middleRating">
+                                <template v-slot:activeLabel>
+                                    <v-svg name="star-small" width="12" height="12" />
+                                </template>
+                                <template v-slot:inactiveLabel>
+                                    <v-svg name="star-empty-small" width="12" height="12" />
+                                </template>
+                            </v-rating>
+                        </div>
+                        <div class="product-view__reviews-header-sort">
+                            Сначала новые <v-svg name="arrow-down" width="12" height="12" />
+                        </div>
+                    </div>
+
+                    <ul class="product-view__reviews-list">
+                        <product-review-card
+                            class="product-view__reviews-list-item"
+                            tag="li"
+                            v-for="item in product.reviews.items"
+                            :key="item.id"
+                            v-bind="item"
+                        />
+                    </ul>
+                </div>
+                <v-button class="btn--outline product-view__section-link product-view__reviews-link">
+                    {{ $t('product.makeReview') }}
+                </v-button>
             </div>
         </section>
     </section>
@@ -271,10 +275,12 @@ import VLink from '../../components/controls/VLink/VLink.vue';
 import VButton from '../../components/controls/VButton/VButton.vue';
 import VRating from '../../components/controls/VRating/VRating.vue';
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
+import VHtml from '../../components/controls/VHtml/VHtml.vue';
 import Tag from '../../components/Tag/Tag.vue';
 
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
+import ProductReviewCard from '../../components/ProductReviewCard/ProductReviewCard.vue';
 
 import productModule, { PRODUCT } from '../../store/modules/Product';
 import {} from '../../store/modules/Product/getters';
@@ -299,8 +305,10 @@ export default {
         VLink,
         VRating,
         VSticky,
+        VHtml,
 
         CatalogProductCard,
+        ProductReviewCard,
     },
 
     data() {

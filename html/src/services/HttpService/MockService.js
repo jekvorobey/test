@@ -49,6 +49,15 @@ import productDetail2 from '../../assets/images/mock/productDetail2.png';
 import productDetail3 from '../../assets/images/mock/productDetail3.png';
 import productDetail4 from '../../assets/images/mock/productDetail4.png';
 
+import productDescription1 from '../../assets/images/mock/productDescription1.png';
+import productDescription2 from '../../assets/images/mock/productDescription2.png';
+
+import productMasterclass1 from '../../assets/images/mock/productMasterclass1.png';
+import productMasterclass2 from '../../assets/images/mock/productMasterclass2.png';
+
+import productReview1 from '../../assets/images/mock/productReview1.png';
+import productReview2 from '../../assets/images/mock/productReview2.png';
+
 const categories = [
     {
         id: 1,
@@ -559,11 +568,12 @@ const productsDetails = [
         code: '4',
         title: 'Губная помада TOM FORD Matte Lip Color, 27, Bruised Plum',
         rating: 4,
-        reviews: 12,
+        reviewsCount: 12,
         vendorCode: 148333731,
         price: 3900,
         oldPrice: 4600,
         bonus: 80,
+
         media: [
             {
                 id: 1,
@@ -586,6 +596,7 @@ const productsDetails = [
                 image: productDetail4,
             },
         ],
+
         option: {
             id: 3,
             type: 'color',
@@ -593,6 +604,7 @@ const productsDetails = [
             title: '27, Bruised Plum',
             value: '#6F0E3C',
         },
+
         options: [
             {
                 id: 1,
@@ -623,6 +635,153 @@ const productsDetails = [
             items: products.slice(0, 4),
             price: 6020,
             oldPrice: 7760,
+        },
+
+        description: {
+            content: `Двадцать три насыщенных, 
+            ярких оттенка помады воплощают в себе современную 
+            интерпретацию классики от Тома Форда. 
+            Редкое экзотическое масло муру-муру из Бразилии и масло цветков ромашки создают кремовую текстуру и 
+            обеспечивают невероятно гладкое нанесение.<br/><br/>
+            <b>ЧТО</b> Помада с кремовой текстурой подарит губам стойкое покрытие с эффектом сатина. 
+            Экстракты белой лилии и мирры в составе помады обеспечивают увлажнение и защиту, визуально делают губы более объемными.<br/><br/>
+            <b>ПРЕИМУЩЕСТВА</b> Растительные полимеры отвечают за оптимальную дисперсию цвета, обеспечивают комфортное ощущение на протяжение всего дня. 
+            Комплекс смягчающих масел обеспечит шелковое скольжение и равномерное нанесение. Экстракт белой лилии обладает антиоксидантными и восстанавливающими 
+            свойствами. Экстракт мирры увлажняет и борется с возрастными признаками.<br/><br/> <b>ЧЕГО ОЖИДАТЬ</b> Обладает точной цветопередачей. Насыщенная формула не 
+            оставляет ощущения утяжеления.`,
+
+            image: productDescription1,
+        },
+
+        howto: {
+            content: `<ol><li>Для начала нанеси помаду в один слой. </li>
+            <li>Промокни губы салфеткой, слегка припудри, нанеси второй слой. </li>
+            <li>Удели особое внимание середине губ — пусть там цвет будет наиболее  насыщенным. Можешь даже нанести немного более темной помады на середину нижней губы. Это придаст объема и сделает губы чувственными!</li></ol>`,
+            image: productDescription2,
+        },
+
+        characteristics: [
+            {
+                id: 1,
+                title: 'Эффект',
+                value: 'Матовая',
+            },
+            {
+                id: 2,
+                title: 'Действие',
+                value: 'Увлажнение',
+            },
+            {
+                id: 3,
+                title: 'Текстура',
+                value: 'Жидкая',
+            },
+            {
+                id: 4,
+                title: 'Стойкая',
+                value: 'Да',
+            },
+            {
+                id: 5,
+                title: 'Серия',
+                value: 'Rouge Signature',
+            },
+            {
+                id: 6,
+                title: 'Цвет',
+                value: '103, розовый',
+            },
+            {
+                id: 7,
+                title: 'Бренд',
+                value: 'TOM FORD',
+            },
+            {
+                id: 8,
+                title: 'Страна-изготовитель',
+                value: 'Франция',
+            },
+            {
+                id: 9,
+                title: 'Объем, мл',
+                value: ' 7',
+            },
+            {
+                id: 10,
+                title: 'Упаковка',
+                value: 'Стик',
+            },
+            {
+                id: 11,
+                title: 'Вес в упаковке, г',
+                value: '28',
+            },
+        ],
+
+        masterClasses: [
+            {
+                id: 1,
+                image: productMasterclass1,
+            },
+            {
+                id: 2,
+                image: productMasterclass2,
+            },
+        ],
+
+        reviews: {
+            middleRating: 4.2,
+            items: [
+                {
+                    id: 1,
+                    name: 'Екатерина',
+                    date: '12 мая 2019',
+                    rating: 4,
+                    likes: 4,
+                    dislikes: 0,
+                    advantage: 'Цвет понравился, мягкая, не сушит',
+                    disadvantage:
+                        'Очень быстро стирается, если чмокнуть кого то останется на нём вся, при этом каждый раз когда ее выдвигаешь, а потом задвигаешь, она стирается о пластик, то есть о сам каркас помады и собирается в комок',
+                    comment: 'За свои деньги неплохо, но стойкости и достойного качества ожидать не стоит',
+                    images: [],
+                    options: [
+                        {
+                            id: 1,
+                            title: 'Цвет',
+                            value: '14, Wild Ginger',
+                        },
+                    ],
+                },
+                {
+                    id: 2,
+                    name: 'Мария',
+                    date: '13 мая 2019',
+                    rating: 5,
+                    likes: 22,
+                    dislikes: 7,
+                    advantage: 'Хороший цвет. Давно искала)',
+                    disadvantage: 'Быстро исчезает с губ',
+                    comment:
+                        'Хорошая мягкая помада, очень хороший розовый цвет, тем более за такую цену. Даже если бы ошиблась — было бы не жалко)',
+                    images: [
+                        {
+                            id: 1,
+                            image: productReview1,
+                        },
+                        {
+                            id: 2,
+                            image: productReview2,
+                        },
+                    ],
+                    options: [
+                        {
+                            id: 1,
+                            title: 'Цвет',
+                            value: '09, True Coral',
+                        },
+                    ],
+                },
+            ],
         },
     },
 ];
