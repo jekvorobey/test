@@ -69,7 +69,7 @@ export default {
             bestseller: 'Бестселлеры',
             featured: 'Смотрят на сайте сейчас',
             brand: 'Популярные бренды',
-            instagram: 'Insta Beauty',
+            instagram: 'Instabeauty',
         },
 
         brands: {
@@ -81,5 +81,23 @@ export default {
         vendorCode: 'Артикул {code}',
         review: '{n} отзывов',
         bonus: '{n} бонусов',
+        showAll: 'Смотреть все',
+
+        title: {
+            masterClasses: 'Мастер-классы с этим продуктом',
+            characteristics: 'Характеристики',
+            reviews: 'Отзывы',
+            method: 'Способ применения',
+            description: 'Описание',
+            profitable: 'Выгодный комплект',
+            compilations: 'Этот товар в подборках',
+            like: 'Вам также могут понравиться',
+        },
+
+        reviews: {
+            showAll: 'Показать ещё',
+            averageRating: 'Средняя оценка',
+            makeReview: 'Написать отзыв',
+        },
     },
 };

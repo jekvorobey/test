@@ -120,20 +120,22 @@
                         </p>
                         <v-link>Подробнее</v-link>
                     </div>
-                    <div>
+                    <div class="product-view__header-detail-section">
                         <span><img :src="mockImg" /><v-link>&nbsp;&nbsp;&nbsp;На страницу бренда</v-link></span>
                     </div>
                 </div>
             </div>
         </section>
-        <section class="section product-view__section">
+        <!-- <section class="section product-view__section">
             <div class="container product-view__socials">
                 <div class="product-view__socials-inner">Подписаться</div>
             </div>
-        </section>
+        </section> -->
         <section class="section product-view__section">
             <div class="container product-view__profitable">
-                <h2 class="product-view__section-hl">Выгодный комплект</h2>
+                <h2 class="product-view__section-hl product-view__profitable-hl">
+                    {{ $t('product.title.profitable') }}
+                </h2>
                 <div class="product-view__profitable-grid">
                     <ul class="product-view__profitable-list">
                         <li
@@ -151,6 +153,7 @@
                                 :old-price="item.oldPrice"
                                 :tags="item.tags"
                                 :rating="item.rating"
+                                :isSmall="isTabletLg"
                             />
                         </li>
                     </ul>
@@ -172,10 +175,11 @@
                 </div>
             </div>
         </section>
+
         <section v-if="product.description" class="section product-view__section product-view__info">
             <div class="container product-view__info-container">
                 <div class="product-view__info-header">
-                    <h2 class="product-view__section-hl">Описание</h2>
+                    <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
                     <v-html class="product-view__info-text" v-html="product.description.content" />
                 </div>
                 <div class="product-view__info-media">
@@ -183,10 +187,11 @@
                 </div>
             </div>
         </section>
+
         <section v-if="product.howto" class="section product-view__info">
             <div class="container product-view__info-container">
                 <div class="product-view__info-header">
-                    <h2 class="product-view__section-hl">Способ применения</h2>
+                    <h2 class="product-view__section-hl">{{ $t('product.title.method') }}</h2>
                     <v-html class="product-view__info-text" v-html="product.howto.content" />
                 </div>
                 <div class="product-view__info-media">
@@ -195,9 +200,9 @@
             </div>
         </section>
 
-        <section v-if="product.howto" class="section product-view__section product-view__characteristics">
+        <section v-if="product.characteristics" class="section product-view__section product-view__characteristics">
             <div class="container">
-                <h2 class="product-view__section-hl">Характеристики</h2>
+                <h2 class="product-view__section-hl">{{ $t('product.title.characteristics') }}</h2>
                 <ul class="product-view__characteristics-list">
                     <li
                         class="product-view__characteristics-item"
@@ -212,28 +217,31 @@
         </section>
 
         <section v-if="product.masterClasses" class="section product-view__masterclass">
-            <div class="container">
-                <h2 class="product-view__section-hl">Мастер-классы с этим продуктом</h2>
-                <v-button class="btn--outline product-view__section-link">
-                    {{ $t('product.showAll') }}
-                </v-button>
+            <div class="container product-view__masterclass-container">
+                <h2 class="product-view__section-hl product-view__masterclass-hl">
+                    {{ $t('product.title.masterClasses') }}
+                </h2>
                 <ul class="product-view__masterclass-list">
                     <li class="product-view__masterclass-item" v-for="item in product.masterClasses" :key="item.id">
                         <img class="blur-up lazyload" :data-src="item.image" />
                     </li>
                 </ul>
+                <v-button class="btn--outline product-view__section-link product-view__masterclass-link">
+                    {{ $t('product.showAll') }}
+                </v-button>
             </div>
         </section>
 
-        <section class="section product-view__section">
+        <!-- <section class="section product-view__section">
             <div class="container product-view__reviews">
                 <div class="product-view__reviews-inner">
                     <div class="product-view__reviews-header">
                         <h2 class="product-view__section-hl product-view__reviews-header-hl">
-                            Отзывы<span class="text-grey product-view__reviews-header-hl-count">12</span>
+                            {{ $t('product.title.reviews') }}
+                            <span class="text-grey product-view__reviews-header-hl-count">12</span>
                         </h2>
                         <div class="product-view__section-header-rating">
-                            Средняя оценка&nbsp;
+                            {{ $t('product.reviews.averageRating') }}&nbsp;
                             <span class="product-view__reviews-header-rating-count">
                                 {{ product.reviews.middleRating }}
                             </span>
@@ -260,9 +268,91 @@
                             v-bind="item"
                         />
                     </ul>
+                    <div class="product-view__reviews-show-more">
+                        <v-button class="btn--outline product-view__reviews-show-more-btn">
+                            {{ $t('product.reviews.showAll') }}
+                        </v-button>
+                    </div>
                 </div>
+
                 <v-button class="btn--outline product-view__section-link product-view__reviews-link">
-                    {{ $t('product.makeReview') }}
+                    {{ $t('product.reviews.makeReview') }}
+                </v-button>
+            </div>
+        </section> -->
+
+        <section class="section product-view__section product-view__banners">
+            <div class="container product-view__banners-container">
+                <h2 class="product-view__section-hl product-view__banners-hl">
+                    {{ $t('product.title.compilations') }}
+                </h2>
+                <div class="product-view__banners-grid">
+                    <banner-card
+                        class="product-view__banners-card"
+                        v-for="banner in banners"
+                        :key="banner.id"
+                        :image="banner.image"
+                        :title="banner.title"
+                        :button-text="banner.btnText"
+                    />
+                </div>
+            </div>
+        </section>
+
+        <section class="section product-view__section product-view__like">
+            <div class="container product-view__like-container">
+                <h2 class="product-view__section-hl product-view__like-hl">{{ $t('product.title.like') }}</h2>
+                <v-slider class="product-view__like-slider" name="also-like" :options="sliderOptions">
+                    <catalog-product-card
+                        class="swiper-slide product-view__like-card"
+                        v-for="product in featuredProducts.items"
+                        :key="product.id"
+                        :product-id="product.id"
+                        :name="product.name"
+                        :href="product.href"
+                        :image="product.image"
+                        :price="product.price"
+                        :old-price="product.oldPrice"
+                        :tags="product.tags"
+                        :rating="product.rating"
+                    />
+                </v-slider>
+            </div>
+        </section>
+
+        <section class="section product-view__section">
+            <div class="container product-view__instagram">
+                <h2 class="product-view__section-hl product-view__instagram-hl">{{ $t('landing.title.instagram') }}</h2>
+
+                <v-slider
+                    v-if="isTabletLg"
+                    class="product-view__instagram-slider"
+                    name="instagram"
+                    :options="instagramOptions"
+                >
+                    <instagram-card
+                        class="swiper-slide product-view__instagram-card"
+                        v-for="item in instagramItems"
+                        :key="item.id"
+                        :instagram-card-id="item.id"
+                        :image="item.image"
+                    />
+                </v-slider>
+
+                <div v-if="!isTabletLg" class="product-view__instagram-grid product-view__instagram-grid--initialized">
+                    <instagram-card
+                        class="product-view__instagram-card"
+                        v-for="item in instagramItems"
+                        :key="item.id"
+                        :instagram-card-id="item.id"
+                        :image="item.image"
+                    />
+                </div>
+                <div class="text-grey product-view__instagram-note">
+                    Добавь тег @bessovestnotalantlivy в Instagram и, возможно, мы опубликуем твою фотографию
+                </div>
+                <v-button class="btn--outline product-view__section-link product-view__instagram-link">
+                    {{ $t('landing.subscribe') }}
                 </v-button>
             </div>
         </section>
@@ -273,27 +363,92 @@
 import VSvg from '../../components/controls/VSvg/VSvg.vue';
 import VLink from '../../components/controls/VLink/VLink.vue';
 import VButton from '../../components/controls/VButton/VButton.vue';
-import VRating from '../../components/controls/VRating/VRating.vue';
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 import VHtml from '../../components/controls/VHtml/VHtml.vue';
+import VSlider from '../../components/controls/VSlider/VSlider.vue';
+
+import BannerCard from '../../components/BannerCard/BannerCard.vue';
+import InstagramCard from '../../components/InstagramCard/InstagramCard.vue';
+import VRating from '../../components/controls/VRating/VRating.vue';
 import Tag from '../../components/Tag/Tag.vue';
 
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
 import ProductReviewCard from '../../components/ProductReviewCard/ProductReviewCard.vue';
 
-import productModule, { PRODUCT } from '../../store/modules/Product';
+import productModule, { PRODUCT, BANNERS, FEATURED_PRODUCTS, INSTAGRAM_ITEMS } from '../../store/modules/Product';
 import {} from '../../store/modules/Product/getters';
 import { FETCH_PRODUCT_DATA } from '../../store/modules/Product/actions';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 
 import _debounce from 'lodash/debounce';
+import { breakpoints } from '../../assets/scripts/constants';
 import productBrand1 from '../../assets/images/mock/brandProduct1.png';
 import '../../assets/images/sprites/star-empty-small.svg';
 import '../../assets/images/sprites/star-small.svg';
+import '../../assets/images/sprites/arrow-small.svg';
 import '../../assets/images/sprites/wishlist-middle.svg';
 import './Product.css';
+
+const sliderOptions = {
+    spaceBetween: 24,
+    slidesPerView: 4,
+    grabCursor: true,
+
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+
+    pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
+    },
+
+    breakpoints: {
+        [breakpoints.tabletLg - 1]: {
+            slidesPerView: 2.5,
+            spaceBetween: 24,
+            slidesOffsetBefore: 24,
+            slidesOffsetAfter: 24,
+        },
+
+        [breakpoints.tablet - 1]: {
+            slidesPerView: 2,
+            spaceBetween: 12,
+            slidesOffsetBefore: 0,
+            slidesOffsetAfter: 0,
+        },
+    },
+};
+
+const instagramOptions = {
+    spaceBetween: 24,
+    slidesOffsetBefore: 24,
+    slidesOffsetAfter: 24,
+    slidesPerView: 2.5,
+    grabCursor: true,
+
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+
+    pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
+    },
+
+    breakpoints: {
+        [breakpoints.tablet - 1]: {
+            slidesPerView: 1.5,
+            spaceBetween: 16,
+            slidesOffsetBefore: 16,
+            slidesOffsetAfter: 16,
+        },
+    },
+};
 
 export const DISPATCH_FETCH_PRODUCT_DATA = `${productModule.name}/${FETCH_PRODUCT_DATA}`;
 
@@ -306,9 +461,12 @@ export default {
         VRating,
         VSticky,
         VHtml,
+        VSlider,
 
         CatalogProductCard,
         ProductReviewCard,
+        BannerCard,
+        InstagramCard,
     },
 
     data() {
@@ -319,8 +477,24 @@ export default {
 
     computed: {
         ...mapGetters(productModule.name, []),
-        ...mapState(productModule.name, [PRODUCT]),
+        ...mapState(productModule.name, [PRODUCT, BANNERS, FEATURED_PRODUCTS, INSTAGRAM_ITEMS]),
         ...mapState('route', { code: state => state.params.code }),
+
+        sliderOptions() {
+            return sliderOptions;
+        },
+
+        instagramOptions() {
+            return instagramOptions;
+        },
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
     },
 
     methods: {
@@ -352,7 +526,7 @@ export default {
             $store
                 .dispatch(DISPATCH_FETCH_PRODUCT_DATA, { code })
                 .then(() => next(vm => $progress.finish()))
-                .catch(() => {
+                .catch(error => {
                     $progress.fail();
                     $logger.error(error);
                 });

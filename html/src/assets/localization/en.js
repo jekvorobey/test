@@ -69,7 +69,7 @@ export default {
             bestseller: 'Bestsellers',
             featured: 'Look on the site now',
             brand: 'Popular brands',
-            instagram: 'Insta Beauty',
+            instagram: 'Instabeauty',
         },
 
         brands: {
@@ -79,7 +79,25 @@ export default {
 
     product: {
         vendorCode: 'Vendor Code {code}',
-        review: '{n} reviews',
-        bonus: '{n} bonuses',
+        review: '{n} Reviews',
+        bonus: '{n} Bonuses',
+        showAll: 'Show All',
+
+        title: {
+            masterClasses: 'Master Classes with this product',
+            characteristics: 'Characteristics',
+            reviews: 'Reviews',
+            method: 'Method for the use thereof',
+            description: 'Description',
+            profitable: 'Profitable kit',
+            compilations: 'This product in Compilations',
+            like: 'You may also like',
+        },
+
+        reviews: {
+            showAll: 'Show More',
+            averageRating: 'Average Rating',
+            makeReview: 'Leave Feedback',
+        },
     },
 };

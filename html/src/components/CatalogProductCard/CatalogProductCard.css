@@ -26,6 +26,35 @@
         transition: all var(--time) ease-in;
     }
 
+    &--small {
+        flex-direction: row;
+    }
+
+    &--small &__img {
+        width: 37.5%;
+        padding: var(--gs);
+        border-bottom: none;
+    }
+
+    &--small &__body {
+        padding-left: calc(var(--gs) * 2);
+    }
+
+    &--small &__link {
+        order: 0;
+        text-align: left;
+    }
+
+    &--small &__prices {
+        order: 1;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    &--small &__rating {
+        display: none;
+    }
+
     &__img {
         display: flex;
         position: relative;

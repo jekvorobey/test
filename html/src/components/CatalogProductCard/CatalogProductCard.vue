@@ -1,5 +1,5 @@
 <template>
-    <div class="catalog-product-card">
+    <div class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }">
         <div class="catalog-product-card__img">
             <img class="blur-up lazyload" :data-src="image" alt />
             <div class="catalog-product-card__controls">
@@ -96,6 +96,11 @@ export default {
         oldPrice: {
             type: [String, Number],
             default: null,
+        },
+
+        isSmall: {
+            type: Boolean,
+            default: false,
         },
     },
 };
