@@ -77,7 +77,7 @@
                         </div>
                     </div>
 
-                    <div class="product-view__header-detail-section">
+                    <div class="product-view__header-detail-section product-view__header-detail-panels">
                         <div class="product-view__header-detail-price-panel">
                             <div class="product-view__header-detail-price-panel-prices">
                                 <div class="text-bold product-view__header-detail-price-panel-current">
