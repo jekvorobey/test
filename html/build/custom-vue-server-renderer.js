@@ -8426,18 +8426,8 @@ function createMapper(clientManifest) {
     // map server-side moduleIds to client-side files
     return function mapper(moduleIds) {
         const res = new Set();
-        // //commented
-        // for (let i = 0; i < moduleIds.length; i++) {
-        //     const mapped = map.get(moduleIds[i]);
-        //     if (mapped) {
-        //         for (let j = 0; j < mapped.length; j++) {
-        //             res.add(mapped[j]);
-        //         }
-        //     }
-        // }
 
-        // new
-        for (let i = moduleIds.length - 1; i >= 0; i--) {
+        for (let i = 0; i < moduleIds.length; i++) {
             const mapped = map.get(moduleIds[i]);
             if (mapped) {
                 for (let j = 0; j < mapped.length; j++) {
@@ -8548,11 +8538,10 @@ TemplateRenderer.prototype.renderStyles = function renderStyles(context) {
 
     const initial = this.preloadFiles || [];
     const async = this.getUsedAsyncFiles(context) || [];
-    const cssFiles = initial.concat(async).filter(function(ref) {
-        const { file } = ref;
+    // ИЗМЕНЕНО
+    // добавлен reverse
+    const cssFiles = initial.concat(async.reverse()).filter(({ file }) => isCSS(file));
 
-        return isCSS(file);
-    });
     return (
         // ИЗМЕНЕНО
         // render links for css files
@@ -8677,10 +8666,10 @@ TemplateRenderer.prototype.renderScripts = function renderScripts(context) {
             return isJS(file);
         });
         // old
-        // const needed = [initial[0]].concat(async, initial.slice(1));
+        const needed = [initial[0]].concat(async, initial.slice(1));
 
         // new
-        const needed = [...initial].concat(async);
+        // const needed = [...initial].concat(async);
         return needed
             .map(function(ref) {
                 const { file } = ref;

@@ -65,6 +65,8 @@ module.exports = merge(base, {
                 },
                 default: {
                     minChunks: 2,
+                    minSize: 0,
+                    maxAsyncRequests: Infinity,
                     priority: -20,
                     reuseExistingChunk: true,
                 },

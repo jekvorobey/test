@@ -18,6 +18,13 @@ import './App.css';
  * Базовые компоненты страницы
  */
 
+// Часто используемые(и маленькие) компоненты лучше добавить сразу в основной бандл,
+// ибо они используются повсеместно на всех страницах, и смысла выносить их в отдельный бандл и грузить отдельно нет
+import VSvg from '../components/controls/VSvg/VSvg.vue';
+import VLink from '../components/controls/VLink/VLink.vue';
+import VButton from '../components/controls/VButton/VButton.vue';
+import VInput from '../components/controls/VInput/VInput.vue';
+
 import VHeader from '../components/VHeader/VHeader.vue';
 import VFooter from '../components/VFooter/VFooter.vue';
 
