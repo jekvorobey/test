@@ -19,6 +19,7 @@
                         :key="category.id"
                         :name="category.name"
                         :image="category.image"
+                        :code="category.code"
                     />
                 </div>
             </div>

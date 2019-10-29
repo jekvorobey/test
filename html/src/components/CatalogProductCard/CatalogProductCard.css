@@ -55,6 +55,12 @@
         display: none;
     }
 
+    &--small &__controls {
+        &-link {
+            display: none;
+        }
+    }
+
     &__img {
         display: flex;
         position: relative;
@@ -101,9 +107,10 @@
         &-link {
             font-size: 12px;
             line-height: 24px;
-            font-weight: 500px;
+            font-weight: bold;
+            letter-spacing: 0.05em;
 
-            @media (--tablet-lg) {
+            @media (--tablet) {
                 display: none;
             }
         }

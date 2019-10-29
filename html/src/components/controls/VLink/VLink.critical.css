@@ -1,13 +1,9 @@
 .link {
-    font-weight: 500;
-    font-style: normal;
-    font-size: 14px;
     line-height: 24px;
-    letter-spacing: 0.5px;
-    cursor: pointer;
     text-decoration: none;
-    text-transform: uppercase;
     transition: all var(--time) var(--timing-function);
+    border-bottom: none;
+    text-transform: uppercase;
 
     &--sm {
         font-weight: normal;

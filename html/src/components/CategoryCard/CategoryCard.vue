@@ -1,6 +1,6 @@
 <template>
     <div class="category-card">
-        <router-link class="category-card__img" to="/">
+        <router-link class="category-card__img" :to="url">
             <img class="blur-up lazyload" :data-src="image" alt="" />
         </router-link>
         {{ name }}
@@ -13,8 +13,6 @@ import './CategoryCard.css';
 export default {
     name: 'category-card',
 
-    components: {},
-
     props: {
         categoryId: {
             type: [Number, String],
@@ -26,6 +24,16 @@ export default {
 
         image: {
             type: String,
+        },
+
+        code: {
+            type: String,
+        },
+    },
+
+    computed: {
+        url() {
+            return this.code ? `/catalog/${this.code}` : `/catalog`;
         },
     },
 };

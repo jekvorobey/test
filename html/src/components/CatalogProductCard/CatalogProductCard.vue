@@ -4,7 +4,7 @@
             <img class="blur-up lazyload" :data-src="image" alt />
             <div class="catalog-product-card__controls">
                 <v-button class="btn--outline catalog-product-card__controls-btn">Купить</v-button>
-                <v-link class="catalog-product-card__controls-link">Быстрый просмотр</v-link>
+                <v-link tag="button" class="catalog-product-card__controls-link">Быстрый просмотр</v-link>
             </div>
         </div>
         <div class="catalog-product-card__body">

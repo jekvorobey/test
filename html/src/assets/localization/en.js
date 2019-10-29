@@ -92,6 +92,8 @@ export default {
             profitable: 'Profitable kit',
             compilations: 'This product in Compilations',
             like: 'You may also like',
+            instagram: 'Instabeauty',
+            history: 'You looked at',
         },
 
         reviews: {

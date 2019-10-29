@@ -3,11 +3,11 @@
         <div class="container">
             <transition-group tag="ol" class="section product-view__breadcrumbs" name="fade-in">
                 <li class="product-view__breadcrumbs-item" key="main">
-                    <router-link to="/">{{ 'Главная' }}</router-link>
+                    <router-link class="product-view__breadcrumbs-link" to="/">{{ 'Главная' }}</router-link>
                 </li>
 
                 <li class="product-view__breadcrumbs-item" key="all">
-                    <router-link to="/catalog">{{ 'Каталог' }}</router-link>
+                    <router-link class="product-view__breadcrumbs-link" to="/catalog">{{ 'Каталог' }}</router-link>
                 </li>
 
                 <!-- <li class="product-view__breadcrumbs-item" v-for="category in activeCategories" :key="category.id">
@@ -103,10 +103,10 @@
                     </div>
 
                     <div class="product-view__header-detail-section">
-                        <p>Получить в г. Москва</p>
+                        <p>Получить в <a href="#">г. Москва</a></p>
                         <p>Экспресс доставка курьером — 550 ₽, сегодня, 21 июня</p>
                         <p>Доставка курьером — 350 ₽, завтра, 22 июня</p>
-                        <p>Из пунктов выдачи или постаматов — бесплатно, 23 июня</p>
+                        <p>Из пунктов <a href="#">выдачи</a> или <a href="#">постаматов</a> — бесплатно, 23 июня</p>
                     </div>
 
                     <div class="product-view__header-detail-section">
@@ -118,19 +118,28 @@
                             классики от Тома Форда. Редкое экзотическое масло муру-муру из Бразилии и масло цветков
                             ромашки создают кремовую текстуру и обеспечивают...
                         </p>
-                        <v-link>Подробнее</v-link>
+                        <a href="#">Подробнее</a>
                     </div>
                     <div class="product-view__header-detail-section">
-                        <span><img :src="mockImg" /><v-link>&nbsp;&nbsp;&nbsp;На страницу бренда</v-link></span>
+                        <span><img :src="mockImg" />&nbsp;&nbsp;&nbsp;<a href="#">На страницу бренда</a></span>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- <section class="section product-view__section">
+
+        <section class="section product-view__section">
             <div class="container product-view__socials">
-                <div class="product-view__socials-inner">Подписаться</div>
+                <div class="product-view__socials-inner">
+                    <span class="text-bold">Поделиться</span>&nbsp;
+                    <div>
+                        <v-svg name="vkontakte-bw" width="22" height="22" />
+                        <v-svg name="facebook-bw" width="22" height="22" />
+                        <v-svg name="instagram-bw" width="22" height="22" />
+                    </div>
+                </div>
             </div>
-        </section> -->
+        </section>
+
         <section class="section product-view__section">
             <div class="container product-view__profitable">
                 <h2 class="product-view__section-hl product-view__profitable-hl">
@@ -147,7 +156,7 @@
                                 class="product-view__profitable-card"
                                 :product-id="item.id"
                                 :name="item.name"
-                                :href="'/'"
+                                href="/catalog"
                                 :image="item.image"
                                 :price="item.price"
                                 :old-price="item.oldPrice"
@@ -232,17 +241,20 @@
             </div>
         </section>
 
-        <!-- <section class="section product-view__section">
+        <section class="section product-view__section">
             <div class="container product-view__reviews">
                 <div class="product-view__reviews-inner">
                     <div class="product-view__reviews-header">
                         <h2 class="product-view__section-hl product-view__reviews-header-hl">
                             {{ $t('product.title.reviews') }}
                             <span class="text-grey product-view__reviews-header-hl-count">12</span>
+                            <v-button class="btn--outline product-view__section-link product-view__reviews-link">
+                                {{ $t('product.reviews.makeReview') }}
+                            </v-button>
                         </h2>
                         <div class="product-view__section-header-rating">
-                            {{ $t('product.reviews.averageRating') }}&nbsp;
                             <span class="product-view__reviews-header-rating-count">
+                                {{ $t('product.reviews.averageRating') }}&nbsp;
                                 {{ product.reviews.middleRating }}
                             </span>
                             <v-rating :value="product.reviews.middleRating">
@@ -274,12 +286,8 @@
                         </v-button>
                     </div>
                 </div>
-
-                <v-button class="btn--outline product-view__section-link product-view__reviews-link">
-                    {{ $t('product.reviews.makeReview') }}
-                </v-button>
             </div>
-        </section> -->
+        </section>
 
         <section class="section product-view__section product-view__banners">
             <div class="container product-view__banners-container">
@@ -320,9 +328,9 @@
             </div>
         </section>
 
-        <section class="section product-view__section">
-            <div class="container product-view__instagram">
-                <h2 class="product-view__section-hl product-view__instagram-hl">{{ $t('landing.title.instagram') }}</h2>
+        <section class="section product-view__section product-view__instagram">
+            <div class="container product-view__instagram-container">
+                <h2 class="product-view__section-hl product-view__instagram-hl">{{ $t('product.title.instagram') }}</h2>
 
                 <v-slider
                     v-if="isTabletLg"
@@ -356,6 +364,27 @@
                 </v-button>
             </div>
         </section>
+
+        <section v-if="!isTabletLg" class="section product-view__section product-view__history">
+            <div class="container product-view__history-container">
+                <h2 class="product-view__section-hl">{{ $t('product.title.history') }}</h2>
+                <div class="product-view__history-grid">
+                    <catalog-product-card
+                        class="product-view__history-card"
+                        v-for="product in featuredProducts.items.slice(0, 6)"
+                        :key="product.id"
+                        :product-id="product.id"
+                        :name="product.name"
+                        :href="product.href"
+                        :image="product.image"
+                        :price="product.price"
+                        :old-price="product.oldPrice"
+                        :tags="product.tags"
+                        :rating="product.rating"
+                    />
+                </div>
+            </div>
+        </section>
     </section>
 </template>
 
@@ -385,6 +414,11 @@ import { $store, $progress, $logger } from '../../services/ServiceLocator';
 import _debounce from 'lodash/debounce';
 import { breakpoints } from '../../assets/scripts/constants';
 import productBrand1 from '../../assets/images/mock/brandProduct1.png';
+
+import '../../assets/images/sprites/socials/vkontakte-bw.svg';
+import '../../assets/images/sprites/socials/facebook-bw.svg';
+import '../../assets/images/sprites/socials/instagram-bw.svg';
+
 import '../../assets/images/sprites/star-empty-small.svg';
 import '../../assets/images/sprites/star-small.svg';
 import '../../assets/images/sprites/arrow-small.svg';

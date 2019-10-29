@@ -22,6 +22,7 @@
 
     &__link {
         transition: none;
+        border-bottom: none;
     }
 
     &__label {

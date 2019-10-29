@@ -1,5 +1,5 @@
 :root {
-    --header-top-bg: #e4e4e4;
+    --header-top-bg: #f4f4f4;
 }
 
 .v-header {
@@ -229,6 +229,10 @@
         &-link {
             text-transform: uppercase;
             color: var(--cl-white);
+            font-size: 14px;
+            line-height: 24px;
+            letter-spacing: 0.04em;
+            font-weight: bold;
         }
     }
 }

@@ -92,6 +92,8 @@ export default {
             profitable: 'Выгодный комплект',
             compilations: 'Этот товар в подборках',
             like: 'Вам также могут понравиться',
+            instagram: 'Instabeauty',
+            history: 'Вы смотрели',
         },
 
         reviews: {

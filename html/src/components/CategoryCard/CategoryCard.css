@@ -20,6 +20,7 @@
         width: 100%;
         padding: 0 var(--gs);
         margin-bottom: calc(var(--gs) * 2);
+        border-bottom: none;
 
         @media (--tablet) {
             padding: 0 calc(var(--gs) * 1.5);

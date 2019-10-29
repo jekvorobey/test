@@ -4,10 +4,16 @@
             Ссылки
         </h2>
 
-        <v-link>В избранное</v-link>
+        <p class="text-grey">Обычная ссылка</p>
+        <a href="#">Обычная ссылка</a>
         <br />
         <br />
-        <v-link class="link--sm">В избранное</v-link>
+        <p class="text-grey">Компонент VLink</p>
+        <v-link href="#">В избранное</v-link>
+        <br />
+        <br />
+        <p class="text-grey">.link.link--sm</p>
+        <v-link class="link--sm" href="#">В избранное</v-link>
     </section>
 </template>
 <script>

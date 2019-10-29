@@ -8,7 +8,26 @@
         line-height: 24px;
         text-transform: uppercase;
 
+        @media (--tablet-lg) {
+            width: 100%;
+            margin-bottom: calc(var(--gs) * 3);
+        }
+
+        &-name {
+            font-weight: bold;
+            letter-spacing: 0.02em;
+
+            @media (--tablet-lg) {
+                font-size: 14px;
+                line-height: 24px;
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: var(--gs);
+            }
+        }
+
         &-date {
+            font-weight: 400;
             margin-left: calc(var(--gs) * 2);
             text-transform: none;
         }
@@ -16,6 +35,11 @@
 
     &__body {
         width: 50%;
+
+        @media (--tablet-lg) {
+            width: 100%;
+            margin-bottom: calc(var(--gs) * 2);
+        }
 
         &-item {
             line-height: 24px;
@@ -56,6 +80,10 @@
         display: flex;
         align-items: flex-end;
         justify-content: flex-end;
+
+        @media (--tablet) {
+            justify-content: flex-start;
+        }
 
         &-btn {
             font-size: 16px;

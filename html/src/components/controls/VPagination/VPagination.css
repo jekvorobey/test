@@ -21,6 +21,7 @@
             background-color: var(--cl-white);
             cursor: pointer;
             text-decoration: none;
+            border-bottom: none;
             margin: 0 calc(var(--gs) / 2);
         }
 
