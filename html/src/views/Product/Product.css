@@ -642,9 +642,7 @@
                 }
 
                 @media (--tablet) {
-                    img {
-                        max-height: 120px;
-                    }
+                    padding: var(--gs);
                 }
             }
         }
