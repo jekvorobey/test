@@ -395,7 +395,11 @@
 
         &-header {
             background-color: var(--cl-global);
-            padding: calc(var(--gs) * 1.5) calc(var(--gs) * 2);
+            padding: calc(var(--gs) * 1.5) calc(var(--gs) * 3);
+
+            @media (--tablet) {
+                padding: calc(var(--gs) * 1.5) calc(var(--gs) * 2);
+            }
 
             &-btn {
                 display: flex;
@@ -451,7 +455,7 @@
             padding-bottom: calc(var(--gs) * 7);
             .v-accordion__item {
                 padding: 0 calc(var(--gs) * 3);
-                padding-top: calc(var(--gs) * 3);
+                padding-top: calc(var(--gs) * 2);
 
                 @media (--tablet) {
                     padding: 0 calc(var(--gs) * 2);
