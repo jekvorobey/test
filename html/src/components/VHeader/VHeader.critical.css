@@ -4,7 +4,7 @@
 
 .v-header {
     position: fixed;
-    z-index: 999;
+    z-index: 998;
     top: 0;
     left: 0;
     right: 0;
@@ -35,7 +35,11 @@
 
         &-container {
             display: flex;
-            padding: calc(var(--gs) / 2) var(--gs);
+            padding: calc(var(--gs) / 2) calc(var(--gs) * 2);
+
+            @media (--tablet) {
+                padding: calc(var(--gs) / 2) var(--gs);
+            }
         }
 
         &-link {

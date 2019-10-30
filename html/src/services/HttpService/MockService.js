@@ -452,7 +452,7 @@ const products = [
         name: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
         description: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
         code: '6',
-        image: product6,
+        image: null,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         type: 'product',
@@ -880,7 +880,7 @@ export default class MockHttpService {
                             setTimeout(
                                 () =>
                                     resolve({
-                                        items: [...products.slice(0, 7), productBanners[0], ...products.slice(7, 13)],
+                                        items: [...products.slice(0, 6), productBanners[0], ...products.slice(6, 12)],
                                         range: 13,
                                     }),
                                 300

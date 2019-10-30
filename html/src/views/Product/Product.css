@@ -2,6 +2,7 @@
     &__breadcrumbs {
         margin: calc(var(--gs) * 1.5) 0;
         display: flex;
+        flex-wrap: wrap;
         font-size: 11px;
         line-height: 24px;
         color: var(--cl-grey);

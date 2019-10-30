@@ -1,13 +1,5 @@
 <template>
     <div class="catalog-filter">
-        <ul class="catalog-filter__categories">
-            <category-tree-item
-                class="catalog-filter__categories-item"
-                :item="category"
-                v-for="(category, index) in categories"
-                :key="category.id || index"
-            />
-        </ul>
         <v-accordion
             class="catalog-filter__filters"
             key-field="id"
@@ -56,7 +48,7 @@
             </template>
         </v-accordion>
         <v-button class="btn--outline catalog-filter__clear-btn" :to="{ path: code ? `/catalog/${code}` : '/catalog' }">
-            Очистить фильтры
+            {{ btnText }}
         </v-button>
     </div>
 </template>
@@ -66,7 +58,6 @@ import VButton from '../controls/VButton/VButton.vue';
 import VRange from '../controls/VRange/VRange.vue';
 import VCheck from '../controls/VCheck/VCheck.vue';
 import VAccordion from '../controls/VAccordion/VAccordion.vue';
-import CategoryTreeItem from './CategoryTreeItem/CategoryTreeItem.vue';
 
 import _debounce from 'lodash/debounce';
 import { concatCatalogRoutePath } from '../../util/catalog';
@@ -76,9 +67,14 @@ import './CatalogFilter.css';
 export default {
     name: 'catalog-filter',
 
-    components: { VButton, VCheck, VRange, VAccordion, CategoryTreeItem },
+    components: { VButton, VCheck, VRange, VAccordion },
 
-    props: {},
+    props: {
+        btnText: {
+            type: String,
+            default: 'Очистить фильтры',
+        },
+    },
 
     data() {
         return {
@@ -131,16 +127,18 @@ export default {
 
     computed: {
         ...mapGetters('catalog', ['filterSegments', 'routeSegments']),
-        ...mapState('catalog', ['categories', 'filters']),
+        ...mapState('catalog', ['filters']),
         ...mapState('route', {
             code: state => state.params.code,
         }),
 
-        accordionFilters(){
-            return this.filters ? this.filters.map(f => {
-                return { id: f.id, item: f, title: f.title, isExpanded: true, };
-            }) : [];
-        }
+        accordionFilters() {
+            return this.filters
+                ? this.filters.map(f => {
+                      return { id: f.id, item: f, title: f.title, isExpanded: true };
+                  })
+                : [];
+        },
     },
 
     beforeMount() {

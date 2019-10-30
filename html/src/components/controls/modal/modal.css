@@ -214,8 +214,7 @@
         }
     }
 
-    &__body,
-    &__footer {
+    &__body {
         width: 100%;
         padding: calc(var(--gs) * 6) calc(var(--gs) * 7) calc(var(--gs) * 7);
         .popup--fullscreen & {

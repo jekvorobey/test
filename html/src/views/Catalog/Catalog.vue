@@ -11,7 +11,9 @@
                 </li>
 
                 <li class="catalog-view__breadcrumbs-item" v-for="category in activeCategories" :key="category.id">
-                    <router-link class="catalog-view__breadcrumbs-link" :to="`/catalog/${category.code}`">{{ category.name }}</router-link>
+                    <router-link class="catalog-view__breadcrumbs-link" :to="`/catalog/${category.code}`">{{
+                        category.name
+                    }}</router-link>
                 </li>
             </transition-group>
 
@@ -28,6 +30,14 @@
         <section class="section">
             <div class="container catalog-view__grid">
                 <div class="catalog-view__side-panel">
+                    <ul class="catalog-view__side-panel-categories">
+                        <category-tree-item
+                            class="catalog-view__side-panel-categories-item"
+                            v-for="category in categories"
+                            :item="category"
+                            :key="category.id"
+                        />
+                    </ul>
                     <catalog-filter class="catalog-view__side-panel-filters" />
                 </div>
                 <div class="catalog-view__main">
@@ -43,8 +53,15 @@
                             v-model="sortValue"
                             :options="sortOptions"
                             :searchable="false"
-                            :allowEmpty="false"
                         />
+
+                        <v-button class="catalog-view__main-header-btn" @click="filterModal = !filterModal">
+                            <span>
+                                Фильтр и сортировка&nbsp;&nbsp;
+                                <span class="text-grey">{{ activeTags.length }}</span>
+                            </span>
+                            <v-svg id="catalog-filter-icon" name="filter" width="18" height="14" />
+                        </v-button>
                     </div>
 
                     <transition-group tag="ul" class="catalog-view__main-tags" name="tag-item">
@@ -56,7 +73,7 @@
                         >
                             {{ tag.name }}&nbsp;
                             <button class="catalog-view__main-tags-delete-btn" @click="onClickDeleteTag(tag.code)">
-                                <v-svg name="cross-small" width="24" height="24" />
+                                <v-svg name="cross-small" width="10" height="10" />
                             </button>
                         </li>
                     </transition-group>
@@ -89,7 +106,7 @@
                                 :rating="item.rating"
                             />
                             <catalog-banner-card
-                                v-if="item.type === 'banner'"
+                                v-else-if="item.type === 'banner'"
                                 class="catalog-view__main-grid-card"
                                 :banner-id="item.id"
                                 :title="item.title"
@@ -116,6 +133,44 @@
                 </div>
             </div>
         </section>
+        <transition name="fade-in">
+            <modal
+                class="catalog-view__modal-filter"
+                v-if="filterModal && isTabletLg"
+                :show-close-btn="false"
+                type="fullscreen"
+            >
+                <template v-slot:body>
+                    <v-sticky class="catalog-view__modal-filter-sticky">
+                        <template v-slot:sticky>
+                            <div class="catalog-view__modal-filter-header">
+                                <button class="catalog-view__modal-filter-header-btn" @click="filterModal = false">
+                                    <v-svg name="cross-small" width="14" height="14" />Фильтр
+                                </button>
+                            </div>
+                        </template>
+
+                        <div class="catalog-view__modal-filter-sort">
+                            <div class="catalog-view__modal-filter-sort-title">Сортировка</div>
+                            <ul class="catalog-view__modal-filter-sort-list">
+                                <li
+                                    class="catalog-view__modal-filter-sort-item"
+                                    :class="{ 'catalog-view__modal-filter-sort-item--active': item === sortValue }"
+                                    v-for="item in sortOptions"
+                                    :key="item"
+                                >
+                                    <button class="catalog-view__modal-filter-sort-btn" @click="sortValue = item">
+                                        {{ item }}
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <catalog-filter class="catalog-view__modal-filter-panel" />
+                    </v-sticky>
+                </template>
+            </modal>
+        </transition>
     </section>
 </template>
 
@@ -126,13 +181,16 @@ import VCheck from '../../components/controls/VCheck/VCheck.vue';
 import VPagination from '../../components/controls/VPagination/VPagination.vue';
 import VRange from '../../components/controls/VRange/VRange.vue';
 import VSelect from '../../components/controls/VSelect/VSelect.vue';
+import VSticky from '../../components/controls/VSticky/VSticky.vue';
+import Modal from '../../components/controls/modal/modal.vue';
 
+import CategoryTreeItem from '../../components/CategoryTreeItem/CategoryTreeItem.vue';
 import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
 
 import { concatCatalogRoutePath } from '../../util/catalog';
-import catalogModule, { ITEMS, BANNER } from '../../store/modules/Catalog';
+import catalogModule, { ITEMS, BANNER, CATEGORIES } from '../../store/modules/Catalog';
 import {
     ACTIVE_TAGS,
     ACTIVE_CATEGORY,
@@ -146,6 +204,7 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 
 import _debounce from 'lodash/debounce';
+import '../../assets/images/sprites/filter.svg';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
 
@@ -161,17 +220,27 @@ export default {
         VButton,
         VSelect,
         VPagination,
+        VSticky,
+        Modal,
 
+        CategoryTreeItem,
         CatalogFilter,
         CatalogProductCard,
         CatalogBannerCard,
     },
 
     data() {
-        const sortOptions = ['Сначала подороже'];
+        const sortOptions = [
+            'Сначала подороже',
+            'Сначала подешевле',
+            'Популярное Новинки',
+            'По размеру скидки',
+            'С высоким рейтингом',
+        ];
         return {
             sortValue: sortOptions[0],
             sortOptions,
+            filterModal: false,
         };
     },
 
@@ -184,10 +253,14 @@ export default {
             ROUTE_SEGMENTS,
             ACTIVE_CATEGORIES,
         ]),
-        ...mapState(catalogModule.name, [ITEMS, BANNER]),
+        ...mapState(catalogModule.name, [ITEMS, BANNER, CATEGORIES]),
         ...mapState('route', {
             code: state => state.params.code,
         }),
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
     },
 
     methods: {

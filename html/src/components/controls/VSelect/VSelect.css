@@ -218,6 +218,9 @@ fieldset[disabled] .multiselect {
     width: 24px;
     height: 100%;
     background-image: svg-load('../../../assets/images/sprites/cross-small.svg', fill: var(--cl-global));
+    background-size: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 .multiselect__tag-icon:focus,
 .multiselect__tag-icon:hover {

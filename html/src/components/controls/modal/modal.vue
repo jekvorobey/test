@@ -27,14 +27,19 @@
                     </slot>
                 </div>
 
-                <!--div class="modal-footer popup__footer">
-                            <slot name="footer">
-                            </slot>
-        </div-->
-                <button type="button" title="Закрыть" class="modal-default-button popup__close" @click="$emit('close')">
-                    <svg class="icon icon--cross-big">
-                        <use xlink:href="#icon-cross"></use>
-                    </svg>
+                <div class="modal-footer popup__footer">
+                    <slot name="footer">
+                        <!-- Default footer -->
+                    </slot>
+                </div>
+                <button
+                    v-if="showCloseBtn"
+                    type="button"
+                    title="Закрыть"
+                    class="modal-default-button popup__close"
+                    @click="$emit('close')"
+                >
+                    <v-svg name="cross" width="14" height="14" />
                 </button>
             </div>
         </div>
@@ -42,10 +47,15 @@
 </template>
 
 <script>
+import VSvg from '../VSvg/VSvg.vue';
+import '../../../assets/images/sprites/cross.svg';
 import './modal.css';
 
 export default {
     name: 'modal',
+    components: {
+        VSvg,
+    },
     props: {
         type: {
             type: String,
@@ -61,9 +71,9 @@ export default {
             type: Boolean,
             default: true,
         },
-        close: {
-            type: Function,
-            default: () => {},
+        showCloseBtn: {
+            type: Boolean,
+            default: true,
         },
     },
     data() {

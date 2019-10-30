@@ -70,8 +70,10 @@
         border-bottom: 0.5px solid transparent;
         flex: none;
 
-        @media (--tablet-lg) {
-            min-height: auto;
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
         }
 
         @media (--tablet) {
@@ -83,6 +85,11 @@
             height: 100%;
             object-fit: cover;
             font-family: 'object-fit: cover;';
+        }
+
+        .icon {
+            margin: auto;
+            opacity: 0.1;
         }
     }
 

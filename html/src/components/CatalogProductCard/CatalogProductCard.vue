@@ -1,7 +1,8 @@
 <template>
     <div class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }">
         <div class="catalog-product-card__img">
-            <img class="blur-up lazyload" :data-src="image" alt />
+            <img v-if="image" class="blur-up lazyload" :data-src="image" alt />
+            <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-card__controls">
                 <v-button class="btn--outline catalog-product-card__controls-btn">Купить</v-button>
                 <v-link tag="button" class="catalog-product-card__controls-link">Быстрый просмотр</v-link>
@@ -43,6 +44,7 @@ import Tag from '../Tag/Tag.vue';
 import '../../assets/images/sprites/star-empty-small.svg';
 import '../../assets/images/sprites/star-small.svg';
 import '../../assets/images/sprites/wishlist-middle.svg';
+import '../../assets/images/sprites/logo.svg';
 import './CatalogProductCard.css';
 
 export default {

@@ -34,7 +34,7 @@
 
 <script>
 import './CategoryTreeItem.css';
-import { ACTIVE_CATEGORIES } from '../../../store/modules/Catalog/getters';
+import { ACTIVE_CATEGORIES } from '../../store/modules/Catalog/getters';
 import { mapGetters } from 'vuex';
 
 export default {
