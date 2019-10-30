@@ -2471,10 +2471,10 @@ core-js@^2.4.0:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.9.tgz#6b4b214620c834152e179323727fc19741b084f2"
   integrity sha512-HOpZf6eXmnl7la+cUdMnLvUxKNqLUzJvgIziQ0DiF3JwSImNphIqdGqzj6hIKyX04MmV0poclQ7+wjWvxQyR2A==
 
-core-js@^3.3.4:
-  version "3.3.4"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.3.4.tgz#6b0a23392958317bfb46e40b090529a923add669"
-  integrity sha512-BtibooaAmSOptGLRccsuX/dqgPtXwNgqcvYA6kOTTMzonRxZ+pJS4e+6mvVutESfXMeTnK8m3M+aBu3bkJbR+w==
+core-js@^3.3.5:
+  version "3.3.5"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.3.5.tgz#58d20f48a95a07304b62ff752742b82b56431ed8"
+  integrity sha512-0J3K+Par/ZydhKg8pEiTcK/9d65/nqJOzY62uMkjeBmt05fDOt/khUVjDdh8TpeIuGQDy1yLDDCjiWN/8pFIuw==
 
 core-util-is@~1.0.0:
   version "1.0.2"
@@ -3822,10 +3822,10 @@ filepond-plugin-image-preview@^4.5.0:
   resolved "https://registry.yarnpkg.com/filepond-plugin-image-preview/-/filepond-plugin-image-preview-4.5.0.tgz#44bccdf1245c64437217db0e41ef1655e56a3c55"
   integrity sha512-17SM6r0FozvoqbZMCWKrkyN87oDLh/xH1fp22DFFx3+phSM+dxLQXPMc8KP3j5u0yRoSzm3oZRGW8rQr3oA1Jw==
 
-filepond@^4.7.2:
-  version "4.7.2"
-  resolved "https://registry.yarnpkg.com/filepond/-/filepond-4.7.2.tgz#5b61d4b437c0e0f9cad7afcb9ffc6e9d16c0ceec"
-  integrity sha512-OqG35MnmvrGnq2KgHO0PS8uujzRqQL/bMlSy0StqRn6RRAM6wBM9gzQl22IvWLwMyw6g8aIZTZAhMaiTS1LZsA==
+filepond@^4.7.3:
+  version "4.7.3"
+  resolved "https://registry.yarnpkg.com/filepond/-/filepond-4.7.3.tgz#86e5df16416d64620085e91603237d54840bd00e"
+  integrity sha512-lt7UC2wwuoy1WN0zTeZRZ+jS9tHgICPYJB8l1OtHdCjGwaQzTq+M3PqKQQ7melKkGS1tQ1rUInKkSdSuojphWg==
 
 filesize@^3.6.1:
   version "3.6.1"
@@ -10043,10 +10043,10 @@ vue-multiselect@^2.1.6:
   resolved "https://registry.yarnpkg.com/vue-multiselect/-/vue-multiselect-2.1.6.tgz#5be5d811a224804a15c43a4edbb7485028a89c7f"
   integrity sha512-s7jmZPlm9FeueJg1RwJtnE9KNPtME/7C8uRWSfp9/yEN4M8XcS/d+bddoyVwVnvFyRh9msFo0HWeW0vTL8Qv+w==
 
-vue-observe-visibility@^0.4.5:
-  version "0.4.5"
-  resolved "https://registry.yarnpkg.com/vue-observe-visibility/-/vue-observe-visibility-0.4.5.tgz#32627299d53bb782ab0f848064cbd23ebfcf98a2"
-  integrity sha512-FG2UWUk1nQBpPM168aH/7nFE4daCSVxkZXm1dbwOS4sGNW7kFe2lPBMfIdU5CcbSn015pKsqahEmXTrYyf71zw==
+vue-observe-visibility@^0.4.6:
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/vue-observe-visibility/-/vue-observe-visibility-0.4.6.tgz#878cb8ebcf3078e40807af29774e97105ebd519e"
+  integrity sha512-xo0CEVdkjSjhJoDdLSvoZoQrw/H2BlzB5jrCBKGZNXN2zdZgMuZ9BKrxXDjNP2AxlcCoKc8OahI3F3r3JGLv2Q==
 
 vue-resize@^0.4.5:
   version "0.4.5"
