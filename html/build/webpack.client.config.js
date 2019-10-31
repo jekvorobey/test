@@ -5,8 +5,6 @@ const SWPrecachePlugin = require('sw-precache-webpack-plugin');
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ImageminWebpPlugin = require('imagemin-webp-webpack-plugin');
-const ImageminPlugin = require('imagemin-webpack-plugin').default;
-const imageminMozJpeg = require('imagemin-mozjpeg');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const BrotliPlugin = require('brotli-webpack-plugin');
@@ -118,30 +116,11 @@ module.exports = merge(base, {
                       {
                           test: /\.(jpe?g|png)$/,
                           options: {
-                              quality: 80,
+                              nearLossless: 0,
+                              quality: 45,
                               method: 6,
                           },
                       },
-                  ],
-              }),
-              /* imagemin-webpack-plugin выполняет все работы по сжатию изображений. */
-              new ImageminPlugin({
-                  /* Для jpeg используется lossy сжатие через mozJpeg. */
-                  jpegtran: null,
-                  /* Для png используется lossy сжатие через pngQuant. */
-                  optipng: null,
-                  /* gif не обрабатывается. Используйте WebM с фолбеком в mp4 (только придётся прописать лоадер). */
-                  gifsicle: null,
-                  /* Под web нет смысла задавать высокое качество, но если будет слишком низко, то можно поднять. */
-                  pngquant: {
-                      quality: '65-90',
-                      /* Выставлено максимальное качество сжатия, т.к. на проде мы никуда не спешим. */
-                      speed: 1,
-                  },
-                  plugins: [
-                      imageminMozJpeg({
-                          quality: 75,
-                      }),
                   ],
               }),
               // strip dev-only code in Vue source

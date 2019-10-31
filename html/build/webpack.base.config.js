@@ -53,9 +53,10 @@ module.exports = {
                         loader: 'url-loader',
                         options: {
                             name: isProd ? 'images/[name].[hash:20].[ext]' : 'images/[name].[ext]',
-                            limit: 10 * 1024,
+                            limit: 1024,
                         },
                     },
+                    'webp-loader',
                 ],
             },
             {
