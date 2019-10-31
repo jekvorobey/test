@@ -1,0 +1,54 @@
+.instagram-section {
+    position: relative;
+
+    @media (--tablet-lg) {
+        padding: 0;
+    }
+
+    @media (--tablet) {
+        text-align: center;
+    }
+
+    &__hl {
+        @media (--tablet-min) and (--tablet-lg) {
+            padding-left: calc(var(--gs) * 3);
+        }
+    }
+
+    &__link {
+        @media (--tablet) {
+            position: relative;
+            width: calc(100% - 32px);
+            left: unset;
+            right: unset;
+        }
+    }
+
+    &__slider {
+        padding-bottom: calc(var(--gs) * 6);
+
+        .v-slider__controls {
+            bottom: calc(var(--gs) * 3);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        grid-gap: calc(var(--gs) * 3);
+        opacity: 0;
+        transition: all var(--animation-time) ease-in;
+
+        @media (--tablet-lg) {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+        }
+
+        &--initialized {
+            opacity: 1;
+        }
+    }
+}

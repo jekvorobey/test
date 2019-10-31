@@ -1,0 +1,31 @@
+.brands-section {
+    padding-top: 104px;
+    padding-bottom: 104px;
+    margin-top: 104px;
+    margin-bottom: 104px;
+    background-color: var(--cl-elem-grey);
+
+    @media (--tablet-lg) {
+        padding-top: 32px;
+        padding-bottom: 32px;
+        margin-top: 32px;
+        margin-bottom: 32px;
+    }
+
+    &__hl {
+        text-align: center;
+        margin-bottom: calc(var(--gs) * 5);
+    }
+
+    &__list {
+        padding: 0 calc(var(--gs) * 13.5);
+
+        @media (--tablet-lg) {
+            padding: 0 calc(var(--gs) * 11.75);
+        }
+
+        @media (--tablet) {
+            padding: 0;
+        }
+    }
+}

@@ -43,5 +43,65 @@ export default {
 
     [SET_LOAD](state, payload) {
         state.load = payload;
+        state.renderData = [
+            {
+                id: 1,
+                component: 'banners-section',
+                data: {
+                    banners: state.banners,
+                },
+            },
+            {
+                id: 2,
+                component: 'categories-section',
+                data: {
+                    categories: state.categories,
+                },
+            },
+            {
+                id: 3,
+                component: 'products-section',
+                data: {
+                    titleText: 'Новинки',
+                    ...state.newProducts,
+                },
+            },
+            {
+                id: 4,
+                component: 'products-section',
+                data: {
+                    titleText: 'Бестселлеры',
+                    inverse: true,
+                    ...state.bestsellerProducts,
+                },
+            },
+            // {
+            //     id: 6,
+            //     component: 'products-section',
+            //     data: {
+            //         titleText: 'Смотрят на сайте сейчас',
+            //         ...state.featuredProducts,
+            //     },
+            // },
+            {
+                id: 7,
+                component: 'brands-section',
+                data: {
+                    titleText: 'Популярные бренды',
+                    items: state.brands,
+                    restCount: 10,
+                    btnText: 'Показать',
+                },
+            },
+            {
+                id: 8,
+                component: 'instagram-section',
+                data: {
+                    titleText: 'Instabeauty',
+                    items: state.instagramItems,
+                    btnText: 'Подписаться на нас',
+                },
+            },
+        ];
     },
 };

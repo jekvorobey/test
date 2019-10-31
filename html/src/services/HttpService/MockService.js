@@ -3,7 +3,7 @@ import product2 from '../../assets/images/mock/product2.png';
 import product3 from '../../assets/images/mock/product3.png';
 import product4 from '../../assets/images/mock/product4.png';
 import product5 from '../../assets/images/mock/product5.png';
-import product6 from '../../assets/images/mock/product6.png';
+// import product6 from '../../assets/images/mock/product6.png';
 import product7 from '../../assets/images/mock/product7.png';
 import product8 from '../../assets/images/mock/product8.png';
 import product9 from '../../assets/images/mock/product9.png';
@@ -41,6 +41,7 @@ import banner3 from '../../assets/images/mock/banner3.png';
 import banner4 from '../../assets/images/mock/banner4.png';
 import banner5 from '../../assets/images/mock/banner5.png';
 import banner6 from '../../assets/images/mock/banner6.png';
+import banner7 from '../../assets/images/mock/banner7.png';
 
 import productBanner1 from '../../assets/images/mock/productBanner1.png';
 
@@ -181,6 +182,30 @@ const banners = [
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
         btnText: 'Смотреть товары',
         image: banner6,
+    },
+    {
+        id: 8,
+        type: 'banner',
+        title: 'Водостойкая губная помада L’Oreal Paris',
+        bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
+        btnText: 'Смотреть товары',
+        image: banner7,
+    },
+    {
+        id: 9,
+        type: 'banner',
+        title: 'Водостойкая губная помада L’Oreal Paris',
+        bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
+        btnText: 'Смотреть товары',
+        image: banner7,
+    },
+    {
+        id: 10,
+        type: 'banner',
+        title: 'Водостойкая губная помада L’Oreal Paris',
+        bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
+        btnText: 'Смотреть товары',
+        image: banner7,
     },
 ];
 

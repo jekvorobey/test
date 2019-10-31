@@ -43,7 +43,7 @@ export default {
     FETCH_BANNERS({ commit }) {
         return getBanners()
             .then(data => {
-                commit(SET_BANNERS, data.slice(2, 5));
+                commit(SET_BANNERS, [data[7], data[8], data[9]]);
                 commit(SET_MIDDLE_BANNERS, data.slice(3, 6));
             })
             .catch(error => {
