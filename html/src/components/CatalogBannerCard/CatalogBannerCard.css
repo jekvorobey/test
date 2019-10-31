@@ -5,8 +5,12 @@
     &__img {
         height: 100%;
         width: 100%;
-        object-fit: cover;
         font-family: 'object-fit: cover;';
+
+        @supports (object-fit: cover) {
+            font-family: inherit;
+            object-fit: cover;
+        }
     }
 
     &__panel {
