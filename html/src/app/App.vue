@@ -14,6 +14,8 @@
 import './App.critical.css';
 import './App.css';
 
+import Vue from 'vue';
+
 /**
  * Базовые компоненты страницы
  */
@@ -25,20 +27,20 @@ import VLink from '../components/controls/VLink/VLink.vue';
 import VButton from '../components/controls/VButton/VButton.vue';
 import VInput from '../components/controls/VInput/VInput.vue';
 import VSticky from '../components/controls/VSticky/VSticky.vue';
+import VPicture from '../components/controls/VPicture/VPicture.vue';
 
 import VHeader from '../components/VHeader/VHeader.vue';
 import VFooter from '../components/VFooter/VFooter.vue';
 
-import _debounce from 'lodash/debounce';
-import { MIN_SCROLL_VALUE, eventName } from '../assets/scripts/constants';
-import { mapState, mapActions } from 'vuex';
-
-import Vue from 'vue';
 import BannersSection from '../components/blocks/BannersSection/BannersSection.vue';
 import CategoriesSection from '../components/blocks/CategoriesSection/CategoriesSection.vue';
 import ProductsSection from '../components/blocks/ProductsSection/ProductsSection.vue';
 import BrandsSection from '../components/blocks/BrandsSection/BrandsSection.vue';
 import InstagramSection from '../components/blocks/InstagramSection/InstagramSection.vue';
+
+import _debounce from 'lodash/debounce';
+import { MIN_SCROLL_VALUE, eventName } from '../assets/scripts/constants';
+import { mapState, mapActions } from 'vuex';
 
 // const BannersSection = () => ({
 //     // Загружаемый компонент. Значение должно быть Promise
