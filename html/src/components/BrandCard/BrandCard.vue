@@ -1,16 +1,20 @@
 <template>
     <div class="brand-card">
         <router-link class="brand-card__img" to="/">
-            <img class="blur-up lazyload" :data-src="image" :alt="name" />
+            <v-picture :image="image" :alt="name" />
         </router-link>
     </div>
 </template>
 
 <script>
+import VPicture from '../controls/VPicture/VPicture.vue';
 import './BrandCard.css';
 
 export default {
     name: 'brand-card',
+    components: {
+        VPicture,
+    },
 
     props: {
         brandId: {
@@ -22,7 +26,7 @@ export default {
         },
 
         image: {
-            type: String,
+            type: [Object, String],
         },
     },
 };

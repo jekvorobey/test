@@ -2,7 +2,7 @@
     <div class="popular-brands">
         <div class="popular-brands__most-popular">
             <div v-for="(brand, index) in mostPopularBrands" :key="brand.id || index">
-                <img class="blur-up lazyload" :data-src="brand.image" alt />
+                <v-picture :image="brand.image" />
             </div>
         </div>
         <ul class="popular-brands__list">
@@ -17,11 +17,16 @@
 </template>
 
 <script>
+import VPicture from '../controls/VPicture/VPicture.vue';
 import './PopularBrands.css';
 
 export default {
     name: 'popular-brands',
-    components: {},
+
+    components: {
+        VPicture,
+    },
+
     props: {
         items: {
             type: Array,

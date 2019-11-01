@@ -1,7 +1,7 @@
 <template>
     <div class="banner-card">
-        <div class="banner-card__img" to="/">
-            <img class="blur-up lazyload" :data-src="image" alt="" />
+        <div class="banner-card__img">
+            <v-picture :image="image" />
             <v-button class="btn--outline banner-card__img-btn" to>{{ buttonText || 'Перейти' }}</v-button>
         </div>
         <div class="banner-card__title">{{ title }}</div>
@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import VPicture from '../controls/VPicture/VPicture.vue';
 import VButton from '../controls/VButton/VButton.vue';
 import './BannerCard.css';
 
@@ -17,6 +18,7 @@ export default {
 
     components: {
         VButton,
+        VPicture,
     },
 
     props: {

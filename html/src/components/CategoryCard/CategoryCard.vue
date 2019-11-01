@@ -1,17 +1,22 @@
 <template>
     <div class="category-card">
         <router-link class="category-card__img" :to="url">
-            <img class="blur-up lazyload" :data-src="image" alt="" />
+            <v-picture :image="image" :alt="name" />
         </router-link>
         {{ name }}
     </div>
 </template>
 
 <script>
+import VPicture from '../controls/VPicture/VPicture.vue';
 import './CategoryCard.css';
 
 export default {
     name: 'category-card',
+
+    components: {
+        VPicture,
+    },
 
     props: {
         categoryId: {
@@ -23,7 +28,7 @@ export default {
         },
 
         image: {
-            type: String,
+            type: [Object, String],
         },
 
         code: {

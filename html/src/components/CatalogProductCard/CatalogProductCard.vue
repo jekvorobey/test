@@ -1,7 +1,7 @@
 <template>
     <div class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }">
         <div class="catalog-product-card__img">
-            <img v-if="image" class="blur-up lazyload" :data-src="image" alt />
+            <v-picture v-if="image" :image="image" />
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-card__controls">
                 <v-button class="btn--outline catalog-product-card__controls-btn">Купить</v-button>
@@ -39,6 +39,7 @@ import VSvg from '../controls/VSvg/VSvg.vue';
 import VLink from '../controls/VLink/VLink.vue';
 import VButton from '../controls/VButton/VButton.vue';
 import VRating from '../controls/VRating/VRating.vue';
+import VPicture from '../controls/VPicture/VPicture.vue';
 import Tag from '../Tag/Tag.vue';
 
 import '../../assets/images/sprites/star-empty-small.svg';
@@ -55,6 +56,7 @@ export default {
         VLink,
         VButton,
         VRating,
+        VPicture,
 
         Tag,
     },
@@ -82,7 +84,7 @@ export default {
         },
 
         image: {
-            type: String,
+            type: [String, Object],
         },
 
         rating: {

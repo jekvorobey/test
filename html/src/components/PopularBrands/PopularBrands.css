@@ -18,6 +18,17 @@
             grid-template-rows: repeat(3, 1fr);
             grid-gap: calc(var(--gs) * 2);
         }
+
+        .v-picture__img {
+            width: 100%;
+            height: 100%;
+            font-family: 'object-fit: contain;';
+
+            @supports (object-fit: contain) {
+                font-family: inherit;
+                object-fit: contain;
+            }
+        }
     }
 
     &__list {

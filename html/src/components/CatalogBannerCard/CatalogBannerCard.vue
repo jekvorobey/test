@@ -1,6 +1,6 @@
 <template>
     <div class="catalog-banner-card">
-        <img class="lazyload blur-up catalog-banner-card__img" :data-src="image" />
+        <v-picture class="catalog-banner-card__img" :image="image" />
         <div class="catalog-banner-card__panel">
             <div v-if="upperText" class="catalog-banner-card__panel-upper-text">
                 {{ upperText }}
@@ -20,6 +20,7 @@
 
 <script>
 import VButton from '../controls/VButton/VButton.vue';
+import VPicture from '../controls/VPicture/VPicture.vue';
 import './CatalogBannerCard.css';
 
 export default {
@@ -27,6 +28,7 @@ export default {
 
     components: {
         VButton,
+        VPicture,
     },
 
     props: {
@@ -47,7 +49,7 @@ export default {
         },
 
         image: {
-            type: String,
+            type: [Object, String],
         },
 
         btnText: {

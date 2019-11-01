@@ -49,7 +49,7 @@ function resolve(file) {
 
 function serve(servePath, cache) {
     return express.static(resolve(servePath), {
-        maxAge: cache ? 1000 * 60 * 60 * 24 * 30 : 0,
+        maxAge: cache ? 1000 * 60 * 60 * 24 * 365 : 0,
     });
 }
 

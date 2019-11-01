@@ -1,16 +1,21 @@
 <template>
     <div class="instagram-card">
-        <div class="instagram-card__img" to="/">
-            <img class="blur-up lazyload" :data-src="image" alt="" />
+        <div class="instagram-card__img">
+            <v-picture :image="image" />
         </div>
     </div>
 </template>
 
 <script>
+import VPicture from '../controls/VPicture/VPicture.vue';
 import './InstagramCard.css';
 
 export default {
     name: 'instagram-card',
+
+    components: {
+        VPicture,
+    },
 
     props: {
         instagramCardId: {
@@ -18,7 +23,7 @@ export default {
         },
 
         image: {
-            type: String,
+            type: [Object, String],
         },
     },
 };

@@ -59,6 +59,8 @@ import productMasterclass2 from '../../assets/images/mock/productMasterclass2.pn
 import productReview1 from '../../assets/images/mock/productReview1.png';
 import productReview2 from '../../assets/images/mock/productReview2.png';
 
+const ext = /\.(jpe?g|png)$/i;
+
 const categories = [
     {
         id: 1,
@@ -97,35 +99,99 @@ const categories = [
 const instagrams = [
     {
         id: 1,
-        image: instagram1,
+        image: {
+            src: instagram1,
+            sources: [
+                {
+                    srcset: `${instagram1.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 2,
-        image: instagram2,
+        image: {
+            src: instagram2,
+            sources: [
+                {
+                    srcset: `${instagram2.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 3,
-        image: instagram3,
+        image: {
+            src: instagram3,
+            sources: [
+                {
+                    srcset: `${instagram3.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 4,
-        image: instagram4,
+        image: {
+            src: instagram4,
+            sources: [
+                {
+                    srcset: `${instagram4.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 5,
-        image: instagram5,
+        image: {
+            src: instagram5,
+            sources: [
+                {
+                    srcset: `${instagram5.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 6,
-        image: instagram6,
+        image: {
+            src: instagram6,
+            sources: [
+                {
+                    srcset: `${instagram6.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 7,
-        image: instagram7,
+        image: {
+            src: instagram7,
+            sources: [
+                {
+                    srcset: `${instagram7.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 8,
-        image: instagram8,
+        image: {
+            src: instagram8,
+            sources: [
+                {
+                    srcset: `${instagram8.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
 ];
 
@@ -136,7 +202,15 @@ const banners = [
         type: 'banner',
         title: 'Новая коллекция косметики Aveda',
         btnText: 'Смотреть товары',
-        image: banner1,
+        image: {
+            src: banner1,
+            sources: [
+                {
+                    srcset: `${banner1.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 2,
@@ -144,7 +218,15 @@ const banners = [
         type: 'banner',
         title: '20 средств для ухода за молодой кожей',
         btnText: 'Посмотреть',
-        image: banner2,
+        image: {
+            src: banner2,
+            sources: [
+                {
+                    srcset: `${banner2.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 3,
@@ -152,28 +234,60 @@ const banners = [
         type: 'banner',
         title: '20 средств для ухода за молодой кожей',
         btnText: 'Посмотреть',
-        image: banner1,
+        image: {
+            src: banner1,
+            sources: [
+                {
+                    srcset: `${banner1.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 4,
         type: 'banner',
         title: 'Лучшие стайлинги для летних укладок в новом сезоне только для тебя',
         btnText: 'Смотреть товары',
-        image: banner3,
+        image: {
+            src: banner3,
+            sources: [
+                {
+                    srcset: `${banner3.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 5,
         type: 'banner',
         title: 'Новейшая косметика для лица и тела с омолаживающим эффектом',
         btnText: 'Смотреть товары',
-        image: banner4,
+        image: {
+            src: banner4,
+            sources: [
+                {
+                    srcset: `${banner4.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 6,
         type: 'banner',
         title: ' Натуральный макияж Aveda, который подойдёт для каждой девушки',
         btnText: 'Смотреть товары',
-        image: banner5,
+        image: {
+            src: banner5,
+            sources: [
+                {
+                    srcset: `${banner5.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 7,
@@ -181,7 +295,15 @@ const banners = [
         title: 'Водостойкая губная помада L’Oreal Paris',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
         btnText: 'Смотреть товары',
-        image: banner6,
+        image: {
+            src: banner6,
+            sources: [
+                {
+                    srcset: `${banner6.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 8,
@@ -189,7 +311,15 @@ const banners = [
         title: 'Водостойкая губная помада L’Oreal Paris',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
         btnText: 'Смотреть товары',
-        image: banner7,
+        image: {
+            src: banner7,
+            sources: [
+                {
+                    srcset: `${banner7.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 9,
@@ -197,7 +327,15 @@ const banners = [
         title: 'Водостойкая губная помада L’Oreal Paris',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
         btnText: 'Смотреть товары',
-        image: banner7,
+        image: {
+            src: banner7,
+            sources: [
+                {
+                    srcset: `${banner7.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 10,
@@ -205,7 +343,15 @@ const banners = [
         title: 'Водостойкая губная помада L’Oreal Paris',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
         btnText: 'Смотреть товары',
-        image: banner7,
+        image: {
+            src: banner7,
+            sources: [
+                {
+                    srcset: `${banner7.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
 ];
 
@@ -216,7 +362,15 @@ const productBanners = [
         upperText: 'Подборка',
         title: 'Новая коллекция косметики Tom Ford',
         btnText: 'Смотреть товары',
-        image: productBanner1,
+        image: {
+            src: banner7,
+            sources: [
+                {
+                    srcset: `${banner7.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
 
     {
@@ -225,7 +379,15 @@ const productBanners = [
         upperText: 'Подборка',
         title: '20 средств для ухода за молодой кожей',
         btnText: 'Смотреть товары',
-        image: banner2,
+        image: {
+            src: banner2,
+            sources: [
+                {
+                    srcset: `${banner2.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
 ];
 
@@ -233,92 +395,212 @@ const brands = [
     {
         id: 1,
         name: 'Brand1',
-        image: brand1,
         title: 'Brand1',
+        image: {
+            src: brand1,
+            sources: [
+                {
+                    srcset: `${brand1.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 2,
         name: 'Brand2',
-        image: brand2,
         title: 'Brand2',
+        image: {
+            src: brand2,
+            sources: [
+                {
+                    srcset: `${brand2.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 3,
         name: 'Brand3',
-        image: brand3,
         title: 'Brand3',
+        image: {
+            src: brand3,
+            sources: [
+                {
+                    srcset: `${brand3.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 4,
         name: 'Brand4',
-        image: brand4,
         title: 'Brand4',
+        image: {
+            src: brand4,
+            sources: [
+                {
+                    srcset: `${brand4.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 5,
         name: 'Brand5',
-        image: brand5,
         title: 'Brand5',
+        image: {
+            src: brand5,
+            sources: [
+                {
+                    srcset: `${brand5.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 6,
         name: 'Brand6',
-        image: brand1,
         title: 'Brand6',
+        image: {
+            src: brand1,
+            sources: [
+                {
+                    srcset: `${brand1.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 7,
         name: 'Brand7',
-        image: brand2,
         title: 'Brand7',
+        image: {
+            src: brand2,
+            sources: [
+                {
+                    srcset: `${brand2.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 8,
         name: 'Brand8',
-        image: brand3,
         title: 'Brand8',
+        image: {
+            src: brand3,
+            sources: [
+                {
+                    srcset: `${brand3.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 9,
         name: 'Brand9',
-        image: brand4,
         title: 'Brand9',
+        image: {
+            src: brand4,
+            sources: [
+                {
+                    srcset: `${brand4.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 10,
         name: 'Brand10',
-        image: brand5,
         title: 'Brand10',
+        image: {
+            src: brand5,
+            sources: [
+                {
+                    srcset: `${brand5.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 11,
         name: 'Brand11',
-        image: brand1,
         title: 'Brand11',
+        image: {
+            src: brand1,
+            sources: [
+                {
+                    srcset: `${brand1.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 12,
         name: 'Brand12',
-        image: brand2,
         title: 'Brand12',
+        image: {
+            src: brand2,
+            sources: [
+                {
+                    srcset: `${brand2.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 13,
         name: 'Brand13',
-        image: brand3,
         title: 'Brand13',
+        image: {
+            src: brand3,
+            sources: [
+                {
+                    srcset: `${brand3.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 14,
         name: 'Brand14',
-        image: brand4,
         title: 'Brand14',
+        image: {
+            src: brand4,
+            sources: [
+                {
+                    srcset: `${brand4.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 15,
         name: 'Brand15',
-        image: brand5,
         title: 'Brand15',
+        image: {
+            src: brand5,
+            sources: [
+                {
+                    srcset: `${banner5.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
 ];
 
@@ -327,25 +609,57 @@ const productCategories = [
         id: 1,
         name: 'Для волос',
         code: 'dlya-volos',
-        image: category1,
+        image: {
+            src: category1,
+            sources: [
+                {
+                    srcset: `${category1.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 2,
         name: 'Для лица и тела',
         code: 'dlya-litsa-i-tela',
-        image: category2,
+        image: {
+            src: category2,
+            sources: [
+                {
+                    srcset: `${category2.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 3,
         name: 'Для рук и ног',
         code: 'dlya-ruk-i-nog',
-        image: category3,
+        image: {
+            src: category3,
+            sources: [
+                {
+                    srcset: `${category3.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 4,
         name: 'Макияж',
         code: 'makiyazh-4',
-        image: category4,
+        image: {
+            src: category4,
+            sources: [
+                {
+                    srcset: `${category4.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
         items: [
             {
                 id: 9,
@@ -391,25 +705,57 @@ const productCategories = [
         id: 5,
         name: 'Для ногтей',
         code: 'dlya-nogtei',
-        image: category5,
+        image: {
+            src: category5,
+            sources: [
+                {
+                    srcset: `${category5.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 6,
         name: 'Инструменты',
         code: 'instrumenti',
-        image: category6,
+        image: {
+            src: category6,
+            sources: [
+                {
+                    srcset: `${category6.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 7,
         name: 'Аксессуары',
         code: 'aksesuari',
-        image: category7,
+        image: {
+            src: category7,
+            sources: [
+                {
+                    srcset: `${category7.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 8,
         name: 'Для мужчин',
         code: 'dlya-muzhchin',
-        image: category8,
+        image: {
+            src: category8,
+            sources: [
+                {
+                    srcset: `${category8.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
 ];
 
@@ -419,58 +765,98 @@ const products = [
         name: 'EvoСухой шампунь-спрей Water Killer, 200 мл',
         description: 'EvoСухой шампунь-спрей Water Killer, 200 мл',
         code: '1',
-        image: product1,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         tags: ['Новинка', '-15%'],
         type: 'product',
         rating: 5,
+        image: {
+            src: product1,
+            sources: [
+                {
+                    srcset: `${product1.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 2,
         name: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
         description: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
         code: '2',
-        image: product2,
         price: '1 900 ₽',
         oldPrice: null,
         tags: ['-15%'],
         type: 'product',
         rating: 1,
+        image: {
+            src: product2,
+            sources: [
+                {
+                    srcset: `${product2.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 3,
         name: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
         description: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
         code: '3',
-        image: product3,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         tags: ['Новинка'],
         type: 'product',
         rating: 3,
+        image: {
+            src: product3,
+            sources: [
+                {
+                    srcset: `${product3.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 4,
         name: 'Alterna Шампунь лифтинг для объема, 200 мл',
         description: 'Alterna Шампунь лифтинг для объема, 200 мл',
         code: '4',
-        image: product4,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         type: 'product',
         rating: 2,
+        image: {
+            src: product4,
+            sources: [
+                {
+                    srcset: `${product4.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 5,
         name: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
         description: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
         code: '5',
-        image: product5,
         price: '1 900 ₽',
         oldPrice: null,
         type: 'product',
         rating: 2,
+        image: {
+            src: product5,
+            sources: [
+                {
+                    srcset: `${product5.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 6,
@@ -488,102 +874,174 @@ const products = [
         name: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
         description: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
         code: '7',
-        image: product7,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         type: 'product',
         rating: 3,
+        image: {
+            src: product7,
+            sources: [
+                {
+                    srcset: `${product7.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 8,
         name: 'R+Co Шампунь для совершенства волос, 240 мл',
         description: 'R+Co Шампунь для совершенства волос, 240 мл',
         code: '8',
-        image: product8,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         type: 'product',
         rating: 5,
+        image: {
+            src: product8,
+            sources: [
+                {
+                    srcset: `${product8.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 9,
         name: 'Alterna Шампунь лифтинг для объема, 200 мл',
         description: 'Alterna Шампунь лифтинг для объема, 200 мл',
         code: '9',
-        image: product9,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         type: 'product',
         rating: 5,
+        image: {
+            src: product9,
+            sources: [
+                {
+                    srcset: `${product9.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 10,
         name: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
         description: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
         code: '10',
-        image: product10,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         type: 'product',
         rating: 5,
+        image: {
+            src: product10,
+            sources: [
+                {
+                    srcset: `${product10.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 11,
         name: 'Alterna Шампунь лифтинг для объема, 200 мл',
         description: 'Alterna Шампунь лифтинг для объема, 200 мл',
         code: '11',
-        image: product11,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         type: 'product',
         rating: 5,
+        image: {
+            src: product11,
+            sources: [
+                {
+                    srcset: `${product11.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 12,
         name: 'Evo Сухой шампунь-спрей Water Killer, 200 мл',
         description: 'Evo Сухой шампунь-спрей Water Killer, 200 мл',
         code: '12',
-        image: product12,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         type: 'product',
         rating: 3,
+        image: {
+            src: product12,
+            sources: [
+                {
+                    srcset: `${product12.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 13,
         name: 'EvoСухой шампунь-спрей Water Killer, 200 мл',
         description: 'EvoСухой шампунь-спрей Water Killer, 200 мл',
         code: '13',
-        image: product1,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         tags: ['Новинка', '-15%'],
         type: 'product',
         rating: 5,
+        image: {
+            src: product1,
+            sources: [
+                {
+                    srcset: `${product1.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 14,
         name: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
         description: 'Kevin Murphy Шампунь для уплотнения волос, 200 мл',
         code: '14',
-        image: product2,
         price: '1 900 ₽',
         oldPrice: null,
         tags: ['-15%'],
         type: 'product',
         rating: 1,
+        image: {
+            src: product2,
+            sources: [
+                {
+                    srcset: `${product2.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
     {
         id: 15,
         name: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
         description: 'Alterna Шампунь для мгновенного восстановления, 250 мл',
         code: '15',
-        image: product3,
         price: '1 900 ₽',
         oldPrice: '1 600 ₽',
         tags: ['Новинка'],
         type: 'product',
         rating: 3,
+        image: {
+            src: product3,
+            sources: [
+                {
+                    srcset: `${product3.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
     },
 ];
 

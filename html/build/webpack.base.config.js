@@ -56,7 +56,6 @@ module.exports = {
                             limit: 1024,
                         },
                     },
-                    'webp-loader',
                 ],
             },
             {
