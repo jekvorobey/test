@@ -1,53 +1,41 @@
 <template>
     <div class="search-panel">
-        <div class="container search-panel__container">
-            <div v-if="suggestions.categories && suggestions.categories.length > 0" class="search-panel__categories">
-                <transition-group tag="ul" name="item" class="search-panel__categories-list" appear>
-                    <li key="title" class="text-bold">Категории</li>
-                    <li :key="category.id" v-for="category in suggestions.categories">
-                        <v-link class="search-panel__categories-link" href="#">{{ category.name }}</v-link>
-                    </li>
-                </transition-group>
-            </div>
-            <div v-if="suggestions.products && suggestions.products.length > 0" class="search-panel__products">
-                <h3>Популярные товары</h3>
-                <transition-group tag="ul" name="item" v-if="!isTabletLg" class="search-panel__products-list" appear>
-                    <li class="search-panel__products-card" v-for="product in suggestions.products" :key="product.id">
-                        <product-card
+        <div class="container search-panel__container" v-scroll-lock="search">
+            <transition-group
+                v-if="categories && categories.length > 0"
+                tag="ul"
+                name="item"
+                class="search-panel__categories-list"
+                appear
+            >
+                <li :key="category.id" v-for="category in categories">
+                    <v-link class="search-panel__categories-link" href="#">{{ category.name }}</v-link>
+                </li>
+            </transition-group>
+            <div v-if="products && products.length > 0" class="search-panel__products">
+                <transition-group tag="ul" name="item" class="search-panel__products-list" appear>
+                    <li class="search-panel__products-card" v-for="product in products" :key="product.id">
+                        <catalog-product-card
                             :product-id="product.id"
                             :name="product.name"
-                            :href="product.href"
+                            href="/"
+                            :image="product.image"
                             :price="product.price"
                             :old-price="product.oldPrice"
+                            :tags="product.tags"
+                            :rating="product.rating"
                         />
                     </li>
                 </transition-group>
             </div>
         </div>
-        <v-slider
-            v-if="isTabletLg"
-            class="search-panel__products-slider"
-            name="search-panel-slider"
-            :options="sliderOptions"
-        >
-            <product-card
-                class="swiper-slide"
-                v-for="product in suggestions.products"
-                :key="product.id"
-                :product-id="product.id"
-                :name="product.name"
-                :href="product.href"
-                :price="product.price"
-                :old-price="product.oldPrice"
-            />
-        </v-slider>
+        <div class="search-panel__mask" />
     </div>
 </template>
 
 <script>
-import VSlider from '../controls/VSlider/VSlider.vue';
 import VLink from '../controls/VLink/VLink.vue';
-import ProductCard from '../ProductCard/ProductCard.vue';
+import CatalogProductCard from '../CatalogProductCard/CatalogProductCard.vue';
 
 import './SearchPanel.css';
 import { mapState } from 'vuex';
@@ -56,42 +44,22 @@ export default {
     name: 'search-panel',
     components: {
         VLink,
-        VSlider,
-        ProductCard,
+        CatalogProductCard,
     },
     props: {},
     data() {
-        return {
-            sliderOptions: {
-                slidesPerView: 6,
-                slidesOffsetBefore: 24,
-                freeMode: true,
-                freeModeSticky: true,
-                grabCursor: true,
-                breakpoints: {
-                    768: {
-                        slidesPerView: 4.5,
-                    },
-                    480: {
-                        slidesPerView: 3.5,
-                    },
-                    360: {
-                        slidesPerView: 2.5,
-                    },
-                },
-            },
-        };
+        return {};
     },
     computed: {
-        ...mapState('search', ['suggestions']),
+        ...mapState('search', ['search']),
+        ...mapState('search', {
+            categories: state => state.suggestions.categories,
+            products: state =>
+                state.searchString ? state.suggestions.products.slice(0, 8) : state.suggestions.products.slice(8, 14),
+        }),
 
         isTabletLg() {
             return this.$mq.tabletLg;
-        },
-    },
-    watch: {
-        suggestions(value) {
-            this.$nextTick(() => this.searchSwiper && this.searchSwiper.slideTo(0, 0));
         },
     },
 };

@@ -32,14 +32,6 @@ import VPicture from '../components/controls/VPicture/VPicture.vue';
 import VHeader from '../components/VHeader/VHeader.vue';
 import VFooter from '../components/VFooter/VFooter.vue';
 
-import SingleBannerSection from '../components/blocks/SingleBannerSection/SingleBannerSection.vue';
-import ListBannersSection from '../components/blocks/ListBannersSection/ListBannersSection.vue';
-import SliderBannersSection from '../components/blocks/SliderBannersSection/SliderBannersSection.vue';
-import CategoriesSection from '../components/blocks/CategoriesSection/CategoriesSection.vue';
-import ProductsSection from '../components/blocks/ProductsSection/ProductsSection.vue';
-import BrandsSection from '../components/blocks/BrandsSection/BrandsSection.vue';
-import InstagramSection from '../components/blocks/InstagramSection/InstagramSection.vue';
-
 import _debounce from 'lodash/debounce';
 import { MIN_SCROLL_VALUE, eventName } from '../assets/scripts/constants';
 import { mapState, mapActions } from 'vuex';
@@ -76,14 +68,6 @@ import { mapState, mapActions } from 'vuex';
 //         /* webpackChunkName: "instagram-section" */ '../components/blocks/InstagramSection/InstagramSection.vue'
 //     ),
 //});
-
-Vue.component('single-banner-section', SingleBannerSection);
-Vue.component('list-banners-section', ListBannersSection);
-Vue.component('slider-banners-section', SliderBannersSection);
-Vue.component('brands-section', BrandsSection);
-Vue.component('categories-section', CategoriesSection);
-Vue.component('products-section', ProductsSection);
-Vue.component('instagram-section', InstagramSection);
 
 export default {
     name: 'app',

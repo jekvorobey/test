@@ -98,6 +98,15 @@
         }
     }
 
+    &--search &__top,
+    &--search &__bottom {
+        opacity: 0;
+    }
+
+    &--search &__middle {
+        height: calc(var(--gs) * 9);
+    }
+
     &__top {
         background-color: var(--header-top-bg);
         height: 30px;

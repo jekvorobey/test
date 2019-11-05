@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
-import Helpers from '../util/helpers';
 
 /**
  * Class
@@ -13,9 +12,10 @@ class VScrollLock {
      * @param {*} disableScrollHook
      * @param {*} enableScrollHook
      */
-    constructor(disableScrollHook, enableScrollHook) {
+    constructor(disableScrollHook, enableScrollHook, defaultOptions) {
         this.disableBodyScroll = disableScrollHook;
         this.enableBodyScroll = enableScrollHook;
+        this.options = Object.assign({}, defaultOptions);
     }
 
     /**
@@ -40,7 +40,7 @@ class VScrollLock {
      */
     inserted(el, binding) {
         if (binding.value) {
-            this.disableBodyScroll(el);
+            this.disableBodyScroll(el, this.options);
         }
     }
 
@@ -52,7 +52,7 @@ class VScrollLock {
      */
     componentUpdated(el, binding) {
         if (binding.oldValue !== binding.value) {
-            if (binding.value) this.disableBodyScroll(el);
+            if (binding.value) this.disableBodyScroll(el, this.options);
             else this.enableBodyScroll(el);
         }
     }
@@ -74,16 +74,7 @@ class VScrollLock {
  * @param {*} options
  */
 function disableScroll(targetElement, options) {
-    const bodyElement =
-        typeof document !== 'undefined' ? document.scrollingElement || document.documentElement || document.body : null;
-    if (bodyElement) {
-        setTimeout(() => {
-            // Helpers.addClass(bodyElement, 'html-modal-open');
-            // Helpers.addClass(document.querySelector('.header-main__top'), 'html-modal-open');
-            // Helpers.addClass(document.querySelector('.header-main__panel'), 'html-modal-open');
-            // Helpers.addClass(document.querySelector('.footer-main'), 'html-modal-open');
-        }, 0);
-    }
+    options.reserveScrollBarGap = true;
     disableBodyScroll(targetElement, options);
 }
 
@@ -93,17 +84,9 @@ function disableScroll(targetElement, options) {
  * @param {*} targetElement
  */
 function enableScroll(targetElement) {
-    const bodyElement =
-        typeof document !== 'undefined' ? document.scrollingElement || document.documentElement || document.body : null;
-    if (bodyElement) {
-        setTimeout(() => {
-            // Helpers.removeClass(bodyElement, 'html-modal-open');
-            // Helpers.removeClass(document.querySelector('.header-main__top'), 'html-modal-open');
-            // Helpers.removeClass(document.querySelector('.header-main__panel'), 'html-modal-open');
-            // Helpers.removeClass(document.querySelector('.footer-main'), 'html-modal-open');
-        }, 0);
-    }
     enableBodyScroll(targetElement);
 }
 
-Vue.use(new VScrollLock(disableScroll, enableScroll));
+if (process.env.VUE_ENV === 'client') {
+    Vue.use(new VScrollLock(disableScroll, enableScroll));
+}

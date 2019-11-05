@@ -13,6 +13,7 @@ import createRouter from '../router';
 import i18n from '../plugins/i18n';
 import mq from '../plugins/media';
 import '../plugins/meta';
+import '../plugins/scroll-lock';
 
 import titleMixin from '../util/title';
 

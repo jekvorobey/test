@@ -453,7 +453,6 @@
         }
 
         &-panel {
-            padding-bottom: calc(var(--gs) * 7);
             .v-accordion__item {
                 padding: 0 calc(var(--gs) * 3);
                 padding-top: calc(var(--gs) * 2);
@@ -473,14 +472,15 @@
             }
 
             .catalog-filter__clear-btn {
-                position: fixed;
+                position: sticky;
                 bottom: 0;
                 margin-bottom: 0;
+                z-index: 1;
                 padding: calc(var(--gs) * 1.5) calc(var(--gs) * 2);
                 background-color: var(--cl-white) !important;
                 border-color: var(--cl-white) !important;
                 color: var(--cl-global) !important;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             }
         }
     }

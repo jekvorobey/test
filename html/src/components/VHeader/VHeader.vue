@@ -48,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            <div class="v-header__bottom">
+            <div v-if="!search" class="v-header__bottom">
                 <div class="container v-header__bottom-container">
                     <nav class="v-header__bottom-inner">
                         <!-- захардкоженый линк на каталог -->
@@ -90,7 +90,7 @@
                 </div>
             </transition>
         </div>
-        <transition name="fade">
+        <transition name="fade-in">
             <search-panel v-if="search" class="v-header__middle-search-panel" />
         </transition>
     </header>
