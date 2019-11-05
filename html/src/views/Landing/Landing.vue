@@ -11,13 +11,15 @@
 
 <script>
 import Vue from 'vue';
-import SingleBannerSection from '../../components/blocks/SingleBannerSection/SingleBannerSection.vue';
-import ListBannersSection from '../../components/blocks/ListBannersSection/ListBannersSection.vue';
+
 import SliderBannersSection from '../../components/blocks/SliderBannersSection/SliderBannersSection.vue';
+import ListBannersSection from '../../components/blocks/ListBannersSection/ListBannersSection.vue';
+import InstagramSection from '../../components/blocks/InstagramSection/InstagramSection.vue';
+import SingleBannerSection from '../../components/blocks/SingleBannerSection/SingleBannerSection.vue';
+
 import CategoriesSection from '../../components/blocks/CategoriesSection/CategoriesSection.vue';
 import ProductsSection from '../../components/blocks/ProductsSection/ProductsSection.vue';
 import BrandsSection from '../../components/blocks/BrandsSection/BrandsSection.vue';
-import InstagramSection from '../../components/blocks/InstagramSection/InstagramSection.vue';
 
 import landingModule from '../../store/modules/Landing';
 import { mapState } from 'vuex';
@@ -25,16 +27,17 @@ import { $store, $progress, $logger } from '../../services/ServiceLocator';
 
 import './Landing.css';
 
-Vue.component('single-banner-section', SingleBannerSection);
-Vue.component('list-banners-section', ListBannersSection);
-Vue.component('slider-banners-section', SliderBannersSection);
-Vue.component('brands-section', BrandsSection);
-Vue.component('categories-section', CategoriesSection);
-Vue.component('products-section', ProductsSection);
-Vue.component('instagram-section', InstagramSection);
-
 export default {
     name: 'landing',
+    components: {
+        SliderBannersSection,
+        ListBannersSection,
+        SingleBannerSection,
+        BrandsSection,
+        CategoriesSection,
+        ProductsSection,
+        InstagramSection,
+    },
 
     head: {
         title: {
