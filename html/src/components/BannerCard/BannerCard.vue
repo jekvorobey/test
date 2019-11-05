@@ -31,7 +31,7 @@ export default {
         },
 
         image: {
-            type: String,
+            type: [Object, String],
         },
 
         buttonText: {

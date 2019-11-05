@@ -1,7 +1,7 @@
 <template>
     <section class="section">
         <div class="container products-section" :class="{ 'products-section--inverse': inverse }">
-            <h2 class="landing-view__section-hl">{{ titleText }}</h2>
+            <h2 class="products-section__hl">{{ titleText }}</h2>
 
             <div class="products-section__grid">
                 <div class="products-section__cards">
@@ -18,7 +18,7 @@
                         :tags="product.tags"
                         :rating="product.rating"
                     />
-                    <v-button class="btn--outline landing-view__section-link" :to="btnLink">
+                    <v-button class="btn--outline products-section__link" :to="btnLink">
                         {{ btnText }}
                     </v-button>
                 </div>

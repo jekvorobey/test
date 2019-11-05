@@ -42,6 +42,7 @@ import banner4 from '../../assets/images/mock/banner4.png';
 import banner5 from '../../assets/images/mock/banner5.png';
 import banner6 from '../../assets/images/mock/banner6.png';
 import banner7 from '../../assets/images/mock/banner7.png';
+import banner8 from '../../assets/images/mock/banner8.png';
 
 import productBanner1 from '../../assets/images/mock/productBanner1.png';
 
@@ -348,6 +349,22 @@ const banners = [
             sources: [
                 {
                     srcset: `${banner7.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
+    },
+    {
+        id: 11,
+        type: 'banner',
+        title: 'Основной уход за кожей',
+        bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
+        btnText: 'Посмотреть',
+        image: {
+            src: banner6,
+            sources: [
+                {
+                    srcset: `${banner6.replace(ext, '.webp')}`,
                     type: 'image/webp',
                 },
             ],

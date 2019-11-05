@@ -1,4 +1,5 @@
 .categories-section {
+    padding-top: calc(var(--gs) * 2);
     margin-bottom: calc(var(--gs) * 7);
 
     @media (--tablet) {

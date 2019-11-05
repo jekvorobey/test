@@ -1,7 +1,7 @@
 <template>
     <section class="section">
         <div class="container instagram-section">
-            <h2 class="landing-view__section-hl instagram-section__hl">{{ titleText }}</h2>
+            <h2 class="instagram-section__hl">{{ titleText }}</h2>
 
             <v-slider v-if="isTabletLg" class="instagram-section__slider" name="instagram" :options="sliderOptions">
                 <instagram-card
@@ -13,7 +13,7 @@
                 />
             </v-slider>
 
-            <v-button class="btn--outline landing-view__section-link instagram-section__link">
+            <v-button class="btn--outline instagram-section__link">
                 {{ btnText }}
             </v-button>
 

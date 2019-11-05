@@ -10,12 +10,37 @@
     }
 
     &__hl {
+        font-size: 28px;
+        line-height: 40px;
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 0.05em;
+
         @media (--tablet-min) and (--tablet-lg) {
             padding-left: calc(var(--gs) * 3);
+        }
+
+        @media (--tablet) {
+            font-size: 24px;
+            line-height: 32px;
+            padding: 0;
+            text-align: center;
         }
     }
 
     &__link {
+        position: absolute;
+        top: 0;
+        right: 108px;
+
+        @media (--desktop) {
+            right: calc(var(--gs) * 5);
+        }
+
+        @media (--tablet-lg) {
+            right: calc(var(--gs) * 3);
+        }
+
         @media (--tablet) {
             position: relative;
             width: calc(100% - 32px);

@@ -1,7 +1,7 @@
 <template>
     <section class="section brands-section">
         <div class="container">
-            <h2 class="landing-view__section-hl brands-section__hl">
+            <h2 class="brands-section__hl">
                 {{ titleText }}
             </h2>
             <popular-brands

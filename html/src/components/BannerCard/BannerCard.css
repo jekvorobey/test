@@ -27,15 +27,12 @@
             height: 192px;
         }
 
-        img {
-            opacity: 1;
+        .v-picture {
             width: 100%;
             height: 100%;
-            font-family: 'object-fit: cover;';
 
-            @supports (object-fit: cover) {
-                font-family: inherit;
-                object-fit: cover;
+            img {
+                opacity: 1;
             }
         }
 
