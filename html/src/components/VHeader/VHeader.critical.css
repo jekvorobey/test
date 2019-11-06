@@ -94,17 +94,16 @@
         border-bottom: 1px solid var(--cl-divider-grey);
 
         &-container {
-            padding: 0 calc(var(--gs) * 3);
+            padding: calc(var(--gs) / 2) calc(var(--gs) * 3);
+
+            @media (--tablet) {
+                padding: calc(var(--gs) / 2) calc(var(--gs) * 2);
+            }
         }
     }
 
-    &--search &__top,
-    &--search &__bottom {
+    &--search &__top {
         opacity: 0;
-    }
-
-    &--search &__middle {
-        height: calc(var(--gs) * 9);
     }
 
     &__top {
@@ -148,8 +147,8 @@
     &__middle {
         position: relative;
         background-color: var(--cl-white);
-        height: calc(var(--gs) * 11);
-        line-height: calc(var(--gs) * 11);
+        height: calc(var(--gs) * 9);
+        line-height: calc(var(--gs) * 9);
 
         &-container,
         &-search,

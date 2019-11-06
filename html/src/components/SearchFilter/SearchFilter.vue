@@ -62,6 +62,7 @@ export default {
         ...mapActions('search', ['SEARCH', 'SET_SEARCH']),
 
         onClearClick() {
+            this.searchString = '';
             this.SET_SEARCH(false);
         },
     },

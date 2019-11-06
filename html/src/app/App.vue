@@ -14,8 +14,6 @@
 import './App.critical.css';
 import './App.css';
 
-import Vue from 'vue';
-
 /**
  * Базовые компоненты страницы
  */
@@ -32,6 +30,7 @@ import VPicture from '../components/controls/VPicture/VPicture.vue';
 import VHeader from '../components/VHeader/VHeader.vue';
 import VFooter from '../components/VFooter/VFooter.vue';
 
+import '../util/catalog';
 import _debounce from 'lodash/debounce';
 import { MIN_SCROLL_VALUE, eventName } from '../assets/scripts/constants';
 import { mapState, mapActions } from 'vuex';
