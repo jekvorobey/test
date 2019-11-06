@@ -10,6 +10,12 @@ import search from './modules/Search';
 
 Vue.use(Vuex);
 
+export const IS_MENU_OPEN = 'isMenuOpen';
+export const LOCALE = 'locale';
+export const SCROLL = 'scroll';
+export const CATEGORIES = 'categories';
+export const BANNER = 'banner';
+
 /**
  * Function for create store instance.
  * Функция создания экземпляра стора.
@@ -18,8 +24,11 @@ export default function createStore() {
     return new Vuex.Store({
         strict: process.env.NODE_ENV !== 'production',
         state: {
-            locale: 'ru',
-            scroll: false,
+            [LOCALE]: 'ru',
+            [SCROLL]: false,
+            [IS_MENU_OPEN]: false,
+            [CATEGORIES]: [],
+            [BANNER]: {},
         },
         getters,
         mutations,

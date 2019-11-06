@@ -1,0 +1,104 @@
+.mobile-menu {
+    .modal-body {
+        position: relative;
+        padding: 0;
+    }
+
+    &__sticky {
+        width: 100%;
+
+        .v-sticky__container {
+            z-index: 1000;
+        }
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        background-color: var(--cl-global);
+        padding-top: calc(var(--gs) * 1.5);
+        padding-bottom: calc(var(--gs) * 1.5);
+
+        &-btn {
+            display: flex;
+            align-items: center;
+            fill: var(--cl-white) !important;
+            color: var(--cl-white) !important;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 24px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+
+            &--close,
+            &--arrow {
+                .icon {
+                    margin-right: calc(var(--gs) * 1.5);
+                    transform: rotate(90deg);
+                }
+            }
+        }
+    }
+
+    &__menu {
+        padding-top: var(--gs);
+
+        &-link {
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 24px;
+            display: flex;
+            align-items: center;
+
+            .icon {
+                margin-right: calc(var(--gs) * 2);
+            }
+        }
+
+        &-btn {
+            display: flex;
+            height: 100%;
+            width: 44px;
+            justify-content: flex-end;
+            align-items: center;
+
+            .icon {
+                transform: rotate(270deg);
+            }
+        }
+
+        &-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 48px;
+
+            &--separator {
+                border-bottom: 1px solid var(--cl-divider-grey);
+            }
+        }
+
+        &-socials {
+            padding-top: calc(var(--gs) * 3);
+            padding-bottom: calc(var(--gs) * 4);
+            text-align: center;
+
+            &-phone {
+                display: block;
+                font-size: 24px;
+                line-height: 32px;
+                letter-spacing: 0.03em;
+                font-weight: bold;
+                margin-bottom: calc(var(--gs) * 2);
+            }
+
+            &-link {
+                display: inline-block;
+
+                & + & {
+                    margin-left: calc(var(--gs) * 2);
+                }
+            }
+        }
+    }
+}

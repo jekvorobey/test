@@ -3,7 +3,7 @@
         <div class="container slider-banners-section">
             <v-slider class="slider-banners-section__slider" name="banners" :options="sliderOptions">
                 <div class="swiper-slide slider-banners-section__card" v-for="banner in banners" :key="banner.id">
-                    <v-picture class="slider-banners-section__card-img" :image="banner.image" lazy />
+                    <v-picture class="slider-banners-section__card-img" :image="banner.image" :lazy="false" />
                 </div>
             </v-slider>
         </div>

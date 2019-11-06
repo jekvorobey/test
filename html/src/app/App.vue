@@ -32,6 +32,8 @@ import VFooter from '../components/VFooter/VFooter.vue';
 
 import '../util/catalog';
 import _debounce from 'lodash/debounce';
+import { SCROLL, CATEGORIES } from '../store';
+import { SET_SCROLL, FETCH_COMMON_DATA } from '../store/actions';
 import { MIN_SCROLL_VALUE, eventName } from '../assets/scripts/constants';
 import { mapState, mapActions } from 'vuex';
 
@@ -76,17 +78,21 @@ export default {
     },
 
     computed: {
-        ...mapState(['scroll']),
+        ...mapState([SCROLL]),
     },
 
     methods: {
-        ...mapActions(['SET_SCROLL']),
+        ...mapActions([SET_SCROLL, FETCH_COMMON_DATA]),
 
         onScroll() {
-            this.SET_SCROLL(
+            this[SET_SCROLL](
                 document.body.scrollTop > MIN_SCROLL_VALUE || document.documentElement.scrollTop > MIN_SCROLL_VALUE
             );
         },
+    },
+
+    serverPrefetch() {
+        return this[FETCH_COMMON_DATA]();
     },
 
     mounted() {

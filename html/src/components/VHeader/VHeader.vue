@@ -1,5 +1,5 @@
 <template>
-    <header class="v-header" :class="[{ 'v-header--scroll': scroll }, { 'v-header--search': search }]">
+    <header class="v-header" :class="[{ 'v-header--scroll': scroll }, { 'v-header--masked': showMask }]">
         <div class="v-header__desktop">
             <div class="v-header__top">
                 <div class="container v-header__top-container">
@@ -51,10 +51,17 @@
             <div v-if="!search" class="v-header__bottom">
                 <div class="container v-header__bottom-container">
                     <nav class="v-header__bottom-inner">
-                        <!-- захардкоженый линк на каталог -->
-                        <v-link class="v-header__bottom-link" to="/catalog">
-                            {{ $t('header.links.catalog') }}
-                        </v-link>
+                        <div class="v-header__bottom-menu">
+                            <v-burger
+                                class="v-header__bottom-menu-burger"
+                                tag="button"
+                                :is-open="isMenuOpen"
+                                @isOpenChanged="SET_MENU_OPEN($event)"
+                            />
+                            <v-link to="/catalog">
+                                {{ $t('header.links.catalog') }}
+                            </v-link>
+                        </div>
                         <v-link class="v-header__bottom-link" to="/top">{{ $t('header.links.new') }}</v-link>
                         <v-link class="v-header__bottom-link" to="/new">{{ $t('header.links.stocks') }}</v-link>
                         <v-link class="v-header__bottom-link" to="/show">{{ $t('header.links.collections') }}</v-link>
@@ -72,7 +79,12 @@
                 </div>
                 <div key="menu" v-else class="container v-header__bottom-container v-header__mobile-container">
                     <div class="v-header__bottom-left">
-                        <v-burger tag="button" class="v-header__bottom-link" :is-open.sync="isOpen" />
+                        <v-burger
+                            tag="button"
+                            class="v-header__bottom-link"
+                            :is-open="isMenuOpen"
+                            @isOpenChanged="SET_MENU_OPEN($event)"
+                        />
                     </div>
                     <div class="v-header__bottom-middle">
                         <v-link class="v-header__bottom-link" to="/">
@@ -90,8 +102,14 @@
                 </div>
             </transition>
         </div>
-        <transition name="fade-in">
-            <search-panel v-if="search" class="v-header__middle-search-panel" />
+        <transition name="fade">
+            <div v-show="showMask" class="v-header__mask">
+                <search-panel v-if="search" />
+                <nav-panel v-else-if="isMenuOpen" />
+            </div>
+        </transition>
+        <transition name="fade">
+            <mobile-menu class="v-header__modal-menu" v-if="isMenuOpen && isTabletLg" />
         </transition>
     </header>
 </template>
@@ -103,6 +121,8 @@ import VBurger from '../controls/VBurger/VBurger.vue';
 
 import SearchPanel from '../SearchPanel/SearchPanel.vue';
 import SearchFilter from '../SearchFilter/SearchFilter.vue';
+import NavPanel from '../NavPanel/NavPanel.vue';
+import MobileMenu from '../MobileMenu/MobileMenu.vue';
 
 import '../../assets/images/sprites/logo.svg';
 import '../../assets/images/sprites/logo-text.svg';
@@ -121,6 +141,11 @@ import './VHeader.critical.css';
 import './VHeader.css';
 
 import { mapState, mapActions } from 'vuex';
+import { SCROLL, IS_MENU_OPEN, CATEGORIES } from '../../store';
+import { SET_MENU_OPEN } from '../../store/actions';
+
+import { SEARCH } from '../../store/modules/Search';
+import { SET_SEARCH } from '../../store/modules/Search/actions';
 
 export default {
     name: 'v-header',
@@ -131,25 +156,32 @@ export default {
 
         SearchPanel,
         SearchFilter,
-    },
-
-    data() {
-        return {
-            isOpen: false,
-        };
+        NavPanel,
+        MobileMenu,
     },
 
     computed: {
-        ...mapState(['scroll']),
-        ...mapState('search', ['search']),
+        ...mapState([SCROLL, IS_MENU_OPEN]),
+        ...mapState('search', [SEARCH]),
 
         isTabletLg() {
             return this.$mq.tabletLg;
         },
+
+        showMask() {
+            return this[SEARCH] || (this[IS_MENU_OPEN] && !this.isTabletLg);
+        },
     },
 
     methods: {
-        ...mapActions('search', ['SET_SEARCH']),
+        ...mapActions([SET_MENU_OPEN]),
+        ...mapActions('search', [SET_SEARCH]),
+    },
+
+    watch: {
+        search(value) {
+            if (value) this[SET_MENU_OPEN](false);
+        },
     },
 };
 </script>

@@ -1,5 +1,9 @@
 import Vue from 'vue';
-import Router from 'vue-router';
+import VueRouter from 'vue-router';
+
+import { $store } from '../services/ServiceLocator';
+import { SET_MENU_OPEN } from '../store/actions';
+import { SET_SEARCH } from '../store/modules/Search/actions';
 
 const routes = [];
 let keys = [];
@@ -14,7 +18,7 @@ function importViews(r) {
 importViews(require.context('../views', true, /index.js$/));
 
 /*  Подключение роутера  */
-Vue.use(Router);
+Vue.use(VueRouter);
 
 /* 
     Route-level bundle splitting
@@ -31,7 +35,7 @@ export default function createRouter() {
         window.history.scrollRestoration = 'manual';
     }
 
-    return new Router({
+    const router = new VueRouter({
         mode: 'history',
         fallback: false,
         // eslint-disable-next-line no-unused-vars
@@ -53,4 +57,14 @@ export default function createRouter() {
         },
         routes,
     });
+
+    // eslint-disable-next-line
+    router.afterEach((to, from) => {
+        if ($store) {
+            $store.dispatch(SET_MENU_OPEN, false);
+            $store.dispatch(`search/${SET_SEARCH}`, false);
+        }
+    });
+
+    return router;
 }

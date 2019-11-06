@@ -1,25 +1,12 @@
 .search-panel {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid var(--cl-divider-grey);
-    padding-top: calc(var(--gs) * 4);
     overflow-x: hidden;
     overflow-y: auto;
-    height: calc(100vh - 102px);
-
-    @media (--tablet-lg) {
-        height: calc(100vh - 40px);
-        padding-top: 0;
-    }
-
-    &__mask {
-        background-color: var(--cl-global);
-        opacity: 0.8;
-        flex: 1;
-    }
 
     &__container {
         background-color: var(--cl-white);
+        padding-top: calc(var(--gs) * 4);
         padding-bottom: 104px;
         min-height: 400px;
         overflow: auto;

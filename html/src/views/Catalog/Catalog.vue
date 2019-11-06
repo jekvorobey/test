@@ -3,17 +3,21 @@
         <div class="container catalog-view__header">
             <transition-group tag="ol" class="section catalog-view__breadcrumbs" name="fade-in">
                 <li class="catalog-view__breadcrumbs-item" key="main">
-                    <router-link class="catalog-view__breadcrumbs-link" to="/">{{ 'Главная' }}</router-link>
+                    <router-link class="catalog-view__breadcrumbs-link" to="/">
+                        {{ 'Главная' }}
+                    </router-link>
                 </li>
 
                 <li class="catalog-view__breadcrumbs-item" key="all">
-                    <router-link class="catalog-view__breadcrumbs-link" to="/catalog">{{ 'Каталог' }}</router-link>
+                    <router-link class="catalog-view__breadcrumbs-link" to="/catalog">
+                        {{ 'Каталог' }}
+                    </router-link>
                 </li>
 
                 <li class="catalog-view__breadcrumbs-item" v-for="category in activeCategories" :key="category.id">
-                    <router-link class="catalog-view__breadcrumbs-link" :to="`/catalog/${category.code}`">{{
-                        category.name
-                    }}</router-link>
+                    <router-link class="catalog-view__breadcrumbs-link" :to="`/catalog/${category.code}`">
+                        {{ category.name }}
+                    </router-link>
                 </li>
             </transition-group>
 

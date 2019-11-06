@@ -35,7 +35,6 @@
                 </div>
             </div>
         </div>
-        <div class="search-panel__mask" />
     </div>
 </template>
 

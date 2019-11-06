@@ -1,20 +1,22 @@
 .v-header {
+    height: auto;
+
+    &--masked {
+        height: 100%;
+    }
+
     &__middle {
         &-search-panel {
-            position: absolute;
-            left: 0;
             width: 100%;
-            z-index: 101;
+            height: 100%;
         }
     }
 
-    &--scroll &__middle {
-        &-search-panel {
-            height: calc(100vh - 48px);
-
-            @media (--tablet-lg) {
-                height: calc(100vh - 40px);
-            }
-        }
+    &__mask {
+        border-top: 1px solid var(--cl-divider-grey);
+        background-color: rgba(0, 0, 0, 0.8);
+        flex: 1;
+        max-height: 100%;
+        overflow: auto;
     }
 }
