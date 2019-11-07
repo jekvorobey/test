@@ -1,5 +1,8 @@
 <template>
-    <header class="v-header" :class="[{ 'v-header--scroll': scroll }, { 'v-header--masked': showMask }]">
+    <header
+        class="v-header"
+        :class="[{ 'v-header--scroll': scroll }, { 'v-header--masked': showMask }, , { 'v-header--search': search }]"
+    >
         <div class="v-header__desktop">
             <div class="v-header__top">
                 <div class="container v-header__top-container">

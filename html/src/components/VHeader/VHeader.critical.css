@@ -89,7 +89,7 @@
     }
 
     &--search &__mobile {
-        background: var(--cl-white);
+        background-color: var(--cl-white);
         border-bottom: 1px solid var(--cl-divider-grey);
 
         &-container {

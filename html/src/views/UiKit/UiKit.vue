@@ -46,6 +46,7 @@ import UiKitSelects from './UiKitSelects.vue';
 import UiKitLinks from './UiKitLinks.vue';
 import UiKitList from './UiKitList.vue';
 import UiKitAccordions from './UiKitAccordions.vue';
+import UiKitCustomComponent from './UiKitCustomComponent.vue';
 
 import { mapActions, mapState } from 'vuex';
 import './UiKit.css';
@@ -75,6 +76,7 @@ export default {
         UiKitLinks,
         UiKitList,
         UiKitAccordions,
+        UiKitCustomComponent,
     },
 
     data() {
@@ -164,6 +166,10 @@ export default {
                 {
                     to: 'tables',
                     desc: 'Таблицы',
+                },
+                {
+                    to: 'custom-component',
+                    desc: 'Custom',
                 },
             ],
         };
