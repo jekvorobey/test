@@ -50,7 +50,7 @@
     }
 
     &__slider {
-        padding-bottom: calc(var(--gs) * 6);
+        padding-bottom: calc(var(--gs) * 6) !important;
 
         .v-slider__controls {
             bottom: calc(var(--gs) * 3);
