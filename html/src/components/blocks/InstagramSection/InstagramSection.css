@@ -50,7 +50,9 @@
     }
 
     &__slider {
-        padding-bottom: calc(var(--gs) * 6) !important;
+        &.swiper-container {
+            padding-bottom: calc(var(--gs) * 6);
+        }
 
         .v-slider__controls {
             bottom: calc(var(--gs) * 3);
