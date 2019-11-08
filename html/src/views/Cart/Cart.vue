@@ -93,12 +93,13 @@
 import VSvg from '../../components/controls/VSvg/VSvg.vue';
 import VButton from '../../components/controls/VButton/VButton.vue';
 import VInput from '../../components/controls/VInput/VInput.vue';
-import VTabs from '../../components/controls/VTabs/VTabs.vue';
+
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 import VSlider from '../../components/controls/VSlider/VSlider.vue';
 
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CartProductCard from '../../components/CartProductCard/CartProductCard.vue';
+import VTabs from '../../components/controls/VTabs/VTabs.vue';
 
 import { mapState, mapActions } from 'vuex';
 import { NAME as CART_MODULE, CART_ITEMS, FEATURED_PRODUCTS } from '../../store/modules/Cart';
