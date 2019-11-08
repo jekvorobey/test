@@ -143,7 +143,7 @@
             }
         }
 
-        &-slider {
+        &-slider.swiper-container {
             @media (--tablet-min) {
                 position: unset;
             }
