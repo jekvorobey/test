@@ -122,9 +122,6 @@
                     margin-bottom: 0;
                 }
 
-                &--image {
-                }
-
                 &--video {
                     padding: 0;
                 }
@@ -254,7 +251,8 @@
         }
 
         &-detail {
-            flex-basis: 34%;
+            flex-basis: calc(100% / 3);
+            max-width: 392px;
             grid-column: 2;
 
             @media (--tablet-lg) {

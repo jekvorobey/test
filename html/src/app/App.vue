@@ -34,41 +34,12 @@ import '../util/catalog';
 import _debounce from 'lodash/debounce';
 import { SCROLL, CATEGORIES } from '../store';
 import { SET_SCROLL, FETCH_COMMON_DATA } from '../store/actions';
+
+import { NAME as CART_MODULE, CART_ITEMS } from '../store/modules/Cart';
+import { FETCH_CART_ITEMS } from '../store/modules/Cart/actions';
+
 import { MIN_SCROLL_VALUE, eventName } from '../assets/scripts/constants';
 import { mapState, mapActions } from 'vuex';
-
-// const SliderBannersSection = () => ({
-//     // Загружаемый компонент. Значение должно быть Promise
-//     component: import(
-//         /* webpackChunkName: "slider-banners-section" */ '../components/blocks/SliderBannersSection/SliderBannersSection.vue'
-//     ),
-// });
-
-// const CategoriesSection = () => ({
-//     // Загружаемый компонент. Значение должно быть Promise
-//     component: import(
-//         /* webpackChunkName: "categories-section" */ '../components/blocks/CategoriesSection/CategoriesSection.vue'
-//     ),
-// });
-
-// const ProductsSection = () => ({
-//     // Загружаемый компонент. Значение должно быть Promise
-//     component: import(
-//         /* webpackChunkName: "products-section" */ '../components/blocks/ProductsSection/ProductsSection.vue'
-//     ),
-// });
-
-// const BrandsSection = () => ({
-//     // Загружаемый компонент. Значение должно быть Promise
-//     component: import(/* webpackChunkName: "brands-section" */ '../components/blocks/BrandsSection/BrandsSection.vue'),
-// });
-
-// const InstagramSection = () => ({
-//     // Загружаемый компонент. Значение должно быть Promise
-//     component: import(
-//         /* webpackChunkName: "instagram-section" */ '../components/blocks/InstagramSection/InstagramSection.vue'
-//     ),
-//});
 
 export default {
     name: 'app',
@@ -83,6 +54,7 @@ export default {
 
     methods: {
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA]),
+        ...mapActions(CART_MODULE, [FETCH_CART_ITEMS]),
 
         onScroll() {
             this[SET_SCROLL](
@@ -92,7 +64,7 @@ export default {
     },
 
     serverPrefetch() {
-        return this[FETCH_COMMON_DATA]();
+        return Promise.all([this[FETCH_COMMON_DATA](), this[FETCH_CART_ITEMS]()]);
     },
 
     mounted() {

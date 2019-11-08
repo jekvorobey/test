@@ -76,7 +76,7 @@ export default {
         },
         float: {
             type: Boolean,
-            default: true,
+            default: false,
         },
         error: String,
     },

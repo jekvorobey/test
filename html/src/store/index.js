@@ -7,6 +7,7 @@ import getters from './getters';
 import auth from './modules/Auth';
 import modal from './modules/Modal';
 import search from './modules/Search';
+import cart from './modules/Cart';
 
 Vue.use(Vuex);
 
@@ -33,6 +34,6 @@ export default function createStore() {
         getters,
         mutations,
         actions,
-        modules: { modal, search, auth },
+        modules: { modal, search, auth, cart },
     });
 }

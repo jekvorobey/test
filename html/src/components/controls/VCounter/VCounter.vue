@@ -25,8 +25,11 @@
 </template>
 
 <script>
-import './VCounter.css';
 import VSvg from '../VSvg/VSvg.vue';
+
+import '../../../assets/images/sprites/minus.svg';
+import '../../../assets/images/sprites/plus.svg';
+import './VCounter.css';
 
 const actionType = {
     decrement: 'decrement',

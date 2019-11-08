@@ -297,7 +297,6 @@
             display: flex;
             flex-wrap: wrap;
             margin: 0 calc(calc(24px * 2) / -4);
-            overflow: hidden;
 
             @media (--tablet) {
                 justify-content: space-between;

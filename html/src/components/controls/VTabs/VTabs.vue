@@ -20,7 +20,7 @@
                 @focus="e => onTabFocus(e, index)"
                 :disabled="item.disabled === true"
             >
-                <slot :name="`tab-${index}`" :item="item" :index="index" :active="internal_active_tab === index">
+                <slot name="header" :item="item" :index="index" :active="internal_active_tab === index">
                     {{ item.title }}
                 </slot>
             </button>
@@ -31,7 +31,7 @@
             :id="`v-tab--panel${selectedItem[keyField] || internal_active_tab}`"
             :aria-labelledby="`v-tab-${selectedItem[keyField] || internal_active_tab}`"
         >
-            <slot :name="`panel-${internal_active_tab}`" :item="selectedItem" :index="internal_active_tab">
+            <slot name="panel" :item="selectedItem" :index="internal_active_tab">
                 {{ selectedItem[keyValue] }}
             </slot>
         </div>

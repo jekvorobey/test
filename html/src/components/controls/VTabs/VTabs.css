@@ -2,33 +2,31 @@
     &__header {
         display: flex;
         overflow: auto;
-        height: calc(var(--gs) * 6);
         border-bottom: 1px solid var(--cl-global);
 
         &-item {
-            padding: 0 var(--gs);
-            min-width: 184px;
-            text-transform: initial;
-            border: 1px solid var(--cl-global);
-            border-bottom: none;
-            border-top-left-radius: calc(var(--gs) / 2);
-            border-top-right-radius: calc(var(--gs) / 2);
+            padding: 0;
+            text-transform: uppercase;
+            border: none;
+            font-size: 14px;
+            line-height: 24px;
+            font-weight: bold;
+            letter-spacing: 0.02em;
+            padding-bottom: calc(var(--gs) * 1.5);
+            border-bottom: 2px solid transparent;
 
             & + & {
                 margin-left: calc(var(--gs) * 2);
             }
 
             &:hover {
-                border-color: var(--cl-dark-blue);
                 color: var(--cl-dark-blue);
                 fill: var(--cl-dark-blue);
             }
 
             &.is-active,
             &:focus {
-                border-color: var(--cl-global);
-                color: var(--cl-white);
-                background-color: var(--cl-global);
+                border-bottom: 2px solid var(--cl-global);
             }
 
             &:disabled {

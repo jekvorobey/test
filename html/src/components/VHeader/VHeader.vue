@@ -1,7 +1,7 @@
 <template>
     <header
         class="v-header"
-        :class="[{ 'v-header--scroll': scroll }, { 'v-header--masked': showMask }, , { 'v-header--search': search }]"
+        :class="[{ 'v-header--scroll': scroll }, { 'v-header--masked': showMask }, { 'v-header--search': search }]"
     >
         <div class="v-header__desktop">
             <div class="v-header__top">
@@ -43,10 +43,10 @@
                         <v-svg class="v-header__middle-cart-item" name="wishlist-middle" width="20" height="20" />
                         <div class="v-header__middle-cart-item">
                             <span class="text-medium v-header__middle-cart-sum">15 780 ₽</span>&nbsp;
-                            <span class="text-medium v-header__middle-cart-icon">
+                            <v-link class="text-medium v-header__middle-cart-icon" to="/cart">
                                 <v-svg name="cart-middle" width="20" height="24" />
-                                <span class="text-bold v-header__middle-cart-count">3</span>
-                            </span>
+                                <span class="text-bold v-header__middle-cart-count">{{ itemsCount }}</span>
+                            </v-link>
                         </div>
                     </div>
                 </div>
@@ -127,6 +127,15 @@ import SearchFilter from '../SearchFilter/SearchFilter.vue';
 import NavPanel from '../NavPanel/NavPanel.vue';
 import MobileMenu from '../MobileMenu/MobileMenu.vue';
 
+import { mapState, mapActions } from 'vuex';
+import { SCROLL, IS_MENU_OPEN, CATEGORIES } from '../../store';
+import { SET_MENU_OPEN } from '../../store/actions';
+
+import { NAME as CART_MODULE, CART_ITEMS } from '../../store/modules/Cart';
+
+import { NAME as SEARCH_MODULE, SEARCH } from '../../store/modules/Search';
+import { SET_SEARCH } from '../../store/modules/Search/actions';
+
 import '../../assets/images/sprites/logo.svg';
 import '../../assets/images/sprites/logo-text.svg';
 
@@ -143,13 +152,6 @@ import '../../assets/images/sprites/arrow-down.svg';
 import './VHeader.critical.css';
 import './VHeader.css';
 
-import { mapState, mapActions } from 'vuex';
-import { SCROLL, IS_MENU_OPEN, CATEGORIES } from '../../store';
-import { SET_MENU_OPEN } from '../../store/actions';
-
-import { SEARCH } from '../../store/modules/Search';
-import { SET_SEARCH } from '../../store/modules/Search/actions';
-
 export default {
     name: 'v-header',
     components: {
@@ -165,7 +167,10 @@ export default {
 
     computed: {
         ...mapState([SCROLL, IS_MENU_OPEN]),
-        ...mapState('search', [SEARCH]),
+        ...mapState(SEARCH_MODULE, [SEARCH]),
+        ...mapState(CART_MODULE, {
+            itemsCount: state => (state[CART_ITEMS] ? state[CART_ITEMS].length : 0),
+        }),
 
         isTabletLg() {
             return this.$mq.tabletLg;
@@ -178,7 +183,7 @@ export default {
 
     methods: {
         ...mapActions([SET_MENU_OPEN]),
-        ...mapActions('search', [SET_SEARCH]),
+        ...mapActions(SEARCH_MODULE, [SET_SEARCH]),
     },
 
     watch: {

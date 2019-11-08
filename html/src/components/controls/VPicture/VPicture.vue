@@ -6,6 +6,7 @@
             :key="index"
             :data-srcset="source.srcset"
             :type="source.type"
+            :media="source.media"
         />
         <img class="blur-up lazyload v-picture__img" :data-src="image.src" :alt="alt" />
     </picture>
