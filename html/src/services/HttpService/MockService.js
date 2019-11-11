@@ -1,3 +1,6 @@
+import _cloneDeep from 'lodash/cloneDeep';
+import HttpServiceBase from './base';
+
 import product1 from '../../assets/images/mock/product1.png';
 import product2 from '../../assets/images/mock/product2.png';
 import product3 from '../../assets/images/mock/product3.png';
@@ -1062,6 +1065,45 @@ const products = [
     },
 ];
 
+const masterClasses = [
+    {
+        id: 1,
+        name: 'Мастер-класс по макияжу (Входной билет LITE)',
+        date: '3 сентября (пт), 12:00',
+        author: 'Денис Карташев, визажист',
+        type: 'masterclass',
+        price: '1 900 ₽',
+        oldPrice: null,
+        image: {
+            src: productMasterclass1,
+            sources: [
+                {
+                    srcset: `${productMasterclass1.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
+    },
+    {
+        id: 2,
+        name: 'Мастер-класс по макияжу (Входной билет LITE)',
+        date: '6 сентября (пн), 18:00',
+        author: 'Владимир Соколов, визажист',
+        type: 'masterclass',
+        price: '1 900 ₽',
+        oldPrice: '1 600 ₽',
+        image: {
+            src: productMasterclass2,
+            sources: [
+                {
+                    srcset: `${productMasterclass2.replace(ext, '.webp')}`,
+                    type: 'image/webp',
+                },
+            ],
+        },
+    },
+];
+
 const productsDetails = [
     {
         id: 1,
@@ -1218,16 +1260,7 @@ const productsDetails = [
             },
         ],
 
-        masterClasses: [
-            {
-                id: 1,
-                image: productMasterclass1,
-            },
-            {
-                id: 2,
-                image: productMasterclass2,
-            },
-        ],
+        masterClasses,
 
         reviews: {
             middleRating: 4.2,
@@ -1286,7 +1319,38 @@ const productsDetails = [
     },
 ];
 
-export default class MockHttpService {
+const cartData = {
+    items: products.slice(0, 6).concat(masterClasses),
+};
+
+export default class MockHttpService extends HttpServiceBase {
+    delete(path, data) {
+        return new Promise((resolve, reject) => {
+            switch (path) {
+                case '/delete-cart-item':
+                    if (data.item) {
+                        const {
+                            item: { id, type },
+                        } = data;
+                        const itemToDelete = cartData.items.find(i => i.id === id && i.type === type);
+                        if (!itemToDelete) {
+                            reject(new Error('cart item not found'));
+                            return;
+                        }
+                        const index = cartData.items.indexOf(itemToDelete);
+                        cartData.items.splice(index, 1);
+                        setTimeout(() => resolve(_cloneDeep(cartData)), 300);
+                    } else {
+                        cartData.items = [];
+                        setTimeout(() => resolve(_cloneDeep(cartData)), 300);
+                    }
+                    break;
+                default:
+                    reject();
+            }
+        });
+    }
+
     /**
      *
      * @param {String} path
@@ -1405,6 +1469,9 @@ export default class MockHttpService {
                         default:
                             setTimeout(() => resolve(productsDetails[0]), 300);
                     }
+                    break;
+                case '/cart-data':
+                    setTimeout(() => resolve(_cloneDeep(cartData)), 300);
                     break;
                 default:
                     reject();

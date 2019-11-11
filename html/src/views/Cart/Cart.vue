@@ -4,37 +4,83 @@
             <h1 class="cart-view__section-hl">Моя корзина</h1>
         </div>
         <section class="section cart-view__main">
-            <div class="container cart-view__main-container">
-                <v-tabs class="cart-view__main-tabs" :items="tabItems" key-field="id">
-                    <template v-slot:header="{ item }">
-                        {{ item.title }}&nbsp;&nbsp;<span class="text-grey">{{ item.products.length }}</span>
-                    </template>
-                    <template v-slot:panel="{ item }">
-                        <div class="cart-view__main-products" v-if="item.type === 'product'">
-                            <div v-if="item.alerts && item.alerts.length > 0" class="cart-view__main-products-alert">
-                                <v-svg name="alert" width="24" height="24" />
-                                <div class="cart-view__main-products-alert-text">
-                                    <div v-for="alert in item.alerts" :key="alert.id">
-                                        {{ alert.title }}
+            <div v-if="cartItemsCount > 0" class="container cart-view__main-container">
+                <div class="cart-view__main-tabs">
+                    <v-tabs :items="tabItems" key-field="id">
+                        <template v-slot:header="{ item }">
+                            {{ item.title }}&nbsp;&nbsp;<span class="text-grey">{{ item.products.length }}</span>
+                        </template>
+                        <template v-slot:panel="{ item }">
+                            <div class="cart-view__main-products" v-if="IS_PRODUCT(item)">
+                                <div
+                                    v-if="item.alerts && item.alerts.length > 0"
+                                    class="cart-view__main-products-alert"
+                                >
+                                    <v-svg name="alert" width="24" height="24" />
+                                    <div class="cart-view__main-products-alert-text">
+                                        <div v-for="alert in item.alerts" :key="alert.id">
+                                            {{ alert.title }}
+                                        </div>
                                     </div>
                                 </div>
+                                <transition-group
+                                    class="cart-view__main-products-list"
+                                    tag="ul"
+                                    name="cart-item"
+                                    @before-enter="onBeforeEnterItems"
+                                    @enter="onEnterItems"
+                                    @after-enter="onAfterEnterItems"
+                                    @leave="onLeaveItems"
+                                >
+                                    <cart-product-card
+                                        class="cart-view__main-products-list-item"
+                                        v-for="(product, index) in item.products"
+                                        :data-index="index"
+                                        :key="product.id"
+                                        :product-id="product.id"
+                                        :type="product.type"
+                                        :name="product.name"
+                                        :image="product.image"
+                                        :price="product.price"
+                                        :old-price="product.oldPrice"
+                                        href="/catalog"
+                                    />
+                                </transition-group>
                             </div>
-                            <ul class="cart-view__main-products-list">
-                                <cart-product-card
-                                    class="cart-view__main-products-list-item"
-                                    v-for="product in item.products"
-                                    :key="product.id"
-                                    :product-id="product.id"
-                                    :name="product.name"
-                                    :image="product.image"
-                                    :price="product.price"
-                                    :old-price="product.oldPrice"
-                                    href="/catalog"
-                                />
-                            </ul>
-                        </div>
-                    </template>
-                </v-tabs>
+                            <div class="cart-view__main-masterclass" v-else-if="IS_MASTER_CLASS(item)">
+                                <transition-group
+                                    class="cart-view__main-products-list"
+                                    tag="ul"
+                                    name="cart-item"
+                                    @before-enter="onBeforeEnterItems"
+                                    @enter="onEnterItems"
+                                    @after-enter="onAfterEnterItems"
+                                    @leave="onLeaveItems"
+                                >
+                                    <cart-master-class-card
+                                        class="cart-view__main-products-list-item"
+                                        v-for="(product, index) in item.products"
+                                        :data-index="index"
+                                        :key="product.id"
+                                        :product-id="product.id"
+                                        :type="product.type"
+                                        :name="product.name"
+                                        :image="product.image"
+                                        :price="product.price"
+                                        :old-price="product.oldPrice"
+                                        :date="product.date"
+                                        :author="product.author"
+                                        href="/catalog"
+                                    />
+                                </transition-group>
+                            </div>
+                        </template>
+                    </v-tabs>
+                    <v-link class="cart-view__main-clear" tag="button" @click="DELETE_CART_ITEM()">
+                        <v-svg name="cross-small" width="13" height="13" />
+                        &nbsp;&nbsp;Очистить корзину
+                    </v-link>
+                </div>
                 <v-sticky class="cart-view__main-sticky">
                     <template v-slot:sticky>
                         <div class="cart-view__main-panel">
@@ -75,6 +121,7 @@
                         v-for="product in featuredProducts"
                         :key="product.id"
                         :product-id="product.id"
+                        :type="product.type"
                         :name="product.name"
                         :href="product.href"
                         :image="product.image"
@@ -92,22 +139,34 @@
 <script>
 import VSvg from '../../components/controls/VSvg/VSvg.vue';
 import VButton from '../../components/controls/VButton/VButton.vue';
+import VLink from '../../components/controls/VLink/VLink.vue';
 import VInput from '../../components/controls/VInput/VInput.vue';
 
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 import VSlider from '../../components/controls/VSlider/VSlider.vue';
 
+import CartMasterClassCard from '../../components/CartMasterClassCard/CartMasterClassCard.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CartProductCard from '../../components/CartProductCard/CartProductCard.vue';
 import VTabs from '../../components/controls/VTabs/VTabs.vue';
 
-import { mapState, mapActions } from 'vuex';
-import { NAME as CART_MODULE, CART_ITEMS, FEATURED_PRODUCTS } from '../../store/modules/Cart';
-import { FETCH_FEATURED_PRODUCTS } from '../../store/modules/Cart/actions';
+import { mapState, mapActions, mapGetters } from 'vuex';
+import { NAME as CART_MODULE, FEATURED_PRODUCTS } from '../../store/modules/Cart';
+import { FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM } from '../../store/modules/Cart/actions';
+import {
+    PRODUCTS,
+    MASTER_CLASSES,
+    IS_PRODUCT,
+    IS_MASTER_CLASS,
+    CART_ITEMS_COUNT,
+} from '../../store/modules/Cart/getters';
 
-import { breakpoints } from '../../assets/scripts/constants';
+import { breakpoints, cartItemTypes } from '../../assets/scripts/constants';
 import '../../assets/images/sprites/alert.svg';
 import './Cart.css';
+
+const itemAnimationDelayDelta = 100;
+let counter = 0;
 
 const sliderOptions = {
     spaceBetween: 24,
@@ -147,17 +206,20 @@ export default {
     components: {
         VSvg,
         VButton,
+        VLink,
         VInput,
         VTabs,
         VSticky,
         VSlider,
 
         CartProductCard,
+        CartMasterClassCard,
         CatalogProductCard,
     },
 
     computed: {
-        ...mapState(CART_MODULE, [CART_ITEMS, FEATURED_PRODUCTS]),
+        ...mapState(CART_MODULE, [FEATURED_PRODUCTS]),
+        ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCTS, MASTER_CLASSES, IS_PRODUCT, IS_MASTER_CLASS]),
 
         sliderOptions() {
             return sliderOptions;
@@ -168,7 +230,7 @@ export default {
                 {
                     id: 1,
                     title: 'Продукты',
-                    type: 'product',
+                    type: cartItemTypes.PRODUCT,
                     alerts: [
                         {
                             id: 1,
@@ -179,20 +241,59 @@ export default {
                             title: 'Ближайший самовывоз из пункта выдачи с 26 июня, среда',
                         },
                     ],
-                    products: this[CART_ITEMS],
+                    products: this[PRODUCTS],
                 },
                 {
                     id: 2,
                     title: 'Мастер-классы',
-                    type: 'masterclasse',
-                    products: this[CART_ITEMS],
+                    type: cartItemTypes.MASTERCLASS,
+                    products: this[MASTER_CLASSES],
                 },
             ];
         },
     },
 
     methods: {
-        ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS]),
+        ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM]),
+
+        onBeforeEnterItems(el) {
+            el.dataset.index = counter;
+            counter += 1;
+            el.style.opacity = 0;
+        },
+
+        itemAnimation(el, delay) {
+            return new Promise((resolve, reject) => {
+                try {
+                    setTimeout(() => {
+                        requestAnimationFrame(() => {
+                            el.style.opacity = 1;
+                            resolve();
+                        });
+                    }, delay);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        },
+
+        async onEnterItems(el, done) {
+            const delay = el.dataset.index * itemAnimationDelayDelta;
+            await this.itemAnimation(el, delay);
+            done();
+        },
+
+        onAfterEnterItems(el) {
+            delete el.dataset.index;
+            counter = 0;
+        },
+
+        onLeaveItems(el, done) {
+            requestAnimationFrame(() => {
+                el.style.opacity = 0;
+                done();
+            });
+        },
     },
 
     mounted() {

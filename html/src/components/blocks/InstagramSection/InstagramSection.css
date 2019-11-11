@@ -44,8 +44,8 @@
         @media (--tablet) {
             position: relative;
             width: calc(100% - 32px);
-            left: unset;
-            right: unset;
+            left: auto;
+            right: auto;
         }
     }
 

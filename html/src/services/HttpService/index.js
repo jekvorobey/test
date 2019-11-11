@@ -1,5 +1,5 @@
-/* eslint-disable no-console */
 import axios from 'axios';
+import HttpServiceBase from './base';
 // import { cacheAdapterEnhancer } from 'axios-extensions';
 
 const http = axios.create({
@@ -9,22 +9,4 @@ const http = axios.create({
     // adapter: cacheAdapterEnhancer(axios.defaults.adapter),
 });
 
-export default class HttpService {
-    /**
-     *
-     * @param {String} path
-     * @param {*} data
-     * @returns {Promise<Object>}
-     */
-    post(path, data) {}
-
-    /**
-     *
-     * @param {String} path
-     * @param {*} data
-     * @returns {Promise<Object>}
-     */
-    get(path, data) {}
-}
-
-/* eslint-enable no-console */
+export default class HttpService extends HttpServiceBase {}

@@ -106,7 +106,7 @@
             </transition>
         </div>
         <transition name="fade">
-            <div v-show="showMask" class="v-header__mask">
+            <div class="v-header__mask" v-if="showMask">
                 <search-panel v-if="search" />
                 <nav-panel v-else-if="isMenuOpen" />
             </div>

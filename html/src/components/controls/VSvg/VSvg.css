@@ -1,6 +1,5 @@
 .icon {
     pointer-events: none;
-    transition: all var(--time) var(--timing-function);
 
     &--rotate {
         &-deg45 {

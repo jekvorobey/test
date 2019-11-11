@@ -2,7 +2,7 @@
     &__header {
         display: flex;
         overflow: auto;
-        border-bottom: 1px solid var(--cl-global);
+        border-bottom: 2px solid var(--cl-grey);
 
         &-item {
             padding: 0;

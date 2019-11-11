@@ -1,18 +1,26 @@
 
 <template>
     <picture class="v-picture" v-if="isObject && lazy">
-        <source
-            v-for="(source, index) in image.sources"
-            :key="index"
-            :data-srcset="source.srcset"
-            :type="source.type"
-            :media="source.media"
-        />
-        <img class="blur-up lazyload v-picture__img" :data-src="image.src" :alt="alt" />
+        <slot name="source" :image="image" :lazy="lazy">
+            <source
+                v-for="(source, index) in image.sources"
+                :key="index"
+                :data-srcset="source.srcset"
+                :type="source.type"
+                :media="source.media"
+            />
+        </slot>
+        <slot name="fallback" :image="image" :lazy="lazy">
+            <img class="blur-up lazyload v-picture__img" :data-src="image.src" :alt="alt" />
+        </slot>
     </picture>
     <picture class="v-picture" v-else-if="isObject && !lazy">
-        <source v-for="(source, index) in image.sources" :key="index" :srcset="source.srcset" :type="source.type" />
-        <img class="v-picture__img" :src="image.src" :alt="alt" />
+        <slot name="source" :image="image" :lazy="lazy">
+            <source v-for="(source, index) in image.sources" :key="index" :srcset="source.srcset" :type="source.type" />
+        </slot>
+        <slot name="fallback" :image="image" :lazy="lazy">
+            <img class="v-picture__img" :src="image.src" :alt="alt" />
+        </slot>
     </picture>
     <img v-else-if="!isObject && lazy" class="blur-up lazyload v-picture" :data-src="image" :alt="alt" />
     <img v-else-if="!isObject && !lazy" class="v-picture" :src="image" :alt="alt" />

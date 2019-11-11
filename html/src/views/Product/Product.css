@@ -1026,14 +1026,18 @@
             @media (--tablet-min) {
                 padding-bottom: calc(var(--gs) * 7);
                 border-bottom: 1px solid var(--cl-divider-grey);
-                position: unset;
+                position: static;
+
+                @supports (position: initial) {
+                    position: initial;
+                }
             }
 
             .v-slider__controls {
                 position: absolute;
                 top: 20px;
                 right: 108px;
-                bottom: unset;
+                bottom: auto;
 
                 @media (--desktop) {
                     right: calc(var(--gs) * 5);
@@ -1091,8 +1095,8 @@
             @media (--tablet) {
                 position: relative;
                 width: calc(100% - 32px);
-                left: unset;
-                right: unset;
+                left: auto;
+                right: auto;
             }
         }
 

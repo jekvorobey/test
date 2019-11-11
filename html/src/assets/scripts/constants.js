@@ -39,3 +39,8 @@ export const breakpoints = Object.freeze({
     desktopLg: 1600,
     desktopXl: 1920,
 });
+
+export const cartItemTypes = Object.freeze({
+    PRODUCT: 'product',
+    MASTERCLASS: 'masterclass',
+});

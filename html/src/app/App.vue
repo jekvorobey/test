@@ -36,7 +36,7 @@ import { SCROLL, CATEGORIES } from '../store';
 import { SET_SCROLL, FETCH_COMMON_DATA } from '../store/actions';
 
 import { NAME as CART_MODULE, CART_ITEMS } from '../store/modules/Cart';
-import { FETCH_CART_ITEMS } from '../store/modules/Cart/actions';
+import { FETCH_CART_DATA } from '../store/modules/Cart/actions';
 
 import { MIN_SCROLL_VALUE, eventName } from '../assets/scripts/constants';
 import { mapState, mapActions } from 'vuex';
@@ -54,7 +54,7 @@ export default {
 
     methods: {
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA]),
-        ...mapActions(CART_MODULE, [FETCH_CART_ITEMS]),
+        ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
 
         onScroll() {
             this[SET_SCROLL](
@@ -64,7 +64,7 @@ export default {
     },
 
     serverPrefetch() {
-        return Promise.all([this[FETCH_COMMON_DATA](), this[FETCH_CART_ITEMS]()]);
+        return Promise.all([this[FETCH_COMMON_DATA](), this[FETCH_CART_DATA]()]);
     },
 
     mounted() {

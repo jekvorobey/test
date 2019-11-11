@@ -1,34 +1,34 @@
 <template>
-    <li class="cart-product-card" :class="{ 'cart-product-card--small': isSmall }">
-        <router-link class="cart-product-card__img" :to="href">
-            <v-picture v-if="image" :image="image" lazy />
-            <v-svg v-else id="cart-product-card-empty" name="logo" width="48" height="48" />
+    <li class="cart-master-class-card" :class="{ 'cart-master-class-card--small': isSmall }">
+        <router-link class="cart-master-class-card__img" :to="href">
+            <v-picture v-if="image" :image="image" />
+            <v-svg v-else id="cart-master-class-card-empty" name="logo" width="48" height="48" />
         </router-link>
-        <div class="cart-product-card__body">
-            <v-link class="cart-product-card__body-name" :to="href">{{ name }}</v-link>
-            <div class="cart-product-card__body-panel">
+        <div class="cart-master-class-card__body">
+            <v-link class="cart-master-class-card__body-name" :to="href">{{ name }}</v-link>
+            <div class="cart-master-class-card__body-panel">
                 <v-counter :value="3" min="1" />
-                <div class="cart-product-card__body-panel-prices">
-                    <div class="text-bold cart-product-card__body-panel-price">{{ price }}</div>
+                <div class="cart-master-class-card__body-panel-prices">
+                    <div class="text-bold cart-master-class-card__body-panel-price">{{ price }}</div>
                     <div
                         v-show="oldPrice"
-                        class="text-grey text-strike cart-product-card__body-panel-price cart-product-card__body-panel-price--old"
+                        class="text-grey text-strike cart-master-class-card__body-panel-price cart-master-class-card__body-panel-price--old"
                     >
                         {{ oldPrice }}
                     </div>
                 </div>
             </div>
-            <div class="text-grey text-sm cart-product-card__body-info">
-                Ближайшая доставка 24 июня<br />
-                Ближайший самовывоз c 26 июня
+            <div class="text-grey text-sm cart-master-class-card__body-info">
+                <div>{{ date }}</div>
+                <div>{{ author }}</div>
             </div>
-            <div class="text-grey cart-product-card__body-bonus">+ 80 бонусов</div>
-            <div class="cart-product-card__body-controls">
-                <v-link class="cart-product-card__body-controls-link" tag="button">
+            <div class="text-grey cart-product-card__body-bonus" />
+            <div class="cart-master-class-card__body-controls">
+                <v-link class="cart-master-class-card__body-controls-link" tag="button">
                     <v-svg name="wishlist-middle" width="15" height="13" />
                     &nbsp;Перенести в избранное
                 </v-link>
-                <v-link class="cart-product-card__body-controls-link" tag="button" @click="deleteItem">
+                <v-link class="cart-master-class-card__body-controls-link" tag="button" @click="deleteItem">
                     <v-svg name="cross-small" width="10" height="10" />
                     &nbsp;Удалить
                 </v-link>
@@ -50,10 +50,10 @@ import { DELETE_CART_ITEM } from '../../store/modules/Cart/actions';
 import '../../assets/images/sprites/cross-small.svg';
 import '../../assets/images/sprites/wishlist-middle.svg';
 import '../../assets/images/sprites/logo.svg';
-import './CartProductCard.css';
+import './CartMasterClassCard.css';
 
 export default {
-    name: 'cart-product-card',
+    name: 'cart-master-class-card',
 
     components: {
         VSvg,
@@ -73,17 +73,25 @@ export default {
             required: true,
         },
 
+        href: {
+            type: String,
+        },
+
         type: {
             type: String,
             required: true,
         },
 
-        href: {
-            type: String,
-        },
-
         image: {
             type: [String, Object],
+        },
+
+        date: {
+            type: [String, Date],
+        },
+
+        author: {
+            type: String,
         },
 
         price: {

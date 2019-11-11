@@ -1,33 +1,41 @@
 import { $http } from '../services/ServiceLocator';
 
-export function search(string) {
-    return $http.get('/search', string);
+export function search(data) {
+    return $http.get('/search', data);
 }
 
-export function getProducts(string) {
-    return $http.get('/products', string);
+export function getProducts(data) {
+    return $http.get('/products', data);
 }
 
-export function getCatalogItems(string) {
-    return $http.get('/catalog/items', string);
+export function getCatalogItems(data) {
+    return $http.get('/catalog/items', data);
 }
 
-export function getCategories(string) {
-    return $http.get('/categories', string);
+export function getCategories(data) {
+    return $http.get('/categories', data);
 }
 
-export function getBanners(string) {
-    return $http.get('/banners', string);
+export function getBanners(data) {
+    return $http.get('/banners', data);
 }
 
-export function getBrands(string) {
-    return $http.get('/brands', string);
+export function getBrands(data) {
+    return $http.get('/brands', data);
 }
 
-export function getInstagram(string) {
-    return $http.get('/instagram', string);
+export function getInstagram(data) {
+    return $http.get('/instagram', data);
 }
 
-export function getProduct(string) {
-    return $http.get('/product', string);
+export function getProduct(data) {
+    return $http.get('/product', data);
+}
+
+export function getCartData(data) {
+    return $http.get('/cart-data', data);
+}
+
+export function deleteCartItem(data) {
+    return $http.delete('/delete-cart-item', data);
 }
