@@ -11,12 +11,14 @@
                         :key="product.id"
                         :product-id="product.id"
                         :name="product.name"
+                        :type="product.type"
                         :href="product.href"
                         :image="product.image"
                         :price="product.price"
                         :old-price="product.oldPrice"
                         :tags="product.tags"
                         :rating="product.rating"
+                        @addItem="ADD_CART_ITEM({ item: product })"
                     />
                     <v-button class="btn--outline products-section__link" :to="btnLink">
                         {{ btnText }}
@@ -39,6 +41,11 @@
 import VButton from '../../controls/VButton/VButton.vue';
 import CatalogProductCard from '../../CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '../../CatalogBannerCard/CatalogBannerCard.vue';
+
+import { mapActions } from 'vuex';
+import { NAME as CART_MODULE } from '../../../store/modules/Cart';
+import { ADD_CART_ITEM } from '../../../store/modules/Cart/actions';
+
 import './ProductsSection.css';
 
 export default {
@@ -83,6 +90,10 @@ export default {
                 return {};
             },
         },
+    },
+
+    methods: {
+        ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
     },
 };
 </script>

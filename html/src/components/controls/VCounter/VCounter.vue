@@ -80,6 +80,13 @@ export default {
             value_internal: Number(value),
         };
     },
+
+    watch: {
+        value(value) {
+            this.value_internal = Number(value);
+        },
+    },
+
     methods: {
         updateValue(action) {
             const { input } = this.$refs;

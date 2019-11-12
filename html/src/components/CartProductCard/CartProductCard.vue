@@ -7,7 +7,7 @@
         <div class="cart-product-card__body">
             <v-link class="cart-product-card__body-name" :to="href">{{ name }}</v-link>
             <div class="cart-product-card__body-panel">
-                <v-counter :value="3" min="1" />
+                <v-counter :value="count" min="0" @input="debounce_countChange" />
                 <div class="cart-product-card__body-panel-prices">
                     <div class="text-bold cart-product-card__body-panel-price">{{ price }}</div>
                     <div
@@ -28,7 +28,7 @@
                     <v-svg name="wishlist-middle" width="15" height="13" />
                     &nbsp;Перенести в избранное
                 </v-link>
-                <v-link class="cart-product-card__body-controls-link" tag="button" @click="deleteItem">
+                <v-link class="cart-product-card__body-controls-link" tag="button" @click="onDeleteClick">
                     <v-svg name="cross-small" width="10" height="10" />
                     &nbsp;Удалить
                 </v-link>
@@ -43,10 +43,7 @@ import VLink from '../controls/VLink/VLink.vue';
 import VPicture from '../controls/VPicture/VPicture.vue';
 import VCounter from '../controls/VCounter/VCounter.vue';
 
-import { mapActions } from 'vuex';
-import { NAME as CART_MODULE } from '../../store/modules/Cart';
-import { DELETE_CART_ITEM } from '../../store/modules/Cart/actions';
-
+import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/cross-small.svg';
 import '../../assets/images/sprites/wishlist-middle.svg';
 import '../../assets/images/sprites/logo.svg';
@@ -96,6 +93,11 @@ export default {
             default: null,
         },
 
+        count: {
+            type: Number,
+            default: 1,
+        },
+
         isSmall: {
             type: Boolean,
             default: false,
@@ -103,11 +105,18 @@ export default {
     },
 
     methods: {
-        ...mapActions(CART_MODULE, [DELETE_CART_ITEM]),
-
-        deleteItem() {
-            this.DELETE_CART_ITEM({ item: { id: this.productId, type: this.type } });
+        onCountChange(value) {
+            if (value > 0) this.$emit('countChange', { id: this.productId, type: this.type, count: value });
+            else this.$emit('deleteItem', { id: this.productId, type: this.type });
         },
+
+        onDeleteClick() {
+            this.$emit('deleteItem', { id: this.productId, type: this.type });
+        },
+    },
+
+    created() {
+        this.debounce_countChange = _debounce(this.onCountChange, 200);
     },
 };
 </script>

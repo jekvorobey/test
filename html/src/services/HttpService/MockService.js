@@ -1320,7 +1320,11 @@ const productsDetails = [
 ];
 
 const cartData = {
-    items: products.slice(0, 6).concat(masterClasses),
+    items: [
+        ...masterClasses.map(mc => {
+            return { id: mc.id, type: mc.type, item: mc, count: 1 };
+        }),
+    ],
 };
 
 export default class MockHttpService extends HttpServiceBase {
@@ -1351,15 +1355,27 @@ export default class MockHttpService extends HttpServiceBase {
         });
     }
 
-    /**
-     *
-     * @param {String} path
-     * @param {*} data
-     * @returns {Promise<Object>}
-     */
     post(path, data) {
         return new Promise((resolve, reject) => {
-            resolve();
+            switch (path) {
+                case '/add-cart-item':
+                    {
+                        if (!data.item) throw new Error('item not found');
+
+                        const {
+                            item: { id, type },
+                        } = data;
+
+                        const existItem = cartData.items.find(i => i.id === id && i.type === type);
+                        if (!existItem) cartData.items.push({ id, type, count: 1, item: data.item });
+                        else if (data.count) existItem.count = data.count;
+                        else existItem.count += 1;
+                        setTimeout(() => resolve(_cloneDeep(cartData)), 300);
+                    }
+                    break;
+                default:
+                    reject();
+            }
         });
     }
 

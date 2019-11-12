@@ -24,7 +24,11 @@ export default {
 
     [MASTER_CLASSES]: state => state.cartItems.filter(i => i.type === cartItemTypes.MASTERCLASS),
 
-    [CART_ITEMS_COUNT]: state => (state.cartItems ? state.cartItems.length : 0),
+    [CART_ITEMS_COUNT]: state => {
+        if (!state.cartItems || state.cartItems.length === 0) return 0;
+        const count = state.cartItems.reduce((accum, current) => accum + current.count, 0);
+        return count;
+    },
 
     [IS_PRODUCT]: () => (item = {}) => isValidType(item.type) && item.type === cartItemTypes.PRODUCT,
 

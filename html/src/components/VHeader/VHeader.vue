@@ -45,7 +45,7 @@
                             <span class="text-medium v-header__middle-cart-sum">15 780 ₽</span>&nbsp;
                             <v-link class="text-medium v-header__middle-cart-icon" to="/cart">
                                 <v-svg name="cart-middle" width="20" height="24" />
-                                <span class="text-bold v-header__middle-cart-count">{{ itemsCount }}</span>
+                                <span class="text-bold v-header__middle-cart-count">{{ cartItemsCount }}</span>
                             </v-link>
                         </div>
                     </div>
@@ -127,11 +127,12 @@ import SearchFilter from '../SearchFilter/SearchFilter.vue';
 import NavPanel from '../NavPanel/NavPanel.vue';
 import MobileMenu from '../MobileMenu/MobileMenu.vue';
 
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, IS_MENU_OPEN, CATEGORIES } from '../../store';
 import { SET_MENU_OPEN } from '../../store/actions';
 
 import { NAME as CART_MODULE, CART_ITEMS } from '../../store/modules/Cart';
+import { CART_ITEMS_COUNT } from '../../store/modules/Cart/getters';
 
 import { NAME as SEARCH_MODULE, SEARCH } from '../../store/modules/Search';
 import { SET_SEARCH } from '../../store/modules/Search/actions';
@@ -168,9 +169,7 @@ export default {
     computed: {
         ...mapState([SCROLL, IS_MENU_OPEN]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
-        ...mapState(CART_MODULE, {
-            itemsCount: state => (state[CART_ITEMS] ? state[CART_ITEMS].length : 0),
-        }),
+        ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT]),
 
         isTabletLg() {
             return this.$mq.tabletLg;

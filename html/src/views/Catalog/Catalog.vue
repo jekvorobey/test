@@ -102,12 +102,14 @@
                                 class="catalog-view__main-grid-card"
                                 :product-id="item.id"
                                 :name="item.name"
+                                :type="item.type"
                                 :href="`/catalog${activeCategory ? `/${activeCategory.code}` : ''}/${item.code}`"
                                 :image="item.image"
                                 :price="item.price"
                                 :old-price="item.oldPrice"
                                 :tags="item.tags"
                                 :rating="item.rating"
+                                @addItem="ADD_CART_ITEM({ item })"
                             />
                             <catalog-banner-card
                                 v-else-if="item.type === 'banner'"
@@ -193,8 +195,15 @@ import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
 
+import { $store, $progress, $logger } from '../../services/ServiceLocator';
 import { concatCatalogRoutePath } from '../../util/catalog';
-import catalogModule, { ITEMS, BANNER, CATEGORIES } from '../../store/modules/Catalog';
+import { mapState, mapActions, mapGetters } from 'vuex';
+
+import { NAME as CART_MODULE } from '../../store/modules/Cart';
+import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
+
+import catalogModule, { NAME as CATALOG_MODULE, ITEMS, BANNER, CATEGORIES } from '../../store/modules/Catalog';
+import { FETCH_ITEMS, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
 import {
     ACTIVE_TAGS,
     ACTIVE_CATEGORY,
@@ -203,16 +212,11 @@ import {
     ROUTE_SEGMENTS,
     ACTIVE_CATEGORIES,
 } from '../../store/modules/Catalog/getters';
-import { FETCH_ITEMS, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
-import { mapState, mapActions, mapGetters } from 'vuex';
-import { $store, $progress, $logger } from '../../services/ServiceLocator';
 
 import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/filter.svg';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
-
-export const DISPATCH_FETCH_CATALOG_DATA = `${catalogModule.name}/${FETCH_CATALOG_DATA}`;
 
 const itemAnimationDelayDelta = 100;
 let counter = 0;
@@ -249,7 +253,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(catalogModule.name, [
+        ...mapGetters(CATALOG_MODULE, [
             ACTIVE_TAGS,
             ACTIVE_CATEGORY,
             ACTIVE_PAGE,
@@ -257,7 +261,7 @@ export default {
             ROUTE_SEGMENTS,
             ACTIVE_CATEGORIES,
         ]),
-        ...mapState(catalogModule.name, [ITEMS, BANNER, CATEGORIES]),
+        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES]),
         ...mapState('route', {
             code: state => state.params.code,
         }),
@@ -268,7 +272,8 @@ export default {
     },
 
     methods: {
-        ...mapActions(catalogModule.name, [FETCH_ITEMS, FETCH_CATALOG_DATA]),
+        ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_CATALOG_DATA]),
+        ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
 
         onBeforeEnterItems(el) {
             el.dataset.index = counter;
@@ -332,9 +337,9 @@ export default {
         } = to;
 
         // регистрируем модуль, если такого нет
-        const register = !!$store._modulesNamespaceMap[`${catalogModule.name}/`];
+        const register = !!$store._modulesNamespaceMap[`${CATALOG_MODULE}/`];
         if (!register)
-            $store.registerModule(catalogModule.name, catalogModule, {
+            $store.registerModule(CATALOG_MODULE, catalogModule, {
                 preserveState: !!$store.state.catalog,
             });
 
@@ -346,7 +351,7 @@ export default {
             // если нет - фетчим
             $progress.start();
             $store
-                .dispatch(DISPATCH_FETCH_CATALOG_DATA, { code })
+                .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, { code })
                 .then(() => next(vm => $progress.finish()))
                 .catch(error => {
                     $progress.fail();

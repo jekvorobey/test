@@ -34,7 +34,7 @@
                                 >
                                     <cart-product-card
                                         class="cart-view__main-products-list-item"
-                                        v-for="(product, index) in item.products"
+                                        v-for="({ item: product, count }, index) in item.products"
                                         :data-index="index"
                                         :key="product.id"
                                         :product-id="product.id"
@@ -43,7 +43,10 @@
                                         :image="product.image"
                                         :price="product.price"
                                         :old-price="product.oldPrice"
+                                        :count="count"
                                         href="/catalog"
+                                        @deleteItem="DELETE_CART_ITEM({ item: product })"
+                                        @countChange="ADD_CART_ITEM({ item: product, count: $event.count })"
                                     />
                                 </transition-group>
                             </div>
@@ -59,7 +62,7 @@
                                 >
                                     <cart-master-class-card
                                         class="cart-view__main-products-list-item"
-                                        v-for="(product, index) in item.products"
+                                        v-for="({ item: product, count }, index) in item.products"
                                         :data-index="index"
                                         :key="product.id"
                                         :product-id="product.id"
@@ -70,6 +73,9 @@
                                         :old-price="product.oldPrice"
                                         :date="product.date"
                                         :author="product.author"
+                                        :count="count"
+                                        @deleteItem="DELETE_CART_ITEM({ item: product })"
+                                        @countChange="ADD_CART_ITEM({ item: product, count: $event.count })"
                                         href="/catalog"
                                     />
                                 </transition-group>
@@ -129,6 +135,7 @@
                         :old-price="product.oldPrice"
                         :tags="product.tags"
                         :rating="product.rating"
+                        @addItem="ADD_CART_ITEM({ item: product })"
                     />
                 </v-slider>
             </div>
@@ -152,7 +159,7 @@ import VTabs from '../../components/controls/VTabs/VTabs.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CART_MODULE, FEATURED_PRODUCTS } from '../../store/modules/Cart';
-import { FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM } from '../../store/modules/Cart/actions';
+import { FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 import {
     PRODUCTS,
     MASTER_CLASSES,
@@ -226,8 +233,12 @@ export default {
         },
 
         tabItems() {
-            return [
-                {
+            const products = this[PRODUCTS];
+            const masterClasses = this[MASTER_CLASSES];
+            const tabs = [];
+
+            if (products.length > 0)
+                tabs.push({
                     id: 1,
                     title: 'Продукты',
                     type: cartItemTypes.PRODUCT,
@@ -241,20 +252,25 @@ export default {
                             title: 'Ближайший самовывоз из пункта выдачи с 26 июня, среда',
                         },
                     ],
-                    products: this[PRODUCTS],
-                },
-                {
+                    disabled: products.length === 0,
+                    products: products,
+                });
+
+            if (masterClasses.length > 0)
+                tabs.push({
                     id: 2,
                     title: 'Мастер-классы',
                     type: cartItemTypes.MASTERCLASS,
-                    products: this[MASTER_CLASSES],
-                },
-            ];
+                    disabled: masterClasses.length === 0,
+                    products: masterClasses,
+                });
+
+            return tabs;
         },
     },
 
     methods: {
-        ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM]),
+        ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM]),
 
         onBeforeEnterItems(el) {
             el.dataset.index = counter;

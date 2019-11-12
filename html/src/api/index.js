@@ -39,3 +39,7 @@ export function getCartData(data) {
 export function deleteCartItem(data) {
     return $http.delete('/delete-cart-item', data);
 }
+
+export function addCartItem(data) {
+    return $http.post('/add-cart-item', data);
+}
