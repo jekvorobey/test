@@ -1,5 +1,6 @@
 .v-counter {
     display: inline-flex;
+    align-items: center;
     height: calc(var(--gs) * 5);
 
     &__input,

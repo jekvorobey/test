@@ -6,16 +6,17 @@
         </router-link>
         <div class="cart-product-card__body">
             <v-link class="cart-product-card__body-name" :to="href">{{ name }}</v-link>
-            <div class="cart-product-card__body-panel">
+            <div class="cart-product-card__body-count">
                 <v-counter :value="count" min="0" @input="debounce_countChange" />
-                <div class="cart-product-card__body-panel-prices">
-                    <div class="text-bold cart-product-card__body-panel-price">{{ price }}</div>
-                    <div
-                        v-show="oldPrice"
-                        class="text-grey text-strike cart-product-card__body-panel-price cart-product-card__body-panel-price--old"
-                    >
-                        {{ oldPrice }}
-                    </div>
+            </div>
+
+            <div class="cart-product-card__body-prices">
+                <div class="text-bold cart-product-card__body-price">{{ price }}</div>
+                <div
+                    v-show="oldPrice"
+                    class="text-grey text-strike cart-product-card__body-price cart-product-card__body-price--old"
+                >
+                    {{ oldPrice }}
                 </div>
             </div>
             <div class="text-grey text-sm cart-product-card__body-info">
@@ -26,11 +27,11 @@
             <div class="cart-product-card__body-controls">
                 <v-link class="cart-product-card__body-controls-link" tag="button">
                     <v-svg name="wishlist-middle" width="15" height="13" />
-                    &nbsp;Перенести в избранное
+                    {{ isTablet ? '' : '&nbsp;Перенести в избранное' }}
                 </v-link>
                 <v-link class="cart-product-card__body-controls-link" tag="button" @click="onDeleteClick">
                     <v-svg name="cross-small" width="10" height="10" />
-                    &nbsp;Удалить
+                    {{ isTablet ? '' : '&nbsp;Удалить' }}
                 </v-link>
             </div>
         </div>
@@ -101,6 +102,12 @@ export default {
         isSmall: {
             type: Boolean,
             default: false,
+        },
+    },
+
+    computed: {
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 

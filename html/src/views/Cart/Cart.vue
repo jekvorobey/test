@@ -16,7 +16,10 @@
                                     v-if="item.alerts && item.alerts.length > 0"
                                     class="cart-view__main-products-alert"
                                 >
-                                    <v-svg name="alert" width="24" height="24" />
+                                    <div class="cart-view__main-products-alert-icon">
+                                        <v-svg name="alert" width="24" height="24" />
+                                    </div>
+
                                     <div class="cart-view__main-products-alert-text">
                                         <div v-for="alert in item.alerts" :key="alert.id">
                                             {{ alert.title }}
