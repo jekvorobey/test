@@ -91,6 +91,7 @@ export default {
     },
     computed: {
         selectedItem() {
+            if (!this.items[this.internal_active_tab]) this.activateTab(0, true);
             return this.items[this.internal_active_tab];
         },
     },

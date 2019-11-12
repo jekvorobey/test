@@ -252,7 +252,6 @@ export default {
                             title: 'Ближайший самовывоз из пункта выдачи с 26 июня, среда',
                         },
                     ],
-                    disabled: products.length === 0,
                     products: products,
                 });
 
@@ -261,7 +260,6 @@ export default {
                     id: 2,
                     title: 'Мастер-классы',
                     type: cartItemTypes.MASTERCLASS,
-                    disabled: masterClasses.length === 0,
                     products: masterClasses,
                 });
 
