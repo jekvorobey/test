@@ -1,3 +1,5 @@
+import { cartItemTypes } from '../../assets/scripts/constants';
+
 /**
  * @Module
  */
@@ -13,7 +15,7 @@ export default {
      */
     routes: [
         {
-            path: '/checkout',
+            path: `/checkout/:type(${cartItemTypes.PRODUCT}|${cartItemTypes.MASTERCLASS})`,
             component: CheckoutAsync,
         },
     ],

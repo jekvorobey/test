@@ -14,6 +14,7 @@ export default {
     routes: [
         {
             path: '*',
+            name: 'NotFound',
             component: NotFoundAsync,
         },
     ],

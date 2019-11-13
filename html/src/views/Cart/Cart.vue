@@ -120,7 +120,7 @@
                                     Применить
                                 </v-button>
                             </div>
-                            <v-button class="cart-view__main-panel-submit" to="/checkout">
+                            <v-button class="cart-view__main-panel-submit" :to="`/checkout/${activeTabItem.type}`">
                                 Оформить заказ
                             </v-button>
                         </div>
