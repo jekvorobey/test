@@ -106,12 +106,14 @@ export default {
     cart: {
         title: {
             like: 'Вам также могут понравиться',
+            product: 'Продукты',
+            masterclass: 'Мастер-классы',
         },
 
         checkout: {
             type: {
                 product: 'Продукты',
-                masterclass: 'Мастер классы',
+                masterclass: 'Мастер-классы',
             },
         },
     },

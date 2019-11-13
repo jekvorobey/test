@@ -1325,15 +1325,9 @@ const typeIds = {
     masterclass: 2,
 };
 
-const typeTitles = {
-    product: 'Продукты',
-    masterclass: 'Мастер классы',
-};
-
 const mockTypes = {
     product: {
         id: typeIds[cartItemTypes.PRODUCT],
-        title: typeTitles[cartItemTypes.PRODUCT],
         type: cartItemTypes.PRODUCT,
         alerts: [
             {
@@ -1355,7 +1349,6 @@ const mockTypes = {
 
     masterclass: {
         id: typeIds[cartItemTypes.MASTERCLASS],
-        title: typeTitles[cartItemTypes.MASTERCLASS],
         type: cartItemTypes.MASTERCLASS,
         checkout: {
             sum: '2 300 ₽',

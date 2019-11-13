@@ -8,7 +8,8 @@
                 <div class="cart-view__main-tabs">
                     <v-tabs :items="cartTypes" key-field="id" :activeTab.sync="activeTab">
                         <template v-slot:header="{ item: type }">
-                            {{ type.title }}&nbsp;&nbsp;<span class="text-grey">{{ type.items.length }}</span>
+                            {{ $t(`cart.title.${type.type}`) }}
+                            &nbsp;&nbsp;<span class="text-grey">{{ type.items.length }}</span>
                         </template>
                         <template v-slot:panel="{ item: type }">
                             <div class="cart-view__main-products" v-if="IS_PRODUCT(type)">
