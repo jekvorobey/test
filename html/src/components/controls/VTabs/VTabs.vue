@@ -28,6 +28,7 @@
         <div
             class="v-tabs__panel"
             role="tabpanel"
+            v-if="selectedItem"
             :id="`v-tab--panel${selectedItem[keyField] || internal_active_tab}`"
             :aria-labelledby="`v-tab-${selectedItem[keyField] || internal_active_tab}`"
         >
@@ -58,24 +59,30 @@ const orientation = {
 
 export default {
     name: 'v-tabs',
+
     props: {
         ariaLabel: {
             type: String,
         },
+
         keyField: {
             type: String,
         },
+
         keyValue: {
             type: String,
         },
+
         items: {
             type: Array,
             default: [],
         },
+
         activeTab: {
             type: Number,
             default: 0,
         },
+
         orientation: {
             type: String,
             default: orientation.horizontal,
@@ -84,22 +91,26 @@ export default {
             },
         },
     },
+
     data() {
         return {
             internal_active_tab: this.activeTab,
         };
     },
+
     computed: {
         selectedItem() {
-            if (!this.items[this.internal_active_tab]) this.activateTab(0, true);
+            if (this.items.length > 0 && !this.items[this.internal_active_tab]) this.activateTab(0, true);
             return this.items[this.internal_active_tab];
         },
     },
+
     watch: {
         activeTab(val) {
             this.activateTab(val, false);
         },
     },
+
     methods: {
         getTab(item) {
             return this.$refs[`v-tab-${item[this.keyField] || this.items.indexOf(item)}`][0];

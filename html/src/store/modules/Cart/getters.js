@@ -7,6 +7,7 @@ export const IS_MASTER_CLASS = 'IS_MASTER_CLASS';
 
 export const PRODUCTS = 'products';
 export const MASTER_CLASSES = 'masterClasses';
+export const CART_TYPES = 'cartTypes';
 export const CART_ITEMS_COUNT = 'cartItemsCount';
 
 const itemTypes = Object.values(cartItemTypes);
@@ -18,16 +19,28 @@ function isValidType(type) {
 }
 
 export default {
-    [GET_ITEMS_BY_TYPE]: state => type => (isValidType(type) ? state.cartItems.filter(i => i.type === type) : []),
+    [CART_ITEMS_COUNT]: (state, getters) => {
+        return getters[CART_TYPES].reduce((accum, current) => {
+            let count = 0;
+            if (Array.isArray(current.items)) {
+                for (let i = 0; i < current.items.length; i++) {
+                    const item = current.items[i];
+                    count += item.count;
+                }
+                return accum + count;
+            }
+            return accum;
+        }, 0);
+    },
 
-    [PRODUCTS]: state => state.cartItems.filter(i => i.type === cartItemTypes.PRODUCT),
+    [CART_TYPES]: state => {
+        const types = itemTypes.reduce((accum, current) => {
+            const type = state.data[current];
 
-    [MASTER_CLASSES]: state => state.cartItems.filter(i => i.type === cartItemTypes.MASTERCLASS),
-
-    [CART_ITEMS_COUNT]: state => {
-        if (!state.cartItems || state.cartItems.length === 0) return 0;
-        const count = state.cartItems.reduce((accum, current) => accum + current.count, 0);
-        return count;
+            if (type) accum.push(type);
+            return accum;
+        }, []);
+        return types;
     },
 
     [IS_PRODUCT]: () => (item = {}) => isValidType(item.type) && item.type === cartItemTypes.PRODUCT,

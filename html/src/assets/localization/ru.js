@@ -102,4 +102,17 @@ export default {
             makeReview: 'Написать отзыв',
         },
     },
+
+    cart: {
+        title: {
+            like: 'Вам также могут понравиться',
+        },
+
+        checkout: {
+            type: {
+                product: 'Продукты',
+                masterclass: 'Мастер классы',
+            },
+        },
+    },
 };

@@ -6,14 +6,14 @@
         <section class="section cart-view__main">
             <div v-if="cartItemsCount > 0" class="container cart-view__main-container">
                 <div class="cart-view__main-tabs">
-                    <v-tabs :items="tabItems" key-field="id">
-                        <template v-slot:header="{ item }">
-                            {{ item.title }}&nbsp;&nbsp;<span class="text-grey">{{ item.products.length }}</span>
+                    <v-tabs :items="cartTypes" key-field="id" :activeTab.sync="activeTab">
+                        <template v-slot:header="{ item: type }">
+                            {{ type.title }}&nbsp;&nbsp;<span class="text-grey">{{ type.items.length }}</span>
                         </template>
-                        <template v-slot:panel="{ item }">
-                            <div class="cart-view__main-products" v-if="IS_PRODUCT(item)">
+                        <template v-slot:panel="{ item: type }">
+                            <div class="cart-view__main-products" v-if="IS_PRODUCT(type)">
                                 <div
-                                    v-if="item.alerts && item.alerts.length > 0"
+                                    v-if="type.alerts && type.alerts.length > 0"
                                     class="cart-view__main-products-alert"
                                 >
                                     <div class="cart-view__main-products-alert-icon">
@@ -21,7 +21,7 @@
                                     </div>
 
                                     <div class="cart-view__main-products-alert-text">
-                                        <div v-for="alert in item.alerts" :key="alert.id">
+                                        <div v-for="alert in type.alerts" :key="alert.id">
                                             {{ alert.title }}
                                         </div>
                                     </div>
@@ -37,7 +37,7 @@
                                 >
                                     <cart-product-card
                                         class="cart-view__main-products-list-item"
-                                        v-for="({ item: product, count }, index) in item.products"
+                                        v-for="({ item: product, count }, index) in type.items"
                                         :data-index="index"
                                         :key="product.id"
                                         :product-id="product.id"
@@ -53,7 +53,7 @@
                                     />
                                 </transition-group>
                             </div>
-                            <div class="cart-view__main-masterclass" v-else-if="IS_MASTER_CLASS(item)">
+                            <div class="cart-view__main-masterclass" v-else-if="IS_MASTER_CLASS(type)">
                                 <transition-group
                                     class="cart-view__main-products-list"
                                     tag="ul"
@@ -65,7 +65,7 @@
                                 >
                                     <cart-master-class-card
                                         class="cart-view__main-products-list-item"
-                                        v-for="({ item: product, count }, index) in item.products"
+                                        v-for="({ item: product, count }, index) in type.items"
                                         :data-index="index"
                                         :key="product.id"
                                         :product-id="product.id"
@@ -96,13 +96,20 @@
                             <p class="text-grey cart-view__main-panel-info">
                                 Внимание: продукты и мастер-классы оплачиваются отдельно
                             </p>
-                            <p class="cart-view__main-panel-line">Сумма заказа: продукты <span>6 704 ₽</span></p>
-                            <p class="cart-view__main-panel-line">Скидка по промокоду <span>0 ₽</span></p>
+                            <p class="cart-view__main-panel-line">
+                                Сумма заказа: {{ $t(`cart.checkout.type.${activeTabItem.type}`) }}
+                                <span>{{ activeTabItem.checkout.sum }}</span>
+                            </p>
+                            <p class="cart-view__main-panel-line">
+                                Скидка по промокоду <span>{{ activeTabItem.checkout.discount }}</span>
+                            </p>
 
                             <div class="cart-view__main-panel-total">
-                                <p class="text-bold cart-view__main-panel-line">Итого <span>6 704 ₽</span></p>
+                                <p class="text-bold cart-view__main-panel-line">
+                                    Итого <span>{{ activeTabItem.checkout.total }}</span>
+                                </p>
                                 <p class="text-grey text-sm cart-view__main-panel-line">
-                                    Будет начислено <span>+1 488 бонусов</span>
+                                    Будет начислено <span>{{ activeTabItem.checkout.bonus }}</span>
                                 </p>
                             </div>
 
@@ -123,7 +130,7 @@
 
         <section class="section cart-view__section cart-view__featured">
             <div class="container cart-view__featured-container">
-                <h2 class="cart-view__section-hl cart-view__featured-hl">{{ $t('product.title.like') }}</h2>
+                <h2 class="cart-view__section-hl cart-view__featured-hl">{{ $t('cart.title.like') }}</h2>
                 <v-slider class="cart-view__featured-slider" name="cart-featured" :options="sliderOptions">
                     <catalog-product-card
                         class="swiper-slide cart-view__featured-card"
@@ -161,7 +168,7 @@ import CartProductCard from '../../components/CartProductCard/CartProductCard.vu
 import VTabs from '../../components/controls/VTabs/VTabs.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as CART_MODULE, FEATURED_PRODUCTS } from '../../store/modules/Cart';
+import { NAME as CART_MODULE, FEATURED_PRODUCTS, DATA } from '../../store/modules/Cart';
 import { FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 import {
     PRODUCTS,
@@ -169,12 +176,14 @@ import {
     IS_PRODUCT,
     IS_MASTER_CLASS,
     CART_ITEMS_COUNT,
+    CART_TYPES,
 } from '../../store/modules/Cart/getters';
 
 import { breakpoints, cartItemTypes } from '../../assets/scripts/constants';
 import '../../assets/images/sprites/alert.svg';
 import './Cart.css';
 
+const itemTypes = Object.values(cartItemTypes);
 const itemAnimationDelayDelta = 100;
 let counter = 0;
 
@@ -227,46 +236,22 @@ export default {
         CatalogProductCard,
     },
 
+    data() {
+        return {
+            activeTab: 0,
+        };
+    },
+
     computed: {
-        ...mapState(CART_MODULE, [FEATURED_PRODUCTS]),
-        ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCTS, MASTER_CLASSES, IS_PRODUCT, IS_MASTER_CLASS]),
+        ...mapState(CART_MODULE, [FEATURED_PRODUCTS, DATA]),
+        ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS]),
 
         sliderOptions() {
             return sliderOptions;
         },
 
-        tabItems() {
-            const products = this[PRODUCTS];
-            const masterClasses = this[MASTER_CLASSES];
-            const tabs = [];
-
-            if (products.length > 0)
-                tabs.push({
-                    id: 1,
-                    title: 'Продукты',
-                    type: cartItemTypes.PRODUCT,
-                    alerts: [
-                        {
-                            id: 1,
-                            title: 'Ближайшая доставка курьером 24 июня, понедельник',
-                        },
-                        {
-                            id: 2,
-                            title: 'Ближайший самовывоз из пункта выдачи с 26 июня, среда',
-                        },
-                    ],
-                    products: products,
-                });
-
-            if (masterClasses.length > 0)
-                tabs.push({
-                    id: 2,
-                    title: 'Мастер-классы',
-                    type: cartItemTypes.MASTERCLASS,
-                    products: masterClasses,
-                });
-
-            return tabs;
+        activeTabItem() {
+            return this.cartTypes[this.activeTab];
         },
     },
 

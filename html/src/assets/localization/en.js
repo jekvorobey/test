@@ -102,4 +102,17 @@ export default {
             makeReview: 'Leave Feedback',
         },
     },
+
+    cart: {
+        title: {
+            like: 'You may also like',
+        },
+
+        checkout: {
+            type: {
+                product: 'Products',
+                masterclass: 'Master classes',
+            },
+        },
+    },
 };

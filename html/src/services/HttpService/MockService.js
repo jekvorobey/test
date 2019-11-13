@@ -1,5 +1,6 @@
 import _cloneDeep from 'lodash/cloneDeep';
 import HttpServiceBase from './base';
+import { cartItemTypes } from '../../assets/scripts/constants';
 
 import product1 from '../../assets/images/mock/product1.png';
 import product2 from '../../assets/images/mock/product2.png';
@@ -1319,12 +1320,61 @@ const productsDetails = [
     },
 ];
 
+const typeIds = {
+    product: 1,
+    masterclass: 2,
+};
+
+const typeTitles = {
+    product: 'Продукты',
+    masterclass: 'Мастер классы',
+};
+
+const mockTypes = {
+    product: {
+        id: typeIds[cartItemTypes.PRODUCT],
+        title: typeTitles[cartItemTypes.PRODUCT],
+        type: cartItemTypes.PRODUCT,
+        alerts: [
+            {
+                id: 1,
+                title: 'Ближайшая доставка курьером 24 июня, понедельник',
+            },
+            {
+                id: 2,
+                title: 'Ближайший самовывоз из пункта выдачи с 26 июня, среда',
+            },
+        ],
+        checkout: {
+            sum: '6 704 ₽',
+            discount: '0 ₽',
+            bonus: '+1 488 бонусов',
+            total: '6 704 ₽',
+        },
+    },
+
+    masterclass: {
+        id: typeIds[cartItemTypes.MASTERCLASS],
+        title: typeTitles[cartItemTypes.MASTERCLASS],
+        type: cartItemTypes.MASTERCLASS,
+        checkout: {
+            sum: '2 300 ₽',
+            discount: '1 600 ₽',
+            bonus: '+600 бонусов',
+            total: '700 ₽',
+        },
+    },
+};
+
 const cartData = {
-    items: [
-        ...masterClasses.map(mc => {
-            return { id: mc.id, type: mc.type, item: mc, count: 1 };
-        }),
-    ],
+    [cartItemTypes.MASTERCLASS]: {
+        ...mockTypes[cartItemTypes.MASTERCLASS],
+        items: [
+            ...masterClasses.map(mc => {
+                return { id: mc.id, type: cartItemTypes.MASTERCLASS, item: mc, count: 1 };
+            }),
+        ],
+    },
 };
 
 export default class MockHttpService extends HttpServiceBase {
@@ -1336,16 +1386,26 @@ export default class MockHttpService extends HttpServiceBase {
                         const {
                             item: { id, type },
                         } = data;
-                        const itemToDelete = cartData.items.find(i => i.id === id && i.type === type);
+
+                        const cartType = cartData[type];
+                        if (!cartType) {
+                            reject(new Error('cart type not found'));
+                            return;
+                        }
+
+                        const itemToDelete = cartType.items.find(i => i.id === id && i.type === type);
                         if (!itemToDelete) {
                             reject(new Error('cart item not found'));
                             return;
                         }
-                        const index = cartData.items.indexOf(itemToDelete);
-                        cartData.items.splice(index, 1);
+
+                        const index = cartType.items.indexOf(itemToDelete);
+                        cartType.items.splice(index, 1);
+                        if (cartType.items.length === 0) cartData[type] = undefined;
                         setTimeout(() => resolve(_cloneDeep(cartData)), 300);
                     } else {
-                        cartData.items = [];
+                        cartData[cartItemTypes.PRODUCT] = undefined;
+                        cartData[cartItemTypes.MASTERCLASS] = undefined;
                         setTimeout(() => resolve(_cloneDeep(cartData)), 300);
                     }
                     break;
@@ -1366,10 +1426,16 @@ export default class MockHttpService extends HttpServiceBase {
                             item: { id, type },
                         } = data;
 
-                        const existItem = cartData.items.find(i => i.id === id && i.type === type);
-                        if (!existItem) cartData.items.push({ id, type, count: 1, item: data.item });
-                        else if (data.count) existItem.count = data.count;
-                        else existItem.count += 1;
+                        let cartType = cartData[type];
+                        if (!cartType) {
+                            cartData[type] = { ...mockTypes[type], items: [{ id, type, count: 1, item: data.item }] };
+                        } else {
+                            cartType = cartData[type];
+                            const existItem = cartType.items.find(i => i.id === id && i.type === type);
+                            if (!existItem) cartType.items.push({ id, type, count: 1, item: data.item });
+                            else if (data.count) existItem.count = data.count;
+                            else existItem.count += 1;
+                        }
                         setTimeout(() => resolve(_cloneDeep(cartData)), 300);
                     }
                     break;
