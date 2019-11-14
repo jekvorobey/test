@@ -1370,6 +1370,154 @@ const cartData = {
     },
 };
 
+const paymentMethods = [
+    {
+        id: 1,
+        title: 'Банковской картой онлайн',
+        type: 'card',
+    },
+    {
+        id: 2,
+        title: 'Наличными при получении',
+        type: 'cash',
+    },
+];
+
+const deliveryTypes = [
+    {
+        id: 1,
+        title: 'Доставка курьером',
+        price: '350 ₽',
+        description: 'Ближайшая доставка в понедельник, 24 июня',
+    },
+    {
+        id: 2,
+        title: 'Экспресс-доставка',
+        price: '500 ₽',
+        description: 'Доставка за 4 часа',
+    },
+    {
+        id: 3,
+        title: 'Самовывоз из 12 пунктов',
+        price: 'Бесплатно',
+        description: 'Ближайший самовывоз в среду, 26 июня',
+    },
+];
+
+const confirmationTypes = [
+    {
+        id: 1,
+        title: 'Подтвердить заказ по SMS',
+    },
+    {
+        id: 2,
+        title: 'Подтвердить заказ через звонок оператора',
+    },
+];
+
+const deliveryMethods = [
+    {
+        id: 1,
+        title: 'Все товары в один день',
+        description: 'Одним отправлением',
+        note: 'Доставим всё во вторник, 2 июля',
+        availiableTime: [3],
+    },
+    {
+        id: 2,
+        title: 'Поскорее',
+        description: 'Несколько отправлений',
+        note: 'Доставим 24 июня, 28 июня, 2 июля ',
+        availiableTime: [1, 2, 3],
+    },
+];
+
+const userAddresses = [
+    { id: 1, type: 'user', description: 'ул. Юности, д. 12, кв. 88, г. Зеленоград, г. Москва, Россия, 124482' },
+    { id: 2, type: 'user', description: 'ул. Парковая, д. 1, кв. 100, г. Москва, Россия, 123456' },
+];
+
+const pickupPoints = [
+    {
+        id: 1,
+        type: 'pickup',
+        description: 'г. Москва, ул. Стратонавтов, д. 11',
+        schedule: [
+            { id: 1, title: 'Будни', time: '10:00 — 20:00' },
+            { id: 2, title: 'Суббота', time: '10:00 — 18:00' },
+            { id: 3, title: 'Воскресенье', time: '10:00 — 15:00' },
+        ],
+    },
+    {
+        id: 2,
+        type: 'pickup',
+        description: 'г. Москва, ул. Пятницкая, д. 3/4, корп. 2',
+        schedule: [
+            { id: 1, title: 'Будни', time: '10:00 — 20:00' },
+            { id: 2, title: 'Воскресенье', time: '10:00 — 15:00' },
+        ],
+    },
+    {
+        id: 3,
+        type: 'pickup',
+        description: 'Москва, ул. Тверская-Ямская 4-я, д. 2/11, корп. 2',
+        schedule: [{ id: 1, title: 'Будни', time: '10:00 — 15:00' }],
+    },
+];
+
+const packages = [
+    {
+        id: 1,
+        date: '24 июня, понедельник, с 10:00 до 18:00',
+        type: deliveryMethods[0].id,
+        items: [
+            {
+                id: 1,
+                products: products.slice(0, 6),
+            },
+        ],
+    },
+    {
+        id: 2,
+        date: '24 июня, понедельник, с 10:00 до 18:00',
+        type: deliveryMethods[1].id,
+        items: [
+            {
+                id: 2,
+                products: products.slice(0, 3),
+            },
+            {
+                id: 3,
+                products: products.slice(0, 3),
+            },
+        ],
+    },
+];
+
+const checkoutData = {
+    deliveryMethod: deliveryMethods[0].id,
+    deliveryType: deliveryTypes[0].id,
+    paymentMethod: paymentMethods[0].id,
+    confirmationType: confirmationTypes[0].id,
+
+    address: userAddresses[0].id,
+
+    bonus: 300,
+    promo: 1,
+    agreement: 1,
+
+    sertificates: [
+        {
+            id: 1,
+            title: 'Будет оплачено 1 000 ₽ подарочным сертификатом — CERT2019-1000',
+        },
+        {
+            id: 2,
+            title: 'Будет оплачено 500 ₽ подарочным сертификатом — CERT2020-500',
+        },
+    ],
+};
+
 export default class MockHttpService extends HttpServiceBase {
     delete(path, data) {
         return new Promise((resolve, reject) => {
@@ -1530,23 +1678,32 @@ export default class MockHttpService extends HttpServiceBase {
                 case '/categories':
                     setTimeout(() => resolve(productCategories), 300);
                     break;
+
                 case '/banners':
                     setTimeout(() => resolve(banners), 300);
                     break;
+
                 case '/instagram':
                     setTimeout(() => resolve(instagrams), 300);
                     break;
+
                 case '/brands':
                     setTimeout(() => resolve(brands), 300);
                     break;
+
                 case '/product':
                     switch (data.code) {
                         default:
                             setTimeout(() => resolve(productsDetails[0]), 300);
                     }
                     break;
+
                 case '/cart-data':
                     setTimeout(() => resolve(_cloneDeep(cartData)), 300);
+                    break;
+
+                case '/checkout-data':
+                    setTimeout(() => resolve(_cloneDeep(checkoutData)), 300);
                     break;
                 default:
                     reject();
