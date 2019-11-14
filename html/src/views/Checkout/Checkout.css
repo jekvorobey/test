@@ -16,6 +16,7 @@
             text-transform: uppercase;
             font-weight: bold;
             letter-spacing: 0.05em;
+            margin-bottom: calc(var(--gs) * 3);
 
             @media (--tablet) {
                 font-size: 24px;
@@ -28,7 +29,8 @@
             position: absolute;
             display: flex;
             align-items: center;
-            top: 0;
+            top: 50%;
+            transform: translateY(-50%);
             right: 0;
             font-weight: bold;
             font-size: 14px;

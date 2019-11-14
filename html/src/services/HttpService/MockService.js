@@ -1360,6 +1360,15 @@ const mockTypes = {
 };
 
 const cartData = {
+    [cartItemTypes.PRODUCT]: {
+        ...mockTypes[cartItemTypes.PRODUCT],
+        items: [
+            ...products.slice(0, 2).map(p => {
+                return { id: p.id, type: cartItemTypes.PRODUCT, item: p, count: 1 };
+            }),
+        ],
+    },
+
     [cartItemTypes.MASTERCLASS]: {
         ...mockTypes[cartItemTypes.MASTERCLASS],
         items: [
@@ -1495,12 +1504,21 @@ const packages = [
 ];
 
 const checkoutData = {
+    recipients: [
+        {
+            id: 1,
+            fullname: 'Евгений Лукашин',
+            tel: '+7 905 123-45-67',
+            email: 'lukashin@gmail.com',
+        },
+    ],
+
     deliveryMethod: deliveryMethods[0].id,
     deliveryType: deliveryTypes[0].id,
     paymentMethod: paymentMethods[0].id,
     confirmationType: confirmationTypes[0].id,
 
-    address: userAddresses[0].id,
+    address: null,
 
     bonus: 300,
     promo: 1,
@@ -1522,7 +1540,7 @@ export default class MockHttpService extends HttpServiceBase {
     delete(path, data) {
         return new Promise((resolve, reject) => {
             switch (path) {
-                case '/delete-cart-item':
+                case '/cart/delete-item':
                     if (data.item) {
                         const {
                             item: { id, type },
@@ -1559,7 +1577,7 @@ export default class MockHttpService extends HttpServiceBase {
     post(path, data) {
         return new Promise((resolve, reject) => {
             switch (path) {
-                case '/add-cart-item':
+                case '/cart/add-item':
                     {
                         if (!data.item) throw new Error('item not found');
 
@@ -1698,18 +1716,73 @@ export default class MockHttpService extends HttpServiceBase {
                     }
                     break;
 
-                case '/cart-data':
+                case '/cart/data':
                     setTimeout(() => resolve(_cloneDeep(cartData)), 300);
                     break;
 
-                case '/checkout-data':
+                case '/checkout/data':
                     setTimeout(() => resolve(_cloneDeep(checkoutData)), 300);
                     break;
+
+                case '/checkout/delivery-methods':
+                    setTimeout(() => resolve(deliveryMethods), 300);
+                    break;
+
+                case '/checkout/delivery-types':
+                    setTimeout(() => resolve(deliveryTypes), 300);
+                    break;
+
+                case '/checkout/confirmation-types':
+                    setTimeout(() => resolve(confirmationTypes), 300);
+                    break;
+
+                case '/checkout/payment-methods':
+                    setTimeout(() => resolve(deliveryMethods), 300);
+                    break;
+
+                case '/checkout/addresses':
+                    switch (data) {
+                        case 1: {
+                            setTimeout(() => resolve(userAddresses), 300);
+                            break;
+                        }
+                        case 2: {
+                            setTimeout(() => resolve(pickupPoints), 300);
+                            break;
+                        }
+                        default:
+                            throw new Error('wrong delivery type');
+                    }
+                    break;
                 default:
-                    reject();
+                    reject(new Error(`Unknown method, path: ${path}, data: ${JSON.stringify(data)}`));
             }
         });
     }
+}
+
+export function getCheckoutData(data) {
+    return $http.get('/checkout/data', data);
+}
+
+export function getCheckoutDeliveryMethods(data) {
+    return $http.get('/checkout/delivery-methods', data);
+}
+
+export function getCheckoutDeliveryTypes(data) {
+    return $http.get('/checkout/delivery-types', data);
+}
+
+export function getCheckoutConfirmationTypes(data) {
+    return $http.get('/checkout/confirmation-types', data);
+}
+
+export function getCheckoutPaymentMethods(data) {
+    return $http.get('/checkout/payment-methods', data);
+}
+
+export function getCheckoutAddresses(data) {
+    return $http.get('/checkout/addresses', data);
 }
 
 /* eslint-enable no-console */

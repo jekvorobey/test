@@ -169,7 +169,7 @@ import CartProductCard from '../../components/CartProductCard/CartProductCard.vu
 import VTabs from '../../components/controls/VTabs/VTabs.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as CART_MODULE, FEATURED_PRODUCTS, DATA } from '../../store/modules/Cart';
+import { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '../../store/modules/Cart';
 import { FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 import {
     PRODUCTS,
@@ -244,7 +244,7 @@ export default {
     },
 
     computed: {
-        ...mapState(CART_MODULE, [FEATURED_PRODUCTS, DATA]),
+        ...mapState(CART_MODULE, [FEATURED_PRODUCTS, CART_DATA]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS]),
 
         sliderOptions() {

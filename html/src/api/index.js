@@ -32,14 +32,42 @@ export function getProduct(data) {
     return $http.get('/product', data);
 }
 
+// cart
+
 export function getCartData(data) {
-    return $http.get('/cart-data', data);
+    return $http.get('/cart/data', data);
 }
 
 export function deleteCartItem(data) {
-    return $http.delete('/delete-cart-item', data);
+    return $http.delete('/cart/delete-item', data);
 }
 
 export function addCartItem(data) {
-    return $http.post('/add-cart-item', data);
+    return $http.post('/cart/add-item', data);
+}
+
+// checkout
+
+export function getCheckoutData(data) {
+    return $http.get('/checkout/data', data);
+}
+
+export function getCheckoutDeliveryMethods(data) {
+    return $http.get('/checkout/delivery-methods', data);
+}
+
+export function getCheckoutDeliveryTypes(data) {
+    return $http.get('/checkout/delivery-types', data);
+}
+
+export function getCheckoutConfirmationTypes(data) {
+    return $http.get('/checkout/confirmation-types', data);
+}
+
+export function getCheckoutPaymentMethods(data) {
+    return $http.get('/checkout/payment-methods', data);
+}
+
+export function getCheckoutAddresses(data) {
+    return $http.get('/checkout/addresses', data);
 }

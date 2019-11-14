@@ -3,14 +3,14 @@ import mutations from './mutations';
 import getters from './getters';
 
 export const NAME = 'cart';
-export const DATA = 'data';
+export const CART_DATA = 'cartData';
 export const FEATURED_PRODUCTS = 'featuredProducts';
 
 export default {
     name: NAME,
     namespaced: true,
     state: {
-        [DATA]: {},
+        [CART_DATA]: {},
         [FEATURED_PRODUCTS]: [],
     },
     actions,

@@ -3,7 +3,7 @@ export const SET_FEATURED_PRODUCTS = 'SET_FEATURED_PRODUCTS';
 
 export default {
     [SET_CART_DATA](state, payload = {}) {
-        state.data = payload;
+        state.cartData = payload;
     },
 
     [SET_FEATURED_PRODUCTS](state, payload = []) {

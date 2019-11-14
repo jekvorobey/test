@@ -13,7 +13,9 @@
 
         <section class="section checkout-view__main">
             <div class="container checkout-view__main-container">
-                <div class="checkout-view__main-body"></div>
+                <div class="checkout-view__main-body">
+                    <product-checkout-panel v-if="checkoutType === 'product'" />
+                </div>
                 <v-sticky class="checkout-view__main-sticky">
                     <template v-slot:sticky>
                         <div class="checkout-view__main-panel">
@@ -69,9 +71,15 @@ import VInput from '../../components/controls/VInput/VInput.vue';
 import VButton from '../../components/controls/VButton/VButton.vue';
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 
-import { mapState } from 'vuex';
-import { NAME as CART_MODULE, DATA } from '../../store/modules/Cart';
-import { $store, $logger } from '../../services/ServiceLocator';
+import ProductCheckoutPanel from '../../components/checkout/ProductCheckoutPanel/ProductCheckoutPanel.vue';
+
+import { $store, $logger, $progress } from '../../services/ServiceLocator';
+
+import { mapState, mapActions } from 'vuex';
+import { NAME as CART_MODULE, CART_DATA } from '../../store/modules/Cart';
+
+import checkoutModule, { NAME as CHECKOUT_MODULE, CHECKOUT_DATA, CHECKOUT_TYPE } from '../../store/modules/Checkout';
+import { FETCH_CHECKOUT_DATA, FETCH_ADDRESSES } from '../../store/modules/Checkout/actions';
 
 import '../../assets/images/sprites/arrow-small.svg';
 import './Checkout.css';
@@ -85,44 +93,53 @@ export default {
         VButton,
         VInput,
         VSticky,
+
+        ProductCheckoutPanel,
     },
 
     computed: {
-        ...mapState(CART_MODULE, [DATA]),
+        ...mapState(CART_MODULE, [CART_DATA]),
+        ...mapState(CHECKOUT_MODULE, [CHECKOUT_DATA, CHECKOUT_TYPE]),
+        ...mapState('route', {
+            checkoutType: state => state.params.type,
+        }),
 
         activeTabItem() {
             const {
                 params: { type },
             } = this.$route;
-            return this[DATA][type] || {};
+            return this[CART_DATA][type] || {};
         },
+    },
+
+    methods: {
+        ...mapActions(CHECKOUT_MODULE, [FETCH_ADDRESSES]),
     },
 
     beforeRouteEnter(to, from, next) {
         // вызывается до подтверждения пути, соответствующего этому компоненту.
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
-        // const register = !!$store._modulesNamespaceMap[`${landingModule.name}/`];
-        // if (!register)
-        //     $store.registerModule(landingModule.name, landingModule, {
-        //         preserveState: !!$store.state.landing,
-        //     });
-        // if ($store.state.landing.load) {
-        //     next();
-        // } else {
-        //     $progress.start();
-        //     $store.dispatch(`${landingModule.name}/FETCH_LANDING_DATA`).then(() => next(vm => $progress.finish()));
-        // }
+
+        const register = !!$store._modulesNamespaceMap[`${CHECKOUT_MODULE}/`];
+        if (!register)
+            $store.registerModule(CHECKOUT_MODULE, checkoutModule, {
+                preserveState: !!$store.state.checkout,
+            });
 
         const {
             params: { type },
         } = to;
 
-        const { cart } = $store.state;
+        const { checkoutType } = $store.state.checkout;
 
-        if (!cart.data[type]) {
-            next({ path: '/cart', replace: true });
-        } else next();
+        if (checkoutType === type) next();
+        else {
+            $progress.start();
+            $store
+                .dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type)
+                .then(() => next(vm => $progress.finish()));
+        }
     },
 
     beforeRouteUpdate(to, from, next) {
@@ -132,6 +149,21 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
+
+        const {
+            params: { type },
+        } = to;
+
+        const { checkoutType } = $store.state.checkout;
+
+        if (checkoutType !== type) {
+            this.$progress.start();
+            this.$store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type).then(() => this.$progress.finish());
+        }
+        next();
+    },
+
+    beforeRouteLeave(to, from, next) {
         // this.$progress.start();
         // this.$store
         //     .dispatch(`${landingModule.name}/FETCH_LANDING_DATA`)
