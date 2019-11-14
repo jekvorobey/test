@@ -78,6 +78,7 @@ export default {
 
         href: {
             type: String,
+            default: '/',
         },
 
         image: {

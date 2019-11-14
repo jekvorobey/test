@@ -71,3 +71,7 @@ export function getCheckoutPaymentMethods(data) {
 export function getCheckoutAddresses(data) {
     return $http.get('/checkout/addresses', data);
 }
+
+export function getCheckoutPackages(data) {
+    return $http.get('/checkout/packages', data);
+}

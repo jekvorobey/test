@@ -1395,6 +1395,23 @@ const paymentMethods = [
 const deliveryTypes = [
     {
         id: 1,
+        title: 'Все товары в один день',
+        description: 'Одним отправлением',
+        note: 'Доставим всё во вторник, 2 июля',
+        availiableTime: [3],
+    },
+    {
+        id: 2,
+        title: 'Поскорее',
+        description: 'Несколько отправлений',
+        note: 'Доставим 24 июня, 28 июня, 2 июля ',
+        availiableTime: [1, 2, 3],
+    },
+];
+
+const deliveryMethods = [
+    {
+        id: 1,
         title: 'Доставка курьером',
         price: '350 ₽',
         description: 'Ближайшая доставка в понедельник, 24 июня',
@@ -1424,32 +1441,17 @@ const confirmationTypes = [
     },
 ];
 
-const deliveryMethods = [
+const userAddresses = [
     {
         id: 1,
-        title: 'Все товары в один день',
-        description: 'Одним отправлением',
-        note: 'Доставим всё во вторник, 2 июля',
-        availiableTime: [3],
+        description: 'ул. Юности, д. 12, кв. 88, г. Зеленоград, г. Москва, Россия, 124482',
     },
-    {
-        id: 2,
-        title: 'Поскорее',
-        description: 'Несколько отправлений',
-        note: 'Доставим 24 июня, 28 июня, 2 июля ',
-        availiableTime: [1, 2, 3],
-    },
-];
-
-const userAddresses = [
-    { id: 1, type: 'user', description: 'ул. Юности, д. 12, кв. 88, г. Зеленоград, г. Москва, Россия, 124482' },
     { id: 2, type: 'user', description: 'ул. Парковая, д. 1, кв. 100, г. Москва, Россия, 123456' },
 ];
 
 const pickupPoints = [
     {
         id: 1,
-        type: 'pickup',
         description: 'г. Москва, ул. Стратонавтов, д. 11',
         schedule: [
             { id: 1, title: 'Будни', time: '10:00 — 20:00' },
@@ -1459,7 +1461,6 @@ const pickupPoints = [
     },
     {
         id: 2,
-        type: 'pickup',
         description: 'г. Москва, ул. Пятницкая, д. 3/4, корп. 2',
         schedule: [
             { id: 1, title: 'Будни', time: '10:00 — 20:00' },
@@ -1468,7 +1469,6 @@ const pickupPoints = [
     },
     {
         id: 3,
-        type: 'pickup',
         description: 'Москва, ул. Тверская-Ямская 4-я, д. 2/11, корп. 2',
         schedule: [{ id: 1, title: 'Будни', time: '10:00 — 15:00' }],
     },
@@ -1477,63 +1477,80 @@ const pickupPoints = [
 const packages = [
     {
         id: 1,
-        date: '24 июня, понедельник, с 10:00 до 18:00',
-        type: deliveryMethods[0].id,
+        type: deliveryTypes[0].id,
         items: [
             {
                 id: 1,
-                products: products.slice(0, 6),
+                title: '24 июня, понедельник, с 10:00 до 18:00',
+                products: products.slice(0, 6).map(p => {
+                    return { id: p.id, name: p.name, image: p.image };
+                }),
             },
         ],
     },
     {
         id: 2,
-        date: '24 июня, понедельник, с 10:00 до 18:00',
-        type: deliveryMethods[1].id,
+        type: deliveryTypes[1].id,
         items: [
             {
                 id: 2,
-                products: products.slice(0, 3),
+                title: '24 июня, понедельник, с 10:00 до 18:00',
+                products: products.slice(0, 3).map(p => {
+                    return { id: p.id, name: p.name, image: p.image };
+                }),
             },
             {
                 id: 3,
-                products: products.slice(0, 3),
+                title: '28 июня, пятница, с 10:00 до 18:00',
+                products: products.slice(0, 3).map(p => {
+                    return { id: p.id, name: p.name, image: p.image };
+                }),
             },
         ],
     },
 ];
 
+const recipients = [
+    {
+        id: 1,
+        fullname: 'Евгений Лукашин',
+        tel: '+7 905 123-45-67',
+        email: 'lukashin@gmail.com',
+    },
+    {
+        id: 2,
+        fullname: 'Динис Базгутдинов',
+        tel: '+7 916 123-45-67',
+        email: 'veryverylongemailever-2020@gmail.com',
+    },
+];
+
+const sertificates = [
+    {
+        id: 1,
+        title: 'Будет оплачено 1 000 ₽ подарочным сертификатом — CERT2019-1000',
+    },
+    {
+        id: 2,
+        title: 'Будет оплачено 500 ₽ подарочным сертификатом — CERT2020-500',
+    },
+];
+
 const checkoutData = {
-    recipients: [
-        {
-            id: 1,
-            fullname: 'Евгений Лукашин',
-            tel: '+7 905 123-45-67',
-            email: 'lukashin@gmail.com',
-        },
-    ],
+    recipientID: recipients[0].id,
+    deliveryTypeID: deliveryTypes[0].id,
+    deliveryMethodID: deliveryMethods[0].id,
+    paymentMethodID: paymentMethods[0].id,
+    confirmationTypeID: confirmationTypes[0].id,
 
-    deliveryMethod: deliveryMethods[0].id,
-    deliveryType: deliveryTypes[0].id,
-    paymentMethod: paymentMethods[0].id,
-    confirmationType: confirmationTypes[0].id,
-
-    address: null,
+    addressID: userAddresses[0].id,
 
     bonus: 300,
     promo: 1,
     agreement: 1,
 
-    sertificates: [
-        {
-            id: 1,
-            title: 'Будет оплачено 1 000 ₽ подарочным сертификатом — CERT2019-1000',
-        },
-        {
-            id: 2,
-            title: 'Будет оплачено 500 ₽ подарочным сертификатом — CERT2020-500',
-        },
-    ],
+    recipients,
+    sertificates,
 };
 
 export default class MockHttpService extends HttpServiceBase {
@@ -1742,14 +1759,28 @@ export default class MockHttpService extends HttpServiceBase {
 
                 case '/checkout/addresses':
                     switch (data) {
-                        case 1: {
+                        case 1:
+                        case 2:
                             setTimeout(() => resolve(userAddresses), 300);
                             break;
-                        }
-                        case 2: {
+
+                        case 3:
                             setTimeout(() => resolve(pickupPoints), 300);
                             break;
-                        }
+
+                        default:
+                            throw new Error('wrong delivery type');
+                    }
+                    break;
+
+                case '/checkout/packages':
+                    switch (data) {
+                        case 1:
+                            setTimeout(() => resolve(packages[0]), 300);
+                            break;
+                        case 2:
+                            setTimeout(() => resolve(packages[1]), 300);
+                            break;
                         default:
                             throw new Error('wrong delivery type');
                     }
@@ -1759,30 +1790,6 @@ export default class MockHttpService extends HttpServiceBase {
             }
         });
     }
-}
-
-export function getCheckoutData(data) {
-    return $http.get('/checkout/data', data);
-}
-
-export function getCheckoutDeliveryMethods(data) {
-    return $http.get('/checkout/delivery-methods', data);
-}
-
-export function getCheckoutDeliveryTypes(data) {
-    return $http.get('/checkout/delivery-types', data);
-}
-
-export function getCheckoutConfirmationTypes(data) {
-    return $http.get('/checkout/confirmation-types', data);
-}
-
-export function getCheckoutPaymentMethods(data) {
-    return $http.get('/checkout/payment-methods', data);
-}
-
-export function getCheckoutAddresses(data) {
-    return $http.get('/checkout/addresses', data);
 }
 
 /* eslint-enable no-console */

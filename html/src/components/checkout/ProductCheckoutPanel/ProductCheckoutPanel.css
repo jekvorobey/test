@@ -2,7 +2,18 @@
     counter-reset: item;
 
     &__item {
-        margin-bottom: calc(var(--gs) * 7);
+        margin-bottom: calc(var(--gs) * 2);
+
+        &--child &-header {
+            padding-left: 0;
+            &::before {
+                display: none;
+            }
+
+            &-hl {
+                text-transform: none;
+            }
+        }
 
         &-header {
             position: relative;
@@ -10,7 +21,6 @@
             align-items: center;
             padding-left: calc(var(--gs) * 4);
             padding-bottom: calc(var(--gs) * 2);
-            margin-bottom: calc(var(--gs) * 3);
             border-bottom: 1px solid var(--cl-divider-grey);
 
             &::before {
@@ -33,6 +43,22 @@
                 line-height: 24px;
                 letter-spacing: 0.03em;
                 text-transform: uppercase;
+            }
+        }
+
+        &-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: calc(var(--gs) * 5);
+        }
+
+        &-card {
+            margin-top: calc(var(--gs) * 3);
+
+            .text-bold,
+            .text-medium {
+                font-size: 20px;
             }
         }
     }

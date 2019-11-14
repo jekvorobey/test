@@ -10,6 +10,7 @@ export const DELIVERY_METHODS = 'deliveryMethods';
 export const DELIVERY_TYPES = 'deliveryTypes';
 export const CONFIRMATION_TYPES = 'confirmationTypes';
 export const ADDRESSES = 'addresses';
+export const PACKAGES = 'packages';
 
 export default {
     name: NAME,
@@ -22,6 +23,7 @@ export default {
         [DELIVERY_TYPES]: [],
         [CONFIRMATION_TYPES]: [],
         [ADDRESSES]: [],
+        [PACKAGES]: {},
     },
     actions,
     mutations,
