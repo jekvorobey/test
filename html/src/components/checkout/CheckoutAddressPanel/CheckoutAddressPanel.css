@@ -1,0 +1,42 @@
+.checkout-address-panel {
+    padding: calc(var(--gs) * 3) 0;
+    &__choice {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__address {
+        &-info {
+            display: flex;
+            margin-bottom: calc(var(--gs) * 2);
+
+            &-main,
+            &-schedule {
+                width: 50%;
+            }
+
+            &-schedule {
+                color: var(--cl-grey);
+                font-size: 14px;
+
+                &-item {
+                    width: 50%;
+                    display: flex;
+                    justify-content: space-between;
+                }
+            }
+        }
+
+        &-desc,
+        &-payment {
+            margin-bottom: calc(var(--gs) * 2);
+        }
+
+        &-map {
+            .ymap-container {
+                width: 100%;
+                height: 240px;
+            }
+        }
+    }
+}

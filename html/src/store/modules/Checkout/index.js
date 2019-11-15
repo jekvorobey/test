@@ -23,7 +23,7 @@ export default {
         [DELIVERY_TYPES]: [],
         [CONFIRMATION_TYPES]: [],
         [ADDRESSES]: [],
-        [PACKAGES]: {},
+        [PACKAGES]: [],
     },
     actions,
     mutations,

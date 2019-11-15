@@ -1,5 +1,9 @@
-import { $logger } from '../../../services/ServiceLocator';
-import { cartItemTypes } from '../../../assets/scripts/constants';
+export const PACKAGES_BY_TYPE = 'packagesByType';
+export const ADDRESSES_BY_METHOD = 'addressesByMethod';
+export const IS_DELIVERY = 'isDelivery';
 
-const itemTypes = Object.values(cartItemTypes);
-export default {};
+export default {
+    [ADDRESSES_BY_METHOD]: state => state.addresses.find(p => p.methodID === state.checkoutData.deliveryMethodID) || {},
+
+    [PACKAGES_BY_TYPE]: state => state.packages.find(p => p.typeID === state.checkoutData.deliveryTypeID) || {},
+};

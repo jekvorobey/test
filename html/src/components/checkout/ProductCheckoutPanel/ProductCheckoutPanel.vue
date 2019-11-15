@@ -39,12 +39,14 @@
         </div>
         <div class="product-checkout-panel__item">
             <div class="product-checkout-panel__item-header">
-                <h2 class="product-checkout-panel__item-header-hl">Адрес доставки</h2>
+                <h2 class="product-checkout-panel__item-header-hl">
+                    {{ isDelivery ? 'Адрес доставки' : 'Пункт самовывоза' }}
+                </h2>
             </div>
             <ul v-if="isDelivery" class="product-checkout-panel__item-list">
                 <checkout-option-card
                     class="product-checkout-panel__item-card"
-                    v-for="address in addresses"
+                    v-for="address in addressesByMethod.items"
                     :key="address.id"
                     :selected="checkoutData.addressID === address.id"
                     @cardClick="SET_DATA_PROP({ prop: 'addressID', value: address.id })"
@@ -52,6 +54,7 @@
                     {{ address.description }}
                 </checkout-option-card>
             </ul>
+            <checkout-address-panel v-else />
         </div>
         <div class="product-checkout-panel__item">
             <div class="product-checkout-panel__item-header">
@@ -73,7 +76,7 @@
             </ul>
             <div
                 class="product-checkout-panel__item product-checkout-panel__item--child"
-                v-for="packageItem in packages.items"
+                v-for="packageItem in packagesByType.items"
                 :key="packageItem.id"
             >
                 <div class="product-checkout-panel__item-header">
@@ -100,8 +103,9 @@
 <script>
 import CheckoutOptionCard from '../CheckoutOptionCard/CheckoutOptionCard.vue';
 import CheckoutProductCard from '../CheckoutProductCard/CheckoutProductCard.vue';
+import CheckoutAddressPanel from '../CheckoutAddressPanel/CheckoutAddressPanel.vue';
 
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import {
     NAME as CHECKOUT_MODULE,
     CHECKOUT_DATA,
@@ -111,14 +115,10 @@ import {
     PACKAGES,
 } from '../../../store/modules/Checkout';
 import { SET_DATA_PROP, FETCH_ADDRESSES, FETCH_PACKAGES } from '../../../store/modules/Checkout/actions';
+import { ADDRESSES_BY_METHOD, PACKAGES_BY_TYPE } from '../../../store/modules/Checkout/getters';
 
+import { deliveryMethods } from '../../../assets/scripts/constants';
 import './ProductCheckoutPanel.css';
-
-const deliveryMethods = {
-    delivery: 1,
-    express: 2,
-    pickup: 3,
-};
 
 export default {
     name: 'product-checkout-panel',
@@ -126,28 +126,25 @@ export default {
     components: {
         CheckoutProductCard,
         CheckoutOptionCard,
+        CheckoutAddressPanel,
     },
 
     computed: {
         ...mapState(CHECKOUT_MODULE, [CHECKOUT_DATA, DELIVERY_METHODS, DELIVERY_TYPES, ADDRESSES, PACKAGES]),
-        ...mapState(CHECKOUT_MODULE, {
-            isDelivery: state =>
-                state.checkoutData.deliveryMethodID === deliveryMethods.delivery ||
-                state.checkoutData.deliveryMethodID === deliveryMethods.express,
-        }),
+        ...mapGetters(CHECKOUT_MODULE, [ADDRESSES_BY_METHOD, PACKAGES_BY_TYPE]),
+
+        isDelivery() {
+            const currentMethod = this[ADDRESSES_BY_METHOD].methodID;
+            return currentMethod === deliveryMethods.DELIVERY || currentMethod === deliveryMethods.EXPRESS;
+        },
     },
 
     watch: {
-        ['checkoutData.deliveryMethodID']: {
-            handler(value) {
-                this[FETCH_ADDRESSES](value);
-            },
-        },
-
-        ['checkoutData.deliveryTypeID']: {
-            handler(value) {
-                this[FETCH_PACKAGES](value);
-            },
+        isDelivery(value) {
+            this[SET_DATA_PROP]({
+                prop: 'addressID',
+                value: this[ADDRESSES_BY_METHOD].items[0].id,
+            });
         },
     },
 

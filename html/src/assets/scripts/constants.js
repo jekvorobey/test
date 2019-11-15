@@ -44,3 +44,14 @@ export const cartItemTypes = Object.freeze({
     PRODUCT: 'product',
     MASTERCLASS: 'masterclass',
 });
+
+export const deliveryMethods = Object.freeze({
+    DELIVERY: 1,
+    EXPRESS: 2,
+    PICKUP: 3,
+});
+
+export const deliveryTypes = Object.freeze({
+    SPLIT: 1,
+    CONSOLIDATION: 2,
+});

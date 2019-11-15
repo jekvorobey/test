@@ -61,28 +61,22 @@ export default {
     },
 
     [FETCH_ADDRESSES]({ commit }, payload) {
-        commit(SET_ADDRESSES, []);
         return getCheckoutAddresses(payload)
             .then(data => commit(SET_ADDRESSES, data))
             .catch(error => $logger.error(`${FETCH_ADDRESSES} ${error}`));
     },
 
     [FETCH_PACKAGES]({ commit }, payload) {
-        commit(SET_PACKAGES, {});
         return getCheckoutPackages(payload)
             .then(data => commit(SET_PACKAGES, data))
             .catch(error => $logger.error(`${FETCH_PACKAGES} ${error}`));
     },
 
-    [FETCH_DATA]({ commit, dispatch }, payload) {
+    [FETCH_DATA]({ commit }, payload) {
         return getCheckoutData(payload)
             .then(data => {
                 commit(SET_TYPE, payload);
                 commit(SET_DATA, data);
-                return Promise.all([
-                    dispatch(FETCH_ADDRESSES, data.deliveryMethodID),
-                    dispatch(FETCH_PACKAGES, data.deliveryTypeID),
-                ]);
             })
             .catch(error => $logger.error(`${FETCH_DATA} ${error}`));
     },
@@ -93,6 +87,8 @@ export default {
             dispatch(FETCH_CONFIRMATION_TYPES, type),
             dispatch(FETCH_DELIVERY_METHODS, type),
             dispatch(FETCH_PAYMENT_METHODS, type),
+            dispatch(FETCH_PACKAGES, type),
+            dispatch(FETCH_ADDRESSES, type),
         ]).then(() => dispatch(FETCH_DATA, type));
     },
 };
