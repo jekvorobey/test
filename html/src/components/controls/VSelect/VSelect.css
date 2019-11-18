@@ -437,3 +437,21 @@ fieldset[disabled] .multiselect {
         transform: rotate(2turn);
     }
 }
+
+.v-select {
+    display: inline-block;
+    padding: 0;
+
+    .multiselect__tags {
+        border: 1px solid var(--cl-global);
+        padding: 3px 40px 3px 16px;
+    }
+
+    .multiselect__single {
+        line-height: 32px;
+    }
+
+    .multiselect__select {
+        top: 0;
+    }
+}

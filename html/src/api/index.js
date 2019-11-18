@@ -52,8 +52,8 @@ export function getCheckoutData(data) {
     return $http.get('/checkout/data', data);
 }
 
-export function getCheckoutDeliveryMethods(data) {
-    return $http.get('/checkout/delivery-methods', data);
+export function getCheckoutReceiveMethods(data) {
+    return $http.get('/checkout/receive-methods', data);
 }
 
 export function getCheckoutDeliveryTypes(data) {
@@ -70,6 +70,10 @@ export function getCheckoutPaymentMethods(data) {
 
 export function getCheckoutAddresses(data) {
     return $http.get('/checkout/addresses', data);
+}
+
+export function getCheckoutPickupPoints(data) {
+    return $http.get('/checkout/pickup-points', data);
 }
 
 export function getCheckoutPackages(data) {

@@ -45,10 +45,17 @@ export const cartItemTypes = Object.freeze({
     MASTERCLASS: 'masterclass',
 });
 
-export const deliveryMethods = Object.freeze({
+export const receiveTypes = Object.freeze({
     DELIVERY: 1,
     EXPRESS: 2,
     PICKUP: 3,
+});
+
+export const deliveryMethods = Object.freeze({
+    OUTPOST_PICKUP: 1,
+    POSTOMAT_PICKUP: 2,
+    DELIVERY: 3,
+    EXPRESS: 4,
 });
 
 export const deliveryTypes = Object.freeze({

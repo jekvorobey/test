@@ -1,6 +1,6 @@
 import _cloneDeep from 'lodash/cloneDeep';
 import HttpServiceBase from './base';
-import { cartItemTypes } from '../../assets/scripts/constants';
+import { cartItemTypes, receiveTypes, deliveryMethods } from '../../assets/scripts/constants';
 
 import product1 from '../../assets/images/mock/product1.png';
 import product2 from '../../assets/images/mock/product2.png';
@@ -1409,24 +1409,46 @@ const deliveryTypes = [
     },
 ];
 
-const deliveryMethods = [
+const receiveMethods = [
     {
-        id: 1,
+        id: receiveTypes.DELIVERY,
         title: 'Доставка курьером',
         price: '350 ₽',
         description: 'Ближайшая доставка в понедельник, 24 июня',
+        methods: [
+            {
+                id: deliveryMethods.DELIVERY,
+                title: 'Доставка',
+            },
+        ],
     },
     {
-        id: 2,
+        id: receiveTypes.EXPRESS,
         title: 'Экспресс-доставка',
         price: '500 ₽',
         description: 'Доставка за 4 часа',
+        methods: [
+            {
+                id: deliveryMethods.EXPRESS,
+                title: 'Экспресс',
+            },
+        ],
     },
     {
-        id: 3,
+        id: receiveTypes.PICKUP,
         title: 'Самовывоз из 12 пунктов',
         price: 'Бесплатно',
         description: 'Ближайший самовывоз в среду, 26 июня',
+        methods: [
+            {
+                id: deliveryMethods.OUTPOST_PICKUP,
+                title: 'Аутпост',
+            },
+            {
+                id: deliveryMethods.POSTOMAT_PICKUP,
+                title: 'Постомат',
+            },
+        ],
     },
 ];
 
@@ -1444,77 +1466,66 @@ const confirmationTypes = [
 const addresses = [
     {
         id: 1,
-        methodID: deliveryMethods[0].id,
-        items: [
-            {
-                id: 1,
-                description: 'ул. Юности, д. 12, кв. 88, г. Зеленоград, г. Москва, Россия, 124482',
-            },
-            { id: 2, description: 'ул. Парковая, д. 1, кв. 100, г. Москва, Россия, 123456' },
+        description: 'ул. Юности, д. 12, кв. 88, г. Зеленоград, г. Москва, Россия, 124482',
+    },
+    { id: 2, description: 'ул. Парковая, д. 1, кв. 100, г. Москва, Россия, 123456' },
+];
+
+const pickupPoints = [
+    {
+        id: 1,
+        methodID: deliveryMethods.POSTOMAT_PICKUP,
+        title: 'г. Москва, ул. Стратонавтов, д. 11',
+        name: 'Пункт выдачи посылок',
+        phone: '+7 800 222-80-00',
+        description: `Остановка — Физтех-лицей. 
+            Примерное расстояние от остановки до отделения — 200 м. 
+            Отделение расположено в 19-ти этажном доме. Расположение входа в отделение — нежилое помещение со стороны улицы, секция ближе к круглым домам.`,
+        payment: 'Банковские карты, наличные',
+        startDate: 'Можно забрать с 26 июня, среда',
+        schedule: [
+            { id: 1, title: 'Будни', time: '10:00 — 20:00' },
+            { id: 2, title: 'Суббота', time: '10:00 — 18:00' },
+            { id: 3, title: 'Воскресенье', time: '10:00 — 15:00' },
         ],
+        map: {
+            coords: [55.82737306892227, 37.43724449999994],
+        },
     },
     {
         id: 2,
-        methodID: deliveryMethods[1].id,
-        items: [
-            {
-                id: 1,
-                description: 'ул. Юности, д. 12, кв. 88, г. Зеленоград, г. Москва, Россия, 124482',
-            },
-            { id: 2, description: 'ул. Парковая, д. 1, кв. 100, г. Москва, Россия, 123456' },
+        methodID: deliveryMethods.OUTPOST_PICKUP,
+        title: 'г. Москва, ул. Пятницкая, д. 3/4, корп. 2',
+        name: 'Пункт выдачи посылок',
+        phone: '+7 800 333-11-33',
+        description: `Остановка — Физтех-лицей. 
+            Примерное расстояние от остановки до отделения — 200 м. 
+            Отделение расположено в 19-ти этажном доме. Расположение входа в отделение — нежилое помещение со стороны улицы, секция ближе к круглым домам.`,
+        payment: 'Банковские карты, наличные',
+        startDate: 'Можно забрать с 26 июня, среда',
+        schedule: [
+            { id: 1, title: 'Будни', time: '10:00 — 20:00' },
+            { id: 2, title: 'Воскресенье', time: '10:00 — 15:00' },
         ],
+        map: {
+            coords: [55.734862141870614, 37.613880184687815],
+        },
     },
     {
         id: 3,
-        methodID: deliveryMethods[2].id,
-        items: [
-            {
-                id: 1,
-                title: 'г. Москва, ул. Стратонавтов, д. 11',
-                name: 'Пункт выдачи посылок',
-                phone: '+7 800 222-80-00',
-                description: `Остановка — Физтех-лицей. 
-                    Примерное расстояние от остановки до отделения — 200 м. 
-                    Отделение расположено в 19-ти этажном доме. Расположение входа в отделение — нежилое помещение со стороны улицы, секция ближе к круглым домам.`,
-                payment: 'Банковские карты, наличные',
-                startDate: 'Можно забрать с 26 июня, среда',
-                schedule: [
-                    { id: 1, title: 'Будни', time: '10:00 — 20:00' },
-                    { id: 2, title: 'Суббота', time: '10:00 — 18:00' },
-                    { id: 3, title: 'Воскресенье', time: '10:00 — 15:00' },
-                ],
-                map: {
-                    coords: [55.827373, 37.437245],
-                },
-            },
-            {
-                id: 2,
-                title: 'г. Москва, ул. Пятницкая, д. 3/4, корп. 2',
-                name: 'Пункт выдачи посылок',
-                phone: '+7 800 333-11-33',
-                description: `Остановка — Физтех-лицей. 
-                    Примерное расстояние от остановки до отделения — 200 м. 
-                    Отделение расположено в 19-ти этажном доме. Расположение входа в отделение — нежилое помещение со стороны улицы, секция ближе к круглым домам.`,
-                payment: 'Банковские карты, наличные',
-                startDate: 'Можно забрать с 26 июня, среда',
-                schedule: [
-                    { id: 1, title: 'Будни', time: '10:00 — 20:00' },
-                    { id: 2, title: 'Воскресенье', time: '10:00 — 15:00' },
-                ],
-            },
-            {
-                id: 3,
-                title: 'г. Москва, ул. Пятницкая, д. 3/4, корп. 2',
-                name: 'Пункт выдачи посылок',
-                phone: '+7 800 333-11-33',
-                description: `Остановка — Физтех-лицей. 
-                    Примерное расстояние от остановки до отделения — 200 м. 
-                    Отделение расположено в 19-ти этажном доме. Расположение входа в отделение — нежилое помещение со стороны улицы, секция ближе к круглым домам.`,
-                payment: 'Банковские карты, наличные',
-                startDate: 'Можно забрать с 26 июня, среда',
-                schedule: [{ id: 1, title: 'Будни', time: '10:00 — 15:00' }],
-            },
-        ],
+        methodID: deliveryMethods.OUTPOST_PICKUP,
+        title: 'г. Москва, ул. Пятницкая, д. 3/4, корп. 2',
+        name: 'Пункт выдачи посылок',
+        phone: '+7 800 333-11-33',
+        description: `Остановка — Физтех-лицей. 
+            Примерное расстояние от остановки до отделения — 200 м. 
+            Отделение расположено в 19-ти этажном доме. Расположение входа в отделение — нежилое помещение со стороны улицы, секция ближе к круглым домам.`,
+        payment: 'Банковские карты, наличные',
+        startDate: 'Можно забрать с 26 июня, среда',
+        schedule: [{ id: 1, title: 'Будни', time: '10:00 — 15:00' }],
+        map: {
+            coords: [55.74551356898018, 37.627750499999976],
+        },
     },
 ];
 
@@ -1582,12 +1593,14 @@ const sertificates = [
 
 const checkoutData = {
     recipientID: recipients[0].id,
+    receiveMethodID: receiveMethods[0].id,
     deliveryTypeID: deliveryTypes[0].id,
-    deliveryMethodID: deliveryMethods[0].id,
+    deliveryMethodID: receiveMethods[0].methods[0].id,
     paymentMethodID: paymentMethods[0].id,
     confirmationTypeID: confirmationTypes[0].id,
 
-    addressID: addresses.find(a => a.methodID === deliveryMethods[0].id).items[0].id,
+    address: addresses[0],
+    pickupPoint: null,
 
     bonus: 300,
     promo: 1,
@@ -1785,8 +1798,8 @@ export default class MockHttpService extends HttpServiceBase {
                     setTimeout(() => resolve(_cloneDeep(checkoutData)), 300);
                     break;
 
-                case '/checkout/delivery-methods':
-                    setTimeout(() => resolve(deliveryMethods), 300);
+                case '/checkout/receive-methods':
+                    setTimeout(() => resolve(receiveMethods), 300);
                     break;
 
                 case '/checkout/delivery-types':
@@ -1803,6 +1816,10 @@ export default class MockHttpService extends HttpServiceBase {
 
                 case '/checkout/addresses':
                     setTimeout(() => resolve(addresses), 300);
+                    break;
+
+                case '/checkout/pickup-points':
+                    setTimeout(() => resolve(pickupPoints), 300);
                     break;
 
                 case '/checkout/packages':

@@ -1,17 +1,4 @@
 .mobile-menu {
-    .modal-body {
-        position: relative;
-        padding: 0;
-    }
-
-    &__sticky {
-        width: 100%;
-
-        .v-sticky__container {
-            z-index: 1000;
-        }
-    }
-
     &__header {
         display: flex;
         justify-content: space-between;

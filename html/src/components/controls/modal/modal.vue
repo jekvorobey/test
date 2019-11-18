@@ -39,7 +39,7 @@
                     class="modal-default-button popup__close"
                     @click="$emit('close')"
                 >
-                    <v-svg name="cross" width="14" height="14" />
+                    <v-svg name="cross" width="24" height="24" />
                 </button>
             </div>
         </div>

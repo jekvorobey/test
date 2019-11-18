@@ -3,7 +3,7 @@ const MARKER_TYPES = ['placemark', 'polyline', 'rectangle', 'polygon', 'circle']
 const unwatchArr = [];
 
 export default {
-    inject: ['deleteMarker', 'rerender', 'compareValues'],
+    inject: ['addMarker', 'deleteMarker', 'rerender', 'compareValues'],
     props: {
         coords: {
             type: Array,
@@ -42,6 +42,7 @@ export default {
     },
     render() {},
     mounted() {
+        if (this.$parent._isMounted) this.addMarker(this.markerId);
         Object.keys(this.$props).forEach(prop => {
             unwatchArr.push(
                 this.$watch(prop, (newVal, oldVal) =>

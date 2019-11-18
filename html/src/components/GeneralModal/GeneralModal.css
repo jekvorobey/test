@@ -1,0 +1,25 @@
+.general-modal {
+    .modal-body {
+        position: relative;
+
+        @media (--tablet-lg) {
+            padding: 0;
+        }
+    }
+
+    &__sticky {
+        width: 100%;
+
+        .v-sticky__container {
+            z-index: 1000;
+        }
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        background-color: var(--cl-global);
+        padding-top: calc(var(--gs) * 1.5);
+        padding-bottom: calc(var(--gs) * 1.5);
+    }
+}

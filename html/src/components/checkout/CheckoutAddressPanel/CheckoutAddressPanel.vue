@@ -1,22 +1,24 @@
 <template>
     <div class="checkout-address-panel">
-        <div v-if="!selectedAddress" class="checkout-address-panel__choice">
+        <div v-if="!selectedPickupPoint" class="checkout-address-panel__choice">
             <h3>Выберите пункт выдачи заказов</h3>
-            <v-button @click="onChangeBtnClick">Выбрать</v-button>
+            <v-button class="btn--outline" @click="$emit('changeAddress')">
+                Выбрать
+            </v-button>
         </div>
         <div v-else class="checkout-address-panel__address">
             <div class="checkout-address-panel__address-info">
                 <div class="checkout-address-panel__address-info-main">
-                    <h3>{{ selectedAddress.title }}</h3>
-                    <div>{{ selectedAddress.name }}</div>
-                    <div>{{ selectedAddress.phone }}</div>
+                    <h3>{{ selectedPickupPoint.title }}</h3>
+                    <div>{{ selectedPickupPoint.name }}</div>
+                    <div>{{ selectedPickupPoint.phone }}</div>
                 </div>
                 <div class="checkout-address-panel__address-info-schedule">
-                    {{ selectedAddress.startDate }}
+                    {{ selectedPickupPoint.startDate }}
                     <ul class="checkout-address-panel__address-info-schedule-list">
                         <li
                             class="checkout-address-panel__address-info-schedule-item"
-                            v-for="item in selectedAddress.schedule"
+                            v-for="item in selectedPickupPoint.schedule"
                             :key="item.id"
                         >
                             <div>{{ item.title }}</div>
@@ -29,21 +31,22 @@
                 <div class="text-bold">
                     Как добраться
                 </div>
-                {{ selectedAddress.description }}
+                {{ selectedPickupPoint.description }}
             </div>
             <div class="checkout-address-panel__address-payment">
                 <div class="text-bold">
                     Принимаются к оплате
                 </div>
-                {{ selectedAddress.payment }}
+                {{ selectedPickupPoint.payment }}
             </div>
-            <div class="checkout-address-panel__address-map" :style="{ width: 600, height: 600 }">
-                <yandex-map
-                    :coords="selectedAddress.map.coords"
-                    :cluster-options="{ 1: { clusterDisableClickZoom: true } }"
-                    :controls="[]"
-                >
-                    <ymap-marker marker-id="123" :coords="selectedAddress.map.coords" :icon="markerIcon" />
+            <div class="checkout-address-panel__address-map">
+                <yandex-map v-if="showMap" :coords="selectedPickupPoint.map.coords" :zoom="13" :controls="[]">
+                    <ymap-marker
+                        :key="`selected-point-${selectedPickupPoint.id}`"
+                        :marker-id="`selected-point-${selectedPickupPoint.id}`"
+                        :coords="selectedPickupPoint.map.coords"
+                        :icon="markerIcon"
+                    />
                 </yandex-map>
             </div>
         </div>
@@ -54,9 +57,12 @@ import '../../../plugins/ya-maps';
 import pin from '../../../assets/images/icons/pin-filled.svg';
 import VButton from '../../controls/VButton/VButton.vue';
 
-import { mapGetters, mapState } from 'vuex';
-import { NAME as CHECKOUT_MODULE, CHECKOUT_DATA } from '../../../store/modules/Checkout';
+import { mapGetters, mapState, mapActions } from 'vuex';
+import { NAME as CHECKOUT_MODULE, CHECKOUT_DATA, SELECTED_PICKUP_POINT } from '../../../store/modules/Checkout';
 import { ADDRESSES_BY_METHOD } from '../../../store/modules/Checkout/getters';
+
+import { NAME as MODAL_MODULE } from '../../../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
 import './CheckoutAddressPanel.css';
 
@@ -69,6 +75,8 @@ export default {
 
     data() {
         return {
+            showMap: false,
+            coords: [55.755814, 37.617635],
             markerIcon: {
                 layout: 'default#image',
                 imageHref: pin,
@@ -79,18 +87,15 @@ export default {
     },
 
     computed: {
-        ...mapState(CHECKOUT_MODULE, [CHECKOUT_DATA]),
-        ...mapGetters(CHECKOUT_MODULE, [ADDRESSES_BY_METHOD]),
-
-        selectedAddress() {
-            return this[ADDRESSES_BY_METHOD].items.find(i => i.id === this[CHECKOUT_DATA].addressID);
-        },
+        ...mapState(CHECKOUT_MODULE, [SELECTED_PICKUP_POINT]),
     },
 
     methods: {
-        onChangeBtnClick() {
-            this.$emit('changeAddress');
-        },
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+    },
+
+    mounted() {
+        setTimeout(() => (this.showMap = true), 400);
     },
 };
 </script>

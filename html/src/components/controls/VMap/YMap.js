@@ -15,20 +15,30 @@ export default {
             if (deleteMarkerWithTimeout) clearTimeout(deleteMarkerWithTimeout);
             deleteMarkerWithTimeout = setTimeout(() => this.deleteMarkers(deletedMarkers), 10);
         };
-        const compareValues = ({ newVal, oldVal, id }) => {
-            if (utils.objectComparison(newVal, oldVal)) {
-                return;
-            }
+
+        const addMarker = id => {
             changedMarkers.push(id);
-            if (rerender) {
-                clearTimeout(rerender);
-            }
+            if (rerender) clearTimeout(rerender);
+
             rerender = setTimeout(() => {
                 this.setMarkers(changedMarkers);
                 changedMarkers = [];
             }, 10);
         };
+
+        const compareValues = ({ newVal, oldVal, id }) => {
+            if (utils.objectComparison(newVal, oldVal)) return;
+            changedMarkers.push(id);
+            if (rerender) clearTimeout(rerender);
+
+            rerender = setTimeout(() => {
+                this.setMarkers(changedMarkers);
+                changedMarkers = [];
+            }, 10);
+        };
+
         return {
+            addMarker,
             deleteMarker,
             rerender: null,
             compareValues,
