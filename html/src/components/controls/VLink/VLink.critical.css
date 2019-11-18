@@ -1,4 +1,5 @@
 .link {
+    font-size: 16px;
     line-height: 24px;
     text-decoration: none;
     transition: all var(--time) var(--timing-function);

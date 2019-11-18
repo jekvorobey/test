@@ -3,7 +3,7 @@
         <div class="product-checkout-panel__item">
             <div class="product-checkout-panel__item-header">
                 <h2 class="product-checkout-panel__item-header-hl">Получатель</h2>
-                <v-link class="product-checkout-panel__item-header-link" @click="onAddRecipient">
+                <v-link class="product-checkout-panel__item-header-link" tag="button" @click="onAddRecipient">
                     <v-svg name="plus" width="24" height="24" />&nbsp;Добавить нового получателя
                 </v-link>
             </div>
@@ -45,12 +45,18 @@
                 <h2 class="product-checkout-panel__item-header-hl">
                     {{ isDelivery ? 'Адрес доставки' : 'Пункт самовывоза' }}
                 </h2>
-                <v-link v-if="isDelivery" class="product-checkout-panel__item-header-link" @click="onAddAddress">
+                <v-link
+                    v-if="isDelivery"
+                    class="product-checkout-panel__item-header-link"
+                    tag="button"
+                    @click="onAddAddress"
+                >
                     <v-svg name="plus" width="24" height="24" />&nbsp;Добавить новый адрес
                 </v-link>
                 <v-link
                     v-else-if="selectedPickupPoint"
                     class="product-checkout-panel__item-header-link"
+                    tag="button"
                     @click="onChangePickupPoint"
                 >
                     <v-svg name="pin" width="24" height="24" />&nbsp;Выбрать другой
