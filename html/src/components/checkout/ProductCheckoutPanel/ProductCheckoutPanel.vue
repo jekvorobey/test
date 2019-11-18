@@ -59,7 +59,7 @@
                     tag="button"
                     @click="onChangePickupPoint"
                 >
-                    <v-svg name="pin" width="24" height="24" />&nbsp;Выбрать другой
+                    <v-svg name="pin" width="16" height="16" />&nbsp;&nbsp;Выбрать другой
                 </v-link>
             </div>
             <transition name="fade-in">
