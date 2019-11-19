@@ -1688,12 +1688,18 @@ export default class MockHttpService extends HttpServiceBase {
                             return;
                         }
 
+                        const sertificateObj = data.data.sertificates.find(s => s.code === data.sertificate.code);
+                        if (!sertificateObj) {
+                            reject(new Error('sertificate does not exist'));
+                            return;
+                        }
+
                         const clone = _cloneDeep(data.data);
                         const sertificate =
                             Number(clone.checkout.sertificate.replace(/\D+/g, '')) - existSertificate.amount;
                         const total = Number(clone.checkout.total.replace(/\D+/g, '')) + existSertificate.amount;
 
-                        const index = clone.sertificates.indexOf(existSertificate);
+                        const index = clone.sertificates.indexOf(sertificateObj);
                         clone.sertificates.splice(index, 1);
 
                         clone.checkout.sertificate = sertificate > 0 ? `- ${preparePrice(sertificate)} ₽` : '0 ₽';
