@@ -8,6 +8,12 @@ import {
     getCheckoutData,
     getCheckoutPackages,
     getCheckoutPickupPoints,
+    addBonus,
+    deleteBonus,
+    addSertificate,
+    deleteSertificate,
+    addPromocode,
+    deletePromocode,
 } from '../../../api';
 
 import {
@@ -34,6 +40,15 @@ export const SET_RECEIVE_METHOD = 'SET_RECEIVE_METHOD';
 export const SET_DELIVERY_TYPE = 'SET_DELIVERY_TYPE';
 export const SET_SELECTED_ADDRESS = 'SET_SELECTED_ADDRESS';
 export const SET_SELECTED_PICKUP_POINT = 'SET_SELECTED_PICKUP_POINT';
+
+export const ADD_BONUS = 'ADD_BONUS';
+export const DELETE_BONUS = 'DELETE_BONUS';
+
+export const ADD_SERTIFICATE = 'ADD_SERTIFICATE';
+export const DELETE_SERTIFICATE = 'DELETE_SERTIFICATE';
+
+export const ADD_PROMOCODE = 'ADD_PROMOCODE';
+export const DELETE_PROMOCODE = 'DELETE_PROMOCODE';
 
 export const FETCH_CHECKOUT_DATA = 'FETCH_CHECKOUT_DATA';
 export const FETCH_DATA = 'FETCH_DATA';
@@ -80,6 +95,42 @@ export default {
     [SET_DELIVERY_TYPE]({ commit }, payload) {
         commit(M_SET_DELIVERY_TYPE, payload);
         commit(M_SET_DATA_PROP, { prop: 'deliveryTypeID', value: payload.id });
+    },
+
+    [ADD_BONUS]({ commit, state }, payload) {
+        return addBonus({ bonus: payload, data: state.checkoutData })
+            .then(data => commit(SET_DATA, data))
+            .catch(error => $logger.error(`${ADD_BONUS} ${error}`));
+    },
+
+    [DELETE_BONUS]({ commit, state }, payload) {
+        return deleteBonus({ bonus: payload, data: state.checkoutData })
+            .then(data => commit(SET_DATA, data))
+            .catch(error => $logger.error(`${DELETE_BONUS} ${error}`));
+    },
+
+    [ADD_SERTIFICATE]({ commit, state }, payload) {
+        return addSertificate({ code: payload, data: state.checkoutData })
+            .then(data => commit(SET_DATA, data))
+            .catch(error => $logger.error(`${ADD_SERTIFICATE} ${error}`));
+    },
+
+    [DELETE_SERTIFICATE]({ commit, state }, payload) {
+        return deleteSertificate({ sertificate: payload, data: state.checkoutData })
+            .then(data => commit(SET_DATA, data))
+            .catch(error => $logger.error(`${DELETE_SERTIFICATE} ${error}`));
+    },
+
+    [ADD_PROMOCODE]({ commit, state }, payload) {
+        return addPromocode({ promocode: payload, data: state.checkoutData })
+            .then(data => commit(SET_DATA, data))
+            .catch(error => $logger.error(`${ADD_PROMOCODE} ${error}`));
+    },
+
+    [DELETE_PROMOCODE]({ commit, state }, payload) {
+        return deletePromocode({ promocode: payload, data: state.checkoutData })
+            .then(data => commit(SET_DATA, data))
+            .catch(error => $logger.error(`${DELETE_PROMOCODE} ${error}`));
     },
 
     [FETCH_CONFIRMATION_TYPES]({ commit }, payload) {

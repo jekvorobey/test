@@ -45,8 +45,6 @@
     }
 
     &__main {
-        margin-bottom: calc(var(--gs) * 7);
-
         @media (--tablet-lg) {
             padding-bottom: calc(var(--gs) * 7);
             border-bottom: 1px solid var(--cl-divider-grey);
@@ -100,7 +98,6 @@
 
             @media (--tablet-lg-min) {
                 padding-bottom: calc(var(--gs) * 7);
-                border-bottom: 1px solid var(--cl-divider-grey);
             }
 
             @media (--tablet-lg) {
@@ -171,11 +168,6 @@
                 flex-basis: 100%;
             }
 
-            @media (--tablet-lg-min) {
-                padding-bottom: calc(var(--gs) * 7);
-                border-bottom: 1px solid var(--cl-divider-grey);
-            }
-
             .v-sticky__container {
                 top: calc(var(--gs) * 9);
             }
@@ -210,6 +202,23 @@
                 display: flex;
                 margin-bottom: calc(var(--gs) * 2);
 
+                &--success {
+                    background-color: #eff1f3;
+                    padding: var(--gs) calc(var(--gs) * 2);
+                }
+
+                &--success &-icon {
+                    margin-right: var(--gs);
+                }
+
+                &--success &-link {
+                    text-transform: none;
+                    font-size: 14px;
+                    line-height: 24px;
+                    font-weight: normal;
+                    color: var(--cl-grey);
+                }
+
                 &-btn {
                     padding: 6px calc(var(--gs) * 2);
                 }
@@ -217,9 +226,6 @@
                 &-input {
                     flex: 1;
                     margin-right: var(--gs);
-
-                    .v-input__input {
-                    }
 
                     .v-input__error {
                         display: none;

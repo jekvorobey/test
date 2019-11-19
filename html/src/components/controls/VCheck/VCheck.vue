@@ -43,7 +43,6 @@ export default {
         },
         value: {
             type: [Number, String],
-            required: true,
         },
         type: {
             type: String,
@@ -83,12 +82,12 @@ export default {
     watch: {
         checked(value, old) {
             // чтобы чекбокс правильно обновлялся
-            this.$nextTick(() => this.m_checked = value);
+            this.$nextTick(() => (this.m_checked = value));
         },
 
         indeterminate(value) {
             const { input } = this.$refs;
-            if(input) input.indeterminate = value;
+            if (input) input.indeterminate = value;
         },
     },
     methods: {

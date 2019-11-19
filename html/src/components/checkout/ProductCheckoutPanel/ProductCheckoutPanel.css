@@ -4,6 +4,12 @@
     &__item {
         margin-bottom: calc(var(--gs) * 2);
 
+        &--child {
+            & + & {
+                margin-top: calc(var(--gs) * 5);
+            }
+        }
+
         &--child &-header {
             padding-left: 0;
             &::before {
@@ -13,6 +19,82 @@
             &-hl {
                 text-transform: none;
             }
+        }
+
+        &--settings {
+            padding-top: calc(var(--gs) * 3);
+            border-top: 1px solid var(--cl-divider-grey);
+        }
+
+        &--settings &-panel {
+            &-check {
+                .v-check__label {
+                    margin-bottom: var(--gs);
+                }
+            }
+        }
+
+        &--settings &-panel + &-panel {
+            padding-top: calc(var(--gs) * 2);
+        }
+
+        &--bonus &-card,
+        &--sertificate &-card {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-top: calc(var(--gs) * 2);
+
+            &-link {
+                font-size: 14px;
+                text-transform: none;
+                font-weight: normal;
+                color: var(--cl-grey);
+            }
+        }
+
+        &--payment &-card {
+            .icon + .icon {
+                margin-left: calc(var(--gs) * 2);
+            }
+        }
+
+        &--bonus &-card {
+            align-items: center;
+        }
+
+        &--sertificate &-card {
+            &-btn {
+                margin-right: auto;
+            }
+        }
+
+        &--sertificate &-controls,
+        &--bonus &-controls {
+            display: flex;
+            align-items: center;
+            margin-top: calc(var(--gs) * 2);
+
+            &-btn {
+                margin-right: calc(var(--gs) * 3);
+            }
+
+            &-input {
+                width: 30%;
+                margin-right: calc(var(--gs) * 2);
+
+                .v-input__input {
+                    text-align: left;
+                }
+
+                .v-input__error {
+                    display: none;
+                }
+            }
+        }
+
+        &--sertificate &-list {
+            margin-bottom: 0;
         }
 
         &-header {
@@ -39,11 +121,17 @@
             }
 
             &-hl {
+                display: flex;
+                align-items: center;
                 margin-bottom: 0;
                 font-size: 16px;
                 line-height: 24px;
                 letter-spacing: 0.03em;
                 text-transform: uppercase;
+
+                .icon {
+                    margin-right: calc(var(--gs) / 2);
+                }
             }
 
             &-link {

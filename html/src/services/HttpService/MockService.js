@@ -1,6 +1,7 @@
 import _cloneDeep from 'lodash/cloneDeep';
 import HttpServiceBase from './base';
 import { cartItemTypes, receiveTypes, deliveryMethods } from '../../assets/scripts/constants';
+import { preparePrice, getRandomInt } from '../../util/helpers';
 
 import product1 from '../../assets/images/mock/product1.png';
 import product2 from '../../assets/images/mock/product2.png';
@@ -1442,11 +1443,11 @@ const receiveMethods = [
         methods: [
             {
                 id: deliveryMethods.OUTPOST_PICKUP,
-                title: 'Аутпост',
+                title: 'Outpost',
             },
             {
                 id: deliveryMethods.POSTOMAT_PICKUP,
-                title: 'Постомат',
+                title: 'Postomat',
             },
         ],
     },
@@ -1456,10 +1457,12 @@ const confirmationTypes = [
     {
         id: 1,
         title: 'Подтвердить заказ по SMS',
+        type: 'sms',
     },
     {
         id: 2,
         title: 'Подтвердить заказ через звонок оператора',
+        type: 'call',
     },
 ];
 
@@ -1583,11 +1586,21 @@ const recipients = [
 const sertificates = [
     {
         id: 1,
-        title: 'Будет оплачено 1 000 ₽ подарочным сертификатом — CERT2019-1000',
+        code: 'CERT2020-500',
+        amount: 500,
     },
     {
         id: 2,
-        title: 'Будет оплачено 500 ₽ подарочным сертификатом — CERT2020-500',
+        code: 'CERT2019-1000',
+        amount: 1000,
+    },
+];
+
+const promocodes = [
+    {
+        id: 1,
+        code: 'ADMITAD700',
+        amount: 500,
     },
 ];
 
@@ -1602,19 +1615,35 @@ const checkoutData = {
     address: addresses[0],
     pickupPoint: null,
 
-    bonus: 300,
-    promo: 1,
-    agreement: 1,
+    currentBonus: 300,
+
+    bonusApplied: 0,
+    subscribe: 0,
+    agreement: 0,
+    accept: 'sms',
+    promocode: null,
 
     recipients,
-    sertificates,
+    bonuses: [],
+    sertificates: [],
+
+    checkout: {
+        sum: '6 704 ₽',
+        discount: '0 ₽',
+        sertificate: '0 ₽',
+        bonusPay: '0 ₽',
+        delivery: 'Бесплатно',
+        total: '6 704 ₽',
+        bonusGet: '+ 1 488',
+        bonusSpent: '0',
+    },
 };
 
 export default class MockHttpService extends HttpServiceBase {
     delete(path, data) {
         return new Promise((resolve, reject) => {
             switch (path) {
-                case '/cart/delete-item':
+                case '/cart/item':
                     if (data.item) {
                         const {
                             item: { id, type },
@@ -1642,6 +1671,72 @@ export default class MockHttpService extends HttpServiceBase {
                         setTimeout(() => resolve(_cloneDeep(cartData)), 300);
                     }
                     break;
+                case '/checkout/sertificate':
+                    {
+                        if (!data.data) {
+                            reject(new Error('data not found'));
+                            return;
+                        }
+                        if (!data.sertificate) {
+                            reject(new Error('code not found'));
+                            return;
+                        }
+
+                        const existSertificate = sertificates.find(s => s.code === data.sertificate.code);
+                        if (!existSertificate) {
+                            reject(new Error('wrong sertificate code'));
+                            return;
+                        }
+
+                        const clone = _cloneDeep(data.data);
+                        const sertificate =
+                            Number(clone.checkout.sertificate.replace(/\D+/g, '')) - existSertificate.amount;
+                        const total = Number(clone.checkout.total.replace(/\D+/g, '')) + existSertificate.amount;
+
+                        const index = clone.sertificates.indexOf(existSertificate);
+                        clone.sertificates.splice(index, 1);
+
+                        clone.checkout.sertificate = sertificate > 0 ? `- ${preparePrice(sertificate)} ₽` : '0 ₽';
+                        clone.checkout.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        setTimeout(() => resolve(clone), 300);
+                    }
+                    break;
+                case '/checkout/bonus':
+                    {
+                        if (!data.data) reject(new Error('data not found'));
+                        if (!data.bonus) reject(new Error('bonus not found'));
+                        const clone = _cloneDeep(data.data);
+                        const total = Number(clone.checkout.total.replace(/\D+/g, '')) + Number(data.bonus.amount);
+                        const index = clone.bonuses.indexOf(data.bonus);
+                        clone.bonuses.splice(index, 1);
+
+                        clone.checkout.bonusSpent = `${0}`;
+                        clone.checkout.bonusPay = `${0} ₽`;
+                        clone.checkout.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        setTimeout(() => resolve(clone), 300);
+                    }
+                    break;
+                case '/checkout/promocode':
+                    {
+                        if (!data.data) reject(new Error('data not found'));
+                        if (!data.promocode) reject(new Error('promocode not found'));
+
+                        const existPromocode = promocodes.find(s => s.code === data.promocode);
+                        if (!existPromocode) {
+                            reject(new Error('wrong promocode'));
+                            return;
+                        }
+
+                        const clone = _cloneDeep(data.data);
+                        const discount = Number(clone.checkout.discount.replace(/\D+/g, '')) - existPromocode.amount;
+                        const total = Number(clone.checkout.total.replace(/\D+/g, '')) + existPromocode.amount;
+
+                        clone.promocode = null;
+                        clone.checkout.discount = discount > 0 ? `- ${preparePrice(discount)} ₽` : '0 ₽';
+                        clone.checkout.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        setTimeout(() => resolve(clone), 300);
+                    }
+                    break;
                 default:
                     reject();
             }
@@ -1651,7 +1746,7 @@ export default class MockHttpService extends HttpServiceBase {
     post(path, data) {
         return new Promise((resolve, reject) => {
             switch (path) {
-                case '/cart/add-item':
+                case '/cart/item':
                     {
                         if (!data.item) throw new Error('item not found');
 
@@ -1670,6 +1765,78 @@ export default class MockHttpService extends HttpServiceBase {
                             else existItem.count += 1;
                         }
                         setTimeout(() => resolve(_cloneDeep(cartData)), 300);
+                    }
+                    break;
+                case '/checkout/sertificate':
+                    {
+                        if (!data.data) {
+                            reject(new Error('data not found'));
+                            return;
+                        }
+                        if (!data.code) {
+                            reject(new Error('code not found'));
+                            return;
+                        }
+
+                        const existSertificate = sertificates.find(s => s.code === data.code);
+                        if (!existSertificate) {
+                            reject(new Error('wrong sertificate code'));
+                            return;
+                        }
+
+                        if (data.data.sertificates.some(s => s.code === data.code)) {
+                            reject(new Error('exists sertificate code'));
+                            return;
+                        }
+
+                        const clone = _cloneDeep(data.data);
+                        const sertificate =
+                            Number(clone.checkout.sertificate.replace(/\D+/g, '')) + existSertificate.amount;
+                        const total = Number(clone.checkout.total.replace(/\D+/g, '')) - existSertificate.amount;
+
+                        clone.sertificates.push(existSertificate);
+                        clone.checkout.sertificate = sertificate > 0 ? `- ${preparePrice(sertificate)} ₽` : '0 ₽';
+                        clone.checkout.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        setTimeout(() => resolve(clone), 300);
+                    }
+                    break;
+                case '/checkout/bonus':
+                    {
+                        if (!data.data) reject(new Error('data not found'));
+                        if (!data.bonus) reject(new Error('bonus not found'));
+                        const clone = _cloneDeep(data.data);
+                        const total = Number(clone.checkout.total.replace(/\D+/g, '')) - Number(data.bonus);
+                        clone.bonuses.push({ id: Math.random(1000000), amount: data.bonus });
+                        clone.checkout.bonusSpent = data.bonus > 0 ? `- ${preparePrice(data.bonus)}` : '0';
+                        clone.checkout.bonusPay = data.bonus > 0 ? `- ${preparePrice(data.bonus)} ₽` : '0 ₽';
+                        clone.checkout.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        setTimeout(() => resolve(clone), 300);
+                    }
+                    break;
+                case '/checkout/promocode':
+                    {
+                        if (!data.data) reject(new Error('data not found'));
+                        if (!data.promocode) reject(new Error('promocode not found'));
+
+                        const existPromocode = promocodes.find(s => s.code === data.promocode);
+                        if (!existPromocode) {
+                            reject(new Error('wrong promocode'));
+                            return;
+                        }
+
+                        if (data.data.promocode === data.promocode) {
+                            reject(new Error('exists promocode'));
+                            return;
+                        }
+
+                        const clone = _cloneDeep(data.data);
+                        const discount = Number(clone.checkout.discount.replace(/\D+/g, '')) + existPromocode.amount;
+                        const total = Number(clone.checkout.total.replace(/\D+/g, '')) - existPromocode.amount;
+
+                        clone.promocode = data.promocode;
+                        clone.checkout.discount = discount > 0 ? `- ${preparePrice(discount)} ₽` : '0 ₽';
+                        clone.checkout.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        setTimeout(() => resolve(clone), 300);
                     }
                     break;
                 default:
@@ -1811,7 +1978,7 @@ export default class MockHttpService extends HttpServiceBase {
                     break;
 
                 case '/checkout/payment-methods':
-                    setTimeout(() => resolve(deliveryMethods), 300);
+                    setTimeout(() => resolve(paymentMethods), 300);
                     break;
 
                 case '/checkout/addresses':

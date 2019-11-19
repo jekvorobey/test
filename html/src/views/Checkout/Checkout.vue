@@ -23,27 +23,62 @@
                                 Внимание: мастер-классы можете оплатить после завершения оплаты продуктов
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Сумма заказа: {{ $t(`cart.checkout.type.${activeTabItem.type}`) }}
-                                <span>{{ activeTabItem.checkout.sum }}</span>
+                                Сумма заказа: {{ $t(`cart.checkout.type.${checkoutType}`) }}
+                                <span>{{ checkout.sum }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Скидка по промокоду <span>{{ activeTabItem.checkout.discount }}</span>
+                                Скидка по промокоду <span>{{ checkout.discount }}</span>
                             </p>
-
+                            <p class="checkout-view__main-panel-line">
+                                Оплата бонусами <span>{{ checkout.bonusPay }}</span>
+                            </p>
+                            <p class="checkout-view__main-panel-line">
+                                Оплата подарочным сертификатом <span>{{ checkout.sertificate }}</span>
+                            </p>
+                            <p class="checkout-view__main-panel-line">
+                                Доставка <span>{{ checkout.delivery }}</span>
+                            </p>
                             <div class="checkout-view__main-panel-total">
                                 <p class="text-bold checkout-view__main-panel-line">
-                                    Итого <span>{{ activeTabItem.checkout.total }}</span>
+                                    Итого <span>{{ checkout.total }}</span>
                                 </p>
                                 <p class="text-grey text-sm checkout-view__main-panel-line">
-                                    Будет начислено <span>{{ activeTabItem.checkout.bonus }}</span>
+                                    Будет начислено <span>{{ checkout.bonusGet }}&nbsp;бонусов</span>
+                                </p>
+                                <p class="text-grey text-sm checkout-view__main-panel-line">
+                                    Будет списано <span>{{ checkout.bonusSpent }}&nbsp;бонусов</span>
                                 </p>
                             </div>
-
-                            <div class="checkout-view__main-panel-promo">
-                                <v-input class="checkout-view__main-panel-promo-input" placeholder="Введите промокод" />
-                                <v-button class="btn--outline checkout-view__main-panel-promo-btn">
+                            <div v-if="!promocode" class="checkout-view__main-panel-promo">
+                                <v-input
+                                    v-model="inputPromocode"
+                                    class="checkout-view__main-panel-promo-input"
+                                    placeholder="Введите промокод"
+                                />
+                                <v-button
+                                    class="btn--outline checkout-view__main-panel-promo-btn"
+                                    @click="ADD_PROMOCODE(inputPromocode)"
+                                >
                                     Применить
                                 </v-button>
+                            </div>
+                            <div
+                                v-else
+                                class="checkout-view__main-panel-promo checkout-view__main-panel-promo--success"
+                            >
+                                <div class="checkout-view__main-panel-promo-icon">
+                                    <v-svg name="check-small" width="16" height="16" />
+                                </div>
+                                <div>
+                                    Промокод&nbsp;{{ promocode }}&nbsp;применён
+                                    <v-link
+                                        tag="button"
+                                        class="checkout-view__main-panel-promo-link"
+                                        @click="DELETE_PROMOCODE(promocode)"
+                                    >
+                                        Отменить
+                                    </v-link>
+                                </div>
                             </div>
                             <v-button class="checkout-view__main-panel-submit">
                                 Перейти к оплате
@@ -52,14 +87,6 @@
                     </template>
                 </v-sticky>
             </div>
-        </section>
-
-        <section class="section">
-            <div class="container"></div>
-        </section>
-
-        <section class="section">
-            <div class="container"></div>
         </section>
     </section>
 </template>
@@ -75,12 +102,19 @@ import ProductCheckoutPanel from '../../components/checkout/ProductCheckoutPanel
 
 import { $store, $logger, $progress } from '../../services/ServiceLocator';
 
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CART_MODULE, CART_DATA } from '../../store/modules/Cart';
 
 import checkoutModule, { NAME as CHECKOUT_MODULE, CHECKOUT_DATA, CHECKOUT_TYPE } from '../../store/modules/Checkout';
-import { FETCH_CHECKOUT_DATA, FETCH_ADDRESSES } from '../../store/modules/Checkout/actions';
+import {
+    FETCH_CHECKOUT_DATA,
+    FETCH_ADDRESSES,
+    ADD_PROMOCODE,
+    DELETE_PROMOCODE,
+} from '../../store/modules/Checkout/actions';
+import { CHECKOUT, PROMO_CODE } from '../../store/modules/Checkout/getters';
 
+import '../../assets/images/sprites/check-small.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import './Checkout.css';
 
@@ -97,23 +131,23 @@ export default {
         ProductCheckoutPanel,
     },
 
+    data() {
+        return {
+            inputPromocode: null,
+        };
+    },
+
     computed: {
         ...mapState(CART_MODULE, [CART_DATA]),
         ...mapState(CHECKOUT_MODULE, [CHECKOUT_DATA, CHECKOUT_TYPE]),
+        ...mapGetters(CHECKOUT_MODULE, [CHECKOUT, PROMO_CODE]),
         ...mapState('route', {
             checkoutType: state => state.params.type,
         }),
-
-        activeTabItem() {
-            const {
-                params: { type },
-            } = this.$route;
-            return this[CART_DATA][type] || {};
-        },
     },
 
     methods: {
-        ...mapActions(CHECKOUT_MODULE, [FETCH_ADDRESSES]),
+        ...mapActions(CHECKOUT_MODULE, [FETCH_ADDRESSES, ADD_PROMOCODE, DELETE_PROMOCODE]),
     },
 
     beforeRouteEnter(to, from, next) {

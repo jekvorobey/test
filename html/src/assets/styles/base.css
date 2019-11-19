@@ -225,9 +225,7 @@ fieldset {
 }
 
 input[type='number'] {
-    width: calc(var(--gs) * 9);
-    height: calc(var(--gs) * 4);
-    padding: 0 8px;
+    padding: 0 calc(var(--gs) * 2);
     border: 1px solid var(--cl-global);
     line-height: calc(var(--gs) * 4);
     text-align: center;

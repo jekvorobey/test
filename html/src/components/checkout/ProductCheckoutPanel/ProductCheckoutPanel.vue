@@ -77,12 +77,13 @@
                 <checkout-address-panel v-else @changeAddress="onChangePickupPoint" />
             </transition>
         </div>
-        <transition name="fade-in">
-            <div v-if="showPanels">
-                <div class="product-checkout-panel__item">
-                    <div class="product-checkout-panel__item-header">
-                        <h2 class="product-checkout-panel__item-header-hl">Дата и время доставки</h2>
-                    </div>
+
+        <div class="product-checkout-panel__item">
+            <div class="product-checkout-panel__item-header">
+                <h2 class="product-checkout-panel__item-header-hl">Дата и время доставки</h2>
+            </div>
+            <transition name="fade-in">
+                <div v-if="showPanels">
                     <ul class="product-checkout-panel__item-list">
                         <checkout-option-card
                             class="product-checkout-panel__item-card"
@@ -116,13 +117,157 @@
                         </ul>
                     </div>
                 </div>
-                <div class="product-checkout-panel__item">
-                    <div class="product-checkout-panel__item-header">
-                        <h2 class="product-checkout-panel__item-header-hl">Способ оплаты</h2>
+                <div v-else>
+                    <p>Выберите пункт выдачи заказов</p>
+                </div>
+            </transition>
+        </div>
+        <div class="product-checkout-panel__item product-checkout-panel__item--payment">
+            <div class="product-checkout-panel__item-header">
+                <h2 class="product-checkout-panel__item-header-hl">Способ оплаты</h2>
+            </div>
+            <ul class="product-checkout-panel__item-list">
+                <checkout-option-card
+                    class="product-checkout-panel__item-card"
+                    v-for="method in paymentMethods"
+                    :key="method.id"
+                    :selected="checkoutData.paymentMethodID === method.id"
+                    readonly
+                    @cardClick="SET_DATA_PROP({ prop: 'paymentMethodID', value: method.id })"
+                >
+                    <p class="text-bold">{{ method.title }}</p>
+                    <br />
+                    <div class="product-checkout-panel__item-payment" v-if="method.type === 'card'">
+                        <v-svg name="visa" width="40" height="24" />
+                        <v-svg name="mastercard" width="40" height="24" />
+                        <v-svg name="mir" width="40" height="24" />
                     </div>
+                </checkout-option-card>
+            </ul>
+
+            <div
+                class="product-checkout-panel__item product-checkout-panel__item--child product-checkout-panel__item--bonus"
+            >
+                <div class="product-checkout-panel__item-header">
+                    <h3 class="product-checkout-panel__item-header-hl">
+                        <v-svg name="bonus" width="24" height="24" />&nbsp;Оплата бонусами
+                    </h3>
+                </div>
+                <div v-if="bonuses.length === 0" class="product-checkout-panel__item-controls">
+                    <v-input
+                        type="number"
+                        min="1"
+                        max="300"
+                        class="product-checkout-panel__item-controls-input"
+                        placeholder="Сколько бонусов использовать?"
+                        v-model="bonusAmount"
+                    />
+                    <v-button
+                        class="btn--outline product-checkout-panel__item-controls-btn"
+                        @click="ADD_BONUS(bonusAmount)"
+                        :disabled="!bonusAmount"
+                    >
+                        Применить
+                    </v-button>
+                    <span>
+                        На вашем счёте:&nbsp;
+                        <strong class="text-bold">{{ 300 }}&nbsp;бонусов</strong>
+                        &nbsp;<span class="text-grey">(1 бонус = 1 рубль)</span>
+                    </span>
+                </div>
+                <div v-else class="product-checkout-panel__item-card" v-for="bonus in bonuses" :key="bonus.id">
+                    <span>
+                        Будет использовано {{ bonus.amount }} бонусных баллов&nbsp;
+                        <span class="text-grey">(1 бонус = 1 рубль)</span>
+                    </span>
+                    <v-link class="product-checkout-panel__item-card-link" tag="button" @click="DELETE_BONUS(bonus)">
+                        Отменить
+                    </v-link>
                 </div>
             </div>
-        </transition>
+            <div
+                class="product-checkout-panel__item product-checkout-panel__item--child product-checkout-panel__item--sertificate"
+            >
+                <div class="product-checkout-panel__item-header">
+                    <h3 class="product-checkout-panel__item-header-hl">
+                        <v-svg name="bonus" width="24" height="24" />&nbsp;Оплата сертификатом
+                    </h3>
+                </div>
+                <ul class="product-checkout-panel__item-list">
+                    <li
+                        class="product-checkout-panel__item-card"
+                        v-for="sertificate in sertificates"
+                        :key="sertificate.code"
+                    >
+                        <span>
+                            Будет оплачено {{ sertificate.amount }} подарочным сертификатом —
+                            {{ sertificate.code }}
+                        </span>
+                        <v-link
+                            class="product-checkout-panel__item-card-link"
+                            tag="button"
+                            @click="DELETE_SERTIFICATE(sertificate)"
+                        >
+                            Отменить
+                        </v-link>
+                    </li>
+                </ul>
+                <div class="product-checkout-panel__item-controls">
+                    <v-input
+                        v-model="sertificateCode"
+                        class="product-checkout-panel__item-controls-input"
+                        placeholder="Введите номер сертификата"
+                    />
+                    <v-button
+                        class="btn--outline product-checkout-panel__item-controls-btn"
+                        @click="ADD_SERTIFICATE(sertificateCode)"
+                        :disabled="!sertificateCode"
+                    >
+                        Активировать
+                    </v-button>
+                </div>
+            </div>
+
+            <div
+                class="product-checkout-panel__item product-checkout-panel__item product-checkout-panel__item--child product-checkout-panel__item--settings"
+            >
+                <div class="product-checkout-panel__item-panel">
+                    <v-check
+                        id="check-promo"
+                        :checked="subscribe"
+                        class="product-checkout-panel__item-panel-check"
+                        name="promo"
+                        @change="SET_DATA_PROP({ prop: 'subscribe', value: Number($event) })"
+                    >
+                        Сообщать мне об акциях, скидках и специальных предложениях
+                    </v-check>
+                    <v-check
+                        id="check-agreement"
+                        :checked="agreement"
+                        class="product-checkout-panel__item-panel-check"
+                        name="agreement"
+                        @change="SET_DATA_PROP({ prop: 'agreement', value: Number($event) })"
+                    >
+                        Я согласен с условиями <router-link to="/">заказа и доставки</router-link>
+                    </v-check>
+                </div>
+                <div class="product-checkout-panel__item-panel">
+                    <v-check
+                        class="product-checkout-panel__item-panel-check"
+                        type="radio"
+                        v-for="confirmation in confirmationTypes"
+                        :key="confirmation.id"
+                        :id="`check-accept-${confirmation.id}`"
+                        :model-value="confirmationTypeID"
+                        :value="confirmation.id"
+                        :name="confirmation.type"
+                        @change="SET_DATA_PROP({ prop: 'confirmationTypeID', value: $event })"
+                    >
+                        {{ confirmation.title }}
+                    </v-check>
+                </div>
+            </div>
+        </div>
 
         <transition name="modal">
             <checkout-pickup-point-modal />
@@ -132,6 +277,10 @@
 <script>
 import VSvg from '../../controls/VSvg/VSvg.vue';
 import VLink from '../../controls/VLink/VLink.vue';
+import VInput from '../../controls/VInput/VInput.vue';
+import VButton from '../../controls/VButton/VButton.vue';
+import VCheck from '../../controls/VCheck/VCheck.vue';
+
 import CheckoutPickupPointModal from '../CheckoutPickupPointModal/CheckoutPickupPointModal.vue';
 import CheckoutOptionCard from '../CheckoutOptionCard/CheckoutOptionCard.vue';
 import CheckoutProductCard from '../CheckoutProductCard/CheckoutProductCard.vue';
@@ -148,6 +297,8 @@ import {
     SELECTED_ADDRESS,
     SELECTED_PICKUP_POINT,
     RECEIVE_METHODS,
+    PAYMENT_METHODS,
+    CONFIRMATION_TYPES,
 } from '../../../store/modules/Checkout';
 
 import {
@@ -158,26 +309,52 @@ import {
     SET_SELECTED_PICKUP_POINT,
     SET_RECEIVE_METHOD,
     SET_SELECTED_ADDRESS,
+    ADD_BONUS,
+    DELETE_BONUS,
+    ADD_SERTIFICATE,
+    DELETE_SERTIFICATE,
 } from '../../../store/modules/Checkout/actions';
+
+import {
+    PACKAGES_BY_TYPE,
+    SERTIFICATES,
+    SUBSCRIBE,
+    AGREEMENT,
+    CONFIRMATION_TYPE_ID,
+    BONUSES,
+} from '../../../store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
 import { deliveryMethods, receiveTypes } from '../../../assets/scripts/constants';
+import '../../../assets/images/sprites/payment/bonus.svg';
+import '../../../assets/images/sprites/payment/visa.svg';
+import '../../../assets/images/sprites/payment/mastercard.svg';
+import '../../../assets/images/sprites/payment/mir.svg';
 import '../../../assets/images/sprites/plus.svg';
 import './ProductCheckoutPanel.css';
-import { PACKAGES_BY_TYPE } from '../../../store/modules/Checkout/getters';
 
 export default {
     name: 'product-checkout-panel',
-
     components: {
         VSvg,
         VLink,
+        VButton,
+        VInput,
+        VCheck,
+
         CheckoutPickupPointModal,
         CheckoutProductCard,
         CheckoutOptionCard,
         CheckoutAddressPanel,
+    },
+
+    data() {
+        return {
+            bonusAmount: null,
+            sertificateCode: null,
+        };
     },
 
     computed: {
@@ -185,6 +362,8 @@ export default {
             CHECKOUT_DATA,
             RECEIVE_METHODS,
             DELIVERY_TYPES,
+            PAYMENT_METHODS,
+            CONFIRMATION_TYPES,
 
             SELECTED_ADDRESS,
             ADDRESSES,
@@ -195,7 +374,14 @@ export default {
             PACKAGES,
         ]),
 
-        ...mapGetters(CHECKOUT_MODULE, [PACKAGES_BY_TYPE]),
+        ...mapGetters(CHECKOUT_MODULE, [
+            PACKAGES_BY_TYPE,
+            SERTIFICATES,
+            BONUSES,
+            SUBSCRIBE,
+            AGREEMENT,
+            CONFIRMATION_TYPE_ID,
+        ]),
 
         showPanels() {
             return this.isDelivery ? this[SELECTED_ADDRESS] : this[SELECTED_PICKUP_POINT];
@@ -216,6 +402,12 @@ export default {
             SET_SELECTED_PICKUP_POINT,
             SET_SELECTED_ADDRESS,
             SET_RECEIVE_METHOD,
+
+            ADD_BONUS,
+            DELETE_BONUS,
+
+            ADD_SERTIFICATE,
+            DELETE_SERTIFICATE,
         ]),
 
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),

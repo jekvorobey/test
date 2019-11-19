@@ -54,6 +54,7 @@
 import inputMixin from './inputMixin';
 import './VInput.css';
 
+const inputTypes = { text: 'text', number: 'number' };
 const validTags = ['input', 'textarea'];
 
 export default {
@@ -62,7 +63,7 @@ export default {
     mixins: [inputMixin],
     props: {
         value: {},
-        type: { type: String, default: 'text' },
+        type: { type: String, default: inputTypes.text },
         tag: {
             type: String,
             default: 'input',
@@ -109,7 +110,15 @@ export default {
                 handlers[k] = e => this.$emit(k, e);
             });
             handlers.input = e => {
-                this.internal_value = e.target.value;
+                if (this.type === inputTypes.number) {
+                    const value = e.target.value;
+                    const max = Number(e.target.max);
+                    const min = Number(e.target.min);
+                    if (value < min) this.internal_value = min;
+                    else if (value > max) this.internal_value = max;
+                    else this.internal_value = value;
+                } else this.internal_value = e.target.value;
+
                 this.$emit('input', this.internal_value);
             };
             return handlers;

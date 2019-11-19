@@ -75,6 +75,32 @@ export function scrollTo(element, to, duration = 1000) {
 }
 
 /**
+ * Random int
+ *
+ * @param min
+ * @param max
+ * @returns {Number}
+ */
+export function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; // Максимум не включается, минимум включается
+}
+
+/**
+ * Random int Inclusive
+ *
+ * @param min
+ * @param max
+ * @returns {Number}
+ */
+export function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min; // Максимум и минимум включаются
+}
+
+/**
  * Make "10000" like "10 000".
  *
  * @param number
@@ -97,7 +123,8 @@ export function preparePrice(number, decimals, dec_point, thousands_sep) {
         number *= -1;
     }
     number = (Number(number) || 0).toFixed(decimals);
-    const i = `${String.parseInt(number)}`;
+    // eslint-disable-next-line
+    const i = `${parseInt(number)}`;
 
     let j = i.length;
     if (j > 3) j %= 3;

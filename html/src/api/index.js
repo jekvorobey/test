@@ -39,11 +39,11 @@ export function getCartData(data) {
 }
 
 export function deleteCartItem(data) {
-    return $http.delete('/cart/delete-item', data);
+    return $http.delete('/cart/item', data);
 }
 
 export function addCartItem(data) {
-    return $http.post('/cart/add-item', data);
+    return $http.post('/cart/item', data);
 }
 
 // checkout
@@ -78,4 +78,28 @@ export function getCheckoutPickupPoints(data) {
 
 export function getCheckoutPackages(data) {
     return $http.get('/checkout/packages', data);
+}
+
+export function addBonus(data) {
+    return $http.post('/checkout/bonus', data);
+}
+
+export function deleteSertificate(data) {
+    return $http.delete('/checkout/sertificate', data);
+}
+
+export function addSertificate(data) {
+    return $http.post('/checkout/sertificate', data);
+}
+
+export function deleteBonus(data) {
+    return $http.delete('/checkout/bonus', data);
+}
+
+export function addPromocode(data) {
+    return $http.post('/checkout/promocode', data);
+}
+
+export function deletePromocode(data) {
+    return $http.delete('/checkout/promocode', data);
 }
