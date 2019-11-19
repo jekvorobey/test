@@ -311,32 +311,34 @@ export default {
             if (changedMarkers) this.$emit('markers-was-change', changedMarkers);
         },
         deleteMarkers(deletedMarkers) {
-            this.myMap.geoObjects.each(collection => {
-                const removedMarkers = [];
-                if (this.useObjectManager) {
-                    collection.remove(deletedMarkers);
-                } else {
-                    const checkMarker = marker => {
-                        const markerId = marker.properties.get('markerId');
-                        if (deletedMarkers.includes(markerId)) removedMarkers.push(marker);
-                    };
-                    let length;
-                    if (collection.each) {
-                        collection.each(checkMarker);
-                        length = collection.getLength();
+            if (this.myMap) {
+                this.myMap.geoObjects.each(collection => {
+                    const removedMarkers = [];
+                    if (this.useObjectManager) {
+                        collection.remove(deletedMarkers);
                     } else {
-                        const markersArray = collection.getGeoObjects();
-                        markersArray.forEach(checkMarker);
-                        length = markersArray.length;
+                        const checkMarker = marker => {
+                            const markerId = marker.properties.get('markerId');
+                            if (deletedMarkers.includes(markerId)) removedMarkers.push(marker);
+                        };
+                        let length;
+                        if (collection.each) {
+                            collection.each(checkMarker);
+                            length = collection.getLength();
+                        } else {
+                            const markersArray = collection.getGeoObjects();
+                            markersArray.forEach(checkMarker);
+                            length = markersArray.length;
+                        }
+                        if (length === 0 || length === removedMarkers.length) {
+                            this.myMap.geoObjects.remove(collection);
+                        } else if (removedMarkers.length) {
+                            removedMarkers.forEach(marker => collection.remove(marker));
+                        }
                     }
-                    if (length === 0 || length === removedMarkers.length) {
-                        this.myMap.geoObjects.remove(collection);
-                    } else if (removedMarkers.length) {
-                        removedMarkers.forEach(marker => collection.remove(marker));
-                    }
-                }
-            });
-            this.$emit('markers-was-delete', deletedMarkers);
+                });
+                this.$emit('markers-was-delete', deletedMarkers);
+            }
         },
         init() {
             // if ymap isn't initialized or have no markers;
@@ -360,7 +362,8 @@ export default {
                 },
                 this.options
             );
-            this.myMap.events.add('click', e => this.$emit('click', e));
+
+            this.myMap.events.add('click', this.onMapClick);
             if (this.zoomControl) {
                 this.myMap.controls.remove('zoomControl');
                 this.myMap.controls.add(new ymaps.control.ZoomControl(this.zoomControl));
@@ -381,6 +384,10 @@ export default {
             if (this.showAllMarkers) this.myMap.setBounds(this.myMap.geoObjects.getBounds());
 
             this.$emit('map-was-initialized', this.myMap);
+        },
+
+        onMapClick(e) {
+            this.$emit('click', e);
         },
     },
     watch: {
@@ -451,12 +458,21 @@ export default {
         if (emitter.ymapReady) {
             ymaps.ready(this.init);
         } else {
-            emitter.$on('scriptIsLoaded', () => {
-                ymaps.ready(this.init);
-            });
+            const ready = () => ymaps.ready(this.init);
+            emitter.$on('scriptIsLoaded', ready);
+            this.$on('hook:beforeDestroy', () => emitter.$off('scriptIsLoaded', ready));
         }
     },
+
     beforeDestroy() {
-        if (this.myMap.geoObjects) this.myMap.geoObjects.removeAll();
+        this.mapObserver.disconnect();
+        this.myMap.geoObjects.removeAll();
+        this.myMap.events.remove('click', this.onMapClick);
+        this.myMap.destroy();
+    },
+
+    destroyed() {
+        this.mapObserver = null;
+        this.myMap = null;
     },
 };
