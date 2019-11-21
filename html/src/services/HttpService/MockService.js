@@ -1705,7 +1705,6 @@ const checkoutData = {
 
     currentBonus: 300,
 
-    bonusApplied: 0,
     subscribe: 0,
     agreement: 0,
     accept: 'sms',
