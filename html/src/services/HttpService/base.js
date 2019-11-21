@@ -1,4 +1,8 @@
 export default class HttpServiceBase {
+    constructor(baseURL) {
+        this.baseURL = baseURL;
+    }
+
     /**
      *
      * @param {String} path

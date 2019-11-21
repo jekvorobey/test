@@ -1,7 +1,27 @@
 <template>
     <div class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }">
         <div class="catalog-product-card__img">
-            <v-picture v-if="image" :image="image" />
+            <v-picture v-if="image" :image="image" alt="">
+                <template v-slot:source="{ image, lazy }">
+                    <source
+                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
+                        type="image/webp"
+                        media="(min-width: 480px)"
+                    />
+                    <source
+                        :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                        type="image/webp"
+                        media="(max-width: 479px)"
+                    />
+                </template>
+                <template v-slot:fallback="{ image, lazy, alt }">
+                    <img
+                        class="blur-up lazyload v-picture__img"
+                        :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
+                        :alt="alt"
+                    />
+                </template>
+            </v-picture>
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-card__controls">
                 <v-button class="btn--outline catalog-product-card__controls-btn" @click="onBuyButtonClick">
@@ -49,6 +69,8 @@ import '../../assets/images/sprites/star-small.svg';
 import '../../assets/images/sprites/wishlist-middle.svg';
 import '../../assets/images/sprites/logo.svg';
 import './CatalogProductCard.css';
+
+import { generatePictureSourcePath } from '../../util/images';
 
 export default {
     name: 'catalog-product-card',
@@ -118,6 +140,10 @@ export default {
     methods: {
         onBuyButtonClick() {
             this.$emit('addItem', { id: this.productId, type: this.type });
+        },
+
+        generateSourcePath(x, y, id, ext) {
+            return generatePictureSourcePath(x, y, id, ext);
         },
     },
 };

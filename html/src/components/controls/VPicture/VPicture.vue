@@ -10,7 +10,7 @@
                 :media="source.media"
             />
         </slot>
-        <slot name="fallback" :image="image" :lazy="lazy">
+        <slot name="fallback" :image="image" :lazy="lazy" :alt="alt">
             <img class="blur-up lazyload v-picture__img" :data-src="image.src" :alt="alt" />
         </slot>
     </picture>
@@ -18,7 +18,7 @@
         <slot name="source" :image="image" :lazy="lazy">
             <source v-for="(source, index) in image.sources" :key="index" :srcset="source.srcset" :type="source.type" />
         </slot>
-        <slot name="fallback" :image="image" :lazy="lazy">
+        <slot name="fallback" :image="image" :lazy="lazy" :alt="alt">
             <img class="v-picture__img" :src="image.src" :alt="alt" />
         </slot>
     </picture>

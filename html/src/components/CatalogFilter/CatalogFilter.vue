@@ -1,5 +1,5 @@
 <template>
-    <div class="catalog-filter">
+    <div v-if="accordionFilters && accordionFilters.length > 0" class="catalog-filter">
         <v-accordion
             class="catalog-filter__filters"
             key-field="id"

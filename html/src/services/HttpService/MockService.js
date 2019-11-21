@@ -1730,7 +1730,7 @@ export default class MockHttpService extends HttpServiceBase {
     delete(path, data) {
         return new Promise((resolve, reject) => {
             switch (path) {
-                case '/cart/item':
+                case '/v1/cart/item':
                     if (data.item) {
                         const {
                             item: { id, type },
@@ -1758,7 +1758,7 @@ export default class MockHttpService extends HttpServiceBase {
                         setTimeout(() => resolve(_cloneDeep(cartData)), 300);
                     }
                     break;
-                case '/checkout/sertificate':
+                case '/v1/checkout/sertificate':
                     {
                         if (!data.data) {
                             reject(new Error('data not found'));
@@ -1794,7 +1794,7 @@ export default class MockHttpService extends HttpServiceBase {
                         setTimeout(() => resolve(clone), 300);
                     }
                     break;
-                case '/checkout/bonus':
+                case '/v1/checkout/bonus':
                     {
                         if (!data.data) reject(new Error('data not found'));
                         if (!data.bonus) reject(new Error('bonus not found'));
@@ -1809,7 +1809,7 @@ export default class MockHttpService extends HttpServiceBase {
                         setTimeout(() => resolve(clone), 300);
                     }
                     break;
-                case '/checkout/promocode':
+                case '/v1/checkout/promocode':
                     {
                         if (!data.data) reject(new Error('data not found'));
                         if (!data.promocode) reject(new Error('promocode not found'));
@@ -1839,7 +1839,7 @@ export default class MockHttpService extends HttpServiceBase {
     post(path, data) {
         return new Promise((resolve, reject) => {
             switch (path) {
-                case '/cart/item':
+                case '/v1/cart/item':
                     {
                         if (!data.item) throw new Error('item not found');
 
@@ -1860,7 +1860,7 @@ export default class MockHttpService extends HttpServiceBase {
                         setTimeout(() => resolve(_cloneDeep(cartData)), 300);
                     }
                     break;
-                case '/checkout/sertificate':
+                case '/v1/checkout/sertificate':
                     {
                         if (!data.data) {
                             reject(new Error('data not found'));
@@ -1893,7 +1893,7 @@ export default class MockHttpService extends HttpServiceBase {
                         setTimeout(() => resolve(clone), 300);
                     }
                     break;
-                case '/checkout/bonus':
+                case '/v1/checkout/bonus':
                     {
                         if (!data.data) reject(new Error('data not found'));
                         if (!data.bonus) reject(new Error('bonus not found'));
@@ -1906,7 +1906,7 @@ export default class MockHttpService extends HttpServiceBase {
                         setTimeout(() => resolve(clone), 300);
                     }
                     break;
-                case '/checkout/promocode':
+                case '/v1/checkout/promocode':
                     {
                         if (!data.data) reject(new Error('data not found'));
                         if (!data.promocode) reject(new Error('promocode not found'));
@@ -1933,7 +1933,7 @@ export default class MockHttpService extends HttpServiceBase {
                     }
                     break;
 
-                case '/checkout/receive-method':
+                case '/v1/checkout/receive-method':
                     {
                         if (!data.method) reject(new Error('receive method not found'));
                         if (!data.data) reject(new Error('checkout data not found'));
@@ -1966,7 +1966,7 @@ export default class MockHttpService extends HttpServiceBase {
     get(path, data = {}) {
         return new Promise((resolve, reject) => {
             switch (path) {
-                case '/search':
+                case '/v1/search':
                     if (data) {
                         setTimeout(
                             () =>
@@ -1982,7 +1982,7 @@ export default class MockHttpService extends HttpServiceBase {
                             categories: [],
                         });
                     break;
-                case '/products':
+                case '/v1/products':
                     switch (data.code) {
                         case 'blesk-dlya-gub-13':
                             setTimeout(() => resolve({ items: products.slice(3, 5), range: 2 }), 300);
@@ -2003,7 +2003,7 @@ export default class MockHttpService extends HttpServiceBase {
                             setTimeout(() => resolve({ items: products, range: 16 }), 300);
                     }
                     break;
-                case '/catalog/items':
+                case '/v1/catalog/items':
                     switch (data.code) {
                         case 'blesk-dlya-gub-13':
                             setTimeout(() => resolve({ items: products.slice(3, 5), range: 2 }), 300);
@@ -2046,62 +2046,62 @@ export default class MockHttpService extends HttpServiceBase {
                     }
                     break;
 
-                case '/categories':
+                case '/v1/categories':
                     setTimeout(() => resolve(productCategories), 300);
                     break;
 
-                case '/banners':
+                case '/v1/banners':
                     setTimeout(() => resolve(banners), 300);
                     break;
 
-                case '/instagram':
+                case '/v1/instagram':
                     setTimeout(() => resolve(instagrams), 300);
                     break;
 
-                case '/brands':
+                case '/v1/brands':
                     setTimeout(() => resolve(brands), 300);
                     break;
 
-                case '/product':
+                case '/v1/product':
                     switch (data.code) {
                         default:
                             setTimeout(() => resolve(productsDetails[0]), 300);
                     }
                     break;
 
-                case '/cart/data':
+                case '/v1/cart/data':
                     setTimeout(() => resolve(_cloneDeep(cartData)), 300);
                     break;
 
-                case '/checkout/data':
+                case '/v1/checkout/data':
                     setTimeout(() => resolve(_cloneDeep(checkoutData)), 300);
                     break;
 
-                case '/checkout/receive-methods':
+                case '/v1/checkout/receive-methods':
                     setTimeout(() => resolve(receiveMethods), 300);
                     break;
 
-                case '/checkout/delivery-types':
+                case '/v1/checkout/delivery-types':
                     setTimeout(() => resolve(mockDeliveryTypes), 300);
                     break;
 
-                case '/checkout/confirmation-types':
+                case '/v1/checkout/confirmation-types':
                     setTimeout(() => resolve(confirmationTypes), 300);
                     break;
 
-                case '/checkout/payment-methods':
+                case '/v1/checkout/payment-methods':
                     setTimeout(() => resolve(paymentMethods), 300);
                     break;
 
-                case '/checkout/addresses':
+                case '/v1/checkout/addresses':
                     setTimeout(() => resolve(addresses), 300);
                     break;
 
-                case '/checkout/pickup-points':
+                case '/v1/checkout/pickup-points':
                     setTimeout(() => resolve(pickupPoints), 300);
                     break;
 
-                case '/checkout/packages':
+                case '/v1/checkout/packages':
                     if (!data.id)
                         reject(new Error(`address id is not defined, path: ${path}, data: ${JSON.stringify(data)}`));
                     if (!data.methodID)

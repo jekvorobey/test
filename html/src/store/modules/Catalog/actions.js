@@ -26,10 +26,11 @@ export default {
             });
     },
 
-    [FETCH_ITEMS]({ commit }, payload) {
+    [FETCH_ITEMS]({ commit, state }, payload) {
         return getCatalogItems(payload)
             .then(data => {
-                commit(SET_ITEMS, data);
+                if (payload.showMore) commit(SET_ITEMS, { items: state.items.concat(data.items), range: data.range });
+                else commit(SET_ITEMS, data);
                 commit(SET_PARAMS, payload);
             })
             .catch(error => {

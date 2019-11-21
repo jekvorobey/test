@@ -126,7 +126,7 @@
                         <v-button
                             v-if="activePage < pagesCount"
                             class="btn--outline catalog-view__main-controls-btn"
-                            :to="{ path: $route.path, query: { page: activePage + 1 } }"
+                            @click="onShowMore"
                         >
                             Показать ещё
                         </v-button>
@@ -249,6 +249,7 @@ export default {
             sortValue: sortOptions[0],
             sortOptions,
             filterModal: false,
+            showMore: false,
         };
     },
 
@@ -325,6 +326,27 @@ export default {
 
             this.$router.replace({ path: concatCatalogRoutePath(code, routeSegments) });
         },
+
+        onShowMore() {
+            this.showMore = true;
+            this.$router.replace({ path: this.$route.path, query: { page: this.activePage + 1 } });
+        },
+
+        async fetchCatalog(to, from, showMore) {
+            try {
+                const {
+                    params: { code },
+                    query: { page = 1 } = { page: 1 },
+                } = to;
+
+                this.$progress.start();
+                await this[FETCH_ITEMS]({ code, page, showMore });
+                this.$progress.finish();
+            } catch (error) {
+                $logger.error('debounce_fetchCatalog', error);
+                this.$progress.fail();
+            }
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -334,6 +356,7 @@ export default {
 
         const {
             params: { code },
+            query: { page = 1 } = { page: 1 },
         } = to;
 
         // регистрируем модуль, если такого нет
@@ -351,7 +374,7 @@ export default {
             // если нет - фетчим
             $progress.start();
             $store
-                .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, { code })
+                .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, { code, page })
                 .then(() => next(vm => $progress.finish()))
                 .catch(error => {
                     $progress.fail();
@@ -367,30 +390,15 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
-
-        this.debounce_fetchCatalog(to, from);
+        if (this.showMore) {
+            this.fetchCatalog(to, from, this.showMore);
+            this.showMore = false;
+        } else this.debounce_fetchCatalog(to, from);
         next();
     },
 
     beforeMount() {
-        this.debounce_fetchCatalog = _debounce(async (to, from) => {
-            try {
-                const { categoryCode } = this.$store.state.catalog;
-                const {
-                    params: { code },
-                } = to;
-
-                this.$progress.start();
-
-                if (categoryCode !== code) await this[FETCH_CATALOG_DATA]({ code });
-                else await this[FETCH_ITEMS]({ code });
-
-                this.$progress.finish();
-            } catch (error) {
-                $logger.error('debounce_fetchCatalog', error);
-                this.$progress.fail();
-            }
-        }, 500);
+        this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
     },
 };
 </script>

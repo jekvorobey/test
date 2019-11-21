@@ -3,7 +3,7 @@ import createApp from './app/app';
 import ServiceLocator from './services/ServiceLocator';
 import BrowserLogger from './services/LogService/BrowserLogger';
 import BrowserCookie from './services/CookieService/BrowserCookie';
-import HttpService from './services/HttpService/MockService';
+import HttpService from './services/HttpService/MockServiceAdapter';
 import events from './services/EventService';
 import progress from './services/ProgressService';
 

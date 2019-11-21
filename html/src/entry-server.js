@@ -3,7 +3,7 @@ import createApp from './app/app';
 import ServiceLocator from './services/ServiceLocator';
 import ExpressLogger from './services/LogService/ExpressLogger';
 import ExpressCookie from './services/CookieService/ExpressCookie';
-import MockHttpService from './services/HttpService/MockService';
+import HttpService from './services/HttpService/MockServiceAdapter';
 import MockProgressService from './services/ProgressService/MockService';
 
 // This exported function will be called by `bundleRenderer`.
@@ -19,7 +19,7 @@ export default context => {
             .register(serviceName.ROUTER, () => router)
             .register(serviceName.STORE, () => store)
             .register(serviceName.PROGRESS, () => new MockProgressService())
-            .register(serviceName.HTTP, () => new MockHttpService())
+            .register(serviceName.HTTP, () => new HttpService())
             .register(serviceName.LOGGER, () => new ExpressLogger())
             .register(serviceName.COOKIE, () => new ExpressCookie(context.req, context.res));
 
