@@ -14,8 +14,12 @@ export const SET_PICKUP_POINTS = 'SET_PICKUP_POINTS';
 export const SET_SELECTED_PICKUP_POINT = 'SET_SELECTED_PICKUP_POINT';
 
 export const SET_RECEIVE_METHOD = 'SET_RECEIVE_METHOD';
-export const SET_DELIVERY_TYPE = 'SET_DELIVERY_TYPE';
+export const SET_SELECTED_PACKAGE = 'SET_SELECTED_PACKAGE';
 export const SET_PACKAGES = 'SET_PACKAGES';
+
+export const SET_PACKAGE_DATE = 'SET_PACKAGE_DATE';
+
+export const ADD_ADDRESS = 'ADD_ADDRESS';
 
 export default {
     [SET_DATA_PROP](state, { prop, value }) {
@@ -66,11 +70,21 @@ export default {
         state.selectedReceiveMethod = payload;
     },
 
-    [SET_DELIVERY_TYPE](state, payload = {}) {
-        state.selectedDeliveryType = payload;
+    [SET_SELECTED_PACKAGE](state, payload = {}) {
+        state.selectedPackage = payload;
     },
 
     [SET_PACKAGES](state, payload = {}) {
         state.packages = payload;
+    },
+
+    [SET_PACKAGE_DATE](state, { id, selectedDate }) {
+        const chunkItem = state.selectedPackage.items.find(i => i.id === id);
+        if (!chunkItem) return;
+        chunkItem.selectedDate = selectedDate;
+    },
+
+    [ADD_ADDRESS](state, payload) {
+        state.addresses.push(payload);
     },
 };

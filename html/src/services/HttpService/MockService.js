@@ -1,7 +1,7 @@
 import _cloneDeep from 'lodash/cloneDeep';
 import HttpServiceBase from './base';
-import { cartItemTypes, receiveTypes, deliveryMethods } from '../../assets/scripts/constants';
-import { preparePrice, getRandomInt } from '../../util/helpers';
+import { cartItemTypes, receiveTypes, deliveryMethods, deliveryTypes } from '../../assets/scripts/constants';
+import { preparePrice, getRandomInt, addDays } from '../../util/helpers';
 
 import product1 from '../../assets/images/mock/product1.png';
 import product2 from '../../assets/images/mock/product2.png';
@@ -1386,27 +1386,23 @@ const paymentMethods = [
         title: 'Банковской картой онлайн',
         type: 'card',
     },
-    {
-        id: 2,
-        title: 'Наличными при получении',
-        type: 'cash',
-    },
+    // {
+    //     id: 2,
+    //     title: 'Наличными при получении',
+    //     type: 'cash',
+    // },
 ];
 
-const deliveryTypes = [
+const mockDeliveryTypes = [
     {
-        id: 1,
+        id: deliveryTypes.CONSOLIDATION,
         title: 'Все товары в один день',
         description: 'Одним отправлением',
-        note: 'Доставим всё во вторник, 2 июля',
-        availiableTime: [3],
     },
     {
-        id: 2,
+        id: deliveryTypes.SPLIT,
         title: 'Поскорее',
         description: 'Несколько отправлений',
-        note: 'Доставим 24 июня, 28 июня, 2 июля ',
-        availiableTime: [1, 2, 3],
     },
 ];
 
@@ -1532,41 +1528,133 @@ const pickupPoints = [
     },
 ];
 
-const packages = [
-    {
-        id: 1,
-        typeID: deliveryTypes[0].id,
-        items: [
-            {
-                id: 1,
-                title: '24 июня, понедельник, с 10:00 до 18:00',
-                products: products.slice(0, 6).map(p => {
-                    return { id: p.id, name: p.name, image: p.image };
-                }),
-            },
-        ],
-    },
-    {
-        id: 2,
-        typeID: deliveryTypes[1].id,
-        items: [
-            {
-                id: 2,
-                title: '24 июня, понедельник, с 10:00 до 18:00',
-                products: products.slice(0, 3).map(p => {
-                    return { id: p.id, name: p.name, image: p.image };
-                }),
-            },
-            {
-                id: 3,
-                title: '28 июня, пятница, с 10:00 до 18:00',
-                products: products.slice(0, 3).map(p => {
-                    return { id: p.id, name: p.name, image: p.image };
-                }),
-            },
-        ],
-    },
-];
+const mockDate = new Date(Date.now());
+mockDate.setHours(0, 0, 0, 0);
+
+const mockPackages = {
+    [deliveryMethods.DELIVERY]: [
+        {
+            id: 1,
+            typeID: deliveryTypes.CONSOLIDATION,
+            methodID: deliveryMethods.DELIVERY,
+
+            items: [
+                {
+                    id: 1,
+                    selectedDate: mockDate,
+                    availableDates: [mockDate, addDays(mockDate, 2), addDays(mockDate, 15)],
+                    items: products.slice(0, 6).map(p => {
+                        return { id: p.id, name: p.name, image: p.image };
+                    }),
+                },
+            ],
+        },
+        {
+            id: 2,
+            typeID: deliveryTypes.SPLIT,
+            methodID: deliveryMethods.DELIVERY,
+
+            items: [
+                {
+                    id: 2,
+                    selectedDate: mockDate,
+                    availableDates: [mockDate, addDays(mockDate, 2), addDays(mockDate, 10)],
+                    items: products.slice(0, 3).map(p => {
+                        return { id: p.id, name: p.name, image: p.image };
+                    }),
+                },
+                {
+                    id: 3,
+                    selectedDate: addDays(mockDate, 4),
+                    availableDates: [addDays(mockDate, 4), addDays(mockDate, 5), addDays(mockDate, 15)],
+                    items: products.slice(0, 3).map(p => {
+                        return { id: p.id, name: p.name, image: p.image };
+                    }),
+                },
+            ],
+        },
+    ],
+    [deliveryMethods.EXPRESS]: [
+        {
+            id: 1,
+            typeID: deliveryTypes.CONSOLIDATION,
+            methodID: deliveryMethods.EXPRESS,
+
+            items: [
+                {
+                    id: 1,
+                    selectedDate: mockDate,
+                    availableDates: [mockDate, addDays(mockDate, 2), addDays(mockDate, 5)],
+                    items: products.slice(0, 6).map(p => {
+                        return { id: p.id, name: p.name, image: p.image };
+                    }),
+                },
+            ],
+        },
+    ],
+    [deliveryMethods.OUTPOST_PICKUP]: [
+        {
+            id: 1,
+            typeID: deliveryTypes.CONSOLIDATION,
+            methodID: deliveryMethods.OUTPOST_PICKUP,
+
+            items: [
+                {
+                    id: 1,
+                    selectedDate: addDays(mockDate, 2),
+                    availableDates: [addDays(mockDate, 2), addDays(mockDate, 5), addDays(mockDate, 7)],
+                    items: products.slice(0, 6).map(p => {
+                        return { id: p.id, name: p.name, image: p.image };
+                    }),
+                },
+            ],
+        },
+        {
+            id: 2,
+            typeID: deliveryTypes.SPLIT,
+            methodID: deliveryMethods.OUTPOST_PICKUP,
+
+            items: [
+                {
+                    id: 2,
+                    selectedDate: addDays(mockDate, 2),
+                    availableDates: [addDays(mockDate, 2), addDays(mockDate, 3), addDays(mockDate, 9)],
+                    items: products.slice(0, 3).map(p => {
+                        return { id: p.id, name: p.name, image: p.image };
+                    }),
+                },
+                {
+                    id: 3,
+                    selectedDate: addDays(mockDate, 5),
+                    availableDates: [addDays(mockDate, 5), addDays(mockDate, 7), addDays(mockDate, 9)],
+
+                    items: products.slice(0, 3).map(p => {
+                        return { id: p.id, name: p.name, image: p.image };
+                    }),
+                },
+            ],
+        },
+    ],
+    [deliveryMethods.POSTOMAT_PICKUP]: [
+        {
+            id: 1,
+            typeID: deliveryTypes.CONSOLIDATION,
+            methodID: deliveryMethods.POSTOMAT_PICKUP,
+
+            items: [
+                {
+                    id: 1,
+                    selectedDate: addDays(mockDate, 4),
+                    availableDates: [addDays(mockDate, 4), addDays(mockDate, 6), addDays(mockDate, 9)],
+
+                    items: products.slice(0, 6).map(p => {
+                        return { id: p.id, name: p.name, image: p.image };
+                    }),
+                },
+            ],
+        },
+    ],
+};
 
 const recipients = [
     {
@@ -1606,13 +1694,13 @@ const promocodes = [
 
 const checkoutData = {
     recipientID: recipients[0].id,
-    receiveMethodID: receiveMethods[0].id,
-    deliveryTypeID: deliveryTypes[0].id,
-    deliveryMethodID: receiveMethods[0].methods[0].id,
+    receiveMethodID: null,
+    deliveryMethodID: null,
+    deliveryTypeID: null,
     paymentMethodID: paymentMethods[0].id,
     confirmationTypeID: confirmationTypes[0].id,
 
-    address: addresses[0],
+    address: null,
     pickupPoint: null,
 
     currentBonus: 300,
@@ -1845,6 +1933,25 @@ export default class MockHttpService extends HttpServiceBase {
                         setTimeout(() => resolve(clone), 300);
                     }
                     break;
+
+                case '/checkout/receive-method':
+                    {
+                        if (!data.method) reject(new Error('receive method not found'));
+                        if (!data.data) reject(new Error('checkout data not found'));
+
+                        const clone = _cloneDeep(data.data);
+                        const price = Number(data.method.price.replace(/\D+/g, ''));
+                        const delivery = Number(clone.checkout.delivery.replace(/\D+/g, ''));
+                        let total = Number(clone.checkout.total.replace(/\D+/g, ''));
+                        if (!Number.isNaN(delivery)) total += delivery;
+                        if (!Number.isNaN(price)) total -= price;
+
+                        clone.checkout.delivery =
+                            !Number.isNaN(price) && price > 0 ? `- ${preparePrice(price)} ₽` : 'Бесплатно';
+                        clone.checkout.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        setTimeout(() => resolve(clone), 300);
+                    }
+                    break;
                 default:
                     reject();
             }
@@ -1976,7 +2083,7 @@ export default class MockHttpService extends HttpServiceBase {
                     break;
 
                 case '/checkout/delivery-types':
-                    setTimeout(() => resolve(deliveryTypes), 300);
+                    setTimeout(() => resolve(mockDeliveryTypes), 300);
                     break;
 
                 case '/checkout/confirmation-types':
@@ -1996,7 +2103,27 @@ export default class MockHttpService extends HttpServiceBase {
                     break;
 
                 case '/checkout/packages':
-                    setTimeout(() => resolve(packages), 300);
+                    if (!data.id)
+                        reject(new Error(`address id is not defined, path: ${path}, data: ${JSON.stringify(data)}`));
+                    if (!data.methodID)
+                        reject(new Error(`methodID is not defined, path: ${path}, data: ${JSON.stringify(data)}`));
+
+                    switch (data.methodID) {
+                        case deliveryMethods.DELIVERY:
+                            setTimeout(() => resolve(_cloneDeep(mockPackages[data.methodID])), 300);
+                            break;
+                        case deliveryMethods.EXPRESS:
+                            setTimeout(() => resolve(_cloneDeep(mockPackages[data.methodID])), 300);
+                            break;
+                        case deliveryMethods.OUTPOST_PICKUP:
+                            setTimeout(() => resolve(_cloneDeep(mockPackages[data.methodID])), 300);
+                            break;
+                        case deliveryMethods.POSTOMAT_PICKUP:
+                            setTimeout(() => resolve(_cloneDeep(mockPackages[data.methodID])), 300);
+                            break;
+                        default:
+                            reject(new Error(`Unknown methodID, path: ${path}, data: ${JSON.stringify(data)}`));
+                    }
                     break;
                 default:
                     reject(new Error(`Unknown method, path: ${path}, data: ${JSON.stringify(data)}`));

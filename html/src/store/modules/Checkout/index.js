@@ -20,6 +20,7 @@ export const SELECTED_DELIVERY_TYPE = 'selectedDeliveryType';
 export const SELECTED_RECEIVE_METHOD = 'selectedReceiveMethod';
 
 export const PACKAGES = 'packages';
+export const SELECTED_PACKAGE = 'selectedPackage';
 
 export default {
     name: NAME,
@@ -39,6 +40,7 @@ export default {
         [SELECTED_DELIVERY_TYPE]: null,
         [SELECTED_ADDRESS]: null,
         [SELECTED_PICKUP_POINT]: null,
+        [SELECTED_PACKAGE]: null,
     },
     actions,
     mutations,

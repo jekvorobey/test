@@ -1,0 +1,29 @@
+.checkout-date-modal {
+    .modal-container {
+        width: 440px;
+    }
+
+    .modal-body {
+        padding: calc(var(--gs) * 3);
+    }
+
+    &__datepicker {
+        padding: 0;
+        padding-bottom: calc(var(--gs) * 3);
+
+        .v-datepicker__input,
+        .v-datepicker__error,
+        .v-datepicker__label,
+        .v-datepicker__icon {
+            display: none;
+        }
+
+        .flatpickr-calendar {
+            border: none;
+        }
+    }
+
+    &__submit {
+        text-align: center;
+    }
+}

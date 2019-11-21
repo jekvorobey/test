@@ -1,5 +1,4 @@
-export const PACKAGES_BY_TYPE = 'packagesByType';
-export const ADDRESSES_BY_METHOD = 'addressesByMethod';
+export const DELIVERY_TYPES_MAP = 'deliveryTypesMap';
 export const SERTIFICATES = 'sertificates';
 export const BONUSES = 'bonuses';
 export const CONFIRMATION_TYPE_ID = 'confirmationTypeID';
@@ -9,6 +8,12 @@ export const CHECKOUT = 'checkout';
 export const PROMO_CODE = 'promocode';
 
 export default {
+    [DELIVERY_TYPES_MAP]: state =>
+        state.deliveryTypes.reduce((accum, current) => {
+            accum[current.id] = current;
+            return accum;
+        }, {}),
+
     [SERTIFICATES]: state => state.checkoutData[SERTIFICATES] || [],
 
     [BONUSES]: state => state.checkoutData[BONUSES] || [],
@@ -22,8 +27,4 @@ export default {
     [SUBSCRIBE]: state => state.checkoutData[SUBSCRIBE],
 
     [AGREEMENT]: state => state.checkoutData[AGREEMENT],
-
-    [ADDRESSES_BY_METHOD]: state => state.addresses.find(p => p.methodID === state.checkoutData.deliveryMethodID) || {},
-
-    [PACKAGES_BY_TYPE]: state => state.packages.find(p => p.typeID === state.checkoutData.deliveryTypeID) || {},
 };

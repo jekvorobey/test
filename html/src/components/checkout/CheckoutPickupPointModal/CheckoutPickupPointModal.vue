@@ -60,7 +60,6 @@ import {
     PICKUP_POINTS,
     RECEIVE_METHODS,
 } from '../../../store/modules/Checkout';
-import { ADDRESSES_BY_METHOD } from '../../../store/modules/Checkout/getters';
 import { FETCH_PICKUP_POINTS, SET_SELECTED_PICKUP_POINT } from '../../../store/modules/Checkout/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';

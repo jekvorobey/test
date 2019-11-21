@@ -92,6 +92,14 @@ export default {
             type: String,
             default: 'ru',
         },
+
+        maxDate: {
+            type: [String, Date],
+        },
+
+        minDate: {
+            type: [String, Date],
+        },
     },
     data() {
         return {
@@ -107,8 +115,8 @@ export default {
             this.internal_value = value;
         },
 
-        internal_value(value) {
-            this.$emit('input', value);
+        internal_value(value, oldValue) {
+            if (value !== oldValue) this.$emit('input', value);
         },
 
         mode(value) {
@@ -126,6 +134,14 @@ export default {
 
         enable(value) {
             this.engine.set('enable', value);
+        },
+
+        minDate(value) {
+            this.engine.set('minDate', value);
+        },
+
+        maxDate(value) {
+            this.engine.set('maxDate', value);
         },
     },
     computed: {
@@ -154,6 +170,8 @@ export default {
                 allowInput: this.allowInput,
                 inline: this.inline,
                 locale: this.locale,
+                minDate: this.minDate,
+                maxDate: this.maxDate,
                 nextArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
                 prevArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
                 onChange(selectedDates, dateStr, instance) {

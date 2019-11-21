@@ -12,6 +12,8 @@
 
         &--child &-header {
             padding-left: 0;
+            padding-bottom: var(--gs);
+
             &::before {
                 display: none;
             }
@@ -19,6 +21,14 @@
             &-hl {
                 text-transform: none;
             }
+        }
+
+        &--delivery &-empty {
+            padding: calc(var(--gs) * 3) 0;
+        }
+
+        &--delivery &--child {
+            margin: calc(var(--gs) * 3) 0;
         }
 
         &--settings {

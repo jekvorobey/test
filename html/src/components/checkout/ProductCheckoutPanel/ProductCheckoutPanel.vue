@@ -78,47 +78,65 @@
             </transition>
         </div>
 
-        <div class="product-checkout-panel__item">
+        <div class="product-checkout-panel__item product-checkout-panel__item--delivery">
             <div class="product-checkout-panel__item-header">
                 <h2 class="product-checkout-panel__item-header-hl">Дата и время доставки</h2>
             </div>
-            <transition name="fade-in">
-                <div v-if="showPanels">
-                    <ul class="product-checkout-panel__item-list">
+            <transition name="fade-in" mode="out-in">
+                <div key="not-empty" v-if="showPanels">
+                    <ul class="product-checkout-panel__item-list" v-if="packages && packages.length > 1">
                         <checkout-option-card
                             class="product-checkout-panel__item-card"
-                            v-for="type in deliveryTypes"
-                            :key="type.id"
-                            :selected="checkoutData.deliveryTypeID === type.id"
+                            v-for="packageItem in packages"
+                            :key="`package-item-${packageItem.typeID}-${packageItem.methodID}`"
+                            :selected="selectedPackage && selectedPackage.id === packageItem.id"
                             readonly
-                            @cardClick="SET_DATA_PROP({ prop: 'deliveryTypeID', value: type.id })"
+                            @cardClick="SET_SELECTED_PACKAGE(packageItem)"
                         >
-                            <p class="text-bold">{{ type.title }}</p>
-                            <p>{{ type.description }}</p>
-                            <p class="text-grey text-sm">{{ type.note }}</p>
+                            <p class="text-bold">{{ deliveryTypesMap[packageItem.typeID].title }}</p>
+                            <p>{{ deliveryTypesMap[packageItem.typeID].description }}</p>
+                            <p class="text-grey text-sm">{{ generatePackageNote(packageItem) }}</p>
                         </checkout-option-card>
                     </ul>
-                    <div
-                        class="product-checkout-panel__item product-checkout-panel__item--child"
-                        v-for="packageItem in packagesByType.items"
-                        :key="packageItem.id"
-                    >
-                        <div class="product-checkout-panel__item-header">
-                            <h3 class="product-checkout-panel__item-header-hl">{{ packageItem.title }}</h3>
-                        </div>
-                        <ul class="product-checkout-panel__item-list">
-                            <checkout-product-card
-                                class="product-checkout-panel__item-card"
-                                v-for="item in packageItem.products"
-                                :key="item.id"
-                                :name="item.name"
-                                :image="item.image"
-                            />
-                        </ul>
-                    </div>
+                    <transition-group tag="ul" name="fade-in">
+                        <li
+                            class="product-checkout-panel__item product-checkout-panel__item--child"
+                            v-for="chunkItem in selectedPackage.items"
+                            :key="chunkItem.id"
+                        >
+                            <div class="product-checkout-panel__item-header">
+                                <h3 class="product-checkout-panel__item-header-hl">
+                                    {{ generateChunkNote(chunkItem) }}
+                                </h3>
+                                <v-link
+                                    v-if="chunkItem.availableDates && chunkItem.availableDates.length > 1"
+                                    class="product-checkout-panel__item-header-link"
+                                    tag="button"
+                                    @click="
+                                        onChangeDate({
+                                            id: chunkItem.id,
+                                            selectedDate: [chunkItem.selectedDate],
+                                            availableDates: [...chunkItem.availableDates],
+                                        })
+                                    "
+                                >
+                                    <v-svg name="edit" width="16" height="16" />&nbsp;Изменить дату
+                                </v-link>
+                            </div>
+                            <ul class="product-checkout-panel__item-list">
+                                <checkout-product-card
+                                    class="product-checkout-panel__item-card"
+                                    v-for="item in chunkItem.items"
+                                    :key="item.id"
+                                    :name="item.name"
+                                    :image="item.image"
+                                />
+                            </ul>
+                        </li>
+                    </transition-group>
                 </div>
-                <div v-else>
-                    <p>Выберите пункт выдачи заказов</p>
+                <div key="empty" v-else class="product-checkout-panel__item-empty">
+                    <h3 class="text-bold">Выберите пункт выдачи заказов</h3>
                 </div>
             </transition>
         </div>
@@ -272,6 +290,10 @@
         <transition name="modal">
             <checkout-pickup-point-modal />
         </transition>
+
+        <transition name="modal">
+            <checkout-date-modal @changed="onDateChanged" />
+        </transition>
     </div>
 </template>
 <script>
@@ -281,6 +303,7 @@ import VInput from '../../controls/VInput/VInput.vue';
 import VButton from '../../controls/VButton/VButton.vue';
 import VCheck from '../../controls/VCheck/VCheck.vue';
 
+import CheckoutDateModal from '../CheckoutDateModal/CheckoutDateModal.vue';
 import CheckoutPickupPointModal from '../CheckoutPickupPointModal/CheckoutPickupPointModal.vue';
 import CheckoutOptionCard from '../CheckoutOptionCard/CheckoutOptionCard.vue';
 import CheckoutProductCard from '../CheckoutProductCard/CheckoutProductCard.vue';
@@ -299,40 +322,42 @@ import {
     RECEIVE_METHODS,
     PAYMENT_METHODS,
     CONFIRMATION_TYPES,
+    SELECTED_PACKAGE,
 } from '../../../store/modules/Checkout';
 
 import {
     SET_DATA_PROP,
-    FETCH_ADDRESSES,
-    FETCH_PACKAGES,
-    FETCH_PICKUP_POINTS,
-    SET_SELECTED_PICKUP_POINT,
     SET_RECEIVE_METHOD,
+    SET_SELECTED_PICKUP_POINT,
     SET_SELECTED_ADDRESS,
+    SET_SELECTED_PACKAGE,
     ADD_BONUS,
     DELETE_BONUS,
     ADD_SERTIFICATE,
     DELETE_SERTIFICATE,
+    CHANGE_PACKAGE_DATE,
 } from '../../../store/modules/Checkout/actions';
 
 import {
-    PACKAGES_BY_TYPE,
     SERTIFICATES,
     SUBSCRIBE,
     AGREEMENT,
-    CONFIRMATION_TYPE_ID,
     BONUSES,
+    CONFIRMATION_TYPE_ID,
+    DELIVERY_TYPES_MAP,
 } from '../../../store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
-import { deliveryMethods, receiveTypes } from '../../../assets/scripts/constants';
+import { deliveryMethods, receiveTypes, deliveryTypes } from '../../../assets/scripts/constants';
+
 import '../../../assets/images/sprites/payment/bonus.svg';
 import '../../../assets/images/sprites/payment/visa.svg';
 import '../../../assets/images/sprites/payment/mastercard.svg';
 import '../../../assets/images/sprites/payment/mir.svg';
 import '../../../assets/images/sprites/plus.svg';
+import '../../../assets/images/sprites/edit.svg';
 import './ProductCheckoutPanel.css';
 
 export default {
@@ -344,6 +369,7 @@ export default {
         VInput,
         VCheck,
 
+        CheckoutDateModal,
         CheckoutPickupPointModal,
         CheckoutProductCard,
         CheckoutOptionCard,
@@ -358,6 +384,7 @@ export default {
     },
 
     computed: {
+        ...mapState(['locale']),
         ...mapState(CHECKOUT_MODULE, [
             CHECKOUT_DATA,
             RECEIVE_METHODS,
@@ -371,16 +398,17 @@ export default {
             SELECTED_PICKUP_POINT,
             PICKUP_POINTS,
 
+            SELECTED_PACKAGE,
             PACKAGES,
         ]),
 
         ...mapGetters(CHECKOUT_MODULE, [
-            PACKAGES_BY_TYPE,
             SERTIFICATES,
             BONUSES,
             SUBSCRIBE,
             AGREEMENT,
             CONFIRMATION_TYPE_ID,
+            DELIVERY_TYPES_MAP,
         ]),
 
         showPanels() {
@@ -395,22 +423,53 @@ export default {
 
     methods: {
         ...mapActions(CHECKOUT_MODULE, [
-            FETCH_ADDRESSES,
-            FETCH_PACKAGES,
-            FETCH_PICKUP_POINTS,
             SET_DATA_PROP,
             SET_SELECTED_PICKUP_POINT,
             SET_SELECTED_ADDRESS,
             SET_RECEIVE_METHOD,
+            SET_SELECTED_PACKAGE,
 
             ADD_BONUS,
             DELETE_BONUS,
 
             ADD_SERTIFICATE,
             DELETE_SERTIFICATE,
+
+            CHANGE_PACKAGE_DATE,
         ]),
 
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        generateChunkNote(chunkItem) {
+            const options = { month: 'long', day: 'numeric' };
+            const date = new Date(chunkItem.selectedDate);
+            return date.toLocaleDateString(this.locale, options);
+        },
+
+        generatePackageNote(packageItem) {
+            const options = { month: 'long', day: 'numeric' };
+
+            if (packageItem.typeID === deliveryTypes.CONSOLIDATION) {
+                const date = new Date(packageItem.items[0].selectedDate);
+                return `Доставим всё ${date.toLocaleDateString(this.locale, options)}`;
+            }
+
+            const note = 'Доставим';
+            const uniqueDates = Array.from(new Set(packageItem.items.map(i => i.selectedDate)));
+            return uniqueDates.reduce(
+                (accum, current, index) =>
+                    accum + `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(this.locale, options)}`,
+                'Доставим'
+            );
+        },
+
+        onDateChanged(state) {
+            this[CHANGE_PACKAGE_DATE]({ id: state.id, selectedDate: state.selectedDate[0] });
+        },
+
+        onChangeDate(state) {
+            this[CHANGE_MODAL_STATE]({ name: 'checkout-date-modal', open: true, state });
+        },
 
         onChangePickupPoint() {
             this[CHANGE_MODAL_STATE]({ name: 'checkout-pickup-point-modal', open: true });

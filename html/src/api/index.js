@@ -103,3 +103,7 @@ export function addPromocode(data) {
 export function deletePromocode(data) {
     return $http.delete('/checkout/promocode', data);
 }
+
+export function changeReceiveMethod(data) {
+    return $http.post('/checkout/receive-method', data);
+}

@@ -157,4 +157,26 @@ export function countCheckdigit(str, coefficients) {
     return (checksum % 11) % 10;
 }
 
-export default { countCheckdigit, preparePrice, scrollTo, rawPhone, isTouch, dateToString };
+/**
+ * Add
+ *
+ * @param date
+ * @param days
+ * @returns {Number}
+ */
+export function addDays(date, days) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
+
+export default {
+    countCheckdigit,
+    preparePrice,
+    scrollTo,
+    rawPhone,
+    isTouch,
+    dateToString,
+    getRandomInt,
+    getRandomIntInclusive,
+};

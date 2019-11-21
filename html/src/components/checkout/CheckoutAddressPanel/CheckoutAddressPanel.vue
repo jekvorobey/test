@@ -59,7 +59,6 @@ import VButton from '../../controls/VButton/VButton.vue';
 
 import { mapGetters, mapState, mapActions } from 'vuex';
 import { NAME as CHECKOUT_MODULE, CHECKOUT_DATA, SELECTED_PICKUP_POINT } from '../../../store/modules/Checkout';
-import { ADDRESSES_BY_METHOD } from '../../../store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
