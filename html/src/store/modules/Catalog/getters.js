@@ -8,7 +8,7 @@ export const ACTIVE_PAGE = 'activePage';
 export const PAGES_COUNT = 'pagesCount';
 export const ACTIVE_CATEGORIES = 'activeCategories';
 
-const pageSize = 9;
+const pageSize = 12;
 
 export default {
     [ACTIVE_CATEGORIES](

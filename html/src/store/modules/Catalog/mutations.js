@@ -2,8 +2,13 @@ export const SET_ITEMS = 'SET_ITEMS';
 export const SET_PARAMS = 'SET_PARAMS';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_BANNER = 'SET_BANNER';
+export const SET_LOAD = 'SET_LOAD';
 
 export default {
+    [SET_LOAD](state, payload) {
+        state.load = payload;
+    },
+
     [SET_BANNER](state, payload = {}) {
         state.banner = payload;
     },

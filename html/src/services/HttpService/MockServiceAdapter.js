@@ -3,7 +3,7 @@ import MockHttpService from './MockService';
 import HttpService from './index';
 
 export default class MockServiceAdapter extends HttpServiceBase {
-    constructor(baseURL = 'https://master-api.ibt-mas.greensight.ru') {
+    constructor(baseURL = 'https://master-front.ibt-mas.greensight.ru') {
         super(baseURL);
         this.httpServiceInstance = new HttpService(baseURL);
         this.mockServiceInstance = new MockHttpService(baseURL);

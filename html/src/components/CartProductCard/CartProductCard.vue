@@ -1,7 +1,27 @@
 <template>
     <li class="cart-product-card" :class="{ 'cart-product-card--small': isSmall }">
         <router-link class="cart-product-card__img" :to="href">
-            <v-picture v-if="image" :image="image" lazy />
+            <v-picture v-if="image" :image="image" alt="">
+                <template v-slot:source="{ image, lazy }">
+                    <source
+                        :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                        type="image/webp"
+                        media="(min-width: 480px)"
+                    />
+                    <source
+                        :data-srcset="generateSourcePath(72, 72, image.id, 'webp')"
+                        type="image/webp"
+                        media="(max-width: 479px)"
+                    />
+                </template>
+                <template v-slot:fallback="{ image, lazy, alt }">
+                    <img
+                        class="blur-up lazyload v-picture__img"
+                        :data-src="generateSourcePath(200, 200, image.id, image.sourceExt)"
+                        :alt="alt"
+                    />
+                </template>
+            </v-picture>
             <v-svg v-else id="cart-product-card-empty" name="logo" width="48" height="48" />
         </router-link>
         <div class="cart-product-card__body">
@@ -20,8 +40,9 @@
                 </div>
             </div>
             <div class="text-grey text-sm cart-product-card__body-info">
-                Ближайшая доставка 24 июня<br />
-                Ближайший самовывоз c 26 июня
+                <!-- неизвестно, будет ли это -->
+                <!-- Ближайшая доставка 24 июня<br />
+                Ближайший самовывоз c 26 июня -->
             </div>
             <div class="text-grey cart-product-card__body-bonus">+ 80 бонусов</div>
             <div class="cart-product-card__body-controls">
@@ -44,6 +65,7 @@ import VLink from '../controls/VLink/VLink.vue';
 import VPicture from '../controls/VPicture/VPicture.vue';
 import VCounter from '../controls/VCounter/VCounter.vue';
 
+import { generatePictureSourcePath } from '../../util/images';
 import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/cross-small.svg';
 import '../../assets/images/sprites/wishlist-middle.svg';
@@ -120,6 +142,10 @@ export default {
 
         onDeleteClick() {
             this.$emit('deleteItem', { id: this.productId, type: this.type });
+        },
+
+        generateSourcePath(x, y, id, ext) {
+            return generatePictureSourcePath(x, y, id, ext);
         },
     },
 

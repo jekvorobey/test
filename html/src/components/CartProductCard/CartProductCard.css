@@ -39,8 +39,10 @@
         display: flex;
         flex-wrap: wrap;
         flex: 1;
+        padding: calc(var(--gs) * 2) 0;
 
         @media (--tablet) {
+            padding: 0;
             padding-right: calc(var(--gs) * 2);
         }
 

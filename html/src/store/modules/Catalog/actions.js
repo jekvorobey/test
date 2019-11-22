@@ -1,11 +1,13 @@
 import { $logger } from '../../../services/ServiceLocator';
 import { getCatalogItems, getCategories, getBanners } from '../../../api';
-import { SET_ITEMS, SET_CATEGORIES, SET_PARAMS, SET_BANNER } from './mutations';
+import { SET_ITEMS, SET_CATEGORIES, SET_PARAMS, SET_BANNER, SET_LOAD as M_SET_LOAD } from './mutations';
 
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const FETCH_BANNER = 'FETCH_BANNER';
 export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 export const FETCH_CATALOG_DATA = 'FETCH_CATALOG_DATA';
+
+export const SET_LOAD = 'SET_LOAD';
 
 export default {
     [FETCH_BANNER]({ commit }) {
@@ -39,8 +41,12 @@ export default {
             });
     },
 
-    async [FETCH_CATALOG_DATA]({ dispatch }, payload) {
+    [SET_LOAD]({ commit }, payload = false) {
+        commit(M_SET_LOAD, payload);
+    },
+
+    async [FETCH_CATALOG_DATA]({ dispatch, commit }, payload) {
         await Promise.all([dispatch(FETCH_CATEGORIES), dispatch(FETCH_BANNER)]);
-        return dispatch(FETCH_ITEMS, payload);
+        return dispatch(FETCH_ITEMS, payload).then(() => commit(SET_LOAD, true));
     },
 };

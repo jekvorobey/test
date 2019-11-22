@@ -55,8 +55,11 @@
                         <v-select
                             class="catalog-view__main-header-sort"
                             v-model="sortValue"
+                            label="title"
+                            track-by="id"
                             :options="sortOptions"
                             :searchable="false"
+                            :allow-empty="false"
                         />
 
                         <v-button class="catalog-view__main-header-btn" @click="filterModal = !filterModal">
@@ -130,11 +133,7 @@
                         >
                             Показать ещё
                         </v-button>
-                        <v-pagination
-                            :value="activePage"
-                            :page-count="pagesCount"
-                            @input="$router.push({ path: $route.path, query: { page: $event } })"
-                        />
+                        <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
                     </div>
                 </div>
             </div>
@@ -217,6 +216,7 @@ import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/filter.svg';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
+import { SET_LOAD } from '../../store/modules/Catalog/mutations';
 
 const itemAnimationDelayDelta = 100;
 let counter = 0;
@@ -239,11 +239,12 @@ export default {
 
     data() {
         const sortOptions = [
-            'Сначала подороже',
-            'Сначала подешевле',
-            'Популярное Новинки',
-            'По размеру скидки',
-            'С высоким рейтингом',
+            { id: 1, title: 'Сначала подороже', field: 'price', direction: 'desc' },
+            { id: 2, title: 'Сначала подешевле', field: 'price', direction: 'asc' },
+            // { id: 3, title: 'Популярное', field: 'price', direction: 'desc' },
+            // { id: 4, title: 'Новинки', field: '', direction: '' },
+            // { id: 5, title: 'По размеру скидки', field: '', direction: '' },
+            // { id: 6, title: 'С высоким рейтингом', field: '', direction: '' },
         ];
         return {
             sortValue: sortOptions[0],
@@ -272,9 +273,26 @@ export default {
         },
     },
 
+    watch: {
+        sortValue(value, oldValue) {
+            if (value !== oldValue) {
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: { orderField: value.field, orderDirection: value.direction },
+                });
+                console.log('sortValue');
+            }
+        },
+    },
+
     methods: {
         ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_CATALOG_DATA]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+
+        setSortValue(field, direction) {
+            this.sortValue =
+                this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
+        },
 
         onBeforeEnterItems(el) {
             el.dataset.index = counter;
@@ -329,18 +347,32 @@ export default {
 
         onShowMore() {
             this.showMore = true;
-            this.$router.replace({ path: this.$route.path, query: { page: this.activePage + 1 } });
+            this.$router.replace({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: this.activePage + 1 },
+            });
+        },
+
+        onPageChanged(page) {
+            this.showMore = false;
+            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
         },
 
         async fetchCatalog(to, from, showMore) {
             try {
                 const {
                     params: { code },
-                    query: { page = 1 } = { page: 1 },
+                    query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
+                        page: 1,
+                        orderField: 'price',
+                        orderDirection: 'desc',
+                    },
                 } = to;
 
+                const filter = code && { category: code };
                 this.$progress.start();
-                await this[FETCH_ITEMS]({ code, page, showMore });
+                await this[FETCH_ITEMS]({ filter, orderField, orderDirection, page, showMore });
+                this.setSortValue(orderField, orderDirection);
                 this.$progress.finish();
             } catch (error) {
                 $logger.error('debounce_fetchCatalog', error);
@@ -356,7 +388,11 @@ export default {
 
         const {
             params: { code },
-            query: { page = 1 } = { page: 1 },
+            query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
+                page: 1,
+                orderField: 'price',
+                orderDirection: 'desc',
+            },
         } = to;
 
         // регистрируем модуль, если такого нет
@@ -366,16 +402,23 @@ export default {
                 preserveState: !!$store.state.catalog,
             });
 
-        const { categoryCode } = $store.state.catalog;
+        const { categoryCode, load } = $store.state.catalog;
 
         // если все загружено, пропускаем
-        if (categoryCode === code) next();
+        if (load && categoryCode === code) next(vm => $store(`${SET_LOAD}/${FETCH_CATALOG_DATA}`, false));
         else {
             // если нет - фетчим
+            const filter = code && { category: code };
+
             $progress.start();
             $store
-                .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, { code, page })
-                .then(() => next(vm => $progress.finish()))
+                .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, { filter, page, orderField, orderDirection })
+                .then(() =>
+                    next(vm => {
+                        vm.setSortValue(orderField, orderDirection);
+                        $progress.finish();
+                    })
+                )
                 .catch(error => {
                     $progress.fail();
                     $logger.error(error);
