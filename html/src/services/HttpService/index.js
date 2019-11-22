@@ -31,9 +31,13 @@ export default class HttpService extends HttpServiceBase {
      */
     post(path, config) {
         return new Promise(async (resolve, reject) => {
-            const resp = await this.instance.get(path, config);
-            if (resp.status === 200 || resp.status === 304) resolve(resp.data);
-            else reject('bad status');
+            try {
+                const resp = await this.instance.get(path, config);
+                if (resp.status === 200 || resp.status === 304) resolve(resp.data);
+                else reject(`status code ${resp.status}`);
+            } catch (error) {
+                reject(error);
+            }
         });
         // return this.instance.post(path, config);
     }
@@ -46,9 +50,13 @@ export default class HttpService extends HttpServiceBase {
      */
     get(path, config) {
         return new Promise(async (resolve, reject) => {
-            const resp = await this.instance.get(path, config);
-            if (resp.status === 200 || resp.status === 304) resolve(resp.data);
-            else reject('bad status');
+            try {
+                const resp = await this.instance.get(path, config);
+                if (resp.status === 200 || resp.status === 304) resolve(resp.data);
+                else reject(`status code ${resp.status}`);
+            } catch (error) {
+                reject(error);
+            }
         });
         // return this.instance.get(path, config);
     }
