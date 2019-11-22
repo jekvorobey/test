@@ -19,8 +19,17 @@ export default class HttpService extends HttpServiceBase {
      * @param {*} config
      * @returns {Promise<Object>}
      */
-    delete(path, config) {
-        return this.instance.get(path, config);
+    get(path, config) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const resp = await this.instance.get(path, config);
+                if (resp.status === 200 || resp.status === 304) resolve(resp.data);
+                else reject(`status code ${resp.status}`);
+            } catch (error) {
+                reject(error);
+            }
+        });
+        // return this.instance.get(path, config);
     }
 
     /**
@@ -48,17 +57,16 @@ export default class HttpService extends HttpServiceBase {
      * @param {*} config
      * @returns {Promise<Object>}
      */
-    get(path, config) {
+    delete(path, config) {
         return new Promise(async (resolve, reject) => {
             try {
                 const resp = await this.instance.get(path, config);
-                if (resp.status === 200 || resp.status === 304) resolve(resp.data);
+                if (resp.status === 200 || resp.status === 204) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
                 reject(error);
             }
         });
-        // return this.instance.get(path, config);
     }
 
     /**
@@ -68,6 +76,14 @@ export default class HttpService extends HttpServiceBase {
      * @returns {Promise<Object>}
      */
     put(path, config) {
-        return this.instance.get(path, config);
+        return new Promise(async (resolve, reject) => {
+            try {
+                const resp = await this.instance.get(path, config);
+                if (resp.status === 200 || resp.status === 204) resolve(resp.data);
+                else reject(`status code ${resp.status}`);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 }
