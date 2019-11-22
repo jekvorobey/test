@@ -38,11 +38,11 @@ export default class HttpService extends HttpServiceBase {
      * @param {*} config
      * @returns {Promise<Object>}
      */
-    post(path, config) {
+    post(path, data, config) {
         return new Promise(async (resolve, reject) => {
             try {
-                const resp = await this.instance.post(path, config);
-                if (resp.status === 200 || resp.status === 304) resolve(resp.data);
+                const resp = await this.instance.post(path, data, config);
+                if (resp.status === 200 || resp.status === 304) resolve(resp);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
                 reject(error);
@@ -75,10 +75,10 @@ export default class HttpService extends HttpServiceBase {
      * @param {*} config
      * @returns {Promise<Object>}
      */
-    put(path, config) {
+    put(path, data, config) {
         return new Promise(async (resolve, reject) => {
             try {
-                const resp = await this.instance.put(path, config);
+                const resp = await this.instance.put(path, data, config);
                 if (resp.status === 200 || resp.status === 204) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
