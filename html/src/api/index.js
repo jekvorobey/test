@@ -10,7 +10,6 @@ export function getProducts(data) {
 }
 
 export function getCatalogItems({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
-    console.log(orderField, orderDirection);
     return $http.get('/v1/catalog/items', {
         params: { filter, page, orderField, orderDirection },
         paramsSerializer(params) {
