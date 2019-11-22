@@ -47,6 +47,6 @@ export default {
 
     async [FETCH_CATALOG_DATA]({ dispatch, commit }, payload) {
         await Promise.all([dispatch(FETCH_CATEGORIES), dispatch(FETCH_BANNER)]);
-        return dispatch(FETCH_ITEMS, payload).then(() => commit(SET_LOAD, true));
+        return dispatch(FETCH_ITEMS, payload).then(() => commit(M_SET_LOAD, true));
     },
 };
