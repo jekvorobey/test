@@ -15,10 +15,10 @@ export default class MockServiceAdapter extends HttpServiceBase {
      * @param {*} config
      * @returns {Promise<Object>}
      */
-    delete(path, config) {
+    delete(path, data, config) {
         switch (path) {
             default:
-                return this.mockServiceInstance.delete(path, config);
+                return this.mockServiceInstance.delete(path, data, config);
         }
     }
 
@@ -28,10 +28,12 @@ export default class MockServiceAdapter extends HttpServiceBase {
      * @param {*} config
      * @returns {Promise<Object>}
      */
-    post(path, config) {
+    post(path, data, config) {
         switch (path) {
+            case '/v1/auth/login':
+                return this.httpServiceInstance.post(path, data, config);
             default:
-                return this.mockServiceInstance.post(path, config);
+                return this.mockServiceInstance.post(path, data, config);
         }
     }
 
@@ -45,6 +47,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
         switch (path) {
             case '/v1/categories':
             case '/v1/catalog/items':
+            case '/v1/cart/data':
                 return this.httpServiceInstance.get(path, config);
             default:
                 return this.mockServiceInstance.get(path, config);
@@ -57,7 +60,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
      * @param {*} config
      * @returns {Promise<Object>}
      */
-    put(path, config) {
+    put(path, data, config) {
         switch (path) {
             default:
                 return this.mockServiceInstance.put(path, config);

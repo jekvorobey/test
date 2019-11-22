@@ -1,9 +1,19 @@
 import qs from 'qs';
 import { $http } from '../services/ServiceLocator';
 
+// auth
+
+export function login({ email, password }) {
+    return $http.post('/v1/auth/login', { email, password }, { withCredentials: true });
+}
+
+// search
+
 export function search(data) {
     return $http.get('/v1/search', data);
 }
+
+// catalog
 
 export function getProducts(data) {
     return $http.get('/v1/products', data);

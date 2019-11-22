@@ -38,6 +38,9 @@ import { SET_SCROLL, FETCH_COMMON_DATA } from '../store/actions';
 import { NAME as CART_MODULE, CART_ITEMS } from '../store/modules/Cart';
 import { FETCH_CART_DATA } from '../store/modules/Cart/actions';
 
+import { NAME as AUTH_MODULE } from '../store/modules/Auth';
+import { LOGIN } from '../store/modules/Auth/actions';
+
 import { MIN_SCROLL_VALUE, eventName } from '../assets/scripts/constants';
 import { mapState, mapActions } from 'vuex';
 
@@ -55,6 +58,7 @@ export default {
     methods: {
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
+        ...mapActions(AUTH_MODULE, [LOGIN]),
 
         onScroll() {
             this[SET_SCROLL](
@@ -64,7 +68,9 @@ export default {
     },
 
     serverPrefetch() {
-        return Promise.all([this[FETCH_COMMON_DATA](), this[FETCH_CART_DATA]()]);
+        return Promise.all([this[FETCH_COMMON_DATA](), this[LOGIN]({ email: 'test@gs.ru', password: 123456 })]).then(
+            () => this[FETCH_CART_DATA]()
+        );
     },
 
     mounted() {
@@ -74,6 +80,3 @@ export default {
     },
 };
 </script>
-
-
-
