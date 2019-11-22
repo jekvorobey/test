@@ -1,7 +1,7 @@
 <template>
     <li class="cart-product-card" :class="{ 'cart-product-card--small': isSmall }">
         <router-link class="cart-product-card__img" :to="href">
-            <v-picture v-if="image" :image="image" alt="">
+            <v-picture v-if="image && image.id" :image="image" alt="">
                 <template v-slot:source="{ image, lazy }">
                     <source
                         :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
@@ -154,4 +154,3 @@ export default {
     },
 };
 </script>
-

@@ -1,7 +1,7 @@
 <template>
     <div class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }">
         <div class="catalog-product-card__img">
-            <v-picture v-if="image" :image="image" alt="">
+            <v-picture v-if="image && image.id" :image="image" alt="">
                 <template v-slot:source="{ image, lazy }">
                     <source
                         :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
