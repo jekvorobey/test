@@ -165,7 +165,7 @@
                                     :key="item"
                                 >
                                     <button class="catalog-view__modal-filter-sort-btn" @click="sortValue = item">
-                                        {{ item }}
+                                        {{ item.title }}
                                     </button>
                                 </li>
                             </ul>
