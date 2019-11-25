@@ -11,6 +11,11 @@ const isProd = mode === 'production';
 module.exports = merge(base, {
     target: 'node',
     entry: './src/entry-server.js',
+    resolve: {
+        alias: {
+            HttpServiceEntry: './ServerHttpService.js',
+        },
+    },
     output: {
         filename: 'server-bundle.js',
         libraryTarget: 'commonjs2',

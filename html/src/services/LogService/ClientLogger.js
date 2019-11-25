@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const { LoggerBase, types } = require('./base');
 
-module.exports = class BrowserLogger extends LoggerBase {
+module.exports = class ClientLogger extends LoggerBase {
     logByType(type, message, ...params) {
         switch (type) {
             case types.ERROR:

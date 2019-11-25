@@ -2,12 +2,13 @@ import axios from 'axios';
 import HttpServiceBase from './base';
 // import { cacheAdapterEnhancer } from 'axios-extensions';
 
-export default class HttpService extends HttpServiceBase {
+export default class ClientHttpService extends HttpServiceBase {
     constructor(baseURL = '') {
         super(baseURL);
 
         this.instance = axios.create({
             baseURL,
+            withCredentials: true,
             // cache will be enabled by default
             // adapter: cacheAdapterEnhancer(axios.defaults.adapter),
         });

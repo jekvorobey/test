@@ -1,6 +1,6 @@
 import BaseCookie from './base';
 
-export default class ExpressCookie extends BaseCookie {
+export default class ServerCookie extends BaseCookie {
     constructor(req, res) {
         super(req.headers.cookie);
         this.req = req;

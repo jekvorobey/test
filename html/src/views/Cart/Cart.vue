@@ -38,7 +38,7 @@
                                 >
                                     <cart-product-card
                                         class="cart-view__main-products-list-item"
-                                        v-for="({ item: product, count }, index) in type.items"
+                                        v-for="({ p: product, count }, index) in type.items"
                                         :data-index="index"
                                         :key="product.id"
                                         :product-id="product.id"
@@ -49,8 +49,8 @@
                                         :old-price="product.oldPrice"
                                         :count="count"
                                         href="/catalog"
-                                        @deleteItem="DELETE_CART_ITEM({ item: product })"
-                                        @countChange="ADD_CART_ITEM({ item: product, count: $event.count })"
+                                        @deleteItem="DELETE_CART_ITEM({ offerId: product.id })"
+                                        @countChange="ADD_CART_ITEM({ offerId: product.id, count: $event.count })"
                                     />
                                 </transition-group>
                             </div>
@@ -66,7 +66,7 @@
                                 >
                                     <cart-master-class-card
                                         class="cart-view__main-products-list-item"
-                                        v-for="({ item: product, count }, index) in type.items"
+                                        v-for="({ mc: product, count }, index) in type.items"
                                         :data-index="index"
                                         :key="product.id"
                                         :product-id="product.id"
@@ -78,15 +78,15 @@
                                         :date="product.date"
                                         :author="product.author"
                                         :count="count"
-                                        @deleteItem="DELETE_CART_ITEM({ item: product })"
-                                        @countChange="ADD_CART_ITEM({ item: product, count: $event.count })"
+                                        @deleteItem="DELETE_CART_ITEM({ offerId: product.id })"
+                                        @countChange="ADD_CART_ITEM({ offerId: product.id, count: $event.count })"
                                         href="/catalog"
                                     />
                                 </transition-group>
                             </div>
                         </template>
                     </v-tabs>
-                    <v-link class="cart-view__main-clear" tag="button" @click="DELETE_CART_ITEM()">
+                    <v-link class="cart-view__main-clear" tag="button">
                         <v-svg name="cross-small" width="13" height="13" />
                         &nbsp;&nbsp;Очистить корзину
                     </v-link>
@@ -146,7 +146,6 @@
                         :old-price="product.oldPrice"
                         :tags="product.tags"
                         :rating="product.rating"
-                        @addItem="ADD_CART_ITEM({ item: product })"
                     />
                 </v-slider>
             </div>

@@ -1,6 +1,6 @@
 import BaseCookie from './base';
 
-export default class BrowserCookie extends BaseCookie {
+export default class ClientCookie extends BaseCookie {
     constructor() {
         super(document.cookie);
     }

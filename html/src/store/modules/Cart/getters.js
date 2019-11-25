@@ -20,7 +20,7 @@ function isValidType(type) {
 
 export default {
     [CART_ITEMS_COUNT]: (state, getters) => {
-        return getters[CART_TYPES].reduce((accum, current) => {
+        const itemsCount = getters[CART_TYPES].reduce((accum, current) => {
             let count = 0;
             if (Array.isArray(current.items)) {
                 for (let i = 0; i < current.items.length; i++) {
@@ -31,6 +31,7 @@ export default {
             }
             return accum;
         }, 0);
+        return itemsCount;
     },
 
     [CART_TYPES]: state => {

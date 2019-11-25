@@ -112,7 +112,7 @@
                                 :old-price="item.oldPrice"
                                 :tags="item.tags"
                                 :rating="item.rating"
-                                @addItem="ADD_CART_ITEM({ item })"
+                                @addItem="ADD_CART_ITEM({ offerId: item.id })"
                             />
                             <catalog-banner-card
                                 v-else-if="item.type === 'banner'"

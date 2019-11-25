@@ -1,6 +1,7 @@
+// eslint-disable-next-line
+import HttpService from 'HttpServiceEntry';
 import HttpServiceBase from './base';
 import MockHttpService from './MockService';
-import HttpService from './index';
 
 export default class MockServiceAdapter extends HttpServiceBase {
     constructor(baseURL = 'https://master-front.ibt-mas.greensight.ru') {
@@ -17,8 +18,8 @@ export default class MockServiceAdapter extends HttpServiceBase {
      */
     delete(path, config) {
         switch (path) {
-            // case '/v1/cart/item':
-            //     return this.httpServiceInstance.delete(path, config);
+            case '/v1/cart/item':
+                return this.httpServiceInstance.delete(path, config);
             default:
                 return this.mockServiceInstance.delete(path, config);
         }
@@ -33,7 +34,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
     post(path, data, config) {
         switch (path) {
             case '/v1/auth/login':
-                // case '/v1/cart/item':
+            case '/v1/cart/item':
                 return this.httpServiceInstance.post(path, data, config);
             default:
                 return this.mockServiceInstance.post(path, data, config);
@@ -50,7 +51,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
         switch (path) {
             case '/v1/categories':
             case '/v1/catalog/items':
-                // case '/v1/cart/data':
+            case '/v1/cart/data':
                 return this.httpServiceInstance.get(path, config);
             default:
                 return this.mockServiceInstance.get(path, config);

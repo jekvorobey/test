@@ -5,9 +5,9 @@ const webpack = require('webpack');
 const chokidar = require('chokidar');
 const clientConfig = require('./webpack.client.config');
 const serverConfig = require('./webpack.server.config');
-const ExpressLogger = require('../src/services/LogService/ExpressLogger');
+const ServerLogger = require('../src/services/LogService/ServerLogger');
 
-const logger = new ExpressLogger();
+const logger = new ServerLogger();
 
 const readFile = (fileSystem, file) => {
     try {

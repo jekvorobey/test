@@ -1,8 +1,8 @@
 import { serviceName } from './assets/scripts/constants';
 import createApp from './app/app';
 import ServiceLocator from './services/ServiceLocator';
-import BrowserLogger from './services/LogService/BrowserLogger';
-import BrowserCookie from './services/CookieService/BrowserCookie';
+import ClientLogger from './services/LogService/ClientLogger';
+import ClientCookie from './services/CookieService/ClientCookie';
 import HttpService from './services/HttpService/MockServiceAdapter';
 import events from './services/EventService';
 import progress from './services/ProgressService';
@@ -14,8 +14,8 @@ ServiceLocator.createInstance()
     .register(serviceName.EVENTS, () => events)
     .register(serviceName.ROUTER, () => router)
     .register(serviceName.STORE, () => store)
-    .register(serviceName.LOGGER, () => new BrowserLogger())
-    .register(serviceName.COOKIE, () => new BrowserCookie())
+    .register(serviceName.LOGGER, () => new ClientLogger())
+    .register(serviceName.COOKIE, () => new ClientCookie())
     .register(serviceName.HTTP, () => new HttpService());
 
 // prime the store with server-initialized state.

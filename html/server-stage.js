@@ -11,9 +11,9 @@ const { createBundleRenderer } = require('./build/custom-vue-server-renderer');
 
 const useMicroCache = process.env.MICRO_CACHE !== 'false';
 const serverInfo = `express/${expressVersion} vue-server-renderer/${serverRendererVersion}`;
-const ExpressLogger = require('./src/services/LogService/ExpressLogger');
+const ServerLogger = require('./src/services/LogService/ServerLogger');
 
-const logger = new ExpressLogger();
+const logger = new ServerLogger();
 
 const app = express();
 const sites_folder = path.resolve(__dirname, '../../');

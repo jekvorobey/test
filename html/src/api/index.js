@@ -4,7 +4,7 @@ import { $http } from '../services/ServiceLocator';
 // auth
 
 export function login({ email, password }) {
-    return $http.post('/v1/auth/login', { email, password }, { withCredentials: true });
+    return $http.post('/v1/auth/login', { email, password });
 }
 
 // search
@@ -50,16 +50,16 @@ export function getProduct(data) {
 
 // cart
 
-export function getCartData(data) {
-    return $http.get('/v1/cart/data', data);
+export function getCartData() {
+    return $http.get('/v1/cart/data');
 }
 
-export function deleteCartItem(data) {
-    return $http.delete('/v1/cart/item', data);
+export function deleteCartItem({ offerId }) {
+    return $http.delete('/v1/cart/item', { data: { offerId } });
 }
 
 export function addCartItem(data) {
-    return $http.post('/v1/cart/item', data);
+    return $http.post('/v1/cart/item', data).then(resp => resp.data);
 }
 
 // checkout

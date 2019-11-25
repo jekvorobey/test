@@ -1,8 +1,8 @@
 import { serviceName } from './assets/scripts/constants';
 import createApp from './app/app';
 import ServiceLocator from './services/ServiceLocator';
-import ExpressLogger from './services/LogService/ExpressLogger';
-import ExpressCookie from './services/CookieService/ExpressCookie';
+import ServerLogger from './services/LogService/ServerLogger';
+import ServerCookie from './services/CookieService/ServerCookie';
 import HttpService from './services/HttpService/MockServiceAdapter';
 import MockProgressService from './services/ProgressService/MockService';
 
@@ -19,9 +19,9 @@ export default context => {
             .register(serviceName.ROUTER, () => router)
             .register(serviceName.STORE, () => store)
             .register(serviceName.PROGRESS, () => new MockProgressService())
+            .register(serviceName.COOKIE, () => new ServerCookie(context.req, context.res))
             .register(serviceName.HTTP, () => new HttpService())
-            .register(serviceName.LOGGER, () => new ExpressLogger())
-            .register(serviceName.COOKIE, () => new ExpressCookie(context.req, context.res));
+            .register(serviceName.LOGGER, () => new ServerLogger());
 
         const { $logger } = ServiceLocator;
         const { url } = context;

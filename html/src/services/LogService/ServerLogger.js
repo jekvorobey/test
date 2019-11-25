@@ -4,7 +4,7 @@
 const chalk = require('chalk');
 const { LoggerBase, types } = require('./base');
 
-module.exports = class ExpressLogger extends LoggerBase {
+module.exports = class ServerLogger extends LoggerBase {
     logByType(type, message, ...params) {
         const time = new Date(Date.now()).toTimeString();
         let messageWithTime = null;

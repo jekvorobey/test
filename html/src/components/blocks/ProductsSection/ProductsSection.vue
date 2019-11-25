@@ -18,7 +18,7 @@
                         :old-price="product.oldPrice"
                         :tags="product.tags"
                         :rating="product.rating"
-                        @addItem="ADD_CART_ITEM({ item: product })"
+                        @addItem="ADD_CART_ITEM({ offerId: product.id })"
                     />
                     <v-button class="btn--outline products-section__link" :to="btnLink">
                         {{ btnText }}

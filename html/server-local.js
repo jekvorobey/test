@@ -1,10 +1,15 @@
 const fs = require('fs');
 const path = require('path');
-const LRUCache = require('lru-cache');
+
 const express = require('express');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+
+const LRUCache = require('lru-cache');
 const favicon = require('serve-favicon');
 const compression = require('compression');
 const microcache = require('route-cache');
+
 const expressVersion = require('express/package.json').version;
 const serverRendererVersion = require('vue-server-renderer/package.json').version;
 const { createBundleRenderer } = require('./build/custom-vue-server-renderer');
@@ -14,9 +19,9 @@ const resolve = file => path.resolve(__dirname, file);
 const isProd = process.env.NODE_ENV === 'production';
 const useMicroCache = process.env.MICRO_CACHE !== 'false';
 const serverInfo = `express/${expressVersion} vue-server-renderer/${serverRendererVersion}`;
-const ExpressLogger = require('./src/services/LogService/ExpressLogger');
+const ServerLogger = require('./src/services/LogService/ServerLogger');
 
-const logger = new ExpressLogger();
+const logger = new ServerLogger();
 const setupDevServer = require('./build/setup-dev-server');
 
 const app = express();
@@ -87,6 +92,8 @@ const serve = (path, cache) =>
         maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 365 : 0,
     });
 
+app.use(cors({ credentials: true }));
+app.use(cookieParser());
 app.use(compression({ threshold: 0 }));
 app.use(favicon('../public/assets/favicon.ico'));
 app.use('/', serve('../public', true));
@@ -136,8 +143,6 @@ function render(req, res) {
     });
 }
 
-app.get('*', isProd ? render : (req, res) => readyPromise.then(() => render(req, res)));
-
 let port = process.env.PORT || 8080;
 let host = process.env.HOST || 'localhost';
 
@@ -150,6 +155,7 @@ if (process.env.CONFIG) {
         logger.error(error);
     }
 }
+app.get('*', isProd ? render : (req, res) => readyPromise.then(() => render(req, res)));
 
 app.listen(port, host, () => {
     logger.info(`server started at ${host}:${port}`);
