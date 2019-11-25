@@ -1,7 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const LRUCache = require('lru-cache');
+
 const express = require('express');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+
 const favicon = require('serve-favicon');
 const compression = require('compression');
 const microcache = require('route-cache');
@@ -53,6 +57,8 @@ function serve(servePath, cache) {
     });
 }
 
+app.use(cors({ credentials: true }));
+app.use(cookieParser());
 app.use(compression({ threshold: 0 }));
 app.use(favicon('../public/assets/favicon.ico'));
 app.use('/', serve('../public', true));
