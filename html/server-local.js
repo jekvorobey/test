@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const url = require('url');
 
 const express = require('express');
 const cors = require('cors');
@@ -89,15 +88,15 @@ if (isProd) {
     });
 }
 
-const serve = (path, cache) =>
-    express.static(resolve(path), {
+const serve = (resourcePath, cache) =>
+    express.static(resolve(resourcePath), {
         maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 365 : 0,
     });
 
-// Проксирование удаленного сервера
+// Проксирование удаленного сервера Api
 // https://localhost:8080/v1/... -> https://master-front.ibt-mas.greensight.ru/v1/...
 const apiProxy = httpProxy('https://master-front.ibt-mas.greensight.ru', {
-    proxyReqPathResolver: req => url.parse(req.baseUrl).path,
+    proxyReqPathResolver: req => req.originalUrl,
 });
 app.use('/content/*', apiProxy);
 app.use('/v1/*', apiProxy);
