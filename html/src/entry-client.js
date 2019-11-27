@@ -8,7 +8,6 @@ import events from './services/EventService';
 import progress from './services/ProgressService';
 
 const { app, router, store } = createApp();
-console.log(document.location.host);
 ServiceLocator.createInstance()
     .register(serviceName.PROGRESS, () => progress)
     .register(serviceName.EVENTS, () => events)

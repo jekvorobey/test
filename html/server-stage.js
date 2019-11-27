@@ -57,6 +57,7 @@ function serve(servePath, cache) {
     });
 }
 
+app.enable('trust proxy');
 app.use(cors({ credentials: true }));
 app.use(cookieParser());
 app.use(compression({ threshold: 0 }));
