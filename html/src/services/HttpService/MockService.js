@@ -1966,6 +1966,9 @@ export default class MockHttpService extends HttpServiceBase {
     get(path, data = {}) {
         return new Promise((resolve, reject) => {
             switch (path) {
+                case '/v1/auth/check-session':
+                    setTimeout(resolve(true), 300);
+                    break;
                 case '/v1/search':
                     if (data) {
                         setTimeout(

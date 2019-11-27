@@ -38,11 +38,12 @@ import { SET_SCROLL, FETCH_COMMON_DATA } from '../store/actions';
 import { NAME as CART_MODULE, CART_ITEMS } from '../store/modules/Cart';
 import { FETCH_CART_DATA } from '../store/modules/Cart/actions';
 
-import { NAME as AUTH_MODULE } from '../store/modules/Auth';
-import { LOGIN } from '../store/modules/Auth/actions';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '../store/modules/Auth';
+import { LOGIN, CHECK_SESSION } from '../store/modules/Auth/actions';
 
 import { MIN_SCROLL_VALUE, eventName } from '../assets/scripts/constants';
 import { mapState, mapActions } from 'vuex';
+import { $logger } from '../services/ServiceLocator';
 
 export default {
     name: 'app',
@@ -53,12 +54,13 @@ export default {
 
     computed: {
         ...mapState([SCROLL]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
     },
 
     methods: {
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
-        ...mapActions(AUTH_MODULE, [LOGIN]),
+        ...mapActions(AUTH_MODULE, [CHECK_SESSION]),
 
         onScroll() {
             this[SET_SCROLL](
@@ -67,8 +69,16 @@ export default {
         },
     },
 
-    serverPrefetch() {
-        return Promise.all([this[FETCH_COMMON_DATA]()]);
+    async serverPrefetch() {
+        try {
+            await this[FETCH_COMMON_DATA]();
+            await this[CHECK_SESSION]();
+            if (this.hasSession) return Promise.all([this[FETCH_CART_DATA]()]);
+            else return Promise.resolve();
+        } catch (error) {
+            return Promise.resolve();
+        }
+        return;
     },
 
     mounted() {

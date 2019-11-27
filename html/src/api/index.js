@@ -3,6 +3,10 @@ import { $http } from '../services/ServiceLocator';
 
 // auth
 
+export function checkSession() {
+    return $http.get('/v1/auth/check-session');
+}
+
 export function login({ email, password }) {
     return $http.post('/v1/auth/login', { email, password });
 }
