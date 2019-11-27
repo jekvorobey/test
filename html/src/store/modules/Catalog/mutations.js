@@ -1,5 +1,5 @@
 export const SET_ITEMS = 'SET_ITEMS';
-export const SET_PARAMS = 'SET_PARAMS';
+export const SET_CATEGORY_CODE = 'SET_CATEGORY_CODE';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_BANNER = 'SET_BANNER';
 export const SET_LOAD = 'SET_LOAD';
@@ -18,9 +18,8 @@ export default {
         state.range = range || 0;
     },
 
-    [SET_PARAMS](state, { id, code } = {}) {
-        state.categoryId = id;
-        state.categoryCode = code;
+    [SET_CATEGORY_CODE](state, payload) {
+        state.categoryCode = payload;
     },
 
     [SET_CATEGORIES](state, payload = []) {

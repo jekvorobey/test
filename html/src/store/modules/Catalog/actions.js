@@ -1,6 +1,6 @@
 import { $logger } from '../../../services/ServiceLocator';
 import { getCatalogItems, getCategories, getBanners } from '../../../api';
-import { SET_ITEMS, SET_CATEGORIES, SET_PARAMS, SET_BANNER, SET_LOAD as M_SET_LOAD } from './mutations';
+import { SET_ITEMS, SET_CATEGORIES, SET_BANNER, SET_LOAD as M_SET_LOAD, SET_CATEGORY_CODE } from './mutations';
 
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const FETCH_BANNER = 'FETCH_BANNER';
@@ -33,7 +33,7 @@ export default {
             .then(data => {
                 if (payload.showMore) commit(SET_ITEMS, { items: state.items.concat(data.items), range: data.range });
                 else commit(SET_ITEMS, data);
-                commit(SET_PARAMS, payload);
+                commit(SET_CATEGORY_CODE, payload.filter && payload.filter.category);
             })
             .catch(error => {
                 $logger.error(`FETCH_ITEMS error: ${error}`);

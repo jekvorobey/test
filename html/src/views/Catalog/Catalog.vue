@@ -404,7 +404,7 @@ export default {
         const { categoryCode, load } = $store.state.catalog;
 
         // если все загружено, пропускаем
-        if (load && categoryCode === code) next(vm => $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD}`, false));
+        if (load && categoryCode === code) next(vm => vm.$store.dispatch(`${CATALOG_MODULE}/${SET_LOAD}`, false));
         else {
             // если нет - фетчим
             const filter = code && { category: code };
