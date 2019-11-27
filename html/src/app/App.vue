@@ -68,14 +68,13 @@ export default {
     },
 
     serverPrefetch() {
-        return Promise.all([this[FETCH_COMMON_DATA]()]).then(() => this[FETCH_CART_DATA]());
+        return Promise.all([this[FETCH_COMMON_DATA]()]);
     },
 
     mounted() {
         const onSetScrollDebounce = _debounce(this.onScroll, 20);
         document.addEventListener(eventName.SCROLL, onSetScrollDebounce, true);
         this.$on('hook:beforeDestroy', () => document.removeEventListener(eventName.SCROLL, onSetScrollDebounce));
-        this[LOGIN]({ email: 'test@gs.ru', password: 123456 });
         // временный логин
     },
 };

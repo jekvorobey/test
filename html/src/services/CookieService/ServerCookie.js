@@ -1,20 +1,27 @@
+import Cookie from 'cookie-universal';
 import BaseCookie from './base';
 
 export default class ServerCookie extends BaseCookie {
     constructor(req, res) {
-        super(req.headers.cookie);
+        super();
+        this.instance = new Cookie(req, res);
         this.req = req;
         this.res = res;
     }
 
-    set(name, value, props) {
-        let cookies = this.res.getHeader('Set-Cookie');
-        if (!cookies) cookies = [this.prepareSetCookieString(name, value, props)];
-        else cookies.push(this.prepareSetCookieString(name, value, props));
-        this.res.setHeader('Set-Cookie', cookies);
+    get(name, options) {
+        return this.instance.get(name, options);
     }
 
-    remove(name) {
-        this.set(name, null, { expires: -1 });
+    set(name, value, options) {
+        this.instance.set(name, value, options);
+    }
+
+    remove(name, options) {
+        this.instance.remove(name, options);
+    }
+
+    getAll(options) {
+        return this.instance.getAll(options);
     }
 }

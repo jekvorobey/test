@@ -1,51 +1,25 @@
 export default class BaseCookie {
-    constructor(cookieString) {
-        this.cookieString = `${cookieString}`;
+    get(name, options) {
+        throw new Error('not implemented');
     }
 
-    get(name, def) {
-        const matches = this.cookieString.match(
-            new RegExp(`(?:^|; )${name.replace(/([$()*+./?[\\\]^{|}])/g, '\\$1')}=([^;]*)`)
-        );
-        return matches ? decodeURIComponent(matches[1]) : def;
+    set(name, value, options) {
+        throw new Error('not implemented');
     }
 
-    set(name, value, props) {
-        throw new Error('Переопредели set');
+    remove(name, options) {
+        throw new Error('not implemented');
     }
 
-    remove(name) {
-        throw new Error('Переопредели remove');
+    setAll(cookieArray) {
+        throw new Error('not implemented');
     }
 
-    prepareSetCookieString(name, value, props) {
-        props = props || {};
+    getAll(options) {
+        throw new Error('not implemented');
+    }
 
-        props.path = props.path || '/';
-        let exp = props.expires;
-
-        if (typeof exp === 'number' && exp) {
-            const d = new Date();
-            d.setTime(d.getTime() + exp * 1000);
-            exp = props.expires = d;
-        }
-
-        if (exp && exp.toUTCString) {
-            props.expires = exp.toUTCString();
-        }
-
-        value = encodeURIComponent(value);
-        let updatedCookie = `${name}=${value}`;
-        /* eslint-disable */
-        for (const propName in props) {
-            if (!props.hasOwnProperty(propName)) continue;
-            updatedCookie += `; ${propName}`;
-            const propValue = props[propName];
-
-            if (propValue !== true) updatedCookie += `=${propValue}`;
-        }
-        /* eslint-enable */
-
-        return updatedCookie;
+    removeAll() {
+        throw new Error('not implemented');
     }
 }

@@ -1,0 +1,5 @@
+.login-modal {
+    .modal-body {
+        padding: calc(var(--gs) * 3);
+    }
+}

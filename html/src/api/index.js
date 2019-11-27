@@ -59,7 +59,7 @@ export function deleteCartItem({ offerId }) {
 }
 
 export function addCartItem(data) {
-    return $http.post('/v1/cart/item', data).then(resp => resp.data);
+    return $http.post('/v1/cart/item', data);
 }
 
 // checkout

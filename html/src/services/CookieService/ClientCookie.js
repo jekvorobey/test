@@ -1,15 +1,25 @@
+import Cookie from 'cookie-universal';
 import BaseCookie from './base';
 
 export default class ClientCookie extends BaseCookie {
     constructor() {
-        super(document.cookie);
+        super();
+        this.instance = new Cookie();
     }
 
-    set(name, value, props) {
-        document.cookie = this.prepareSetCookieString(name, value, props);
+    get(name, options) {
+        this.instance.get(name, options);
     }
 
-    remove(name) {
-        this.set(name, null, { expires: -1 });
+    set(name, value, options) {
+        this.instance.set(name, value, options);
+    }
+
+    remove(name, options) {
+        this.instance.get(name, options);
+    }
+
+    getAll(options) {
+        return this.instance.getAll(options);
     }
 }

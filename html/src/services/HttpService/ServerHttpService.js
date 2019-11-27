@@ -10,8 +10,8 @@ export default class ServerHttpService extends HttpServiceBase {
         this.instance = axios.create({
             baseURL,
             withCredentials: true,
-            headers: { Cookie: $cookie.cookieString },
-            timeout: 10000,
+            timeout: 20000,
+            headers: { Cookie: $cookie.req.headers.cookie || '' },
             // cache will be enabled by default
             // adapter: cacheAdapterEnhancer(axios.defaults.adapter),
         });
@@ -46,7 +46,7 @@ export default class ServerHttpService extends HttpServiceBase {
         return new Promise(async (resolve, reject) => {
             try {
                 const resp = await this.instance.post(path, data, config);
-                if (resp.status === 200 || resp.status === 304) resolve(resp);
+                if (resp.status === 200 || resp.status === 304) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
                 reject(error);

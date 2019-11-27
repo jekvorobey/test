@@ -152,7 +152,7 @@
         &-container,
         &-search,
         &-cart,
-        &-cart,
+        &-cart-item,
         &-middle,
         &-middle-item {
             display: flex;

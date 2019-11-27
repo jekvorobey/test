@@ -20,9 +20,10 @@
             <v-button
                 v-if="!$attrs.disabled"
                 class="btn--transparent v-password__btn-show"
-                :iconName="showPassword ? 'eye-crossed' : 'eye'"
                 @click.prevent="changePasswordState"
-            />
+            >
+                <v-svg :name="showPassword ? 'eye-crossed' : 'eye'" width="16" height="16" />
+            </v-button>
         </div>
 
         <div :id="`${inputId}-alert`" class="error-message v-password__error" role="alert">
@@ -34,11 +35,13 @@
 </template>
 
 <script>
-import inputMixin from '../VInput/inputMixin';
+import VSvg from '../VSvg/VSvg.vue';
 import VButton from '../VButton/VButton.vue';
+
+import inputMixin from '../VInput/inputMixin';
+import '../../../assets/images/sprites/eye.svg';
+import '../../../assets/images/sprites/eye-crossed.svg';
 import './VPassword.css';
-import '../../../../images/sprite/eye.svg';
-import '../../../../images/sprite/eye-crossed.svg';
 
 export default {
     name: 'v-password',
@@ -46,6 +49,7 @@ export default {
     mixins: [inputMixin],
     components: {
         VButton,
+        VSvg,
     },
     props: {
         value: {},

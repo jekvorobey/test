@@ -39,8 +39,15 @@
                     </div>
 
                     <div v-show="!search" class="v-header__middle-cart">
-                        <v-svg class="v-header__middle-cart-item" name="account-middle" width="18" height="20" />
-                        <v-svg class="v-header__middle-cart-item" name="wishlist-middle" width="20" height="20" />
+                        <button
+                            class="v-header__middle-cart-item"
+                            @click="CHANGE_MODAL_STATE({ name: 'login-modal', open: true })"
+                        >
+                            <v-svg name="account-middle" width="18" height="20" />
+                        </button>
+                        <button class="v-header__middle-cart-item">
+                            <v-svg name="wishlist-middle" width="20" height="20" />
+                        </button>
                         <div class="v-header__middle-cart-item">
                             <span class="text-medium v-header__middle-cart-sum">15 780 ₽</span>&nbsp;
                             <v-link class="text-medium v-header__middle-cart-icon" to="/cart">
@@ -105,14 +112,20 @@
                 </div>
             </transition>
         </div>
+
         <transition name="fade">
             <div class="v-header__mask" v-if="showMask">
                 <search-panel v-if="search" />
                 <nav-panel v-else-if="isMenuOpen" />
             </div>
         </transition>
+
         <transition name="fade">
             <mobile-menu class="v-header__modal-menu" v-if="isMenuOpen && isTabletLg" />
+        </transition>
+
+        <transition name="fade">
+            <login-modal />
         </transition>
     </header>
 </template>
@@ -126,6 +139,7 @@ import SearchPanel from '../SearchPanel/SearchPanel.vue';
 import SearchFilter from '../SearchFilter/SearchFilter.vue';
 import NavPanel from '../NavPanel/NavPanel.vue';
 import MobileMenu from '../MobileMenu/MobileMenu.vue';
+import LoginModal from '../LoginModal/LoginModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, IS_MENU_OPEN, CATEGORIES } from '../../store';
@@ -136,6 +150,9 @@ import { CART_ITEMS_COUNT } from '../../store/modules/Cart/getters';
 
 import { NAME as SEARCH_MODULE, SEARCH } from '../../store/modules/Search';
 import { SET_SEARCH } from '../../store/modules/Search/actions';
+
+import { NAME as MODAL_MODULE } from '../../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import '../../assets/images/sprites/logo.svg';
 import '../../assets/images/sprites/logo-text.svg';
@@ -164,6 +181,7 @@ export default {
         SearchFilter,
         NavPanel,
         MobileMenu,
+        LoginModal,
     },
 
     computed: {
@@ -183,6 +201,7 @@ export default {
     methods: {
         ...mapActions([SET_MENU_OPEN]),
         ...mapActions(SEARCH_MODULE, [SET_SEARCH]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
     },
 
     watch: {
@@ -192,4 +211,3 @@ export default {
     },
 };
 </script>
-

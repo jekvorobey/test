@@ -1,9 +1,11 @@
 const fs = require('fs');
 const path = require('path');
+const url = require('url');
 
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const httpProxy = require('express-http-proxy');
 
 const LRUCache = require('lru-cache');
 const favicon = require('serve-favicon');
@@ -92,6 +94,14 @@ const serve = (path, cache) =>
         maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 365 : 0,
     });
 
+// Проксирование удаленного сервера
+// https://localhost:8080/v1/... -> https://master-front.ibt-mas.greensight.ru/v1/...
+const apiProxy = httpProxy('https://master-front.ibt-mas.greensight.ru', {
+    proxyReqPathResolver: req => url.parse(req.baseUrl).path,
+});
+app.use('/content/*', apiProxy);
+app.use('/v1/*', apiProxy);
+
 app.use(cors({ credentials: true }));
 app.use(cookieParser());
 app.use(compression({ threshold: 0 }));
@@ -155,6 +165,7 @@ if (process.env.CONFIG) {
         logger.error(error);
     }
 }
+
 app.get('*', isProd ? render : (req, res) => readyPromise.then(() => render(req, res)));
 
 app.listen(port, host, () => {
