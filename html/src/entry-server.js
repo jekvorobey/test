@@ -14,14 +14,15 @@ import MockProgressService from './services/ProgressService/MockService';
 export default context => {
     return new Promise((resolve, reject) => {
         const { app, router, store } = createApp();
+        const host = `${context.req.protocol}://${context.req.get('host')}`;
 
         ServiceLocator.createInstance()
             .register(serviceName.ROUTER, () => router)
             .register(serviceName.STORE, () => store)
             .register(serviceName.PROGRESS, () => new MockProgressService())
+            .register(serviceName.LOGGER, () => new ServerLogger())
             .register(serviceName.COOKIE, () => new ServerCookie(context.req, context.res))
-            .register(serviceName.HTTP, () => new HttpService())
-            .register(serviceName.LOGGER, () => new ServerLogger());
+            .register(serviceName.HTTP, () => new HttpService(host));
 
         const { $logger } = ServiceLocator;
         const { url } = context;

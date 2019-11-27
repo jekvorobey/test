@@ -8,7 +8,7 @@ import events from './services/EventService';
 import progress from './services/ProgressService';
 
 const { app, router, store } = createApp();
-
+console.log(document.location.host);
 ServiceLocator.createInstance()
     .register(serviceName.PROGRESS, () => progress)
     .register(serviceName.EVENTS, () => events)
@@ -16,7 +16,7 @@ ServiceLocator.createInstance()
     .register(serviceName.STORE, () => store)
     .register(serviceName.LOGGER, () => new ClientLogger())
     .register(serviceName.COOKIE, () => new ClientCookie())
-    .register(serviceName.HTTP, () => new HttpService());
+    .register(serviceName.HTTP, () => new HttpService(document.location.origin));
 
 // prime the store with server-initialized state.
 // the state is determined during SSR and inlined in the page markup.
