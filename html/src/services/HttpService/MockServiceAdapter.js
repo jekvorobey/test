@@ -33,8 +33,10 @@ export default class MockServiceAdapter extends HttpServiceBase {
      */
     post(path, data, config) {
         switch (path) {
+            // case '/v1/checkout/receive-method':
             case '/v1/auth/login':
             case '/v1/cart/item':
+            case '/v1/checkout/commit':
                 return this.httpServiceInstance.post(path, data, config);
             default:
                 return this.mockServiceInstance.post(path, data, config);
@@ -49,6 +51,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
      */
     get(path, config) {
         switch (path) {
+            // case '/v1/checkout/data':
             case '/v1/categories':
             case '/v1/catalog/items':
             case '/v1/cart/data':

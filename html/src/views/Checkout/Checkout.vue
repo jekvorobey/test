@@ -24,29 +24,29 @@
                             </p>
                             <p class="checkout-view__main-panel-line">
                                 Сумма заказа: {{ $t(`cart.checkout.type.${checkoutType}`) }}
-                                <span>{{ checkout.sum }}</span>
+                                <span>{{ summory.sum }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Скидка по промокоду <span>{{ checkout.discount }}</span>
+                                Скидка по промокоду <span>{{ summory.discount }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Оплата бонусами <span>{{ checkout.bonusPay }}</span>
+                                Оплата бонусами <span>{{ summory.bonusPay }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Оплата подарочным сертификатом <span>{{ checkout.sertificate }}</span>
+                                Оплата подарочным сертификатом <span>{{ summory.certificate }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Доставка <span>{{ checkout.delivery }}</span>
+                                Доставка <span>{{ summory.delivery }}</span>
                             </p>
                             <div class="checkout-view__main-panel-total">
                                 <p class="text-bold checkout-view__main-panel-line">
-                                    Итого <span>{{ checkout.total }}</span>
+                                    Итого <span>{{ summory.total }}</span>
                                 </p>
                                 <p class="text-grey text-sm checkout-view__main-panel-line">
-                                    Будет начислено <span>{{ checkout.bonusGet }}&nbsp;бонусов</span>
+                                    Будет начислено <span>{{ summory.bonusGet }}&nbsp;бонусов</span>
                                 </p>
                                 <p class="text-grey text-sm checkout-view__main-panel-line">
-                                    Будет списано <span>{{ checkout.bonusSpent }}&nbsp;бонусов</span>
+                                    Будет списано <span>{{ summory.bonusSpent }}&nbsp;бонусов</span>
                                 </p>
                             </div>
                             <div v-if="!promocode" class="checkout-view__main-panel-promo">
@@ -105,14 +105,9 @@ import { $store, $logger, $progress } from '../../services/ServiceLocator';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CART_MODULE, CART_DATA } from '../../store/modules/Cart';
 
-import checkoutModule, { NAME as CHECKOUT_MODULE, CHECKOUT_DATA, CHECKOUT_TYPE } from '../../store/modules/Checkout';
-import {
-    FETCH_CHECKOUT_DATA,
-    FETCH_ADDRESSES,
-    ADD_PROMOCODE,
-    DELETE_PROMOCODE,
-} from '../../store/modules/Checkout/actions';
-import { CHECKOUT, PROMO_CODE } from '../../store/modules/Checkout/getters';
+import checkoutModule, { NAME as CHECKOUT_MODULE, CHECKOUT_TYPE, CHECKOUT_DATA } from '../../store/modules/Checkout';
+import { FETCH_CHECKOUT_DATA, ADD_PROMOCODE, DELETE_PROMOCODE } from '../../store/modules/Checkout/actions';
+import { CHECKOUT, PROMO_CODE, SUMMORY } from '../../store/modules/Checkout/getters';
 
 import '../../assets/images/sprites/check-small.svg';
 import '../../assets/images/sprites/arrow-small.svg';
@@ -139,15 +134,16 @@ export default {
 
     computed: {
         ...mapState(CART_MODULE, [CART_DATA]),
-        ...mapState(CHECKOUT_MODULE, [CHECKOUT_DATA, CHECKOUT_TYPE]),
-        ...mapGetters(CHECKOUT_MODULE, [CHECKOUT, PROMO_CODE]),
+        ...mapState(CHECKOUT_MODULE, [CHECKOUT_TYPE, CHECKOUT_DATA]),
         ...mapState('route', {
             checkoutType: state => state.params.type,
         }),
+
+        ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMORY]),
     },
 
     methods: {
-        ...mapActions(CHECKOUT_MODULE, [FETCH_ADDRESSES, ADD_PROMOCODE, DELETE_PROMOCODE]),
+        ...mapActions(CHECKOUT_MODULE, [ADD_PROMOCODE, DELETE_PROMOCODE]),
     },
 
     beforeRouteEnter(to, from, next) {

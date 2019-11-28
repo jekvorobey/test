@@ -72,44 +72,28 @@ export function getCheckoutData(data) {
     return $http.get('/v1/checkout/data', data);
 }
 
-export function getCheckoutReceiveMethods(data) {
-    return $http.get('/v1/checkout/receive-methods', data);
+export function setReceiveMethod(data) {
+    return $http.post('/v1/checkout/receive-method', data);
 }
 
-export function getCheckoutDeliveryTypes(data) {
-    return $http.get('/v1/checkout/delivery-types', data);
+export function setAddress(data) {
+    return $http.post('/v1/checkout/address', data);
 }
 
-export function getCheckoutConfirmationTypes(data) {
-    return $http.get('/v1/checkout/confirmation-types', data);
-}
-
-export function getCheckoutPaymentMethods(data) {
-    return $http.get('/v1/checkout/payment-methods', data);
-}
-
-export function getCheckoutAddresses(data) {
-    return $http.get('/v1/checkout/addresses', data);
-}
-
-export function getCheckoutPickupPoints(data) {
-    return $http.get('/v1/checkout/pickup-points', data);
-}
-
-export function getCheckoutPackages(data) {
-    return $http.get('/v1/checkout/packages', data);
+export function setPickupPoint(data) {
+    return $http.post('/v1/checkout/pickup-point', data);
 }
 
 export function addBonus(data) {
     return $http.post('/v1/checkout/bonus', data);
 }
 
-export function deleteSertificate(data) {
-    return $http.delete('/v1/checkout/sertificate', data);
+export function deleteCertificate(data) {
+    return $http.delete('/v1/checkout/certificate', data);
 }
 
-export function addSertificate(data) {
-    return $http.post('/v1/checkout/sertificate', data);
+export function addCertificate(data) {
+    return $http.post('/v1/checkout/certificate', data);
 }
 
 export function deleteBonus(data) {

@@ -111,7 +111,7 @@ export default {
             });
             handlers.input = e => {
                 if (this.type === inputTypes.number) {
-                    const value = e.target.value;
+                    const value = Number(e.target.value);
                     const max = Number(e.target.max);
                     const min = Number(e.target.min);
                     if (value < min) this.internal_value = min;

@@ -1,0 +1,13 @@
+.checkout-recipient-modal {
+    .modal-container {
+        width: 440px;
+    }
+
+    .modal-body {
+        padding: calc(var(--gs) * 3);
+    }
+
+    &__submit {
+        text-align: center;
+    }
+}

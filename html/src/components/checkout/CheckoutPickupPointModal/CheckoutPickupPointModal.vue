@@ -54,13 +54,9 @@ import CheckoutOptionCard from '../CheckoutOptionCard/CheckoutOptionCard.vue';
 import GeneralModal from '../../GeneralModal/GeneralModal.vue';
 
 import { mapGetters, mapState, mapActions } from 'vuex';
-import {
-    NAME as CHECKOUT_MODULE,
-    CHECKOUT_DATA,
-    PICKUP_POINTS,
-    RECEIVE_METHODS,
-} from '../../../store/modules/Checkout';
-import { FETCH_PICKUP_POINTS, SET_SELECTED_PICKUP_POINT } from '../../../store/modules/Checkout/actions';
+import { NAME as CHECKOUT_MODULE } from '../../../store/modules/Checkout';
+import { SET_PICKUP_POINT } from '../../../store/modules/Checkout/actions';
+import { PICKUP_POINTS, SELECTED_DELIVERY_METHOD_ID, DELIVERY_METHODS } from '../../../store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
@@ -101,14 +97,7 @@ export default {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
-        ...mapState(CHECKOUT_MODULE, [CHECKOUT_DATA, PICKUP_POINTS]),
-
-        ...mapState(CHECKOUT_MODULE, {
-            deliveryMethods: state => {
-                const pickupMethod = state[RECEIVE_METHODS].find(m => m.id === receiveTypes.PICKUP);
-                return pickupMethod ? pickupMethod.methods : [];
-            },
-        }),
+        ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, DELIVERY_METHODS, SELECTED_DELIVERY_METHOD_ID]),
 
         filteredPickupPoints() {
             return this[PICKUP_POINTS].filter(
@@ -119,20 +108,16 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(CHECKOUT_MODULE, [FETCH_PICKUP_POINTS, SET_SELECTED_PICKUP_POINT]),
+        ...mapActions(CHECKOUT_MODULE, [SET_PICKUP_POINT]),
 
         onSelectPoint(point) {
-            this[SET_SELECTED_PICKUP_POINT](point);
+            this[SET_PICKUP_POINT](point);
             this.onClose();
         },
 
         onClose() {
             this.selectedDeliveryMethod = null;
             this.CHANGE_MODAL_STATE({ name: NAME, open: false });
-        },
-
-        async initialize() {
-            await this[FETCH_PICKUP_POINTS]();
         },
     },
 
@@ -141,10 +126,6 @@ export default {
             if (!value) this.showMap = false;
             else setTimeout(() => (this.showMap = true), 400);
         },
-    },
-
-    mounted() {
-        this.initialize();
     },
 };
 </script>
