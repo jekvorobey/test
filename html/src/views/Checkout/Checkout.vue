@@ -27,13 +27,13 @@
                                 <span>{{ summary.sum }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Скидка по промокоду <span>{{ summary.discount }}</span>
+                                Скидка по промокоду <span>{{ summary.promoDiscount }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Оплата бонусами <span>{{ summary.bonusPay }}</span>
+                                Оплата бонусами <span>{{ summary.bonusDiscount }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Оплата подарочным сертификатом <span>{{ summary.certificate }}</span>
+                                Оплата подарочным сертификатом <span>{{ summary.certDiscount }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
                                 Доставка <span>{{ summary.delivery }}</span>

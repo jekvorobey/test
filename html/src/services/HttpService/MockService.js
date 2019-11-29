@@ -1342,7 +1342,7 @@ const mockTypes = {
         ],
         checkout: {
             sum: '6 704 ₽',
-            discount: '0 ₽',
+            promoDiscount: '0 ₽',
             bonus: '+1 488 бонусов',
             total: '6 704 ₽',
         },
@@ -1353,7 +1353,7 @@ const mockTypes = {
         type: cartItemTypes.MASTERCLASS,
         checkout: {
             sum: '2 300 ₽',
-            discount: '1 600 ₽',
+            promoDiscount: '1 600 ₽',
             bonus: '+600 бонусов',
             total: '700 ₽',
         },
@@ -1365,7 +1365,7 @@ const cartData = {
         ...mockTypes[cartItemTypes.PRODUCT],
         items: [
             ...products.slice(0, 2).map(p => {
-                return { id: p.id, type: cartItemTypes.PRODUCT, item: p, count: 1 };
+                return { id: p.id, type: cartItemTypes.PRODUCT, p, count: 1 };
             }),
         ],
     },
@@ -1374,7 +1374,7 @@ const cartData = {
         ...mockTypes[cartItemTypes.MASTERCLASS],
         items: [
             ...masterClasses.map(mc => {
-                return { id: mc.id, type: cartItemTypes.MASTERCLASS, item: mc, count: 1 };
+                return { id: mc.id, type: cartItemTypes.MASTERCLASS, mc, count: 1 };
             }),
         ],
     },
@@ -1561,90 +1561,6 @@ const mockDeliveryTypes = [
     },
 ];
 
-const mockPackages = {
-    [deliveryMethods.DELIVERY]: [],
-    [deliveryMethods.EXPRESS]: [
-        {
-            id: 1,
-            typeID: deliveryTypes.CONSOLIDATION,
-            methodID: deliveryMethods.EXPRESS,
-
-            items: [
-                {
-                    id: 1,
-                    selectedDate: mockDate,
-                    availableDates: [mockDate, addDays(mockDate, 2), addDays(mockDate, 5)],
-                    items: products.slice(0, 6).map(p => {
-                        return { id: p.id, name: p.name, image: p.image };
-                    }),
-                },
-            ],
-        },
-    ],
-    [deliveryMethods.OUTPOST_PICKUP]: [
-        {
-            id: 1,
-            typeID: deliveryTypes.CONSOLIDATION,
-            methodID: deliveryMethods.OUTPOST_PICKUP,
-
-            items: [
-                {
-                    id: 1,
-                    selectedDate: addDays(mockDate, 2),
-                    availableDates: [addDays(mockDate, 2), addDays(mockDate, 5), addDays(mockDate, 7)],
-                    items: products.slice(0, 6).map(p => {
-                        return { id: p.id, name: p.name, image: p.image };
-                    }),
-                },
-            ],
-        },
-        {
-            id: 2,
-            typeID: deliveryTypes.SPLIT,
-            methodID: deliveryMethods.OUTPOST_PICKUP,
-
-            items: [
-                {
-                    id: 2,
-                    selectedDate: addDays(mockDate, 2),
-                    availableDates: [addDays(mockDate, 2), addDays(mockDate, 3), addDays(mockDate, 9)],
-                    items: products.slice(0, 3).map(p => {
-                        return { id: p.id, name: p.name, image: p.image };
-                    }),
-                },
-                {
-                    id: 3,
-                    selectedDate: addDays(mockDate, 5),
-                    availableDates: [addDays(mockDate, 5), addDays(mockDate, 7), addDays(mockDate, 9)],
-
-                    items: products.slice(0, 3).map(p => {
-                        return { id: p.id, name: p.name, image: p.image };
-                    }),
-                },
-            ],
-        },
-    ],
-    [deliveryMethods.POSTOMAT_PICKUP]: [
-        {
-            id: 1,
-            typeID: deliveryTypes.CONSOLIDATION,
-            methodID: deliveryMethods.POSTOMAT_PICKUP,
-
-            items: [
-                {
-                    id: 1,
-                    selectedDate: addDays(mockDate, 4),
-                    availableDates: [addDays(mockDate, 4), addDays(mockDate, 6), addDays(mockDate, 9)],
-
-                    items: products.slice(0, 6).map(p => {
-                        return { id: p.id, name: p.name, image: p.image };
-                    }),
-                },
-            ],
-        },
-    ],
-};
-
 const recipients = [
     {
         id: 1,
@@ -1660,7 +1576,7 @@ const recipients = [
     },
 ];
 
-const certificates = [
+const certDiscounts = [
     {
         id: 1,
         code: 'CERT2020-500',
@@ -1707,14 +1623,14 @@ const checkoutData = {
 
         promocode: null,
         bonus: 0,
-        certificates: [],
+        certDiscounts: [],
     },
 
-    summory: {
+    summary: {
         sum: '6 704 ₽',
-        discount: '0 ₽',
-        certificate: '0 ₽',
-        bonusPay: '0 ₽',
+        promoDiscount: '0 ₽',
+        certDiscount: '0 ₽',
+        bonusDiscount: '0 ₽',
         delivery: 'Бесплатно',
         total: '6 704 ₽',
         bonusGet: '+ 1 488',
@@ -1754,39 +1670,41 @@ export default class MockHttpService extends HttpServiceBase {
                         setTimeout(() => resolve(_cloneDeep(cartData)), 300);
                     }
                     break;
-                case '/v1/checkout/certificate':
+                case '/v1/checkout/certDiscount':
                     {
                         if (!data.data) {
                             reject(new Error('data not found'));
                             return;
                         }
 
-                        if (!data.certificate) {
-                            reject(new Error('certificate not found'));
+                        if (!data.certDiscount) {
+                            reject(new Error('certDiscount not found'));
                             return;
                         }
 
-                        const existCertificate = certificates.find(s => s.code === data.certificate.code);
+                        const existCertificate = certDiscounts.find(s => s.code === data.certDiscount.code);
                         if (!existCertificate) {
-                            reject(new Error('wrong certificate code'));
+                            reject(new Error('wrong certDiscount code'));
                             return;
                         }
 
-                        const certificateObj = data.data.input.certificates.find(s => s.code === data.certificate.code);
-                        if (!certificateObj) {
-                            reject(new Error('certificate does not exist'));
+                        const certDiscountObj = data.data.input.certDiscounts.find(
+                            s => s.code === data.certDiscount.code
+                        );
+                        if (!certDiscountObj) {
+                            reject(new Error('certDiscount does not exist'));
                             return;
                         }
 
                         const clone = _cloneDeep(data.data);
-                        const certificate =
-                            Number(clone.summary.certificate.replace(/\D+/g, '')) - existCertificate.amount;
+                        const certDiscount =
+                            Number(clone.summary.certDiscount.replace(/\D+/g, '')) - existCertificate.amount;
                         const total = Number(clone.summary.total.replace(/\D+/g, '')) + existCertificate.amount;
 
-                        const index = clone.input.certificates.indexOf(certificateObj);
-                        clone.input.certificates.splice(index, 1);
+                        const index = clone.input.certDiscounts.indexOf(certDiscountObj);
+                        clone.input.certDiscounts.splice(index, 1);
 
-                        clone.summary.certificate = certificate > 0 ? `- ${preparePrice(certificate)} ₽` : '0 ₽';
+                        clone.summary.certDiscount = certDiscount > 0 ? `- ${preparePrice(certDiscount)} ₽` : '0 ₽';
                         clone.summary.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
                         setTimeout(() => resolve(clone), 300);
                     }
@@ -1803,7 +1721,7 @@ export default class MockHttpService extends HttpServiceBase {
                         clone.input.bonus = 0;
 
                         clone.summary.bonusSpent = `${0}`;
-                        clone.summary.bonusPay = `${0} ₽`;
+                        clone.summary.bonusDiscount = `${0} ₽`;
                         clone.summary.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
                         setTimeout(() => resolve(clone), 300);
                     }
@@ -1822,11 +1740,12 @@ export default class MockHttpService extends HttpServiceBase {
                         }
 
                         const clone = _cloneDeep(data.data);
-                        const discount = Number(clone.summary.discount.replace(/\D+/g, '')) - existPromocode.amount;
+                        const promoDiscount =
+                            Number(clone.summary.promoDiscount.replace(/\D+/g, '')) - existPromocode.amount;
                         const total = Number(clone.summary.total.replace(/\D+/g, '')) + existPromocode.amount;
 
                         clone.input.promocode = null;
-                        clone.summary.discount = discount > 0 ? `- ${preparePrice(discount)} ₽` : '0 ₽';
+                        clone.summary.promoDiscount = promoDiscount > 0 ? `- ${preparePrice(promoDiscount)} ₽` : '0 ₽';
                         clone.summary.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
                         setTimeout(() => resolve(clone), 300);
                     }
@@ -1948,7 +1867,7 @@ export default class MockHttpService extends HttpServiceBase {
                     }
                     break;
 
-                case '/v1/checkout/certificate':
+                case '/v1/checkout/certDiscount':
                     {
                         if (!data.data) {
                             reject(new Error('data not found'));
@@ -1959,24 +1878,24 @@ export default class MockHttpService extends HttpServiceBase {
                             return;
                         }
 
-                        const existCertificate = certificates.find(s => s.code === data.code);
+                        const existCertificate = certDiscounts.find(s => s.code === data.code);
                         if (!existCertificate) {
-                            reject(new Error('wrong certificate code'));
+                            reject(new Error('wrong certDiscount code'));
                             return;
                         }
 
-                        if (data.data.input.certificates.some(s => s.code === data.code)) {
-                            reject(new Error('exists certificate code'));
+                        if (data.data.input.certDiscounts.some(s => s.code === data.code)) {
+                            reject(new Error('exists certDiscount code'));
                             return;
                         }
 
                         const clone = _cloneDeep(data.data);
-                        const certificate =
-                            Number(clone.summary.certificate.replace(/\D+/g, '')) + existCertificate.amount;
+                        const certDiscount =
+                            Number(clone.summary.certDiscount.replace(/\D+/g, '')) + existCertificate.amount;
                         const total = Number(clone.summary.total.replace(/\D+/g, '')) - existCertificate.amount;
 
-                        clone.input.certificates.push(existCertificate);
-                        clone.summary.certificate = certificate > 0 ? `- ${preparePrice(certificate)} ₽` : '0 ₽';
+                        clone.input.certDiscounts.push(existCertificate);
+                        clone.summary.certDiscount = certDiscount > 0 ? `- ${preparePrice(certDiscount)} ₽` : '0 ₽';
                         clone.summary.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
                         setTimeout(() => resolve(clone), 300);
                     }
@@ -1990,7 +1909,7 @@ export default class MockHttpService extends HttpServiceBase {
                         const total = Number(clone.summary.total.replace(/\D+/g, '')) - Number(data.bonus);
                         clone.input.bonus = data.bonus;
                         clone.summary.bonusSpent = data.bonus > 0 ? `- ${preparePrice(data.bonus)}` : '0';
-                        clone.summary.bonusPay = data.bonus > 0 ? `- ${preparePrice(data.bonus)} ₽` : '0 ₽';
+                        clone.summary.bonusDiscount = data.bonus > 0 ? `- ${preparePrice(data.bonus)} ₽` : '0 ₽';
                         clone.summary.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
                         setTimeout(() => resolve(clone), 300);
                     }
@@ -2019,11 +1938,12 @@ export default class MockHttpService extends HttpServiceBase {
                         }
 
                         const clone = _cloneDeep(data.data);
-                        const discount = Number(clone.summary.discount.replace(/\D+/g, '')) + existPromocode.amount;
+                        const promoDiscount =
+                            Number(clone.summary.promoDiscount.replace(/\D+/g, '')) + existPromocode.amount;
                         const total = Number(clone.summary.total.replace(/\D+/g, '')) - existPromocode.amount;
 
                         clone.input.promocode = data.promocode;
-                        clone.summary.discount = discount > 0 ? `- ${preparePrice(discount)} ₽` : '0 ₽';
+                        clone.summary.promoDiscount = promoDiscount > 0 ? `- ${preparePrice(promoDiscount)} ₽` : '0 ₽';
                         clone.summary.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
                         setTimeout(() => resolve(clone), 300);
                     }

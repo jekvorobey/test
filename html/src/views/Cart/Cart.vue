@@ -102,7 +102,7 @@
                                 <span>{{ activeTabItem.checkout.sum }}</span>
                             </p>
                             <p class="cart-view__main-panel-line">
-                                Скидка по промокоду <span>{{ activeTabItem.checkout.discount }}</span>
+                                Скидка по промокоду <span>{{ activeTabItem.checkout.promoDiscount }}</span>
                             </p>
 
                             <div class="cart-view__main-panel-total">
