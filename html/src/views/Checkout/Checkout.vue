@@ -43,10 +43,26 @@
                                     Итого <span>{{ summary.total }}</span>
                                 </p>
                                 <p class="text-grey text-sm checkout-view__main-panel-line">
-                                    Будет начислено <span>{{ summary.bonusGet }}&nbsp;бонусов</span>
+                                    Будет начислено
+                                    <span>
+                                        {{
+                                            summary.bonusGet > 0
+                                                ? `+ ${prepareBonus(summary.bonusGet)}`
+                                                : prepareBonus(summary.bonusGet)
+                                        }}
+                                        &nbsp;бонусов
+                                    </span>
                                 </p>
                                 <p class="text-grey text-sm checkout-view__main-panel-line">
-                                    Будет списано <span>{{ summary.bonusSpent }}&nbsp;бонусов</span>
+                                    Будет списано
+                                    <span>
+                                        {{
+                                            summary.bonusSpent > 0
+                                                ? `- ${prepareBonus(summary.bonusSpent)}`
+                                                : prepareBonus(summary.bonusSpent)
+                                        }}
+                                        &nbsp;бонусов
+                                    </span>
                                 </p>
                             </div>
                             <div v-if="!promocode" class="checkout-view__main-panel-promo">
@@ -109,6 +125,7 @@ import checkoutModule, { NAME as CHECKOUT_MODULE, CHECKOUT_TYPE, CHECKOUT_DATA }
 import { FETCH_CHECKOUT_DATA, ADD_PROMOCODE, DELETE_PROMOCODE } from '../../store/modules/Checkout/actions';
 import { CHECKOUT, PROMO_CODE, SUMMARY } from '../../store/modules/Checkout/getters';
 
+import { preparePrice } from '../../util/helpers';
 import '../../assets/images/sprites/check-small.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import './Checkout.css';
@@ -144,6 +161,10 @@ export default {
 
     methods: {
         ...mapActions(CHECKOUT_MODULE, [ADD_PROMOCODE, DELETE_PROMOCODE]),
+
+        prepareBonus(value) {
+            return preparePrice(value);
+        },
     },
 
     beforeRouteEnter(to, from, next) {

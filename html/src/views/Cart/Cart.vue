@@ -110,7 +110,15 @@
                                     Итого <span>{{ activeTabItem.summary.total }}</span>
                                 </p>
                                 <p class="text-grey text-sm cart-view__main-panel-line">
-                                    Будет начислено <span>{{ activeTabItem.summary.bonusGet }}</span>
+                                    Будет начислено
+                                    <span>
+                                        {{
+                                            activeTabItem.summary.bonusGet > 0
+                                                ? `+ ${prepareBonus(activeTabItem.summary.bonusGet)}`
+                                                : prepareBonus(activeTabItem.summary.bonusGet)
+                                        }}
+                                        бонусов
+                                    </span>
                                 </p>
                             </div>
 
@@ -180,6 +188,7 @@ import {
 } from '../../store/modules/Cart/getters';
 
 import { breakpoints, cartItemTypes } from '../../assets/scripts/constants';
+import { preparePrice } from '../../util/helpers';
 import '../../assets/images/sprites/alert.svg';
 import './Cart.css';
 
@@ -257,6 +266,10 @@ export default {
 
     methods: {
         ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM]),
+
+        prepareBonus(value) {
+            return preparePrice(value);
+        },
 
         onBeforeEnterItems(el) {
             el.dataset.index = counter;

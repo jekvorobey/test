@@ -1576,7 +1576,7 @@ const recipients = [
     },
 ];
 
-const certDiscounts = [
+const certificates = [
     {
         id: 1,
         code: 'CERT2020-500',
@@ -1623,7 +1623,7 @@ const checkoutData = {
 
         promocode: null,
         bonus: 0,
-        certDiscounts: [],
+        certificates: [],
     },
 
     summary: {
@@ -1670,29 +1670,27 @@ export default class MockHttpService extends HttpServiceBase {
                         setTimeout(() => resolve(_cloneDeep(cartData)), 300);
                     }
                     break;
-                case '/v1/checkout/certDiscount':
+                case '/v1/checkout/certificate':
                     {
                         if (!data.data) {
                             reject(new Error('data not found'));
                             return;
                         }
 
-                        if (!data.certDiscount) {
-                            reject(new Error('certDiscount not found'));
+                        if (!data.certificate) {
+                            reject(new Error('certificate not found'));
                             return;
                         }
 
-                        const existCertificate = certDiscounts.find(s => s.code === data.certDiscount.code);
+                        const existCertificate = certificates.find(s => s.code === data.certificate.code);
                         if (!existCertificate) {
-                            reject(new Error('wrong certDiscount code'));
+                            reject(new Error('wrong certificate code'));
                             return;
                         }
 
-                        const certDiscountObj = data.data.input.certDiscounts.find(
-                            s => s.code === data.certDiscount.code
-                        );
-                        if (!certDiscountObj) {
-                            reject(new Error('certDiscount does not exist'));
+                        const certificateObj = data.data.input.certificates.find(s => s.code === data.certificate.code);
+                        if (!certificateObj) {
+                            reject(new Error('certificate does not exist'));
                             return;
                         }
 
@@ -1701,7 +1699,7 @@ export default class MockHttpService extends HttpServiceBase {
                             Number(clone.summary.certDiscount.replace(/\D+/g, '')) - existCertificate.amount;
                         const total = Number(clone.summary.total.replace(/\D+/g, '')) + existCertificate.amount;
 
-                        const index = clone.input.certDiscounts.indexOf(certDiscountObj);
+                        const index = clone.input.certDiscounts.indexOf(certificateObj);
                         clone.input.certDiscounts.splice(index, 1);
 
                         clone.summary.certDiscount = certDiscount > 0 ? `- ${preparePrice(certDiscount)} ₽` : '0 ₽';
@@ -1867,7 +1865,7 @@ export default class MockHttpService extends HttpServiceBase {
                     }
                     break;
 
-                case '/v1/checkout/certDiscount':
+                case '/v1/checkout/certificate':
                     {
                         if (!data.data) {
                             reject(new Error('data not found'));
@@ -1878,14 +1876,14 @@ export default class MockHttpService extends HttpServiceBase {
                             return;
                         }
 
-                        const existCertificate = certDiscounts.find(s => s.code === data.code);
+                        const existCertificate = certificates.find(s => s.code === data.code);
                         if (!existCertificate) {
-                            reject(new Error('wrong certDiscount code'));
+                            reject(new Error('wrong certificate code'));
                             return;
                         }
 
-                        if (data.data.input.certDiscounts.some(s => s.code === data.code)) {
-                            reject(new Error('exists certDiscount code'));
+                        if (data.data.input.certificates.some(s => s.code === data.code)) {
+                            reject(new Error('exists certificate code'));
                             return;
                         }
 

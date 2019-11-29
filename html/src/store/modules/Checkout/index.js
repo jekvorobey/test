@@ -5,6 +5,7 @@ import getters, {
     PROMOCODE_STATUS,
     ADDRESS_STATUS,
 } from './getters';
+
 import actions from './actions';
 import mutations from './mutations';
 import { requestStatus } from '../../../assets/scripts/constants';

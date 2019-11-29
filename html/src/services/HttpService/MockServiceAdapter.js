@@ -19,6 +19,10 @@ export default class MockServiceAdapter extends HttpServiceBase {
     delete(path, config) {
         switch (path) {
             case '/v1/cart/item':
+            case '/v1/checkout/address':
+            case '/v1/checkout/certificate':
+            case '/v1/checkout/bonus':
+            case '/v1/checkout/promocode':
                 return this.httpServiceInstance.delete(path, config);
             default:
                 return this.mockServiceInstance.delete(path, config);
@@ -39,6 +43,9 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/checkout/address':
             case '/v1/checkout/pickup-point':
             case '/v1/checkout/commit':
+            case '/v1/checkout/certificate':
+            case '/v1/checkout/bonus':
+            case '/v1/checkout/promocode':
                 return this.httpServiceInstance.post(path, data, config);
             default:
                 return this.mockServiceInstance.post(path, data, config);
