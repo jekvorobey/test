@@ -11,7 +11,7 @@ export default class ServerHttpService extends HttpServiceBase {
             baseURL,
             withCredentials: true,
             timeout: 20000,
-            headers: { Cookie: $cookie.req.headers.cookie || '' },
+            headers: { Cookie: $cookie.cookieString || '' },
             // cache will be enabled by default
             // adapter: cacheAdapterEnhancer(axios.defaults.adapter),
         });

@@ -62,3 +62,9 @@ export const deliveryTypes = Object.freeze({
     SPLIT: 1,
     CONSOLIDATION: 2,
 });
+
+export const requestStatus = Object.freeze({
+    PENDING: 'pending',
+    SUCCESS: 'success',
+    ERROR: 'error',
+});

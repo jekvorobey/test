@@ -24,29 +24,29 @@
                             </p>
                             <p class="checkout-view__main-panel-line">
                                 Сумма заказа: {{ $t(`cart.checkout.type.${checkoutType}`) }}
-                                <span>{{ summory.sum }}</span>
+                                <span>{{ summary.sum }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Скидка по промокоду <span>{{ summory.discount }}</span>
+                                Скидка по промокоду <span>{{ summary.discount }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Оплата бонусами <span>{{ summory.bonusPay }}</span>
+                                Оплата бонусами <span>{{ summary.bonusPay }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Оплата подарочным сертификатом <span>{{ summory.certificate }}</span>
+                                Оплата подарочным сертификатом <span>{{ summary.certificate }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Доставка <span>{{ summory.delivery }}</span>
+                                Доставка <span>{{ summary.delivery }}</span>
                             </p>
                             <div class="checkout-view__main-panel-total">
                                 <p class="text-bold checkout-view__main-panel-line">
-                                    Итого <span>{{ summory.total }}</span>
+                                    Итого <span>{{ summary.total }}</span>
                                 </p>
                                 <p class="text-grey text-sm checkout-view__main-panel-line">
-                                    Будет начислено <span>{{ summory.bonusGet }}&nbsp;бонусов</span>
+                                    Будет начислено <span>{{ summary.bonusGet }}&nbsp;бонусов</span>
                                 </p>
                                 <p class="text-grey text-sm checkout-view__main-panel-line">
-                                    Будет списано <span>{{ summory.bonusSpent }}&nbsp;бонусов</span>
+                                    Будет списано <span>{{ summary.bonusSpent }}&nbsp;бонусов</span>
                                 </p>
                             </div>
                             <div v-if="!promocode" class="checkout-view__main-panel-promo">
@@ -107,7 +107,7 @@ import { NAME as CART_MODULE, CART_DATA } from '../../store/modules/Cart';
 
 import checkoutModule, { NAME as CHECKOUT_MODULE, CHECKOUT_TYPE, CHECKOUT_DATA } from '../../store/modules/Checkout';
 import { FETCH_CHECKOUT_DATA, ADD_PROMOCODE, DELETE_PROMOCODE } from '../../store/modules/Checkout/actions';
-import { CHECKOUT, PROMO_CODE, SUMMORY } from '../../store/modules/Checkout/getters';
+import { CHECKOUT, PROMO_CODE, SUMMARY } from '../../store/modules/Checkout/getters';
 
 import '../../assets/images/sprites/check-small.svg';
 import '../../assets/images/sprites/arrow-small.svg';
@@ -139,7 +139,7 @@ export default {
             checkoutType: state => state.params.type,
         }),
 
-        ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMORY]),
+        ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMARY]),
     },
 
     methods: {

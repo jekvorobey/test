@@ -1,5 +1,6 @@
 export const SET_DATA = 'SET_DATA';
 export const SET_TYPE = 'SET_TYPE';
+export const SET_STATUS = 'SET_STATUS';
 
 export const SET_RECIPIENT = 'SET_RECIPIENT';
 export const SET_AGREEMENT = 'SET_AGREEMENT';
@@ -12,6 +13,10 @@ export const CHANGE_CHUNK_DATE = 'CHANGE_CHUNK_DATE';
 export const ADD_ADDRESS = 'ADD_ADDRESS';
 
 export default {
+    [SET_STATUS](state, payload = {}) {
+        state.checkoutStatus[payload.name] = payload.value;
+    },
+
     [SET_TYPE](state, payload = null) {
         state.checkoutType = payload;
     },

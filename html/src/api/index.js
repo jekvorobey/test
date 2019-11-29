@@ -72,6 +72,10 @@ export function getCheckoutData(data) {
     return $http.get('/v1/checkout/data', data);
 }
 
+export function commitCheckoutData(data) {
+    return $http.get('/v1/checkout/commit', data);
+}
+
 export function setReceiveMethod(data) {
     return $http.post('/v1/checkout/receive-method', data);
 }

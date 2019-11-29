@@ -1,4 +1,8 @@
 export default class BaseCookie {
+    get cookieString() {
+        throw new Error('not implemented');
+    }
+
     get(name, options) {
         throw new Error('not implemented');
     }

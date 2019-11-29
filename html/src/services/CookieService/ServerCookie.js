@@ -9,6 +9,10 @@ export default class ServerCookie extends BaseCookie {
         this.res = res;
     }
 
+    get cookieString() {
+        return this.req && this.req.headers.cookie;
+    }
+
     get(name, options) {
         return this.instance.get(name, options);
     }

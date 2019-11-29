@@ -1,3 +1,5 @@
+import { requestStatus } from '../../../assets/scripts/constants';
+
 export const DELIVERY_TYPES_MAP = 'deliveryTypesMap';
 
 export const CERTIFICATES = 'certificates';
@@ -8,7 +10,7 @@ export const AGREEMENT = 'agreement';
 export const CHECKOUT = 'checkout';
 export const PROMO_CODE = 'promocode';
 
-export const AVALIABLE_BONUS = 'avaliableBonus';
+export const AVAILABLE_BONUS = 'availableBonus';
 export const RECIPIENTS = 'recipients';
 export const ADDRESSES = 'addresses';
 export const PICKUP_POINTS = 'pickupPoints';
@@ -31,7 +33,14 @@ export const SELECTED_DELIVERY_METHOD_ID = 'selectedDeliveryMethodID';
 export const SELECTED_PAYMENT_METHOD_ID = 'selectedPaymentMethodID';
 export const SELECTED_CONFIRMATION_TYPE_ID = 'selectedConfirmationTypeID';
 
-export const SUMMORY = 'summory';
+export const CHECKOUT_STATUS = 'checkoutStatus';
+export const RECEIVE_METHOD_STATUS = 'receiveMethodStatus';
+export const ADDRESS_STATUS = 'addressStatus';
+export const BONUS_STATUS = 'bonusStatus';
+export const CERTIFICATE_STATUS = 'certificateStatus';
+export const PROMOCODE_STATUS = 'promocodeStatus';
+
+export const SUMMARY = 'summary';
 
 // const checkoutData = {
 //     recipients: [...recipients],
@@ -41,7 +50,7 @@ export const SUMMORY = 'summory';
 //     paymentMethods: [...paymentMethods],
 //     confirmationTypes: [...confirmationTypes],
 //     deliveryTypes: [],
-//     avaliableBonus: 300,
+//     availableBonus: 300,
 
 //     input: {
 //         receiveMethodID: receiveMethods[0].id,
@@ -62,7 +71,7 @@ export const SUMMORY = 'summory';
 //         certificates: [],
 //     },
 
-//     summory: {
+//     summary: {
 //         sum: '6 704 ₽',
 //         discount: '0 ₽',
 //         certificate: '0 ₽',
@@ -75,7 +84,7 @@ export const SUMMORY = 'summory';
 // };
 
 export default {
-    [AVALIABLE_BONUS]: state => state.checkoutData[AVALIABLE_BONUS],
+    [AVAILABLE_BONUS]: state => state.checkoutData[AVAILABLE_BONUS],
 
     [RECIPIENTS]: state => state.checkoutData[RECIPIENTS] || [],
     [ADDRESSES]: state => state.checkoutData[ADDRESSES] || [],
@@ -110,11 +119,12 @@ export default {
     [AGREEMENT]: state => !!state.checkoutData.input.agreement,
     [CERTIFICATES]: state => state.checkoutData.input.certificates || [],
 
-    [SUMMORY]: state => state.checkoutData[SUMMORY],
+    [SUMMARY]: state => state.checkoutData[SUMMARY],
 
-    // [DELIVERY_TYPES_MAP]: state =>
-    //     state.deliveryTypes.reduce((accum, current) => {
-    //         accum[current.id] = current;
-    //         return accum;
-    //     }, {}),
+    [CHECKOUT_STATUS]: state => state[CHECKOUT_STATUS] || {},
+    [RECEIVE_METHOD_STATUS]: state => state[CHECKOUT_STATUS][RECEIVE_METHOD_STATUS] || requestStatus.SUCCESS,
+    [ADDRESS_STATUS]: state => state[CHECKOUT_STATUS][ADDRESS_STATUS] || requestStatus.SUCCESS,
+    [BONUS_STATUS]: state => state[CHECKOUT_STATUS][BONUS_STATUS] || requestStatus.SUCCESS,
+    [CERTIFICATE_STATUS]: state => state[CHECKOUT_STATUS][CERTIFICATE_STATUS] || requestStatus.SUCCESS,
+    [PROMOCODE_STATUS]: state => state[CHECKOUT_STATUS][PROMOCODE_STATUS] || requestStatus.SUCCESS,
 };

@@ -1,4 +1,20 @@
 import { $logger } from '../../../services/ServiceLocator';
+import { requestStatus } from '../../../assets/scripts/constants';
+
+import { RECEIVE_METHOD_STATUS, ADDRESS_STATUS, BONUS_STATUS, CERTIFICATE_STATUS, PROMOCODE_STATUS } from './getters';
+
+import {
+    SET_DATA,
+    SET_TYPE,
+    SET_STATUS,
+    SET_AGREEMENT as M_SET_AGREEMENT,
+    SET_SUBSCRIBE as M_SET_SUBSCRIBE,
+    SET_RECIPIENT as M_SET_RECIPIENT,
+    SET_DELIVERY_TYPE as M_SET_DELIVERY_TYPE,
+    SET_CONFIRMATION_TYPE as M_SET_CONFIRMATION_TYPE,
+    CHANGE_CHUNK_DATE as M_CHANGE_CHUNK_DATE,
+} from './mutations';
+
 import {
     getCheckoutData,
     setReceiveMethod,
@@ -10,18 +26,8 @@ import {
     deleteCertificate,
     addPromocode,
     deletePromocode,
+    commitCheckoutData,
 } from '../../../api';
-
-import {
-    SET_DATA,
-    SET_TYPE,
-    SET_AGREEMENT as M_SET_AGREEMENT,
-    SET_SUBSCRIBE as M_SET_SUBSCRIBE,
-    SET_RECIPIENT as M_SET_RECIPIENT,
-    SET_DELIVERY_TYPE as M_SET_DELIVERY_TYPE,
-    SET_CONFIRMATION_TYPE as M_SET_CONFIRMATION_TYPE,
-    CHANGE_CHUNK_DATE as M_CHANGE_CHUNK_DATE,
-} from './mutations';
 
 export const SET_RECIPIENT = 'SET_RECIPIENT';
 export const SET_RECEIVE_METHOD = 'SET_RECEIVE_METHOD';
@@ -47,59 +53,124 @@ export const CHANGE_ADDRESS = 'CHANGE_ADDRESS';
 export const FETCH_CHECKOUT_DATA = 'FETCH_CHECKOUT_DATA';
 export const CHANGE_CHUNK_DATE = 'CHANGE_CHUNK_DATE';
 
+export const COMMIT_DATA = 'COMMIT_DATA';
+
 export default {
     [SET_RECEIVE_METHOD]({ commit, state }, payload) {
+        commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.PENDING });
         return setReceiveMethod({ method: payload, data: state.checkoutData })
-            .then(data => commit(SET_DATA, data))
-            .catch(error => $logger.error(`${SET_RECEIVE_METHOD} ${error}`));
+            .then(data => {
+                commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.SUCCESS });
+                commit(SET_DATA, data);
+            })
+            .catch(error => {
+                commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.ERROR });
+                $logger.error(`${SET_RECEIVE_METHOD} ${error}`);
+            });
     },
 
     [SET_ADDRESS]({ commit, state }, payload) {
+        commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
         return setAddress({ address: payload, data: state.checkoutData })
-            .then(data => commit(SET_DATA, data))
-            .catch(error => $logger.error(`${SET_ADDRESS} ${error}`));
+            .then(data => {
+                commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
+                commit(SET_DATA, data);
+            })
+            .catch(error => {
+                commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
+                $logger.error(`${SET_ADDRESS} ${error}`);
+            });
     },
 
     [SET_PICKUP_POINT]({ commit, state }, payload) {
+        commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
         return setPickupPoint({ pickupPoint: payload, data: state.checkoutData })
-            .then(data => commit(SET_DATA, data))
-            .catch(error => $logger.error(`${SET_PICKUP_POINT} ${error}`));
+            .then(data => {
+                commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
+                commit(SET_DATA, data);
+            })
+            .catch(error => {
+                commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
+                $logger.error(`${SET_PICKUP_POINT} ${error}`);
+            });
     },
 
     [ADD_BONUS]({ commit, state }, payload) {
+        commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.PENDING });
         return addBonus({ bonus: payload, data: state.checkoutData })
-            .then(data => commit(SET_DATA, data))
-            .catch(error => $logger.error(`${ADD_BONUS} ${error}`));
+            .then(data => {
+                commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.SUCCESS });
+                commit(SET_DATA, data);
+            })
+            .catch(error => {
+                commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.ERROR });
+                $logger.error(`${ADD_BONUS} ${error}`);
+            });
     },
 
     [DELETE_BONUS]({ commit, state }) {
+        commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.PENDING });
         return deleteBonus({ data: state.checkoutData })
-            .then(data => commit(SET_DATA, data))
-            .catch(error => $logger.error(`${DELETE_BONUS} ${error}`));
+            .then(data => {
+                commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.SUCCESS });
+                commit(SET_DATA, data);
+            })
+            .catch(error => {
+                commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.ERROR });
+                $logger.error(`${DELETE_BONUS} ${error}`);
+            });
     },
 
     [ADD_CERTIFICATE]({ commit, state }, payload) {
+        commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.PENDING });
         return addCertificate({ code: payload, data: state.checkoutData })
-            .then(data => commit(SET_DATA, data))
-            .catch(error => $logger.error(`${ADD_CERTIFICATE} ${error}`));
+            .then(data => {
+                commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.SUCCESS });
+                commit(SET_DATA, data);
+            })
+            .catch(error => {
+                commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.ERROR });
+                $logger.error(`${ADD_CERTIFICATE} ${error}`);
+            });
     },
 
     [DELETE_CERTIFICATE]({ commit, state }, payload) {
+        commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.PENDING });
         return deleteCertificate({ certificate: payload, data: state.checkoutData })
-            .then(data => commit(SET_DATA, data))
-            .catch(error => $logger.error(`${DELETE_CERTIFICATE} ${error}`));
+            .then(data => {
+                commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.SUCCESS });
+                commit(SET_DATA, data);
+            })
+            .catch(error => {
+                commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.ERROR });
+                $logger.error(`${DELETE_CERTIFICATE} ${error}`);
+            });
     },
 
     [ADD_PROMOCODE]({ commit, state }, payload) {
+        commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
         return addPromocode({ promocode: payload, data: state.checkoutData })
-            .then(data => commit(SET_DATA, data))
-            .catch(error => $logger.error(`${ADD_PROMOCODE} ${error}`));
+            .then(data => {
+                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
+                commit(SET_DATA, data);
+            })
+            .catch(error => {
+                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
+                $logger.error(`${ADD_PROMOCODE} ${error}`);
+            });
     },
 
     [DELETE_PROMOCODE]({ commit, state }) {
+        commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
         return deletePromocode({ data: state.checkoutData })
-            .then(data => commit(SET_DATA, data))
-            .catch(error => $logger.error(`${DELETE_PROMOCODE} ${error}`));
+            .then(data => {
+                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
+                commit(SET_DATA, data);
+            })
+            .catch(error => {
+                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
+                $logger.error(`${DELETE_PROMOCODE} ${error}`);
+            });
     },
 
     [SET_CONFIRMATION_TYPE]({ commit }, payload) {
@@ -124,6 +195,12 @@ export default {
 
     [CHANGE_CHUNK_DATE]({ commit }, payload) {
         commit(M_CHANGE_CHUNK_DATE, payload);
+    },
+
+    [COMMIT_DATA]({ state }) {
+        return commitCheckoutData(state.checkoutData)
+            .then(() => console.log('success commit'))
+            .catch(error => $logger.error(`${FETCH_CHECKOUT_DATA} ${error}`));
     },
 
     [FETCH_CHECKOUT_DATA]({ commit }, payload) {

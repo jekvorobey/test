@@ -23,7 +23,9 @@
         </div>
         <div class="product-checkout-panel__item">
             <div class="product-checkout-panel__item-header">
-                <h2 class="product-checkout-panel__item-header-hl">Способ получения</h2>
+                <h2 class="product-checkout-panel__item-header-hl">
+                    Способ получения&nbsp;<v-spinner width="24" height="24" :show="isReceiveMethodPending" />
+                </h2>
             </div>
             <ul class="product-checkout-panel__item-list">
                 <checkout-option-card
@@ -43,7 +45,8 @@
         <div class="product-checkout-panel__item">
             <div class="product-checkout-panel__item-header">
                 <h2 class="product-checkout-panel__item-header-hl">
-                    {{ isDelivery ? 'Адрес доставки' : 'Пункт самовывоза' }}
+                    {{ isDelivery ? 'Адрес доставки' : 'Пункт самовывоза' }}&nbsp;
+                    <v-spinner width="24" height="24" :show="isAddressPending" />
                 </h2>
                 <v-link
                     v-if="isDelivery"
@@ -68,7 +71,7 @@
                         class="product-checkout-panel__item-card"
                         v-for="address in addresses"
                         :key="address.id"
-                        :selected="address.id === selectedAddress.id"
+                        :selected="selectedAddress && address.id === selectedAddress.id"
                         @cardClick="SET_ADDRESS(address)"
                     >
                         {{ address.description }}
@@ -167,28 +170,32 @@
             >
                 <div class="product-checkout-panel__item-header">
                     <h3 class="product-checkout-panel__item-header-hl">
-                        <v-svg name="bonus" width="24" height="24" />&nbsp;Оплата бонусами
+                        <v-svg name="bonus" width="24" height="24" />&nbsp;Оплата бонусами&nbsp;
+                        <v-spinner width="24" height="24" :show="isBonusPending" />
                     </h3>
                 </div>
                 <div v-if="!bonus" class="product-checkout-panel__item-controls">
-                    <v-input
-                        type="number"
-                        min="1"
-                        :max="avaliableBonus"
-                        class="product-checkout-panel__item-controls-input"
-                        placeholder="Сколько бонусов использовать?"
-                        v-model="bonusAmount"
-                    />
-                    <v-button
-                        class="btn--outline product-checkout-panel__item-controls-btn"
-                        @click="ADD_BONUS(bonusAmount)"
-                        :disabled="!bonusAmount"
-                    >
-                        Применить
-                    </v-button>
+                    <template v-if="availableBonus > 0">
+                        <v-input
+                            type="number"
+                            min="1"
+                            :max="availableBonus"
+                            class="product-checkout-panel__item-controls-input"
+                            placeholder="Сколько бонусов использовать?"
+                            v-model="bonusAmount"
+                            @keydown.enter.prevent="ADD_BONUS(bonusAmount)"
+                        />
+                        <v-button
+                            class="btn--outline product-checkout-panel__item-controls-btn"
+                            @click="ADD_BONUS(bonusAmount)"
+                            :disabled="!bonusAmount"
+                        >
+                            Применить
+                        </v-button>
+                    </template>
                     <span>
                         На вашем счёте:&nbsp;
-                        <strong class="text-bold">{{ avaliableBonus }}&nbsp;бонусов</strong>
+                        <strong class="text-bold">{{ availableBonus }}&nbsp;бонусов</strong>
                         &nbsp;<span class="text-grey">(1 бонус = 1 рубль)</span>
                     </span>
                 </div>
@@ -207,7 +214,8 @@
             >
                 <div class="product-checkout-panel__item-header">
                     <h3 class="product-checkout-panel__item-header-hl">
-                        <v-svg name="bonus" width="24" height="24" />&nbsp;Оплата сертификатом
+                        <v-svg name="gift" width="24" height="24" />&nbsp;Оплата сертификатом&nbsp;
+                        <v-spinner width="24" height="24" :show="isCertificatePending" />
                     </h3>
                 </div>
                 <ul class="product-checkout-panel__item-list">
@@ -234,11 +242,13 @@
                         v-model="certificateCode"
                         class="product-checkout-panel__item-controls-input"
                         placeholder="Введите номер сертификата"
+                        @keydown.enter.prevent="ADD_CERTIFICATE(certificateCode)"
                     />
                     <v-button
                         class="btn--outline product-checkout-panel__item-controls-btn"
-                        @click="ADD_CERTIFICATE(certificateCode)"
                         :disabled="!certificateCode"
+                        @click="ADD_CERTIFICATE(certificateCode)"
+                        @mousedown.prevent
                     >
                         Активировать
                     </v-button>
@@ -301,6 +311,7 @@ import VLink from '../../controls/VLink/VLink.vue';
 import VInput from '../../controls/VInput/VInput.vue';
 import VButton from '../../controls/VButton/VButton.vue';
 import VCheck from '../../controls/VCheck/VCheck.vue';
+import VSpinner from '../../controls/VSpinner/VSpinner.vue';
 
 import CheckoutDateModal from '../CheckoutDateModal/CheckoutDateModal.vue';
 import CheckoutPickupPointModal from '../CheckoutPickupPointModal/CheckoutPickupPointModal.vue';
@@ -309,7 +320,7 @@ import CheckoutProductCard from '../CheckoutProductCard/CheckoutProductCard.vue'
 import CheckoutAddressPanel from '../CheckoutAddressPanel/CheckoutAddressPanel.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as CHECKOUT_MODULE } from '../../../store/modules/Checkout';
+import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '../../../store/modules/Checkout';
 import {
     SET_DATA_PROP,
     SET_RECIPIENT,
@@ -349,13 +360,24 @@ import {
     SUBSCRIBE,
     PROMO_CODE,
     SELECTED_CONFIRMATION_TYPE_ID,
-    AVALIABLE_BONUS,
+    AVAILABLE_BONUS,
+    ADDRESS_STATUS,
+    BONUS_STATUS,
+    CERTIFICATE_STATUS,
+    PROMOCODE_STATUS,
+    RECEIVE_METHOD_STATUS,
 } from '../../../store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
-import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '../../../assets/scripts/constants';
+import {
+    deliveryMethods,
+    receiveTypes,
+    deliveryTypes,
+    receiveMethods,
+    requestStatus,
+} from '../../../assets/scripts/constants';
 
 import '../../../assets/images/sprites/payment/bonus.svg';
 import '../../../assets/images/sprites/payment/visa.svg';
@@ -363,6 +385,7 @@ import '../../../assets/images/sprites/payment/mastercard.svg';
 import '../../../assets/images/sprites/payment/mir.svg';
 import '../../../assets/images/sprites/plus.svg';
 import '../../../assets/images/sprites/edit.svg';
+import '../../../assets/images/sprites/gift.svg';
 import './ProductCheckoutPanel.css';
 
 export default {
@@ -373,6 +396,7 @@ export default {
         VButton,
         VInput,
         VCheck,
+        VSpinner,
 
         CheckoutDateModal,
         CheckoutPickupPointModal,
@@ -391,7 +415,7 @@ export default {
     computed: {
         ...mapState(['locale']),
         ...mapGetters(CHECKOUT_MODULE, [
-            AVALIABLE_BONUS,
+            AVAILABLE_BONUS,
             RECIPIENTS,
             SELECTED_RECIPIENT,
 
@@ -417,7 +441,33 @@ export default {
             AGREEMENT,
             SUBSCRIBE,
             PROMO_CODE,
+
+            ADDRESS_STATUS,
+            BONUS_STATUS,
+            CERTIFICATE_STATUS,
+            PROMOCODE_STATUS,
+            RECEIVE_METHOD_STATUS,
         ]),
+
+        isReceiveMethodPending() {
+            return this[RECEIVE_METHOD_STATUS] === requestStatus.PENDING;
+        },
+
+        isAddressPending() {
+            return this[ADDRESS_STATUS] === requestStatus.PENDING;
+        },
+
+        isBonusPending() {
+            return this[BONUS_STATUS] === requestStatus.PENDING;
+        },
+
+        isCertificatePending() {
+            return this[CERTIFICATE_STATUS] === requestStatus.PENDING;
+        },
+
+        isPromocodePending() {
+            return this[PROMOCODE_STATUS] === requestStatus.PENDING;
+        },
 
         showPanels() {
             return this.isDelivery ? this[SELECTED_ADDRESS] : this[SELECTED_PICKUP_POINT];

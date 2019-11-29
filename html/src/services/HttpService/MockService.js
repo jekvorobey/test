@@ -1689,7 +1689,7 @@ const checkoutData = {
     paymentMethods: [...paymentMethods],
     confirmationTypes: [...confirmationTypes],
     deliveryTypes: [...mockDeliveryTypes],
-    avaliableBonus: 300,
+    availableBonus: 300,
 
     input: {
         receiveMethodID: mockReceiveMethods[0].id,
@@ -1780,14 +1780,14 @@ export default class MockHttpService extends HttpServiceBase {
 
                         const clone = _cloneDeep(data.data);
                         const certificate =
-                            Number(clone.summory.certificate.replace(/\D+/g, '')) - existCertificate.amount;
-                        const total = Number(clone.summory.total.replace(/\D+/g, '')) + existCertificate.amount;
+                            Number(clone.summary.certificate.replace(/\D+/g, '')) - existCertificate.amount;
+                        const total = Number(clone.summary.total.replace(/\D+/g, '')) + existCertificate.amount;
 
                         const index = clone.input.certificates.indexOf(certificateObj);
                         clone.input.certificates.splice(index, 1);
 
-                        clone.summory.certificate = certificate > 0 ? `- ${preparePrice(certificate)} ₽` : '0 ₽';
-                        clone.summory.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        clone.summary.certificate = certificate > 0 ? `- ${preparePrice(certificate)} ₽` : '0 ₽';
+                        clone.summary.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
                         setTimeout(() => resolve(clone), 300);
                     }
                     break;
@@ -1799,12 +1799,12 @@ export default class MockHttpService extends HttpServiceBase {
                         }
 
                         const clone = _cloneDeep(data.data);
-                        const total = Number(clone.summory.total.replace(/\D+/g, '')) + Number(clone.input.bonus);
+                        const total = Number(clone.summary.total.replace(/\D+/g, '')) + Number(clone.input.bonus);
                         clone.input.bonus = 0;
 
-                        clone.summory.bonusSpent = `${0}`;
-                        clone.summory.bonusPay = `${0} ₽`;
-                        clone.summory.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        clone.summary.bonusSpent = `${0}`;
+                        clone.summary.bonusPay = `${0} ₽`;
+                        clone.summary.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
                         setTimeout(() => resolve(clone), 300);
                     }
                     break;
@@ -1822,12 +1822,12 @@ export default class MockHttpService extends HttpServiceBase {
                         }
 
                         const clone = _cloneDeep(data.data);
-                        const discount = Number(clone.summory.discount.replace(/\D+/g, '')) - existPromocode.amount;
-                        const total = Number(clone.summory.total.replace(/\D+/g, '')) + existPromocode.amount;
+                        const discount = Number(clone.summary.discount.replace(/\D+/g, '')) - existPromocode.amount;
+                        const total = Number(clone.summary.total.replace(/\D+/g, '')) + existPromocode.amount;
 
                         clone.input.promocode = null;
-                        clone.summory.discount = discount > 0 ? `- ${preparePrice(discount)} ₽` : '0 ₽';
-                        clone.summory.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        clone.summary.discount = discount > 0 ? `- ${preparePrice(discount)} ₽` : '0 ₽';
+                        clone.summary.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
                         setTimeout(() => resolve(clone), 300);
                     }
                     break;
@@ -1896,14 +1896,14 @@ export default class MockHttpService extends HttpServiceBase {
 
                         // пересчет
                         const price = Number(data.method.price.replace(/\D+/g, ''));
-                        const delivery = Number(clone.summory.delivery.replace(/\D+/g, ''));
-                        let total = Number(clone.summory.total.replace(/\D+/g, ''));
+                        const delivery = Number(clone.summary.delivery.replace(/\D+/g, ''));
+                        let total = Number(clone.summary.total.replace(/\D+/g, ''));
                         if (!Number.isNaN(delivery)) total += delivery;
                         if (!Number.isNaN(price)) total -= price;
 
-                        clone.summory.delivery =
+                        clone.summary.delivery =
                             !Number.isNaN(price) && price > 0 ? `- ${preparePrice(price)} ₽` : 'Бесплатно';
-                        clone.summory.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        clone.summary.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
                         setTimeout(() => resolve(clone), 300);
                     }
                     break;
@@ -1972,12 +1972,12 @@ export default class MockHttpService extends HttpServiceBase {
 
                         const clone = _cloneDeep(data.data);
                         const certificate =
-                            Number(clone.summory.certificate.replace(/\D+/g, '')) + existCertificate.amount;
-                        const total = Number(clone.summory.total.replace(/\D+/g, '')) - existCertificate.amount;
+                            Number(clone.summary.certificate.replace(/\D+/g, '')) + existCertificate.amount;
+                        const total = Number(clone.summary.total.replace(/\D+/g, '')) - existCertificate.amount;
 
                         clone.input.certificates.push(existCertificate);
-                        clone.summory.certificate = certificate > 0 ? `- ${preparePrice(certificate)} ₽` : '0 ₽';
-                        clone.summory.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        clone.summary.certificate = certificate > 0 ? `- ${preparePrice(certificate)} ₽` : '0 ₽';
+                        clone.summary.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
                         setTimeout(() => resolve(clone), 300);
                     }
                     break;
@@ -1987,11 +1987,11 @@ export default class MockHttpService extends HttpServiceBase {
                         if (!data.bonus) reject(new Error('bonus not found'));
 
                         const clone = _cloneDeep(data.data);
-                        const total = Number(clone.summory.total.replace(/\D+/g, '')) - Number(data.bonus);
+                        const total = Number(clone.summary.total.replace(/\D+/g, '')) - Number(data.bonus);
                         clone.input.bonus = data.bonus;
-                        clone.summory.bonusSpent = data.bonus > 0 ? `- ${preparePrice(data.bonus)}` : '0';
-                        clone.summory.bonusPay = data.bonus > 0 ? `- ${preparePrice(data.bonus)} ₽` : '0 ₽';
-                        clone.summory.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        clone.summary.bonusSpent = data.bonus > 0 ? `- ${preparePrice(data.bonus)}` : '0';
+                        clone.summary.bonusPay = data.bonus > 0 ? `- ${preparePrice(data.bonus)} ₽` : '0 ₽';
+                        clone.summary.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
                         setTimeout(() => resolve(clone), 300);
                     }
                     break;
@@ -2019,12 +2019,12 @@ export default class MockHttpService extends HttpServiceBase {
                         }
 
                         const clone = _cloneDeep(data.data);
-                        const discount = Number(clone.summory.discount.replace(/\D+/g, '')) + existPromocode.amount;
-                        const total = Number(clone.summory.total.replace(/\D+/g, '')) - existPromocode.amount;
+                        const discount = Number(clone.summary.discount.replace(/\D+/g, '')) + existPromocode.amount;
+                        const total = Number(clone.summary.total.replace(/\D+/g, '')) - existPromocode.amount;
 
                         clone.input.promocode = data.promocode;
-                        clone.summory.discount = discount > 0 ? `- ${preparePrice(discount)} ₽` : '0 ₽';
-                        clone.summory.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
+                        clone.summary.discount = discount > 0 ? `- ${preparePrice(discount)} ₽` : '0 ₽';
+                        clone.summary.total = `${preparePrice(total < 0 ? 0 : total)} ₽`;
                         setTimeout(() => resolve(clone), 300);
                     }
                     break;
