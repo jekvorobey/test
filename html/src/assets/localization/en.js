@@ -110,7 +110,7 @@ export default {
             masterclass: 'Master-classes',
         },
 
-        checkout: {
+        summary: {
             type: {
                 product: 'Products',
                 masterclass: 'Master-classes',

@@ -1340,10 +1340,10 @@ const mockTypes = {
                 title: 'Ближайший самовывоз из пункта выдачи с 26 июня, среда',
             },
         ],
-        checkout: {
+        summary: {
             sum: '6 704 ₽',
             promoDiscount: '0 ₽',
-            bonus: '+1 488 бонусов',
+            bonusGet: '+1 488 бонусов',
             total: '6 704 ₽',
         },
     },
@@ -1351,10 +1351,10 @@ const mockTypes = {
     masterclass: {
         id: typeIds[cartItemTypes.MASTERCLASS],
         type: cartItemTypes.MASTERCLASS,
-        checkout: {
+        summary: {
             sum: '2 300 ₽',
             promoDiscount: '1 600 ₽',
-            bonus: '+600 бонусов',
+            bonusGet: '+600 бонусов',
             total: '700 ₽',
         },
     },
@@ -2082,58 +2082,3 @@ export default class MockHttpService extends HttpServiceBase {
         });
     }
 }
-
-// /* eslint-enable no-console */
-
-// /* eslint-disable  */
-
-// get '/checkout/data'
-// //принимает
-// { region, type }
-
-// //возвращает
-// { data }
-
-// get '/checkout/receive-methods'
-// //принимает
-// { region }
-
-// //возвращает
-// { data: [] }
-
-// get '/checkout/confirmation-methods'
-// //принимает
-// null
-
-// //возвращает
-// { [] }
-
-// get '/checkout/payment-methods'
-// //принимает
-// null
-
-// //возвращает
-// { [] }
-
-// post '/checkout/receive-method'
-// //принимает
-// { data, method}
-
-// //возвращает
-// { data }
-
-// post '/checkout/set-address'
-// //принимает
-// { data, address}
-
-// //возвращает
-// { data, deliveryTypes }
-
-// post '/checkout/set-pickup-point'
-// //принимает
-// { data, address}
-
-// //возвращает
-// { data, deliveryTypes }
-
-// /* eslint-enable  */

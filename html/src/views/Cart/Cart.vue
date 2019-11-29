@@ -98,19 +98,19 @@
                                 Внимание: продукты и мастер-классы оплачиваются отдельно
                             </p>
                             <p class="cart-view__main-panel-line">
-                                Сумма заказа: {{ $t(`cart.checkout.type.${activeTabItem.type}`) }}
-                                <span>{{ activeTabItem.checkout.sum }}</span>
+                                Сумма заказа: {{ $t(`cart.summary.type.${activeTabItem.type}`) }}
+                                <span>{{ activeTabItem.summary.sum }}</span>
                             </p>
                             <p class="cart-view__main-panel-line">
-                                Скидка по промокоду <span>{{ activeTabItem.checkout.promoDiscount }}</span>
+                                Скидка по промокоду <span>{{ activeTabItem.summary.promoDiscount }}</span>
                             </p>
 
                             <div class="cart-view__main-panel-total">
                                 <p class="text-bold cart-view__main-panel-line">
-                                    Итого <span>{{ activeTabItem.checkout.total }}</span>
+                                    Итого <span>{{ activeTabItem.summary.total }}</span>
                                 </p>
                                 <p class="text-grey text-sm cart-view__main-panel-line">
-                                    Будет начислено <span>{{ activeTabItem.checkout.bonus }}</span>
+                                    Будет начислено <span>{{ activeTabItem.summary.bonusGet }}</span>
                                 </p>
                             </div>
 
