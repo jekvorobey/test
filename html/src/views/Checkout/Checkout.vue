@@ -23,7 +23,7 @@
                                 Внимание: мастер-классы можете оплатить после завершения оплаты продуктов
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Сумма заказа: {{ $t(`cart.checkout.type.${checkoutType}`) }}
+                                Сумма заказа: {{ $t(`cart.summary.type.${checkoutType}`) }}
                                 <span>{{ summary.sum }}</span>
                             </p>
                             <p class="checkout-view__main-panel-line">
