@@ -96,7 +96,7 @@
                                     </v-link>
                                 </div>
                             </div>
-                            <v-button class="checkout-view__main-panel-submit">
+                            <v-button class="checkout-view__main-panel-submit" @click="COMMIT_DATA()">
                                 Перейти к оплате
                             </v-button>
                         </div>
@@ -122,7 +122,12 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CART_MODULE, CART_DATA } from '../../store/modules/Cart';
 
 import checkoutModule, { NAME as CHECKOUT_MODULE, CHECKOUT_TYPE, CHECKOUT_DATA } from '../../store/modules/Checkout';
-import { FETCH_CHECKOUT_DATA, ADD_PROMOCODE, DELETE_PROMOCODE } from '../../store/modules/Checkout/actions';
+import {
+    FETCH_CHECKOUT_DATA,
+    ADD_PROMOCODE,
+    DELETE_PROMOCODE,
+    COMMIT_DATA,
+} from '../../store/modules/Checkout/actions';
 import { CHECKOUT, PROMO_CODE, SUMMARY } from '../../store/modules/Checkout/getters';
 
 import { preparePrice } from '../../util/helpers';
@@ -160,7 +165,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(CHECKOUT_MODULE, [ADD_PROMOCODE, DELETE_PROMOCODE]),
+        ...mapActions(CHECKOUT_MODULE, [ADD_PROMOCODE, DELETE_PROMOCODE, COMMIT_DATA]),
 
         prepareBonus(value) {
             return preparePrice(value);
