@@ -41,7 +41,8 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/checkout/receive-method':
             case '/v1/checkout/address':
             case '/v1/checkout/pickup-point':
-            case '/v1/checkout/certificate':
+            case '/v1/checkout/add-certificate':
+            case '/v1/checkout/remove-certificate':
             case '/v1/checkout/bonus':
             case '/v1/checkout/promocode':
             case '/v1/checkout/commit':
