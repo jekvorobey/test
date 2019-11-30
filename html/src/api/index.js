@@ -93,11 +93,11 @@ export function addBonus(data) {
 }
 
 export function deleteCertificate(data) {
-    return $http.post('/v1/checkout/certificate', data);
+    return $http.post('/v1/checkout/remove-certificate', data);
 }
 
 export function addCertificate(data) {
-    return $http.post('/v1/checkout/certificate', data);
+    return $http.post('/v1/checkout/add-certificate', data);
 }
 
 export function deleteBonus(data) {
