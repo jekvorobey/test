@@ -231,7 +231,7 @@
                         <v-link
                             class="product-checkout-panel__item-card-link"
                             tag="button"
-                            @click="DELETE_CERTIFICATE(certificate)"
+                            @click="DELETE_CERTIFICATE(certificate.code)"
                         >
                             Отменить
                         </v-link>

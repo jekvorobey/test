@@ -73,7 +73,7 @@ export function getCheckoutData(data) {
 }
 
 export function commitCheckoutData(data) {
-    return $http.get('/v1/checkout/commit', data);
+    return $http.post('/v1/checkout/commit', data);
 }
 
 export function setReceiveMethod(data) {
@@ -93,7 +93,7 @@ export function addBonus(data) {
 }
 
 export function deleteCertificate(data) {
-    return $http.delete('/v1/checkout/certificate', data);
+    return $http.post('/v1/checkout/certificate', data);
 }
 
 export function addCertificate(data) {
@@ -101,7 +101,7 @@ export function addCertificate(data) {
 }
 
 export function deleteBonus(data) {
-    return $http.delete('/v1/checkout/bonus', data);
+    return $http.post('/v1/checkout/bonus', data);
 }
 
 export function addPromocode(data) {
@@ -109,7 +109,7 @@ export function addPromocode(data) {
 }
 
 export function deletePromocode(data) {
-    return $http.delete('/v1/checkout/promocode', data);
+    return $http.post('/v1/checkout/promocode', data);
 }
 
 export function changeReceiveMethod(data) {

@@ -136,7 +136,7 @@ export default {
 
     [DELETE_CERTIFICATE]({ commit, state }, payload) {
         commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.PENDING });
-        return deleteCertificate({ certificate: payload, data: state.checkoutData })
+        return deleteCertificate({ code: payload, data: state.checkoutData })
             .then(data => {
                 commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.SUCCESS });
                 commit(SET_DATA, data);
@@ -198,9 +198,11 @@ export default {
     },
 
     [COMMIT_DATA]({ state }) {
-        return commitCheckoutData(state.checkoutData)
-            .then(() => console.log('success commit'))
-            .catch(error => $logger.error(`${FETCH_CHECKOUT_DATA} ${error}`));
+        return commitCheckoutData({ data: state.checkoutData })
+            .then(({ paymentUrl }) => {
+                if (paymentUrl && typeof document !== 'undefined') document.location.href = paymentUrl;
+            })
+            .catch(error => $logger.error(`${COMMIT_DATA} ${error}`));
     },
 
     [FETCH_CHECKOUT_DATA]({ commit }, payload) {
