@@ -9,6 +9,7 @@ export const PRODUCTS = 'products';
 export const MASTER_CLASSES = 'masterClasses';
 export const CART_TYPES = 'cartTypes';
 export const CART_ITEMS_COUNT = 'cartItemsCount';
+export const PRODUCT_ITEMS_SUM = 'productItemsSum';
 
 const itemTypes = Object.values(cartItemTypes);
 
@@ -44,6 +45,11 @@ export default {
         return types;
     },
 
+    [PRODUCT_ITEMS_SUM]: state => {
+        const productData = state.cartData[cartItemTypes.PRODUCT];
+        if (productData) return productData.summary.sum;
+        return '';
+    },
     [IS_PRODUCT]: () => (item = {}) => isValidType(item.type) && item.type === cartItemTypes.PRODUCT,
 
     [IS_MASTER_CLASS]: () => (item = {}) => isValidType(item.type) && item.type === cartItemTypes.MASTERCLASS,

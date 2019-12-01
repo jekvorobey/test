@@ -49,7 +49,8 @@
                             <v-svg name="wishlist-middle" width="20" height="20" />
                         </button>
                         <div class="v-header__middle-cart-item">
-                            <span class="text-medium v-header__middle-cart-sum">15 780 ₽</span>&nbsp;
+                            <span class="text-medium v-header__middle-cart-sum">{{ productItemsSum }}</span
+                            >&nbsp;
                             <v-link class="text-medium v-header__middle-cart-icon" to="/cart">
                                 <v-svg name="cart-middle" width="20" height="24" />
                                 <span class="text-bold v-header__middle-cart-count">{{ cartItemsCount }}</span>
@@ -146,7 +147,7 @@ import { SCROLL, IS_MENU_OPEN, CATEGORIES } from '../../store';
 import { SET_MENU_OPEN } from '../../store/actions';
 
 import { NAME as CART_MODULE, CART_ITEMS } from '../../store/modules/Cart';
-import { CART_ITEMS_COUNT } from '../../store/modules/Cart/getters';
+import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '../../store/modules/Cart/getters';
 
 import { NAME as SEARCH_MODULE, SEARCH } from '../../store/modules/Search';
 import { SET_SEARCH } from '../../store/modules/Search/actions';
@@ -187,7 +188,7 @@ export default {
     computed: {
         ...mapState([SCROLL, IS_MENU_OPEN]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
-        ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT]),
+        ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
 
         isTabletLg() {
             return this.$mq.tabletLg;
