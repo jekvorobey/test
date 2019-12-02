@@ -10,6 +10,7 @@
                 :locale="locale"
                 :maxDate="maxDate"
                 :minDate="minDate"
+                :date-format="'Y-m-d'"
                 inline
             />
             <div class="checkout-date-modal__submit">

@@ -100,6 +100,11 @@ export default {
         minDate: {
             type: [String, Date],
         },
+
+        dateFormat: {
+            type: String,
+            default: null,
+        },
     },
     data() {
         return {
@@ -175,7 +180,7 @@ export default {
                 nextArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
                 prevArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
                 onChange(selectedDates, dateStr, instance) {
-                    that.internal_value = selectedDates;
+                    that.internal_value = [dateStr];
                 },
                 onOpen() {
                     that.open = true;
@@ -187,7 +192,7 @@ export default {
                     that.initialized = true;
                 },
             };
-
+            if (this.dateFormat) config.dateFormat = this.dateFormat;
             if (this.inline) config.appendTo = datepicker;
             if (this.disable && this.disable.length > 0) config.disable = this.disable;
             if (this.enable && this.enable.length > 0) config.enable = this.enable;

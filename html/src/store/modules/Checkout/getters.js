@@ -94,6 +94,7 @@ export default {
     [PAYMENT_METHODS]: state => state.checkoutData[PAYMENT_METHODS] || [],
 
     [CONFIRMATION_TYPES]: state => state.checkoutData[CONFIRMATION_TYPES] || [],
+
     [DELIVERY_TYPES]: state => state.checkoutData[DELIVERY_TYPES] || [],
 
     [CHECKOUT_INPUT]: state => state.checkoutData.input || {},

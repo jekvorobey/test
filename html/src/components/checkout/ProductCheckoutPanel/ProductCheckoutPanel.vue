@@ -15,9 +15,9 @@
                     :selected="recipient.id === selectedRecipient.id"
                     @cardClick="SET_RECIPIENT(recipient)"
                 >
-                    <p>{{ recipient.fullname }}</p>
-                    <p>{{ recipient.tel }}</p>
+                    <p>{{ recipient.name }}</p>
                     <p>{{ recipient.email }}</p>
+                    <p>{{ recipient.phone }}</p>
                 </checkout-option-card>
             </ul>
         </div>
@@ -87,24 +87,27 @@
             </div>
             <transition name="fade-in" mode="out-in">
                 <div key="not-empty" v-if="showPanels">
-                    <ul class="product-checkout-panel__item-list" v-if="deliveryTypes && deliveryTypes.length > 1">
+                    <ul
+                        class="product-checkout-panel__item-list"
+                        v-if="computedDeliveryTypes && computedDeliveryTypes.length > 1"
+                    >
                         <checkout-option-card
                             class="product-checkout-panel__item-card"
-                            v-for="deliveryType in deliveryTypes"
+                            v-for="deliveryType in computedDeliveryTypes"
                             :key="`delivery-type-${deliveryType.id}-${deliveryType.methodID}`"
                             :selected="deliveryType.id === selectedDeliveryType.id"
                             readonly
-                            @cardClick="SET_DELIVERY_TYPE(deliveryType)"
+                            @cardClick="onSetDeliveryType(deliveryType.id)"
                         >
                             <p class="text-bold">{{ deliveryType.title }}</p>
                             <p>{{ deliveryType.description }}</p>
                             <p class="text-grey text-sm">{{ generatePackageNote(deliveryType) }}</p>
                         </checkout-option-card>
                     </ul>
-                    <transition-group v-if="selectedDeliveryType" tag="ul" name="fade-in">
+                    <transition-group v-if="selectedDeliveryType" tag="ul" name="chunk-item">
                         <li
                             class="product-checkout-panel__item product-checkout-panel__item--child"
-                            v-for="chunkItem in selectedDeliveryType.items"
+                            v-for="chunkItem in computedSelectedDeliveryType.items"
                             :key="chunkItem.id"
                         >
                             <div class="product-checkout-panel__item-header">
@@ -115,13 +118,7 @@
                                     v-if="chunkItem.availableDates && chunkItem.availableDates.length > 1"
                                     class="product-checkout-panel__item-header-link"
                                     tag="button"
-                                    @click="
-                                        onChangeDate({
-                                            id: chunkItem.id,
-                                            selectedDate: [chunkItem.selectedDate],
-                                            availableDates: [...chunkItem.availableDates],
-                                        })
-                                    "
+                                    @click="onChangeDate(chunkItem.id)"
                                 >
                                     <v-svg name="edit" width="16" height="16" />&nbsp;Изменить дату
                                 </v-link>
@@ -319,6 +316,7 @@ import CheckoutOptionCard from '../CheckoutOptionCard/CheckoutOptionCard.vue';
 import CheckoutProductCard from '../CheckoutProductCard/CheckoutProductCard.vue';
 import CheckoutAddressPanel from '../CheckoutAddressPanel/CheckoutAddressPanel.vue';
 
+import { orderBy as _orderBy } from 'lodash/collection';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '../../../store/modules/Checkout';
 import {
@@ -388,6 +386,24 @@ import '../../../assets/images/sprites/edit.svg';
 import '../../../assets/images/sprites/gift.svg';
 import './ProductCheckoutPanel.css';
 
+function prepareChunkItem(chunkItem) {
+    return {
+        ...chunkItem,
+        selectedDate: new Date(chunkItem.selectedDate),
+        availableDates: chunkItem.availableDates.map(d => new Date(d)),
+    };
+}
+
+function prepareDeliveryType(deliveryType) {
+    const items = deliveryType.items;
+
+    const type = {
+        ...deliveryType,
+        items: _orderBy(items.map(prepareChunkItem), ['selectedDate'], ['asc']),
+    };
+    return type;
+}
+
 export default {
     name: 'product-checkout-panel',
     components: {
@@ -448,6 +464,16 @@ export default {
             PROMOCODE_STATUS,
             RECEIVE_METHOD_STATUS,
         ]),
+
+        computedDeliveryTypes() {
+            const deliveryTypes = this[DELIVERY_TYPES];
+            return deliveryTypes.map(prepareDeliveryType);
+        },
+
+        computedSelectedDeliveryType() {
+            const deliveryType = this[SELECTED_DELIVERY_TYPE];
+            return prepareDeliveryType(deliveryType);
+        },
 
         isReceiveMethodPending() {
             return this[RECEIVE_METHOD_STATUS] === requestStatus.PENDING;
@@ -528,12 +554,30 @@ export default {
             );
         },
 
+        onSetDeliveryType(id) {
+            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find(t => t.id === id);
+            this[SET_DELIVERY_TYPE](selectedType);
+        },
+
         onDateChanged(state) {
             this[CHANGE_CHUNK_DATE]({ id: state.id, selectedDate: state.selectedDate[0] });
         },
 
-        onChangeDate(state) {
-            this[CHANGE_MODAL_STATE]({ name: 'checkout-date-modal', open: true, state });
+        onChangeDate(chunkItemId) {
+            const deliveryType = this[SELECTED_DELIVERY_TYPE];
+            const chunkItem = deliveryType.items.find(i => i.id === chunkItemId);
+
+            const state = {
+                id: chunkItem.id,
+                selectedDate: [chunkItem.selectedDate],
+                availableDates: [...chunkItem.availableDates],
+            };
+
+            this[CHANGE_MODAL_STATE]({
+                name: 'checkout-date-modal',
+                open: true,
+                state,
+            });
         },
 
         onChangePickupPoint() {
