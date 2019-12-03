@@ -52,35 +52,43 @@ export default {
                 return [];
             },
         },
+
         disable: {
             type: Array,
             default() {
                 return [];
             },
         },
+
         enable: {
             type: Array,
             default() {
                 return [];
             },
         },
+
         disabled: {
             type: Boolean,
             default: false,
         },
+
         float: {
             type: Boolean,
             default: true,
         },
+
         error: String,
+
         allowInput: {
             type: Boolean,
             default: false,
         },
+
         inline: {
             type: Boolean,
             default: false,
         },
+
         mode: {
             type: String,
             default: 'single',
@@ -88,6 +96,7 @@ export default {
                 return validModes.indexOf(value) !== -1;
             },
         },
+
         locale: {
             type: String,
             default: 'ru',

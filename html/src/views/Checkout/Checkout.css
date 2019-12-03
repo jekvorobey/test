@@ -7,8 +7,17 @@
         padding-bottom: calc(var(--gs) * 5);
     }
 
+    @media (--tablet) {
+        padding-bottom: 0;
+    }
+
     &__header {
         position: relative;
+
+        @media (--tablet) {
+            display: flex;
+            flex-direction: column-reverse;
+        }
 
         &-hl {
             font-size: 28px;
@@ -22,6 +31,10 @@
                 font-size: 24px;
                 line-height: 32px;
                 letter-spacing: 0.02em;
+            }
+
+            @media (--mobile-sm) {
+                text-align: center;
             }
         }
 
@@ -37,6 +50,10 @@
             line-height: 24px;
             letter-spacing: 0.02em;
             text-transform: uppercase;
+
+            @media (--tablet) {
+                position: static;
+            }
 
             .icon {
                 transform: rotate(90deg);
@@ -95,6 +112,10 @@
             position: relative;
             margin-right: calc(var(--gs) * 3);
             flex: 1;
+
+            @media (--desktop) and (--tablet-lg-min) {
+                max-width: calc(100% - 320px);
+            }
 
             @media (--tablet-lg-min) {
                 padding-bottom: calc(var(--gs) * 7);
@@ -162,6 +183,10 @@
         &-sticky {
             flex-basis: calc(100% / 3);
             max-width: 392px;
+
+            @media (--desktop) {
+                min-width: 320px;
+            }
 
             @media (--tablet-lg) {
                 max-width: 100%;

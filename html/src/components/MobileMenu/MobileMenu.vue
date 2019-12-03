@@ -1,5 +1,5 @@
 <template>
-    <general-modal class="mobile-menu" :show-close-btn="false" type="fullscreen">
+    <general-modal class="mobile-menu" :show-close-btn="false" type="fullscreen" :is-mobile="isTabletLg">
         <template v-slot:header>
             <button
                 v-if="!showCategories"
@@ -157,7 +157,6 @@ import '../../assets/images/sprites/account-middle.svg';
 import '../../assets/images/sprites/wishlist-middle.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import '../../assets/images/sprites/arrow-down.svg';
-import '../../assets/images/sprites/cross.svg';
 import './MobileMenu.css';
 
 export default {
@@ -189,6 +188,10 @@ export default {
             return this.selectedCategories.length > 0
                 ? this.selectedCategories[this.selectedCategories.length - 1]
                 : null;
+        },
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
         },
     },
 

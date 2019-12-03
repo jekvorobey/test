@@ -9,7 +9,7 @@
         <div v-else class="checkout-address-panel__address">
             <div class="checkout-address-panel__address-info">
                 <div class="checkout-address-panel__address-info-main">
-                    <h3>{{ selectedPickupPoint.title }}</h3>
+                    <h3 class="checkout-address-panel__address-info-main-hl">{{ selectedPickupPoint.title }}</h3>
                     <div>{{ selectedPickupPoint.name }}</div>
                     <div>{{ selectedPickupPoint.phone }}</div>
                 </div>

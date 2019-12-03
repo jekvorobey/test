@@ -1,3 +1,4 @@
+@custom-media --mobile-sm (width <= 360px);
 @custom-media --mobile (width <= 479px);
 @custom-media --mobile-min (width >= 480px);
 @custom-media --mobile-lg-diff (480px <= width <= 639px);

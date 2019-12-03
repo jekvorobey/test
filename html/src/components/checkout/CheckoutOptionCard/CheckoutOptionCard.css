@@ -6,6 +6,10 @@
     transition: all var(--time) ease-in;
     min-height: 120px;
 
+    @media (--desktop) {
+        padding: calc(var(--gs) * 2);
+    }
+
     &--selected {
         border-color: var(--cl-global);
     }

@@ -3,9 +3,6 @@
         <div class="product-checkout-panel__item">
             <div class="product-checkout-panel__item-header">
                 <h2 class="product-checkout-panel__item-header-hl">Получатель</h2>
-                <v-link class="product-checkout-panel__item-header-link" tag="button" @click="onAddRecipient">
-                    <v-svg name="plus" width="24" height="24" />&nbsp;Добавить нового получателя
-                </v-link>
             </div>
             <ul class="product-checkout-panel__item-list">
                 <checkout-option-card
@@ -20,8 +17,11 @@
                     <p>{{ recipient.phone }}</p>
                 </checkout-option-card>
             </ul>
+            <v-link class="product-checkout-panel__item-header-link" tag="button" @click="onAddRecipient">
+                <v-svg name="plus" width="24" height="24" />&nbsp;Добавить нового получателя
+            </v-link>
         </div>
-        <div class="product-checkout-panel__item">
+        <div class="product-checkout-panel__item product-checkout-panel__item--receive-method">
             <div class="product-checkout-panel__item-header">
                 <h2 class="product-checkout-panel__item-header-hl">
                     Способ получения&nbsp;<v-spinner width="24" height="24" :show="isReceiveMethodPending" />
@@ -48,22 +48,6 @@
                     {{ isDelivery ? 'Адрес доставки' : 'Пункт самовывоза' }}&nbsp;
                     <v-spinner width="24" height="24" :show="isAddressPending" />
                 </h2>
-                <v-link
-                    v-if="isDelivery"
-                    class="product-checkout-panel__item-header-link"
-                    tag="button"
-                    @click="onAddAddress"
-                >
-                    <v-svg name="plus" width="24" height="24" />&nbsp;Добавить новый адрес
-                </v-link>
-                <v-link
-                    v-else-if="selectedPickupPoint"
-                    class="product-checkout-panel__item-header-link"
-                    tag="button"
-                    @click="onChangePickupPoint"
-                >
-                    <v-svg name="pin" width="16" height="16" />&nbsp;&nbsp;Выбрать другой
-                </v-link>
             </div>
             <transition name="fade-in">
                 <ul v-if="isDelivery" class="product-checkout-panel__item-list">
@@ -79,6 +63,22 @@
                 </ul>
                 <checkout-address-panel v-else @changeAddress="onChangePickupPoint" />
             </transition>
+            <v-link
+                v-if="isDelivery"
+                class="product-checkout-panel__item-header-link"
+                tag="button"
+                @click="onAddAddress"
+            >
+                <v-svg name="plus" width="24" height="24" />&nbsp;Добавить новый адрес
+            </v-link>
+            <v-link
+                v-else-if="selectedPickupPoint"
+                class="product-checkout-panel__item-header-link"
+                tag="button"
+                @click="onChangePickupPoint"
+            >
+                <v-svg name="pin" width="16" height="16" />&nbsp;&nbsp;Выбрать другой
+            </v-link>
         </div>
 
         <div class="product-checkout-panel__item product-checkout-panel__item--delivery">
@@ -120,7 +120,7 @@
                                     tag="button"
                                     @click="onChangeDate(chunkItem.id)"
                                 >
-                                    <v-svg name="edit" width="16" height="16" />&nbsp;Изменить дату
+                                    <v-svg name="edit" width="16" height="16" />{{ isTablet ? '' : ' Изменить дату' }}
                                 </v-link>
                             </div>
                             <ul class="product-checkout-panel__item-list">
@@ -190,10 +190,11 @@
                             Применить
                         </v-button>
                     </template>
-                    <span>
+                    <span class="product-checkout-panel__item-controls-text">
                         На вашем счёте:&nbsp;
                         <strong class="text-bold">{{ availableBonus }}&nbsp;бонусов</strong>
-                        &nbsp;<span class="text-grey">(1 бонус = 1 рубль)</span>
+                        <br v-show="isTablet" />
+                        <span class="text-grey">(1 бонус = 1 рубль)</span>
                     </span>
                 </div>
                 <div v-else class="product-checkout-panel__item-card">
@@ -293,11 +294,11 @@
             </div>
         </div>
 
-        <transition name="modal">
+        <transition name="fade">
             <checkout-pickup-point-modal />
         </transition>
 
-        <transition name="modal">
+        <transition name="fade">
             <checkout-date-modal @changed="onDateChanged" />
         </transition>
     </div>
@@ -497,6 +498,10 @@ export default {
 
         showPanels() {
             return this.isDelivery ? this[SELECTED_ADDRESS] : this[SELECTED_PICKUP_POINT];
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
 
         isDelivery() {

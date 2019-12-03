@@ -3,6 +3,10 @@
     &__choice {
         display: flex;
         justify-content: space-between;
+
+        @media (--tablet) {
+            flex-direction: column;
+        }
     }
 
     &__address {
@@ -10,19 +14,48 @@
             display: flex;
             margin-bottom: calc(var(--gs) * 2);
 
-            &-main,
-            &-schedule {
+            @media (--tablet) {
+                flex-wrap: wrap;
+            }
+
+            &-main {
                 width: 50%;
+                @media (--desktop) {
+                    width: 60%;
+                }
+
+                @media (--tablet) {
+                    width: 100%;
+                }
+
+                &-hl {
+                    font-weight: 500;
+                    font-size: 20px;
+                    line-height: 24px;
+                }
             }
 
             &-schedule {
                 color: var(--cl-grey);
                 font-size: 14px;
+                width: 50%;
+
+                @media (--desktop) {
+                    width: 40%;
+                }
+
+                @media (--tablet) {
+                    width: 100%;
+                }
 
                 &-item {
                     width: 50%;
                     display: flex;
                     justify-content: space-between;
+
+                    @media (--desktop) {
+                        width: 100%;
+                    }
                 }
             }
         }
@@ -35,6 +68,11 @@
         &-map {
             display: flex;
             height: 240px;
+            overflow: hidden;
+
+            @media (--tablet) {
+                margin: 0 calc(var(--gs) * -2);
+            }
 
             .ymap-container {
                 width: 100%;

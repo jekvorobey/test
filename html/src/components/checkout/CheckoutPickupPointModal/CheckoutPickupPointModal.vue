@@ -1,8 +1,14 @@
 <template>
-    <general-modal v-if="isOpen" class="checkout-pickup-point-modal" @close="onClose" :is-scroll-locked="false">
+    <general-modal
+        v-if="isOpen"
+        class="checkout-pickup-point-modal"
+        @close="onClose"
+        :is-scroll-locked="false"
+        :is-mobile="isTablet"
+    >
         <template v-slot:content>
             <div class="checkout-pickup-point-modal__map">
-                <yandex-map v-if="showMap" :zoom="11" :coords="coords" :controls="[]" showAllMarkers>
+                <yandex-map v-if="showMap && !isTablet" :zoom="11" :coords="coords" :controls="[]" showAllMarkers>
                     <ymap-marker
                         v-for="point in filteredPickupPoints"
                         :key="`${point.id}-${point.methodID}`"
@@ -13,7 +19,7 @@
                 </yandex-map>
             </div>
             <div class="checkout-pickup-point-modal__filter">
-                <div class="checkout-pickup-point-modal__filter-header">
+                <div class="container checkout-pickup-point-modal__filter-header">
                     <h3 class="checkout-pickup-point-modal__filter-header-hl">Выбор пункта выдачи</h3>
                     <div class="checkout-pickup-point-modal__filter-header-controls">
                         <v-select placeholder="Станция метро" :options="[]" />
@@ -103,6 +109,10 @@ export default {
             return this[PICKUP_POINTS].filter(
                 p => !this.selectedDeliveryMethod || p.methodID === this.selectedDeliveryMethod.id
             );
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 

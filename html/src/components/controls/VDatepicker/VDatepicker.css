@@ -25,7 +25,7 @@ https://flatpickr.js.org/
     --flatpickr-calendar-width: calc((var(--gs) * 40) - (var(--gs) * 3) * 2);
 
     /* Ширина полей календаря */
-    --flatpickr-calendar-padding: calc((var(--gs)) / 2);
+    --flatpickr-calendar-padding: 0;
 
     /* Ширина контентной области: ширина календаря - ширина полей календаря */
     --flatpickr-content-width: calc(var(--flatpickr-calendar-width) - var(--flatpickr-calendar-padding) * 2);
@@ -185,7 +185,7 @@ https://flatpickr.js.org/
         color: var(--flatpickr-calendar-cl);
         fill: var(--flatpickr-calendar-cl);
 
-        &.disabled {
+        &.flatpickr-disabled {
             /* Перекрываем display: none, который не подходит для статичного позиционирования */
             display: flex;
             visibility: hidden;

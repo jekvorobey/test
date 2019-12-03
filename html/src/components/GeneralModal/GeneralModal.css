@@ -21,5 +21,24 @@
         background-color: var(--cl-global);
         padding-top: calc(var(--gs) * 1.5);
         padding-bottom: calc(var(--gs) * 1.5);
+
+        @media (--tablet-lg) {
+            color: var(--cl-white);
+            fill: var(--cl-white);
+        }
+
+        &-btn {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 24px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+
+            .icon {
+                margin-right: calc(var(--gs) * 1.5);
+            }
+        }
     }
 }
