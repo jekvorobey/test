@@ -180,7 +180,7 @@ export default {
                 nextArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
                 prevArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
                 onChange(selectedDates, dateStr, instance) {
-                    that.internal_value = [dateStr];
+                    that.internal_value = [...dateStr.split(', ')];
                 },
                 onOpen() {
                     that.open = true;

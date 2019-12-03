@@ -7,15 +7,14 @@ import HttpService from './services/HttpService/MockServiceAdapter';
 import events from './services/EventService';
 import progress from './services/ProgressService';
 
-const { app, router, store } = createApp();
-ServiceLocator.createInstance()
+const locator = ServiceLocator.createInstance()
     .register(serviceName.PROGRESS, () => progress)
     .register(serviceName.EVENTS, () => events)
-    .register(serviceName.ROUTER, () => router)
-    .register(serviceName.STORE, () => store)
     .register(serviceName.LOGGER, () => new ClientLogger())
     .register(serviceName.COOKIE, () => new ClientCookie())
     .register(serviceName.HTTP, () => new HttpService(document.location.origin));
+
+const { app, router, store } = createApp(locator);
 
 // prime the store with server-initialized state.
 // the state is determined during SSR and inlined in the page markup.

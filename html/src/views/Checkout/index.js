@@ -1,4 +1,5 @@
 import { cartItemTypes } from '../../assets/scripts/constants';
+import isCartEmpty from './middleware/isCartEmpty';
 
 /**
  * @Module
@@ -17,6 +18,9 @@ export default {
         {
             path: `/checkout/:type(${cartItemTypes.PRODUCT}|${cartItemTypes.MASTERCLASS})`,
             component: CheckoutAsync,
+            meta: {
+                middleware: [isCartEmpty],
+            },
         },
     ],
 };

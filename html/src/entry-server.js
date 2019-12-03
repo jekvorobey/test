@@ -13,16 +13,14 @@ import MockProgressService from './services/ProgressService/MockService';
 // return a Promise that resolves to the app instance.
 export default context => {
     return new Promise((resolve, reject) => {
-        const { app, router, store } = createApp();
         const host = `${context.req.protocol}://${context.req.get('host')}`;
-
-        ServiceLocator.createInstance()
-            .register(serviceName.ROUTER, () => router)
-            .register(serviceName.STORE, () => store)
+        const locator = ServiceLocator.createInstance()
             .register(serviceName.PROGRESS, () => new MockProgressService())
             .register(serviceName.LOGGER, () => new ServerLogger())
             .register(serviceName.COOKIE, () => new ServerCookie(context.req, context.res))
             .register(serviceName.HTTP, () => new HttpService(host));
+
+        const { app, router, store } = createApp(locator);
 
         const { $logger } = ServiceLocator;
         const { url } = context;
@@ -36,7 +34,12 @@ export default context => {
         // set router's location
         router.push(url);
 
-        router.onReady(() => {
+        router.onReady(ctx => {
+            if (context.req.originalUrl !== ctx.fullPath) {
+                $logger.error(`full path ${fullPath} doesn't match ${url}`);
+                return reject({ url: ctx.fullPath });
+            }
+
             // This `rendered` hook is called when the app has finished rendering
             context.rendered = () => {
                 // After the app is rendered, our store is now
@@ -46,7 +49,7 @@ export default context => {
                 // serialized and injected into the HTML as `window.__INITIAL_STATE__`.
                 context.state = store.state;
             };
-            resolve(app);
+            return resolve(app);
         }, reject);
     });
 };

@@ -96,7 +96,7 @@
                                     </v-link>
                                 </div>
                             </div>
-                            <v-button class="checkout-view__main-panel-submit" @click="COMMIT_DATA()">
+                            <v-button class="checkout-view__main-panel-submit" @click="onCommit">
                                 Перейти к оплате
                             </v-button>
                         </div>
@@ -120,6 +120,7 @@ import { $store, $logger, $progress } from '../../services/ServiceLocator';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CART_MODULE, CART_DATA } from '../../store/modules/Cart';
+import { CART_ITEMS_COUNT } from '../../store/modules/Cart/getters';
 
 import checkoutModule, { NAME as CHECKOUT_MODULE, CHECKOUT_TYPE, CHECKOUT_DATA } from '../../store/modules/Checkout';
 import {
@@ -167,6 +168,15 @@ export default {
     methods: {
         ...mapActions(CHECKOUT_MODULE, [ADD_PROMOCODE, DELETE_PROMOCODE, COMMIT_DATA]),
 
+        async onCommit() {
+            try {
+                const data = await this[COMMIT_DATA]();
+                document.location.href = data.paymentUrl;
+            } catch (error) {
+                $logger.error(error);
+            }
+        },
+
         prepareBonus(value) {
             return preparePrice(value);
         },
@@ -189,12 +199,12 @@ export default {
 
         const { checkoutType } = $store.state.checkout;
 
-        if (checkoutType === type) next();
+        if (checkoutType === type) return next();
         else {
             $progress.start();
-            $store
-                .dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type)
-                .then(() => next(vm => $progress.finish()));
+            return $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type).then(() => {
+                return next(vm => $progress.finish());
+            });
         }
     },
 
@@ -205,6 +215,11 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
+
+        const cartItemsCount = $store.getters[`${CART_MODULE}/${CART_ITEMS_COUNT}`];
+        console.log(cartItemsCount);
+
+        console.log(cartItemsCount);
 
         const {
             params: { type },

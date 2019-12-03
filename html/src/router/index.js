@@ -3,7 +3,9 @@ import VueRouter from 'vue-router';
 
 import { $store } from '../services/ServiceLocator';
 import { SET_MENU_OPEN } from '../store/actions';
+import { NAME as SEARCH_MODULE } from '../store/modules/Search';
 import { SET_SEARCH } from '../store/modules/Search/actions';
+import pipeline from './pipeline';
 
 const routes = [];
 let keys = [];
@@ -58,11 +60,29 @@ export default function createRouter() {
         routes,
     });
 
+    router.beforeEach((to, from, next) => {
+        if (!to.meta.middleware) return next();
+
+        const { middleware } = to.meta;
+
+        const context = {
+            to,
+            from,
+            next,
+            store: $store,
+        };
+
+        return middleware[0]({
+            ...context,
+            next: pipeline(context, middleware, 1),
+        });
+    });
+
     // eslint-disable-next-line
     router.afterEach((to, from) => {
         if ($store) {
             $store.dispatch(SET_MENU_OPEN, false);
-            $store.dispatch(`search/${SET_SEARCH}`, false);
+            $store.dispatch(`${SEARCH_MODULE}/${SET_SEARCH}`, false);
         }
     });
 

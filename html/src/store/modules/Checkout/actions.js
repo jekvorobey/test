@@ -199,9 +199,7 @@ export default {
 
     [COMMIT_DATA]({ state }) {
         return commitCheckoutData({ data: state.checkoutData })
-            .then(({ paymentUrl }) => {
-                if (paymentUrl && typeof document !== 'undefined') document.location.href = paymentUrl;
-            })
+            .then(data => data)
             .catch(error => $logger.error(`${COMMIT_DATA} ${error}`));
     },
 
