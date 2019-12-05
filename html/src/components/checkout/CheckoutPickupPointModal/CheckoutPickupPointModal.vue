@@ -1,11 +1,5 @@
 <template>
-    <general-modal
-        v-if="isOpen"
-        class="checkout-pickup-point-modal"
-        @close="onClose"
-        :is-scroll-locked="false"
-        :is-mobile="isTablet"
-    >
+    <general-modal class="checkout-pickup-point-modal" @close="onClose" :is-scroll-locked="false" :is-mobile="isTablet">
         <template v-slot:content>
             <div class="checkout-pickup-point-modal__map">
                 <yandex-map v-if="showMap && !isTablet" :zoom="11" :coords="coords" :controls="[]" showAllMarkers>
@@ -99,10 +93,6 @@ export default {
     },
 
     computed: {
-        ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
-        }),
-
         ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, DELIVERY_METHODS, SELECTED_DELIVERY_METHOD_ID]),
 
         filteredPickupPoints() {
@@ -131,11 +121,8 @@ export default {
         },
     },
 
-    watch: {
-        isOpen(value) {
-            if (!value) this.showMap = false;
-            else setTimeout(() => (this.showMap = true), 400);
-        },
+    mounted() {
+        setTimeout(() => (this.showMap = true), 400);
     },
 };
 </script>

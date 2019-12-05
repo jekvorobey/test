@@ -8,6 +8,7 @@ import auth from './modules/Auth';
 import modal from './modules/Modal';
 import search from './modules/Search';
 import cart from './modules/Cart';
+import geolocation from './modules/Geolocation';
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ export const LOCALE = 'locale';
 export const SCROLL = 'scroll';
 export const CATEGORIES = 'categories';
 export const BANNER = 'banner';
+export const SELECTED_CITY = 'selectedCity';
 
 /**
  * Function for create store instance.
@@ -25,6 +27,7 @@ export default function createStore() {
     return new Vuex.Store({
         strict: process.env.NODE_ENV !== 'production',
         state: {
+            [SELECTED_CITY]: null,
             [LOCALE]: 'ru',
             [SCROLL]: false,
             [IS_MENU_OPEN]: false,
@@ -34,6 +37,6 @@ export default function createStore() {
         getters,
         mutations,
         actions,
-        modules: { modal, search, auth, cart },
+        modules: { modal, search, auth, cart, geolocation },
     });
 }

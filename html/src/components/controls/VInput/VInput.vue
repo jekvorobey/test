@@ -71,14 +71,21 @@ export default {
                 return validTags.indexOf(value) !== -1;
             },
         },
+
         disabled: {
             type: Boolean,
             default: false,
         },
+
         float: {
             type: Boolean,
             default: false,
         },
+
+        maxHeight: {
+            type: [Number, String],
+        },
+
         error: String,
     },
     data() {
@@ -86,16 +93,14 @@ export default {
             inputId: `v-input-id-${this._uid}`,
             internal_value: this.value,
             focus: false,
+            internalMaxHeight: Number(this.maxHeight),
         };
     },
     watch: {
         value(value) {
             this.internal_value = value;
             const { textarea } = this.$refs;
-            if (textarea) {
-                textarea.style.height = 'auto';
-                textarea.style.height = textarea.scrollHeight + 5 + 'px';
-            }
+            if (textarea) this.adjustHeight();
         },
     },
     computed: {
@@ -110,19 +115,47 @@ export default {
                 handlers[k] = e => this.$emit(k, e);
             });
             handlers.input = e => {
+                let value = e.target.value;
+                const maxLength = Number(e.target.maxLength);
+                if (!Number.isNaN(maxLength) && maxLength > -1 && e.target.value.length > maxLength) {
+                    e.target.value = e.target.value.slice(0, maxLength);
+                    return;
+                }
+
                 if (this.type === inputTypes.number) {
-                    const value = Number(e.target.value);
-                    const max = Number(e.target.max);
-                    const min = Number(e.target.min);
+                    value = Number(value);
+                    const max = e.target.max ? Number(e.target.max) : Number.POSITIVE_INFINITY;
+                    const min = e.target.min ? Number(e.target.min) : Number.NEGATIVE_INFINITY;
                     if (value < min) this.internal_value = min;
                     else if (value > max) this.internal_value = max;
                     else this.internal_value = value;
-                } else this.internal_value = e.target.value;
+                } else this.internal_value = value;
 
                 this.$emit('input', this.internal_value);
             };
             return handlers;
         },
+    },
+
+    methods: {
+        adjustHeight() {
+            const { textarea } = this.$refs;
+            if (!textarea) return;
+            if (textarea.offsetHeight === this.internalMaxHeight) return;
+
+            if (textarea && textarea.scrollHeight < this.internalMaxHeight) {
+                textarea.style.overflow = 'hidden';
+                textarea.style.height = 'auto';
+                textarea.style.height = textarea.scrollHeight + 'px';
+            } else {
+                textarea.style.height = this.internalMaxHeight + 'px';
+                textarea.style.overflow = 'auto';
+            }
+        },
+    },
+
+    mounted() {
+        this.adjustHeight();
     },
 };
 </script>

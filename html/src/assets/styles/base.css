@@ -257,6 +257,12 @@ a,
     }
 }
 
+label {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+}
+
 .html-modal-open {
     @media (--desktop-min) {
         padding-right: 17px;

@@ -98,6 +98,12 @@ const serve = (resourcePath, cache) =>
 const apiProxy = httpProxy('https://master-front.ibt-mas.greensight.ru', {
     proxyReqPathResolver: req => req.originalUrl,
 });
+
+const dadataProxy = httpProxy('https://suggestions.dadata.ru', {
+    proxyReqPathResolver: req => req.originalUrl,
+});
+
+app.use('/suggestions/api/4_1/rs*', dadataProxy);
 app.use('/content/*', apiProxy);
 app.use('/v1/*', apiProxy);
 

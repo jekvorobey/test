@@ -59,24 +59,29 @@ export default {
             },
             required: true,
         },
+
         zoom: {
             validator(val) {
                 return !Number.isNaN(val);
             },
             default: 18,
         },
+
         clusterOptions: {
             type: Object,
             default: () => ({}),
         },
+
         clusterCallbacks: {
             type: Object,
             default: () => ({}),
         },
+
         behaviors: {
             type: Array,
             default: () => ['default'],
         },
+
         controls: {
             type: Array,
             default: () => ['default'],
@@ -84,6 +89,7 @@ export default {
                 return utils.controlsTypeValidator(val);
             },
         },
+
         detailedControls: {
             type: Object,
             validator(val) {
@@ -91,11 +97,14 @@ export default {
                 return utils.controlsTypeValidator(controls);
             },
         },
+
         scrollZoom: {
             type: Boolean,
             default: true,
         },
+
         zoomControl: Object,
+
         mapType: {
             type: String,
             default: 'map',
@@ -103,37 +112,46 @@ export default {
                 return ['map', 'satellite', 'hybrid'].includes(val);
             },
         },
+
         placemarks: {
             type: Array,
             default() {
                 return [];
             },
         },
+
         useObjectManager: {
             type: Boolean,
             default: false,
         },
+
         objectManagerClusterize: {
             type: Boolean,
             default: true,
         },
+
         ymapClass: String,
+
         initWithoutMarkers: {
             type: Boolean,
             default: true,
         },
+
         debug: {
             type: Boolean,
             default: false,
         },
+
         settings: {
             type: Object,
             default: () => ({}),
         },
+
         options: {
             type: Object,
             default: () => ({}),
         },
+
         showAllMarkers: Boolean,
     },
     computed: {
@@ -194,6 +212,7 @@ export default {
                       .filter(marker => marker && marker.markerType)
                 : [];
         },
+
         createMarkers(changedMarkers) {
             const markers = [];
             const myMarkers = this.getMarkersFromSlots(changedMarkers);
@@ -299,6 +318,7 @@ export default {
 
             return markers;
         },
+
         setMarkers(changedMarkers) {
             const config = {
                 options: this.clusterOptions,
@@ -310,6 +330,7 @@ export default {
             utils.addToMap(this.createMarkers(changedMarkers), config);
             if (changedMarkers) this.$emit('markers-was-change', changedMarkers);
         },
+
         deleteMarkers(deletedMarkers) {
             if (this.myMap) {
                 this.myMap.geoObjects.each(collection => {

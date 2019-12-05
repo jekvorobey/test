@@ -7,7 +7,7 @@
             <div class="v-header__top">
                 <div class="container v-header__top-container">
                     <button class="text-medium v-header__top-city" title="Выбрать город">
-                        Москва&nbsp;<v-svg name="arrow-down" width="20" height="20" />
+                        {{ city }}&nbsp;<v-svg name="arrow-down" width="20" height="20" />
                     </button>
                     <div class="v-header__top-middle">
                         <span class="v-header__top-middle-item">
@@ -152,6 +152,9 @@ import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '../../store/modules/Cart/ge
 import { NAME as SEARCH_MODULE, SEARCH } from '../../store/modules/Search';
 import { SET_SEARCH } from '../../store/modules/Search/actions';
 
+import { NAME as GEO_MODULE, SELECTED_CITY } from '../../store/modules/Geolocation';
+import { SET_SELECTED_CITY } from '../../store/modules/Geolocation/actions';
+
 import { NAME as MODAL_MODULE } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
@@ -188,6 +191,10 @@ export default {
     computed: {
         ...mapState([SCROLL, IS_MENU_OPEN]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
+        ...mapState(GEO_MODULE, {
+            city: state => state[SELECTED_CITY].data.city || state[SELECTED_CITY].data.settlement || 'Выберите город',
+        }),
+
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
 
         isTabletLg() {
@@ -203,6 +210,7 @@ export default {
         ...mapActions([SET_MENU_OPEN]),
         ...mapActions(SEARCH_MODULE, [SET_SEARCH]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(GEO_MODULE, [SET_SELECTED_CITY]),
     },
 
     watch: {

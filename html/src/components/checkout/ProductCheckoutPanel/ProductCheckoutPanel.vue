@@ -57,6 +57,7 @@
                         :key="address.id"
                         :selected="selectedAddress && address.id === selectedAddress.id"
                         @cardClick="SET_ADDRESS(address)"
+                        @btnClick="onChangeAddress(address)"
                     >
                         {{ address.description }}
                     </checkout-option-card>
@@ -295,11 +296,15 @@
         </div>
 
         <transition name="fade">
-            <checkout-pickup-point-modal />
+            <checkout-pickup-point-modal v-if="isPickupPointModalOpen" />
         </transition>
 
         <transition name="fade">
-            <checkout-date-modal @changed="onDateChanged" />
+            <checkout-date-modal v-if="isDateModalOpen" @changed="onDateChanged" />
+        </transition>
+
+        <transition name="fade">
+            <checkout-address-modal v-if="isAddressModalOpen" />
         </transition>
     </div>
 </template>
@@ -311,12 +316,14 @@ import VButton from '../../controls/VButton/VButton.vue';
 import VCheck from '../../controls/VCheck/VCheck.vue';
 import VSpinner from '../../controls/VSpinner/VSpinner.vue';
 
-import CheckoutDateModal from '../CheckoutDateModal/CheckoutDateModal.vue';
-import CheckoutPickupPointModal from '../CheckoutPickupPointModal/CheckoutPickupPointModal.vue';
 import CheckoutOptionCard from '../CheckoutOptionCard/CheckoutOptionCard.vue';
 import CheckoutProductCard from '../CheckoutProductCard/CheckoutProductCard.vue';
+import CheckoutDateModal from '../CheckoutDateModal/CheckoutDateModal.vue';
+import CheckoutAddressModal from '../CheckoutAddressModal/CheckoutAddressModal.vue';
+import CheckoutPickupPointModal from '../CheckoutPickupPointModal/CheckoutPickupPointModal.vue';
 import CheckoutAddressPanel from '../CheckoutAddressPanel/CheckoutAddressPanel.vue';
 
+import _cloneDeep from 'lodash/cloneDeep';
 import { orderBy as _orderBy } from 'lodash/collection';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '../../../store/modules/Checkout';
@@ -415,10 +422,11 @@ export default {
         VCheck,
         VSpinner,
 
-        CheckoutDateModal,
-        CheckoutPickupPointModal,
         CheckoutProductCard,
         CheckoutOptionCard,
+        CheckoutDateModal,
+        CheckoutAddressModal,
+        CheckoutPickupPointModal,
         CheckoutAddressPanel,
     },
 
@@ -431,6 +439,15 @@ export default {
 
     computed: {
         ...mapState(['locale']),
+        ...mapState(MODAL_MODULE, {
+            isPickupPointModalOpen: state =>
+                state[MODALS][CheckoutPickupPointModal.name] && state[MODALS][CheckoutPickupPointModal.name].open,
+            isDateModalOpen: state =>
+                state[MODALS][CheckoutDateModal.name] && state[MODALS][CheckoutDateModal.name].open,
+            isAddressModalOpen: state =>
+                state[MODALS][CheckoutAddressModal.name] && state[MODALS][CheckoutAddressModal.name].open,
+        }),
+
         ...mapGetters(CHECKOUT_MODULE, [
             AVAILABLE_BONUS,
             RECIPIENTS,
@@ -587,6 +604,10 @@ export default {
 
         onChangePickupPoint() {
             this[CHANGE_MODAL_STATE]({ name: 'checkout-pickup-point-modal', open: true });
+        },
+
+        onChangeAddress(address) {
+            this[CHANGE_MODAL_STATE]({ name: 'checkout-address-modal', open: true, state: { address } });
         },
 
         onAddAddress() {
