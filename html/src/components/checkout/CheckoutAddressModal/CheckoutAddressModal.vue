@@ -5,18 +5,13 @@
                 <yandex-map
                     v-if="showMap && !isTablet"
                     :zoom="zoom"
-                    :coords="selectedAddressCoords"
+                    :coords="coords"
                     :controls="[]"
                     :options="{ yandexMapDisablePoiInteractivity: true }"
                     showAllMarkers
                     @click="onMapClick"
                 >
-                    <ymap-marker
-                        v-if="selectedAddress"
-                        marker-id="marker-id"
-                        :coords="selectedAddressCoords"
-                        :icon="markerIcon"
-                    />
+                    <ymap-marker v-if="selectedAddress" marker-id="marker-id" :coords="coords" :icon="markerIcon" />
                 </yandex-map>
             </div>
             <div class="checkout-address-modal__form">
@@ -41,7 +36,7 @@
 
                     <v-input
                         class="checkout-address-modal__form-column checkout-address-modal__form-column--30"
-                        v-model="postalCode"
+                        v-model="address.post_index"
                         type="number"
                         maxlength="6"
                         min="1"
@@ -65,7 +60,7 @@
                         </template>
                     </v-suggestion>
                     <v-input
-                        v-model="flat"
+                        v-model="address.flat"
                         class="checkout-address-modal__form-column checkout-address-modal__form-column--30"
                         type="number"
                         min="1"
@@ -76,7 +71,7 @@
 
                 <div class="checkout-address-modal__form-row">
                     <v-input
-                        v-model="floor"
+                        v-model="address.floor"
                         class="checkout-address-modal__form-column checkout-address-modal__form-column--30"
                         type="number"
                         min="1"
@@ -85,7 +80,7 @@
                     </v-input>
 
                     <v-input
-                        v-model="porch"
+                        v-model="address.porch"
                         class="checkout-address-modal__form-column checkout-address-modal__form-column--30"
                         type="number"
                         min="1"
@@ -94,7 +89,7 @@
                     </v-input>
 
                     <v-input
-                        v-model="intercom"
+                        v-model="address.intercom"
                         class="checkout-address-modal__form-column checkout-address-modal__form-column--30"
                         min="1"
                     >
@@ -102,7 +97,7 @@
                     </v-input>
                 </div>
 
-                <v-input tag="textarea" rows="3" v-model="comment" maxHeight="100">
+                <v-input tag="textarea" rows="3" v-model="address.comment" maxHeight="100">
                     Комментарий курьеру
                 </v-input>
 
@@ -158,36 +153,49 @@ export default {
         selectedAddress: {
             required,
         },
+        address: {
+            post_index: {
+                required,
+            },
 
-        postalCode: {
-            required,
-        },
+            flat: {
+                required,
+            },
 
-        flat: {
-            required,
-        },
+            floor: {
+                required,
+            },
 
-        floor: {
-            required,
-        },
-
-        porch: {
-            required,
+            porch: {
+                required,
+            },
         },
     },
 
     data() {
         return {
             zoom: 15,
+            address: {
+                country_code: '',
+                post_index: '',
+                region: '',
+                region_guid: '',
+                area: '',
+                area_guid: '',
+                city: '',
+                city_guid: '',
+                street: '',
+                house: '',
+                block: '',
+                flat: '',
+                floor: '',
+                porch: '',
+                intercom: '',
+                comment: '',
+            },
+
             selectedAddress: null,
             options: { debounce: 500 },
-
-            postalCode: null,
-            flat: null,
-            floor: null,
-            porch: null,
-            intercom: null,
-            comment: null,
 
             showMap: false,
             markerIcon: {
@@ -210,10 +218,14 @@ export default {
             return this.$mq.tablet;
         },
 
+        coords() {
+            return this.selectedAddressCoords ? this.selectedAddressCoords : this.selectedCityCoords;
+        },
+
         selectedAddressCoords() {
             return this.selectedAddress && this.selectedAddress.data.geo_lat && this.selectedAddress.data.geo_lon
                 ? [Number(this.selectedAddress.data.geo_lat), Number(this.selectedAddress.data.geo_lon)]
-                : this.selectedCityCoords;
+                : null;
         },
     },
 
@@ -328,7 +340,7 @@ export default {
         onSubmit() {
             this.$v.$touch();
             if (this.$v.$invalid) return;
-            this.$emit('submit', this.selectedAddress);
+            this.$emit('addressSubmit', this.address);
             this.CHANGE_MODAL_STATE({ name: NAME, open: false, state: {} });
         },
 
@@ -360,14 +372,14 @@ export default {
             this.selectedAddress = null;
             this.postalCode = null;
         },
-
-        selectedAddress(value) {
-            if (value) this.postalCode = value.data['postal_code'];
-        },
     },
 
     beforeMount() {
-        this.init();
+        //this.init();
+    },
+
+    mounted() {
+        setTimeout(() => (this.showMap = true), 300);
     },
 };
 </script>

@@ -59,7 +59,7 @@
                         @cardClick="SET_ADDRESS(address)"
                         @btnClick="onChangeAddress(address)"
                     >
-                        {{ address.description }}
+                        {{ `${address.city}, ${address.street ? `${address.street}, ` : ''}${address.house}` }}
                     </checkout-option-card>
                 </ul>
                 <checkout-address-panel v-else @changeAddress="onChangePickupPoint" />
@@ -304,7 +304,7 @@
         </transition>
 
         <transition name="fade">
-            <checkout-address-modal v-if="isAddressModalOpen" />
+            <checkout-address-modal v-if="isAddressModalOpen" @addressSubmit="onAddressSubmit" />
         </transition>
     </div>
 </template>
@@ -344,6 +344,7 @@ import {
     SET_AGREEMENT,
     SET_SUBSCRIBE,
     SET_CONFIRMATION_TYPE,
+    ADD_ADDRESS,
 } from '../../../store/modules/Checkout/actions';
 
 import {
@@ -535,11 +536,14 @@ export default {
             CHANGE_CHUNK_DATE,
             SET_RECIPIENT,
             SET_RECEIVE_METHOD,
-            SET_ADDRESS,
+
             SET_DELIVERY_TYPE,
             SET_AGREEMENT,
             SET_SUBSCRIBE,
             SET_CONFIRMATION_TYPE,
+
+            SET_ADDRESS,
+            ADD_ADDRESS,
 
             ADD_BONUS,
             DELETE_BONUS,
@@ -612,6 +616,11 @@ export default {
 
         onAddAddress() {
             this[CHANGE_MODAL_STATE]({ name: 'checkout-address-modal', open: true });
+        },
+
+        onAddressSubmit(address) {
+            debugger;
+            this[ADD_ADDRESS](address);
         },
 
         onAddRecipient() {

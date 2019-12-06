@@ -13,6 +13,7 @@ import {
     SET_DELIVERY_TYPE as M_SET_DELIVERY_TYPE,
     SET_CONFIRMATION_TYPE as M_SET_CONFIRMATION_TYPE,
     CHANGE_CHUNK_DATE as M_CHANGE_CHUNK_DATE,
+    ADD_ADDRESS as M_ADD_ADDRESS,
 } from './mutations';
 
 import {
@@ -171,6 +172,11 @@ export default {
                 commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
                 $logger.error(`${DELETE_PROMOCODE} ${error}`);
             });
+    },
+
+    [ADD_ADDRESS]({ dispatch, commit }, payload) {
+        commit(M_ADD_ADDRESS, payload);
+        return dispatch(SET_ADDRESS, payload);
     },
 
     [SET_CONFIRMATION_TYPE]({ commit }, payload) {
