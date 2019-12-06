@@ -1,4 +1,4 @@
-.product-checkout-panel {
+.checkout-product-panel {
     counter-reset: item;
 
     &__item {
