@@ -14,7 +14,7 @@
         <section class="section checkout-view__main">
             <div class="container checkout-view__main-container">
                 <div class="checkout-view__main-body">
-                    <product-checkout-panel v-if="checkoutType === 'product'" />
+                    <checkout-product-panel v-if="checkoutType === 'product'" />
                 </div>
                 <v-sticky class="checkout-view__main-sticky">
                     <template v-slot:sticky>
@@ -114,7 +114,7 @@ import VInput from '../../components/controls/VInput/VInput.vue';
 import VButton from '../../components/controls/VButton/VButton.vue';
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 
-import ProductCheckoutPanel from '../../components/checkout/ProductCheckoutPanel/ProductCheckoutPanel.vue';
+import CheckoutProductPanel from '../../components/checkout/CheckoutProductPanel/CheckoutProductPanel.vue';
 
 import { $store, $logger, $progress } from '../../services/ServiceLocator';
 
@@ -146,7 +146,7 @@ export default {
         VInput,
         VSticky,
 
-        ProductCheckoutPanel,
+        CheckoutProductPanel,
     },
 
     data() {
