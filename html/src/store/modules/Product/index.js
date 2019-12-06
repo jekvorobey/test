@@ -9,8 +9,10 @@ export const PRODUCT_ID = 'productId';
 export const PRODUCT_CODE = 'productCode';
 export const PRODUCT = 'product';
 
+export const NAME = 'product';
+
 export default {
-    name: 'product',
+    name: NAME,
     namespaced: true,
     state: {
         [FEATURED_PRODUCTS]: { items: [], range: 0 },

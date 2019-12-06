@@ -3,18 +3,22 @@
         <div class="container">
             <transition-group tag="ol" class="section product-view__breadcrumbs" name="fade-in">
                 <li class="product-view__breadcrumbs-item" key="main">
-                    <router-link class="product-view__breadcrumbs-link" to="/">{{ 'Главная' }}</router-link>
+                    <router-link class="product-view__breadcrumbs-link" to="/">
+                        Главная
+                    </router-link>
                 </li>
 
                 <li class="product-view__breadcrumbs-item" key="all">
-                    <router-link class="product-view__breadcrumbs-link" to="/catalog">{{ 'Каталог' }}</router-link>
+                    <router-link class="product-view__breadcrumbs-link" to="/catalog">
+                        Каталог
+                    </router-link>
                 </li>
 
-                <!-- <li class="product-view__breadcrumbs-item" v-for="category in activeCategories" :key="category.id">
-                    <router-link :to="`/catalog/${category.code}`">
-                        {{ category.name }}
+                <li class="product-view__breadcrumbs-item" v-for="category in product.categoryCodes" :key="category">
+                    <router-link class="product-view__breadcrumbs-link" :to="`/catalog/${category}`">
+                        {{ category }}
                     </router-link>
-                </li> -->
+                </li>
             </transition-group>
         </div>
         <section class="section">
@@ -24,11 +28,30 @@
                         <div class="product-view__header-gallery">
                             <div
                                 class="product-view__header-gallery-item"
-                                :class="{ [`product-view__header-gallery-item--${item.type}`]: item.type }"
-                                v-for="item in product.media"
-                                :key="item.id"
+                                v-for="image in product.media"
+                                :key="image.id"
                             >
-                                <img :src="item.image" alt="" />
+                                <v-picture v-if="image && image.id" :image="image" alt="">
+                                    <template v-slot:source="{ image, lazy }">
+                                        <source
+                                            :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
+                                            type="image/webp"
+                                            media="(min-width: 480px)"
+                                        />
+                                        <source
+                                            :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                                            type="image/webp"
+                                            media="(max-width: 479px)"
+                                        />
+                                    </template>
+                                    <template v-slot:fallback="{ image, lazy, alt }">
+                                        <img
+                                            class="blur-up lazyload v-picture__img"
+                                            :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
+                                            :alt="alt"
+                                        />
+                                    </template>
+                                </v-picture>
                             </div>
                         </div>
                     </template>
@@ -92,7 +115,10 @@
                             </div>
                         </div>
                         <div class="product-view__header-detail-control-panel">
-                            <v-button class="product-view__header-detail-control-panel-btn">
+                            <v-button
+                                class="product-view__header-detail-control-panel-btn"
+                                @click.prevent="ADD_CART_ITEM({ offerId: product.id })"
+                            >
                                 Добавить в корзину
                             </v-button>
                             <v-link class="product-view__header-detail-control-panel-wishlist">
@@ -140,7 +166,7 @@
             </div>
         </section>
 
-        <section class="section product-view__section">
+        <!-- <section class="section product-view__section">
             <div class="container product-view__profitable">
                 <h2 class="product-view__section-hl product-view__profitable-hl">
                     {{ $t('product.title.profitable') }}
@@ -183,7 +209,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <section v-if="product.description" class="section product-view__section product-view__info">
             <div class="container product-view__info-container">
@@ -192,7 +218,31 @@
                     <v-html class="product-view__info-text" v-html="product.description.content" />
                 </div>
                 <div class="product-view__info-media">
-                    <img class="blur-up lazyload" :data-src="product.description.image" />
+                    <v-picture
+                        v-if="product.description.image && product.description.image.id"
+                        :image="product.description.image"
+                        alt=""
+                    >
+                        <template v-slot:source="{ image, lazy }">
+                            <source
+                                :data-srcset="generateSourcePath(600, 600, image.id, 'webp')"
+                                type="image/webp"
+                                media="(min-width: 480px)"
+                            />
+                            <source
+                                :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                                type="image/webp"
+                                media="(max-width: 479px)"
+                            />
+                        </template>
+                        <template v-slot:fallback="{ image, lazy, alt }">
+                            <img
+                                class="blur-up lazyload v-picture__img"
+                                :data-src="generateSourcePath(600, 600, image.id, image.sourceExt)"
+                                :alt="alt"
+                            />
+                        </template>
+                    </v-picture>
                 </div>
             </div>
         </section>
@@ -204,7 +254,27 @@
                     <v-html class="product-view__info-text" v-html="product.howto.content" />
                 </div>
                 <div class="product-view__info-media">
-                    <img class="blur-up lazyload" :data-src="product.howto.image" />
+                    <v-picture v-if="product.howto.image && product.howto.image.id" :image="product.howto.image" alt="">
+                        <template v-slot:source="{ image, lazy }">
+                            <source
+                                :data-srcset="generateSourcePath(600, 600, image.id, 'webp')"
+                                type="image/webp"
+                                media="(min-width: 480px)"
+                            />
+                            <source
+                                :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                                type="image/webp"
+                                media="(max-width: 479px)"
+                            />
+                        </template>
+                        <template v-slot:fallback="{ image, lazy, alt }">
+                            <img
+                                class="blur-up lazyload v-picture__img"
+                                :data-src="generateSourcePath(600, 600, image.id, image.sourceExt)"
+                                :alt="alt"
+                            />
+                        </template>
+                    </v-picture>
                 </div>
             </div>
         </section>
@@ -241,7 +311,7 @@
             </div>
         </section>
 
-        <section class="section product-view__section">
+        <!-- <section class="section product-view__section">
             <div class="container product-view__reviews">
                 <div class="product-view__reviews-inner">
                     <div class="product-view__reviews-header">
@@ -287,7 +357,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <section class="section product-view__section product-view__banners">
             <div class="container product-view__banners-container">
@@ -317,6 +387,7 @@
                         :key="product.id"
                         :product-id="product.id"
                         :name="product.name"
+                        :type="product.type"
                         :href="product.href"
                         :image="product.image"
                         :price="product.price"
@@ -374,6 +445,7 @@
                         v-for="product in featuredProducts.items.slice(0, 6)"
                         :key="product.id"
                         :product-id="product.id"
+                        :type="product.type"
                         :name="product.name"
                         :href="product.href"
                         :image="product.image"
@@ -395,6 +467,7 @@ import VButton from '../../components/controls/VButton/VButton.vue';
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 import VHtml from '../../components/controls/VHtml/VHtml.vue';
 import VSlider from '../../components/controls/VSlider/VSlider.vue';
+import VPicture from '../../components/controls/VPicture/VPicture.vue';
 
 import BannerCard from '../../components/BannerCard/BannerCard.vue';
 import InstagramCard from '../../components/InstagramCard/InstagramCard.vue';
@@ -405,13 +478,24 @@ import CatalogProductCard from '../../components/CatalogProductCard/CatalogProdu
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
 import ProductReviewCard from '../../components/ProductReviewCard/ProductReviewCard.vue';
 
-import productModule, { PRODUCT, BANNERS, FEATURED_PRODUCTS, INSTAGRAM_ITEMS } from '../../store/modules/Product';
-import {} from '../../store/modules/Product/getters';
-import { FETCH_PRODUCT_DATA } from '../../store/modules/Product/actions';
 import { mapState, mapActions, mapGetters } from 'vuex';
+
+import productModule, {
+    NAME as PRODUCT_MODULE,
+    PRODUCT,
+    BANNERS,
+    FEATURED_PRODUCTS,
+    INSTAGRAM_ITEMS,
+} from '../../store/modules/Product';
+import { FETCH_PRODUCT_DATA } from '../../store/modules/Product/actions';
+
+import { NAME as CART_MODULE } from '../../store/modules/Cart';
+import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
+
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 
 import _debounce from 'lodash/debounce';
+import { generatePictureSourcePath } from '../../util/images';
 import { breakpoints } from '../../assets/scripts/constants';
 import productBrand1 from '../../assets/images/mock/brandProduct1.png';
 
@@ -484,8 +568,6 @@ const instagramOptions = {
     },
 };
 
-export const DISPATCH_FETCH_PRODUCT_DATA = `${productModule.name}/${FETCH_PRODUCT_DATA}`;
-
 export default {
     name: 'product',
     components: {
@@ -496,6 +578,7 @@ export default {
         VSticky,
         VHtml,
         VSlider,
+        VPicture,
 
         CatalogProductCard,
         ProductReviewCard,
@@ -510,9 +593,8 @@ export default {
     },
 
     computed: {
-        ...mapGetters(productModule.name, []),
-        ...mapState(productModule.name, [PRODUCT, BANNERS, FEATURED_PRODUCTS, INSTAGRAM_ITEMS]),
         ...mapState('route', { code: state => state.params.code }),
+        ...mapState(PRODUCT_MODULE, [PRODUCT, BANNERS, FEATURED_PRODUCTS, INSTAGRAM_ITEMS]),
 
         sliderOptions() {
             return sliderOptions;
@@ -532,7 +614,12 @@ export default {
     },
 
     methods: {
-        ...mapActions(productModule.name, [FETCH_PRODUCT_DATA]),
+        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA]),
+        ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+
+        generateSourcePath(x, y, id, ext) {
+            return generatePictureSourcePath(x, y, id, ext);
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -558,7 +645,7 @@ export default {
         else {
             $progress.start();
             $store
-                .dispatch(DISPATCH_FETCH_PRODUCT_DATA, { code })
+                .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code })
                 .then(() => next(vm => $progress.finish()))
                 .catch(error => {
                     $progress.fail();

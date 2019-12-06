@@ -13,7 +13,7 @@ export default {
         return getProduct(payload)
             .then(data => commit(SET_PRODUCT, data))
             .catch(error => {
-                $logger.error(`FETCH_PRODUCT error: ${error}`);
+                $logger.error(`${FETCH_PRODUCT} ${error}`);
                 return {};
             });
     },
@@ -22,7 +22,7 @@ export default {
         return getProducts(payload)
             .then(data => commit(SET_FEATURED_PRODUCTS, data))
             .catch(error => {
-                $logger.error(`SET_FEATURED_PRODUCTS error: ${error}`);
+                $logger.error(`${FETCH_FEATURED_PRODUCTS} ${error}`);
                 return {};
             });
     },
@@ -31,7 +31,7 @@ export default {
         return getBanners(payload)
             .then(data => commit(SET_BANNERS, data.slice(3, 6)))
             .catch(error => {
-                $logger.error(`SET_BANNERS error: ${error}`);
+                $logger.error(`${FETCH_BANNERS} ${error}`);
                 return [];
             });
     },
@@ -40,7 +40,7 @@ export default {
         return getInstagram(payload)
             .then(data => commit(SET_INSTAGRAM_ITEMS, data.slice(0, 4)))
             .catch(error => {
-                $logger.error(`SET_INSTAGRAM_ITEMS error: ${error}`);
+                $logger.error(`${FETCH_INSTAGRAM_ITEMS} ${error}`);
                 return [];
             });
     },

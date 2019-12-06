@@ -61,9 +61,10 @@ export default class MockServiceAdapter extends HttpServiceBase {
     get(path, config) {
         switch (path) {
             case '/v1/categories':
-            case '/v1/catalog/items':
             case '/v1/cart/data':
             case '/v1/checkout/data':
+            case '/v1/catalog/items':
+            case '/v1/catalog/product-detail':
                 return this.httpServiceInstance.get(path, config);
             default:
                 return this.mockServiceInstance.get(path, config);

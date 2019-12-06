@@ -4,13 +4,13 @@
             <transition-group tag="ol" class="section catalog-view__breadcrumbs" name="fade-in">
                 <li class="catalog-view__breadcrumbs-item" key="main">
                     <router-link class="catalog-view__breadcrumbs-link" to="/">
-                        {{ 'Главная' }}
+                        Главная
                     </router-link>
                 </li>
 
                 <li class="catalog-view__breadcrumbs-item" key="all">
                     <router-link class="catalog-view__breadcrumbs-link" to="/catalog">
-                        {{ 'Каталог' }}
+                        Каталог
                     </router-link>
                 </li>
 
@@ -106,7 +106,7 @@
                                 :product-id="item.id"
                                 :name="item.name"
                                 :type="item.type"
-                                :href="`/catalog${activeCategory ? `/${activeCategory.code}` : ''}/${item.code}`"
+                                :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
                                 :image="item.image"
                                 :price="item.price"
                                 :old-price="item.oldPrice"
@@ -202,7 +202,7 @@ import { NAME as CART_MODULE } from '../../store/modules/Cart';
 import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 
 import catalogModule, { NAME as CATALOG_MODULE, ITEMS, BANNER, CATEGORIES } from '../../store/modules/Catalog';
-import { FETCH_ITEMS, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
+import { FETCH_ITEMS, FETCH_CATALOG_DATA, SET_LOAD } from '../../store/modules/Catalog/actions';
 import {
     ACTIVE_TAGS,
     ACTIVE_CATEGORY,
@@ -216,7 +216,6 @@ import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/filter.svg';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
-import { SET_LOAD } from '../../store/modules/Catalog/mutations';
 
 const itemAnimationDelayDelta = 100;
 let counter = 0;
