@@ -1,30 +1,30 @@
 {
   "publicPath": "/assets/",
   "all": [
-    "app.e29f33e55d3310b44ba8.css",
-    "app.e29f33e55d3310b44ba8.css.br",
-    "app.e29f33e55d3310b44ba8.css.gz",
-    "app.e29f33e55d3310b44ba8.js",
-    "app.e29f33e55d3310b44ba8.js.br",
-    "app.e29f33e55d3310b44ba8.js.gz",
+    "app.0efb2cc56e5c84022b2b.css",
+    "app.0efb2cc56e5c84022b2b.css.br",
+    "app.0efb2cc56e5c84022b2b.css.gz",
+    "app.0efb2cc56e5c84022b2b.js",
+    "app.0efb2cc56e5c84022b2b.js.br",
+    "app.0efb2cc56e5c84022b2b.js.gz",
     "cart-view.bb1242bd31ca8855ad22.css",
     "cart-view.bb1242bd31ca8855ad22.css.br",
     "cart-view.bb1242bd31ca8855ad22.css.gz",
     "cart-view.bb1242bd31ca8855ad22.js",
     "cart-view.bb1242bd31ca8855ad22.js.br",
     "cart-view.bb1242bd31ca8855ad22.js.gz",
-    "catalog-view.477e2f3f1d46f4746efd.css",
-    "catalog-view.477e2f3f1d46f4746efd.css.br",
-    "catalog-view.477e2f3f1d46f4746efd.css.gz",
-    "catalog-view.477e2f3f1d46f4746efd.js",
-    "catalog-view.477e2f3f1d46f4746efd.js.br",
-    "catalog-view.477e2f3f1d46f4746efd.js.gz",
-    "checkout-view.bfb53a4632b2bb1fbd04.css",
-    "checkout-view.bfb53a4632b2bb1fbd04.css.br",
-    "checkout-view.bfb53a4632b2bb1fbd04.css.gz",
-    "checkout-view.bfb53a4632b2bb1fbd04.js",
-    "checkout-view.bfb53a4632b2bb1fbd04.js.br",
-    "checkout-view.bfb53a4632b2bb1fbd04.js.gz",
+    "catalog-view.4b842c00830c77462ff5.css",
+    "catalog-view.4b842c00830c77462ff5.css.br",
+    "catalog-view.4b842c00830c77462ff5.css.gz",
+    "catalog-view.4b842c00830c77462ff5.js",
+    "catalog-view.4b842c00830c77462ff5.js.br",
+    "catalog-view.4b842c00830c77462ff5.js.gz",
+    "checkout-view.9079b79bbd3afef2a52e.css",
+    "checkout-view.9079b79bbd3afef2a52e.css.br",
+    "checkout-view.9079b79bbd3afef2a52e.css.gz",
+    "checkout-view.9079b79bbd3afef2a52e.js",
+    "checkout-view.9079b79bbd3afef2a52e.js.br",
+    "checkout-view.9079b79bbd3afef2a52e.js.gz",
     "default~cart-view~catalog-view~ui-kit.613c4c34144eceecc2e3.js",
     "default~cart-view~checkout-view~ui-kit.7125b8d091097a99ff5e.js",
     "default~cart-view~landing-view~product-view.1cce640009e791c7921b.css",
@@ -209,12 +209,12 @@
     "manifest.json",
     "not-found-view.d418bab705840ac79bb3.css",
     "not-found-view.d418bab705840ac79bb3.js",
-    "product-view.084aa1492ff5a3b41edc.css",
-    "product-view.084aa1492ff5a3b41edc.css.br",
-    "product-view.084aa1492ff5a3b41edc.css.gz",
-    "product-view.084aa1492ff5a3b41edc.js",
-    "product-view.084aa1492ff5a3b41edc.js.br",
-    "product-view.084aa1492ff5a3b41edc.js.gz",
+    "product-view.d25896169ed80874cfa0.css",
+    "product-view.d25896169ed80874cfa0.css.br",
+    "product-view.d25896169ed80874cfa0.css.gz",
+    "product-view.d25896169ed80874cfa0.js",
+    "product-view.d25896169ed80874cfa0.js.br",
+    "product-view.d25896169ed80874cfa0.js.gz",
     "ui-kit.d79d5b3e29fc851b9442.css",
     "ui-kit.d79d5b3e29fc851b9442.css.br",
     "ui-kit.d79d5b3e29fc851b9442.css.gz",
@@ -248,16 +248,16 @@
   ],
   "initial": [
     "vendors~app.6ae5f40cc09580a3e743.js",
-    "app.e29f33e55d3310b44ba8.css",
-    "app.e29f33e55d3310b44ba8.js"
+    "app.0efb2cc56e5c84022b2b.css",
+    "app.0efb2cc56e5c84022b2b.js"
   ],
   "async": [
     "cart-view.bb1242bd31ca8855ad22.css",
     "cart-view.bb1242bd31ca8855ad22.js",
-    "catalog-view.477e2f3f1d46f4746efd.css",
-    "catalog-view.477e2f3f1d46f4746efd.js",
-    "checkout-view.bfb53a4632b2bb1fbd04.css",
-    "checkout-view.bfb53a4632b2bb1fbd04.js",
+    "catalog-view.4b842c00830c77462ff5.css",
+    "catalog-view.4b842c00830c77462ff5.js",
+    "checkout-view.9079b79bbd3afef2a52e.css",
+    "checkout-view.9079b79bbd3afef2a52e.js",
     "default~cart-view~catalog-view~ui-kit.613c4c34144eceecc2e3.js",
     "default~cart-view~checkout-view~ui-kit.7125b8d091097a99ff5e.js",
     "default~cart-view~landing-view~product-view.1cce640009e791c7921b.css",
@@ -276,8 +276,8 @@
     "landing-view.361b14cce5d3ac4a6b83.js",
     "not-found-view.d418bab705840ac79bb3.css",
     "not-found-view.d418bab705840ac79bb3.js",
-    "product-view.084aa1492ff5a3b41edc.css",
-    "product-view.084aa1492ff5a3b41edc.js",
+    "product-view.d25896169ed80874cfa0.css",
+    "product-view.d25896169ed80874cfa0.js",
     "ui-kit.d79d5b3e29fc851b9442.css",
     "ui-kit.d79d5b3e29fc851b9442.js",
     "vendors~cart-view~landing-view~product-view.21a37f316c2ca04dc5ec.css",
@@ -1642,7 +1642,7 @@
       199,
       202
     ],
-    "00cb6644": [
+    "221d45c4": [
       18,
       21
     ],
@@ -4907,10 +4907,6 @@
     ],
     "92ed9c66": [
       220
-    ],
-    "6a2dc4fa": [
-      18,
-      21
     ],
     "d807d800": [
       220
@@ -9229,6 +9225,10 @@
     ],
     "732a04ea": [
       235
+    ],
+    "e900b70c": [
+      18,
+      21
     ],
     "aa98365e": [
       235
