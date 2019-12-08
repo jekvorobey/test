@@ -77,9 +77,9 @@ app.use('/service-worker.js', serve('../public/assets/service-worker.js'));
 function render(req, res) {
     try {
         let app_root = null;
-        const matches = /([^.]+)-front\.ibt-mas\.greensight\.ru/.exec(req.hostname);
+        const matches = /([^.]+)_front\.ibt-mas\.greensight\.ru/.exec(req.hostname);
         if (!matches || typeof matches[1] === 'undefined') throw new Error('Hostname is not matches by regex');
-        app_root = path.resolve(sites_folder, `${matches[1]}-front.ibt-mas.greensight.ru`);
+        app_root = path.resolve(sites_folder, `${matches[1]}_front.ibt-mas.greensight.ru`);
 
         res.setHeader('Content-Type', 'text/html');
         res.setHeader('Server', serverInfo);
