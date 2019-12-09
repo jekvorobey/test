@@ -20,7 +20,7 @@
         ]
     },
     "scripts": {
-        "dev": "cross-env NODE_ENV=development node server-local",
+        "dev": "cross-env NODE_ENV=development node --trace-deprecation server-local ",
         "start": "cross-env NODE_ENV=production node server-local",
         "start:remote": "cross-env NODE_ENV=production CONFIG=.env.remote node server-local",
         "rebuild": "rimraf ../public/assets && yarn build:client && yarn build:server",

@@ -65,7 +65,7 @@ module.exports = function setupDevServer(app, templatePath, cb) {
         noInfo: true,
     });
     app.use(devMiddleware);
-    clientCompiler.plugin('done', stats => {
+    clientCompiler.hooks.done.tap('BuildStatsPlugin', stats => {
         stats = stats.toJson();
         stats.errors.forEach(err => logger.error(err));
         stats.warnings.forEach(err => logger.warn(err));
