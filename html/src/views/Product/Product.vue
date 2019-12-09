@@ -25,7 +25,7 @@
             <div class="container product-view__header">
                 <v-sticky class="product-view__header-sticky">
                     <template v-slot:sticky>
-                        <div class="product-view__header-gallery">
+                        <div v-if="!isTabletLg" class="product-view__header-gallery">
                             <div
                                 class="product-view__header-gallery-item"
                                 v-for="image in product.media"
@@ -54,6 +54,35 @@
                                 </v-picture>
                             </div>
                         </div>
+                        <v-slider v-else class="product-view__header-gallery" :options="productGalleryOptions">
+                            <div
+                                class="swiper-slide product-view__header-gallery-item"
+                                v-for="image in product.media"
+                                :key="image.id"
+                            >
+                                <v-picture v-if="image && image.id" :image="image" alt="">
+                                    <template v-slot:source="{ image, lazy }">
+                                        <source
+                                            :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
+                                            type="image/webp"
+                                            media="(min-width: 480px)"
+                                        />
+                                        <source
+                                            :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                                            type="image/webp"
+                                            media="(max-width: 479px)"
+                                        />
+                                    </template>
+                                    <template v-slot:fallback="{ image, lazy, alt }">
+                                        <img
+                                            class="blur-up lazyload v-picture__img"
+                                            :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
+                                            :alt="alt"
+                                        />
+                                    </template>
+                                </v-picture>
+                            </div>
+                        </v-slider>
                     </template>
                 </v-sticky>
                 <div class="product-view__header-detail">
@@ -77,7 +106,7 @@
                         </div>
                     </div>
 
-                    <div class="product-view__header-detail-section product-view__header-detail-options">
+                    <!-- <div class="product-view__header-detail-section product-view__header-detail-options">
                         <div class="product-view__header-detail-options-selected">
                             <div>{{ product.option.title }}</div>
                             <div class="text-grey text-sm">16 оттенков</div>
@@ -98,7 +127,7 @@
                                 />
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="product-view__header-detail-section product-view__header-detail-panels">
                         <div class="product-view__header-detail-price-panel">
@@ -279,7 +308,10 @@
             </div>
         </section>
 
-        <section v-if="product.characteristics" class="section product-view__section product-view__characteristics">
+        <section
+            v-if="product.characteristics && product.characteristics.length > 0"
+            class="section product-view__section product-view__characteristics"
+        >
             <div class="container">
                 <h2 class="product-view__section-hl">{{ $t('product.title.characteristics') }}</h2>
                 <ul class="product-view__characteristics-list">
@@ -295,7 +327,10 @@
             </div>
         </section>
 
-        <section v-if="product.masterClasses" class="section product-view__masterclass">
+        <section
+            v-if="product.masterClasses && product.masterClasses.length > 0"
+            class="section product-view__masterclass"
+        >
             <div class="container product-view__masterclass-container">
                 <h2 class="product-view__section-hl product-view__masterclass-hl">
                     {{ $t('product.title.masterClasses') }}
@@ -436,7 +471,7 @@
             </div>
         </section>
 
-        <section v-if="!isTabletLg" class="section product-view__section product-view__history">
+        <section class="section product-view__section product-view__history">
             <div class="container product-view__history-container">
                 <h2 class="product-view__section-hl">{{ $t('product.title.history') }}</h2>
                 <div class="product-view__history-grid">
@@ -509,6 +544,32 @@ import '../../assets/images/sprites/arrow-small.svg';
 import '../../assets/images/sprites/wishlist-middle.svg';
 import './Product.css';
 
+const productGalleryOptions = {
+    spaceBetween: 8,
+    slidesPerView: 1.5,
+    slidesOffsetBefore: 24,
+    slidesOffsetAfter: 24,
+    grabCursor: true,
+
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+
+    breakpoints: {
+        [breakpoints.tablet - 1]: {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            slidesOffsetBefore: 16,
+            slidesOffsetAfter: 16,
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'bullets',
+            },
+        },
+    },
+};
+
 const sliderOptions = {
     spaceBetween: 24,
     slidesPerView: 4,
@@ -526,8 +587,7 @@ const sliderOptions = {
 
     breakpoints: {
         [breakpoints.tabletLg - 1]: {
-            slidesPerView: 2.5,
-            spaceBetween: 24,
+            slidesPerView: 3.5,
             slidesOffsetBefore: 24,
             slidesOffsetAfter: 24,
         },
@@ -545,7 +605,7 @@ const instagramOptions = {
     spaceBetween: 24,
     slidesOffsetBefore: 24,
     slidesOffsetAfter: 24,
-    slidesPerView: 2.5,
+    slidesPerView: 3.5,
     grabCursor: true,
 
     navigation: {
@@ -595,6 +655,10 @@ export default {
     computed: {
         ...mapState('route', { code: state => state.params.code }),
         ...mapState(PRODUCT_MODULE, [PRODUCT, BANNERS, FEATURED_PRODUCTS, INSTAGRAM_ITEMS]),
+
+        productGalleryOptions() {
+            return productGalleryOptions;
+        },
 
         sliderOptions() {
             return sliderOptions;

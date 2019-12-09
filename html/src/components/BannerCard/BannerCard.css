@@ -21,10 +21,11 @@
     &__img {
         position: relative;
         display: flex;
-        height: 240px;
 
-        @media (--tablet) {
-            height: 192px;
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
         }
 
         .v-picture {
