@@ -9,7 +9,7 @@ const httpProxy = require('express-http-proxy');
 const LRUCache = require('lru-cache');
 const favicon = require('serve-favicon');
 const compression = require('compression');
-const microcache = require('route-cache');
+const routeCache = require('route-cache');
 
 const expressVersion = require('express/package.json').version;
 const serverRendererVersion = require('vue-server-renderer/package.json').version;
@@ -18,7 +18,6 @@ const { createBundleRenderer } = require('./build/custom-vue-server-renderer');
 const resolve = file => path.resolve(__dirname, file);
 
 const isProd = process.env.NODE_ENV === 'production';
-const useMicroCache = process.env.MICRO_CACHE !== 'false';
 const serverInfo = `express/${expressVersion} vue-server-renderer/${serverRendererVersion}`;
 const ServerLogger = require('./src/services/LogService/ServerLogger');
 
@@ -88,41 +87,6 @@ if (isProd) {
     });
 }
 
-const serve = (resourcePath, cache) =>
-    express.static(resolve(resourcePath), {
-        maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 365 : 0,
-    });
-
-// Проксирование удаленного сервера Api
-// https://localhost:8080/v1/... -> https://master-front.ibt-mas.greensight.ru/v1/...
-const apiProxy = httpProxy('https://master-front.ibt-mas.greensight.ru', {
-    proxyReqPathResolver: req => req.originalUrl,
-});
-
-const dadataProxy = httpProxy('https://suggestions.dadata.ru', {
-    proxyReqPathResolver: req => req.originalUrl,
-});
-
-app.use('/suggestions/api/4_1/rs*', dadataProxy);
-app.use('/content/*', apiProxy);
-app.use('/v1/*', apiProxy);
-
-app.use(cors({ credentials: true }));
-app.use(cookieParser());
-app.use(compression({ threshold: 0 }));
-app.use(favicon('../public/assets/favicon.ico'));
-app.use('/', serve('../public', true));
-app.use('/manifest.json', serve('./manifest.json', true));
-app.use('/service-worker.js', serve('../public/assets/service-worker.js'));
-
-// since this app has no user-specific content, every page is micro-cacheable.
-// if your app involves user-specific content, you need to implement custom
-// logic to determine whether a request is cacheable based on its url and
-// headers.
-// 1-second microcache.
-// https://www.nginx.com/blog/benefits-of-microcaching-nginx/
-// if (isProd) app.use(microcache.cacheSeconds(1, req => useMicroCache && req.originalUrl));
-
 function render(req, res) {
     const s = Date.now();
 
@@ -158,18 +122,62 @@ function render(req, res) {
     });
 }
 
-let port = process.env.PORT || 8080;
-let host = process.env.HOST || 'localhost';
+const serve = (resourcePath, cache) =>
+    express.static(resolve(resourcePath), {
+        maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 365 : 0,
+    });
 
-if (process.env.CONFIG) {
-    try {
-        const env = require(path.resolve(__dirname, process.env.CONFIG));
-        port = env.PORT;
-        host = env.HOST;
-    } catch (error) {
-        logger.error(error);
+const proxy = hostname =>
+    httpProxy(hostname, {
+        proxyReqPathResolver: req => req.originalUrl,
+    });
+
+let env = null;
+let port = 8080;
+let host = 'localhost';
+let proxies = [];
+let cacheRoutes = [];
+const configFileName = process.env.CONFIG || '.env.json';
+
+try {
+    env = require(path.resolve(__dirname, configFileName));
+    port = process.env.PORT || env.PORT;
+    host = process.env.HOST || env.HOST;
+    proxies = env.PROXIES || [];
+    cacheRoutes = env.CACHE_ROUTES || [];
+} catch (error) {
+    port = 8080;
+    host = 'localhost';
+}
+
+for (let i = 0; i < proxies.length; i++) {
+    const entry = proxies[i];
+    app.use(entry.path, proxy(entry.host));
+}
+
+if (isProd) {
+    // since this app has no user-specific content, every page is micro-cacheable.
+    // if your app involves user-specific content, you need to implement custom
+    // logic to determine whether a request is cacheable based on its url and
+    // headers.
+    // https://www.nginx.com/blog/benefits-of-microcaching-nginx/
+
+    for (let i = 0; i < cacheRoutes.length; i++) {
+        const entry = cacheRoutes[i];
+        app.use(
+            entry.path,
+            routeCache.cacheSeconds(entry.time, req => req.originalUrl)
+        );
     }
 }
+
+app.use(cors({ credentials: true }));
+app.use(cookieParser());
+app.use(compression({ threshold: 0 }));
+app.use(favicon('../public/assets/favicon.ico'));
+app.use('/', serve('../public', true));
+app.use('/manifest.json', serve('./manifest.json', true));
+app.use('/service-worker.js', serve('../public/assets/service-worker.js'));
 
 app.get('*', isProd ? render : (req, res) => readyPromise.then(() => render(req, res)));
 
