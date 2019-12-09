@@ -5,23 +5,34 @@ const LRUCache = require('lru-cache');
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const httpProxy = require('express-http-proxy');
 
 const favicon = require('serve-favicon');
 const compression = require('compression');
-const microcache = require('route-cache');
+const routeCache = require('route-cache');
 const expressVersion = require('express/package.json').version;
 const serverRendererVersion = require('vue-server-renderer/package.json').version;
 const { createBundleRenderer } = require('./build/custom-vue-server-renderer');
 
-const useMicroCache = process.env.MICRO_CACHE !== 'false';
 const serverInfo = `express/${expressVersion} vue-server-renderer/${serverRendererVersion}`;
 const ServerLogger = require('./src/services/LogService/ServerLogger');
 
 const logger = new ServerLogger();
 
+const resolve = file => path.resolve(__dirname, file);
+
+const serve = (resourcePath, cache) =>
+    express.static(resolve(resourcePath), {
+        maxAge: cache ? 1000 * 60 * 60 * 24 * 365 : 0,
+    });
+
+const proxy = hostname =>
+    httpProxy(hostname, {
+        proxyReqPathResolver: req => req.originalUrl,
+    });
+
 const app = express();
 const sites_folder = path.resolve(__dirname, '../../');
-const port = 3000;
 
 if (serverRendererVersion !== '2.6.10')
     logger.warn(
@@ -46,33 +57,6 @@ function createRenderer(bundle, options) {
         })
     );
 }
-
-function resolve(file) {
-    return path.resolve(__dirname, file);
-}
-
-function serve(servePath, cache) {
-    return express.static(resolve(servePath), {
-        maxAge: cache ? 1000 * 60 * 60 * 24 * 365 : 0,
-    });
-}
-
-app.enable('trust proxy');
-app.use(cors({ credentials: true }));
-app.use(cookieParser());
-app.use(compression({ threshold: 0 }));
-app.use(favicon('../public/assets/favicon.ico'));
-app.use('/', serve('../public', true));
-app.use('/manifest.json', serve('../public/assets/manifest.json', true));
-app.use('/service-worker.js', serve('../public/assets/service-worker.js'));
-
-// since this app has no user-specific content, every page is micro-cacheable.
-// if your app involves user-specific content, you need to implement custom
-// logic to determine whether a request is cacheable based on its url and
-// headers.
-// 1-second microcache.
-// https://www.nginx.com/blog/benefits-of-microcaching-nginx/
-// app.use(microcache.cacheSeconds(1, req => useMicroCache && req.originalUrl));
 
 function render(req, res) {
     try {
@@ -144,8 +128,78 @@ function render(req, res) {
     }
 }
 
-app.get('*', render);
+let env = null;
+let config = null;
+let port = 3000;
+let publicPath = '/';
+let outputPath = '../public/assets';
 
-app.listen(port, () => {
-    logger.info(`server started at port ${port}`);
-});
+let faviconConf = null;
+let serviceWorkerConf = null;
+let manifestConf = null;
+let corsConf = null;
+let compressionConf = null;
+
+let proxies = [];
+let cacheRoutes = [];
+let enable = [];
+const baseConfig = '.env.json';
+const configFileName = process.env.CONFIG || '.env.stage.json';
+
+try {
+    env = require(resolve(baseConfig));
+    if (configFileName) {
+        config = require(resolve(configFileName));
+        Object.assign(env, config);
+    }
+
+    port = process.env.PORT || env.PORT;
+    publicPath = env.PUBLIC_PATH;
+    outputPath = env.OUTPUT_PATH;
+
+    faviconConf = env.FAVICON;
+    manifestConf = env.MANIFEST;
+    serviceWorkerConf = env.SERVICE_WORKER;
+    corsConf = env.CORS;
+    compressionConf = env.COMPRESSION;
+
+    enable = env.ENABLE || [];
+    proxies = env.PROXIES || [];
+    cacheRoutes = env.CACHE_ROUTES || [];
+} catch (error) {
+    logger.error(error);
+}
+
+for (let i = 0; i < enable.length; i++) {
+    const entry = enable[i];
+    app.enable(entry);
+}
+
+for (let i = 0; i < proxies.length; i++) {
+    const entry = proxies[i];
+    app.use(entry.path, proxy(entry.host));
+}
+
+// since this app has no user-specific content, every page is micro-cacheable.
+// if your app involves user-specific content, you need to implement custom
+// logic to determine whether a request is cacheable based on its url and
+// headers.
+// https://www.nginx.com/blog/benefits-of-microcaching-nginx/
+for (let i = 0; i < cacheRoutes.length; i++) {
+    const entry = cacheRoutes[i];
+    app.use(
+        entry.path,
+        routeCache.cacheSeconds(entry.time, req => req.originalUrl)
+    );
+}
+
+if (corsConf) app.use(cors(corsConf));
+if (compressionConf) app.use(compression(compressionConf));
+if (faviconConf) app.use(favicon(faviconConf.outputPath));
+if (manifestConf) app.use(manifestConf.publicPath, serve(manifestConf.outputPath, true));
+if (serviceWorkerConf) app.use(serviceWorkerConf.publicPath, serve(serviceWorkerConf.outputPath));
+
+app.use(publicPath, serve(outputPath, true));
+app.use(cookieParser());
+app.get('*', render);
+app.listen(port, () => logger.info(`server started at port ${port}`));

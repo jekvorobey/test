@@ -15,14 +15,24 @@ const expressVersion = require('express/package.json').version;
 const serverRendererVersion = require('vue-server-renderer/package.json').version;
 const { createBundleRenderer } = require('./build/custom-vue-server-renderer');
 
-const resolve = file => path.resolve(__dirname, file);
-
 const isProd = process.env.NODE_ENV === 'production';
 const serverInfo = `express/${expressVersion} vue-server-renderer/${serverRendererVersion}`;
 const ServerLogger = require('./src/services/LogService/ServerLogger');
 
 const logger = new ServerLogger();
 const setupDevServer = require('./build/setup-dev-server');
+
+const resolve = file => path.resolve(__dirname, file);
+
+const serve = (resourcePath, cache) =>
+    express.static(resolve(resourcePath), {
+        maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 365 : 0,
+    });
+
+const proxy = hostname =>
+    httpProxy(hostname, {
+        proxyReqPathResolver: req => req.originalUrl,
+    });
 
 const app = express();
 
@@ -122,32 +132,53 @@ function render(req, res) {
     });
 }
 
-const serve = (resourcePath, cache) =>
-    express.static(resolve(resourcePath), {
-        maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 365 : 0,
-    });
-
-const proxy = hostname =>
-    httpProxy(hostname, {
-        proxyReqPathResolver: req => req.originalUrl,
-    });
-
 let env = null;
+let config = null;
 let port = 8080;
 let host = 'localhost';
+let publicPath = '/';
+let outputPath = '../public/assets';
+
+let faviconConf = null;
+let serviceWorkerConf = null;
+let manifestConf = null;
+let corsConf = null;
+let compressionConf = null;
+
 let proxies = [];
 let cacheRoutes = [];
-const configFileName = process.env.CONFIG || '.env.json';
+let enable = [];
+const baseConfig = '.env.json';
+const configFileName = process.env.CONFIG;
 
 try {
-    env = require(path.resolve(__dirname, configFileName));
+    env = require(resolve(baseConfig));
+    if (configFileName) {
+        config = require(resolve(configFileName));
+        Object.assign(env, config);
+    }
+
     port = process.env.PORT || env.PORT;
     host = process.env.HOST || env.HOST;
+    publicPath = env.PUBLIC_PATH;
+    outputPath = env.OUTPUT_PATH;
+
+    faviconConf = env.FAVICON;
+    manifestConf = env.MANIFEST;
+    serviceWorkerConf = env.SERVICE_WORKER;
+    corsConf = env.CORS;
+    compressionConf = env.COMPRESSION;
+
+    enable = env.ENABLE || [];
     proxies = env.PROXIES || [];
     cacheRoutes = env.CACHE_ROUTES || [];
 } catch (error) {
-    port = 8080;
-    host = 'localhost';
+    logger.error(error);
+}
+
+for (let i = 0; i < enable.length; i++) {
+    const entry = enable[i];
+    app.enable(entry);
 }
 
 for (let i = 0; i < proxies.length; i++) {
@@ -171,16 +202,13 @@ if (isProd) {
     }
 }
 
-app.use(cors({ credentials: true }));
+if (corsConf) app.use(cors(corsConf));
+if (compressionConf) app.use(compression(compressionConf));
+if (faviconConf) app.use(favicon(faviconConf.outputPath));
+if (manifestConf) app.use(manifestConf.publicPath, serve(manifestConf.outputPath, true));
+if (serviceWorkerConf) app.use(serviceWorkerConf.publicPath, serve(serviceWorkerConf.outputPath));
+
+app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());
-app.use(compression({ threshold: 0 }));
-app.use(favicon('../public/assets/favicon.ico'));
-app.use('/', serve('../public', true));
-app.use('/manifest.json', serve('./manifest.json', true));
-app.use('/service-worker.js', serve('../public/assets/service-worker.js'));
-
 app.get('*', isProd ? render : (req, res) => readyPromise.then(() => render(req, res)));
-
-app.listen(port, host, () => {
-    logger.info(`server started at ${host}:${port}`);
-});
+app.listen(port, host, () => logger.info(`server started at ${host}:${port}`));
