@@ -100,9 +100,6 @@ if (isProd) {
 function render(req, res) {
     const s = Date.now();
 
-    res.setHeader('Content-Type', 'text/html');
-    res.setHeader('Server', serverInfo);
-
     const handleError = err => {
         if (err.url) {
             logger.warn(`redirect: ${err.url}`);
@@ -126,6 +123,10 @@ function render(req, res) {
 
     renderer.renderToString(context, (err, html) => {
         if (err) return handleError(err);
+
+        res.setHeader('Content-Type', 'text/html');
+        res.setHeader('Content-Length', html.length);
+        res.setHeader('Server', serverInfo);
 
         res.send(html);
         if (!isProd) logger.success(`whole request: ${Date.now() - s}ms`, req.url);
@@ -176,6 +177,12 @@ try {
     logger.error(error);
 }
 
+if (corsConf) app.use(cors(corsConf));
+if (compressionConf) app.use(compression(compressionConf));
+if (faviconConf) app.use(favicon(faviconConf.outputPath));
+if (manifestConf) app.use(manifestConf.publicPath, serve(manifestConf.outputPath, true));
+if (serviceWorkerConf) app.use(serviceWorkerConf.publicPath, serve(serviceWorkerConf.outputPath));
+
 for (let i = 0; i < enable.length; i++) {
     const entry = enable[i];
     app.enable(entry);
@@ -201,12 +208,6 @@ if (isProd) {
         );
     }
 }
-
-if (corsConf) app.use(cors(corsConf));
-if (compressionConf) app.use(compression(compressionConf));
-if (faviconConf) app.use(favicon(faviconConf.outputPath));
-if (manifestConf) app.use(manifestConf.publicPath, serve(manifestConf.outputPath, true));
-if (serviceWorkerConf) app.use(serviceWorkerConf.publicPath, serve(serviceWorkerConf.outputPath));
 
 app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());

@@ -65,9 +65,6 @@ function render(req, res) {
         if (!matches || typeof matches[1] === 'undefined') throw new Error('Hostname is not matches by regex');
         app_root = path.resolve(sites_folder, `${matches[1]}_front.ibt-mas.greensight.ru`);
 
-        res.setHeader('Content-Type', 'text/html');
-        res.setHeader('Server', serverInfo);
-
         const handleError = err => {
             if (err.url) {
                 res.redirect(err.url);
@@ -121,6 +118,10 @@ function render(req, res) {
 
         renderer.renderToString(context, (err, html) => {
             if (err) return handleError(err);
+
+            res.setHeader('Content-Type', 'text/html');
+            res.setHeader('Content-Length', html.length);
+            res.setHeader('Server', serverInfo);
             res.send(html);
         });
     } catch (error) {
@@ -170,6 +171,12 @@ try {
     logger.error(error);
 }
 
+if (corsConf) app.use(cors(corsConf));
+if (compressionConf) app.use(compression(compressionConf));
+if (faviconConf) app.use(favicon(faviconConf.outputPath));
+if (manifestConf) app.use(manifestConf.publicPath, serve(manifestConf.outputPath, true));
+if (serviceWorkerConf) app.use(serviceWorkerConf.publicPath, serve(serviceWorkerConf.outputPath));
+
 for (let i = 0; i < enable.length; i++) {
     const entry = enable[i];
     app.enable(entry);
@@ -192,12 +199,6 @@ for (let i = 0; i < cacheRoutes.length; i++) {
         routeCache.cacheSeconds(entry.time, req => req.originalUrl)
     );
 }
-
-if (corsConf) app.use(cors(corsConf));
-if (compressionConf) app.use(compression(compressionConf));
-if (faviconConf) app.use(favicon(faviconConf.outputPath));
-if (manifestConf) app.use(manifestConf.publicPath, serve(manifestConf.outputPath, true));
-if (serviceWorkerConf) app.use(serviceWorkerConf.publicPath, serve(serviceWorkerConf.outputPath));
 
 app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());
