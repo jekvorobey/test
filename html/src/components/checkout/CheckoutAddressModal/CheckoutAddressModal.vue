@@ -373,18 +373,30 @@ export default {
         },
 
         selectedAddress(value) {
-            if (value) {
-                this.address.country_code = value.country_iso_code;
-                this.address.post_index = value.postal_code;
-                this.address.region = value.region_with_type || value.region;
-                this.address.region_guid = value.region_fias_id;
-                this.address.area = value.area_with_type || value.area;
-                this.address.area_guid = value.area_fias_id;
-                this.address.city = value.city_with_type || value.city;
-                this.address.city_guid = value.city_fias_id;
-                this.address.street = value.street_with_type || value.street;
-                this.address.house = value.house_type ? `${value.house_type}${value.house}` : value.house;
-                this.address.block = value.block_type ? `${value.block_type}${value.block}` : value.block;
+            if (!value) {
+                this.address.country_code = '';
+                this.address.post_index = '';
+                this.address.region = '';
+                this.address.region_guid = '';
+                this.address.area = '';
+                this.address.area_guid = '';
+                this.address.city = '';
+                this.address.city_guid = '';
+                this.address.street = '';
+                this.address.house = '';
+                this.address.block = '';
+            } else {
+                this.address.country_code = value.data.country_iso_code;
+                this.address.post_index = value.data.postal_code;
+                this.address.region = value.data.region_with_type || value.data.region;
+                this.address.region_guid = value.data.region_fias_id;
+                this.address.area = value.data.area_with_type || value.data.area;
+                this.address.area_guid = value.data.area_fias_id;
+                this.address.city = value.data.city_with_type || value.data.city;
+                this.address.city_guid = value.data.city_fias_id;
+                this.address.street = value.data.street_with_type || value.data.street;
+                this.address.house = value.data.house_type ? `${value.data.house_type}${value.data.house}` : value.data.house;
+                this.address.block = value.data.block_type ? `${value.data.block_type}${value.data.block}` : value.data.block;
             }
 
             console.log(this.address);
