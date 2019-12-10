@@ -337,7 +337,9 @@ export default {
         onSubmit() {
             this.$v.$touch();
             if (this.$v.$invalid) return;
-            this.$emit('addressSubmit', Object.assign({}, this.address));
+            const address = Object.assign({}, this.address);
+            console.log(address, this.address);
+            this.$emit('addressSubmit', address);
             this.CHANGE_MODAL_STATE({ name: NAME, open: false, state: {} });
         },
 
@@ -396,6 +398,8 @@ export default {
                 this.address.house = value.house_type ? `${value.house_type}${value.house}` : value.house;
                 this.address.block = value.block_type ? `${value.block_type}${value.block}` : value.block;
             }
+
+            console.log(this.address);
         },
     },
 
