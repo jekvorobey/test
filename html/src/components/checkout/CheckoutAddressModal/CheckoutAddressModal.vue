@@ -395,8 +395,12 @@ export default {
                 this.address.city = value.data.city_with_type || value.data.city;
                 this.address.city_guid = value.data.city_fias_id;
                 this.address.street = value.data.street_with_type || value.data.street;
-                this.address.house = value.data.house_type ? `${value.data.house_type}${value.data.house}` : value.data.house;
-                this.address.block = value.data.block_type ? `${value.data.block_type}${value.data.block}` : value.data.block;
+                this.address.house = value.data.house_type
+                    ? `${value.data.house_type} ${value.data.house}`
+                    : value.data.house;
+                this.address.block = value.data.block_type
+                    ? `${value.data.block_type} ${value.data.block}`
+                    : value.data.block;
             }
 
             console.log(this.address);
