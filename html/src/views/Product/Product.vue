@@ -356,7 +356,9 @@
                         :key="item.id"
                     >
                         <div class="product-view__characteristics-item-title">{{ item.title }}</div>
-                        <div class="product-view__characteristics-item-value">{{ item.value }}</div>
+                        <div class="product-view__characteristics-item-value">
+                            {{ Array.isArray(item.value) ? item.value.join(', ') : item.value }}
+                        </div>
                     </li>
                 </ul>
             </div>
