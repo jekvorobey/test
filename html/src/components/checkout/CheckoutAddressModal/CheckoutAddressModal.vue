@@ -337,7 +337,7 @@ export default {
         onSubmit() {
             this.$v.$touch();
             if (this.$v.$invalid) return;
-            this.$emit('addressSubmit', this.address);
+            this.$emit('addressSubmit', Object.assign({}, this.address));
             this.CHANGE_MODAL_STATE({ name: NAME, open: false, state: {} });
         },
 

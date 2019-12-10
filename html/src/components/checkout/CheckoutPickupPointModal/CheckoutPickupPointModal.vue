@@ -94,6 +94,9 @@ export default {
 
     computed: {
         ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, DELIVERY_METHODS, SELECTED_DELIVERY_METHOD_ID]),
+        ...mapState(MODAL_MODULE, {
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].isOpen,
+        }),
 
         filteredPickupPoints() {
             return this[PICKUP_POINTS].filter(
