@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const Config = require('merge-config');
 const LRUCache = require('lru-cache');
 
 const express = require('express');
@@ -129,8 +130,8 @@ function render(req, res) {
     }
 }
 
-let env = null;
-let config = null;
+let env = new Config();
+const config = new Config();
 let port = 3000;
 let publicPath = '/';
 let outputPath = '../public/assets';
@@ -148,12 +149,13 @@ const baseConfig = '.env.json';
 const configFileName = process.env.CONFIG || '.env.stage.json';
 
 try {
-    env = require(resolve(baseConfig));
+    env.file(resolve(baseConfig));
     if (configFileName) {
-        config = require(resolve(configFileName));
-        Object.assign(env, config);
+        config.file(resolve(configFileName));
+        env.merge(config.get());
     }
 
+    env = env.get();
     port = process.env.PORT || env.PORT;
     publicPath = env.PUBLIC_PATH;
     outputPath = env.OUTPUT_PATH;
