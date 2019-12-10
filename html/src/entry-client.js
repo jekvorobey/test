@@ -6,6 +6,7 @@ import ClientCookie from './services/CookieService/ClientCookie';
 import HttpService from './services/HttpService/MockServiceAdapter';
 import events from './services/EventService';
 import progress from './services/ProgressService';
+import DadataHttpService from './services/HttpService/DadataHttpService';
 
 const locator = ServiceLocator.createInstance()
     .register(serviceName.PROGRESS, () => progress)
@@ -21,6 +22,10 @@ const { app, router, store } = createApp(locator);
 if (window.__INITIAL_STATE__) {
     // Вставляем данные в стор
     store.replaceState(window.__INITIAL_STATE__);
+    locator.register(
+        serviceName.DADATA,
+        () => new DadataHttpService(store.state.env.DADATA_API_HOST, store.state.env.DADATA_API_KEY)
+    );
 
     // удаляем тег скрипта с данными, и чистим их в переменной
     const appEl = document.getElementById('app');

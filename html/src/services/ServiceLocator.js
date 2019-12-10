@@ -63,6 +63,10 @@ module.exports = class ServiceLocator {
         return ServiceLocator.instance().get(serviceName.HTTP);
     }
 
+    static get $dadata() {
+        return ServiceLocator.instance().get(serviceName.DADATA);
+    }
+
     static get $config() {
         return ServiceLocator.instance().get(serviceName.CONFIG);
     }

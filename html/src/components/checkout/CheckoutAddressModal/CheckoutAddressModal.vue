@@ -128,13 +128,10 @@ import { SELECTED_CITY_COORDS } from '../../../store/modules/Geolocation/getters
 import { SET_SELECTED_CITY } from '../../../store/modules/Geolocation/actions';
 
 import validationMixin, { required } from '../../../plugins/validation';
-import DadataHttpService from '../../../services/HttpService/DadataHttpService';
 import { suggestionTypes } from '../../../assets/scripts/constants';
-
+import { $dadata } from '../../../services/ServiceLocator';
 import pin from '../../../assets/images/icons/pin-filled.svg';
 import './CheckoutAddressModal.css';
-
-const http = new DadataHttpService();
 
 export const NAME = 'checkout-address-modal';
 
@@ -250,7 +247,7 @@ export default {
                     to_bound = { value: type };
             }
 
-            return http.post('/suggestions/api/4_1/rs/suggest/address', {
+            return $dadata.post('/suggestions/api/4_1/rs/suggest/address', {
                 query,
                 count,
                 locations,
@@ -312,7 +309,7 @@ export default {
         async onMapClick(e) {
             const coords = e.get('coords');
 
-            const { suggestions } = await http.post('/suggestions/api/4_1/rs/geolocate/address', {
+            const { suggestions } = await $dadata.post('/suggestions/api/4_1/rs/geolocate/address', {
                 lat: coords[0],
                 lon: coords[1],
                 radius_meters: 1000,

@@ -16,6 +16,7 @@ export const serviceName = Object.freeze({
     COOKIE: 'cookie',
     HTTP: 'http',
     CONFIG: 'config',
+    DADATA: 'dadata',
 });
 
 /**

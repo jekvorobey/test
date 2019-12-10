@@ -23,16 +23,16 @@ export const SELECTED_CITY = 'selectedCity';
  * Function for create store instance.
  * Функция создания экземпляра стора.
  */
-export default function createStore() {
+export default function createStore(env = {}) {
     return new Vuex.Store({
         strict: process.env.NODE_ENV !== 'production',
         state: {
-            [SELECTED_CITY]: null,
             [LOCALE]: 'ru',
             [SCROLL]: false,
             [IS_MENU_OPEN]: false,
             [CATEGORIES]: [],
             [BANNER]: {},
+            env,
         },
         getters,
         mutations,

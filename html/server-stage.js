@@ -202,5 +202,5 @@ for (let i = 0; i < cacheRoutes.length; i++) {
 
 app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());
-app.get('*', render);
+app.get('*', (req, res) => render(req, res, env));
 app.listen(port, () => logger.info(`server started at port ${port}`));

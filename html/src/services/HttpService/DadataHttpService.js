@@ -3,7 +3,7 @@ import { cacheAdapterEnhancer } from 'axios-extensions';
 import HttpServiceBase from './base';
 
 export default class DadataHttpService extends HttpServiceBase {
-    constructor(baseURL = '', key = '792b35c1bbc1867adf05d8bdf29470842f7997b0') {
+    constructor(baseURL = '', key = '') {
         super(baseURL);
 
         this.instance = axios.create({

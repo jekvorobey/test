@@ -25,9 +25,9 @@ Vue.mixin(titleMixin);
 
 // Expose a factory function that creates a fresh set of store, router,
 // app instances on each call (which is called for each SSR request)
-export default function createApp(locator) {
+export default function createApp(locator, env) {
     // create store and router instances
-    const store = createStore();
+    const store = createStore(env);
     locator.register(serviceName.STORE, () => store);
     const router = createRouter();
     locator.register(serviceName.ROUTER, () => router);

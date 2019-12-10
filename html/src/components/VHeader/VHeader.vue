@@ -192,7 +192,7 @@ export default {
         ...mapState([SCROLL, IS_MENU_OPEN]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
         ...mapState(GEO_MODULE, {
-            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            city: state => state[SELECTED_CITY].data.city || state[SELECTED_CITY].data.settlement || 'Выберите город',
         }),
 
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),

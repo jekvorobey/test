@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const Config = require('merge-config');
 
 const express = require('express');
 const cors = require('cors');
@@ -97,7 +98,7 @@ if (isProd) {
     });
 }
 
-function render(req, res) {
+function render(req, res, env) {
     const s = Date.now();
 
     const handleError = err => {
@@ -119,6 +120,7 @@ function render(req, res) {
         url: req.url,
         req,
         res,
+        env,
     };
 
     renderer.renderToString(context, (err, html) => {
@@ -133,8 +135,8 @@ function render(req, res) {
     });
 }
 
-let env = null;
-let config = null;
+let env = new Config();
+const config = new Config();
 let port = 8080;
 let host = 'localhost';
 let publicPath = '/';
@@ -151,14 +153,14 @@ let cacheRoutes = [];
 let enable = [];
 const baseConfig = '.env.json';
 const configFileName = process.env.CONFIG;
-
 try {
-    env = require(resolve(baseConfig));
+    env.file(resolve(baseConfig));
     if (configFileName) {
-        config = require(resolve(configFileName));
-        Object.assign(env, config);
+        config.file(resolve(configFileName));
+        env.merge(config.get());
     }
 
+    env = env.get();
     port = process.env.PORT || env.PORT;
     host = process.env.HOST || env.HOST;
     publicPath = env.PUBLIC_PATH;
@@ -211,5 +213,8 @@ if (isProd) {
 
 app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());
-app.get('*', isProd ? render : (req, res) => readyPromise.then(() => render(req, res)));
+app.get(
+    '*',
+    isProd ? (req, res) => render(req, res, env) : (req, res) => readyPromise.then(() => render(req, res, env))
+);
 app.listen(port, host, () => logger.info(`server started at ${host}:${port}`));

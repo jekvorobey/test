@@ -5,6 +5,7 @@ import ServerLogger from './services/LogService/ServerLogger';
 import ServerCookie from './services/CookieService/ServerCookie';
 import HttpService from './services/HttpService/MockServiceAdapter';
 import MockProgressService from './services/ProgressService/MockService';
+import DadataHttpService from './services/HttpService/DadataHttpService';
 
 // This exported function will be called by `bundleRenderer`.
 // This is where we perform data-prefetching to determine the
@@ -20,7 +21,12 @@ export default context => {
             .register(serviceName.COOKIE, () => new ServerCookie(context.req, context.res))
             .register(serviceName.HTTP, () => new HttpService(host));
 
-        const { app, router, store } = createApp(locator);
+        const { app, router, store } = createApp(locator, context.env);
+
+        locator.register(
+            serviceName.DADATA,
+            () => new DadataHttpService(store.state.env.DADATA_API_HOST, store.state.env.DADATA_API_KEY)
+        );
 
         const { $logger } = ServiceLocator;
         const { url } = context;
