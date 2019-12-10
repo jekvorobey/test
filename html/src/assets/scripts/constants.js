@@ -78,3 +78,9 @@ export const suggestionTypes = Object.freeze({
     STREET: 'street',
     HOUSE: 'house',
 });
+
+export const currencySymbol = Object.freeze({
+    RUB: '&#8381;',
+    USD: '&#36;',
+    EUR: '&#128;',
+});

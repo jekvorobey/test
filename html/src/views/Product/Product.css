@@ -217,6 +217,7 @@
                 }
 
                 @media (--tablet) {
+                    flex-wrap: wrap;
                     padding: 0 calc(var(--gs) * 2);
                 }
 
@@ -235,6 +236,8 @@
                     margin-left: auto;
 
                     @media (--tablet) {
+                        margin-top: var(--gs);
+                        width: 100%;
                         font-size: 14px;
                         line-height: 24px;
                     }

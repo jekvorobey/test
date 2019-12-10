@@ -14,9 +14,13 @@
                     </router-link>
                 </li>
 
-                <li class="product-view__breadcrumbs-item" v-for="category in product.categoryCodes" :key="category">
-                    <router-link class="product-view__breadcrumbs-link" :to="`/catalog/${category}`">
-                        {{ category }}
+                <li
+                    class="product-view__breadcrumbs-item"
+                    v-for="category in product.categoryCodes"
+                    :key="category.code"
+                >
+                    <router-link class="product-view__breadcrumbs-link" :to="`/catalog/${category.code}`">
+                        {{ category.name }}
                     </router-link>
                 </li>
             </transition-group>
@@ -137,12 +141,17 @@
                     <div class="product-view__header-detail-section product-view__header-detail-panels">
                         <div class="product-view__header-detail-price-panel">
                             <div class="product-view__header-detail-price-panel-prices">
-                                <div class="text-bold product-view__header-detail-price-panel-current">
-                                    {{ product.price }}₽
-                                </div>
-                                <div class="text-grey text-strike product-view__header-detail-price-panel-old">
-                                    {{ product.oldPrice }}₽
-                                </div>
+                                <price
+                                    class="text-bold product-view__header-detail-price-panel-current"
+                                    :value="product.price.value"
+                                    :currency="product.price.currency"
+                                />
+                                <price
+                                    v-if="product.oldPrice"
+                                    class="text-grey text-strike product-view__header-detail-price-panel-old"
+                                    :value="product.oldPrice.value"
+                                    :currency="product.oldPrice.currency"
+                                />
                             </div>
                             <div class="text-grey product-view__header-detail-price-panel-bonus">
                                 +{{ $t('product.bonus', { n: product.bonus }) }}
@@ -530,6 +539,7 @@ import VHtml from '../../components/controls/VHtml/VHtml.vue';
 import VSlider from '../../components/controls/VSlider/VSlider.vue';
 import VPicture from '../../components/controls/VPicture/VPicture.vue';
 
+import Price from '../../components/Price/Price.vue';
 import BannerCard from '../../components/BannerCard/BannerCard.vue';
 import InstagramCard from '../../components/InstagramCard/InstagramCard.vue';
 import VRating from '../../components/controls/VRating/VRating.vue';
@@ -668,6 +678,7 @@ export default {
         VSlider,
         VPicture,
 
+        Price,
         CatalogProductCard,
         ProductReviewCard,
         BannerCard,
