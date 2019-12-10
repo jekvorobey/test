@@ -8,7 +8,6 @@ export default class DadataHttpService extends HttpServiceBase {
 
         this.instance = axios.create({
             baseURL,
-            withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
