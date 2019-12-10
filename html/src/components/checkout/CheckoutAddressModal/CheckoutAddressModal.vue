@@ -373,19 +373,7 @@ export default {
         },
 
         selectedAddress(value) {
-            if (!value) {
-                this.address.country_code = '';
-                this.address.post_index = '';
-                this.address.region = '';
-                this.address.region_guid = '';
-                this.address.area = '';
-                this.address.area_guid = '';
-                this.address.city = '';
-                this.address.city_guid = '';
-                this.address.street = '';
-                this.address.house = '';
-                this.address.block = '';
-            } else {
+            if (value) {
                 this.address.country_code = value.country_iso_code;
                 this.address.post_index = value.postal_code;
                 this.address.region = value.region_with_type || value.region;
