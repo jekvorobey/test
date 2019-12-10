@@ -85,7 +85,6 @@ export default {
         const onSetScrollDebounce = _debounce(this.onScroll, 20);
         document.addEventListener(eventName.SCROLL, onSetScrollDebounce, true);
         this.$on('hook:beforeDestroy', () => document.removeEventListener(eventName.SCROLL, onSetScrollDebounce));
-        // временный логин
     },
 };
 </script>

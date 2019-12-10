@@ -28,6 +28,7 @@ import {
     addPromocode,
     deletePromocode,
     commitCheckoutData,
+    changeCity,
 } from '../../../api';
 
 export const SET_RECIPIENT = 'SET_RECIPIENT';
@@ -38,6 +39,7 @@ export const SET_PICKUP_POINT = 'SET_PICKUP_POINT';
 export const SET_AGREEMENT = 'SET_AGREEMENT';
 export const SET_SUBSCRIBE = 'SET_SUBSCRIBE';
 export const SET_CONFIRMATION_TYPE = 'SET_CONFIRMATION_TYPE';
+export const CHANGE_CITY = 'CHANGE_CITY';
 
 export const ADD_BONUS = 'ADD_BONUS';
 export const DELETE_BONUS = 'DELETE_BONUS';
@@ -57,6 +59,19 @@ export const CHANGE_CHUNK_DATE = 'CHANGE_CHUNK_DATE';
 export const COMMIT_DATA = 'COMMIT_DATA';
 
 export default {
+    [CHANGE_CITY]({ commit, state }, payload) {
+        commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.PENDING });
+        return changeCity({ city: payload, data: state.checkoutData })
+            .then(data => {
+                commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.SUCCESS });
+                commit(SET_DATA, data);
+            })
+            .catch(error => {
+                commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.ERROR });
+                $logger.error(`${CHANGE_CITY} ${error}`);
+            });
+    },
+
     [SET_RECEIVE_METHOD]({ commit, state }, payload) {
         commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.PENDING });
         return setReceiveMethod({ method: payload, data: state.checkoutData })

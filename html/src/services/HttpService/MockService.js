@@ -65,6 +65,9 @@ import productMasterclass2 from '../../assets/images/mock/productMasterclass2.pn
 import productReview1 from '../../assets/images/mock/productReview1.png';
 import productReview2 from '../../assets/images/mock/productReview2.png';
 
+const mockDate = new Date(Date.now());
+mockDate.setHours(0, 0, 0, 0);
+
 const ext = /\.(jpe?g|png)$/i;
 
 const categories = [
@@ -1109,14 +1112,65 @@ const masterClasses = [
 const productsDetails = [
     {
         id: 1,
-        code: '4',
+        code: 'krem-dlya-britya-olaplex',
         title: 'Губная помада TOM FORD Matte Lip Color, 27, Bruised Plum',
         rating: 4,
         reviewsCount: 12,
         vendorCode: 148333731,
-        price: 3900,
-        oldPrice: 4600,
+
+        shortDescription: `Двадцать три насыщенных,
+        ярких оттенка помады воплощают в себе современную интерпретацию классики от Тома Форда. 
+        Редкое экзотическое масло муру-муру из Бразилии и масло цветков ромашки создают кремовую текстуру и обеспечивают...`,
+
+        instagramNote: 'Добавь тег @bessovestnotalantlivy в Instagram и, возможно, мы опубликуем твою фотографию',
+
+        price: {
+            value: 3900,
+            currency: 'RUB',
+        },
+
+        oldPrice: {
+            value: 4600,
+            currency: 'RUB',
+        },
+
         bonus: 80,
+
+        receiveMethods: [
+            {
+                id: receiveMethods.EXPRESS,
+                date: mockDate,
+                price: {
+                    value: 550,
+                    currency: 'RUB',
+                },
+            },
+            {
+                id: receiveMethods.DELIVERY,
+                date: addDays(mockDate, 1),
+                price: {
+                    value: 350,
+                    currency: 'RUB',
+                },
+            },
+            {
+                id: receiveMethods.PICKUP,
+                date: addDays(mockDate, 2),
+                price: {
+                    value: 0,
+                    currency: 'RUB',
+                },
+            },
+        ],
+
+        brand: {
+            name: 'brand-name',
+            code: 'brand-code',
+            image: {
+                id: 32,
+                sourceExt: 'jpg',
+            },
+        },
 
         media: [
             {
@@ -1514,9 +1568,6 @@ const pickupPoints = [
         },
     },
 ];
-
-const mockDate = new Date(Date.now());
-mockDate.setHours(0, 0, 0, 0);
 
 const mockDeliveryTypes = [
     {

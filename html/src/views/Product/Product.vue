@@ -54,7 +54,12 @@
                                 </v-picture>
                             </div>
                         </div>
-                        <v-slider v-else class="product-view__header-gallery" :options="productGalleryOptions">
+                        <v-slider
+                            v-else
+                            class="product-view__header-gallery"
+                            name="gallery"
+                            :options="productGalleryOptions"
+                        >
                             <div
                                 class="swiper-slide product-view__header-gallery-item"
                                 v-for="image in product.media"
@@ -106,7 +111,7 @@
                         </div>
                     </div>
 
-                    <!-- <div class="product-view__header-detail-section product-view__header-detail-options">
+                    <div class="product-view__header-detail-section product-view__header-detail-options">
                         <div class="product-view__header-detail-options-selected">
                             <div>{{ product.option.title }}</div>
                             <div class="text-grey text-sm">16 оттенков</div>
@@ -127,7 +132,7 @@
                                 />
                             </div>
                         </div>
-                    </div> -->
+                    </div>
 
                     <div class="product-view__header-detail-section product-view__header-detail-panels">
                         <div class="product-view__header-detail-price-panel">
@@ -175,8 +180,29 @@
                         </p>
                         <a href="#">Подробнее</a>
                     </div>
-                    <div class="product-view__header-detail-section">
-                        <span><img :src="mockImg" />&nbsp;&nbsp;&nbsp;<a href="#">На страницу бренда</a></span>
+                    <div v-if="product.brand" class="product-view__header-detail-section">
+                        <span>
+                            <v-picture
+                                v-if="product.brand.image && product.brand.image.id"
+                                :image="product.brand.image"
+                                alt=""
+                            >
+                                <template v-slot:source="{ image, lazy }">
+                                    <source
+                                        :data-srcset="generateSourcePath(120, 24, image.id, 'webp')"
+                                        type="image/webp"
+                                    />
+                                </template>
+                                <template v-slot:fallback="{ image, lazy, alt }">
+                                    <img
+                                        class="blur-up lazyload v-picture__img"
+                                        :data-src="generateSourcePath(120, 24, image.id, image.sourceExt)"
+                                        :alt="alt"
+                                    />
+                                </template>
+                            </v-picture>
+                            <router-link :to="{ path: `/brand/${product.brand.code}` }">На страницу бренда</router-link>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -195,7 +221,7 @@
             </div>
         </section>
 
-        <!-- <section class="section product-view__section">
+        <section v-if="product.profitable" class="section product-view__section">
             <div class="container product-view__profitable">
                 <h2 class="product-view__section-hl product-view__profitable-hl">
                     {{ $t('product.title.profitable') }}
@@ -211,7 +237,7 @@
                                 class="product-view__profitable-card"
                                 :product-id="item.id"
                                 :name="item.name"
-                                href="/catalog"
+                                :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
                                 :image="item.image"
                                 :price="item.price"
                                 :old-price="item.oldPrice"
@@ -238,7 +264,7 @@
                     </div>
                 </div>
             </div>
-        </section> -->
+        </section>
 
         <section v-if="product.description" class="section product-view__section product-view__info">
             <div class="container product-view__info-container">
@@ -346,7 +372,7 @@
             </div>
         </section>
 
-        <!-- <section class="section product-view__section">
+        <section class="section product-view__section">
             <div class="container product-view__reviews">
                 <div class="product-view__reviews-inner">
                     <div class="product-view__reviews-header">
@@ -392,7 +418,7 @@
                     </div>
                 </div>
             </div>
-        </section> -->
+        </section>
 
         <section class="section product-view__section product-view__banners">
             <div class="container product-view__banners-container">
@@ -527,6 +553,8 @@ import { FETCH_PRODUCT_DATA } from '../../store/modules/Product/actions';
 import { NAME as CART_MODULE } from '../../store/modules/Cart';
 import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 
+import { NAME as GEO_MODULE, SELECTED_CITY } from '../../store/modules/Geolocation';
+
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 
 import _debounce from 'lodash/debounce';
@@ -560,8 +588,8 @@ const productGalleryOptions = {
         [breakpoints.tablet - 1]: {
             slidesPerView: 1,
             spaceBetween: 0,
-            slidesOffsetBefore: 16,
-            slidesOffsetAfter: 16,
+            slidesOffsetBefore: 0,
+            slidesOffsetAfter: 0,
             pagination: {
                 el: '.swiper-pagination',
                 type: 'bullets',
@@ -655,6 +683,7 @@ export default {
     computed: {
         ...mapState('route', { code: state => state.params.code }),
         ...mapState(PRODUCT_MODULE, [PRODUCT, BANNERS, FEATURED_PRODUCTS, INSTAGRAM_ITEMS]),
+        ...mapState(GEO_MODULE, [SELECTED_CITY]),
 
         productGalleryOptions() {
             return productGalleryOptions;
@@ -674,6 +703,14 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+    },
+
+    watch: {
+        [SELECTED_CITY](value) {
+            const { productCode } = this.product;
+            const { fias_id } = value;
+            this.debounce_fetchProduct(to, from);
         },
     },
 
@@ -703,13 +740,16 @@ export default {
             });
 
         const { productCode } = $store.state.product;
+        const {
+            selectedCity: { fias_id },
+        } = $store.state.geolocation;
 
         // если все загружено, пропускаем
         if (productCode === code) next();
         else {
             $progress.start();
             $store
-                .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code })
+                .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, city: fias_id })
                 .then(() => next(vm => $progress.finish()))
                 .catch(error => {
                     $progress.fail();
@@ -725,22 +765,22 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
+        const { productCode } = this.product;
+        const { fias_id } = this.selectedCity;
 
-        this.debounce_fetchProduct(to, from);
+        const {
+            params: { code },
+        } = to;
+
+        this.debounce_fetchProduct(code, fias_id);
         next();
     },
 
     beforeMount() {
-        this.debounce_fetchProduct = _debounce(async (to, from) => {
+        this.debounce_fetchProduct = _debounce(async (code, city) => {
             try {
-                const { productCode } = this.$store.state.product;
-                const {
-                    params: { code },
-                } = to;
-
                 this.$progress.start();
-
-                if (productCode !== code) await this[FETCH_PRODUCT_DATA]({ code });
+                if (productCode !== code) await this[FETCH_PRODUCT_DATA]({ code, city });
                 else await Promise.resolve();
 
                 this.$progress.finish();
