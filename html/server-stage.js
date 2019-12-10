@@ -59,7 +59,7 @@ function createRenderer(bundle, options) {
     );
 }
 
-function render(req, res) {
+function render(req, res, env) {
     try {
         let app_root = null;
         const matches = /([^.]+)_front\.ibt-mas\.greensight\.ru/.exec(req.hostname);
@@ -80,14 +80,12 @@ function render(req, res) {
             }
         };
 
-        // const env = JSON.parse(fs.readFileSync(path.resolve(app_root, '.env.json')).toString());
-
         const context = {
             title: 'IBT',
             url: req.url,
             req,
             res,
-            // env,
+            env,
         };
 
         // In production: create server renderer using template and built server bundle.
