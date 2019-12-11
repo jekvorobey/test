@@ -121,7 +121,10 @@
                                     tag="button"
                                     @click="onChangeDate(chunkItem.id)"
                                 >
-                                    <v-svg name="edit" width="16" height="16" />{{ isTablet ? '' : ' Изменить дату' }}
+                                    <v-svg name="edit" width="16" height="16" />
+                                    <template v-if="!isTablet">
+                                        &nbsp;&nbsp;Изменить дату
+                                    </template>
                                 </v-link>
                             </div>
                             <ul class="checkout-product-panel__item-list">

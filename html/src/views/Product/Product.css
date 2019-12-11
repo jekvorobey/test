@@ -127,6 +127,12 @@
                 margin-bottom: var(--gs);
                 width: calc(50% - 4px);
 
+                &::after {
+                    content: '';
+                    display: block;
+                    padding-bottom: 100%;
+                }
+
                 @media (--desktop) {
                     padding: calc(var(--gs) * 2);
                 }
