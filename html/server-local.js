@@ -144,7 +144,6 @@ let outputPath = '../public/assets';
 
 let faviconConf = null;
 let serviceWorkerConf = null;
-let manifestConf = null;
 let corsConf = null;
 let compressionConf = null;
 
@@ -167,7 +166,6 @@ try {
     outputPath = env.OUTPUT_PATH;
 
     faviconConf = env.FAVICON;
-    manifestConf = env.MANIFEST;
     serviceWorkerConf = env.SERVICE_WORKER;
     corsConf = env.CORS;
     compressionConf = env.COMPRESSION;
@@ -182,7 +180,6 @@ try {
 if (corsConf) app.use(cors(corsConf));
 if (compressionConf) app.use(compression(compressionConf));
 if (faviconConf) app.use(favicon(faviconConf.outputPath));
-if (manifestConf) app.use(manifestConf.publicPath, serve(manifestConf.outputPath, true));
 if (serviceWorkerConf) app.use(serviceWorkerConf.publicPath, serve(serviceWorkerConf.outputPath));
 
 for (let i = 0; i < enable.length; i++) {
