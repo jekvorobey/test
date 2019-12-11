@@ -34,18 +34,13 @@ export default context => {
 
         if (fullPath !== url) {
             $logger.error(`full path ${fullPath} doesn't match ${url}`);
-            reject({ url: fullPath });
+            return reject({ url: fullPath });
         }
 
         // set router's location
         router.push(url);
 
         router.onReady(ctx => {
-            if (context.req.originalUrl !== ctx.fullPath) {
-                $logger.error(`full path ${fullPath} doesn't match ${url}`);
-                return reject({ url: ctx.fullPath });
-            }
-
             // This `rendered` hook is called when the app has finished rendering
             context.rendered = () => {
                 // After the app is rendered, our store is now

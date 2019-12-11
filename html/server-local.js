@@ -123,16 +123,17 @@ function render(req, res, env) {
         env,
     };
 
-    renderer.renderToString(context, (err, html) => {
-        if (err) return handleError(err);
+    renderer
+        .renderToString(context)
+        .then(html => {
+            res.setHeader('Content-Type', 'text/html');
+            res.setHeader('Content-Length', html.length);
+            res.setHeader('Server', serverInfo);
 
-        res.setHeader('Content-Type', 'text/html');
-        res.setHeader('Content-Length', html.length);
-        res.setHeader('Server', serverInfo);
-
-        res.send(html);
-        if (!isProd) logger.success(`whole request: ${Date.now() - s}ms`, req.url);
-    });
+            res.send(html);
+            if (!isProd) logger.success(`whole request: ${Date.now() - s}ms`, req.url);
+        })
+        .catch(handleError);
 }
 
 let env = new Config();
@@ -208,10 +209,11 @@ if (isProd) {
     }
 }
 
+const renderFunction = isProd
+    ? (req, res) => render(req, res, env)
+    : (req, res) => readyPromise.then(() => render(req, res, env));
+
 app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());
-app.get(
-    '*',
-    isProd ? (req, res) => render(req, res, env) : (req, res) => readyPromise.then(() => render(req, res, env))
-);
+app.get('*', renderFunction);
 app.listen(port, host, () => logger.info(`server started at ${host}:${port}`));

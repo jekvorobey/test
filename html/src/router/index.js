@@ -7,6 +7,21 @@ import { NAME as SEARCH_MODULE } from '../store/modules/Search';
 import { SET_SEARCH } from '../store/modules/Search/actions';
 import pipeline from './pipeline';
 
+/*
+ * Preventing errors in console in Vue-router >= 3.1.0
+ * https://github.com/vuejs/vue-router/issues/2881#issuecomment-520554378
+ * https://router.vuejs.org/ru/api/#router-push
+ * */
+const routerMethods = ['push', 'replace'];
+routerMethods.forEach(method => {
+    const originalCall = VueRouter.prototype[method];
+
+    VueRouter.prototype[method] = function(location, onResolve, onReject) {
+        if (onResolve || onReject) return originalCall.call(this, location, onResolve, onReject);
+        return originalCall.call(this, location).catch(err => err);
+    };
+});
+
 const routes = [];
 let keys = [];
 
