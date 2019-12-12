@@ -34,13 +34,21 @@
         width: 100%;
 
         .v-slider__controls {
-            left: calc(var(--gs) * 13.5);
+            left: calc(var(--gs) * 12);
             bottom: calc(var(--gs) * 4);
+
+            @media (--desktop) {
+                bottom: calc(var(--gs) * 2);
+            }
 
             @media (--tablet-lg) {
                 left: 50%;
                 bottom: calc(var(--gs) * 3);
                 transform: translateX(-50%);
+            }
+
+            @media (--tablet) {
+                bottom: calc(var(--gs) * 2);
             }
 
             .swiper-pagination {

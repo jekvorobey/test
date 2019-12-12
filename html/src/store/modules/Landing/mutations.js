@@ -55,6 +55,10 @@ export default {
             },
             {
                 id: 3,
+                component: 'separator-section',
+            },
+            {
+                id: 4,
                 component: 'products-section',
                 data: {
                     titleText: 'Новинки',
@@ -62,14 +66,22 @@ export default {
                 },
             },
             {
-                id: 4,
+                id: 5,
+                component: 'separator-section',
+            },
+            {
+                id: 6,
                 component: 'single-banner-section',
                 data: {
                     banner: state.banners[10],
                 },
             },
             {
-                id: 5,
+                id: 7,
+                component: 'separator-section',
+            },
+            {
+                id: 8,
                 component: 'products-section',
                 data: {
                     titleText: 'Бестселлеры',
@@ -78,14 +90,22 @@ export default {
                 },
             },
             {
-                id: 6,
+                id: 9,
+                component: 'separator-section',
+            },
+            {
+                id: 10,
                 component: 'list-banners-section',
                 data: {
                     banners: state.banners.slice(3, 6),
                 },
             },
             {
-                id: 7,
+                id: 11,
+                component: 'separator-section',
+            },
+            {
+                id: 12,
                 component: 'products-section',
                 data: {
                     titleText: 'Смотрят на сайте сейчас',
@@ -93,7 +113,7 @@ export default {
                 },
             },
             {
-                id: 8,
+                id: 13,
                 component: 'brands-section',
                 data: {
                     titleText: 'Популярные бренды',
@@ -103,7 +123,7 @@ export default {
                 },
             },
             {
-                id: 9,
+                id: 14,
                 component: 'instagram-section',
                 data: {
                     titleText: 'Instabeauty',

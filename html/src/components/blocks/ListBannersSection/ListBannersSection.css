@@ -1,16 +1,11 @@
 .list-banners-section {
-    margin-bottom: calc(var(--gs) * 7);
-
     @media (--tablet) {
         padding: 0;
-        margin-bottom: calc(var(--gs) * 4);
     }
 
     &__list {
         display: flex;
         flex-wrap: wrap;
-        padding-bottom: calc(var(--gs) * 9);
-        border-bottom: 1px solid var(--cl-divider-grey);
         margin: 0 calc(var(--gs) * -3 / 2);
 
         @media (--tablet) {

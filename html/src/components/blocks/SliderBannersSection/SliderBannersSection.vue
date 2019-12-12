@@ -2,9 +2,17 @@
     <section class="section">
         <div class="container slider-banners-section">
             <v-slider class="slider-banners-section__slider" name="banners" :options="sliderOptions">
-                <div class="swiper-slide slider-banners-section__card" v-for="banner in banners" :key="banner.id">
-                    <v-picture class="slider-banners-section__card-img" :image="banner.image" :lazy="false" />
-                </div>
+                <landing-banner-card
+                    v-for="banner in banners"
+                    class="swiper-slide slider-banners-section__card"
+                    :key="banner.id"
+                    :banner-id="banner.id"
+                    :image="banner.image"
+                    :upper-text="banner.upperText"
+                    :bottom-text="banner.bottomText"
+                    :title="banner.title"
+                    :btn-text="banner.btnText"
+                />
             </v-slider>
         </div>
     </section>
@@ -13,6 +21,8 @@
 <script>
 import VPicture from '../../controls/VPicture/VPicture.vue';
 import VSlider from '../../../components/controls/VSlider/VSlider.vue';
+import LandingBannerCard from '../../LandingBannerCard/LandingBannerCard.vue';
+
 import './SliderBannersSection.css';
 
 const sliderOptions = {
@@ -40,6 +50,7 @@ export default {
     components: {
         VPicture,
         VSlider,
+        LandingBannerCard,
     },
 
     props: {

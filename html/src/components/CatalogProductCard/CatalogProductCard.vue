@@ -1,5 +1,5 @@
 <template>
-    <div class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }">
+    <router-link tag="li" class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }" :to="href">
         <div class="catalog-product-card__img">
             <v-picture v-if="image && image.id" :image="image" alt="">
                 <template v-slot:source="{ image, lazy }">
@@ -24,10 +24,12 @@
             </v-picture>
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-card__controls">
-                <v-button class="btn--outline catalog-product-card__controls-btn" @click="onBuyButtonClick">
+                <v-button class="btn--outline catalog-product-card__controls-btn" @click.prevent="onBuyButtonClick">
                     Купить
                 </v-button>
-                <v-link tag="button" class="catalog-product-card__controls-link">Быстрый просмотр</v-link>
+                <v-link tag="button" class="catalog-product-card__controls-link" @click.prevent>
+                    Быстрый просмотр
+                </v-link>
             </div>
         </div>
         <div class="catalog-product-card__body">
@@ -37,7 +39,7 @@
                     от {{ oldPrice }}
                 </div>
             </div>
-            <v-link class="link--sm catalog-product-card__link" :to="href">{{ name }}</v-link>
+            <div class="link--sm catalog-product-card__link">{{ name }}</div>
             <v-rating class="catalog-product-card__rating" :value="rating" readonly>
                 <template v-slot:activeLabel>
                     <v-svg name="star-small" width="12" height="12" />
@@ -50,10 +52,10 @@
         <div class="catalog-product-card__tags">
             <tag class="catalog-product-card__tags-item" v-for="(tag, index) in tags" :key="index" :text="tag" />
         </div>
-        <v-link class="catalog-product-card__wishlist-btn">
+        <v-link tag="button" class="catalog-product-card__wishlist-btn" @click.prevent>
             <v-svg name="wishlist-middle" width="18" height="20" />
         </v-link>
-    </div>
+    </router-link>
 </template>
 
 <script>
@@ -109,7 +111,8 @@ export default {
         },
 
         href: {
-            type: String,
+            type: [Object, String],
+            default: '/',
         },
 
         image: {

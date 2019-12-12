@@ -211,15 +211,7 @@ const banners = [
         type: 'banner',
         title: 'Новая коллекция косметики Aveda',
         btnText: 'Смотреть товары',
-        image: {
-            src: banner1,
-            sources: [
-                {
-                    srcset: `${banner1.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner1,
     },
     {
         id: 2,
@@ -227,15 +219,7 @@ const banners = [
         type: 'banner',
         title: '20 средств для ухода за молодой кожей',
         btnText: 'Посмотреть',
-        image: {
-            src: banner2,
-            sources: [
-                {
-                    srcset: `${banner2.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner2,
     },
     {
         id: 3,
@@ -243,60 +227,28 @@ const banners = [
         type: 'banner',
         title: '20 средств для ухода за молодой кожей',
         btnText: 'Посмотреть',
-        image: {
-            src: banner1,
-            sources: [
-                {
-                    srcset: `${banner1.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner1,
     },
     {
         id: 4,
         type: 'banner',
         title: 'Лучшие стайлинги для летних укладок в новом сезоне только для тебя',
         btnText: 'Смотреть товары',
-        image: {
-            src: banner3,
-            sources: [
-                {
-                    srcset: `${banner3.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner3,
     },
     {
         id: 5,
         type: 'banner',
         title: 'Новейшая косметика для лица и тела с омолаживающим эффектом',
         btnText: 'Смотреть товары',
-        image: {
-            src: banner4,
-            sources: [
-                {
-                    srcset: `${banner4.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner4,
     },
     {
         id: 6,
         type: 'banner',
         title: ' Натуральный макияж Aveda, который подойдёт для каждой девушки',
         btnText: 'Смотреть товары',
-        image: {
-            src: banner5,
-            sources: [
-                {
-                    srcset: `${banner5.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner5,
     },
     {
         id: 7,
@@ -304,63 +256,31 @@ const banners = [
         title: 'Водостойкая губная помада L’Oreal Paris',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
         btnText: 'Смотреть товары',
-        image: {
-            src: banner6,
-            sources: [
-                {
-                    srcset: `${banner6.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner6,
     },
     {
         id: 8,
         type: 'banner',
-        title: 'Водостойкая губная помада L’Oreal Paris',
+        title: 'Если ты — бессовестно талантливый стилист, визажист, мастер красоты любого профиля',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
-        btnText: 'Смотреть товары',
-        image: {
-            src: banner7,
-            sources: [
-                {
-                    srcset: `${banner7.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        btnText: 'Регистрация',
+        image: banner7,
     },
     {
         id: 9,
         type: 'banner',
-        title: 'Водостойкая губная помада L’Oreal Paris',
+        title: 'Если ты — бессовестно талантливый стилист, визажист, мастер красоты любого профиля',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
-        btnText: 'Смотреть товары',
-        image: {
-            src: banner7,
-            sources: [
-                {
-                    srcset: `${banner7.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        btnText: 'Регистрация',
+        image: banner7,
     },
     {
         id: 10,
         type: 'banner',
-        title: 'Водостойкая губная помада L’Oreal Paris',
+        title: 'Если ты — бессовестно талантливый стилист, визажист, мастер красоты любого профиля',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
-        btnText: 'Смотреть товары',
-        image: {
-            src: banner7,
-            sources: [
-                {
-                    srcset: `${banner7.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        btnText: 'Регистрация',
+        image: banner7,
     },
     {
         id: 11,
@@ -368,15 +288,7 @@ const banners = [
         title: 'Основной уход за кожей',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
         btnText: 'Посмотреть',
-        image: {
-            src: banner6,
-            sources: [
-                {
-                    srcset: `${banner6.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner6,
     },
 ];
 
@@ -421,211 +333,91 @@ const brands = [
         id: 1,
         name: 'Brand1',
         title: 'Brand1',
-        image: {
-            src: brand1,
-            sources: [
-                {
-                    srcset: `${brand1.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: brand1,
     },
     {
         id: 2,
         name: 'Brand2',
         title: 'Brand2',
-        image: {
-            src: brand2,
-            sources: [
-                {
-                    srcset: `${brand2.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: brand2,
     },
     {
         id: 3,
         name: 'Brand3',
         title: 'Brand3',
-        image: {
-            src: brand3,
-            sources: [
-                {
-                    srcset: `${brand3.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: brand3,
     },
     {
         id: 4,
         name: 'Brand4',
         title: 'Brand4',
-        image: {
-            src: brand4,
-            sources: [
-                {
-                    srcset: `${brand4.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: brand4,
     },
     {
         id: 5,
         name: 'Brand5',
         title: 'Brand5',
-        image: {
-            src: brand5,
-            sources: [
-                {
-                    srcset: `${brand5.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: brand5,
     },
     {
         id: 6,
         name: 'Brand6',
         title: 'Brand6',
-        image: {
-            src: brand1,
-            sources: [
-                {
-                    srcset: `${brand1.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: brand1,
     },
     {
         id: 7,
-        name: 'Brand7',
-        title: 'Brand7',
-        image: {
-            src: brand2,
-            sources: [
-                {
-                    srcset: `${brand2.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        name: 'Christian Dior',
+        title: 'Christian Dior',
+        image: brand2,
     },
     {
         id: 8,
-        name: 'Brand8',
-        title: 'Brand8',
-        image: {
-            src: brand3,
-            sources: [
-                {
-                    srcset: `${brand3.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        name: 'Chanel',
+        title: 'Chanel',
+        image: brand3,
     },
     {
         id: 9,
-        name: 'Brand9',
-        title: 'Brand9',
-        image: {
-            src: brand4,
-            sources: [
-                {
-                    srcset: `${brand4.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        name: 'Shiseido',
+        title: 'Shiseido',
+        image: brand4,
     },
     {
         id: 10,
-        name: 'Brand10',
-        title: 'Brand10',
-        image: {
-            src: brand5,
-            sources: [
-                {
-                    srcset: `${brand5.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        name: 'Maybelline',
+        title: 'Maybelline',
+        image: brand5,
     },
     {
         id: 11,
-        name: 'Brand11',
-        title: 'Brand11',
-        image: {
-            src: brand1,
-            sources: [
-                {
-                    srcset: `${brand1.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        name: 'Avon',
+        title: 'Avon',
+        image: brand1,
     },
     {
         id: 12,
-        name: 'Brand12',
-        title: 'Brand12',
-        image: {
-            src: brand2,
-            sources: [
-                {
-                    srcset: `${brand2.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        name: 'Lancôme',
+        title: 'Lancôme',
+        image: brand2,
     },
     {
         id: 13,
-        name: 'Brand13',
-        title: 'Brand13',
-        image: {
-            src: brand3,
-            sources: [
-                {
-                    srcset: `${brand3.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        name: 'Yves Saint Laurent',
+        title: 'Yves Saint Laurent',
+        image: brand3,
     },
     {
         id: 14,
-        name: 'Brand14',
-        title: 'Brand14',
-        image: {
-            src: brand4,
-            sources: [
-                {
-                    srcset: `${brand4.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        name: 'Clinique',
+        title: 'Clinique',
+        image: brand4,
     },
     {
         id: 15,
-        name: 'Brand15',
-        title: 'Brand15',
-        image: {
-            src: brand5,
-            sources: [
-                {
-                    srcset: `${banner5.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        name: 'Estée Lauder',
+        title: 'Estée Lauder',
+        image: brand5,
     },
 ];
 

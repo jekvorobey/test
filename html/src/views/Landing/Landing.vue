@@ -12,6 +12,7 @@
 <script>
 import Vue from 'vue';
 
+import SeparatorSection from '../../components/blocks/SeparatorSection/SeparatorSection.vue';
 import SliderBannersSection from '../../components/blocks/SliderBannersSection/SliderBannersSection.vue';
 import ListBannersSection from '../../components/blocks/ListBannersSection/ListBannersSection.vue';
 import InstagramSection from '../../components/blocks/InstagramSection/InstagramSection.vue';
@@ -30,6 +31,7 @@ import './Landing.css';
 export default {
     name: 'landing',
     components: {
+        SeparatorSection,
         SliderBannersSection,
         ListBannersSection,
         SingleBannerSection,

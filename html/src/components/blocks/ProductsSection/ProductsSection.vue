@@ -12,7 +12,7 @@
                         :product-id="product.id"
                         :name="product.name"
                         :type="product.type"
-                        :href="product.href"
+                        :href="`/catalog/${product.categoryCodes[product.categoryCodes.length - 1]}/${product.code}`"
                         :image="product.image"
                         :price="product.price"
                         :old-price="product.oldPrice"

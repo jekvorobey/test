@@ -1,7 +1,7 @@
 <template>
-    <div class="catalog-banner-card">
-        <div class="catalog-banner-card__img">
-            <v-picture v-if="image" :image="image" alt="">
+    <div class="landing-banner-card">
+        <div class="landing-banner-card__img">
+            <v-picture v-if="image" :image="image" alt="" :lazy="false">
                 <template v-slot:source="{ image, lazy }">
                     <source
                         :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
@@ -18,20 +18,25 @@
                 </template>
             </v-picture>
         </div>
-
-        <div class="catalog-banner-card__panel">
-            <div v-if="upperText" class="catalog-banner-card__panel-upper-text">
-                {{ upperText }}
+        <div class="landing-banner-card__panel">
+            <div class="landing-banner-card__panel-container">
+                <div class="landing-banner-card__panel-title">
+                    <div class="landing-banner-card__panel-title-text">{{ title }}</div>
+                    <v-button class="landing-banner-card__panel-btn">
+                        {{ btnText }}
+                    </v-button>
+                </div>
+                <div v-if="bottomText" class="landing-banner-card__panel-bottom-text">
+                    <div>
+                        <span style="font-size: 24px; line-height: 32px;">01</span>
+                        <p>Регистрируйся и укажи ссылку на свой профиль в социальных сетях</p>
+                        <span style="font-size: 24px; line-height: 32px;">02</span>
+                        <p>В течение 24 часов мы проверим твоё портфолио</p>
+                        <span style="font-size: 24px; line-height: 32px;">03</span>
+                        <p>Ты получишь доступ к тысячам товаров по специальным ценам</p>
+                    </div>
+                </div>
             </div>
-            <div class="catalog-banner-card__panel-title">
-                {{ title }}
-            </div>
-            <div v-if="bottomText" class="catalog-banner-card__panel-bottom-text">
-                {{ bottomText }}
-            </div>
-            <v-button class="btn--outline catalog-banner-card__panel-btn">
-                {{ btnText }}
-            </v-button>
         </div>
     </div>
 </template>
@@ -41,10 +46,10 @@ import VButton from '../controls/VButton/VButton.vue';
 import VPicture from '../controls/VPicture/VPicture.vue';
 
 import { generatePictureSourcePath } from '../../util/images';
-import './CatalogBannerCard.css';
+import './LandingBannerCard.css';
 
 export default {
-    name: 'catalog-banner-card',
+    name: 'landing-banner-card',
 
     components: {
         VButton,
