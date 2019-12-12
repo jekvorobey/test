@@ -6,7 +6,8 @@
     }
 
     @media (--tablet) {
-        padding: calc(var(--gs) * 2) 0;
+        padding: 0;
+        padding-top: calc(var(--gs) * 2);
     }
 
     &__container {
@@ -17,7 +18,7 @@
             border: 1px solid var(--cl-divider-grey);
 
             @media (--tablet) {
-                padding: calc(var(--gs) * 2) 0;
+                border: none;
             }
         }
 
