@@ -1,0 +1,39 @@
+.header-navigation-panel {
+    display: flex;
+    justify-content: space-between;
+
+    .link {
+        font-size: 14px;
+        line-height: 24px;
+        font-weight: bold;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    &__item {
+        display: flex;
+
+        @media (--tablet-lg) {
+            display: none;
+        }
+
+        .link {
+            margin-left: calc(var(--gs) * 2);
+
+            @media (--tablet) {
+                display: none;
+            }
+        }
+
+        &--burger {
+            @media (--tablet-lg) {
+                display: flex;
+            }
+        }
+
+        &-burger {
+            height: 24px;
+            width: 24px;
+        }
+    }
+}

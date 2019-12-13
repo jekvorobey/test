@@ -1,7 +1,7 @@
 .v-burger {
     position: relative;
-    width: 40px;
-    height: 40px;
+    height: 24px;
+    width: 24px;
 
     &__line {
         display: none;
@@ -31,7 +31,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         background-color: var(--cl-white);
-        width: 24px;
+        width: 18px;
         height: 2px;
         border-radius: 1px;
         transition: margin 0.2s ease-in-out 0.2s, transform 0.2s ease-in-out 0s;

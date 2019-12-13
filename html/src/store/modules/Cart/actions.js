@@ -8,7 +8,7 @@ export const DELETE_CART_ITEM = 'DELETE_CART_ITEM';
 export const ADD_CART_ITEM = 'ADD_CART_ITEM';
 
 export default {
-    [FETCH_FEATURED_PRODUCTS]({ commit }, payload) {
+    [FETCH_FEATURED_PRODUCTS]({ commit }, payload = {}) {
         return getProducts(payload)
             .then(data => commit(SET_FEATURED_PRODUCTS, data.items.slice(2, 11)))
             .catch(error => {

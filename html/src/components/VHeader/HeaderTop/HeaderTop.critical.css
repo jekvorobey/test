@@ -1,0 +1,51 @@
+.header-top {
+    padding: calc(var(--gs) / 2) 0;
+    overflow: hidden;
+    background-color: var(--cl-white);
+    border-bottom: 1px solid var(--cl-divider-grey);
+    color: var(--cl-grey);
+    fill: var(--cl-grey);
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: normal;
+    text-transform: none;
+
+    @media (--tablet-lg) {
+        display: none;
+    }
+
+    &__city,
+    &__help {
+        font-size: inherit;
+        line-height: inherit;
+        font-weight: inherit;
+        text-transform: inherit;
+    }
+
+    &__container,
+    &__city,
+    &__help,
+    &__middle,
+    &__middle-item {
+        display: flex;
+        align-items: center;
+    }
+
+    &__container {
+        justify-content: space-between;
+    }
+
+    &__middle-item {
+        & + & {
+            margin-left: calc(var(--gs) * 9);
+
+            @media (--desktop) {
+                margin-left: calc(var(--gs) * 3);
+            }
+        }
+
+        .icon {
+            margin-right: var(--gs);
+        }
+    }
+}

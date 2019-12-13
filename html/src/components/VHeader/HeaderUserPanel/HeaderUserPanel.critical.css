@@ -1,0 +1,46 @@
+.header-user-panel {
+    display: flex;
+    position: relative;
+
+    .icon {
+        display: block;
+        position: relative;
+    }
+
+    &__item {
+        margin-left: calc(var(--gs) * 3);
+
+        @media (--desktop) {
+            margin-left: calc(var(--gs) * 2);
+        }
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        &:last-child {
+            display: flex;
+            align-items: center;
+        }
+
+        &:nth-child(1),
+        &:nth-child(2) {
+            @media (--tablet) {
+                display: none;
+            }
+        }
+
+        &-count {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            right: 0;
+            top: 60%;
+            transform: translateY(-50%);
+            width: 24px;
+            font-size: 12px;
+            line-height: 15px;
+        }
+    }
+}

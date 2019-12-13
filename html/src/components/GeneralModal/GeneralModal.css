@@ -22,9 +22,11 @@
         padding-top: calc(var(--gs) * 1.5);
         padding-bottom: calc(var(--gs) * 1.5);
 
-        @media (--tablet-lg) {
+        @media (--tablet-lg) and (--tablet-min) {
             color: var(--cl-white);
             fill: var(--cl-white);
+            padding-top: calc(var(--gs) * 2.5);
+            padding-bottom: calc(var(--gs) * 2.5);
         }
 
         &-btn {

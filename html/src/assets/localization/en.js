@@ -9,10 +9,12 @@ export default {
             gifts: 'Bonuses from every purchase',
             help: 'Help',
         },
+
         middle: {
             search: 'Find...',
-            professionals: 'for beauty industry professionals',
+            professionals: 'Marketplace for beauty industry professionals only',
         },
+
         links: {
             catalog: 'Catalog',
             new: 'New',

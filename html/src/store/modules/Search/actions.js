@@ -18,7 +18,7 @@ export const SET_SEARCH = 'SET_SEARCH';
 export const SEARCH = 'SEARCH';
 
 export default {
-    [GET_POPULAR_PRODUCTS]({ commit }, payload) {
+    [GET_POPULAR_PRODUCTS]({ commit }, payload = {}) {
         return getProducts(payload)
             .then(data => commit(SET_POPULAR_PRODUCTS, data.items.slice(0, 4)))
             .catch(error => {

@@ -1,7 +1,6 @@
 .search-filter {
     display: flex;
     align-items: center;
-    background: var(--cl-white);
     transition: width var(--time) var(--timing-function);
 
     &--active {
@@ -12,13 +11,30 @@
         display: flex;
         cursor: pointer;
         flex: none;
-        margin-right: calc(var(--gs) * 1.5);
     }
 
-    &__input {
+    input[type='text'] {
+        font-family: var(--base-font);
+        margin-left: var(--gs);
+        font-size: 16px;
+        line-height: 24px;
         border: 0;
         padding: var(--gs);
-        flex: 1;
+
+        &::placeholder {
+            font-weight: bold;
+            text-transform: uppercase;
+            color: var(--cl-global);
+            opacity: 1;
+        }
+    }
+
+    &--active input[type='text'] {
+        width: 100%;
+
+        &::placeholder {
+            opacity: 0.6;
+        }
     }
 
     &__clear {

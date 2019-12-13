@@ -1,10 +1,11 @@
 <template>
     <div class="search-filter" :class="{ 'search-filter--active': search }">
         <label class="search-filter__label" :for="inputId">
-            <v-svg name="search-middle" width="20" height="20" />
+            <v-svg name="search-middle" width="24" height="24" />
         </label>
         <input
             class="search-filter__input"
+            type="text"
             v-model="searchString"
             :id="inputId"
             :placeholder="searchPlaceholder"
