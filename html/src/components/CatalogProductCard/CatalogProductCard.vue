@@ -1,5 +1,5 @@
 <template>
-    <router-link tag="li" class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }" :to="href">
+    <router-link tag="div" class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }" :to="href">
         <div class="catalog-product-card__img">
             <v-picture v-if="image && image.id" :image="image" alt="">
                 <template v-slot:source="{ image, lazy }">

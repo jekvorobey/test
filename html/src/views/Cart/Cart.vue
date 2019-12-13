@@ -143,17 +143,18 @@
                 <v-slider class="cart-view__featured-slider" name="cart-featured" :options="sliderOptions">
                     <catalog-product-card
                         class="swiper-slide cart-view__featured-card"
-                        v-for="product in featuredProducts"
-                        :key="product.id"
-                        :product-id="product.id"
-                        :type="product.type"
-                        :name="product.name"
-                        :href="product.href"
-                        :image="product.image"
-                        :price="product.price"
-                        :old-price="product.oldPrice"
-                        :tags="product.tags"
-                        :rating="product.rating"
+                        v-for="item in featuredProducts"
+                        :key="item.id"
+                        :product-id="item.id"
+                        :type="item.type"
+                        :name="item.name"
+                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                        :image="item.image"
+                        :price="item.price"
+                        :old-price="item.oldPrice"
+                        :tags="item.tags"
+                        :rating="item.rating"
+                        @addItem="ADD_CART_ITEM({ offerId: item.id })"
                     />
                 </v-slider>
             </div>

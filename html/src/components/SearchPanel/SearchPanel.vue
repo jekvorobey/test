@@ -19,18 +19,18 @@
                 <div v-if="!isTabletLg && products && products.length > 0" class="search-panel__products">
                     <p class="text-bold search-panel__hl" v-if="searchString === ''">Популярные продукты</p>
                     <transition-group tag="ul" name="item" class="search-panel__products-list" appear>
-                        <li class="search-panel__products-card" v-for="product in products" :key="product.id">
+                        <li class="search-panel__products-card" v-for="item in products" :key="item.id">
                             <catalog-product-card
-                                :product-id="product.id"
-                                :name="product.name"
-                                :type="product.type"
-                                href="/"
-                                :image="product.image"
-                                :price="product.price"
-                                :old-price="product.oldPrice"
-                                :tags="product.tags"
-                                :rating="product.rating"
-                                @addItem="ADD_CART_ITEM({ offerId: product.id })"
+                                :product-id="item.id"
+                                :name="item.name"
+                                :type="item.type"
+                                :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                                :image="item.image"
+                                :price="item.price"
+                                :old-price="item.oldPrice"
+                                :tags="item.tags"
+                                :rating="item.rating"
+                                @addItem="ADD_CART_ITEM({ offerId: item.id })"
                             />
                         </li>
                     </transition-group>
@@ -92,4 +92,3 @@ export default {
     },
 };
 </script>
-

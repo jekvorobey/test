@@ -37,6 +37,8 @@ import LoginModal from '../LoginModal/LoginModal.vue';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { SCROLL, IS_MENU_OPEN } from '../../store';
+import { SET_MENU_OPEN } from '../../store/actions';
+
 import { NAME as SEARCH_MODULE, SEARCH } from '../../store/modules/Search';
 
 import './VHeader.critical.css';
