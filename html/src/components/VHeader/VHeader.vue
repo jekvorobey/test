@@ -70,6 +70,10 @@ export default {
         },
     },
 
+    methods: {
+        ...mapActions([SET_MENU_OPEN]),
+    },
+
     watch: {
         search(value) {
             if (value) this[SET_MENU_OPEN](false);
