@@ -147,6 +147,7 @@
             }
 
             &-item {
+                display: flex;
                 position: relative;
                 text-align: center;
                 padding: calc(var(--gs) * 4);
@@ -166,14 +167,14 @@
                     opacity: 0.03;
                 }
 
+                &::after {
+                    content: '';
+                    display: block;
+                    padding-bottom: 100%;
+                }
+
                 @media (--tablet) {
                     display: none;
-
-                    &::after {
-                        content: '';
-                        display: block;
-                        padding-bottom: 100%;
-                    }
                 }
 
                 @media (--desktop) {
