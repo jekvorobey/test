@@ -74,6 +74,18 @@
                     border-bottom: none;
                     margin-right: auto;
                 }
+
+                .icon:first-of-type {
+                    @media (--tablet) {
+                        display: none;
+                    }
+                }
+
+                .icon:last-of-type {
+                    @media (--tablet-min) {
+                        display: none;
+                    }
+                }
             }
         }
 
