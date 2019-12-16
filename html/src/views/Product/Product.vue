@@ -534,13 +534,14 @@
                 </div>
             </div>
         </section>
-        <transition name="slide-top">
+        <transition :name="pricePanelAnimation">
             <product-price-panel
                 class="product-view__top-panel"
-                v-if="scroll && !isPriceVisible && !isTablet"
+                v-if="(scroll && !isPriceVisible) || isTablet"
                 :name="product.title"
                 :price="product.price"
                 :old-price="product.oldPrice"
+                :bonus="product.bonus"
                 @addItem="ADD_CART_ITEM({ offerId: product.id })"
             />
         </transition>
@@ -730,6 +731,10 @@ export default {
 
         instagramOptions() {
             return instagramOptions;
+        },
+
+        pricePanelAnimation() {
+            return this.isTablet ? 'slide-bottom' : 'slide-top';
         },
 
         isTabletLg() {

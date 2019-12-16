@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { preparePrice } from '../../util/helpers';
 import { currencySymbol } from '../../assets/scripts/constants';
 import './Price.css';
 
@@ -30,6 +31,10 @@ export default {
     computed: {
         currencySymbol() {
             return currencySymbol[this.currency];
+        },
+
+        computedValue() {
+            return preparePrice(this.value);
         },
     },
 };

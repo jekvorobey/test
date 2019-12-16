@@ -19,9 +19,21 @@
         margin-right: calc(var(--gs) * 2);
     }
 
+    &__bonus {
+        width: 100%;
+
+        @media (--tablet-min) {
+            display: none;
+        }
+    }
+
     &__btn {
         display: flex;
         line-height: 16px;
+
+        @media (--tablet) {
+            line-height: 24px;
+        }
 
         & + & {
             margin-left: var(--gs);
