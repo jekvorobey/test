@@ -14,7 +14,7 @@
 
     &__breadcrumbs {
         order: 0;
-        margin: calc(var(--gs) * 1.5) 0;
+        margin: var(--gs) 0;
         display: flex;
         flex-wrap: wrap;
         font-size: 11px;
