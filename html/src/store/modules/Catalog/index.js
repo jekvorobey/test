@@ -15,7 +15,7 @@ export const LOAD = 'load';
 const filters = [
     {
         id: 1,
-        title: 'Цена р.',
+        title: 'Цена, ₽',
         name: 'price',
         type: 'range',
         max: 1000,

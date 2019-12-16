@@ -1140,12 +1140,6 @@
         }
 
         &-card {
-            .catalog-product-card__wishlist-btn,
-            .catalog-product-card__tags,
-            .catalog-product-card__controls {
-                display: none;
-            }
-
             .catalog-product-card__img {
                 padding: calc(var(--gs) * 2) var(--gs);
             }

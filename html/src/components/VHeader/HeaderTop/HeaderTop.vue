@@ -1,5 +1,5 @@
 <template>
-    <div class="header-top">
+    <div class="header-top" :class="{ 'header-top--search': search }">
         <div class="container header-top__container">
             <button class="header-top__city" title="Выбрать город">
                 <v-svg name="pin" width="16" height="16" />&nbsp;{{ city }}

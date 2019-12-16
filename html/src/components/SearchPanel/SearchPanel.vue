@@ -24,13 +24,12 @@
                                 :product-id="item.id"
                                 :name="item.name"
                                 :type="item.type"
-                                :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                                href="/"
                                 :image="item.image"
                                 :price="item.price"
                                 :old-price="item.oldPrice"
                                 :tags="item.tags"
                                 :rating="item.rating"
-                                @addItem="ADD_CART_ITEM({ offerId: item.id })"
                             />
                         </li>
                     </transition-group>
