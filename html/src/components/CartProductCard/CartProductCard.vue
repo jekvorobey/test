@@ -47,7 +47,7 @@
             <div class="text-grey cart-product-card__body-bonus">+ 80 бонусов</div>
             <div class="cart-product-card__body-controls">
                 <v-link class="cart-product-card__body-controls-link" tag="button">
-                    <v-svg name="wishlist-middle" width="15" height="13" />
+                    <v-svg name="wishlist-middle" width="16" height="16" />
                     {{ isTablet ? '' : '&nbsp;Перенести в избранное' }}
                 </v-link>
                 <v-link class="cart-product-card__body-controls-link" tag="button" @click="onDeleteClick">

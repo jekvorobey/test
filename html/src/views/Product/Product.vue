@@ -138,7 +138,10 @@
                         </div>
                     </div>
 
-                    <div class="product-view__header-detail-section product-view__header-detail-panels">
+                    <div
+                        class="product-view__header-detail-section product-view__header-detail-panels"
+                        v-observe-visibility="onPriceVisibilityChanged"
+                    >
                         <div class="product-view__header-detail-price-panel">
                             <div class="product-view__header-detail-price-panel-prices">
                                 <price
@@ -460,12 +463,13 @@
                         :product-id="product.id"
                         :name="product.name"
                         :type="product.type"
-                        :href="product.href"
+                        :href="`/catalog/${product.categoryCodes[product.categoryCodes.length - 1]}/${product.code}`"
                         :image="product.image"
                         :price="product.price"
                         :old-price="product.oldPrice"
                         :tags="product.tags"
                         :rating="product.rating"
+                        @addItem="ADD_CART_ITEM({ offerId: product.id })"
                     />
                 </v-slider>
             </div>
@@ -519,16 +523,27 @@
                         :product-id="product.id"
                         :type="product.type"
                         :name="product.name"
-                        :href="product.href"
+                        :href="`/catalog/${product.categoryCodes[product.categoryCodes.length - 1]}/${product.code}`"
                         :image="product.image"
                         :price="product.price"
                         :old-price="product.oldPrice"
                         :tags="product.tags"
                         :rating="product.rating"
+                        @addItem="ADD_CART_ITEM({ offerId: product.id })"
                     />
                 </div>
             </div>
         </section>
+        <transition name="slide-top">
+            <product-price-panel
+                class="product-view__top-panel"
+                v-if="scroll && !isPriceVisible && !isTablet"
+                :name="product.title"
+                :price="product.price"
+                :old-price="product.oldPrice"
+                @addItem="ADD_CART_ITEM({ offerId: product.id })"
+            />
+        </transition>
     </section>
 </template>
 
@@ -550,8 +565,12 @@ import Tag from '../../components/Tag/Tag.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
 import ProductReviewCard from '../../components/ProductReviewCard/ProductReviewCard.vue';
+import ProductPricePanel from '../../components/ProductPricePanel/ProductPricePanel.vue';
 
+import '../../plugins/observer';
 import { mapState, mapActions, mapGetters } from 'vuex';
+
+import { SCROLL } from '../../store';
 
 import productModule, {
     NAME as PRODUCT_MODULE,
@@ -685,15 +704,18 @@ export default {
         ProductReviewCard,
         BannerCard,
         InstagramCard,
+        ProductPricePanel,
     },
 
     data() {
         return {
+            isPriceVisible: true,
             mockImg: productBrand1,
         };
     },
 
     computed: {
+        ...mapState([SCROLL]),
         ...mapState('route', { code: state => state.params.code }),
         ...mapState(PRODUCT_MODULE, [PRODUCT, BANNERS, FEATURED_PRODUCTS, INSTAGRAM_ITEMS]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
@@ -733,6 +755,10 @@ export default {
 
         generateSourcePath(x, y, id, ext) {
             return generatePictureSourcePath(x, y, id, ext);
+        },
+
+        onPriceVisibilityChanged(isVisible) {
+            this.isPriceVisible = isVisible;
         },
     },
 
@@ -778,27 +804,28 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
-        const { productCode } = this.product;
+
         const { fias_id } = this.selectedCity;
 
         const {
             params: { code },
         } = to;
-
-        this.debounce_fetchProduct(code, fias_id);
-        next();
+        this.debounce_fetchProduct(code, fias_id, next);
     },
 
     beforeMount() {
-        this.debounce_fetchProduct = _debounce(async (code, city) => {
+        this.debounce_fetchProduct = _debounce(async (code, city, next) => {
             try {
+                const { productCode } = this.product;
                 this.$progress.start();
-                if (productCode !== code) await this[FETCH_PRODUCT_DATA]({ code, city });
-                else await Promise.resolve();
-
+                if (productCode !== code) {
+                    await this[FETCH_PRODUCT_DATA]({ code, city });
+                } else await Promise.resolve();
+                next();
                 this.$progress.finish();
             } catch (error) {
                 $logger.error('debounce_fetchProduct', error);
+                next(false);
                 this.$progress.fail();
             }
         }, 500);
