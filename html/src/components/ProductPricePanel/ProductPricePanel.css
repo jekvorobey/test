@@ -3,7 +3,7 @@
     width: 100%;
     background-color: var(--cl-white);
     z-index: 100;
-    padding: var(--gs) 0;
+    padding: calc(var(--gs) / 2) 0;
     box-shadow: 0px 5px 40px rgba(0, 0, 0, 0.1);
 
     &__container {
@@ -11,11 +11,30 @@
         align-items: center;
     }
 
+    &__img {
+        width: 56px;
+        height: 56px;
+        margin-right: calc(var(--gs) * 3);
+
+        @media (--tablet) {
+            display: none;
+        }
+
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 510px;
+        }
+    }
+
     &__name {
         flex: 1;
+        font-size: 20px;
+        line-height: 24px;
     }
 
     &__price {
+        order: 0;
         margin-right: calc(var(--gs) * 2);
     }
 
@@ -29,11 +48,8 @@
 
     &__btn {
         display: flex;
-        line-height: 16px;
-
-        @media (--tablet) {
-            line-height: 24px;
-        }
+        line-height: 24px;
+        padding: 6px 16px;
 
         & + & {
             margin-left: var(--gs);

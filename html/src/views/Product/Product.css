@@ -1,9 +1,4 @@
 .product-view {
-    .v-picture {
-        width: 100%;
-        height: 100%;
-    }
-
     &__breadcrumbs {
         margin: calc(var(--gs) * 1.5) 0;
         display: flex;
@@ -94,6 +89,8 @@
             }
 
             .v-sticky {
+                overflow: hidden;
+
                 &__container {
                     top: 60px;
                     margin-bottom: auto;
@@ -108,6 +105,22 @@
 
             @media (--tablet-lg) {
                 position: relative;
+                flex-wrap: nowrap;
+                opacity: 0;
+            }
+
+            @media (--tablet-lg) {
+                &::after {
+                    content: '';
+                    display: block;
+                    padding-bottom: 510px;
+                }
+            }
+
+            @media (--tablet) {
+                &::after {
+                    padding-bottom: 100%;
+                }
             }
 
             .v-slider__controls {
@@ -119,18 +132,48 @@
                 }
             }
 
+            &.swiper-container-initialized &-item {
+                @media (--tablet-lg) {
+                    display: flex;
+                    &::after {
+                        content: none;
+                    }
+                }
+            }
+
+            .v-picture {
+                width: 100%;
+                height: 100%;
+            }
+
             &-item {
-                display: flex;
-                background-color: var(--cl-elem-grey);
+                position: relative;
                 text-align: center;
                 padding: calc(var(--gs) * 4);
                 margin-bottom: var(--gs);
                 width: calc(50% - calc(var(--gs) / 2));
 
-                &::after {
+                &::before {
                     content: '';
+                    position: absolute;
                     display: block;
-                    padding-bottom: 100%;
+                    z-index: 1;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: var(--cl-global);
+                    opacity: 0.03;
+                }
+
+                @media (--tablet) {
+                    display: none;
+
+                    &::after {
+                        content: '';
+                        display: block;
+                        padding-bottom: 100%;
+                    }
                 }
 
                 @media (--desktop) {
@@ -1138,12 +1181,6 @@
 
             .product-price-panel__container {
                 justify-content: space-between;
-            }
-
-            .product-price-panel__btn {
-                &:nth-of-type(2) {
-                    display: none;
-                }
             }
 
             .product-price-panel__name {

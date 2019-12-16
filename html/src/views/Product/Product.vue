@@ -539,6 +539,7 @@
                 class="product-view__top-panel"
                 v-if="(scroll && !isPriceVisible) || isTablet"
                 :name="product.title"
+                :image="product.media && product.media.length > 0 ? product.media[0] : null"
                 :price="product.price"
                 :old-price="product.oldPrice"
                 :bonus="product.bonus"
