@@ -534,7 +534,7 @@
                 </div>
             </div>
         </section>
-        <transition :name="pricePanelAnimation">
+        <transition :name="pricePanelAnimation" appear>
             <product-price-panel
                 class="product-view__top-panel"
                 v-if="(scroll && !isPriceVisible) || isTablet"
