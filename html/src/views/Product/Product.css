@@ -135,9 +135,6 @@
             &.swiper-container-initialized &-item {
                 @media (--tablet-lg) {
                     display: flex;
-                    &::after {
-                        content: none;
-                    }
                 }
             }
 
