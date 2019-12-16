@@ -1,19 +1,23 @@
 <template>
     <div class="product-price-panel">
         <div class="container product-price-panel__container">
-            <v-picture class="product-price-panel__img" v-if="image" :image="image" alt="">
-                <template v-slot:source="{ image, lazy }">
-                    <source :data-srcset="generateSourcePath(56, 56, image.id, 'webp')" type="image/webp" />
-                </template>
-                <template v-slot:fallback="{ image, lazy, alt }">
-                    <img
-                        class="blur-up lazyload v-picture__img"
-                        :data-src="generateSourcePath(56, 56, image.id, image.sourceExt)"
-                        :alt="alt"
-                    />
-                </template>
-            </v-picture>
+            <div class="product-price-panel__img" v-if="image">
+                <v-picture :image="image" alt="">
+                    <template v-slot:source="{ image, lazy }">
+                        <source :data-srcset="generateSourcePath(56, 56, image.id, 'webp')" type="image/webp" />
+                    </template>
+                    <template v-slot:fallback="{ image, lazy, alt }">
+                        <img
+                            class="blur-up lazyload v-picture__img"
+                            :data-src="generateSourcePath(56, 56, image.id, image.sourceExt)"
+                            :alt="alt"
+                        />
+                    </template>
+                </v-picture>
+            </div>
+
             <div class="text-medium product-price-panel__name">{{ name }}</div>
+
             <div>
                 <price class="text-bold product-price-panel__price" :value="price.value" :currency="price.currency" />
                 <price
@@ -31,8 +35,9 @@
                 class="product-price-panel__btn"
                 :class="{ 'btn--outline': !isTablet }"
                 @click.prevent="onBuyBtnClick"
-                >В корзину</v-button
             >
+                В корзину
+            </v-button>
         </div>
     </div>
 </template>
