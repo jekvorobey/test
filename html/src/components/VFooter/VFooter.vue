@@ -6,7 +6,6 @@
                     <v-link class="v-footer__logo" to="/">
                         <v-svg name="logo-default" width="128" height="48" />
                     </v-link>
-                    <p class="v-footer__rights" v-html="$t('footer.rights')" />
                 </div>
                 <div class="v-footer__col" :key="index" v-for="(col, index) in links">
                     <p class="v-footer__col-title">{{ col.title }}</p>
@@ -33,17 +32,10 @@
                 </div>
             </div>
             <hr />
-            <div class="v-footer__row">
+            <div class="v-footer__row v-footer__bottom-links">
+                <p class="v-footer__rights" v-html="$t('footer.rights')" />
                 <v-link class="v-footer__link">{{ $t('footer.terms_of_use') }}</v-link>
                 <v-link class="v-footer__link">{{ $t('footer.offer') }}</v-link>
-                <v-link
-                    class="v-footer__link v-footer__made-by v-footer__col"
-                    href="https://greensight.ru/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    {{ $t('footer.made_by') }}
-                </v-link>
             </div>
         </div>
 
@@ -81,18 +73,7 @@
         <div class="v-footer__container v-footer__container--mobile v-footer__col v-footer__mobile-links">
             <v-link class="v-footer__link">{{ $t('footer.terms_of_use') }}</v-link>
             <v-link class="v-footer__link">{{ $t('footer.offer') }}</v-link>
-        </div>
-
-        <div class="container v-footer__container v-footer__container--mobile v-footer__col">
             <p class="v-footer__rights" v-html="$t('footer.rights')" />
-            <v-link
-                class="v-footer__link v-footer__link--made-by"
-                href="https://greensight.ru/"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                {{ $t('footer.made_by') }}
-            </v-link>
         </div>
     </footer>
 </template>

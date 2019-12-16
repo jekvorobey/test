@@ -255,7 +255,7 @@ const banners = [
         type: 'banner',
         title: 'Водостойкая губная помада L’Oreal Paris',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
-        btnText: 'Смотреть товары',
+        btnText: 'Посмотреть',
         image: banner6,
     },
     {

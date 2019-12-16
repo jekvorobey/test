@@ -40,13 +40,13 @@ export default {
         },
 
         made_by: 'Made by Greensight',
-        rights: '© 2019 «Shamelessly Talented».<br/> All rights reserved.',
+        rights: '© 2019 «Shamelessly Talented»',
         terms_of_use: 'Terms of use',
         offer: 'Public offer',
     },
 
     socials: {
-        socials: 'We are in social networks',
+        socials: 'Subscribe in social networks',
         facebook: 'Facebook',
         vkontakte: 'VKontakte',
         twitter: 'Twitter',

@@ -115,7 +115,7 @@
                         </div>
                     </div>
 
-                    <div class="product-view__header-detail-section product-view__header-detail-options">
+                    <!-- <div class="product-view__header-detail-section product-view__header-detail-options">
                         <div class="product-view__header-detail-options-selected">
                             <div>{{ product.option.title }}</div>
                             <div class="text-grey text-sm">16 оттенков</div>
@@ -136,7 +136,7 @@
                                 />
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div
                         class="product-view__header-detail-section product-view__header-detail-panels"
@@ -284,7 +284,7 @@
                     <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
                     <v-html class="product-view__info-text" v-html="product.description.content" />
                 </div>
-                <div class="product-view__info-media">
+                <!-- <div class="product-view__info-media">
                     <v-picture
                         v-if="product.description.image && product.description.image.id"
                         :image="product.description.image"
@@ -310,7 +310,7 @@
                             />
                         </template>
                     </v-picture>
-                </div>
+                </div> -->
             </div>
         </section>
 
@@ -320,7 +320,7 @@
                     <h2 class="product-view__section-hl">{{ $t('product.title.method') }}</h2>
                     <v-html class="product-view__info-text" v-html="product.howto.content" />
                 </div>
-                <div class="product-view__info-media">
+                <!-- <div class="product-view__info-media">
                     <v-picture v-if="product.howto.image && product.howto.image.id" :image="product.howto.image" alt="">
                         <template v-slot:source="{ image, lazy }">
                             <source
@@ -342,7 +342,7 @@
                             />
                         </template>
                     </v-picture>
-                </div>
+                </div> -->
             </div>
         </section>
 

@@ -40,13 +40,13 @@ export default {
         },
 
         made_by: 'Сделано в Гринсайте',
-        rights: '© 2019 «Бессовестно Талантливый».<br/> Все права защищены.',
+        rights: '© 2019 «Бессовестно Талантливый»',
         terms_of_use: 'Пользовательское соглашение',
         offer: 'Оферта',
     },
 
     socials: {
-        socials: 'Мы в социальных сетях',
+        socials: 'Подпишись на нас в соц. сетях',
         facebook: 'Facebook',
         vkontakte: 'ВКонтакте',
         twitter: 'Twitter',

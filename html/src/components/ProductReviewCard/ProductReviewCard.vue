@@ -22,14 +22,14 @@
                 <div class="text-bold product-review-card__body-item-title">Недостатки</div>
                 <div class="product-review-card__body-item-value">{{ disadvantage }}</div>
             </div>
-            <div v-if="images && images.length > 0" class="product-review-card__body-item">
+            <!-- <div v-if="images && images.length > 0" class="product-review-card__body-item">
                 <div class="text-bold product-review-card__body-item-title">Фото</div>
                 <div class="product-review-card__body-item-value">
                     <div class="product-review-card__body-item-img" v-for="item in images" :key="item.id">
                         <img class="blur-up lazyload" :data-src="item.image" alt="" />
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="product-review-card__controls">
             <button class="product-review-card__controls-btn">
