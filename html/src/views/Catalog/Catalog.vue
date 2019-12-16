@@ -54,12 +54,14 @@
                         </div>
                         <v-select
                             class="catalog-view__main-header-sort"
-                            v-model="sortValue"
                             label="title"
                             track-by="id"
+                            :value="sortValue"
                             :options="sortOptions"
                             :searchable="false"
                             :allow-empty="false"
+                            :show-labels="false"
+                            @input="onInputSortValue($event)"
                         />
 
                         <v-button class="catalog-view__main-header-btn" @click="filterModal = !filterModal">
@@ -272,17 +274,6 @@ export default {
         },
     },
 
-    watch: {
-        sortValue(value, oldValue) {
-            if (value !== oldValue) {
-                this.$router.replace({
-                    path: this.$route.path,
-                    query: { orderField: value.field, orderDirection: value.direction },
-                });
-            }
-        },
-    },
-
     methods: {
         ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_CATALOG_DATA]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
@@ -290,6 +281,14 @@ export default {
         setSortValue(field, direction) {
             this.sortValue =
                 this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
+        },
+
+        onInputSortValue(value) {
+            debugger;
+            this.$router.replace({
+                path: this.$route.path,
+                query: { orderField: value.field, orderDirection: value.direction },
+            });
         },
 
         onBeforeEnterItems(el) {

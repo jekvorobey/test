@@ -7,7 +7,7 @@
             <v-svg name="wishlist-middle" width="24" height="24" />
         </button>
         <div class="header-user-panel__item">
-            <span class="text-bold header-user-panel__item-sum">{{ productItemsSum }}</span>
+            <span class="text-medium header-user-panel__item-sum">{{ productItemsSum }}</span>
             &nbsp;&nbsp;
             <v-link class="header-user-panel__item-cart" to="/cart">
                 <v-svg name="cart-middle" width="24" height="24" />

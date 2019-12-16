@@ -17,7 +17,11 @@
     }
 
     @media (--tablet-lg) {
-        padding-top: 48px;
+        padding-top: calc(var(--gs) * 8);
+    }
+
+    @media (--tablet) {
+        padding-top: calc(var(--gs) * 6);
     }
 }
 

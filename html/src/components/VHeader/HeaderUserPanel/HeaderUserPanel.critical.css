@@ -30,6 +30,10 @@
             }
         }
 
+        &-sum {
+            white-space: nowrap;
+        }
+
         &-count {
             position: absolute;
             display: flex;
