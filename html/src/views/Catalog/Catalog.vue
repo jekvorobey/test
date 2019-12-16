@@ -162,7 +162,7 @@
                                     class="catalog-view__modal-filter-sort-item"
                                     :class="{ 'catalog-view__modal-filter-sort-item--active': item === sortValue }"
                                     v-for="item in sortOptions"
-                                    :key="item"
+                                    :key="item.title"
                                 >
                                     <button class="catalog-view__modal-filter-sort-btn" @click="sortValue = item">
                                         {{ item.title }}

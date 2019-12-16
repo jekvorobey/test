@@ -4,8 +4,10 @@
     &__header {
         display: flex;
         flex-direction: column;
+        margin-bottom: calc(var(--gs) * 5);
 
         @media (--tablet-lg) {
+            margin-bottom: 0;
             padding: 0;
         }
     }
@@ -44,11 +46,9 @@
     &__banner {
         order: 1;
         height: 240px;
-        margin-bottom: calc(var(--gs) * 7);
 
         @media (--tablet-lg) {
             order: 0;
-            margin-bottom: 0;
         }
 
         .catalog-banner-card__panel {
@@ -101,7 +101,7 @@
         display: grid;
         grid-template-columns: 288px 1fr;
         grid-template-rows: 1fr;
-        grid-gap: calc(var(--gs) * 3);
+        grid-gap: calc(var(--gs) * 8);
         overflow: hidden;
 
         @media (--desktop) {
@@ -199,6 +199,7 @@
                 margin-right: calc(var(--gs) * 2);
 
                 @media (--tablet) {
+                    padding: 0 calc(var(--gs) * 2);
                     margin-right: 0;
                 }
             }
@@ -215,7 +216,7 @@
 
             &-sort {
                 display: inline-block;
-                width: 232px;
+                width: calc(calc(100% / 3) - calc(var(--gs) * 2));
                 padding: 0;
                 margin-left: auto;
 
