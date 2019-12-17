@@ -1,11 +1,14 @@
 .slider-banners-section {
     display: flex;
     margin-bottom: calc(var(--gs) * 8);
-    padding: 0;
     height: 520px;
 
+    @media (--desktop-lg-min) {
+        padding: 0;
+    }
+
     @media (--desktop-lg) {
-        height: 320px;
+        height: 380px;
         margin-bottom: calc(var(--gs) * 2);
     }
 
@@ -34,6 +37,7 @@
         width: 100%;
 
         .v-slider__controls {
+            display: none;
             left: calc(var(--gs) * 12);
             bottom: calc(var(--gs) * 4);
 

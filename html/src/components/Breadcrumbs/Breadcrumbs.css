@@ -1,0 +1,5 @@
+.breadcrumbs {
+    margin: var(--gs) 0;
+    display: flex;
+    flex-wrap: wrap;
+}

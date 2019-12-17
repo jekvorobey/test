@@ -3,7 +3,7 @@
         <div class="container slider-banners-section">
             <v-slider class="slider-banners-section__slider" name="banners" :options="sliderOptions">
                 <landing-banner-card
-                    v-for="banner in banners"
+                    v-for="banner in computedBanners"
                     class="swiper-slide slider-banners-section__card"
                     :key="banner.id"
                     :banner-id="banner.id"
@@ -27,21 +27,21 @@ import './SliderBannersSection.css';
 
 const sliderOptions = {
     slidesPerView: 1,
-    grabCursor: true,
-    loop: true,
-    autoplay: {
-        delay: 10000,
-    },
+    // grabCursor: true,
+    // loop: true,
+    // autoplay: {
+    //     delay: 10000,
+    // },
 
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-    },
+    // navigation: {
+    //     nextEl: '.swiper-button-next',
+    //     prevEl: '.swiper-button-prev',
+    // },
 
-    pagination: {
-        el: '.swiper-pagination',
-        type: 'bullets',
-    },
+    // pagination: {
+    //     el: '.swiper-pagination',
+    //     type: 'bullets',
+    // },
 };
 
 export default {
@@ -65,6 +65,10 @@ export default {
     computed: {
         sliderOptions() {
             return sliderOptions;
+        },
+
+        computedBanners() {
+            return this.banners.slice(0, 1);
         },
     },
 };

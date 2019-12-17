@@ -1,0 +1,31 @@
+.image-picker {
+    display: flex;
+    align-items: center;
+
+    &__img {
+        display: flex;
+        width: 95px;
+        background-color: var(--cl-grey);
+        border-radius: 50%;
+        margin-right: calc(var(--gs) * 3);
+
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+
+        &-controls {
+            margin-bottom: var(--gs);
+
+            &-delete {
+                color: var(--cl-grey);
+            }
+        }
+    }
+}

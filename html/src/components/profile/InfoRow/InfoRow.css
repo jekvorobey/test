@@ -1,0 +1,16 @@
+.info-row {
+    display: flex;
+
+    &__name {
+        width: calc(100% / 3);
+        margin-right: calc(var(--gs) * 3);
+    }
+
+    &__value {
+        flex: 1;
+    }
+
+    &__link {
+        width: auto;
+    }
+}

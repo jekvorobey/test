@@ -1,0 +1,17 @@
+.breadcrumb-item {
+    color: var(--cl-grey);
+    font-size: 11px;
+    line-height: 24px;
+
+    &__link {
+        border-bottom: none;
+        text-transform: uppercase;
+    }
+
+    & + & {
+        &::before {
+            content: '/';
+            margin: 0 var(--gs);
+        }
+    }
+}
