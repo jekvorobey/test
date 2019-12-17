@@ -11,14 +11,15 @@
 
     &__grid {
         display: grid;
-        grid-template-columns: 288px 1fr;
+        grid-template-columns: 248px 1fr;
         grid-template-rows: 1fr;
         grid-gap: calc(var(--gs) * 8);
         overflow: hidden;
 
         @media (--desktop) {
-            grid-template-columns: 256px 1fr;
+            grid-template-columns: 248px 1fr;
             grid-template-rows: 1fr;
+            grid-gap: calc(var(--gs) * 4);
         }
 
         @media (--tablet-lg) {
