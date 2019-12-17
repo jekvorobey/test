@@ -15,7 +15,14 @@
                 <a>Подробнее о реферальной программе</a>
             </div>
             <div class="referal-view__panel">
-                <img :src="referalGroup2" alt="" />
+                <div class="referal-view__panel-item">
+                    <img :src="referalGroup1" alt="" />
+                    <div class="text-grey">Новых рефералов</div>
+                </div>
+                <div class="referal-view__panel-item">
+                    <img :src="referalGroup2" alt="" />
+                    <div class="text-grey">Сумма заказов</div>
+                </div>
             </div>
         </div>
 
@@ -117,6 +124,7 @@ import referalProduct1 from '../../../assets/images/mock/referalProduct1.png';
 import referalProduct2 from '../../../assets/images/mock/referalProduct2.png';
 import referalProduct3 from '../../../assets/images/mock/referalProduct3.png';
 import graph from '../../../assets/images/mock/graph.png';
+import referalGroup1 from '../../../assets/images/mock/referalGroup1.png';
 import referalGroup2 from '../../../assets/images/mock/referalGroup2.png';
 import './Referal.css';
 
@@ -131,6 +139,7 @@ export default {
     data() {
         return {
             graph,
+            referalGroup1,
             referalGroup2,
             referalProduct1,
             referalProduct2,

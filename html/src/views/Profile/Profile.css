@@ -16,10 +16,10 @@
         grid-gap: calc(var(--gs) * 8);
         overflow: hidden;
 
-        @media (--desktop) {
+        @media (--desktop-lg) {
             grid-template-columns: 248px 1fr;
             grid-template-rows: 1fr;
-            grid-gap: calc(var(--gs) * 4);
+            grid-gap: calc(var(--gs) * 6);
         }
 
         @media (--tablet-lg) {

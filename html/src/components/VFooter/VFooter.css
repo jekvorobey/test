@@ -47,12 +47,22 @@
             text-transform: uppercase;
             line-height: 20px;
             font-weight: bold;
-            margin-bottom: calc(var(--gs) * 4);
+            margin-bottom: calc(var(--gs) * 2);
+            font-size: 14px;
+            line-height: 24px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+
+            &--socials {
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 24px;
+                text-transform: none;
+            }
 
             @media (--tablet-lg) {
-                margin-bottom: calc(var(--gs) * 3);
+                margin-bottom: calc(var(--gs) * 2);
                 font-weight: bold;
-                font-size: 20px;
                 text-align: center;
                 text-transform: none;
             }

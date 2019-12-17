@@ -50,7 +50,7 @@
                             <h1 class="catalog-view__main-header-hl">
                                 {{ activeCategory ? activeCategory.name : 'Каталог' }}
                             </h1>
-                            <p class="text-grey catalog-view__main-header-text">489 товаров</p>
+                            <p class="text-grey catalog-view__main-header-text">489 продуктов</p>
                         </div>
                         <v-select
                             class="catalog-view__main-header-sort"

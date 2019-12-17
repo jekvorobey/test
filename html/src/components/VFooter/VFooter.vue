@@ -16,7 +16,7 @@
                     </ul>
                 </div>
                 <div class="v-footer__col">
-                    <p class="v-footer__col-title">{{ socials.name }}</p>
+                    <p class="v-footer__col-title v-footer__col-title--socials">{{ socials.name }}</p>
                     <ul class="v-footer__socials">
                         <li
                             class="v-footer__socials-item"
@@ -197,5 +197,3 @@ export default {
     },
 };
 </script>
-
-

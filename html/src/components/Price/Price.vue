@@ -1,6 +1,6 @@
 <template>
     <span class="price">
-        {{ value }}
+        {{ computedValue }}
         &nbsp;<span v-html="currencySymbol" />
     </span>
 </template>
