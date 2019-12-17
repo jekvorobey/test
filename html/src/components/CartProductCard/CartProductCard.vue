@@ -4,7 +4,7 @@
             <v-picture v-if="image && image.id" :image="image" alt="">
                 <template v-slot:source="{ image, lazy }">
                     <source
-                        :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
                         type="image/webp"
                         media="(min-width: 480px)"
                     />
@@ -17,7 +17,7 @@
                 <template v-slot:fallback="{ image, lazy, alt }">
                     <img
                         class="blur-up lazyload v-picture__img"
-                        :data-src="generateSourcePath(200, 200, image.id, image.sourceExt)"
+                        :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
                         :alt="alt"
                     />
                 </template>
