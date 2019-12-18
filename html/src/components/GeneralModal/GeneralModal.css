@@ -1,4 +1,7 @@
 .general-modal {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
     .modal-body {
         position: relative;
 

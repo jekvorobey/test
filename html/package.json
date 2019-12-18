@@ -21,6 +21,7 @@
     },
     "scripts": {
         "dev": "cross-env NODE_ENV=development node --trace-deprecation server-local",
+        "dev:remote": "cross-env NODE_ENV=development CONFIG=.env.remote.json node --trace-deprecation server-local",
         "start": "cross-env NODE_ENV=production node server-local",
         "start:remote": "cross-env NODE_ENV=production CONFIG=.env.remote.json node server-local",
         "rebuild": "rimraf ../public/assets && yarn build:client && yarn build:server",

@@ -1,0 +1,57 @@
+.promocodes-view {
+    &__hl {
+        margin-bottom: calc(var(--gs) * 3);
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 40px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    &__table {
+        width: 100%;
+        border: none;
+        border-collapse: collapse;
+        margin-bottom: calc(var(--gs) * 4);
+
+        &-img {
+            width: 40px;
+            height: 40px;
+            align-self: center;
+            margin-right: var(--gs);
+        }
+
+        &-title {
+            flex: 1;
+        }
+
+        &-btn {
+            display: inline-flex;
+        }
+
+        &-tr {
+            border-bottom: 1px solid var(--cl-divider-grey);
+
+            &--header {
+                border-top: 1px solid var(--cl-divider-grey);
+            }
+        }
+
+        &-th,
+        &-td {
+            font-weight: normal;
+            text-align: left;
+            line-height: 24px;
+            padding: calc(var(--gs) * 2) 0;
+        }
+
+        &-td {
+            vertical-align: top;
+        }
+
+        &-th {
+            font-size: 14px;
+            color: var(--cl-grey);
+        }
+    }
+}

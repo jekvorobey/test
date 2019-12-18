@@ -1,10 +1,11 @@
 .nav-panel {
     border-top: 1px solid var(--cl-divider-grey);
-    overflow-x: hidden;
-    overflow-y: auto;
     max-height: 100%;
     background-color: var(--cl-white);
     padding: calc(var(--gs) * 5) 0;
+    overflow-x: hidden;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
 
     @media (--desktop) {
         padding: calc(var(--gs) * 2) 0;

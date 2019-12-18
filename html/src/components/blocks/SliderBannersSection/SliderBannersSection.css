@@ -12,6 +12,10 @@
         margin-bottom: calc(var(--gs) * 2);
     }
 
+    @media (--desktop) {
+        padding: 0;
+    }
+
     @media (--tablet-lg) {
         height: 272px;
         margin-bottom: calc(var(--gs) * 4);

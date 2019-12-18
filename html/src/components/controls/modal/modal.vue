@@ -1,5 +1,5 @@
 <template>
-    <div @click="onClose" class="modal-mask">
+    <div @click="onClose" class="modal-mask" @touchstart.self.prevent="onClose" @touchmove.self.prevent>
         <div
             v-scroll-lock="lock"
             ref="wrapper"

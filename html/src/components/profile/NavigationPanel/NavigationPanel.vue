@@ -20,17 +20,17 @@
                     </v-link>
                 </li>
                 <li class="navigation-panel__group-item">
-                    <v-link class="navigation-panel__group-link" to="/profile/preferences">
+                    <v-link class="navigation-panel__group-link" to="/profile/pro-preferences">
                         Мои профессиональные предпочтения
                     </v-link>
                 </li>
                 <li class="navigation-panel__group-item">
-                    <v-link class="navigation-panel__group-link" to="/profile/promo-page">
+                    <v-link class="navigation-panel__group-link" to="/profile/promopage">
                         Моя промостраница
                     </v-link>
                 </li>
                 <li class="navigation-panel__group-item">
-                    <v-link class="navigation-panel__group-link" to="/profile/products">
+                    <v-link class="navigation-panel__group-link" to="/profile/seo">
                         Товары для продвижения
                     </v-link>
                 </li>

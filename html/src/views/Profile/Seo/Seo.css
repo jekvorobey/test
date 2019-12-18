@@ -1,0 +1,106 @@
+.seo-view {
+    &__header {
+        display: flex;
+        align-items: baseline;
+    }
+
+    &__hl {
+        margin-right: calc(var(--gs) * 2);
+        margin-bottom: calc(var(--gs) * 3);
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 40px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    &__panel {
+        & + & {
+            margin-top: calc(var(--gs) * 7);
+        }
+
+        &-links {
+            display: flex;
+        }
+
+        &-link {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: normal;
+            line-height: 24px;
+            text-transform: none;
+
+            & + & {
+                margin-left: calc(var(--gs) * 4);
+            }
+        }
+
+        &-referal {
+            margin-bottom: calc(var(--gs) * 2);
+
+            &-text {
+                font-size: 14px;
+                line-height: 24px;
+                letter-spacing: 0.02em;
+                margin-right: var(--gs);
+                text-transform: uppercase;
+            }
+
+            &-link {
+                font-family: 'Roboto', Arial, sans-serif;
+            }
+        }
+
+        &-content {
+            margin-bottom: calc(var(--gs) * 2);
+        }
+
+        &-list {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 calc(var(--gs) / -2);
+        }
+
+        &-item {
+            position: relative;
+            display: flex;
+            width: calc(calc(100% / 6) - calc(var(--gs) * 1.5));
+            margin: 0 calc(var(--gs) / 2);
+            margin-bottom: calc(var(--gs) * 3);
+            max-height: 94px;
+
+            img {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+
+        &-share {
+            padding-top: calc(var(--gs) * 2);
+            display: flex;
+            align-items: center;
+            border-top: 1px solid var(--cl-divider-grey);
+            font-size: 14px;
+            line-height: 24px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+
+            .icon {
+                margin-left: calc(var(--gs) * 2);
+            }
+        }
+    }
+
+    &__controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: calc(var(--gs) * 4);
+
+        &-btn {
+            width: 100%;
+        }
+    }
+}

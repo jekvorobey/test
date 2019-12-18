@@ -275,23 +275,6 @@
             @media (--tablet-lg) {
                 display: none;
             }
-
-            &-item {
-                display: inline-flex;
-                font-size: 16px;
-                line-height: 32px;
-                padding-left: var(--gs);
-                margin-right: calc(var(--gs) / 2);
-                margin-bottom: var(--gs);
-                transition: transform 0.5s;
-                background-color: var(--cl-elem-grey);
-            }
-
-            &-delete-btn {
-                display: flex;
-                align-items: center;
-                padding: 0 var(--gs);
-            }
         }
 
         &-grid {
@@ -484,14 +467,6 @@
                 box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             }
         }
-    }
-
-    .tag-item-leave-to {
-        opacity: 0;
-    }
-
-    .tag-item-leave-active {
-        position: absolute;
     }
 
     .catalog-item-enter {

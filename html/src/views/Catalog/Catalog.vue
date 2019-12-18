@@ -73,17 +73,13 @@
                     </div>
 
                     <transition-group tag="ul" class="catalog-view__main-tags" name="tag-item">
-                        <li
+                        <tag-item
+                        v-for="(tag, index) in activeTags"
                             :data-index="index"
-                            class="catalog-view__main-tags-item"
-                            v-for="(tag, index) in activeTags"
                             :key="tag.code"
-                        >
-                            {{ tag.name }}&nbsp;
-                            <button class="catalog-view__main-tags-delete-btn" @click="onClickDeleteTag(tag.code)">
-                                <v-svg name="cross-small" width="10" height="10" />
-                            </button>
-                        </li>
+                            :text="tag.name"
+                            @delete="onClickDeleteTag(tag.code)"
+                        />
                     </transition-group>
 
                     <transition-group
@@ -190,6 +186,7 @@ import VSelect from '../../components/controls/VSelect/VSelect.vue';
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 import Modal from '../../components/controls/modal/modal.vue';
 
+import TagItem from '../../components/TagItem/TagItem.vue';
 import CategoryTreeItem from '../../components/CategoryTreeItem/CategoryTreeItem.vue';
 import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
@@ -231,6 +228,7 @@ export default {
         VSticky,
         Modal,
 
+        TagItem,
         CategoryTreeItem,
         CatalogFilter,
         CatalogProductCard,

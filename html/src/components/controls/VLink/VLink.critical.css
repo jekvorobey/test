@@ -11,4 +11,9 @@
         font-size: 12px;
         line-height: 20px;
     }
+
+    &--grey {
+        fill: var(--cl-grey);
+        color: var(--cl-grey);
+    }
 }

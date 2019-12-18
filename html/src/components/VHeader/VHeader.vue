@@ -9,7 +9,7 @@
         </div>
 
         <transition name="fade">
-            <div class="v-header__mask" v-if="showMask">
+            <div class="v-header__mask" v-if="showMask" @touchstart.self.prevent @touchmove.self.prevent>
                 <search-panel v-if="search" />
                 <nav-panel v-else-if="isMenuOpen" />
             </div>
