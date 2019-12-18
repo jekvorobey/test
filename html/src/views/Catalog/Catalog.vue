@@ -74,7 +74,7 @@
 
                     <transition-group tag="ul" class="catalog-view__main-tags" name="tag-item">
                         <tag-item
-                        v-for="(tag, index) in activeTags"
+                            v-for="(tag, index) in activeTags"
                             :data-index="index"
                             :key="tag.code"
                             :text="tag.name"
@@ -210,6 +210,7 @@ import {
     ACTIVE_CATEGORIES,
 } from '../../store/modules/Catalog/getters';
 
+import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants';
 import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/filter.svg';
 import '../../assets/images/sprites/cross-small.svg';
@@ -366,11 +367,20 @@ export default {
                     },
                 } = to;
 
+                const { query: { page: fromPage = 1 } = { page: 1 } } = from;
+
                 const filter = code && { category: code };
                 this.$progress.start();
                 await this[FETCH_ITEMS]({ filter, orderField, orderDirection, page, showMore });
+
                 this.setSortValue(orderField, orderDirection);
                 this.$progress.finish();
+
+                if (!showMore && page !== fromPage)
+                    window.scrollTo({
+                        top: MIN_SCROLL_VALUE + 1,
+                        behavior: 'smooth',
+                    });
             } catch (error) {
                 $logger.error('debounce_fetchCatalog', error);
                 this.$progress.fail();
