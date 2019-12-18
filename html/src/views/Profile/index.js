@@ -29,6 +29,10 @@ export default {
                 ...Promopage.routes,
                 ...ProPreferences.routes,
                 ...Seo.routes,
+                {
+                    path: '*',
+                    redirect: '/profile',
+                },
             ],
         },
     ],
