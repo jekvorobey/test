@@ -32,6 +32,8 @@ import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 import NavigationPanel from '../../components/profile/NavigationPanel/NavigationPanel.vue';
 
+import { $store } from '../../services/ServiceLocator';
+import profileModule, { NAME as PROFILE_MODULE } from '../../store/modules/Profile';
 import './Profile.css';
 
 export default {
@@ -56,6 +58,13 @@ export default {
     methods: {},
 
     beforeRouteEnter(to, from, next) {
+        // регистрируем модуль, если такого нет
+        const register = !!$store._modulesNamespaceMap[`${PROFILE_MODULE}/`];
+        if (!register)
+            $store.registerModule(PROFILE_MODULE, profileModule, {
+                preserveState: !!$store.state.profile,
+            });
+
         next();
     },
 

@@ -42,14 +42,14 @@
             </ul>
         </div>
 
-        <div class="navigation-panel__group">
+        <!-- <div class="navigation-panel__group">
             <p class="text-medium navigation-panel__group-hl">Обучение</p>
             <ul class="navigation-panel__group-list">
                 <li class="navigation-panel__group-item">
                     <v-link class="navigation-panel__group-link" to="/" />
                 </li>
             </ul>
-        </div>
+        </div> -->
 
         <v-link class="navigation-panel__group-link">Выйти</v-link>
     </div>
