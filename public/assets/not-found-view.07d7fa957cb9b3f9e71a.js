@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[27],{jGXi:function(n,t,e){"use strict";e.r(t);e("ySlP");var s={name:"not-found"},i=e("KHd+"),o=Object(i.a)(s,(function(){var n=this.$createElement;return(this._self._c||n)("section",{staticClass:"section not-found-view"},[this._v("\n    404\n")])}),[],!1,null,null,null);t.default=o.exports},ySlP:function(n,t,e){}}]);
