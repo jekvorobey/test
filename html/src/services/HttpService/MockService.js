@@ -865,39 +865,20 @@ const products = [
 const masterClasses = [
     {
         id: 1,
-        name: 'Мастер-класс по макияжу (Входной билет LITE)',
-        date: '3 сентября (пт), 12:00',
+        name: 'Мастер-класс по макияжу',
+        description: '3 сентября (пт), 12:00',
         author: 'Денис Карташев, визажист',
         type: 'masterclass',
-        price: '1 900 ₽',
+        price: 'от 1 900 ₽',
         oldPrice: null,
-        image: {
-            src: productMasterclass1,
-            sources: [
-                {
-                    srcset: `${productMasterclass1.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: productMasterclass1,
     },
     {
         id: 2,
-        name: 'Мастер-класс по макияжу (Входной билет LITE)',
-        date: '6 сентября (пн), 18:00',
-        author: 'Владимир Соколов, визажист',
+        name: 'Макияж для фотографии',
+        description: 'Видео-урок',
         type: 'masterclass',
-        price: '1 900 ₽',
-        oldPrice: '1 600 ₽',
-        image: {
-            src: productMasterclass2,
-            sources: [
-                {
-                    srcset: `${productMasterclass2.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: productMasterclass2,
     },
 ];
 
@@ -1901,6 +1882,10 @@ export default class MockHttpService extends HttpServiceBase {
 
                 case '/v1/brands':
                     setTimeout(() => resolve(brands), 300);
+                    break;
+
+                case '/v1/masterclasses':
+                    setTimeout(() => resolve(masterClasses), 300);
                     break;
 
                 case '/v1/product':

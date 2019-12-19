@@ -367,17 +367,32 @@
             </div>
         </section>
 
-        <section
-            v-if="product.masterClasses && product.masterClasses.length > 0"
-            class="section product-view__masterclass"
-        >
+        <section v-if="masterClasses && masterClasses.length > 0" class="section product-view__masterclass">
             <div class="container product-view__masterclass-container">
                 <h2 class="product-view__section-hl product-view__masterclass-hl">
                     {{ $t('product.title.masterClasses') }}
                 </h2>
                 <ul class="product-view__masterclass-list">
-                    <li class="product-view__masterclass-item" v-for="item in product.masterClasses" :key="item.id">
-                        <img class="blur-up lazyload" :data-src="item.image" />
+                    <li class="product-view__masterclass-item" v-for="item in masterClasses" :key="item.id">
+                        <div class="product-view__masterclass-card">
+                            <v-picture class="product-view__masterclass-card-img" :image="item.image" />
+                            <div class="product-view__masterclass-card-panel">
+                                <div class="text-bold product-view__masterclass-card-info">
+                                    <div class="text-bold product-view__masterclass-card-name">
+                                        {{ item.name }}
+                                    </div>
+                                    <div class="product-view__masterclass-card-author" v-if="item.author">
+                                        {{ item.author }}
+                                    </div>
+                                    <div class="product-view__masterclass-card-description" v-if="item.description">
+                                        {{ item.description }}
+                                    </div>
+                                </div>
+                                <div class="text-bold product-view__masterclass-card-price" v-if="item.price">
+                                    {{ item.price }}
+                                </div>
+                            </div>
+                        </div>
                     </li>
                 </ul>
                 <v-button class="btn--outline product-view__section-link product-view__masterclass-link">
@@ -578,6 +593,7 @@ import productModule, {
     NAME as PRODUCT_MODULE,
     PRODUCT,
     BANNERS,
+    MASTERCLASSES,
     FEATURED_PRODUCTS,
     INSTAGRAM_ITEMS,
 } from '../../store/modules/Product';
@@ -719,7 +735,7 @@ export default {
     computed: {
         ...mapState([SCROLL]),
         ...mapState('route', { code: state => state.params.code }),
-        ...mapState(PRODUCT_MODULE, [PRODUCT, BANNERS, FEATURED_PRODUCTS, INSTAGRAM_ITEMS]),
+        ...mapState(PRODUCT_MODULE, [PRODUCT, MASTERCLASSES, BANNERS, FEATURED_PRODUCTS, INSTAGRAM_ITEMS]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
 
         productGalleryOptions() {
