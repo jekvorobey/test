@@ -18,12 +18,12 @@
     &__img {
         display: block;
         width: 100%;
-        padding: 0 var(--gs);
+        padding: 0 calc(var(--gs) * 1.5);
         margin-bottom: calc(var(--gs) * 2);
         border-bottom: none;
 
         @media (--tablet) {
-            padding: 0 calc(var(--gs) * 1.5);
+            padding: 0 var(--gs);
             font-size: 14px;
             line-height: 22px;
             margin-bottom: var(--gs);
