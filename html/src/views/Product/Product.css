@@ -983,7 +983,6 @@
                 align-items: center;
                 margin-right: calc(var(--gs) * 30);
                 margin-left: auto;
-                border-bottom: 1px solid var(--cl-global);
 
                 @media (--tablet-lg) {
                     padding-top: var(--gs);
@@ -995,6 +994,10 @@
                     right: 0;
                     padding-top: 0;
                     top: 12px;
+                }
+
+                &-text {
+                    border-bottom: 1px solid var(--cl-global);
                 }
 
                 .icon {

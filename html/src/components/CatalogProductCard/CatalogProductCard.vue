@@ -34,8 +34,10 @@
         </div>
         <div class="catalog-product-card__body">
             <div class="catalog-product-card__prices">
-                <div class="text-bold catalog-product-card__price">{{ oldPrice ? `от ${price}` : price }}</div>
-                <div v-show="oldPrice" class="text-sm text-grey text-strike catalog-product-card__price">
+                <div v-if="price" class="text-bold catalog-product-card__price">
+                    {{ oldPrice ? `от ${price}` : price }}
+                </div>
+                <div v-if="oldPrice" class="text-sm text-grey text-strike catalog-product-card__price">
                     от {{ oldPrice }}
                 </div>
             </div>

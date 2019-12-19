@@ -179,11 +179,14 @@
                             Получить в
                             <a href="#">г. Москва&nbsp;<v-svg name="arrow-down" width="12" height="12"/></a>
                         </p>
-                        <p>Экспресс доставка курьером — 550 ₽, <span class="text-grey">сегодня, 21 июня</span></p>
-                        <p>Доставка курьером — 350 ₽, <span class="text-grey">завтра, 22 июня</span></p>
+                        <p>
+                            Экспресс доставка курьером — 550 ₽,
+                            <span class="text-grey">сегодня,&nbsp;21&nbsp;июня</span>
+                        </p>
+                        <p>Доставка курьером — 350 ₽, <span class="text-grey">завтра,&nbsp;22&nbsp;июня</span></p>
                         <p>
                             Из пунктов <a href="#">выдачи</a> или <a href="#">постаматов</a> — бесплатно,
-                            <span class="text-grey">23 июня</span>
+                            <span class="text-grey">23&nbsp;июня</span>
                         </p>
                     </div>
 
@@ -427,7 +430,7 @@
                         </div>
                         <div class="product-view__reviews-header-sort">
                             <span class="product-view__reviews-header-sort-text">Сначала новые</span>
-                            <v-svg name="arrow-down" width="12" height="12" />
+                            <v-svg name="arrow-down" width="16" height="16" />
                         </div>
                     </div>
 
@@ -540,8 +543,6 @@
                         :name="product.name"
                         :href="`/catalog/${product.categoryCodes[product.categoryCodes.length - 1]}/${product.code}`"
                         :image="product.image"
-                        :price="product.price"
-                        :old-price="product.oldPrice"
                         :tags="product.tags"
                         :rating="product.rating"
                         @addItem="ADD_CART_ITEM({ offerId: product.id })"
