@@ -32,6 +32,8 @@
 
         &-sum {
             white-space: nowrap;
+            line-height: 22px;
+            padding-top: 2px;
         }
 
         &-count {

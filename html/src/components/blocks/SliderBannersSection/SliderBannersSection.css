@@ -40,6 +40,22 @@
     &__slider {
         width: 100%;
 
+        @media (--desktop-lg) {
+            padding: 0 104px;
+        }
+
+        @media (--desktop) {
+            padding: 0 calc(var(--gs) * 5);
+        }
+
+        @media (--tablet-lg) {
+            padding: 0 calc(var(--gs) * 3);
+        }
+
+        @media (--tablet) {
+            padding: 0 calc(var(--gs) * 2);
+        }
+
         .v-slider__controls {
             display: none;
             left: calc(var(--gs) * 12);

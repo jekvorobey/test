@@ -1,14 +1,15 @@
 .product-review-card {
     display: flex;
+    position: relative;
 
     &__header {
         display: flex;
         flex-direction: column;
         width: 25%;
         line-height: 24px;
-        text-transform: uppercase;
 
         @media (--tablet-lg) {
+            position: relative;
             width: 100%;
             margin-bottom: calc(var(--gs) * 3);
         }
@@ -16,6 +17,7 @@
         &-name {
             font-weight: bold;
             letter-spacing: 0.02em;
+            text-transform: uppercase;
 
             @media (--tablet-lg) {
                 font-size: 14px;
@@ -27,9 +29,28 @@
         }
 
         &-date {
+            line-height: 24px;
             font-weight: 400;
             margin-left: calc(var(--gs) * 2);
             text-transform: none;
+        }
+
+        &-options {
+            position: absolute;
+            line-height: 24px;
+            right: 0;
+
+            z-index: 1;
+
+            @media (--tablet-min) {
+                top: calc(var(--gs) * 4);
+            }
+
+            @media (--tablet) {
+                line-height: 16px;
+                font-size: 14px;
+                bottom: 0;
+            }
         }
     }
 

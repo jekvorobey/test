@@ -18,9 +18,13 @@
         position: absolute;
         left: 50%;
         top: 50%;
-        width: calc(100% - 216px);
+        width: calc(100% - calc(var(--gs) * 27));
         transform: translate(-50%, -50%);
         color: var(--cl-white);
+
+        @media (--desktop-lg) {
+            width: calc(100% - calc(var(--gs) * 17));
+        }
 
         @media (--desktop) {
             height: calc(100% - calc(var(--gs) * 6));

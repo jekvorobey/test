@@ -101,10 +101,10 @@
                     <div class="product-view__header-detail-info">
                         <v-rating class="product-view__header-detail-info-rating" :value="product.rating">
                             <template v-slot:activeLabel>
-                                <v-svg name="star-small" width="12" height="12" />
+                                <v-svg name="star-small" width="16" height="16" />
                             </template>
                             <template v-slot:inactiveLabel>
-                                <v-svg name="star-empty-small" width="12" height="12" />
+                                <v-svg name="star-empty-small" width="16" height="16" />
                             </template>
                         </v-rating>
                         <div class="text-grey product-view__header-detail-info-review">
@@ -175,14 +175,20 @@
                     </div>
 
                     <div class="product-view__header-detail-section">
-                        <p>Получить в <a href="#">г. Москва</a></p>
-                        <p>Экспресс доставка курьером — 550 ₽, сегодня, 21 июня</p>
-                        <p>Доставка курьером — 350 ₽, завтра, 22 июня</p>
-                        <p>Из пунктов <a href="#">выдачи</a> или <a href="#">постаматов</a> — бесплатно, 23 июня</p>
+                        <p>
+                            Получить в
+                            <a href="#">г. Москва&nbsp;<v-svg name="arrow-down" width="12" height="12"/></a>
+                        </p>
+                        <p>Экспресс доставка курьером — 550 ₽, <span class="text-grey">сегодня, 21 июня</span></p>
+                        <p>Доставка курьером — 350 ₽, <span class="text-grey">завтра, 22 июня</span></p>
+                        <p>
+                            Из пунктов <a href="#">выдачи</a> или <a href="#">постаматов</a> — бесплатно,
+                            <span class="text-grey">23 июня</span>
+                        </p>
                     </div>
 
                     <div class="product-view__header-detail-section">
-                        <p class="text-bold">
+                        <p class="text-bold product-view__header-detail-section-hl">
                             Описание и характеристики
                         </p>
                         <p>
@@ -192,29 +198,13 @@
                         </p>
                         <a href="#">Подробнее</a>
                     </div>
-                    <div v-if="product.brand" class="product-view__header-detail-section">
-                        <span>
-                            <v-picture
-                                v-if="product.brand.image && product.brand.image.id"
-                                :image="product.brand.image"
-                                alt=""
-                            >
-                                <template v-slot:source="{ image, lazy }">
-                                    <source
-                                        :data-srcset="generateSourcePath(120, 24, image.id, 'webp')"
-                                        type="image/webp"
-                                    />
-                                </template>
-                                <template v-slot:fallback="{ image, lazy, alt }">
-                                    <img
-                                        class="blur-up lazyload v-picture__img"
-                                        :data-src="generateSourcePath(120, 24, image.id, image.sourceExt)"
-                                        :alt="alt"
-                                    />
-                                </template>
-                            </v-picture>
-                            <router-link :to="{ path: `/brand/${product.brand.code}` }">На страницу бренда</router-link>
-                        </span>
+                    <div class="product-view__header-detail-section">
+                        <div class="product-view__header-detail-brand">
+                            <img class="product-view__header-detail-brand-img" :src="mockImg" />
+                            <router-link class="product-view__header-detail-brand-link" to="/">
+                                На страницу бренда
+                            </router-link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -223,11 +213,20 @@
         <section class="section product-view__section">
             <div class="container product-view__socials">
                 <div class="product-view__socials-inner">
-                    <span class="text-bold">Поделиться</span>&nbsp;
-                    <div>
-                        <v-svg name="vkontakte-bw" width="22" height="22" />
-                        <v-svg name="facebook-bw" width="22" height="22" />
-                        <v-svg name="instagram-bw" width="22" height="22" />
+                    <div class="product-view__socials-statistics">
+                        <div>
+                            <v-svg name="cart-empty" width="24" height="24" />
+                        </div>
+                        <div>
+                            <div>32 человека уже купили это товар</div>
+                            <div class="text-grey">за последние 2 месяца</div>
+                        </div>
+                    </div>
+                    <div class="product-view__socials-share">
+                        <span class="text-bold">Поделиться</span>&nbsp;
+                        <v-svg name="vkontakte-bw" width="24" height="24" />
+                        <v-svg name="facebook-bw" width="24" height="24" />
+                        <v-svg name="instagram-bw" width="24" height="24" />
                     </div>
                 </div>
             </div>
@@ -412,22 +411,23 @@
                                 {{ $t('product.reviews.makeReview') }}
                             </v-button>
                         </h2>
-                        <div class="product-view__section-header-rating">
+                        <div class="product-view__reviews-header-rating">
                             <span class="product-view__reviews-header-rating-count">
                                 {{ $t('product.reviews.averageRating') }}&nbsp;
                                 {{ product.reviews.middleRating }}
                             </span>
                             <v-rating :value="product.reviews.middleRating">
                                 <template v-slot:activeLabel>
-                                    <v-svg name="star-small" width="12" height="12" />
+                                    <v-svg name="star-small" width="16" height="16" />
                                 </template>
                                 <template v-slot:inactiveLabel>
-                                    <v-svg name="star-empty-small" width="12" height="12" />
+                                    <v-svg name="star-empty-small" width="16" height="16" />
                                 </template>
                             </v-rating>
                         </div>
                         <div class="product-view__reviews-header-sort">
-                            Сначала новые <v-svg name="arrow-down" width="12" height="12" />
+                            <span class="product-view__reviews-header-sort-text">Сначала новые</span>
+                            <v-svg name="arrow-down" width="12" height="12" />
                         </div>
                     </div>
 
@@ -549,6 +549,7 @@
                 </div>
             </div>
         </section>
+
         <transition :name="pricePanelAnimation" appear>
             <product-price-panel
                 class="product-view__top-panel"
@@ -615,6 +616,7 @@ import '../../assets/images/sprites/socials/vkontakte-bw.svg';
 import '../../assets/images/sprites/socials/facebook-bw.svg';
 import '../../assets/images/sprites/socials/instagram-bw.svg';
 
+import '../../assets/images/sprites/cart-empty.svg';
 import '../../assets/images/sprites/star-empty-small.svg';
 import '../../assets/images/sprites/star-small.svg';
 import '../../assets/images/sprites/arrow-small.svg';

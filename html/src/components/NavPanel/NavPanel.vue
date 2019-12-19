@@ -7,15 +7,33 @@
                         <v-link class="nav-panel__main-list-title" :to="`/catalog/${category.code}`">
                             {{ category.name }}
                         </v-link>
-                        <ul>
+                        <v-expander
+                            v-if="category.items && category.items.length > 5"
+                            class="nav-panel__main-list-expander"
+                            :min-height="160"
+                        >
+                            <ul>
+                                <li v-for="item in category.items" :key="item.id">
+                                    <v-link class="nav-panel__main-list-link" :to="`/catalog/${item.code}`">
+                                        {{ item.name }}
+                                    </v-link>
+                                </li>
+                            </ul>
+
+                            <template v-slot:btn="{ isExpanded }">
+                                {{ isExpanded ? 'Скрыть' : 'Показать все' }}
+                            </template>
+                        </v-expander>
+                        <ul v-else>
                             <li v-for="item in category.items" :key="item.id">
-                                <v-link class="nav-panel__main-list-child" :to="`/catalog/${item.code}`">
+                                <v-link class="nav-panel__main-list-link" :to="`/catalog/${item.code}`">
                                     {{ item.name }}
                                 </v-link>
                             </li>
                         </ul>
                     </li>
                 </ul>
+
                 <catalog-banner-card
                     class="nav-panel__main-banner"
                     :banner-id="banner.id"
@@ -31,6 +49,7 @@
 
 <script>
 import VLink from '../controls/VLink/VLink.vue';
+import VExpander from '../VExpander/VExpander.vue';
 import CatalogBannerCard from '../CatalogBannerCard/CatalogBannerCard.vue';
 
 import { CATEGORIES, BANNER, IS_MENU_OPEN } from '../../store';
@@ -43,6 +62,7 @@ export default {
 
     components: {
         VLink,
+        VExpander,
         CatalogBannerCard,
     },
 

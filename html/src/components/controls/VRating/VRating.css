@@ -3,15 +3,12 @@
     flex-flow: row nowrap;
     align-items: flex-start;
     line-height: 1em;
-
-    span + span {
-        margin-left: calc(var(--gs) / 2);
-    }
 }
+
 .vue-stars label {
     display: block;
     padding: 0 !important;
-    width: 12px;
+    width: 16px;
     text-align: center;
     color: #fd0;
     text-shadow: 0 0 0.3em #ff0;

@@ -42,10 +42,10 @@
             <div class="link--sm catalog-product-card__link">{{ name }}</div>
             <v-rating class="catalog-product-card__rating" :value="rating" readonly>
                 <template v-slot:activeLabel>
-                    <v-svg name="star-small" width="12" height="12" />
+                    <v-svg name="star-small" width="16" height="16" />
                 </template>
                 <template v-slot:inactiveLabel>
-                    <v-svg name="star-empty-small" width="12" height="12" />
+                    <v-svg name="star-empty-small" width="16" height="16" />
                 </template>
             </v-rating>
         </div>

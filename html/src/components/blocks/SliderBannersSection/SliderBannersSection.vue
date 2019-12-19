@@ -1,7 +1,7 @@
 <template>
     <section class="section">
-        <div class="container slider-banners-section">
-            <v-slider class="slider-banners-section__slider" name="banners" :options="sliderOptions">
+        <div class="slider-banners-section" :style="{ 'background-color': '#8CA9BE' }">
+            <v-slider class="container slider-banners-section__slider" name="banners" :options="sliderOptions">
                 <landing-banner-card
                     v-for="banner in computedBanners"
                     class="swiper-slide slider-banners-section__card"
