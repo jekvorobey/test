@@ -75,9 +75,9 @@
             </ul>
         </info-panel>
 
-        <info-panel class="account-view__panel" header="Социальные сети">
+        <info-panel class="account-view__panel" header="Реквизиты">
             <template v-slot:controls>
-                <v-link class="account-view__panel-link" tag="button">
+                <v-link class="account-view__panel-link" tag="button" @click="onOpenDetailsModal">
                     <v-svg name="edit" width="16" height="16" />
                     &nbsp;&nbsp;Изменить
                 </v-link>
@@ -120,6 +120,10 @@
                 </info-row>
             </ul>
         </info-panel>
+
+        <!-- <transition name="fade">
+            <details-modal v-if="isDetailsOpen" />
+        </transition> -->
     </section>
 </template>
 
@@ -130,8 +134,14 @@ import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
 import ImagePicker from '../../../components/profile/ImagePicker/ImagePicker.vue';
 
+import DetailsModal, { NAME as DETAILS_MODAL_NAME } from '../../../components/profile/DetailsModal/DetailsModal.vue';
+
+import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+
 import '../../../assets/images/sprites/edit.svg';
 import './Account.css';
+import { mapActions, mapState } from 'vuex';
 
 export default {
     name: 'account',
@@ -143,17 +153,29 @@ export default {
         InfoRow,
         InfoPanel,
         ImagePicker,
+
+        DetailsModal,
     },
 
     data() {
         return {};
     },
 
-    computed: {},
+    computed: {
+        ...mapState(MODAL_MODULE, {
+            isDetailsOpen: state => state[MODALS][DETAILS_MODAL_NAME] && state[MODALS][DETAILS_MODAL_NAME].open,
+        }),
+    },
 
     watch: {},
 
     methods: {
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        onOpenDetailsModal() {
+            this[CHANGE_MODAL_STATE]({ name: DETAILS_MODAL_NAME, open: true });
+        },
+
         onImageChanged(image) {},
     },
 

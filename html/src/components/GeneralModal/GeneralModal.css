@@ -25,11 +25,19 @@
         padding-top: calc(var(--gs) * 1.5);
         padding-bottom: calc(var(--gs) * 1.5);
 
-        @media (--tablet-lg) and (--tablet-min) {
+        @media (--tablet-lg) {
             color: var(--cl-white);
             fill: var(--cl-white);
+        }
+
+        @media (--tablet-lg) and (--tablet-min) {
             padding-top: calc(var(--gs) * 2.5);
             padding-bottom: calc(var(--gs) * 2.5);
+        }
+
+        @media (--tablet) {
+            padding-top: calc(var(--gs) * 1.5);
+            padding-bottom: calc(var(--gs) * 1.5);
         }
 
         &-btn {

@@ -23,19 +23,11 @@
         color: var(--cl-white);
 
         @media (--desktop-lg) {
-            width: calc(100% - calc(var(--gs) * 17));
+            width: 100%;
         }
 
         @media (--desktop) {
             height: calc(100% - calc(var(--gs) * 6));
-        }
-
-        @media (--tablet-lg) {
-            width: calc(100% - calc(var(--gs) * 6));
-        }
-
-        @media (--tablet) {
-            width: calc(100% - calc(var(--gs) * 4));
         }
 
         &-container {

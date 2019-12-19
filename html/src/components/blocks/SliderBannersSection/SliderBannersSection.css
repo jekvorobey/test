@@ -41,19 +41,19 @@
         width: 100%;
 
         @media (--desktop-lg) {
-            padding: 0 104px;
+            padding: 0 190px !important;
         }
 
         @media (--desktop) {
-            padding: 0 calc(var(--gs) * 5);
+            padding: 0 calc(var(--gs) * 5) !important;
         }
 
         @media (--tablet-lg) {
-            padding: 0 calc(var(--gs) * 3);
+            padding: 0 calc(var(--gs) * 3) !important;
         }
 
         @media (--tablet) {
-            padding: 0 calc(var(--gs) * 2);
+            padding: 0 calc(var(--gs) * 2) !important;
         }
 
         .v-slider__controls {
