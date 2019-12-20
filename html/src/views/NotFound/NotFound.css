@@ -1,2 +1,8 @@
-.not-found {
+.not-found-view {
+    &__notify {
+        text-align: center;
+        padding: calc(var(--gs) * 20);
+        font-size: 40px;
+        line-height: 56px;
+    }
 }
