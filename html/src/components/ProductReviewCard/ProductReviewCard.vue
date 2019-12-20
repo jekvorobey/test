@@ -4,7 +4,7 @@
             <h4 class="product-review-card__header-name">
                 {{ name }} <span class="text-grey text-sm product-review-card__header-date">{{ computedDate }}</span>
             </h4>
-            <v-rating class="product-review-card__header-rating" :value="rating">
+            <v-rating class="product-review-card__header-rating" :value="rating" readonly>
                 <template v-slot:activeLabel>
                     <v-svg name="star-small" width="16" height="16" />
                 </template>

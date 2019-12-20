@@ -99,7 +99,7 @@
                         {{ product.title }}
                     </h1>
                     <div class="product-view__header-detail-info">
-                        <v-rating class="product-view__header-detail-info-rating" :value="product.rating">
+                        <v-rating class="product-view__header-detail-info-rating" :value="product.rating" readonly>
                             <template v-slot:activeLabel>
                                 <v-svg name="star-small" width="16" height="16" />
                             </template>
@@ -419,7 +419,7 @@
                                 {{ $t('product.reviews.averageRating') }}&nbsp;
                                 {{ product.reviews.middleRating }}
                             </span>
-                            <v-rating :value="product.reviews.middleRating">
+                            <v-rating :value="product.reviews.middleRating" readonly>
                                 <template v-slot:activeLabel>
                                     <v-svg name="star-small" width="16" height="16" />
                                 </template>
