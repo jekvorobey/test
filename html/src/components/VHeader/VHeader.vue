@@ -20,7 +20,7 @@
         </transition>
 
         <transition name="fade">
-            <login-modal @close="$router.push({ path: '/profile' })" />
+            <login-modal @login="$router.push({ path: '/profile' })" />
         </transition>
     </header>
 </template>
