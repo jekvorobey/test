@@ -4,5 +4,9 @@
         padding: calc(var(--gs) * 20);
         font-size: 40px;
         line-height: 56px;
+
+        @media (--tablet-lg) {
+            padding: calc(var(--gs) * 20) 0;
+        }
     }
 }
