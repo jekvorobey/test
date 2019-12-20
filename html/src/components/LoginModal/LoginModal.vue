@@ -77,6 +77,7 @@ export default {
             try {
                 await this[LOGIN]({ email: this.email, password: this.password });
                 this[FETCH_CART_DATA]();
+                this.$emit('login');
                 this.onClose();
             } catch (error) {
                 console.log(error);

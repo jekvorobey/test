@@ -102,7 +102,7 @@
             </ul>
         </info-panel>
 
-        <info-panel class="account-view__panel" header="Пароль">
+        <info-panel class="account-view__panel" header="Сертификаты">
             <template v-slot:controls>
                 <v-link class="account-view__panel-link" tag="button">
                     <v-svg name="edit" width="16" height="16" />
