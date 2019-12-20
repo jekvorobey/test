@@ -38,5 +38,5 @@ router.onReady(() =>
     app.$mount('#app')
 );
 
-// service worker
-if (navigator.serviceWorker) navigator.serviceWorker.register('/service-worker.js');
+// // service worker
+// if (navigator.serviceWorker) navigator.serviceWorker.register('/service-worker.js');
