@@ -16,11 +16,31 @@
             </div>
             <div class="referal-view__panel">
                 <div class="referal-view__panel-item">
-                    <img :src="referalGroup1" alt="" />
+                    <v-arc-counter
+                        stroke="#BDBDBD"
+                        activeStroke="#141116"
+                        text="23"
+                        :start="-120"
+                        :end="120"
+                        :activeWidth="16"
+                        :strokeWidth="16"
+                        :dashCount="30"
+                        :activeCount="23"
+                    />
                     <div class="text-grey">Новых рефералов</div>
                 </div>
                 <div class="referal-view__panel-item">
-                    <img :src="referalGroup2" alt="" />
+                    <v-arc-counter
+                        stroke="#BDBDBD"
+                        activeStroke="#141116"
+                        text="750 860 ₽"
+                        :start="-120"
+                        :end="120"
+                        :activeWidth="16"
+                        :strokeWidth="16"
+                        :dashCount="10"
+                        :activeCount="7"
+                    />
                     <div class="text-grey">Сумма заказов</div>
                 </div>
             </div>
@@ -119,6 +139,7 @@
 <script>
 import VButton from '../../../components/controls/VButton/VButton.vue';
 import VPagination from '../../../components/controls/VPagination/VPagination.vue';
+import VArcCounter from '../../../components/controls/VArcCounter/VArcCounter.vue';
 
 import referalProduct1 from '../../../assets/images/mock/referalProduct1.png';
 import referalProduct2 from '../../../assets/images/mock/referalProduct2.png';
@@ -134,6 +155,7 @@ export default {
     components: {
         VButton,
         VPagination,
+        VArcCounter,
     },
 
     data() {

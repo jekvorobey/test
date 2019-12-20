@@ -34,18 +34,22 @@
         }
 
         &:last-child {
-            padding: calc(var(--gs) * 2) calc(var(--gs) * 3);
+            padding: 0 calc(var(--gs) * 7);
+            padding-top: calc(var(--gs) * 3);
+            padding-bottom: calc(var(--gs) * 2);
+
             align-items: center;
             justify-content: space-between;
         }
 
-        &:last-child &-item {
-            text-align: center;
-            max-width: calc(50% - var(--gs));
-        }
-
         &-item {
             flex: 1;
+        }
+
+        &:last-child &-item {
+            flex: none;
+            text-align: center;
+            width: 120px;
         }
 
         &-level {
