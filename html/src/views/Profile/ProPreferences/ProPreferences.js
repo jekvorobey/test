@@ -13,6 +13,7 @@ export default {
      */
     routes: [
         {
+            name: 'ProPreferences',
             path: 'pro-preferences',
             component: ProPreferencesAsync,
         },

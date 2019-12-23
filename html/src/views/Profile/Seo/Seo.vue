@@ -1,6 +1,6 @@
 <template>
     <section class="section seo-view">
-        <h2 class="seo-view__hl">Товары для продвижения</h2>
+        <h2 class="seo-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
         <info-panel class="seo-view__panel" header="Лаки для ногтей Mood">
             <template v-slot:controls>
                 <div class="seo-view__panel-links">

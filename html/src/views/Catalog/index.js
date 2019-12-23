@@ -20,6 +20,7 @@ export default {
             },
         },
         {
+            name: 'Catalog',
             path: '/catalog/:code?',
             component: CatalogAsync,
             meta: {

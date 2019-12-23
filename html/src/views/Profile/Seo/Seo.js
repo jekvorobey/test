@@ -13,6 +13,7 @@ export default {
      */
     routes: [
         {
+            name: 'Seo',
             path: 'seo',
             component: SeoAsync,
         },

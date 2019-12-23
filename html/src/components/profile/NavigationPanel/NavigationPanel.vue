@@ -1,56 +1,16 @@
 <template>
     <div class="navigation-panel">
-        <div class="navigation-panel__group">
-            <p class="text-medium navigation-panel__group-hl">Мой профиль</p>
+        <div class="navigation-panel__group" v-for="group in groups" :key="group.id">
+            <p class="text-medium navigation-panel__group-hl">{{ group.name }}</p>
             <ul class="navigation-panel__group-list">
-                <li class="navigation-panel__group-item">
-                    <v-link class="navigation-panel__group-link" to="/profile" exact>
-                        Личные данные
+                <li class="navigation-panel__group-item" v-for="route in group.routes" :key="route">
+                    <v-link class="navigation-panel__group-link" :to="{ name: route }" exact>
+                        {{ $t(`profile.routes.${route}`) }}
                     </v-link>
                 </li>
             </ul>
         </div>
-
-        <div class="navigation-panel__group">
-            <p class="text-medium navigation-panel__group-hl">Мой бизнес</p>
-            <ul class="navigation-panel__group-list">
-                <li class="navigation-panel__group-item">
-                    <v-link class="navigation-panel__group-link" to="/profile/referal">
-                        Реферальная программа
-                    </v-link>
-                </li>
-                <li class="navigation-panel__group-item">
-                    <v-link class="navigation-panel__group-link" to="/profile/pro-preferences">
-                        Мои профессиональные предпочтения
-                    </v-link>
-                </li>
-                <li class="navigation-panel__group-item">
-                    <v-link class="navigation-panel__group-link" to="/profile/promopage">
-                        Моя промостраница
-                    </v-link>
-                </li>
-                <li class="navigation-panel__group-item">
-                    <v-link class="navigation-panel__group-link" to="/profile/seo">
-                        Товары для продвижения
-                    </v-link>
-                </li>
-                <li class="navigation-panel__group-item">
-                    <v-link class="navigation-panel__group-link" to="/profile/promocodes">
-                        Мои промокоды
-                    </v-link>
-                </li>
-            </ul>
-        </div>
-
-        <div class="navigation-panel__group">
-            <!-- <p class="text-medium navigation-panel__group-hl">Обучение</p>
-            <ul class="navigation-panel__group-list">
-                <li class="navigation-panel__group-item">
-                    <v-link class="navigation-panel__group-link" to="/" />
-                </li>
-            </ul> -->
-        </div>
-
+        <br />
         <v-link class="navigation-panel__group-link" to="/">Выйти</v-link>
     </div>
 </template>
@@ -65,6 +25,28 @@ export default {
 
     components: {
         VLink,
+    },
+
+    computed: {
+        groups() {
+            return [
+                {
+                    id: 1,
+                    name: this.$t('profile.groups.profile'),
+                    routes: ['Account'],
+                },
+                {
+                    id: 2,
+                    name: this.$t('profile.groups.business'),
+                    routes: ['Referal', 'ProPreferences', 'Promopage', 'Seo', 'Promocodes'],
+                },
+                // {
+                //     id: 3,
+                //     name: $t('profile.groups.training'),
+                //     routes: [],
+                // },
+            ];
+        },
     },
 };
 </script>

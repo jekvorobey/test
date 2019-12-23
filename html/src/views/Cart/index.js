@@ -13,6 +13,7 @@ export default {
      */
     routes: [
         {
+            name: 'Cart',
             path: '/cart',
             component: CartAsync,
         },

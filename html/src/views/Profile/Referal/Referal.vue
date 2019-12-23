@@ -1,6 +1,6 @@
 <template>
     <section class="section referal-view">
-        <h2 class="referal-view__hl">Реферальная программа</h2>
+        <h2 class="referal-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
         <div class="referal-view__panels">
             <div class="referal-view__panel">
                 <div class="referal-view__panel-item">

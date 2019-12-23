@@ -1,6 +1,6 @@
 <template>
     <section class="section pro-preferences-view">
-        <h2 class="pro-preferences-view__hl">Мои профессиональные предпочтения</h2>
+        <h2 class="pro-preferences-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
         <info-panel class="pro-preferences-view__panel" header="Бренды">
             <template v-slot:controls>
                 <div class="pro-preferences-view__panel-links">

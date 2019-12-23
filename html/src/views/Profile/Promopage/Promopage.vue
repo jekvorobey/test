@@ -2,7 +2,7 @@
     <section class="section promopage-view">
         <div class="promopage-view__header">
             <h2 class="promopage-view__hl">
-                Моя промостраница
+                {{ $t(`profile.routes.${$route.name}`) }}
             </h2>
             <span class="text-grey text-sm">{{ products.length }} продуктов</span>
         </div>
