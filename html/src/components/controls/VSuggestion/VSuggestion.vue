@@ -1,6 +1,6 @@
 <template>
     <div class="v-suggestions">
-        <label>
+        <label class="v-suggestions__label">
             <slot />
         </label>
         <input

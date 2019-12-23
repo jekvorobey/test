@@ -63,7 +63,9 @@ export default {
     mixins: [inputMixin],
     props: {
         value: {},
+
         type: { type: String, default: inputTypes.text },
+
         tag: {
             type: String,
             default: 'input',
@@ -84,6 +86,11 @@ export default {
 
         maxHeight: {
             type: [Number, String],
+        },
+
+        autoHeight: {
+            type: Boolean,
+            default: true,
         },
 
         error: String,

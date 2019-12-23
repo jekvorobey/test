@@ -13,6 +13,7 @@ export default {
      */
     routes: [
         {
+            name: 'Promopage',
             path: 'promopage',
             component: PromopageAsync,
         },

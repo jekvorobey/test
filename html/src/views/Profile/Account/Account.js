@@ -13,6 +13,7 @@ export default {
      */
     routes: [
         {
+            name: 'Account',
             path: '',
             component: AccountAsync,
         },

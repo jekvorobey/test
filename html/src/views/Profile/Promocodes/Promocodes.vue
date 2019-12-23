@@ -1,6 +1,6 @@
 <template>
     <section class="section promocodes-view">
-        <h2 class="promocodes-view__hl">Мои промокоды</h2>
+        <h2 class="promocodes-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
 
         <table class="promocodes-view__table">
             <colgroup>

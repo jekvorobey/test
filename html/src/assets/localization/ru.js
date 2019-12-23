@@ -119,4 +119,21 @@ export default {
             },
         },
     },
+
+    profile: {
+        groups: {
+            profile: 'Личный кабинет',
+            business: 'Мой бизнес',
+            training: 'Обучение',
+        },
+
+        routes: {
+            Account: 'Личный кабинет',
+            Referal: 'Реферальная программа',
+            ProPreferences: 'Мои профессиональные предпочтения',
+            Promopage: 'Моя промостраница',
+            Promocodes: 'Моя промокоды',
+            Seo: 'Товары для продвижения',
+        },
+    },
 };

@@ -13,6 +13,7 @@ export default {
      */
     routes: [
         {
+            name: 'Promocodes',
             path: 'promocodes',
             component: PromocodesAsync,
         },

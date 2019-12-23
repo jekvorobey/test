@@ -13,6 +13,7 @@ export default {
      */
     routes: [
         {
+            name: 'Product',
             path: '/catalog/:categoryCode/:code',
             component: ProductAsync,
         },

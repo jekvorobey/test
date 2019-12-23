@@ -1,6 +1,6 @@
 <template>
     <section class="section account-view">
-        <h2 class="account-view__hl">Профиль</h2>
+        <h2 class="account-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
         <image-picker class="account-view__avatar" @fileChanged="onImageChanged" />
         <info-panel class="account-view__panel" header="Личные данные">
             <template v-slot:controls>
@@ -121,9 +121,9 @@
             </ul>
         </info-panel>
 
-        <!-- <transition name="fade">
+        <transition name="fade">
             <details-modal v-if="isDetailsOpen" />
-        </transition> -->
+        </transition>
     </section>
 </template>
 
@@ -136,12 +136,17 @@ import ImagePicker from '../../../components/profile/ImagePicker/ImagePicker.vue
 
 import DetailsModal, { NAME as DETAILS_MODAL_NAME } from '../../../components/profile/DetailsModal/DetailsModal.vue';
 
+import { mapActions, mapState } from 'vuex';
+import { $store } from '../../../services/ServiceLocator';
+
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
+import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
+import { SET_BREADCRUMB } from '../../../store/modules/Profile/actions';
+
 import '../../../assets/images/sprites/edit.svg';
 import './Account.css';
-import { mapActions, mapState } from 'vuex';
 
 export default {
     name: 'account',
@@ -157,36 +162,20 @@ export default {
         DetailsModal,
     },
 
-    data() {
-        return {};
-    },
-
     computed: {
         ...mapState(MODAL_MODULE, {
             isDetailsOpen: state => state[MODALS][DETAILS_MODAL_NAME] && state[MODALS][DETAILS_MODAL_NAME].open,
         }),
     },
 
-    watch: {},
-
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        onImageChanged() {},
 
         onOpenDetailsModal() {
             this[CHANGE_MODAL_STATE]({ name: DETAILS_MODAL_NAME, open: true });
         },
-
-        onImageChanged(image) {},
     },
-
-    beforeRouteEnter(to, from, next) {
-        next();
-    },
-
-    beforeRouteUpdate(to, from, next) {
-        next();
-    },
-
-    beforeMount() {},
 };
 </script>

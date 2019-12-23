@@ -4,6 +4,19 @@
     display: inline-block;
     padding: 0;
 
+    &__label {
+        display: flex;
+        margin-bottom: var(--gs);
+        cursor: text;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 24px;
+
+        &:empty {
+            display: none;
+        }
+    }
+
     .multiselect__tags {
         border: 1px solid var(--cl-global);
         padding: 3px 40px 3px 16px;

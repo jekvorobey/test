@@ -14,6 +14,7 @@ export default {
     routes: [
         {
             path: 'referal',
+            name: 'Referal',
             component: ReferalAsync,
         },
     ],

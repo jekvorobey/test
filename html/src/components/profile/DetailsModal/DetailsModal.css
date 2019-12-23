@@ -1,11 +1,72 @@
 .details-modal {
     .modal-body {
         padding: calc(var(--gs) * 3);
+
         @media (--tablet) {
             padding: 0;
         }
     }
 
+    &__hl {
+        @media (--tablet) {
+            display: none;
+        }
+    }
+
     &__form {
+        display: flex;
+        flex-wrap: wrap;
+
+        @media (--tablet) {
+            padding: calc(var(--gs) * 2);
+        }
+
+        &-row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+
+            @media (--tablet) {
+                flex-wrap: wrap;
+            }
+        }
+
+        &-column {
+            width: calc(50% - calc(var(--gs) * 1.5));
+
+            @media (--tablet) {
+                width: 100%;
+            }
+        }
+
+        &-textarea {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+            .v-input__container {
+                height: 100%;
+            }
+        }
+    }
+
+    &__submit {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        @media (--tablet) {
+            position: sticky;
+            bottom: 0;
+            padding: var(--gs) calc(var(--gs) * 2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            background-color: var(--cl-white);
+        }
+
+        &-btn {
+            @media (--tablet) {
+                width: 100%;
+            }
+        }
     }
 }

@@ -5,8 +5,11 @@
                 <breadcrumb-item key="main" to="/">
                     Главная
                 </breadcrumb-item>
-                <breadcrumb-item key="all" to="/profile">
-                    Личный кабинет
+                <breadcrumb-item key="account" :to="{ name: 'Account' }">
+                    {{ $t('profile.routes.Account') }}
+                </breadcrumb-item>
+                <breadcrumb-item v-if="$route.name !== 'Account'" :key="$route.name" :to="$route.path">
+                    {{ $t(`profile.routes.${$route.name}`) }}
                 </breadcrumb-item>
             </breadcrumbs>
         </div>
@@ -35,7 +38,9 @@ import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/Breadcru
 import NavigationPanel from '../../components/profile/NavigationPanel/NavigationPanel.vue';
 
 import { $store } from '../../services/ServiceLocator';
+import { mapState } from 'vuex';
 import profileModule, { NAME as PROFILE_MODULE } from '../../store/modules/Profile';
+
 import './Profile.css';
 
 export default {
@@ -49,16 +54,6 @@ export default {
         NavigationPanel,
     },
 
-    data() {
-        return {};
-    },
-
-    computed: {},
-
-    watch: {},
-
-    methods: {},
-
     beforeRouteEnter(to, from, next) {
         // регистрируем модуль, если такого нет
         const register = !!$store._modulesNamespaceMap[`${PROFILE_MODULE}/`];
@@ -69,11 +64,5 @@ export default {
 
         next();
     },
-
-    beforeRouteUpdate(to, from, next) {
-        next();
-    },
-
-    beforeMount() {},
 };
 </script>

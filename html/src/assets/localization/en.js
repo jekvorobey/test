@@ -119,4 +119,21 @@ export default {
             },
         },
     },
+
+    profile: {
+        groups: {
+            profile: 'My Profile',
+            business: 'My Business',
+            training: 'Training',
+        },
+
+        routes: {
+            Account: 'Account',
+            Referal: 'Referal Program',
+            ProPreferences: 'My Professional Preferences',
+            Promopage: 'My Promopage',
+            Promocodes: 'My Promocodes',
+            Seo: 'Goods for Promotion',
+        },
+    },
 };
