@@ -213,8 +213,8 @@ fieldset {
 }
 
 :--input {
-    font-size: 14px;
-    line-height: 22px;
+    font-size: 16px;
+    line-height: 24px;
     border-radius: 0;
 
     /* Прячет крестик очистки поля в IE */

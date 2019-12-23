@@ -1,20 +1,40 @@
 <template>
     <general-modal class="details-modal" header="Реквизиты" @close="onClose" :is-mobile="isTablet">
         <template v-slot:content>
-            <h4>Реквизиты</h4>
-            <form>
-                <v-input>Наименование ИП</v-input>
-                <v-input>Банк</v-input>
-                <v-input>ИНН</v-input>
-                <v-input>Корреспондентский счет банка</v-input>
-                <v-input>Расчетный счет</v-input>
-                <v-input>БИК</v-input>
-                <v-input>Юридический адрес</v-input>
+            <h4 class="details-modal__hl">Реквизиты</h4>
+            <form class="details-modal__form">
+                <div class="details-modal__form-row">
+                    <v-input class="details-modal__form-column">Наименование ИП</v-input>
+                    <v-input class="details-modal__form-column">Банк</v-input>
+                </div>
+
+                <div class="details-modal__form-row">
+                    <v-input class="details-modal__form-column">ИНН</v-input>
+                    <v-input class="details-modal__form-column">Корреспондентский счет банка</v-input>
+                </div>
+
+                <div class="details-modal__form-row">
+                    <div class="details-modal__form-column">
+                        <v-input>Расчетный счет</v-input>
+                        <v-input>БИК</v-input>
+                    </div>
+                    <div class="details-modal__form-column">
+                        <v-input class="details-modal__form-textarea" tag="textarea" :auto-height="isTablet">
+                            Юридический адрес
+                        </v-input>
+                    </div>
+                </div>
             </form>
+            <div class="details-modal__submit">
+                <v-button class="details-modal__submit-btn" @click="onClose">
+                    Сохранить
+                </v-button>
+            </div>
         </template>
     </general-modal>
 </template>
 <script>
+import VButton from '../../controls/VButton/VButton.vue';
 import VInput from '../../controls/VInput/VInput.vue';
 import GeneralModal from '../../GeneralModal/GeneralModal.vue';
 import validationMixin, { required } from '../../../plugins/validation';
@@ -31,6 +51,7 @@ export default {
     mixins: [validationMixin],
 
     components: {
+        VButton,
         VInput,
         GeneralModal,
     },

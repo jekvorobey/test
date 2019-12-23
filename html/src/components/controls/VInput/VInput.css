@@ -60,7 +60,16 @@
     }
 
     &__label {
+        display: flex;
+        margin-bottom: var(--gs);
         cursor: text;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 24px;
+
+        &:empty {
+            display: none;
+        }
     }
 
     &__input {
@@ -69,8 +78,6 @@
         padding: var(--gs) calc(var(--gs) * 2);
         border: 1px solid var(--cl-global);
         color: var(--cl-global);
-        font-size: 0.875rem;
-        line-height: 1.375rem;
         background-color: var(--cl-white);
         transition: all var(--time) var(--timing-function);
         overflow: hidden;
