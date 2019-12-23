@@ -27,6 +27,10 @@
                         :dashCount="30"
                         :activeCount="23"
                     />
+                    <div class="text-grey referal-view__panel-item-label">
+                        <span>0</span>
+                        <span>30</span>
+                    </div>
                     <div class="text-grey">Новых рефералов</div>
                 </div>
                 <div class="referal-view__panel-item">
@@ -41,17 +45,22 @@
                         :dashCount="10"
                         :activeCount="7"
                     />
+                    <div class="text-grey referal-view__panel-item-label">
+                        <span>0</span>
+                        <span>1 млн</span>
+                    </div>
                     <div class="text-grey">Сумма заказов</div>
                 </div>
             </div>
         </div>
 
-        <div class="referal-view__graph">
-            <img :src="graph" alt="" />
-        </div>
+        <section class="referal-view__section referal-view__graph">
+            <h3 class="referal-view__section-hl">Новые рефералы</h3>
+            <v-chart v-if="isMounted" type="line" :options="chartOptions" :series="series" height="350px" />
+        </section>
 
         <section class="referal-view__section">
-            <h3 class="referal-view__section-hl">Заказы рефералов</h3>
+            <h3 class="referal-view__section-hl">История заказов реферала</h3>
             <table class="referal-view__table">
                 <colgroup>
                     <col width="40%" />
@@ -147,7 +156,11 @@ import referalProduct3 from '../../../assets/images/mock/referalProduct3.png';
 import graph from '../../../assets/images/mock/graph.png';
 import referalGroup1 from '../../../assets/images/mock/referalGroup1.png';
 import referalGroup2 from '../../../assets/images/mock/referalGroup2.png';
+
+import { baseChartOptions } from '../../../assets/scripts/constants';
 import './Referal.css';
+
+const VChart = () => import(/* webpackChunkName: "v-chart" */ '../../../components/controls/VChart/VChart.vue');
 
 export default {
     name: 'referal',
@@ -156,16 +169,42 @@ export default {
         VButton,
         VPagination,
         VArcCounter,
+        VChart,
     },
 
     data() {
         return {
+            isMounted: false,
             graph,
             referalGroup1,
             referalGroup2,
             referalProduct1,
             referalProduct2,
             referalProduct3,
+
+            chartOptions: {
+                ...baseChartOptions,
+            },
+
+            series: [
+                {
+                    name: 'Новые рефералы',
+                    data: [
+                        [1, 5],
+                        [2, 8],
+                        [3, 7],
+                        [4, 21],
+                        [5, 15],
+                        [6, 12],
+                        [7, 13],
+                        [8, 12],
+                        [9, 3],
+                        [10, 5],
+                        [11, 24],
+                        [12, null],
+                    ],
+                },
+            ],
         };
     },
 
@@ -185,6 +224,8 @@ export default {
         next();
     },
 
-    beforeMount() {},
+    mounted() {
+        this.isMounted = true;
+    },
 };
 </script>
