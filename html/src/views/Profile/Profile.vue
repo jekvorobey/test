@@ -18,7 +18,7 @@
                     </template>
                 </v-sticky>
                 <div class="profile-view__main">
-                    <transition name="fade" mode="out-in">
+                    <transition name="fade-absolute">
                         <router-view />
                     </transition>
                 </div>
