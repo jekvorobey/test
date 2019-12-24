@@ -213,6 +213,7 @@ fieldset {
 }
 
 :--input {
+    font-family: var(--base-font);
     font-size: 16px;
     line-height: 24px;
     border-radius: 0;
@@ -250,6 +251,7 @@ a,
 :--btn,
 :--input {
     font-family: var(--base-font);
+
     &:disabled,
     &.is-disabled {
         cursor: default;

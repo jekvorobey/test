@@ -3,9 +3,14 @@ import { $logger } from '../../../services/ServiceLocator';
 import { SET_HAS_SESSION } from './mutations';
 
 export const LOGIN = 'LOGIN';
+export const REGISTER = 'REGISTER';
 export const CHECK_SESSION = 'CHECK_SESSION';
 
 export default {
+    [REGISTER]({ commit }, payload) {
+        return Promise.resolve();
+    },
+
     [LOGIN]({ commit }, payload) {
         return login(payload)
             .then(() => commit(SET_HAS_SESSION, true))

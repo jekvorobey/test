@@ -40,6 +40,10 @@
 
             align-items: center;
             justify-content: space-between;
+
+            @media (--desktop) {
+                padding: calc(var(--gs) * 4) calc(var(--gs) * 3);
+            }
         }
 
         &-item {

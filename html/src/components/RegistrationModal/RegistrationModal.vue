@@ -1,23 +1,52 @@
 <template>
-    <general-modal type="sm" class="login-modal" header="Войти" @close="onClose" :is-mobile="isTablet">
+    <general-modal type="sm" class="registration-modal" header="Регистрация" @close="onClose" :is-mobile="isTablet">
         <template v-slot:content>
-            <div class="login-modal__body">
-                <h3 class="login-modal__hl">Войти</h3>
-                <form class="login-modal__form" method="post" @submit.prevent="onSubmit">
-                    <v-input-mask v-model="phone" mask="+7 ### ###-##-##" masked>
-                        Номер телефона
-                    </v-input-mask>
-                    <v-password v-model="password">
-                        Пароль
-                    </v-password>
-                    <div class="login-modal__form-submit">
-                        <v-button class="login-modal__form-submit-btn" type="submit">Войти</v-button>
-                        <v-link class="login-modal__form-submit-link">Забыли пароль?</v-link>
+            <div class="registration-modal__body">
+                <h3 v-if="!isTablet" class="registration-modal__hl">Регистрация</h3>
+                <div class="registration-modal__desc">
+                    <template v-if="sent">
+                        Мы отправили код на {{ displayPhone }}, введите его для регистрации.
+                        <a @click.stop="onChangeNumber">Изменить</a>
+                    </template>
+                    <template v-else>
+                        На указанный номер телефона будет выслан код по СМС, введите его для регистрации
+                    </template>
+                </div>
+                <form class="registration-modal__form" @submit.prevent="onSubmit">
+                    <template v-if="sent">
+                        <div class="registration-modal__form-confirmation">
+                            <v-input class="registration-modal__form-input" v-model="code">
+                                Код из СМС
+                            </v-input>
+                            <v-button class="registration-modal__form-btn" type="submit">Регистрация</v-button>
+                        </div>
+                        <div class="registration-modal__form-timer">
+                            <span v-if="counter !== 0">Получить новый код можно через {{ counter }} сек.</span>
+                            <a v-else @click.stop="startCounter">Отправить новый код</a>
+                        </div>
+                        <span class="text-grey registration-modal__form-info">
+                            Нажимая кнопку «Регистрация», вы соглашаетесь с условиями <a>оферты</a> и
+                            <a>политикой конфиденциальности</a>
+                        </span>
+                    </template>
+                    <div v-else class="registration-modal__form-phone">
+                        <v-input-mask
+                            class="registration-modal__form-input"
+                            @input="phone = $event"
+                            :display-value.sync="displayPhone"
+                            placeholder="+7 ___ ___-__-__"
+                            mask="+7 ### ###-##-##"
+                            masked
+                        >
+                            Номер телефона
+                        </v-input-mask>
+                        <v-button class="registration-modal__form-btn" type="submit">Получить код</v-button>
                     </div>
                 </form>
-                <div class="login-modal__socials">
-                    <div class="login-modal__socials-list">
-                        <button class="login-modal__socials-item">
+
+                <div class="registration-modal__socials">
+                    <div class="registration-modal__socials-list">
+                        <button class="registration-modal__socials-item">
                             <svg
                                 width="14"
                                 height="14"
@@ -31,7 +60,7 @@
                                 />
                             </svg>
                         </button>
-                        <button class="login-modal__socials-item">
+                        <button class="registration-modal__socials-item">
                             <svg
                                 width="16"
                                 height="10"
@@ -47,7 +76,7 @@
                                 />
                             </svg>
                         </button>
-                        <button class="login-modal__socials-item">
+                        <button class="registration-modal__socials-item">
                             <svg
                                 width="8"
                                 height="18"
@@ -64,41 +93,37 @@
                             </svg>
                         </button>
                     </div>
-                    <span class="login-modal__socials-text">Войти через соцсеть</span>
+                    <span class="registration-modal__socials-text">Или зарегистрируйтесь через соцсеть</span>
                 </div>
             </div>
 
-            <div class="login-modal__footer">
-                <v-button class="btn--outline login-modal__footer-btn" @click="onRegister">Зарегистрируйтесь</v-button>
-                &nbsp;&nbsp;Нет&nbsp;аккаунта?
+            <div class="registration-modal__footer">
+                <v-button class="btn--outline registration-modal__footer-btn" @click="onLogin">Войти</v-button>
+                <span>Есть аккаунт?</span>
             </div>
         </template>
     </general-modal>
 </template>
+
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VLink from '../controls/VLink/VLink.vue';
 import VButton from '../controls/VButton/VButton.vue';
+import VInput from '../controls/VInput/VInput.vue';
 import VInputMask from '../controls/VInput/VInputMask.vue';
-import VPassword from '../controls/VPassword/VPassword.vue';
 import GeneralModal from '../GeneralModal/GeneralModal.vue';
-import { NAME as REGISTRATION_MODAL_NAME } from '../RegistrationModal/RegistrationModal.vue';
+import { NAME as LOGIN_MODAL_NAME } from '../LoginModal/LoginModal.vue';
 
 import validationMixin, { required, minLength } from '../../plugins/validation';
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
-import { LOGIN } from '../../store/modules/Auth/actions';
-
-import { NAME as CART_MODULE } from '../../store/modules/Cart';
-import { FETCH_CART_DATA } from '../../store/modules/Cart/actions';
+import { REGISTER } from '../../store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
-import './LoginModal.css';
+import './RegistrationModal.css';
 
-export const NAME = 'login-modal';
+export const NAME = 'registration-modal';
 
 export default {
     name: NAME,
@@ -106,11 +131,9 @@ export default {
     mixins: [validationMixin],
 
     components: {
-        VSvg,
-        VLink,
         VButton,
+        VInput,
         VInputMask,
-        VPassword,
         GeneralModal,
     },
 
@@ -119,20 +142,26 @@ export default {
             required,
             minLength: minLength(10),
         },
-
-        password: {
+        code: {
             required,
         },
     },
 
     data() {
         return {
-            phone: '+7',
-            password: 123456,
+            sent: false,
+            phone: '+7 ',
+            displayPhone: '',
+            code: null,
+            counter: 59,
         };
     },
 
     computed: {
+        ...mapState(MODAL_MODULE, {
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+        }),
+
         isTablet() {
             return this.$mq.tablet;
         },
@@ -140,29 +169,56 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(AUTH_MODULE, [LOGIN]),
-        ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
+        ...mapActions(AUTH_MODULE, [REGISTER]),
+
+        startCounter() {
+            this.stopCounter();
+            this.counter = 59;
+
+            this.timer = setInterval(() => {
+                this.counter -= 1;
+                if (this.counter === 0) this.stopCounter();
+            }, 1000);
+        },
+
+        stopCounter() {
+            clearInterval(this.timer);
+            this.timer = null;
+        },
+
+        onLogin() {
+            this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
+            this[CHANGE_MODAL_STATE]({ name: LOGIN_MODAL_NAME, open: true });
+        },
 
         async onSubmit() {
-            try {
-                await this[LOGIN]({ email: this.email, password: this.password });
-                this[FETCH_CART_DATA]();
-                this.$emit('login');
-                this.onClose();
-            } catch (error) {
-                console.log(error);
+            if (this.sent && !this.$v.code.$invalid) {
+                try {
+                    await this[REGISTER]({ code: this.code });
+                    this.$emit('login');
+                    this.onClose();
+                } catch (error) {
+                    console.log(error);
+                }
+            } else if (!this.$v.phone.$invalid) {
+                this.sent = true;
+                this.startCounter();
             }
         },
 
-        onRegister() {
-            this.onClose();
-            this[CHANGE_MODAL_STATE]({ name: REGISTRATION_MODAL_NAME, open: true });
+        onChangeNumber() {
+            this.stopCounter();
+            this.sent = false;
         },
 
         onClose() {
             this.$emit('close');
-            this.CHANGE_MODAL_STATE({ name: NAME, open: false });
+            this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
         },
+    },
+
+    beforeDestroy() {
+        this.stopCounter();
     },
 };
 </script>
