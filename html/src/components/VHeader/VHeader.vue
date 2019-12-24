@@ -19,8 +19,9 @@
             <mobile-menu class="v-header__modal-menu" v-if="isMenuOpen && isTabletLg" />
         </transition>
 
-        <transition name="fade">
-            <login-modal @login="$router.push({ path: '/profile' })" />
+        <transition name="fade-in">
+            <login-modal key="login" v-if="isLoginOpen" @login="$router.push({ path: '/profile' })" />
+            <registration-modal key="register" v-else-if="isRegistrationOpen" />
         </transition>
     </header>
 </template>
@@ -32,12 +33,16 @@ import HeaderBottom from './HeaderBottom/HeaderBottom.vue';
 import SearchPanel from '../SearchPanel/SearchPanel.vue';
 import NavPanel from '../NavPanel/NavPanel.vue';
 import MobileMenu from '../MobileMenu/MobileMenu.vue';
-import LoginModal from '../LoginModal/LoginModal.vue';
+import LoginModal, { NAME as LOGIN_MODAL_NAME } from '../LoginModal/LoginModal.vue';
+import RegistrationModal, { NAME as REGISTRATION_MODAL_NAME } from '../RegistrationModal/RegistrationModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { SCROLL, IS_MENU_OPEN } from '../../store';
 import { SET_MENU_OPEN } from '../../store/actions';
+
+import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import { NAME as SEARCH_MODULE, SEARCH } from '../../store/modules/Search';
 
@@ -55,11 +60,17 @@ export default {
         NavPanel,
         MobileMenu,
         LoginModal,
+        RegistrationModal,
     },
 
     computed: {
         ...mapState([SCROLL, IS_MENU_OPEN]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
+        ...mapState(MODAL_MODULE, {
+            isRegistrationOpen: state =>
+                state[MODALS][REGISTRATION_MODAL_NAME] && state[MODALS][REGISTRATION_MODAL_NAME].open,
+            isLoginOpen: state => state[MODALS][LOGIN_MODAL_NAME] && state[MODALS][LOGIN_MODAL_NAME].open,
+        }),
 
         isTabletLg() {
             return this.$mq.tabletLg;

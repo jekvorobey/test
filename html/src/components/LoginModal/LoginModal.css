@@ -1,5 +1,81 @@
 .login-modal {
+    .popup--sm {
+        width: 440px;
+    }
+
     .modal-body {
+        padding: 0;
+    }
+
+    &__body {
+        flex-grow: 1;
+    }
+
+    &__footer,
+    &__body {
         padding: calc(var(--gs) * 3);
+        @media (--tablet) {
+            padding: calc(var(--gs) * 2);
+        }
+    }
+
+    &__form {
+        margin-bottom: calc(var(--gs) * 5);
+
+        &-submit {
+            &-btn {
+                width: 120px;
+                margin-right: calc(var(--gs) * 2);
+            }
+
+            &-link {
+                font-weight: bold;
+            }
+        }
+    }
+
+    &__socials {
+        display: flex;
+        align-items: center;
+
+        &-list {
+            display: flex;
+            align-items: center;
+        }
+
+        &-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--cl-global);
+            border-radius: 1px;
+
+            & + & {
+                margin-left: calc(var(--gs) * 2);
+            }
+        }
+
+        &-text {
+            margin-left: calc(var(--gs) * 2);
+        }
+    }
+
+    &__footer {
+        position: sticky;
+        z-index: 1;
+        bottom: 0;
+        padding: calc(var(--gs) * 3);
+        border-top: 1px solid var(--cl-divider-grey);
+
+        @media (--tablet) {
+            padding: calc(var(--gs) * 2);
+        }
+
+        &-btn {
+            padding: 6px calc(var(--gs) * 2);
+            margin-right: auto;
+        }
     }
 }

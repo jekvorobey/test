@@ -11,6 +11,8 @@
     }
 
     &__sticky {
+        display: flex;
+        flex-direction: column;
         width: 100%;
 
         .v-sticky__container {
@@ -50,7 +52,7 @@
             text-transform: uppercase;
 
             .icon {
-                margin-right: calc(var(--gs) * 1.5);
+                margin-right: var(--gs);
             }
         }
     }

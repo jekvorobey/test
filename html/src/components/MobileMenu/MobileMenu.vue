@@ -61,7 +61,7 @@
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/">
+                            <v-link tag="button" class="mobile-menu__menu-link" @click="onRegister">
                                 <v-svg name="account-middle" width="18" height="20" />Личный кабинет
                             </v-link>
                         </li>
@@ -143,10 +143,14 @@ import VSvg from '../controls/VSvg/VSvg.vue';
 import VLink from '../controls/VLink/VLink.vue';
 import VSticky from '../controls/VSticky/VSticky.vue';
 import GeneralModal from '../GeneralModal/GeneralModal.vue';
+import { NAME as REGISTER_MODAL_NAME } from '../RegistrationModal/RegistrationModal.vue';
 
 import { CATEGORIES } from '../../store';
 import { SET_MENU_OPEN } from '../../store/actions';
 import { mapState, mapActions } from 'vuex';
+
+import { NAME as MODAL_MODULE } from '../../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import '../../assets/images/sprites/socials/viber-bw.svg';
 import '../../assets/images/sprites/socials/whatsup-bw.svg';
@@ -197,6 +201,7 @@ export default {
 
     methods: {
         ...mapActions([SET_MENU_OPEN]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onCategoryClick(item) {
             this.selectedCategories.push(item);
@@ -205,6 +210,11 @@ export default {
         onBackClick() {
             if (this.selectedCategories.length > 0) this.selectedCategories.pop();
             else this.showCategories = false;
+        },
+
+        onRegister() {
+            this[SET_MENU_OPEN](false);
+            this[CHANGE_MODAL_STATE]({ name: REGISTER_MODAL_NAME, open: true });
         },
     },
 };

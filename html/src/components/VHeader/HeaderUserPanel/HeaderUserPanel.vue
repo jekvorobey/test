@@ -1,6 +1,6 @@
 <template>
     <div class="header-user-panel">
-        <button class="header-user-panel__item" @click="CHANGE_MODAL_STATE({ name: 'login-modal', open: true })">
+        <button class="header-user-panel__item" @click="onRegister">
             <v-svg name="account-middle" width="24" height="24" />
         </button>
         <button class="header-user-panel__item">
@@ -20,6 +20,7 @@
 <script>
 import VSvg from '../../controls/VSvg/VSvg.vue';
 import VLink from '../../controls/VLink/VLink.vue';
+import { NAME as REGISTRATION_MODAL_NAME } from '../../RegistrationModal/RegistrationModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
@@ -48,6 +49,10 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        onRegister() {
+            this[CHANGE_MODAL_STATE]({ name: REGISTRATION_MODAL_NAME, open: true });
+        },
     },
 };
 </script>
