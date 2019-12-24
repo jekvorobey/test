@@ -1,4 +1,6 @@
-import 'core-js/stable';
+import 'core-js/stable/object';
+import 'core-js/stable/promise';
+import 'core-js/stable/array';
 import 'regenerator-runtime/runtime';
 import 'custom-event-polyfill';
 import 'intersection-observer';
