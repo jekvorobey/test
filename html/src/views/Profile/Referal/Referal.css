@@ -37,7 +37,6 @@
             padding: 0 calc(var(--gs) * 7);
             padding-top: calc(var(--gs) * 3);
             padding-bottom: calc(var(--gs) * 2);
-
             align-items: center;
             justify-content: space-between;
 
