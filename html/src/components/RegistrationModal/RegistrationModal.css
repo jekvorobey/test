@@ -28,12 +28,6 @@
     }
 
     &__form {
-        margin-bottom: calc(var(--gs) * 5);
-
-        @media (--tablet) {
-            margin-bottom: calc(var(--gs) * 2);
-        }
-
         &-confirmation,
         &-phone {
             display: flex;
@@ -77,15 +71,29 @@
                 width: 100%;
             }
         }
+
+        &-password &-input {
+            margin-right: 0;
+
+            @media (--tablet) {
+                margin-bottom: 0;
+
+                &:last-of-type {
+                    margin-bottom: calc(var(--gs) * 2);
+                }
+            }
+        }
     }
 
     &__socials {
         display: flex;
         align-items: center;
+        margin-top: calc(var(--gs) * 5);
 
         @media (--tablet) {
             flex-direction: column;
             justify-content: center;
+            margin-top: calc(var(--gs) * 2);
         }
 
         &-list {
