@@ -13,6 +13,8 @@ import geolocation from './modules/Geolocation';
 Vue.use(Vuex);
 
 export const IS_MENU_OPEN = 'isMenuOpen';
+export const IS_CART_OPEN = 'isCartOpen';
+export const IS_CITY_CONFIRMATION_OPEN = 'isCityConfirmationOpen';
 export const LOCALE = 'locale';
 export const SCROLL = 'scroll';
 export const CATEGORIES = 'categories';
@@ -30,6 +32,8 @@ export default function createStore(env = {}) {
             [LOCALE]: 'ru',
             [SCROLL]: false,
             [IS_MENU_OPEN]: false,
+            [IS_CART_OPEN]: false,
+            [IS_CITY_CONFIRMATION_OPEN]: false,
             [CATEGORIES]: [],
             [BANNER]: {},
             env,

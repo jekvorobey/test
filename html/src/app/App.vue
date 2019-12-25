@@ -33,7 +33,7 @@ import VFooter from '../components/VFooter/VFooter.vue';
 import '../util/catalog';
 import _debounce from 'lodash/debounce';
 import { SCROLL, CATEGORIES } from '../store';
-import { SET_SCROLL, FETCH_COMMON_DATA } from '../store/actions';
+import { SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN } from '../store/actions';
 
 import { NAME as CART_MODULE, CART_ITEMS } from '../store/modules/Cart';
 import { FETCH_CART_DATA } from '../store/modules/Cart/actions';
@@ -58,7 +58,7 @@ export default {
     },
 
     methods: {
-        ...mapActions([SET_SCROLL, FETCH_COMMON_DATA]),
+        ...mapActions([SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
         ...mapActions(AUTH_MODULE, [CHECK_SESSION]),
 
@@ -78,13 +78,16 @@ export default {
         } catch (error) {
             return Promise.resolve();
         }
-        return;
     },
 
     mounted() {
         const onSetScrollDebounce = _debounce(this.onScroll, 20);
         document.addEventListener(eventName.SCROLL, onSetScrollDebounce, true);
         this.$on('hook:beforeDestroy', () => document.removeEventListener(eventName.SCROLL, onSetScrollDebounce));
+
+        setTimeout(() => {
+            this[SET_CITY_CONFIRMATION_OPEN](true);
+        }, 2000);
     },
 };
 </script>

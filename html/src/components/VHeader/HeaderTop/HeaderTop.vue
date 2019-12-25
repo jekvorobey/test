@@ -4,6 +4,7 @@
             <button class="header-top__city" title="Выбрать город">
                 <v-svg name="pin" width="16" height="16" />&nbsp;{{ city }}
             </button>
+
             <div class="header-top__middle">
                 <span class="header-top__middle-item">
                     <v-svg name="delivery" width="16" height="16" />{{ $t('header.top.delivery') }}
@@ -15,6 +16,7 @@
                     <v-svg name="gift" width="16" height="16" />{{ $t('header.top.gifts') }}
                 </span>
             </div>
+
             <button class="header-top__help" title="Помощь">
                 {{ $t('header.top.help') }}<v-svg name="arrow-down" width="20" height="20" />
             </button>
@@ -26,8 +28,7 @@
 import VSvg from '../../controls/VSvg/VSvg.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-
-import { SCROLL } from '../../../store';
+import { SCROLL, IS_CITY_CONFIRMATION_OPEN } from '../../../store';
 
 import { NAME as SEARCH_MODULE, SEARCH } from '../../../store/modules/Search';
 

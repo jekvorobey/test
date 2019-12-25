@@ -7,6 +7,10 @@
         position: relative;
     }
 
+    .v-popover {
+        line-height: 13px;
+    }
+
     &__item {
         margin-left: calc(var(--gs) * 3);
 

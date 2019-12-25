@@ -5,6 +5,10 @@
         height: 100%;
     }
 
+    &__city-confirm {
+        height: 0;
+    }
+
     &__middle {
         &-search-panel {
             width: 100%;
