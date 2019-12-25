@@ -21,7 +21,11 @@
 
         <transition name="fade-in">
             <login-modal key="login" v-if="isLoginOpen" @login="$router.push({ path: '/profile' })" />
-            <registration-modal key="register" v-else-if="isRegistrationOpen" />
+            <registration-modal
+                key="register"
+                v-else-if="isRegistrationOpen"
+                @login="$router.push({ path: '/profile' })"
+            />
         </transition>
     </header>
 </template>

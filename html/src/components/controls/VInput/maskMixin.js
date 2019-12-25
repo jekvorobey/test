@@ -126,26 +126,23 @@ export default {
             default: () => tokens,
         },
     },
+
     data() {
         return {
             lastValue: null, // avoid unecessary emit when has no change
-            display: this.value,
         };
     },
+
     watch: {
         display(value) {
             this.$emit('update:displayValue', value);
         },
 
-        value(newValue) {
-            if (newValue !== this.lastValue) {
-                this.display = newValue;
-            }
-        },
         masked() {
             this.refresh(this.display);
         },
     },
+
     computed: {
         config() {
             return {
@@ -154,14 +151,18 @@ export default {
                 masked: this.masked,
             };
         },
+
+        display() {
+            return masker(this.value, this.mask, this.masked, this.tokens);
+        },
     },
+
     methods: {
         input(e) {
             this.refresh(e.target.value);
         },
 
         refresh(value) {
-            this.display = masker(value, this.mask, this.masked, this.tokens);
             const maskedValue = masker(value, this.mask, false, this.tokens);
             if (maskedValue !== this.lastValue) {
                 this.lastValue = maskedValue;

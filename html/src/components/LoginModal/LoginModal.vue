@@ -1,9 +1,10 @@
 <template>
-    <general-modal type="sm" class="login-modal" header="Войти" @close="onClose" :is-mobile="isTablet">
+    <general-modal type="sm" class="login-modal" :header="header" @close="onClose" :is-mobile="isTablet">
         <template v-slot:content>
             <div class="login-modal__body">
-                <h3 class="login-modal__hl">Войти</h3>
-                <form class="login-modal__form" method="post" @submit.prevent="onSubmit">
+                <h3 class="login-modal__hl">{{ header }}</h3>
+
+                <form v-if="!restore" class="login-modal__form" @submit.prevent="onSubmit">
                     <v-input-mask v-model="phone" mask="+7 ### ###-##-##" masked>
                         Номер телефона
                     </v-input-mask>
@@ -11,10 +12,52 @@
                         Пароль
                     </v-password>
                     <div class="login-modal__form-submit">
-                        <v-button class="login-modal__form-submit-btn" type="submit">Войти</v-button>
-                        <v-link class="login-modal__form-submit-link">Забыли пароль?</v-link>
+                        <v-button class="login-modal__form-submit-btn" type="submit">
+                            Войти
+                        </v-button>
+                        <v-link class="login-modal__form-submit-link" tag="button" @click.stop="onRestore">
+                            Забыли пароль?
+                        </v-link>
                     </div>
                 </form>
+
+                <template v-else-if="!sent">
+                    <p class="login-modal__desc">
+                        Введите номер телефона, использованный при регистрации. Мы отправим на него новый пароль в СМС.
+                    </p>
+
+                    <form class="login-modal__form" @submit.prevent="onSendPassword">
+                        <v-input-mask
+                            v-model="restorePhone"
+                            :display-value.sync="displayRestorePhone"
+                            mask="+7 ### ###-##-##"
+                            masked
+                        >
+                            Номер телефона
+                        </v-input-mask>
+                        <div class="login-modal__form-submit">
+                            <v-button class="login-modal__form-submit-btn" type="submit">
+                                Получить пароль
+                            </v-button>
+                            <v-link class="login-modal__form-submit-link" tag="button" @click.stop="onCancelRestore">
+                                Отмена
+                            </v-link>
+                        </div>
+                    </form>
+                </template>
+
+                <template v-else>
+                    <p class="login-modal__desc">
+                        Проверьте телефон {{ displayRestorePhone }}. Мы отправили на него новый пароль в СМС.
+                    </p>
+
+                    <form class="login-modal__form" @submit.prevent="onCancelRestore">
+                        <v-button class="login-modal__form-submit-btn" type="submit">
+                            Войти
+                        </v-button>
+                    </form>
+                </template>
+
                 <div class="login-modal__socials">
                     <div class="login-modal__socials-list">
                         <button class="login-modal__socials-item">
@@ -120,6 +163,11 @@ export default {
             minLength: minLength(10),
         },
 
+        restorePhone: {
+            required,
+            minLength: minLength(10),
+        },
+
         password: {
             required,
         },
@@ -129,12 +177,28 @@ export default {
         return {
             phone: '+7',
             password: 123456,
+            displayRestorePhone: null,
+            restorePhone: '+7',
+            restore: false,
+            sent: false,
         };
     },
 
     computed: {
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        header() {
+            return this.restore ? 'Получить новый пароль' : 'Войти';
+        },
+    },
+
+    watch: {
+        restore(value) {
+            if (!value) {
+                this.sent = false;
+            }
         },
     },
 
@@ -152,6 +216,18 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+
+        onSendPassword() {
+            if (!this.$v.restorePhone.$invalid) this.sent = true;
+        },
+
+        onRestore() {
+            this.restore = true;
+        },
+
+        onCancelRestore() {
+            this.restore = false;
         },
 
         onRegister() {

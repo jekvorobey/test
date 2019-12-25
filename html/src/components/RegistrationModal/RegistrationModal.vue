@@ -1,19 +1,39 @@
 <template>
-    <general-modal type="sm" class="registration-modal" header="Регистрация" @close="onClose" :is-mobile="isTablet">
+    <general-modal type="sm" class="registration-modal" :header="header" @close="onClose" :is-mobile="isTablet">
         <template v-slot:content>
             <div class="registration-modal__body">
-                <h3 v-if="!isTablet" class="registration-modal__hl">Регистрация</h3>
+                <h3 v-if="!isTablet" class="registration-modal__hl">{{ header }}</h3>
                 <div class="registration-modal__desc">
-                    <template v-if="sent">
+                    <template v-if="!sent">
+                        На указанный номер телефона будет выслан код по СМС, введите его для регистрации
+                    </template>
+
+                    <template v-else-if="!accepted">
                         Мы отправили код на {{ displayPhone }}, введите его для регистрации.
                         <a @click.stop="onChangeNumber">Изменить</a>
                     </template>
+
                     <template v-else>
-                        На указанный номер телефона будет выслан код по СМС, введите его для регистрации
+                        Придумайте пароль для входа в Личный кабинет
                     </template>
                 </div>
+
                 <form class="registration-modal__form" @submit.prevent="onSubmit">
-                    <template v-if="sent">
+                    <div v-if="!sent" class="registration-modal__form-phone">
+                        <v-input-mask
+                            class="registration-modal__form-input"
+                            v-model="phone"
+                            :display-value.sync="displayPhone"
+                            placeholder="+7 ___ ___-__-__"
+                            mask="+7 ### ###-##-##"
+                            masked
+                        >
+                            Номер телефона
+                        </v-input-mask>
+                        <v-button class="registration-modal__form-btn" type="submit">Получить код</v-button>
+                    </div>
+
+                    <template v-else-if="!accepted">
                         <div class="registration-modal__form-confirmation">
                             <v-input class="registration-modal__form-input" v-model="code">
                                 Код из СМС
@@ -29,22 +49,19 @@
                             <a>политикой конфиденциальности</a>
                         </span>
                     </template>
-                    <div v-else class="registration-modal__form-phone">
-                        <v-input-mask
-                            class="registration-modal__form-input"
-                            @input="phone = $event"
-                            :display-value.sync="displayPhone"
-                            placeholder="+7 ___ ___-__-__"
-                            mask="+7 ### ###-##-##"
-                            masked
-                        >
-                            Номер телефона
-                        </v-input-mask>
-                        <v-button class="registration-modal__form-btn" type="submit">Получить код</v-button>
+
+                    <div v-else class="registration-modal__form-password">
+                        <v-password class="registration-modal__form-input" v-model="password">
+                            Пароль
+                        </v-password>
+                        <v-password class="registration-modal__form-input" v-model="passwordRepeat">
+                            Пароль ещё раз
+                        </v-password>
+                        <v-button class="registration-modal__form-btn" type="submit">Сохранить</v-button>
                     </div>
                 </form>
 
-                <div class="registration-modal__socials">
+                <div v-if="!accepted" class="registration-modal__socials">
                     <div class="registration-modal__socials-list">
                         <button class="registration-modal__socials-item">
                             <svg
@@ -97,7 +114,7 @@
                 </div>
             </div>
 
-            <div class="registration-modal__footer">
+            <div v-if="!accepted" class="registration-modal__footer">
                 <v-button class="btn--outline registration-modal__footer-btn" @click="onLogin">Войти</v-button>
                 <span>Есть аккаунт?</span>
             </div>
@@ -107,12 +124,13 @@
 
 <script>
 import VButton from '../controls/VButton/VButton.vue';
+import VPassword from '../controls/VPassword/VPassword.vue';
 import VInput from '../controls/VInput/VInput.vue';
 import VInputMask from '../controls/VInput/VInputMask.vue';
 import GeneralModal from '../GeneralModal/GeneralModal.vue';
 import { NAME as LOGIN_MODAL_NAME } from '../LoginModal/LoginModal.vue';
 
-import validationMixin, { required, minLength } from '../../plugins/validation';
+import validationMixin, { required, minLength, password, sameAs } from '../../plugins/validation';
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
@@ -132,16 +150,28 @@ export default {
 
     components: {
         VButton,
+        VPassword,
         VInput,
         VInputMask,
         GeneralModal,
     },
 
     validations: {
+        password: {
+            required,
+            password,
+        },
+
+        passwordRepeat: {
+            required,
+            sameAs: sameAs('password'),
+        },
+
         phone: {
             required,
             minLength: minLength(10),
         },
+
         code: {
             required,
         },
@@ -150,10 +180,14 @@ export default {
     data() {
         return {
             sent: false,
+            accepted: false,
             phone: '+7 ',
             displayPhone: '',
             code: null,
             counter: 59,
+
+            password: null,
+            passwordRepeat: null,
         };
     },
 
@@ -161,6 +195,10 @@ export default {
         ...mapState(MODAL_MODULE, {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
+
+        header() {
+            return this.accepted ? 'Создание пароля' : 'Регистрация';
+        },
 
         isTablet() {
             return this.$mq.tablet;
@@ -192,7 +230,7 @@ export default {
         },
 
         async onSubmit() {
-            if (this.sent && !this.$v.code.$invalid) {
+            if (this.sent && this.accepted && !this.$v.password.$invalid && !this.$v.passwordRepeat.$invalid) {
                 try {
                     await this[REGISTER]({ code: this.code });
                     this.$emit('login');
@@ -200,6 +238,8 @@ export default {
                 } catch (error) {
                     console.log(error);
                 }
+            } else if (this.sent && !this.$v.code.$invalid) {
+                this.accepted = true;
             } else if (!this.$v.phone.$invalid) {
                 this.sent = true;
                 this.startCounter();
