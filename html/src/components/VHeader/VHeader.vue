@@ -5,6 +5,9 @@
     >
         <div class="v-header__desktop">
             <header-top v-show="!scroll" />
+            <div class="container v-header__city-confirm">
+                <city-confirmation-panel />
+            </div>
             <header-bottom />
         </div>
 
@@ -34,15 +37,16 @@
 import HeaderTop from './HeaderTop/HeaderTop.vue';
 import HeaderBottom from './HeaderBottom/HeaderBottom.vue';
 
-import SearchPanel from '../SearchPanel/SearchPanel.vue';
 import NavPanel from '../NavPanel/NavPanel.vue';
 import MobileMenu from '../MobileMenu/MobileMenu.vue';
+import SearchPanel from '../SearchPanel/SearchPanel.vue';
+import CityConfirmationPanel from '../CityConfirmationPanel/CityConfirmationPanel.vue';
 import LoginModal, { NAME as LOGIN_MODAL_NAME } from '../LoginModal/LoginModal.vue';
 import RegistrationModal, { NAME as REGISTRATION_MODAL_NAME } from '../RegistrationModal/RegistrationModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { SCROLL, IS_MENU_OPEN } from '../../store';
+import { SCROLL, IS_MENU_OPEN, IS_CITY_CONFIRMATION_OPEN } from '../../store';
 import { SET_MENU_OPEN } from '../../store/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
@@ -65,10 +69,11 @@ export default {
         MobileMenu,
         LoginModal,
         RegistrationModal,
+        CityConfirmationPanel,
     },
 
     computed: {
-        ...mapState([SCROLL, IS_MENU_OPEN]),
+        ...mapState([SCROLL, IS_MENU_OPEN, IS_CITY_CONFIRMATION_OPEN]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
         ...mapState(MODAL_MODULE, {
             isRegistrationOpen: state =>

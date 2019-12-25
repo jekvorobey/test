@@ -7,6 +7,11 @@
         position: relative;
     }
 
+    .v-popover {
+        position: absolute;
+        bottom: -24px;
+    }
+
     &__item {
         margin-left: calc(var(--gs) * 3);
 

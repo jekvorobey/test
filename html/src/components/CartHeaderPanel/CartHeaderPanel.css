@@ -1,0 +1,21 @@
+.cart-header-panel {
+    width: 420px;
+
+    &__list {
+        width: 100%;
+
+        &-item {
+            padding: calc(var(--gs) * 2) 0;
+            border-bottom: 1px solid var(--cl-divider-grey);
+
+            &:last-of-type {
+                border-bottom: none;
+            }
+        }
+    }
+
+    &__total {
+        text-align: right;
+        margin-left: auto;
+    }
+}
