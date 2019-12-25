@@ -8,7 +8,8 @@
     }
 
     .v-popover {
-        line-height: 13px;
+        position: absolute;
+        bottom: -24px;
     }
 
     &__item {

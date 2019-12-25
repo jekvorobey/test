@@ -9,12 +9,11 @@
         <div class="header-user-panel__item">
             <span class="text-medium header-user-panel__item-sum">{{ productItemsSum }}</span>
             &nbsp;&nbsp;
-            <cart-header-panel>
-                <button class="header-user-panel__item-cart" @click="onToggleCart">
-                    <v-svg name="cart-middle" width="24" height="24" />
-                    <span class="text-bold header-user-panel__item-count">{{ cartItemsCount }}</span>
-                </button>
-            </cart-header-panel>
+            <button class="header-user-panel__item-cart" @click="onToggleCart">
+                <v-svg name="cart-middle" width="24" height="24" />
+                <span class="text-bold header-user-panel__item-count">{{ cartItemsCount }}</span>
+            </button>
+            <cart-header-panel />
         </div>
     </div>
 </template>
