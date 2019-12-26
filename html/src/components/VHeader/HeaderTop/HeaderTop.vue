@@ -1,7 +1,7 @@
 <template>
     <div class="header-top" :class="{ 'header-top--search': search }">
         <div class="container header-top__container">
-            <button class="header-top__city" title="Выбрать город">
+            <button class="header-top__city" title="Выбрать город" @click="onOpenCitySelection">
                 <v-svg name="pin" width="16" height="16" />&nbsp;{{ city }}
             </button>
 
@@ -17,18 +17,25 @@
                 </span>
             </div>
 
-            <button class="header-top__help" title="Помощь">
+            <button class="header-top__help" title="Помощь" @click="onToggleHelp">
                 {{ $t('header.top.help') }}<v-svg name="arrow-down" width="20" height="20" />
             </button>
+
+            <div class="header-top__panel">
+                <help-panel v-if="!isTabletLg" />
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import VSvg from '../../controls/VSvg/VSvg.vue';
+import HelpPanel from '../../HelpPanel/HelpPanel.vue';
+import { NAME as CITY_SELECTION_MODAL_NAME } from '../../CitySelectionModal/CitySelectionModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { SCROLL, IS_CITY_CONFIRMATION_OPEN } from '../../../store';
+import { SCROLL, IS_CITY_CONFIRMATION_OPEN, IS_HELP_OPEN } from '../../../store';
+import { SET_HELP_OPEN } from '../../../store/actions';
 
 import { NAME as SEARCH_MODULE, SEARCH } from '../../../store/modules/Search';
 
@@ -51,10 +58,11 @@ export default {
 
     components: {
         VSvg,
+        HelpPanel,
     },
 
     computed: {
-        ...mapState([SCROLL]),
+        ...mapState([SCROLL, IS_HELP_OPEN]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
         ...mapState(GEO_MODULE, {
             city: state => state[SELECTED_CITY].data.city || state[SELECTED_CITY].data.settlement || 'Выберите город',
@@ -66,7 +74,17 @@ export default {
     },
 
     methods: {
+        ...mapActions([SET_HELP_OPEN]),
         ...mapActions(GEO_MODULE, [SET_SELECTED_CITY]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        onToggleHelp() {
+            this[SET_HELP_OPEN](!this[IS_HELP_OPEN]);
+        },
+
+        onOpenCitySelection() {
+            this[CHANGE_MODAL_STATE]({ name: CITY_SELECTION_MODAL_NAME, open: true });
+        },
     },
 };
 </script>

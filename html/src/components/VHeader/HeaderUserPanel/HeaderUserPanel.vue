@@ -13,7 +13,7 @@
                 <v-svg name="cart-middle" width="24" height="24" />
                 <span class="text-bold header-user-panel__item-count">{{ cartItemsCount }}</span>
             </button>
-            <cart-header-panel />
+            <cart-header-panel v-if="!isTabletLg" />
         </div>
     </div>
 </template>
@@ -53,6 +53,10 @@ export default {
     computed: {
         ...mapState([IS_CART_OPEN]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
     },
 
     methods: {

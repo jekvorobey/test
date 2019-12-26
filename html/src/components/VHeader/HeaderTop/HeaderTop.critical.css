@@ -52,4 +52,10 @@
             margin-right: var(--gs);
         }
     }
+
+    &__panel {
+        position: absolute;
+        right: 250px;
+        bottom: calc(var(--gs) * -1);
+    }
 }

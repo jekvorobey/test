@@ -1,0 +1,43 @@
+.city-selection-modal {
+    .popup--sm {
+        width: 440px;
+        height: 440px;
+    }
+
+    .modal-body {
+        padding: calc(var(--gs) * 3);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__input {
+        input[type='text'] {
+            padding-right: calc(var(--gs) * 5);
+        }
+
+        .icon {
+            position: absolute;
+            z-index: 1;
+            right: var(--gs);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+
+    &__list {
+        overflow: auto;
+
+        &-item {
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+
+            & + & {
+                margin-top: var(--gs);
+            }
+        }
+    }
+}
