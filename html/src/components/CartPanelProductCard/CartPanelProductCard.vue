@@ -85,16 +85,6 @@ export default {
             type: [String, Number],
             default: null,
         },
-
-        count: {
-            type: Number,
-            default: 1,
-        },
-
-        isSmall: {
-            type: Boolean,
-            default: false,
-        },
     },
 
     computed: {
@@ -104,22 +94,9 @@ export default {
     },
 
     methods: {
-        onCountChange(value) {
-            if (value > 0) this.$emit('countChange', { id: this.productId, type: this.type, count: value });
-            else this.$emit('deleteItem', { id: this.productId, type: this.type });
-        },
-
-        onDeleteClick() {
-            this.$emit('deleteItem', { id: this.productId, type: this.type });
-        },
-
         generateSourcePath(x, y, id, ext) {
             return generatePictureSourcePath(x, y, id, ext);
         },
-    },
-
-    created() {
-        this.debounce_countChange = _debounce(this.onCountChange, 200);
     },
 };
 </script>
