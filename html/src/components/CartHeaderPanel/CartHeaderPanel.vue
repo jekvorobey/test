@@ -29,7 +29,7 @@
                 В корзину
             </v-button>
             <div class="cart-header-panel__total">
-                {{ cartItemsCount }} товаров на сумму
+                {{ $tc('cart.items', cartItemsCount) }} на сумму
                 <div class="text-bold">
                     {{ productItemsSum }}
                 </div>

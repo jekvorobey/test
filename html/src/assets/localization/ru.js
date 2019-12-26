@@ -112,6 +112,8 @@ export default {
             masterclass: 'Мастер-классы',
         },
 
+        items: '0 товаров | {n} товар | {n} товаров',
+
         summary: {
             type: {
                 product: 'Продукты',
