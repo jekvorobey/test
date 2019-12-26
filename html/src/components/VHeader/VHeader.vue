@@ -4,9 +4,9 @@
         :class="[{ 'v-header--scroll': scroll }, { 'v-header--masked': showMask }, { 'v-header--search': search }]"
     >
         <div class="v-header__desktop">
-            <header-top v-show="!scroll" />
+            <header-top v-if="!scroll" />
             <div class="container v-header__city-confirm">
-                <city-confirmation-panel />
+                <city-confirmation-panel v-if="!isTabletLg" />
             </div>
             <header-bottom />
         </div>
@@ -30,6 +30,10 @@
                 @login="$router.push({ path: '/profile' })"
             />
         </transition>
+
+        <transition name="fade-in">
+            <city-selection-modal v-if="isCitySelectionOpen && !isTabletLg" />
+        </transition>
     </header>
 </template>
 
@@ -41,8 +45,10 @@ import NavPanel from '../NavPanel/NavPanel.vue';
 import MobileMenu from '../MobileMenu/MobileMenu.vue';
 import SearchPanel from '../SearchPanel/SearchPanel.vue';
 import CityConfirmationPanel from '../CityConfirmationPanel/CityConfirmationPanel.vue';
+
 import LoginModal, { NAME as LOGIN_MODAL_NAME } from '../LoginModal/LoginModal.vue';
 import RegistrationModal, { NAME as REGISTRATION_MODAL_NAME } from '../RegistrationModal/RegistrationModal.vue';
+import CitySelectionModal, { NAME as CITY_SELECTION_MODAL_NAME } from '../CitySelectionModal/CitySelectionModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
@@ -69,6 +75,7 @@ export default {
         MobileMenu,
         LoginModal,
         RegistrationModal,
+        CitySelectionModal,
         CityConfirmationPanel,
     },
 
@@ -79,6 +86,8 @@ export default {
             isRegistrationOpen: state =>
                 state[MODALS][REGISTRATION_MODAL_NAME] && state[MODALS][REGISTRATION_MODAL_NAME].open,
             isLoginOpen: state => state[MODALS][LOGIN_MODAL_NAME] && state[MODALS][LOGIN_MODAL_NAME].open,
+            isCitySelectionOpen: state =>
+                state[MODALS][CITY_SELECTION_MODAL_NAME] && state[MODALS][CITY_SELECTION_MODAL_NAME].open,
         }),
 
         isTabletLg() {

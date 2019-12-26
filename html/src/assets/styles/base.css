@@ -216,7 +216,7 @@ fieldset {
     font-family: var(--base-font);
     font-size: 16px;
     line-height: 24px;
-    border-radius: 0;
+    border-radius: 1px;
 
     /* Прячет крестик очистки поля в IE */
 
