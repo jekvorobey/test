@@ -8,6 +8,7 @@ import auth from './modules/Auth';
 import modal from './modules/Modal';
 import search from './modules/Search';
 import cart from './modules/Cart';
+import preview from './modules/Preview';
 import geolocation from './modules/Geolocation';
 
 Vue.use(Vuex);
@@ -43,6 +44,6 @@ export default function createStore(env = {}) {
         getters,
         mutations,
         actions,
-        modules: { modal, search, auth, cart, geolocation },
+        modules: { modal, search, auth, cart, geolocation, preview },
     });
 }

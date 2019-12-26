@@ -1,0 +1,23 @@
+.quick-view-modal {
+    .modal-container {
+        width: auto;
+    }
+
+    .modal-body {
+        padding: calc(var(--gs) * 3);
+    }
+
+    &__body {
+        display: flex;
+    }
+
+    &__gallery {
+        width: 584px;
+        display: flex;
+        flex-wrap: wrap;
+
+        &-item {
+            width: calc(50% - calc(var(--gs) / 2));
+        }
+    }
+}

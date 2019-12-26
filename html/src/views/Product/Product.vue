@@ -563,6 +563,10 @@
                 @addItem="ADD_CART_ITEM({ offerId: product.id })"
             />
         </transition>
+
+        <transition name="fade">
+            <quick-view-modal />
+        </transition>
     </section>
 </template>
 
@@ -585,6 +589,8 @@ import CatalogProductCard from '../../components/CatalogProductCard/CatalogProdu
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
 import ProductReviewCard from '../../components/ProductReviewCard/ProductReviewCard.vue';
 import ProductPricePanel from '../../components/ProductPricePanel/ProductPricePanel.vue';
+
+import QuickViewModal from '../../components/QuickViewModal/QuickViewModal.vue';
 
 import '../../plugins/observer';
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -726,6 +732,7 @@ export default {
         BannerCard,
         InstagramCard,
         ProductPricePanel,
+        QuickViewModal,
     },
 
     data() {
