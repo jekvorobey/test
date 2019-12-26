@@ -112,6 +112,8 @@ export default {
             masterclass: 'Master-classes',
         },
 
+        items: '0 products | {n} product | {n} products',
+
         summary: {
             type: {
                 product: 'Products',

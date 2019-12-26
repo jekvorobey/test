@@ -9,11 +9,10 @@
     >
         <slot />
         <template v-slot:body>
-            <ul class="cart-header-panel__list">
+            <ul class="cart-header-panel__list" v-if="cartTypes[0]">
                 <cart-panel-product-card
                     class="cart-header-panel__list-item"
-                    v-for="({ p: product, count }, index) in cartTypes[0].items"
-                    :data-index="index"
+                    v-for="{ p: product } in cartTypes[0].items"
                     :key="product.id"
                     :product-id="product.id"
                     :type="product.type"
@@ -21,7 +20,6 @@
                     :image="product.image"
                     :price="product.price"
                     :old-price="product.oldPrice"
-                    :count="count"
                     href="/catalog"
                 />
             </ul>
@@ -31,7 +29,7 @@
                 В корзину
             </v-button>
             <div class="cart-header-panel__total">
-                {{ cartItemsCount }} товаров на сумму
+                {{ $tc('cart.items', cartItemsCount) }} на сумму
                 <div class="text-bold">
                     {{ productItemsSum }}
                 </div>
