@@ -110,6 +110,7 @@
                                 :tags="item.tags"
                                 :rating="item.rating"
                                 @addItem="ADD_CART_ITEM({ offerId: item.id })"
+                                @preview="onPreview(item.code)"
                             />
                             <catalog-banner-card
                                 v-else-if="item.type === 'banner'"
@@ -191,6 +192,10 @@
                 </v-expander>
             </div>
         </section>
+
+        <transition name="fade-in">
+            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
+        </transition>
     </section>
 </template>
 
@@ -211,12 +216,17 @@ import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
 
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
+
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 import { concatCatalogRoutePath } from '../../util/catalog';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { NAME as CART_MODULE } from '../../store/modules/Cart';
 import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
+
+import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import catalogModule, { NAME as CATALOG_MODULE, ITEMS, BANNER, CATEGORIES } from '../../store/modules/Catalog';
 import { FETCH_ITEMS, FETCH_CATALOG_DATA, SET_LOAD } from '../../store/modules/Catalog/actions';
@@ -254,6 +264,8 @@ export default {
         CatalogFilter,
         CatalogProductCard,
         CatalogBannerCard,
+
+        QuickViewModal,
     },
 
     data() {
@@ -283,6 +295,9 @@ export default {
             ACTIVE_CATEGORIES,
         ]),
         ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES]),
+        ...mapState(MODAL_MODULE, {
+            isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
+        }),
         ...mapState('route', {
             code: state => state.params.code,
         }),
@@ -306,6 +321,7 @@ export default {
     methods: {
         ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_CATALOG_DATA]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         setSortValue(field, direction) {
             this.sortValue =
@@ -369,6 +385,10 @@ export default {
                 path: this.$route.path,
                 query: { ...this.$route.query, page: this.activePage + 1 },
             });
+        },
+
+        onPreview(code) {
+            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
         },
 
         onPageChanged(page) {

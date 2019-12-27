@@ -27,7 +27,7 @@
                 <v-button class="btn--outline catalog-product-card__controls-btn" @click.prevent="onBuyButtonClick">
                     Купить
                 </v-button>
-                <v-link tag="button" class="catalog-product-card__controls-link" @click.prevent>
+                <v-link tag="button" class="catalog-product-card__controls-link" @click.prevent="onPreview">
                     Быстрый просмотр
                 </v-link>
             </div>
@@ -150,6 +150,10 @@ export default {
     methods: {
         onBuyButtonClick() {
             this.$emit('addItem', { id: this.productId, type: this.type });
+        },
+
+        onPreview() {
+            this.$emit('preview', { id: this.productId, type: this.type });
         },
 
         generateSourcePath(x, y, id, ext) {
