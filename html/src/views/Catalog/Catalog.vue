@@ -193,8 +193,8 @@
             </div>
         </section>
 
-        <transition name="fade">
-            <quick-view-modal v-if="isQuickViewOpen" />
+        <transition name="fade-in">
+            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
         </transition>
     </section>
 </template>
