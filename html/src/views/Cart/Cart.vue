@@ -155,10 +155,15 @@
                         :tags="item.tags"
                         :rating="item.rating"
                         @addItem="ADD_CART_ITEM({ offerId: item.id })"
+                        @preview="onPreview(item.code)"
                     />
                 </v-slider>
             </div>
         </section>
+
+        <transition name="fade-in">
+            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
+        </transition>
     </section>
 </template>
 
@@ -176,6 +181,8 @@ import CatalogProductCard from '../../components/CatalogProductCard/CatalogProdu
 import CartProductCard from '../../components/CartProductCard/CartProductCard.vue';
 import VTabs from '../../components/controls/VTabs/VTabs.vue';
 
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
+
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '../../store/modules/Cart';
 import { FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM } from '../../store/modules/Cart/actions';
@@ -187,6 +194,9 @@ import {
     CART_ITEMS_COUNT,
     CART_TYPES,
 } from '../../store/modules/Cart/getters';
+
+import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import { breakpoints, cartItemTypes } from '../../assets/scripts/constants';
 import { preparePrice } from '../../util/helpers';
@@ -244,6 +254,8 @@ export default {
         CartProductCard,
         CartMasterClassCard,
         CatalogProductCard,
+
+        QuickViewModal,
     },
 
     data() {
@@ -253,8 +265,15 @@ export default {
     },
 
     computed: {
+        ...mapState(MODAL_MODULE, {
+            isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
+        }),
         ...mapState(CART_MODULE, [FEATURED_PRODUCTS, CART_DATA]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS]),
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
 
         sliderOptions() {
             return sliderOptions;
@@ -267,6 +286,11 @@ export default {
 
     methods: {
         ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        onPreview(code) {
+            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+        },
 
         prepareBonus(value) {
             return preparePrice(value);

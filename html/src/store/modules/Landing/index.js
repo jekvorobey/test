@@ -2,8 +2,11 @@ import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
 
+export const NAME = 'landing';
+export const RENDER_DATA = 'renderData';
+
 export default {
-    name: 'landing',
+    name: NAME,
     namespaced: true,
     state: {
         renderData: [],

@@ -6,6 +6,9 @@
             :is="renderItem.component"
             v-bind="renderItem.data"
         />
+        <transition name="fade-in">
+            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
+        </transition>
     </section>
 </template>
 
@@ -22,9 +25,14 @@ import CategoriesSection from '../../components/blocks/CategoriesSection/Categor
 import ProductsSection from '../../components/blocks/ProductsSection/ProductsSection.vue';
 import BrandsSection from '../../components/blocks/BrandsSection/BrandsSection.vue';
 
-import landingModule from '../../store/modules/Landing';
-import { mapState } from 'vuex';
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
+
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
+import { mapState } from 'vuex';
+
+import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
+
+import landingModule, { NAME as LANDING_MODULE, RENDER_DATA } from '../../store/modules/Landing';
 
 import './Landing.css';
 
@@ -39,6 +47,8 @@ export default {
         CategoriesSection,
         ProductsSection,
         InstagramSection,
+
+        QuickViewModal,
     },
 
     head: {
@@ -50,7 +60,14 @@ export default {
     },
 
     computed: {
-        ...mapState('landing', ['renderData']),
+        ...mapState(LANDING_MODULE, [RENDER_DATA]),
+        ...mapState(MODAL_MODULE, {
+            isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
+        }),
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
     },
 
     beforeRouteEnter(to, from, next) {

@@ -19,6 +19,7 @@
                         :tags="product.tags"
                         :rating="product.rating"
                         @addItem="ADD_CART_ITEM({ offerId: product.id })"
+                        @preview="onPreview(product.code)"
                     />
                     <v-button class="btn--outline products-section__link" :to="btnLink">
                         {{ btnText }}
@@ -45,6 +46,9 @@ import CatalogBannerCard from '../../CatalogBannerCard/CatalogBannerCard.vue';
 import { mapActions } from 'vuex';
 import { NAME as CART_MODULE } from '../../../store/modules/Cart';
 import { ADD_CART_ITEM } from '../../../store/modules/Cart/actions';
+
+import { NAME as MODAL_MODULE } from '../../../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
 import './ProductsSection.css';
 
@@ -94,6 +98,11 @@ export default {
 
     methods: {
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        onPreview(code) {
+            this[CHANGE_MODAL_STATE]({ name: 'quick-view-modal', open: true, state: { code } });
+        },
     },
 };
 </script>
