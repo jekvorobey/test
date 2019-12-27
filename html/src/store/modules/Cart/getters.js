@@ -50,6 +50,7 @@ export default {
         if (productData) return productData.summary.sum;
         return '';
     },
+
     [IS_PRODUCT]: () => (item = {}) => isValidType(item.type) && item.type === cartItemTypes.PRODUCT,
 
     [IS_MASTER_CLASS]: () => (item = {}) => isValidType(item.type) && item.type === cartItemTypes.MASTERCLASS,

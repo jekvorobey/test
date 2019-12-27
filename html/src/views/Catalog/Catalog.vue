@@ -109,7 +109,7 @@
                                 :old-price="item.oldPrice"
                                 :tags="item.tags"
                                 :rating="item.rating"
-                                @addItem="ADD_CART_ITEM({ offerId: item.id })"
+                                @addItem="onAddToCart($event)"
                                 @preview="onPreview(item.code)"
                             />
                             <catalog-banner-card
@@ -195,6 +195,7 @@
 
         <transition name="fade-in">
             <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
+            <add-to-cart-modal v-else-if="isAddToCartOpen" />
         </transition>
     </section>
 </template>
@@ -216,6 +217,7 @@ import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
 
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
 
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
@@ -265,6 +267,7 @@ export default {
         CatalogProductCard,
         CatalogBannerCard,
 
+        AddToCartModal,
         QuickViewModal,
     },
 
@@ -297,6 +300,8 @@ export default {
         ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES]),
         ...mapState(MODAL_MODULE, {
             isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
+            isAddToCartOpen: state =>
+                state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
         }),
         ...mapState('route', {
             code: state => state.params.code,
@@ -389,6 +394,14 @@ export default {
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+        },
+
+        onAddToCart(item) {
+            this[CHANGE_MODAL_STATE]({
+                name: ADD_TO_CART_MODAL_NAME,
+                open: true,
+                state: { offerId: item.id, type: item.type },
+            });
         },
 
         onPageChanged(page) {
