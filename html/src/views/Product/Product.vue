@@ -488,6 +488,7 @@
                         :tags="product.tags"
                         :rating="product.rating"
                         @addItem="ADD_CART_ITEM({ offerId: product.id })"
+                        @preview="onPreview(product.code)"
                     />
                 </v-slider>
             </div>
@@ -546,6 +547,7 @@
                         :tags="product.tags"
                         :rating="product.rating"
                         @addItem="ADD_CART_ITEM({ offerId: product.id })"
+                        @preview="onPreview(product.code)"
                     />
                 </div>
             </div>
@@ -564,8 +566,8 @@
             />
         </transition>
 
-        <transition name="fade">
-            <!-- <quick-view-modal /> -->
+        <transition name="fade-in">
+            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
         </transition>
     </section>
 </template>
@@ -592,9 +594,10 @@ import ProductPricePanel from '../../components/ProductPricePanel/ProductPricePa
 import ProductCartPanel from '../../components/ProductCartPanel/ProductCartPanel.vue';
 import ProductDetailPanel from '../../components/ProductDetailPanel/ProductDetailPanel.vue';
 
-import QuickViewModal from '../../components/QuickViewModal/QuickViewModal.vue';
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
 
 import '../../plugins/observer';
+import { $store, $progress, $logger } from '../../services/ServiceLocator';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { SCROLL } from '../../store';
@@ -614,7 +617,8 @@ import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 
 import { NAME as GEO_MODULE, SELECTED_CITY } from '../../store/modules/Geolocation';
 
-import { $store, $progress, $logger } from '../../services/ServiceLocator';
+import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
 import { generatePictureSourcePath } from '../../util/images';
@@ -753,6 +757,9 @@ export default {
         ...mapState('route', { code: state => state.params.code }),
         ...mapState(PRODUCT_MODULE, [PRODUCT, MASTERCLASSES, BANNERS, FEATURED_PRODUCTS, INSTAGRAM_ITEMS]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
+        ...mapState(MODAL_MODULE, {
+            isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
+        }),
 
         productGalleryOptions() {
             return productGalleryOptions;
@@ -781,18 +788,23 @@ export default {
 
     watch: {
         [SELECTED_CITY](value) {
-            const { productCode } = this.product;
-            const { fias_id } = value;
-            this.debounce_fetchProduct(to, from);
+            // const { productCode } = this.product;
+            // const { fias_id } = value;
+            // this.debounce_fetchProduct(to, from);
         },
     },
 
     methods: {
         ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         generateSourcePath(x, y, id, ext) {
             return generatePictureSourcePath(x, y, id, ext);
+        },
+
+        onPreview(code) {
+            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
         },
 
         onPriceVisibilityChanged(isVisible) {

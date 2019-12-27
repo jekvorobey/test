@@ -54,12 +54,12 @@
 <script>
 import VButton from '../controls/VButton/VButton.vue';
 import VPicture from '../controls/VPicture/VPicture.vue';
-import VSpinner from '../controls/VSpinner/VSpinner.vue';
 
 import GeneralModal from '../GeneralModal/GeneralModal.vue';
 import ProductCartPanel from '../ProductCartPanel/ProductCartPanel.vue';
 import ProductDetailPanel from '../ProductDetailPanel/ProductDetailPanel.vue';
 import ProductDeliveryPanel from '../ProductDeliveryPanel/ProductDeliveryPanel.vue';
+import VSpinner from '../controls/VSpinner/VSpinner.vue';
 
 import { mapState, mapActions } from 'vuex';
 
@@ -72,9 +72,9 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 import { NAME as CART_MODULE } from '../../store/modules/Cart';
 import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 
+import { requestStatus } from '../../assets/scripts/constants';
 import { generatePictureSourcePath } from '../../util/images';
 import './QuickViewModal.css';
-import { requestStatus } from '../../assets/scripts/constants';
 
 export const NAME = 'quick-view-modal';
 
@@ -90,10 +90,6 @@ export default {
         ProductCartPanel,
         ProductDetailPanel,
         ProductDeliveryPanel,
-    },
-
-    data() {
-        return {};
     },
 
     computed: {
