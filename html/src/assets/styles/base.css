@@ -200,6 +200,7 @@ fieldset {
     text-transform: uppercase;
     color: inherit;
     fill: inherit;
+    border-radius: 1px;
 
     &:hover {
         color: inherit;

@@ -7,7 +7,6 @@
     clear: both;
     transition: all var(--time) var(--timing-function);
     border: 2px solid var(--cl-global);
-    border-radius: 0;
     background: var(--cl-global);
     text-align: center;
     text-transform: uppercase;

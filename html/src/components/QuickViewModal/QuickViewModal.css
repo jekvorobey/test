@@ -11,10 +11,6 @@
 
     &__body {
         display: flex;
-
-        &--loading {
-            opacity: 0;
-        }
     }
 
     &__detail {

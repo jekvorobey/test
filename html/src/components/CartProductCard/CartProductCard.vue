@@ -27,7 +27,7 @@
         <div class="cart-product-card__body">
             <v-link class="cart-product-card__body-name" :to="href">{{ name }}</v-link>
             <div class="cart-product-card__body-count">
-                <v-counter :value="count" min="0" @input="debounce_countChange" />
+                <v-counter :value="count" min="1" @input="debounce_countChange" />
             </div>
 
             <div class="cart-product-card__body-prices">
