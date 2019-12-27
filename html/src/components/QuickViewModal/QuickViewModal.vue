@@ -54,12 +54,12 @@
 <script>
 import VButton from '../controls/VButton/VButton.vue';
 import VPicture from '../controls/VPicture/VPicture.vue';
-import VSpinner from '../controls/VSpinner/VSpinner.vue';
 
 import GeneralModal from '../GeneralModal/GeneralModal.vue';
 import ProductCartPanel from '../ProductCartPanel/ProductCartPanel.vue';
 import ProductDetailPanel from '../ProductDetailPanel/ProductDetailPanel.vue';
 import ProductDeliveryPanel from '../ProductDeliveryPanel/ProductDeliveryPanel.vue';
+import VSpinner from '../controls/VSpinner/VSpinner.vue';
 
 import { mapState, mapActions } from 'vuex';
 

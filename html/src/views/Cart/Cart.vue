@@ -176,12 +176,11 @@ import VInput from '../../components/controls/VInput/VInput.vue';
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 import VSlider from '../../components/controls/VSlider/VSlider.vue';
 
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
 import CartMasterClassCard from '../../components/CartMasterClassCard/CartMasterClassCard.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CartProductCard from '../../components/CartProductCard/CartProductCard.vue';
 import VTabs from '../../components/controls/VTabs/VTabs.vue';
-
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '../../store/modules/Cart';
