@@ -1,6 +1,7 @@
 .quick-view-modal {
     .modal-container {
         width: 1024px;
+        min-height: 600px;
     }
 
     .modal-body {

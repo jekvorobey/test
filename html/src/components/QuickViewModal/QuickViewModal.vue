@@ -1,7 +1,7 @@
 <template>
     <general-modal type="wide" class="quick-view-modal" @close="onClose">
         <template v-slot:content>
-            <div class="quick-view-modal__body" :class="{ 'quick-view-modal__body--loading': isPending }">
+            <div class="quick-view-modal__body" v-if="!isPending">
                 <div class="quick-view-modal__gallery">
                     <div class="quick-view-modal__gallery-item" v-for="image in images" :key="image.id">
                         <v-picture v-if="image && image.id" :image="image" alt="">
