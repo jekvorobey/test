@@ -19,6 +19,10 @@
         padding: 0;
     }
 
+    .general-modal__sticky {
+        height: 100%;
+    }
+
     &__hl {
         @media (--tablet) {
             display: none;
