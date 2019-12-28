@@ -177,8 +177,9 @@ import VInput from '../../components/controls/VInput/VInput.vue';
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 import VSlider from '../../components/controls/VSlider/VSlider.vue';
 
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
+
 import CartMasterClassCard from '../../components/CartMasterClassCard/CartMasterClassCard.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CartProductCard from '../../components/CartProductCard/CartProductCard.vue';

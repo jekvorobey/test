@@ -27,8 +27,8 @@ import CategoriesSection from '../../components/blocks/CategoriesSection/Categor
 import ProductsSection from '../../components/blocks/ProductsSection/ProductsSection.vue';
 import BrandsSection from '../../components/blocks/BrandsSection/BrandsSection.vue';
 
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 import { mapState } from 'vuex';

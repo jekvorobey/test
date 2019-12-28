@@ -595,8 +595,8 @@ import ProductPricePanel from '../../components/ProductPricePanel/ProductPricePa
 import ProductCartPanel from '../../components/ProductCartPanel/ProductCartPanel.vue';
 import ProductDetailPanel from '../../components/ProductDetailPanel/ProductDetailPanel.vue';
 
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 
 import '../../plugins/observer';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
