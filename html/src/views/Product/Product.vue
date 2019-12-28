@@ -29,7 +29,7 @@
             <div class="container product-view__header">
                 <v-sticky class="product-view__header-sticky">
                     <template v-slot:sticky>
-                        <div v-if="!isTabletLg" class="product-view__header-gallery">
+                        <div v-if="!isTabletLg" class="product-view__header-gallery" @click.prevent="onShowGallery">
                             <div
                                 class="product-view__header-gallery-item"
                                 v-for="image in product.media"
@@ -569,6 +569,7 @@
         <transition name="fade-in">
             <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
             <add-to-cart-modal v-else-if="isAddToCartOpen" />
+            <gallery-modal v-else-if="isGalleryOpen && !isTabletLg" />
         </transition>
     </section>
 </template>
@@ -597,6 +598,7 @@ import ProductDetailPanel from '../../components/ProductDetailPanel/ProductDetai
 
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
 import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
+import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '../../components/GalleryModal/GalleryModal.vue';
 
 import '../../plugins/observer';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
@@ -746,6 +748,7 @@ export default {
 
         QuickViewModal,
         AddToCartModal,
+        GalleryModal,
     },
 
     data() {
@@ -764,6 +767,7 @@ export default {
             isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
             isAddToCartOpen: state =>
                 state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
+            isGalleryOpen: state => state[MODALS][GALLERY_MODAL_NAME] && state[MODALS][GALLERY_MODAL_NAME].open,
         }),
 
         productGalleryOptions() {
@@ -810,6 +814,10 @@ export default {
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+        },
+
+        onShowGallery() {
+            this[CHANGE_MODAL_STATE]({ name: GALLERY_MODAL_NAME, open: true });
         },
 
         onAddToCart(item) {
