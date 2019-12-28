@@ -487,7 +487,7 @@
                         :old-price="product.oldPrice"
                         :tags="product.tags"
                         :rating="product.rating"
-                        @addItem="ADD_CART_ITEM({ offerId: product.id })"
+                        @addItem="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                     />
                 </v-slider>
@@ -546,7 +546,7 @@
                         :image="product.image"
                         :tags="product.tags"
                         :rating="product.rating"
-                        @addItem="ADD_CART_ITEM({ offerId: product.id })"
+                        @addItem="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                     />
                 </div>
@@ -568,6 +568,7 @@
 
         <transition name="fade-in">
             <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
+            <add-to-cart-modal v-else-if="isAddToCartOpen" />
         </transition>
     </section>
 </template>
@@ -594,6 +595,7 @@ import ProductPricePanel from '../../components/ProductPricePanel/ProductPricePa
 import ProductCartPanel from '../../components/ProductCartPanel/ProductCartPanel.vue';
 import ProductDetailPanel from '../../components/ProductDetailPanel/ProductDetailPanel.vue';
 
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
 
 import '../../plugins/observer';
@@ -743,6 +745,7 @@ export default {
         ProductDetailPanel,
 
         QuickViewModal,
+        AddToCartModal,
     },
 
     data() {
@@ -759,6 +762,8 @@ export default {
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {
             isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
+            isAddToCartOpen: state =>
+                state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
         }),
 
         productGalleryOptions() {
@@ -805,6 +810,14 @@ export default {
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+        },
+
+        onAddToCart(item) {
+            this[CHANGE_MODAL_STATE]({
+                name: ADD_TO_CART_MODAL_NAME,
+                open: true,
+                state: { offerId: item.id, type: item.type },
+            });
         },
 
         onPriceVisibilityChanged(isVisible) {

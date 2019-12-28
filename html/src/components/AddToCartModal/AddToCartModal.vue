@@ -91,9 +91,9 @@ import { NAME as CART_MODULE, CART_DATA, RELATIVE_PRODUCTS } from '../../store/m
 import { ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS } from '../../store/modules/Cart/actions';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '../../store/modules/Cart/getters';
 
+import { getRandomIntInclusive } from '../../util/helpers';
 import { generatePictureSourcePath } from '../../util/images';
 import './AddToCartModal.css';
-import { getRandomIntInclusive } from '../../util/helpers';
 
 export const NAME = 'add-to-cart-modal';
 

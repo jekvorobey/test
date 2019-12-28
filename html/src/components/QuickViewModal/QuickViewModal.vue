@@ -61,6 +61,8 @@ import ProductDetailPanel from '../ProductDetailPanel/ProductDetailPanel.vue';
 import ProductDeliveryPanel from '../ProductDeliveryPanel/ProductDeliveryPanel.vue';
 import VSpinner from '../controls/VSpinner/VSpinner.vue';
 
+import { NAME as ADD_TO_CART_MODAL_NAME } from '../AddToCartModal/AddToCartModal.vue';
+
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as PREVIEW_MODULE, PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS } from '../../store/modules/Preview';
@@ -122,7 +124,12 @@ export default {
         onWishlistStateChange() {},
 
         onCartStateChange() {
-            this[ADD_CART_ITEM]({ offerId: this.productPreview.id });
+            this.onClose();
+            this[CHANGE_MODAL_STATE]({
+                name: ADD_TO_CART_MODAL_NAME,
+                open: true,
+                state: { offerId: this.productPreview.id, type: 'product' },
+            });
         },
 
         onClose() {

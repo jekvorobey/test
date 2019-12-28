@@ -154,7 +154,7 @@
                         :old-price="item.oldPrice"
                         :tags="item.tags"
                         :rating="item.rating"
-                        @addItem="ADD_CART_ITEM({ offerId: item.id })"
+                        @addItem="onAddToCart(item)"
                         @preview="onPreview(item.code)"
                     />
                 </v-slider>
@@ -163,6 +163,7 @@
 
         <transition name="fade-in">
             <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
+            <add-to-cart-modal v-else-if="isAddToCartOpen" />
         </transition>
     </section>
 </template>
@@ -176,6 +177,7 @@ import VInput from '../../components/controls/VInput/VInput.vue';
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 import VSlider from '../../components/controls/VSlider/VSlider.vue';
 
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
 import CartMasterClassCard from '../../components/CartMasterClassCard/CartMasterClassCard.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
@@ -254,6 +256,7 @@ export default {
         CartMasterClassCard,
         CatalogProductCard,
 
+        AddToCartModal,
         QuickViewModal,
     },
 
@@ -266,6 +269,8 @@ export default {
     computed: {
         ...mapState(MODAL_MODULE, {
             isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
+            isAddToCartOpen: state =>
+                state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
         }),
         ...mapState(CART_MODULE, [FEATURED_PRODUCTS, CART_DATA]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS]),
@@ -289,6 +294,14 @@ export default {
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+        },
+
+        onAddToCart(item) {
+            this[CHANGE_MODAL_STATE]({
+                name: ADD_TO_CART_MODAL_NAME,
+                open: true,
+                state: { offerId: item.id, type: item.type },
+            });
         },
 
         prepareBonus(value) {
