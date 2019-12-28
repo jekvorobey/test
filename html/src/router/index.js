@@ -1,11 +1,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import pipeline from './pipeline';
 
 import { $store } from '../services/ServiceLocator';
 import { SET_MENU_OPEN } from '../store/actions';
+
 import { NAME as SEARCH_MODULE } from '../store/modules/Search';
 import { SET_SEARCH } from '../store/modules/Search/actions';
-import pipeline from './pipeline';
+
+import { NAME as MODAL_MODULE } from '../store/modules/Modal';
+import { CLOSE_ALL } from '../store/modules/Modal/actions';
 
 /*
  * Preventing errors in console in Vue-router >= 3.1.0
@@ -98,6 +102,7 @@ export default function createRouter() {
         if ($store) {
             $store.dispatch(SET_MENU_OPEN, false);
             $store.dispatch(`${SEARCH_MODULE}/${SET_SEARCH}`, false);
+            $store.dispatch(`${MODAL_MODULE}/${CLOSE_ALL}`);
         }
     });
 

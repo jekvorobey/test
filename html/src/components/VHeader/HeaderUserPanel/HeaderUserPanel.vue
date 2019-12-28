@@ -54,6 +54,10 @@ export default {
         ...mapState([IS_CART_OPEN]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
 
+        isTablet() {
+            return this.$mq.tablet;
+        },
+
         isTabletLg() {
             return this.$mq.tabletLg;
         },
@@ -64,7 +68,10 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onToggleCart() {
-            this[SET_CART_OPEN](!this.isCartOpen);
+            if (this.isTablet) {
+                this[SET_CART_OPEN](false);
+                this.$router.push({ path: '/cart' });
+            } else this[SET_CART_OPEN](!this.isCartOpen);
         },
 
         onRegister() {
