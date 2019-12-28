@@ -1,8 +1,20 @@
 .gallery-modal {
+    .popup--wide {
+        @media (--desktop-lg) {
+            width: 900px;
+            height: 600px;
+        }
+    }
+
     .modal-body {
         position: relative;
         padding: 0 calc(var(--gs) * 20);
         padding-top: calc(var(--gs) * 6);
+
+        @media (--desktop-lg) {
+            padding: 0 calc(var(--gs) * 28);
+            padding-top: calc(var(--gs) * 6);
+        }
     }
 
     &__body {
@@ -17,6 +29,9 @@
 
         &-item {
             min-height: 600px;
+            @media (--desktop-lg) {
+                min-height: 400px;
+            }
         }
 
         .v-slider__controls {
