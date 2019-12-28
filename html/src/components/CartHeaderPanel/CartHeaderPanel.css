@@ -1,8 +1,10 @@
 .cart-header-panel {
-    width: 420px;
+    width: calc(var(--gs) * 52.5);
 
     &__list {
         width: 100%;
+        height: calc(var(--gs) * 37.5);
+        overflow: auto;
 
         &-item {
             padding: calc(var(--gs) * 2) 0;

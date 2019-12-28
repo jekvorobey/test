@@ -18,7 +18,7 @@
                         :old-price="product.oldPrice"
                         :tags="product.tags"
                         :rating="product.rating"
-                        @addItem="ADD_CART_ITEM({ offerId: product.id })"
+                        @addItem="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                     />
                     <v-button class="btn--outline products-section__link" :to="btnLink">
@@ -102,6 +102,14 @@ export default {
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: 'quick-view-modal', open: true, state: { code } });
+        },
+
+        onAddToCart(item) {
+            this[CHANGE_MODAL_STATE]({
+                name: 'add-to-cart-modal',
+                open: true,
+                state: { offerId: item.id, type: item.type },
+            });
         },
     },
 };

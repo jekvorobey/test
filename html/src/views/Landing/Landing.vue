@@ -6,8 +6,10 @@
             :is="renderItem.component"
             v-bind="renderItem.data"
         />
+
         <transition name="fade-in">
             <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
+            <add-to-cart-modal v-else-if="isAddToCartOpen" />
         </transition>
     </section>
 </template>
@@ -26,6 +28,7 @@ import ProductsSection from '../../components/blocks/ProductsSection/ProductsSec
 import BrandsSection from '../../components/blocks/BrandsSection/BrandsSection.vue';
 
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 import { mapState } from 'vuex';
@@ -49,6 +52,7 @@ export default {
         InstagramSection,
 
         QuickViewModal,
+        AddToCartModal,
     },
 
     head: {
@@ -63,6 +67,8 @@ export default {
         ...mapState(LANDING_MODULE, [RENDER_DATA]),
         ...mapState(MODAL_MODULE, {
             isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
+            isAddToCartOpen: state =>
+                state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
         }),
 
         isTabletLg() {
