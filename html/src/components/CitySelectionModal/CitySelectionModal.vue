@@ -1,21 +1,23 @@
 <template>
-    <general-modal type="sm" class="city-selection-modal" :header="header" @close="onClose">
+    <general-modal type="sm" class="city-selection-modal" :header="header" @close="onClose" :is-mobile="isTablet">
         <template v-slot:content>
-            <h3 class="city-selection-modal__hl">{{ header }}</h3>
-            <v-input class="city-selection-modal__input" @input="debounce_onCityInputChange">
-                <template v-slot:after>
-                    <v-svg name="search-middle" width="24" height="24" />
-                </template>
-            </v-input>
-            <ul class="city-selection-modal__list">
-                <li
-                    class="city-selection-modal__list-item"
-                    v-for="city in suggestions"
-                    :key="city.city_fias_id || city.settlement_fias_id"
-                >
-                    <button class="city-selection-modal__list-btn" @click="onSubmit(city)">{{ city.value }}</button>
-                </li>
-            </ul>
+            <div class="city-selection-modal__body">
+                <h3 class="city-selection-modal__hl">{{ header }}</h3>
+                <v-input class="city-selection-modal__input" @input="debounce_onCityInputChange">
+                    <template v-slot:after>
+                        <v-svg name="search-middle" width="24" height="24" />
+                    </template>
+                </v-input>
+                <ul class="city-selection-modal__list">
+                    <li
+                        class="city-selection-modal__list-item"
+                        v-for="city in suggestions"
+                        :key="city.city_fias_id || city.settlement_fias_id"
+                    >
+                        <button class="city-selection-modal__list-btn" @click="onSubmit(city)">{{ city.value }}</button>
+                    </li>
+                </ul>
+            </div>
         </template>
     </general-modal>
 </template>
