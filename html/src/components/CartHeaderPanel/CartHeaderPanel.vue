@@ -28,11 +28,14 @@
             <v-button class="btn--outline cart-header-panel__controls-btn" @click="onToCart">
                 В корзину
             </v-button>
-            <div class="cart-header-panel__total">
+            <div class="cart-header-panel__total" v-if="cartItemsCount > 0">
                 {{ $tc('cart.items', cartItemsCount) }} на сумму
                 <div class="text-bold">
                     {{ productItemsSum }}
                 </div>
+            </div>
+            <div class="cart-header-panel__total" v-else>
+                Ваша корзина пуста
             </div>
         </template>
     </general-popup-panel>
