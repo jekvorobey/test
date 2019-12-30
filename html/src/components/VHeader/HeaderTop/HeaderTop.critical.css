@@ -33,14 +33,28 @@
     &__middle-item {
         display: flex;
         align-items: center;
+        text-align: left;
+
+        .icon {
+            flex: none;
+            margin-right: var(--gs);
+        }
     }
 
     &__city {
-        padding-right: calc(var(--gs) * 2);
+        padding-right: calc(var(--gs) * 7);
+
+        @media (--desktop-lg) {
+            padding-right: calc(var(--gs) * 2);
+        }
     }
 
     &__help {
-        padding-left: calc(var(--gs) * 2);
+        padding-left: calc(var(--gs) * 7);
+
+        @media (--desktop-lg) {
+            padding-left: calc(var(--gs) * 2);
+        }
     }
 
     &__container {
@@ -52,13 +66,9 @@
         & + & {
             margin-left: calc(var(--gs) * 9);
 
-            @media (--desktop) {
+            @media (--desktop-lg) {
                 margin-left: calc(var(--gs) * 2);
             }
-        }
-
-        .icon {
-            margin-right: var(--gs);
         }
     }
 

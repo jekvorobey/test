@@ -2,8 +2,8 @@
     <div class="header-top" :class="{ 'header-top--search': search }">
         <div class="container header-top__container">
             <button class="header-top__city" title="Выбрать город" @click="onOpenCitySelection">
-                <v-svg name="pin" width="16" height="16" />&nbsp;
-                <v-clamp :max-lines="1">{{ city }}</v-clamp>
+                <v-svg name="pin" width="16" height="16" />
+                <v-clamp :max-lines="1" autoresize>{{ city }}</v-clamp>
             </button>
 
             <div class="header-top__middle">

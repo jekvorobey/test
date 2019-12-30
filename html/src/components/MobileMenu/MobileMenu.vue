@@ -73,7 +73,7 @@
                         <li class="container mobile-menu__menu-item mobile-menu__menu-item--separator">
                             <v-link tag="button" class="mobile-menu__menu-link" @click.prevent="onOpenCitySelection">
                                 <v-svg name="pin" width="24" height="24" />
-                                <v-clamp :max-lines="2">{{ city }}</v-clamp>
+                                <v-clamp :max-lines="2" autoresize>{{ city }}</v-clamp>
                             </v-link>
                             <v-link tag="button" class="mobile-menu__menu-btn" @click.prevent="onOpenCitySelection">
                                 <v-svg name="arrow-down" width="24" height="24" />
