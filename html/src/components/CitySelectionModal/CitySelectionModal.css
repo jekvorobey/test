@@ -9,6 +9,34 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
+
+        @media (--tablet) {
+            padding: 0;
+            padding-bottom: calc(var(--gs) * 4);
+        }
+    }
+
+    .general-modal__sticky {
+        @media (--tablet) {
+            height: 100%;
+            overflow: hidden;
+        }
+    }
+
+    &__hl {
+        @media (--tablet) {
+            display: none;
+        }
+    }
+
+    &__body {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        @media (--tablet) {
+            padding: calc(var(--gs) * 2);
+        }
     }
 
     &__input {
@@ -29,14 +57,20 @@
         overflow: auto;
 
         &-item {
-            cursor: pointer;
+            padding: 1px;
+            & + & {
+                margin-top: var(--gs);
+            }
+        }
+
+        &-btn {
+            font-size: 16px;
+            line-height: 24px;
+            text-align: left;
+            text-transform: none;
 
             &:hover {
                 text-decoration: underline;
-            }
-
-            & + & {
-                margin-top: var(--gs);
             }
         }
     }

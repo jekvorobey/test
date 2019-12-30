@@ -2,7 +2,8 @@
     <div class="header-top" :class="{ 'header-top--search': search }">
         <div class="container header-top__container">
             <button class="header-top__city" title="Выбрать город" @click="onOpenCitySelection">
-                <v-svg name="pin" width="16" height="16" />&nbsp;{{ city }}
+                <v-svg name="pin" width="16" height="16" />&nbsp;
+                <v-clamp :max-lines="1">{{ city }}</v-clamp>
             </button>
 
             <div class="header-top__middle">
@@ -30,6 +31,8 @@
 
 <script>
 import VSvg from '../../controls/VSvg/VSvg.vue';
+import VClamp from 'vue-clamp';
+
 import HelpPanel from '../../HelpPanel/HelpPanel.vue';
 import { NAME as CITY_SELECTION_MODAL_NAME } from '../../CitySelectionModal/CitySelectionModal.vue';
 
@@ -58,6 +61,8 @@ export default {
 
     components: {
         VSvg,
+        VClamp,
+
         HelpPanel,
     },
 
@@ -65,7 +70,7 @@ export default {
         ...mapState([SCROLL, IS_HELP_OPEN]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
         ...mapState(GEO_MODULE, {
-            city: state => state[SELECTED_CITY].data.city || state[SELECTED_CITY].data.settlement || 'Выберите город',
+            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].value) || 'Выберите город',
         }),
 
         isTabletLg() {

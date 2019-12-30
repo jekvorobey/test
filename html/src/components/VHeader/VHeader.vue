@@ -32,7 +32,7 @@
         </transition>
 
         <transition name="fade-in">
-            <city-selection-modal v-if="isCitySelectionOpen && !isTabletLg" />
+            <city-selection-modal v-if="isCitySelectionOpen" />
         </transition>
     </header>
 </template>

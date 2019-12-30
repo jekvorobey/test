@@ -35,16 +35,25 @@
         align-items: center;
     }
 
+    &__city {
+        padding-right: calc(var(--gs) * 2);
+    }
+
+    &__help {
+        padding-left: calc(var(--gs) * 2);
+    }
+
     &__container {
         justify-content: space-between;
     }
 
     &__middle-item {
+        white-space: nowrap;
         & + & {
             margin-left: calc(var(--gs) * 9);
 
             @media (--desktop) {
-                margin-left: calc(var(--gs) * 3);
+                margin-left: calc(var(--gs) * 2);
             }
         }
 
