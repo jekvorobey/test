@@ -35,6 +35,14 @@
         align-items: center;
     }
 
+    &__city {
+        padding-right: calc(var(--gs) * 3);
+    }
+
+    &__help {
+        padding-left: calc(var(--gs) * 3);
+    }
+
     &__container {
         justify-content: space-between;
     }

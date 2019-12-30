@@ -29,14 +29,20 @@
         overflow: auto;
 
         &-item {
-            cursor: pointer;
+            padding: 1px;
+            & + & {
+                margin-top: var(--gs);
+            }
+        }
+
+        &-btn {
+            font-size: 16px;
+            line-height: 24px;
+            text-align: left;
+            text-transform: none;
 
             &:hover {
                 text-decoration: underline;
-            }
-
-            & + & {
-                margin-top: var(--gs);
             }
         }
     }
