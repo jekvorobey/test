@@ -7,12 +7,12 @@
     "account-view.732b53638711bf39739e.js",
     "account-view.732b53638711bf39739e.js.br",
     "account-view.732b53638711bf39739e.js.gz",
-    "app.5839724123b4e693b17b.css",
-    "app.5839724123b4e693b17b.css.br",
-    "app.5839724123b4e693b17b.css.gz",
-    "app.5839724123b4e693b17b.js",
-    "app.5839724123b4e693b17b.js.br",
-    "app.5839724123b4e693b17b.js.gz",
+    "app.cdfc057ddd48131956fd.css",
+    "app.cdfc057ddd48131956fd.css.br",
+    "app.cdfc057ddd48131956fd.css.gz",
+    "app.cdfc057ddd48131956fd.js",
+    "app.cdfc057ddd48131956fd.js.br",
+    "app.cdfc057ddd48131956fd.js.gz",
     "cart-view.f230c0ad7fa6b8a5d37b.css",
     "cart-view.f230c0ad7fa6b8a5d37b.css.br",
     "cart-view.f230c0ad7fa6b8a5d37b.css.gz",
@@ -323,9 +323,9 @@
     "ui-kit.a7aa82c3b2c54d28a050.js.gz",
     "v-chart.c1ceadcf5233687f4f35.css",
     "v-chart.c1ceadcf5233687f4f35.js",
-    "vendors~app.90434b54490dfc256a1c.js",
-    "vendors~app.90434b54490dfc256a1c.js.br",
-    "vendors~app.90434b54490dfc256a1c.js.gz",
+    "vendors~app.c45532bd7f860c7ebaf0.js",
+    "vendors~app.c45532bd7f860c7ebaf0.js.br",
+    "vendors~app.c45532bd7f860c7ebaf0.js.gz",
     "vendors~cart-view~landing-view~product-view.a72b970ec48b08d51f49.css",
     "vendors~cart-view~landing-view~product-view.a72b970ec48b08d51f49.css.br",
     "vendors~cart-view~landing-view~product-view.a72b970ec48b08d51f49.css.gz",
@@ -349,9 +349,9 @@
     "vendors~v-chart.e1282c010e8dca9ae591.js.gz"
   ],
   "initial": [
-    "vendors~app.90434b54490dfc256a1c.js",
-    "app.5839724123b4e693b17b.css",
-    "app.5839724123b4e693b17b.js"
+    "vendors~app.c45532bd7f860c7ebaf0.js",
+    "app.cdfc057ddd48131956fd.css",
+    "app.cdfc057ddd48131956fd.js"
   ],
   "async": [
     "account-view.732b53638711bf39739e.css",
@@ -8048,6 +8048,9 @@
     ],
     "9cb28a32": [
       337
+    ],
+    "956d8186": [
+      322
     ],
     "8c8a8194": [
       322
