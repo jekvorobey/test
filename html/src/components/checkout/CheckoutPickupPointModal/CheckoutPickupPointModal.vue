@@ -2,13 +2,21 @@
     <general-modal class="checkout-pickup-point-modal" @close="onClose" :is-scroll-locked="false" :is-mobile="isTablet">
         <template v-slot:content>
             <div class="checkout-pickup-point-modal__map">
-                <yandex-map v-if="showMap && !isTablet" :zoom="11" :coords="coords" :controls="[]" showAllMarkers>
+                <yandex-map
+                    v-if="showMap && !isTablet"
+                    :zoom="11"
+                    :coords="coords"
+                    :controls="[]"
+                    :cluster-options="clusterOptions"
+                    showAllMarkers
+                >
                     <ymap-marker
                         v-for="point in filteredPickupPoints"
                         :key="`${point.id}-${point.methodID}`"
                         :marker-id="`marker-${point.id}`"
                         :coords="point.map.coords"
                         :icon="markerIcon"
+                        cluster-name="default-cluster"
                     />
                 </yandex-map>
             </div>
@@ -83,11 +91,18 @@ export default {
             selectedDeliveryMethod: null,
             showMap: false,
             coords: [55.755814, 37.617635],
+
             markerIcon: {
                 layout: 'default#image',
                 imageHref: pin,
                 imageSize: [24, 24],
                 imageOffset: [0, 0],
+            },
+
+            clusterMarkerIcon: {
+                href: pin,
+                size: [32, 32],
+                offset: [0, 0],
             },
         };
     },
@@ -95,13 +110,21 @@ export default {
     computed: {
         ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, DELIVERY_METHODS, SELECTED_DELIVERY_METHOD_ID]),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].isOpen,
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         filteredPickupPoints() {
             return this[PICKUP_POINTS].filter(
                 p => !this.selectedDeliveryMethod || p.methodID === this.selectedDeliveryMethod.id
             );
+        },
+
+        clusterOptions() {
+            return {
+                'default-cluster': {
+                    preset: 'islands#blackClusterIcons',
+                },
+            };
         },
 
         isTablet() {
