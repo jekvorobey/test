@@ -27,5 +27,19 @@ export default {
                 skipScroll: true,
             },
         },
+        {
+            path: '/brand/:brandCode/:code?/filters/*',
+            component: CatalogAsync,
+            meta: {
+                skipScroll: true,
+            },
+        },
+        {
+            path: '/brand/:brandCode/:code?',
+            component: CatalogAsync,
+            meta: {
+                skipScroll: true,
+            },
+        },
     ],
 };

@@ -31,6 +31,8 @@ import brand3 from '../../assets/images/mock/brand3.png';
 import brand4 from '../../assets/images/mock/brand4.png';
 import brand5 from '../../assets/images/mock/brand5.png';
 
+import brandDetail1 from '../../assets/images/mock/brandDetail1.jpg';
+
 import category1 from '../../assets/images/mock/category1.png';
 import category2 from '../../assets/images/mock/category2.png';
 import category3 from '../../assets/images/mock/category3.png';
@@ -418,6 +420,29 @@ const brands = [
         name: 'Estée Lauder',
         title: 'Estée Lauder',
         image: brand5,
+    },
+];
+
+const brandDetails = [
+    {
+        id: 1,
+        code: 'loreal',
+        name: 'L’Oréal Paris',
+        description: `L’Oreal — это, пожалуй, самый известный мировой бренд. 
+        Его знают и доверяют его продукции во всех странах мира. 
+        Это компания действительно уникальна. 
+        Она объединила несколько популярных и сделавших свое имя марок, но при этом логотип «L’Oreal» не теряет собственной значимости и индивидуальности. 
+        Каждая женщина при упоминании фразы «L’Oreal Paris» ассоциирует ее с качественными средствами для ухода за кожей, со стойкой и безопасной краской, с шампунями, масками и маслами, а также с возможностью сделать прекрасный макияж.`,
+    },
+
+    {
+        id: 2,
+        code: 'lipstick-queen',
+        name: 'Lipstick Queen',
+        image: brandDetail1,
+        description: `Губная помада Queen приглашает вас преодолеть косметические барьеры и пробиться с губой. 
+        Начиная с преобразующих цветов и увлажняющих и комфортных текстур и формул, мы предлагаем губную помаду для всех и каждого случая. 
+        Покупайте нашу бестселлерную губную помаду Frog Prince и другие любимые продукты у наших официальных партнеров по всему миру.`,
     },
 ];
 
@@ -1902,6 +1927,20 @@ export default class MockHttpService extends HttpServiceBase {
                 case '/v1/checkout/data':
                     setTimeout(() => resolve(_cloneDeep(checkoutData)), 300);
                     break;
+
+                case '/v1/brand':
+                    if (!data.brandCode) {
+                        reject(new Error('wrong brandCode'));
+                        return;
+                    }
+                    const brand = brandDetails.find(b => b.code === data.brandCode);
+                    if (!brand) {
+                        reject("brand doesn't exist");
+                        return;
+                    }
+                    setTimeout(() => resolve(_cloneDeep(brand)), 300);
+                    break;
+
                 default:
                     reject(new Error(`Unknown method, path: ${path}, data: ${JSON.stringify(data)}`));
             }

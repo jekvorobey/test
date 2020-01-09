@@ -3,6 +3,7 @@ export const SET_CATEGORY_CODE = 'SET_CATEGORY_CODE';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_BANNER = 'SET_BANNER';
 export const SET_LOAD = 'SET_LOAD';
+export const SET_BRAND = 'SET_BRAND';
 
 export default {
     [SET_LOAD](state, payload) {
@@ -24,5 +25,10 @@ export default {
 
     [SET_CATEGORIES](state, payload = []) {
         state.categories = payload;
+    },
+
+    [SET_BRAND](state, payload = {}) {
+        state.brandCode = payload.code;
+        state.brand = payload;
     },
 };

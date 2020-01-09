@@ -1,6 +1,17 @@
 const rangeRegx = /from_\d*_to_\d*/;
 const numberRegx = /\d+/g;
 
+export function generateCategoryUrl(brandCode, code) {
+    if (brandCode) return code ? `/brand/${brandCode}/${code}` : `/brand/${brandCode}`;
+    return code ? `/catalog/${code}` : `/catalog`;
+}
+
+export function concatBrandRoutePath(brandCode, categoryCode, segments) {
+    const baseRoute = categoryCode ? `/brand/${brandCode}/${categoryCode}` : `/brand/${brandCode}`;
+    const basePath = segments.length > 0 ? `${baseRoute}/filters` : baseRoute;
+    return basePath.concat(...segments.map(s => `/${s}`));
+}
+
 export function concatCatalogRoutePath(categoryCode, segments) {
     const baseRoute = categoryCode ? `/catalog/${categoryCode}` : '/catalog';
     const basePath = segments.length > 0 ? `${baseRoute}/filters` : baseRoute;
@@ -39,4 +50,4 @@ export function getActiveCategories(code, item, activeItems = []) {
     return false;
 }
 
-export default { concatCatalogRoutePath, mapFilterSegments };
+export default { generateCategoryUrl, concatCatalogRoutePath, concatBrandRoutePath, mapFilterSegments };

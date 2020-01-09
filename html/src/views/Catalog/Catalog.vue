@@ -9,19 +9,36 @@
                 </li>
 
                 <li class="catalog-view__breadcrumbs-item" key="all">
-                    <router-link class="catalog-view__breadcrumbs-link" to="/catalog">
+                    <template v-if="brandCode">Бренды</template>
+                    <router-link v-else class="catalog-view__breadcrumbs-link" to="/catalog">
                         Каталог
                     </router-link>
                 </li>
 
+                <li v-if="brandCode" class="catalog-view__breadcrumbs-item" :key="brandCode">
+                    <router-link class="catalog-view__breadcrumbs-link" :to="`/brand/${brandCode}`">
+                        {{ brand && brand.name }}
+                    </router-link>
+                </li>
+
                 <li class="catalog-view__breadcrumbs-item" v-for="category in activeCategories" :key="category.id">
-                    <router-link class="catalog-view__breadcrumbs-link" :to="`/catalog/${category.code}`">
+                    <router-link class="catalog-view__breadcrumbs-link" :to="generateBreadcrumbUrl(category.code)">
                         {{ category.name }}
                     </router-link>
                 </li>
             </transition-group>
 
             <catalog-banner-card
+                v-if="brandCode && brand"
+                class="catalog-view__brand"
+                :banner-id="brand.id"
+                :bottom-text="brand.description"
+                :title="brand.name"
+                :image="brand.image"
+            />
+
+            <catalog-banner-card
+                v-else
                 class="catalog-view__banner"
                 :banner-id="banner.id"
                 :image="banner.image"
@@ -48,7 +65,7 @@
                     <div class="catalog-view__main-header">
                         <div class="catalog-view__main-header-title">
                             <h1 class="catalog-view__main-header-hl">
-                                {{ activeCategory ? activeCategory.name : 'Каталог' }}
+                                {{ activeCategory ? activeCategory.name : 'Все категории' }}
                             </h1>
                             <p class="text-grey catalog-view__main-header-text">489 продуктов</p>
                         </div>
@@ -221,7 +238,7 @@ import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/
 import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
-import { concatCatalogRoutePath } from '../../util/catalog';
+import { concatCatalogRoutePath, concatBrandRoutePath, generateCategoryUrl } from '../../util/catalog';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { NAME as CART_MODULE } from '../../store/modules/Cart';
@@ -230,7 +247,7 @@ import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
-import catalogModule, { NAME as CATALOG_MODULE, ITEMS, BANNER, CATEGORIES } from '../../store/modules/Catalog';
+import catalogModule, { NAME as CATALOG_MODULE, ITEMS, BANNER, CATEGORIES, BRAND } from '../../store/modules/Catalog';
 import { FETCH_ITEMS, FETCH_CATALOG_DATA, SET_LOAD } from '../../store/modules/Catalog/actions';
 import {
     ACTIVE_TAGS,
@@ -252,6 +269,7 @@ let counter = 0;
 
 export default {
     name: 'catalog',
+
     components: {
         VSvg,
         VButton,
@@ -297,7 +315,7 @@ export default {
             ROUTE_SEGMENTS,
             ACTIVE_CATEGORIES,
         ]),
-        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES]),
+        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, BRAND]),
         ...mapState(MODAL_MODULE, {
             isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
             isAddToCartOpen: state =>
@@ -305,6 +323,7 @@ export default {
         }),
         ...mapState('route', {
             code: state => state.params.code,
+            brandCode: state => state.params.brandCode,
         }),
 
         isTabletLg() {
@@ -327,6 +346,11 @@ export default {
         ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_CATALOG_DATA]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        generateBreadcrumbUrl(code) {
+            const { brandCode } = this;
+            return { path: generateCategoryUrl(brandCode, code) };
+        },
 
         setSortValue(field, direction) {
             this.sortValue =
@@ -373,15 +397,18 @@ export default {
         },
 
         onClickDeleteTag(value) {
-            let { routeSegments, code } = this;
+            let { routeSegments, code, brandCode } = this;
 
             if (!routeSegments.includes(value)) return;
             else {
                 const index = routeSegments.indexOf(value);
                 if (index !== -1) routeSegments.splice(index, 1);
             }
+            const path = brandCode
+                ? concatBrandRoutePath(brandCode, code, routeSegments)
+                : concatCatalogRoutePath(code, routeSegments);
 
-            this.$router.replace({ path: concatCatalogRoutePath(code, routeSegments) });
+            this.$router.replace({ path });
         },
 
         onShowMore() {
@@ -412,7 +439,7 @@ export default {
         async fetchCatalog(to, from, showMore) {
             try {
                 const {
-                    params: { code },
+                    params: { code, brandCode: toBrandCode },
                     query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
                         page: 1,
                         orderField: 'price',
@@ -420,11 +447,25 @@ export default {
                     },
                 } = to;
 
+                const {
+                    params: { brandCode: fromBrandCode },
+                } = from;
+
                 const { query: { page: fromPage = 1 } = { page: 1 } } = from;
 
-                const filter = code && { category: code };
+                //const filter = { category: code, brand: [brandCode] };
+                const filter = { category: code };
                 this.$progress.start();
-                await this[FETCH_ITEMS]({ filter, orderField, orderDirection, page, showMore });
+                if (fromBrandCode === toBrandCode)
+                    await this[FETCH_ITEMS]({ filter, orderField, orderDirection, page, showMore });
+                else
+                    await this[FETCH_CATALOG_DATA]({
+                        brandCode: toBrandCode,
+                        filter,
+                        orderField,
+                        orderDirection,
+                        page,
+                    });
 
                 this.setSortValue(orderField, orderDirection);
                 this.$progress.finish();
@@ -435,8 +476,10 @@ export default {
                         behavior: 'smooth',
                     });
             } catch (error) {
-                $logger.error('debounce_fetchCatalog', error);
                 this.$progress.fail();
+                $logger.error('debounce_fetchCatalog', error);
+                this.$router.replace({ name: '404' });
+                this.$progress.finish();
             }
         },
     },
@@ -447,7 +490,7 @@ export default {
         // так как к моменту вызова экземпляр ещё не создан!
 
         const {
-            params: { code },
+            params: { code, brandCode: bCode },
             query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
                 page: 1,
                 orderField: 'price',
@@ -462,17 +505,25 @@ export default {
                 preserveState: !!$store.state.catalog,
             });
 
-        const { categoryCode, load } = $store.state.catalog;
+        const { categoryCode, brandCode, load } = $store.state.catalog;
 
         // если все загружено, пропускаем
-        if (load && categoryCode === code) next(vm => vm.$store.dispatch(`${CATALOG_MODULE}/${SET_LOAD}`, false));
+        if (load && categoryCode === code && brandCode === bCode)
+            next(vm => vm.$store.dispatch(`${CATALOG_MODULE}/${SET_LOAD}`, false));
         else {
             // если нет - фетчим
-            const filter = code && { category: code };
+            //const filter = { category: code, brand: [brandCode] };
+            const filter = { category: code };
 
             $progress.start();
             $store
-                .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, { filter, page, orderField, orderDirection })
+                .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, {
+                    brandCode: bCode,
+                    filter,
+                    page,
+                    orderField,
+                    orderDirection,
+                })
                 .then(() =>
                     next(vm => {
                         vm.setSortValue(orderField, orderDirection);
@@ -482,6 +533,8 @@ export default {
                 .catch(error => {
                     $progress.fail();
                     $logger.error(error);
+                    next({ name: '404', replace: true });
+                    $progress.finish();
                 });
         }
     },

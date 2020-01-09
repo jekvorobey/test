@@ -29,7 +29,7 @@
             <div v-if="bottomText" class="catalog-banner-card__panel-bottom-text">
                 {{ bottomText }}
             </div>
-            <v-button class="btn--outline catalog-banner-card__panel-btn">
+            <v-button v-if="btnText" class="btn--outline catalog-banner-card__panel-btn">
                 {{ btnText }}
             </v-button>
         </div>
