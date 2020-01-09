@@ -31,8 +31,7 @@
 
 <script>
 import VSvg from '../../controls/VSvg/VSvg.vue';
-import VClamp from 'vue-clamp';
-
+import VClamp from '../../controls/VClamp/VClamp.vue';
 import HelpPanel from '../../HelpPanel/HelpPanel.vue';
 import { NAME as CITY_SELECTION_MODAL_NAME } from '../../CitySelectionModal/CitySelectionModal.vue';
 

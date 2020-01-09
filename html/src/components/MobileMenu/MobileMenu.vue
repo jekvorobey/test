@@ -143,7 +143,7 @@
 import VSvg from '../controls/VSvg/VSvg.vue';
 import VLink from '../controls/VLink/VLink.vue';
 import VSticky from '../controls/VSticky/VSticky.vue';
-import VClamp from 'vue-clamp';
+import VClamp from '../controls/VClamp/VClamp.vue';
 
 import GeneralModal from '../GeneralModal/GeneralModal.vue';
 
