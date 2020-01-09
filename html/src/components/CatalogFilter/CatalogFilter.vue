@@ -60,7 +60,7 @@ import VCheck from '../controls/VCheck/VCheck.vue';
 import VAccordion from '../controls/VAccordion/VAccordion.vue';
 
 import _debounce from 'lodash/debounce';
-import { concatCatalogRoutePath } from '../../util/catalog';
+import { concatCatalogRoutePath, concatBrandRoutePath } from '../../util/catalog';
 import { mapState, mapGetters } from 'vuex';
 import './CatalogFilter.css';
 
@@ -92,19 +92,40 @@ export default {
         };
     },
 
+    computed: {
+        ...mapGetters('catalog', ['filterSegments', 'routeSegments']),
+        ...mapState('catalog', ['filters']),
+        ...mapState('route', {
+            code: state => state.params.code,
+            brandCode: state => state.params.brandCode,
+        }),
+
+        accordionFilters() {
+            return this.filters
+                ? this.filters.map(f => {
+                      return { id: f.id, item: f, title: f.title, isExpanded: true };
+                  })
+                : [];
+        },
+    },
+
     methods: {
         onRadioChange(e, name, value) {
-            let { routeSegments } = this;
+            let { routeSegments, code, brandCode } = this;
 
             if (!routeSegments.includes(value)) routeSegments.push(value);
             const radioRegexp = new RegExp(`^${name}-`);
             routeSegments = routeSegments.filter(s => s === value || !s.match(radioRegexp));
 
-            this.$router.replace({ path: concatCatalogRoutePath(this.code, routeSegments) });
+            const path = brandCode
+                ? concatBrandRoutePath(brandCode, code, routeSegments)
+                : concatCatalogRoutePath(code, routeSegments);
+
+            this.$router.replace({ path });
         },
 
         onCheckChange(e, name, value) {
-            let { routeSegments } = this;
+            let { routeSegments, code, brandCode } = this;
 
             if (e) {
                 if (routeSegments.includes(value)) return;
@@ -117,27 +138,15 @@ export default {
                 }
             }
 
-            this.$router.replace({ path: concatCatalogRoutePath(this.code, routeSegments) });
+            const path = brandCode
+                ? concatBrandRoutePath(brandCode, code, routeSegments)
+                : concatCatalogRoutePath(code, routeSegments);
+
+            this.$router.replace({ path });
         },
 
         onRangeChange(e, name) {
             this.debounce_rangeChange(e, name);
-        },
-    },
-
-    computed: {
-        ...mapGetters('catalog', ['filterSegments', 'routeSegments']),
-        ...mapState('catalog', ['filters']),
-        ...mapState('route', {
-            code: state => state.params.code,
-        }),
-
-        accordionFilters() {
-            return this.filters
-                ? this.filters.map(f => {
-                      return { id: f.id, item: f, title: f.title, isExpanded: true };
-                  })
-                : [];
         },
     },
 
@@ -164,4 +173,3 @@ export default {
     },
 };
 </script>
-

@@ -10,6 +10,8 @@ export const ITEMS = 'items';
 export const FILTERS = 'filters';
 export const RANGE = 'range';
 export const BANNER = 'banner';
+export const BRAND = 'brand';
+export const BRAND_CODE = 'brandCode';
 export const LOAD = 'load';
 
 const filters = [
@@ -98,6 +100,8 @@ export default {
     namespaced: true,
     state: {
         [LOAD]: false,
+        [BRAND]: {},
+        [BRAND_CODE]: null,
         [BANNER]: {},
         [CATEGORY_ID]: null,
         [CATEGORY_CODE]: null,

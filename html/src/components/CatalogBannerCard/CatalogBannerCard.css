@@ -6,7 +6,7 @@
         height: 100%;
         width: 100%;
         font-family: 'object-fit: cover;';
-        background-color: var(--cl-grey);
+        background-color: var(--cl-elem-grey);
 
         @supports (object-fit: cover) {
             font-family: inherit;

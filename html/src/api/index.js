@@ -61,6 +61,12 @@ export function getProduct({ code }) {
     return $http.get('/v1/catalog/product-detail', { params: { code } });
 }
 
+//brand
+
+export function getBrand(data) {
+    return $http.get('/v1/brand', data);
+}
+
 // cart
 
 export function getCartData() {
