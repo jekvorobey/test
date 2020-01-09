@@ -42,14 +42,22 @@
     }
 
     &__city {
+        flex: 1;
         padding-right: calc(var(--gs) * 7);
 
         @media (--desktop-lg) {
             padding-right: calc(var(--gs) * 2);
         }
+
+        &-name {
+            width: 100%;
+        }
     }
 
     &__help {
+        display: flex;
+        justify-content: flex-end;
+        flex: 1;
         padding-left: calc(var(--gs) * 7);
 
         @media (--desktop-lg) {
