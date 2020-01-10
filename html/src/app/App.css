@@ -4,11 +4,6 @@
 @import '../assets/styles/list.css';
 @import '../assets/styles/tooltip.css';
 
-body {
-    font-family: var(--base-font);
-    background-color: var(--cl-white);
-}
-
 .blur-up {
     filter: blur(5px);
 }

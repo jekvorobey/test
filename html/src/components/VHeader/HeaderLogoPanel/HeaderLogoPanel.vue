@@ -1,8 +1,11 @@
 <template>
     <div class="header-logo-panel">
-        <router-link class="header-logo-panel__link" to="/">
+        <router-link v-if="hasRouter" class="header-logo-panel__link" to="/">
             <v-svg name="logo-text" width="340" height="35" />
         </router-link>
+        <a v-else class="header-logo-panel__link" href="/">
+            <v-svg name="logo-text" width="340" height="35" />
+        </a>
         <div class="header-logo-panel__text">
             {{ $t('header.middle.professionals') }}
         </div>
@@ -22,6 +25,12 @@ export default {
 
     components: {
         VSvg,
+    },
+
+    computed: {
+        hasRouter() {
+            return !!this.$router;
+        },
     },
 };
 </script>
