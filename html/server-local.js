@@ -65,6 +65,7 @@ function createRenderer(bundle, options) {
 let renderer;
 let readyPromise;
 const templatePath = resolve('./src/index.template.html');
+const page502 = fs.readFileSync(resolve('../public/page502.html'), 'utf-8');
 
 if (isProd) {
     // In production: create server renderer using template and built server bundle.
@@ -110,7 +111,7 @@ function render(req, res, env) {
             logger.warn(`page not found: ${req.url}`);
         } else {
             // Render Error Page or Redirect
-            res.status(500).send('500 | Internal Server Error');
+            res.status(500).send(page502);
             logger.error(`error during render: ${req.url}`, err.stack);
         }
     };

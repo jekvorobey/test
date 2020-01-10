@@ -74,8 +74,9 @@ function render(req, res, env) {
                 res.status(404).send('404 | Page Not Found');
                 logger.warn(`page not found: ${req.url}`);
             } else {
+                const page502 = fs.readFileSync(path.resolve(app_root, 'public/page502.html'), 'utf-8');
                 // Render Error Page or Redirect
-                res.status(500).send('500 | Internal Server Error');
+                res.status(500).send(page502);
                 logger.error(`error during render: ${req.url}`, err.stack);
             }
         };

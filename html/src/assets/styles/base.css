@@ -29,7 +29,7 @@ body {
 body {
     display: flex;
     flex-direction: column;
-    background-color: var(--cl-grey);
+    background-color: var(--cl-white);
     font-size: 16px;
     line-height: 24px;
     overflow-x: hidden;
@@ -40,6 +40,7 @@ body {
     fill: var(--cl-global);
     vertical-align: top;
     backface-visibility: hidden;
+    font-family: var(--base-font);
 }
 
 main {
