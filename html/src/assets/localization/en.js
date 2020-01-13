@@ -131,6 +131,15 @@ export default {
 
         routes: {
             Account: 'Account',
+            Preferences: 'My Preferences',
+            Addresses: 'Delivery Address',
+            Payment: 'Payment Methods',
+            Subscribes: 'Subscribes',
+            Messages: 'Messages',
+            Sertificates: 'Sertificates',
+            BonusProgram: 'Bonuses',
+            Purchases: 'My Purchases',
+
             Referal: 'Referal Program',
             ProPreferences: 'My Professional Preferences',
             Promopage: 'My Promopage',

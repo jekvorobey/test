@@ -131,6 +131,15 @@ export default {
 
         routes: {
             Account: 'Личный кабинет',
+            Preferences: 'Мои предпочтения',
+            Addresses: 'Адреса доставки',
+            Payment: 'Способы оплаты',
+            Subscribes: 'Подписки',
+            Messages: 'Сообщения',
+            Sertificates: 'Подарочные сертификаты',
+            BonusProgram: 'Бонусная программа',
+            Purchases: 'Мои Заказы',
+
             Referal: 'Реферальная программа',
             ProPreferences: 'Мои профессиональные предпочтения',
             Promopage: 'Моя промостраница',

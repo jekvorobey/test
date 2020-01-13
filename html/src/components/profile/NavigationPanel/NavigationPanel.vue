@@ -33,7 +33,7 @@ export default {
                 {
                     id: 1,
                     name: this.$t('profile.groups.profile'),
-                    routes: ['Account'],
+                    routes: ['Account', 'Preferences', 'Addresses', 'Payment', 'Subscribes'],
                 },
                 {
                     id: 2,
