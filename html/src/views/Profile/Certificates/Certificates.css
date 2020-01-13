@@ -1,0 +1,104 @@
+.certificates-view {
+    &__hl {
+        margin-bottom: calc(var(--gs) * 3);
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 40px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    &__section {
+        &-hl {
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+            margin-bottom: calc(var(--gs) * 3);
+        }
+    }
+
+    &__panel {
+        display: flex;
+        margin-bottom: calc(var(--gs) * 3);
+
+        &-input {
+            width: 344px;
+            margin-right: var(--gs);
+
+            .v-input__error {
+                display: none;
+            }
+        }
+    }
+
+    &__attention {
+        margin-bottom: calc(var(--gs) * 4);
+
+        &-link {
+            text-transform: none;
+            border-bottom: 1px solid var(--cl-global);
+        }
+    }
+
+    &__table {
+        width: 100%;
+        border: none;
+        border-collapse: collapse;
+        margin-bottom: calc(var(--gs) * 4);
+
+        &-title {
+            flex: 1;
+        }
+
+        &-tr {
+            border-bottom: 1px solid var(--cl-divider-grey);
+
+            &--header {
+                border-top: 1px solid var(--cl-divider-grey);
+            }
+        }
+
+        &-th,
+        &-td {
+            padding: calc(var(--gs) * 2) 0;
+            font-weight: normal;
+            text-align: left;
+
+            &:last-child {
+                text-align: right;
+            }
+        }
+
+        &-td {
+            &:first-child {
+                display: flex;
+                text-align: left;
+                padding-right: calc(var(--gs) * 2);
+            }
+        }
+
+        &-th {
+            font-size: 14px;
+            line-height: 24px;
+            color: var(--cl-grey);
+
+            &:first-child {
+                text-align: left;
+            }
+
+            &:last-child {
+                text-align: right;
+            }
+        }
+    }
+
+    &__controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        &-btn {
+            width: 100%;
+        }
+    }
+}

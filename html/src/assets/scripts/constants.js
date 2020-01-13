@@ -142,7 +142,6 @@ export const baseChartOptions = Object.freeze({
             show: true,
             color: '#EFF1F3',
             height: 1,
-            width: '100%',
             offsetX: 0,
             offsetY: 0,
         },
@@ -162,12 +161,7 @@ export const baseChartOptions = Object.freeze({
 
     yaxis: {
         axisBorder: {
-            show: true,
-            color: '#EFF1F3',
-            height: 1,
-            width: '100%',
-            offsetX: 0,
-            offsetY: 0,
+            show: false,
         },
 
         axisTicks: {

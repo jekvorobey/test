@@ -3,9 +3,9 @@
         <div class="navigation-panel__group" v-for="group in groups" :key="group.id">
             <p class="text-medium navigation-panel__group-hl">{{ group.name }}</p>
             <ul class="navigation-panel__group-list">
-                <li class="navigation-panel__group-item" v-for="route in group.routes" :key="route">
-                    <v-link class="navigation-panel__group-link" :to="{ name: route }" exact>
-                        {{ $t(`profile.routes.${route}`) }}
+                <li class="navigation-panel__group-item" v-for="route in group.routes" :key="route.name">
+                    <v-link class="navigation-panel__group-link" :to="{ name: route.name }" :exact="route.exact">
+                        {{ $t(`profile.routes.${route.name}`) }}
                     </v-link>
                 </li>
             </ul>
@@ -33,12 +33,26 @@ export default {
                 {
                     id: 1,
                     name: this.$t('profile.groups.profile'),
-                    routes: ['Account'],
+                    routes: [
+                        { name: 'Account', exact: true },
+                        { name: 'Preferences', exact: true },
+                        { name: 'Addresses', exact: true },
+                        { name: 'Payment', exact: true },
+                        { name: 'Subscribes', exact: true },
+                        { name: 'Certificates', exact: true },
+                        { name: 'Orders' },
+                    ],
                 },
                 {
                     id: 2,
                     name: this.$t('profile.groups.business'),
-                    routes: ['Referal', 'ProPreferences', 'Promopage', 'Seo', 'Promocodes'],
+                    routes: [
+                        { name: 'Referal', exact: true },
+                        { name: 'ProPreferences', exact: true },
+                        { name: 'Promopage', exact: true },
+                        { name: 'Seo', exact: true },
+                        { name: 'Promocodes', exact: true },
+                    ],
                 },
                 // {
                 //     id: 3,

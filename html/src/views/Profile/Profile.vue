@@ -22,7 +22,7 @@
                 </v-sticky>
                 <div class="profile-view__main">
                     <transition name="fade-absolute">
-                        <router-view />
+                        <router-view class="profile-view__main-view" />
                     </transition>
                 </div>
             </div>

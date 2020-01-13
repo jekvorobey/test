@@ -158,6 +158,15 @@ export function countCheckdigit(str, coefficients) {
 }
 
 /**
+ * Маскирует номер карты, кроме последних 4х цифр
+ *
+ * @param  {string}  number Номер карты.
+ */
+export function maskCardNumber(number = '') {
+    return number.replace(/\d{4}(?=\d{4})/g, '**** ');
+}
+
+/**
  * Add
  *
  * @param date

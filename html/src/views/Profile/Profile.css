@@ -8,6 +8,10 @@
     &__main {
         position: relative;
         margin-top: calc(var(--gs) * 3);
+
+        &-view {
+            width: 100%;
+        }
     }
 
     &__grid {
