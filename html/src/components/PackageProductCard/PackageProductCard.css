@@ -1,0 +1,110 @@
+.package-product-card {
+    display: flex;
+
+    &__img {
+        position: relative;
+        display: flex;
+        width: 40%;
+        max-width: calc(var(--gs) * 10);
+        height: 100%;
+        padding: var(--gs);
+        margin-right: calc(var(--gs) * 3);
+        border-bottom: none;
+
+        @media (--tablet) {
+        }
+
+        .v-picture {
+            width: 100%;
+            height: 100%;
+        }
+
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 100%;
+                padding-bottom: 0;
+            }
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            display: block;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--cl-global);
+            opacity: 0.03;
+        }
+
+        .icon {
+            margin: auto;
+            opacity: 0.1;
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        flex: 1;
+        padding: calc(var(--gs) * 2) 0;
+
+        @media (--tablet) {
+            padding: 0;
+            padding-right: calc(var(--gs) * 2);
+        }
+
+        &-name {
+            text-transform: none;
+            font-weight: bold;
+
+            @media (--tablet) {
+                width: 100%;
+                margin-bottom: var(--gs);
+                font-size: 16px;
+                line-height: 24px;
+                font-weight: normal;
+            }
+        }
+
+        &-count {
+            margin-left: auto;
+        }
+
+        &-prices {
+            width: 25%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        &-price {
+            font-size: 20px;
+            line-height: 24px;
+
+            @media (--tablet) {
+                font-size: 16px;
+                line-height: 24px;
+                margin-right: var(--gs);
+            }
+
+            &--old {
+                font-size: 14px;
+                line-height: 24px;
+
+                @media (--tablet) {
+                    font-size: 12px;
+                    line-height: 16px;
+                }
+            }
+        }
+    }
+}

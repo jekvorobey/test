@@ -136,9 +136,10 @@ export default {
             Payment: 'Payment Methods',
             Subscribes: 'Subscribes',
             Messages: 'Messages',
-            Sertificates: 'Sertificates',
+            Certificates: 'Certificates',
             BonusProgram: 'Bonuses',
-            Purchases: 'My Purchases',
+            Orders: 'My Orders',
+            OrderDetails: 'My Orders',
 
             Referal: 'Referal Program',
             ProPreferences: 'My Professional Preferences',

@@ -136,9 +136,10 @@ export default {
             Payment: 'Способы оплаты',
             Subscribes: 'Подписки',
             Messages: 'Сообщения',
-            Sertificates: 'Подарочные сертификаты',
+            Certificates: 'Подарочные сертификаты',
             BonusProgram: 'Бонусная программа',
-            Purchases: 'Мои Заказы',
+            Orders: 'Мои Заказы',
+            OrderDetails: 'Мои Заказы',
 
             Referal: 'Реферальная программа',
             ProPreferences: 'Мои профессиональные предпочтения',

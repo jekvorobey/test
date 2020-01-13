@@ -1,0 +1,12 @@
+.attention-panel {
+    display: flex;
+    align-items: center;
+    padding: calc(var(--gs) * 2);
+    background-color: var(--cl-elem-grey);
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        margin-right: calc(var(--gs) * 2);
+    }
+}

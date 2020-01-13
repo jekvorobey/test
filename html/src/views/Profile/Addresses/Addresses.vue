@@ -4,8 +4,8 @@
         <info-panel class="addresses-view__panel" header="Сохраненные адреса">
             <template v-slot:controls>
                 <v-link class="addresses-view__panel-link" tag="button">
-                    <v-svg name="edit" width="16" height="16" />
-                    &nbsp;&nbsp;Изменить
+                    <v-svg name="plus-small" width="16" height="16" />
+                    &nbsp;&nbsp;Добавить новый адрес
                 </v-link>
             </template>
 
@@ -45,7 +45,7 @@ import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 
-import '../../../assets/images/sprites/edit.svg';
+import '../../../assets/images/sprites/plus-small.svg';
 import './Addresses.css';
 
 export default {

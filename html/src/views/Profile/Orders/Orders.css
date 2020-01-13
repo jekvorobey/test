@@ -1,0 +1,100 @@
+.orders-view {
+    &__hl {
+        margin-bottom: calc(var(--gs) * 3);
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 40px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    &__section {
+        &-hl {
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+            margin-bottom: calc(var(--gs) * 3);
+        }
+    }
+
+    &__table {
+        width: 100%;
+        border: none;
+        border-collapse: collapse;
+        margin-bottom: calc(var(--gs) * 4);
+
+        &-tr {
+            border-bottom: 1px solid var(--cl-divider-grey);
+        }
+
+        &-body &-tr {
+            cursor: pointer;
+        }
+
+        &-th,
+        &-td {
+            padding: calc(var(--gs) * 2) 0;
+            font-weight: normal;
+            text-align: center;
+
+            &-link {
+                font-size: 14px;
+                line-height: 24px;
+            }
+
+            &:first-child,
+            &:nth-child(5) {
+                text-align: left;
+            }
+
+            &:last-child {
+                text-align: right;
+            }
+        }
+
+        &-td {
+            &-link {
+                font-weight: bold;
+                letter-spacing: 0.05em;
+            }
+
+            &:first-child {
+                text-decoration: underline;
+            }
+        }
+
+        &-th {
+            font-size: 14px;
+            line-height: 24px;
+            text-transform: uppercase;
+            font-weight: 500;
+
+            &-link {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 500;
+                letter-spacing: 0.02em;
+
+                .icon {
+                    margin-left: var(--gs);
+                }
+            }
+
+            &:first-child &-link {
+                justify-content: flex-start;
+            }
+        }
+    }
+
+    &__controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        &-btn {
+            width: 100%;
+        }
+    }
+}
