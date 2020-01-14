@@ -123,6 +123,11 @@ export default {
     },
 
     profile: {
+        format: {
+            order: 'Order №{id}',
+            messages: 'Messages ({n})',
+        },
+
         groups: {
             profile: 'My Profile',
             business: 'My Business',
@@ -136,8 +141,9 @@ export default {
             Payment: 'Payment Methods',
             Subscribes: 'Subscribes',
             Messages: 'Messages',
+            MessageDetails: 'Messages',
             Certificates: 'Certificates',
-            BonusProgram: 'Bonuses',
+            Bonuses: 'Bonuses',
             Orders: 'My Orders',
             OrderDetails: 'My Orders',
 

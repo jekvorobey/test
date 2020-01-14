@@ -7,7 +7,10 @@ import Addresses from './Addresses/Addresses';
 import Preferences from './Prefferences/Preferences';
 import Payment from './Payment/Payment';
 import Subscribes from './Subscribes/Subscribes';
+import Messages from './Messages/Messages';
+import MessageDetails from './MessageDetails/MessageDetails';
 import Certificates from './Certificates/Certificates';
+import Bonuses from './Bonuses/Bonuses';
 import Orders from './Orders/Orders';
 import OrderDetails from './OrderDetails/OrderDetails';
 
@@ -36,7 +39,10 @@ export default {
                 ...Addresses.routes,
                 ...Payment.routes,
                 ...Subscribes.routes,
+                ...Messages.routes,
+                ...MessageDetails.routes,
                 ...Certificates.routes,
+                ...Bonuses.routes,
                 ...Orders.routes,
                 ...OrderDetails.routes,
 

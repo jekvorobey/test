@@ -123,6 +123,11 @@ export default {
     },
 
     profile: {
+        format: {
+            order: 'Заказ №{id}',
+            messages: 'Сообщения ({n})',
+        },
+
         groups: {
             profile: 'Личный кабинет',
             business: 'Мой бизнес',
@@ -136,8 +141,9 @@ export default {
             Payment: 'Способы оплаты',
             Subscribes: 'Подписки',
             Messages: 'Сообщения',
+            MessageDetails: 'Сообщения',
             Certificates: 'Подарочные сертификаты',
-            BonusProgram: 'Бонусная программа',
+            Bonuses: 'Бонусная программа',
             Orders: 'Мои Заказы',
             OrderDetails: 'Мои Заказы',
 

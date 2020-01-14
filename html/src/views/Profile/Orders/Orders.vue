@@ -40,7 +40,7 @@
                 </tr>
             </thead>
             <transition-group tag="tbody" name="fade-in" appear class="orders-view__table-body">
-                <tr class="orders-view__table-tr" key="1" @click="onOpenOrder">
+                <tr class="orders-view__table-tr" key="1" @click="onOpenOrder(124589524)">
                     <td class="orders-view__table-td">124589524</td>
                     <td class="orders-view__table-td">18.08.2019</td>
                     <td class="orders-view__table-td">20.08.2019</td>
@@ -52,7 +52,7 @@
                         <v-link class="orders-view__table-td-link" tag="button" @click.stop>Отменить</v-link>
                     </td>
                 </tr>
-                <tr class="orders-view__table-tr" key="2" @click.stop="onOpenOrder">
+                <tr class="orders-view__table-tr" key="2" @click="onOpenOrder(454654545)">
                     <td class="orders-view__table-td">454654545</td>
                     <td class="orders-view__table-td">27.07.2019</td>
                     <td class="orders-view__table-td">28.07.2019</td>
@@ -62,7 +62,7 @@
                         <v-link class="orders-view__table-td-link" tag="button" @click.stop>Повторить</v-link>
                     </td>
                 </tr>
-                <tr class="orders-view__table-tr" key="3" @click="onOpenOrder">
+                <tr class="orders-view__table-tr" key="3" @click="onOpenOrder(24823875)">
                     <td class="orders-view__table-td">24823875</td>
                     <td class="orders-view__table-td">6.07.2019</td>
                     <td class="orders-view__table-td">8.07.2019</td>
@@ -72,7 +72,7 @@
                         <v-link class="orders-view__table-td-link" tag="button" @click.stop>Повторить</v-link>
                     </td>
                 </tr>
-                <tr class="orders-view__table-tr" key="4" @click.stop="onOpenOrder">
+                <tr class="orders-view__table-tr" key="4" @click="onOpenOrder(123547899)">
                     <td class="orders-view__table-td">123547899</td>
                     <td class="orders-view__table-td">6.07.2019</td>
                     <td class="orders-view__table-td">-</td>
@@ -115,8 +115,8 @@ export default {
     watch: {},
 
     methods: {
-        onOpenOrder() {
-            this.$router.push({ name: 'OrderDetails', params: { orderId: '1' } });
+        onOpenOrder(id) {
+            this.$router.push({ name: 'OrderDetails', params: { orderId: id } });
         },
     },
 };
