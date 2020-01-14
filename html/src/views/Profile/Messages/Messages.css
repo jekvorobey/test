@@ -1,0 +1,25 @@
+.messages-view {
+    &__hl {
+        margin-bottom: calc(var(--gs) * 3);
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 40px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    &__list {
+        padding: 1px;
+
+        &-item {
+            cursor: pointer;
+            border-bottom: 1px solid var(--cl-divider-grey);
+        }
+    }
+}

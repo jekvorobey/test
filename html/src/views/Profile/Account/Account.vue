@@ -142,9 +142,6 @@ import { $store } from '../../../services/ServiceLocator';
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { SET_BREADCRUMB } from '../../../store/modules/Profile/actions';
-
 import '../../../assets/images/sprites/edit.svg';
 import './Account.css';
 

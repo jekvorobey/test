@@ -8,8 +8,15 @@
                 <breadcrumb-item key="account" :to="{ name: 'Account' }">
                     {{ $t('profile.routes.Account') }}
                 </breadcrumb-item>
-                <breadcrumb-item v-if="$route.name !== 'Account'" :key="$route.name" :to="$route.path">
+                <breadcrumb-item
+                    v-if="$route.name !== 'Account' && breadcrumbs.length === 0"
+                    :key="$route.name"
+                    :to="$route.path"
+                >
                     {{ $t(`profile.routes.${$route.name}`) }}
+                </breadcrumb-item>
+                <breadcrumb-item v-for="breadcrumb in breadcrumbs" :key="breadcrumb.name" :to="breadcrumb.to">
+                    {{ breadcrumb.name }}
                 </breadcrumb-item>
             </breadcrumbs>
         </div>
@@ -39,7 +46,7 @@ import NavigationPanel from '../../components/profile/NavigationPanel/Navigation
 
 import { $store } from '../../services/ServiceLocator';
 import { mapState } from 'vuex';
-import profileModule, { NAME as PROFILE_MODULE } from '../../store/modules/Profile';
+import profileModule, { NAME as PROFILE_MODULE, BREADCRUMBS } from '../../store/modules/Profile';
 
 import './Profile.css';
 
@@ -52,6 +59,10 @@ export default {
         Breadcrumbs,
         BreadcrumbItem,
         NavigationPanel,
+    },
+
+    computed: {
+        ...mapState(PROFILE_MODULE, [BREADCRUMBS]),
     },
 
     beforeRouteEnter(to, from, next) {

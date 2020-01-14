@@ -57,6 +57,7 @@
             }
 
             &-btn {
+                min-width: 190px;
                 margin-bottom: calc(var(--gs) * 3);
             }
 

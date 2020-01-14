@@ -140,7 +140,7 @@
             <v-button class="btn--outline referal-view__controls-btn">
                 Показать ещё
             </v-button>
-            <v-pagination :value="1" :page-count="10" />
+            <v-pagination v-model="page" :page-count="10" />
         </div>
     </section>
 </template>
@@ -174,6 +174,7 @@ export default {
 
     data() {
         return {
+            page: 1,
             isMounted: false,
             graph,
             referalGroup1,

@@ -5,7 +5,7 @@
             <ul class="navigation-panel__group-list">
                 <li class="navigation-panel__group-item" v-for="route in group.routes" :key="route.name">
                     <v-link class="navigation-panel__group-link" :to="{ name: route.name }" :exact="route.exact">
-                        {{ $t(`profile.routes.${route.name}`) }}
+                        {{ route.displayName || $t(`profile.routes.${route.name}`) }}
                     </v-link>
                 </li>
             </ul>
@@ -39,7 +39,9 @@ export default {
                         { name: 'Addresses', exact: true },
                         { name: 'Payment', exact: true },
                         { name: 'Subscribes', exact: true },
+                        { name: 'Messages', displayName: this.$tc('profile.format.messages', 5) },
                         { name: 'Certificates', exact: true },
+                        { name: 'Bonuses', exact: true },
                         { name: 'Orders' },
                     ],
                 },
