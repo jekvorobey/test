@@ -56,11 +56,15 @@ export default {
                         { name: 'Promocodes', exact: true },
                     ],
                 },
-                // {
-                //     id: 3,
-                //     name: $t('profile.groups.training'),
-                //     routes: [],
-                // },
+                {
+                    id: 3,
+                    name: this.$t('profile.groups.training'),
+                    routes: [
+                        { name: 'Guides' },
+                        // { name: 'Masterclasses', exact: true },
+                        { name: 'QnA', exact: true },
+                    ],
+                },
             ];
         },
     },

@@ -217,14 +217,6 @@ export default {
         onImageChanged(image) {},
     },
 
-    beforeRouteEnter(to, from, next) {
-        next();
-    },
-
-    beforeRouteUpdate(to, from, next) {
-        next();
-    },
-
     mounted() {
         this.isMounted = true;
     },

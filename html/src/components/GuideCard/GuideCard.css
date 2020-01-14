@@ -1,0 +1,8 @@
+.guide-card {
+    text-align: center;
+
+    &__img {
+        max-height: 288px;
+        margin-bottom: calc(var(--gs) * 2);
+    }
+}

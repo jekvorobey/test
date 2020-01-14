@@ -20,6 +20,11 @@ import Promopage from './Promopage/Promopage';
 import ProPreferences from './ProPreferences/ProPreferences';
 import Seo from './Seo/Seo';
 
+import Guides from './Guides/Guides';
+import GuideDetails from './GuideDetails/GuideDetails';
+import Masterclasses from './Masterclasses/Masterclasses';
+import QnA from './QnA/QnA';
+
 const ProfileAsync = () => import(/* webpackChunkName: "profile-view" */ './Profile.vue');
 
 /**
@@ -51,6 +56,11 @@ export default {
                 ...Promopage.routes,
                 ...ProPreferences.routes,
                 ...Seo.routes,
+
+                ...Guides.routes,
+                ...GuideDetails.routes,
+                ...Masterclasses.routes,
+                ...QnA.routes,
 
                 {
                     path: '*',

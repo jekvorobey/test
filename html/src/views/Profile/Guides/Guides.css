@@ -1,0 +1,22 @@
+.guides-view {
+    &__hl {
+        margin-bottom: calc(var(--gs) * 3);
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 40px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 calc(var(--gs) * -1.5);
+
+        &-item {
+            width: calc(100% / 3 - calc(var(--gs) * 6 / 2));
+            margin: 0 calc(var(--gs) * 1.5);
+            cursor: pointer;
+        }
+    }
+}

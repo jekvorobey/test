@@ -152,6 +152,11 @@ export default {
             Promopage: 'My Promopage',
             Promocodes: 'My Promocodes',
             Seo: 'Goods for Promotion',
+
+            Guides: 'Product Guide',
+            GuideDetails: 'Product Guide',
+            Masterclasses: 'My Masterclasses',
+            QnA: 'Questions and Answers',
         },
     },
 };
