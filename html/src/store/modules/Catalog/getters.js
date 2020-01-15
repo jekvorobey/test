@@ -70,7 +70,8 @@ export default {
             const filter = filters[i];
             for (let j = 0; j < filter.items.length; j++) {
                 const item = filter.items[j];
-                if (filterSegments[filter.name] && filterSegments[filter.name][item.code]) activeTags.push(item);
+                if (filterSegments[filter.name] && filterSegments[filter.name][item.code])
+                    activeTags.push({ ...item, segment: `${filter.name}-${item.code}` });
             }
         }
         return activeTags;

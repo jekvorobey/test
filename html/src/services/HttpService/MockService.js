@@ -436,7 +436,7 @@ const brandDetails = [
     },
 
     {
-        id: 2,
+        id: 1,
         code: 'lipstick-queen',
         name: 'Lipstick Queen',
         image: brandDetail1,
@@ -1933,11 +1933,7 @@ export default class MockHttpService extends HttpServiceBase {
                         reject(new Error('wrong brandCode'));
                         return;
                     }
-                    const brand = brandDetails.find(b => b.code === data.brandCode);
-                    if (!brand) {
-                        reject("brand doesn't exist");
-                        return;
-                    }
+                    const brand = brandDetails[0];
                     setTimeout(() => resolve(_cloneDeep(brand)), 300);
                     break;
 

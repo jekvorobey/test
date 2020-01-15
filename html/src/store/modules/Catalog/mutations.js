@@ -1,4 +1,6 @@
+export const SET_FILTERS = 'SET_FILTERS';
 export const SET_ITEMS = 'SET_ITEMS';
+export const SET_BRAND_CODE = 'SET_BRAND_CODE';
 export const SET_CATEGORY_CODE = 'SET_CATEGORY_CODE';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_BANNER = 'SET_BANNER';
@@ -23,12 +25,19 @@ export default {
         state.categoryCode = payload;
     },
 
+    [SET_BRAND_CODE](state, payload) {
+        state.brandCode = payload;
+    },
+
     [SET_CATEGORIES](state, payload = []) {
         state.categories = payload;
     },
 
     [SET_BRAND](state, payload = {}) {
-        state.brandCode = payload.code;
         state.brand = payload;
+    },
+
+    [SET_FILTERS](state, payload = []) {
+        state.filters = payload;
     },
 };

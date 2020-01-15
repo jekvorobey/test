@@ -37,6 +37,15 @@ export function getCatalogItems({ filter, orderField = 'price', orderDirection =
     });
 }
 
+export function getFilters(data) {
+    return $http.get('/v1/catalog/filter', {
+        params: data,
+        paramsSerializer(params) {
+            return qs.stringify(params, { encode: false });
+        },
+    });
+}
+
 export function getCategories(data) {
     return $http.get('/v1/categories', data);
 }

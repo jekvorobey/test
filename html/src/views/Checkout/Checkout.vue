@@ -131,6 +131,7 @@ import {
 } from '../../store/modules/Checkout/actions';
 import { CHECKOUT, PROMO_CODE, SUMMARY } from '../../store/modules/Checkout/getters';
 
+import { registerModuleIfNotExists } from '../../util/store';
 import { preparePrice } from '../../util/helpers';
 import '../../assets/images/sprites/check-small.svg';
 import '../../assets/images/sprites/arrow-small.svg';
@@ -166,7 +167,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(CHECKOUT_MODULE, [ADD_PROMOCODE, DELETE_PROMOCODE, COMMIT_DATA]),
+        ...mapActions(CHECKOUT_MODULE, [FETCH_CHECKOUT_DATA, ADD_PROMOCODE, DELETE_PROMOCODE, COMMIT_DATA]),
 
         async onCommit() {
             try {
@@ -187,23 +188,19 @@ export default {
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
 
-        const register = !!$store._modulesNamespaceMap[`${CHECKOUT_MODULE}/`];
-        if (!register)
-            $store.registerModule(CHECKOUT_MODULE, checkoutModule, {
-                preserveState: !!$store.state.checkout,
-            });
-
         const {
             params: { type },
         } = to;
 
-        const { checkoutType } = $store.state.checkout;
+        //регистрируем модуль, если такого нет
+        registerModuleIfNotExists($store, CHECKOUT_MODULE, checkoutModule);
+        const { checkoutType } = $store.state[CHECKOUT_MODULE];
 
         if (checkoutType === type) return next();
         else {
             $progress.start();
-            return $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type).then(() => {
-                return next(vm => $progress.finish());
+            $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type).then(() => {
+                next(vm => $progress.finish());
             });
         }
     },
@@ -216,11 +213,6 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        const cartItemsCount = $store.getters[`${CART_MODULE}/${CART_ITEMS_COUNT}`];
-        console.log(cartItemsCount);
-
-        console.log(cartItemsCount);
-
         const {
             params: { type },
         } = to;
@@ -229,17 +221,8 @@ export default {
 
         if (checkoutType !== type) {
             this.$progress.start();
-            this.$store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type).then(() => this.$progress.finish());
+            this[FETCH_CHECKOUT_DATA](type).then(() => this.$progress.finish());
         }
-        next();
-    },
-
-    beforeRouteLeave(to, from, next) {
-        // this.$progress.start();
-        // this.$store
-        //     .dispatch(`${landingModule.name}/FETCH_LANDING_DATA`)
-        //     .then(() => next(vm => this.$progress.finish()));
-
         next();
     },
 };

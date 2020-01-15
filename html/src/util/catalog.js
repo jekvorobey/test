@@ -23,12 +23,13 @@ export function mapFilterSegments(urlSegments) {
     for (let i = 0; i < urlSegments.length; i++) {
         const segment = urlSegments[i];
         const name = segment.split('-')[0];
+        const value = segment.split('-')[1];
         if (rangeRegx.test(segment)) {
             const numbers = segment.match(numberRegx);
             segments[name] = numbers.map(n => +n);
         } else {
             if (!segments[name]) segments[name] = {};
-            segments[name][segment] = segment;
+            segments[name][value] = value;
         }
     }
     return segments;
@@ -50,4 +51,28 @@ export function getActiveCategories(code, item, activeItems = []) {
     return false;
 }
 
-export default { generateCategoryUrl, concatCatalogRoutePath, concatBrandRoutePath, mapFilterSegments };
+export function computeFilterData(pathMatch, code, brandCode) {
+    const filter = { category: code };
+    const routeSegments = pathMatch ? pathMatch.split('/') : [];
+    const filterSegments = mapFilterSegments(routeSegments);
+    const filterNames = Object.keys(filterSegments);
+
+    for (let i = 0; i < filterNames.length; i++) {
+        const filterName = filterNames[i];
+        const segment = filterSegments[filterName];
+
+        if (Array.isArray(segment)) filter[filterName] = segment;
+        else filter[filterName] = Object.keys(segment);
+    }
+
+    if (brandCode) filter['brand'] = [brandCode];
+    return filter;
+}
+
+export default {
+    generateCategoryUrl,
+    concatCatalogRoutePath,
+    concatBrandRoutePath,
+    mapFilterSegments,
+    computeFilterData,
+};

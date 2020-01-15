@@ -108,7 +108,7 @@ export default {
         [CATEGORIES]: [],
         [ITEMS]: [],
         [RANGE]: 0,
-        [FILTERS]: filters,
+        [FILTERS]: [],
     },
     actions,
     mutations,
