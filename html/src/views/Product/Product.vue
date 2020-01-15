@@ -625,6 +625,7 @@ import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
+import { registerModuleIfNotExists } from '../../util/store';
 import { generatePictureSourcePath } from '../../util/images';
 import { breakpoints } from '../../assets/scripts/constants';
 import productBrand1 from '../../assets/images/mock/brandProduct1.png';
@@ -843,16 +844,11 @@ export default {
         } = to;
 
         // регистрируем модуль, если такого нет
-        const register = !!$store._modulesNamespaceMap[`${productModule.name}/`];
-        if (!register)
-            $store.registerModule(productModule.name, productModule, {
-                preserveState: !!$store.state.product,
-            });
-
-        const { productCode } = $store.state.product;
+        registerModuleIfNotExists($store, PRODUCT_MODULE, productModule);
+        const { productCode } = $store.state[PRODUCT_MODULE];
         const {
             selectedCity: { fias_id },
-        } = $store.state.geolocation;
+        } = $store.state[GEO_MODULE];
 
         // если все загружено, пропускаем
         if (productCode === code) next();
@@ -895,9 +891,10 @@ export default {
                 next();
                 this.$progress.finish();
             } catch (error) {
+                this.$progress.fail();
                 $logger.error('debounce_fetchProduct', error);
                 next(false);
-                this.$progress.fail();
+                this.$progress.finish();
             }
         }, 500);
     },

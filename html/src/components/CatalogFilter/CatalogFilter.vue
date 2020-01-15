@@ -22,11 +22,10 @@
                     <v-check
                         v-for="option in filter.item.items"
                         :id="`${filter.item.name}-${option.id}`"
-                        :value="option.code"
                         :key="option.id"
                         :name="filter.item.name"
                         :checked="filterSegments[filter.item.name] && filterSegments[filter.item.name][option.code]"
-                        @change="onCheckChange($event, filter.item.name, option.code)"
+                        @change="onCheckChange($event, `${filter.item.name}-${option.code}`)"
                     >
                         {{ option.name }}
                     </v-check>
@@ -36,18 +35,17 @@
                         v-for="option in filter.item.items"
                         :id="`${filter.item.name}-${option.id}`"
                         type="radio"
-                        :value="option.code"
                         :key="option.id"
                         :name="filter.item.name"
                         :checked="filterSegments[filter.item.name] && filterSegments[filter.item.name][option.code]"
-                        @change="onRadioChange($event, filter.item.name, option.code)"
+                        @change="onRadioChange($event, `${filter.item.name}-${option.code}`)"
                     >
                         {{ option.name }}
                     </v-check>
                 </div>
             </template>
         </v-accordion>
-        <v-button class="btn--outline catalog-filter__clear-btn" :to="{ path: code ? `/catalog/${code}` : '/catalog' }">
+        <v-button class="btn--outline catalog-filter__clear-btn" :to="clearFilterUrl" replace>
             {{ btnText }}
         </v-button>
     </div>
@@ -58,6 +56,9 @@ import VButton from '../controls/VButton/VButton.vue';
 import VRange from '../controls/VRange/VRange.vue';
 import VCheck from '../controls/VCheck/VCheck.vue';
 import VAccordion from '../controls/VAccordion/VAccordion.vue';
+
+import { NAME as CATALOG_MODULE, FILTERS } from '../../store/modules/Catalog';
+import { FILTER_SEGMENTS, ROUTE_SEGMENTS } from '../../store/modules/Catalog/getters';
 
 import _debounce from 'lodash/debounce';
 import { concatCatalogRoutePath, concatBrandRoutePath } from '../../util/catalog';
@@ -93,8 +94,8 @@ export default {
     },
 
     computed: {
-        ...mapGetters('catalog', ['filterSegments', 'routeSegments']),
-        ...mapState('catalog', ['filters']),
+        ...mapGetters(CATALOG_MODULE, [FILTER_SEGMENTS, ROUTE_SEGMENTS]),
+        ...mapState(CATALOG_MODULE, [FILTERS]),
         ...mapState('route', {
             code: state => state.params.code,
             brandCode: state => state.params.brandCode,
@@ -107,15 +108,20 @@ export default {
                   })
                 : [];
         },
+
+        clearFilterUrl() {
+            const { code, brandCode } = this;
+            if (brandCode) return { path: code ? `/brand/${brandCode}/${code}` : `/brand/${brandCode}` };
+            return { path: code ? `/catalog/${code}` : '/catalog' };
+        },
     },
 
     methods: {
-        onRadioChange(e, name, value) {
+        onRadioChange(e, value) {
             let { routeSegments, code, brandCode } = this;
 
             if (!routeSegments.includes(value)) routeSegments.push(value);
-            const radioRegexp = new RegExp(`^${name}-`);
-            routeSegments = routeSegments.filter(s => s === value || !s.match(radioRegexp));
+            routeSegments = routeSegments.filter(s => s === value);
 
             const path = brandCode
                 ? concatBrandRoutePath(brandCode, code, routeSegments)
@@ -124,7 +130,7 @@ export default {
             this.$router.replace({ path });
         },
 
-        onCheckChange(e, name, value) {
+        onCheckChange(e, value) {
             let { routeSegments, code, brandCode } = this;
 
             if (e) {
@@ -152,7 +158,7 @@ export default {
 
     beforeMount() {
         this.debounce_rangeChange = _debounce((e, name) => {
-            let { routeSegments } = this;
+            let { routeSegments, brandCode, code } = this;
             const segment = `${name}-from_${e[0]}_to_${e[1]}`;
             const rangeRegex = new RegExp(`^${name}-`);
 
@@ -168,7 +174,12 @@ export default {
                 if (routeSegments[currentIndex] === segment) return;
                 routeSegments.splice(currentIndex, 1, segment);
             } else routeSegments.push(segment);
-            this.$router.replace({ path: concatCatalogRoutePath(this.code, routeSegments) });
+
+            const path = brandCode
+                ? concatBrandRoutePath(brandCode, code, routeSegments)
+                : concatCatalogRoutePath(code, routeSegments);
+
+            this.$router.replace({ path });
         }, 500);
     },
 };

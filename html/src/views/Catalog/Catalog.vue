@@ -95,7 +95,7 @@
                             :data-index="index"
                             :key="tag.code"
                             :text="tag.name"
-                            @delete="onClickDeleteTag(tag.code)"
+                            @delete="onClickDeleteTag(tag.segment)"
                         />
                     </transition-group>
 
@@ -238,7 +238,6 @@ import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/
 import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
-import { concatCatalogRoutePath, concatBrandRoutePath, generateCategoryUrl } from '../../util/catalog';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { NAME as CART_MODULE } from '../../store/modules/Cart';
@@ -258,6 +257,14 @@ import {
     ACTIVE_CATEGORIES,
 } from '../../store/modules/Catalog/getters';
 
+import {
+    concatCatalogRoutePath,
+    concatBrandRoutePath,
+    generateCategoryUrl,
+    mapFilterSegments,
+    computeFilterData,
+} from '../../util/catalog';
+import { registerModuleIfNotExists } from '../../util/store';
 import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants';
 import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/filter.svg';
@@ -439,7 +446,7 @@ export default {
         async fetchCatalog(to, from, showMore) {
             try {
                 const {
-                    params: { code, brandCode: toBrandCode },
+                    params: { code: toCode, brandCode: toBrandCode, pathMatch },
                     query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
                         page: 1,
                         orderField: 'price',
@@ -448,15 +455,14 @@ export default {
                 } = to;
 
                 const {
-                    params: { brandCode: fromBrandCode },
+                    params: { code: fromCode, brandCode: fromBrandCode },
                 } = from;
 
                 const { query: { page: fromPage = 1 } = { page: 1 } } = from;
+                const filter = computeFilterData(pathMatch, toCode, toBrandCode);
 
-                //const filter = { category: code, brand: [brandCode] };
-                const filter = { category: code };
                 this.$progress.start();
-                if (fromBrandCode === toBrandCode)
+                if (fromCode === toCode && fromBrandCode === toBrandCode)
                     await this[FETCH_ITEMS]({ filter, orderField, orderDirection, page, showMore });
                 else
                     await this[FETCH_CATALOG_DATA]({
@@ -490,7 +496,7 @@ export default {
         // так как к моменту вызова экземпляр ещё не создан!
 
         const {
-            params: { code, brandCode: bCode },
+            params: { code: toCode, brandCode: toBrandCode, pathMatch },
             query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
                 page: 1,
                 orderField: 'price',
@@ -498,27 +504,27 @@ export default {
             },
         } = to;
 
-        // регистрируем модуль, если такого нет
-        const register = !!$store._modulesNamespaceMap[`${CATALOG_MODULE}/`];
-        if (!register)
-            $store.registerModule(CATALOG_MODULE, catalogModule, {
-                preserveState: !!$store.state.catalog,
-            });
+        const {
+            params: { code: fromCode, brandCode: fromBrandCode },
+        } = from;
 
-        const { categoryCode, brandCode, load } = $store.state.catalog;
+        // регистрируем модуль, если такого нет
+        registerModuleIfNotExists($store, CATALOG_MODULE, catalogModule);
+        const { load, brandCode, categoryCode } = $store.state[CATALOG_MODULE];
 
         // если все загружено, пропускаем
-        if (load && categoryCode === code && brandCode === bCode)
+        if (load && toCode === categoryCode && toBrandCode === brandCode)
             next(vm => vm.$store.dispatch(`${CATALOG_MODULE}/${SET_LOAD}`, false));
         else {
-            // если нет - фетчим
-            //const filter = { category: code, brand: [brandCode] };
-            const filter = { category: code };
+            const filter = computeFilterData(pathMatch, toCode, toBrandCode);
+            let fetchMethod = null;
+            if (toCode === categoryCode && toBrandCode === brandCode) fetchMethod = `${CATALOG_MODULE}/${FETCH_ITEMS}`;
+            else fetchMethod = `${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`;
 
             $progress.start();
             $store
-                .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, {
-                    brandCode: bCode,
+                .dispatch(fetchMethod, {
+                    brandCode: toBrandCode,
                     filter,
                     page,
                     orderField,

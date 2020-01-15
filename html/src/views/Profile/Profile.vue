@@ -67,12 +67,7 @@ export default {
 
     beforeRouteEnter(to, from, next) {
         // регистрируем модуль, если такого нет
-        const register = !!$store._modulesNamespaceMap[`${PROFILE_MODULE}/`];
-        if (!register)
-            $store.registerModule(PROFILE_MODULE, profileModule, {
-                preserveState: !!$store.state.profile,
-            });
-
+        registerModuleIfNotExists($store, PROFILE_MODULE, profileModule);
         next();
     },
 };

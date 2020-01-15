@@ -1,15 +1,18 @@
 import { $logger } from '../../../services/ServiceLocator';
-import { getCatalogItems, getCategories, getBanners, getBrand } from '../../../api';
+import { getCatalogItems, getCategories, getBanners, getBrand, getFilters } from '../../../api';
 import {
+    SET_FILTERS,
     SET_ITEMS,
     SET_CATEGORIES,
     SET_BANNER,
     SET_BRAND,
     SET_LOAD as M_SET_LOAD,
     SET_CATEGORY_CODE,
+    SET_BRAND_CODE,
 } from './mutations';
 import { getRandomIntInclusive } from '../../../util/helpers';
 
+export const FETCH_FILTERS = 'FETCH_FILTERS';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const FETCH_BANNER = 'FETCH_BANNER';
 export const FETCH_BRAND = 'FETCH_BRAND';
@@ -42,12 +45,22 @@ export default {
             });
     },
 
+    [FETCH_FILTERS]({ commit }, payload) {
+        return getFilters({ categoryCode: payload.filter.category, needBrands: Number(!!!payload.brandCode) })
+            .then(data => {
+                commit(SET_FILTERS, data);
+            })
+            .catch(error => {
+                $logger.error(`${FETCH_FILTERS} ${error}`);
+                return [];
+            });
+    },
+
     [FETCH_ITEMS]({ commit, state }, payload) {
         return getCatalogItems(payload)
             .then(data => {
                 if (payload.showMore) commit(SET_ITEMS, { items: state.items.concat(data.items), range: data.range });
                 else commit(SET_ITEMS, data);
-                commit(SET_CATEGORY_CODE, payload.filter && payload.filter.category);
             })
             .catch(error => {
                 $logger.error(`${FETCH_ITEMS} ${error}`);
@@ -71,6 +84,11 @@ export default {
         if (payload.brandCode)
             await Promise.all([dispatch(FETCH_CATEGORIES), dispatch(FETCH_BRAND, { brandCode: payload.brandCode })]);
         else await Promise.all([dispatch(FETCH_CATEGORIES), dispatch(FETCH_BANNER)]);
-        return dispatch(FETCH_ITEMS, payload).then(() => commit(M_SET_LOAD, true));
+        await dispatch(FETCH_FILTERS, payload);
+        return dispatch(FETCH_ITEMS, payload).then(() => {
+            commit(SET_BRAND_CODE, payload.brandCode);
+            commit(SET_CATEGORY_CODE, payload.filter && payload.filter.category);
+            commit(M_SET_LOAD, true);
+        });
     },
 };

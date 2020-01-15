@@ -31,12 +31,14 @@ import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/
 import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 
 import landingModule, { NAME as LANDING_MODULE, RENDER_DATA } from '../../store/modules/Landing';
+import { FETCH_LANDING_DATA } from '../../store/modules/Landing/actions';
 
+import { registerModuleIfNotExists } from '../../util/store';
 import './Landing.css';
 
 export default {
@@ -76,22 +78,22 @@ export default {
         },
     },
 
+    methods: {
+        ...mapActions(LANDING_MODULE, [FETCH_LANDING_DATA]),
+    },
+
     beforeRouteEnter(to, from, next) {
         // вызывается до подтверждения пути, соответствующего этому компоненту.
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
 
-        const register = !!$store._modulesNamespaceMap[`${landingModule.name}/`];
-        if (!register)
-            $store.registerModule(landingModule.name, landingModule, {
-                preserveState: !!$store.state.landing,
-            });
-
-        if ($store.state.landing.load) {
-            next();
-        } else {
+        //регистрируем модуль, если такого нет
+        registerModuleIfNotExists($store, LANDING_MODULE, landingModule);
+        const { load } = $store.state[LANDING_MODULE];
+        if (load) next();
+        else {
             $progress.start();
-            $store.dispatch(`${landingModule.name}/FETCH_LANDING_DATA`).then(() => next(vm => $progress.finish()));
+            $store.dispatch(`${LANDING_MODULE}/${FETCH_LANDING_DATA}`).then(() => next(vm => $progress.finish()));
         }
     },
 
@@ -104,16 +106,8 @@ export default {
         // Также имеется доступ в `this` к экземпляру компонента.
 
         this.$progress.start();
-        this.$store
-            .dispatch(`${landingModule.name}/FETCH_LANDING_DATA`)
-            .then(() => next(vm => this.$progress.finish()));
+        this[FETCH_LANDING_DATA]().then(() => this.$progress.finish());
+        next();
     },
-
-    // Server-side only
-    // This will be called by the server renderer automatically
-    //serverPrefetch() {
-    // return the Promise from the action
-    // so that the component waits before rendering
-    //},
 };
 </script>
