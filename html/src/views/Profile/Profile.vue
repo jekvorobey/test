@@ -48,6 +48,7 @@ import { $store } from '../../services/ServiceLocator';
 import { mapState } from 'vuex';
 import profileModule, { NAME as PROFILE_MODULE, BREADCRUMBS } from '../../store/modules/Profile';
 
+import { registerModuleIfNotExists } from '../../util/store';
 import './Profile.css';
 
 export default {
