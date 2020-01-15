@@ -18,6 +18,10 @@
     &__input {
         width: calc(var(--gs) * 9);
         height: calc(var(--gs) * 4);
+
+        &[type='number'] {
+            padding: var(--gs);
+        }
     }
 
     .noUi-target {
