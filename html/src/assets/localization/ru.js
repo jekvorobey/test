@@ -135,7 +135,7 @@ export default {
         },
 
         routes: {
-            Account: 'Личный кабинет',
+            Cabinet: 'Личный кабинет',
             Preferences: 'Мои предпочтения',
             Addresses: 'Адреса доставки',
             Payment: 'Способы оплаты',
@@ -146,12 +146,17 @@ export default {
             Bonuses: 'Бонусная программа',
             Orders: 'Мои Заказы',
             OrderDetails: 'Мои Заказы',
+            ReferalOrders: 'Реферальные заказы',
+            ReferalOrderDetails: 'Реферальные заказы',
 
             Referal: 'Реферальная программа',
             ProPreferences: 'Мои профессиональные предпочтения',
             Promopage: 'Моя промостраница',
-            Promocodes: 'Моя промокоды',
             Seo: 'Товары для продвижения',
+            Promocodes: 'Моя промокоды',
+            Account: 'Мой счет',
+            Billing: 'Биллинг по счету',
+            Documents: 'Мои документы',
 
             Guides: 'Гиды по продуктам',
             GuideDetails: 'Гиды по продуктам',

@@ -1,4 +1,4 @@
-.account-view {
+.documents-view {
     &__hl {
         margin-bottom: calc(var(--gs) * 3);
         font-weight: 700;
@@ -17,69 +17,26 @@
         }
     }
 
-    &__panels {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: calc(var(--gs) * 7);
-    }
-
     &__panel {
-        background-color: var(--cl-elem-grey);
+        display: flex;
+        margin-bottom: calc(var(--gs) * 3);
 
-        &:first-of-type {
-            text-align: left;
-            width: 20%;
-            margin-right: calc(var(--gs) * 3);
-            padding: calc(var(--gs) * 4);
-        }
+        &-input {
+            width: 344px;
+            margin-right: var(--gs);
 
-        &:last-of-type {
-            flex: 1;
-            padding: calc(var(--gs) * 3);
-        }
-
-        &-count {
-            font-size: 28px;
-            line-height: 40px;
-            letter-spacing: 0.05em;
-        }
-
-        &-top {
-            margin-bottom: var(--gs);
-
-            &-label {
-                margin-right: calc(var(--gs) * 2);
-            }
-
-            &-notice {
-                font-size: 12px;
-                line-height: 16px;
-            }
-        }
-
-        &-bottom {
-            display: flex;
-            align-items: flex-start;
-
-            &-select {
-                width: 40%;
-                margin-right: var(--gs);
-            }
-
-            &-input {
-                width: 30%;
-                margin-right: calc(var(--gs) * 2);
-            }
-
-            &-btn {
-                width: 30%;
-                padding: 6px calc(var(--gs) * 2);
-            }
-
-            .multiselect__error,
             .v-input__error {
                 display: none;
             }
+        }
+    }
+
+    &__attention {
+        margin-bottom: calc(var(--gs) * 4);
+
+        &-link {
+            text-transform: none;
+            border-bottom: 1px solid var(--cl-global);
         }
     }
 

@@ -135,7 +135,7 @@ export default {
         },
 
         routes: {
-            Account: 'Account',
+            Cabinet: 'Cabinet',
             Preferences: 'My Preferences',
             Addresses: 'Delivery Address',
             Payment: 'Payment Methods',
@@ -146,12 +146,17 @@ export default {
             Bonuses: 'Bonuses',
             Orders: 'My Orders',
             OrderDetails: 'My Orders',
+            ReferalOrders: 'Referal orders',
+            ReferalOrderDetails: 'Referal orders',
 
             Referal: 'Referal Program',
             ProPreferences: 'My Professional Preferences',
             Promopage: 'My Promopage',
-            Promocodes: 'My Promocodes',
             Seo: 'Goods for Promotion',
+            Promocodes: 'My Promocodes',
+            Account: 'My Account',
+            Billing: 'Account Billing',
+            Documents: 'My Documents',
 
             Guides: 'Product Guide',
             GuideDetails: 'Product Guide',

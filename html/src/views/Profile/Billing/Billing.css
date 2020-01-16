@@ -1,4 +1,4 @@
-.account-view {
+.billing-view {
     &__hl {
         margin-bottom: calc(var(--gs) * 3);
         font-weight: 700;
@@ -8,78 +8,17 @@
         letter-spacing: 0.05em;
     }
 
-    &__section {
-        &-hl {
-            font-weight: 500;
-            font-size: 20px;
-            line-height: 24px;
-            margin-bottom: calc(var(--gs) * 3);
-        }
-    }
-
-    &__panels {
+    &__header {
         display: flex;
         justify-content: space-between;
-        margin-bottom: calc(var(--gs) * 7);
+        align-items: flex-start;
     }
 
-    &__panel {
-        background-color: var(--cl-elem-grey);
+    &__sort {
+        width: 30%;
 
-        &:first-of-type {
-            text-align: left;
-            width: 20%;
-            margin-right: calc(var(--gs) * 3);
-            padding: calc(var(--gs) * 4);
-        }
-
-        &:last-of-type {
-            flex: 1;
-            padding: calc(var(--gs) * 3);
-        }
-
-        &-count {
-            font-size: 28px;
-            line-height: 40px;
-            letter-spacing: 0.05em;
-        }
-
-        &-top {
-            margin-bottom: var(--gs);
-
-            &-label {
-                margin-right: calc(var(--gs) * 2);
-            }
-
-            &-notice {
-                font-size: 12px;
-                line-height: 16px;
-            }
-        }
-
-        &-bottom {
-            display: flex;
-            align-items: flex-start;
-
-            &-select {
-                width: 40%;
-                margin-right: var(--gs);
-            }
-
-            &-input {
-                width: 30%;
-                margin-right: calc(var(--gs) * 2);
-            }
-
-            &-btn {
-                width: 30%;
-                padding: 6px calc(var(--gs) * 2);
-            }
-
-            .multiselect__error,
-            .v-input__error {
-                display: none;
-            }
+        .multiselect__error {
+            display: none;
         }
     }
 

@@ -34,7 +34,7 @@ export default {
                     id: 1,
                     name: this.$t('profile.groups.profile'),
                     routes: [
-                        { name: 'Account', exact: true },
+                        { name: 'Cabinet', exact: true },
                         { name: 'Preferences', exact: true },
                         { name: 'Addresses', exact: true },
                         { name: 'Payment', exact: true },
@@ -43,6 +43,7 @@ export default {
                         { name: 'Certificates', exact: true },
                         { name: 'Bonuses', exact: true },
                         { name: 'Orders' },
+                        { name: 'ReferalOrders' },
                     ],
                 },
                 {
@@ -54,6 +55,9 @@ export default {
                         { name: 'Promopage', exact: true },
                         { name: 'Seo', exact: true },
                         { name: 'Promocodes', exact: true },
+                        { name: 'Account', exact: true },
+                        { name: 'Billing', exact: true },
+                        { name: 'Documents', exact: true },
                     ],
                 },
                 {

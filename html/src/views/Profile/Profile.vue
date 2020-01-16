@@ -5,11 +5,11 @@
                 <breadcrumb-item key="main" to="/">
                     Главная
                 </breadcrumb-item>
-                <breadcrumb-item key="account" :to="{ name: 'Account' }">
-                    {{ $t('profile.routes.Account') }}
+                <breadcrumb-item key="Cabinet" :to="{ name: 'Cabinet' }">
+                    {{ $t('profile.routes.Cabinet') }}
                 </breadcrumb-item>
                 <breadcrumb-item
-                    v-if="$route.name !== 'Account' && breadcrumbs.length === 0"
+                    v-if="$route.name !== 'Cabinet' && breadcrumbs.length === 0"
                     :key="$route.name"
                     :to="$route.path"
                 >

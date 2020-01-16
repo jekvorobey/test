@@ -153,9 +153,6 @@ import VArcCounter from '../../../components/controls/VArcCounter/VArcCounter.vu
 import referalProduct1 from '../../../assets/images/mock/referalProduct1.png';
 import referalProduct2 from '../../../assets/images/mock/referalProduct2.png';
 import referalProduct3 from '../../../assets/images/mock/referalProduct3.png';
-import graph from '../../../assets/images/mock/graph.png';
-import referalGroup1 from '../../../assets/images/mock/referalGroup1.png';
-import referalGroup2 from '../../../assets/images/mock/referalGroup2.png';
 
 import { baseChartOptions } from '../../../assets/scripts/constants';
 import './Referal.css';
@@ -176,9 +173,6 @@ export default {
         return {
             page: 1,
             isMounted: false,
-            graph,
-            referalGroup1,
-            referalGroup2,
             referalProduct1,
             referalProduct2,
             referalProduct3,
