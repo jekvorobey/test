@@ -173,6 +173,8 @@ export default {
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
+        onImageChanged() {},
+
         onOpenDetailsModal() {
             this[CHANGE_MODAL_STATE]({ name: DETAILS_MODAL_NAME, open: true });
         },
