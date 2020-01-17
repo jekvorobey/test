@@ -44,9 +44,11 @@
             </v-check>
         </info-panel>
 
-        <v-button @click="onSave">
-            Сохранить
-        </v-button>
+        <div class="container subscribes-view__submit">
+            <v-button class="subscribes-view__submit-btn" @click="onSave">
+                Сохранить
+            </v-button>
+        </div>
     </section>
 </template>
 

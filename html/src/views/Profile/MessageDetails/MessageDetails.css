@@ -7,6 +7,11 @@
         line-height: 40px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+
+        @media (--tablet) {
+            padding: 0 calc(var(--gs) * 2);
+            margin-bottom: var(--gs);
+        }
     }
 
     &__back-link {
@@ -17,6 +22,16 @@
         color: var(--cl-grey);
         text-transform: none;
         margin-bottom: var(--gs);
+
+        @media (--tablet) {
+            padding: 0 calc(var(--gs) * 2);
+            margin-bottom: calc(var(--gs) * 2);
+            text-transform: uppercase;
+            color: var(--cl-global);
+            fill: var(--cl-global);
+            letter-spacing: 0.02em;
+            font-weight: bold;
+        }
     }
 
     &__list {
@@ -24,6 +39,10 @@
 
         &-item {
             border-bottom: 1px solid var(--cl-divider-grey);
+
+            @media (--tablet) {
+                padding: calc(var(--gs) * 2);
+            }
         }
     }
 }

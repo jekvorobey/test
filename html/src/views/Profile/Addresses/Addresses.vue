@@ -4,8 +4,8 @@
         <info-panel class="addresses-view__panel" header="Сохраненные адреса">
             <template v-slot:controls>
                 <v-link class="addresses-view__panel-link" tag="button">
-                    <v-svg name="plus-small" width="16" height="16" />
-                    &nbsp;&nbsp;Добавить новый адрес
+                    <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
+                    <template v-if="!isTablet">&nbsp;&nbsp;&nbsp;&nbsp;Добавить новый адрес</template>
                 </v-link>
             </template>
 
@@ -104,6 +104,14 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {}),
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
+
+        iconSize() {
+            return this.$mq.tablet ? 24 : 16;
+        },
     },
 
     methods: {

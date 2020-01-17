@@ -6,7 +6,7 @@
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button">
                     <v-svg name="edit" width="16" height="16" />
-                    &nbsp;&nbsp;Изменить
+                    <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
             <ul class="cabinet-view__panel-list">
@@ -33,7 +33,7 @@
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button">
                     <v-svg name="edit" width="16" height="16" />
-                    &nbsp;&nbsp;Изменить
+                    <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
             <ul class="cabinet-view__panel-list">
@@ -47,7 +47,7 @@
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button">
                     <v-svg name="edit" width="16" height="16" />
-                    &nbsp;&nbsp;Изменить
+                    <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
             <ul class="cabinet-view__panel-list">
@@ -79,7 +79,7 @@
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button" @click="onOpenDetailsModal">
                     <v-svg name="edit" width="16" height="16" />
-                    &nbsp;&nbsp;Изменить
+                    <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
 
@@ -106,7 +106,7 @@
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button">
                     <v-svg name="edit" width="16" height="16" />
-                    &nbsp;&nbsp;Изменить
+                    <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
             <ul class="cabinet-view__panel-list">
@@ -130,6 +130,7 @@
 <script>
 import VSvg from '../../../components/controls/VSvg/VSvg.vue';
 import VLink from '../../../components/controls/VLink/VLink.vue';
+
 import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
 import ImagePicker from '../../../components/profile/ImagePicker/ImagePicker.vue';
@@ -163,12 +164,14 @@ export default {
         ...mapState(MODAL_MODULE, {
             isDetailsOpen: state => state[MODALS][DETAILS_MODAL_NAME] && state[MODALS][DETAILS_MODAL_NAME].open,
         }),
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
     },
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-
-        onImageChanged() {},
 
         onOpenDetailsModal() {
             this[CHANGE_MODAL_STATE]({ name: DETAILS_MODAL_NAME, open: true });

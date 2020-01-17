@@ -4,7 +4,7 @@
 
 import Cabinet from './Cabinet/Cabinet';
 import Addresses from './Addresses/Addresses';
-import Preferences from './Prefferences/Preferences';
+import Preferences from './Preferences/Preferences';
 import Payment from './Payment/Payment';
 import Subscribes from './Subscribes/Subscribes';
 import Messages from './Messages/Messages';

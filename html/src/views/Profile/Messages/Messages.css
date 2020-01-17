@@ -6,12 +6,27 @@
         line-height: 40px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+
+        @media (--tablet) {
+            display: none;
+        }
+    }
+
+    &__btn {
+        @media (--tablet) {
+            width: 100%;
+        }
     }
 
     &__header {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
+
+        @media (--tablet) {
+            padding: 0 calc(var(--gs) * 2);
+            margin-bottom: var(--gs);
+        }
     }
 
     &__list {
@@ -20,6 +35,10 @@
         &-item {
             cursor: pointer;
             border-bottom: 1px solid var(--cl-divider-grey);
+
+            @media (--tablet) {
+                padding: calc(var(--gs) * 2);
+            }
         }
     }
 }

@@ -4,8 +4,8 @@
         <info-panel class="payment-view__panel" header="Сохраненные карты">
             <template v-slot:controls>
                 <v-link class="payment-view__panel-link" tag="button">
-                    <v-svg name="plus-small" width="16" height="16" />
-                    &nbsp;&nbsp;Добавить карту
+                    <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
+                    <template v-if="!isTablet">&nbsp;&nbsp;Добавить карту</template>
                 </v-link>
             </template>
 
@@ -40,22 +40,26 @@
         </info-panel>
 
         <info-panel class="payment-view__panel" header="Предпочтительный способ оплаты">
-            <v-check
-                v-for="method in paymentMethods"
-                v-model="selectedMethod"
-                type="radio"
-                name="selectedMethod"
-                :key="method.id"
-                :value="method.id"
-                :id="`radio-${method.id}`"
-            >
-                {{ method.name }}
-            </v-check>
+            <div class="payment-view__panel-check">
+                <v-check
+                    v-for="method in paymentMethods"
+                    v-model="selectedMethod"
+                    type="radio"
+                    name="selectedMethod"
+                    :key="method.id"
+                    :value="method.id"
+                    :id="`radio-${method.id}`"
+                >
+                    {{ method.name }}
+                </v-check>
+            </div>
         </info-panel>
 
-        <v-button @click="onSave">
-            Сохранить
-        </v-button>
+        <div class="container payment-view__submit">
+            <v-button class="payment-view__submit-btn" @click="onSave">
+                Сохранить
+            </v-button>
+        </div>
     </section>
 </template>
 
@@ -147,6 +151,14 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {}),
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
+
+        iconSize() {
+            return this.$mq.tablet ? 24 : 16;
+        },
     },
 
     methods: {

@@ -6,6 +6,10 @@
         line-height: 40px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+
+        @media (--tablet) {
+            display: none;
+        }
     }
 
     &__panel {
@@ -22,6 +26,10 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
+
+            @media (--tablet) {
+                padding: 0 calc(var(--gs) * 2);
+            }
         }
 
         &-item {
@@ -31,6 +39,7 @@
             @media (--tablet) {
                 width: 100%;
                 margin-bottom: calc(var(--gs) * 2);
+                padding: calc(var(--gs) * 3);
             }
 
             &:first-of-type:last-of-type {

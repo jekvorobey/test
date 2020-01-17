@@ -6,15 +6,35 @@
         line-height: 40px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+
+        @media (--tablet) {
+            display: none;
+        }
     }
 
     &__panel {
         & + & {
             margin-top: calc(var(--gs) * 7);
+
+            @media (--tablet) {
+                margin-top: calc(var(--gs) * 4);
+            }
         }
 
         &-links {
             display: flex;
+        }
+
+        &-tags {
+            @media (--tablet) {
+                padding: 0 calc(var(--gs) * 2);
+            }
+
+            &-item {
+                @media (--tablet) {
+                    width: 100%;
+                }
+            }
         }
 
         &-link {
@@ -27,6 +47,10 @@
 
             & + & {
                 margin-left: calc(var(--gs) * 4);
+
+                @media (--tablet) {
+                    margin-left: calc(var(--gs) * 2);
+                }
             }
 
             &--delete {

@@ -1,0 +1,19 @@
+.navigation-modal {
+    .modal-body {
+        padding: calc(var(--gs) * 3);
+
+        @media (--tablet) {
+            padding: 0;
+        }
+    }
+
+    &__hl {
+        @media (--tablet) {
+            display: none;
+        }
+    }
+
+    &__panel {
+        padding: calc(var(--gs) * 3) 0;
+    }
+}

@@ -2,7 +2,7 @@
     <section class="section messages-view">
         <div class="messages-view__header">
             <h2 class="messages-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
-            <v-button>Новое сообщение</v-button>
+            <v-button class="messages-view__btn">Новое сообщение</v-button>
         </div>
 
         <ul class="messages-view__list">
@@ -19,6 +19,7 @@
                 :date="formatDate(message.date)"
                 :is-system="message.isSystem"
                 :is-read="message.isRead"
+                :use-header-clamp="!isTablet"
                 use-clamp
                 @click.prevent="onOpenMessage(message.id)"
             />
@@ -92,6 +93,12 @@ export default {
                 },
             ],
         };
+    },
+
+    computed: {
+        isTablet() {
+            return this.$mq.tablet;
+        },
     },
 
     methods: {

@@ -5,17 +5,22 @@
             <template v-slot:controls>
                 <div class="preferences-view__panel-links">
                     <v-link class="preferences-view__panel-link" tag="button">
-                        <v-svg name="edit" width="16" height="16" />
-                        &nbsp;&nbsp;Изменить
+                        <v-svg name="edit" :width="iconSize" :height="iconSize" />
+                        <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                     </v-link>
                     <v-link class="link--grey preferences-view__panel-link" tag="button">
-                        <v-svg name="cross" width="16" height="16" />
-                        &nbsp;&nbsp;Удалить все
+                        <v-svg name="cross" :width="iconSize" :height="iconSize" />
+                        <template v-if="!isTablet">&nbsp;&nbsp;Удалить все</template>
                     </v-link>
                 </div>
             </template>
             <transition-group tag="ul" class="preferences-view__panel-tags" name="tag-item">
-                <tag-item class="catalog-view__main-tags-item" v-for="item in brandTags" :key="item" :text="item" />
+                <tag-item
+                    class="preferences-view__panel-tags-item"
+                    v-for="item in brandTags"
+                    :key="item"
+                    :text="item"
+                />
             </transition-group>
         </info-panel>
 
@@ -23,18 +28,18 @@
             <template v-slot:controls>
                 <div class="preferences-view__panel-links">
                     <v-link class="preferences-view__panel-link" tag="button">
-                        <v-svg name="edit" width="16" height="16" />
-                        &nbsp;&nbsp;Изменить
+                        <v-svg name="edit" :width="iconSize" :height="iconSize" />
+                        <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                     </v-link>
                     <v-link class="link--grey preferences-view__panel-link" tag="button">
-                        <v-svg name="cross" width="16" height="16" />
-                        &nbsp;&nbsp;Удалить все
+                        <v-svg name="cross" :width="iconSize" :height="iconSize" />
+                        <template v-if="!isTablet">&nbsp;&nbsp;Удалить все</template>
                     </v-link>
                 </div>
             </template>
             <transition-group tag="ul" class="preferences-view__panel-tags" name="tag-item">
                 <tag-item
-                    class="catalog-view__main-tags-item"
+                    class="preferences-view__panel-tags-item"
                     v-for="item in categoriesTags"
                     :key="item"
                     :text="item"
@@ -86,7 +91,15 @@ export default {
         };
     },
 
-    computed: {},
+    computed: {
+        isTablet() {
+            return this.$mq.tablet;
+        },
+
+        iconSize() {
+            return this.$mq.tablet ? 24 : 16;
+        },
+    },
 
     watch: {},
 

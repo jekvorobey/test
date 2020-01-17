@@ -1,8 +1,36 @@
 .profile-view {
     padding-bottom: calc(var(--gs) * 10);
 
+    @media (--tablet) {
+        padding-bottom: calc(var(--gs) * 4);
+    }
+
     &__panel {
         padding-top: calc(var(--gs) * 4);
+
+        @media (--tablet) {
+            padding-top: 0;
+        }
+
+        .v-sticky__container {
+            @media (--tablet) {
+                top: 48px;
+            }
+        }
+
+        &-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px calc(var(--gs) * 2);
+            width: 100%;
+            text-align: left;
+            background-color: var(--cl-white);
+            border-color: var(--cl-white);
+            box-shadow: 0px -1px 0px #eff1f3, 0px 0px 20px rgba(0, 0, 0, 0.1);
+            color: var(--cl-global);
+            fill: var(--cl-global);
+        }
     }
 
     &__main {
