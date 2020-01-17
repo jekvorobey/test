@@ -45,7 +45,11 @@
                             </div>
                         </td>
                         <td class="referal-orders-view__table-td">2 шт</td>
-                        <td class="referal-orders-view__table-td">154</td>
+                        <td class="referal-orders-view__table-td">
+                            <router-link :to="{ name: 'ReferalOrderDetails', params: { referalId: 154 } }">
+                                154
+                            </router-link>
+                        </td>
                         <td class="referal-orders-view__table-td">Промокод SOKOLOV</td>
                         <td class="referal-orders-view__table-td">18.08.19</td>
                         <td class="referal-orders-view__table-td">3 374 ₽</td>
@@ -62,7 +66,11 @@
                             </div>
                         </td>
                         <td class="referal-orders-view__table-td">1 шт</td>
-                        <td class="referal-orders-view__table-td">154</td>
+                        <td class="referal-orders-view__table-td">
+                            <router-link :to="{ name: 'ReferalOrderDetails', params: { referalId: 154 } }">
+                                154
+                            </router-link>
+                        </td>
                         <td class="referal-orders-view__table-td">Промокод SOKOLOV</td>
                         <td class="referal-orders-view__table-td">17.08.19</td>
                         <td class="referal-orders-view__table-td">1 124 ₽</td>
@@ -79,7 +87,11 @@
                             </div>
                         </td>
                         <td class="referal-orders-view__table-td">3 шт</td>
-                        <td class="referal-orders-view__table-td">469</td>
+                        <td class="referal-orders-view__table-td">
+                            <router-link :to="{ name: 'ReferalOrderDetails', params: { referalId: 469 } }">
+                                469
+                            </router-link>
+                        </td>
                         <td class="referal-orders-view__table-td">Реферальная ссылка</td>
                         <td class="referal-orders-view__table-td">16.08.19</td>
                         <td class="referal-orders-view__table-td">2 789 ₽</td>

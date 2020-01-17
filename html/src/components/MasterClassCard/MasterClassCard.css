@@ -1,0 +1,113 @@
+.master-class-card {
+    display: flex;
+
+    &__img {
+        position: relative;
+        display: flex;
+        width: calc(100% / 3);
+        max-height: 184px;
+        background: var(--cl-elem-grey);
+        margin-right: calc(var(--gs) * 3);
+        border-bottom: none;
+
+        @media (--tablet) {
+            max-width: 104px;
+            max-height: 72px;
+            margin-right: var(--gs);
+        }
+
+        .v-picture {
+            width: 100%;
+            height: 100%;
+        }
+
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 100%;
+                padding-bottom: 0;
+            }
+        }
+
+        .icon {
+            margin: auto;
+            opacity: 0.1;
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: calc(var(--gs) * 2) 0;
+
+        @media (--tablet) {
+            padding-right: calc(var(--gs) * 2);
+        }
+
+        &-name {
+            flex: 1;
+            font-weight: bold;
+
+            @media (--tablet) {
+                width: 100%;
+                margin-bottom: var(--gs);
+                font-size: 16px;
+                line-height: 24px;
+                font-weight: normal;
+            }
+        }
+
+        &-prices {
+            text-align: right;
+            padding-left: calc(var(--gs) * 2);
+
+            @media (--tablet) {
+                width: 100%;
+                padding-left: 0;
+                margin-bottom: var(--gs);
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        &-price {
+            font-size: 20px;
+            line-height: 24px;
+
+            @media (--tablet) {
+                font-size: 16px;
+                line-height: 24px;
+                margin-right: var(--gs);
+            }
+
+            &--old {
+                font-size: 14px;
+                line-height: 24px;
+
+                @media (--tablet) {
+                    font-size: 12px;
+                    line-height: 16px;
+                }
+            }
+        }
+
+        &-top {
+            display: flex;
+            margin-bottom: calc(var(--gs) * 2);
+        }
+
+        &-bottom {
+            width: 100%;
+
+            @media (--tablet) {
+                order: 1;
+                margin-bottom: var(--gs);
+            }
+        }
+    }
+}

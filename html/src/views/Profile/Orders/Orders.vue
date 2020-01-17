@@ -2,6 +2,64 @@
     <section class="section orders-view">
         <h2 class="orders-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
 
+        <div class="orders-view__panels">
+            <div class="orders-view__panel">
+                <div class="orders-view__panel-item">
+                    <div class="text-grey orders-view__panel-name">Ваш уровень</div>
+                    <div class="orders-view__panel-level">Золотой</div>
+                </div>
+                <div class="orders-view__panel-item">
+                    <div class="text-grey orders-view__panel-name">Следующий уровень</div>
+                    <div class="text-grey orders-view__panel-level">Платиновый</div>
+                </div>
+
+                <a class="orders-view__panel-link">Подробнее о реферальной программе</a>
+            </div>
+            <div class="orders-view__panel">
+                <div class="orders-view__panel-item">
+                    <div class="orders-view__panel-item-counter">
+                        <v-arc-counter
+                            stroke="#BDBDBD"
+                            activeStroke="#141116"
+                            text="2"
+                            :start="-120"
+                            :end="120"
+                            :activeWidth="16"
+                            :strokeWidth="16"
+                            :dashCount="10"
+                            :activeCount="2"
+                        />
+                        <div class="text-grey orders-view__panel-item-label">
+                            <span>2</span>
+                            <span>10</span>
+                        </div>
+                    </div>
+
+                    <div class="text-grey">Новых заказов</div>
+                </div>
+                <div class="orders-view__panel-item">
+                    <div class="orders-view__panel-item-counter">
+                        <v-arc-counter
+                            stroke="#BDBDBD"
+                            activeStroke="#141116"
+                            text="15 780 ₽"
+                            :start="-120"
+                            :end="120"
+                            :activeWidth="16"
+                            :strokeWidth="16"
+                            :dashCount="10"
+                            :activeCount="1"
+                        />
+                        <div class="text-grey orders-view__panel-item-label">
+                            <span>0</span>
+                            <span>300к</span>
+                        </div>
+                    </div>
+                    <div class="text-grey">Сумма моих заказов</div>
+                </div>
+            </div>
+        </div>
+
         <table class="orders-view__table">
             <colgroup>
                 <col width="20%" />
@@ -92,6 +150,7 @@ import VSvg from '../../../components/controls/VSvg/VSvg.vue';
 import VLink from '../../../components/controls/VLink/VLink.vue';
 import VButton from '../../../components/controls/VButton/VButton.vue';
 import VInput from '../../../components/controls/VInput/VInput.vue';
+import VArcCounter from '../../../components/controls/VArcCounter/VArcCounter.vue';
 
 import '../../../assets/images/sprites/arrow-updown.svg';
 import './Orders.css';
@@ -104,6 +163,7 @@ export default {
         VLink,
         VButton,
         VInput,
+        VArcCounter,
     },
 
     data() {

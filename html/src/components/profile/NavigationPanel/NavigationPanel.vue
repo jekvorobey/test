@@ -64,8 +64,9 @@ export default {
                     id: 3,
                     name: this.$t('profile.groups.training'),
                     routes: [
+                        { name: 'HowItWorks', exact: true },
                         { name: 'Guides' },
-                        // { name: 'Masterclasses', exact: true },
+                        { name: 'Masterclasses', exact: true },
                         { name: 'QnA', exact: true },
                     ],
                 },

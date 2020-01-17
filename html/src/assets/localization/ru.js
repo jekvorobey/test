@@ -126,6 +126,7 @@ export default {
         format: {
             order: 'Заказ №{id}',
             messages: 'Сообщения ({n})',
+            referal: 'Реферал №{id}',
         },
 
         groups: {
@@ -153,11 +154,12 @@ export default {
             ProPreferences: 'Мои профессиональные предпочтения',
             Promopage: 'Моя промостраница',
             Seo: 'Товары для продвижения',
-            Promocodes: 'Моя промокоды',
+            Promocodes: 'Мои промокоды',
             Account: 'Мой счет',
             Billing: 'Биллинг по счету',
             Documents: 'Мои документы',
 
+            HowItWorks: 'Как работать с платформой',
             Guides: 'Гиды по продуктам',
             GuideDetails: 'Гиды по продуктам',
             Masterclasses: 'Мои мастер-классы',

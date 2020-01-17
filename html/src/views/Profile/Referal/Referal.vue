@@ -12,7 +12,7 @@
                     <div class="text-grey referal-view__panel-level">Платиновый</div>
                 </div>
 
-                <a>Подробнее о реферальной программе</a>
+                <a class="referal-view__panel-link">Подробнее о реферальной программе</a>
             </div>
             <div class="referal-view__panel">
                 <div class="referal-view__panel-item">

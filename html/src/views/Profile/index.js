@@ -25,6 +25,7 @@ import Account from './Account/Account';
 import Billing from './Billing/Billing';
 import Documents from './Documents/Documents';
 
+import HowItWorks from './HowItWorks/HowItWorks';
 import Guides from './Guides/Guides';
 import GuideDetails from './GuideDetails/GuideDetails';
 import Masterclasses from './Masterclasses/Masterclasses';
@@ -67,6 +68,7 @@ export default {
                 ...Billing.routes,
                 ...Documents.routes,
 
+                ...HowItWorks.routes,
                 ...Guides.routes,
                 ...GuideDetails.routes,
                 ...Masterclasses.routes,

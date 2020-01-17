@@ -1,97 +1,130 @@
 <template>
     <section class="section referal-order-details-view">
         <v-link class="referal-order-details-view__back-link" :to="backUrl">
-            <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем заказам
+            <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад к реферальным
+            заказам
         </v-link>
-        <h2 class="referal-order-details-view__hl">{{ $t('profile.format.order', { id: orderId }) }}</h2>
-        <div class="referal-order-details-view__details">
+        <h2 class="referal-order-details-view__hl">{{ $t('profile.format.referal', { id: referalId }) }}</h2>
+        <section class="referal-order-details-view__details">
             <div class="referal-order-details-view__details-info">
-                <info-row class="referal-order-details-view__details-row" name="Сумма" value="15 780 ₽" />
+                <info-row class="referal-order-details-view__details-row" name="Заказал товаров" value="12" />
+                <info-row class="referal-order-details-view__details-row" name="Сумма заказов" value="745 856 ₽" />
+                <info-row class="referal-order-details-view__details-row" name="Источник" value="Промокод SOKOLOV" />
                 <info-row
                     class="referal-order-details-view__details-row"
-                    name="Статус заказа"
-                    value="Ожидается оплата"
-                />
-                <info-row class="referal-order-details-view__details-row" name="Дата заказа" value="18 августа 2019" />
-                <info-row
-                    class="referal-order-details-view__details-row"
-                    name="Дата доставки"
-                    value="20 августа 2019"
-                />
-                <info-row
-                    class="referal-order-details-view__details-row"
-                    name="Адрес доставки"
-                    value="Москва, г. Зеленоград, Центральный проспект, к. 305"
+                    name="Дата привязки реферала"
+                    value="9 августа 2019"
                 />
             </div>
-            <div class="referal-order-details-view__details-controls">
-                <v-button class="referal-order-details-view__details-controls-btn">Оплатить заказ</v-button>
-                <v-button class="btn--outline referal-order-details-view__details-controls-btn"
-                    >Повторить заказ</v-button
-                >
-                <v-link class="referal-order-details-view__details-controls-link">Оформить возврат</v-link>
+        </section>
+
+        <section class="referal-order-details-view__section">
+            <div class="referal-order-details-view__section-header">
+                <h3 class="referal-order-details-view__section-hl">История заказов реферала</h3>
+                <div>
+                    <v-check
+                        class="referal-order-details-view__section-check"
+                        v-for="source in referalSources"
+                        v-model="referalSource"
+                        name="referal-source"
+                        type="radio"
+                        :id="`${source.value}-${source.id}`"
+                        :key="source.id"
+                        :value="source.value"
+                    >
+                        {{ source.name }}
+                    </v-check>
+                </div>
             </div>
-        </div>
 
-        <info-panel class="referal-order-details-view__panel" header="Корзина">
-            <ul class="referal-order-details-view__panel-list">
-                <package-product-card
-                    class="referal-order-details-view__panel-item"
-                    v-for="item in cartItems"
-                    :key="item.id"
-                    :name="item.name"
-                    :image="item.image"
-                    :price="item.price"
-                    :old-price="item.oldPrice"
-                    :count="item.count"
-                />
-            </ul>
-        </info-panel>
+            <table class="referal-order-details-view__table">
+                <colgroup>
+                    <col width="40%" />
+                    <col width="12%" />
+                    <col width="12%" />
+                    <col width="12%" />
+                    <col width="12%" />
+                    <col width="12%" />
+                </colgroup>
+                <thead class="referal-order-details-view__table-head">
+                    <tr class="referal-order-details-view__table-tr referal-order-details-view__table-tr--header">
+                        <th class="referal-order-details-view__table-th">Товар</th>
+                        <th class="referal-order-details-view__table-th">Кол-во</th>
+                        <th class="referal-order-details-view__table-th">Источник</th>
+                        <th class="referal-order-details-view__table-th">Дата заказа</th>
+                        <th class="referal-order-details-view__table-th">Сумма</th>
+                        <th class="referal-order-details-view__table-th">Сумма вознаграждения</th>
+                    </tr>
+                </thead>
+                <transition-group tag="tbody" name="fade-in" appear class="referal-order-details-view__table-body">
+                    <tr class="referal-order-details-view__table-tr" key="1">
+                        <td class="referal-order-details-view__table-td">
+                            <div class="referal-order-details-view__table-img">
+                                <img :src="referalProduct1" />
+                            </div>
+                            <div class="referal-order-details-view__table-title">
+                                Губная помада L'Oreal Paris Color Riche Collection Privee by J'Lo's увлажняющая
+                            </div>
+                        </td>
+                        <td class="referal-order-details-view__table-td">2 шт</td>
+                        <td class="referal-order-details-view__table-td">Промокод SOKOLOV</td>
+                        <td class="referal-order-details-view__table-td">18.08.19</td>
+                        <td class="referal-order-details-view__table-td">3 374 ₽</td>
+                        <td class="referal-order-details-view__table-td">337 ₽</td>
+                    </tr>
 
-        <info-panel
-            class="referal-order-details-view__panel"
-            v-for="delivery in deliveries"
-            :key="delivery.id"
-            :header="`Доставка №${delivery.id}`"
-        >
-            <info-row class="referal-order-details-view__panel-row" name="Дата доставки" :value="delivery.date" />
-            <info-row class="referal-order-details-view__panel-row" name="Адрес доставки" :value="delivery.address" />
-            <ul class="referal-order-details-view__panel-list">
-                <package-product-card
-                    class="referal-order-details-view__panel-item"
-                    v-for="item in delivery.items"
-                    :key="item.id"
-                    :name="item.name"
-                    :image="item.image"
-                    :price="item.price"
-                    :old-price="item.oldPrice"
-                    :count="item.count"
-                />
-            </ul>
-        </info-panel>
+                    <tr class="referal-order-details-view__table-tr" key="2">
+                        <td class="referal-order-details-view__table-td">
+                            <div class="referal-order-details-view__table-img">
+                                <img :src="referalProduct2" />
+                            </div>
+                            <div class="referal-order-details-view__table-title">
+                                Matrix Спрей для укладки волос Total results Wonder boost, 250 мл
+                            </div>
+                        </td>
+                        <td class="referal-order-details-view__table-td">1 шт</td>
+                        <td class="referal-order-details-view__table-td">Промокод SOKOLOV</td>
+                        <td class="referal-order-details-view__table-td">17.08.19</td>
+                        <td class="referal-order-details-view__table-td">1 124 ₽</td>
+                        <td class="referal-order-details-view__table-td">112 ₽</td>
+                    </tr>
+
+                    <tr class="referal-order-details-view__table-tr" key="3">
+                        <td class="referal-order-details-view__table-td">
+                            <div class="referal-order-details-view__table-img">
+                                <img :src="referalProduct3" />
+                            </div>
+                            <div class="referal-order-details-view__table-title">
+                                Лосьон для волос Matrix Total Results Keep Me Vivid Color Velvetizer 100 мл
+                            </div>
+                        </td>
+                        <td class="referal-order-details-view__table-td">3 шт</td>
+                        <td class="referal-order-details-view__table-td">Реферальная ссылка</td>
+                        <td class="referal-order-details-view__table-td">16.08.19</td>
+                        <td class="referal-order-details-view__table-td">2 789 ₽</td>
+                        <td class="referal-order-details-view__table-td">278 ₽</td>
+                    </tr>
+                </transition-group>
+            </table>
+        </section>
     </section>
 </template>
 
 <script>
 import VSvg from '../../../components/controls/VSvg/VSvg.vue';
 import VLink from '../../../components/controls/VLink/VLink.vue';
-import VButton from '../../../components/controls/VButton/VButton.vue';
-import VInput from '../../../components/controls/VInput/VInput.vue';
+import VCheck from '../../../components/controls/VCheck/VCheck.vue';
 
 import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
-import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
-
-import PackageProductCard from '../../../components/PackageProductCard/PackageProductCard.vue';
 
 import { mapActions, mapState } from 'vuex';
 
 import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '../../../store/modules/Profile/actions';
 
-import mockProduct1 from '../../../assets/images/mock/orderPackageProduct1.png';
-import mockProduct2 from '../../../assets/images/mock/orderPackageProduct2.png';
-import mockProduct3 from '../../../assets/images/mock/orderPackageProduct3.png';
-import mockProduct4 from '../../../assets/images/mock/orderPackageProduct4.png';
+import referalProduct1 from '../../../assets/images/mock/referalProduct1.png';
+import referalProduct2 from '../../../assets/images/mock/referalProduct2.png';
+import referalProduct3 from '../../../assets/images/mock/referalProduct3.png';
 import '../../../assets/images/sprites/arrow-small.svg';
 import './ReferalOrderDetails.css';
 
@@ -101,147 +134,28 @@ export default {
     components: {
         VSvg,
         VLink,
-        VButton,
-        VInput,
+        VCheck,
 
-        InfoPanel,
         InfoRow,
-
-        PackageProductCard,
     },
 
     data() {
         return {
-            cartItems: [
-                {
-                    id: 1,
-                    name: "Губная помада L'Oreal Paris Color Riche by J'Lo's, 103, розовый",
-                    description: 'Цвет: 27, Bruised Plum',
-                    count: 1,
-                    image: mockProduct1,
-
-                    price: {
-                        value: 3900,
-                        currency: 'RUB',
-                    },
-
-                    oldPrice: {
-                        value: 4600,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 2,
-                    name: 'Matrix Спрей для укладки волос Total results Wonder boost, 250 мл',
-                    description: null,
-                    count: 2,
-                    image: mockProduct2,
-
-                    price: {
-                        value: 1168,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 3,
-                    name: 'Wella Professionals Koleston Perfect Me+ Deep Browns Краска для волос, 60 мл',
-                    description: null,
-                    count: 1,
-                    image: mockProduct3,
-
-                    price: {
-                        value: 1899,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 4,
-                    name: 'Matrix кондиционер Total Results Moisture Me Rich, 300 мл',
-                    description: null,
-                    count: 1,
-                    image: mockProduct4,
-
-                    price: {
-                        value: 599,
-                        currency: 'RUB',
-                    },
-                },
-            ],
-            deliveries: [
-                {
-                    id: '124589524-1',
-                    date: '20 августа 2019',
-                    address: 'Москва, г. Зеленоград, Центральный проспект, к. 305',
-                    items: [
-                        {
-                            id: 1,
-                            name: "Губная помада L'Oreal Paris Color Riche by J'Lo's, 103, розовый",
-                            description: 'Цвет: 27, Bruised Plum',
-                            count: 1,
-                            image: mockProduct1,
-
-                            price: {
-                                value: 3900,
-                                currency: 'RUB',
-                            },
-
-                            oldPrice: {
-                                value: 4600,
-                                currency: 'RUB',
-                            },
-                        },
-                        {
-                            id: 2,
-                            name: 'Matrix Спрей для укладки волос Total results Wonder boost, 250 мл',
-                            description: null,
-                            count: 2,
-                            image: mockProduct2,
-
-                            price: {
-                                value: 1168,
-                                currency: 'RUB',
-                            },
-                        },
-                    ],
-                },
-                {
-                    id: '124589524-2',
-                    date: '22 августа 2019',
-                    address: 'Москва, г. Зеленоград, Центральный проспект, к. 305',
-                    items: [
-                        {
-                            id: 3,
-                            name: 'Wella Professionals Koleston Perfect Me+ Deep Browns Краска для волос, 60 мл',
-                            description: null,
-                            count: 1,
-                            image: mockProduct3,
-
-                            price: {
-                                value: 1899,
-                                currency: 'RUB',
-                            },
-                        },
-                        {
-                            id: 4,
-                            name: 'Matrix кондиционер Total Results Moisture Me Rich, 300 мл',
-                            description: null,
-                            count: 1,
-                            image: mockProduct4,
-
-                            price: {
-                                value: 599,
-                                currency: 'RUB',
-                            },
-                        },
-                    ],
-                },
+            referalProduct1,
+            referalProduct2,
+            referalProduct3,
+            referalSource: 'all',
+            referalSources: [
+                { id: 1, value: 'all', name: 'Все источники' },
+                { id: 2, value: 'referal', name: 'Реферальная ссылка' },
+                { id: 3, value: 'promo', name: 'Промокод' },
             ],
         };
     },
 
     computed: {
         ...mapState('route', {
-            orderId: state => state.params && state.params.orderId,
+            referalId: state => state.params && state.params.referalId,
         }),
 
         backUrl() {

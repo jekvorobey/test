@@ -7,4 +7,12 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
+
+    &__list {
+        &-item {
+            & + & {
+                margin-top: calc(var(--gs) * 3);
+            }
+        }
+    }
 }

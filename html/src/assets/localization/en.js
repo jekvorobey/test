@@ -126,6 +126,7 @@ export default {
         format: {
             order: 'Order №{id}',
             messages: 'Messages ({n})',
+            referal: 'Referal №{id}',
         },
 
         groups: {
@@ -158,6 +159,7 @@ export default {
             Billing: 'Account Billing',
             Documents: 'My Documents',
 
+            HowItWorks: 'How It Works',
             Guides: 'Product Guide',
             GuideDetails: 'Product Guide',
             Masterclasses: 'My Masterclasses',
