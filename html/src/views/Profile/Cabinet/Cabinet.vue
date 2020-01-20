@@ -7,7 +7,7 @@
         <info-panel class="cabinet-view__panel" header="Личные данные">
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button">
-                    <v-svg name="edit" width="16" height="16" />
+                    <v-svg name="edit" :width="iconSize" :height="iconSize" />
                     <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
@@ -36,7 +36,7 @@
         <info-panel class="cabinet-view__panel" header="Пароль">
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button">
-                    <v-svg name="edit" width="16" height="16" />
+                    <v-svg name="edit" :width="iconSize" :height="iconSize" />
                     <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
@@ -52,7 +52,7 @@
         <info-panel class="cabinet-view__panel" header="Социальные сети">
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button">
-                    <v-svg name="edit" width="16" height="16" />
+                    <v-svg name="edit" :width="iconSize" :height="iconSize" />
                     <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
@@ -92,7 +92,7 @@
         <info-panel class="cabinet-view__panel" header="Реквизиты">
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button" @click="onOpenDetailsModal">
-                    <v-svg name="edit" width="16" height="16" />
+                    <v-svg name="edit" :width="iconSize" :height="iconSize" />
                     <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
@@ -120,7 +120,7 @@
         <info-panel class="cabinet-view__panel" header="Сертификаты">
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button">
-                    <v-svg name="edit" width="16" height="16" />
+                    <v-svg name="edit" :width="iconSize" :height="iconSize" />
                     <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
@@ -184,6 +184,10 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        iconSize() {
+            return this.$mq.tablet ? 24 : 16;
         },
     },
 
