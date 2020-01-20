@@ -10,24 +10,39 @@
         <info-panel class="promopage-view__panel" :header="headerText">
             <template v-slot:controls>
                 <v-link class="promopage-view__panel-link" tag="button">
-                    <v-svg name="edit" width="16" height="16" />
+                    <v-svg name="edit" :width="iconSize" :height="iconSize" />
                 </v-link>
 
-                <v-link class="promopage-view__panel-link" tag="button">
-                    <v-svg name="plus-small" width="16" height="16" />
-                    &nbsp;&nbsp;Добавить
-                </v-link>
+                <template v-if="!isTablet">
+                    <v-link class="promopage-view__panel-link" tag="button">
+                        <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
+                        &nbsp;&nbsp;Добавить
+                    </v-link>
+                    <v-link class="promopage-view__panel-link" tag="button">
+                        <v-svg name="link-add" :width="iconSize" :height="iconSize" />
+                        &nbsp;&nbsp;Добавить по ссылке
+                    </v-link>
 
-                <v-link class="promopage-view__panel-link" tag="button">
-                    <v-svg name="link-add" width="16" height="16" />
-                    &nbsp;&nbsp;Добавить по ссылке
-                </v-link>
-
-                <v-link class="promopage-view__panel-link" tag="button">
-                    <v-svg name="link" width="16" height="16" />
-                    &nbsp;&nbsp;Скопировать ссылку
-                </v-link>
+                    <v-link class="promopage-view__panel-link" tag="button">
+                        <v-svg name="link" :width="iconSize" :height="iconSize" />
+                        &nbsp;&nbsp;Скопировать ссылку
+                    </v-link>
+                </template>
             </template>
+
+            <div class="container container--tablet-lg">
+                <div class="promopage-view__panel-links" v-if="isTablet">
+                    <v-link class="promopage-view__panel-link" tag="button">
+                        <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
+                        &nbsp;&nbsp;Добавить
+                    </v-link>
+
+                    <v-link class="promopage-view__panel-link" tag="button">
+                        <v-svg name="link-add" :width="iconSize" :height="iconSize" />
+                        &nbsp;&nbsp;Добавить по ссылке
+                    </v-link>
+                </div>
+            </div>
 
             <ul class="promopage-view__panel-list">
                 <li class="promopage-view__panel-item" v-for="item in products" :key="item.id">
@@ -99,6 +114,14 @@ export default {
         ...mapState(PROFILE_MODULE, {
             products: state => (state[PROMO_DATA] ? state[PROMO_DATA].products : []),
         }),
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
+
+        iconSize() {
+            return this.$mq.tablet ? 24 : 16;
+        },
     },
 
     methods: {

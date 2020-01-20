@@ -21,20 +21,6 @@
         }
     }
 
-    &__panels {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: calc(var(--gs) * 5);
-
-        @media (--tablet-lg) {
-            flex-wrap: wrap;
-        }
-
-        @media (--tablet) {
-            display: none;
-        }
-    }
-
     &__filter-btn {
         display: none;
 
@@ -44,6 +30,16 @@
 
         @media (--tablet) {
             width: 100%;
+        }
+    }
+
+    &__panels {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: calc(var(--gs) * 5);
+
+        @media (--tablet-lg) {
+            flex-wrap: wrap;
         }
     }
 
@@ -116,6 +112,10 @@
                 margin-bottom: calc(var(--gs) * 2);
 
                 @media (--desktop) and (--tablet-lg-min) {
+                    width: 100%;
+                }
+
+                @media (--tablet) {
                     width: 100%;
                 }
             }

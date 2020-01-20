@@ -1,67 +1,67 @@
 <template>
     <section class="section orders-view">
-        <div class="container container--tablet-lg">
-            <h2 class="orders-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+        <h2 class="container container--tablet-lg orders-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
 
-            <div class="orders-view__panels">
-                <div class="orders-view__panel">
-                    <div class="orders-view__panel-item">
-                        <div class="text-grey orders-view__panel-name">Ваш уровень</div>
-                        <div class="orders-view__panel-level">Золотой</div>
-                    </div>
-                    <div class="orders-view__panel-item">
-                        <div class="text-grey orders-view__panel-name">Следующий уровень</div>
-                        <div class="text-grey orders-view__panel-level">Платиновый</div>
-                    </div>
-
-                    <a class="orders-view__panel-link">Подробнее о реферальной программе</a>
+        <div class="orders-view__panels">
+            <div class="orders-view__panel">
+                <div class="orders-view__panel-item">
+                    <div class="text-grey orders-view__panel-name">Ваш уровень</div>
+                    <div class="orders-view__panel-level">Золотой</div>
+                </div>
+                <div class="orders-view__panel-item">
+                    <div class="text-grey orders-view__panel-name">Следующий уровень</div>
+                    <div class="text-grey orders-view__panel-level">Платиновый</div>
                 </div>
 
-                <div class="orders-view__panel">
-                    <div class="orders-view__panel-item">
-                        <div class="orders-view__panel-item-counter">
-                            <v-arc-counter
-                                stroke="#BDBDBD"
-                                activeStroke="#141116"
-                                text="2"
-                                :start="-120"
-                                :end="120"
-                                :activeWidth="16"
-                                :strokeWidth="16"
-                                :dashCount="10"
-                                :activeCount="2"
-                            />
-                            <div class="text-grey orders-view__panel-item-label">
-                                <span>2</span>
-                                <span>10</span>
-                            </div>
-                        </div>
-
-                        <div class="text-grey">Новых заказов</div>
-                    </div>
-                    <div class="orders-view__panel-item">
-                        <div class="orders-view__panel-item-counter">
-                            <v-arc-counter
-                                stroke="#BDBDBD"
-                                activeStroke="#141116"
-                                text="15 780 ₽"
-                                :start="-120"
-                                :end="120"
-                                :activeWidth="16"
-                                :strokeWidth="16"
-                                :dashCount="10"
-                                :activeCount="1"
-                            />
-                            <div class="text-grey orders-view__panel-item-label">
-                                <span>0</span>
-                                <span>300к</span>
-                            </div>
-                        </div>
-                        <div class="text-grey">Сумма моих заказов</div>
-                    </div>
-                </div>
+                <a class="orders-view__panel-link">Подробнее о реферальной программе</a>
             </div>
 
+            <div class="orders-view__panel">
+                <div class="orders-view__panel-item">
+                    <div class="orders-view__panel-item-counter">
+                        <v-arc-counter
+                            stroke="#BDBDBD"
+                            activeStroke="#141116"
+                            text="2"
+                            :start="-120"
+                            :end="120"
+                            :activeWidth="16"
+                            :strokeWidth="16"
+                            :dashCount="10"
+                            :activeCount="2"
+                        />
+                        <div class="text-grey orders-view__panel-item-label">
+                            <span>2</span>
+                            <span>10</span>
+                        </div>
+                    </div>
+
+                    <div class="text-grey">Новых заказов</div>
+                </div>
+                <div class="orders-view__panel-item">
+                    <div class="orders-view__panel-item-counter">
+                        <v-arc-counter
+                            stroke="#BDBDBD"
+                            activeStroke="#141116"
+                            text="15 780 ₽"
+                            :start="-120"
+                            :end="120"
+                            :activeWidth="16"
+                            :strokeWidth="16"
+                            :dashCount="10"
+                            :activeCount="1"
+                        />
+                        <div class="text-grey orders-view__panel-item-label">
+                            <span>0</span>
+                            <span>300к</span>
+                        </div>
+                    </div>
+                    <div class="text-grey">Сумма моих заказов</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container container--tablet-lg">
             <filter-button class="orders-view__filter-btn" @click="filterModal = !filterModal">
                 Фильтр и сортировка&nbsp;&nbsp;
                 <span class="text-grey">4</span>
@@ -196,7 +196,6 @@ import Price from '../../../components/Price/Price.vue';
 import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
 
 import { orderStatus } from '../../../assets/scripts/constants';
-import '../../../assets/images/sprites/filter.svg';
 import '../../../assets/images/sprites/arrow-updown.svg';
 import './Orders.css';
 

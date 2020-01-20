@@ -107,7 +107,11 @@
                         </div>
                     </info-row>
                     <info-row class="referal-orders-view__list-item-row" name="Кол-во"> {{ order.qty }} шт. </info-row>
-                    <info-row class="referal-orders-view__list-item-row" name="ID реферала" :value="order.referalId" />
+                    <info-row class="referal-orders-view__list-item-row" name="ID реферала">
+                        <router-link :to="{ name: 'ReferalOrderDetails', params: { referalId: order.referalId } }">
+                            {{ order.referalId }}
+                        </router-link>
+                    </info-row>
                     <info-row class="referal-orders-view__list-item-row" name="Источник" :value="order.source" />
                     <info-row class="referal-orders-view__list-item-row" name="Дата заказа" :value="order.date" />
                     <info-row class="referal-orders-view__list-item-row" name="Сумма">

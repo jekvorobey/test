@@ -266,7 +266,6 @@ import {
 import { registerModuleIfNotExists } from '../../util/store';
 import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants';
 import _debounce from 'lodash/debounce';
-import '../../assets/images/sprites/filter.svg';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
 

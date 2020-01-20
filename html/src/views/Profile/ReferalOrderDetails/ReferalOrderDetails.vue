@@ -144,6 +144,7 @@ import { UPDATE_BREADCRUMB } from '../../../store/modules/Profile/actions';
 import referalProduct1 from '../../../assets/images/mock/referalProduct1.png';
 import referalProduct2 from '../../../assets/images/mock/referalProduct2.png';
 import referalProduct3 from '../../../assets/images/mock/referalProduct3.png';
+
 import '../../../assets/images/sprites/arrow-small.svg';
 import './ReferalOrderDetails.css';
 
