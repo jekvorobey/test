@@ -14,14 +14,16 @@
                     </v-link>
                 </div>
             </template>
-            <transition-group tag="ul" class="preferences-view__panel-tags" name="tag-item">
-                <tag-item
-                    class="preferences-view__panel-tags-item"
-                    v-for="item in brandTags"
-                    :key="item"
-                    :text="item"
-                />
-            </transition-group>
+            <div class="container container--tablet-lg">
+                <transition-group tag="ul" class="preferences-view__panel-tags" name="tag-item">
+                    <tag-item
+                        class="preferences-view__panel-tags-item"
+                        v-for="item in brandTags"
+                        :key="item"
+                        :text="item"
+                    />
+                </transition-group>
+            </div>
         </info-panel>
 
         <info-panel class="preferences-view__panel" header="Категории">
@@ -37,14 +39,16 @@
                     </v-link>
                 </div>
             </template>
-            <transition-group tag="ul" class="preferences-view__panel-tags" name="tag-item">
-                <tag-item
-                    class="preferences-view__panel-tags-item"
-                    v-for="item in categoriesTags"
-                    :key="item"
-                    :text="item"
-                />
-            </transition-group>
+            <div class="container container--tablet-lg">
+                <transition-group tag="ul" class="preferences-view__panel-tags" name="tag-item">
+                    <tag-item
+                        class="preferences-view__panel-tags-item"
+                        v-for="item in categoriesTags"
+                        :key="item"
+                        :text="item"
+                    />
+                </transition-group>
+            </div>
         </info-panel>
     </section>
 </template>

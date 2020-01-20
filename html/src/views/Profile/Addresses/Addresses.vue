@@ -8,23 +8,24 @@
                     <template v-if="!isTablet">&nbsp;&nbsp;&nbsp;&nbsp;Добавить новый адрес</template>
                 </v-link>
             </template>
-
-            <ul class="addresses-view__panel-list">
-                <checkout-option-card
-                    class="addresses-view__panel-item"
-                    v-for="address in addresses"
-                    :key="`${address.region_guid}-${address.city_guid || address.settlment_guid}-${address.house}`"
-                    :selected="isEqualAddress(address, selectedAddress)"
-                    @cardClick="onSetSelectedAddress(address)"
-                    @btnClick="onChangeAddress(address)"
-                >
-                    {{
-                        `${address.city || address.settlement}, ${address.street ? `${address.street}, ` : ''}${
-                            address.house
-                        } ${address.block}, ${address.postal_code}`
-                    }}
-                </checkout-option-card>
-            </ul>
+            <div class="container container--tablet-lg">
+                <ul class="addresses-view__panel-list">
+                    <checkout-option-card
+                        class="addresses-view__panel-item"
+                        v-for="address in addresses"
+                        :key="`${address.region_guid}-${address.city_guid || address.settlment_guid}-${address.house}`"
+                        :selected="isEqualAddress(address, selectedAddress)"
+                        @cardClick="onSetSelectedAddress(address)"
+                        @btnClick="onChangeAddress(address)"
+                    >
+                        {{
+                            `${address.city || address.settlement}, ${address.street ? `${address.street}, ` : ''}${
+                                address.house
+                            } ${address.block}, ${address.postal_code}`
+                        }}
+                    </checkout-option-card>
+                </ul>
+            </div>
         </info-panel>
     </section>
 </template>

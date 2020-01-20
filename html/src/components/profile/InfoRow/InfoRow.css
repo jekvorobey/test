@@ -3,7 +3,6 @@
 
     @media (--tablet) {
         flex-direction: column;
-        padding: 0 calc(var(--gs) * 2);
     }
 
     &__name {
@@ -17,6 +16,7 @@
     }
 
     &__value {
+        display: flex;
         flex: 1;
 
         @media (--tablet) {

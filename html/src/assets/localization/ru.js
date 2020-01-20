@@ -127,6 +127,7 @@ export default {
             order: 'Заказ №{id}',
             messages: 'Сообщения ({n})',
             referal: 'Реферал №{id}',
+            orderStatus: { created: 'Создан', process: 'Передан в доставку', done: 'Доставлен', cancel: 'Отменён' },
         },
 
         groups: {

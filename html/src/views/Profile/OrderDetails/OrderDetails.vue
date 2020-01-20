@@ -1,41 +1,47 @@
 <template>
     <section class="section order-details-view">
-        <v-link class="order-details-view__back-link" :to="backUrl">
-            <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем заказам
-        </v-link>
-        <h2 class="order-details-view__hl">{{ $t('profile.format.order', { id: orderId }) }}</h2>
-        <div class="order-details-view__details">
-            <div class="order-details-view__details-info">
-                <info-row class="order-details-view__details-row" name="Сумма" value="15 780 ₽" />
-                <info-row class="order-details-view__details-row" name="Статус заказа" value="Ожидается оплата" />
-                <info-row class="order-details-view__details-row" name="Дата заказа" value="18 августа 2019" />
-                <info-row class="order-details-view__details-row" name="Дата доставки" value="20 августа 2019" />
-                <info-row
-                    class="order-details-view__details-row"
-                    name="Адрес доставки"
-                    value="Москва, г. Зеленоград, Центральный проспект, к. 305"
-                />
-            </div>
-            <div class="order-details-view__details-controls">
-                <v-button class="order-details-view__details-controls-btn">Оплатить заказ</v-button>
-                <v-button class="btn--outline order-details-view__details-controls-btn">Повторить заказ</v-button>
-                <v-link class="order-details-view__details-controls-link">Оформить возврат</v-link>
+        <div class="container container--tablet-lg">
+            <v-link class="order-details-view__back-link" :to="backUrl">
+                <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем
+                заказам
+            </v-link>
+            <h2 class="order-details-view__hl">{{ $t('profile.format.order', { id: orderId }) }}</h2>
+
+            <div class="order-details-view__details">
+                <div class="order-details-view__details-info">
+                    <info-row class="order-details-view__details-row" name="Сумма" value="15 780 ₽" />
+                    <info-row class="order-details-view__details-row" name="Статус заказа" value="Ожидается оплата" />
+                    <info-row class="order-details-view__details-row" name="Дата заказа" value="18 августа 2019" />
+                    <info-row class="order-details-view__details-row" name="Дата доставки" value="20 августа 2019" />
+                    <info-row
+                        class="order-details-view__details-row"
+                        name="Адрес доставки"
+                        value="Москва, г. Зеленоград, Центральный проспект, к. 305"
+                    />
+                </div>
+                <div class="order-details-view__details-controls">
+                    <v-button class="order-details-view__details-controls-btn">Оплатить заказ</v-button>
+                    <v-button class="btn--outline order-details-view__details-controls-btn">Повторить заказ</v-button>
+                    <v-link class="order-details-view__details-controls-link">Оформить возврат</v-link>
+                </div>
             </div>
         </div>
 
         <info-panel class="order-details-view__panel" header="Корзина">
-            <ul class="order-details-view__panel-list">
-                <package-product-card
-                    class="order-details-view__panel-item"
-                    v-for="item in cartItems"
-                    :key="item.id"
-                    :name="item.name"
-                    :image="item.image"
-                    :price="item.price"
-                    :old-price="item.oldPrice"
-                    :count="item.count"
-                />
-            </ul>
+            <div class="container container--tablet-lg">
+                <ul class="order-details-view__panel-list">
+                    <package-product-card
+                        class="order-details-view__panel-item"
+                        v-for="item in cartItems"
+                        :key="item.id"
+                        :name="item.name"
+                        :image="item.image"
+                        :price="item.price"
+                        :old-price="item.oldPrice"
+                        :count="item.count"
+                    />
+                </ul>
+            </div>
         </info-panel>
 
         <info-panel
@@ -44,20 +50,22 @@
             :key="delivery.id"
             :header="`Доставка №${delivery.id}`"
         >
-            <info-row class="order-details-view__panel-row" name="Дата доставки" :value="delivery.date" />
-            <info-row class="order-details-view__panel-row" name="Адрес доставки" :value="delivery.address" />
-            <ul class="order-details-view__panel-list">
-                <package-product-card
-                    class="order-details-view__panel-item"
-                    v-for="item in delivery.items"
-                    :key="item.id"
-                    :name="item.name"
-                    :image="item.image"
-                    :price="item.price"
-                    :old-price="item.oldPrice"
-                    :count="item.count"
-                />
-            </ul>
+            <div class="container container--tablet-lg">
+                <info-row class="order-details-view__panel-row" name="Дата доставки" :value="delivery.date" />
+                <info-row class="order-details-view__panel-row" name="Адрес доставки" :value="delivery.address" />
+                <ul class="order-details-view__panel-list">
+                    <package-product-card
+                        class="order-details-view__panel-item"
+                        v-for="item in delivery.items"
+                        :key="item.id"
+                        :name="item.name"
+                        :image="item.image"
+                        :price="item.price"
+                        :old-price="item.oldPrice"
+                        :count="item.count"
+                    />
+                </ul>
+            </div>
         </info-panel>
     </section>
 </template>

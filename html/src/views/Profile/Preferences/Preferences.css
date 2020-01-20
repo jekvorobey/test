@@ -7,7 +7,7 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
 
-        @media (--tablet) {
+        @media (--tablet-lg) {
             display: none;
         }
     }
@@ -26,10 +26,6 @@
         }
 
         &-tags {
-            @media (--tablet) {
-                padding: 0 calc(var(--gs) * 2);
-            }
-
             &-item {
                 @media (--tablet) {
                     width: 100%;

@@ -8,39 +8,40 @@
                     <template v-if="!isTablet">&nbsp;&nbsp;Добавить карту</template>
                 </v-link>
             </template>
-
-            <ul class="payment-view__panel-list">
-                <checkout-option-card
-                    class="payment-view__panel-item"
-                    v-for="card in cards"
-                    :key="card.type"
-                    :selected="card.type === selectedCard.type"
-                    @cardClick="onSetSelectedCard(card)"
-                >
-                    <div class="payment-view__panel-item-type">
-                        <v-svg :name="card.type" width="40" height="24" />
-                        &nbsp;&nbsp;
-                        {{ card.name }}
-                    </div>
-                    <div class="payment-view__panel-item-number">
-                        {{ card.number && maskCardNumber(card.number) }}
-                    </div>
-                    <template v-slot:controls>
-                        <div class="payment-view__panel-item-controls">
-                            <v-link class="payment-view__panel-item-link" tag="button">
-                                <v-svg name="edit" width="16" height="16" />
-                            </v-link>
-                            <v-link class="payment-view__panel-item-link" tag="button">
-                                <v-svg name="cross" width="16" height="16" />
-                            </v-link>
+            <div class="container container--tablet-lg">
+                <ul class="payment-view__panel-list">
+                    <checkout-option-card
+                        class="payment-view__panel-item"
+                        v-for="card in cards"
+                        :key="card.type"
+                        :selected="card.type === selectedCard.type"
+                        @cardClick="onSetSelectedCard(card)"
+                    >
+                        <div class="payment-view__panel-item-type">
+                            <v-svg :name="card.type" width="40" height="24" />
+                            &nbsp;&nbsp;
+                            {{ card.name }}
                         </div>
-                    </template>
-                </checkout-option-card>
-            </ul>
+                        <div class="payment-view__panel-item-number">
+                            {{ card.number && maskCardNumber(card.number) }}
+                        </div>
+                        <template v-slot:controls>
+                            <div class="payment-view__panel-item-controls">
+                                <v-link class="payment-view__panel-item-link" tag="button">
+                                    <v-svg name="edit" width="16" height="16" />
+                                </v-link>
+                                <v-link class="payment-view__panel-item-link" tag="button">
+                                    <v-svg name="cross" width="16" height="16" />
+                                </v-link>
+                            </div>
+                        </template>
+                    </checkout-option-card>
+                </ul>
+            </div>
         </info-panel>
 
         <info-panel class="payment-view__panel" header="Предпочтительный способ оплаты">
-            <div class="payment-view__panel-check">
+            <div class="container container--tablet-lg">
                 <v-check
                     v-for="method in paymentMethods"
                     v-model="selectedMethod"

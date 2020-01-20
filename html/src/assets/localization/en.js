@@ -127,6 +127,7 @@ export default {
             order: 'Order №{id}',
             messages: 'Messages ({n})',
             referal: 'Referal №{id}',
+            orderStatus: { created: 'Created', process: 'Shipping', done: 'Done', cancel: 'Canceled' },
         },
 
         groups: {

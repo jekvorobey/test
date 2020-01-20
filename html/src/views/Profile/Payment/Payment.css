@@ -7,7 +7,7 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
 
-        @media (--tablet) {
+        @media (--tablet-lg) {
             display: none;
         }
     }
@@ -15,7 +15,7 @@
     &__panel {
         margin-bottom: calc(var(--gs) * 7);
 
-        @media (--tablet) {
+        @media (--tablet-lg) {
             margin-bottom: calc(var(--gs) * 4);
         }
 
@@ -36,13 +36,6 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-        }
-
-        &-list,
-        &-check {
-            @media (--tablet) {
-                padding: 0 calc(var(--gs) * 2);
-            }
         }
 
         &-item {
@@ -100,7 +93,7 @@
     }
 
     &__submit {
-        @media (--tablet-min) {
+        @media (--tablet-lg-min) {
             padding: 0;
         }
 

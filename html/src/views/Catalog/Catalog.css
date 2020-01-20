@@ -280,21 +280,6 @@
 
             &-btn {
                 display: none;
-                align-items: center;
-                justify-content: space-between;
-                padding: 6px calc(var(--gs) * 2);
-                background-color: var(--cl-elem-grey);
-                fill: var(--cl-global);
-                color: var(--cl-global);
-                border-color: var(--cl-elem-grey);
-
-                &:hover {
-                    background-color: var(--cl-elem-grey);
-                }
-
-                .icon {
-                    margin-left: calc(var(--gs) * 2);
-                }
 
                 @media (--tablet-lg) {
                     display: flex;

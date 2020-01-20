@@ -1,10 +1,12 @@
 <template>
     <section class="section message-details-view">
-        <v-link class="message-details-view__back-link" :to="backUrl">
-            <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем
-            сообщениям
-        </v-link>
-        <h2 class="message-details-view__hl">{{ messageId }} Доставка в Зеленоград</h2>
+        <div class="container container--tablet-lg">
+            <v-link class="message-details-view__back-link" :to="backUrl">
+                <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем
+                сообщениям
+            </v-link>
+            <h2 class="message-details-view__hl">{{ messageId }} Доставка в Зеленоград</h2>
+        </div>
 
         <ul class="message-details-view__list">
             <message-card

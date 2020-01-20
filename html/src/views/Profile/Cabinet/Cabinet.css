@@ -7,7 +7,7 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
 
-        @media (--tablet) {
+        @media (--tablet-lg) {
             display: none;
         }
     }
@@ -15,8 +15,7 @@
     &__avatar {
         margin-bottom: calc(var(--gs) * 7);
 
-        @media (--tablet) {
-            padding: 0 calc(var(--gs) * 2);
+        @media (--tablet-lg) {
             margin-bottom: calc(var(--gs) * 4);
         }
     }
@@ -25,7 +24,7 @@
         & + & {
             margin-top: calc(var(--gs) * 7);
 
-            @media (--tablet) {
+            @media (--tablet-lg) {
                 margin-top: calc(var(--gs) * 4);
             }
         }

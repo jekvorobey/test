@@ -1,19 +1,18 @@
 .messages-view {
     &__hl {
-        margin-bottom: calc(var(--gs) * 3);
         font-weight: 700;
         font-size: 28px;
         line-height: 40px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
 
-        @media (--tablet) {
+        @media (--tablet-lg) {
             display: none;
         }
     }
 
     &__btn {
-        @media (--tablet) {
+        @media (--tablet-lg) {
             width: 100%;
         }
     }
@@ -22,6 +21,11 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
+        margin-bottom: calc(var(--gs) * 3);
+
+        @media (--tablet-lg) {
+            padding: 0 calc(var(--gs) * 3);
+        }
 
         @media (--tablet) {
             padding: 0 calc(var(--gs) * 2);
@@ -35,6 +39,10 @@
         &-item {
             cursor: pointer;
             border-bottom: 1px solid var(--cl-divider-grey);
+
+            @media (--tablet-lg) {
+                padding: calc(var(--gs) * 3);
+            }
 
             @media (--tablet) {
                 padding: calc(var(--gs) * 2);

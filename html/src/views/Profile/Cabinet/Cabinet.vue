@@ -1,7 +1,9 @@
 <template>
     <section class="section cabinet-view">
-        <h2 class="cabinet-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
-        <image-picker class="cabinet-view__avatar" @fileChanged="onImageChanged" />
+        <div class="container container--tablet-lg">
+            <h2 class="cabinet-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+            <image-picker class="cabinet-view__avatar" @fileChanged="onImageChanged" />
+        </div>
         <info-panel class="cabinet-view__panel" header="Личные данные">
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button">
@@ -9,24 +11,26 @@
                     <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
-            <ul class="cabinet-view__panel-list">
-                <info-row class="cabinet-view__panel-item" name="ФИО" value="Динис Базгутдинов" />
-                <info-row class="cabinet-view__panel-item" name="Дата рождения" />
-                <info-row class="cabinet-view__panel-item" name="Пол" value="Мужской" />
-                <info-row class="cabinet-view__panel-item" name="Номер телефона" value="+7 916 123-45-67" />
-                <info-row class="cabinet-view__panel-item" name="Email" value="disbag@gmail.com" />
-                <info-row class="cabinet-view__panel-item" name="Портфолио">
-                    <ul>
-                        <li>
-                            <a class="cabinet-view__panel-item-link">Работы в Инстаграме</a>
-                        </li>
-                        <li>
-                            <a class="cabinet-view__panel-item-link">Портфолио «Свадебные прически»</a>
-                        </li>
-                    </ul>
-                </info-row>
-                <info-row class="cabinet-view__panel-item" name="Профиль" value="Стилист, визажист" />
-            </ul>
+            <div class="container container--tablet-lg">
+                <ul class="cabinet-view__panel-list">
+                    <info-row class="cabinet-view__panel-item" name="ФИО" value="Динис Базгутдинов" />
+                    <info-row class="cabinet-view__panel-item" name="Дата рождения" />
+                    <info-row class="cabinet-view__panel-item" name="Пол" value="Мужской" />
+                    <info-row class="cabinet-view__panel-item" name="Номер телефона" value="+7 916 123-45-67" />
+                    <info-row class="cabinet-view__panel-item" name="Email" value="disbag@gmail.com" />
+                    <info-row class="cabinet-view__panel-item" name="Портфолио">
+                        <ul>
+                            <li>
+                                <a class="cabinet-view__panel-item-link">Работы в Инстаграме</a>
+                            </li>
+                            <li>
+                                <a class="cabinet-view__panel-item-link">Портфолио «Свадебные прически»</a>
+                            </li>
+                        </ul>
+                    </info-row>
+                    <info-row class="cabinet-view__panel-item" name="Профиль" value="Стилист, визажист" />
+                </ul>
+            </div>
         </info-panel>
 
         <info-panel class="cabinet-view__panel" header="Пароль">
@@ -36,11 +40,13 @@
                     <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
-            <ul class="cabinet-view__panel-list">
-                <info-row class="cabinet-view__panel-item" name="Пароль">
-                    • • • • • • • • • • •
-                </info-row>
-            </ul>
+            <div class="container container--tablet-lg">
+                <ul class="cabinet-view__panel-list">
+                    <info-row class="cabinet-view__panel-item" name="Пароль">
+                        • • • • • • • • • • •
+                    </info-row>
+                </ul>
+            </div>
         </info-panel>
 
         <info-panel class="cabinet-view__panel" header="Социальные сети">
@@ -50,29 +56,37 @@
                     <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
-            <ul class="cabinet-view__panel-list">
-                <info-row class="cabinet-view__panel-item" name="Vkontakte">
-                    <template v-slot:link>
-                        <v-link class="cabinet-view__panel-item-link" tag="button">
-                            Подключить
-                        </v-link>
-                    </template>
-                </info-row>
-                <info-row class="cabinet-view__panel-item" name="Facebook" value="Dinis Bazgutdinov">
-                    <template v-slot:link>
-                        <v-link class="cabinet-view__panel-item-link cabinet-view__panel-item-link--grey" tag="button">
-                            Отключить
-                        </v-link>
-                    </template>
-                </info-row>
-                <info-row class="cabinet-view__panel-item" name="Instagram" value="@disbag">
-                    <template v-slot:link>
-                        <v-link class="cabinet-view__panel-item-link cabinet-view__panel-item-link--grey" tag="button">
-                            Отключить
-                        </v-link>
-                    </template>
-                </info-row>
-            </ul>
+            <div class="container container--tablet-lg">
+                <ul class="cabinet-view__panel-list">
+                    <info-row class="cabinet-view__panel-item" name="Vkontakte">
+                        <template v-slot:link>
+                            <v-link class="cabinet-view__panel-item-link" tag="button">
+                                Подключить
+                            </v-link>
+                        </template>
+                    </info-row>
+                    <info-row class="cabinet-view__panel-item" name="Facebook" value="Dinis Bazgutdinov">
+                        <template v-slot:link>
+                            <v-link
+                                class="cabinet-view__panel-item-link cabinet-view__panel-item-link--grey"
+                                tag="button"
+                            >
+                                Отключить
+                            </v-link>
+                        </template>
+                    </info-row>
+                    <info-row class="cabinet-view__panel-item" name="Instagram" value="@disbag">
+                        <template v-slot:link>
+                            <v-link
+                                class="cabinet-view__panel-item-link cabinet-view__panel-item-link--grey"
+                                tag="button"
+                            >
+                                Отключить
+                            </v-link>
+                        </template>
+                    </info-row>
+                </ul>
+            </div>
         </info-panel>
 
         <info-panel class="cabinet-view__panel" header="Реквизиты">
@@ -82,24 +96,25 @@
                     <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
-
-            <ul class="cabinet-view__panel-list">
-                <info-row class="cabinet-view__panel-item" name="Наименование ИП" value="ООО «Соколов»" />
-                <info-row class="cabinet-view__panel-item" name="ИНН" value="471101415706" />
-                <info-row class="cabinet-view__panel-item" name="Расчетный счет" value="17600000658470000" />
-                <info-row class="cabinet-view__panel-item" name="БИК" value="1299786" />
-                <info-row class="cabinet-view__panel-item" name="Банк" value="Сбербанк" />
-                <info-row
-                    class="cabinet-view__panel-item"
-                    name="Корреспондентский счет банка"
-                    value="68000007970000008"
-                />
-                <info-row
-                    class="cabinet-view__panel-item"
-                    name="Юридический адрес"
-                    value="Россия, г. Москва, г. Зеленоград, Самый Центральный проспект, к. 305, офис 134"
-                />
-            </ul>
+            <div class="container container--tablet-lg">
+                <ul class="cabinet-view__panel-list">
+                    <info-row class="cabinet-view__panel-item" name="Наименование ИП" value="ООО «Соколов»" />
+                    <info-row class="cabinet-view__panel-item" name="ИНН" value="471101415706" />
+                    <info-row class="cabinet-view__panel-item" name="Расчетный счет" value="17600000658470000" />
+                    <info-row class="cabinet-view__panel-item" name="БИК" value="1299786" />
+                    <info-row class="cabinet-view__panel-item" name="Банк" value="Сбербанк" />
+                    <info-row
+                        class="cabinet-view__panel-item"
+                        name="Корреспондентский счет банка"
+                        value="68000007970000008"
+                    />
+                    <info-row
+                        class="cabinet-view__panel-item"
+                        name="Юридический адрес"
+                        value="Россия, г. Москва, г. Зеленоград, Самый Центральный проспект, к. 305, офис 134"
+                    />
+                </ul>
+            </div>
         </info-panel>
 
         <info-panel class="cabinet-view__panel" header="Сертификаты">
@@ -109,16 +124,18 @@
                     <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
                 </v-link>
             </template>
-            <ul class="cabinet-view__panel-list">
-                <info-row
-                    class="text-sm cabinet-view__panel-item cabinet-view__panel-item--dropzone"
-                    name="Не более 10 файлов, jpeg, png, mp4, mov. Фото не более 5Mb, видео до 15Mb"
-                >
-                    <div class="cabinet-view__panel-dropzone">
-                        Выберите фото
-                    </div>
-                </info-row>
-            </ul>
+            <div class="container container--tablet-lg">
+                <ul class="cabinet-view__panel-list">
+                    <info-row
+                        class="text-sm cabinet-view__panel-item cabinet-view__panel-item--dropzone"
+                        name="Не более 10 файлов, jpeg, png, mp4, mov. Фото не более 5Mb, видео до 15Mb"
+                    >
+                        <div class="cabinet-view__panel-dropzone">
+                            Выберите фото
+                        </div>
+                    </info-row>
+                </ul>
+            </div>
         </info-panel>
 
         <transition name="fade">

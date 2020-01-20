@@ -1,7 +1,7 @@
 <template>
-    <general-modal class="navigation-modal" @close="onClose" :is-mobile="isTabletLg">
+    <general-modal class="navigation-modal" type="fullscreen" @close="onClose" :is-mobile="isTabletLg">
         <template v-slot:content>
-            <div class="container">
+            <div class="container navigation-modal__container">
                 <navigation-panel class="navigation-modal__panel" />
             </div>
         </template>

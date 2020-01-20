@@ -79,6 +79,17 @@ export const suggestionTypes = Object.freeze({
     HOUSE: 'house',
 });
 
+export const orderStatus = Object.freeze({
+    /** создан */
+    CREATED: 'created',
+    /** в обработке */
+    PROCESS: 'process',
+    /** выполнен */
+    DONE: 'done',
+    /** отменен */
+    CANCEL: 'cancel',
+});
+
 export const currencySymbol = Object.freeze({
     RUB: '&#8381;',
     USD: '&#36;',

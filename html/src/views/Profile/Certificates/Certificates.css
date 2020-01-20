@@ -6,6 +6,10 @@
         line-height: 40px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+
+        @media (--tablet-lg) {
+            display: none;
+        }
     }
 
     &__section {
@@ -21,9 +25,19 @@
         display: flex;
         margin-bottom: calc(var(--gs) * 3);
 
+        @media (--tablet) {
+            flex-direction: column;
+        }
+
         &-input {
             width: 344px;
             margin-right: var(--gs);
+
+            @media (--tablet) {
+                margin-right: 0;
+                width: 100%;
+                margin-bottom: calc(var(--gs) * 2);
+            }
 
             .v-input__error {
                 display: none;
@@ -64,8 +78,16 @@
             font-weight: normal;
             text-align: left;
 
+            @media (--tablet) {
+                text-align: center;
+            }
+
             &:last-child {
                 text-align: right;
+
+                @media (--tablet) {
+                    display: none;
+                }
             }
         }
 

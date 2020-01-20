@@ -26,6 +26,15 @@
         color: var(--cl-grey);
         text-transform: none;
         margin-bottom: var(--gs);
+
+        @media (--tablet-lg) {
+            margin-bottom: calc(var(--gs) * 2);
+            text-transform: uppercase;
+            color: var(--cl-global);
+            fill: var(--cl-global);
+            letter-spacing: 0.02em;
+            font-weight: bold;
+        }
     }
 
     &__details {
@@ -74,6 +83,7 @@
 
         &-row {
             width: 70%;
+            padding: 0;
 
             & + & {
                 margin-top: var(--gs);

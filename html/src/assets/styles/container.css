@@ -16,6 +16,20 @@
     @media (--tablet) {
         padding: 0 calc(var(--gs) * 2);
     }
+
+    &--tablet-lg {
+        @media (--tablet-lg-min) {
+            padding: 0;
+            margin: 0;
+        }
+    }
+
+    &--tablet {
+        @media (--tablet-min) {
+            padding: 0;
+            margin: 0;
+        }
+    }
 }
 
 .section {

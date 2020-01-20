@@ -2,18 +2,24 @@
     .modal-body {
         padding: calc(var(--gs) * 3);
 
-        @media (--tablet) {
+        @media (--tablet-lg) {
             padding: 0;
         }
     }
 
     &__hl {
-        @media (--tablet) {
+        @media (--tablet-lg) {
             display: none;
         }
     }
 
     &__panel {
         padding: calc(var(--gs) * 3) 0;
+    }
+
+    &__container {
+        @media (--tablet-lg) {
+            margin: 0;
+        }
     }
 }

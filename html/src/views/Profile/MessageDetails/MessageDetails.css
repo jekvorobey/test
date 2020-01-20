@@ -8,8 +8,7 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
 
-        @media (--tablet) {
-            padding: 0 calc(var(--gs) * 2);
+        @media (--tablet-lg) {
             margin-bottom: var(--gs);
         }
     }
@@ -23,8 +22,7 @@
         text-transform: none;
         margin-bottom: var(--gs);
 
-        @media (--tablet) {
-            padding: 0 calc(var(--gs) * 2);
+        @media (--tablet-lg) {
             margin-bottom: calc(var(--gs) * 2);
             text-transform: uppercase;
             color: var(--cl-global);
@@ -39,6 +37,10 @@
 
         &-item {
             border-bottom: 1px solid var(--cl-divider-grey);
+
+            @media (--tablet-lg) {
+                padding: calc(var(--gs) * 3);
+            }
 
             @media (--tablet) {
                 padding: calc(var(--gs) * 2);

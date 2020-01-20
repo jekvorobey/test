@@ -69,6 +69,7 @@
                             </h1>
                             <p class="text-grey catalog-view__main-header-text">489 продуктов</p>
                         </div>
+
                         <v-select
                             class="catalog-view__main-header-sort"
                             label="title"
@@ -80,13 +81,10 @@
                             :show-labels="false"
                         />
 
-                        <v-button class="catalog-view__main-header-btn" @click="filterModal = !filterModal">
-                            <span>
-                                Фильтр и сортировка&nbsp;&nbsp;
-                                <span class="text-grey">{{ activeTags.length }}</span>
-                            </span>
-                            <v-svg id="catalog-filter-icon" name="filter" width="18" height="14" />
-                        </v-button>
+                        <filter-button class="catalog-view__main-header-btn" @click="filterModal = !filterModal">
+                            Фильтр и сортировка&nbsp;&nbsp;
+                            <span class="text-grey">{{ activeTags.length }}</span>
+                        </filter-button>
                     </div>
 
                     <transition-group tag="ul" class="catalog-view__main-tags" name="tag-item">
@@ -228,6 +226,7 @@ import VSticky from '../../components/controls/VSticky/VSticky.vue';
 import VExpander from '../../components/VExpander/VExpander.vue';
 import Modal from '../../components/controls/modal/modal.vue';
 
+import FilterButton from '../../components/FilterButton/FilterButton.vue';
 import TagItem from '../../components/TagItem/TagItem.vue';
 import CategoryTreeItem from '../../components/CategoryTreeItem/CategoryTreeItem.vue';
 import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
@@ -286,6 +285,7 @@ export default {
         VExpander,
         Modal,
 
+        FilterButton,
         TagItem,
         CategoryTreeItem,
         CatalogFilter,
