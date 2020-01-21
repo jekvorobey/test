@@ -5,6 +5,20 @@
         padding-bottom: calc(var(--gs) * 4);
     }
 
+    &__container {
+        &--desktop {
+            @media (--tablet-lg) {
+                display: none;
+            }
+        }
+
+        &--mobile {
+            @media (--tablet-lg-min) {
+                display: none;
+            }
+        }
+    }
+
     &__panel {
         padding-top: calc(var(--gs) * 4);
 

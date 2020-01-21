@@ -2,6 +2,10 @@
     background-color: var(--cl-white);
     overflow: hidden;
 
+    @media (--tablet-lg) {
+        max-height: calc(var(--gs) * 8);
+    }
+
     &__container {
         display: flex;
         justify-content: space-between;
@@ -80,6 +84,10 @@
                 }
 
                 .icon:first-of-type {
+                    @media (--tablet-lg) {
+                        height: 28px;
+                    }
+
                     @media (--tablet) {
                         display: none;
                     }
@@ -95,6 +103,10 @@
 
         &-nav {
             width: 100%;
+            @media (--tablet-lg) {
+                width: calc(30% - calc(var(--gs) * 1.5));
+                margin-right: 0;
+            }
 
             @media (--tablet) {
                 width: calc(50% - calc(var(--gs) * 1.5));

@@ -1,6 +1,6 @@
 <template>
     <section class="section profile-view">
-        <div class="container" v-if="!isTabletLg">
+        <div class="container profile-view__container--desktop">
             <breadcrumbs>
                 <breadcrumb-item key="main" to="/">
                     Главная
@@ -33,39 +33,37 @@
                 </div>
             </div>
         </div>
-        <template v-else>
-            <v-sticky class="profile-view__panel">
-                <template v-slot:sticky>
-                    <v-button class="profile-view__panel-btn" @click="onOpenNavigation">
-                        {{ $t(`profile.routes.${$route.name}`) }}<v-svg name="arrow-updown" width="16" height="16" />
-                    </v-button>
-                </template>
-                <breadcrumbs class="container">
-                    <breadcrumb-item key="main" to="/">
-                        Главная
-                        <!-- <v-svg name="home" width="16" height="16" /> -->
-                    </breadcrumb-item>
-                    <breadcrumb-item key="Cabinet" :to="{ name: 'Cabinet' }">
-                        {{ $t('profile.routes.Cabinet') }}
-                    </breadcrumb-item>
-                    <breadcrumb-item
-                        v-if="$route.name !== 'Cabinet' && breadcrumbs.length === 0"
-                        :key="$route.name"
-                        :to="$route.path"
-                    >
-                        {{ $t(`profile.routes.${$route.name}`) }}
-                    </breadcrumb-item>
-                    <breadcrumb-item v-for="breadcrumb in breadcrumbs" :key="breadcrumb.name" :to="breadcrumb.to">
-                        {{ breadcrumb.name }}
-                    </breadcrumb-item>
-                </breadcrumbs>
-                <div class="profile-view__main">
-                    <transition name="fade-absolute">
-                        <router-view class="profile-view__main-view" />
-                    </transition>
-                </div>
-            </v-sticky>
-        </template>
+        <v-sticky class="profile-view__panel profile-view__container--mobile">
+            <template v-slot:sticky>
+                <v-button class="profile-view__panel-btn" @click="onOpenNavigation">
+                    {{ $t(`profile.routes.${$route.name}`) }}<v-svg name="arrow-updown" width="16" height="16" />
+                </v-button>
+            </template>
+            <breadcrumbs class="container">
+                <breadcrumb-item key="main" to="/">
+                    Главная
+                    <!-- <v-svg name="home" width="16" height="16" /> -->
+                </breadcrumb-item>
+                <breadcrumb-item key="Cabinet" :to="{ name: 'Cabinet' }">
+                    {{ $t('profile.routes.Cabinet') }}
+                </breadcrumb-item>
+                <breadcrumb-item
+                    v-if="$route.name !== 'Cabinet' && breadcrumbs.length === 0"
+                    :key="$route.name"
+                    :to="$route.path"
+                >
+                    {{ $t(`profile.routes.${$route.name}`) }}
+                </breadcrumb-item>
+                <breadcrumb-item v-for="breadcrumb in breadcrumbs" :key="breadcrumb.name" :to="breadcrumb.to">
+                    {{ breadcrumb.name }}
+                </breadcrumb-item>
+            </breadcrumbs>
+            <div class="profile-view__main">
+                <transition name="fade-absolute">
+                    <router-view class="profile-view__main-view" />
+                </transition>
+            </div>
+        </v-sticky>
 
         <transition name="fade-in">
             <navigation-modal v-if="isNavigationOpen && isTabletLg" />
