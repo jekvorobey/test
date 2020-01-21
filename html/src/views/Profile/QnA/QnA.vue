@@ -3,7 +3,7 @@
         <h2 class="qna-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
 
         <section class="qna-view__section" v-for="topic in topics" :key="topic.id">
-            <h3 class="qna-view__section-hl">{{ topic.title }}</h3>
+            <h3 class="container container--tablet-lg qna-view__section-hl">{{ topic.title }}</h3>
             <v-accordion
                 class="qna-view__accordion"
                 key-field="id"
@@ -13,7 +13,9 @@
                 :is-single="false"
             >
                 <template v-slot:content="{ item }">
-                    <div class="qna-view__accordion-content">{{ item.content }}</div>
+                    <div class="container container--tablet-lg qna-view__accordion-content">
+                        {{ item.content }}
+                    </div>
                 </template>
             </v-accordion>
         </section>

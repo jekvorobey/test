@@ -2,16 +2,18 @@
     <section class="section guides-view">
         <h2 class="guides-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
 
-        <ul class="guides-view__list">
-            <guide-card
-                class="guides-view__list-item"
-                v-for="guide in guides"
-                :key="guide.id"
-                :image="guide.image"
-                :title="guide.title"
-                @click.native="onOpenGuide(guide.code)"
-            />
-        </ul>
+        <div class="container container--tablet-lg guides-view__container">
+            <ul class="guides-view__list">
+                <guide-card
+                    class="guides-view__list-item"
+                    v-for="guide in guides"
+                    :key="guide.id"
+                    :image="guide.image"
+                    :title="guide.title"
+                    @click.native="onOpenGuide(guide.code)"
+                />
+            </ul>
+        </div>
     </section>
 </template>
 

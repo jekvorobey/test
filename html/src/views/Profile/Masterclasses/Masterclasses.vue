@@ -2,15 +2,17 @@
     <section class="section masterclasses-view">
         <h2 class="masterclasses-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
 
-        <ul class="masterclasses-view__list">
-            <master-class-card
-                class="masterclasses-view__list-item"
-                v-for="item in masterclasses"
-                :key="item.id"
-                v-bind="item"
-                href="/"
-            />
-        </ul>
+        <div class="container container--tablet-lg masterclasses-view__container">
+            <ul class="masterclasses-view__list">
+                <master-class-card
+                    class="masterclasses-view__list-item"
+                    v-for="item in masterclasses"
+                    :key="item.id"
+                    v-bind="item"
+                    href="/"
+                />
+            </ul>
+        </div>
     </section>
 </template>
 

@@ -6,10 +6,18 @@
         line-height: 40px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+
+        @media (--tablet-lg) {
+            display: none;
+        }
     }
 
     &__accordion {
         border-top: 1px solid var(--cl-divider-grey);
+
+        &-header {
+            text-align: left;
+        }
 
         &-content {
             padding-bottom: calc(var(--gs) * 3);
@@ -35,6 +43,11 @@
             & + & {
                 margin-top: var(--gs);
             }
+
+            @media (--tablet) {
+                justify-content: space-between;
+                align-items: center;
+            }
         }
 
         .v-accordion__item + .v-accordion__item {
@@ -45,6 +58,15 @@
             padding: calc(var(--gs) * 2) 0;
             border: none;
             border-bottom: 1px solid var(--cl-divider-grey);
+            text-align: left;
+
+            @media (--tablet-lg) {
+                padding: calc(var(--gs) * 2) calc(var(--gs) * 3);
+            }
+
+            @media (--tablet) {
+                padding: calc(var(--gs) * 2);
+            }
         }
 
         .v-accordion__item:hover .v-accordion__item-btn {

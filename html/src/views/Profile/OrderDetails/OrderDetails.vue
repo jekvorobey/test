@@ -28,7 +28,7 @@
         </div>
 
         <info-panel class="order-details-view__panel" header="Корзина">
-            <div class="container container--tablet-lg">
+            <div class="container container--tablet-lg order-details-view__container">
                 <ul class="order-details-view__panel-list">
                     <package-product-card
                         class="order-details-view__panel-item"

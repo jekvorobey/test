@@ -11,8 +11,12 @@
             :is-single="false"
         >
             <template v-slot:content="{ item, index }">
-                <div class="how-it-works-view__accordion-content">
-                    <v-html class="how-it-works-view__accordion-desc" v-html="item.description" />
+                <div class="container container--tablet-lg how-it-works-view__accordion-content">
+                    <v-html
+                        v-if="item.description"
+                        class="how-it-works-view__accordion-desc"
+                        v-html="item.description"
+                    />
                     <img class="how-it-works-view__accordion-img" :src="mockImg1" v-if="item.img" />
                     <div class="how-it-works-view__accordion-links" v-if="index === 0">
                         <v-link class="how-it-works-view__accordion-link" :to="{ name: 'Preferences' }">

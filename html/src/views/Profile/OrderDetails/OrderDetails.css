@@ -18,6 +18,13 @@
         }
     }
 
+    &__container {
+        @media (--tablet) {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
     &__back-link {
         display: flex;
         font-size: 16px;
@@ -42,8 +49,17 @@
         justify-content: space-between;
         margin-bottom: calc(var(--gs) * 5);
 
+        @media (--tablet) {
+            flex-direction: column;
+        }
+
         &-info {
             width: 70%;
+
+            @media (--tablet) {
+                width: 100%;
+                margin-bottom: calc(var(--gs) * 3);
+            }
         }
 
         &-row {
@@ -72,6 +88,14 @@
 
             &-link {
                 color: var(--cl-grey);
+            }
+
+            &-btn,
+            &-link {
+                @media (--tablet) {
+                    width: 100%;
+                    text-align: center;
+                }
             }
         }
     }

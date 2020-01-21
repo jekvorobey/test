@@ -1,0 +1,33 @@
+.radio-switch {
+    display: flex;
+    flex-wrap: wrap;
+
+    &__radio {
+        width: 50%;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 12px;
+        line-height: 24px;
+        letter-spacing: 0.02em;
+
+        input[type='radio'] {
+            & + label {
+                padding: var(--gs) calc(var(--gs) * 2);
+                background-color: var(--cl-elem-grey);
+                margin-bottom: 0;
+                font-weight: bold;
+                border-radius: 1px;
+
+                &::before,
+                &::after {
+                    display: none;
+                }
+            }
+
+            &:checked + label {
+                background-color: var(--cl-global);
+                color: var(--cl-white);
+            }
+        }
+    }
+}

@@ -1,27 +1,29 @@
 <template>
     <section class="section documents-view">
-        <div class="documents-view__header">
-            <h2 class="documents-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
-            <v-select
-                class="documents-view__sort"
-                v-model="selectedSortType"
-                :options="sortTypes"
-                :searchable="false"
-                :show-labels="false"
-            />
-        </div>
+        <div class="container container--tablet-lg">
+            <div class="documents-view__header">
+                <h2 class="documents-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+                <v-select
+                    class="documents-view__sort"
+                    v-model="selectedSortType"
+                    :options="sortTypes"
+                    :searchable="false"
+                    :show-labels="false"
+                />
+            </div>
 
-        <ul class="documents-view__list">
-            <document-card
-                class="documents-view__list-item"
-                v-for="document in documents"
-                :key="document.id"
-                :type="document.type"
-                :name="document.name"
-                :size="document.size"
-                :ext="document.ext"
-            />
-        </ul>
+            <ul class="documents-view__list">
+                <document-card
+                    class="documents-view__list-item"
+                    v-for="document in documents"
+                    :key="document.id"
+                    :type="document.type"
+                    :name="document.name"
+                    :size="document.size"
+                    :ext="document.ext"
+                />
+            </ul>
+        </div>
     </section>
 </template>
 

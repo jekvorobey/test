@@ -1,6 +1,10 @@
 .master-class-card {
     display: flex;
 
+    @media (--tablet) {
+        flex-direction: column;
+    }
+
     &__img {
         position: relative;
         display: flex;
@@ -11,9 +15,9 @@
         border-bottom: none;
 
         @media (--tablet) {
-            max-width: 104px;
-            max-height: 72px;
-            margin-right: var(--gs);
+            width: 100%;
+            margin-right: 0;
+            margin-bottom: calc(var(--gs) * 2);
         }
 
         .v-picture {
@@ -46,7 +50,27 @@
         padding: calc(var(--gs) * 2) 0;
 
         @media (--tablet) {
-            padding-right: calc(var(--gs) * 2);
+            padding: calc(var(--gs) * 2);
+            text-align: center;
+        }
+
+        &-top {
+            display: flex;
+            margin-bottom: calc(var(--gs) * 2);
+
+            @media (--tablet) {
+                flex-direction: column;
+                margin-bottom: 0;
+            }
+        }
+
+        &-bottom {
+            width: 100%;
+
+            @media (--tablet) {
+                order: 1;
+                margin-bottom: var(--gs);
+            }
         }
 
         &-name {
@@ -70,8 +94,7 @@
                 width: 100%;
                 padding-left: 0;
                 margin-bottom: var(--gs);
-                display: flex;
-                align-items: center;
+                text-align: center;
             }
         }
 
@@ -93,20 +116,6 @@
                     font-size: 12px;
                     line-height: 16px;
                 }
-            }
-        }
-
-        &-top {
-            display: flex;
-            margin-bottom: calc(var(--gs) * 2);
-        }
-
-        &-bottom {
-            width: 100%;
-
-            @media (--tablet) {
-                order: 1;
-                margin-bottom: var(--gs);
             }
         }
     }

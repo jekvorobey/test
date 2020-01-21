@@ -43,6 +43,10 @@
 
             & + & {
                 margin-left: calc(var(--gs) * 4);
+
+                @media (--tablet) {
+                    margin-left: calc(var(--gs) * 2);
+                }
             }
 
             &--delete {

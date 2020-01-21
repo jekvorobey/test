@@ -64,6 +64,14 @@
             flex-wrap: wrap;
         }
 
+        @media (--tablet-lg) {
+            padding: calc(var(--gs) * 3);
+        }
+
+        @media (--tablet) {
+            padding: calc(var(--gs) * 2);
+        }
+
         &-col {
             &:nth-child(1),
             &:nth-child(2) {

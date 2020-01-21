@@ -39,6 +39,11 @@
 
             & + & {
                 margin-left: calc(var(--gs) * 4);
+
+                @media (--desktop) {
+                    margin-left: calc(var(--gs) * 2);
+                }
+
                 @media (--tablet) {
                     margin: 0;
                 }

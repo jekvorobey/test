@@ -1,11 +1,30 @@
 .promocodes-view {
-    &__hl {
+    &__header {
+        display: flex;
+        align-items: baseline;
         margin-bottom: calc(var(--gs) * 3);
+        justify-content: space-between;
+    }
+
+    &__hl {
+        margin-bottom: 0;
         font-weight: 700;
         font-size: 28px;
         line-height: 40px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+
+        @media (--tablet-lg) {
+            display: none;
+        }
+    }
+
+    &__switch {
+        width: 288px;
+
+        @media (--tablet) {
+            width: 100%;
+        }
     }
 
     &__table {
@@ -52,6 +71,31 @@
         &-th {
             font-size: 14px;
             color: var(--cl-grey);
+        }
+    }
+
+    &__list {
+        margin-bottom: calc(var(--gs) * 2);
+
+        &-item {
+            padding: calc(var(--gs) * 3);
+            border-bottom: 1px solid var(--cl-divider-grey);
+
+            @media (--tablet) {
+                padding: calc(var(--gs) * 2);
+            }
+
+            &-row {
+                display: flex;
+
+                @media (--tablet) {
+                    flex-direction: column;
+                }
+
+                & + & {
+                    margin-top: var(--gs);
+                }
+            }
         }
     }
 }

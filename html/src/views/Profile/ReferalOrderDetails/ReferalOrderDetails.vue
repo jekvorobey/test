@@ -92,12 +92,7 @@
         </div>
 
         <ul class="referal-order-details-view__list" v-if="isTabletLg">
-            <li
-                class="referal-order-details-view__list-item"
-                v-for="order in orders"
-                :key="order.id"
-                @click="onOpenOrder(order.referalId)"
-            >
+            <li class="referal-order-details-view__list-item" v-for="order in orders" :key="order.id">
                 <info-row class="referal-order-details-view__list-item-row" name="Товар">
                     <div class="referal-order-details-view__table-img">
                         <img :src="order.image" width="40" height="40" />
