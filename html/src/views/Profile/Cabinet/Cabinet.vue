@@ -8,7 +8,7 @@
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button">
                     <v-svg name="edit" :width="iconSize" :height="iconSize" />
-                    <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
+                    <span>&nbsp;&nbsp;Изменить</span>
                 </v-link>
             </template>
             <div class="container container--tablet-lg">
@@ -37,7 +37,7 @@
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button">
                     <v-svg name="edit" :width="iconSize" :height="iconSize" />
-                    <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
+                    <span>&nbsp;&nbsp;Изменить</span>
                 </v-link>
             </template>
             <div class="container container--tablet-lg">
@@ -53,7 +53,7 @@
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button">
                     <v-svg name="edit" :width="iconSize" :height="iconSize" />
-                    <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
+                    <span>&nbsp;&nbsp;Изменить</span>
                 </v-link>
             </template>
             <div class="container container--tablet-lg">
@@ -93,7 +93,7 @@
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button" @click="onOpenDetailsModal">
                     <v-svg name="edit" :width="iconSize" :height="iconSize" />
-                    <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
+                    <span>&nbsp;&nbsp;Изменить</span>
                 </v-link>
             </template>
             <div class="container container--tablet-lg">
@@ -121,7 +121,7 @@
             <template v-slot:controls>
                 <v-link class="cabinet-view__panel-link" tag="button">
                     <v-svg name="edit" :width="iconSize" :height="iconSize" />
-                    <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
+                    <span>&nbsp;&nbsp;Изменить</span>
                 </v-link>
             </template>
             <div class="container container--tablet-lg">

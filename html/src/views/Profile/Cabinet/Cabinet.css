@@ -36,6 +36,12 @@
             font-weight: normal;
             line-height: 24px;
             text-transform: none;
+
+            span {
+                @media (--tablet) {
+                    display: none;
+                }
+            }
         }
 
         &-dropzone {

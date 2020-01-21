@@ -17,17 +17,17 @@
                 <div class="seo-view__panel-links">
                     <v-link class="seo-view__panel-link" tag="button">
                         <v-svg name="download" :width="iconSize" :height="iconSize" />
-                        <template v-if="!isTablet">&nbsp;&nbsp;Скачать</template>
+                        <span>&nbsp;&nbsp;Скачать</span>
                     </v-link>
 
                     <v-link class="seo-view__panel-link" tag="button">
                         <v-svg name="copy" :width="iconSize" :height="iconSize" />
-                        <template v-if="!isTablet">&nbsp;&nbsp;Скопировать текст</template>
+                        <span>&nbsp;&nbsp;Скопировать текст</span>
                     </v-link>
 
                     <v-link class="seo-view__panel-link" tag="button">
                         <v-svg name="link" :width="iconSize" :height="iconSize" />
-                        <template v-if="!isTablet">&nbsp;&nbsp;Скопировать ссылку</template>
+                        <span>&nbsp;&nbsp;Скопировать ссылку</span>
                     </v-link>
                 </div>
             </template>

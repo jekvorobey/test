@@ -5,7 +5,7 @@
             <template v-slot:controls>
                 <v-link class="payment-view__panel-link" tag="button">
                     <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
-                    <template v-if="!isTablet">&nbsp;&nbsp;Добавить карту</template>
+                    <span>&nbsp;&nbsp;Добавить карту</span>
                 </v-link>
             </template>
             <div class="container container--tablet-lg">

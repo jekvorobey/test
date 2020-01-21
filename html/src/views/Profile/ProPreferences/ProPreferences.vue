@@ -6,11 +6,11 @@
                 <div class="pro-preferences-view__panel-links">
                     <v-link class="pro-preferences-view__panel-link" tag="button">
                         <v-svg name="edit" :width="iconSize" :height="iconSize" />
-                        <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
+                        <span>&nbsp;&nbsp;Изменить</span>
                     </v-link>
                     <v-link class="link--grey pro-preferences-view__panel-link" tag="button">
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
-                        <template v-if="!isTablet">&nbsp;&nbsp;Удалить все</template>
+                        <span>&nbsp;&nbsp;Удалить все</span>
                     </v-link>
                 </div>
             </template>
@@ -34,11 +34,11 @@
                 <div class="pro-preferences-view__panel-links">
                     <v-link class="pro-preferences-view__panel-link" tag="button">
                         <v-svg name="edit" :width="iconSize" :height="iconSize" />
-                        <template v-if="!isTablet">&nbsp;&nbsp;Изменить</template>
+                        <span>&nbsp;&nbsp;Изменить</span>
                     </v-link>
                     <v-link class="link--grey pro-preferences-view__panel-link" tag="button">
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
-                        <template v-if="!isTablet">&nbsp;&nbsp;Удалить все</template>
+                        <span>&nbsp;&nbsp;Удалить все</span>
                     </v-link>
                 </div>
             </template>
@@ -58,8 +58,6 @@
         </info-panel>
     </section>
 </template>
-
-           
 
 <script>
 import VSvg from '../../../components/controls/VSvg/VSvg.vue';

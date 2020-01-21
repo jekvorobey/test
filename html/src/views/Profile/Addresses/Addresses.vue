@@ -5,7 +5,7 @@
             <template v-slot:controls>
                 <v-link class="addresses-view__panel-link" tag="button">
                     <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
-                    <template v-if="!isTablet">&nbsp;&nbsp;&nbsp;&nbsp;Добавить новый адрес</template>
+                    <span>&nbsp;&nbsp;Добавить новый адрес</span>
                 </v-link>
             </template>
             <div class="container container--tablet-lg">
