@@ -6,11 +6,11 @@
         <div class="image-picker__body">
             <div class="image-picker__body-controls">
                 <v-button class="btn--outline image-picker__body-controls-btn">
-                    {{ isTablet ? 'Загрузить другой' : 'Загрузить новое фото' }}
+                    {{ btnText }}
                 </v-button>
                 <v-link tag="button" class="image-picker__body-controls-link">
-                    <v-svg v-if="isTablet" name="cross" width="24" height="24" />
-                    <template v-else>Удалить</template>
+                    <v-svg name="cross" width="24" height="24" />
+                    <span>Удалить</span>
                 </v-link>
             </div>
             <div class="text-grey image-picker__body-note">В формате png или jpg, до 1 Мб</div>
@@ -51,6 +51,12 @@ export default {
         },
     },
 
+    data() {
+        return {
+            btnText: 'Загрузить другой',
+        };
+    },
+
     computed: {
         inputId() {
             return `image-picker-${this._uid}`;
@@ -62,6 +68,12 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+    },
+
+    watch: {
+        isTablet(value) {
+            this.btnText = value ? 'Загрузить другой' : 'Загрузить новое фото';
         },
     },
 

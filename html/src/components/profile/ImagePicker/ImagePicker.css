@@ -46,6 +46,18 @@
                 display: flex;
                 color: var(--cl-grey);
                 margin-left: var(--gs);
+
+                .icon {
+                    @media (--tablet-min) {
+                        display: none;
+                    }
+                }
+
+                span {
+                    @media (--tablet) {
+                        display: none;
+                    }
+                }
             }
         }
 
