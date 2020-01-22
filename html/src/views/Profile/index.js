@@ -2,6 +2,8 @@
  * @Module
  */
 
+import hasSession from '../../router/middleware/hasSession';
+
 import Cabinet from './Cabinet/Cabinet';
 import Addresses from './Addresses/Addresses';
 import Preferences from './Preferences/Preferences';
@@ -44,6 +46,11 @@ export default {
         {
             path: '/profile',
             component: ProfileAsync,
+
+            meta: {
+                middleware: [hasSession],
+            },
+
             children: [
                 ...Cabinet.routes,
                 ...Preferences.routes,

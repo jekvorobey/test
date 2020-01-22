@@ -80,9 +80,17 @@ export default function createRouter() {
     });
 
     router.beforeEach((to, from, next) => {
-        if (!to.meta.middleware) return next();
+        const { matched } = to;
+        const middlewares = [];
 
-        const { middleware } = to.meta;
+        for (let i = 0; i < matched.length; i++) {
+            const {
+                meta: { middleware = [] },
+            } = matched[i];
+            middlewares.push(...middleware);
+        }
+
+        if (middlewares.length === 0) return next();
 
         const context = {
             to,
@@ -91,9 +99,9 @@ export default function createRouter() {
             store: $store,
         };
 
-        return middleware[0]({
+        return middlewares[0]({
             ...context,
-            next: pipeline(context, middleware, 1),
+            next: pipeline(context, middlewares, 1),
         });
     });
 

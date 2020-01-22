@@ -115,14 +115,26 @@
         }
 
         &-search {
-            margin-left: calc(var(--gs) * 3);
+            @media (--tablet-lg-min) {
+                min-width: 288px;
+            }
+
+            @media (--tablet-lg) {
+                margin-left: calc(var(--gs) * 3);
+            }
 
             .search-filter__input {
-                display: none;
+                @media (--tablet-lg) {
+                    display: none;
+                }
             }
         }
 
         &-user {
+            @media (--tablet-lg-min) {
+                min-width: 288px;
+            }
+
             .header-user-panel__item {
                 &:first-child {
                     margin-left: calc(var(--gs) * 3);

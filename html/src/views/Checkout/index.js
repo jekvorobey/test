@@ -1,5 +1,5 @@
 import { cartItemTypes } from '../../assets/scripts/constants';
-import isCartEmpty from './middleware/isCartEmpty';
+import isCartEmpty from '../../router/middleware/isCartEmpty';
 
 /**
  * @Module

@@ -11,6 +11,31 @@ export function login({ email, password }) {
     return $http.post('/v1/auth/login', { email, password });
 }
 
+export function logout() {
+    return Promise.resolve();
+    //return $http.post('/v1/auth/logout', data);
+}
+
+export function sendSMS(phone) {
+    return $http.post('/v1/auth/sendSMS', { phone });
+}
+
+export function checkCode(code) {
+    return $http.post('/v1/auth/checkCode', { code });
+}
+
+export function setPassword(password) {
+    return $http.post('/v1/auth/setPassword', { password });
+}
+
+export function addSocialAccount(id, driver, title) {
+    return $http.post('/v1/auth/addSocialAccount', { id, driver, title });
+}
+
+export function finishRegister() {
+    return $http.post('/v1/auth/finishRegister');
+}
+
 // search
 
 export function search(data) {

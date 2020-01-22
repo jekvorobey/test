@@ -90,6 +90,11 @@ export const orderStatus = Object.freeze({
     CANCEL: 'cancel',
 });
 
+export const responseStatus = Object.freeze({
+    OK: 'ok',
+    ERROR: 'error',
+});
+
 export const currencySymbol = Object.freeze({
     RUB: '&#8381;',
     USD: '&#36;',

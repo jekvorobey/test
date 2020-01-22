@@ -1,6 +1,7 @@
 .header-user-panel {
     display: flex;
     position: relative;
+    justify-content: flex-end;
 
     .icon {
         display: block;

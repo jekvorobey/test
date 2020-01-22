@@ -11,14 +11,20 @@
             </ul>
         </div>
         <br />
-        <v-link class="navigation-panel__group-link" to="/">Выйти</v-link>
+        <v-link tag="button" class="navigation-panel__group-link" @click.prevent="onLogout">
+            Выйти
+        </v-link>
     </div>
 </template>
 
 <script>
 import VLink from '../../controls/VLink/VLink.vue';
 
+import { NAME as AUTH_MODULE } from '../../../store/modules/Auth';
+import { LOGOUT } from '../../../store/modules/Auth/actions';
+
 import './NavigationPanel.css';
+import { mapActions } from 'vuex';
 
 export default {
     name: 'navigation-panel',
@@ -71,6 +77,17 @@ export default {
                     ],
                 },
             ];
+        },
+    },
+
+    methods: {
+        ...mapActions(AUTH_MODULE, [LOGOUT]),
+
+        async onLogout() {
+            try {
+                await this[LOGOUT]();
+                this.$router.replace({ name: 'Landing' });
+            } catch (error) {}
         },
     },
 };
