@@ -5,10 +5,10 @@
                 <h3 class="login-modal__hl">{{ header }}</h3>
 
                 <form v-if="!restore" class="login-modal__form" @submit.prevent="onSubmit">
-                    <v-input-mask v-model="phone" mask="+7 ### ###-##-##" masked>
+                    <v-input-mask v-model="phone" mask="+7 ### ###-##-##" masked :error="phoneError">
                         Номер телефона
                     </v-input-mask>
-                    <v-password v-model="password">
+                    <v-password v-model="password" :error="passwordError">
                         Пароль
                     </v-password>
                     <div class="login-modal__form-submit">
@@ -127,11 +127,11 @@ import VPassword from '../controls/VPassword/VPassword.vue';
 import GeneralModal from '../GeneralModal/GeneralModal.vue';
 import { NAME as REGISTRATION_MODAL_NAME } from '../RegistrationModal/RegistrationModal.vue';
 
-import validationMixin, { required, minLength } from '../../plugins/validation';
+import validationMixin, { required, minLength, password } from '../../plugins/validation';
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
-import { LOGIN } from '../../store/modules/Auth/actions';
+import { LOGIN_BY_PASSWORD } from '../../store/modules/Auth/actions';
 
 import { NAME as CART_MODULE } from '../../store/modules/Cart';
 import { FETCH_CART_DATA } from '../../store/modules/Cart/actions';
@@ -145,7 +145,6 @@ export const NAME = 'login-modal';
 
 export default {
     name: NAME,
-
     mixins: [validationMixin],
 
     components: {
@@ -158,27 +157,36 @@ export default {
     },
 
     validations: {
-        phone: {
+        computedPhone: {
             required,
-            minLength: minLength(10),
-        },
-
-        restorePhone: {
-            required,
-            minLength: minLength(10),
+            minLength: minLength(12),
         },
 
         password: {
             required,
+            password,
+            minLength: minLength(8),
+        },
+
+        fail: {
+            valid: value => value !== true,
         },
     },
 
     data() {
+        const phoneCode = '+7';
+
         return {
-            phone: '+7',
-            password: 123456,
+            phoneCode,
+            phone: `${phoneCode} `,
+            displayPhone: '',
+            fail: true,
+
+            password: '',
+
             displayRestorePhone: null,
             restorePhone: '+7',
+
             restore: false,
             sent: false,
         };
@@ -192,6 +200,27 @@ export default {
         header() {
             return this.restore ? 'Получить новый пароль' : 'Войти';
         },
+
+        computedPhone() {
+            return `${this.phoneCode}${this.phone}`;
+        },
+
+        phoneError() {
+            if (this.$v.computedPhone.$dirty) {
+                if (!this.$v.computedPhone.required) return 'Обязательное поле';
+                if (!this.$v.computedPhone.minLength) return 'Неверно введен номер';
+            }
+
+            if (this.$v.fail.$dirty && !this.$v.fail.valid) return 'Неверный логин и/или пароль';
+        },
+
+        passwordError() {
+            if (this.$v.password.$dirty) {
+                if (!this.$v.password.required) return 'Обязательное поле';
+                if (!this.$v.password.password) return 'Как минимум 1 заглавная и строчная латинские буквы и 1 цифра';
+                if (!this.$v.password.minLength) return 'Не менее 8 символов';
+            }
+        },
     },
 
     watch: {
@@ -200,21 +229,43 @@ export default {
                 this.sent = false;
             }
         },
+
+        computedPhone(value) {
+            this.resetLoginValidation();
+        },
+
+        password(value) {
+            this.resetLoginValidation();
+        },
     },
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(AUTH_MODULE, [LOGIN]),
+        ...mapActions(AUTH_MODULE, [LOGIN_BY_PASSWORD]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
 
+        resetLoginValidation() {
+            if (this.$v.computedPhone.$dirty) this.$v.computedPhone.$reset();
+            if (this.$v.password.$dirty) this.$v.password.$reset();
+            if (this.$v.fail.$dirty) this.$v.fail.$reset();
+        },
+
         async onSubmit() {
+            if (!this.restore) {
+                this.$v.computedPhone.$touch();
+                this.$v.password.$touch();
+                if (!this.$v.computedPhone.$invalid && !this.$v.password.$invalid) this.loginByPassword();
+            }
+        },
+
+        async loginByPassword() {
             try {
-                await this[LOGIN]({ email: this.email, password: this.password });
+                await this[LOGIN_BY_PASSWORD]({ login: this.computedPhone, password: this.password });
                 this[FETCH_CART_DATA]();
-                this.$emit('login');
-                this.onClose();
+                this.$router.push({ name: 'Cabinet' });
             } catch (error) {
-                console.log(error);
+                this.fail = true;
+                this.$v.fail.$touch();
             }
         },
 

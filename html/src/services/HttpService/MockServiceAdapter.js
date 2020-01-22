@@ -39,7 +39,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
      */
     post(path, data, config) {
         switch (path) {
-            case '/v1/auth/login':
+            case '/v1/auth/loginByPassword':
             case '/v1/auth/sendSMS':
             case '/v1/auth/checkCode':
             case '/v1/auth/setPassword':

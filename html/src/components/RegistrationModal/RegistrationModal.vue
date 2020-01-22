@@ -179,7 +179,6 @@ import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import './RegistrationModal.css';
-import { $logger } from '../../services/ServiceLocator';
 
 export const NAME = 'registration-modal';
 
@@ -280,7 +279,7 @@ export default {
         },
 
         passwordError() {
-            if (this.$v.password.$dirty && this.$v.password) {
+            if (this.$v.password.$dirty) {
                 if (!this.$v.password.required) return 'Обязательное поле';
                 if (!this.$v.password.password) return 'Как минимум 1 заглавная и строчная латинские буквы и 1 цифра';
                 if (!this.$v.password.minLength) return 'Не менее 8 символов';

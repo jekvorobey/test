@@ -7,8 +7,8 @@ export function checkSession() {
     return $http.get('/v1/auth/check-session');
 }
 
-export function login({ email, password }) {
-    return $http.post('/v1/auth/login', { email, password });
+export function loginByPassword(payload) {
+    return $http.post('/v1/auth/loginByPassword', payload);
 }
 
 export function logout() {
