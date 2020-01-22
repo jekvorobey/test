@@ -298,6 +298,11 @@ export default {
             if (this.$v.phoneExists.$dirty) this.$v.phoneExists.$reset();
             if (this.$v.computedPhone.$dirty) this.$v.computedPhone.$reset();
         },
+
+        code() {
+            if (this.$v.code.$dirty) this.$v.code.$reset();
+            if (this.$v.accepted.$dirty) this.$v.accepted.$reset();
+        },
     },
 
     methods: {

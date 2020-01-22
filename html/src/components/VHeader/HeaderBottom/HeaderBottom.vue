@@ -2,9 +2,9 @@
     <div class="header-bottom" :class="{ 'header-bottom--scroll': scroll && !isTabletLg }">
         <div class="header-bottom__main" v-if="!scroll">
             <div class="container header-bottom__container">
-                <search-filter class="header-bottom__bottom-search" input-id="upper-filter" />
+                <search-filter class="header-bottom__main-search" input-id="upper-filter" />
                 <header-logo-panel v-show="!search" />
-                <header-user-panel class="header-bottom__bottom-user" v-show="!search" />
+                <header-user-panel class="header-bottom__main-user" v-show="!search" />
             </div>
         </div>
         <div class="header-bottom__bottom" v-show="!search">

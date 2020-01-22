@@ -60,6 +60,19 @@
             flex: 1;
             margin-right: var(--gs);
 
+            .v-input__container {
+                @media (--tablet) {
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+
+            .v-input__input {
+                @media (--tablet) {
+                    margin-bottom: calc(var(--gs) * 2);
+                }
+            }
+
             @media (--tablet) {
                 margin-right: 0;
                 margin-bottom: calc(var(--gs) * 2);
@@ -72,6 +85,7 @@
             padding: 6px calc(var(--gs) * 2);
 
             @media (--tablet) {
+                margin-left: 0;
                 width: 100%;
             }
         }
