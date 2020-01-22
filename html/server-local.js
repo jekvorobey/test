@@ -190,6 +190,7 @@ for (let i = 0; i < enable.length; i++) {
 }
 
 for (let i = 0; i < proxies.length; i++) {
+    logger.info('proxy', `path: ${entry.path}, host: ${entry.host}`);
     const entry = proxies[i];
     app.use(entry.path, proxy(entry.host));
 }
