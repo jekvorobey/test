@@ -11,6 +11,15 @@ export function loginByPassword(payload) {
     return $http.post('/v1/auth/loginByPassword', payload);
 }
 
+export function loginBySocial(payload) {
+    return $http.post('/v1/auth/loginBySocial', null, {
+        params: payload,
+        paramsSerializer(params) {
+            return qs.stringify(params, { encode: true });
+        },
+    });
+}
+
 export function logout() {
     return Promise.resolve();
     //return $http.post('/v1/auth/logout', data);

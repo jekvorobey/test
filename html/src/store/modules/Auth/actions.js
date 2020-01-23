@@ -8,12 +8,14 @@ import {
     finishRegister,
     logout,
     loginByPassword,
+    loginBySocial,
 } from '../../../api';
 
 import { SET_HAS_SESSION } from './mutations';
 import { $logger } from '../../../services/ServiceLocator';
 import { responseStatus } from '../../../assets/scripts/constants';
 
+export const LOGIN_BY_SOCIAL = 'LOGIN_BY_SOCIAL';
 export const LOGIN_BY_PASSWORD = 'LOGIN_BY_PASSWORD';
 export const LOGOUT = 'LOGOUT';
 export const REGISTER = 'REGISTER';
@@ -77,6 +79,14 @@ export default {
             $logger.error(`${LOGIN_BY_PASSWORD}: ${error}`);
             return Promise.reject(error);
         });
+    },
+
+    [LOGIN_BY_SOCIAL]({ commit }, payload) {
+        return loginBySocial(payload)
+            .then(({ url }) => {
+                document.location.href = url;
+            })
+            .catch(error => $logger.error(`${LOGIN_BY_SOCIAL}: ${error}`));
     },
 
     [LOGOUT]({ commit }, payload) {
