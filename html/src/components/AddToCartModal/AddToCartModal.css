@@ -183,6 +183,10 @@
                 width: calc(calc(100% / 2) - calc(var(--gs) * 1.5));
                 margin: 0 calc(var(--gs) * 1.5 / 2);
             }
+        }
+
+        &-card {
+            width: 100%;
 
             .catalog-product-card__img {
                 padding: calc(var(--gs) * 2) var(--gs);
