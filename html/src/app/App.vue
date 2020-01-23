@@ -39,7 +39,7 @@ import { NAME as CART_MODULE, CART_ITEMS } from '../store/modules/Cart';
 import { FETCH_CART_DATA } from '../store/modules/Cart/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '../store/modules/Auth';
-import { LOGIN, CHECK_SESSION } from '../store/modules/Auth/actions';
+import { CHECK_SESSION, LOGIN_BY_PASSWORD } from '../store/modules/Auth/actions';
 
 import { MIN_SCROLL_VALUE, eventName } from '../assets/scripts/constants';
 import { mapState, mapActions } from 'vuex';
@@ -60,7 +60,7 @@ export default {
     methods: {
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
-        ...mapActions(AUTH_MODULE, [CHECK_SESSION]),
+        ...mapActions(AUTH_MODULE, [CHECK_SESSION, LOGIN_BY_PASSWORD]),
 
         onScroll() {
             this[SET_SCROLL](
@@ -78,6 +78,11 @@ export default {
         } catch (error) {
             return Promise.resolve();
         }
+    },
+
+    beforeMount() {
+        // Выпилить при релизе
+        this[LOGIN_BY_PASSWORD]({ login: '+73223223222', password: 'Sardaukar13' });
     },
 
     mounted() {

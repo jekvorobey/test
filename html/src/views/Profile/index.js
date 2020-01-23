@@ -47,9 +47,9 @@ export default {
             path: '/profile',
             component: ProfileAsync,
 
-            meta: {
-                middleware: [hasSession],
-            },
+            // meta: {
+            //     middleware: [hasSession],
+            // },
 
             children: [
                 ...Cabinet.routes,

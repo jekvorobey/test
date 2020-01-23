@@ -26,7 +26,7 @@
             padding-top: 0;
         }
 
-        .v-sticky__container {
+        & > .v-sticky__container {
             @media (--tablet-lg) {
                 top: 64px;
             }

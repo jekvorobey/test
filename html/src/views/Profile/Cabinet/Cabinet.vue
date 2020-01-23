@@ -13,22 +13,49 @@
             </template>
             <div class="container container--tablet-lg">
                 <ul class="cabinet-view__panel-list">
-                    <info-row class="cabinet-view__panel-item" name="ФИО" value="Динис Базгутдинов" />
-                    <info-row class="cabinet-view__panel-item" name="Дата рождения" />
-                    <info-row class="cabinet-view__panel-item" name="Пол" value="Мужской" />
-                    <info-row class="cabinet-view__panel-item" name="Номер телефона" value="+7 916 123-45-67" />
-                    <info-row class="cabinet-view__panel-item" name="Email" value="disbag@gmail.com" />
+                    <info-row class="cabinet-view__panel-item" name="ФИО" :value="fullName" />
+                    <info-row class="cabinet-view__panel-item" name="Дата рождения" :value="bornDate" />
+                    <info-row class="cabinet-view__panel-item" name="Пол" :value="sex" />
+                    <info-row class="cabinet-view__panel-item" name="Номер телефона" :value="phone" />
+                    <info-row class="cabinet-view__panel-item" name="Email" :value="email" />
                     <info-row class="cabinet-view__panel-item" name="Портфолио">
-                        <ul>
-                            <li>
-                                <a class="cabinet-view__panel-item-link">Работы в Инстаграме</a>
-                            </li>
-                            <li>
-                                <a class="cabinet-view__panel-item-link">Портфолио «Свадебные прически»</a>
+                        <ul v-if="portfolios && portfolios.length > 0">
+                            <li v-for="portfolio in portfolios" :key="portfolio.id">
+                                <a
+                                    class="cabinet-view__panel-item-link"
+                                    :href="portfolio.ref"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    {{ portfolio.name }}
+                                </a>
                             </li>
                         </ul>
+                        <template v-else>
+                            -
+                        </template>
+
+                        <template v-slot:link>
+                            <v-link
+                                class="cabinet-view__panel-item-link"
+                                tag="button"
+                                @click.prevent="onOpenPortfoliosModal"
+                            >
+                                {{ portfolios && portfolios.length > 0 ? 'Изменить' : 'Заполнить' }}
+                            </v-link>
+                        </template>
                     </info-row>
-                    <info-row class="cabinet-view__panel-item" name="Профиль" value="Стилист, визажист" />
+                    <info-row class="cabinet-view__panel-item" name="Профиль" :value="profilesString">
+                        <template v-slot:link>
+                            <v-link
+                                class="cabinet-view__panel-item-link"
+                                tag="button"
+                                @click.prevent="onOpenProfilesModal"
+                            >
+                                {{ profilesString ? 'Изменить' : 'Заполнить' }}
+                            </v-link>
+                        </template>
+                    </info-row>
                 </ul>
             </div>
         </info-panel>
@@ -140,6 +167,8 @@
 
         <transition name="fade">
             <details-modal v-if="isDetailsOpen" />
+            <portfolio-modal v-else-if="isPortofiosOpen" />
+            <profile-modal v-else-if="isProfilesOpen" />
         </transition>
     </section>
 </template>
@@ -152,13 +181,20 @@ import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
 import ImagePicker from '../../../components/profile/ImagePicker/ImagePicker.vue';
 
+import PortfolioModal, {
+    NAME as PORTFOLIOS_MODAL_NAME,
+} from '../../../components/profile/PortfolioModal/PortfolioModal.vue';
+import ProfileModal, { NAME as PROFILE_MODAL_NAME } from '../../../components/profile/ProfileModal/ProfileModal.vue';
 import DetailsModal, { NAME as DETAILS_MODAL_NAME } from '../../../components/profile/DetailsModal/DetailsModal.vue';
 
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import { $store } from '../../../services/ServiceLocator';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+
+import { NAME as PROFILE_MODULE, CABINET_DATA } from '../../../store/modules/Profile';
+import { FULL_NAME, PROFILES_STRING } from '../../../store/modules/Profile/getters';
 
 import '../../../assets/images/sprites/edit.svg';
 import './Cabinet.css';
@@ -175,12 +211,24 @@ export default {
         ImagePicker,
 
         DetailsModal,
+        PortfolioModal,
+        ProfileModal,
     },
 
     computed: {
         ...mapState(MODAL_MODULE, {
             isDetailsOpen: state => state[MODALS][DETAILS_MODAL_NAME] && state[MODALS][DETAILS_MODAL_NAME].open,
+            isPortofiosOpen: state => state[MODALS][PORTFOLIOS_MODAL_NAME] && state[MODALS][PORTFOLIOS_MODAL_NAME].open,
+            isProfilesOpen: state => state[MODALS][PROFILE_MODAL_NAME] && state[MODALS][PROFILE_MODAL_NAME].open,
         }),
+        ...mapState(PROFILE_MODULE, {
+            bornDate: state => state[CABINET_DATA] && state[CABINET_DATA].bornDate,
+            sex: state => state[CABINET_DATA] && state[CABINET_DATA].sex,
+            phone: state => state[CABINET_DATA] && state[CABINET_DATA].phone,
+            email: state => state[CABINET_DATA] && state[CABINET_DATA].email,
+            portfolios: state => state[CABINET_DATA] && state[CABINET_DATA].portfolios,
+        }),
+        ...mapGetters(PROFILE_MODULE, [FULL_NAME, PROFILES_STRING]),
 
         isTablet() {
             return this.$mq.tablet;
@@ -198,6 +246,14 @@ export default {
 
         onOpenDetailsModal() {
             this[CHANGE_MODAL_STATE]({ name: DETAILS_MODAL_NAME, open: true });
+        },
+
+        onOpenPortfoliosModal() {
+            this[CHANGE_MODAL_STATE]({ name: PORTFOLIOS_MODAL_NAME, open: true });
+        },
+
+        onOpenProfilesModal() {
+            this[CHANGE_MODAL_STATE]({ name: PROFILE_MODAL_NAME, open: true });
         },
     },
 };
