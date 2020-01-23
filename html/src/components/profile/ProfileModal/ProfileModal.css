@@ -16,10 +16,10 @@
     &__list {
         display: flex;
         flex-direction: column;
-        height: 100%;
 
         @media (--tablet) {
             padding: calc(var(--gs) * 3) calc(var(--gs) * 2);
+            height: 100%;
         }
 
         &-row {

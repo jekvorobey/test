@@ -16,9 +16,9 @@
     &__list {
         display: flex;
         flex-direction: column;
-        height: 100%;
 
         @media (--tablet) {
+            height: 100%;
             padding: calc(var(--gs) * 3) calc(var(--gs) * 2);
         }
 
