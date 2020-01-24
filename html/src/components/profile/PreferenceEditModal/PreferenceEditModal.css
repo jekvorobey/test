@@ -1,0 +1,104 @@
+.preference-edit-modal {
+    .popup--sm {
+        width: 440px;
+        height: 500px;
+    }
+
+    .modal-body {
+        padding: calc(var(--gs) * 3);
+
+        @media (--tablet-min) {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (--tablet) {
+            padding: 0;
+        }
+    }
+
+    &__hl {
+        @media (--tablet) {
+            display: none;
+        }
+    }
+
+    &__input {
+        margin-bottom: calc(var(--gs) * 3);
+
+        @media (--tablet) {
+            padding: 0 calc(var(--gs) * 2);
+            padding-top: calc(var(--gs) * 3);
+        }
+
+        input[type='text'] {
+            padding-right: calc(var(--gs) * 5);
+        }
+
+        .v-input__error {
+            display: none;
+        }
+
+        .icon {
+            position: absolute;
+            z-index: 1;
+            right: var(--gs);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+
+    &__title {
+        margin-top: 0;
+        margin-bottom: calc(var(--gs) * 2);
+
+        @media (--tablet) {
+            padding: 0 calc(var(--gs) * 2);
+        }
+    }
+
+    &__list {
+        overflow: auto;
+        margin-bottom: calc(var(--gs) * 2);
+
+        @media (--tablet) {
+            padding: 0 calc(var(--gs) * 2);
+            height: 100%;
+        }
+
+        &-item {
+            padding: 1px;
+            & + & {
+                margin-top: var(--gs);
+            }
+        }
+
+        &-check {
+            .v-check__label {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &__submit {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: auto;
+
+        @media (--tablet) {
+            position: sticky;
+            justify-content: space-between;
+            bottom: 0;
+            padding: var(--gs) calc(var(--gs) * 2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            background-color: var(--cl-white);
+        }
+
+        &-btn {
+            @media (--tablet) {
+                width: 100%;
+            }
+        }
+    }
+}

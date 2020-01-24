@@ -107,7 +107,7 @@ export default {
         value(value) {
             this.internal_value = value;
             const { textarea } = this.$refs;
-            if (textarea) this.adjustHeight();
+            if (textarea && this.autoHeight) this.adjustHeight();
         },
     },
     computed: {

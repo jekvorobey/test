@@ -12,8 +12,8 @@ import {
 import { password as passwordRegx, tel as telRegx, email as emailRegx } from '../assets/scripts/regex';
 import { countCheckdigit } from '../util/helpers';
 
-const innValidation = value => {
-    const inn = value;
+function innValidation(value) {
+    const inn = value || '';
 
     let isCorrect = false;
     let checkdigit;
@@ -36,7 +36,32 @@ const innValidation = value => {
     }
 
     return isCorrect;
-};
+}
+
+// Рассчетный счет
+function rsValidation(rs, bik) {
+    if (!bik) bik = '';
+    if (!rs) rs = '';
+    const bikRs = bik.toString().slice(-3) + rs;
+    let checksum = 0;
+    const coefficients = [7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1];
+    for (let i in coefficients) checksum += coefficients[i] * (bikRs[i] % 10);
+    const v = checksum % 10 === 0;
+    return v;
+}
+
+function rsWithParams(prop) {
+    return helpers.withParams({ type: 'rs', bik: prop }, function(value, parentVm) {
+        return rsValidation(value, helpers.ref(prop, this, parentVm));
+    });
+}
+
+// Бик
+function bikValidation(bik) {
+    if (!bik) bik = '';
+    if (bik instanceof Number) bik = bik.toString();
+    return bik.length === 9 && !/[^0-9]/.test(bik);
+}
 
 export const password = helpers.regex('password', passwordRegx);
 export const tel = helpers.regex('tel', telRegx);
@@ -48,5 +73,7 @@ export const minLength = minl;
 export const maxLength = maxl;
 export const minValue = minv;
 export const maxValue = maxv;
+export const bik = bikValidation;
+export const rs = rsWithParams;
 
 export default validationMixin;

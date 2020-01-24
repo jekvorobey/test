@@ -1,7 +1,7 @@
 <template>
     <section class="section payment-view">
         <h2 class="payment-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
-        <info-panel class="payment-view__panel" header="Сохраненные карты">
+        <!-- <info-panel class="payment-view__panel" header="Сохраненные карты">
             <template v-slot:controls>
                 <v-link class="payment-view__panel-link" tag="button">
                     <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
@@ -38,7 +38,7 @@
                     </checkout-option-card>
                 </ul>
             </div>
-        </info-panel>
+        </info-panel> -->
 
         <info-panel class="payment-view__panel" header="Предпочтительный способ оплаты">
             <div class="container container--tablet-lg">

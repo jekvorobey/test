@@ -29,13 +29,13 @@ import VButton from '../../controls/VButton/VButton.vue';
 import VCheck from '../../controls/VCheck/VCheck.vue';
 import GeneralModal from '../../GeneralModal/GeneralModal.vue';
 
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
+import { NAME as PROFILE_MODULE, AVAILABLE_PROFILES } from '../../../store/modules/Profile';
 import { UPDATE_PROFILES } from '../../../store/modules/Profile/actions';
-import { PORTFOLIOS, PROFILES, AVAILABLE_PROFILES } from '../../../store/modules/Profile/getters';
+import { PORTFOLIOS, PROFILES } from '../../../store/modules/Profile/getters';
 
 import { getRandomInt } from '../../../util/helpers';
 import _cloneDeep from 'lodash/cloneDeep';
@@ -61,7 +61,8 @@ export default {
     },
 
     computed: {
-        ...mapGetters(PROFILE_MODULE, [PROFILES, AVAILABLE_PROFILES]),
+        ...mapState(PROFILE_MODULE, [AVAILABLE_PROFILES]),
+        ...mapGetters(PROFILE_MODULE, [PROFILES]),
 
         computedSelectedProfiles() {
             return this.selectedProfiles;

@@ -125,20 +125,20 @@
             </template>
             <div class="container container--tablet-lg">
                 <ul class="cabinet-view__panel-list">
-                    <info-row class="cabinet-view__panel-item" name="Наименование ИП" value="ООО «Соколов»" />
-                    <info-row class="cabinet-view__panel-item" name="ИНН" value="471101415706" />
-                    <info-row class="cabinet-view__panel-item" name="Расчетный счет" value="17600000658470000" />
-                    <info-row class="cabinet-view__panel-item" name="БИК" value="1299786" />
-                    <info-row class="cabinet-view__panel-item" name="Банк" value="Сбербанк" />
+                    <info-row class="cabinet-view__panel-item" name="Наименование ИП" :value="requisites.name" />
+                    <info-row class="cabinet-view__panel-item" name="ИНН" :value="requisites.inn" />
+                    <info-row class="cabinet-view__panel-item" name="Расчетный счет" :value="requisites.account" />
+                    <info-row class="cabinet-view__panel-item" name="БИК" :value="requisites.bik" />
+                    <info-row class="cabinet-view__panel-item" name="Банк" :value="requisites.bank" />
                     <info-row
                         class="cabinet-view__panel-item"
                         name="Корреспондентский счет банка"
-                        value="68000007970000008"
+                        :value="requisites.correspondentAccount"
                     />
                     <info-row
                         class="cabinet-view__panel-item"
                         name="Юридический адрес"
-                        value="Россия, г. Москва, г. Зеленоград, Самый Центральный проспект, к. 305, офис 134"
+                        :value="requisites.address"
                     />
                 </ul>
             </div>
@@ -194,7 +194,7 @@ import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE, CABINET_DATA } from '../../../store/modules/Profile';
-import { FULL_NAME, PROFILES_STRING } from '../../../store/modules/Profile/getters';
+import { FULL_NAME, PROFILES_STRING, REQUISITES } from '../../../store/modules/Profile/getters';
 
 import '../../../assets/images/sprites/edit.svg';
 import './Cabinet.css';
@@ -228,7 +228,7 @@ export default {
             email: state => state[CABINET_DATA] && state[CABINET_DATA].email,
             portfolios: state => state[CABINET_DATA] && state[CABINET_DATA].portfolios,
         }),
-        ...mapGetters(PROFILE_MODULE, [FULL_NAME, PROFILES_STRING]),
+        ...mapGetters(PROFILE_MODULE, [FULL_NAME, PROFILES_STRING, REQUISITES]),
 
         isTablet() {
             return this.$mq.tablet;

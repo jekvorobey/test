@@ -25,6 +25,8 @@
                 v-if="!editablePortfolios || editablePortfolios.length === 0"
             >
                 Добавьте портфолио
+                <br />
+                <br />
             </div>
 
             <div class="portfolio-modal__submit">

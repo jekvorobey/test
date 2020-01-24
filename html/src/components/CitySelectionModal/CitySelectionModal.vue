@@ -106,7 +106,7 @@ export default {
                     to_bound = { value: type };
             }
 
-            return $dadata.post('/suggestions/api/4_1/rs/suggest/address', {
+            return $dadata.post('/suggest/address', {
                 query,
                 count,
                 locations,
