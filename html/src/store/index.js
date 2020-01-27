@@ -1,3 +1,7 @@
+import { injectable } from 'inversify';
+import { injectionType } from '../assets/scripts/constants';
+import { injectableClass, injectClass } from '../util/container';
+
 import Vue from 'vue';
 import Vuex from 'vuex';
 import actions from './actions';
@@ -13,6 +17,7 @@ import featured from './modules/Featured';
 import geolocation from './modules/Geolocation';
 
 Vue.use(Vuex);
+injectableClass(Vuex.Store);
 
 export const IS_MENU_OPEN = 'isMenuOpen';
 export const IS_HELP_OPEN = 'isHelpOpen';
@@ -28,8 +33,9 @@ export const SELECTED_CITY = 'selectedCity';
  * Function for create store instance.
  * Функция создания экземпляра стора.
  */
-export default function createStore(env = {}) {
-    return new Vuex.Store({
+export default function createStore(container) {
+    const context = container.get(injectionType.APPLICATION_CONTEXT);
+    const store = new Vuex.Store({
         strict: process.env.NODE_ENV !== 'production',
         state: {
             [LOCALE]: 'ru',
@@ -40,7 +46,7 @@ export default function createStore(env = {}) {
             [IS_CITY_CONFIRMATION_OPEN]: false,
             [CATEGORIES]: [],
             [BANNER]: {},
-            env,
+            env: context.env,
         },
         getters,
         mutations,
@@ -55,4 +61,6 @@ export default function createStore(env = {}) {
             featured,
         },
     });
+
+    container.bind(injectionType.STORE).toConstantValue(store);
 }

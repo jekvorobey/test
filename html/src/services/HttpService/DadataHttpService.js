@@ -3,15 +3,16 @@ import { cacheAdapterEnhancer } from 'axios-extensions';
 import HttpServiceBase from './base';
 
 export default class DadataHttpService extends HttpServiceBase {
-    constructor(baseURL = '', key = '') {
-        super(baseURL);
+    constructor(store) {
+        const { DADATA_API_HOST, DADATA_API_KEY } = store.state.env;
+        super(DADATA_API_HOST);
 
         this.instance = axios.create({
-            baseURL,
+            baseURL: DADATA_API_HOST,
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
-                Authorization: `Token ${key}`,
+                Authorization: `Token ${DADATA_API_KEY}`,
             },
             adapter: cacheAdapterEnhancer(axios.defaults.adapter),
         });

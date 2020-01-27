@@ -4,6 +4,8 @@ import 'core-js/stable/array';
 import 'core-js/stable/number';
 import 'core-js/stable/dom-collections';
 import 'regenerator-runtime/runtime';
+import 'proxy-polyfill';
+import 'reflect-metadata';
 
 import './insertAdjacentElement';
 import './classlist-polyfill';

@@ -1,31 +1,66 @@
-import { serviceName } from './assets/scripts/constants';
-import createApp from './app/app';
+import { injectionType } from './assets/scripts/constants';
+import { Container } from 'inversify';
+import { injectableClass, injectClass } from './util/container';
+
 import ServiceLocator from './services/ServiceLocator';
+
 import ClientLogger from './services/LogService/ClientLogger';
 import ClientCookie from './services/CookieService/ClientCookie';
 import HttpService from './services/HttpService/MockServiceAdapter';
-import events from './services/EventService';
-import progress from './services/ProgressService';
+import ProgressService from './services/ProgressService';
 import DadataHttpService from './services/HttpService/DadataHttpService';
+import ApplicationContext from './services/ApplicationContext';
 
-const locator = ServiceLocator.createInstance()
-    .register(serviceName.PROGRESS, () => progress)
-    .register(serviceName.EVENTS, () => events)
-    .register(serviceName.LOGGER, () => new ClientLogger())
-    .register(serviceName.COOKIE, () => new ClientCookie())
-    .register(serviceName.HTTP, () => new HttpService(document.location.origin));
+import createApp from './app/app';
 
-const { app, router, store } = createApp(locator);
+// Declare as injectable and its dependencies
+injectableClass(ApplicationContext);
+injectableClass(ProgressService);
+injectableClass(ClientLogger);
+injectableClass(ClientCookie);
+injectableClass(HttpService);
+injectableClass(DadataHttpService);
+
+injectClass(injectionType.STORE, DadataHttpService, 0);
+injectClass(injectionType.APPLICATION_CONTEXT, HttpService, 0);
+injectClass(injectionType.COOKIE, HttpService, 1);
+
+const context = new ApplicationContext();
+context.baseURL = document.location.origin;
+
+// Declare bindings
+ServiceLocator.createInstance(new Container({ skipBaseClassChecks: true }));
+const { $container } = ServiceLocator;
+
+$container.bind(injectionType.APPLICATION_CONTEXT).toConstantValue(context);
+$container
+    .bind(injectionType.PROGRESS)
+    .to(ProgressService)
+    .inSingletonScope();
+$container
+    .bind(injectionType.LOGGER)
+    .to(ClientLogger)
+    .inSingletonScope();
+$container
+    .bind(injectionType.COOKIE)
+    .to(ClientCookie)
+    .inSingletonScope();
+$container
+    .bind(injectionType.HTTP)
+    .to(HttpService)
+    .inSingletonScope();
+$container
+    .bind(injectionType.DADATA)
+    .to(DadataHttpService)
+    .inSingletonScope();
+
+const { app, router, store } = createApp($container);
 
 // prime the store with server-initialized state.
 // the state is determined during SSR and inlined in the page markup.
 if (window.__INITIAL_STATE__) {
     // Вставляем данные в стор
     store.replaceState(window.__INITIAL_STATE__);
-    locator.register(
-        serviceName.DADATA,
-        () => new DadataHttpService(store.state.env.DADATA_API_HOST, store.state.env.DADATA_API_KEY)
-    );
 
     // удаляем тег скрипта с данными, и чистим их в переменной
     const appEl = document.getElementById('app');

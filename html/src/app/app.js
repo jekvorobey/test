@@ -4,10 +4,10 @@
  */
 
 import '../assets/scripts/common';
+import { injectionType } from '../assets/scripts/constants';
 import Vue from 'vue';
 
 import { sync } from 'vuex-router-sync';
-import { serviceName } from '../assets/scripts/constants';
 import createStore from '../store';
 import createRouter from '../router';
 
@@ -25,12 +25,13 @@ Vue.mixin(titleMixin);
 
 // Expose a factory function that creates a fresh set of store, router,
 // app instances on each call (which is called for each SSR request)
-export default function createApp(locator, env) {
+export default function createApp(container) {
     // create store and router instances
-    const store = createStore(env);
-    locator.register(serviceName.STORE, () => store);
-    const router = createRouter();
-    locator.register(serviceName.ROUTER, () => router);
+    createStore(container);
+    createRouter(container);
+
+    const store = container.get(injectionType.STORE);
+    const router = container.get(injectionType.ROUTER);
 
     /* 
        sync the router with the vuex store.

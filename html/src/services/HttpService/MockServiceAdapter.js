@@ -4,10 +4,10 @@ import HttpServiceBase from './base';
 import MockHttpService from './MockService';
 
 export default class MockServiceAdapter extends HttpServiceBase {
-    constructor(baseURL = '') {
-        super(baseURL);
-        this.httpServiceInstance = new HttpService(baseURL);
-        this.mockServiceInstance = new MockHttpService(baseURL);
+    constructor(context, cookie) {
+        super(context.baseURL);
+        this.httpServiceInstance = new HttpService(context, cookie);
+        this.mockServiceInstance = new MockHttpService(context);
     }
 
     /**

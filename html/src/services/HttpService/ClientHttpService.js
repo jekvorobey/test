@@ -3,11 +3,11 @@ import HttpServiceBase from './base';
 // import { cacheAdapterEnhancer } from 'axios-extensions';
 
 export default class ClientHttpService extends HttpServiceBase {
-    constructor(baseURL = '') {
-        super(baseURL);
+    constructor(context) {
+        super(context.baseURL);
 
         this.instance = axios.create({
-            baseURL,
+            baseURL: context.baseURL,
             withCredentials: true,
             // cache will be enabled by default
             // adapter: cacheAdapterEnhancer(axios.defaults.adapter),

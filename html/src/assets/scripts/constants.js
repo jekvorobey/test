@@ -7,7 +7,7 @@ export const MIN_SCROLL_VALUE = 1;
 /**
  * Имена сервисов
  */
-export const serviceName = Object.freeze({
+export const injectionType = Object.freeze({
     PROGRESS: 'progress',
     ROUTER: 'router',
     STORE: 'store',
@@ -17,6 +17,7 @@ export const serviceName = Object.freeze({
     HTTP: 'http',
     CONFIG: 'config',
     DADATA: 'dadata',
+    APPLICATION_CONTEXT: 'applicationContext',
 });
 
 /**

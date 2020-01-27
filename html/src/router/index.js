@@ -1,3 +1,7 @@
+import { injectionType } from '../assets/scripts/constants';
+import { Container, injectable, inject } from 'inversify';
+import { injectableClass } from '../util/container';
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import pipeline from './pipeline';
@@ -26,6 +30,8 @@ routerMethods.forEach(method => {
     };
 });
 
+injectableClass(VueRouter);
+
 const routes = [];
 let keys = [];
 
@@ -49,7 +55,7 @@ Vue.use(VueRouter);
 /**
  * Инициализация нового экземпляра роутера
  */
-export default function createRouter() {
+export default function createRouter(container) {
     if (process.env.VUE_ENV === 'client' && 'scrollRestoration' in window.history) {
         // включаем ручной режим выставления скрола на странице
         // только в клиентской сборке
@@ -114,5 +120,5 @@ export default function createRouter() {
         }
     });
 
-    return router;
+    container.bind(injectionType.ROUTER).toConstantValue(router);
 }
