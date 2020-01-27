@@ -25,7 +25,7 @@
 
 <script>
 import VSvg from '../controls/VSvg/VSvg.vue';
-import VClamp from '../controls/VClamp/VClamp.vue';
+import VClamp from 'vue-clamp';
 
 import '../../assets/images/sprites/logo.svg';
 import './MessageCard.css';

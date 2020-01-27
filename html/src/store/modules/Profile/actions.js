@@ -7,6 +7,7 @@ export const UPDATE_BREADCRUMB = 'UPDATE_BREADCRUMB';
 export const UPDATE_PORTFOLIOS = 'UPDATE_PORTFOLIOS';
 export const UPDATE_PROFILES = 'UPDATE_PROFILES';
 export const UPDATE_REQUISITES = 'UPDATE_REQUISITES';
+export const UPDATE_PROMOPAGE_NAME = 'UPDATE_PROMOPAGE_NAME';
 
 export const UPDATE_ENTITIES = 'UPDATE_ENTITIES';
 export const DELETE_ENTITY = 'DELETE_ENTITY';
@@ -37,13 +38,17 @@ export default {
         commit(UPDATE_REQUISITES, payload);
     },
 
-    [FETCH_PROMO_DATA]({ commit }, payload = {}) {
-        return getProducts(payload)
-            .then(data => commit(SET_PROMO_DATA, { products: data.items.slice(0, 5) }))
-            .catch(error => $logger.error(`${FETCH_PROMO_DATA} ${error}`));
-    },
-
     [UPDATE_BREADCRUMB]({ commit }, payload) {
         commit(UPDATE_BREADCRUMB, payload);
+    },
+
+    [UPDATE_PROMOPAGE_NAME]({ commit }, payload) {
+        commit(UPDATE_PROMOPAGE_NAME, payload);
+    },
+
+    [FETCH_PROMO_DATA]({ commit }, payload = {}) {
+        return getProducts(payload)
+            .then(data => commit(SET_PROMO_DATA, { products: data.items.slice(0, 5), name: 'Я рекомендую' }))
+            .catch(error => $logger.error(`${FETCH_PROMO_DATA} ${error}`));
     },
 };

@@ -2,7 +2,7 @@
     <li class="cart-panel-product-card">
         <router-link class="cart-panel-product-card__img" :to="href">
             <v-picture v-if="image && image.id" :image="image" alt="">
-                <template v-slot:source="{ image, lazy }">
+                <template v-slot:source="{ image }">
                     <source :data-srcset="generateSourcePath(300, 300, image.id, 'webp')" type="image/webp" />
                 </template>
                 <template v-slot:fallback="{ image, lazy, alt }">

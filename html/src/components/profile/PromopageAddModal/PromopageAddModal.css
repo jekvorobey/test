@@ -1,7 +1,9 @@
-.preference-edit-modal {
+.promopage-add-modal {
     .popup--sm {
-        width: 440px;
-        height: 500px;
+        @media (--tablet-min) {
+            width: 440px;
+            height: 600px;
+        }
     }
 
     .modal-body {

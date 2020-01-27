@@ -19,13 +19,20 @@
     }
 
     &__panel {
+        overflow: hidden;
+
         & + & {
             margin-top: calc(var(--gs) * 7);
         }
 
-        &-links {
+        &-links,
+        &-controls {
+            flex: none;
             display: flex;
             justify-content: space-between;
+        }
+
+        &-links {
             margin-bottom: calc(var(--gs) * 2);
         }
 
