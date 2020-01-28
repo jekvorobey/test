@@ -10,7 +10,9 @@
             :value="item.value"
             :name="name"
         >
-            {{ item.title }}
+            <slot name="content" :item="item" :index="index">
+                {{ item.title }}
+            </slot>
         </v-check>
     </div>
 </template>
@@ -31,7 +33,7 @@ export default {
         },
 
         value: {
-            type: [String, Number],
+            type: [String, Number, Boolean],
         },
 
         name: {

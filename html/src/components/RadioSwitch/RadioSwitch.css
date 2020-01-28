@@ -12,6 +12,9 @@
 
         input[type='radio'] {
             & + label {
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 padding: var(--gs) calc(var(--gs) * 2);
                 background-color: var(--cl-elem-grey);
                 margin-bottom: 0;
