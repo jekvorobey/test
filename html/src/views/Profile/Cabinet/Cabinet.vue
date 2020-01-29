@@ -135,11 +135,7 @@
                         name="Корреспондентский счет банка"
                         :value="requisites.correspondentAccount"
                     />
-                    <info-row
-                        class="cabinet-view__panel-item"
-                        name="Юридический адрес"
-                        :value="requisites.address"
-                    />
+                    <info-row class="cabinet-view__panel-item" name="Юридический адрес" :value="requisites.address" />
                 </ul>
             </div>
         </info-panel>
@@ -166,9 +162,18 @@
         </info-panel>
 
         <transition name="fade">
-            <details-modal v-if="isDetailsOpen" />
-            <portfolio-modal v-else-if="isPortofiosOpen" />
-            <profile-modal v-else-if="isProfilesOpen" />
+            <details-modal
+                v-show="isDetailsOpen"
+                v-if="$isServer || (isDetailsOpen && !isPortofiosOpen && !isProfilesOpen)"
+            />
+            <portfolio-modal
+                v-show="isPortofiosOpen"
+                v-if="$isServer || (isPortofiosOpen && !isDetailsOpen && !isProfilesOpen)"
+            />
+            <profile-modal
+                v-show="isProfilesOpen"
+                v-if="$isServer || (isProfilesOpen && !isDetailsOpen && !isPortofiosOpen)"
+            />
         </transition>
     </section>
 </template>

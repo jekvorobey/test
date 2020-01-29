@@ -78,6 +78,9 @@ import VSvg from '../../components/controls/VSvg/VSvg.vue';
 import VButton from '../../components/controls/VButton/VButton.vue';
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 
+import InfoPanel from '../../components/profile/InfoPanel/InfoPanel.vue';
+import InfoRow from '../../components/profile/InfoRow/InfoRow.vue';
+
 import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 import NavigationPanel from '../../components/profile/NavigationPanel/NavigationPanel.vue';

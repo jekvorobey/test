@@ -26,7 +26,7 @@
         </ul>
 
         <transition name="fade">
-            <message-modal v-if="isMessageOpen" />
+            <message-modal v-show="isMessageOpen" v-if="$isServer || isMessageOpen" />
         </transition>
     </section>
 </template>

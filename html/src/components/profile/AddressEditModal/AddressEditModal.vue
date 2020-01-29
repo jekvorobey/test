@@ -200,7 +200,6 @@ export default {
 
     data() {
         return {
-            zoom: 15,
             address: {
                 country_code: '',
                 post_index: '',
@@ -424,7 +423,7 @@ export default {
                 const { suggestions } = await this.findAddress(suggestionTypes.HOUSE, this.address.value, 1);
                 const suggestion = suggestions[0];
                 if (suggestion) this.coords = [Number(suggestion.data.geo_lat), Number(suggestion.data.geo_lon)];
-            } else this.zoom = 15;
+            }
         },
     },
 

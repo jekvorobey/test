@@ -72,7 +72,7 @@
         </info-panel>
 
         <transition name="fade">
-            <preference-edit-modal v-if="isPreferencesOpen" />
+            <preference-edit-modal v-show="isPreferencesOpen" v-if="$isServer || isPreferencesOpen" />
         </transition>
     </section>
 </template>

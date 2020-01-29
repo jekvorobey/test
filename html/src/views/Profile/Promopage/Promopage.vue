@@ -68,9 +68,18 @@
         </info-panel>
 
         <transition name="fade">
-            <promopage-edit-modal v-if="isNameEditOpen" />
-            <promopage-add-modal v-else-if="isProductAddOpen" />
-            <promopage-add-by-link-modal v-else-if="isProductAddByLinkOpen" />
+            <promopage-edit-modal
+                v-show="isNameEditOpen"
+                v-if="$isServer || (isNameEditOpen && !isProductAddOpen && !isProductAddByLinkOpen)"
+            />
+            <promopage-add-modal
+                v-show="isProductAddOpen"
+                v-if="$isServer || (!isNameEditOpen && isProductAddOpen && !isProductAddByLinkOpen)"
+            />
+            <promopage-add-by-link-modal
+                v-show="isProductAddByLinkOpen"
+                v-if="$isServer || (!isNameEditOpen && !isProductAddOpen && isProductAddByLinkOpen)"
+            />
         </transition>
     </section>
 </template>

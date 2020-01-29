@@ -24,6 +24,7 @@ import VSvg from '../components/controls/VSvg/VSvg.vue';
 import VLink from '../components/controls/VLink/VLink.vue';
 import VButton from '../components/controls/VButton/VButton.vue';
 import VInput from '../components/controls/VInput/VInput.vue';
+import VCheck from '../components/controls/VCheck/VCheck.vue';
 import VSticky from '../components/controls/VSticky/VSticky.vue';
 import VPicture from '../components/controls/VPicture/VPicture.vue';
 

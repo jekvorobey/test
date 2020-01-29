@@ -29,7 +29,7 @@
         </info-panel>
 
         <transition name="fade">
-            <address-edit-modal v-if="isAddressEditOpen" />
+            <address-edit-modal v-show="isAddressEditOpen" v-if="$isServer || isAddressEditOpen" />
         </transition>
     </section>
 </template>
@@ -93,6 +93,7 @@ export default {
         };
 
         return {
+            mounted: false,
             selectedAddress,
             addresses: [
                 selectedAddress,
