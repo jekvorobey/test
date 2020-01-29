@@ -9,6 +9,7 @@ export const MIN_SCROLL_VALUE = 1;
  */
 export const injectionType = Object.freeze({
     PROGRESS: 'progress',
+    LOCALIZATION: 'localization',
     ROUTER: 'router',
     STORE: 'store',
     EVENTS: 'events',

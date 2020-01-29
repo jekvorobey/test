@@ -1,7 +1,7 @@
 import flatPickrEn from 'flatpickr/dist/l10n/default';
 
-export const flatpickrLocale = flatPickrEn;
-export default {
+const flatpickrLocale = flatPickrEn;
+const main = {
     header: {
         top: {
             delivery: 'Deliveries across Russia',
@@ -168,3 +168,6 @@ export default {
         },
     },
 };
+
+const LOCALE = 'en';
+export default { main, flatpickrLocale, LOCALE };

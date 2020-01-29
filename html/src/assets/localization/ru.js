@@ -1,7 +1,7 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
 
-export const flatpickrLocale = flatPickrRu;
-export default {
+const flatpickrLocale = flatPickrRu.ru;
+const main = {
     header: {
         top: {
             delivery: 'Доставка по всей России',
@@ -168,3 +168,6 @@ export default {
         },
     },
 };
+
+const LOCALE = 'ru';
+export default { main, flatpickrLocale, LOCALE };

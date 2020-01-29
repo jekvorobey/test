@@ -44,7 +44,6 @@ import { CHECK_SESSION, LOGIN_BY_PASSWORD } from '../store/modules/Auth/actions'
 
 import { MIN_SCROLL_VALUE, eventName } from '../assets/scripts/constants';
 import { mapState, mapActions } from 'vuex';
-import { $logger } from '../services/ServiceLocator';
 
 export default {
     name: 'app',

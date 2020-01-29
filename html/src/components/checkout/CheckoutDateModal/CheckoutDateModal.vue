@@ -13,7 +13,7 @@
                     mode="single"
                     v-model="selectedDate"
                     :enable="availableDates"
-                    :locale="locale"
+                    :locale="datepickerLocale"
                     :maxDate="maxDate"
                     :minDate="minDate"
                     date-format="Y-m-d"
@@ -33,6 +33,7 @@ import VDatepicker from '../../controls/VDatepicker/VDatepicker.vue';
 import GeneralModal from '../../GeneralModal/GeneralModal.vue';
 
 import { mapState, mapActions } from 'vuex';
+import { LOCALE, LOCALIZATIONS } from '../../../store';
 import { NAME as CHECKOUT_MODULE } from '../../../store/modules/Checkout';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
@@ -59,7 +60,10 @@ export default {
     },
 
     computed: {
-        ...mapState(['locale']),
+        ...mapState({
+            datepickerLocale: state =>
+                state[LOCALIZATIONS][state[LOCALE]] && state[LOCALIZATIONS][state[LOCALE]].flatpickrLocale,
+        }),
         ...mapState(MODAL_MODULE, {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
             state: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},

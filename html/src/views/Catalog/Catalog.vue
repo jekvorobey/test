@@ -461,7 +461,7 @@ export default {
                 const filter = computeFilterData(pathMatch, toCode, toBrandCode);
 
                 this.$progress.start();
-                if (fromCode === toCode && fromBrandCode === toBrandCode)
+                if (fromBrandCode === toBrandCode)
                     await this[FETCH_ITEMS]({ filter, orderField, orderDirection, page, showMore });
                 else
                     await this[FETCH_CATALOG_DATA]({

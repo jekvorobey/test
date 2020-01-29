@@ -56,4 +56,8 @@ module.exports = class ServiceLocator {
     static get $cookie() {
         return ServiceLocator.instance()._container.get(injectionType.COOKIE);
     }
+
+    static get $locale() {
+        return ServiceLocator.instance()._container.get(injectionType.LOCALIZATION);
+    }
 };

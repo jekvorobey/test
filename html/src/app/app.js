@@ -4,14 +4,14 @@
  */
 
 import '../assets/scripts/common';
-import { injectionType } from '../assets/scripts/constants';
 import Vue from 'vue';
 
+import { injectionType } from '../assets/scripts/constants';
 import { sync } from 'vuex-router-sync';
 import createStore from '../store';
 import createRouter from '../router';
+import createLocalization from '../plugins/i18n';
 
-import i18n from '../plugins/i18n';
 import mq from '../plugins/media';
 import '../plugins/meta';
 import '../plugins/scroll-lock';
@@ -29,9 +29,12 @@ export default function createApp(container) {
     // create store and router instances
     createStore(container);
     createRouter(container);
+    createLocalization(container);
 
     const store = container.get(injectionType.STORE);
     const router = container.get(injectionType.ROUTER);
+    const i18n = container.get(injectionType.LOCALIZATION);
+    const progress = container.get(injectionType.PROGRESS);
 
     /* 
        sync the router with the vuex store.

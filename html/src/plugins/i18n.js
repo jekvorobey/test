@@ -1,49 +1,34 @@
+import { injectable } from 'inversify';
+import { injectionType } from '../assets/scripts/constants';
+import { injectableClass, injectClass } from '../util/container';
+import { LOCALIZATIONS, LOCALE, FALLBACK_LOCALE } from '../store';
+
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
-import axios from 'axios';
-import flatpickr from 'flatpickr';
-import ruLocalization, { flatpickrLocale } from '../assets/localization/ru';
-import enLocalization from '../assets/localization/en';
-import { $store } from '../services/ServiceLocator';
 
 Vue.use(VueI18n);
+injectableClass(VueI18n);
 
-const defaultL = 'ru';
-const i18n = new VueI18n({
-    locale: defaultL, // set locale
-    fallbackLocale: 'en',
-    messages: {
-        ru: ruLocalization,
-        en: enLocalization,
-    }, // set locale messages
-});
+/**
+ * Инициализация нового экземпляра роутера
+ */
+export default function createLocalization(container) {
+    const store = container.get(injectionType.STORE);
+    const localizations = {};
 
-flatpickr.localize(flatpickrLocale);
-
-const loadedLanguages = [defaultL, 'en']; // our default language that is preloaded
-
-function setI18nLanguage(lang) {
-    i18n.locale = lang;
-    axios.defaults.headers.common['Accept-Language'] = lang;
-    document.querySelector('html').setAttribute('lang', lang);
-    $store.dispatch('SET_LOCALE', lang);
-    return lang;
-}
-
-export function loadLanguageAsync(lang) {
-    if (i18n.locale !== lang) {
-        if (!loadedLanguages.includes(lang)) {
-            return import(/* webpackChunkName: "lang-[request]" */ `../assets/localization/${lang}`).then(msgs => {
-                i18n.setLocaleMessage(lang, msgs.default);
-                flatpickr.localize(msgs.flatpickrLocale);
-                loadedLanguages.push(lang);
-                return setI18nLanguage(lang);
-            });
-        }
-        return Promise.resolve(setI18nLanguage(lang));
+    for (const key in store.state[LOCALIZATIONS]) {
+        const localization = store.state[LOCALIZATIONS][key];
+        localizations[key] = localization.main;
     }
-    return Promise.resolve(lang);
-}
 
-export const defaultLang = defaultL;
-export default i18n;
+    const locale = store.state[LOCALE];
+    const fallbackLocale = store.state[FALLBACK_LOCALE];
+
+    const i18n = new VueI18n({
+        locale, // set locale
+        fallbackLocale,
+        messages: localizations,
+    });
+
+    container.bind(injectionType.LOCALIZATION).toConstantValue(i18n);
+}
