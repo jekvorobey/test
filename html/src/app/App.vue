@@ -28,6 +28,8 @@ import VCheck from '../components/controls/VCheck/VCheck.vue';
 import VSticky from '../components/controls/VSticky/VSticky.vue';
 import VPicture from '../components/controls/VPicture/VPicture.vue';
 
+import Price from '../components/Price/Price.vue';
+
 import VHeader from '../components/VHeader/VHeader.vue';
 import VFooter from '../components/VFooter/VFooter.vue';
 
