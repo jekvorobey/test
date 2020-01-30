@@ -24,9 +24,12 @@
 
         @media (--tablet-lg) {
             padding-bottom: 0;
-            padding-top: 0;
             margin-bottom: calc(var(--gs) * 4);
             border-bottom: 1px solid var(--cl-divider-grey);
+        }
+
+        @media (--tablet) {
+            padding-top: 0;
         }
     }
 }
