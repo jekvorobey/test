@@ -41,7 +41,7 @@
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/show">
+                            <v-link class="mobile-menu__menu-link" to="/sets">
                                 {{ $t('header.links.collections') }}
                             </v-link>
                         </li>

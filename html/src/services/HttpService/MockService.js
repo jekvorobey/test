@@ -330,6 +330,75 @@ const productBanners = [
     },
 ];
 
+const sets = [
+    {
+        id: 1,
+        title: 'Новая коллекция косметики Aveda',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner1,
+    },
+    {
+        id: 2,
+        title: '20 средств для ухода за молодой кожей',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner2,
+    },
+    {
+        id: 3,
+        title: '20 средств для ухода за молодой кожей',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner1,
+    },
+    {
+        id: 4,
+        title: 'Лучшие стайлинги для летних укладок в новом сезоне только для тебя',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner3,
+    },
+    {
+        id: 5,
+        title: 'Новейшая косметика для лица и тела с омолаживающим эффектом',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner4,
+    },
+    {
+        id: 6,
+        title: ' Натуральный макияж Aveda, который подойдёт для каждой девушки',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner5,
+    },
+    {
+        id: 7,
+        title: 'Водостойкая губная помада L’Oreal Paris',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner6,
+    },
+    {
+        id: 8,
+        title: 'Если ты — бессовестно талантливый стилист, визажист, мастер красоты любого профиля',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner7,
+    },
+    {
+        id: 9,
+        title: 'Если ты — бессовестно талантливый стилист, визажист, мастер красоты любого профиля',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner7,
+    },
+    {
+        id: 10,
+        title: 'Если ты — бессовестно талантливый стилист, визажист, мастер красоты любого профиля',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner7,
+    },
+    {
+        id: 11,
+        title: 'Основной уход за кожей',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner6,
+    },
+];
+
 const brands = [
     { id: 1, name: 'Alterna', code: 'alterna', image: brand1 },
     { id: 2, name: 'Aveda', code: 'aveda', image: brand2 },
@@ -1882,8 +1951,12 @@ export default class MockHttpService extends HttpServiceBase {
                     setTimeout(() => resolve(brands), 300);
                     break;
 
-                case '/v1/brands-catalog':
+                case '/v1/brand-catalog':
                     setTimeout(() => resolve(_cloneDeep(brandsCatalog)), 300);
+                    break;
+
+                case '/v1/set-catalog':
+                    setTimeout(() => resolve(_cloneDeep(sets)), 300);
                     break;
 
                 case '/v1/masterclasses':

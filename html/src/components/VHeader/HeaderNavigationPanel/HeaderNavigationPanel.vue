@@ -11,11 +11,21 @@
                 {{ $t('header.links.catalog') }}
             </v-link>
         </div>
-        <v-link class="header-navigation-panel__item" to="/top">{{ $t('header.links.new') }}</v-link>
-        <v-link class="header-navigation-panel__item" to="/new">{{ $t('header.links.stocks') }}</v-link>
-        <v-link class="header-navigation-panel__item" to="/show">{{ $t('header.links.collections') }}</v-link>
-        <v-link class="header-navigation-panel__item" :to="{ name: 'Brands' }">{{ $t('header.links.brands') }}</v-link>
-        <v-link class="header-navigation-panel__item" to="/job">{{ $t('header.links.classes') }}</v-link>
+        <v-link class="header-navigation-panel__item" to="/top">
+            {{ $t('header.links.new') }}
+        </v-link>
+        <v-link class="header-navigation-panel__item" to="/new">
+            {{ $t('header.links.stocks') }}
+        </v-link>
+        <v-link class="header-navigation-panel__item" :to="{ name: 'Sets' }">
+            {{ $t('header.links.collections') }}
+        </v-link>
+        <v-link class="header-navigation-panel__item" :to="{ name: 'Brands' }">
+            {{ $t('header.links.brands') }}
+        </v-link>
+        <v-link class="header-navigation-panel__item" to="/job">
+            {{ $t('header.links.classes') }}
+        </v-link>
     </nav>
 </template>
 

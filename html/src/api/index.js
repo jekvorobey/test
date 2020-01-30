@@ -88,8 +88,12 @@ export function getBanners(data) {
     return $http.get('/v1/banners', data);
 }
 
-export function getBrandsCatalog(data) {
-    return $http.get('/v1/brands-catalog', data);
+export function getBrandCatalog(data) {
+    return $http.get('/v1/brand-catalog', data);
+}
+
+export function getSetCatalog(data) {
+    return $http.get('/v1/set-catalog', data);
 }
 
 export function getBrands(data) {
