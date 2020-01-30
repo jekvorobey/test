@@ -1,0 +1,86 @@
+<template>
+    <ul class="group-list">
+        <li
+            class="group-list__item"
+            v-for="{ name, id, to, items: children } in items"
+            :key="id"
+            :style="{ width: columnWidth }"
+        >
+            <v-link v-if="to" class="group-list__link group-list__title" :to="to">
+                {{ name }}
+            </v-link>
+            <div v-else class="group-list__title">
+                {{ name }}
+            </div>
+
+            <v-expander
+                v-if="Array.isArray(children) && children.length > maxCount"
+                class="group-list__expander"
+                :min-height="160"
+            >
+                <ul>
+                    <li v-for="{ name, id, to } in children" :key="id">
+                        <v-link class="group-list__link" :to="to">
+                            {{ name }}
+                        </v-link>
+                    </li>
+                </ul>
+
+                <template v-slot:btn="{ isExpanded }">
+                    {{ isExpanded ? 'Скрыть' : 'Показать все' }}
+                </template>
+            </v-expander>
+            <ul v-else>
+                <li v-for="{ name, id, to } in children" :key="id">
+                    <v-link class="group-list__link" :to="to">
+                        {{ name }}
+                    </v-link>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</template>
+
+<script>
+import VLink from '../controls/VLink/VLink.vue';
+import VExpander from '../VExpander/VExpander.vue';
+import './GroupList.css';
+
+export default {
+    name: 'group-list',
+
+    components: {
+        VLink,
+        VExpander,
+    },
+
+    props: {
+        items: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
+
+        columns: {
+            type: [Number, String],
+            default: 4,
+        },
+
+        count: {
+            type: [Number, String],
+            default: 5,
+        },
+    },
+
+    computed: {
+        columnWidth() {
+            return `${100 / Number(this.columns)}%`;
+        },
+
+        maxCount() {
+            return Number(this.count);
+        },
+    },
+};
+</script>

@@ -28,14 +28,14 @@ export default {
             },
         },
         {
-            path: '/brand/:brandCode/:code?/filters/*',
+            path: '/brands/:brandCode/:code?/filters/*',
             component: CatalogAsync,
             meta: {
                 skipScroll: true,
             },
         },
         {
-            path: '/brand/:brandCode/:code?',
+            path: '/brands/:brandCode/:code?',
             component: CatalogAsync,
             meta: {
                 skipScroll: true,

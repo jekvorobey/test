@@ -14,7 +14,7 @@
         <v-link class="header-navigation-panel__item" to="/top">{{ $t('header.links.new') }}</v-link>
         <v-link class="header-navigation-panel__item" to="/new">{{ $t('header.links.stocks') }}</v-link>
         <v-link class="header-navigation-panel__item" to="/show">{{ $t('header.links.collections') }}</v-link>
-        <v-link class="header-navigation-panel__item" to="/ask">{{ $t('header.links.brands') }}</v-link>
+        <v-link class="header-navigation-panel__item" :to="{ name: 'Brands' }">{{ $t('header.links.brands') }}</v-link>
         <v-link class="header-navigation-panel__item" to="/job">{{ $t('header.links.classes') }}</v-link>
     </nav>
 </template>

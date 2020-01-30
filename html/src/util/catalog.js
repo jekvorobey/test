@@ -2,12 +2,12 @@ const rangeRegx = /from_\d*_to_\d*/;
 const numberRegx = /\d+/g;
 
 export function generateCategoryUrl(brandCode, code) {
-    if (brandCode) return code ? `/brand/${brandCode}/${code}` : `/brand/${brandCode}`;
+    if (brandCode) return code ? `/brands/${brandCode}/${code}` : `/brands/${brandCode}`;
     return code ? `/catalog/${code}` : `/catalog`;
 }
 
 export function concatBrandRoutePath(brandCode, categoryCode, segments) {
-    const baseRoute = categoryCode ? `/brand/${brandCode}/${categoryCode}` : `/brand/${brandCode}`;
+    const baseRoute = categoryCode ? `/brands/${brandCode}/${categoryCode}` : `/brands/${brandCode}`;
     const basePath = segments.length > 0 ? `${baseRoute}/filters` : baseRoute;
     return basePath.concat(...segments.map(s => `/${s}`));
 }

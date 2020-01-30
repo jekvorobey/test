@@ -7,7 +7,7 @@
             <v-svg name="logo-text" width="340" height="35" />
         </a>
         <div class="header-logo-panel__text">
-            {{ $t('header.middle.professionals') }}
+            <slot />
         </div>
     </div>
 </template>

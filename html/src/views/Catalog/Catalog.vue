@@ -1,32 +1,24 @@
 <template>
     <section class="section catalog-view">
         <div class="container catalog-view__header">
-            <transition-group tag="ol" class="section catalog-view__breadcrumbs" name="fade-in">
-                <li class="catalog-view__breadcrumbs-item" key="main">
-                    <router-link class="catalog-view__breadcrumbs-link" to="/">
-                        Главная
-                    </router-link>
-                </li>
-
-                <li class="catalog-view__breadcrumbs-item" key="all">
-                    <template v-if="brandCode">Бренды</template>
-                    <router-link v-else class="catalog-view__breadcrumbs-link" to="/catalog">
-                        Каталог
-                    </router-link>
-                </li>
-
-                <li v-if="brandCode" class="catalog-view__breadcrumbs-item" :key="brandCode">
-                    <router-link class="catalog-view__breadcrumbs-link" :to="`/brand/${brandCode}`">
-                        {{ brand && brand.name }}
-                    </router-link>
-                </li>
-
-                <li class="catalog-view__breadcrumbs-item" v-for="category in activeCategories" :key="category.id">
-                    <router-link class="catalog-view__breadcrumbs-link" :to="generateBreadcrumbUrl(category.code)">
-                        {{ category.name }}
-                    </router-link>
-                </li>
-            </transition-group>
+            <breadcrumbs class="catalog-view__breadcrumbs">
+                <breadcrumb-item key="main" to="/">
+                    Главная
+                </breadcrumb-item>
+                <breadcrumb-item key="Cabinet" :to="{ name: brandCode ? 'Brands' : 'Catalog' }">
+                    {{ brandCode ? 'Бренды' : 'Каталог' }}
+                </breadcrumb-item>
+                <breadcrumb-item v-if="brandCode" :key="brandCode" :to="generateBreadcrumbUrl(null)">
+                    {{ brand && brand.name }}
+                </breadcrumb-item>
+                <breadcrumb-item
+                    v-for="category in activeCategories"
+                    :key="category.id"
+                    :to="generateBreadcrumbUrl(category.code)"
+                >
+                    {{ category.name }}
+                </breadcrumb-item>
+            </breadcrumbs>
 
             <catalog-banner-card
                 v-if="brandCode && brand"
@@ -226,6 +218,9 @@ import VSticky from '../../components/controls/VSticky/VSticky.vue';
 import VExpander from '../../components/VExpander/VExpander.vue';
 import Modal from '../../components/controls/modal/modal.vue';
 
+import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+
 import FilterButton from '../../components/FilterButton/FilterButton.vue';
 import TagItem from '../../components/TagItem/TagItem.vue';
 import CategoryTreeItem from '../../components/CategoryTreeItem/CategoryTreeItem.vue';
@@ -284,6 +279,8 @@ export default {
         VExpander,
         Modal,
 
+        Breadcrumbs,
+        BreadcrumbItem,
         FilterButton,
         TagItem,
         CategoryTreeItem,
@@ -461,7 +458,7 @@ export default {
                 const filter = computeFilterData(pathMatch, toCode, toBrandCode);
 
                 this.$progress.start();
-                if (fromBrandCode === toBrandCode)
+                if (toCode === fromCode && fromBrandCode === toBrandCode)
                     await this[FETCH_ITEMS]({ filter, orderField, orderDirection, page, showMore });
                 else
                     await this[FETCH_CATALOG_DATA]({

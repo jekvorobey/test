@@ -16,7 +16,9 @@
     }
 
     &__img {
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 100%;
         padding: 0 calc(var(--gs) * 1.5);
         margin-bottom: calc(var(--gs) * 2);
@@ -29,6 +31,18 @@
             margin-bottom: var(--gs);
         }
 
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 100%;
+                padding-bottom: 0;
+            }
+        }
+
         .v-picture {
             justify-content: center;
 
@@ -36,6 +50,16 @@
                 @media (--tablet) {
                     width: 64px;
                 }
+            }
+        }
+
+        .icon {
+            width: 96px;
+            max-height: 96px;
+
+            @media (--tablet) {
+                width: 48px;
+                max-height: 48px;
             }
         }
     }

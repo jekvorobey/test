@@ -22,11 +22,14 @@ import enLocale from '../assets/localization/en';
 Vue.use(Vuex);
 injectableClass(Vuex.Store);
 
+const ENV = 'env';
+
 export const IS_MENU_OPEN = 'isMenuOpen';
 export const IS_HELP_OPEN = 'isHelpOpen';
 export const IS_CART_OPEN = 'isCartOpen';
 export const IS_CITY_CONFIRMATION_OPEN = 'isCityConfirmationOpen';
 export const SCROLL = 'scroll';
+
 export const CATEGORIES = 'categories';
 export const BANNER = 'banner';
 export const SELECTED_CITY = 'selectedCity';
@@ -57,7 +60,7 @@ export default function createStore(container) {
             [IS_CITY_CONFIRMATION_OPEN]: false,
             [CATEGORIES]: [],
             [BANNER]: {},
-            env: context.env,
+            [ENV]: context.env,
         },
         getters,
         mutations,

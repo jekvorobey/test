@@ -2,7 +2,7 @@
     <div class="category-card">
         <router-link class="category-card__img" :to="url">
             <v-picture v-if="image" :image="image" :alt="name" />
-            <v-svg v-else id="category-card-empty" name="logo" width="48" height="48" />
+            <v-svg v-else id="category-card-empty" name="logo" />
         </router-link>
         {{ name }}
     </div>

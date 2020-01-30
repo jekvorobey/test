@@ -88,6 +88,10 @@ export function getBanners(data) {
     return $http.get('/v1/banners', data);
 }
 
+export function getBrandsCatalog(data) {
+    return $http.get('/v1/brands-catalog', data);
+}
+
 export function getBrands(data) {
     return $http.get('/v1/brands', data);
 }

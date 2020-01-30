@@ -10,7 +10,7 @@ Vue.use(VueI18n);
 injectableClass(VueI18n);
 
 /**
- * Инициализация нового экземпляра роутера
+ * Инициализация нового экземпляра i18n
  */
 export default function createLocalization(container) {
     const store = container.get(injectionType.STORE);

@@ -331,95 +331,67 @@ const productBanners = [
 ];
 
 const brands = [
+    { id: 1, name: 'Alterna', code: 'alterna', image: brand1 },
+    { id: 2, name: 'Aveda', code: 'aveda', image: brand2 },
+    { id: 3, name: 'Bungeetape', code: 'bungeetape', image: brand3 },
+    { id: 4, name: 'Christina Fitzgerald', code: 'christina_fitzgerald', image: brand4 },
+    { id: 5, name: 'Cloud Nine', code: 'cloud_nine', image: brand5 },
+    { id: 6, name: 'Dajuja', code: 'dajuja', image: brand1 },
+    { id: 7, name: 'Dyson', code: 'dyson' },
+    { id: 8, name: 'IKOO', code: 'ikoo' },
+    { id: 9, name: 'Kevin.Murphy', code: 'kevin_murphy' },
+    { id: 10, name: 'Kure Bazaar', code: 'kure_bazaar' },
+    { id: 11, name: 'La Ric', code: 'la_ric' },
+    { id: 12, name: 'Olaplex', code: 'olaplex' },
+    { id: 13, name: 'Oribe', code: 'oribe' },
+    { id: 14, name: 'R+Co', code: 'r_co' },
+];
+
+const brandsCatalog = [
     {
         id: 1,
-        name: 'Brand1',
-        title: 'Brand1',
-        image: brand1,
+        name: 'A',
+        items: [brands[0], brands[1]],
     },
     {
         id: 2,
-        name: 'Brand2',
-        title: 'Brand2',
-        image: brand2,
+        name: 'B',
+        items: [brands[2]],
     },
     {
         id: 3,
-        name: 'Brand3',
-        title: 'Brand3',
-        image: brand3,
+        name: 'C',
+        items: [brands[3], brands[4]],
     },
     {
         id: 4,
-        name: 'Brand4',
-        title: 'Brand4',
-        image: brand4,
+        name: 'D',
+        items: [brands[5], brands[6]],
     },
     {
         id: 5,
-        name: 'Brand5',
-        title: 'Brand5',
-        image: brand5,
+        name: 'I',
+        items: [brands[7]],
     },
     {
         id: 6,
-        name: 'Brand6',
-        title: 'Brand6',
-        image: brand1,
+        name: 'K',
+        items: [brands[8], brands[9]],
     },
     {
         id: 7,
-        name: 'Christian Dior',
-        title: 'Christian Dior',
-        image: brand2,
+        name: 'L',
+        items: [brands[10]],
     },
     {
         id: 8,
-        name: 'Chanel',
-        title: 'Chanel',
-        image: brand3,
+        name: 'O',
+        items: [brands[11], brands[12]],
     },
     {
         id: 9,
-        name: 'Shiseido',
-        title: 'Shiseido',
-        image: brand4,
-    },
-    {
-        id: 10,
-        name: 'Maybelline',
-        title: 'Maybelline',
-        image: brand5,
-    },
-    {
-        id: 11,
-        name: 'Avon',
-        title: 'Avon',
-        image: brand1,
-    },
-    {
-        id: 12,
-        name: 'Lancôme',
-        title: 'Lancôme',
-        image: brand2,
-    },
-    {
-        id: 13,
-        name: 'Yves Saint Laurent',
-        title: 'Yves Saint Laurent',
-        image: brand3,
-    },
-    {
-        id: 14,
-        name: 'Clinique',
-        title: 'Clinique',
-        image: brand4,
-    },
-    {
-        id: 15,
-        name: 'Estée Lauder',
-        title: 'Estée Lauder',
-        image: brand5,
+        name: 'R',
+        items: [brands[13]],
     },
 ];
 
@@ -1904,9 +1876,14 @@ export default class MockHttpService extends HttpServiceBase {
                 case '/v1/instagram':
                     setTimeout(() => resolve(instagrams), 300);
                     break;
+                    brandsCatalog;
 
                 case '/v1/brands':
                     setTimeout(() => resolve(brands), 300);
+                    break;
+
+                case '/v1/brands-catalog':
+                    setTimeout(() => resolve(_cloneDeep(brandsCatalog)), 300);
                     break;
 
                 case '/v1/masterclasses':

@@ -38,23 +38,6 @@
     &__breadcrumbs {
         order: 0;
         margin: var(--gs) 0;
-        display: flex;
-        flex-wrap: wrap;
-        font-size: 11px;
-        line-height: 24px;
-        color: var(--cl-grey);
-        text-transform: uppercase;
-
-        &-link {
-            border-bottom: none;
-        }
-
-        &-item + &-item {
-            &::before {
-                content: '/';
-                margin: 0 var(--gs);
-            }
-        }
 
         @media (--tablet-lg) {
             order: 1;

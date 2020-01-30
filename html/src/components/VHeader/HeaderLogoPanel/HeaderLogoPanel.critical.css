@@ -1,4 +1,6 @@
 .header-logo-panel {
+    text-align: center;
+
     &__link {
         display: block;
         border-bottom: none;
