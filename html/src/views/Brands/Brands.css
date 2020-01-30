@@ -1,4 +1,10 @@
 .brands-view {
+    padding-bottom: calc(var(--gs) * 10);
+
+    @media (--tablet-lg) {
+        padding-bottom: calc(var(--gs) * 4);
+    }
+
     &__section {
         &-hl {
             font-size: 28px;
