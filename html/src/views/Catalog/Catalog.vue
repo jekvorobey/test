@@ -476,11 +476,11 @@ export default {
                 this.setSortValue(orderField, orderDirection);
                 this.$progress.finish();
 
-                // if (!showMore && page !== fromPage)
-                //     window.scrollTo({
-                //         top: MIN_SCROLL_VALUE + 1,
-                //         behavior: 'smooth',
-                //     });
+                if (!showMore && page !== fromPage)
+                    window.scrollTo({
+                        top: MIN_SCROLL_VALUE + 1,
+                        behavior: 'smooth',
+                    });
             } catch (error) {
                 this.$progress.fail();
                 $logger.error('debounce_fetchCatalog', error);
