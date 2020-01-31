@@ -79,7 +79,8 @@
                         </filter-button>
                     </div>
 
-                    <transition-group tag="ul" class="catalog-view__main-tags" name="tag-item">
+                    <!-- <transition-group tag="ul" class="catalog-view__main-tags" name="tag-item"> -->
+                    <ul class="catalog-view__main-tags">
                         <tag-item
                             v-for="(tag, index) in activeTags"
                             :data-index="index"
@@ -87,9 +88,10 @@
                             :text="tag.name"
                             @delete="onClickDeleteTag(tag.segment)"
                         />
-                    </transition-group>
+                    </ul>
+                    <!-- </transition-group> -->
 
-                    <transition-group
+                    <!-- <transition-group
                         tag="ul"
                         class="catalog-view__main-grid"
                         name="catalog-item"
@@ -97,10 +99,11 @@
                         @enter="onEnterItems"
                         @after-enter="onAfterEnterItems"
                         @leave="onLeaveItems"
-                    >
+                    > -->
+                    <ul class="catalog-view__main-grid" v-for="page in items" :key="page.id">
                         <li
                             class="catalog-view__main-grid-item"
-                            v-for="item in items"
+                            v-for="item in page.items"
                             :key="`${item.id}-${item.type}`"
                             :class="{ [`catalog-view__main-grid-item--${item.type}`]: item.type }"
                         >
@@ -129,7 +132,8 @@
                                 :btn-text="item.btnText"
                             />
                         </li>
-                    </transition-group>
+                    </ul>
+                    <!-- </transition-group> -->
                     <div class="catalog-view__main-controls" v-if="pagesCount > 1">
                         <v-button
                             v-if="activePage < pagesCount"
@@ -472,11 +476,11 @@ export default {
                 this.setSortValue(orderField, orderDirection);
                 this.$progress.finish();
 
-                if (!showMore && page !== fromPage)
-                    window.scrollTo({
-                        top: MIN_SCROLL_VALUE + 1,
-                        behavior: 'smooth',
-                    });
+                // if (!showMore && page !== fromPage)
+                //     window.scrollTo({
+                //         top: MIN_SCROLL_VALUE + 1,
+                //         behavior: 'smooth',
+                //     });
             } catch (error) {
                 this.$progress.fail();
                 $logger.error('debounce_fetchCatalog', error);

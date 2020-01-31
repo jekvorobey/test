@@ -1,5 +1,6 @@
 export const SET_FILTERS = 'SET_FILTERS';
 export const SET_ITEMS = 'SET_ITEMS';
+export const SET_ITEMS_MORE = 'SET_ITEMS_MORE';
 export const SET_BRAND_CODE = 'SET_BRAND_CODE';
 export const SET_CATEGORY_CODE = 'SET_CATEGORY_CODE';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
@@ -16,9 +17,14 @@ export default {
         state.banner = payload;
     },
 
-    [SET_ITEMS](state, { items, range } = { items: [], range: 0 }) {
-        state.items = items || [];
-        state.range = range || 0;
+    [SET_ITEMS_MORE](state, page) {
+        state.items.push(page);
+        state.range = page.range || 0;
+    },
+
+    [SET_ITEMS](state, page) {
+        state.items = [page];
+        state.range = page.range || 0;
     },
 
     [SET_CATEGORY_CODE](state, payload) {

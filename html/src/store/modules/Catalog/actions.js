@@ -3,6 +3,7 @@ import { getCatalogItems, getCategories, getBanners, getBrand, getFilters } from
 import {
     SET_FILTERS,
     SET_ITEMS,
+    SET_ITEMS_MORE,
     SET_CATEGORIES,
     SET_BANNER,
     SET_BRAND,
@@ -59,8 +60,9 @@ export default {
     [FETCH_ITEMS]({ commit, state }, payload) {
         return getCatalogItems(payload)
             .then(data => {
-                if (payload.showMore) commit(SET_ITEMS, { items: state.items.concat(data.items), range: data.range });
-                else commit(SET_ITEMS, data);
+                if (payload.showMore)
+                    commit(SET_ITEMS_MORE, { id: payload.page, items: data.items, range: data.range });
+                else commit(SET_ITEMS, { id: payload.page, items: data.items, range: data.range });
             })
             .catch(error => {
                 $logger.error(`${FETCH_ITEMS} ${error}`);
