@@ -222,7 +222,7 @@ function onFinally() {
 gracefulShutdown(app, {
     signals: 'SIGINT SIGTERM',
     timeout: 30000,
-    development: !isProd,
+    development: false,
     onShutdown: onCleanup,
     finally: onFinally,
 });
