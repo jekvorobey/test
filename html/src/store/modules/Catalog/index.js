@@ -12,7 +12,7 @@ export const RANGE = 'range';
 export const BANNER = 'banner';
 export const BRAND = 'brand';
 export const BRAND_CODE = 'brandCode';
-export const LOAD = 'load';
+export const LOAD_PATH = 'loadPath';
 
 // const filters = [
 //     {
@@ -99,7 +99,7 @@ export default {
     name: NAME,
     namespaced: true,
     state: {
-        [LOAD]: false,
+        [LOAD_PATH]: '',
         [BRAND]: {},
         [BRAND_CODE]: null,
         [BANNER]: {},

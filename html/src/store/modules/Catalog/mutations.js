@@ -5,26 +5,26 @@ export const SET_BRAND_CODE = 'SET_BRAND_CODE';
 export const SET_CATEGORY_CODE = 'SET_CATEGORY_CODE';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_BANNER = 'SET_BANNER';
-export const SET_LOAD = 'SET_LOAD';
+export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 export const SET_BRAND = 'SET_BRAND';
 
 export default {
-    [SET_LOAD](state, payload) {
-        state.load = payload;
+    [SET_LOAD_PATH](state, payload = '') {
+        state.loadPath = payload;
     },
 
     [SET_BANNER](state, payload = {}) {
         state.banner = payload;
     },
 
-    [SET_ITEMS_MORE](state, page) {
-        state.items.push(page);
-        state.range = page.range || 0;
+    [SET_ITEMS_MORE](state, { items, range }) {
+        state.items.push(...items);
+        state.range = range || 0;
     },
 
-    [SET_ITEMS](state, page) {
-        state.items = [page];
-        state.range = page.range || 0;
+    [SET_ITEMS](state, { items, range }) {
+        state.items = items;
+        state.range = range || 0;
     },
 
     [SET_CATEGORY_CODE](state, payload) {

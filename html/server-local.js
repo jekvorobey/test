@@ -6,6 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const httpProxy = require('express-http-proxy');
+const gracefulShutdown = require('http-graceful-shutdown');
 
 const LRUCache = require('lru-cache');
 const favicon = require('serve-favicon');
@@ -219,3 +220,22 @@ app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());
 app.get('*', renderFunction);
 app.listen(port, host, () => logger.info(`server started at ${host}:${port}`));
+
+function onCleanup(signal) {
+    return new Promise(resolve => {
+        logger.info('called signal: ', signal);
+        resolve();
+    });
+}
+
+function onFinally() {
+    logger.info('server shutted down');
+}
+
+gracefulShutdown(app, {
+    signals: 'SIGINT SIGTERM',
+    timeout: 30000,
+    development: !isProd,
+    onShutdown: onCleanup,
+    finally: onFinally,
+});

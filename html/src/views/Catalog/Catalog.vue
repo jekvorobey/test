@@ -42,7 +42,7 @@
         </div>
         <section class="section">
             <div class="container catalog-view__grid">
-                <div class="catalog-view__side-panel">
+                <div class="catalog-view__side-panel" v-if="!isTabletLg">
                     <ul class="catalog-view__side-panel-categories">
                         <category-tree-item
                             class="catalog-view__side-panel-categories-item"
@@ -80,7 +80,7 @@
                     </div>
 
                     <!-- <transition-group tag="ul" class="catalog-view__main-tags" name="tag-item"> -->
-                    <ul class="catalog-view__main-tags">
+                    <ul class="catalog-view__main-tags" v-if="!isTabletLg">
                         <tag-item
                             v-for="(tag, index) in activeTags"
                             :data-index="index"
@@ -100,45 +100,16 @@
                         @after-enter="onAfterEnterItems"
                         @leave="onLeaveItems"
                     > -->
-                    <ul class="catalog-view__main-grid" v-for="page in items" :key="page.id">
-                        <li
-                            class="catalog-view__main-grid-item"
-                            v-for="item in page.items"
-                            :key="`${item.id}-${item.type}`"
-                            :class="{ [`catalog-view__main-grid-item--${item.type}`]: item.type }"
-                        >
-                            <catalog-product-card
-                                v-if="item.type === 'product'"
-                                class="catalog-view__main-grid-card"
-                                :product-id="item.id"
-                                :name="item.name"
-                                :type="item.type"
-                                :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                                :image="item.image"
-                                :price="item.price"
-                                :old-price="item.oldPrice"
-                                :tags="item.tags"
-                                :rating="item.rating"
-                                @addItem="onAddToCart($event)"
-                                @preview="onPreview(item.code)"
-                            />
-                            <catalog-banner-card
-                                v-else-if="item.type === 'banner'"
-                                class="catalog-view__main-grid-card"
-                                :banner-id="item.id"
-                                :title="item.title"
-                                :image="item.image"
-                                :upper-text="item.upperText"
-                                :btn-text="item.btnText"
-                            />
-                        </li>
-                    </ul>
+
+                    <catalog-product-list class="catalog-view__main-grid" :animation="!isTablet" />
+
                     <!-- </transition-group> -->
                     <div class="catalog-view__main-controls" v-if="pagesCount > 1">
                         <v-button
                             v-if="activePage < pagesCount"
                             class="btn--outline catalog-view__main-controls-btn"
                             @click="onShowMore"
+                            :disabled="showMore"
                         >
                             Показать ещё
                         </v-button>
@@ -229,8 +200,8 @@ import FilterButton from '../../components/FilterButton/FilterButton.vue';
 import TagItem from '../../components/TagItem/TagItem.vue';
 import CategoryTreeItem from '../../components/CategoryTreeItem/CategoryTreeItem.vue';
 import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
-import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
+import CatalogProductList from '../../components/CatalogProductList/CatalogProductList.vue';
 
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
 import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
@@ -245,7 +216,7 @@ import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import catalogModule, { NAME as CATALOG_MODULE, ITEMS, BANNER, CATEGORIES, BRAND } from '../../store/modules/Catalog';
-import { FETCH_ITEMS, FETCH_CATALOG_DATA, SET_LOAD } from '../../store/modules/Catalog/actions';
+import { FETCH_ITEMS, FETCH_CATALOG_DATA, SET_LOAD_PATH } from '../../store/modules/Catalog/actions';
 import {
     ACTIVE_TAGS,
     ACTIVE_CATEGORY,
@@ -268,8 +239,8 @@ import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
 
-const itemAnimationDelayDelta = 100;
-let counter = 0;
+// const itemAnimationDelayDelta = 100;
+// let counter = 0;
 
 export default {
     name: 'catalog',
@@ -289,7 +260,7 @@ export default {
         TagItem,
         CategoryTreeItem,
         CatalogFilter,
-        CatalogProductCard,
+        CatalogProductList,
         CatalogBannerCard,
 
         AddToCartModal,
@@ -336,6 +307,10 @@ export default {
         isTabletLg() {
             return this.$mq.tabletLg;
         },
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
     },
 
     watch: {
@@ -350,7 +325,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_CATALOG_DATA]),
+        ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_CATALOG_DATA, SET_LOAD_PATH]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
@@ -364,44 +339,44 @@ export default {
                 this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
         },
 
-        onBeforeEnterItems(el) {
-            el.dataset.index = counter;
-            counter += 1;
-            el.style.opacity = 0;
-        },
+        // onBeforeEnterItems(el) {
+        //     el.dataset.index = counter;
+        //     counter += 1;
+        //     el.style.opacity = 0;
+        // },
 
-        itemAnimation(el, delay) {
-            return new Promise((resolve, reject) => {
-                try {
-                    setTimeout(() => {
-                        requestAnimationFrame(() => {
-                            el.style.opacity = 1;
-                            resolve();
-                        });
-                    }, delay);
-                } catch (error) {
-                    reject(error);
-                }
-            });
-        },
+        // itemAnimation(el, delay) {
+        //     return new Promise((resolve, reject) => {
+        //         try {
+        //             setTimeout(() => {
+        //                 requestAnimationFrame(() => {
+        //                     el.style.opacity = 1;
+        //                     resolve();
+        //                 });
+        //             }, delay);
+        //         } catch (error) {
+        //             reject(error);
+        //         }
+        //     });
+        // },
 
-        async onEnterItems(el, done) {
-            const delay = el.dataset.index * itemAnimationDelayDelta;
-            await this.itemAnimation(el, delay);
-            done();
-        },
+        // async onEnterItems(el, done) {
+        //     const delay = el.dataset.index * itemAnimationDelayDelta;
+        //     await this.itemAnimation(el, delay);
+        //     done();
+        // },
 
-        onAfterEnterItems(el) {
-            delete el.dataset.index;
-            counter = 0;
-        },
+        // onAfterEnterItems(el) {
+        //     delete el.dataset.index;
+        //     counter = 0;
+        // },
 
-        onLeaveItems(el, done) {
-            requestAnimationFrame(() => {
-                el.style.opacity = 0;
-                done();
-            });
-        },
+        // onLeaveItems(el, done) {
+        //     requestAnimationFrame(() => {
+        //         el.style.opacity = 0;
+        //         done();
+        //     });
+        // },
 
         onClickDeleteTag(value) {
             let { routeSegments, code, brandCode } = this;
@@ -423,18 +398,6 @@ export default {
             this.$router.replace({
                 path: this.$route.path,
                 query: { ...this.$route.query, page: this.activePage + 1 },
-            });
-        },
-
-        onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
-        },
-
-        onAddToCart(item) {
-            this[CHANGE_MODAL_STATE]({
-                name: ADD_TO_CART_MODAL_NAME,
-                open: true,
-                state: { offerId: item.id, type: item.type },
             });
         },
 
@@ -481,6 +444,8 @@ export default {
                         top: MIN_SCROLL_VALUE + 1,
                         behavior: 'smooth',
                     });
+
+                if (showMore) setTimeout(() => (this.showMore = false), 200);
             } catch (error) {
                 this.$progress.fail();
                 $logger.error('debounce_fetchCatalog', error);
@@ -496,6 +461,7 @@ export default {
         // так как к моменту вызова экземпляр ещё не создан!
 
         const {
+            fullPath,
             params: { code: toCode, brandCode: toBrandCode, pathMatch },
             query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
                 page: 1,
@@ -510,11 +476,10 @@ export default {
 
         // регистрируем модуль, если такого нет
         registerModuleIfNotExists($store, CATALOG_MODULE, catalogModule);
-        const { load, brandCode, categoryCode } = $store.state[CATALOG_MODULE];
+        const { loadPath, brandCode, categoryCode } = $store.state[CATALOG_MODULE];
 
         // если все загружено, пропускаем
-        if (load && toCode === categoryCode && toBrandCode === brandCode)
-            next(vm => vm.$store.dispatch(`${CATALOG_MODULE}/${SET_LOAD}`, false));
+        if (loadPath === fullPath && toCode === categoryCode && toBrandCode === brandCode) next();
         else {
             const filter = computeFilterData(pathMatch, toCode, toBrandCode);
             let fetchMethod = null;
@@ -530,12 +495,13 @@ export default {
                     orderField,
                     orderDirection,
                 })
-                .then(() =>
+                .then(() => {
+                    $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
                         vm.setSortValue(orderField, orderDirection);
                         $progress.finish();
-                    })
-                )
+                    });
+                })
                 .catch(error => {
                     $progress.fail();
                     $logger.error(error);
@@ -554,7 +520,6 @@ export default {
         // Также имеется доступ в `this` к экземпляру компонента.
         if (this.showMore) {
             this.fetchCatalog(to, from, this.showMore);
-            this.showMore = false;
         } else this.debounce_fetchCatalog(to, from);
         next();
     },

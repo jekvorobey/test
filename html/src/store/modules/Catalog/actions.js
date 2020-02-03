@@ -7,7 +7,7 @@ import {
     SET_CATEGORIES,
     SET_BANNER,
     SET_BRAND,
-    SET_LOAD as M_SET_LOAD,
+    SET_LOAD_PATH as M_SET_LOAD_PATH,
     SET_CATEGORY_CODE,
     SET_BRAND_CODE,
 } from './mutations';
@@ -21,7 +21,7 @@ export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 export const FETCH_CATALOG_DATA = 'FETCH_CATALOG_DATA';
 export const FETCH_BRAND_DATA = 'FETCH_BRAND_DATA';
 
-export const SET_LOAD = 'SET_LOAD';
+export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 
 export default {
     [FETCH_BANNER]({ commit }, payload) {
@@ -60,9 +60,8 @@ export default {
     [FETCH_ITEMS]({ commit, state }, payload) {
         return getCatalogItems(payload)
             .then(data => {
-                if (payload.showMore)
-                    commit(SET_ITEMS_MORE, { id: payload.page, items: data.items, range: data.range });
-                else commit(SET_ITEMS, { id: payload.page, items: data.items, range: data.range });
+                if (payload.showMore) commit(SET_ITEMS_MORE, { items: data.items, range: data.range });
+                else commit(SET_ITEMS, { items: data.items, range: data.range });
             })
             .catch(error => {
                 $logger.error(`${FETCH_ITEMS} ${error}`);
@@ -70,8 +69,8 @@ export default {
             });
     },
 
-    [SET_LOAD]({ commit }, payload = false) {
-        commit(M_SET_LOAD, payload);
+    [SET_LOAD_PATH]({ commit }, payload) {
+        commit(M_SET_LOAD_PATH, payload);
     },
 
     [FETCH_BRAND]({ commit }, payload) {
@@ -90,7 +89,6 @@ export default {
         return dispatch(FETCH_ITEMS, payload).then(() => {
             commit(SET_BRAND_CODE, payload.brandCode);
             commit(SET_CATEGORY_CODE, payload.filter && payload.filter.category);
-            commit(M_SET_LOAD, true);
         });
     },
 };

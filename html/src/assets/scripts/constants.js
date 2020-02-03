@@ -48,6 +48,11 @@ export const cartItemTypes = Object.freeze({
     MASTERCLASS: 'masterclass',
 });
 
+export const catalogItemTypes = Object.freeze({
+    PRODUCT: 'product',
+    BANNER: 'banner',
+});
+
 export const receiveMethods = Object.freeze({
     DELIVERY: 1,
     EXPRESS: 2,
