@@ -83,8 +83,8 @@ export default {
     },
 
     beforeMount() {
-        // Выпилить при релизе
-        // this[LOGIN_BY_PASSWORD]({ login: '+73223223222', password: 'Sardaukar13' });
+        //Выпилить при релизе
+        this[LOGIN_BY_PASSWORD]({ login: '+71111111111', password: 'Sardaukar13' });
     },
 
     mounted() {

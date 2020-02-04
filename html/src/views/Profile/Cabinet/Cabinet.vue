@@ -162,18 +162,13 @@
         </info-panel>
 
         <transition name="fade">
-            <details-modal
-                v-show="isDetailsOpen"
-                v-if="$isServer || (isDetailsOpen && !isPortofiosOpen && !isProfilesOpen)"
-            />
-            <portfolio-modal
-                v-show="isPortofiosOpen"
-                v-if="$isServer || (isPortofiosOpen && !isDetailsOpen && !isProfilesOpen)"
-            />
-            <profile-modal
-                v-show="isProfilesOpen"
-                v-if="$isServer || (isProfilesOpen && !isDetailsOpen && !isPortofiosOpen)"
-            />
+            <details-modal v-if="$isServer || (isDetailsOpen && !isPortofiosOpen && !isProfilesOpen)" />
+        </transition>
+        <transition name="fade">
+            <portfolio-modal v-if="$isServer || (isPortofiosOpen && !isDetailsOpen && !isProfilesOpen)" />
+        </transition>
+        <transition name="fade">
+            <profile-modal v-if="$isServer || (isProfilesOpen && !isDetailsOpen && !isPortofiosOpen)" />
         </transition>
     </section>
 </template>

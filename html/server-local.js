@@ -219,7 +219,7 @@ const renderFunction = isProd
 app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());
 app.get('*', renderFunction);
-app.listen(port, host, () => logger.info(`server started at ${host}:${port}`));
+app.listen(port, host, () => logger.success(`server started at ${host}:${port}`));
 
 function onCleanup(signal) {
     return new Promise(resolve => {
@@ -229,7 +229,7 @@ function onCleanup(signal) {
 }
 
 function onFinally() {
-    logger.info('server shutted down');
+    logger.success('server shutted down');
 }
 
 gracefulShutdown(app, {
