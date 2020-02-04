@@ -11,16 +11,16 @@
                 {{ $t('header.links.catalog') }}
             </v-link>
         </div>
-        <v-link class="header-navigation-panel__item" to="/top">
+        <v-link class="header-navigation-panel__item" :to="{ name: 'ProductGroups', params: { type: 'new' } }">
             {{ $t('header.links.new') }}
         </v-link>
-        <v-link class="header-navigation-panel__item" to="/new">
+        <v-link class="header-navigation-panel__item" :to="{ name: 'ProductGroups', params: { type: 'promo' } }">
             {{ $t('header.links.stocks') }}
         </v-link>
-        <v-link class="header-navigation-panel__item" :to="{ name: 'Sets' }">
+        <v-link class="header-navigation-panel__item" :to="{ name: 'ProductGroups', params: { type: 'sets' } }">
             {{ $t('header.links.collections') }}
         </v-link>
-        <v-link class="header-navigation-panel__item" :to="{ name: 'Brands' }">
+        <v-link class="header-navigation-panel__item" :to="{ name: 'ProductGroups', params: { type: 'brands' } }">
             {{ $t('header.links.brands') }}
         </v-link>
         <v-link class="header-navigation-panel__item" to="/job">

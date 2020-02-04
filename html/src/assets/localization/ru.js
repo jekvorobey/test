@@ -105,6 +105,15 @@ const main = {
         },
     },
 
+    productGroups: {
+        title: {
+            new: 'Новинки',
+            promo: 'Акции',
+            sets: 'Подборки',
+            brands: 'Бренды',
+        },
+    },
+
     cart: {
         title: {
             like: 'Вам также могут понравиться',

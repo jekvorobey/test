@@ -56,7 +56,7 @@ export default {
 
     props: {
         items: {
-            type: Array,
+            type: [Array, Object],
             default() {
                 return [];
             },

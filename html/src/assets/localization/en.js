@@ -105,6 +105,15 @@ const main = {
         },
     },
 
+    productGroups: {
+        title: {
+            new: 'New',
+            promo: 'Stocks',
+            sets: 'Collections',
+            brands: 'Brands',
+        },
+    },
+
     cart: {
         title: {
             like: 'You may also like',

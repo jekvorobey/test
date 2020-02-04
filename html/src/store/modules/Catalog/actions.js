@@ -11,7 +11,6 @@ import {
     SET_CATEGORY_CODE,
     SET_BRAND_CODE,
 } from './mutations';
-import { getRandomIntInclusive } from '../../../util/helpers';
 
 export const FETCH_FILTERS = 'FETCH_FILTERS';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
@@ -60,8 +59,8 @@ export default {
     [FETCH_ITEMS]({ commit, state }, payload) {
         return getCatalogItems(payload)
             .then(data => {
-                if (payload.showMore) commit(SET_ITEMS_MORE, { items: data.items, range: data.range });
-                else commit(SET_ITEMS, { items: data.items, range: data.range });
+                if (payload.showMore) commit(SET_ITEMS_MORE, data);
+                else commit(SET_ITEMS, data);
             })
             .catch(error => {
                 $logger.error(`${FETCH_ITEMS} ${error}`);

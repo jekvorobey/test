@@ -5,7 +5,7 @@
                 <breadcrumb-item key="main" to="/">
                     Главная
                 </breadcrumb-item>
-                <breadcrumb-item key="Cabinet" :to="{ name: brandCode ? 'Brands' : 'Catalog' }">
+                <breadcrumb-item key="catalog" :to="{ path: brandCode ? '/brands' : '/catalog' }">
                     {{ brandCode ? 'Бренды' : 'Каталог' }}
                 </breadcrumb-item>
                 <breadcrumb-item v-if="brandCode" :key="brandCode" :to="generateBreadcrumbUrl(null)">
@@ -79,8 +79,7 @@
                         </filter-button>
                     </div>
 
-                    <!-- <transition-group tag="ul" class="catalog-view__main-tags" name="tag-item"> -->
-                    <ul class="catalog-view__main-tags" v-if="!isTabletLg">
+                    <transition-group v-if="!isTabletLg" tag="ul" class="catalog-view__main-tags" name="tag-item">
                         <tag-item
                             v-for="(tag, index) in activeTags"
                             :data-index="index"
@@ -88,22 +87,10 @@
                             :text="tag.name"
                             @delete="onClickDeleteTag(tag.segment)"
                         />
-                    </ul>
-                    <!-- </transition-group> -->
-
-                    <!-- <transition-group
-                        tag="ul"
-                        class="catalog-view__main-grid"
-                        name="catalog-item"
-                        @before-enter="onBeforeEnterItems"
-                        @enter="onEnterItems"
-                        @after-enter="onAfterEnterItems"
-                        @leave="onLeaveItems"
-                    > -->
+                    </transition-group>
 
                     <catalog-product-list class="catalog-view__main-grid" :animation="!isTablet" />
 
-                    <!-- </transition-group> -->
                     <div class="catalog-view__main-controls" v-if="pagesCount > 1">
                         <v-button
                             v-if="activePage < pagesCount"
@@ -239,9 +226,6 @@ import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
 
-// const itemAnimationDelayDelta = 100;
-// let counter = 0;
-
 export default {
     name: 'catalog',
 
@@ -338,45 +322,6 @@ export default {
             this.sortValue =
                 this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
         },
-
-        // onBeforeEnterItems(el) {
-        //     el.dataset.index = counter;
-        //     counter += 1;
-        //     el.style.opacity = 0;
-        // },
-
-        // itemAnimation(el, delay) {
-        //     return new Promise((resolve, reject) => {
-        //         try {
-        //             setTimeout(() => {
-        //                 requestAnimationFrame(() => {
-        //                     el.style.opacity = 1;
-        //                     resolve();
-        //                 });
-        //             }, delay);
-        //         } catch (error) {
-        //             reject(error);
-        //         }
-        //     });
-        // },
-
-        // async onEnterItems(el, done) {
-        //     const delay = el.dataset.index * itemAnimationDelayDelta;
-        //     await this.itemAnimation(el, delay);
-        //     done();
-        // },
-
-        // onAfterEnterItems(el) {
-        //     delete el.dataset.index;
-        //     counter = 0;
-        // },
-
-        // onLeaveItems(el, done) {
-        //     requestAnimationFrame(() => {
-        //         el.style.opacity = 0;
-        //         done();
-        //     });
-        // },
 
         onClickDeleteTag(value) {
             let { routeSegments, code, brandCode } = this;

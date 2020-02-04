@@ -1,4 +1,4 @@
-.sets-view {
+.product-groups-view {
     padding-bottom: calc(var(--gs) * 10);
 
     @media (--tablet-lg) {
