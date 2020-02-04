@@ -4,7 +4,7 @@ import {
     sendSMS,
     checkCode,
     registerByPassword,
-    addSocialAccount,
+    getSocialLink,
     logout,
     loginByPassword,
     loginBySocial,
@@ -14,7 +14,6 @@ import { SET_HAS_SESSION } from './mutations';
 import { $logger } from '../../../services/ServiceLocator';
 import { responseStatus } from '../../../assets/scripts/constants';
 
-export const LOGIN_BY_SOCIAL = 'LOGIN_BY_SOCIAL';
 export const LOGIN_BY_PASSWORD = 'LOGIN_BY_PASSWORD';
 export const LOGOUT = 'LOGOUT';
 export const REGISTER = 'REGISTER';
@@ -23,11 +22,11 @@ export const CHECK_SESSION = 'CHECK_SESSION';
 export const SEND_SMS = 'SEND_SMS';
 export const CHECK_CODE = 'CHECK_CODE';
 export const REGISTER_BY_PASSWORD = 'REGISTER_BY_PASSWORD';
-export const ADD_SOCIAL_ACCOUNT = 'ADD_SOCIAL_ACCOUNT';
+export const GET_SOCIAL_LINK = 'GET_SOCIAL_LINK';
 
 export default {
     [SEND_SMS]({ commit }, phone) {
-        return sendSMS(phone).then(({ status, error = 'invalid phone' }) => {
+        return sendSMS(phone).then(({ status, error = 'Invalid phone' }) => {
             if (status === true || status === responseStatus.OK) return;
             $logger.error(`${SEND_SMS}: ${error}`);
             return Promise.reject(error);
@@ -35,7 +34,7 @@ export default {
     },
 
     [CHECK_CODE]({ commit }, code) {
-        return checkCode(code).then(({ isCodeValid, status, error = 'invalid code' }) => {
+        return checkCode(code).then(({ isCodeValid, status, error = 'Invalid code' }) => {
             if (isCodeValid || status === true || status === responseStatus.OK) return isCodeValid;
             $logger.error(`${CHECK_CODE}: ${error}`);
             return Promise.reject(error);
@@ -52,31 +51,22 @@ export default {
                 return Promise.reject(error);
             })
             .catch(error => {
-                $logger.error(`${REGISTER_BY_PASSWORD}: ${error || 'something went wrong'}`);
+                $logger.error(`${REGISTER_BY_PASSWORD}: ${error || 'Something went wrong'}`);
             });
     },
 
-    [ADD_SOCIAL_ACCOUNT]({ commit }, payload) {
-        return Promise.resolve();
+    [GET_SOCIAL_LINK]({ commit }, { url, driver }) {
+        return getSocialLink(url, driver)
+            .then(({ url }) => url)
+            .catch(error => {
+                $logger.error(`${GET_SOCIAL_LINK}: ${error || 'Something went wrong'}`);
+            });
     },
 
     [LOGIN_BY_PASSWORD]({ commit }, payload) {
-        return loginByPassword(payload).then(({ status, error = 'Wrong password or login' }) => {
-            if (status === true || status === responseStatus.OK) {
-                commit(SET_HAS_SESSION, true);
-                return;
-            }
-            $logger.error(`${LOGIN_BY_PASSWORD}: ${error}`);
-            return Promise.reject(error);
+        return loginByPassword(payload).then(() => {
+            commit(SET_HAS_SESSION, true);
         });
-    },
-
-    [LOGIN_BY_SOCIAL]({ commit }, payload) {
-        return loginBySocial(payload)
-            .then(({ url }) => {
-                document.location.href = url;
-            })
-            .catch(error => $logger.error(`${LOGIN_BY_SOCIAL}: ${error}`));
     },
 
     [LOGOUT]({ commit }, payload) {

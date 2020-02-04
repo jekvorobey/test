@@ -100,7 +100,7 @@
 
                 <div v-if="!accepted" class="registration-modal__socials">
                     <div class="registration-modal__socials-list">
-                        <button class="registration-modal__socials-item">
+                        <button class="registration-modal__socials-item" @click="onRegisterBySocial('google')">
                             <svg
                                 width="14"
                                 height="14"
@@ -114,7 +114,7 @@
                                 />
                             </svg>
                         </button>
-                        <button class="registration-modal__socials-item">
+                        <button class="registration-modal__socials-item" @click="onRegisterBySocial('vkontakte')">
                             <svg
                                 width="16"
                                 height="10"
@@ -130,7 +130,7 @@
                                 />
                             </svg>
                         </button>
-                        <button class="registration-modal__socials-item">
+                        <button class="registration-modal__socials-item" @click="onRegisterBySocial('facebook')">
                             <svg
                                 width="8"
                                 height="18"
@@ -172,7 +172,7 @@ import validationMixin, { required, minLength, password, sameAs } from '../../pl
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
-import { SEND_SMS, CHECK_CODE, REGISTER_BY_PASSWORD } from '../../store/modules/Auth/actions';
+import { SEND_SMS, CHECK_CODE, REGISTER_BY_PASSWORD, GET_SOCIAL_LINK } from '../../store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
@@ -308,7 +308,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(AUTH_MODULE, [SEND_SMS, REGISTER_BY_PASSWORD, CHECK_CODE]),
+        ...mapActions(AUTH_MODULE, [SEND_SMS, REGISTER_BY_PASSWORD, CHECK_CODE, GET_SOCIAL_LINK]),
 
         startCounter() {
             this.stopCounter();
@@ -328,6 +328,16 @@ export default {
         onLogin() {
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
             this[CHANGE_MODAL_STATE]({ name: LOGIN_MODAL_NAME, open: true });
+        },
+
+        async onRegisterBySocial(driver) {
+            try {
+                const url = `${document.location.origin}/profile`;
+                const socialUrl = await this[GET_SOCIAL_LINK]({ url, driver });
+                document.location.href = socialUrl;
+            } catch (error) {
+                return;
+            }
         },
 
         async finishRegistration() {

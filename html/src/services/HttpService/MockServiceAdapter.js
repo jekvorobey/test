@@ -43,7 +43,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/auth/loginByPassword':
             case '/v1/auth/sendSMS':
             case '/v1/auth/checkCode':
-            case '/v1/auth/addSocialAccount':
+            case '/v1/auth/getSocialLink':
             case '/v1/auth/registerByPassword':
             case '/v1/auth/logout':
 

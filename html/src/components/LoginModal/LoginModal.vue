@@ -126,7 +126,7 @@ import validationMixin, { required, minLength, password } from '../../plugins/va
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
-import { LOGIN_BY_PASSWORD, LOGIN_BY_SOCIAL } from '../../store/modules/Auth/actions';
+import { LOGIN_BY_PASSWORD, GET_SOCIAL_LINK } from '../../store/modules/Auth/actions';
 
 import { NAME as CART_MODULE } from '../../store/modules/Cart';
 import { FETCH_CART_DATA } from '../../store/modules/Cart/actions';
@@ -234,7 +234,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(AUTH_MODULE, [LOGIN_BY_PASSWORD, LOGIN_BY_SOCIAL]),
+        ...mapActions(AUTH_MODULE, [LOGIN_BY_PASSWORD, GET_SOCIAL_LINK]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
 
         resetLoginValidation() {
@@ -256,6 +256,7 @@ export default {
                 await this[LOGIN_BY_PASSWORD]({ login: this.phone, password: this.password });
                 this[FETCH_CART_DATA]();
                 this.$router.push({ name: 'Cabinet' });
+                this.onClose();
             } catch (error) {
                 this.fail = true;
                 this.$v.fail.$touch();
@@ -264,8 +265,12 @@ export default {
 
         async onLoginBySocial(driver) {
             try {
-                await this[LOGIN_BY_SOCIAL]({ final_login_url: `${document.location.origin}/social-login`, driver });
-            } catch (error) {}
+                const url = `${document.location.origin}/profile`;
+                const socialUrl = await this[GET_SOCIAL_LINK]({ url, driver });
+                document.location.href = socialUrl;
+            } catch (error) {
+                return;
+            }
         },
 
         onSendPassword() {

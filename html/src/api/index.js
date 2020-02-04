@@ -11,15 +11,6 @@ export function loginByPassword(payload) {
     return $http.post('/v1/auth/loginByPassword', payload);
 }
 
-export function loginBySocial(payload) {
-    return $http.post('/v1/auth/loginBySocial', null, {
-        params: payload,
-        paramsSerializer(params) {
-            return qs.stringify(params, { encode: true });
-        },
-    });
-}
-
 export function logout() {
     return $http.post('/v1/auth/logout');
 }
@@ -36,8 +27,8 @@ export function registerByPassword(password) {
     return $http.post('/v1/auth/registerByPassword', { password });
 }
 
-export function addSocialAccount(id, driver, title) {
-    return $http.post('/v1/auth/addSocialAccount', { id, driver, title });
+export function getSocialLink(url, driver) {
+    return $http.post('/v1/auth/getSocialLink', { final_login_url: url, driver });
 }
 
 // search
