@@ -21,8 +21,7 @@ export function loginBySocial(payload) {
 }
 
 export function logout() {
-    return Promise.resolve();
-    //return $http.post('/v1/auth/logout', data);
+    return $http.post('/v1/auth/logout');
 }
 
 export function sendSMS(phone) {
@@ -33,16 +32,12 @@ export function checkCode(code) {
     return $http.post('/v1/auth/checkCode', { code });
 }
 
-export function setPassword(password) {
-    return $http.post('/v1/auth/setPassword', { password });
+export function registerByPassword(password) {
+    return $http.post('/v1/auth/registerByPassword', { password });
 }
 
 export function addSocialAccount(id, driver, title) {
     return $http.post('/v1/auth/addSocialAccount', { id, driver, title });
-}
-
-export function finishRegister() {
-    return $http.post('/v1/auth/finishRegister');
 }
 
 // search

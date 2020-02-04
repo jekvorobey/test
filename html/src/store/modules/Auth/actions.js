@@ -3,9 +3,8 @@ import {
     checkSession,
     sendSMS,
     checkCode,
-    setPassword,
+    registerByPassword,
     addSocialAccount,
-    finishRegister,
     logout,
     loginByPassword,
     loginBySocial,
@@ -23,14 +22,13 @@ export const CHECK_SESSION = 'CHECK_SESSION';
 
 export const SEND_SMS = 'SEND_SMS';
 export const CHECK_CODE = 'CHECK_CODE';
-export const SET_PASSWORD = 'SET_PASSWORD';
+export const REGISTER_BY_PASSWORD = 'REGISTER_BY_PASSWORD';
 export const ADD_SOCIAL_ACCOUNT = 'ADD_SOCIAL_ACCOUNT';
-export const FINISH_REGISTER = 'FINISH_REGISTER';
 
 export default {
     [SEND_SMS]({ commit }, phone) {
-        return sendSMS(phone).then(({ status, error = 'invalid phone', _debugCode }) => {
-            if (status === true || status === responseStatus.OK) return _debugCode;
+        return sendSMS(phone).then(({ status, error = 'invalid phone' }) => {
+            if (status === true || status === responseStatus.OK) return;
             $logger.error(`${SEND_SMS}: ${error}`);
             return Promise.reject(error);
         });
@@ -44,30 +42,22 @@ export default {
         });
     },
 
-    [SET_PASSWORD]({ commit }, password) {
-        return setPassword(password).catch(error => {
-            $logger.error(`${SET_PASSWORD}: ${error || 'something went wrong'}`);
-        });
-        // return setPassword(password).then(({ status, error = 'invalid password' }) => {
-        //     if (status === true ||status === responseStatus.OK) return;
-        //     $logger.error(`${SET_PASSWORD}: ${error}`);
-        //     return Promise.reject(error);
-        // });
+    [REGISTER_BY_PASSWORD]({ commit }, password) {
+        return registerByPassword(password)
+            .then(({ status, error = 'Invalid password' }) => {
+                if (status === true || status === responseStatus.OK) {
+                    commit(SET_HAS_SESSION, true);
+                    return;
+                }
+                return Promise.reject(error);
+            })
+            .catch(error => {
+                $logger.error(`${REGISTER_BY_PASSWORD}: ${error || 'something went wrong'}`);
+            });
     },
 
     [ADD_SOCIAL_ACCOUNT]({ commit }, payload) {
         return Promise.resolve();
-    },
-
-    [FINISH_REGISTER]({ commit }) {
-        return finishRegister().then(({ status, error = 'something went wrong' }) => {
-            if (status === true || status === responseStatus.OK) {
-                commit(SET_HAS_SESSION, true);
-                return;
-            }
-            $logger.error(`${FINISH_REGISTER}: ${error}`);
-            return Promise.reject(error);
-        });
     },
 
     [LOGIN_BY_PASSWORD]({ commit }, payload) {

@@ -9,7 +9,7 @@
                     </template>
 
                     <template v-else-if="!accepted">
-                        Мы отправили код на {{ displayPhone }}, введите его для регистрации.
+                        Мы отправили код на {{ rawPhone }}, введите его для регистрации.
                         <a @click.stop="onChangeNumber">Изменить</a>
                     </template>
 
@@ -22,11 +22,10 @@
                     <div v-if="!sent" class="registration-modal__form-phone">
                         <v-input-mask
                             class="registration-modal__form-input"
-                            v-model="phone"
-                            :display-value.sync="displayPhone"
+                            v-model="rawPhone"
                             placeholder="+7 ___ ___-__-__"
-                            mask="+7 ### ###-##-##"
-                            masked
+                            :raw="false"
+                            :options="maskOptions"
                             :error="phoneError"
                         >
                             Номер телефона
@@ -173,12 +172,17 @@ import validationMixin, { required, minLength, password, sameAs } from '../../pl
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
-import { SEND_SMS, CHECK_CODE, FINISH_REGISTER, SET_PASSWORD } from '../../store/modules/Auth/actions';
+import { SEND_SMS, CHECK_CODE, REGISTER_BY_PASSWORD } from '../../store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
+import _cloneDeep from 'lodash/cloneDeep';
+import { phoneMaskOptions } from '../../assets/scripts/constants';
+import { rawPhone } from '../../util/helpers';
 import './RegistrationModal.css';
+
+const maskOptions = _cloneDeep(phoneMaskOptions);
 
 export const NAME = 'registration-modal';
 
@@ -208,7 +212,7 @@ export default {
             sameAs: sameAs('password'),
         },
 
-        computedPhone: {
+        phone: {
             required,
             minLength: minLength(12),
         },
@@ -227,15 +231,11 @@ export default {
     },
 
     data() {
-        const phoneCode = '+7';
-
         return {
             sent: false,
             accepted: false,
 
-            phoneCode,
-            phone: `${phoneCode} `,
-            displayPhone: '',
+            rawPhone: null,
             phoneExists: false,
 
             code: null,
@@ -244,6 +244,8 @@ export default {
             passwordRepeat: null,
 
             counter: 59,
+
+            maskOptions,
         };
     },
 
@@ -251,6 +253,10 @@ export default {
         ...mapState(MODAL_MODULE, {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
+
+        phone() {
+            return rawPhone(this.rawPhone);
+        },
 
         header() {
             return this.accepted ? 'Создание пароля' : 'Регистрация';
@@ -260,19 +266,15 @@ export default {
             return this.$mq.tablet;
         },
 
-        computedPhone() {
-            return `${this.phoneCode}${this.phone}`;
-        },
-
         codeError() {
             if (this.$v.code.$dirty && !this.$v.code.required) return 'Обязательное поле';
             if (this.$v.accepted.$dirty && !this.$v.accepted.valid) return 'Неверный код';
         },
 
         phoneError() {
-            if (this.$v.computedPhone.$dirty) {
-                if (!this.$v.computedPhone.required) return 'Обязательное поле';
-                if (!this.$v.computedPhone.minLength) return 'Неверно введен номер';
+            if (this.$v.phone.$dirty) {
+                if (!this.$v.phone.required) return 'Обязательное поле';
+                if (!this.$v.phone.minLength) return 'Неверно введен номер';
             }
 
             if (this.$v.phoneExists.$dirty && !this.$v.phoneExists.exists) return 'Такой номер уже зарегистрирован';
@@ -295,7 +297,7 @@ export default {
     watch: {
         phone() {
             if (this.$v.phoneExists.$dirty) this.$v.phoneExists.$reset();
-            if (this.$v.computedPhone.$dirty) this.$v.computedPhone.$reset();
+            if (this.$v.phone.$dirty) this.$v.phone.$reset();
         },
 
         code() {
@@ -306,7 +308,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(AUTH_MODULE, [SEND_SMS, FINISH_REGISTER, SET_PASSWORD, CHECK_CODE]),
+        ...mapActions(AUTH_MODULE, [SEND_SMS, REGISTER_BY_PASSWORD, CHECK_CODE]),
 
         startCounter() {
             this.stopCounter();
@@ -330,15 +332,9 @@ export default {
 
         async finishRegistration() {
             try {
-                await this[SET_PASSWORD](this.password);
-            } catch (error) {
-                return;
-            }
-
-            try {
-                await this[FINISH_REGISTER]();
-                this.$router.push({ name: 'Cabinet' });
+                await this[REGISTER_BY_PASSWORD](this.password);
                 this.onClose();
+                this.$router.push({ name: 'Cabinet' });
             } catch (error) {
                 return;
             }
@@ -355,7 +351,7 @@ export default {
 
         async sendSms() {
             try {
-                this.code = await this[SEND_SMS](this.computedPhone);
+                this.code = await this[SEND_SMS](this.phone);
                 this.startCounter();
                 this.phoneExists = false;
                 this.sent = true;
@@ -377,8 +373,8 @@ export default {
                 this.$v.code.$touch();
                 if (!this.$v.code.$invalid) this.checkCode();
             } else {
-                this.$v.computedPhone.$touch();
-                if (!this.$v.computedPhone.$invalid) this.sendSms();
+                this.$v.phone.$touch();
+                if (!this.$v.phone.$invalid) this.sendSms();
             }
         },
 

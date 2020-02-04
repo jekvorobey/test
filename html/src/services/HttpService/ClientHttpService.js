@@ -24,13 +24,12 @@ export default class ClientHttpService extends HttpServiceBase {
         return new Promise(async (resolve, reject) => {
             try {
                 const resp = await this.instance.get(path, config);
-                if (resp.status === 200 || resp.status === 304) resolve(resp.data);
+                if (resp.status >= 200 || resp.status <= 304) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
                 reject(error);
             }
         });
-        // return this.instance.get(path, config);
     }
 
     /**
@@ -43,13 +42,12 @@ export default class ClientHttpService extends HttpServiceBase {
         return new Promise(async (resolve, reject) => {
             try {
                 const resp = await this.instance.post(path, data, config);
-                if (resp.status === 200 || resp.status === 304) resolve(resp.data);
+                if (resp.status >= 200 || resp.status <= 304) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
                 reject(error);
             }
         });
-        // return this.instance.post(path, config);
     }
 
     /**
@@ -62,7 +60,7 @@ export default class ClientHttpService extends HttpServiceBase {
         return new Promise(async (resolve, reject) => {
             try {
                 const resp = await this.instance.delete(path, config);
-                if (resp.status === 200 || resp.status === 204) resolve(resp.data);
+                if (resp.status >= 200 || resp.status <= 204) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
                 reject(error);
@@ -80,7 +78,7 @@ export default class ClientHttpService extends HttpServiceBase {
         return new Promise(async (resolve, reject) => {
             try {
                 const resp = await this.instance.put(path, data, config);
-                if (resp.status === 200 || resp.status === 204) resolve(resp.data);
+                if (resp.status >= 200 || resp.status <= 204) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
                 reject(error);

@@ -108,6 +108,13 @@ export const currencySymbol = Object.freeze({
     EUR: '&#128;',
 });
 
+export const phoneMaskOptions = Object.freeze({
+    prefix: '+7',
+    delimiters: [' ', ' ', '-', '-'],
+    blocks: [2, 3, 3, 2, 2],
+    numericOnly: true,
+});
+
 export const baseChartOptions = Object.freeze({
     chart: {
         toolbar: {

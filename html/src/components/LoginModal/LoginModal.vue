@@ -5,7 +5,7 @@
                 <h3 class="login-modal__hl">{{ header }}</h3>
 
                 <form v-if="!restore" class="login-modal__form" @submit.prevent="onSubmit">
-                    <v-input-mask v-model="phone" mask="+7 ### ###-##-##" masked :error="phoneError">
+                    <v-input-mask v-model="phone" :options="maskOptions" :error="phoneError">
                         Номер телефона
                     </v-input-mask>
                     <v-password v-model="password" :error="passwordError">
@@ -27,12 +27,7 @@
                     </p>
 
                     <form class="login-modal__form" @submit.prevent="onSendPassword">
-                        <v-input-mask
-                            v-model="restorePhone"
-                            :display-value.sync="displayRestorePhone"
-                            mask="+7 ### ###-##-##"
-                            masked
-                        >
+                        <v-input-mask v-model="restorePhone" :options="maskOptions">
                             Номер телефона
                         </v-input-mask>
                         <div class="login-modal__form-submit">
@@ -139,7 +134,11 @@ import { FETCH_CART_DATA } from '../../store/modules/Cart/actions';
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
+import _cloneDeep from 'lodash/cloneDeep';
+import { phoneMaskOptions } from '../../assets/scripts/constants';
 import './LoginModal.css';
+
+const maskOptions = _cloneDeep(phoneMaskOptions);
 
 export const NAME = 'login-modal';
 
@@ -157,7 +156,7 @@ export default {
     },
 
     validations: {
-        computedPhone: {
+        phone: {
             required,
             minLength: minLength(12),
         },
@@ -174,12 +173,8 @@ export default {
     },
 
     data() {
-        const phoneCode = '+7';
-
         return {
-            phoneCode,
-            phone: `${phoneCode} `,
-            displayPhone: '',
+            phone: '',
             fail: true,
 
             password: '',
@@ -189,6 +184,8 @@ export default {
 
             restore: false,
             sent: false,
+
+            maskOptions,
         };
     },
 
@@ -201,14 +198,10 @@ export default {
             return this.restore ? 'Получить новый пароль' : 'Войти';
         },
 
-        computedPhone() {
-            return `${this.phoneCode}${this.phone}`;
-        },
-
         phoneError() {
-            if (this.$v.computedPhone.$dirty) {
-                if (!this.$v.computedPhone.required) return 'Обязательное поле';
-                if (!this.$v.computedPhone.minLength) return 'Неверно введен номер';
+            if (this.$v.phone.$dirty) {
+                if (!this.$v.phone.required) return 'Обязательное поле';
+                if (!this.$v.phone.minLength) return 'Неверно введен номер';
             }
 
             if (this.$v.fail.$dirty && !this.$v.fail.valid) return 'Неверный логин и/или пароль';
@@ -230,7 +223,7 @@ export default {
             }
         },
 
-        computedPhone(value) {
+        phone(value) {
             this.resetLoginValidation();
         },
 
@@ -245,22 +238,22 @@ export default {
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
 
         resetLoginValidation() {
-            if (this.$v.computedPhone.$dirty) this.$v.computedPhone.$reset();
+            if (this.$v.phone.$dirty) this.$v.phone.$reset();
             if (this.$v.password.$dirty) this.$v.password.$reset();
             if (this.$v.fail.$dirty) this.$v.fail.$reset();
         },
 
         async onSubmit() {
             if (!this.restore) {
-                this.$v.computedPhone.$touch();
+                this.$v.phone.$touch();
                 this.$v.password.$touch();
-                if (!this.$v.computedPhone.$invalid && !this.$v.password.$invalid) this.loginByPassword();
+                if (!this.$v.phone.$invalid && !this.$v.password.$invalid) this.loginByPassword();
             }
         },
 
         async loginByPassword() {
             try {
-                await this[LOGIN_BY_PASSWORD]({ login: this.computedPhone, password: this.password });
+                await this[LOGIN_BY_PASSWORD]({ login: this.phone, password: this.password });
                 this[FETCH_CART_DATA]();
                 this.$router.push({ name: 'Cabinet' });
             } catch (error) {

@@ -2,6 +2,7 @@ export default {
     props: {
         error: String,
     },
+
     computed: {
         inputListeners() {
             // `Object.assign` объединяет объекты вместе, чтобы получить новый объект
@@ -18,6 +19,7 @@ export default {
             );
         },
     },
+
     methods: {
         input(e) {
             this.$emit('input', e.target.value);

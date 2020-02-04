@@ -27,14 +27,14 @@ export function isTouch() {
 }
 
 /**
- * Получить только числа из строки.
+ * Получить только числа из строки и +.
  *
  * @param  {string} str Исходная строка.
  * @return {string} Str.
  */
 export function rawPhone(str) {
     if (!_isString(str)) return null;
-    return str.match(/\d+/g).join('');
+    return str.replace(/(?<!^\s*)\+|[^\d+]+/g, '');
 }
 
 /**
