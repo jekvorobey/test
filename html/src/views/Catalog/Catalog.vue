@@ -393,8 +393,7 @@ export default {
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
             } catch (error) {
                 this.$progress.fail();
-                $logger.error('debounce_fetchCatalog', error);
-                this.$router.replace({ name: '404' });
+                $logger.error('fetchCatalog', error);
                 this.$progress.finish();
             }
         },
@@ -449,9 +448,9 @@ export default {
                 })
                 .catch(error => {
                     $progress.fail();
-                    $logger.error(error);
-                    next({ name: '404', replace: true });
+                    $logger.error('beforeRouteEnter', error);
                     $progress.finish();
+                    next();
                 });
         }
     },
@@ -463,9 +462,16 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
+
         if (this.showMore) {
             this.fetchCatalog(to, from, this.showMore);
         } else this.debounce_fetchCatalog(to, from);
+        next();
+    },
+
+    beforeRouteLeave(to, from, next) {
+        // При уходе с роута отменяем запрос
+        this.debounce_fetchCatalog.cancel();
         next();
     },
 

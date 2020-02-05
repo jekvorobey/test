@@ -18,7 +18,7 @@
 
             <section class="section brands-view__section">
                 <div class="container">
-                    <h1 class="brands-view__section-hl">Бренды</h1>
+                    <h1 class="brands-view__section-hl">{{ $t(`productGroups.title.${type}`) }}</h1>
                     <group-list class="brands-view__brands" :items="brandsCatalog" :columns="columns" />
                 </div>
             </section>
@@ -47,7 +47,6 @@
                     >
                         Показать ещё
                     </v-button>
-
                     <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
                 </div>
             </div>
@@ -215,7 +214,7 @@ export default {
             $store
                 .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, { type: toType, page })
                 .then(() => {
-                    this[SET_LOAD_PATH](fullPath);
+                    $store.dispatch(`${PRODUCT_GROUPS_MODULE}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
                         $progress.finish();
                     });

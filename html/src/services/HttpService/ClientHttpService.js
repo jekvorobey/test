@@ -1,5 +1,6 @@
 import axios from 'axios';
 import HttpServiceBase from './base';
+import { $logger } from '../ServiceLocator';
 // import { cacheAdapterEnhancer } from 'axios-extensions';
 
 export default class ClientHttpService extends HttpServiceBase {
@@ -26,8 +27,8 @@ export default class ClientHttpService extends HttpServiceBase {
                 const resp = await this.instance.get(path, config);
                 if (resp.status >= 200 || resp.status <= 304) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
-            } catch (error) {
-                reject(error);
+            } catch (thrown) {
+                reject({ isCancel: axios.isCancel(thrown), message: thrown.message });
             }
         });
     }
@@ -44,8 +45,8 @@ export default class ClientHttpService extends HttpServiceBase {
                 const resp = await this.instance.post(path, data, config);
                 if (resp.status >= 200 || resp.status <= 304) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
-            } catch (error) {
-                reject(error);
+            } catch (thrown) {
+                reject({ isCancel: axios.isCancel(thrown), message: thrown.message });
             }
         });
     }
@@ -62,8 +63,8 @@ export default class ClientHttpService extends HttpServiceBase {
                 const resp = await this.instance.delete(path, config);
                 if (resp.status >= 200 || resp.status <= 204) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
-            } catch (error) {
-                reject(error);
+            } catch (thrown) {
+                reject({ isCancel: axios.isCancel(thrown), message: thrown.message });
             }
         });
     }
@@ -80,8 +81,8 @@ export default class ClientHttpService extends HttpServiceBase {
                 const resp = await this.instance.put(path, data, config);
                 if (resp.status >= 200 || resp.status <= 204) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
-            } catch (error) {
-                reject(error);
+            } catch (thrown) {
+                reject({ isCancel: axios.isCancel(thrown), message: thrown.message });
             }
         });
     }

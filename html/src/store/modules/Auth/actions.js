@@ -26,11 +26,7 @@ export const GET_SOCIAL_LINK = 'GET_SOCIAL_LINK';
 
 export default {
     [SEND_SMS]({ commit }, phone) {
-        return sendSMS(phone).then(({ status, error = 'Invalid phone' }) => {
-            if (status === true || status === responseStatus.OK) return;
-            $logger.error(`${SEND_SMS}: ${error}`);
-            return Promise.reject(error);
-        });
+        return sendSMS(phone);
     },
 
     [CHECK_CODE]({ commit }, code) {
@@ -43,12 +39,8 @@ export default {
 
     [REGISTER_BY_PASSWORD]({ commit }, password) {
         return registerByPassword(password)
-            .then(({ status, error = 'Invalid password' }) => {
-                if (status === true || status === responseStatus.OK) {
-                    commit(SET_HAS_SESSION, true);
-                    return;
-                }
-                return Promise.reject(error);
+            .then(() => {
+                commit(SET_HAS_SESSION, true);
             })
             .catch(error => {
                 $logger.error(`${REGISTER_BY_PASSWORD}: ${error || 'Something went wrong'}`);

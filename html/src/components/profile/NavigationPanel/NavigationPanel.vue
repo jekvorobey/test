@@ -86,8 +86,9 @@ export default {
         async onLogout() {
             try {
                 await this[LOGOUT]();
-                this.$router.replace({ name: 'Landing' });
-            } catch (error) {}
+            } catch (error) {
+                $logger.error(error);
+            }
         },
     },
 };

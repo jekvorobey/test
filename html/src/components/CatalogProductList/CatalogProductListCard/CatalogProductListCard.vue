@@ -9,7 +9,7 @@
             <v-picture v-if="item.image && item.image.id" alt="">
                 <source :data-srcset="bigImg" type="image/webp" media="(min-width: 480px)" />
                 <source :data-srcset="smallImg" type="image/webp" media="(max-width: 479px)" />
-                <img class="v-picture__img" :src="defaultImg" alt="" />
+                <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
             </v-picture>
             <v-svg v-else id="catalog-product-list-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-list-card__controls">

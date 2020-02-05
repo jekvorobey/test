@@ -43,11 +43,11 @@
             (Ambystomidae) отряда хвостатых (Caudata).
         </p>
         <br />
-        <b>
+        <strong>
             Основной текст &lt;b&gt;<br />
             Futura PT Bold 16px / 24px <br />
             Аксоло́тль (Axolotl) — неотеническая личинка
-        </b>
+        </strong>
         <br />
         <br />
 

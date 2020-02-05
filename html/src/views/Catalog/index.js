@@ -1,3 +1,5 @@
+import { productGroupTypes } from '../../assets/scripts/constants';
+
 /**
  * @Module
  */
@@ -13,7 +15,7 @@ export default {
      */
     routes: [
         {
-            path: '/catalog/:code?/filters/*',
+            path: `/${productGroupTypes.CATALOG}/:code?/filters/*`,
             component: CatalogAsync,
             meta: {
                 skipScroll: true,
@@ -21,21 +23,21 @@ export default {
         },
         {
             name: 'Catalog',
-            path: '/catalog/:code?',
+            path: `/${productGroupTypes.CATALOG}/:code?`,
             component: CatalogAsync,
             meta: {
                 skipScroll: true,
             },
         },
         {
-            path: '/brands/:brandCode/:code?/filters/*',
+            path: `/${productGroupTypes.BRANDS}/:brandCode/:code?/filters/*`,
             component: CatalogAsync,
             meta: {
                 skipScroll: true,
             },
         },
         {
-            path: '/brands/:brandCode/:code?',
+            path: `/${productGroupTypes.BRANDS}/:brandCode/:code?`,
             component: CatalogAsync,
             meta: {
                 skipScroll: true,

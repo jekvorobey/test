@@ -5,6 +5,11 @@
 export const MIN_SCROLL_VALUE = 1;
 
 /**
+ * Сообщение при отмене запроса
+ */
+export const REQUEST_CANCEL_MESSAGE = 'Request has been canceled';
+
+/**
  * Имена сервисов
  */
 export const injectionType = Object.freeze({
@@ -49,6 +54,7 @@ export const cartItemTypes = Object.freeze({
 });
 
 export const productGroupTypes = Object.freeze({
+    CATALOG: 'catalog',
     NEW: 'new',
     PROMO: 'promo',
     SETS: 'sets',

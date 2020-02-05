@@ -39,7 +39,7 @@ import { SCROLL, CATEGORIES } from '../store';
 import { SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN } from '../store/actions';
 
 import { NAME as CART_MODULE, CART_ITEMS } from '../store/modules/Cart';
-import { FETCH_CART_DATA } from '../store/modules/Cart/actions';
+import { FETCH_CART_DATA, CLEAR_CART_DATA } from '../store/modules/Cart/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '../store/modules/Auth';
 import { CHECK_SESSION, LOGIN_BY_PASSWORD } from '../store/modules/Auth/actions';
@@ -61,13 +61,23 @@ export default {
 
     methods: {
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN]),
-        ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
+        ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
         ...mapActions(AUTH_MODULE, [CHECK_SESSION, LOGIN_BY_PASSWORD]),
 
         onScroll() {
             this[SET_SCROLL](
                 document.body.scrollTop > MIN_SCROLL_VALUE || document.documentElement.scrollTop > MIN_SCROLL_VALUE
             );
+        },
+    },
+
+    watch: {
+        hasSession(value) {
+            if (value) this[FETCH_CART_DATA]();
+            else {
+                this[CLEAR_CART_DATA]();
+                this.$router.replace({ name: 'Landing' });
+            }
         },
     },
 
@@ -83,8 +93,7 @@ export default {
     },
 
     beforeMount() {
-        //Выпилить при релизе
-        this[LOGIN_BY_PASSWORD]({ login: '+71111111111', password: 'Sardaukar13' });
+        // this[LOGIN_BY_PASSWORD]({ login: '+71111111111', password: 'Sardaukar13' }); //Выпилить при релизе
     },
 
     mounted() {

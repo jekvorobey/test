@@ -61,7 +61,7 @@
                         </div>
                         <div class="registration-modal__form-timer">
                             <span v-if="counter !== 0">
-                                Получить новый код можно через <b>{{ counter }} сек.</b>
+                                Получить новый код можно через <strong>{{ counter }} сек.</strong>
                             </span>
                             <v-link class="registration-modal__form-repeat" v-else tag="button" @click.stop="sendSms">
                                 Отправить новый код

@@ -62,9 +62,13 @@ export default {
                 if (payload.showMore) commit(SET_ITEMS_MORE, data);
                 else commit(SET_ITEMS, data);
             })
-            .catch(error => {
-                $logger.error(`${FETCH_ITEMS} ${error}`);
-                return [];
+            .catch(thrown => {
+                if (thrown && thrown.isCancel === true) $logger.warn(`${FETCH_ITEMS} ${thrown.message}`);
+                else if (thrown && thrown.isCancel === false) $logger.error(`${FETCH_ITEMS} ${thrown.message}`);
+                else {
+                    $logger.error(`${FETCH_ITEMS} ${thrown}`);
+                    throw thrown;
+                }
             });
     },
 
