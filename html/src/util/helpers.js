@@ -34,7 +34,7 @@ export function isTouch() {
  */
 export function rawPhone(str) {
     if (!_isString(str)) return null;
-    return str.replace(/(?<!^\s*)\+|[^\d+]+/g, '');
+    return str.match(/\d+/g).join('');
 }
 
 /**
