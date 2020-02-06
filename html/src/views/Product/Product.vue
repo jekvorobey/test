@@ -625,7 +625,7 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '../../util/store';
 import { generatePictureSourcePath } from '../../util/images';
-import { breakpoints } from '../../assets/scripts/constants';
+import { breakpoints, productGroupTypes } from '../../assets/scripts/constants';
 import productBrand1 from '../../assets/images/mock/brandProduct1.png';
 
 import { generateCategoryUrl } from '../../util/catalog';
@@ -817,7 +817,7 @@ export default {
         },
 
         generateBreadcrumbUrl(code) {
-            return { path: generateCategoryUrl(null, code) };
+            return { path: generateCategoryUrl(productGroupTypes.CATALOG, null, code) };
         },
 
         onPreview(code) {
