@@ -395,9 +395,10 @@ export default {
                     });
 
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
-            } catch (error) {
+            } catch (thrown) {
+                if (thrown && thrown.isCancel === true) return;
                 this.$progress.fail();
-                $logger.error('fetchCatalog', error);
+                $logger.error('fetchCatalog', thrown);
                 this.$progress.finish();
             }
         },
@@ -448,9 +449,10 @@ export default {
                         $progress.finish();
                     });
                 })
-                .catch(error => {
+                .catch(thrown => {
+                    if (thrown && thrown.isCancel === true) return next();
                     $progress.fail();
-                    $logger.error('beforeRouteEnter', error);
+                    $logger.error('beforeRouteEnter', thrown);
                     $progress.finish();
                     next();
                 });
