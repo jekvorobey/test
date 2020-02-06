@@ -35,6 +35,7 @@
                         :key="item.id"
                         :title="item.name"
                         :image="item.image"
+                        :to="`/${type}/${item.code}`"
                         button-text="Смотреть товары"
                     />
                 </ul>

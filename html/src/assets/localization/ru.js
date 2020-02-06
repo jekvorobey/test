@@ -107,9 +107,10 @@ const main = {
 
     productGroups: {
         title: {
+            catalog: 'Каталог',
             new: 'Новинки',
             promo: 'Акции',
-            sets: 'Подборки',
+            sets: 'Подборки товаров',
             brands: 'Бренды',
         },
     },

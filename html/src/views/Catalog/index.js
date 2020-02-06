@@ -15,7 +15,7 @@ export default {
      */
     routes: [
         {
-            path: `/${productGroupTypes.CATALOG}/:code?/filters/*`,
+            path: `/:type(${productGroupTypes.CATALOG})/:code?/filters/*`,
             component: CatalogAsync,
             meta: {
                 skipScroll: true,
@@ -23,21 +23,21 @@ export default {
         },
         {
             name: 'Catalog',
-            path: `/${productGroupTypes.CATALOG}/:code?`,
+            path: `/:type(${productGroupTypes.CATALOG})/:code?`,
             component: CatalogAsync,
             meta: {
                 skipScroll: true,
             },
         },
         {
-            path: `/${productGroupTypes.BRANDS}/:brandCode/:code?/filters/*`,
+            path: `/:type(${productGroupTypes.BRANDS}|${productGroupTypes.PROMO}|${productGroupTypes.SETS})/:entityCode/:code?/filters/*`,
             component: CatalogAsync,
             meta: {
                 skipScroll: true,
             },
         },
         {
-            path: `/${productGroupTypes.BRANDS}/:brandCode/:code?`,
+            path: `/:type(${productGroupTypes.BRANDS}|${productGroupTypes.PROMO}|${productGroupTypes.SETS})/:entityCode/:code?`,
             component: CatalogAsync,
             meta: {
                 skipScroll: true,

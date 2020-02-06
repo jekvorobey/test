@@ -107,9 +107,10 @@ const main = {
 
     productGroups: {
         title: {
+            catalog: 'Catalog',
             new: 'New',
             promo: 'Stocks',
-            sets: 'Collections',
+            sets: 'Product Sets',
             brands: 'Brands',
         },
     },

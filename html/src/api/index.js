@@ -52,6 +52,15 @@ export function getProductGroups({ type, page = 1 }) {
     });
 }
 
+export function getProductGroup(code) {
+    return $http.get('/v1/catalog/product-group', {
+        params: { code },
+        paramsSerializer(params) {
+            return qs.stringify(params, { encode: false });
+        },
+    });
+}
+
 export function getProducts({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
     return $http.get('/v1/catalog/products', {
         params: { filter, page, orderField, orderDirection },
@@ -78,7 +87,7 @@ export function getCatalogItems({ filter, orderField = 'price', orderDirection =
 
 export function getFilters(data) {
     return $http.get('/v1/catalog/filter', {
-        params: data,
+        params: { ...data, needBrands: 1 },
         paramsSerializer(params) {
             return qs.stringify(params, { encode: false });
         },
@@ -86,7 +95,7 @@ export function getFilters(data) {
 }
 
 export function getCategories(data) {
-    return $http.get('/v1/categories', data);
+    return $http.get('/v1/categories');
 }
 
 export function getBanners(data) {

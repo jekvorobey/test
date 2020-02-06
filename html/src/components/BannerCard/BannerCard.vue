@@ -2,7 +2,7 @@
     <component :is="tag" class="banner-card">
         <div class="banner-card__img">
             <v-picture :image="image" />
-            <v-button class="btn--outline banner-card__img-btn" to>{{ buttonText }}</v-button>
+            <v-button class="btn--outline banner-card__img-btn" :to="to">{{ buttonText }}</v-button>
         </div>
         <div class="banner-card__title">{{ title }}</div>
     </component>
@@ -37,6 +37,11 @@ export default {
 
         image: {
             type: [Object, String],
+        },
+
+        to: {
+            type: [Object, String],
+            default: '/',
         },
 
         buttonText: {

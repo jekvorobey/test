@@ -5,11 +5,11 @@
                 <breadcrumb-item key="main" to="/">
                     Главная
                 </breadcrumb-item>
-                <breadcrumb-item key="catalog" :to="{ path: brandCode ? '/brands' : '/catalog' }">
-                    {{ brandCode ? 'Бренды' : 'Каталог' }}
+                <breadcrumb-item :key="type" :to="breadcrumbRootUrl">
+                    {{ $t(`productGroups.title.${type}`) }}
                 </breadcrumb-item>
-                <breadcrumb-item v-if="brandCode" :key="brandCode" :to="generateBreadcrumbUrl(null)">
-                    {{ brand && brand.name }}
+                <breadcrumb-item v-if="entityCode" :key="entityCode" :to="generateBreadcrumbUrl(null)">
+                    {{ productGroup && productGroup.name }}
                 </breadcrumb-item>
                 <breadcrumb-item
                     v-for="category in activeCategories"
@@ -21,12 +21,12 @@
             </breadcrumbs>
 
             <catalog-banner-card
-                v-if="brandCode && brand"
+                v-if="entityCode && productGroup"
                 class="catalog-view__brand"
-                :banner-id="brand.id"
-                :bottom-text="brand.description"
-                :title="brand.name"
-                :image="brand.image"
+                :banner-id="productGroup.id"
+                :bottom-text="productGroup.description"
+                :title="productGroup.name"
+                :image="productGroup.image"
             />
 
             <catalog-banner-card
@@ -202,8 +202,14 @@ import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
-import catalogModule, { NAME as CATALOG_MODULE, ITEMS, BANNER, CATEGORIES, BRAND } from '../../store/modules/Catalog';
-import { FETCH_ITEMS, FETCH_CATALOG_DATA, SET_LOAD_PATH } from '../../store/modules/Catalog/actions';
+import catalogModule, {
+    NAME as CATALOG_MODULE,
+    ITEMS,
+    BANNER,
+    CATEGORIES,
+    PRODUCT_GROUP,
+} from '../../store/modules/Catalog';
+import { FETCH_ITEMS, SET_LOAD_PATH, FETCH_DATA_BY_TYPE } from '../../store/modules/Catalog/actions';
 import {
     ACTIVE_TAGS,
     ACTIVE_CATEGORY,
@@ -213,15 +219,9 @@ import {
     ACTIVE_CATEGORIES,
 } from '../../store/modules/Catalog/getters';
 
-import {
-    concatCatalogRoutePath,
-    concatBrandRoutePath,
-    generateCategoryUrl,
-    mapFilterSegments,
-    computeFilterData,
-} from '../../util/catalog';
+import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '../../util/catalog';
 import { registerModuleIfNotExists } from '../../util/store';
-import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants';
+import { MIN_SCROLL_VALUE, productGroupTypes } from '../../assets/scripts/constants';
 import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
@@ -277,16 +277,22 @@ export default {
             ROUTE_SEGMENTS,
             ACTIVE_CATEGORIES,
         ]),
-        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, BRAND]),
+        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP]),
         ...mapState(MODAL_MODULE, {
             isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
             isAddToCartOpen: state =>
                 state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
         }),
         ...mapState('route', {
+            type: state => state.params.type,
             code: state => state.params.code,
-            brandCode: state => state.params.brandCode,
+            entityCode: state => state.params.entityCode,
         }),
+
+        breadcrumbRootUrl() {
+            const { type } = this;
+            return { name: type === productGroupTypes.CATALOG ? 'Catalog' : 'ProductGroups', params: { type } };
+        },
 
         isTabletLg() {
             return this.$mq.tabletLg;
@@ -309,13 +315,13 @@ export default {
     },
 
     methods: {
-        ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_CATALOG_DATA, SET_LOAD_PATH]),
+        ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_DATA_BY_TYPE, SET_LOAD_PATH]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
-        generateBreadcrumbUrl(code) {
-            const { brandCode } = this;
-            return { path: generateCategoryUrl(brandCode, code) };
+        generateBreadcrumbUrl(categoryCode) {
+            const { type, entityCode } = this;
+            return { path: generateCategoryUrl(type, entityCode, categoryCode) };
         },
 
         setSortValue(field, direction) {
@@ -324,17 +330,14 @@ export default {
         },
 
         onClickDeleteTag(value) {
-            let { routeSegments, code, brandCode } = this;
+            let { type, code, entityCode, routeSegments } = this;
 
             if (!routeSegments.includes(value)) return;
             else {
                 const index = routeSegments.indexOf(value);
                 if (index !== -1) routeSegments.splice(index, 1);
             }
-            const path = brandCode
-                ? concatBrandRoutePath(brandCode, code, routeSegments)
-                : concatCatalogRoutePath(code, routeSegments);
-
+            const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
             this.$router.replace({ path });
         },
 
@@ -354,7 +357,7 @@ export default {
         async fetchCatalog(to, from, showMore) {
             try {
                 const {
-                    params: { code: toCode, brandCode: toBrandCode, pathMatch },
+                    params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
                     query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
                         page: 1,
                         orderField: 'price',
@@ -363,18 +366,19 @@ export default {
                 } = to;
 
                 const {
-                    params: { code: fromCode, brandCode: fromBrandCode },
+                    params: { code: fromCode, entityCode: fromEntityCode, type: fromType },
                 } = from;
 
                 const { query: { page: fromPage = 1 } = { page: 1 } } = from;
-                const filter = computeFilterData(pathMatch, toCode, toBrandCode);
+                const filter = computeFilterData(pathMatch, toCode);
 
                 this.$progress.start();
-                if (toCode === fromCode && fromBrandCode === toBrandCode)
+                if (toType === fromType && toCode === fromCode && toEntityCode === fromEntityCode)
                     await this[FETCH_ITEMS]({ filter, orderField, orderDirection, page, showMore });
                 else
-                    await this[FETCH_CATALOG_DATA]({
-                        brandCode: toBrandCode,
+                    await this[FETCH_DATA_BY_TYPE]({
+                        type: toType,
+                        entityCode: toEntityCode,
                         filter,
                         orderField,
                         orderDirection,
@@ -406,7 +410,7 @@ export default {
 
         const {
             fullPath,
-            params: { code: toCode, brandCode: toBrandCode, pathMatch },
+            params: { code: toCode = null, entityCode: toEntityCode = null, type: toType, pathMatch },
             query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
                 page: 1,
                 orderField: 'price',
@@ -414,26 +418,24 @@ export default {
             },
         } = to;
 
-        const {
-            params: { code: fromCode, brandCode: fromBrandCode },
-        } = from;
-
         // регистрируем модуль, если такого нет
         registerModuleIfNotExists($store, CATALOG_MODULE, catalogModule);
-        const { loadPath, brandCode, categoryCode } = $store.state[CATALOG_MODULE];
+        const { loadPath, categoryCode, entityCode, type } = $store.state[CATALOG_MODULE];
 
         // если все загружено, пропускаем
-        if (loadPath === fullPath && toCode === categoryCode && toBrandCode === brandCode) next();
+        if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode) next();
         else {
-            const filter = computeFilterData(pathMatch, toCode, toBrandCode);
+            const filter = computeFilterData(pathMatch, toCode);
             let fetchMethod = null;
-            if (toCode === categoryCode && toBrandCode === brandCode) fetchMethod = `${CATALOG_MODULE}/${FETCH_ITEMS}`;
-            else fetchMethod = `${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`;
+            if (toType === type && toCode === categoryCode && toEntityCode === entityCode)
+                fetchMethod = `${CATALOG_MODULE}/${FETCH_ITEMS}`;
+            else fetchMethod = `${CATALOG_MODULE}/${FETCH_DATA_BY_TYPE}`;
 
             $progress.start();
             $store
                 .dispatch(fetchMethod, {
-                    brandCode: toBrandCode,
+                    type: toType,
+                    entityCode: toEntityCode,
                     filter,
                     page,
                     orderField,

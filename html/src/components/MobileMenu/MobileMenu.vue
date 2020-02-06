@@ -18,12 +18,30 @@
                 </button>
             </template>
         </template>
+        <v-link class="header-navigation-panel__item">
+            {{ $t('header.links.new') }}
+        </v-link>
+        <v-link class="header-navigation-panel__item" :to="{ name: 'ProductGroups', params: { type: 'promo' } }">
+            {{ $t('header.links.stocks') }}
+        </v-link>
+        <v-link class="header-navigation-panel__item" :to="{ name: 'ProductGroups', params: { type: 'sets' } }">
+            {{ $t('header.links.collections') }}
+        </v-link>
+        <v-link class="header-navigation-panel__item" :to="{ name: 'ProductGroups', params: { type: 'brands' } }">
+            {{ $t('header.links.brands') }}
+        </v-link>
+        <v-link class="header-navigation-panel__item" to="/job">
+            {{ $t('header.links.classes') }}
+        </v-link>
         <template v-slot:content>
             <transition name="fade-in" mode="out-in">
                 <div v-if="!showCategories" class="mobile-menu__panel-root">
                     <ul class="mobile-menu__menu">
                         <li class="container mobile-menu__menu-item mobile-menu__menu-item--separator">
-                            <v-link class="mobile-menu__menu-link" to="/catalog">
+                            <v-link
+                                class="mobile-menu__menu-link"
+                                :to="{ name: 'Catalog', params: { type: 'catalog' } }"
+                            >
                                 {{ $t('header.links.catalog') }}
                             </v-link>
                             <v-link tag="button" class="mobile-menu__menu-btn" @click.prevent="showCategories = true">
@@ -31,27 +49,39 @@
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/top">
+                            <v-link
+                                class="mobile-menu__menu-link"
+                                :to="{ name: 'Catalog', params: { type: 'catalog' } }"
+                            >
                                 {{ $t('header.links.new') }}
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/new">
+                            <v-link
+                                class="mobile-menu__menu-link"
+                                :to="{ name: 'ProductGroups', params: { type: 'promo' } }"
+                            >
                                 {{ $t('header.links.stocks') }}
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/sets">
+                            <v-link
+                                class="mobile-menu__menu-link"
+                                :to="{ name: 'ProductGroups', params: { type: 'sets' } }"
+                            >
                                 {{ $t('header.links.collections') }}
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/brands">
+                            <v-link
+                                class="mobile-menu__menu-link"
+                                :to="{ name: 'ProductGroups', params: { type: 'brands' } }"
+                            >
                                 {{ $t('header.links.brands') }}
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/job">
+                            <v-link class="mobile-menu__menu-link" to="/">
                                 {{ $t('header.links.classes') }}
                             </v-link>
                         </li>

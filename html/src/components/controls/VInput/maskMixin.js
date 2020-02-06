@@ -1,5 +1,4 @@
 function maskit(value, mask, masked = true, tokens) {
-    debugger;
     value = value || '';
     mask = mask || '';
     var iMask = 0;

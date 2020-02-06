@@ -16,7 +16,7 @@ export default {
     routes: [
         {
             name: 'ProductGroups',
-            path: `/:type(${productGroupTypes.NEW}|${productGroupTypes.PROMO}|${productGroupTypes.SETS}|${productGroupTypes.BRANDS})`,
+            path: `/:type(${productGroupTypes.PROMO}|${productGroupTypes.SETS}|${productGroupTypes.BRANDS})`,
             component: ProductGroupsAsync,
         },
     ],

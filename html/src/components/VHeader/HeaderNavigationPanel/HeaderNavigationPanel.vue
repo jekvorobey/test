@@ -11,7 +11,7 @@
                 {{ $t('header.links.catalog') }}
             </v-link>
         </div>
-        <v-link class="header-navigation-panel__item" :to="{ name: 'ProductGroups', params: { type: 'new' } }">
+        <v-link class="header-navigation-panel__item" :to="{ name: 'Catalog', params: { type: 'catalog' } }">
             {{ $t('header.links.new') }}
         </v-link>
         <v-link class="header-navigation-panel__item" :to="{ name: 'ProductGroups', params: { type: 'promo' } }">
