@@ -1,5 +1,5 @@
-import { Container } from 'inversify';
 import { injectionType } from './assets/scripts/enums';
+import { Container } from 'inversify';
 import { injectClass, injectableClass } from './util/container';
 
 import ServiceLocator from './services/ServiceLocator';

@@ -20,7 +20,7 @@ module.exports = {
     },
     plugins: ['optimize-regex'],
     rules: {
-        'func-names': 'off',
+        'func-names': 'off'
         /* Отключаем требование в использовании this, чтобы иметь возможность прописывать пустые методы в родительских компонентах. */
         'class-methods-use-this': 'off',
         /* Отключён по той же причине, что и import/no-dynamic-require. */

@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { getCategories, getBanners } from '../api';
 import { $logger, $locale } from '../services/ServiceLocator';
+import axios from 'axios';
 
 export const SET_BANNER = 'SET_BANNER';
 export const SET_LOCALE = 'SET_LOCALE';

@@ -29,7 +29,7 @@
         "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.config.js --progress --hide-modules",
         "build:pages": "cross-env NODE_ENV=production webpack --config build/webpack.pages.config.js --progress --hide-modules",
         "analyze": "cross-env NODE_ENV=production ANALYZE=true webpack --config build/webpack.client.config.js --progress --hide-modules",
-        "eslint": "eslint '**/*.js' --fix",
+        "eslint": "eslint **/*.js --fix",
         "stylelint": "stylelint '**/*.css' --fix"
     },
     "engines": {
@@ -62,7 +62,6 @@
         "intersection-observer": "^0.7.0",
         "inversify": "^5.0.1",
         "lazysizes": "^5.2.0",
-        "linq-es6": "^0.2.1",
         "lodash": "^4.17.15",
         "lru-cache": "^5.1.1",
         "memory-fs": "^0.5.0",
