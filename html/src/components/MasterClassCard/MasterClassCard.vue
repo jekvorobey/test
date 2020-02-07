@@ -1,5 +1,5 @@
 <template>
-    <li class="master-class-card">
+    <li class="master-class-card" :class="{ 'master-class-card--small': isSmall }">
         <router-link class="master-class-card__img" :to="href">
             <v-picture v-if="image" :image="image" />
             <v-svg v-else id="master-class-card-empty" name="logo" width="48" height="48" />
@@ -66,7 +66,11 @@ export default {
         price: {
             type: Object,
         },
+
+        isSmall: {
+            type: Boolean,
+            default: false,
+        },
     },
 };
 </script>
-
