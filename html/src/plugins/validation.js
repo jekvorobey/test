@@ -45,7 +45,7 @@ function rsValidation(rs, bik) {
     const bikRs = bik.toString().slice(-3) + rs;
     let checksum = 0;
     const coefficients = [7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1];
-    for (let i in coefficients) checksum += coefficients[i] * (bikRs[i] % 10);
+    for (const i in coefficients) checksum += coefficients[i] * (bikRs[i] % 10);
     const v = checksum % 10 === 0;
     return v;
 }

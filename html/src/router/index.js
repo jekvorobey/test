@@ -1,9 +1,9 @@
-import { injectionType } from '../assets/scripts/enums';
 import { Container, injectable, inject } from 'inversify';
-import { injectableClass } from '../util/container';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import { injectableClass } from '../util/container';
+import { injectionType } from '../assets/scripts/enums';
 import pipeline from './pipeline';
 
 import { $store } from '../services/ServiceLocator';

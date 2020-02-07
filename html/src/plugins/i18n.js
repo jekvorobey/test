@@ -1,10 +1,9 @@
 import { injectable } from 'inversify';
+import Vue from 'vue';
+import VueI18n from 'vue-i18n';
 import { injectionType } from '../assets/scripts/enums';
 import { injectableClass, injectClass } from '../util/container';
 import { LOCALIZATIONS, LOCALE, FALLBACK_LOCALE } from '../store';
-
-import Vue from 'vue';
-import VueI18n from 'vue-i18n';
 
 Vue.use(VueI18n);
 injectableClass(VueI18n);

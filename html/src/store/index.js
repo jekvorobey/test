@@ -1,9 +1,9 @@
 import { injectable } from 'inversify';
+import Vue from 'vue';
+import Vuex from 'vuex';
 import { injectionType } from '../assets/scripts/enums';
 import { injectableClass, injectClass } from '../util/container';
 
-import Vue from 'vue';
-import Vuex from 'vuex';
 import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
