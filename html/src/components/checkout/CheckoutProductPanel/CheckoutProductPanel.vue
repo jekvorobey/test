@@ -388,7 +388,7 @@ import {
     deliveryTypes,
     receiveMethods,
     requestStatus,
-} from '../../../assets/scripts/constants';
+} from '../../../assets/scripts/enums';
 
 import '../../../assets/images/sprites/payment/bonus.svg';
 import '../../../assets/images/sprites/payment/visa.svg';

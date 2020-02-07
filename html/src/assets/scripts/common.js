@@ -8,8 +8,8 @@ import 'regenerator-runtime/runtime';
 import 'proxy-polyfill';
 import 'reflect-metadata';
 
-import './insertAdjacentElement';
-import './classlist-polyfill';
+import './polyfills/insertAdjacentElement';
+import './polyfills/classlist-polyfill';
 import 'custom-event-polyfill';
 import 'intersection-observer';
 import 'focus-visible';
@@ -21,3 +21,7 @@ import 'lazysizes/plugins/respimg/ls.respimg';
 import 'lazysizes/plugins/blur-up/ls.blur-up';
 
 lazysizes.cfg.blurupMode = 'auto';
+
+import './constants';
+import './enums';
+import './regex';

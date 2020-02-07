@@ -47,7 +47,7 @@ import { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
-import { catalogItemTypes } from '../../assets/scripts/constants';
+import { catalogItemTypes } from '../../assets/scripts/enums';
 import './CatalogProductList.css';
 
 const itemAnimationDelayDelta = 100;

@@ -12,7 +12,7 @@ import {
 
 import { SET_HAS_SESSION } from './mutations';
 import { $logger } from '../../../services/ServiceLocator';
-import { responseStatus } from '../../../assets/scripts/constants';
+import { responseStatus } from '../../../assets/scripts/enums';
 
 export const LOGIN_BY_PASSWORD = 'LOGIN_BY_PASSWORD';
 export const LOGOUT = 'LOGOUT';

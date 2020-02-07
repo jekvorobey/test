@@ -221,7 +221,8 @@ import {
 
 import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '../../util/catalog';
 import { registerModuleIfNotExists } from '../../util/store';
-import { MIN_SCROLL_VALUE, productGroupTypes } from '../../assets/scripts/constants';
+import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants';
+import { productGroupTypes } from '../../assets/scripts/enums';
 import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
@@ -422,7 +423,7 @@ export default {
         // регистрируем модуль, если такого нет
         registerModuleIfNotExists($store, CATALOG_MODULE, catalogModule);
         const { loadPath, categoryCode, entityCode, type } = $store.state[CATALOG_MODULE];
-
+debugger;
         // если все загружено, пропускаем
         if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode) next();
         else {

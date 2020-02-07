@@ -1,4 +1,4 @@
-import { productGroupTypes } from '../../assets/scripts/constants';
+import { productGroupTypes } from '../../assets/scripts/enums';
 
 /**
  * @Module
@@ -16,7 +16,7 @@ export default {
     routes: [
         {
             name: 'ProductGroups',
-            path: `/:type(${productGroupTypes.PROMO}|${productGroupTypes.SETS}|${productGroupTypes.BRANDS})`,
+            path: `/:type(${productGroupTypes.PROMO}|${productGroupTypes.SETS}|${productGroupTypes.BRANDS}|${productGroupTypes.MASTERCLASSES})`,
             component: ProductGroupsAsync,
         },
     ],

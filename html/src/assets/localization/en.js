@@ -14,15 +14,6 @@ const main = {
             search: 'Find...',
             professionals: 'Marketplace for beauty industry professionals only',
         },
-
-        links: {
-            catalog: 'Catalog',
-            new: 'New',
-            stocks: 'Stocks',
-            collections: 'Collections',
-            brands: 'Brands',
-            classes: 'Master-classes',
-        },
     },
 
     footer: {
@@ -112,6 +103,16 @@ const main = {
             promo: 'Stocks',
             sets: 'Product Sets',
             brands: 'Brands',
+            masterclasses: 'Masterclasses',
+        },
+
+        links: {
+            catalog: 'Catalog',
+            new: 'New',
+            promo: 'Promo',
+            sets: 'Sets',
+            brands: 'Brands',
+            masterclasses: 'Masterclasses',
         },
     },
 

@@ -74,7 +74,7 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 import { NAME as CART_MODULE } from '../../store/modules/Cart';
 import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 
-import { requestStatus } from '../../assets/scripts/constants';
+import { requestStatus } from '../../assets/scripts/enums';
 import { generatePictureSourcePath } from '../../util/images';
 import './QuickViewModal.css';
 

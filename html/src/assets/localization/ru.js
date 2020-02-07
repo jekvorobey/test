@@ -14,15 +14,6 @@ const main = {
             search: 'Искать...',
             professionals: 'Mаркетплейс только для профессионалов бьюти-индустрии',
         },
-
-        links: {
-            catalog: 'Каталог',
-            new: 'Новинки',
-            stocks: 'Акции',
-            collections: 'Подборки',
-            brands: 'Бренды',
-            classes: 'Мастер-классы',
-        },
     },
 
     footer: {
@@ -112,6 +103,16 @@ const main = {
             promo: 'Акции',
             sets: 'Подборки товаров',
             brands: 'Бренды',
+            masterclasses: 'Мастерклассы',
+        },
+
+        links: {
+            catalog: 'Каталог',
+            new: 'Новинки',
+            promo: 'Акции',
+            sets: 'Подборки',
+            brands: 'Бренды',
+            masterclasses: 'Мастерклассы',
         },
     },
 

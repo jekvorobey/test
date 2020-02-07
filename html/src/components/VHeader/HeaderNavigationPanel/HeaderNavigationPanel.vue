@@ -1,30 +1,13 @@
 <template>
     <nav class="header-navigation-panel">
-        <div class="header-navigation-panel__item header-navigation-panel__item--burger">
-            <v-burger
-                class="header-navigation-panel__item-burger"
-                tag="button"
-                :is-open="isMenuOpen"
-                @isOpenChanged="SET_MENU_OPEN($event)"
-            />
-            <v-link to="/catalog">
-                {{ $t('header.links.catalog') }}
-            </v-link>
-        </div>
-        <v-link class="header-navigation-panel__item" :to="{ name: 'Catalog', params: { type: 'catalog' } }">
-            {{ $t('header.links.new') }}
-        </v-link>
-        <v-link class="header-navigation-panel__item" :to="{ name: 'ProductGroups', params: { type: 'promo' } }">
-            {{ $t('header.links.stocks') }}
-        </v-link>
-        <v-link class="header-navigation-panel__item" :to="{ name: 'ProductGroups', params: { type: 'sets' } }">
-            {{ $t('header.links.collections') }}
-        </v-link>
-        <v-link class="header-navigation-panel__item" :to="{ name: 'ProductGroups', params: { type: 'brands' } }">
-            {{ $t('header.links.brands') }}
-        </v-link>
-        <v-link class="header-navigation-panel__item" to="/job">
-            {{ $t('header.links.classes') }}
+        <v-burger
+            class="header-navigation-panel__burger"
+            tag="button"
+            :is-open="isMenuOpen"
+            @isOpenChanged="SET_MENU_OPEN($event)"
+        />
+        <v-link v-for="link in links" :key="link.name" class="header-navigation-panel__item" :to="link.to">
+            {{ link.name }}
         </v-link>
     </nav>
 </template>
@@ -44,6 +27,7 @@ import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '../../../store/modules/Cart
 import { NAME as MODAL_MODULE } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
+import { productGroupTypes } from '../../../assets/scripts/enums';
 import './HeaderNavigationPanel.critical.css';
 
 export default {
@@ -56,6 +40,35 @@ export default {
 
     computed: {
         ...mapState([SCROLL, IS_MENU_OPEN]),
+
+        links() {
+            return [
+                {
+                    to: { name: 'Catalog', params: { type: productGroupTypes.CATALOG } },
+                    name: this.$t(`productGroups.links.${productGroupTypes.CATALOG}`),
+                },
+                {
+                    to: { name: 'Catalog', params: { type: productGroupTypes.CATALOG } },
+                    name: this.$t(`productGroups.links.${productGroupTypes.NEW}`),
+                },
+                {
+                    to: { name: 'ProductGroups', params: { type: productGroupTypes.PROMO } },
+                    name: this.$t(`productGroups.links.${productGroupTypes.PROMO}`),
+                },
+                {
+                    to: { name: 'ProductGroups', params: { type: productGroupTypes.SETS } },
+                    name: this.$t(`productGroups.links.${productGroupTypes.SETS}`),
+                },
+                {
+                    to: { name: 'ProductGroups', params: { type: productGroupTypes.BRANDS } },
+                    name: this.$t(`productGroups.links.${productGroupTypes.BRANDS}`),
+                },
+                {
+                    to: { name: 'ProductGroups', params: { type: productGroupTypes.MASTERCLASSES } },
+                    name: this.$t(`productGroups.links.${productGroupTypes.MASTERCLASSES}`),
+                },
+            ];
+        },
 
         isTabletLg() {
             return this.$mq.isTabletLg;

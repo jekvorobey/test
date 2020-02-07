@@ -1,4 +1,4 @@
-import { injectionType } from '../assets/scripts/constants';
+import { injectionType } from '../assets/scripts/enums';
 import { Container, injectable, inject } from 'inversify';
 import { injectableClass } from '../util/container';
 
@@ -121,4 +121,5 @@ export default function createRouter(container) {
     });
 
     container.bind(injectionType.ROUTER).toConstantValue(router);
+    return router;
 }

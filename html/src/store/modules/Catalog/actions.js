@@ -1,5 +1,5 @@
 import { $logger } from '../../../services/ServiceLocator';
-import { productGroupTypes } from '../../../assets/scripts/constants';
+import { productGroupTypes } from '../../../assets/scripts/enums';
 import { storeErrorHandler } from '../../../util/store';
 import { getCatalogItems, getCategories, getBanners, getBrand, getFilters, getProductGroup } from '../../../api';
 import {
@@ -107,7 +107,7 @@ export default {
     },
 
     async [FETCH_DATA_BY_TYPE]({ dispatch, commit }, payload = { type: productGroupTypes.CATALOG }) {
-        const { type, entityCode } = payload;
+        const { type, entityCode, code, filter } = payload;
         let fetchMethod = null;
 
         switch (payload.type) {
@@ -125,6 +125,7 @@ export default {
 
         return dispatch(fetchMethod, payload).then(() => {
             commit(SET_TYPE, type);
+            commit(SET_CATEGORY_CODE, filter.category);
             commit(SET_ENTITY_CODE, entityCode);
         });
     },

@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { injectionType } from '../assets/scripts/constants';
+import { injectionType } from '../assets/scripts/enums';
 import { injectableClass, injectClass } from '../util/container';
 import { LOCALIZATIONS, LOCALE, FALLBACK_LOCALE } from '../store';
 
@@ -30,5 +30,10 @@ export default function createLocalization(container) {
         messages: localizations,
     });
 
-    container.bind(injectionType.LOCALIZATION).toConstantValue(i18n);
+    const localizationService = new Vue({
+        i18n,
+    });
+
+    container.bind(injectionType.LOCALIZATION).toConstantValue(localizationService);
+    return i18n;
 }

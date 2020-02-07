@@ -195,7 +195,7 @@ import FilterButton from '../../../components/FilterButton/FilterButton.vue';
 import Price from '../../../components/Price/Price.vue';
 import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
 
-import { orderStatus } from '../../../assets/scripts/constants';
+import { orderStatus } from '../../../assets/scripts/enums';
 import '../../../assets/images/sprites/arrow-updown.svg';
 import './Orders.css';
 

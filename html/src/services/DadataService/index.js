@@ -1,4 +1,4 @@
-import { suggestionTypes } from '../../assets/scripts/constants';
+import { suggestionTypes } from '../../assets/scripts/enums';
 import DadataHttpService from '../HttpService/DadataHttpService';
 
 /**

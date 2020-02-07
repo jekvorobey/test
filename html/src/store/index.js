@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { injectionType } from '../assets/scripts/constants';
+import { injectionType } from '../assets/scripts/enums';
 import { injectableClass, injectClass } from '../util/container';
 
 import Vue from 'vue';
@@ -77,4 +77,5 @@ export default function createStore(container) {
     });
 
     container.bind(injectionType.STORE).toConstantValue(store);
+    return store;
 }

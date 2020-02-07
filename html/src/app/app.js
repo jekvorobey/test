@@ -6,7 +6,7 @@
 import '../assets/scripts/common';
 import Vue from 'vue';
 
-import { injectionType } from '../assets/scripts/constants';
+import { injectionType } from '../assets/scripts/enums';
 import { sync } from 'vuex-router-sync';
 import createStore from '../store';
 import createRouter from '../router';
@@ -27,13 +27,9 @@ Vue.mixin(titleMixin);
 // app instances on each call (which is called for each SSR request)
 export default function createApp(container) {
     // create store and router instances
-    createStore(container);
-    createRouter(container);
-    createLocalization(container);
-
-    const store = container.get(injectionType.STORE);
-    const router = container.get(injectionType.ROUTER);
-    const i18n = container.get(injectionType.LOCALIZATION);
+    const store = createStore(container);
+    const router = createRouter(container);
+    const i18n = createLocalization(container);
     const progress = container.get(injectionType.PROGRESS);
 
     /* 

@@ -25,7 +25,7 @@ export default {
             }
             commit(SET_LOCALE, payload);
             axios.defaults.headers.common['Accept-Language'] = payload;
-            $locale.locale = payload;
+            $locale.$i18n.locale = payload;
             document.querySelector('html').setAttribute('lang', payload);
         } catch (error) {
             $logger.error(SET_LOCALE, error);

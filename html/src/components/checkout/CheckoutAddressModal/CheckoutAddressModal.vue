@@ -128,7 +128,7 @@ import { SELECTED_CITY_COORDS } from '../../../store/modules/Geolocation/getters
 import { SET_SELECTED_CITY } from '../../../store/modules/Geolocation/actions';
 
 import validationMixin, { required } from '../../../plugins/validation';
-import { suggestionTypes } from '../../../assets/scripts/constants';
+import { suggestionTypes } from '../../../assets/scripts/enums';
 import { $dadata } from '../../../services/ServiceLocator';
 import pin from '../../../assets/images/icons/pin-filled.svg';
 import './CheckoutAddressModal.css';

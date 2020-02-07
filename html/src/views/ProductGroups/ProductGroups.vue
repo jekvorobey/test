@@ -100,7 +100,7 @@ import productGroupsModule, {
 import { BRANDS_CATALOG } from '../../store/modules/ProductGroups/getters';
 import { FETCH_ITEMS, SET_LOAD_PATH, SET_TYPE } from '../../store/modules/ProductGroups/actions';
 
-import { productGroupTypes } from '../../assets/scripts/constants';
+import { productGroupTypes } from '../../assets/scripts/enums';
 import { registerModuleIfNotExists } from '../../util/store';
 import _debounce from 'lodash/debounce';
 import './ProductGroups.css';

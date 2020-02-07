@@ -1,4 +1,4 @@
-const { injectionType } = require('../assets/scripts/constants');
+const { injectionType } = require('../assets/scripts/enums');
 
 let locatorInstance;
 module.exports = class ServiceLocator {

@@ -1,4 +1,4 @@
-import { cartItemTypes } from '../../assets/scripts/constants';
+import { cartItemTypes } from '../../assets/scripts/enums';
 import isCartEmpty from '../../router/middleware/isCartEmpty';
 
 /**
