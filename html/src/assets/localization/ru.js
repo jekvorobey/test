@@ -103,7 +103,7 @@ const main = {
             promo: 'Акции',
             sets: 'Подборки товаров',
             brands: 'Бренды',
-            masterclasses: 'Мастерклассы',
+            masterclasses: 'Мастер-классы',
         },
 
         links: {
@@ -112,7 +112,7 @@ const main = {
             promo: 'Акции',
             sets: 'Подборки',
             brands: 'Бренды',
-            masterclasses: 'Мастерклассы',
+            masterclasses: 'Мастер-классы',
         },
     },
 
