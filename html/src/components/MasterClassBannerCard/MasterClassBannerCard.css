@@ -1,0 +1,104 @@
+.master-class-banner-card {
+    position: relative;
+    display: flex;
+
+    &::before {
+        content: '';
+        position: absolute;
+        display: block;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--cl-black);
+        opacity: 0.5;
+    }
+
+    &__panel {
+        position: absolute;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        z-index: 2;
+        left: calc(var(--gs) * 5);
+        right: calc(var(--gs) * 5);
+        bottom: calc(var(--gs) * 5);
+
+        @media (--tablet) {
+            display: block;
+            left: calc(var(--gs) * 2);
+            right: calc(var(--gs) * 2);
+            bottom: calc(var(--gs) * 2);
+        }
+    }
+
+    &__info {
+        @media (--tablet) {
+            margin-bottom: calc(var(--gs) * 2);
+        }
+    }
+
+    &__right-panel {
+        display: flex;
+        align-items: center;
+    }
+
+    &__btn {
+        order: 1;
+        margin-left: calc(var(--gs) * 2);
+        border-color: var(--cl-white);
+
+        &:hover {
+            background-color: var(--cl-white);
+            color: var(--cl-global);
+        }
+
+        @media (--tablet) {
+            margin-left: 0;
+            order: 0;
+        }
+    }
+
+    &__price + &__btn {
+        @media (--tablet) {
+            order: 0;
+            margin-right: calc(var(--gs) * 2);
+        }
+    }
+
+    &__price,
+    &__name,
+    &__author,
+    &__description {
+        color: var(--cl-white);
+        line-height: 24px;
+    }
+
+    &__author,
+    &__description {
+        font-size: 14px;
+        font-weight: 300;
+    }
+
+    &__price {
+        order: 0;
+        font-size: 20px;
+
+        @media (--tablet) {
+            order: 1;
+        }
+    }
+
+    &__name {
+        font-size: 28px;
+        line-height: 40px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+
+        @media (--tablet) {
+            font-size: 24px;
+            line-height: 32px;
+        }
+    }
+}

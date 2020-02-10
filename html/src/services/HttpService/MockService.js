@@ -67,6 +67,10 @@ import productMasterclass2 from '../../assets/images/mock/productMasterclass2.pn
 import productReview1 from '../../assets/images/mock/productReview1.png';
 import productReview2 from '../../assets/images/mock/productReview2.png';
 
+import masterclassDetailImage1 from '../../assets/images/mock/masterclassDetailImage1.png';
+
+import author1 from '../../assets/images/mock/author1.png';
+
 const mockDate = new Date(Date.now());
 mockDate.setHours(0, 0, 0, 0);
 
@@ -1214,6 +1218,61 @@ const productsDetails = [
     },
 ];
 
+const masterClassDetails = {
+    name: 'Макияж для фото',
+    code: 'code1',
+    date: '3 сентября (пт), 12:00–18:00',
+    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
+    topText: `<p>Мастер-класс «Макияж для фото» направлен на создание образов непосредственно для коммерческих и творческих съемок. </p>
+    Рекомендуем посетить мастер-класс визажистам с любым уровнем подготовки, которые только начали или давно работают с частными клиентами, но хотят качественно изменить направление работы в сторону fashion, beauty и других коммерческих съемок.`,
+    bottomText: `На мастер-классе преподаватель расскажет и покажет главные отличия картинки в жизни и на фото, какие текстуры подойдут для создания самых трендовых эффектов (матовая, глянцевая, мокрая, сияющая кожа), как работать с крупными кадрами и какие текстуры выбирать, чтобы постпродакшн (дальнейшая обработка фото) сказал вам спасибо!`,
+    image: productMasterclass2,
+    detailImage: masterclassDetailImage1,
+
+    authors: [
+        {
+            id: 1,
+            firstName: 'Владимир',
+            lastName: 'Соколов',
+            nickName: '@sokolov',
+            profile: 'Ведущий стилист',
+            image: author1,
+        },
+        {
+            id: 2,
+            firstName: 'Игорь',
+            lastName: 'Борисов',
+            nickName: null,
+            profile: 'Cтилист',
+            image: null,
+        },
+        {
+            id: 3,
+            firstName: 'Владимир',
+            lastName: 'Соколов',
+            nickName: '@sokolov',
+            profile: 'Ведущий стилист',
+            image: author1,
+        },
+        {
+            id: 4,
+            firstName: 'Игорь',
+            lastName: 'Борисов',
+            nickName: null,
+            profile: 'Cтилист',
+            image: null,
+        },
+    ],
+
+    price: {
+        value: {
+            from: 5000,
+            to: 7000,
+        },
+        currency: 'RUB',
+    },
+};
+
 const typeIds = {
     product: 1,
     masterclass: 2,
@@ -2044,7 +2103,11 @@ export default class MockHttpService extends HttpServiceBase {
                     setTimeout(() => resolve(masterClasses), 300);
                     break;
 
-                case '/v1/product':
+                case '/v1/catalog/masterclass-details':
+                    setTimeout(() => resolve(_cloneDeep(masterClassDetails)), 300);
+                    break;
+
+                case '/v1/product-details':
                     switch (data.code) {
                         default:
                             setTimeout(() => resolve(productsDetails[0]), 300);

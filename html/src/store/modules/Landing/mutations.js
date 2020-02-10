@@ -43,7 +43,7 @@ export default {
                 id: 1,
                 component: 'slider-banners-section',
                 data: {
-                    banners: state.banners.slice(7, 10),
+                    banners: state.banners.slice(7, 8),
                 },
             },
             {

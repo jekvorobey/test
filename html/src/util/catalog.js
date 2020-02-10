@@ -6,12 +6,15 @@ const numberRegx = /\d+/g;
 export function generateCategoryUrl(type, entityCode, categoryCode) {
     switch (type) {
         case productGroupTypes.CATALOG:
-            return categoryCode ? `/${type}/${categoryCode}` : `/${type}`;
+            return categoryCode ? `/${type}/${categoryCode}` : `/${type}/`;
+
+        case productGroupTypes.MASTERCLASSES:
+            return entityCode ? `/${type}/${entityCode}` : `/${type}/`;
 
         case productGroupTypes.PROMO:
         case productGroupTypes.SETS:
         case productGroupTypes.BRANDS:
-            return categoryCode ? `/${type}/${entityCode}/${categoryCode}` : `/${type}/${entityCode}`;
+            return categoryCode ? `/${type}/${entityCode}/${categoryCode}/` : `/${type}/${entityCode}/`;
 
         default:
             return '/';
@@ -22,12 +25,12 @@ export function concatCatalogRoutePath(type, entityCode, categoryCode, segments)
     let baseRoute = '';
     switch (type) {
         case productGroupTypes.CATALOG:
-            baseRoute = categoryCode ? `/${type}/${categoryCode}` : `/${type}`;
+            baseRoute = categoryCode ? `/${type}/${categoryCode}/` : `/${type}/`;
             break;
         case productGroupTypes.PROMO:
         case productGroupTypes.SETS:
         case productGroupTypes.BRANDS:
-            baseRoute = categoryCode ? `/${type}/${entityCode}/${categoryCode}` : `/${type}/${entityCode}`;
+            baseRoute = categoryCode ? `/${type}/${entityCode}/${categoryCode}/` : `/${type}/${entityCode}/`;
             break;
         default:
             return '/';

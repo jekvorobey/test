@@ -1,7 +1,7 @@
 <template>
     <section class="section product-groups-view">
-        <div class="container">
-            <breadcrumbs class="product-groups-view__breadcrumbs">
+        <div class="container product-groups-view__header">
+            <breadcrumbs class="container container--tablet-lg product-groups-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
                     Главная
                 </breadcrumb-item>
@@ -9,49 +9,83 @@
                     {{ $t(`productGroups.title.${type}`) }}
                 </breadcrumb-item>
             </breadcrumbs>
+
+            <section v-if="isMasterClass" class="section product-groups-view__banners">
+                <v-slider class="product-groups-view__banners-slider" name="masterClasses" :options="sliderOptions">
+                    <master-class-banner-card
+                        class="swiper-slide product-groups-view__banners-slider-item"
+                        v-for="item in masterclassBanners"
+                        :key="item.id"
+                        :name="item.name"
+                        :image="item.image"
+                        :price="item.price"
+                        :author="item.author"
+                        :description="item.date"
+                        :to="generateCategoryUrl(item.code)"
+                        show-btn
+                    />
+                </v-slider>
+            </section>
         </div>
 
         <template v-if="showList">
-            <categories-section class="brands-view__categories" :categories="categories" />
+            <categories-section class="product-groups-view__categories" :categories="categories" />
 
-            <separator-section class="brands-view__separator" />
+            <separator-section class="product-groups-view__separator" />
 
-            <section class="section brands-view__section">
+            <section class="section product-groups-view__section">
                 <div class="container">
-                    <h1 class="brands-view__section-hl">{{ $t(`productGroups.title.${type}`) }}</h1>
-                    <group-list class="brands-view__brands" :items="brandsCatalog" :columns="columns" />
+                    <h1 class="product-groups-view__section-hl">
+                        {{ $t(`productGroups.title.${type || 'catalog'}`) }}
+                    </h1>
+                    <group-list class="product-groups-view__brands" :items="brandsCatalog" :columns="columns" />
                 </div>
             </section>
         </template>
 
-        <section v-else class="section product-groups-view__section product-groups-view__sets">
-            <h1 class="container product-groups-view__section-hl">{{ $t(`productGroups.title.${type}`) }}</h1>
-            <div class="container product-groups-view__sets-container">
-                <ul class="product-groups-view__sets-list">
-                    <banner-card
-                        class="product-groups-view__sets-list-item"
-                        tag="li"
-                        v-for="item in items"
-                        :key="item.id"
-                        :title="item.name"
-                        :image="item.image"
-                        :to="`/${type}/${item.code}`"
-                        button-text="Смотреть товары"
-                    />
-                </ul>
+        <template v-else>
+            <section class="section product-groups-view__section product-groups-view__sets">
+                <h1 class="container product-groups-view__section-hl">
+                    {{ $t(`productGroups.title.${type || 'catalog'}`) }}
+                </h1>
+                <div class="container product-groups-view__sets-container">
+                    <ul v-if="isMasterClass" class="product-groups-view__sets-list">
+                        <master-class-card
+                            class="product-groups-view__sets-list-item"
+                            v-for="item in masterclasses"
+                            :key="item.id"
+                            v-bind="item"
+                            :to="generateCategoryUrl(item.code)"
+                            is-small
+                        />
+                    </ul>
 
-                <div class="product-groups-view__sets-controls" v-if="pagesCount > 1">
-                    <v-button
-                        v-if="activePage < pagesCount"
-                        class="btn--outline product-groups-view__sets-controls-btn"
-                        @click="onShowMore"
-                    >
-                        Показать ещё
-                    </v-button>
-                    <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
+                    <ul v-else class="product-groups-view__sets-list">
+                        <banner-card
+                            class="product-groups-view__sets-list-item"
+                            tag="li"
+                            v-for="item in items"
+                            :key="item.id"
+                            :title="item.name"
+                            :image="item.image"
+                            :to="generateCategoryUrl(item.code)"
+                            button-text="Смотреть товары"
+                        />
+                    </ul>
+
+                    <div class="product-groups-view__sets-controls" v-if="pagesCount > 1">
+                        <v-button
+                            v-if="activePage < pagesCount"
+                            class="btn--outline product-groups-view__sets-controls-btn"
+                            @click="onShowMore"
+                        >
+                            Показать ещё
+                        </v-button>
+                        <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </template>
 
         <section class="section product-groups-view__section product-groups-view__seo">
             <div class="container product-groups-view__seo-container">
@@ -77,8 +111,11 @@
 import VButton from '../../components/controls/VButton/VButton.vue';
 import VPagination from '../../components/controls/VPagination/VPagination.vue';
 import VExpander from '../../components/VExpander/VExpander.vue';
+import VSlider from '../../components/controls/VSlider/VSlider.vue';
 
 import BannerCard from '../../components/BannerCard/BannerCard.vue';
+import MasterClassCard from '../../components/MasterClassCard/MasterClassCard.vue';
+import MasterClassBannerCard from '../../components/MasterClassBannerCard/MasterClassBannerCard.vue';
 
 import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
@@ -102,8 +139,33 @@ import { FETCH_ITEMS, SET_LOAD_PATH, SET_TYPE } from '../../store/modules/Produc
 
 import { productGroupTypes } from '../../assets/scripts/enums';
 import { registerModuleIfNotExists } from '../../util/store';
+import { generateCategoryUrl } from '../../util/catalog';
 import _debounce from 'lodash/debounce';
 import './ProductGroups.css';
+
+import profileMasterClassImg1 from '../../assets/images/mock/profileMasterClass1.png';
+import profileMasterClassImg2 from '../../assets/images/mock/profileMasterClass2.png';
+import profileMasterClassImg3 from '../../assets/images/mock/profileMasterClass3.png';
+import profileMasterClassImg4 from '../../assets/images/mock/profileMasterClass4.png';
+
+const sliderOptions = {
+    slidesPerView: 1,
+    // grabCursor: true,
+    // loop: true,
+    // autoplay: {
+    //     delay: 10000,
+    // },
+
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+
+    pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
+    },
+};
 
 export default {
     name: 'product-groups',
@@ -112,8 +174,11 @@ export default {
         VButton,
         VPagination,
         VExpander,
+        VSlider,
 
         BannerCard,
+        MasterClassCard,
+        MasterClassBannerCard,
 
         Breadcrumbs,
         BreadcrumbItem,
@@ -127,6 +192,109 @@ export default {
         return {
             activePage: 0,
             pagesCount: 10,
+
+            masterclassBanners: [
+                {
+                    id: 1,
+                    name: 'Свадебный стилист',
+                    date: '3 сентября (пт), 12:00',
+                    author: 'Владимир Перельман',
+                    image: profileMasterClassImg1,
+                    code: 'code1',
+                    price: {
+                        value: 5000,
+                        currency: 'RUB',
+                    },
+                },
+                {
+                    id: 2,
+                    name: 'Модные косы',
+                    date: '4 сентября (пт), 12:00',
+                    author: 'Владимир Перельман',
+                    image: profileMasterClassImg2,
+                    code: 'code2',
+                    price: {
+                        value: 6000,
+                        currency: 'RUB',
+                    },
+                },
+                {
+                    id: 3,
+                    name: 'Пучки и хвосты',
+                    date: '5 сентября (пт), 12:00',
+                    author: 'Владимир Перельман',
+                    image: profileMasterClassImg3,
+                    code: 'code3',
+
+                    price: {
+                        value: 2000,
+                        currency: 'RUB',
+                    },
+                },
+                {
+                    id: 4,
+                    name: 'Цвет под ключ',
+                    date: '8 сентября (пт), 12:00',
+                    author: 'Владимир Перельман',
+                    image: profileMasterClassImg4,
+                    code: 'code4',
+                    price: {
+                        value: 4000,
+                        currency: 'RUB',
+                    },
+                },
+            ],
+
+            masterclasses: [
+                {
+                    id: 1,
+                    name: 'Свадебный стилист',
+                    date: '3 сентября (пт), 12:00',
+                    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
+                    image: profileMasterClassImg1,
+                    code: 'code1',
+                    price: {
+                        value: 5000,
+                        currency: 'RUB',
+                    },
+                },
+                {
+                    id: 2,
+                    name: 'Модные косы',
+                    date: '4 сентября (пт), 12:00',
+                    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
+                    image: profileMasterClassImg2,
+                    code: 'code2',
+                    price: {
+                        value: 6000,
+                        currency: 'RUB',
+                    },
+                },
+                {
+                    id: 3,
+                    name: 'Пучки и хвосты',
+                    date: '5 сентября (пт), 12:00',
+                    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
+                    image: profileMasterClassImg3,
+                    code: 'code3',
+                    price: {
+                        value: 2000,
+                        currency: 'RUB',
+                    },
+                },
+                {
+                    id: 4,
+                    name: 'Цвет под ключ',
+                    date: '8 сентября (пт), 12:00',
+                    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
+                    image: profileMasterClassImg4,
+                    code: 'code4',
+                    price: {
+                        value: 4000,
+                        currency: 'RUB',
+                    },
+                },
+            ],
         };
     },
 
@@ -144,6 +312,10 @@ export default {
             return this.isTabletLg ? 3 : 6;
         },
 
+        sliderOptions() {
+            return sliderOptions;
+        },
+
         isTablet() {
             return this.$mq.tablet;
         },
@@ -151,10 +323,19 @@ export default {
         isTabletLg() {
             return this.$mq.tabletLg;
         },
+
+        isMasterClass() {
+            return true; //this[TYPE] === productGroupTypes.MASTERCLASSES;
+        },
     },
 
     methods: {
         ...mapActions(PRODUCT_GROUPS_MODULE, [FETCH_ITEMS]),
+
+        generateCategoryUrl(code) {
+            const { type } = this;
+            return generateCategoryUrl(type || productGroupTypes.MASTERCLASSES, code);
+        },
 
         onShowMore() {
             this.activePage += 1;
@@ -187,8 +368,6 @@ export default {
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
             } catch (error) {
                 this.$progress.fail();
-                $logger.error('debounce_fetchCatalog', error);
-                this.$router.replace({ name: '404' });
                 this.$progress.finish();
             }
         },

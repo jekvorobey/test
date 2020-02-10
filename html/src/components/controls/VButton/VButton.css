@@ -3,7 +3,7 @@
     position: relative;
     font-size: 14px;
     line-height: 24px;
-    padding: 6px calc(var(--gs) * 3);
+    padding: 6px calc(var(--gs) * 2);
     clear: both;
     transition: all var(--time) var(--timing-function);
     border: 2px solid var(--cl-global);

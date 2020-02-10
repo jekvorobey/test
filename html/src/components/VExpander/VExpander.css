@@ -2,7 +2,7 @@
     &__content {
         position: relative;
         overflow: hidden;
-        margin-bottom: calc(var(--gs) * 2);
+        margin-bottom: var(--gs);
         transition: all 400ms var(--timing-function);
     }
 

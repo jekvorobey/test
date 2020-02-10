@@ -19,6 +19,8 @@
 
     &--tablet-lg {
         @media (--tablet-lg-min) {
+            min-width: initial;
+            max-width: initial;
             padding: 0;
             margin: 0;
         }
@@ -26,6 +28,8 @@
 
     &--tablet {
         @media (--tablet-min) {
+            min-width: initial;
+            max-width: initial;
             padding: 0;
             margin: 0;
         }

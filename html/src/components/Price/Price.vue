@@ -14,7 +14,7 @@ export default {
     name: 'price',
     props: {
         value: {
-            type: Number,
+            type: [Number, Object],
             required: true,
         },
 
@@ -29,11 +29,16 @@ export default {
     },
 
     computed: {
+        isObject() {
+            return this.value instanceof Object;
+        },
+
         currencySymbol() {
             return currencySymbol[this.currency];
         },
 
         computedValue() {
+            if (this.isObject) return `${preparePrice(this.value.from)} - ${preparePrice(this.value.to)}`;
             return preparePrice(this.value);
         },
     },

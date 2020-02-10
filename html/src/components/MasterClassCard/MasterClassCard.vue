@@ -1,12 +1,12 @@
 <template>
     <li class="master-class-card" :class="{ 'master-class-card--small': isSmall }">
-        <router-link class="master-class-card__img" :to="href">
+        <router-link class="master-class-card__img" :to="to">
             <v-picture v-if="image" :image="image" />
             <v-svg v-else id="master-class-card-empty" name="logo" width="48" height="48" />
         </router-link>
         <div class="master-class-card__body">
             <div class="master-class-card__body-top">
-                <v-link class="master-class-card__body-name" :to="href">{{ name }}</v-link>
+                <v-link class="master-class-card__body-name" :to="to">{{ name }}</v-link>
                 <div class="master-class-card__body-prices">
                     <price class="text-bold master-class-card__body-price" v-bind="price" />
                 </div>
@@ -47,10 +47,6 @@ export default {
             required: true,
         },
 
-        href: {
-            type: String,
-        },
-
         image: {
             type: [String, Object],
         },
@@ -65,6 +61,11 @@ export default {
 
         price: {
             type: Object,
+        },
+
+        to: {
+            type: [String, Object],
+            default: '/',
         },
 
         isSmall: {
