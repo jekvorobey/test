@@ -598,7 +598,6 @@ import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/
 import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '../../components/GalleryModal/GalleryModal.vue';
 
-import '../../plugins/observer';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 import { mapState, mapActions, mapGetters } from 'vuex';
 

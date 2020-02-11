@@ -123,11 +123,11 @@ export function getInstagram(data) {
 }
 
 export function getProduct({ code }) {
-    return $http.get('/v1/catalog/product-details', { params: { code } });
+    return $http.get('/v1/catalog/product-detail', { params: { code } });
 }
 
 export function getMasterclass({ code }) {
-    return $http.get('/v1/catalog/masterclass-details', { params: { code } });
+    return $http.get('/v1/catalog/masterclass-detail', { params: { code } });
 }
 
 //brand

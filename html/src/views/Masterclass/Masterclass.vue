@@ -42,8 +42,8 @@
                         <img :src="masterClass.detailImage" />
                         <v-html class="container container--tablet" v-html="masterClass.bottomText" />
                     </div>
-                    <div class="container container--tablet master-class-view__panel-right">
-                        <div class="master-class-view__panel-right-section">
+                    <div class="master-class-view__panel-right">
+                        <div class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">
                                 Спикеры
                             </p>
@@ -61,54 +61,130 @@
                                 </ul>
                             </v-expander>
                         </div>
-                        <div class="master-class-view__panel-right-section">
+                        <div class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">
                                 Дата и время
                             </p>
                             <p>{{ masterClass.date }}</p>
                             <p><a>Задать вопрос организатору</a></p>
                         </div>
-                        <div class="master-class-view__panel-right-section">
+                        <div class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">
                                 Место проведения
                             </p>
-                            <p>{{ masterClass.address }}</p>
-                            <p><a>Задать вопрос организатору</a></p>
+                            <p>{{ masterClass.address.full }}</p>
+                            <p><a>Посмотреть на карте</a></p>
                         </div>
-                        <div class="master-class-view__panel-right-section">
+                        <div
+                            v-if="!isTablet"
+                            class="container container--tablet master-class-view__panel-right-section master-class-view__panel-right-social"
+                        >
                             <p class="text-bold master-class-view__panel-right-hl">
                                 Поделиться
                             </p>
-                            <v-svg name="vkontakte-bw" width="24" height="24" />
                             <v-svg name="facebook-bw" width="24" height="24" />
-                            <v-svg name="instagram-bw" width="24" height="24" />
+                            <v-svg name="vkontakte-bw" width="24" height="24" />
+                            <v-svg name="ok-bw" width="24" height="24" />
+                            <v-svg name="twitter-bw" width="24" height="24" />
+                            <v-svg name="telegram-bw" width="24" height="24" />
+                            <v-svg name="link" width="24" height="24" />
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- <section class="section master-class-view__section">
-            <div class="container master-class-view__socials">
-                <div class="master-class-view__socials-inner">
-                    <div class="master-class-view__socials-statistics">
-                        <div>
-                            <v-svg name="cart-empty" width="24" height="24" />
-                        </div>
-                        <div>
-                            <div>32 человека уже купили это товар</div>
-                            <div class="text-grey">за последние 2 месяца</div>
-                        </div>
+        <section
+            class="section master-class-view__section master-class-view__gallery"
+            v-if="masterClass.gallery || masterClass.gallery.length > 0"
+        >
+            <div class="container" v-if="!isTablet">
+                <ul class="master-class-view__gallery-list">
+                    <li class="master-class-view__gallery-item" v-for="image in masterClass.gallery" :key="image">
+                        <v-picture :image="image" />
+                    </li>
+                </ul>
+            </div>
+
+            <v-slider
+                name="masterclass-gallery-slider"
+                class="master-class-view__gallery-slider"
+                :options="sliderOptions"
+                v-else
+            >
+                <div
+                    class="swiper-slide master-class-view__gallery-item"
+                    v-for="image in masterClass.gallery"
+                    :key="image"
+                >
+                    <v-picture :image="image" />
+                </div>
+            </v-slider>
+        </section>
+
+        <section class="section master-class-view__section master-class-view__panel master-class-view__panel--reverse">
+            <div class="container master-class-view__panel-container">
+                <div class="master-class-view__panel-body">
+                    <div class="container container--tablet master-class-view__panel-left" />
+                    <div class="master-class-view__panel-middle">
+                        <p class="container container--tablet text-bold master-class-view__section-hl">
+                            Программа
+                        </p>
+                        <v-html class="container container--tablet" v-html="masterClass.program" />
                     </div>
-                    <div class="master-class-view__socials-share">
-                        <span class="text-bold">Поделиться</span>&nbsp;
-                        <v-svg name="vkontakte-bw" width="24" height="24" />
-                        <v-svg name="facebook-bw" width="24" height="24" />
-                        <v-svg name="instagram-bw" width="24" height="24" />
+                    <div class="master-class-view__panel-right">
+                        <div class="container container--tablet master-class-view__panel-right-section">
+                            <p class="text-bold master-class-view__panel-right-hl">
+                                Что взять с собой
+                            </p>
+                            <v-html v-html="masterClass.requirements" />
+                        </div>
+                        <div
+                            v-if="isTablet"
+                            class="container container--tablet master-class-view__panel-right-section master-class-view__panel-right-social"
+                        >
+                            <p class="text-bold master-class-view__panel-right-hl">
+                                Поделиться
+                            </p>
+                            <v-svg name="facebook-bw" width="24" height="24" />
+                            <v-svg name="vkontakte-bw" width="24" height="24" />
+                            <v-svg name="ok-bw" width="24" height="24" />
+                            <v-svg name="twitter-bw" width="24" height="24" />
+                            <v-svg name="telegram-bw" width="24" height="24" />
+                            <v-svg name="link" width="24" height="24" />
+                        </div>
                     </div>
                 </div>
             </div>
-        </section> -->
+        </section>
+
+        <div ref="panel" v-observe-visibility="onPanelVisibilityChanged"></div>
+
+        <section class="section master-class-view__section master-class-view__map">
+            <div class="container">
+                <h2 class="master-class-view__section-hl">
+                    Место проведения
+                </h2>
+                <p>{{ masterClass.address.full }}</p>
+                <br />
+                <div style="height: 400px; width:100%;">
+                    <yandex-map
+                        v-if="showMap"
+                        :coords="masterClass.address.coords"
+                        :controls="[]"
+                        :options="{ yandexMapDisablePoiInteractivity: true }"
+                        :settings="mapSettings"
+                    >
+                        <ymap-marker
+                            :key="`masterclass-point-${masterClass.address.id}`"
+                            :marker-id="`masterclass-point-${masterClass.address.id}`"
+                            :coords="masterClass.address.coords"
+                            :icon="markerIcon"
+                        />
+                    </yandex-map>
+                </div>
+            </div>
+        </section>
 
         <section
             v-if="masterclassBanners && masterclassBanners.length > 0"
@@ -116,7 +192,7 @@
         >
             <div class="container master-class-view__masterclass-container">
                 <h2 class="master-class-view__section-hl master-class-view__masterclass-hl">
-                    {{ $t('product.title.masterClasses') }}
+                    Похожие мастер-классы
                 </h2>
                 <ul class="master-class-view__masterclass-list">
                     <master-class-banner-card
@@ -147,7 +223,7 @@
                     v-if="isTabletLg"
                     class="master-class-view__instagram-slider"
                     name="instagram"
-                    :options="instagramOptions"
+                    :options="sliderOptions"
                 >
                     <instagram-card
                         class="swiper-slide master-class-view__instagram-card"
@@ -170,19 +246,24 @@
                         :image="item.image"
                     />
                 </div>
-                <v-button class="btn--outline master-class-view__section-link master-class-view__instagram-link">
-                    {{ $t('landing.subscribe') }}
-                </v-button>
             </div>
         </section>
 
-        <transition :name="pricePanelAnimation" appear> </transition>
-
-        <transition name="fade"> </transition>
+        <transition name="slide-bottom" appear>
+            <div class="master-class-view__price-panel" v-if="isPanelVisible && isTablet">
+                <div class="container">
+                    <v-button class="master-class-view__price-panel-btn" @click.prevent="onBuyBtnClick">
+                        Купить билет
+                    </v-button>
+                </div>
+            </div>
+        </transition>
     </section>
 </template>
 
 <script>
+import { yandexMap, ymapMarker } from 'vue-yandex-maps';
+
 import VSvg from '../../components/controls/VSvg/VSvg.vue';
 import VLink from '../../components/controls/VLink/VLink.vue';
 import VButton from '../../components/controls/VButton/VButton.vue';
@@ -232,13 +313,17 @@ import productBrand1 from '../../assets/images/mock/brandProduct1.png';
 
 import '../../assets/images/sprites/socials/vkontakte-bw.svg';
 import '../../assets/images/sprites/socials/facebook-bw.svg';
-import '../../assets/images/sprites/socials/instagram-bw.svg';
+import '../../assets/images/sprites/socials/telegram-bw.svg';
+import '../../assets/images/sprites/socials/ok-bw.svg';
+import '../../assets/images/sprites/socials/twitter-bw.svg';
 
+import '../../assets/images/sprites/link.svg';
 import '../../assets/images/sprites/cart-empty.svg';
 import '../../assets/images/sprites/star-empty-small.svg';
 import '../../assets/images/sprites/star-small.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import '../../assets/images/sprites/wishlist-middle.svg';
+import pin from '../../assets/images/icons/pin-filled.svg';
 import './Masterclass.css';
 
 import profileMasterClassImg1 from '../../assets/images/mock/profileMasterClass1.png';
@@ -246,68 +331,11 @@ import profileMasterClassImg2 from '../../assets/images/mock/profileMasterClass2
 import profileMasterClassImg3 from '../../assets/images/mock/profileMasterClass3.png';
 import profileMasterClassImg4 from '../../assets/images/mock/profileMasterClass4.png';
 
-const productGalleryOptions = {
-    spaceBetween: 8,
-    slidesPerView: 1.5,
-    slidesOffsetBefore: 24,
-    slidesOffsetAfter: 24,
-    grabCursor: true,
-
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-    },
-
-    breakpoints: {
-        [breakpoints.tablet - 1]: {
-            slidesPerView: 1,
-            spaceBetween: 0,
-            slidesOffsetBefore: 0,
-            slidesOffsetAfter: 0,
-            pagination: {
-                el: '.swiper-pagination',
-                type: 'bullets',
-            },
-        },
-    },
-};
-
 const sliderOptions = {
     spaceBetween: 24,
-    slidesPerView: 4,
-    grabCursor: true,
-
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-    },
-
-    pagination: {
-        el: '.swiper-pagination',
-        type: 'bullets',
-    },
-
-    breakpoints: {
-        [breakpoints.tabletLg - 1]: {
-            slidesPerView: 3.5,
-            slidesOffsetBefore: 24,
-            slidesOffsetAfter: 24,
-        },
-
-        [breakpoints.tablet - 1]: {
-            slidesPerView: 2,
-            spaceBetween: 12,
-            slidesOffsetBefore: 0,
-            slidesOffsetAfter: 0,
-        },
-    },
-};
-
-const instagramOptions = {
-    spaceBetween: 24,
     slidesOffsetBefore: 24,
     slidesOffsetAfter: 24,
-    slidesPerView: 3.5,
+    slidesPerView: 2.5,
     grabCursor: true,
 
     navigation: {
@@ -322,7 +350,7 @@ const instagramOptions = {
 
     breakpoints: {
         [breakpoints.tablet - 1]: {
-            slidesPerView: 1.5,
+            slidesPerView: 1.2,
             spaceBetween: 16,
             slidesOffsetBefore: 16,
             slidesOffsetAfter: 16,
@@ -330,10 +358,20 @@ const instagramOptions = {
     },
 };
 
+const settings = {
+    apiKey: '46c69919-a571-416e-8198-189ed26c6a79',
+    lang: 'ru_RU',
+    coordorder: 'latlong',
+    version: '2.1',
+};
+
 export default {
     name: 'master-class',
 
     components: {
+        yandexMap,
+        ymapMarker,
+
         VSvg,
         VButton,
         VLink,
@@ -355,8 +393,15 @@ export default {
 
     data() {
         return {
-            isPriceVisible: true,
+            showMap: false,
+            isPanelVisible: false,
             mockImg: productBrand1,
+            markerIcon: {
+                layout: 'default#image',
+                imageHref: pin,
+                imageSize: [24, 24],
+                imageOffset: [0, 0],
+            },
 
             masterclassBanners: [
                 {
@@ -402,20 +447,12 @@ export default {
             return this.$t(`productGroups.title.${productGroupTypes.MASTERCLASSES}`);
         },
 
-        productGalleryOptions() {
-            return productGalleryOptions;
+        mapSettings() {
+            return settings;
         },
 
         sliderOptions() {
             return sliderOptions;
-        },
-
-        instagramOptions() {
-            return instagramOptions;
-        },
-
-        pricePanelAnimation() {
-            return this.isTablet ? 'slide-bottom' : 'slide-top';
         },
 
         isTabletLg() {
@@ -448,14 +485,6 @@ export default {
             return generateCategoryUrl(productGroupTypes.MASTERCLASSES, code);
         },
 
-        onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
-        },
-
-        onShowGallery() {
-            this[CHANGE_MODAL_STATE]({ name: GALLERY_MODAL_NAME, open: true });
-        },
-
         onAddToCart(item) {
             this[CHANGE_MODAL_STATE]({
                 name: ADD_TO_CART_MODAL_NAME,
@@ -464,8 +493,13 @@ export default {
             });
         },
 
-        onPriceVisibilityChanged(isVisible) {
-            this.isPriceVisible = isVisible;
+        onPanelVisibilityChanged(isVisible) {
+            this.isPanelVisible = !isVisible;
+        },
+
+        onBuyBtnClick() {
+            const { panel } = this.$refs;
+            window.scrollTo({ top: panel.offsetTop, behavior: 'smooth' });
         },
     },
 
@@ -529,6 +563,10 @@ export default {
                 this.$progress.finish();
             }
         }, 500);
+    },
+
+    mounted() {
+        setTimeout(() => (this.showMap = true), 300);
     },
 };
 </script>

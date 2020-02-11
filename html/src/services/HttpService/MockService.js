@@ -69,6 +69,10 @@ import productReview2 from '../../assets/images/mock/productReview2.png';
 
 import masterclassDetailImage1 from '../../assets/images/mock/masterclassDetailImage1.png';
 
+import masterclassGalleryImg1 from '../../assets/images/mock/masterclassGalleryImg1.png';
+import masterclassGalleryImg2 from '../../assets/images/mock/masterclassGalleryImg2.png';
+import masterclassGalleryImg3 from '../../assets/images/mock/masterclassGalleryImg3.png';
+
 import author1 from '../../assets/images/mock/author1.png';
 
 const mockDate = new Date(Date.now());
@@ -1222,12 +1226,40 @@ const masterClassDetails = {
     name: 'Макияж для фото',
     code: 'code1',
     date: '3 сентября (пт), 12:00–18:00',
-    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
     topText: `<p>Мастер-класс «Макияж для фото» направлен на создание образов непосредственно для коммерческих и творческих съемок. </p>
     Рекомендуем посетить мастер-класс визажистам с любым уровнем подготовки, которые только начали или давно работают с частными клиентами, но хотят качественно изменить направление работы в сторону fashion, beauty и других коммерческих съемок.`,
     bottomText: `На мастер-классе преподаватель расскажет и покажет главные отличия картинки в жизни и на фото, какие текстуры подойдут для создания самых трендовых эффектов (матовая, глянцевая, мокрая, сияющая кожа), как работать с крупными кадрами и какие текстуры выбирать, чтобы постпродакшн (дальнейшая обработка фото) сказал вам спасибо!`,
     image: productMasterclass2,
     detailImage: masterclassDetailImage1,
+
+    gallery: [masterclassGalleryImg1, masterclassGalleryImg2, masterclassGalleryImg3],
+
+    program: `
+    <p>— Зачем нужна команда и как с ней работать, где ее искать;</p>
+    <p>— Как придумать образ по референсу стилиста и что это такое;</p> 
+    <p>— Разбор текстур для работы с кожей, начиная с выбора ухода;</p> 
+    <p>— Вариации nude make-up: от «голого лица» до свежего образа;</p>
+    <p>— Способы нанесения тона для очень крупных кадров, чтобы кожа оставалась живой;</p>
+    <p>— Создание влажной, матовой или сияющей кожи для формата beauty съемок;</p> 
+    <p>— Универсальные и проверенные продукты для создания безупречного нюдового мейкапа;</p> 
+    <p>— Демонстрация и практическая отработка по пройденно лекции;</p>
+    <p>— Особенности работы с разным освещением в студии;</p> 
+    <p>— Создание портфолио и выбор фотографа;</p> 
+    <p>— Этапы трансформации нюдового макияжа в яркий, этапы нанесения и цветовые решения для создания единой концепции съемки;</p> 
+    <p>— Сочетание сухих, кремовых и жидких текстур в одном макияже;</p> 
+    <p>— Использование продуктов не поназначению, креативные макияжи;</p> 
+    <p>— Секреты цвета – как добиться такого же насыщенного цвета на фото, как и в жизни;</p> 
+    <p>— Влажные цветные смоки, подводка нижнего века, несколько цветных акцентов в макияже;</p> 
+    <p>— Демонстрация и практическая отработка по пройденной лекции.</p>`,
+
+    requirements: `
+    <p>— Влажные салфетки;</p> 
+    <p>— Жидкость для снятия макияжа;</p> 
+    <p>— Ершик для бровей;</p> 
+    <p>— Корректор (база или крем);</p> 
+    <p>— Кисть для хайлайтера;</p> 
+    <p>— Кисть плоская для консилера;</p> 
+    <p>— Кисть для нижнего века и ресничного контура;</p>`,
 
     authors: [
         {
@@ -1261,6 +1293,35 @@ const masterClassDetails = {
             nickName: null,
             profile: 'Cтилист',
             image: null,
+        },
+    ],
+
+    address: {
+        id: 1,
+        full: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
+        coords: [55.7521569884845, 37.66961932869719],
+    },
+
+    tickets: [
+        {
+            id: 1,
+            name: 'Входной билет LITE',
+            description: 'Возможность посетить только одну площадку на мероприятии',
+            left: 10,
+            price: {
+                value: 5000,
+                currency: 'RUB',
+            },
+        },
+        {
+            id: 2,
+            name: 'Входной билет LITE',
+            description: 'Доступ ко всем площадкам и материалам',
+            left: 3,
+            price: {
+                value: 7000,
+                currency: 'RUB',
+            },
         },
     ],
 
@@ -2103,11 +2164,11 @@ export default class MockHttpService extends HttpServiceBase {
                     setTimeout(() => resolve(masterClasses), 300);
                     break;
 
-                case '/v1/catalog/masterclass-details':
+                case '/v1/catalog/masterclass-detail':
                     setTimeout(() => resolve(_cloneDeep(masterClassDetails)), 300);
                     break;
 
-                case '/v1/product-details':
+                case '/v1/product-detail':
                     switch (data.code) {
                         default:
                             setTimeout(() => resolve(productsDetails[0]), 300);

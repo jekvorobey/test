@@ -15,6 +15,7 @@ import createLocalization from '../plugins/i18n';
 import mq from '../plugins/media';
 import '../plugins/meta';
 import '../plugins/scroll-lock';
+import '../plugins/observer';
 
 import titleMixin from '../util/title';
 

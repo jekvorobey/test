@@ -19,7 +19,13 @@
             </div>
         </div>
     </li>
-    <router-link tag="li" v-else class="master-class-banner-card" :to="to">
+    <router-link
+        tag="li"
+        v-else
+        class="master-class-banner-card"
+        :class="{ 'master-class-banner-card--link': !showBtn }"
+        :to="to"
+    >
         <v-picture class="master-class-banner-card__img" :image="image" />
         <div class="master-class-banner-card__panel">
             <div class="text-bold master-class-banner-card__info">

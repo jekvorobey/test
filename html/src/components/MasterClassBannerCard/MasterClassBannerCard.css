@@ -15,6 +15,10 @@
         opacity: 0.5;
     }
 
+    &--link {
+        cursor: pointer;
+    }
+
     &__panel {
         position: absolute;
         display: flex;
