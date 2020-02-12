@@ -4014,10 +4014,10 @@ filepond-plugin-image-preview@^4.6.1:
   resolved "https://registry.yarnpkg.com/filepond-plugin-image-preview/-/filepond-plugin-image-preview-4.6.1.tgz#b328ef9da377023a6e359fbcef92d1721c399cf9"
   integrity sha512-DYpPpbO3hg/Wrgkx6bOtl9+cF4UB0EpbtFr9PVwwwPZBdq9YCJlk8oq5M9vHVTZR1t6RGcg6Q2+qK8ukY+b5WA==
 
-filepond@^4.10.0:
-  version "4.10.0"
-  resolved "https://registry.yarnpkg.com/filepond/-/filepond-4.10.0.tgz#5f88a1a61b258a668559180269e3307ac647305c"
-  integrity sha512-R9WS1Qap/+riBgcRNFKEajYK6VUc7ehC0iW8kvWimgQXEber7wRRV4+hi2g2fX7ToNETjFguWl4hEL4m7EmNGw==
+filepond@^4.11.0:
+  version "4.11.0"
+  resolved "https://registry.yarnpkg.com/filepond/-/filepond-4.11.0.tgz#4c09971d711c2c8cc7f0e13624c8a542ed1afd15"
+  integrity sha512-BCzpBBnv8DgBUeEZPNQyltdD1YIXemm8VjQJ9+vKKhVkGMRQcAzGBFZBtWJSI4dbZF8KVQn+jIvRGujcm5T+EA==
 
 filesize@^3.6.1:
   version "3.6.1"
@@ -10649,10 +10649,10 @@ webpack-bundle-analyzer@^3.6.0:
     opener "^1.5.1"
     ws "^6.0.0"
 
-webpack-cli@^3.3.10:
-  version "3.3.10"
-  resolved "https://registry.yarnpkg.com/webpack-cli/-/webpack-cli-3.3.10.tgz#17b279267e9b4fb549023fae170da8e6e766da13"
-  integrity sha512-u1dgND9+MXaEt74sJR4PR7qkPxXUSQ0RXYq8x1L6Jg1MYVEmGPrH6Ah6C4arD4r0J1P5HKjRqpab36k0eIzPqg==
+webpack-cli@^3.3.11:
+  version "3.3.11"
+  resolved "https://registry.yarnpkg.com/webpack-cli/-/webpack-cli-3.3.11.tgz#3bf21889bf597b5d82c38f215135a411edfdc631"
+  integrity sha512-dXlfuml7xvAFwYUPsrtQAA9e4DOe58gnzSxhgrO/ZM/gyXTBowrsYeubyN4mqGhYdpXMFNyQ6emjJS9M7OBd4g==
   dependencies:
     chalk "2.4.2"
     cross-spawn "6.0.5"
@@ -10715,10 +10715,10 @@ webpack-sources@^1.0.1, webpack-sources@^1.0.2, webpack-sources@^1.1.0, webpack-
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack@^4.41.5:
-  version "4.41.5"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.41.5.tgz#3210f1886bce5310e62bb97204d18c263341b77c"
-  integrity sha512-wp0Co4vpyumnp3KlkmpM5LWuzvZYayDwM2n17EHFr4qxBBbRokC7DJawPJC7TfSFZ9HZ6GsdH40EBj4UV0nmpw==
+webpack@^4.41.6:
+  version "4.41.6"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.41.6.tgz#12f2f804bf6542ef166755050d4afbc8f66ba7e1"
+  integrity sha512-yxXfV0Zv9WMGRD+QexkZzmGIh54bsvEs+9aRWxnN8erLWEOehAKUTeNBoUbA6HPEZPlRo7KDi2ZcNveoZgK9MA==
   dependencies:
     "@webassemblyjs/ast" "1.8.5"
     "@webassemblyjs/helper-module-context" "1.8.5"
