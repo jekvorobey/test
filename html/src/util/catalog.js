@@ -36,7 +36,7 @@ export function concatCatalogRoutePath(type, entityCode, categoryCode, segments)
             return '/';
     }
 
-    const basePath = segments.length > 0 ? `${baseRoute}/filters` : baseRoute;
+    const basePath = segments.length > 0 ? `${baseRoute}filters` : baseRoute;
     return basePath.concat(...segments.map(s => `/${s}`));
 }
 
