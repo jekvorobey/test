@@ -14,7 +14,7 @@ export default {
     routes: [
         {
             name: 'Account',
-            path: '',
+            path: 'account',
             component: AccountAsync,
         },
     ],

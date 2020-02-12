@@ -5,10 +5,15 @@
         </div>
         <div class="image-picker__body">
             <div class="image-picker__body-controls">
-                <v-button class="btn--outline">Загрузить новое фото</v-button>
-                <v-button class="btn--transparent image-picker__body-controls-delete">Удалить</v-button>
+                <v-button class="btn--outline image-picker__body-controls-btn">
+                    {{ btnText }}
+                </v-button>
+                <v-link tag="button" class="image-picker__body-controls-link">
+                    <v-svg name="cross" width="24" height="24" />
+                    <span>Удалить</span>
+                </v-link>
             </div>
-            <div class="text-grey">В формате png или jpg, до 1 Мб</div>
+            <div class="text-grey image-picker__body-note">В формате png или jpg, до 1 Мб</div>
         </div>
     </div>
 </template>
@@ -19,6 +24,7 @@ import VButton from '../../controls/VButton/VButton.vue';
 import VLink from '../../controls/VLink/VLink.vue';
 
 import profileImg from '../../../assets/images/mock/profile.png';
+import '../../../assets/images/sprites/cross.svg';
 import '../../../assets/images/sprites/account-middle.svg';
 import './ImagePicker.css';
 
@@ -45,6 +51,12 @@ export default {
         },
     },
 
+    data() {
+        return {
+            btnText: 'Загрузить другой',
+        };
+    },
+
     computed: {
         inputId() {
             return `image-picker-${this._uid}`;
@@ -52,6 +64,16 @@ export default {
 
         types() {
             return this.validTypes.join(', ');
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
+    },
+
+    watch: {
+        isTablet(value) {
+            this.btnText = value ? 'Загрузить другой' : 'Загрузить новое фото';
         },
     },
 

@@ -1,61 +1,66 @@
 <template>
     <section class="section payment-view">
         <h2 class="payment-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
-        <info-panel class="payment-view__panel" header="Сохраненные карты">
+        <!-- <info-panel class="payment-view__panel" header="Сохраненные карты">
             <template v-slot:controls>
                 <v-link class="payment-view__panel-link" tag="button">
-                    <v-svg name="plus-small" width="16" height="16" />
-                    &nbsp;&nbsp;Добавить карту
+                    <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
+                    <span>&nbsp;&nbsp;Добавить карту</span>
                 </v-link>
             </template>
-
-            <ul class="payment-view__panel-list">
-                <checkout-option-card
-                    class="payment-view__panel-item"
-                    v-for="card in cards"
-                    :key="card.type"
-                    :selected="card.type === selectedCard.type"
-                    @cardClick="onSetSelectedCard(card)"
-                >
-                    <div class="payment-view__panel-item-type">
-                        <v-svg :name="card.type" width="40" height="24" />
-                        &nbsp;&nbsp;
-                        {{ card.name }}
-                    </div>
-                    <div class="payment-view__panel-item-number">
-                        {{ card.number && maskCardNumber(card.number) }}
-                    </div>
-                    <template v-slot:controls>
-                        <div class="payment-view__panel-item-controls">
-                            <v-link class="payment-view__panel-item-link" tag="button">
-                                <v-svg name="edit" width="16" height="16" />
-                            </v-link>
-                            <v-link class="payment-view__panel-item-link" tag="button">
-                                <v-svg name="cross" width="16" height="16" />
-                            </v-link>
+            <div class="container container--tablet-lg">
+                <ul class="payment-view__panel-list">
+                    <checkout-option-card
+                        class="payment-view__panel-item"
+                        v-for="card in cards"
+                        :key="card.type"
+                        :selected="card.type === selectedCard.type"
+                        @cardClick="onSetSelectedCard(card)"
+                    >
+                        <div class="payment-view__panel-item-type">
+                            <v-svg :name="card.type" width="40" height="24" />
+                            &nbsp;&nbsp;
+                            {{ card.name }}
                         </div>
-                    </template>
-                </checkout-option-card>
-            </ul>
-        </info-panel>
+                        <div class="payment-view__panel-item-number">
+                            {{ card.number && maskCardNumber(card.number) }}
+                        </div>
+                        <template v-slot:controls>
+                            <div class="payment-view__panel-item-controls">
+                                <v-link class="payment-view__panel-item-link" tag="button">
+                                    <v-svg name="edit" width="16" height="16" />
+                                </v-link>
+                                <v-link class="payment-view__panel-item-link" tag="button">
+                                    <v-svg name="cross" width="16" height="16" />
+                                </v-link>
+                            </div>
+                        </template>
+                    </checkout-option-card>
+                </ul>
+            </div>
+        </info-panel> -->
 
         <info-panel class="payment-view__panel" header="Предпочтительный способ оплаты">
-            <v-check
-                v-for="method in paymentMethods"
-                v-model="selectedMethod"
-                type="radio"
-                name="selectedMethod"
-                :key="method.id"
-                :value="method.id"
-                :id="`radio-${method.id}`"
-            >
-                {{ method.name }}
-            </v-check>
+            <div class="container container--tablet-lg">
+                <v-check
+                    v-for="method in paymentMethods"
+                    v-model="selectedMethod"
+                    type="radio"
+                    name="selectedMethod"
+                    :key="method.id"
+                    :value="method.id"
+                    :id="`radio-${method.id}`"
+                >
+                    {{ method.name }}
+                </v-check>
+            </div>
         </info-panel>
 
-        <v-button @click="onSave">
-            Сохранить
-        </v-button>
+        <div class="container payment-view__submit">
+            <v-button class="payment-view__submit-btn" @click="onSave">
+                Сохранить
+            </v-button>
+        </div>
     </section>
 </template>
 
@@ -147,6 +152,14 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {}),
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
+
+        iconSize() {
+            return this.$mq.tablet ? 24 : 16;
+        },
     },
 
     methods: {

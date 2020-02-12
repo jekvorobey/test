@@ -69,7 +69,7 @@ import { PICKUP_POINTS, SELECTED_DELIVERY_METHOD_ID, DELIVERY_METHODS } from '..
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
-import { receiveTypes } from '../../../assets/scripts/constants';
+import { receiveTypes } from '../../../assets/scripts/enums';
 import pin from '../../../assets/images/icons/pin-filled.svg';
 import './CheckoutPickupPointModal.css';
 

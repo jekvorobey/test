@@ -1,5 +1,5 @@
 <template>
-    <div class="v-password" :class="{ 'is-disabled': $attrs.disabled }">
+    <div class="v-password" :class="[{ 'is-disabled': $attrs.disabled }, { 'v-password--invalid': error }]">
         <label class="v-password__label" :for="inputId">
             <slot />
         </label>
@@ -9,7 +9,6 @@
                 v-bind="$attrs"
                 v-on="inputListeners"
                 class="v-password__input"
-                :class="{ 'is-invalid': error }"
                 :id="inputId"
                 :value="value"
                 :type="type"
@@ -20,6 +19,7 @@
             <v-button
                 v-if="!$attrs.disabled"
                 class="btn--transparent v-password__btn-show"
+                @mousedown.prevent
                 @click.prevent="changePasswordState"
             >
                 <v-svg :name="showPassword ? 'eye-crossed' : 'eye'" width="16" height="16" />

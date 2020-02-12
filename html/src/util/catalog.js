@@ -1,19 +1,41 @@
+import { productGroupTypes } from '../assets/scripts/enums';
+
 const rangeRegx = /from_\d*_to_\d*/;
 const numberRegx = /\d+/g;
 
-export function generateCategoryUrl(brandCode, code) {
-    if (brandCode) return code ? `/brand/${brandCode}/${code}` : `/brand/${brandCode}`;
-    return code ? `/catalog/${code}` : `/catalog`;
+export function generateCategoryUrl(type, entityCode, categoryCode) {
+    switch (type) {
+        case productGroupTypes.CATALOG:
+            return categoryCode ? `/${type}/${categoryCode}` : `/${type}/`;
+
+        case productGroupTypes.MASTERCLASSES:
+            return entityCode ? `/${type}/${entityCode}` : `/${type}/`;
+
+        case productGroupTypes.PROMO:
+        case productGroupTypes.SETS:
+        case productGroupTypes.BRANDS:
+            return categoryCode ? `/${type}/${entityCode}/${categoryCode}/` : `/${type}/${entityCode}/`;
+
+        default:
+            return '/';
+    }
 }
 
-export function concatBrandRoutePath(brandCode, categoryCode, segments) {
-    const baseRoute = categoryCode ? `/brand/${brandCode}/${categoryCode}` : `/brand/${brandCode}`;
-    const basePath = segments.length > 0 ? `${baseRoute}/filters` : baseRoute;
-    return basePath.concat(...segments.map(s => `/${s}`));
-}
+export function concatCatalogRoutePath(type, entityCode, categoryCode, segments) {
+    let baseRoute = '';
+    switch (type) {
+        case productGroupTypes.CATALOG:
+            baseRoute = categoryCode ? `/${type}/${categoryCode}/` : `/${type}/`;
+            break;
+        case productGroupTypes.PROMO:
+        case productGroupTypes.SETS:
+        case productGroupTypes.BRANDS:
+            baseRoute = categoryCode ? `/${type}/${entityCode}/${categoryCode}/` : `/${type}/${entityCode}/`;
+            break;
+        default:
+            return '/';
+    }
 
-export function concatCatalogRoutePath(categoryCode, segments) {
-    const baseRoute = categoryCode ? `/catalog/${categoryCode}` : '/catalog';
     const basePath = segments.length > 0 ? `${baseRoute}/filters` : baseRoute;
     return basePath.concat(...segments.map(s => `/${s}`));
 }
@@ -51,7 +73,7 @@ export function getActiveCategories(code, item, activeItems = []) {
     return false;
 }
 
-export function computeFilterData(pathMatch, code, brandCode) {
+export function computeFilterData(pathMatch, code) {
     const filter = { category: code };
     const routeSegments = pathMatch ? pathMatch.split('/') : [];
     const filterSegments = mapFilterSegments(routeSegments);
@@ -64,15 +86,12 @@ export function computeFilterData(pathMatch, code, brandCode) {
         if (Array.isArray(segment)) filter[filterName] = segment;
         else filter[filterName] = Object.keys(segment);
     }
-
-    if (brandCode) filter['brand'] = [brandCode];
     return filter;
 }
 
 export default {
     generateCategoryUrl,
     concatCatalogRoutePath,
-    concatBrandRoutePath,
     mapFilterSegments,
     computeFilterData,
 };

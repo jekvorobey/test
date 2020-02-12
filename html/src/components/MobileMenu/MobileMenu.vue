@@ -11,7 +11,7 @@
             <template v-else class="container mobile-menu__header">
                 <button class="mobile-menu__header-btn mobile-menu__header-btn--arrow" @click.prevent="onBackClick">
                     <v-svg name="arrow-small" width="24" height="24" />
-                    {{ selectedCategory ? selectedCategory.name : $t('header.links.catalog') }}
+                    {{ selectedCategoryName }}
                 </button>
                 <button class="mobile-menu__header-btn" @click="SET_MENU_OPEN(false)">
                     <v-svg name="cross" width="24" height="24" />
@@ -22,37 +22,21 @@
             <transition name="fade-in" mode="out-in">
                 <div v-if="!showCategories" class="mobile-menu__panel-root">
                     <ul class="mobile-menu__menu">
-                        <li class="container mobile-menu__menu-item mobile-menu__menu-item--separator">
-                            <v-link class="mobile-menu__menu-link" to="/catalog">
-                                {{ $t('header.links.catalog') }}
+                        <li
+                            class="container mobile-menu__menu-item mobile-menu__menu-item--separator"
+                            v-for="(link, index) in links"
+                            :key="link.name"
+                        >
+                            <v-link class="mobile-menu__menu-link" :to="link.to">
+                                {{ link.name }}
                             </v-link>
-                            <v-link tag="button" class="mobile-menu__menu-btn" @click.prevent="showCategories = true">
+                            <v-link
+                                v-if="index === 0"
+                                tag="button"
+                                class="mobile-menu__menu-btn"
+                                @click.prevent="showCategories = true"
+                            >
                                 <v-svg name="arrow-down" width="24" height="24" />
-                            </v-link>
-                        </li>
-                        <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/top">
-                                {{ $t('header.links.new') }}
-                            </v-link>
-                        </li>
-                        <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/new">
-                                {{ $t('header.links.stocks') }}
-                            </v-link>
-                        </li>
-                        <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/show">
-                                {{ $t('header.links.collections') }}
-                            </v-link>
-                        </li>
-                        <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/ask">
-                                {{ $t('header.links.brands') }}
-                            </v-link>
-                        </li>
-                        <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/job">
-                                {{ $t('header.links.classes') }}
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item mobile-menu__menu-item--separator">
@@ -143,7 +127,7 @@
 import VSvg from '../controls/VSvg/VSvg.vue';
 import VLink from '../controls/VLink/VLink.vue';
 import VSticky from '../controls/VSticky/VSticky.vue';
-import VClamp from '../controls/VClamp/VClamp.vue';
+import VClamp from 'vue-clamp';
 
 import GeneralModal from '../GeneralModal/GeneralModal.vue';
 
@@ -160,6 +144,7 @@ import { NAME as GEO_MODULE, SELECTED_CITY } from '../../store/modules/Geolocati
 import { NAME as MODAL_MODULE } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
+import { productGroupTypes } from '../../assets/scripts/enums';
 import '../../assets/images/sprites/socials/viber-bw.svg';
 import '../../assets/images/sprites/socials/whatsup-bw.svg';
 import '../../assets/images/sprites/socials/telegram-bw.svg';
@@ -204,6 +189,41 @@ export default {
             return this.selectedCategories.length > 0
                 ? this.selectedCategories[this.selectedCategories.length - 1]
                 : null;
+        },
+
+        selectedCategoryName() {
+            return this.selectedCategory
+                ? this.selectedCategory.name
+                : this.$t(`productGroups.links.${productGroupTypes.CATALOG}`);
+        },
+
+        links() {
+            return [
+                {
+                    to: { name: 'Catalog', params: { type: productGroupTypes.CATALOG } },
+                    name: this.$t(`productGroups.links.${productGroupTypes.CATALOG}`),
+                },
+                {
+                    to: { name: 'Catalog', params: { type: productGroupTypes.CATALOG } },
+                    name: this.$t(`productGroups.links.${productGroupTypes.NEW}`),
+                },
+                {
+                    to: { name: 'ProductGroups', params: { type: productGroupTypes.PROMO } },
+                    name: this.$t(`productGroups.links.${productGroupTypes.PROMO}`),
+                },
+                {
+                    to: { name: 'ProductGroups', params: { type: productGroupTypes.SETS } },
+                    name: this.$t(`productGroups.links.${productGroupTypes.SETS}`),
+                },
+                {
+                    to: { name: 'ProductGroups', params: { type: productGroupTypes.BRANDS } },
+                    name: this.$t(`productGroups.links.${productGroupTypes.BRANDS}`),
+                },
+                {
+                    to: { name: 'ProductGroups', params: { type: productGroupTypes.MASTERCLASSES } },
+                    name: this.$t(`productGroups.links.${productGroupTypes.MASTERCLASSES}`),
+                },
+            ];
         },
 
         isTabletLg() {

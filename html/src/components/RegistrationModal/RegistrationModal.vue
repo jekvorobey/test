@@ -9,7 +9,7 @@
                     </template>
 
                     <template v-else-if="!accepted">
-                        Мы отправили код на {{ displayPhone }}, введите его для регистрации.
+                        Мы отправили код на {{ rawPhone }}, введите его для регистрации.
                         <a @click.stop="onChangeNumber">Изменить</a>
                     </template>
 
@@ -22,27 +22,50 @@
                     <div v-if="!sent" class="registration-modal__form-phone">
                         <v-input-mask
                             class="registration-modal__form-input"
-                            v-model="phone"
-                            :display-value.sync="displayPhone"
+                            v-model="rawPhone"
                             placeholder="+7 ___ ___-__-__"
-                            mask="+7 ### ###-##-##"
-                            masked
+                            :raw="false"
+                            :options="maskOptions"
+                            :error="phoneError"
                         >
                             Номер телефона
+                            <template v-slot:after>
+                                <v-button class="registration-modal__form-btn" type="submit">Получить код</v-button>
+                            </template>
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error" v-if="error">{{ error }}</div>
+                                </transition>
+                            </template>
                         </v-input-mask>
-                        <v-button class="registration-modal__form-btn" type="submit">Получить код</v-button>
                     </div>
 
                     <template v-else-if="!accepted">
                         <div class="registration-modal__form-confirmation">
-                            <v-input class="registration-modal__form-input" v-model="code">
+                            <v-input
+                                class="registration-modal__form-input"
+                                maxLength="4"
+                                v-model="code"
+                                :error="codeError"
+                            >
                                 Код из СМС
+                                <template v-slot:after>
+                                    <v-button class="registration-modal__form-btn" type="submit">Регистрация</v-button>
+                                </template>
+                                <template v-slot:error="{ error }">
+                                    <transition name="slide-in-bottom" mode="out-in">
+                                        <div :key="error" v-if="error">{{ error }}</div>
+                                    </transition>
+                                </template>
                             </v-input>
-                            <v-button class="registration-modal__form-btn" type="submit">Регистрация</v-button>
                         </div>
                         <div class="registration-modal__form-timer">
-                            <span v-if="counter !== 0">Получить новый код можно через {{ counter }} сек.</span>
-                            <a v-else @click.stop="startCounter">Отправить новый код</a>
+                            <span v-if="counter !== 0">
+                                Получить новый код можно через <strong>{{ counter }} сек.</strong>
+                            </span>
+                            <v-link class="registration-modal__form-repeat" v-else tag="button" @click.stop="sendSms">
+                                Отправить новый код
+                            </v-link>
                         </div>
                         <span class="text-grey registration-modal__form-info">
                             Нажимая кнопку «Регистрация», вы соглашаетесь с условиями <a>оферты</a> и
@@ -51,11 +74,25 @@
                     </template>
 
                     <div v-else class="registration-modal__form-password">
-                        <v-password class="registration-modal__form-input" v-model="password">
+                        <v-password class="registration-modal__form-input" v-model="password" :error="passwordError">
                             Пароль
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error" v-if="error">{{ error }}</div>
+                                </transition>
+                            </template>
                         </v-password>
-                        <v-password class="registration-modal__form-input" v-model="passwordRepeat">
+                        <v-password
+                            class="registration-modal__form-input"
+                            v-model="passwordRepeat"
+                            :error="passwordRepeatError"
+                        >
                             Пароль ещё раз
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error" v-if="error">{{ error }}</div>
+                                </transition>
+                            </template>
                         </v-password>
                         <v-button class="registration-modal__form-btn" type="submit">Сохранить</v-button>
                     </div>
@@ -63,7 +100,7 @@
 
                 <div v-if="!accepted" class="registration-modal__socials">
                     <div class="registration-modal__socials-list">
-                        <button class="registration-modal__socials-item">
+                        <button class="registration-modal__socials-item" @click="onRegisterBySocial('google')">
                             <svg
                                 width="14"
                                 height="14"
@@ -77,7 +114,7 @@
                                 />
                             </svg>
                         </button>
-                        <button class="registration-modal__socials-item">
+                        <button class="registration-modal__socials-item" @click="onRegisterBySocial('vkontakte')">
                             <svg
                                 width="16"
                                 height="10"
@@ -93,7 +130,7 @@
                                 />
                             </svg>
                         </button>
-                        <button class="registration-modal__socials-item">
+                        <button class="registration-modal__socials-item" @click="onRegisterBySocial('facebook')">
                             <svg
                                 width="8"
                                 height="18"
@@ -123,6 +160,7 @@
 </template>
 
 <script>
+import VLink from '../controls/VLink/VLink.vue';
 import VButton from '../controls/VButton/VButton.vue';
 import VPassword from '../controls/VPassword/VPassword.vue';
 import VInput from '../controls/VInput/VInput.vue';
@@ -134,11 +172,14 @@ import validationMixin, { required, minLength, password, sameAs } from '../../pl
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
-import { REGISTER } from '../../store/modules/Auth/actions';
+import { SEND_SMS, CHECK_CODE, REGISTER_BY_PASSWORD, GET_SOCIAL_LINK } from '../../store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
+import _cloneDeep from 'lodash/cloneDeep';
+import { phoneMaskOptions } from '../../assets/scripts/settings';
+import { rawPhone } from '../../util/helpers';
 import './RegistrationModal.css';
 
 export const NAME = 'registration-modal';
@@ -149,6 +190,7 @@ export default {
     mixins: [validationMixin],
 
     components: {
+        VLink,
         VButton,
         VPassword,
         VInput,
@@ -160,6 +202,7 @@ export default {
         password: {
             required,
             password,
+            minLength: minLength(8),
         },
 
         passwordRepeat: {
@@ -169,11 +212,19 @@ export default {
 
         phone: {
             required,
-            minLength: minLength(10),
+            minLength: minLength(12),
+        },
+
+        phoneExists: {
+            exists: value => value === false,
         },
 
         code: {
             required,
+        },
+
+        accepted: {
+            valid: value => value === true,
         },
     },
 
@@ -181,13 +232,20 @@ export default {
         return {
             sent: false,
             accepted: false,
-            phone: '+7 ',
-            displayPhone: '',
+
+            rawPhone: null,
+            phoneExists: false,
+
             code: null,
-            counter: 59,
 
             password: null,
             passwordRepeat: null,
+
+            counter: 59,
+
+            maskOptions: {
+                ...phoneMaskOptions,
+            },
         };
     },
 
@@ -196,6 +254,10 @@ export default {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
+        phone() {
+            return rawPhone(this.rawPhone);
+        },
+
         header() {
             return this.accepted ? 'Создание пароля' : 'Регистрация';
         },
@@ -203,11 +265,50 @@ export default {
         isTablet() {
             return this.$mq.tablet;
         },
+
+        codeError() {
+            if (this.$v.code.$dirty && !this.$v.code.required) return 'Обязательное поле';
+            if (this.$v.accepted.$dirty && !this.$v.accepted.valid) return 'Неверный код';
+        },
+
+        phoneError() {
+            if (this.$v.phone.$dirty) {
+                if (!this.$v.phone.required) return 'Обязательное поле';
+                if (!this.$v.phone.minLength) return 'Неверно введен номер';
+            }
+
+            if (this.$v.phoneExists.$dirty && !this.$v.phoneExists.exists) return 'Такой номер уже зарегистрирован';
+        },
+
+        passwordError() {
+            if (this.$v.password.$dirty) {
+                if (!this.$v.password.required) return 'Обязательное поле';
+                if (!this.$v.password.password) return 'Как минимум 1 заглавная и строчная латинские буквы и 1 цифра';
+                if (!this.$v.password.minLength) return 'Не менее 8 символов';
+            }
+        },
+
+        passwordRepeatError() {
+            if (this.$v.password.$dirty && this.$v.passwordRepeat.$dirty && !this.$v.passwordRepeat.sameAs)
+                return 'Пароль не совпадает';
+        },
+    },
+
+    watch: {
+        phone() {
+            if (this.$v.phoneExists.$dirty) this.$v.phoneExists.$reset();
+            if (this.$v.phone.$dirty) this.$v.phone.$reset();
+        },
+
+        code() {
+            if (this.$v.code.$dirty) this.$v.code.$reset();
+            if (this.$v.accepted.$dirty) this.$v.accepted.$reset();
+        },
     },
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(AUTH_MODULE, [REGISTER]),
+        ...mapActions(AUTH_MODULE, [SEND_SMS, REGISTER_BY_PASSWORD, CHECK_CODE, GET_SOCIAL_LINK]),
 
         startCounter() {
             this.stopCounter();
@@ -229,20 +330,61 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: LOGIN_MODAL_NAME, open: true });
         },
 
-        async onSubmit() {
-            if (this.sent && this.accepted && !this.$v.password.$invalid && !this.$v.passwordRepeat.$invalid) {
-                try {
-                    await this[REGISTER]({ code: this.code });
-                    this.$emit('login');
-                    this.onClose();
-                } catch (error) {
-                    console.log(error);
-                }
-            } else if (this.sent && !this.$v.code.$invalid) {
-                this.accepted = true;
-            } else if (!this.$v.phone.$invalid) {
-                this.sent = true;
+        async onRegisterBySocial(driver) {
+            try {
+                const url = `${document.location.origin}/profile`;
+                const socialUrl = await this[GET_SOCIAL_LINK]({ url, driver });
+                document.location.href = socialUrl;
+            } catch (error) {
+                return;
+            }
+        },
+
+        async finishRegistration() {
+            try {
+                await this[REGISTER_BY_PASSWORD](this.password);
+                this.onClose();
+                this.$router.push({ name: 'Cabinet' });
+            } catch (error) {
+                return;
+            }
+        },
+
+        async checkCode() {
+            try {
+                this.accepted = await this[CHECK_CODE](this.code);
+            } catch (error) {
+                this.accepted = false;
+                this.$v.accepted.$touch();
+            }
+        },
+
+        async sendSms() {
+            try {
+                this.code = await this[SEND_SMS](this.phone);
                 this.startCounter();
+                this.phoneExists = false;
+                this.sent = true;
+            } catch (error) {
+                this.phoneExists = true;
+                this.$v.phoneExists.$touch();
+
+                this.stopCounter();
+                this.sent = false;
+            }
+        },
+
+        async onSubmit() {
+            if (this.sent && this.accepted) {
+                this.$v.password.$touch();
+                this.$v.passwordRepeat.$touch();
+                if (!this.$v.password.$invalid && !this.$v.passwordRepeat.$invalid) this.finishRegistration();
+            } else if (this.sent) {
+                this.$v.code.$touch();
+                if (!this.$v.code.$invalid) this.checkCode();
+            } else {
+                this.$v.phone.$touch();
+                if (!this.$v.phone.$invalid) this.sendSms();
             }
         },
 

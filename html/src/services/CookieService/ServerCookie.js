@@ -2,11 +2,11 @@ import Cookie from 'cookie-universal';
 import BaseCookie from './base';
 
 export default class ServerCookie extends BaseCookie {
-    constructor(req, res) {
+    constructor(context) {
         super();
-        this.instance = new Cookie(req, res);
-        this.req = req;
-        this.res = res;
+        this.instance = new Cookie(context.req, context.res);
+        this.req = context.req;
+        this.res = context.res;
     }
 
     get cookieString() {

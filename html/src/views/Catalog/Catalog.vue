@@ -1,40 +1,32 @@
 <template>
     <section class="section catalog-view">
         <div class="container catalog-view__header">
-            <transition-group tag="ol" class="section catalog-view__breadcrumbs" name="fade-in">
-                <li class="catalog-view__breadcrumbs-item" key="main">
-                    <router-link class="catalog-view__breadcrumbs-link" to="/">
-                        Главная
-                    </router-link>
-                </li>
-
-                <li class="catalog-view__breadcrumbs-item" key="all">
-                    <template v-if="brandCode">Бренды</template>
-                    <router-link v-else class="catalog-view__breadcrumbs-link" to="/catalog">
-                        Каталог
-                    </router-link>
-                </li>
-
-                <li v-if="brandCode" class="catalog-view__breadcrumbs-item" :key="brandCode">
-                    <router-link class="catalog-view__breadcrumbs-link" :to="`/brand/${brandCode}`">
-                        {{ brand && brand.name }}
-                    </router-link>
-                </li>
-
-                <li class="catalog-view__breadcrumbs-item" v-for="category in activeCategories" :key="category.id">
-                    <router-link class="catalog-view__breadcrumbs-link" :to="generateBreadcrumbUrl(category.code)">
-                        {{ category.name }}
-                    </router-link>
-                </li>
-            </transition-group>
+            <breadcrumbs class="catalog-view__breadcrumbs">
+                <breadcrumb-item key="main" to="/">
+                    Главная
+                </breadcrumb-item>
+                <breadcrumb-item :key="type" :to="breadcrumbRootUrl">
+                    {{ $t(`productGroups.title.${type}`) }}
+                </breadcrumb-item>
+                <breadcrumb-item v-if="entityCode" :key="entityCode" :to="generateBreadcrumbUrl(null)">
+                    {{ productGroup && productGroup.name }}
+                </breadcrumb-item>
+                <breadcrumb-item
+                    v-for="category in activeCategories"
+                    :key="category.id"
+                    :to="generateBreadcrumbUrl(category.code)"
+                >
+                    {{ category.name }}
+                </breadcrumb-item>
+            </breadcrumbs>
 
             <catalog-banner-card
-                v-if="brandCode && brand"
+                v-if="entityCode && productGroup"
                 class="catalog-view__brand"
-                :banner-id="brand.id"
-                :bottom-text="brand.description"
-                :title="brand.name"
-                :image="brand.image"
+                :banner-id="productGroup.id"
+                :bottom-text="productGroup.description"
+                :title="productGroup.name"
+                :image="productGroup.image"
             />
 
             <catalog-banner-card
@@ -50,7 +42,7 @@
         </div>
         <section class="section">
             <div class="container catalog-view__grid">
-                <div class="catalog-view__side-panel">
+                <div class="catalog-view__side-panel" v-if="!isTabletLg">
                     <ul class="catalog-view__side-panel-categories">
                         <category-tree-item
                             class="catalog-view__side-panel-categories-item"
@@ -69,6 +61,7 @@
                             </h1>
                             <p class="text-grey catalog-view__main-header-text">489 продуктов</p>
                         </div>
+
                         <v-select
                             class="catalog-view__main-header-sort"
                             label="title"
@@ -80,16 +73,13 @@
                             :show-labels="false"
                         />
 
-                        <v-button class="catalog-view__main-header-btn" @click="filterModal = !filterModal">
-                            <span>
-                                Фильтр и сортировка&nbsp;&nbsp;
-                                <span class="text-grey">{{ activeTags.length }}</span>
-                            </span>
-                            <v-svg id="catalog-filter-icon" name="filter" width="18" height="14" />
-                        </v-button>
+                        <filter-button class="catalog-view__main-header-btn" @click="filterModal = !filterModal">
+                            Фильтр и сортировка&nbsp;&nbsp;
+                            <span class="text-grey">{{ activeTags.length }}</span>
+                        </filter-button>
                     </div>
 
-                    <transition-group tag="ul" class="catalog-view__main-tags" name="tag-item">
+                    <transition-group v-if="!isTabletLg" tag="ul" class="catalog-view__main-tags" name="tag-item">
                         <tag-item
                             v-for="(tag, index) in activeTags"
                             :data-index="index"
@@ -99,52 +89,14 @@
                         />
                     </transition-group>
 
-                    <transition-group
-                        tag="ul"
-                        class="catalog-view__main-grid"
-                        name="catalog-item"
-                        @before-enter="onBeforeEnterItems"
-                        @enter="onEnterItems"
-                        @after-enter="onAfterEnterItems"
-                        @leave="onLeaveItems"
-                    >
-                        <li
-                            class="catalog-view__main-grid-item"
-                            v-for="item in items"
-                            :key="`${item.id}-${item.type}`"
-                            :class="{ [`catalog-view__main-grid-item--${item.type}`]: item.type }"
-                        >
-                            <catalog-product-card
-                                v-if="item.type === 'product'"
-                                class="catalog-view__main-grid-card"
-                                :product-id="item.id"
-                                :name="item.name"
-                                :type="item.type"
-                                :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                                :image="item.image"
-                                :price="item.price"
-                                :old-price="item.oldPrice"
-                                :tags="item.tags"
-                                :rating="item.rating"
-                                @addItem="onAddToCart($event)"
-                                @preview="onPreview(item.code)"
-                            />
-                            <catalog-banner-card
-                                v-else-if="item.type === 'banner'"
-                                class="catalog-view__main-grid-card"
-                                :banner-id="item.id"
-                                :title="item.title"
-                                :image="item.image"
-                                :upper-text="item.upperText"
-                                :btn-text="item.btnText"
-                            />
-                        </li>
-                    </transition-group>
+                    <catalog-product-list class="catalog-view__main-grid" :animation="!isTablet" />
+
                     <div class="catalog-view__main-controls" v-if="pagesCount > 1">
                         <v-button
                             v-if="activePage < pagesCount"
                             class="btn--outline catalog-view__main-controls-btn"
                             @click="onShowMore"
+                            :disabled="showMore"
                         >
                             Показать ещё
                         </v-button>
@@ -228,11 +180,15 @@ import VSticky from '../../components/controls/VSticky/VSticky.vue';
 import VExpander from '../../components/VExpander/VExpander.vue';
 import Modal from '../../components/controls/modal/modal.vue';
 
+import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+
+import FilterButton from '../../components/FilterButton/FilterButton.vue';
 import TagItem from '../../components/TagItem/TagItem.vue';
 import CategoryTreeItem from '../../components/CategoryTreeItem/CategoryTreeItem.vue';
 import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
-import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
+import CatalogProductList from '../../components/CatalogProductList/CatalogProductList.vue';
 
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
 import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
@@ -246,8 +202,14 @@ import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
-import catalogModule, { NAME as CATALOG_MODULE, ITEMS, BANNER, CATEGORIES, BRAND } from '../../store/modules/Catalog';
-import { FETCH_ITEMS, FETCH_CATALOG_DATA, SET_LOAD } from '../../store/modules/Catalog/actions';
+import catalogModule, {
+    NAME as CATALOG_MODULE,
+    ITEMS,
+    BANNER,
+    CATEGORIES,
+    PRODUCT_GROUP,
+} from '../../store/modules/Catalog';
+import { FETCH_ITEMS, SET_LOAD_PATH, FETCH_DATA_BY_TYPE } from '../../store/modules/Catalog/actions';
 import {
     ACTIVE_TAGS,
     ACTIVE_CATEGORY,
@@ -257,22 +219,13 @@ import {
     ACTIVE_CATEGORIES,
 } from '../../store/modules/Catalog/getters';
 
-import {
-    concatCatalogRoutePath,
-    concatBrandRoutePath,
-    generateCategoryUrl,
-    mapFilterSegments,
-    computeFilterData,
-} from '../../util/catalog';
+import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '../../util/catalog';
 import { registerModuleIfNotExists } from '../../util/store';
 import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants';
+import { productGroupTypes } from '../../assets/scripts/enums';
 import _debounce from 'lodash/debounce';
-import '../../assets/images/sprites/filter.svg';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
-
-const itemAnimationDelayDelta = 100;
-let counter = 0;
 
 export default {
     name: 'catalog',
@@ -286,10 +239,13 @@ export default {
         VExpander,
         Modal,
 
+        Breadcrumbs,
+        BreadcrumbItem,
+        FilterButton,
         TagItem,
         CategoryTreeItem,
         CatalogFilter,
-        CatalogProductCard,
+        CatalogProductList,
         CatalogBannerCard,
 
         AddToCartModal,
@@ -322,19 +278,29 @@ export default {
             ROUTE_SEGMENTS,
             ACTIVE_CATEGORIES,
         ]),
-        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, BRAND]),
+        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP]),
         ...mapState(MODAL_MODULE, {
             isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
             isAddToCartOpen: state =>
                 state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
         }),
         ...mapState('route', {
+            type: state => state.params.type,
             code: state => state.params.code,
-            brandCode: state => state.params.brandCode,
+            entityCode: state => state.params.entityCode,
         }),
+
+        breadcrumbRootUrl() {
+            const { type } = this;
+            return { name: type === productGroupTypes.CATALOG ? 'Catalog' : 'ProductGroups', params: { type } };
+        },
 
         isTabletLg() {
             return this.$mq.tabletLg;
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 
@@ -350,13 +316,13 @@ export default {
     },
 
     methods: {
-        ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_CATALOG_DATA]),
+        ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_DATA_BY_TYPE, SET_LOAD_PATH]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
-        generateBreadcrumbUrl(code) {
-            const { brandCode } = this;
-            return { path: generateCategoryUrl(brandCode, code) };
+        generateBreadcrumbUrl(categoryCode) {
+            const { type, entityCode } = this;
+            return { path: generateCategoryUrl(type, entityCode, categoryCode) };
         },
 
         setSortValue(field, direction) {
@@ -364,57 +330,15 @@ export default {
                 this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
         },
 
-        onBeforeEnterItems(el) {
-            el.dataset.index = counter;
-            counter += 1;
-            el.style.opacity = 0;
-        },
-
-        itemAnimation(el, delay) {
-            return new Promise((resolve, reject) => {
-                try {
-                    setTimeout(() => {
-                        requestAnimationFrame(() => {
-                            el.style.opacity = 1;
-                            resolve();
-                        });
-                    }, delay);
-                } catch (error) {
-                    reject(error);
-                }
-            });
-        },
-
-        async onEnterItems(el, done) {
-            const delay = el.dataset.index * itemAnimationDelayDelta;
-            await this.itemAnimation(el, delay);
-            done();
-        },
-
-        onAfterEnterItems(el) {
-            delete el.dataset.index;
-            counter = 0;
-        },
-
-        onLeaveItems(el, done) {
-            requestAnimationFrame(() => {
-                el.style.opacity = 0;
-                done();
-            });
-        },
-
         onClickDeleteTag(value) {
-            let { routeSegments, code, brandCode } = this;
+            let { type, code, entityCode, routeSegments } = this;
 
             if (!routeSegments.includes(value)) return;
             else {
                 const index = routeSegments.indexOf(value);
                 if (index !== -1) routeSegments.splice(index, 1);
             }
-            const path = brandCode
-                ? concatBrandRoutePath(brandCode, code, routeSegments)
-                : concatCatalogRoutePath(code, routeSegments);
-
+            const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
             this.$router.replace({ path });
         },
 
@@ -426,18 +350,6 @@ export default {
             });
         },
 
-        onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
-        },
-
-        onAddToCart(item) {
-            this[CHANGE_MODAL_STATE]({
-                name: ADD_TO_CART_MODAL_NAME,
-                open: true,
-                state: { offerId: item.id, type: item.type },
-            });
-        },
-
         onPageChanged(page) {
             this.showMore = false;
             this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
@@ -446,7 +358,7 @@ export default {
         async fetchCatalog(to, from, showMore) {
             try {
                 const {
-                    params: { code: toCode, brandCode: toBrandCode, pathMatch },
+                    params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
                     query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
                         page: 1,
                         orderField: 'price',
@@ -455,18 +367,19 @@ export default {
                 } = to;
 
                 const {
-                    params: { code: fromCode, brandCode: fromBrandCode },
+                    params: { code: fromCode, entityCode: fromEntityCode, type: fromType },
                 } = from;
 
                 const { query: { page: fromPage = 1 } = { page: 1 } } = from;
-                const filter = computeFilterData(pathMatch, toCode, toBrandCode);
+                const filter = computeFilterData(pathMatch, toCode);
 
                 this.$progress.start();
-                if (fromCode === toCode && fromBrandCode === toBrandCode)
+                if (toType === fromType && toCode === fromCode && toEntityCode === fromEntityCode)
                     await this[FETCH_ITEMS]({ filter, orderField, orderDirection, page, showMore });
                 else
-                    await this[FETCH_CATALOG_DATA]({
-                        brandCode: toBrandCode,
+                    await this[FETCH_DATA_BY_TYPE]({
+                        type: toType,
+                        entityCode: toEntityCode,
                         filter,
                         orderField,
                         orderDirection,
@@ -481,10 +394,12 @@ export default {
                         top: MIN_SCROLL_VALUE + 1,
                         behavior: 'smooth',
                     });
-            } catch (error) {
+
+                if (showMore) setTimeout(() => (this.showMore = false), 200);
+            } catch (thrown) {
+                if (thrown && thrown.isCancel === true) return;
                 this.$progress.fail();
-                $logger.error('debounce_fetchCatalog', error);
-                this.$router.replace({ name: '404' });
+                $logger.error('fetchCatalog', thrown);
                 this.$progress.finish();
             }
         },
@@ -496,7 +411,8 @@ export default {
         // так как к моменту вызова экземпляр ещё не создан!
 
         const {
-            params: { code: toCode, brandCode: toBrandCode, pathMatch },
+            fullPath,
+            params: { code: toCode = null, entityCode: toEntityCode = null, type: toType, pathMatch },
             query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
                 page: 1,
                 orderField: 'price',
@@ -504,43 +420,42 @@ export default {
             },
         } = to;
 
-        const {
-            params: { code: fromCode, brandCode: fromBrandCode },
-        } = from;
-
         // регистрируем модуль, если такого нет
         registerModuleIfNotExists($store, CATALOG_MODULE, catalogModule);
-        const { load, brandCode, categoryCode } = $store.state[CATALOG_MODULE];
+        const { loadPath, categoryCode, entityCode, type } = $store.state[CATALOG_MODULE];
 
         // если все загружено, пропускаем
-        if (load && toCode === categoryCode && toBrandCode === brandCode)
-            next(vm => vm.$store.dispatch(`${CATALOG_MODULE}/${SET_LOAD}`, false));
+        if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode) next();
         else {
-            const filter = computeFilterData(pathMatch, toCode, toBrandCode);
+            const filter = computeFilterData(pathMatch, toCode);
             let fetchMethod = null;
-            if (toCode === categoryCode && toBrandCode === brandCode) fetchMethod = `${CATALOG_MODULE}/${FETCH_ITEMS}`;
-            else fetchMethod = `${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`;
+            if (toType === type && toCode === categoryCode && toEntityCode === entityCode)
+                fetchMethod = `${CATALOG_MODULE}/${FETCH_ITEMS}`;
+            else fetchMethod = `${CATALOG_MODULE}/${FETCH_DATA_BY_TYPE}`;
 
             $progress.start();
             $store
                 .dispatch(fetchMethod, {
-                    brandCode: toBrandCode,
+                    type: toType,
+                    entityCode: toEntityCode,
                     filter,
                     page,
                     orderField,
                     orderDirection,
                 })
-                .then(() =>
+                .then(() => {
+                    $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
                         vm.setSortValue(orderField, orderDirection);
                         $progress.finish();
-                    })
-                )
-                .catch(error => {
+                    });
+                })
+                .catch(thrown => {
+                    if (thrown && thrown.isCancel === true) return next();
                     $progress.fail();
-                    $logger.error(error);
-                    next({ name: '404', replace: true });
+                    $logger.error('beforeRouteEnter', thrown);
                     $progress.finish();
+                    next();
                 });
         }
     },
@@ -552,10 +467,16 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
+
         if (this.showMore) {
             this.fetchCatalog(to, from, this.showMore);
-            this.showMore = false;
         } else this.debounce_fetchCatalog(to, from);
+        next();
+    },
+
+    beforeRouteLeave(to, from, next) {
+        // При уходе с роута отменяем запрос
+        this.debounce_fetchCatalog.cancel();
         next();
     },
 

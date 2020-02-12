@@ -1,8 +1,13 @@
 .attention-panel {
     display: flex;
     align-items: center;
-    padding: calc(var(--gs) * 2);
+    flex-wrap: wrap;
     background-color: var(--cl-elem-grey);
+    padding: calc(var(--gs) * 2);
+
+    @media (--tablet) {
+        align-items: flex-start;
+    }
 
     &__icon {
         display: flex;

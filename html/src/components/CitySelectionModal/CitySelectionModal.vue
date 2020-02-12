@@ -37,7 +37,7 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
 import { $dadata } from '../../services/ServiceLocator';
-import { suggestionTypes } from '../../assets/scripts/constants';
+import { suggestionTypes } from '../../assets/scripts/enums';
 import '../../assets/images/sprites/search-middle.svg';
 import './CitySelectionModal.css';
 
@@ -106,7 +106,7 @@ export default {
                     to_bound = { value: type };
             }
 
-            return $dadata.post('/suggestions/api/4_1/rs/suggest/address', {
+            return $dadata.post('/suggest/address', {
                 query,
                 count,
                 locations,

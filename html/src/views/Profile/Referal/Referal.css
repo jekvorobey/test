@@ -6,6 +6,10 @@
         line-height: 40px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+
+        @media (--tablet-lg) {
+            display: none;
+        }
     }
 
     &__section {
@@ -21,6 +25,10 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: calc(var(--gs) * 5);
+
+        @media (--tablet-lg) {
+            flex-wrap: wrap;
+        }
     }
 
     &__panel {
@@ -31,6 +39,18 @@
 
         &:first-child {
             flex-wrap: wrap;
+
+            @media (--desktop-lg) and (--tablet-lg-min) {
+                width: calc(55% - var(--gs));
+            }
+
+            @media (--desktop) {
+                width: calc(50% - var(--gs));
+            }
+
+            @media (--tablet-lg) {
+                width: 100%;
+            }
         }
 
         &:last-child {
@@ -40,14 +60,25 @@
             align-items: center;
             justify-content: space-between;
 
+            @media (--desktop-lg) and (--desktop-min) {
+                width: calc(45% - var(--gs));
+                padding: 0 calc(var(--gs) * 3);
+                padding-top: calc(var(--gs) * 3);
+            }
+
             @media (--desktop) {
+                width: calc(50% - var(--gs));
                 padding: calc(var(--gs) * 4) calc(var(--gs) * 3);
+            }
+
+            @media (--tablet-lg) {
+                justify-content: space-around;
+                padding-top: 0;
+                width: 100%;
             }
         }
 
         &-item {
-            flex: 1;
-
             &-label {
                 font-size: 12px;
                 line-height: 16px;
@@ -56,12 +87,35 @@
                 padding: 0 calc(var(--gs) * 2) var(--gs);
                 margin-top: calc(var(--gs) * -1);
             }
+
+            &-counter {
+                width: 120px;
+            }
+        }
+
+        &:first-child &-item {
+            &:nth-child(1),
+            &:nth-child(2) {
+                width: 50%;
+                margin-bottom: calc(var(--gs) * 2);
+
+                @media (--desktop) and (--tablet-lg-min) {
+                    width: 100%;
+                }
+
+                @media (--tablet) {
+                    width: 100%;
+                }
+            }
         }
 
         &:last-child &-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             flex: none;
             text-align: center;
-            width: 120px;
 
             &:first-of-type {
                 text {
@@ -93,11 +147,19 @@
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
+
+        &-link {
+            margin-top: auto;
+        }
     }
 
     &__graph {
         position: relative;
         margin-bottom: calc(var(--gs) * 7);
+
+        @media (--tablet-lg) {
+            margin-bottom: calc(var(--gs) * 4);
+        }
     }
 
     &__table {
@@ -164,10 +226,47 @@
         }
     }
 
+    &__list {
+        margin-bottom: calc(var(--gs) * 2);
+
+        &-item {
+            padding: calc(var(--gs) * 3);
+            border-bottom: 1px solid var(--cl-divider-grey);
+
+            @media (--tablet) {
+                padding: calc(var(--gs) * 2);
+            }
+
+            &-row {
+                display: flex;
+
+                @media (--tablet) {
+                    flex-direction: column;
+                }
+
+                & + & {
+                    margin-top: var(--gs);
+                }
+
+                &:first-of-type {
+                    @media (--tablet-lg) {
+                        flex-direction: column;
+                    }
+
+                    .info-row__name {
+                        margin-bottom: calc(var(--gs) / 2);
+                    }
+                }
+
+                &:first-of-type + & {
+                    margin-top: calc(var(--gs) * 1.5);
+                }
+            }
+        }
+    }
+
     &__controls {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        text-align: center;
 
         &-btn {
             width: 100%;

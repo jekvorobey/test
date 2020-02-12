@@ -1,5 +1,6 @@
 .tag-item {
     display: inline-flex;
+    justify-content: space-between;
     font-size: 16px;
     line-height: 32px;
     padding-left: var(--gs);
@@ -13,12 +14,12 @@
         align-items: center;
         padding: 0 var(--gs);
     }
-}
 
-.tag-item-leave-to {
-    opacity: 0;
-}
+    &-leave-to {
+        opacity: 0;
+    }
 
-.tag-item-leave-active {
-    position: absolute;
+    &-leave-active {
+        position: absolute;
+    }
 }

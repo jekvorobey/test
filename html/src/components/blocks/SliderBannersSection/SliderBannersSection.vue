@@ -1,18 +1,21 @@
 <template>
     <section class="section">
-        <div class="slider-banners-section" :style="{ 'background-color': '#8CA9BE' }">
+        <div class="slider-banners-section" :style="{ 'background-color': backgroundColor }">
             <v-slider class="container slider-banners-section__slider" name="banners" :options="sliderOptions">
-                <landing-banner-card
-                    v-for="banner in computedBanners"
-                    class="swiper-slide slider-banners-section__card"
-                    :key="banner.id"
-                    :banner-id="banner.id"
-                    :image="banner.image"
-                    :upper-text="banner.upperText"
-                    :bottom-text="banner.bottomText"
-                    :title="banner.title"
-                    :btn-text="banner.btnText"
-                />
+                <template v-for="banner in banners">
+                    <slot name="item" :item="banner">
+                        <landing-banner-card
+                            class="swiper-slide slider-banners-section__card"
+                            :key="banner.id"
+                            :banner-id="banner.id"
+                            :image="banner.image"
+                            :upper-text="banner.upperText"
+                            :bottom-text="banner.bottomText"
+                            :title="banner.title"
+                            :btn-text="banner.btnText"
+                        />
+                    </slot>
+                </template>
             </v-slider>
         </div>
     </section>
@@ -60,15 +63,16 @@ export default {
                 return [];
             },
         },
+
+        backgroundColor: {
+            type: String,
+            default: '#8CA9BE',
+        },
     },
 
     computed: {
         sliderOptions() {
             return sliderOptions;
-        },
-
-        computedBanners() {
-            return this.banners.slice(0, 1);
         },
     },
 };

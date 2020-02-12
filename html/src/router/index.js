@@ -1,3 +1,7 @@
+import { injectionType } from '../assets/scripts/enums';
+import { Container, injectable, inject } from 'inversify';
+import { injectableClass } from '../util/container';
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import pipeline from './pipeline';
@@ -26,6 +30,8 @@ routerMethods.forEach(method => {
     };
 });
 
+injectableClass(VueRouter);
+
 const routes = [];
 let keys = [];
 
@@ -49,7 +55,7 @@ Vue.use(VueRouter);
 /**
  * Инициализация нового экземпляра роутера
  */
-export default function createRouter() {
+export default function createRouter(container) {
     if (process.env.VUE_ENV === 'client' && 'scrollRestoration' in window.history) {
         // включаем ручной режим выставления скрола на странице
         // только в клиентской сборке
@@ -80,9 +86,17 @@ export default function createRouter() {
     });
 
     router.beforeEach((to, from, next) => {
-        if (!to.meta.middleware) return next();
+        const { matched } = to;
+        const middlewares = [];
 
-        const { middleware } = to.meta;
+        for (let i = 0; i < matched.length; i++) {
+            const {
+                meta: { middleware = [] },
+            } = matched[i];
+            middlewares.push(...middleware);
+        }
+
+        if (middlewares.length === 0) return next();
 
         const context = {
             to,
@@ -91,9 +105,9 @@ export default function createRouter() {
             store: $store,
         };
 
-        return middleware[0]({
+        return middlewares[0]({
             ...context,
-            next: pipeline(context, middleware, 1),
+            next: pipeline(context, middlewares, 1),
         });
     });
 
@@ -106,5 +120,6 @@ export default function createRouter() {
         }
     });
 
+    container.bind(injectionType.ROUTER).toConstantValue(router);
     return router;
 }

@@ -1,9 +1,9 @@
 <template>
     <div class="info-panel">
         <div class="info-panel__header">
-            <span class="text-bold info-panel__header-hl">
+            <v-clamp tag="span" class="text-bold info-panel__header-hl" :max-lines="1" autoresize>
                 {{ header }}
-            </span>
+            </v-clamp>
             <slot name="controls" />
         </div>
 
@@ -14,10 +14,15 @@
 </template>
 
 <script>
+import VClamp from 'vue-clamp';
 import './InfoPanel.css';
 
 export default {
     name: 'info-panel',
+    components: {
+        VClamp,
+    },
+
     props: {
         header: String,
     },

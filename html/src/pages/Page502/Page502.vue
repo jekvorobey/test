@@ -5,7 +5,9 @@
                 <a class="page-502__header-logo" href="/">
                     <v-svg name="logo" width="30" height="30" />
                 </a>
-                <header-logo-panel class="page-502__header-panel" />
+                <header-logo-panel class="page-502__header-panel">
+                    Mаркетплейс только для профессионалов бьюти-индустрии
+                </header-logo-panel>
             </div>
         </header>
 

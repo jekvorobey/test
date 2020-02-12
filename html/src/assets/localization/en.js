@@ -1,7 +1,7 @@
 import flatPickrEn from 'flatpickr/dist/l10n/default';
 
-export const flatpickrLocale = flatPickrEn;
-export default {
+const flatpickrLocale = flatPickrEn;
+const main = {
     header: {
         top: {
             delivery: 'Deliveries across Russia',
@@ -13,15 +13,6 @@ export default {
         middle: {
             search: 'Find...',
             professionals: 'Marketplace for beauty industry professionals only',
-        },
-
-        links: {
-            catalog: 'Catalog',
-            new: 'New',
-            stocks: 'Stocks',
-            collections: 'Collections',
-            brands: 'Brands',
-            classes: 'Master-classes',
         },
     },
 
@@ -105,6 +96,26 @@ export default {
         },
     },
 
+    productGroups: {
+        title: {
+            catalog: 'Catalog',
+            new: 'New',
+            promo: 'Stocks',
+            sets: 'Product Sets',
+            brands: 'Brands',
+            masterclasses: 'Master-classes',
+        },
+
+        links: {
+            catalog: 'Catalog',
+            new: 'New',
+            promo: 'Promo',
+            sets: 'Sets',
+            brands: 'Brands',
+            masterclasses: 'Master-classes',
+        },
+    },
+
     cart: {
         title: {
             like: 'You may also like',
@@ -126,6 +137,8 @@ export default {
         format: {
             order: 'Order №{id}',
             messages: 'Messages ({n})',
+            referal: 'Referal №{id}',
+            orderStatus: { created: 'Created', process: 'Shipping', done: 'Done', cancel: 'Canceled' },
         },
 
         groups: {
@@ -135,7 +148,7 @@ export default {
         },
 
         routes: {
-            Account: 'Account',
+            Cabinet: 'Cabinet',
             Preferences: 'My Preferences',
             Addresses: 'Delivery Address',
             Payment: 'Payment Methods',
@@ -146,13 +159,19 @@ export default {
             Bonuses: 'Bonuses',
             Orders: 'My Orders',
             OrderDetails: 'My Orders',
+            ReferalOrders: 'Referal orders',
+            ReferalOrderDetails: 'Referal orders',
 
             Referal: 'Referal Program',
             ProPreferences: 'My Professional Preferences',
             Promopage: 'My Promopage',
-            Promocodes: 'My Promocodes',
             Seo: 'Goods for Promotion',
+            Promocodes: 'My Promocodes',
+            Account: 'My Account',
+            Billing: 'Account Billing',
+            Documents: 'My Documents',
 
+            HowItWorks: 'How It Works',
             Guides: 'Product Guide',
             GuideDetails: 'Product Guide',
             Masterclasses: 'My Masterclasses',
@@ -160,3 +179,6 @@ export default {
         },
     },
 };
+
+const LOCALE = 'en';
+export default { main, flatpickrLocale, LOCALE };

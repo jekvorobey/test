@@ -1,27 +1,32 @@
 <template>
     <section class="section guide-details-view">
-        <v-link class="guide-details-view__back-link" :to="backUrl">
-            <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем гайдам
-        </v-link>
-        <h2 class="guide-details-view__hl">Шампуни и кондиционеры Aveda для вьющихся волос</h2>
-
-        <ul class="guide-details-view__list">
-            <li class="guide-details-view__list-item" v-for="{ product: item, desc } in guides" :key="item.id">
-                <catalog-product-card
-                    class="guide-details-view__list-card"
-                    :product-id="item.id"
-                    :name="item.name"
-                    :type="item.type"
-                    :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                    :image="item.image"
-                    :price="item.price"
-                    :old-price="item.oldPrice"
-                    :tags="item.tags"
-                    :rating="item.rating"
-                />
-                <v-html class="guide-details-view__list-desc" v-html="desc" />
-            </li>
-        </ul>
+        <div class="container container--tablet-lg">
+            <v-link class="guide-details-view__back-link" :to="backUrl">
+                <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем
+                гайдам
+            </v-link>
+            <h2 class="guide-details-view__hl">Шампуни и кондиционеры Aveda для вьющихся волос</h2>
+        </div>
+        <div class="container container--tablet-lg guide-details-view__container">
+            <ul class="guide-details-view__list">
+                <li class="guide-details-view__list-item" v-for="{ product: item, desc } in guides" :key="item.id">
+                    <catalog-product-card
+                        class="guide-details-view__list-card"
+                        :product-id="item.id"
+                        :name="item.name"
+                        :type="item.type"
+                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                        :image="item.image"
+                        :price="item.price"
+                        :old-price="item.oldPrice"
+                        :tags="item.tags"
+                        :rating="item.rating"
+                        :is-small="isTablet"
+                    />
+                    <v-html class="container container--tablet guide-details-view__list-desc" v-html="desc" />
+                </li>
+            </ul>
+        </div>
     </section>
 </template>
 
@@ -69,9 +74,9 @@ export default {
                         rating: 5,
                         image: { id: 64, sourceExt: 'jpg' },
                     },
-                    desc: `<p><b>ЧТО</b> Шампунь для вьющихся волос, подчеркивает текстуру натуральных кудрей. Подходит для ежедневного применения.</p>
-                    <p><b>ПРЕИМУЩЕСТВА </b> Гидролизованный протеин сои поддерживает и выделяет натуральный завиток.</p>
-                    <p><b>ЧЕГО ОЖИДАТЬ </b> Шампунь с кремовой текстурой. Аромат лайма, лимона, бергамота.</p>`,
+                    desc: `<p><strong>ЧТО</strong> Шампунь для вьющихся волос, подчеркивает текстуру натуральных кудрей. Подходит для ежедневного применения.</p>
+                    <p><strong>ПРЕИМУЩЕСТВА </strong> Гидролизованный протеин сои поддерживает и выделяет натуральный завиток.</p>
+                    <p><strong>ЧЕГО ОЖИДАТЬ </strong> Шампунь с кремовой текстурой. Аромат лайма, лимона, бергамота.</p>`,
                 },
                 {
                     id: 2,
@@ -87,9 +92,9 @@ export default {
                         rating: 5,
                         image: { id: 64, sourceExt: 'jpg' },
                     },
-                    desc: `<p><b>ЧТО</b> Шампунь для вьющихся волос, подчеркивает текстуру натуральных кудрей. Подходит для ежедневного применения.</p>
-                    <p><b>ПРЕИМУЩЕСТВА </b> Гидролизованный протеин сои поддерживает и выделяет натуральный завиток.</p>
-                    <p><b>ЧЕГО ОЖИДАТЬ </b> Шампунь с кремовой текстурой. Аромат лайма, лимона, бергамота.</p>`,
+                    desc: `<p><strong>ЧТО</strong> Шампунь для вьющихся волос, подчеркивает текстуру натуральных кудрей. Подходит для ежедневного применения.</p>
+                    <p><strong>ПРЕИМУЩЕСТВА </strong> Гидролизованный протеин сои поддерживает и выделяет натуральный завиток.</p>
+                    <p><strong>ЧЕГО ОЖИДАТЬ </strong> Шампунь с кремовой текстурой. Аромат лайма, лимона, бергамота.</p>`,
                 },
             ],
         };
@@ -103,6 +108,10 @@ export default {
 
         backUrl() {
             return { name: 'Guides' };
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 

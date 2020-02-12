@@ -200,7 +200,7 @@ import {
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
-import { breakpoints, cartItemTypes } from '../../assets/scripts/constants';
+import { breakpoints, cartItemTypes } from '../../assets/scripts/enums';
 import { preparePrice } from '../../util/helpers';
 import '../../assets/images/sprites/alert.svg';
 import './Cart.css';

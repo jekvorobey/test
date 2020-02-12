@@ -6,15 +6,16 @@
 import '../assets/scripts/common';
 import Vue from 'vue';
 
+import { injectionType } from '../assets/scripts/enums';
 import { sync } from 'vuex-router-sync';
-import { serviceName } from '../assets/scripts/constants';
 import createStore from '../store';
 import createRouter from '../router';
+import createLocalization from '../plugins/i18n';
 
-import i18n from '../plugins/i18n';
 import mq from '../plugins/media';
 import '../plugins/meta';
 import '../plugins/scroll-lock';
+import '../plugins/observer';
 
 import titleMixin from '../util/title';
 
@@ -25,12 +26,12 @@ Vue.mixin(titleMixin);
 
 // Expose a factory function that creates a fresh set of store, router,
 // app instances on each call (which is called for each SSR request)
-export default function createApp(locator, env) {
+export default function createApp(container) {
     // create store and router instances
-    const store = createStore(env);
-    locator.register(serviceName.STORE, () => store);
-    const router = createRouter();
-    locator.register(serviceName.ROUTER, () => router);
+    const store = createStore(container);
+    const router = createRouter(container);
+    const i18n = createLocalization(container);
+    const progress = container.get(injectionType.PROGRESS);
 
     /* 
        sync the router with the vuex store.

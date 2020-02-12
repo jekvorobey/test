@@ -1,0 +1,24 @@
+.document-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--cl-divider-grey);
+    border-radius: 1px;
+    padding: calc(var(--gs) * 3);
+
+    &__name {
+        margin-bottom: calc(var(--gs) * 2);
+    }
+
+    &__bottom {
+        display: flex;
+        justify-content: space-between;
+        margin-top: auto;
+
+        &-link {
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 24px;
+            letter-spacing: 0.05em;
+        }
+    }
+}

@@ -49,19 +49,17 @@ export default {
     props: {
         options: {
             type: Object,
-            default: {},
+            default() {
+                return {};
+            },
         },
 
-        onInputChange: {
-            type: Function,
-            required: true,
+        items: {
+            type: Array,
+            default() {
+                return [];
+            },
         },
-
-        onItemSelected: {
-            type: Function,
-        },
-
-        selectedItem: {},
 
         value: {
             type: String,
@@ -77,13 +75,9 @@ export default {
             type: String,
         },
 
-        selectedValuePath: {
-            type: [String, Function],
-            default: null,
-        },
-
         error: String,
     },
+
     data() {
         const defaultOptions = {
             debounce: 0,
@@ -97,10 +91,8 @@ export default {
             extendedOptions,
             query: this.value,
             lastSetQuery: null,
-            items: [],
             activeItemIndex: -1,
             showItems: false,
-            internalSelectedItem: this.selectedItem,
         };
     },
 
@@ -110,7 +102,6 @@ export default {
                 this.lastSetQuery = null;
                 return;
             }
-            this.onQueryChanged(newValue);
             this.$emit('input', newValue);
         },
 
@@ -118,32 +109,18 @@ export default {
             this.setInputQuery(newValue);
         },
 
-        selectedItem(value) {
-            this.internalSelectedItem = value;
-            this.onItemSelectedDefault(this.internalSelectedItem);
-            if (!this.internalSelectedItem) this.onQueryChanged('');
+        items() {
+            this.activeItemIndex = -1;
+            this.showItems = true;
         },
     },
 
     methods: {
-        onItemSelectedDefault(item) {
-            let value = '';
-            if (item instanceof String) value = item;
-            else {
-                if (this.selectedValuePath instanceof String) value = item && item[this.selectedValuePath];
-                else if (this.selectedValuePath instanceof Function) value = item && this.selectedValuePath(item);
-            }
-
-            this.$emit('input', value);
-            this.setInputQuery(value);
-            this.showItems = false;
-        },
-
         hideItems() {
             setTimeout(() => {
                 this.showItems = false;
-                if (this.sync) this.onItemSelectedDefault(this.internalSelectedItem);
-            }, 300);
+                if (this.sync) this.setInputQuery(this.value);
+            }, 0);
         },
 
         showResults() {
@@ -187,11 +164,8 @@ export default {
             } else item = this.items[index];
 
             if (!item) return;
-            this.internalSelectedItem = item;
-            this.$emit('selected', this.internalSelectedItem);
-            this.onItemSelectedDefault(this.internalSelectedItem);
-
-            this.showItems = false;
+            this.$emit('selected', item);
+            this.hideItems();
         },
 
         highlightItem(direction) {
@@ -217,20 +191,6 @@ export default {
             if (element) element.scrollIntoView();
         },
 
-        setItems(items) {
-            this.items = items;
-            this.activeItemIndex = -1;
-            this.showItems = true;
-        },
-
-        onQueryChanged(value) {
-            const result = this.onInputChange(value);
-            this.items = [];
-            if (typeof result === 'undefined' || typeof result === 'boolean' || result === null) return;
-            if (result instanceof Array) this.setItems(result);
-            else if (typeof result.then === 'function') result.then(items => this.setItems(items));
-        },
-
         onSuggestionClick() {
             this.showItems = true;
             this.$nextTick(() => this.$refs.input.focus());
@@ -238,9 +198,8 @@ export default {
     },
 
     beforeMount() {
-        this.onItemSelectedDefault(this.internalSelectedItem);
-        if (this.extendedOptions.debounce !== 0)
-            this.onQueryChanged = _debounce(this.onQueryChanged, this.extendedOptions.debounce);
+        // if (this.extendedOptions.debounce !== 0)
+        //     this.onQueryChanged = _debounce(this.onQueryChanged, this.extendedOptions.debounce);
     },
 };
 </script>

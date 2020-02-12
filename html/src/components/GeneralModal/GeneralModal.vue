@@ -1,5 +1,5 @@
 <template>
-    <v-modal class="general-modal" v-bind="$attrs" @close="$emit('close', $event)">
+    <v-modal class="general-modal" v-bind="$attrs" @close="$emit('close', $event)" v-if="!$isServer">
         <template v-slot:body>
             <v-sticky v-if="isMobile" class="general-modal__sticky">
                 <template v-slot:sticky>

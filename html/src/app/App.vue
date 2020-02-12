@@ -24,8 +24,11 @@ import VSvg from '../components/controls/VSvg/VSvg.vue';
 import VLink from '../components/controls/VLink/VLink.vue';
 import VButton from '../components/controls/VButton/VButton.vue';
 import VInput from '../components/controls/VInput/VInput.vue';
+import VCheck from '../components/controls/VCheck/VCheck.vue';
 import VSticky from '../components/controls/VSticky/VSticky.vue';
 import VPicture from '../components/controls/VPicture/VPicture.vue';
+
+import Price from '../components/Price/Price.vue';
 
 import VHeader from '../components/VHeader/VHeader.vue';
 import VFooter from '../components/VFooter/VFooter.vue';
@@ -36,14 +39,14 @@ import { SCROLL, CATEGORIES } from '../store';
 import { SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN } from '../store/actions';
 
 import { NAME as CART_MODULE, CART_ITEMS } from '../store/modules/Cart';
-import { FETCH_CART_DATA } from '../store/modules/Cart/actions';
+import { FETCH_CART_DATA, CLEAR_CART_DATA } from '../store/modules/Cart/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '../store/modules/Auth';
-import { LOGIN, CHECK_SESSION } from '../store/modules/Auth/actions';
+import { CHECK_SESSION, LOGIN_BY_PASSWORD } from '../store/modules/Auth/actions';
 
-import { MIN_SCROLL_VALUE, eventName } from '../assets/scripts/constants';
+import { MIN_SCROLL_VALUE } from '../assets/scripts/constants';
+import { eventName } from '../assets/scripts/enums';
 import { mapState, mapActions } from 'vuex';
-import { $logger } from '../services/ServiceLocator';
 
 export default {
     name: 'app',
@@ -59,13 +62,23 @@ export default {
 
     methods: {
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN]),
-        ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
-        ...mapActions(AUTH_MODULE, [CHECK_SESSION]),
+        ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
+        ...mapActions(AUTH_MODULE, [CHECK_SESSION, LOGIN_BY_PASSWORD]),
 
         onScroll() {
             this[SET_SCROLL](
                 document.body.scrollTop > MIN_SCROLL_VALUE || document.documentElement.scrollTop > MIN_SCROLL_VALUE
             );
+        },
+    },
+
+    watch: {
+        hasSession(value) {
+            if (value) this[FETCH_CART_DATA]();
+            else {
+                this[CLEAR_CART_DATA]();
+                this.$router.replace({ name: 'Landing' });
+            }
         },
     },
 
@@ -78,6 +91,10 @@ export default {
         } catch (error) {
             return Promise.resolve();
         }
+    },
+
+    beforeMount() {
+        // this[LOGIN_BY_PASSWORD]({ login: '+71111111111', password: 'Sardaukar13' }); //Выпилить при релизе
     },
 
     mounted() {

@@ -1,0 +1,79 @@
+.portfolio-modal {
+    .modal-body {
+        padding: calc(var(--gs) * 3);
+
+        @media (--tablet) {
+            padding: 0;
+        }
+    }
+
+    &__hl {
+        @media (--tablet) {
+            display: none;
+        }
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+
+        @media (--tablet) {
+            height: 100%;
+            padding: calc(var(--gs) * 3) calc(var(--gs) * 2);
+        }
+
+        &-row {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+
+            @media (--tablet) {
+                flex-wrap: wrap;
+                margin-bottom: calc(var(--gs) * 3);
+            }
+
+            &-btn {
+                position: absolute;
+                top: 0;
+                right: 0;
+                z-index: 1;
+            }
+        }
+
+        &-column {
+            width: calc(50% - calc(var(--gs) * 1.5));
+
+            @media (--tablet) {
+                width: 100%;
+            }
+        }
+    }
+
+    &__submit {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+
+        @media (--tablet) {
+            position: sticky;
+            justify-content: space-between;
+            bottom: 0;
+            padding: var(--gs) calc(var(--gs) * 2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            background-color: var(--cl-white);
+        }
+
+        &-btn {
+            @media (--tablet) {
+                width: calc(50% - var(--gs));
+            }
+
+            & + & {
+                @media (--tablet-min) {
+                    margin-left: calc(var(--gs) * 2);
+                }
+            }
+        }
+    }
+}

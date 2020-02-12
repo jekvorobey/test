@@ -1,0 +1,77 @@
+.catalog-banner-list-card {
+    display: flex;
+    position: relative;
+
+    &__img {
+        height: 100%;
+        width: 100%;
+        font-family: 'object-fit: cover;';
+        background-color: var(--cl-elem-grey);
+
+        @supports (object-fit: cover) {
+            font-family: inherit;
+            object-fit: cover;
+        }
+    }
+
+    &__panel {
+        position: absolute;
+        bottom: 64px;
+        left: 50%;
+        width: 80%;
+        text-align: center;
+        transform: translateX(-50%);
+        color: var(--cl-white);
+
+        @media (--tablet) {
+            bottom: 24px;
+        }
+
+        &-upper-text {
+            margin-bottom: calc(var(--gs) * 4);
+            text-transform: uppercase;
+            font-weight: bold;
+
+            @media (--tablet) {
+                margin-bottom: var(--gs);
+            }
+        }
+
+        &-title {
+            font-size: 30px;
+            line-height: 40px;
+            margin-bottom: calc(var(--gs) * 4);
+            text-transform: uppercase;
+            font-weight: bold;
+
+            @media (--tablet) {
+                font-size: 24px;
+                line-height: 32px;
+                margin-bottom: calc(var(--gs) * 3);
+            }
+        }
+
+        &-bottom-text {
+            font-size: 24px;
+            line-height: 24px;
+            margin-bottom: calc(var(--gs) * 3);
+
+            @media (--tablet) {
+                font-size: 18px;
+                line-height: 32px;
+                margin-bottom: calc(var(--gs) * 3);
+            }
+        }
+
+        &-btn {
+            background-color: transparent;
+            border-color: var(--cl-white);
+            color: inherit;
+
+            &:hover {
+                background-color: var(--cl-white);
+                color: var(--cl-global);
+            }
+        }
+    }
+}

@@ -7,6 +7,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const httpProxy = require('express-http-proxy');
+const gracefulShutdown = require('http-graceful-shutdown');
 
 const favicon = require('serve-favicon');
 const compression = require('compression');
@@ -185,6 +186,7 @@ for (let i = 0; i < enable.length; i++) {
 
 for (let i = 0; i < proxies.length; i++) {
     const entry = proxies[i];
+    logger.info('proxy', `path: ${entry.path}, host: ${entry.host}`);
     app.use(entry.path, proxy(entry.host));
 }
 
@@ -204,4 +206,23 @@ for (let i = 0; i < cacheRoutes.length; i++) {
 app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());
 app.get('*', (req, res) => render(req, res, env));
-app.listen(port, () => logger.info(`server started at port ${port}`));
+app.listen(port, () => logger.success(`server started at port ${port}`));
+
+function onCleanup(signal) {
+    return new Promise(resolve => {
+        logger.info('called signal: ', signal);
+        resolve();
+    });
+}
+
+function onFinally() {
+    logger.success('server shutted down');
+}
+
+gracefulShutdown(app, {
+    signals: 'SIGINT SIGTERM',
+    timeout: 30000,
+    development: false,
+    onShutdown: onCleanup,
+    finally: onFinally,
+});

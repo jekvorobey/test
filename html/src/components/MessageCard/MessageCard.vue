@@ -8,20 +8,24 @@
             <div class="message-card__body-top">
                 <span v-if="isRead === false" class="message-card__body-top-read" />
                 <span v-if="messageId" class="message-card__body-top-number">{{ messageId }}</span>
-                <v-clamp class="text-bold message-card__body-top-title" :max-lines="1" autoresize>{{ title }}</v-clamp>
+                <v-clamp v-if="useHeaderClamp" class="text-bold message-card__body-top-title" :max-lines="1" autoresize>
+                    {{ title }}
+                </v-clamp>
+                <span v-else class="text-bold message-card__body-top-title">{{ title }}</span>
                 <span class="text-sm text-grey message-card__body-top-date">{{ date }}</span>
             </div>
             <div class="message-card__body-bottom">
                 <v-clamp v-if="useClamp" :max-lines="1" autoresize>{{ message }}</v-clamp>
                 <span v-else>{{ message }}</span>
             </div>
+            <span class="text-sm text-grey message-card__date-mobile">{{ date }}</span>
         </div>
     </li>
 </template>
 
 <script>
 import VSvg from '../controls/VSvg/VSvg.vue';
-import VClamp from '../controls/VClamp/VClamp.vue';
+import VClamp from 'vue-clamp';
 
 import '../../assets/images/sprites/logo.svg';
 import './MessageCard.css';
@@ -68,6 +72,11 @@ export default {
         },
 
         useClamp: {
+            type: Boolean,
+            default: false,
+        },
+
+        useHeaderClamp: {
             type: Boolean,
             default: false,
         },

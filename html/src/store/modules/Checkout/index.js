@@ -8,7 +8,7 @@ import getters, {
 
 import actions from './actions';
 import mutations from './mutations';
-import { requestStatus } from '../../../assets/scripts/constants';
+import { requestStatus } from '../../../assets/scripts/enums';
 
 export const NAME = 'checkout';
 export const CHECKOUT_DATA = 'checkoutData';

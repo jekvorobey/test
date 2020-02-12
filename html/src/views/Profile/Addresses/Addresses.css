@@ -6,6 +6,10 @@
         line-height: 40px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+
+        @media (--tablet-lg) {
+            display: none;
+        }
     }
 
     &__panel {
@@ -16,6 +20,12 @@
             font-weight: normal;
             line-height: 24px;
             text-transform: none;
+
+            span {
+                @media (--tablet) {
+                    display: none;
+                }
+            }
         }
 
         &-list {
@@ -31,6 +41,7 @@
             @media (--tablet) {
                 width: 100%;
                 margin-bottom: calc(var(--gs) * 2);
+                padding: calc(var(--gs) * 3);
             }
 
             &:first-of-type:last-of-type {

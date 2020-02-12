@@ -1,29 +1,24 @@
 <template>
     <section class="section product-view">
         <div class="container">
-            <transition-group tag="ol" class="section product-view__breadcrumbs" name="fade-in">
-                <li class="product-view__breadcrumbs-item" key="main">
-                    <router-link class="product-view__breadcrumbs-link" to="/">
-                        Главная
-                    </router-link>
-                </li>
-
-                <li class="product-view__breadcrumbs-item" key="all">
-                    <router-link class="product-view__breadcrumbs-link" to="/catalog">
-                        Каталог
-                    </router-link>
-                </li>
-
-                <li
-                    class="product-view__breadcrumbs-item"
+            <breadcrumbs class="product-view__breadcrumbs">
+                <breadcrumb-item key="main" to="/">
+                    Главная
+                </breadcrumb-item>
+                <breadcrumb-item key="Cabinet" :to="{ name: brandCode ? 'Brands' : 'Catalog' }">
+                    {{ brandCode ? 'Бренды' : 'Каталог' }}
+                </breadcrumb-item>
+                <breadcrumb-item
                     v-for="category in product.categoryCodes"
                     :key="category.code"
+                    :to="generateBreadcrumbUrl(category.code)"
                 >
-                    <router-link class="product-view__breadcrumbs-link" :to="`/catalog/${category.code}`">
-                        {{ category.name }}
-                    </router-link>
-                </li>
-            </transition-group>
+                    {{ category.name }}
+                </breadcrumb-item>
+                <breadcrumb-item :key="product.id" :to="{ path: $route.path }">
+                    {{ product.title }}
+                </breadcrumb-item>
+            </breadcrumbs>
         </div>
         <section class="section">
             <div class="container product-view__header">
@@ -36,7 +31,7 @@
                                 :key="image.id"
                             >
                                 <v-picture v-if="image && image.id" :image="image" alt="">
-                                    <template v-slot:source="{ image, lazy }">
+                                    <template v-slot:source="{ image }">
                                         <source
                                             :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
                                             type="image/webp"
@@ -70,7 +65,7 @@
                                 :key="image.id"
                             >
                                 <v-picture v-if="image && image.id" :image="image" alt="">
-                                    <template v-slot:source="{ image, lazy }">
+                                    <template v-slot:source="{ image }">
                                         <source
                                             :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
                                             type="image/webp"
@@ -589,6 +584,9 @@ import InstagramCard from '../../components/InstagramCard/InstagramCard.vue';
 import VRating from '../../components/controls/VRating/VRating.vue';
 import Tag from '../../components/Tag/Tag.vue';
 
+import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
 import ProductReviewCard from '../../components/ProductReviewCard/ProductReviewCard.vue';
@@ -600,7 +598,6 @@ import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/
 import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '../../components/GalleryModal/GalleryModal.vue';
 
-import '../../plugins/observer';
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
@@ -627,8 +624,10 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '../../util/store';
 import { generatePictureSourcePath } from '../../util/images';
-import { breakpoints } from '../../assets/scripts/constants';
+import { breakpoints, productGroupTypes } from '../../assets/scripts/enums';
 import productBrand1 from '../../assets/images/mock/brandProduct1.png';
+
+import { generateCategoryUrl } from '../../util/catalog';
 
 import '../../assets/images/sprites/socials/vkontakte-bw.svg';
 import '../../assets/images/sprites/socials/facebook-bw.svg';
@@ -737,6 +736,9 @@ export default {
         VSlider,
         VPicture,
 
+        Breadcrumbs,
+        BreadcrumbItem,
+
         Price,
         CatalogProductCard,
         ProductReviewCard,
@@ -811,6 +813,10 @@ export default {
 
         generateSourcePath(x, y, id, ext) {
             return generatePictureSourcePath(x, y, id, ext);
+        },
+
+        generateBreadcrumbUrl(code) {
+            return { path: generateCategoryUrl(productGroupTypes.CATALOG, null, code) };
         },
 
         onPreview(code) {

@@ -5,10 +5,10 @@
                 <h3 class="login-modal__hl">{{ header }}</h3>
 
                 <form v-if="!restore" class="login-modal__form" @submit.prevent="onSubmit">
-                    <v-input-mask v-model="phone" mask="+7 ### ###-##-##" masked>
+                    <v-input-mask v-model="phone" :options="maskOptions" :error="phoneError">
                         Номер телефона
                     </v-input-mask>
-                    <v-password v-model="password">
+                    <v-password v-model="password" :error="passwordError">
                         Пароль
                     </v-password>
                     <div class="login-modal__form-submit">
@@ -27,12 +27,7 @@
                     </p>
 
                     <form class="login-modal__form" @submit.prevent="onSendPassword">
-                        <v-input-mask
-                            v-model="restorePhone"
-                            :display-value.sync="displayRestorePhone"
-                            mask="+7 ### ###-##-##"
-                            masked
-                        >
+                        <v-input-mask v-model="restorePhone" :options="maskOptions">
                             Номер телефона
                         </v-input-mask>
                         <div class="login-modal__form-submit">
@@ -60,7 +55,7 @@
 
                 <div class="login-modal__socials">
                     <div class="login-modal__socials-list">
-                        <button class="login-modal__socials-item">
+                        <button class="login-modal__socials-item" @click="onLoginBySocial('google')">
                             <svg
                                 width="14"
                                 height="14"
@@ -74,7 +69,7 @@
                                 />
                             </svg>
                         </button>
-                        <button class="login-modal__socials-item">
+                        <button class="login-modal__socials-item" @click="onLoginBySocial('vkontakte')">
                             <svg
                                 width="16"
                                 height="10"
@@ -90,7 +85,7 @@
                                 />
                             </svg>
                         </button>
-                        <button class="login-modal__socials-item">
+                        <button class="login-modal__socials-item" @click="onLoginBySocial('facebook')">
                             <svg
                                 width="8"
                                 height="18"
@@ -127,11 +122,11 @@ import VPassword from '../controls/VPassword/VPassword.vue';
 import GeneralModal from '../GeneralModal/GeneralModal.vue';
 import { NAME as REGISTRATION_MODAL_NAME } from '../RegistrationModal/RegistrationModal.vue';
 
-import validationMixin, { required, minLength } from '../../plugins/validation';
+import validationMixin, { required, minLength, password } from '../../plugins/validation';
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
-import { LOGIN } from '../../store/modules/Auth/actions';
+import { LOGIN_BY_PASSWORD, GET_SOCIAL_LINK } from '../../store/modules/Auth/actions';
 
 import { NAME as CART_MODULE } from '../../store/modules/Cart';
 import { FETCH_CART_DATA } from '../../store/modules/Cart/actions';
@@ -139,13 +134,16 @@ import { FETCH_CART_DATA } from '../../store/modules/Cart/actions';
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
+import _cloneDeep from 'lodash/cloneDeep';
+import { phoneMaskOptions } from '../../assets/scripts/settings';
 import './LoginModal.css';
+
+const maskOptions = _cloneDeep(phoneMaskOptions);
 
 export const NAME = 'login-modal';
 
 export default {
     name: NAME,
-
     mixins: [validationMixin],
 
     components: {
@@ -160,27 +158,34 @@ export default {
     validations: {
         phone: {
             required,
-            minLength: minLength(10),
-        },
-
-        restorePhone: {
-            required,
-            minLength: minLength(10),
+            minLength: minLength(12),
         },
 
         password: {
             required,
+            password,
+            minLength: minLength(8),
+        },
+
+        fail: {
+            valid: value => value !== true,
         },
     },
 
     data() {
         return {
-            phone: '+7',
-            password: 123456,
+            phone: '',
+            fail: true,
+
+            password: '',
+
             displayRestorePhone: null,
             restorePhone: '+7',
+
             restore: false,
             sent: false,
+
+            maskOptions,
         };
     },
 
@@ -192,6 +197,23 @@ export default {
         header() {
             return this.restore ? 'Получить новый пароль' : 'Войти';
         },
+
+        phoneError() {
+            if (this.$v.phone.$dirty) {
+                if (!this.$v.phone.required) return 'Обязательное поле';
+                if (!this.$v.phone.minLength) return 'Неверно введен номер';
+            }
+
+            if (this.$v.fail.$dirty && !this.$v.fail.valid) return 'Неверный логин и/или пароль';
+        },
+
+        passwordError() {
+            if (this.$v.password.$dirty) {
+                if (!this.$v.password.required) return 'Обязательное поле';
+                if (!this.$v.password.password) return 'Как минимум 1 заглавная и строчная латинские буквы и 1 цифра';
+                if (!this.$v.password.minLength) return 'Не менее 8 символов';
+            }
+        },
     },
 
     watch: {
@@ -200,21 +222,54 @@ export default {
                 this.sent = false;
             }
         },
+
+        phone(value) {
+            this.resetLoginValidation();
+        },
+
+        password(value) {
+            this.resetLoginValidation();
+        },
     },
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(AUTH_MODULE, [LOGIN]),
+        ...mapActions(AUTH_MODULE, [LOGIN_BY_PASSWORD, GET_SOCIAL_LINK]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
 
+        resetLoginValidation() {
+            if (this.$v.phone.$dirty) this.$v.phone.$reset();
+            if (this.$v.password.$dirty) this.$v.password.$reset();
+            if (this.$v.fail.$dirty) this.$v.fail.$reset();
+        },
+
         async onSubmit() {
+            if (!this.restore) {
+                this.$v.phone.$touch();
+                this.$v.password.$touch();
+                if (!this.$v.phone.$invalid && !this.$v.password.$invalid) this.loginByPassword();
+            }
+        },
+
+        async loginByPassword() {
             try {
-                await this[LOGIN]({ email: this.email, password: this.password });
+                await this[LOGIN_BY_PASSWORD]({ login: this.phone, password: this.password });
                 this[FETCH_CART_DATA]();
-                this.$emit('login');
+                this.$router.push({ name: 'Cabinet' });
                 this.onClose();
             } catch (error) {
-                console.log(error);
+                this.fail = true;
+                this.$v.fail.$touch();
+            }
+        },
+
+        async onLoginBySocial(driver) {
+            try {
+                const url = `${document.location.origin}/profile`;
+                const socialUrl = await this[GET_SOCIAL_LINK]({ url, driver });
+                document.location.href = socialUrl;
+            } catch (error) {
+                return;
             }
         },
 

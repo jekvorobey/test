@@ -64,7 +64,8 @@ export default {
     computed: {
         ...mapGetters(CATALOG_MODULE, [ACTIVE_CATEGORIES]),
         ...mapState('route', {
-            brandCode: state => state.params.brandCode,
+            type: state => state.params.type,
+            entityCode: state => state.params.entityCode,
         }),
 
         isActive() {
@@ -72,12 +73,21 @@ export default {
         },
 
         url() {
-            const { brandCode } = this;
-            return this.item && { path: generateCategoryUrl(brandCode, this.item.code) };
+            const {
+                entityCode,
+                type,
+                item: { code },
+            } = this;
+            return { path: generateCategoryUrl(type, entityCode, code) };
         },
 
         hasChildren() {
-            return this.item && Array.isArray(this.item.items);
+            const {
+                entityCode,
+                type,
+                item: { items },
+            } = this;
+            return Array.isArray(this.item.items);
         },
     },
 

@@ -16,15 +16,6 @@
             display: none;
         }
     }
-
-    .multiselect__tags {
-        border: 1px solid var(--cl-global);
-        padding: 3px 40px 3px 16px;
-    }
-
-    .multiselect__single {
-        line-height: 32px;
-    }
 }
 
 .v-suggestions .suggestions {

@@ -1,6 +1,5 @@
 .header-navigation-panel {
     display: flex;
-    justify-content: space-between;
 
     .link {
         font-size: 14px;
@@ -10,8 +9,18 @@
         text-transform: uppercase;
     }
 
+    &__burger {
+        height: calc(var(--gs) * 3);
+        width: calc(var(--gs) * 3);
+    }
+
     &__item {
         display: flex;
+        margin-left: calc(var(--gs) * 2);
+
+        & + & {
+            margin-left: auto;
+        }
 
         @media (--tablet-lg) {
             display: none;
@@ -23,17 +32,6 @@
             @media (--tablet) {
                 display: none;
             }
-        }
-
-        &--burger {
-            @media (--tablet-lg) {
-                display: flex;
-            }
-        }
-
-        &-burger {
-            height: 24px;
-            width: 24px;
         }
     }
 }

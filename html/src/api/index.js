@@ -1,5 +1,9 @@
 import qs from 'qs';
-import { $http } from '../services/ServiceLocator';
+import axios from 'axios';
+import { $http, $logger } from '../services/ServiceLocator';
+import { REQUEST_CANCEL_MESSAGE } from '../assets/scripts/constants';
+
+let catalogItemsCancelSource = null;
 
 // auth
 
@@ -7,8 +11,28 @@ export function checkSession() {
     return $http.get('/v1/auth/check-session');
 }
 
-export function login({ email, password }) {
-    return $http.post('/v1/auth/login', { email, password });
+export function loginByPassword(payload) {
+    return $http.post('/v1/auth/loginByPassword', payload);
+}
+
+export function logout() {
+    return $http.post('/v1/auth/logout');
+}
+
+export function sendSMS(phone) {
+    return $http.post('/v1/auth/sendSMS', { phone });
+}
+
+export function checkCode(code) {
+    return $http.post('/v1/auth/checkCode', { code });
+}
+
+export function registerByPassword(password) {
+    return $http.post('/v1/auth/registerByPassword', { password });
+}
+
+export function getSocialLink(url, driver) {
+    return $http.post('/v1/auth/getSocialLink', { final_login_url: url, driver });
 }
 
 // search
@@ -18,6 +42,24 @@ export function search(data) {
 }
 
 // catalog
+
+export function getProductGroups({ type, page = 1 }) {
+    return $http.get('/v1/catalog/product-groups', {
+        params: { type_code: type, page },
+        paramsSerializer(params) {
+            return qs.stringify(params, { encode: false });
+        },
+    });
+}
+
+export function getProductGroup(code) {
+    return $http.get('/v1/catalog/product-group', {
+        params: { code },
+        paramsSerializer(params) {
+            return qs.stringify(params, { encode: false });
+        },
+    });
+}
 
 export function getProducts({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
     return $http.get('/v1/catalog/products', {
@@ -29,7 +71,13 @@ export function getProducts({ filter, orderField = 'price', orderDirection = 'de
 }
 
 export function getCatalogItems({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
+    if (catalogItemsCancelSource) {
+        catalogItemsCancelSource.cancel(REQUEST_CANCEL_MESSAGE);
+        catalogItemsCancelSource = axios.CancelToken.source();
+    } else catalogItemsCancelSource = axios.CancelToken.source();
+
     return $http.get('/v1/catalog/items', {
+        cancelToken: catalogItemsCancelSource.token,
         params: { filter, page, orderField, orderDirection },
         paramsSerializer(params) {
             return qs.stringify(params, { encode: false });
@@ -39,7 +87,7 @@ export function getCatalogItems({ filter, orderField = 'price', orderDirection =
 
 export function getFilters(data) {
     return $http.get('/v1/catalog/filter', {
-        params: data,
+        params: { ...data, needBrands: 1 },
         paramsSerializer(params) {
             return qs.stringify(params, { encode: false });
         },
@@ -47,11 +95,19 @@ export function getFilters(data) {
 }
 
 export function getCategories(data) {
-    return $http.get('/v1/categories', data);
+    return $http.get('/v1/categories');
 }
 
 export function getBanners(data) {
     return $http.get('/v1/banners', data);
+}
+
+export function getBrandCatalog(data) {
+    return $http.get('/v1/brand-catalog', data);
+}
+
+export function getSetCatalog(data) {
+    return $http.get('/v1/set-catalog', data);
 }
 
 export function getBrands(data) {
@@ -68,6 +124,10 @@ export function getInstagram(data) {
 
 export function getProduct({ code }) {
     return $http.get('/v1/catalog/product-detail', { params: { code } });
+}
+
+export function getMasterclass({ code }) {
+    return $http.get('/v1/catalog/masterclass-detail', { params: { code } });
 }
 
 //brand

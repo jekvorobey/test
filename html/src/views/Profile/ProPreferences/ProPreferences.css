@@ -6,11 +6,27 @@
         line-height: 40px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+
+        @media (--tablet-lg) {
+            display: none;
+        }
     }
 
     &__panel {
         & + & {
             margin-top: calc(var(--gs) * 7);
+
+            @media (--tablet) {
+                margin-top: calc(var(--gs) * 4);
+            }
+        }
+
+        &-tags {
+            &-item {
+                @media (--tablet) {
+                    width: 100%;
+                }
+            }
         }
 
         &-links {
@@ -25,8 +41,18 @@
             line-height: 24px;
             text-transform: none;
 
+            span {
+                @media (--tablet) {
+                    display: none;
+                }
+            }
+
             & + & {
                 margin-left: calc(var(--gs) * 4);
+
+                @media (--tablet) {
+                    margin-left: calc(var(--gs) * 2);
+                }
             }
 
             &--delete {

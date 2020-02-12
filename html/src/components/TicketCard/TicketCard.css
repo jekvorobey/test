@@ -1,0 +1,90 @@
+.ticket-card {
+    display: flex;
+    justify-content: space-between;
+    padding: calc(var(--gs) * 2) 0;
+
+    @media (--tablet-lg) {
+        flex-direction: column;
+    }
+
+    &__info {
+        flex: 1;
+
+        @media (--tablet-lg) {
+            margin-bottom: var(--gs);
+        }
+    }
+
+    &__body {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 60%;
+
+        @media (--tablet-lg) {
+            width: 100%;
+        }
+
+        @media (--tablet) {
+            flex-wrap: wrap;
+        }
+    }
+
+    &__remain,
+    &__count,
+    &__price {
+        width: 20%;
+
+        @media (--tablet) {
+            width: 50%;
+        }
+    }
+
+    &__count,
+    &__price {
+        text-align: center;
+    }
+
+    &__name,
+    &__price {
+        font-size: 20px;
+        line-height: 24px;
+    }
+
+    &__count {
+        .v-counter__input[type='number'] {
+            min-width: 38px;
+        }
+
+        @media (--tablet) {
+            text-align: right;
+            width: 50%;
+            margin-bottom: var(--gs);
+        }
+    }
+
+    &__remain {
+        @media (--tablet) {
+            text-align: left;
+            width: 50%;
+            margin-bottom: var(--gs);
+        }
+    }
+
+    &__price {
+        @media (--tablet) {
+            text-align: left;
+            width: 50%;
+        }
+    }
+
+    &__btn {
+        @media (--tablet-min) {
+            min-width: 200px;
+        }
+
+        @media (--tablet) {
+            width: 50%;
+        }
+    }
+}

@@ -55,10 +55,6 @@
         color: var(--cl-grey);
     }
 
-    &--disabled &__error {
-        display: none;
-    }
-
     &__label {
         display: flex;
         margin-bottom: var(--gs);

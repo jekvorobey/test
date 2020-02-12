@@ -1,7 +1,7 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
 
-export const flatpickrLocale = flatPickrRu;
-export default {
+const flatpickrLocale = flatPickrRu.ru;
+const main = {
     header: {
         top: {
             delivery: 'Доставка по всей России',
@@ -13,15 +13,6 @@ export default {
         middle: {
             search: 'Искать...',
             professionals: 'Mаркетплейс только для профессионалов бьюти-индустрии',
-        },
-
-        links: {
-            catalog: 'Каталог',
-            new: 'Новинки',
-            stocks: 'Акции',
-            collections: 'Подборки',
-            brands: 'Бренды',
-            classes: 'Мастер-классы',
         },
     },
 
@@ -105,6 +96,26 @@ export default {
         },
     },
 
+    productGroups: {
+        title: {
+            catalog: 'Каталог',
+            new: 'Новинки',
+            promo: 'Акции',
+            sets: 'Подборки товаров',
+            brands: 'Бренды',
+            masterclasses: 'Мастер-классы',
+        },
+
+        links: {
+            catalog: 'Каталог',
+            new: 'Новинки',
+            promo: 'Акции',
+            sets: 'Подборки',
+            brands: 'Бренды',
+            masterclasses: 'Мастер-классы',
+        },
+    },
+
     cart: {
         title: {
             like: 'Вам также могут понравиться',
@@ -126,6 +137,8 @@ export default {
         format: {
             order: 'Заказ №{id}',
             messages: 'Сообщения ({n})',
+            referal: 'Реферал №{id}',
+            orderStatus: { created: 'Создан', process: 'Передан в доставку', done: 'Доставлен', cancel: 'Отменён' },
         },
 
         groups: {
@@ -135,7 +148,7 @@ export default {
         },
 
         routes: {
-            Account: 'Личный кабинет',
+            Cabinet: 'Личный кабинет',
             Preferences: 'Мои предпочтения',
             Addresses: 'Адреса доставки',
             Payment: 'Способы оплаты',
@@ -146,13 +159,19 @@ export default {
             Bonuses: 'Бонусная программа',
             Orders: 'Мои Заказы',
             OrderDetails: 'Мои Заказы',
+            ReferalOrders: 'Реферальные заказы',
+            ReferalOrderDetails: 'Реферальные заказы',
 
             Referal: 'Реферальная программа',
             ProPreferences: 'Мои профессиональные предпочтения',
             Promopage: 'Моя промостраница',
-            Promocodes: 'Моя промокоды',
             Seo: 'Товары для продвижения',
+            Promocodes: 'Мои промокоды',
+            Account: 'Мой счет',
+            Billing: 'Биллинг по счету',
+            Documents: 'Мои документы',
 
+            HowItWorks: 'Как работать с платформой',
             Guides: 'Гиды по продуктам',
             GuideDetails: 'Гиды по продуктам',
             Masterclasses: 'Мои мастер-классы',
@@ -160,3 +179,6 @@ export default {
         },
     },
 };
+
+const LOCALE = 'ru';
+export default { main, flatpickrLocale, LOCALE };

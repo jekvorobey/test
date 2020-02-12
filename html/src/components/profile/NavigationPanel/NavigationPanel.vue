@@ -11,14 +11,20 @@
             </ul>
         </div>
         <br />
-        <v-link class="navigation-panel__group-link" to="/">Выйти</v-link>
+        <v-link tag="button" class="navigation-panel__group-link" @click.prevent="onLogout">
+            Выйти
+        </v-link>
     </div>
 </template>
 
 <script>
 import VLink from '../../controls/VLink/VLink.vue';
 
+import { NAME as AUTH_MODULE } from '../../../store/modules/Auth';
+import { LOGOUT } from '../../../store/modules/Auth/actions';
+
 import './NavigationPanel.css';
+import { mapActions } from 'vuex';
 
 export default {
     name: 'navigation-panel',
@@ -34,7 +40,7 @@ export default {
                     id: 1,
                     name: this.$t('profile.groups.profile'),
                     routes: [
-                        { name: 'Account', exact: true },
+                        { name: 'Cabinet', exact: true },
                         { name: 'Preferences', exact: true },
                         { name: 'Addresses', exact: true },
                         { name: 'Payment', exact: true },
@@ -43,6 +49,7 @@ export default {
                         { name: 'Certificates', exact: true },
                         { name: 'Bonuses', exact: true },
                         { name: 'Orders' },
+                        { name: 'ReferalOrders' },
                     ],
                 },
                 {
@@ -54,18 +61,34 @@ export default {
                         { name: 'Promopage', exact: true },
                         { name: 'Seo', exact: true },
                         { name: 'Promocodes', exact: true },
+                        { name: 'Account', exact: true },
+                        { name: 'Billing', exact: true },
+                        { name: 'Documents', exact: true },
                     ],
                 },
                 {
                     id: 3,
                     name: this.$t('profile.groups.training'),
                     routes: [
+                        { name: 'HowItWorks', exact: true },
                         { name: 'Guides' },
-                        // { name: 'Masterclasses', exact: true },
+                        { name: 'Masterclasses', exact: true },
                         { name: 'QnA', exact: true },
                     ],
                 },
             ];
+        },
+    },
+
+    methods: {
+        ...mapActions(AUTH_MODULE, [LOGOUT]),
+
+        async onLogout() {
+            try {
+                await this[LOGOUT]();
+            } catch (error) {
+                $logger.error(error);
+            }
         },
     },
 };

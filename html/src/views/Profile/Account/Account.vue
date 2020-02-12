@@ -1,178 +1,177 @@
 <template>
     <section class="section account-view">
         <h2 class="account-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
-        <image-picker class="account-view__avatar" @fileChanged="onImageChanged" />
-        <info-panel class="account-view__panel" header="Личные данные">
-            <template v-slot:controls>
-                <v-link class="account-view__panel-link" tag="button">
-                    <v-svg name="edit" width="16" height="16" />
-                    &nbsp;&nbsp;Изменить
-                </v-link>
-            </template>
-            <ul class="account-view__panel-list">
-                <info-row class="account-view__panel-item" name="ФИО" value="Динис Базгутдинов" />
-                <info-row class="account-view__panel-item" name="Дата рождения" />
-                <info-row class="account-view__panel-item" name="Пол" value="Мужской" />
-                <info-row class="account-view__panel-item" name="Номер телефона" value="+7 916 123-45-67" />
-                <info-row class="account-view__panel-item" name="Email" value="disbag@gmail.com" />
-                <info-row class="account-view__panel-item" name="Портфолио">
-                    <ul>
-                        <li>
-                            <a class="account-view__panel-item-link">Работы в Инстаграме</a>
-                        </li>
-                        <li>
-                            <a class="account-view__panel-item-link">Портфолио «Свадебные прически»</a>
-                        </li>
-                    </ul>
-                </info-row>
-                <info-row class="account-view__panel-item" name="Профиль" value="Стилист, визажист" />
-            </ul>
-        </info-panel>
 
-        <info-panel class="account-view__panel" header="Пароль">
-            <template v-slot:controls>
-                <v-link class="account-view__panel-link" tag="button">
-                    <v-svg name="edit" width="16" height="16" />
-                    &nbsp;&nbsp;Изменить
-                </v-link>
-            </template>
-            <ul class="account-view__panel-list">
-                <info-row class="account-view__panel-item" name="Пароль">
-                    • • • • • • • • • • •
-                </info-row>
-            </ul>
-        </info-panel>
+        <div class="account-view__panels">
+            <div class="account-view__panel">
+                <div class="text-grey">На вашем счете</div>
+                <div class="text-bold account-view__panel-count">1 587 ₽</div>
+            </div>
+            <div class="account-view__panel">
+                <div class="account-view__panel-top">
+                    <span class="text-bold account-view__panel-top-label">Вывод средств</span>
+                    <span class="text-grey account-view__panel-top-notice">
+                        Вывод денежных средств осуществляется в срок до 10 календарных дней
+                    </span>
+                </div>
+                <div class="account-view__panel-bottom">
+                    <v-select
+                        class="account-view__panel-bottom-select"
+                        v-model="selectedCard"
+                        :options="cards"
+                        :searchable="false"
+                        :show-labels="false"
+                    />
+                    <v-input class="account-view__panel-bottom-input" placeholder="Сумма от 0 до 1 587 ₽" />
+                    <v-button class="account-view__panel-bottom-btn">
+                        Оформить вывод
+                    </v-button>
+                </div>
+            </div>
+        </div>
 
-        <info-panel class="account-view__panel" header="Социальные сети">
-            <template v-slot:controls>
-                <v-link class="account-view__panel-link" tag="button">
-                    <v-svg name="edit" width="16" height="16" />
-                    &nbsp;&nbsp;Изменить
-                </v-link>
-            </template>
-            <ul class="account-view__panel-list">
-                <info-row class="account-view__panel-item" name="Vkontakte">
-                    <template v-slot:link>
-                        <v-link class="account-view__panel-item-link" tag="button">
-                            Подключить
-                        </v-link>
-                    </template>
-                </info-row>
-                <info-row class="account-view__panel-item" name="Facebook" value="Dinis Bazgutdinov">
-                    <template v-slot:link>
-                        <v-link class="account-view__panel-item-link account-view__panel-item-link--grey" tag="button">
-                            Отключить
-                        </v-link>
-                    </template>
-                </info-row>
-                <info-row class="account-view__panel-item" name="Instagram" value="@disbag">
-                    <template v-slot:link>
-                        <v-link class="account-view__panel-item-link account-view__panel-item-link--grey" tag="button">
-                            Отключить
-                        </v-link>
-                    </template>
-                </info-row>
-            </ul>
-        </info-panel>
+        <section class="account-view__section">
+            <div class="container container--tablet-lg">
+                <h3 class="account-view__section-hl">История начислений</h3>
+                <table class="account-view__table" v-if="!isTabletLg">
+                    <colgroup>
+                        <col width="35%" />
+                        <col width="25%" />
+                        <col width="25%" />
+                        <col width="15%" />
+                    </colgroup>
+                    <thead class="account-view__table-head">
+                        <tr class="account-view__table-tr account-view__table-tr--header">
+                            <th class="account-view__table-th">Заказ/событие</th>
+                            <th class="account-view__table-th">Дата</th>
+                            <th class="account-view__table-th">Операция</th>
+                            <th class="account-view__table-th">Начислено/cписано</th>
+                        </tr>
+                    </thead>
+                    <transition-group tag="tbody" name="fade-in" appear class="account-view__table-body">
+                        <tr class="account-view__table-tr" v-for="event in events" :key="event.id">
+                            <td class="account-view__table-td">{{ event.eventId }}</td>
+                            <td class="account-view__table-td">{{ event.date }}</td>
+                            <td class="account-view__table-td">{{ event.operation }}</td>
+                            <td class="account-view__table-td">
+                                <span v-if="event.delta.minus">-</span>&nbsp;
+                                <price v-bind="event.delta" />
+                            </td>
+                        </tr>
+                    </transition-group>
+                </table>
+            </div>
+        </section>
 
-        <info-panel class="account-view__panel" header="Реквизиты">
-            <template v-slot:controls>
-                <v-link class="account-view__panel-link" tag="button" @click="onOpenDetailsModal">
-                    <v-svg name="edit" width="16" height="16" />
-                    &nbsp;&nbsp;Изменить
-                </v-link>
-            </template>
-
-            <ul class="account-view__panel-list">
-                <info-row class="account-view__panel-item" name="Наименование ИП" value="ООО «Соколов»" />
-                <info-row class="account-view__panel-item" name="ИНН" value="471101415706" />
-                <info-row class="account-view__panel-item" name="Расчетный счет" value="17600000658470000" />
-                <info-row class="account-view__panel-item" name="БИК" value="1299786" />
-                <info-row class="account-view__panel-item" name="Банк" value="Сбербанк" />
-                <info-row
-                    class="account-view__panel-item"
-                    name="Корреспондентский счет банка"
-                    value="68000007970000008"
-                />
-                <info-row
-                    class="account-view__panel-item"
-                    name="Юридический адрес"
-                    value="Россия, г. Москва, г. Зеленоград, Самый Центральный проспект, к. 305, офис 134"
-                />
-            </ul>
-        </info-panel>
-
-        <info-panel class="account-view__panel" header="Сертификаты">
-            <template v-slot:controls>
-                <v-link class="account-view__panel-link" tag="button">
-                    <v-svg name="edit" width="16" height="16" />
-                    &nbsp;&nbsp;Изменить
-                </v-link>
-            </template>
-            <ul class="account-view__panel-list">
-                <info-row
-                    class="text-sm account-view__panel-item account-view__panel-item--dropzone"
-                    name="Не более 10 файлов, jpeg, png, mp4, mov. Фото не более 5Mb, видео до 15Mb"
-                >
-                    <div class="account-view__panel-dropzone">
-                        Выберите фото
-                    </div>
+        <ul class="account-view__list" v-if="isTabletLg">
+            <li class="container container--tablet-lg account-view__list-item" v-for="event in events" :key="event.id">
+                <info-row class="account-view__list-item-row" name="Заказ/событие" :value="event.eventId" />
+                <info-row class="account-view__list-item-row" name="Дата" :value="event.date" />
+                <info-row class="account-view__list-item-row" name="Операция" :value="event.operation" />
+                <info-row class="account-view__list-item-row" name="Начислено/cписано">
+                    <span v-if="event.delta.minus">-</span>&nbsp;
+                    <price v-bind="event.delta" />
                 </info-row>
-            </ul>
-        </info-panel>
+            </li>
+        </ul>
 
-        <transition name="fade">
-            <details-modal v-if="isDetailsOpen" />
-        </transition>
+        <div class="container container--tablet-lg account-view__controls">
+            <v-button class="btn--outline account-view__controls-btn">
+                Показать ещё
+            </v-button>
+            <v-pagination v-model="page" :page-count="10" />
+        </div>
     </section>
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
 import VLink from '../../../components/controls/VLink/VLink.vue';
+import VButton from '../../../components/controls/VButton/VButton.vue';
+import VInput from '../../../components/controls/VInput/VInput.vue';
+import VSelect from '../../../components/controls/VSelect/VSelect.vue';
+import VPagination from '../../../components/controls/VPagination/VPagination.vue';
+
+import Price from '../../../components/Price/Price.vue';
 import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
-import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
-import ImagePicker from '../../../components/profile/ImagePicker/ImagePicker.vue';
-
-import DetailsModal, { NAME as DETAILS_MODAL_NAME } from '../../../components/profile/DetailsModal/DetailsModal.vue';
-
-import { mapActions, mapState } from 'vuex';
-import { $store } from '../../../services/ServiceLocator';
-
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
-
-import '../../../assets/images/sprites/edit.svg';
 import './Account.css';
 
 export default {
     name: 'account',
 
     components: {
-        VSvg,
         VLink,
+        VButton,
+        VInput,
+        VSelect,
+        VPagination,
 
+        Price,
         InfoRow,
-        InfoPanel,
-        ImagePicker,
+    },
 
-        DetailsModal,
+    data() {
+        const cards = ['MasterCard **** 8515', 'VISA **** 5000', 'Добавить новую карту'];
+
+        return {
+            page: 1,
+            selectedCard: cards[0],
+            cards,
+            events: [
+                {
+                    id: 1,
+                    eventId: 15487488,
+                    date: '18 августа 2019',
+                    operation: 'Оплата заказа',
+                    delta: {
+                        minus: true,
+                        value: 1463,
+                        currency: 'RUB',
+                    },
+                },
+                {
+                    id: 2,
+                    eventId: 15487488,
+                    date: '15 августа 2019',
+                    operation: 'Оплата заказа',
+                    delta: {
+                        minus: true,
+                        value: 4780,
+                        currency: 'RUB',
+                    },
+                },
+                {
+                    id: 3,
+                    eventId: 15487488,
+                    date: '9 августа 2019',
+                    operation: 'Вывод средств',
+                    delta: {
+                        minus: true,
+                        value: 6880,
+                        currency: 'RUB',
+                    },
+                },
+                {
+                    id: 4,
+                    eventId: 15487364,
+                    date: '27 июля 2019',
+                    operation: 'Начисление вознаграждения',
+                    delta: {
+                        value: 7888,
+                        currency: 'RUB',
+                    },
+                },
+            ],
+        };
     },
 
     computed: {
-        ...mapState(MODAL_MODULE, {
-            isDetailsOpen: state => state[MODALS][DETAILS_MODAL_NAME] && state[MODALS][DETAILS_MODAL_NAME].open,
-        }),
-    },
-
-    methods: {
-        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-
-        onImageChanged() {},
-
-        onOpenDetailsModal() {
-            this[CHANGE_MODAL_STATE]({ name: DETAILS_MODAL_NAME, open: true });
+        isTabletLg() {
+            return this.$mq.tabletLg;
         },
     },
+
+    watch: {},
+
+    methods: {},
 };
 </script>

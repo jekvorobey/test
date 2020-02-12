@@ -7,27 +7,42 @@
             <span class="text-grey text-sm">{{ products.length }} продуктов</span>
         </div>
 
-        <info-panel class="promopage-view__panel" :header="headerText">
+        <info-panel class="promopage-view__panel" :header="name">
             <template v-slot:controls>
-                <v-link class="promopage-view__panel-link" tag="button">
-                    <v-svg name="edit" width="16" height="16" />
+                <v-link class="promopage-view__panel-link" tag="button" @click="onEditName">
+                    <v-svg name="edit" :width="iconSize" :height="iconSize" />
                 </v-link>
 
-                <v-link class="promopage-view__panel-link" tag="button">
-                    <v-svg name="plus-small" width="16" height="16" />
-                    &nbsp;&nbsp;Добавить
-                </v-link>
+                <div class="promopage-view__panel-controls" v-if="!isTablet">
+                    <v-link class="promopage-view__panel-link" tag="button" @click="onAddProduct">
+                        <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
+                        &nbsp;&nbsp;Добавить
+                    </v-link>
+                    <v-link class="promopage-view__panel-link" tag="button" @click="onAddProductByLink">
+                        <v-svg name="link-add" :width="iconSize" :height="iconSize" />
+                        &nbsp;&nbsp;Добавить по ссылке
+                    </v-link>
 
-                <v-link class="promopage-view__panel-link" tag="button">
-                    <v-svg name="link-add" width="16" height="16" />
-                    &nbsp;&nbsp;Добавить по ссылке
-                </v-link>
-
-                <v-link class="promopage-view__panel-link" tag="button">
-                    <v-svg name="link" width="16" height="16" />
-                    &nbsp;&nbsp;Скопировать ссылку
-                </v-link>
+                    <v-link class="promopage-view__panel-link" tag="button">
+                        <v-svg name="link" :width="iconSize" :height="iconSize" />
+                        &nbsp;&nbsp;Скопировать ссылку
+                    </v-link>
+                </div>
             </template>
+
+            <div class="container container--tablet-lg">
+                <div class="promopage-view__panel-links" v-if="isTablet">
+                    <v-link class="promopage-view__panel-link" tag="button" @click="onAddProduct">
+                        <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
+                        &nbsp;&nbsp;Добавить
+                    </v-link>
+
+                    <v-link class="promopage-view__panel-link" tag="button" @click="onAddProductByLink">
+                        <v-svg name="link-add" :width="iconSize" :height="iconSize" />
+                        &nbsp;&nbsp;Добавить по ссылке
+                    </v-link>
+                </div>
+            </div>
 
             <ul class="promopage-view__panel-list">
                 <li class="promopage-view__panel-item" v-for="item in products" :key="item.id">
@@ -51,6 +66,21 @@
                 </li>
             </ul>
         </info-panel>
+
+        <transition name="fade">
+            <promopage-edit-modal
+                v-show="isNameEditOpen"
+                v-if="$isServer || (isNameEditOpen && !isProductAddOpen && !isProductAddByLinkOpen)"
+            />
+            <promopage-add-modal
+                v-show="isProductAddOpen"
+                v-if="$isServer || (!isNameEditOpen && isProductAddOpen && !isProductAddByLinkOpen)"
+            />
+            <promopage-add-by-link-modal
+                v-show="isProductAddByLinkOpen"
+                v-if="$isServer || (!isNameEditOpen && !isProductAddOpen && isProductAddByLinkOpen)"
+            />
+        </transition>
     </section>
 </template>
 
@@ -61,7 +91,23 @@ import VLink from '../../../components/controls/VLink/VLink.vue';
 import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
 import CatalogProductCard from '../../../components/CatalogProductCard/CatalogProductCard.vue';
 
+import PromopageEditModal, {
+    NAME as PROMOPAGE_EDIT_MODAL_NAME,
+} from '../../../components/profile/PromopageEditModal/PromopageEditModal.vue';
+
+import PromopageAddModal, {
+    NAME as PROMOPAGE_ADD_MODAL_NAME,
+} from '../../../components/profile/PromopageAddModal/PromopageAddModal.vue';
+
+import PromopageAddByLinkModal, {
+    NAME as PROMOPAGE_ADD_BY_LINK_MODAL_NAME,
+} from '../../../components/profile/PromopageAddByLinkModal/PromopageAddByLinkModal.vue';
+
 import { $store, $progress, $logger } from '../../../services/ServiceLocator';
+import { mapState, mapActions } from 'vuex';
+
+import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE, PROMO_DATA } from '../../../store/modules/Profile';
 import { FETCH_PROMO_DATA } from '../../../store/modules/Profile/actions';
@@ -76,7 +122,6 @@ import '../../../assets/images/sprites/link.svg';
 import '../../../assets/images/sprites/link-add.svg';
 import '../../../assets/images/sprites/plus-small.svg';
 import './Promopage.css';
-import { mapState, mapActions } from 'vuex';
 
 export default {
     name: 'promopage',
@@ -87,22 +132,51 @@ export default {
 
         InfoPanel,
         CatalogProductCard,
-    },
 
-    data() {
-        return {
-            headerText: 'Я рекомендую',
-        };
+        PromopageEditModal,
+        PromopageAddModal,
+        PromopageAddByLinkModal,
     },
 
     computed: {
+        ...mapState(MODAL_MODULE, {
+            isNameEditOpen: state =>
+                state[MODALS][PROMOPAGE_EDIT_MODAL_NAME] && state[MODALS][PROMOPAGE_EDIT_MODAL_NAME].open,
+            isProductAddOpen: state =>
+                state[MODALS][PROMOPAGE_ADD_MODAL_NAME] && state[MODALS][PROMOPAGE_ADD_MODAL_NAME].open,
+            isProductAddByLinkOpen: state =>
+                state[MODALS][PROMOPAGE_ADD_BY_LINK_MODAL_NAME] && state[MODALS][PROMOPAGE_ADD_BY_LINK_MODAL_NAME].open,
+        }),
+
         ...mapState(PROFILE_MODULE, {
             products: state => (state[PROMO_DATA] ? state[PROMO_DATA].products : []),
+            name: state => (state[PROMO_DATA] ? state[PROMO_DATA].name : ''),
         }),
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
+
+        iconSize() {
+            return this.$mq.tablet ? 24 : 16;
+        },
     },
 
     methods: {
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+
+        onAddProduct() {
+            this[CHANGE_MODAL_STATE]({ name: PROMOPAGE_ADD_MODAL_NAME, open: true });
+        },
+
+        onAddProductByLink() {
+            this[CHANGE_MODAL_STATE]({ name: PROMOPAGE_ADD_BY_LINK_MODAL_NAME, open: true });
+        },
+
+        onEditName() {
+            this[CHANGE_MODAL_STATE]({ name: PROMOPAGE_EDIT_MODAL_NAME, open: true });
+        },
     },
 
     beforeRouteEnter(to, from, next) {

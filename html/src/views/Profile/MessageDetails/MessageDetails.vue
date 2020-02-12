@@ -1,10 +1,12 @@
 <template>
     <section class="section message-details-view">
-        <v-link class="message-details-view__back-link" :to="backUrl">
-            <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем
-            сообщениям
-        </v-link>
-        <h2 class="message-details-view__hl">{{ messageId }} Доставка в Зеленоград</h2>
+        <div class="container container--tablet-lg">
+            <v-link class="message-details-view__back-link" :to="backUrl">
+                <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем
+                сообщениям
+            </v-link>
+            <h2 class="message-details-view__hl">{{ messageId }} Доставка в Зеленоград</h2>
+        </div>
 
         <ul class="message-details-view__list">
             <message-card
@@ -20,6 +22,11 @@
                 :is-system="message.isSystem"
             />
         </ul>
+
+        <!-- <div class="message-details-view__controls">
+            <v-input tag="textarea"></v-input>
+            <v-button>Отправить</v-button>
+        </div> -->
     </section>
 </template>
 
@@ -28,7 +35,6 @@ import VSvg from '../../../components/controls/VSvg/VSvg.vue';
 import VLink from '../../../components/controls/VLink/VLink.vue';
 import VButton from '../../../components/controls/VButton/VButton.vue';
 import VInput from '../../../components/controls/VInput/VInput.vue';
-import VPagination from '../../../components/controls/VPagination/VPagination.vue';
 
 import MessageCard from '../../../components/MessageCard/MessageCard.vue';
 

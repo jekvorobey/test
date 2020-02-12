@@ -1,52 +1,62 @@
 <template>
     <section class="section subscribes-view">
-        <h2 class="subscribes-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+        <div class="container container--tablet-lg">
+            <h2 class="subscribes-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+        </div>
         <info-panel class="subscribes-view__panel" header="Что вас интересует?">
-            <v-check
-                v-model="selectedSubscribes"
-                v-for="subscribe in subscribes"
-                :id="`subscribe-${subscribe.id}`"
-                :key="subscribe.id"
-                :value="subscribe.id"
-                name="subscribes"
-            >
-                {{ subscribe.name }}
-                <div class="text-grey text-sm">
-                    {{ subscribe.description }}
-                </div>
-            </v-check>
+            <div class="container container--tablet-lg">
+                <v-check
+                    v-model="selectedSubscribes"
+                    v-for="subscribe in subscribes"
+                    :id="`subscribe-${subscribe.id}`"
+                    :key="subscribe.id"
+                    :value="subscribe.id"
+                    name="subscribes"
+                >
+                    {{ subscribe.name }}
+                    <div class="text-grey text-sm">
+                        {{ subscribe.description }}
+                    </div>
+                </v-check>
+            </div>
         </info-panel>
 
         <info-panel class="subscribes-view__panel" header="Как часто?">
-            <v-check
-                v-model="selectedPeriod"
-                v-for="period in periods"
-                :id="`period-${period.id}`"
-                :key="period.id"
-                :value="period.id"
-                type="radio"
-                name="period"
-            >
-                {{ period.name }}
-            </v-check>
+            <div class="container container--tablet-lg">
+                <v-check
+                    v-model="selectedPeriod"
+                    v-for="period in periods"
+                    :id="`period-${period.id}`"
+                    :key="period.id"
+                    :value="period.id"
+                    type="radio"
+                    name="period"
+                >
+                    {{ period.name }}
+                </v-check>
+            </div>
         </info-panel>
 
         <info-panel class="subscribes-view__panel" header="Предпочитаемый способ связи">
-            <v-check
-                v-model="selectedReceivers"
-                v-for="receiver in receivers"
-                :id="`receiver-${receiver.id}`"
-                :key="receiver.id"
-                :value="receiver.id"
-                name="receivers"
-            >
-                {{ receiver.name }}
-            </v-check>
+            <div class="container container--tablet-lg">
+                <v-check
+                    v-model="selectedReceivers"
+                    v-for="receiver in receivers"
+                    :id="`receiver-${receiver.id}`"
+                    :key="receiver.id"
+                    :value="receiver.id"
+                    name="receivers"
+                >
+                    {{ receiver.name }}
+                </v-check>
+            </div>
         </info-panel>
 
-        <v-button @click="onSave">
-            Сохранить
-        </v-button>
+        <div class="container subscribes-view__submit">
+            <v-button class="subscribes-view__submit-btn" @click="onSave">
+                Сохранить
+            </v-button>
+        </div>
     </section>
 </template>
 

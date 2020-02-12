@@ -4,10 +4,10 @@ import HttpServiceBase from './base';
 import MockHttpService from './MockService';
 
 export default class MockServiceAdapter extends HttpServiceBase {
-    constructor(baseURL = '') {
-        super(baseURL);
-        this.httpServiceInstance = new HttpService(baseURL);
-        this.mockServiceInstance = new MockHttpService(baseURL);
+    constructor(context, cookie) {
+        super(context.baseURL);
+        this.httpServiceInstance = new HttpService(context, cookie);
+        this.mockServiceInstance = new MockHttpService(context);
     }
 
     /**
@@ -25,6 +25,8 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/catalog/items':
             case '/v1/catalog/product-detail':
             case '/v1/catalog/filter':
+            case '/v1/catalog/product-groups':
+            case '/v1/catalog/product-group':
                 return this.httpServiceInstance.get(path, config);
             default:
                 return this.mockServiceInstance.get(path, config);
@@ -39,8 +41,16 @@ export default class MockServiceAdapter extends HttpServiceBase {
      */
     post(path, data, config) {
         switch (path) {
-            case '/v1/auth/login':
+            case '/v1/auth/loginBySocial':
+            case '/v1/auth/loginByPassword':
+            case '/v1/auth/sendSMS':
+            case '/v1/auth/checkCode':
+            case '/v1/auth/getSocialLink':
+            case '/v1/auth/registerByPassword':
+            case '/v1/auth/logout':
+
             case '/v1/cart/item':
+
             case '/v1/checkout/receive-method':
             case '/v1/checkout/address':
             case '/v1/checkout/pickup-point':

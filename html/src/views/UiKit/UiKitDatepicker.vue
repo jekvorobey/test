@@ -5,20 +5,20 @@
                 v-model="value"
                 :disable="disable"
                 :mode="mode"
-                :locale="locale"
+                :locale="datepickerLocale"
                 allow-input
                 :disabled="disabled2"
             >
                 Дата1
             </v-datepicker>
-            <v-datepicker v-model="values" :disable="disable1" :mode="mode1" :locale="locale">
+            <v-datepicker v-model="values" :disable="disable1" :mode="mode1" :locale="datepickerLocale">
                 Дата2
             </v-datepicker>
             <v-datepicker
                 v-model="values2"
                 :enable="enable2"
                 :mode="mode2"
-                :locale="locale"
+                :locale="datepickerLocale"
                 :disabled="disabled2"
                 inline
             >
@@ -30,6 +30,7 @@
 <script>
 import VDatepicker from '../../components/controls/VDatepicker/VDatepicker.vue';
 import { mapState } from 'vuex';
+import { LOCALE, LOCALIZATIONS } from '../../store';
 
 export default {
     name: 'ui-kit-datepicker',
@@ -51,8 +52,12 @@ export default {
             disabled2: false,
         };
     },
+
     computed: {
-        ...mapState(['locale']),
+        ...mapState({
+            datepickerLocale: state =>
+                state[LOCALIZATIONS][state[LOCALE]] && state[LOCALIZATIONS][state[LOCALE]].flatpickrLocale,
+        }),
     },
 };
 </script>

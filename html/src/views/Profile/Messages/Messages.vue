@@ -2,7 +2,7 @@
     <section class="section messages-view">
         <div class="messages-view__header">
             <h2 class="messages-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
-            <v-button>Новое сообщение</v-button>
+            <v-button class="messages-view__btn" @click="onCreateMessage">Новое сообщение</v-button>
         </div>
 
         <ul class="messages-view__list">
@@ -19,10 +19,15 @@
                 :date="formatDate(message.date)"
                 :is-system="message.isSystem"
                 :is-read="message.isRead"
+                :use-header-clamp="!isTablet"
                 use-clamp
                 @click.prevent="onOpenMessage(message.id)"
             />
         </ul>
+
+        <transition name="fade">
+            <message-modal v-show="isMessageOpen" v-if="$isServer || isMessageOpen" />
+        </transition>
     </section>
 </template>
 
@@ -33,6 +38,14 @@ import VInput from '../../../components/controls/VInput/VInput.vue';
 import VPagination from '../../../components/controls/VPagination/VPagination.vue';
 
 import MessageCard from '../../../components/MessageCard/MessageCard.vue';
+import MessageModal, { NAME as MESSAGE_MODAL_NAME } from '../../../components/profile/MessageModal/MessageModal.vue';
+
+import { mapState, mapActions, mapGetters } from 'vuex';
+import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+
+import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
+import { MESSAGES } from '../../../store/modules/Profile/getters';
 
 import './Messages.css';
 
@@ -44,61 +57,31 @@ export default {
         VInput,
 
         MessageCard,
+        MessageModal,
     },
 
-    data() {
-        return {
-            messages: [
-                {
-                    id: 56835,
-                    name: null,
-                    lastName: null,
-                    title: 'Начисление баллов за заказ №125-7865564-6',
-                    message:
-                        'Добрый день, Владимир! Мы разобрались в вашей ситуации — 1500 бонусов за заказ №125-7, Добрый день, Владимир! Мы разобрались в вашей ситуации — 1500 бонусов за заказ №125-7',
-                    isRead: false,
-                    isSystem: true,
-                    date: '2019-07-28',
-                },
-                {
-                    id: 56822,
-                    name: 'Владимир',
-                    lastName: 'Соколов',
-                    title: 'Доставка в Зеленоград',
-                    message: 'Ок, спасибо!',
-                    isRead: true,
-                    isSystem: false,
-                    date: '2019-07-18',
-                },
-                {
-                    id: 56577,
-                    name: null,
-                    lastName: null,
-                    title: 'Оплата через юрлицо',
-                    message: 'Всегда рады вам помочь!',
-                    isRead: true,
-                    isSystem: true,
-                    date: '2019-07-02',
-                },
-                {
-                    id: 56547,
-                    name: null,
-                    lastName: null,
-                    title: 'Шампуни Aveda',
-                    message: 'К сожалению, пока что шампуней Aveda нет в наличии. Но вы можете обратить внимание на...',
-                    isRead: true,
-                    isSystem: true,
-                    date: '2019-07-02',
-                },
-            ],
-        };
+    computed: {
+        ...mapState(MODAL_MODULE, {
+            isMessageOpen: state => state[MODALS][MESSAGE_MODAL_NAME] && state[MODALS][MESSAGE_MODAL_NAME].open,
+        }),
+        ...mapGetters(PROFILE_MODULE, [MESSAGES]),
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
     },
 
     methods: {
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
         formatDate(date) {
             const dateObj = new Date(date);
             const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
             return dateObj.toLocaleDateString(options);
+        },
+
+        onCreateMessage() {
+            this[CHANGE_MODAL_STATE]({ name: MESSAGE_MODAL_NAME, open: true });
         },
 
         onOpenMessage(id) {

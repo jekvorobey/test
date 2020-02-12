@@ -20,7 +20,7 @@ module.exports = {
         },
     },
     module: {
-        noParse: /es6-promise\.js$/, // avoid webpack shimming process
+        noParse: /es6-promise/, // avoid webpack shimming process
         rules: [
             {
                 test: /\.vue$/,
@@ -29,7 +29,12 @@ module.exports = {
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
-                exclude: /node_modules/,
+                include: [
+                    path.resolve(__dirname, '../src/'),
+                    path.resolve(__dirname, '../node_modules/proxy-polyfill'),
+                    path.resolve(__dirname, '../node_modules/resize-detector'),
+                    path.resolve(__dirname, '../node_modules/vue-clamp'),
+                ],
             },
             {
                 test: /\.critical\.css$/,

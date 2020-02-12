@@ -39,6 +39,7 @@
                     <ul class="add-to-cart-modal__relative-list" v-if="products && products.length > 0">
                         <li class="add-to-cart-modal__relative-item" v-for="item in products" :key="item.id">
                             <catalog-product-card
+                                class="add-to-cart-modal__relative-card"
                                 :product-id="item.id"
                                 :name="item.name"
                                 :type="item.type"

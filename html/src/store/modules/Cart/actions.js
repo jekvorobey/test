@@ -3,6 +3,7 @@ import { getProducts, getCartData, deleteCartItem, addCartItem } from '../../../
 import { SET_CART_DATA, SET_FEATURED_PRODUCTS, SET_RELATIVE_PRODUCTS } from './mutations';
 import { getRandomIntInclusive } from '../../../util/helpers';
 
+export const CLEAR_CART_DATA = 'CLEAR_CART_DATA';
 export const FETCH_CART_DATA = 'FETCH_CART_DATA';
 export const FETCH_RELATIVE_PRODUCTS = 'FETCH_RELATIVE_PRODUCTS';
 export const FETCH_FEATURED_PRODUCTS = 'FETCH_FEATURED_PRODUCTS';
@@ -33,13 +34,14 @@ export default {
             });
     },
 
+    [CLEAR_CART_DATA]({ commit }) {
+        commit(SET_CART_DATA, {});
+    },
+
     [FETCH_CART_DATA]({ commit }, payload) {
         return getCartData(payload)
             .then(data => commit(SET_CART_DATA, data))
-            .catch(error => {
-                $logger.error(`${FETCH_CART_DATA} ${error}`);
-                return [];
-            });
+            .catch(error => $logger.error(`${FETCH_CART_DATA} ${error}`));
     },
 
     [ADD_CART_ITEM]({ commit }, payload = {}) {

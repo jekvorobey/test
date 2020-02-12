@@ -61,7 +61,7 @@ import { NAME as CATALOG_MODULE, FILTERS } from '../../store/modules/Catalog';
 import { FILTER_SEGMENTS, ROUTE_SEGMENTS } from '../../store/modules/Catalog/getters';
 
 import _debounce from 'lodash/debounce';
-import { concatCatalogRoutePath, concatBrandRoutePath } from '../../util/catalog';
+import { concatCatalogRoutePath, generateCategoryUrl } from '../../util/catalog';
 import { mapState, mapGetters } from 'vuex';
 import './CatalogFilter.css';
 
@@ -97,8 +97,9 @@ export default {
         ...mapGetters(CATALOG_MODULE, [FILTER_SEGMENTS, ROUTE_SEGMENTS]),
         ...mapState(CATALOG_MODULE, [FILTERS]),
         ...mapState('route', {
+            type: state => state.params.type,
             code: state => state.params.code,
-            brandCode: state => state.params.brandCode,
+            entityCode: state => state.params.entityCode,
         }),
 
         accordionFilters() {
@@ -110,28 +111,24 @@ export default {
         },
 
         clearFilterUrl() {
-            const { code, brandCode } = this;
-            if (brandCode) return { path: code ? `/brand/${brandCode}/${code}` : `/brand/${brandCode}` };
-            return { path: code ? `/catalog/${code}` : '/catalog' };
+            const { type, entityCode, code } = this;
+            return generateCategoryUrl(type, entityCode, code);
         },
     },
 
     methods: {
         onRadioChange(e, value) {
-            let { routeSegments, code, brandCode } = this;
+            const { type, entityCode, code, routeSegments } = this;
 
             if (!routeSegments.includes(value)) routeSegments.push(value);
             routeSegments = routeSegments.filter(s => s === value);
 
-            const path = brandCode
-                ? concatBrandRoutePath(brandCode, code, routeSegments)
-                : concatCatalogRoutePath(code, routeSegments);
-
+            const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
             this.$router.replace({ path });
         },
 
         onCheckChange(e, value) {
-            let { routeSegments, code, brandCode } = this;
+            const { type, entityCode, code, routeSegments } = this;
 
             if (e) {
                 if (routeSegments.includes(value)) return;
@@ -144,10 +141,7 @@ export default {
                 }
             }
 
-            const path = brandCode
-                ? concatBrandRoutePath(brandCode, code, routeSegments)
-                : concatCatalogRoutePath(code, routeSegments);
-
+            const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
             this.$router.replace({ path });
         },
 
@@ -158,7 +152,7 @@ export default {
 
     beforeMount() {
         this.debounce_rangeChange = _debounce((e, name) => {
-            let { routeSegments, brandCode, code } = this;
+            const { type, entityCode, code, routeSegments } = this;
             const segment = `${name}-from_${e[0]}_to_${e[1]}`;
             const rangeRegex = new RegExp(`^${name}-`);
 
@@ -175,10 +169,7 @@ export default {
                 routeSegments.splice(currentIndex, 1, segment);
             } else routeSegments.push(segment);
 
-            const path = brandCode
-                ? concatBrandRoutePath(brandCode, code, routeSegments)
-                : concatCatalogRoutePath(code, routeSegments);
-
+            const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
             this.$router.replace({ path });
         }, 500);
     },

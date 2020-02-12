@@ -2,10 +2,10 @@
     <li class="package-product-card">
         <router-link class="package-product-card__img" :to="href">
             <v-picture v-if="image" :image="image" alt="">
-                <template v-slot:source="{ image, lazy }">
+                <template v-slot:source="{ image }">
                     <source :data-srcset="generateSourcePath(64, 64, image.id, 'webp')" type="image/webp" />
                 </template>
-                <template v-slot:fallback="{ image, lazy, alt }">
+                <template v-slot:fallback="{ image, alt }">
                     <img
                         class="blur-up lazyload v-picture__img"
                         :data-src="generateSourcePath(64, 64, image.id, image.sourceExt)"

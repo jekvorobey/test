@@ -1,11 +1,25 @@
-import { serviceName } from './assets/scripts/constants';
-import createApp from './app/app';
+import { injectionType } from './assets/scripts/enums';
+import { Container } from 'inversify';
+import { injectClass, injectableClass } from './util/container';
+
 import ServiceLocator from './services/ServiceLocator';
+import ApplicationContext from './services/ApplicationContext';
 import ServerLogger from './services/LogService/ServerLogger';
 import ServerCookie from './services/CookieService/ServerCookie';
 import HttpService from './services/HttpService/MockServiceAdapter';
 import MockProgressService from './services/ProgressService/MockService';
-import DadataHttpService from './services/HttpService/DadataHttpService';
+
+import createApp from './app/app';
+
+// Declare as injectable and its dependencies
+injectableClass(ApplicationContext);
+injectableClass(MockProgressService);
+injectableClass(ServerLogger);
+injectableClass(ServerCookie);
+injectableClass(HttpService);
+injectClass(injectionType.APPLICATION_CONTEXT, ServerCookie, 0);
+injectClass(injectionType.APPLICATION_CONTEXT, HttpService, 0);
+injectClass(injectionType.COOKIE, HttpService, 1);
 
 // This exported function will be called by `bundleRenderer`.
 // This is where we perform data-prefetching to determine the
@@ -14,26 +28,42 @@ import DadataHttpService from './services/HttpService/DadataHttpService';
 // return a Promise that resolves to the app instance.
 export default context => {
     return new Promise((resolve, reject) => {
-        const host = `${context.req.protocol}://${context.req.get('host')}`;
-        const locator = ServiceLocator.createInstance()
-            .register(serviceName.PROGRESS, () => new MockProgressService())
-            .register(serviceName.LOGGER, () => new ServerLogger())
-            .register(serviceName.COOKIE, () => new ServerCookie(context.req, context.res))
-            .register(serviceName.HTTP, () => new HttpService(host));
+        const appContext = new ApplicationContext();
+        appContext.env = context.env;
+        appContext.req = context.req;
+        appContext.res = context.res;
+        appContext.baseURL = `${context.req.protocol}://${context.req.get('host')}`;
 
-        const { app, router, store } = createApp(locator, context.env);
+        // Declare bindings
+        ServiceLocator.createInstance(new Container({ skipBaseClassChecks: true }));
+        const { $container } = ServiceLocator;
 
-        locator.register(
-            serviceName.DADATA,
-            () => new DadataHttpService(store.state.env.DADATA_API_HOST, store.state.env.DADATA_API_KEY)
-        );
+        $container.bind(injectionType.APPLICATION_CONTEXT).toConstantValue(appContext);
+        $container
+            .bind(injectionType.PROGRESS)
+            .to(MockProgressService)
+            .inSingletonScope();
+        $container
+            .bind(injectionType.LOGGER)
+            .to(ServerLogger)
+            .inSingletonScope();
+        $container
+            .bind(injectionType.COOKIE)
+            .to(ServerCookie)
+            .inSingletonScope();
+        $container
+            .bind(injectionType.HTTP)
+            .to(HttpService)
+            .inSingletonScope();
 
-        const { $logger } = ServiceLocator;
+        const { app, router, store } = createApp($container);
+        const logger = $container.get(injectionType.LOGGER);
+
         const { url } = context;
         const { fullPath } = router.resolve(url).route;
 
         if (fullPath !== url) {
-            $logger.error(`full path ${fullPath} doesn't match ${url}`);
+            logger.error(`full path ${fullPath} doesn't match ${url}`);
             return reject({ url: fullPath });
         }
 
