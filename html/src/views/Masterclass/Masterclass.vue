@@ -388,7 +388,7 @@ export default {
         return {
             showMap: false,
             isPanelVisible: false,
-            mockImg: productBrand1,
+
             markerIcon: {
                 layout: 'default#image',
                 imageHref: pin,
