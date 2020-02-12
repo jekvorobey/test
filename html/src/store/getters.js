@@ -1,7 +1,13 @@
 import { generateCategoryUrl } from '../util/catalog';
+import { productGroupTypes } from '../assets/scripts/enums';
 
 function prepareCategory({ id, name, code, items = [] }) {
-    return { id, name, to: generateCategoryUrl(null, code), items: items.map(i => prepareCategory(i)) };
+    return {
+        id,
+        name,
+        to: generateCategoryUrl(productGroupTypes.CATALOG, null, code),
+        items: items.map(i => prepareCategory(i)),
+    };
 }
 
 const CATEGORIES = 'categories';
