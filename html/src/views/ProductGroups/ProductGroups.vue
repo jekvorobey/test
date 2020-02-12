@@ -325,7 +325,7 @@ export default {
         },
 
         isMasterClass() {
-            return true; //this[TYPE] === productGroupTypes.MASTERCLASSES;
+            return this[TYPE] === productGroupTypes.MASTERCLASSES;
         },
     },
 
