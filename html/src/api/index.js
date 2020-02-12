@@ -85,9 +85,9 @@ export function getCatalogItems({ filter, orderField = 'price', orderDirection =
     });
 }
 
-export function getFilters(data) {
+export function getFilters(code) {
     return $http.get('/v1/catalog/filter', {
-        params: { ...data, needBrands: 1 },
+        params: { categoryCode: code, needBrands: 1 },
         paramsSerializer(params) {
             return qs.stringify(params, { encode: false });
         },
