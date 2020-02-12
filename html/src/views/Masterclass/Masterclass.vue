@@ -309,7 +309,7 @@ import { registerModuleIfNotExists } from '../../util/store';
 import { generatePictureSourcePath } from '../../util/images';
 import { generateCategoryUrl } from '../../util/catalog';
 import { breakpoints, productGroupTypes } from '../../assets/scripts/enums';
-import productBrand1 from '../../assets/images/mock/brandProduct1.png';
+import { yaMapSettings } from '../../assets/scripts/settings';
 
 import '../../assets/images/sprites/socials/vkontakte-bw.svg';
 import '../../assets/images/sprites/socials/facebook-bw.svg';
@@ -441,7 +441,7 @@ export default {
         },
 
         mapSettings() {
-            return settings;
+            return { ...yaMapSettings };
         },
 
         sliderOptions() {
