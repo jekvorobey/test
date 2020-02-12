@@ -3,7 +3,7 @@
         <div class="container">
             <div class="checkout-view__header">
                 <h1 class="checkout-view__header-hl">
-                    Оформление заказа: Продукты
+                    Оформление заказа: {{ $t(`cart.summary.type.${checkoutType}`) }}
                 </h1>
                 <v-link class="checkout-view__header-link" to="/cart">
                     <v-svg name="arrow-small" width="24" height="24" />&nbsp;&nbsp;Вернуться в корзину
@@ -14,30 +14,35 @@
         <section class="section checkout-view__main">
             <div class="container checkout-view__main-container">
                 <div class="checkout-view__main-body">
-                    <checkout-product-panel v-if="checkoutType === 'product'" />
+                    <component :is="checkoutPanel" />
                 </div>
                 <v-sticky class="checkout-view__main-sticky">
                     <template v-slot:sticky>
                         <div class="checkout-view__main-panel">
-                            <p class="text-grey checkout-view__main-panel-info">
+                            <p v-if="isProduct" class="text-grey checkout-view__main-panel-info">
                                 Внимание: мастер-классы можете оплатить после завершения оплаты продуктов
                             </p>
                             <p class="checkout-view__main-panel-line">
                                 Сумма заказа: {{ $t(`cart.summary.type.${checkoutType}`) }}
                                 <span>{{ summary.sum }}</span>
                             </p>
+
                             <p class="checkout-view__main-panel-line">
                                 Скидка по промокоду <span>{{ summary.promoDiscount }}</span>
                             </p>
-                            <p class="checkout-view__main-panel-line">
-                                Оплата бонусами <span>{{ summary.bonusDiscount }}</span>
-                            </p>
-                            <p class="checkout-view__main-panel-line">
-                                Оплата подарочным сертификатом <span>{{ summary.certDiscount }}</span>
-                            </p>
-                            <p class="checkout-view__main-panel-line">
-                                Доставка <span>{{ summary.delivery }}</span>
-                            </p>
+
+                            <template v-if="isProduct">
+                                <p class="checkout-view__main-panel-line">
+                                    Оплата бонусами <span>{{ summary.bonusDiscount }}</span>
+                                </p>
+                                <p class="checkout-view__main-panel-line">
+                                    Оплата подарочным сертификатом <span>{{ summary.certDiscount }}</span>
+                                </p>
+                                <p class="checkout-view__main-panel-line">
+                                    Доставка <span>{{ summary.delivery }}</span>
+                                </p>
+                            </template>
+
                             <div class="checkout-view__main-panel-total">
                                 <p class="text-bold checkout-view__main-panel-line">
                                     Итого <span>{{ summary.total }}</span>
@@ -53,7 +58,7 @@
                                         &nbsp;бонусов
                                     </span>
                                 </p>
-                                <p class="text-grey text-sm checkout-view__main-panel-line">
+                                <p v-if="isProduct" class="text-grey text-sm checkout-view__main-panel-line">
                                     Будет списано
                                     <span>
                                         {{
@@ -65,6 +70,7 @@
                                     </span>
                                 </p>
                             </div>
+
                             <div v-if="!promocode" class="checkout-view__main-panel-promo">
                                 <v-input
                                     v-model="inputPromocode"
@@ -115,6 +121,7 @@ import VButton from '../../components/controls/VButton/VButton.vue';
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 
 import CheckoutProductPanel from '../../components/checkout/CheckoutProductPanel/CheckoutProductPanel.vue';
+import CheckoutMasterClassPanel from '../../components/checkout/CheckoutMasterClassPanel/CheckoutMasterClassPanel.vue';
 
 import { $store, $logger, $progress } from '../../services/ServiceLocator';
 
@@ -133,6 +140,7 @@ import { CHECKOUT, PROMO_CODE, SUMMARY } from '../../store/modules/Checkout/gett
 
 import { registerModuleIfNotExists } from '../../util/store';
 import { preparePrice } from '../../util/helpers';
+import { cartItemTypes } from '../../assets/scripts/enums';
 import '../../assets/images/sprites/check-small.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import './Checkout.css';
@@ -164,6 +172,21 @@ export default {
         }),
 
         ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMARY]),
+
+        isProduct() {
+            return this.checkoutType === cartItemTypes.PRODUCT;
+        },
+
+        checkoutPanel() {
+            switch (this.checkoutType) {
+                case cartItemTypes.PRODUCT:
+                    return CheckoutProductPanel;
+                case cartItemTypes.MASTERCLASS:
+                    return CheckoutMasterClassPanel;
+                default:
+                    'div';
+            }
+        },
     },
 
     methods: {
@@ -217,12 +240,10 @@ export default {
             params: { type },
         } = to;
 
-        const { checkoutType } = $store.state.checkout;
-
-        if (checkoutType !== type) {
-            this.$progress.start();
-            this[FETCH_CHECKOUT_DATA](type).then(() => this.$progress.finish());
-        }
+        this.$progress.start();
+        this[FETCH_CHECKOUT_DATA](type)
+            .then(() => this.$progress.finish())
+            .catch(() => this.$progress.fail());
         next();
     },
 };

@@ -1,3 +1,5 @@
+import { requestStatus } from '../../../assets/scripts/enums';
+
 import getters, {
     RECEIVE_METHOD_STATUS,
     BONUS_STATUS,
@@ -8,7 +10,6 @@ import getters, {
 
 import actions from './actions';
 import mutations from './mutations';
-import { requestStatus } from '../../../assets/scripts/enums';
 
 export const NAME = 'checkout';
 export const CHECKOUT_DATA = 'checkoutData';
@@ -26,7 +27,7 @@ export default {
             [PROMOCODE_STATUS]: requestStatus.SUCCESS,
             [ADDRESS_STATUS]: requestStatus.SUCCESS,
         },
-        [CHECKOUT_DATA]: {},
+        [CHECKOUT_DATA]: { input: {}, summary: {} },
         [CHECKOUT_TYPE]: null,
     },
     actions,
