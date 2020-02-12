@@ -1,0 +1,173 @@
+.checkout-master-class-panel {
+    counter-reset: item;
+
+    &__item {
+        position: relative;
+        margin-bottom: calc(var(--gs) * 2);
+
+        @media (--tablet) {
+            position: relative;
+            padding: 0 calc(var(--gs) * 2);
+            padding-bottom: calc(var(--gs) * 5);
+            margin-bottom: calc(var(--gs) * 3);
+        }
+
+        &--child {
+            @media (--tablet) {
+                padding: 0;
+            }
+
+            & + & {
+                margin-top: calc(var(--gs) * 5);
+
+                @media (--tablet) {
+                    margin-top: calc(var(--gs) * 3);
+                }
+            }
+        }
+
+        &--child &-header {
+            padding-left: 0;
+            padding-bottom: var(--gs);
+
+            &::before {
+                display: none;
+            }
+
+            &-hl {
+                text-transform: none;
+            }
+
+            &-link {
+                @media (--tablet) {
+                    position: static;
+                    top: 0;
+                    transform: none;
+
+                    .icon {
+                        width: 20px;
+                        height: 20px;
+                    }
+                }
+            }
+        }
+
+        &--settings {
+            padding-top: calc(var(--gs) * 3);
+            border-top: 1px solid var(--cl-divider-grey);
+        }
+
+        &--settings &-panel {
+            &-check {
+                .v-check__label {
+                    margin-bottom: var(--gs);
+                }
+            }
+        }
+
+        &--settings &-panel + &-panel {
+            padding-top: calc(var(--gs) * 2);
+        }
+
+        &--payment {
+            @media (--tablet) {
+                padding-bottom: 0;
+            }
+        }
+
+        &--payment &-card {
+            .icon + .icon {
+                margin-left: calc(var(--gs) * 2);
+            }
+        }
+
+        &--payment &-list {
+            @media (--tablet) {
+                margin-bottom: calc(var(--gs) * 3);
+            }
+        }
+
+        &-header {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: calc(var(--gs) * 4);
+            padding-bottom: calc(var(--gs) * 2);
+            border-bottom: 1px solid var(--cl-divider-grey);
+
+            &::before {
+                counter-increment: item;
+                content: counter(item);
+                position: absolute;
+                left: 0;
+                top: 0;
+                text-align: center;
+                width: calc(var(--gs) * 3);
+                height: calc(var(--gs) * 3);
+                background-color: var(--cl-global);
+                color: var(--cl-white);
+                border-radius: 50%;
+            }
+
+            &-hl {
+                display: flex;
+                align-items: center;
+                margin-bottom: 0;
+                font-size: 16px;
+                line-height: 24px;
+                letter-spacing: 0.03em;
+                text-transform: uppercase;
+
+                .icon {
+                    margin-right: calc(var(--gs) / 2);
+                }
+            }
+
+            &-link {
+                position: absolute;
+                top: 0;
+                right: 0;
+                display: flex;
+                align-items: center;
+                text-transform: none;
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 24px;
+
+                @media (--tablet) {
+                    position: absolute;
+                    top: auto;
+                    right: auto;
+                    bottom: 0;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+            }
+        }
+
+        &-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: calc(var(--gs) * 5);
+
+            @media (--tablet) {
+                margin-bottom: 0;
+            }
+        }
+
+        &-card {
+            margin-top: calc(var(--gs) * 3);
+
+            @media (--tablet) {
+                margin-top: calc(var(--gs) * 2);
+            }
+
+            .text-bold,
+            .text-medium {
+                font-size: 20px;
+            }
+        }
+    }
+}
