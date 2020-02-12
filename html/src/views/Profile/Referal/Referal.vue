@@ -163,7 +163,7 @@ import referalProduct1 from '../../../assets/images/mock/referalProduct1.png';
 import referalProduct2 from '../../../assets/images/mock/referalProduct2.png';
 import referalProduct3 from '../../../assets/images/mock/referalProduct3.png';
 
-import { baseChartOptions } from '../../../assets/scripts/enums';
+import { baseChartOptions } from '../../../assets/scripts/settings';
 import './Referal.css';
 
 const VChart = () => import(/* webpackChunkName: "v-chart" */ '../../../components/controls/VChart/VChart.vue');

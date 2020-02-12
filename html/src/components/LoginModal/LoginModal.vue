@@ -135,7 +135,7 @@ import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import _cloneDeep from 'lodash/cloneDeep';
-import { phoneMaskOptions } from '../../assets/scripts/enums';
+import { phoneMaskOptions } from '../../assets/scripts/settings';
 import './LoginModal.css';
 
 const maskOptions = _cloneDeep(phoneMaskOptions);
