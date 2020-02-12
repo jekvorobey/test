@@ -74,7 +74,7 @@
                                 Место проведения
                             </p>
                             <p>{{ masterClass.address.full }}</p>
-                            <p><a>Посмотреть на карте</a></p>
+                            <p><a @click="onShowMap">Посмотреть на карте</a></p>
                         </div>
                         <div
                             v-if="!isTablet"
@@ -191,7 +191,7 @@
             </div>
         </section>
 
-        <section class="section master-class-view__section master-class-view__map">
+        <section ref="map" class="section master-class-view__section master-class-view__map">
             <div class="container master-class-view__map-container">
                 <h2 class="container container--tablet master-class-view__section-hl">
                     Место проведения
@@ -551,6 +551,11 @@ export default {
         onBuyBtnClick() {
             const { panel } = this.$refs;
             window.scrollTo({ top: panel.offsetTop - panelScrollOffset, behavior: 'smooth' });
+        },
+
+        onShowMap() {
+            const { map } = this.$refs;
+            window.scrollTo({ top: map.offsetTop - panelScrollOffset, behavior: 'smooth' });
         },
     },
 
