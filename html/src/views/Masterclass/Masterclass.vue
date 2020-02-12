@@ -20,6 +20,7 @@
                 :price="masterClass.price"
                 btn-text="Купить билет"
                 show-btn
+                @btnClick="onBuyBtnClick"
             />
         </div>
 
@@ -122,7 +123,7 @@
             </v-slider>
         </section>
 
-        <section class="section master-class-view__section master-class-view__panel master-class-view__panel--reverse">
+        <section class="section master-class-view__section master-class-view__panel">
             <div class="container master-class-view__panel-container">
                 <div class="master-class-view__panel-body">
                     <div class="container container--tablet master-class-view__panel-left" />
@@ -158,30 +159,89 @@
             </div>
         </section>
 
-        <div ref="panel" v-observe-visibility="onPanelVisibilityChanged"></div>
+        <section
+            class="section master-class-view__section master-class-view__tickets"
+            ref="panel"
+            v-observe-visibility="onPanelVisibilityChanged"
+        >
+            <div class="container master-class-view__tickets-container">
+                <h2 class="container container--tablet master-class-view__section-hl">
+                    Билеты на мастер-класс
+                </h2>
+                <ul class="master-class-view__tickets-list">
+                    <ticket-card
+                        class="master-class-view__tickets-item"
+                        v-for="ticket in masterClass.tickets"
+                        :key="ticket.id"
+                        :name="ticket.name"
+                        :description="ticket.description"
+                        :max="ticket.remain"
+                        :price="ticket.price"
+                        :disabled="isInCart(ticket.id)"
+                        @btnClick="onAddToCart(ticket.id, $event)"
+                    >
+                        <template v-if="!isTablet">
+                            {{ isInCart(ticket.id) ? 'Перейти в корзину' : 'Добавить в корзину' }}
+                        </template>
+                        <template v-else>
+                            {{ isInCart(ticket.id) ? 'В корзину' : 'Добавить' }}
+                        </template>
+                    </ticket-card>
+                </ul>
+            </div>
+        </section>
 
         <section class="section master-class-view__section master-class-view__map">
-            <div class="container">
-                <h2 class="master-class-view__section-hl">
+            <div class="container master-class-view__map-container">
+                <h2 class="container container--tablet master-class-view__section-hl">
                     Место проведения
                 </h2>
-                <p>{{ masterClass.address.full }}</p>
-                <br />
-                <div style="height: 400px; width:100%;">
-                    <yandex-map
-                        v-if="showMap"
+                <p class="container container--tablet master-class-view__map-desc">
+                    {{ masterClass.address.full }}
+                </p>
+                <yandex-map
+                    v-if="showMap"
+                    :coords="masterClass.address.coords"
+                    :controls="[]"
+                    :options="{ yandexMapDisablePoiInteractivity: true }"
+                    :settings="mapSettings"
+                >
+                    <ymap-marker
+                        :key="`masterclass-point-${masterClass.address.id}`"
+                        :marker-id="`masterclass-point-${masterClass.address.id}`"
                         :coords="masterClass.address.coords"
-                        :controls="[]"
-                        :options="{ yandexMapDisablePoiInteractivity: true }"
-                        :settings="mapSettings"
-                    >
-                        <ymap-marker
-                            :key="`masterclass-point-${masterClass.address.id}`"
-                            :marker-id="`masterclass-point-${masterClass.address.id}`"
-                            :coords="masterClass.address.coords"
-                            :icon="markerIcon"
-                        />
-                    </yandex-map>
+                        :icon="markerIcon"
+                    />
+                </yandex-map>
+            </div>
+        </section>
+
+        <section v-if="masterClass.contacts" class="section master-class-view__section master-class-view__contacts">
+            <div class="container master-class-view__contacts-container">
+                <h2 class="container container--tablet master-class-view__section-hl">
+                    Контакты организатора
+                </h2>
+                <div class="master-class-view__contacts-panel">
+                    <p class="master-class-view__contacts-panel-hl">
+                        По всем вопросам и предложениям обращаться к организатору
+                    </p>
+                    <p class="text-bold master-class-view__contacts-panel-name">
+                        {{ masterClass.contacts.name }}
+                    </p>
+                    <p class="text-grey master-class-view__contacts-panel-desc">
+                        {{ masterClass.contacts.description }}
+                    </p>
+                    <div class="master-class-view__contacts-panel-bottom">
+                        <div class="master-class-view__contacts-panel-phone">
+                            Телефон: {{ masterClass.contacts.phone }}
+                        </div>
+                        <div class="master-class-view__contacts-panel-email">
+                            Email: {{ masterClass.contacts.email }}
+                        </div>
+                        <v-button class="master-class-view__contacts-panel-btn">
+                            Написать
+                        </v-button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -273,6 +333,7 @@ import VPicture from '../../components/controls/VPicture/VPicture.vue';
 import VExpander from '../../components/VExpander/VExpander.vue';
 
 import Price from '../../components/Price/Price.vue';
+import TicketCard from '../../components/TicketCard/TicketCard.vue';
 import AuthorCard from '../../components/AuthorCard/AuthorCard.vue';
 import BannerCard from '../../components/BannerCard/BannerCard.vue';
 import InstagramCard from '../../components/InstagramCard/InstagramCard.vue';
@@ -358,6 +419,8 @@ const sliderOptions = {
     },
 };
 
+const panelScrollOffset = 24;
+
 export default {
     name: 'master-class',
 
@@ -377,6 +440,7 @@ export default {
         BreadcrumbItem,
 
         Price,
+        TicketCard,
         BannerCard,
         AuthorCard,
         InstagramCard,
@@ -422,6 +486,8 @@ export default {
                     },
                 },
             ],
+
+            inCart: [], // мок корзина
         };
     },
 
@@ -457,14 +523,6 @@ export default {
         },
     },
 
-    watch: {
-        [SELECTED_CITY](value) {
-            // const { productCode } = this.product;
-            // const { fias_id } = value;categoryCodes
-            // this.debounce_fetchProduct(to, from);
-        },
-    },
-
     methods: {
         ...mapActions(MASTERCLASS_MODULE, [FETCH_MASTERCLASS_DATA]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
@@ -478,12 +536,12 @@ export default {
             return generateCategoryUrl(productGroupTypes.MASTERCLASSES, code);
         },
 
-        onAddToCart(item) {
-            this[CHANGE_MODAL_STATE]({
-                name: ADD_TO_CART_MODAL_NAME,
-                open: true,
-                state: { offerId: item.id, type: item.type },
-            });
+        onAddToCart(id, count) {
+            if (!this.inCart.some(i => i.id === id)) this.inCart.push({ id, count });
+        },
+
+        isInCart(id) {
+            return this.inCart.some(i => i.id === id);
         },
 
         onPanelVisibilityChanged(isVisible) {
@@ -492,7 +550,7 @@ export default {
 
         onBuyBtnClick() {
             const { panel } = this.$refs;
-            window.scrollTo({ top: panel.offsetTop, behavior: 'smooth' });
+            window.scrollTo({ top: panel.offsetTop - panelScrollOffset, behavior: 'smooth' });
         },
     },
 

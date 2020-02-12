@@ -281,6 +281,90 @@
         }
     }
 
+    &__tickets {
+        &-container {
+            @media (--tablet) {
+                padding: 0;
+                margin: 0;
+            }
+        }
+
+        &-list {
+            border-top: 1px solid var(--cl-divider-grey);
+        }
+
+        &-item {
+            width: 100%;
+            border-bottom: 1px solid var(--cl-divider-grey);
+
+            @media (--tablet) {
+                padding: calc(var(--gs) * 2);
+            }
+        }
+    }
+
+    &__contacts {
+        &-container {
+            @media (--tablet) {
+                padding: 0;
+                margin: 0;
+            }
+        }
+
+        &-panel {
+            background-color: var(--cl-elem-grey);
+            padding: calc(var(--gs) * 5);
+
+            @media (--tablet) {
+                padding: calc(var(--gs) * 3) calc(var(--gs) * 2);
+            }
+
+            &-hl,
+            &-name {
+                font-size: 20px;
+                line-height: 24px;
+            }
+
+            &-desc {
+                @media (--tablet) {
+                    margin-bottom: calc(var(--gs) * 2);
+                }
+            }
+
+            &-hl {
+                margin-bottom: calc(var(--gs) * 3);
+            }
+
+            &-bottom {
+                display: flex;
+                align-items: center;
+
+                @media (--tablet) {
+                    flex-wrap: wrap;
+                }
+            }
+
+            &-phone {
+                margin-right: calc(var(--gs) * 4);
+            }
+
+            &-email {
+                @media (--tablet) {
+                    margin-bottom: calc(var(--gs) * 2);
+                }
+            }
+
+            &-btn {
+                margin-left: auto;
+
+                @media (--tablet) {
+                    width: 100%;
+                    margin: 0;
+                }
+            }
+        }
+    }
+
     &__masterclass {
         @media (--tablet) {
             margin-bottom: calc(var(--gs) * 4);
@@ -291,6 +375,7 @@
         &-container {
             @media (--tablet) {
                 padding: 0;
+                margin: 0;
             }
         }
 
@@ -501,9 +586,24 @@
     }
 
     &__map {
+        &-container {
+            @media (--tablet) {
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        &-desc {
+            margin-bottom: calc(var(--gs) * 2);
+        }
+
         .ymap-container {
             width: 100%;
-            height: 100%;
+            height: 400px;
+
+            @media (--tablet) {
+                height: 320px;
+            }
         }
     }
 }

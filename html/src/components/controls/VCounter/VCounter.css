@@ -13,9 +13,11 @@
         display: flex;
         padding: 0 var(--gs);
         max-width: 40px;
-        color: var(--cl-cyan);
+        height: 100%;
         cursor: pointer;
         user-select: none;
+        color: var(--cl-global);
+        fill: var(--cl-global);
 
         &:first-child {
             border-top-left-radius: calc(var(--gs) / 2);
@@ -27,6 +29,11 @@
             border-top-right-radius: calc(var(--gs) / 2);
             border-bottom-right-radius: calc(var(--gs) / 2);
             border-left: none;
+        }
+
+        &:disabled {
+            color: var(--cl-grey);
+            fill: var(--cl-grey);
         }
     }
 

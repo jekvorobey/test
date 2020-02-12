@@ -1232,6 +1232,13 @@ const masterClassDetails = {
     image: productMasterclass2,
     detailImage: masterclassDetailImage1,
 
+    contacts: {
+        name: 'Тумарева Элина Леонидовна',
+        description: 'Лицензированный консультант, мастер-коуч ICI',
+        phone: '+7 (903) 233 77 11',
+        email: 'info@insight-russia.ru',
+    },
+
     gallery: [masterclassGalleryImg1, masterclassGalleryImg2, masterclassGalleryImg3],
 
     program: `
@@ -1307,7 +1314,7 @@ const masterClassDetails = {
             id: 1,
             name: 'Входной билет LITE',
             description: 'Возможность посетить только одну площадку на мероприятии',
-            left: 10,
+            remain: 10,
             price: {
                 value: 5000,
                 currency: 'RUB',
@@ -1315,9 +1322,9 @@ const masterClassDetails = {
         },
         {
             id: 2,
-            name: 'Входной билет LITE',
+            name: 'Входной билет PRO',
             description: 'Доступ ко всем площадкам и материалам',
-            left: 3,
+            remain: 3,
             price: {
                 value: 7000,
                 currency: 'RUB',

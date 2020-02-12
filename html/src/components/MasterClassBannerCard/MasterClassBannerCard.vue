@@ -15,7 +15,9 @@
             </div>
             <div class="text-bold master-class-banner-card__right-panel">
                 <price v-if="price" class="text-bold master-class-banner-card__price" v-bind="price" />
-                <v-button class="btn--outline master-class-banner-card__btn" :to="to">{{ btnText }}</v-button>
+                <v-button class="btn--outline master-class-banner-card__btn" :to="to" @click="onBtnClick">
+                    {{ btnText }}
+                </v-button>
             </div>
         </div>
     </li>
@@ -96,13 +98,12 @@ export default {
 
         to: {
             type: [Object, String],
-            default: '/',
         },
     },
 
     methods: {
-        onClick() {
-            this.$router.push(this.to);
+        onBtnClick() {
+            this.$emit('btnClick');
         },
     },
 };
