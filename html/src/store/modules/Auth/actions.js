@@ -80,13 +80,11 @@ export default {
     },
 
     [CHECK_SESSION]({ commit }, payload) {
-        return (
-            checkSession(payload)
-                // .then(() => commit(SET_HAS_SESSION, true)) // todo имплементировать потом
-                .catch(error => {
-                    commit(SET_HAS_SESSION, false);
-                    $logger.error(`${CHECK_SESSION}: ${error}`);
-                })
-        );
+        return checkSession(payload)
+            .then(() => commit(SET_HAS_SESSION, true))
+            .catch(error => {
+                commit(SET_HAS_SESSION, false);
+                $logger.error(`${CHECK_SESSION}: ${error}`);
+            });
     },
 };

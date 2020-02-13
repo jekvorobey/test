@@ -22,6 +22,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
         }
 
         switch (path) {
+            case '/v1/auth/is-login':
             case '/v1/categories':
             case '/v1/cart/data':
             case '/v1/checkout/data':
