@@ -8,7 +8,7 @@ let catalogItemsCancelSource = null;
 // auth
 
 export function checkSession() {
-    return $http.get('/v1/auth/check-session');
+    return $http.get('/v1/auth/is-login');
 }
 
 export function loginByPassword(payload) {
@@ -62,9 +62,9 @@ export function getProductGroups({ type, page = 1 }) {
     });
 }
 
-export function getProductGroup(code) {
+export function getProductGroup(type, code) {
     return $http.get('/v1/catalog/product-group', {
-        params: { code },
+        params: { type_code: type, code },
         paramsSerializer(params) {
             return qs.stringify(params, { encode: false });
         },
