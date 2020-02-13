@@ -231,6 +231,6 @@ export default {
                 commit(SET_TYPE, payload);
                 commit(SET_DATA, data);
             })
-            .catch(error => storeErrorHandler(FETCH_CHECKOUT_DATA, true)(error));
+            .catch(error => storeErrorHandler(FETCH_CHECKOUT_DATA)(error));
     },
 };

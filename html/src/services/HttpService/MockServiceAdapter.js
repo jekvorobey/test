@@ -17,6 +17,10 @@ export default class MockServiceAdapter extends HttpServiceBase {
      * @returns {Promise<Object>}
      */
     get(path, config) {
+        if (path.includes('/v1/auth/socialHandler/')) {
+            return this.httpServiceInstance.get(path, config);
+        }
+
         switch (path) {
             case '/v1/categories':
             case '/v1/cart/data':

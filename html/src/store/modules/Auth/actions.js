@@ -1,3 +1,7 @@
+import { $logger } from '../../../services/ServiceLocator';
+import { responseStatus } from '../../../assets/scripts/enums';
+import { storeErrorHandler } from '../../../util/store';
+
 import {
     login,
     checkSession,
@@ -11,9 +15,8 @@ import {
 } from '../../../api';
 
 import { SET_HAS_SESSION } from './mutations';
-import { $logger } from '../../../services/ServiceLocator';
-import { responseStatus } from '../../../assets/scripts/enums';
 
+export const LOGIN_BY_SOCIAL = 'LOGIN_BY_SOCIAL';
 export const LOGIN_BY_PASSWORD = 'LOGIN_BY_PASSWORD';
 export const LOGOUT = 'LOGOUT';
 export const REGISTER = 'REGISTER';
@@ -47,8 +50,8 @@ export default {
             });
     },
 
-    [GET_SOCIAL_LINK]({ commit }, { url, driver }) {
-        return getSocialLink(url, driver)
+    [GET_SOCIAL_LINK]({ commit }, { url, driver, redirectUrl }) {
+        return getSocialLink(url, driver, redirectUrl)
             .then(({ url }) => url)
             .catch(error => {
                 $logger.error(`${GET_SOCIAL_LINK}: ${error || 'Something went wrong'}`);
@@ -59,6 +62,15 @@ export default {
         return loginByPassword(payload).then(() => {
             commit(SET_HAS_SESSION, true);
         });
+    },
+
+    [LOGIN_BY_SOCIAL]({ commit }, { driver, query }) {
+        return loginBySocial(driver, query)
+            .then(({ url }) => {
+                commit(SET_HAS_SESSION, true);
+                return url;
+            })
+            .catch(error => storeErrorHandler(LOGIN_BY_SOCIAL, true)(error));
     },
 
     [LOGOUT]({ commit }, payload) {

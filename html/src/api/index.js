@@ -15,6 +15,12 @@ export function loginByPassword(payload) {
     return $http.post('/v1/auth/loginByPassword', payload);
 }
 
+export function loginBySocial(driver, query) {
+    return $http.get(`/v1/auth/socialHandler/${driver}`, {
+        params: query,
+    });
+}
+
 export function logout() {
     return $http.post('/v1/auth/logout');
 }
@@ -31,8 +37,12 @@ export function registerByPassword(password) {
     return $http.post('/v1/auth/registerByPassword', { password });
 }
 
-export function getSocialLink(url, driver) {
-    return $http.post('/v1/auth/getSocialLink', { final_login_url: url, driver });
+export function getSocialLink(url, driver, redirectUrl) {
+    return $http.post('/v1/auth/getSocialLink', {
+        redirect_social_url: redirectUrl,
+        final_login_url: url,
+        driver,
+    });
 }
 
 // search
