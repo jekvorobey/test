@@ -7,11 +7,11 @@
                         <v-svg name="logo-default" width="128" height="48" />
                     </v-link>
                 </div>
-                <div class="v-footer__col" :key="index" v-for="(col, index) in links">
+                <div class="v-footer__col" :key="col.title" v-for="col in links">
                     <p class="v-footer__col-title">{{ col.title }}</p>
                     <ul class="v-footer__links">
-                        <li class="v-footer__links-item" :key="link.id" v-for="link in col.items" :title="link.key">
-                            <a class="v-footer__link" :href="link.href">{{ link.label }}</a>
+                        <li class="v-footer__links-item" :key="link.name" v-for="link in col.items" :title="link.name">
+                            <a class="v-footer__link" :href="link.href">{{ link.name }}</a>
                         </li>
                     </ul>
                 </div>
@@ -48,8 +48,8 @@
         >
             <template v-slot:content="{ item }">
                 <ul class="v-footer__links">
-                    <li class="v-footer__links-item" :key="link.id" v-for="link in item.items" :title="link.key">
-                        <a class="v-footer__link" :href="link.href">{{ link.label }}</a>
+                    <li class="v-footer__links-item" :key="link.name" v-for="link in item.items" :title="link.name">
+                        <a class="v-footer__link" :href="link.url">{{ link.name }}</a>
                     </li>
                 </ul>
             </template>
@@ -92,18 +92,21 @@ import '../../assets/images/sprites/logo.svg';
 import '../../assets/images/sprites/logo-default.svg';
 
 import './VFooter.css';
+import { mapGetters } from 'vuex';
+import { FOOTER_MENU } from '../../store/getters';
 
 export default {
     name: 'v-footer',
+
     components: {
         VSvg,
         VLink,
         VAccordion,
     },
-    data() {
-        return {};
-    },
+
     computed: {
+        ...mapGetters([FOOTER_MENU]),
+
         socials() {
             return {
                 name: this.$t('socials.socials'),
@@ -137,62 +140,20 @@ export default {
         },
 
         links() {
-            return [
-                {
-                    id: 1,
-                    title: this.$t('footer.links.purchase'),
+            const menuItems = this[FOOTER_MENU].items || [];
+            return menuItems.map(mi => {
+                return {
+                    title: mi.name,
                     isExpanded: false,
-                    items: [
-                        {
-                            id: 1,
-                            label: this.$t('footer.links.payment'),
-                            href: '/',
-                        },
-                        {
-                            id: 2,
-                            label: this.$t('footer.links.refund'),
-                            href: '/',
-                        },
-                        {
-                            id: 3,
-                            label: this.$t('footer.links.guarantee'),
-                            href: '/',
-                        },
-                        {
-                            id: 4,
-                            label: this.$t('footer.links.qna'),
-                            href: '/',
-                        },
-                    ],
-                },
-                {
-                    id: 2,
-                    title: this.$t('footer.links.about_company'),
-                    isExpanded: false,
-                    items: [
-                        {
-                            id: 1,
-                            label: this.$t('footer.links.about_us'),
-                            href: '/',
-                        },
-                        {
-                            id: 2,
-                            label: this.$t('footer.links.partners'),
-                            href: '/',
-                        },
-                        {
-                            id: 3,
-                            label: this.$t('footer.links.feedback'),
-                            href: '/',
-                        },
-                        {
-                            id: 4,
-                            label: this.$t('footer.links.vacancy'),
-                            href: '/',
-                        },
-                    ],
-                },
-            ];
+                    items: mi.children.map(i => {
+                        return {
+                            id: i.id,
+                            name: i.name,
+                            url: i.url,
+                        };
+                    }),
+                };
+            });
         },
     },
 };

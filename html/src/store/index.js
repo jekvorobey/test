@@ -24,6 +24,8 @@ injectableClass(Vuex.Store);
 
 const ENV = 'env';
 
+export const MENU = 'menu';
+
 export const IS_MENU_OPEN = 'isMenuOpen';
 export const IS_HELP_OPEN = 'isHelpOpen';
 export const IS_CART_OPEN = 'isCartOpen';
@@ -47,6 +49,7 @@ export default function createStore(container) {
     const store = new Vuex.Store({
         strict: process.env.NODE_ENV !== 'production',
         state: {
+            [MENU]: [],
             [LOCALE]: ruLocale.LOCALE,
             [FALLBACK_LOCALE]: enLocale.LOCALE,
             [LOCALIZATIONS]: {

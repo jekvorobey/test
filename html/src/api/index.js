@@ -5,6 +5,12 @@ import { REQUEST_CANCEL_MESSAGE } from '../assets/scripts/constants';
 
 let catalogItemsCancelSource = null;
 
+// main
+
+export function getMenu() {
+    return $http.get('/v1/content/menus');
+}
+
 // auth
 
 export function checkSession() {

@@ -7,6 +7,7 @@ export const SET_HELP_OPEN = 'SET_HELP_OPEN';
 export const SET_CITY_CONFIRMATION_OPEN = 'SET_CITY_CONFIRMATION_OPEN';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_BANNER = 'SET_BANNER';
+export const SET_MENU = 'SET_MENU';
 
 export default {
     [SET_LOCALE](state, payload) {
@@ -43,5 +44,9 @@ export default {
 
     [SET_BANNER](state, payload) {
         state.banner = payload;
+    },
+
+    [SET_MENU](state, payload) {
+        state.menu = payload;
     },
 };

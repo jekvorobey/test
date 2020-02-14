@@ -1,6 +1,9 @@
-import { getCategories, getBanners } from '../api';
-import { $logger, $locale } from '../services/ServiceLocator';
 import axios from 'axios';
+import { getMenu, getCategories, getBanners } from '../api';
+import { $logger, $locale } from '../services/ServiceLocator';
+import { storeErrorHandler } from '../util/store';
+
+import { SET_CATEGORIES, SET_MENU } from './mutations';
 
 export const SET_BANNER = 'SET_BANNER';
 export const SET_LOCALE = 'SET_LOCALE';
@@ -52,10 +55,14 @@ export default {
         commit(SET_MENU_OPEN, payload);
     },
 
-    [FETCH_COMMON_DATA]({ commit }, payload) {
-        return Promise.all([getCategories(payload), getBanners(payload)]).then(resp => {
-            commit('SET_CATEGORIES', resp[0]);
-            commit('SET_BANNER', resp[1][0]);
-        });
+    async [FETCH_COMMON_DATA]({ commit }, payload) {
+        try {
+            const resp = await Promise.all([getCategories(payload), getBanners(payload), getMenu()]);
+            commit(SET_CATEGORIES, resp[0]);
+            commit(SET_BANNER, resp[1][0]);
+            commit(SET_MENU, resp[2]);
+        } catch (error) {
+            storeErrorHandler(FETCH_COMMON_DATA)(error);
+        }
     },
 };
