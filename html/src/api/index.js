@@ -37,11 +37,11 @@ export function registerByPassword(password) {
     return $http.post('/v1/auth/registerByPassword', { password });
 }
 
-export function getSocialLink(url, driver, redirectUrl) {
+export function getSocialLink({ backUrl, driver, redirectUrl }) {
     return $http.post('/v1/auth/getSocialLink', {
-        redirect_social_url: redirectUrl,
-        final_login_url: url,
+        final_login_url: backUrl,
         driver,
+        redirect_social_url: redirectUrl,
     });
 }
 

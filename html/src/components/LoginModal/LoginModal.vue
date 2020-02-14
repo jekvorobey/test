@@ -265,9 +265,9 @@ export default {
 
         async onLoginBySocial(driver) {
             try {
-                const url = this.$route.fullPath;
+                const backUrl = this.$route.fullPath;
                 const redirectUrl = `${document.location.origin}/social-login`;
-                const socialUrl = await this[GET_SOCIAL_LINK]({ url, driver, redirectUrl });
+                const socialUrl = await this[GET_SOCIAL_LINK]({ backUrl, driver, redirectUrl });
                 document.location.href = socialUrl;
             } catch (error) {
                 return;

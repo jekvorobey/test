@@ -32,59 +32,70 @@ export default {
         return sendSMS(phone);
     },
 
-    [CHECK_CODE]({ commit }, code) {
-        return checkCode(code).then(({ isCodeValid, status, error = 'Invalid code' }) => {
+    async [CHECK_CODE]({ commit }, code) {
+        try {
+            const { isCodeValid, status, error = 'Invalid code' } = await checkCode(code);
             if (isCodeValid || status === true || status === responseStatus.OK) return isCodeValid;
             $logger.error(`${CHECK_CODE}: ${error}`);
             return Promise.reject(error);
-        });
+        } catch (error) {
+            storeErrorHandler(CHECK_CODE)(error);
+        }
     },
 
-    [REGISTER_BY_PASSWORD]({ commit }, password) {
-        return registerByPassword(password)
-            .then(() => {
-                commit(SET_HAS_SESSION, true);
-            })
-            .catch(error => {
-                $logger.error(`${REGISTER_BY_PASSWORD}: ${error || 'Something went wrong'}`);
-            });
-    },
-
-    [GET_SOCIAL_LINK]({ commit }, { url, driver, redirectUrl }) {
-        return getSocialLink(url, driver, redirectUrl)
-            .then(({ url }) => url)
-            .catch(error => {
-                $logger.error(`${GET_SOCIAL_LINK}: ${error || 'Something went wrong'}`);
-            });
-    },
-
-    [LOGIN_BY_PASSWORD]({ commit }, payload) {
-        return loginByPassword(payload).then(() => {
+    async [REGISTER_BY_PASSWORD]({ commit }, password) {
+        try {
+            await registerByPassword(password);
             commit(SET_HAS_SESSION, true);
-        });
+        } catch (error) {
+            storeErrorHandler(LOGIN_BY_PASSWORD)(error);
+        }
     },
 
-    [LOGIN_BY_SOCIAL]({ commit }, { driver, query }) {
-        return loginBySocial(driver, query)
-            .then(({ url }) => {
-                commit(SET_HAS_SESSION, true);
-                return url;
-            })
-            .catch(error => storeErrorHandler(LOGIN_BY_SOCIAL, true)(error));
+    async [GET_SOCIAL_LINK]({ commit }, { backUrl, driver, redirectUrl }) {
+        try {
+            const { url } = await getSocialLink({ backUrl, driver, redirectUrl });
+            return url;
+        } catch (error) {
+            storeErrorHandler(LOGIN_BY_PASSWORD)(error);
+        }
     },
 
-    [LOGOUT]({ commit }, payload) {
-        return logout(payload)
-            .then(() => commit(SET_HAS_SESSION, false))
-            .catch(error => $logger.error(`${LOGOUT}: ${error}`));
+    async [LOGIN_BY_PASSWORD]({ commit }, payload) {
+        try {
+            await loginByPassword(payload);
+            commit(SET_HAS_SESSION, true);
+        } catch (error) {
+            storeErrorHandler(LOGIN_BY_PASSWORD)(error);
+        }
     },
 
-    [CHECK_SESSION]({ commit }, payload) {
-        return checkSession(payload)
-            .then(() => commit(SET_HAS_SESSION, true))
-            .catch(error => {
-                commit(SET_HAS_SESSION, false);
-                $logger.error(`${CHECK_SESSION}: ${error}`);
-            });
+    async [LOGIN_BY_SOCIAL]({ commit }, { driver, query }) {
+        try {
+            const { url } = await loginBySocial(driver, query);
+            commit(SET_HAS_SESSION, true);
+            return url;
+        } catch (error) {
+            storeErrorHandler(LOGIN_BY_SOCIAL)(error);
+        }
+    },
+
+    async [LOGOUT]({ commit }) {
+        try {
+            await logout();
+            commit(SET_HAS_SESSION, false);
+        } catch (error) {
+            storeErrorHandler(CHECK_SESSION)(error);
+        }
+    },
+
+    async [CHECK_SESSION]({ commit }) {
+        try {
+            const { is_login } = await checkSession();
+            commit(SET_HAS_SESSION, is_login);
+        } catch (error) {
+            commit(SET_HAS_SESSION, false);
+            storeErrorHandler(CHECK_SESSION)(error);
+        }
     },
 };
