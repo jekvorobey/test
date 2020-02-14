@@ -12,6 +12,8 @@ import {
     logout,
     loginByPassword,
     loginBySocial,
+    sendRestoreSMS,
+    resetPassword,
 } from '../../../api';
 
 import { SET_HAS_SESSION } from './mutations';
@@ -27,9 +29,20 @@ export const CHECK_CODE = 'CHECK_CODE';
 export const REGISTER_BY_PASSWORD = 'REGISTER_BY_PASSWORD';
 export const GET_SOCIAL_LINK = 'GET_SOCIAL_LINK';
 
+export const SEND_RESTORE_SMS = 'SEND_RESTORE_SMS';
+export const RESET_PASSWORD = 'RESET_PASSWORD';
+
 export default {
     [SEND_SMS]({ commit }, phone) {
-        return sendSMS(phone);
+        return sendSMS(phone).catch(error => storeErrorHandler(SEND_SMS, true)(error));
+    },
+
+    [SEND_RESTORE_SMS]({ commit }, phone) {
+        return sendRestoreSMS(phone).catch(error => storeErrorHandler(SEND_RESTORE_SMS, true)(error));
+    },
+
+    [RESET_PASSWORD]({ commit }, { code, phone, password }) {
+        return resetPassword(code, phone, password).catch(error => storeErrorHandler(RESET_PASSWORD, true)(error));
     },
 
     async [CHECK_CODE]({ commit }, code) {

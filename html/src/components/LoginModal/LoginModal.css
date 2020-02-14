@@ -26,6 +26,12 @@
     &__form {
         margin-bottom: calc(var(--gs) * 5);
 
+        &-input {
+            .v-input__input {
+                text-align: left;
+            }
+        }
+
         &-submit {
             &-btn {
                 min-width: 120px;

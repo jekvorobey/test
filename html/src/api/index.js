@@ -29,6 +29,14 @@ export function sendSMS(phone) {
     return $http.post('/v1/auth/sendSMS', { phone });
 }
 
+export function sendRestoreSMS(phone) {
+    return $http.post('/v1/auth/reset/sendSMS', { phone });
+}
+
+export function resetPassword(code, phone, password) {
+    return $http.post('/v1/auth/reset/resetPassword', { code, phone, password });
+}
+
 export function checkCode(code) {
     return $http.post('/v1/auth/checkCode', { code });
 }

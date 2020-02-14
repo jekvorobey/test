@@ -23,16 +23,21 @@
 
                 <template v-else-if="!sent">
                     <p class="login-modal__desc">
-                        Введите номер телефона, использованный при регистрации. Мы отправим на него новый пароль в СМС.
+                        Введите номер телефона, использованный при регистрации. Мы отправим на него новый код в СМС.
                     </p>
 
-                    <form class="login-modal__form" @submit.prevent="onSendPassword">
-                        <v-input-mask v-model="restorePhone" :options="maskOptions">
+                    <form class="login-modal__form" @submit.prevent="onSubmit">
+                        <v-input-mask
+                            v-model="rawRestorePhone"
+                            :options="maskOptions"
+                            :raw="false"
+                            :error="restorePhoneError"
+                        >
                             Номер телефона
                         </v-input-mask>
                         <div class="login-modal__form-submit">
                             <v-button class="login-modal__form-submit-btn" type="submit">
-                                Получить пароль
+                                Получить код
                             </v-button>
                             <v-link class="login-modal__form-submit-link" tag="button" @click.stop="onCancelRestore">
                                 Отмена
@@ -43,17 +48,55 @@
 
                 <template v-else>
                     <p class="login-modal__desc">
-                        Проверьте телефон {{ displayRestorePhone }}. Мы отправили на него новый пароль в СМС.
+                        Проверьте телефон {{ rawRestorePhone }}. Мы отправили на него новый код в СМС.
                     </p>
 
-                    <form class="login-modal__form" @submit.prevent="onCancelRestore">
+                    <form class="login-modal__form" @submit.prevent="onSubmit">
+                        <v-input
+                            class="login-modal__form-input"
+                            type="number"
+                            v-model="code"
+                            maxLength="4"
+                            :error="codeError"
+                        >
+                            Код из СМС
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error" v-if="error">{{ error }}</div>
+                                </transition>
+                            </template>
+                        </v-input>
+                        <v-password
+                            class="login-modal__form-input"
+                            v-model="restorePassword"
+                            :error="restorePasswordError"
+                        >
+                            Пароль
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error" v-if="error">{{ error }}</div>
+                                </transition>
+                            </template>
+                        </v-password>
+                        <v-password
+                            class="login-modal__form-input"
+                            v-model="restorePasswordRepeat"
+                            :error="restorePasswordRepeatError"
+                        >
+                            Пароль ещё раз
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error" v-if="error">{{ error }}</div>
+                                </transition>
+                            </template>
+                        </v-password>
                         <v-button class="login-modal__form-submit-btn" type="submit">
-                            Войти
+                            Сменить пароль
                         </v-button>
                     </form>
                 </template>
 
-                <div class="login-modal__socials">
+                <div class="login-modal__socials" v-if="!restore">
                     <div class="login-modal__socials-list">
                         <button class="login-modal__socials-item" @click="onLoginBySocial('google')">
                             <svg
@@ -117,16 +160,23 @@
 import VSvg from '../controls/VSvg/VSvg.vue';
 import VLink from '../controls/VLink/VLink.vue';
 import VButton from '../controls/VButton/VButton.vue';
+import VInput from '../controls/VInput/VInput.vue';
 import VInputMask from '../controls/VInput/VInputMask.vue';
 import VPassword from '../controls/VPassword/VPassword.vue';
 import GeneralModal from '../GeneralModal/GeneralModal.vue';
 import { NAME as REGISTRATION_MODAL_NAME } from '../RegistrationModal/RegistrationModal.vue';
 
-import validationMixin, { required, minLength, password } from '../../plugins/validation';
+import validationMixin, { required, minLength, password, sameAs } from '../../plugins/validation';
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
-import { LOGIN_BY_PASSWORD, GET_SOCIAL_LINK } from '../../store/modules/Auth/actions';
+import {
+    LOGIN_BY_PASSWORD,
+    GET_SOCIAL_LINK,
+    SEND_RESTORE_SMS,
+    SEND_SMS,
+    RESET_PASSWORD,
+} from '../../store/modules/Auth/actions';
 
 import { NAME as CART_MODULE } from '../../store/modules/Cart';
 import { FETCH_CART_DATA } from '../../store/modules/Cart/actions';
@@ -136,9 +186,8 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import _cloneDeep from 'lodash/cloneDeep';
 import { phoneMaskOptions } from '../../assets/scripts/settings';
+import { rawPhone } from '../../util/helpers';
 import './LoginModal.css';
-
-const maskOptions = _cloneDeep(phoneMaskOptions);
 
 export const NAME = 'login-modal';
 
@@ -150,6 +199,7 @@ export default {
         VSvg,
         VLink,
         VButton,
+        VInput,
         VInputMask,
         VPassword,
         GeneralModal,
@@ -161,31 +211,60 @@ export default {
             minLength: minLength(12),
         },
 
+        restorePhone: {
+            required,
+            minLength: minLength(12),
+        },
+
         password: {
             required,
             password,
             minLength: minLength(8),
         },
 
+        code: {
+            required,
+            minLength: minLength(4),
+        },
+
+        restorePassword: {
+            required,
+            password,
+            minLength: minLength(8),
+        },
+
+        restorePasswordRepeat: {
+            required,
+            sameAs: sameAs('restorePassword'),
+        },
+
         fail: {
+            valid: value => value !== true,
+        },
+
+        restoreFail: {
             valid: value => value !== true,
         },
     },
 
     data() {
         return {
-            phone: '',
             fail: true,
+            restoreFail: true,
 
-            password: '',
+            phone: null,
+            password: null,
 
-            displayRestorePhone: null,
-            restorePhone: '+7',
+            rawRestorePhone: null,
+            code: null,
+
+            restorePassword: null,
+            restorePasswordRepeat: null,
 
             restore: false,
             sent: false,
 
-            maskOptions,
+            maskOptions: { ...phoneMaskOptions },
         };
     },
 
@@ -195,7 +274,18 @@ export default {
         },
 
         header() {
-            return this.restore ? 'Получить новый пароль' : 'Войти';
+            return this.restore ? 'Восстановление пароля' : 'Войти';
+        },
+
+        restorePhone() {
+            return rawPhone(this.rawRestorePhone);
+        },
+
+        codeError() {
+            if (this.$v.code.$dirty) {
+                if (!this.$v.code.required) return 'Обязательное поле';
+                if (!this.$v.code.minLength) return 'Неверно введен код';
+            }
         },
 
         phoneError() {
@@ -212,6 +302,31 @@ export default {
                 if (!this.$v.password.required) return 'Обязательное поле';
                 if (!this.$v.password.password) return 'Как минимум 1 заглавная и строчная латинские буквы и 1 цифра';
                 if (!this.$v.password.minLength) return 'Не менее 8 символов';
+            }
+        },
+
+        restorePhoneError() {
+            if (this.$v.restorePhone.$dirty) {
+                if (!this.$v.restorePhone.required) return 'Обязательное поле';
+                if (!this.$v.restorePhone.minLength) return 'Неверно введен номер';
+            }
+
+            if (this.$v.restoreFail.$dirty && !this.$v.restoreFail.valid) return 'Неправильный телефон';
+        },
+
+        restorePasswordError() {
+            if (this.$v.restorePassword.$dirty) {
+                if (!this.$v.restorePassword.required) return 'Обязательное поле';
+                if (!this.$v.restorePassword.password)
+                    return 'Как минимум 1 заглавная и строчная латинские буквы и 1 цифра';
+                if (!this.$v.restorePassword.minLength) return 'Не менее 8 символов';
+            }
+        },
+
+        restorePasswordRepeatError() {
+            if (this.$v.restorePasswordRepeat.$dirty) {
+                if (!this.$v.restorePasswordRepeat.required) return 'Обязательное поле';
+                if (!this.$v.restorePasswordRepeat.sameAs) return 'Не совпадает';
             }
         },
     },
@@ -234,7 +349,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(AUTH_MODULE, [LOGIN_BY_PASSWORD, GET_SOCIAL_LINK]),
+        ...mapActions(AUTH_MODULE, [LOGIN_BY_PASSWORD, GET_SOCIAL_LINK, SEND_RESTORE_SMS, RESET_PASSWORD]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
 
         resetLoginValidation() {
@@ -244,10 +359,47 @@ export default {
         },
 
         async onSubmit() {
-            if (!this.restore) {
+            if (this.restore && this.sent) {
+                this.$v.restorePassword.$touch();
+                this.$v.restorePasswordRepeat.$touch();
+                this.$v.code.$touch();
+                if (
+                    !this.$v.restorePassword.$invalid &&
+                    !this.$v.restorePasswordRepeat.$invalid &&
+                    !this.$v.code.$invalid
+                )
+                    this.resetPassword();
+            } else if (!this.restore) {
                 this.$v.phone.$touch();
                 this.$v.password.$touch();
                 if (!this.$v.phone.$invalid && !this.$v.password.$invalid) this.loginByPassword();
+            } else {
+                this.$v.restorePhone.$touch();
+                if (!this.$v.restorePhone.$invalid) {
+                    try {
+                        await this[SEND_RESTORE_SMS](this.restorePhone);
+                        this.sent = true;
+                        this.restoreFail = false;
+                    } catch (error) {
+                        this.sent = false;
+                        this.restoreFail = true;
+                        this.$v.restoreFail.$touch();
+                    }
+                }
+            }
+        },
+
+        async resetPassword() {
+            try {
+                await this[RESET_PASSWORD]({
+                    code: this.code,
+                    phone: this.restorePhone,
+                    password: this.restorePassword,
+                });
+                this.onClose();
+            } catch (error) {
+                this.onClose();
+                alert('Не удалось сменить пароль');
             }
         },
 
