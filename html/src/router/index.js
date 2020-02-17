@@ -6,7 +6,6 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import pipeline from './pipeline';
 
-import { $store } from '../services/ServiceLocator';
 import { SET_MENU_OPEN } from '../store/actions';
 
 import { NAME as SEARCH_MODULE } from '../store/modules/Search';
@@ -61,6 +60,8 @@ export default function createRouter(container) {
         // только в клиентской сборке
         window.history.scrollRestoration = 'manual';
     }
+    const appContext = container.get(injectionType.APPLICATION_CONTEXT);
+    const store = container.get(injectionType.STORE);
 
     const router = new VueRouter({
         mode: 'history',
@@ -102,7 +103,9 @@ export default function createRouter(container) {
             to,
             from,
             next,
-            store: $store,
+            store,
+            appContext,
+            router,
         };
 
         return middlewares[0]({
@@ -111,12 +114,11 @@ export default function createRouter(container) {
         });
     });
 
-    // eslint-disable-next-line
     router.afterEach((to, from) => {
-        if ($store) {
-            $store.dispatch(SET_MENU_OPEN, false);
-            $store.dispatch(`${SEARCH_MODULE}/${SET_SEARCH}`, false);
-            $store.dispatch(`${MODAL_MODULE}/${CLOSE_ALL}`);
+        if (store) {
+            store.dispatch(SET_MENU_OPEN, false);
+            store.dispatch(`${SEARCH_MODULE}/${SET_SEARCH}`, false);
+            store.dispatch(`${MODAL_MODULE}/${CLOSE_ALL}`);
         }
     });
 

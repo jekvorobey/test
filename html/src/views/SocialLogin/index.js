@@ -1,8 +1,8 @@
+import socialLogin from '../../router/middleware/socialLogin';
+
 /**
  * @Module
  */
-
-const SocialLoginAsync = () => import(/* webpackChunkName: "social-login-view" */ './SocialLogin.vue');
 
 /**
  * Модуль компонента SocialLogin
@@ -14,7 +14,9 @@ export default {
     routes: [
         {
             path: '/social-login/:driver*',
-            component: SocialLoginAsync,
+            meta: {
+                middleware: [socialLogin],
+            },
         },
     ],
 };

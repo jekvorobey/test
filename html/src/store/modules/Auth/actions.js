@@ -15,7 +15,6 @@ import {
     sendRestoreSMS,
     resetPassword,
 } from '../../../api';
-
 import { SET_HAS_SESSION } from './mutations';
 
 export const LOGIN_BY_SOCIAL = 'LOGIN_BY_SOCIAL';
@@ -83,7 +82,7 @@ export default {
         }
     },
 
-    async [LOGIN_BY_SOCIAL]({ commit }, { driver, query }) {
+    async [LOGIN_BY_SOCIAL]({ state, commit }, { driver, query }) {
         try {
             const { url } = await loginBySocial(driver, query);
             commit(SET_HAS_SESSION, true);
