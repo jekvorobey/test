@@ -332,7 +332,7 @@ export default {
 
         async onRegisterBySocial(driver) {
             try {
-                const backUrl = `${document.location.origin}/profile`;
+                const backUrl = '/profile';
                 const redirectUrl = `${document.location.origin}/social-login`;
                 const socialUrl = await this[GET_SOCIAL_LINK]({ backUrl, driver, redirectUrl });
                 document.location.href = socialUrl;

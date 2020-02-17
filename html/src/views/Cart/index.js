@@ -1,3 +1,5 @@
+import hasSession from '../../router/middleware/hasSession';
+
 /**
  * @Module
  */
@@ -16,6 +18,10 @@ export default {
             name: 'Cart',
             path: '/cart',
             component: CartAsync,
+
+            meta: {
+                middleware: [hasSession],
+            },
         },
     ],
 };
