@@ -110,3 +110,9 @@ export const currencySymbol = Object.freeze({
     USD: '&#36;',
     EUR: '&#128;',
 });
+
+export const menuCode = Object.freeze({
+    HEADER: 'header_main',
+    HELP: 'header_help',
+    FOOTER: 'footer_main',
+});

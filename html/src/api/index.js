@@ -5,6 +5,12 @@ import { REQUEST_CANCEL_MESSAGE } from '../assets/scripts/constants';
 
 let catalogItemsCancelSource = null;
 
+// main
+
+export function getMenu() {
+    return $http.get('/v1/content/menus');
+}
+
 // auth
 
 export function checkSession() {
@@ -29,6 +35,14 @@ export function sendSMS(phone) {
     return $http.post('/v1/auth/sendSMS', { phone });
 }
 
+export function sendRestoreSMS(phone) {
+    return $http.post('/v1/auth/reset/sendSMS', { phone });
+}
+
+export function resetPassword(code, phone, password) {
+    return $http.post('/v1/auth/reset/resetPassword', { code, phone, password });
+}
+
 export function checkCode(code) {
     return $http.post('/v1/auth/checkCode', { code });
 }
@@ -37,11 +51,11 @@ export function registerByPassword(password) {
     return $http.post('/v1/auth/registerByPassword', { password });
 }
 
-export function getSocialLink(url, driver, redirectUrl) {
+export function getSocialLink({ backUrl, driver, redirectUrl }) {
     return $http.post('/v1/auth/getSocialLink', {
-        redirect_social_url: redirectUrl,
-        final_login_url: url,
+        final_login_url: backUrl,
         driver,
+        redirect_social_url: redirectUrl,
     });
 }
 

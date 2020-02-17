@@ -1,5 +1,5 @@
 import { generateCategoryUrl } from '../util/catalog';
-import { productGroupTypes } from '../assets/scripts/enums';
+import { productGroupTypes, menuCode } from '../assets/scripts/enums';
 
 function prepareCategory({ id, name, code, items = [] }) {
     return {
@@ -11,11 +11,31 @@ function prepareCategory({ id, name, code, items = [] }) {
 }
 
 const CATEGORIES = 'categories';
+const MENU = 'menu';
+
 export const CATEGORIES_CATALOG = 'categoriesCatalog';
+export const HEADER_MENU = 'headerMenu';
+export const HELP_MENU = 'helpMenu';
+export const FOOTER_MENU = 'footerMenu';
 
 export default {
     [CATEGORIES_CATALOG](state) {
         const categories = state[CATEGORIES] || [];
         return categories.map(c => prepareCategory(c));
+    },
+
+    [HEADER_MENU](state) {
+        const menu = state[MENU];
+        return menu.find(m => m.code === menuCode.HEADER) || {};
+    },
+
+    [HELP_MENU](state) {
+        const menu = state[MENU];
+        return menu.find(m => m.code === menuCode.HELP) || {};
+    },
+
+    [FOOTER_MENU](state) {
+        const menu = state[MENU];
+        return menu.find(m => m.code === menuCode.FOOTER) || {};
     },
 };
