@@ -162,6 +162,16 @@
         }
     }
 
+    &__filter-btn {
+        @media (--tablet-lg-min) {
+            display: none;
+        }
+
+        @media (--tablet) {
+            width: 100%;
+        }
+    }
+
     &__table {
         border: none;
         border-collapse: collapse;

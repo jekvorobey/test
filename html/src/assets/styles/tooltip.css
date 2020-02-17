@@ -99,7 +99,7 @@
             padding: calc(var(--gs) * 3) 0;
             background-color: var(--cl-white);
             color: var(--cl-global);
-            box-shadow: 0px 5px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 40px rgba(0, 0, 0, 0.1);
         }
 
         .popover-arrow {
