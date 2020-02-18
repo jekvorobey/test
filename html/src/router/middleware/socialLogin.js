@@ -2,6 +2,7 @@ import { breakMiddleware } from '../../util/router';
 
 import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
 import { LOGIN_BY_SOCIAL } from '../../store/modules/Auth/actions';
+import { httpCodes } from '../../assets/scripts/enums';
 
 export default async function socialLogin({ from, to, next, store: { state, dispatch }, appContext, resolve }) {
     try {
@@ -12,9 +13,9 @@ export default async function socialLogin({ from, to, next, store: { state, disp
 
         if (appContext.isServer) {
             const url = await dispatch(`${AUTH_MODULE}/${LOGIN_BY_SOCIAL}`, { driver, query });
-            breakMiddleware(appContext, next, url || '/', 301);
+            breakMiddleware(appContext, next, url || '/', httpCodes.FOUND);
         } else next(false);
     } catch (error) {
-        breakMiddleware(appContext, next, '/', 500);
+        breakMiddleware(appContext, next, '/', httpCodes.FOUND);
     }
 }
