@@ -125,3 +125,23 @@ export const interval = Object.freeze({
     TEN_MINUTES: 600000,
     HOUR: 6000000,
 });
+
+export const httpCodes = Object.freeze({
+    SUCCESS: 200,
+    NO_CONTENT: 204,
+
+    MOVED_PERMANENTLY: 301,
+    FOUND: 302,
+    NOT_MODIFIED: 304,
+
+    BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    FORBIDDEN: 403,
+    NOT_FOUND: 404,
+
+    INTERNAL_SERVER_ERROR: 500,
+    NOT_IMPLEMENTED: 501,
+    BAD_GATEAWAY: 502,
+    SERVICE_UNAVALIABLE: 504,
+    GATEAWAY_TIMEOUT: 505,
+});
