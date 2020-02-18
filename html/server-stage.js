@@ -69,11 +69,8 @@ function render(req, res, env) {
 
         const handleError = err => {
             if (err.url) {
-                res.redirect(err.url);
                 logger.warn(`redirect: ${err.url}`);
-            } else if (err.code === 404) {
-                res.status(404).send('404 | Page Not Found');
-                logger.warn(`page not found: ${req.url}`);
+                res.redirect(err.code || 302, err.url);
             } else {
                 const page502 = fs.readFileSync(path.resolve(app_root, 'public/page502.html'), 'utf-8');
                 // Render Error Page or Redirect
@@ -120,6 +117,9 @@ function render(req, res, env) {
         renderer.renderToString(context, (err, html) => {
             if (err) return handleError(err);
 
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
             res.setHeader('Content-Type', 'text/html');
             res.setHeader('Content-Length', html.length);
             res.setHeader('Server', serverInfo);
