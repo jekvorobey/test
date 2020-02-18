@@ -58,7 +58,7 @@ const { app, router, store } = createApp($container);
 
 // prime the store with server-initialized state.
 // the state is determined during SSR and inlined in the page markup.
-if (window.__INITIAL_STATE__) {
+if (typeof window !== 'undefined' && window.__INITIAL_STATE__) {
     // Вставляем данные в стор
     store.replaceState(window.__INITIAL_STATE__);
 
