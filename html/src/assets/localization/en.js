@@ -53,6 +53,12 @@ const main = {
         },
     },
 
+    deliveryMethod: {
+        [1]: 'Delivery',
+        [2]: 'Express delivery',
+        [3]: 'Pickup',
+    },
+
     landing: {
         showAll: 'Show all',
         subscribe: 'Subscrube',

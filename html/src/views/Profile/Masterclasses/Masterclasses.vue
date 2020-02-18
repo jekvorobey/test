@@ -9,7 +9,7 @@
                     v-for="item in masterclasses"
                     :key="item.id"
                     v-bind="item"
-                    href="/"
+                    to="/"
                 />
             </ul>
         </div>

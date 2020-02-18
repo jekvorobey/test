@@ -110,3 +110,18 @@ export const currencySymbol = Object.freeze({
     USD: '&#36;',
     EUR: '&#128;',
 });
+
+export const menuCode = Object.freeze({
+    HEADER: 'header_main',
+    HELP: 'header_help',
+    FOOTER: 'footer_main',
+});
+
+export const interval = Object.freeze({
+    SECOND: 1000,
+    TWO_SECONDS: 2000,
+    MINUTE: 60000,
+    FIVE_MINUTES: 300000,
+    TEN_MINUTES: 600000,
+    HOUR: 6000000,
+});

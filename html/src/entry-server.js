@@ -28,11 +28,13 @@ injectClass(injectionType.COOKIE, HttpService, 1);
 // return a Promise that resolves to the app instance.
 export default context => {
     return new Promise((resolve, reject) => {
+        const { url, req, res, env } = context;
         const appContext = new ApplicationContext();
-        appContext.env = context.env;
-        appContext.req = context.req;
-        appContext.res = context.res;
-        appContext.baseURL = `${context.req.protocol}://${context.req.get('host')}`;
+        appContext.env = env;
+        appContext.req = req;
+        appContext.res = res;
+        appContext.isServer = true;
+        appContext.baseURL = `${req.protocol}://${req.get('host')}`;
 
         // Declare bindings
         ServiceLocator.createInstance(new Container({ skipBaseClassChecks: true }));
@@ -59,18 +61,13 @@ export default context => {
         const { app, router, store } = createApp($container);
         const logger = $container.get(injectionType.LOGGER);
 
-        const { url } = context;
-        const { fullPath } = router.resolve(url).route;
-
-        if (fullPath !== url) {
-            logger.error(`full path ${fullPath} doesn't match ${url}`);
-            return reject({ url: fullPath });
-        }
-
         // set router's location
         router.push(url);
 
         router.onReady(ctx => {
+            if (appContext.redirect) return reject({ code: appContext.statusCode, url: appContext.redirect });
+            if (appContext.statusCode) res.status(appContext.statusCode);
+
             // This `rendered` hook is called when the app has finished rendering
             context.rendered = () => {
                 // After the app is rendered, our store is now

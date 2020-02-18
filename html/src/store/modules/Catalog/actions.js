@@ -37,8 +37,8 @@ export default {
         try {
             const data = await getBanners();
             commit(SET_BANNER, data[6]);
-        } catch (thrown) {
-            storeErrorHandler(FETCH_BANNER, true)(thrown);
+        } catch (error) {
+            storeErrorHandler(FETCH_BANNER, true)(error);
         }
     },
 
@@ -46,8 +46,8 @@ export default {
         try {
             const data = await getCategories(payload);
             commit(SET_CATEGORIES, data);
-        } catch (thrown) {
-            storeErrorHandler(FETCH_CATEGORIES, true)(thrown);
+        } catch (error) {
+            storeErrorHandler(FETCH_CATEGORIES, true)(error);
         }
     },
 
@@ -55,8 +55,8 @@ export default {
         try {
             const data = await getFilters(payload);
             commit(SET_FILTERS, data);
-        } catch (thrown) {
-            storeErrorHandler(FETCH_FILTERS, true)(thrown);
+        } catch (error) {
+            storeErrorHandler(FETCH_FILTERS, true)(error);
         }
     },
 
@@ -67,28 +67,28 @@ export default {
             const data = await getCatalogItems({ ...payload, filter });
             if (payload.showMore) commit(SET_ITEMS_MORE, data);
             else commit(SET_ITEMS, data);
-        } catch (thrown) {
-            storeErrorHandler(FETCH_ITEMS, true)(thrown);
+        } catch (error) {
+            storeErrorHandler(FETCH_ITEMS, true)(error);
         }
     },
 
-    async [FETCH_PRODUCT_GROUP]({ commit }, code) {
+    async [FETCH_PRODUCT_GROUP]({ commit }, { type, entityCode }) {
         try {
-            const data = await getProductGroup(code);
+            const data = await getProductGroup(type, entityCode);
             commit(SET_PRODUCT_GROUP, data);
             return data;
-        } catch (thrown) {
-            storeErrorHandler(FETCH_PRODUCT_GROUP, true)(thrown);
+        } catch (error) {
+            storeErrorHandler(FETCH_PRODUCT_GROUP, true)(error);
         }
     },
 
     async [FETCH_PRODUCT_GROUP_DATA]({ dispatch }, payload = {}) {
         try {
-            await dispatch(FETCH_PRODUCT_GROUP, payload.entityCode);
+            await dispatch(FETCH_PRODUCT_GROUP, { type: payload.type, entityCode: payload.entityCode });
             await Promise.all([dispatch(FETCH_CATEGORIES, payload), dispatch(FETCH_FILTERS, payload.filter.category)]);
             return dispatch(FETCH_ITEMS, payload);
-        } catch (thrown) {
-            storeErrorHandler(FETCH_PRODUCT_GROUP_DATA)(thrown);
+        } catch (error) {
+            storeErrorHandler(FETCH_PRODUCT_GROUP_DATA)(error);
         }
     },
 
@@ -101,8 +101,8 @@ export default {
             ]);
             commit(SET_PRODUCT_GROUP, null);
             return dispatch(FETCH_ITEMS, payload);
-        } catch (thrown) {
-            storeErrorHandler(FETCH_CATALOG_DATA)(thrown);
+        } catch (error) {
+            storeErrorHandler(FETCH_CATALOG_DATA)(error);
         }
     },
 

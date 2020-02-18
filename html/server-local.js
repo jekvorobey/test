@@ -103,13 +103,10 @@ if (isProd) {
 function render(req, res, env) {
     const s = Date.now();
 
-    const handleError = err => {
+    const handleError = (err = {}) => {
         if (err.url) {
             logger.warn(`redirect: ${err.url}`);
-            res.redirect(err.url);
-        } else if (err.code === 404) {
-            res.status(404).send('404 | Page Not Found');
-            logger.warn(`page not found: ${req.url}`);
+            res.redirect(err.code || 302, err.url);
         } else {
             // Render Error Page or Redirect
             res.status(500).send(page502);
@@ -128,6 +125,9 @@ function render(req, res, env) {
     renderer
         .renderToString(context)
         .then(html => {
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
             res.setHeader('Content-Type', 'text/html');
             res.setHeader('Content-Length', html.length);
             res.setHeader('Server', serverInfo);

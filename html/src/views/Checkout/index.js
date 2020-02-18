@@ -1,5 +1,6 @@
 import { cartItemTypes } from '../../assets/scripts/enums';
 import isCartEmpty from '../../router/middleware/isCartEmpty';
+import hasSession from '../../router/middleware/hasSession';
 
 /**
  * @Module
@@ -20,7 +21,7 @@ export default {
             path: `/checkout/:type(${cartItemTypes.PRODUCT}|${cartItemTypes.MASTERCLASS})`,
             component: CheckoutAsync,
             meta: {
-                middleware: [isCartEmpty],
+                middleware: [hasSession, isCartEmpty],
             },
         },
     ],

@@ -26,9 +26,9 @@
         </template>
         <template v-slot:bottom>
             <div class="help-panel__links">
-                <v-link class="help-panel__link" tag="button">Доставка и оплата</v-link>
-                <v-link class="help-panel__link" tag="button">Возврат товара</v-link>
-                <v-link class="help-panel__link" tag="button">Гарантии</v-link>
+                <v-link class="help-panel__link" v-for="item in helpMenu.items" :key="item.name" :to="item.url">
+                    {{ item.name }}
+                </v-link>
             </div>
         </template>
     </general-popup-panel>
@@ -40,9 +40,10 @@ import VLink from '../controls/VLink/VLink.vue';
 
 import GeneralPopupPanel from '../GeneralPopupPanel/GeneralPopupPanel.vue';
 
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import { IS_HELP_OPEN } from '../../store';
 import { SET_HELP_OPEN } from '../../store/actions';
+import { HELP_MENU } from '../../store/getters';
 
 import '../../assets/images/sprites/socials/telegram.svg';
 import '../../assets/images/sprites/socials/whatsup.svg';
@@ -62,6 +63,7 @@ export default {
 
     computed: {
         ...mapState([IS_HELP_OPEN]),
+        ...mapGetters([HELP_MENU]),
     },
 
     methods: {

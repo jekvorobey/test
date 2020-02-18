@@ -1,18 +1,37 @@
 import qs from 'qs';
 import axios from 'axios';
+
+import { Cache } from 'axios-extensions';
 import { $http, $logger } from '../services/ServiceLocator';
 import { REQUEST_CANCEL_MESSAGE } from '../assets/scripts/constants';
+import { interval } from '../assets/scripts/enums';
 
 let catalogItemsCancelSource = null;
+const sessionCheckCache = new Cache({ maxAge: interval.FIVE_MINUTES });
+
+// main
+
+export function getMenu() {
+    return $http.get('/v1/content/menus');
+}
 
 // auth
 
-export function checkSession() {
-    return $http.get('/v1/auth/check-session');
+export function checkSession(force = false) {
+    return $http.get('/v1/auth/is-login', {
+        cache: sessionCheckCache,
+        forceUpdate: force,
+    });
 }
 
 export function loginByPassword(payload) {
     return $http.post('/v1/auth/loginByPassword', payload);
+}
+
+export function loginBySocial(driver, query) {
+    return $http.get(`/v1/auth/socialHandler/${driver}`, {
+        params: query,
+    });
 }
 
 export function logout() {
@@ -23,6 +42,14 @@ export function sendSMS(phone) {
     return $http.post('/v1/auth/sendSMS', { phone });
 }
 
+export function sendRestoreSMS(phone) {
+    return $http.post('/v1/auth/reset/sendSMS', { phone });
+}
+
+export function resetPassword(code, phone, password) {
+    return $http.post('/v1/auth/reset/resetPassword', { code, phone, password });
+}
+
 export function checkCode(code) {
     return $http.post('/v1/auth/checkCode', { code });
 }
@@ -31,8 +58,12 @@ export function registerByPassword(password) {
     return $http.post('/v1/auth/registerByPassword', { password });
 }
 
-export function getSocialLink(url, driver) {
-    return $http.post('/v1/auth/getSocialLink', { final_login_url: url, driver });
+export function getSocialLink({ backUrl, driver, redirectUrl }) {
+    return $http.post('/v1/auth/getSocialLink', {
+        final_login_url: backUrl,
+        driver,
+        redirect_social_url: redirectUrl,
+    });
 }
 
 // search
@@ -52,9 +83,9 @@ export function getProductGroups({ type, page = 1 }) {
     });
 }
 
-export function getProductGroup(code) {
+export function getProductGroup(type, code) {
     return $http.get('/v1/catalog/product-group', {
-        params: { code },
+        params: { type_code: type, code },
         paramsSerializer(params) {
             return qs.stringify(params, { encode: false });
         },

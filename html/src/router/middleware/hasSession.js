@@ -1,12 +1,14 @@
-import { NAME as AUTH_MODULE, HAS_SESSION } from '../../store/modules/Auth';
+import { breakMiddleware } from '../../util/router';
 
-export default function hasSession({ next, store }) {
-    const hasSession = store.state[AUTH_MODULE][HAS_SESSION];
-    if (!hasSession) {
-        return next({
-            path: '/',
-            replace: true,
-        });
+import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
+import { CHECK_SESSION } from '../../store/modules/Auth/actions';
+
+export default async function hasSession({ next, store: { dispatch }, appContext, nextMiddleware }) {
+    try {
+        const hasSession = await dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, appContext.isServer === true);
+        if (!hasSession) breakMiddleware(appContext, next);
+        else nextMiddleware();
+    } catch (error) {
+        breakMiddleware(appContext, next);
     }
-    return next();
 }

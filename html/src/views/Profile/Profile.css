@@ -44,7 +44,7 @@
             text-align: left;
             background-color: var(--cl-white);
             border: none;
-            box-shadow: 0px -1px 0px #eff1f3, 0px 0px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 -1px 0 #eff1f3, 0 0 20px rgba(0, 0, 0, 0.1);
             color: var(--cl-global);
             fill: var(--cl-global);
 

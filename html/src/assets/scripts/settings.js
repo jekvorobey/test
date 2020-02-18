@@ -1,3 +1,8 @@
+export const cancelRoute = {
+    path: '/',
+    replace: true,
+};
+
 export const yaMapSettings = {
     apiKey: '46c69919-a571-416e-8198-189ed26c6a79',
     lang: 'ru_RU',
