@@ -42,6 +42,18 @@ export default function createApp(container) {
     */
     sync(store, router);
 
+    // prime the store with server-initialized state.
+    // the state is determined during SSR and inlined in the page markup.
+    if (typeof window !== 'undefined' && window.__INITIAL_STATE__) {
+        // Вставляем данные в стор
+        store.replaceState(window.__INITIAL_STATE__);
+
+        // удаляем тег скрипта с данными, и чистим их в переменной
+        const appEl = document.getElementById('app');
+        appEl.parentElement.removeChild(appEl.nextElementSibling);
+        delete window.__INITIAL_STATE__;
+    }
+
     // create the app instance.
     // here we inject the router, store and ssr context to all child components,
     // making them available everywhere as `this.$router` and `this.$store`.
