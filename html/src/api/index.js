@@ -1,9 +1,13 @@
 import qs from 'qs';
 import axios from 'axios';
+
+import { Cache } from 'axios-extensions';
 import { $http, $logger } from '../services/ServiceLocator';
 import { REQUEST_CANCEL_MESSAGE } from '../assets/scripts/constants';
+import { interval } from '../assets/scripts/enums';
 
 let catalogItemsCancelSource = null;
+const sessionCheckCache = new Cache({ maxAge: interval.FIVE_MINUTES });
 
 // main
 
@@ -13,8 +17,11 @@ export function getMenu() {
 
 // auth
 
-export function checkSession() {
-    return $http.get('/v1/auth/is-login');
+export function checkSession(force = false) {
+    return $http.get('/v1/auth/is-login', {
+        cache: sessionCheckCache,
+        forceUpdate: force,
+    });
 }
 
 export function loginByPassword(payload) {

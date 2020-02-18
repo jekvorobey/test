@@ -1,7 +1,7 @@
 import axios from 'axios';
 import HttpServiceBase from './base';
 import { $logger } from '../ServiceLocator';
-// import { cacheAdapterEnhancer } from 'axios-extensions';
+import { cacheAdapterEnhancer } from 'axios-extensions';
 
 export default class ClientHttpService extends HttpServiceBase {
     constructor(context) {
@@ -11,7 +11,7 @@ export default class ClientHttpService extends HttpServiceBase {
             baseURL: context.baseURL,
             withCredentials: true,
             // cache will be enabled by default
-            // adapter: cacheAdapterEnhancer(axios.defaults.adapter),
+            adapter: cacheAdapterEnhancer(axios.defaults.adapter, { enabledByDefault: false }),
         });
     }
 

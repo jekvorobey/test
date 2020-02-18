@@ -101,13 +101,15 @@ export default {
         }
     },
 
-    async [CHECK_SESSION]({ commit }) {
+    async [CHECK_SESSION]({ commit }, force) {
         try {
-            const { is_login } = await checkSession();
+            const { is_login } = await checkSession(force);
             commit(SET_HAS_SESSION, is_login);
+            return is_login;
         } catch (error) {
             commit(SET_HAS_SESSION, false);
-            storeErrorHandler(CHECK_SESSION)(error);
+            storeErrorHandler(CHECK_SESSION, true)(error);
+            return false;
         }
     },
 };

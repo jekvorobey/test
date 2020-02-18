@@ -110,7 +110,7 @@ export default function createRouter(container) {
 
         return middlewares[0]({
             ...context,
-            next: pipeline(context, middlewares, 1),
+            nextMiddleware: pipeline(context, middlewares, 1),
         });
     });
 

@@ -1,4 +1,6 @@
-import { NAME as AUTH_MODULE, BACK_URL } from '../../store/modules/Auth';
+import { breakMiddleware } from '../../util/router';
+
+import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
 import { LOGIN_BY_SOCIAL } from '../../store/modules/Auth/actions';
 
 export default async function socialLogin({ from, to, next, store: { state, dispatch }, appContext, resolve }) {
@@ -10,13 +12,9 @@ export default async function socialLogin({ from, to, next, store: { state, disp
 
         if (appContext.isServer) {
             const url = await dispatch(`${AUTH_MODULE}/${LOGIN_BY_SOCIAL}`, { driver, query });
-            appContext.statusCode = 302;
-            appContext.redirect = url;
-            return next();
-        }
-        return next(false);
+            breakMiddleware(appContext, next, url || '/', 301);
+        } else next(false);
     } catch (error) {
-        appContext.statusCode = 500;
-        return next({ path: '/', replace: true });
+        breakMiddleware(appContext, next, '/', 500);
     }
 }

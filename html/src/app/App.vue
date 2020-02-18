@@ -33,7 +33,6 @@ import Price from '../components/Price/Price.vue';
 import VHeader from '../components/VHeader/VHeader.vue';
 import VFooter from '../components/VFooter/VFooter.vue';
 
-import '../util/catalog';
 import _debounce from 'lodash/debounce';
 import { SCROLL, CATEGORIES } from '../store';
 import { SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN } from '../store/actions';
@@ -44,12 +43,13 @@ import { FETCH_CART_DATA, CLEAR_CART_DATA } from '../store/modules/Cart/actions'
 import { NAME as AUTH_MODULE, HAS_SESSION } from '../store/modules/Auth';
 import { CHECK_SESSION, LOGIN_BY_PASSWORD } from '../store/modules/Auth/actions';
 
-import { MIN_SCROLL_VALUE } from '../assets/scripts/constants';
-import { eventName } from '../assets/scripts/enums';
+import { MIN_SCROLL_VALUE, SCROLL_DEBOUCE_TIME } from '../assets/scripts/constants';
+import { eventName, interval } from '../assets/scripts/enums';
 import { mapState, mapActions } from 'vuex';
 
 export default {
     name: 'app',
+
     components: {
         VHeader,
         VFooter,
@@ -73,20 +73,17 @@ export default {
     },
 
     watch: {
-        hasSession(value) {
+        [HAS_SESSION](value) {
             if (value) this[FETCH_CART_DATA]();
-            else {
-                this[CLEAR_CART_DATA]();
-                this.$router.replace({ name: 'Landing' });
-            }
+            else this[CLEAR_CART_DATA]();
         },
     },
 
     async serverPrefetch() {
         try {
             await this[FETCH_COMMON_DATA]();
-            await this[CHECK_SESSION]();
-            if (this.hasSession) return Promise.all([this[FETCH_CART_DATA]()]);
+            await this[CHECK_SESSION](true);
+            if (this[HAS_SESSION]) await this[FETCH_CART_DATA]();
             else return Promise.resolve();
         } catch (error) {
             return Promise.resolve();
@@ -94,17 +91,21 @@ export default {
     },
 
     beforeMount() {
-        // this[LOGIN_BY_PASSWORD]({ login: '+71111111111', password: 'Sardaukar13' }); //Выпилить при релизе
+        this.sessionTimer = setInterval(this[CHECK_SESSION], interval.MINUTE);
     },
 
     mounted() {
-        const onSetScrollDebounce = _debounce(this.onScroll, 20);
+        const onSetScrollDebounce = _debounce(this.onScroll, SCROLL_DEBOUCE_TIME);
         document.addEventListener(eventName.SCROLL, onSetScrollDebounce, true);
-        this.$on('hook:beforeDestroy', () => document.removeEventListener(eventName.SCROLL, onSetScrollDebounce));
+        this.$once('hook:beforeDestroy', () => document.removeEventListener(eventName.SCROLL, onSetScrollDebounce));
 
         setTimeout(() => {
             this[SET_CITY_CONFIRMATION_OPEN](true);
-        }, 2000);
+        }, interval.TWO_SECONDS);
+    },
+
+    beforeDestroy() {
+        clearInterval(this.sessionTimer);
     },
 };
 </script>

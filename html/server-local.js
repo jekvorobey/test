@@ -125,6 +125,9 @@ function render(req, res, env) {
     renderer
         .renderToString(context)
         .then(html => {
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
             res.setHeader('Content-Type', 'text/html');
             res.setHeader('Content-Length', html.length);
             res.setHeader('Server', serverInfo);

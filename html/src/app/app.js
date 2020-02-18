@@ -17,6 +17,13 @@ import '../plugins/meta';
 import '../plugins/scroll-lock';
 import '../plugins/observer';
 
+import '../util/catalog';
+import '../util/router';
+import '../util/helpers';
+import '../util/container';
+import '../util/store';
+import '../util/images';
+
 import titleMixin from '../util/title';
 
 import App from './App.vue';

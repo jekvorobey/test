@@ -94,6 +94,8 @@ import profileModule, { NAME as PROFILE_MODULE, BREADCRUMBS } from '../../store/
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
+import { NAME as AUTH_MODULE, HAS_SESSION } from '../../store/modules/Auth';
+import { cancelRoute } from '../../assets/scripts/settings';
 import { $store } from '../../services/ServiceLocator';
 import { registerModuleIfNotExists } from '../../util/store';
 import '../../assets/images/sprites/arrow-updown.svg';
@@ -116,6 +118,7 @@ export default {
 
     computed: {
         ...mapState(PROFILE_MODULE, [BREADCRUMBS]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
 
         ...mapState(MODAL_MODULE, {
             isNavigationOpen: state =>
@@ -128,6 +131,12 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+    },
+
+    watch: {
+        [HAS_SESSION](value) {
+            if (!value) this.$router.replace(cancelRoute.path);
         },
     },
 
