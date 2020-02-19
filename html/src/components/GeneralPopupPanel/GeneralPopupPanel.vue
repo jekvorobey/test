@@ -3,6 +3,7 @@
         popoverWrapperClass="general-popup-panel"
         :popover-class="popoverClass"
         trigger="manual"
+        :placement="placement"
         :open="open"
         @hide="onHide"
     >
@@ -42,6 +43,11 @@ export default {
         popoverClass: {
             type: String,
             default: 'tooltip--white',
+        },
+
+        placement: {
+            type: String,
+            default: 'top',
         },
 
         header: {

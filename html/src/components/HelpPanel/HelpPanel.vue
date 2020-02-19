@@ -1,11 +1,5 @@
 <template>
-    <general-popup-panel
-        header="Ваш город Москва?"
-        popover-class="tooltip--white help-panel"
-        :open="isHelpOpen"
-        @hide="onClose"
-        show-bottom
-    >
+    <general-popup-panel popover-class="tooltip--white help-panel" :open="isHelpOpen" @hide="onClose" show-bottom>
         <slot />
         <template v-slot:header>
             <div class="help-panel__top">

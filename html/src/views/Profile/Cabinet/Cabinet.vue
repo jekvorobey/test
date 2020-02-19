@@ -16,8 +16,24 @@
                     <info-row class="cabinet-view__panel-item" name="ФИО" :value="fullName" />
                     <info-row class="cabinet-view__panel-item" name="Дата рождения" :value="bornDate" />
                     <info-row class="cabinet-view__panel-item" name="Пол" :value="sex" />
-                    <info-row class="cabinet-view__panel-item" name="Номер телефона" :value="phone" />
-                    <info-row class="cabinet-view__panel-item" name="Email" :value="email" />
+                    <info-row class="cabinet-view__panel-item" name="Номер телефона" :value="phone">
+                        <template v-slot:link>
+                            <v-link class="cabinet-view__panel-item-link" tag="button">
+                                Изменить
+                            </v-link>
+                        </template>
+                    </info-row>
+                    <info-row class="cabinet-view__panel-item" name="Email" :value="email">
+                        <template v-slot:link>
+                            <v-link
+                                class="cabinet-view__panel-item-link"
+                                tag="button"
+                                @click.prevent="onOpenEmailModal"
+                            >
+                                Изменить
+                            </v-link>
+                        </template>
+                    </info-row>
                     <info-row class="cabinet-view__panel-item" name="Портфолио">
                         <ul v-if="portfolios && portfolios.length > 0">
                             <li v-for="portfolio in portfolios" :key="portfolio.id">
@@ -162,13 +178,16 @@
         </info-panel>
 
         <transition name="fade">
-            <details-modal v-if="$isServer || (isDetailsOpen && !isPortofiosOpen && !isProfilesOpen)" />
+            <details-modal v-if="$isServer || isDetailsOpen" />
         </transition>
         <transition name="fade">
-            <portfolio-modal v-if="$isServer || (isPortofiosOpen && !isDetailsOpen && !isProfilesOpen)" />
+            <portfolio-modal v-if="$isServer || isPortofiosOpen" />
         </transition>
         <transition name="fade">
-            <profile-modal v-if="$isServer || (isProfilesOpen && !isDetailsOpen && !isPortofiosOpen)" />
+            <profile-modal v-if="$isServer || isProfilesOpen" />
+        </transition>
+        <transition name="fade">
+            <email-edit-modal v-if="$isServer || isEditEmailOpen" />
         </transition>
     </section>
 </template>
@@ -184,6 +203,9 @@ import ImagePicker from '../../../components/profile/ImagePicker/ImagePicker.vue
 import PortfolioModal, {
     NAME as PORTFOLIOS_MODAL_NAME,
 } from '../../../components/profile/PortfolioModal/PortfolioModal.vue';
+import EmailEditModal, {
+    NAME as EDIT_EMAIL_MODAL_NAME,
+} from '../../../components/profile/EmailEditModal/EmailEditModal.vue';
 import ProfileModal, { NAME as PROFILE_MODAL_NAME } from '../../../components/profile/ProfileModal/ProfileModal.vue';
 import DetailsModal, { NAME as DETAILS_MODAL_NAME } from '../../../components/profile/DetailsModal/DetailsModal.vue';
 
@@ -213,6 +235,7 @@ export default {
         DetailsModal,
         PortfolioModal,
         ProfileModal,
+        EmailEditModal,
     },
 
     computed: {
@@ -220,6 +243,7 @@ export default {
             isDetailsOpen: state => state[MODALS][DETAILS_MODAL_NAME] && state[MODALS][DETAILS_MODAL_NAME].open,
             isPortofiosOpen: state => state[MODALS][PORTFOLIOS_MODAL_NAME] && state[MODALS][PORTFOLIOS_MODAL_NAME].open,
             isProfilesOpen: state => state[MODALS][PROFILE_MODAL_NAME] && state[MODALS][PROFILE_MODAL_NAME].open,
+            isEditEmailOpen: state => state[MODALS][EDIT_EMAIL_MODAL_NAME] && state[MODALS][EDIT_EMAIL_MODAL_NAME].open,
         }),
         ...mapState(PROFILE_MODULE, {
             bornDate: state => state[CABINET_DATA] && state[CABINET_DATA].bornDate,
@@ -254,6 +278,10 @@ export default {
 
         onOpenProfilesModal() {
             this[CHANGE_MODAL_STATE]({ name: PROFILE_MODAL_NAME, open: true });
+        },
+
+        onOpenEmailModal() {
+            this[CHANGE_MODAL_STATE]({ name: EDIT_EMAIL_MODAL_NAME, open: true });
         },
     },
 };

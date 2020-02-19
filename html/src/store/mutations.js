@@ -4,6 +4,7 @@ export const SET_SCROLL = 'SET_SCROLL';
 export const SET_MENU_OPEN = 'SET_MENU_OPEN';
 export const SET_CART_OPEN = 'SET_CART_OPEN';
 export const SET_HELP_OPEN = 'SET_HELP_OPEN';
+export const SET_PROFILE_PANEL_OPEN = 'SET_PROFILE_PANEL_OPEN';
 export const SET_CITY_CONFIRMATION_OPEN = 'SET_CITY_CONFIRMATION_OPEN';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_BANNER = 'SET_BANNER';
@@ -28,6 +29,10 @@ export default {
 
     [SET_HELP_OPEN](state, payload) {
         state.isHelpOpen = payload;
+    },
+
+    [SET_PROFILE_PANEL_OPEN](state, payload) {
+        state.isProfilePanelOpen = payload;
     },
 
     [SET_CITY_CONFIRMATION_OPEN](state, payload) {

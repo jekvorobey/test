@@ -24,7 +24,7 @@
                 <div class="profile-view__grid">
                     <v-sticky class="profile-view__panel">
                         <template v-slot:sticky>
-                            <navigation-panel />
+                            <navigation-panel :groups="groups" />
                         </template>
                     </v-sticky>
                     <div class="profile-view__main">
@@ -68,7 +68,7 @@
         </transition>
 
         <transition name="fade-in">
-            <navigation-modal v-if="isNavigationOpen && isTabletLg" />
+            <navigation-modal v-if="isNavigationOpen && isTabletLg" :groups="groups" />
         </transition>
     </section>
 </template>
@@ -124,6 +124,51 @@ export default {
             isNavigationOpen: state =>
                 state[MODALS][NAVIGATION_MODAL_NAME] && state[MODALS][NAVIGATION_MODAL_NAME].open,
         }),
+
+        groups() {
+            return [
+                {
+                    id: 1,
+                    name: this.$t('profile.groups.profile'),
+                    routes: [
+                        { name: 'Cabinet', exact: true },
+                        { name: 'Preferences', exact: true },
+                        { name: 'Addresses', exact: true },
+                        { name: 'Payment', exact: true },
+                        { name: 'Subscribes', exact: true },
+                        { name: 'Messages', displayName: this.$tc('profile.format.messages', 5) },
+                        { name: 'Certificates', exact: true },
+                        { name: 'Bonuses', exact: true },
+                        { name: 'Orders' },
+                        { name: 'ReferalOrders' },
+                    ],
+                },
+                {
+                    id: 2,
+                    name: this.$t('profile.groups.business'),
+                    routes: [
+                        { name: 'Referal', exact: true },
+                        { name: 'ProPreferences', exact: true },
+                        { name: 'Promopage', exact: true },
+                        { name: 'Seo', exact: true },
+                        { name: 'Promocodes', exact: true },
+                        { name: 'Account', exact: true },
+                        { name: 'Billing', exact: true },
+                        { name: 'Documents', exact: true },
+                    ],
+                },
+                {
+                    id: 3,
+                    name: this.$t('profile.groups.training'),
+                    routes: [
+                        { name: 'HowItWorks', exact: true },
+                        { name: 'Guides' },
+                        { name: 'Masterclasses', exact: true },
+                        { name: 'QnA', exact: true },
+                    ],
+                },
+            ];
+        },
 
         isTabletLg() {
             return this.$mq.tabletLg;

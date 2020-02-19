@@ -10,7 +10,14 @@
 
     .v-popover {
         position: absolute;
-        bottom: -24px;
+        bottom: calc(var(--gs) * -3);
+    }
+
+    &__account {
+        position: relative;
+        .v-popover {
+            right: calc(var(--gs) * -8);
+        }
     }
 
     &__item {
@@ -24,6 +31,7 @@
             margin-left: 0;
         }
 
+        &:first-child,
         &:last-child {
             display: flex;
             align-items: center;

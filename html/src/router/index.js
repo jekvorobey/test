@@ -6,7 +6,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import pipeline from './pipeline';
 
-import { SET_MENU_OPEN } from '../store/actions';
+import { SET_MENU_OPEN, SET_PROFILE_PANEL_OPEN } from '../store/actions';
 
 import { NAME as SEARCH_MODULE } from '../store/modules/Search';
 import { SET_SEARCH } from '../store/modules/Search/actions';
@@ -117,6 +117,7 @@ export default function createRouter(container) {
     router.afterEach((to, from) => {
         if (store) {
             store.dispatch(SET_MENU_OPEN, false);
+            store.dispatch(SET_PROFILE_PANEL_OPEN, false);
             store.dispatch(`${SEARCH_MODULE}/${SET_SEARCH}`, false);
             store.dispatch(`${MODAL_MODULE}/${CLOSE_ALL}`);
         }
