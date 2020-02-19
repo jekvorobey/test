@@ -1,0 +1,39 @@
+.general-popup-panel {
+    &__header,
+    &__bottom,
+    &__body {
+        display: flex;
+        align-items: center;
+        padding: 0 calc(var(--gs) * 3);
+    }
+
+    &__header {
+        margin-bottom: calc(var(--gs) * 3);
+
+        &-hl {
+            margin-bottom: 0;
+        }
+
+        &-close {
+            display: flex;
+            margin-left: auto;
+        }
+    }
+
+    &__bottom {
+        border-top: 1px solid var(--cl-divider-grey);
+        padding-top: calc(var(--gs) * 3);
+
+        &-btn {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 24px;
+            letter-spacing: 0.05em;
+
+            &:first-of-type {
+                padding: 10px calc(var(--gs) * 2);
+                margin-right: calc(var(--gs) * 3);
+            }
+        }
+    }
+}

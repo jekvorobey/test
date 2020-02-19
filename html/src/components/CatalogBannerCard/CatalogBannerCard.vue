@@ -1,7 +1,7 @@
 <template>
     <div class="catalog-banner-card">
         <div class="catalog-banner-card__img">
-            <v-picture v-if="image && image.id" :image="image" alt="">
+            <v-picture v-if="image" :image="image" alt="">
                 <template v-slot:source="{ image, lazy }">
                     <source
                         :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
@@ -29,7 +29,7 @@
             <div v-if="bottomText" class="catalog-banner-card__panel-bottom-text">
                 {{ bottomText }}
             </div>
-            <v-button class="btn--outline catalog-banner-card__panel-btn">
+            <v-button v-if="btnText" class="btn--outline catalog-banner-card__panel-btn">
                 {{ btnText }}
             </v-button>
         </div>

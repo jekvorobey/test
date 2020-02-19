@@ -4,7 +4,7 @@
             <v-picture v-if="image && image.id" :image="image" alt="">
                 <template v-slot:source="{ image, lazy }">
                     <source
-                        :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
                         type="image/webp"
                         media="(min-width: 480px)"
                     />
@@ -17,7 +17,7 @@
                 <template v-slot:fallback="{ image, lazy, alt }">
                     <img
                         class="blur-up lazyload v-picture__img"
-                        :data-src="generateSourcePath(200, 200, image.id, image.sourceExt)"
+                        :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
                         :alt="alt"
                     />
                 </template>
@@ -27,7 +27,7 @@
         <div class="cart-product-card__body">
             <v-link class="cart-product-card__body-name" :to="href">{{ name }}</v-link>
             <div class="cart-product-card__body-count">
-                <v-counter :value="count" min="0" @input="debounce_countChange" />
+                <v-counter :value="count" min="1" @input="debounce_countChange" />
             </div>
 
             <div class="cart-product-card__body-prices">
@@ -47,7 +47,7 @@
             <div class="text-grey cart-product-card__body-bonus">+ 80 бонусов</div>
             <div class="cart-product-card__body-controls">
                 <v-link class="cart-product-card__body-controls-link" tag="button">
-                    <v-svg name="wishlist-middle" width="15" height="13" />
+                    <v-svg name="wishlist-middle" width="16" height="16" />
                     {{ isTablet ? '' : '&nbsp;Перенести в избранное' }}
                 </v-link>
                 <v-link class="cart-product-card__body-controls-link" tag="button" @click="onDeleteClick">

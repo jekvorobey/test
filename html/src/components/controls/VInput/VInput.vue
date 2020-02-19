@@ -63,7 +63,9 @@ export default {
     mixins: [inputMixin],
     props: {
         value: {},
+
         type: { type: String, default: inputTypes.text },
+
         tag: {
             type: String,
             default: 'input',
@@ -86,6 +88,11 @@ export default {
             type: [Number, String],
         },
 
+        autoHeight: {
+            type: Boolean,
+            default: true,
+        },
+
         error: String,
     },
     data() {
@@ -100,7 +107,7 @@ export default {
         value(value) {
             this.internal_value = value;
             const { textarea } = this.$refs;
-            if (textarea) this.adjustHeight();
+            if (textarea && this.autoHeight) this.adjustHeight();
         },
     },
     computed: {

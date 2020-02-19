@@ -1,35 +1,30 @@
 <template>
-    <div class="v-input">
+    <div
+        class="v-input"
+        :class="[
+            { 'v-input--float': float },
+            { 'v-input--active': active },
+            { 'v-input--invalid': error },
+            { 'v-input--disabled': disabled },
+        ]"
+    >
         <label class="v-input__label" :for="inputId">
             <slot />
         </label>
         <div class="v-input__container">
             <input
-                v-if="tag === 'input'"
+                ref="input"
                 v-bind="$attrs"
-                v-on="inputListeners"
-                v-mask="mask"
                 class="v-input__input"
-                :class="{ 'is-invalid': error }"
+                type="text"
                 :id="inputId"
-                :value="display"
-                :type="type"
+                :disabled="disabled"
                 :aria-describedby="`${inputId}-alert`"
-            />
-            <textarea
-                v-if="tag === 'textarea'"
-                v-bind="$attrs"
-                v-on="inputListeners"
-                v-mask="mask"
-                class="v-input__input"
-                :class="{ 'is-invalid': error }"
-                :id="inputId"
-                :value="display"
-                :aria-describedby="`${inputId}-alert`"
+                @focus="focus = true"
+                @blur="focus = false"
             />
             <slot name="after" />
         </div>
-
         <div :id="`${inputId}-alert`" class="error-message v-input__error" role="alert">
             <slot name="error" :error="error">
                 {{ error }}
@@ -39,31 +34,153 @@
 </template>
 
 <script>
-import maskMixin from './maskMixin';
+import Cleave from 'cleave.js';
 import inputMixin from './inputMixin';
 import './VInput.css';
 
-const validTags = ['input', 'textarea'];
+const inputTypes = { text: 'text', number: 'number' };
+const validTags = ['input'];
 
 export default {
     name: 'v-input',
     inheritAttrs: false,
-    mixins: [inputMixin, maskMixin],
+    mixins: [inputMixin],
+
     props: {
-        value: {},
-        type: { type: String, default: 'text' },
-        tag: {
-            type: String,
-            default: 'input',
+        value: {
+            default: null,
+            required: true,
             validator(value) {
-                return validTags.indexOf(value) !== -1;
+                return (
+                    value === null || typeof value === 'string' || value instanceof String || typeof value === 'number'
+                );
             },
         },
+
+        // https://github.com/nosir/cleave.js/blob/master/doc/options.md
+        options: {
+            type: Object,
+            default: () => ({}),
+        },
+
+        // Set this prop to false to emit masked value
+        raw: {
+            type: Boolean,
+            default: true,
+        },
+
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
+
+        float: {
+            type: Boolean,
+            default: false,
+        },
+
+        error: String,
     },
+
     data() {
         return {
             inputId: `v-input-id-${this._uid}`,
+            focus: false,
+            engine: null,
         };
+    },
+
+    computed: {
+        active() {
+            return this.focus || this.value;
+        },
+
+        handlers() {
+            const keys = Object.keys(this.$listeners);
+            const handlers = {};
+            keys.forEach(k => {
+                handlers[k] = e => this.$emit(k, e);
+            });
+            handlers.input = this.input;
+            return handlers;
+        },
+    },
+
+    watch: {
+        /**
+         * Watch for any changes in options and redraw
+         *
+         * @param newOptions Object
+         */
+        options: {
+            deep: true,
+            handler(newOptions) {
+                if (this.engine) this.engine.destroy();
+                this.engine = new Cleave(this.$refs.input, this.getOptions(newOptions));
+                this.engine.setRawValue(this.value);
+            },
+        },
+
+        /**
+         * Watch for changes from parent component and notify cleave instance
+         *
+         * @param newValue
+         */
+        value(newValue) {
+            /* istanbul ignore if */
+            if (!this.engine) return;
+
+            // when v-model is not masked (raw)
+            if (this.raw && newValue === this.engine.getRawValue()) return;
+            //  when v-model is masked (NOT raw)
+            if (!this.raw && newValue === this.$el.value) return;
+            // Lastly set newValue
+            this.engine.setRawValue(newValue);
+        },
+    },
+
+    methods: {
+        getOptions(options) {
+            // Preserve original callback
+            this.onValueChangedFn = options.onValueChanged;
+
+            return Object.assign({}, options, {
+                onValueChanged: this.onValueChanged,
+            });
+        },
+
+        /**
+         * Watch for value changed by cleave and notify parent component
+         *
+         * @param event
+         */
+        onValueChanged(event) {
+            let value = this.raw ? event.target.rawValue : event.target.value;
+            this.$emit('input', value);
+
+            // Call original callback method
+            if (typeof this.onValueChangedFn === 'function') {
+                this.onValueChangedFn.call(this, event);
+            }
+        },
+    },
+
+    mounted() {
+        /* istanbul ignore if */
+        if (this.engine) return;
+        this.engine = new Cleave(this.$refs.input, this.getOptions(this.options));
+    },
+
+    /**
+     * Free up memory
+     */
+    beforeDestroy() {
+        /* istanbul ignore if */
+        if (!this.engine) return;
+
+        this.engine.destroy();
+        this.engine = null;
+        this.onValueChangedFn = null;
     },
 };
 </script>

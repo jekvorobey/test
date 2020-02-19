@@ -1,0 +1,37 @@
+.header-navigation-panel {
+    display: flex;
+
+    .link {
+        font-size: 14px;
+        line-height: 24px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    &__burger {
+        height: calc(var(--gs) * 3);
+        width: calc(var(--gs) * 3);
+    }
+
+    &__item {
+        display: flex;
+        margin-left: calc(var(--gs) * 2);
+
+        & + & {
+            margin-left: auto;
+        }
+
+        @media (--tablet-lg) {
+            display: none;
+        }
+
+        .link {
+            margin-left: calc(var(--gs) * 2);
+
+            @media (--tablet) {
+                display: none;
+            }
+        }
+    }
+}

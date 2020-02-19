@@ -128,13 +128,10 @@ import { SELECTED_CITY_COORDS } from '../../../store/modules/Geolocation/getters
 import { SET_SELECTED_CITY } from '../../../store/modules/Geolocation/actions';
 
 import validationMixin, { required } from '../../../plugins/validation';
-import DadataHttpService from '../../../services/HttpService/DadataHttpService';
-import { suggestionTypes } from '../../../assets/scripts/constants';
-
+import { suggestionTypes } from '../../../assets/scripts/enums';
+import { $dadata } from '../../../services/ServiceLocator';
 import pin from '../../../assets/images/icons/pin-filled.svg';
 import './CheckoutAddressModal.css';
-
-const http = new DadataHttpService();
 
 export const NAME = 'checkout-address-modal';
 
@@ -250,7 +247,7 @@ export default {
                     to_bound = { value: type };
             }
 
-            return http.post('/suggestions/api/4_1/rs/suggest/address', {
+            return $dadata.post('/suggestions/api/4_1/rs/suggest/address', {
                 query,
                 count,
                 locations,
@@ -312,7 +309,7 @@ export default {
         async onMapClick(e) {
             const coords = e.get('coords');
 
-            const { suggestions } = await http.post('/suggestions/api/4_1/rs/geolocate/address', {
+            const { suggestions } = await $dadata.post('/suggestions/api/4_1/rs/geolocate/address', {
                 lat: coords[0],
                 lon: coords[1],
                 radius_meters: 1000,
@@ -340,7 +337,9 @@ export default {
         onSubmit() {
             this.$v.$touch();
             if (this.$v.$invalid) return;
-            this.$emit('addressSubmit', this.address);
+            const address = Object.assign({}, this.address);
+            console.log(address, this.address);
+            this.$emit('addressSubmit', address);
             this.CHANGE_MODAL_STATE({ name: NAME, open: false, state: {} });
         },
 
@@ -371,6 +370,40 @@ export default {
         selectedCity(value) {
             this.selectedAddress = null;
             this.postalCode = null;
+        },
+
+        selectedAddress(value) {
+            if (!value) {
+                this.address.country_code = '';
+                this.address.post_index = '';
+                this.address.region = '';
+                this.address.region_guid = '';
+                this.address.area = '';
+                this.address.area_guid = '';
+                this.address.city = '';
+                this.address.city_guid = '';
+                this.address.street = '';
+                this.address.house = '';
+                this.address.block = '';
+            } else {
+                this.address.country_code = value.data.country_iso_code;
+                this.address.post_index = value.data.postal_code;
+                this.address.region = value.data.region_with_type || value.data.region;
+                this.address.region_guid = value.data.region_fias_id;
+                this.address.area = value.data.area_with_type || value.data.area;
+                this.address.area_guid = value.data.area_fias_id;
+                this.address.city = value.data.city_with_type || value.data.city;
+                this.address.city_guid = value.data.city_fias_id;
+                this.address.street = value.data.street_with_type || value.data.street;
+                this.address.house = value.data.house_type
+                    ? `${value.data.house_type} ${value.data.house}`
+                    : value.data.house;
+                this.address.block = value.data.block_type
+                    ? `${value.data.block_type} ${value.data.block}`
+                    : value.data.block;
+            }
+
+            console.log(this.address);
         },
     },
 

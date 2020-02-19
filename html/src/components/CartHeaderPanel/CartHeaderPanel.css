@@ -1,0 +1,24 @@
+.cart-header-panel {
+    width: calc(var(--gs) * 52.5);
+
+    &__list {
+        width: 100%;
+        max-height: calc(var(--gs) * 37.5);
+        overflow: auto;
+
+        &-item {
+            padding: calc(var(--gs) * 2) 0;
+            padding-right: calc(var(--gs) * 2);
+            border-bottom: 1px solid var(--cl-divider-grey);
+
+            &:last-of-type {
+                border-bottom: none;
+            }
+        }
+    }
+
+    &__total {
+        text-align: right;
+        margin-left: auto;
+    }
+}

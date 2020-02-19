@@ -1,12 +1,19 @@
 .slider-banners-section {
     display: flex;
     margin-bottom: calc(var(--gs) * 8);
-    padding: 0;
     height: 520px;
 
+    @media (--desktop-lg-min) {
+        padding: 0;
+    }
+
     @media (--desktop-lg) {
-        height: 320px;
+        height: 380px;
         margin-bottom: calc(var(--gs) * 2);
+    }
+
+    @media (--desktop) {
+        padding: 0;
     }
 
     @media (--tablet-lg) {
@@ -33,14 +40,39 @@
     &__slider {
         width: 100%;
 
+        @media (--desktop-lg) {
+            padding: 0 190px !important;
+        }
+
+        @media (--desktop) {
+            padding: 0 calc(var(--gs) * 5) !important;
+        }
+
+        @media (--tablet-lg) {
+            padding: 0 calc(var(--gs) * 3) !important;
+        }
+
+        @media (--tablet) {
+            padding: 0 calc(var(--gs) * 2) !important;
+        }
+
         .v-slider__controls {
-            left: calc(var(--gs) * 13.5);
+            display: none;
+            left: calc(var(--gs) * 12);
             bottom: calc(var(--gs) * 4);
+
+            @media (--desktop) {
+                bottom: calc(var(--gs) * 2);
+            }
 
             @media (--tablet-lg) {
                 left: 50%;
                 bottom: calc(var(--gs) * 3);
                 transform: translateX(-50%);
+            }
+
+            @media (--tablet) {
+                bottom: calc(var(--gs) * 2);
             }
 
             .swiper-pagination {

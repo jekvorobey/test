@@ -1,0 +1,18 @@
+.header-logo-panel {
+    text-align: center;
+
+    &__link {
+        display: block;
+        border-bottom: none;
+        padding-left: var(--gs);
+    }
+
+    &__text {
+        font-size: 10px;
+        line-height: 14px;
+        font-style: italic;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--cl-grey);
+    }
+}

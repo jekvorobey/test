@@ -6,18 +6,17 @@
                     <v-link class="v-footer__logo" to="/">
                         <v-svg name="logo-default" width="128" height="48" />
                     </v-link>
-                    <p class="v-footer__rights" v-html="$t('footer.rights')" />
                 </div>
-                <div class="v-footer__col" :key="index" v-for="(col, index) in links">
+                <div class="v-footer__col" :key="col.title" v-for="col in links">
                     <p class="v-footer__col-title">{{ col.title }}</p>
                     <ul class="v-footer__links">
-                        <li class="v-footer__links-item" :key="link.id" v-for="link in col.items" :title="link.key">
-                            <a class="v-footer__link" :href="link.href">{{ link.label }}</a>
+                        <li class="v-footer__links-item" :key="link.name" v-for="link in col.items" :title="link.name">
+                            <a class="v-footer__link" :href="link.href">{{ link.name }}</a>
                         </li>
                     </ul>
                 </div>
                 <div class="v-footer__col">
-                    <p class="v-footer__col-title">{{ socials.name }}</p>
+                    <p class="v-footer__col-title v-footer__col-title--socials">{{ socials.name }}</p>
                     <ul class="v-footer__socials">
                         <li
                             class="v-footer__socials-item"
@@ -33,17 +32,10 @@
                 </div>
             </div>
             <hr />
-            <div class="v-footer__row">
+            <div class="v-footer__row v-footer__bottom-links">
+                <p class="v-footer__rights" v-html="$t('footer.rights')" />
                 <v-link class="v-footer__link">{{ $t('footer.terms_of_use') }}</v-link>
                 <v-link class="v-footer__link">{{ $t('footer.offer') }}</v-link>
-                <v-link
-                    class="v-footer__link v-footer__made-by v-footer__col"
-                    href="https://greensight.ru/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    {{ $t('footer.made_by') }}
-                </v-link>
             </div>
         </div>
 
@@ -56,8 +48,8 @@
         >
             <template v-slot:content="{ item }">
                 <ul class="v-footer__links">
-                    <li class="v-footer__links-item" :key="link.id" v-for="link in item.items" :title="link.key">
-                        <a class="v-footer__link" :href="link.href">{{ link.label }}</a>
+                    <li class="v-footer__links-item" :key="link.name" v-for="link in item.items" :title="link.name">
+                        <a class="v-footer__link" :href="link.url">{{ link.name }}</a>
                     </li>
                 </ul>
             </template>
@@ -81,18 +73,7 @@
         <div class="v-footer__container v-footer__container--mobile v-footer__col v-footer__mobile-links">
             <v-link class="v-footer__link">{{ $t('footer.terms_of_use') }}</v-link>
             <v-link class="v-footer__link">{{ $t('footer.offer') }}</v-link>
-        </div>
-
-        <div class="container v-footer__container v-footer__container--mobile v-footer__col">
             <p class="v-footer__rights" v-html="$t('footer.rights')" />
-            <v-link
-                class="v-footer__link v-footer__link--made-by"
-                href="https://greensight.ru/"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                {{ $t('footer.made_by') }}
-            </v-link>
         </div>
     </footer>
 </template>
@@ -111,18 +92,21 @@ import '../../assets/images/sprites/logo.svg';
 import '../../assets/images/sprites/logo-default.svg';
 
 import './VFooter.css';
+import { mapGetters } from 'vuex';
+import { FOOTER_MENU } from '../../store/getters';
 
 export default {
     name: 'v-footer',
+
     components: {
         VSvg,
         VLink,
         VAccordion,
     },
-    data() {
-        return {};
-    },
+
     computed: {
+        ...mapGetters([FOOTER_MENU]),
+
         socials() {
             return {
                 name: this.$t('socials.socials'),
@@ -156,65 +140,21 @@ export default {
         },
 
         links() {
-            return [
-                {
-                    id: 1,
-                    title: this.$t('footer.links.purchase'),
+            const menuItems = this[FOOTER_MENU].items || [];
+            return menuItems.map(mi => {
+                return {
+                    title: mi.name,
                     isExpanded: false,
-                    items: [
-                        {
-                            id: 1,
-                            label: this.$t('footer.links.payment'),
-                            href: '/',
-                        },
-                        {
-                            id: 2,
-                            label: this.$t('footer.links.refund'),
-                            href: '/',
-                        },
-                        {
-                            id: 3,
-                            label: this.$t('footer.links.guarantee'),
-                            href: '/',
-                        },
-                        {
-                            id: 4,
-                            label: this.$t('footer.links.qna'),
-                            href: '/',
-                        },
-                    ],
-                },
-                {
-                    id: 2,
-                    title: this.$t('footer.links.about_company'),
-                    isExpanded: false,
-                    items: [
-                        {
-                            id: 1,
-                            label: this.$t('footer.links.about_us'),
-                            href: '/',
-                        },
-                        {
-                            id: 2,
-                            label: this.$t('footer.links.partners'),
-                            href: '/',
-                        },
-                        {
-                            id: 3,
-                            label: this.$t('footer.links.feedback'),
-                            href: '/',
-                        },
-                        {
-                            id: 4,
-                            label: this.$t('footer.links.vacancy'),
-                            href: '/',
-                        },
-                    ],
-                },
-            ];
+                    items: mi.children.map(i => {
+                        return {
+                            id: i.id,
+                            name: i.name,
+                            url: i.url,
+                        };
+                    }),
+                };
+            });
         },
     },
 };
 </script>
-
-

@@ -1,27 +1,36 @@
 <template>
     <section class="section catalog-view">
         <div class="container catalog-view__header">
-            <transition-group tag="ol" class="section catalog-view__breadcrumbs" name="fade-in">
-                <li class="catalog-view__breadcrumbs-item" key="main">
-                    <router-link class="catalog-view__breadcrumbs-link" to="/">
-                        Главная
-                    </router-link>
-                </li>
-
-                <li class="catalog-view__breadcrumbs-item" key="all">
-                    <router-link class="catalog-view__breadcrumbs-link" to="/catalog">
-                        Каталог
-                    </router-link>
-                </li>
-
-                <li class="catalog-view__breadcrumbs-item" v-for="category in activeCategories" :key="category.id">
-                    <router-link class="catalog-view__breadcrumbs-link" :to="`/catalog/${category.code}`">
-                        {{ category.name }}
-                    </router-link>
-                </li>
-            </transition-group>
+            <breadcrumbs class="catalog-view__breadcrumbs">
+                <breadcrumb-item key="main" to="/">
+                    Главная
+                </breadcrumb-item>
+                <breadcrumb-item :key="type" :to="breadcrumbRootUrl">
+                    {{ $t(`productGroups.title.${type}`) }}
+                </breadcrumb-item>
+                <breadcrumb-item v-if="entityCode" :key="entityCode" :to="generateBreadcrumbUrl(null)">
+                    {{ productGroup && productGroup.name }}
+                </breadcrumb-item>
+                <breadcrumb-item
+                    v-for="category in activeCategories"
+                    :key="category.id"
+                    :to="generateBreadcrumbUrl(category.code)"
+                >
+                    {{ category.name }}
+                </breadcrumb-item>
+            </breadcrumbs>
 
             <catalog-banner-card
+                v-if="entityCode && productGroup"
+                class="catalog-view__brand"
+                :banner-id="productGroup.id"
+                :bottom-text="productGroup.description"
+                :title="productGroup.name"
+                :image="productGroup.image"
+            />
+
+            <catalog-banner-card
+                v-else
                 class="catalog-view__banner"
                 :banner-id="banner.id"
                 :image="banner.image"
@@ -33,7 +42,7 @@
         </div>
         <section class="section">
             <div class="container catalog-view__grid">
-                <div class="catalog-view__side-panel">
+                <div class="catalog-view__side-panel" v-if="!isTabletLg">
                     <ul class="catalog-view__side-panel-categories">
                         <category-tree-item
                             class="catalog-view__side-panel-categories-item"
@@ -48,88 +57,46 @@
                     <div class="catalog-view__main-header">
                         <div class="catalog-view__main-header-title">
                             <h1 class="catalog-view__main-header-hl">
-                                {{ activeCategory ? activeCategory.name : 'Каталог' }}
+                                {{ activeCategory ? activeCategory.name : 'Все категории' }}
                             </h1>
-                            <p class="text-grey catalog-view__main-header-text">489 товаров</p>
+                            <p class="text-grey catalog-view__main-header-text">489 продуктов</p>
                         </div>
+
                         <v-select
                             class="catalog-view__main-header-sort"
-                            v-model="sortValue"
                             label="title"
                             track-by="id"
+                            v-model="sortValue"
                             :options="sortOptions"
                             :searchable="false"
                             :allow-empty="false"
+                            :show-labels="false"
                         />
 
-                        <v-button class="catalog-view__main-header-btn" @click="filterModal = !filterModal">
-                            <span>
-                                Фильтр и сортировка&nbsp;&nbsp;
-                                <span class="text-grey">{{ activeTags.length }}</span>
-                            </span>
-                            <v-svg id="catalog-filter-icon" name="filter" width="18" height="14" />
-                        </v-button>
+                        <filter-button class="catalog-view__main-header-btn" @click="filterModal = !filterModal">
+                            Фильтр и сортировка&nbsp;&nbsp;
+                            <span class="text-grey">{{ activeTags.length }}</span>
+                        </filter-button>
                     </div>
 
-                    <transition-group tag="ul" class="catalog-view__main-tags" name="tag-item">
-                        <li
-                            :data-index="index"
-                            class="catalog-view__main-tags-item"
+                    <transition-group v-if="!isTabletLg" tag="ul" class="catalog-view__main-tags" name="tag-item">
+                        <tag-item
                             v-for="(tag, index) in activeTags"
+                            :data-index="index"
                             :key="tag.code"
-                        >
-                            {{ tag.name }}&nbsp;
-                            <button class="catalog-view__main-tags-delete-btn" @click="onClickDeleteTag(tag.code)">
-                                <v-svg name="cross-small" width="10" height="10" />
-                            </button>
-                        </li>
+                            :text="tag.name"
+                            @delete="onClickDeleteTag(tag.segment)"
+                        />
                     </transition-group>
 
-                    <transition-group
-                        tag="ul"
-                        class="catalog-view__main-grid"
-                        name="catalog-item"
-                        @before-enter="onBeforeEnterItems"
-                        @enter="onEnterItems"
-                        @after-enter="onAfterEnterItems"
-                        @leave="onLeaveItems"
-                    >
-                        <li
-                            class="catalog-view__main-grid-item"
-                            v-for="item in items"
-                            :key="`${item.id}-${item.type}`"
-                            :class="{ [`catalog-view__main-grid-item--${item.type}`]: item.type }"
-                        >
-                            <catalog-product-card
-                                v-if="item.type === 'product'"
-                                class="catalog-view__main-grid-card"
-                                :product-id="item.id"
-                                :name="item.name"
-                                :type="item.type"
-                                :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                                :image="item.image"
-                                :price="item.price"
-                                :old-price="item.oldPrice"
-                                :tags="item.tags"
-                                :rating="item.rating"
-                                @addItem="ADD_CART_ITEM({ offerId: item.id })"
-                            />
-                            <catalog-banner-card
-                                v-else-if="item.type === 'banner'"
-                                class="catalog-view__main-grid-card"
-                                :banner-id="item.id"
-                                :title="item.title"
-                                :image="item.image"
-                                :upper-text="item.upperText"
-                                :btn-text="item.btnText"
-                            />
-                        </li>
-                    </transition-group>
+                    <catalog-product-list class="catalog-view__main-grid" :animation="!isTablet" />
+
                     <div class="catalog-view__main-controls" v-if="pagesCount > 1">
                         <v-button
                             v-if="activePage < pagesCount"
                             class="btn--outline catalog-view__main-controls-btn"
                             @click="onShowMore"
+                            :disabled="showMore"
                         >
                             Показать ещё
                         </v-button>
@@ -162,7 +129,7 @@
                                     class="catalog-view__modal-filter-sort-item"
                                     :class="{ 'catalog-view__modal-filter-sort-item--active': item === sortValue }"
                                     v-for="item in sortOptions"
-                                    :key="item"
+                                    :key="item.title"
                                 >
                                     <button class="catalog-view__modal-filter-sort-btn" @click="sortValue = item">
                                         {{ item.title }}
@@ -176,6 +143,29 @@
                 </template>
             </modal>
         </transition>
+
+        <section class="section catalog-view__section catalog-view__seo">
+            <div class="container catalog-view__seo-container">
+                <h2 class="catalog-view__section-hl catalog-view__seo-hl">Блок SEO текста</h2>
+                <v-expander class="catalog-view__seo-text" :min-height="80" has-mask>
+                    Помада L'Oreal Paris Color Riche — это первый матовый тинт для губ с ультранасыщенным цветом,
+                    который абсолютно не ощущается на губах. Выбери из 10 модных оттенков те, которые тебе по душе. Эта
+                    помада не оставит тебя равнодушной. Экспериментируй и наслаждайся, а Color Riche поможет тебе в
+                    этом. Мы заботимся о надёжных поставщиках, качестве товаров и безопасной оплате. А что делать вам?
+                    Просто наслаждаться покупками. Для экономии не нужен повод, поэтому мы каждый день даём вам скидки
+                    на популярные товары самых разных категорий.
+
+                    <template v-slot:btn="{ isExpanded }">
+                        {{ isExpanded ? 'Скрыть' : 'Показать больше' }}
+                    </template>
+                </v-expander>
+            </div>
+        </section>
+
+        <transition name="fade-in">
+            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
+            <add-to-cart-modal v-else-if="isAddToCartOpen" />
+        </transition>
     </section>
 </template>
 
@@ -187,22 +177,39 @@ import VPagination from '../../components/controls/VPagination/VPagination.vue';
 import VRange from '../../components/controls/VRange/VRange.vue';
 import VSelect from '../../components/controls/VSelect/VSelect.vue';
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
+import VExpander from '../../components/VExpander/VExpander.vue';
 import Modal from '../../components/controls/modal/modal.vue';
 
+import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+
+import FilterButton from '../../components/FilterButton/FilterButton.vue';
+import TagItem from '../../components/TagItem/TagItem.vue';
 import CategoryTreeItem from '../../components/CategoryTreeItem/CategoryTreeItem.vue';
 import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
-import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
+import CatalogProductList from '../../components/CatalogProductList/CatalogProductList.vue';
+
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
-import { concatCatalogRoutePath } from '../../util/catalog';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { NAME as CART_MODULE } from '../../store/modules/Cart';
 import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 
-import catalogModule, { NAME as CATALOG_MODULE, ITEMS, BANNER, CATEGORIES } from '../../store/modules/Catalog';
-import { FETCH_ITEMS, FETCH_CATALOG_DATA, SET_LOAD } from '../../store/modules/Catalog/actions';
+import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+
+import catalogModule, {
+    NAME as CATALOG_MODULE,
+    ITEMS,
+    BANNER,
+    CATEGORIES,
+    PRODUCT_GROUP,
+} from '../../store/modules/Catalog';
+import { FETCH_ITEMS, SET_LOAD_PATH, FETCH_DATA_BY_TYPE } from '../../store/modules/Catalog/actions';
 import {
     ACTIVE_TAGS,
     ACTIVE_CATEGORY,
@@ -212,28 +219,37 @@ import {
     ACTIVE_CATEGORIES,
 } from '../../store/modules/Catalog/getters';
 
+import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '../../util/catalog';
+import { registerModuleIfNotExists } from '../../util/store';
+import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants';
+import { productGroupTypes } from '../../assets/scripts/enums';
 import _debounce from 'lodash/debounce';
-import '../../assets/images/sprites/filter.svg';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';
 
-const itemAnimationDelayDelta = 100;
-let counter = 0;
-
 export default {
     name: 'catalog',
+
     components: {
         VSvg,
         VButton,
         VSelect,
         VPagination,
         VSticky,
+        VExpander,
         Modal,
 
+        Breadcrumbs,
+        BreadcrumbItem,
+        FilterButton,
+        TagItem,
         CategoryTreeItem,
         CatalogFilter,
-        CatalogProductCard,
+        CatalogProductList,
         CatalogBannerCard,
+
+        AddToCartModal,
+        QuickViewModal,
     },
 
     data() {
@@ -262,13 +278,29 @@ export default {
             ROUTE_SEGMENTS,
             ACTIVE_CATEGORIES,
         ]),
-        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES]),
-        ...mapState('route', {
-            code: state => state.params.code,
+        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP]),
+        ...mapState(MODAL_MODULE, {
+            isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
+            isAddToCartOpen: state =>
+                state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
         }),
+        ...mapState('route', {
+            type: state => state.params.type,
+            code: state => state.params.code,
+            entityCode: state => state.params.entityCode,
+        }),
+
+        breadcrumbRootUrl() {
+            const { type } = this;
+            return { name: type === productGroupTypes.CATALOG ? 'Catalog' : 'ProductGroups', params: { type } };
+        },
 
         isTabletLg() {
             return this.$mq.tabletLg;
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 
@@ -284,63 +316,30 @@ export default {
     },
 
     methods: {
-        ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_CATALOG_DATA]),
+        ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_DATA_BY_TYPE, SET_LOAD_PATH]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        generateBreadcrumbUrl(categoryCode) {
+            const { type, entityCode } = this;
+            return { path: generateCategoryUrl(type, entityCode, categoryCode) };
+        },
 
         setSortValue(field, direction) {
             this.sortValue =
                 this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
         },
 
-        onBeforeEnterItems(el) {
-            el.dataset.index = counter;
-            counter += 1;
-            el.style.opacity = 0;
-        },
-
-        itemAnimation(el, delay) {
-            return new Promise((resolve, reject) => {
-                try {
-                    setTimeout(() => {
-                        requestAnimationFrame(() => {
-                            el.style.opacity = 1;
-                            resolve();
-                        });
-                    }, delay);
-                } catch (error) {
-                    reject(error);
-                }
-            });
-        },
-
-        async onEnterItems(el, done) {
-            const delay = el.dataset.index * itemAnimationDelayDelta;
-            await this.itemAnimation(el, delay);
-            done();
-        },
-
-        onAfterEnterItems(el) {
-            delete el.dataset.index;
-            counter = 0;
-        },
-
-        onLeaveItems(el, done) {
-            requestAnimationFrame(() => {
-                el.style.opacity = 0;
-                done();
-            });
-        },
-
         onClickDeleteTag(value) {
-            let { routeSegments, code } = this;
+            let { type, code, entityCode, routeSegments } = this;
 
             if (!routeSegments.includes(value)) return;
             else {
                 const index = routeSegments.indexOf(value);
                 if (index !== -1) routeSegments.splice(index, 1);
             }
-
-            this.$router.replace({ path: concatCatalogRoutePath(code, routeSegments) });
+            const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
+            this.$router.replace({ path });
         },
 
         onShowMore() {
@@ -359,7 +358,7 @@ export default {
         async fetchCatalog(to, from, showMore) {
             try {
                 const {
-                    params: { code },
+                    params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
                     query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
                         page: 1,
                         orderField: 'price',
@@ -367,14 +366,41 @@ export default {
                     },
                 } = to;
 
-                const filter = code && { category: code };
+                const {
+                    params: { code: fromCode, entityCode: fromEntityCode, type: fromType },
+                } = from;
+
+                const { query: { page: fromPage = 1 } = { page: 1 } } = from;
+                const filter = computeFilterData(pathMatch, toCode);
+
                 this.$progress.start();
-                await this[FETCH_ITEMS]({ filter, orderField, orderDirection, page, showMore });
+                if (toType === fromType && toCode === fromCode && toEntityCode === fromEntityCode)
+                    await this[FETCH_ITEMS]({ filter, orderField, orderDirection, page, showMore });
+                else
+                    await this[FETCH_DATA_BY_TYPE]({
+                        type: toType,
+                        entityCode: toEntityCode,
+                        filter,
+                        orderField,
+                        orderDirection,
+                        page,
+                    });
+
                 this.setSortValue(orderField, orderDirection);
                 this.$progress.finish();
-            } catch (error) {
-                $logger.error('debounce_fetchCatalog', error);
+
+                if (!showMore && page !== fromPage)
+                    window.scrollTo({
+                        top: MIN_SCROLL_VALUE + 1,
+                        behavior: 'smooth',
+                    });
+
+                if (showMore) setTimeout(() => (this.showMore = false), 200);
+            } catch (thrown) {
+                if (thrown && thrown.isCancel === true) return;
                 this.$progress.fail();
+                $logger.error('fetchCatalog', thrown);
+                this.$progress.finish();
             }
         },
     },
@@ -385,7 +411,8 @@ export default {
         // так как к моменту вызова экземпляр ещё не создан!
 
         const {
-            params: { code },
+            fullPath,
+            params: { code: toCode = null, entityCode: toEntityCode = null, type: toType, pathMatch },
             query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
                 page: 1,
                 orderField: 'price',
@@ -394,32 +421,41 @@ export default {
         } = to;
 
         // регистрируем модуль, если такого нет
-        const register = !!$store._modulesNamespaceMap[`${CATALOG_MODULE}/`];
-        if (!register)
-            $store.registerModule(CATALOG_MODULE, catalogModule, {
-                preserveState: !!$store.state.catalog,
-            });
-
-        const { categoryCode, load } = $store.state.catalog;
+        registerModuleIfNotExists($store, CATALOG_MODULE, catalogModule);
+        const { loadPath, categoryCode, entityCode, type } = $store.state[CATALOG_MODULE];
 
         // если все загружено, пропускаем
-        if (load && categoryCode === code) next(vm => vm.$store.dispatch(`${CATALOG_MODULE}/${SET_LOAD}`, false));
+        if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode) next();
         else {
-            // если нет - фетчим
-            const filter = code && { category: code };
+            const filter = computeFilterData(pathMatch, toCode);
+            let fetchMethod = null;
+            if (toType === type && toCode === categoryCode && toEntityCode === entityCode)
+                fetchMethod = `${CATALOG_MODULE}/${FETCH_ITEMS}`;
+            else fetchMethod = `${CATALOG_MODULE}/${FETCH_DATA_BY_TYPE}`;
 
             $progress.start();
             $store
-                .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, { filter, page, orderField, orderDirection })
-                .then(() =>
+                .dispatch(fetchMethod, {
+                    type: toType,
+                    entityCode: toEntityCode,
+                    filter,
+                    page,
+                    orderField,
+                    orderDirection,
+                })
+                .then(() => {
+                    $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
                         vm.setSortValue(orderField, orderDirection);
                         $progress.finish();
-                    })
-                )
-                .catch(error => {
+                    });
+                })
+                .catch(thrown => {
+                    if (thrown && thrown.isCancel === true) return next();
                     $progress.fail();
-                    $logger.error(error);
+                    $logger.error('beforeRouteEnter', thrown);
+                    $progress.finish();
+                    next();
                 });
         }
     },
@@ -431,10 +467,16 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
+
         if (this.showMore) {
             this.fetchCatalog(to, from, this.showMore);
-            this.showMore = false;
         } else this.debounce_fetchCatalog(to, from);
+        next();
+    },
+
+    beforeRouteLeave(to, from, next) {
+        // При уходе с роута отменяем запрос
+        this.debounce_fetchCatalog.cancel();
         next();
     },
 

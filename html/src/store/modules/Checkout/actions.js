@@ -1,5 +1,6 @@
 import { $logger } from '../../../services/ServiceLocator';
-import { requestStatus } from '../../../assets/scripts/constants';
+import { requestStatus } from '../../../assets/scripts/enums';
+import { storeErrorHandler } from '../../../util/store';
 
 import { RECEIVE_METHOD_STATUS, ADDRESS_STATUS, BONUS_STATUS, CERTIFICATE_STATUS, PROMOCODE_STATUS } from './getters';
 
@@ -28,6 +29,7 @@ import {
     addPromocode,
     deletePromocode,
     commitCheckoutData,
+    changeCity,
 } from '../../../api';
 
 export const SET_RECIPIENT = 'SET_RECIPIENT';
@@ -38,6 +40,7 @@ export const SET_PICKUP_POINT = 'SET_PICKUP_POINT';
 export const SET_AGREEMENT = 'SET_AGREEMENT';
 export const SET_SUBSCRIBE = 'SET_SUBSCRIBE';
 export const SET_CONFIRMATION_TYPE = 'SET_CONFIRMATION_TYPE';
+export const CHANGE_CITY = 'CHANGE_CITY';
 
 export const ADD_BONUS = 'ADD_BONUS';
 export const DELETE_BONUS = 'DELETE_BONUS';
@@ -57,6 +60,19 @@ export const CHANGE_CHUNK_DATE = 'CHANGE_CHUNK_DATE';
 export const COMMIT_DATA = 'COMMIT_DATA';
 
 export default {
+    [CHANGE_CITY]({ commit, state }, payload) {
+        commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.PENDING });
+        return changeCity({ city: payload, data: state.checkoutData })
+            .then(data => {
+                commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.SUCCESS });
+                commit(SET_DATA, data);
+            })
+            .catch(error => {
+                commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.ERROR });
+                storeErrorHandler(CHANGE_CITY, true)(error);
+            });
+    },
+
     [SET_RECEIVE_METHOD]({ commit, state }, payload) {
         commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.PENDING });
         return setReceiveMethod({ method: payload, data: state.checkoutData })
@@ -66,7 +82,7 @@ export default {
             })
             .catch(error => {
                 commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.ERROR });
-                $logger.error(`${SET_RECEIVE_METHOD} ${error}`);
+                storeErrorHandler(SET_RECEIVE_METHOD, true)(error);
             });
     },
 
@@ -79,7 +95,7 @@ export default {
             })
             .catch(error => {
                 commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
-                $logger.error(`${SET_ADDRESS} ${error}`);
+                storeErrorHandler(SET_ADDRESS, true)(error);
             });
     },
 
@@ -92,7 +108,7 @@ export default {
             })
             .catch(error => {
                 commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
-                $logger.error(`${SET_PICKUP_POINT} ${error}`);
+                storeErrorHandler(SET_PICKUP_POINT, true)(error);
             });
     },
 
@@ -105,7 +121,7 @@ export default {
             })
             .catch(error => {
                 commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.ERROR });
-                $logger.error(`${ADD_BONUS} ${error}`);
+                storeErrorHandler(ADD_BONUS, true)(error);
             });
     },
 
@@ -118,7 +134,7 @@ export default {
             })
             .catch(error => {
                 commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.ERROR });
-                $logger.error(`${DELETE_BONUS} ${error}`);
+                storeErrorHandler(DELETE_BONUS, true)(error);
             });
     },
 
@@ -131,7 +147,7 @@ export default {
             })
             .catch(error => {
                 commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.ERROR });
-                $logger.error(`${ADD_CERTIFICATE} ${error}`);
+                storeErrorHandler(ADD_CERTIFICATE, true)(error);
             });
     },
 
@@ -144,7 +160,7 @@ export default {
             })
             .catch(error => {
                 commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.ERROR });
-                $logger.error(`${DELETE_CERTIFICATE} ${error}`);
+                storeErrorHandler(DELETE_CERTIFICATE, true)(error);
             });
     },
 
@@ -157,7 +173,7 @@ export default {
             })
             .catch(error => {
                 commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
-                $logger.error(`${ADD_PROMOCODE} ${error}`);
+                storeErrorHandler(ADD_PROMOCODE, true)(error);
             });
     },
 
@@ -170,7 +186,7 @@ export default {
             })
             .catch(error => {
                 commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
-                $logger.error(`${DELETE_PROMOCODE} ${error}`);
+                storeErrorHandler(DELETE_PROMOCODE, true)(error);
             });
     },
 
@@ -206,7 +222,7 @@ export default {
     [COMMIT_DATA]({ state }) {
         return commitCheckoutData({ data: state.checkoutData })
             .then(data => data)
-            .catch(error => $logger.error(`${COMMIT_DATA} ${error}`));
+            .catch(error => storeErrorHandler(COMMIT_DATA, true)(error));
     },
 
     [FETCH_CHECKOUT_DATA]({ commit }, payload) {
@@ -215,6 +231,6 @@ export default {
                 commit(SET_TYPE, payload);
                 commit(SET_DATA, data);
             })
-            .catch(error => $logger.error(`${FETCH_CHECKOUT_DATA} ${error}`));
+            .catch(error => storeErrorHandler(FETCH_CHECKOUT_DATA)(error));
     },
 };

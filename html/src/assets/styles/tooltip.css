@@ -7,8 +7,6 @@
         color: var(--cl-white);
         width: 160px;
         padding: 5px 10px 4px;
-        font-size: 12px;
-        line-height: 16px;
         text-align: center;
     }
 
@@ -96,12 +94,12 @@
 
     &--white.popover {
         .popover-inner {
-            background: var(--cl-white);
+            text-align: left;
+            width: auto;
+            padding: calc(var(--gs) * 3) 0;
+            background-color: var(--cl-white);
             color: var(--cl-global);
-            border: 1px solid var(--cl-global);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            min-height: 56px;
-            width: 250px;
+            box-shadow: 0 5px 40px rgba(0, 0, 0, 0.1);
         }
 
         .popover-arrow {

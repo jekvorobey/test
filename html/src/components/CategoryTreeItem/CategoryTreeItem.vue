@@ -33,9 +33,12 @@
 </template>
 
 <script>
-import './CategoryTreeItem.css';
+import { NAME as CATALOG_MODULE } from '../../store/modules/Catalog';
 import { ACTIVE_CATEGORIES } from '../../store/modules/Catalog/getters';
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
+import { generateCategoryUrl } from '../../util/catalog';
+
+import './CategoryTreeItem.css';
 
 export default {
     name: 'category-tree-item',
@@ -59,18 +62,32 @@ export default {
     },
 
     computed: {
-        ...mapGetters('catalog', [ACTIVE_CATEGORIES]),
+        ...mapGetters(CATALOG_MODULE, [ACTIVE_CATEGORIES]),
+        ...mapState('route', {
+            type: state => state.params.type,
+            entityCode: state => state.params.entityCode,
+        }),
 
         isActive() {
             return this[ACTIVE_CATEGORIES].includes(this.item);
         },
 
         url() {
-            return this.item.code ? `/catalog/${this.item.code}` : '/catalog';
+            const {
+                entityCode,
+                type,
+                item: { code },
+            } = this;
+            return { path: generateCategoryUrl(type, entityCode, code) };
         },
 
         hasChildren() {
-            return this.item && Array.isArray(this.item.items);
+            const {
+                entityCode,
+                type,
+                item: { items },
+            } = this;
+            return Array.isArray(this.item.items);
         },
     },
 
@@ -81,4 +98,3 @@ export default {
     },
 };
 </script>
-

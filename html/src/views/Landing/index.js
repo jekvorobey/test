@@ -11,7 +11,7 @@ export default {
      */
     routes: [
         {
-            name: 'landing',
+            name: 'Landing',
             path: '/',
             component: () => import(/* webpackChunkName: "landing-view" */ './Landing.vue'),
         },

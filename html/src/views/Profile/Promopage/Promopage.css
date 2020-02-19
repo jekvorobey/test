@@ -1,0 +1,118 @@
+.promopage-view {
+    &__header {
+        display: flex;
+        align-items: baseline;
+
+        @media (--tablet-lg) {
+            display: none;
+        }
+    }
+
+    &__hl {
+        margin-right: calc(var(--gs) * 2);
+        margin-bottom: calc(var(--gs) * 3);
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 40px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    &__panel {
+        overflow: hidden;
+
+        & + & {
+            margin-top: calc(var(--gs) * 7);
+        }
+
+        &-links,
+        &-controls {
+            flex: none;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        &-links {
+            margin-bottom: calc(var(--gs) * 2);
+        }
+
+        &-link {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: normal;
+            line-height: 24px;
+            text-transform: none;
+
+            & + & {
+                margin-left: calc(var(--gs) * 4);
+
+                @media (--desktop) {
+                    margin-left: calc(var(--gs) * 2);
+                }
+
+                @media (--tablet) {
+                    margin: 0;
+                }
+            }
+
+            &:first-of-type {
+                margin-left: var(--gs);
+                margin-right: auto;
+
+                @media (--tablet) {
+                    margin: 0;
+                }
+            }
+        }
+
+        &-links &-link {
+            display: flex;
+
+            &:first-of-type {
+                margin: 0;
+            }
+        }
+
+        &-list {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 calc(var(--gs) * -1.5);
+
+            @media (--tablet) {
+                justify-content: space-between;
+                margin: 0;
+            }
+        }
+
+        &-item {
+            position: relative;
+            display: flex;
+            width: calc(calc(100% / 3) - calc(var(--gs) * 3));
+            padding-bottom: calc(var(--gs) * 3);
+            margin: 0 calc(var(--gs) * 1.5);
+            transition: all 0.5s;
+
+            @media (--tablet) {
+                width: calc(calc(100% / 2) - calc(var(--gs) * 1.5 / 2));
+                margin: 0;
+            }
+
+            &-btn {
+                position: absolute;
+                z-index: 1;
+                top: 16px;
+                right: 16px;
+
+                @media (--tablet) {
+                    top: 8px;
+                    right: 12px;
+                }
+            }
+        }
+
+        &-card {
+            width: 100%;
+        }
+    }
+}

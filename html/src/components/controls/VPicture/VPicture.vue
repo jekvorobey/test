@@ -1,6 +1,9 @@
 
 <template>
-    <picture class="v-picture" v-if="isObject && lazy">
+    <picture class="v-picture" v-if="!image">
+        <slot />
+    </picture>
+    <picture class="v-picture" v-else-if="isObject && lazy">
         <slot name="source" :image="image" :lazy="lazy">
             <source
                 v-for="(source, index) in image.sources"

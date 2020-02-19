@@ -1,4 +1,7 @@
 .general-modal {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
     .modal-body {
         position: relative;
 
@@ -8,6 +11,8 @@
     }
 
     &__sticky {
+        display: flex;
+        flex-direction: column;
         width: 100%;
 
         .v-sticky__container {
@@ -27,6 +32,16 @@
             fill: var(--cl-white);
         }
 
+        @media (--tablet-lg) and (--tablet-min) {
+            padding-top: calc(var(--gs) * 2.5);
+            padding-bottom: calc(var(--gs) * 2.5);
+        }
+
+        @media (--tablet) {
+            padding-top: calc(var(--gs) * 1.5);
+            padding-bottom: calc(var(--gs) * 1.5);
+        }
+
         &-btn {
             display: flex;
             align-items: center;
@@ -37,7 +52,7 @@
             text-transform: uppercase;
 
             .icon {
-                margin-right: calc(var(--gs) * 1.5);
+                margin-right: var(--gs);
             }
         }
     }

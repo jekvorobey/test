@@ -98,8 +98,7 @@ export default {
         },
 
         locale: {
-            type: String,
-            default: 'ru',
+            type: Object,
         },
 
         maxDate: {
@@ -138,8 +137,10 @@ export default {
         },
 
         locale(value) {
-            this.engine.set('locale', value);
-            this.reinit();
+            if (value) {
+                flatpickr.localize(value);
+                this.reinit();
+            }
         },
 
         disable(value) {
@@ -183,7 +184,6 @@ export default {
                 disableMobile: true,
                 allowInput: this.allowInput,
                 inline: this.inline,
-                locale: this.locale,
                 minDate: this.minDate,
                 maxDate: this.maxDate,
                 nextArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
@@ -205,6 +205,7 @@ export default {
             if (this.inline) config.appendTo = datepicker;
             if (this.disable && this.disable.length > 0) config.disable = this.disable;
             if (this.enable && this.enable.length > 0) config.enable = this.enable;
+            if (this.locale) flatpickr.localize(this.locale);
             this.engine = flatpickr(input, config);
         },
 
@@ -215,6 +216,7 @@ export default {
             this.engine = null;
         },
     },
+
     mounted() {
         this.init();
     },

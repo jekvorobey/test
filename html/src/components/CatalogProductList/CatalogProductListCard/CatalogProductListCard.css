@@ -1,0 +1,233 @@
+.catalog-product-list-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+
+    &:hover &__controls {
+        opacity: 1;
+        transition: all var(--time) ease-in;
+    }
+
+    &:hover &__body {
+        background-color: var(--cl-elem-grey);
+    }
+
+    &:hover &__img {
+        border-color: var(--cl-divider-grey);
+
+        img {
+            opacity: 0.2;
+            transition: all var(--time) ease-in;
+        }
+    }
+
+    &:hover &__rating,
+    &:hover &__wishlist-btn {
+        opacity: 1;
+        transition: all var(--time) ease-in;
+    }
+
+    &--small {
+        flex-direction: row;
+    }
+
+    &--small &__img {
+        width: 37.5%;
+        padding: var(--gs);
+        border-bottom: none;
+    }
+
+    &--small &__body {
+        padding-left: calc(var(--gs) * 2);
+    }
+
+    &--small &__link {
+        order: 0;
+        text-align: left;
+    }
+
+    &--small &__prices {
+        order: 1;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    &--small &__rating {
+        display: none;
+    }
+
+    &--small &__controls {
+        &-link {
+            display: none;
+        }
+    }
+
+    &__img {
+        display: flex;
+        position: relative;
+        width: 100%;
+        padding: calc(var(--gs) * 4);
+        border-bottom: 0.5px solid transparent;
+        flex: none;
+
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 100%;
+                padding-bottom: 0;
+            }
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            display: block;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--cl-global);
+            opacity: 0.03;
+        }
+
+        @media (--tablet) {
+            padding: var(--gs) 0;
+        }
+
+        .v-picture {
+            width: 100%;
+            max-height: 100%;
+        }
+
+        .icon {
+            margin: auto;
+            opacity: 0.1;
+        }
+    }
+
+    &__controls {
+        position: absolute;
+        z-index: 2;
+        left: 50%;
+        bottom: 23px;
+        transform: translateX(-50%);
+        text-align: center;
+        opacity: 0;
+
+        &-btn {
+            min-width: 160px;
+            margin-bottom: var(--gs);
+            background: var(--cl-elem-grey);
+
+            @media (--tablet-lg) {
+                min-width: auto;
+            }
+        }
+
+        &-link {
+            font-size: 12px;
+            line-height: 24px;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+
+            @media (--tablet) {
+                display: none;
+            }
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        padding: calc(var(--gs) * 2);
+        flex-grow: 1;
+
+        @media (--tablet) {
+            padding: var(--gs);
+        }
+    }
+
+    &__link {
+        text-transform: none;
+        text-align: center;
+        font-size: 16px;
+        line-height: 24px;
+        flex-grow: 1;
+        margin-bottom: var(--gs);
+    }
+
+    &__prices {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: var(--gs);
+
+        @media (--tablet-lg) {
+            flex-direction: column;
+        }
+    }
+
+    &__price {
+        text-align: left;
+
+        & + & {
+            margin-left: var(--gs);
+            @media (--tablet-lg) {
+                margin-left: 0;
+            }
+        }
+    }
+
+    &__tags {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+
+        @media (--tablet) {
+            top: 8px;
+            left: 12px;
+        }
+
+        &-item {
+            @media (--tablet) {
+                font-size: 10px;
+                line-height: 16px;
+            }
+        }
+    }
+
+    &__rating {
+        display: flex;
+        justify-content: center;
+        opacity: 0;
+
+        &-star {
+            width: calc(var(--gs) * 2);
+            height: calc(var(--gs) * 2);
+            background-image: svg-load('../../../assets/images/sprites/star-small.svg');
+
+            &--empty {
+                background-image: svg-load('../../../assets/images/sprites/star-empty-small.svg');
+            }
+        }
+    }
+
+    &__wishlist-btn {
+        opacity: 0;
+        position: absolute;
+        z-index: 2;
+        top: 20px;
+        right: 20px;
+
+        @media (--tablet) {
+            top: 8px;
+            right: 12px;
+        }
+    }
+}

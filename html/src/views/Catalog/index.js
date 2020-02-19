@@ -1,3 +1,5 @@
+import { productGroupTypes } from '../../assets/scripts/enums';
+
 /**
  * @Module
  */
@@ -13,14 +15,29 @@ export default {
      */
     routes: [
         {
-            path: '/catalog/:code?/filters/*',
+            path: `/:type(${productGroupTypes.CATALOG})/:code?/filters/*`,
             component: CatalogAsync,
             meta: {
                 skipScroll: true,
             },
         },
         {
-            path: '/catalog/:code?',
+            name: 'Catalog',
+            path: `/:type(${productGroupTypes.CATALOG})/:code?`,
+            component: CatalogAsync,
+            meta: {
+                skipScroll: true,
+            },
+        },
+        {
+            path: `/:type(${productGroupTypes.BRANDS}|${productGroupTypes.PROMO}|${productGroupTypes.SETS})/:entityCode/:code?/filters/*`,
+            component: CatalogAsync,
+            meta: {
+                skipScroll: true,
+            },
+        },
+        {
+            path: `/:type(${productGroupTypes.BRANDS}|${productGroupTypes.PROMO}|${productGroupTypes.SETS})/:entityCode/:code?`,
             component: CatalogAsync,
             meta: {
                 skipScroll: true,

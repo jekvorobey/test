@@ -2,16 +2,19 @@
     <component :is="tag" class="product-review-card">
         <div class="product-review-card__header">
             <h4 class="product-review-card__header-name">
-                {{ name }} <span class="text-grey text-sm product-review-card__header-date">{{ date }}</span>
+                {{ name }} <span class="text-grey text-sm product-review-card__header-date">{{ computedDate }}</span>
             </h4>
-            <v-rating class="product-review-card__header-rating" :value="rating">
+            <v-rating class="product-review-card__header-rating" :value="rating" readonly>
                 <template v-slot:activeLabel>
-                    <v-svg name="star-small" width="12" height="12" />
+                    <v-svg name="star-small" width="16" height="16" />
                 </template>
                 <template v-slot:inactiveLabel>
-                    <v-svg name="star-empty-small" width="12" height="12" />
+                    <v-svg name="star-empty-small" width="16" height="16" />
                 </template>
             </v-rating>
+            <div class="product-review-card__header-options">
+                {{ options && `${options[0].title}: ${options[0].value}` }}
+            </div>
         </div>
         <div class="product-review-card__body">
             <div class="product-review-card__body-item">
@@ -22,14 +25,14 @@
                 <div class="text-bold product-review-card__body-item-title">Недостатки</div>
                 <div class="product-review-card__body-item-value">{{ disadvantage }}</div>
             </div>
-            <div v-if="images && images.length > 0" class="product-review-card__body-item">
+            <!-- <div v-if="images && images.length > 0" class="product-review-card__body-item">
                 <div class="text-bold product-review-card__body-item-title">Фото</div>
                 <div class="product-review-card__body-item-value">
                     <div class="product-review-card__body-item-img" v-for="item in images" :key="item.id">
                         <img class="blur-up lazyload" :data-src="item.image" alt="" />
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="product-review-card__controls">
             <button class="product-review-card__controls-btn">
@@ -73,15 +76,19 @@ export default {
         dislikes: { type: Number },
         advantage: { type: String },
         disadvantage: { type: String },
-        comment: { type: String },
+        locale: { type: String },
+        comment: { type: String, default: 'ru' },
         images: { type: Array },
         options: { type: Array },
     },
-    data() {
-        return {};
+
+    computed: {
+        computedDate() {
+            const date = new Date(this.date);
+            var options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleString(this.locale, options);
+        },
     },
-    computed: {},
-    methods: {},
 };
 </script>
 

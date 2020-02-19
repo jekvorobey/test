@@ -1,0 +1,27 @@
+.info-panel {
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: calc(var(--gs) * 2);
+        margin-bottom: calc(var(--gs) * 3);
+        border-bottom: 1px solid var(--cl-divider-grey);
+
+        @media (--tablet-lg) {
+            padding: 0 calc(var(--gs) * 3);
+            padding-bottom: calc(var(--gs) * 2);
+            margin-bottom: calc(var(--gs) * 2);
+        }
+
+        @media (--tablet) {
+            padding: 0 calc(var(--gs) * 2);
+            padding-bottom: calc(var(--gs) * 2);
+        }
+
+        &-hl {
+            font-size: 16px;
+            line-height: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+    }
+}

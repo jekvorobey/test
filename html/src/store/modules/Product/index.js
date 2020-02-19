@@ -5,6 +5,7 @@ import getters from './getters';
 export const INSTAGRAM_ITEMS = 'instagramItems';
 export const FEATURED_PRODUCTS = 'featuredProducts';
 export const BANNERS = 'banners';
+export const MASTERCLASSES = 'masterClasses';
 export const PRODUCT_ID = 'productId';
 export const PRODUCT_CODE = 'productCode';
 export const PRODUCT = 'product';
@@ -18,6 +19,7 @@ export default {
         [FEATURED_PRODUCTS]: { items: [], range: 0 },
         [INSTAGRAM_ITEMS]: [],
         [BANNERS]: [],
+        [MASTERCLASSES]: [],
         [PRODUCT]: {},
         [PRODUCT_CODE]: '',
     },

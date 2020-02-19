@@ -1,29 +1,40 @@
 const fs = require('fs');
 const path = require('path');
+const Config = require('merge-config');
 
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const httpProxy = require('express-http-proxy');
+const gracefulShutdown = require('http-graceful-shutdown');
 
 const LRUCache = require('lru-cache');
 const favicon = require('serve-favicon');
 const compression = require('compression');
-const microcache = require('route-cache');
+const routeCache = require('route-cache');
 
 const expressVersion = require('express/package.json').version;
 const serverRendererVersion = require('vue-server-renderer/package.json').version;
 const { createBundleRenderer } = require('./build/custom-vue-server-renderer');
 
-const resolve = file => path.resolve(__dirname, file);
-
 const isProd = process.env.NODE_ENV === 'production';
-const useMicroCache = process.env.MICRO_CACHE !== 'false';
 const serverInfo = `express/${expressVersion} vue-server-renderer/${serverRendererVersion}`;
 const ServerLogger = require('./src/services/LogService/ServerLogger');
 
 const logger = new ServerLogger();
 const setupDevServer = require('./build/setup-dev-server');
+
+const resolve = file => path.resolve(__dirname, file);
+
+const serve = (resourcePath, cache) =>
+    express.static(resolve(resourcePath), {
+        maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 365 : 0,
+    });
+
+const proxy = hostname =>
+    httpProxy(hostname, {
+        proxyReqPathResolver: req => req.originalUrl,
+    });
 
 const app = express();
 
@@ -55,6 +66,7 @@ function createRenderer(bundle, options) {
 let renderer;
 let readyPromise;
 const templatePath = resolve('./src/index.template.html');
+const page502 = fs.readFileSync(resolve('../public/page502.html'), 'utf-8');
 
 if (isProd) {
     // In production: create server renderer using template and built server bundle.
@@ -88,57 +100,16 @@ if (isProd) {
     });
 }
 
-const serve = (resourcePath, cache) =>
-    express.static(resolve(resourcePath), {
-        maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 365 : 0,
-    });
-
-// Проксирование удаленного сервера Api
-// https://localhost:8080/v1/... -> https://master-front.ibt-mas.greensight.ru/v1/...
-const apiProxy = httpProxy('https://master-front.ibt-mas.greensight.ru', {
-    proxyReqPathResolver: req => req.originalUrl,
-});
-
-const dadataProxy = httpProxy('https://suggestions.dadata.ru', {
-    proxyReqPathResolver: req => req.originalUrl,
-});
-
-app.use('/suggestions/api/4_1/rs*', dadataProxy);
-app.use('/content/*', apiProxy);
-app.use('/v1/*', apiProxy);
-
-app.use(cors({ credentials: true }));
-app.use(cookieParser());
-app.use(compression({ threshold: 0 }));
-app.use(favicon('../public/assets/favicon.ico'));
-app.use('/', serve('../public', true));
-app.use('/manifest.json', serve('./manifest.json', true));
-app.use('/service-worker.js', serve('../public/assets/service-worker.js'));
-
-// since this app has no user-specific content, every page is micro-cacheable.
-// if your app involves user-specific content, you need to implement custom
-// logic to determine whether a request is cacheable based on its url and
-// headers.
-// 1-second microcache.
-// https://www.nginx.com/blog/benefits-of-microcaching-nginx/
-// if (isProd) app.use(microcache.cacheSeconds(1, req => useMicroCache && req.originalUrl));
-
-function render(req, res) {
+function render(req, res, env) {
     const s = Date.now();
 
-    res.setHeader('Content-Type', 'text/html');
-    res.setHeader('Server', serverInfo);
-
-    const handleError = err => {
+    const handleError = (err = {}) => {
         if (err.url) {
             logger.warn(`redirect: ${err.url}`);
-            res.redirect(err.url);
-        } else if (err.code === 404) {
-            res.status(404).send('404 | Page Not Found');
-            logger.warn(`page not found: ${req.url}`);
+            res.redirect(err.code || 302, err.url);
         } else {
             // Render Error Page or Redirect
-            res.status(500).send('500 | Internal Server Error');
+            res.status(500).send(page502);
             logger.error(`error during render: ${req.url}`, err.stack);
         }
     };
@@ -148,31 +119,123 @@ function render(req, res) {
         url: req.url,
         req,
         res,
+        env,
     };
 
-    renderer.renderToString(context, (err, html) => {
-        if (err) return handleError(err);
+    renderer
+        .renderToString(context)
+        .then(html => {
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
+            res.setHeader('Content-Type', 'text/html');
+            res.setHeader('Content-Length', html.length);
+            res.setHeader('Server', serverInfo);
 
-        res.send(html);
-        if (!isProd) logger.success(`whole request: ${Date.now() - s}ms`, req.url);
-    });
+            res.send(html);
+            if (!isProd) logger.success(`whole request: ${Date.now() - s}ms`, req.url);
+        })
+        .catch(handleError);
 }
 
-let port = process.env.PORT || 8080;
-let host = process.env.HOST || 'localhost';
+let env = new Config();
+const config = new Config();
+let port = 8080;
+let host = 'localhost';
+let publicPath = '/';
+let outputPath = '../public/assets';
 
-if (process.env.CONFIG) {
-    try {
-        const env = require(path.resolve(__dirname, process.env.CONFIG));
-        port = env.PORT;
-        host = env.HOST;
-    } catch (error) {
-        logger.error(error);
+let faviconConf = null;
+let serviceWorkerConf = null;
+let corsConf = null;
+let compressionConf = null;
+
+let proxies = [];
+let cacheRoutes = [];
+let enable = [];
+const baseConfig = '.env.json';
+const configFileName = process.env.CONFIG;
+try {
+    env.file(resolve(baseConfig));
+    if (configFileName) {
+        config.file(resolve(configFileName));
+        env.merge(config.get());
+    }
+
+    env = env.get();
+    port = process.env.PORT || env.PORT;
+    host = process.env.HOST || env.HOST;
+    publicPath = env.PUBLIC_PATH;
+    outputPath = env.OUTPUT_PATH;
+
+    faviconConf = env.FAVICON;
+    serviceWorkerConf = env.SERVICE_WORKER;
+    corsConf = env.CORS;
+    compressionConf = env.COMPRESSION;
+
+    enable = env.ENABLE || [];
+    proxies = env.PROXIES || [];
+    cacheRoutes = env.CACHE_ROUTES || [];
+} catch (error) {
+    logger.error(error);
+}
+
+if (corsConf) app.use(cors(corsConf));
+if (compressionConf) app.use(compression(compressionConf));
+if (faviconConf) app.use(favicon(faviconConf.outputPath));
+if (serviceWorkerConf) app.use(serviceWorkerConf.publicPath, serve(serviceWorkerConf.outputPath));
+
+for (let i = 0; i < enable.length; i++) {
+    const entry = enable[i];
+    app.enable(entry);
+}
+
+for (let i = 0; i < proxies.length; i++) {
+    const entry = proxies[i];
+    logger.info('proxy', `path: ${entry.path}, host: ${entry.host}`);
+    app.use(entry.path, proxy(entry.host));
+}
+
+if (isProd) {
+    // since this app has no user-specific content, every page is micro-cacheable.
+    // if your app involves user-specific content, you need to implement custom
+    // logic to determine whether a request is cacheable based on its url and
+    // headers.
+    // https://www.nginx.com/blog/benefits-of-microcaching-nginx/
+
+    for (let i = 0; i < cacheRoutes.length; i++) {
+        const entry = cacheRoutes[i];
+        app.use(
+            entry.path,
+            routeCache.cacheSeconds(entry.time, req => req.originalUrl)
+        );
     }
 }
 
-app.get('*', isProd ? render : (req, res) => readyPromise.then(() => render(req, res)));
+const renderFunction = isProd
+    ? (req, res) => render(req, res, env)
+    : (req, res) => readyPromise.then(() => render(req, res, env));
 
-app.listen(port, host, () => {
-    logger.info(`server started at ${host}:${port}`);
+app.use(publicPath, serve(outputPath, true));
+app.use(cookieParser());
+app.get('*', renderFunction);
+app.listen(port, host, () => logger.success(`server started at ${host}:${port}`));
+
+function onCleanup(signal) {
+    return new Promise(resolve => {
+        logger.info('called signal: ', signal);
+        resolve();
+    });
+}
+
+function onFinally() {
+    logger.success('server shutted down');
+}
+
+gracefulShutdown(app, {
+    signals: 'SIGINT SIGTERM',
+    timeout: 30000,
+    development: !isProd,
+    onShutdown: onCleanup,
+    finally: onFinally,
 });

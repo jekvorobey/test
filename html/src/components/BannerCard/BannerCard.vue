@@ -1,11 +1,11 @@
 <template>
-    <div class="banner-card">
+    <component :is="tag" class="banner-card">
         <div class="banner-card__img">
             <v-picture :image="image" />
-            <v-button class="btn--outline banner-card__img-btn" to>{{ buttonText || 'Перейти' }}</v-button>
+            <v-button class="btn--outline banner-card__img-btn" :to="to">{{ buttonText }}</v-button>
         </div>
         <div class="banner-card__title">{{ title }}</div>
-    </div>
+    </component>
 </template>
 
 <script>
@@ -22,6 +22,11 @@ export default {
     },
 
     props: {
+        tag: {
+            type: String,
+            default: 'div',
+        },
+
         bannerId: {
             type: [Number, String],
         },
@@ -34,8 +39,14 @@ export default {
             type: [Object, String],
         },
 
+        to: {
+            type: [Object, String],
+            default: '/',
+        },
+
         buttonText: {
             type: String,
+            default: 'Перейти',
         },
     },
 };

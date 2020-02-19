@@ -18,3 +18,7 @@
 .text-strike {
     text-decoration: line-through;
 }
+
+.text-uppercase {
+    text-transform: uppercase;
+}

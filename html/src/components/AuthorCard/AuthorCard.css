@@ -1,0 +1,48 @@
+.author-card {
+    display: flex;
+
+    &__title {
+        padding: calc(var(--gs) * 1.5);
+        flex: 1;
+
+        @media (--tablet) {
+            padding: var(--gs);
+        }
+    }
+
+    &__img {
+        position: relative;
+        display: flex;
+        width: 72px;
+        height: 72px;
+
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 100%;
+                padding-bottom: 0;
+            }
+        }
+
+        .v-picture {
+            width: 100%;
+            height: 100%;
+        }
+
+        &-empty {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--cl-global);
+            color: var(--cl-white);
+            border-radius: 50%;
+            font-size: 26px;
+            line-height: 28px;
+        }
+    }
+}

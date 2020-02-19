@@ -1,6 +1,6 @@
 import _cloneDeep from 'lodash/cloneDeep';
 import HttpServiceBase from './base';
-import { cartItemTypes, receiveMethods, deliveryMethods, deliveryTypes } from '../../assets/scripts/constants';
+import { cartItemTypes, receiveMethods, deliveryMethods, deliveryTypes } from '../../assets/scripts/enums';
 import { preparePrice, addDays } from '../../util/helpers';
 
 import product1 from '../../assets/images/mock/product1.png';
@@ -30,6 +30,8 @@ import brand2 from '../../assets/images/mock/brand2.png';
 import brand3 from '../../assets/images/mock/brand3.png';
 import brand4 from '../../assets/images/mock/brand4.png';
 import brand5 from '../../assets/images/mock/brand5.png';
+
+import brandDetail1 from '../../assets/images/mock/brandDetail1.jpg';
 
 import category1 from '../../assets/images/mock/category1.png';
 import category2 from '../../assets/images/mock/category2.png';
@@ -64,6 +66,17 @@ import productMasterclass2 from '../../assets/images/mock/productMasterclass2.pn
 
 import productReview1 from '../../assets/images/mock/productReview1.png';
 import productReview2 from '../../assets/images/mock/productReview2.png';
+
+import masterclassDetailImage1 from '../../assets/images/mock/masterclassDetailImage1.png';
+
+import masterclassGalleryImg1 from '../../assets/images/mock/masterclassGalleryImg1.png';
+import masterclassGalleryImg2 from '../../assets/images/mock/masterclassGalleryImg2.png';
+import masterclassGalleryImg3 from '../../assets/images/mock/masterclassGalleryImg3.png';
+
+import author1 from '../../assets/images/mock/author1.png';
+
+const mockDate = new Date(Date.now());
+mockDate.setHours(0, 0, 0, 0);
 
 const ext = /\.(jpe?g|png)$/i;
 
@@ -208,15 +221,7 @@ const banners = [
         type: 'banner',
         title: 'Новая коллекция косметики Aveda',
         btnText: 'Смотреть товары',
-        image: {
-            src: banner1,
-            sources: [
-                {
-                    srcset: `${banner1.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner1,
     },
     {
         id: 2,
@@ -224,15 +229,7 @@ const banners = [
         type: 'banner',
         title: '20 средств для ухода за молодой кожей',
         btnText: 'Посмотреть',
-        image: {
-            src: banner2,
-            sources: [
-                {
-                    srcset: `${banner2.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner2,
     },
     {
         id: 3,
@@ -240,124 +237,60 @@ const banners = [
         type: 'banner',
         title: '20 средств для ухода за молодой кожей',
         btnText: 'Посмотреть',
-        image: {
-            src: banner1,
-            sources: [
-                {
-                    srcset: `${banner1.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner1,
     },
     {
         id: 4,
         type: 'banner',
         title: 'Лучшие стайлинги для летних укладок в новом сезоне только для тебя',
         btnText: 'Смотреть товары',
-        image: {
-            src: banner3,
-            sources: [
-                {
-                    srcset: `${banner3.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner3,
     },
     {
         id: 5,
         type: 'banner',
         title: 'Новейшая косметика для лица и тела с омолаживающим эффектом',
         btnText: 'Смотреть товары',
-        image: {
-            src: banner4,
-            sources: [
-                {
-                    srcset: `${banner4.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner4,
     },
     {
         id: 6,
         type: 'banner',
         title: ' Натуральный макияж Aveda, который подойдёт для каждой девушки',
         btnText: 'Смотреть товары',
-        image: {
-            src: banner5,
-            sources: [
-                {
-                    srcset: `${banner5.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner5,
     },
     {
         id: 7,
         type: 'banner',
         title: 'Водостойкая губная помада L’Oreal Paris',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
-        btnText: 'Смотреть товары',
-        image: {
-            src: banner6,
-            sources: [
-                {
-                    srcset: `${banner6.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        btnText: 'Посмотреть',
+        image: banner6,
     },
     {
         id: 8,
         type: 'banner',
-        title: 'Водостойкая губная помада L’Oreal Paris',
+        title: 'Если ты — бессовестно талантливый стилист, визажист, мастер красоты любого профиля',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
-        btnText: 'Смотреть товары',
-        image: {
-            src: banner7,
-            sources: [
-                {
-                    srcset: `${banner7.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        btnText: 'Регистрация',
+        image: banner7,
     },
     {
         id: 9,
         type: 'banner',
-        title: 'Водостойкая губная помада L’Oreal Paris',
+        title: 'Если ты — бессовестно талантливый стилист, визажист, мастер красоты любого профиля',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
-        btnText: 'Смотреть товары',
-        image: {
-            src: banner7,
-            sources: [
-                {
-                    srcset: `${banner7.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        btnText: 'Регистрация',
+        image: banner7,
     },
     {
         id: 10,
         type: 'banner',
-        title: 'Водостойкая губная помада L’Oreal Paris',
+        title: 'Если ты — бессовестно талантливый стилист, визажист, мастер красоты любого профиля',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
-        btnText: 'Смотреть товары',
-        image: {
-            src: banner7,
-            sources: [
-                {
-                    srcset: `${banner7.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        btnText: 'Регистрация',
+        image: banner7,
     },
     {
         id: 11,
@@ -365,15 +298,7 @@ const banners = [
         title: 'Основной уход за кожей',
         bottomText: 'Мгновенная оптимизация тона, текстуры и увлажнения кожи',
         btnText: 'Посмотреть',
-        image: {
-            src: banner6,
-            sources: [
-                {
-                    srcset: `${banner6.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: banner6,
     },
 ];
 
@@ -413,216 +338,160 @@ const productBanners = [
     },
 ];
 
-const brands = [
+const sets = [
     {
         id: 1,
-        name: 'Brand1',
-        title: 'Brand1',
-        image: {
-            src: brand1,
-            sources: [
-                {
-                    srcset: `${brand1.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        title: 'Новая коллекция косметики Aveda',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner1,
     },
     {
         id: 2,
-        name: 'Brand2',
-        title: 'Brand2',
-        image: {
-            src: brand2,
-            sources: [
-                {
-                    srcset: `${brand2.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        title: '20 средств для ухода за молодой кожей',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner2,
     },
     {
         id: 3,
-        name: 'Brand3',
-        title: 'Brand3',
-        image: {
-            src: brand3,
-            sources: [
-                {
-                    srcset: `${brand3.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        title: '20 средств для ухода за молодой кожей',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner1,
     },
     {
         id: 4,
-        name: 'Brand4',
-        title: 'Brand4',
-        image: {
-            src: brand4,
-            sources: [
-                {
-                    srcset: `${brand4.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        title: 'Лучшие стайлинги для летних укладок в новом сезоне только для тебя',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner3,
     },
     {
         id: 5,
-        name: 'Brand5',
-        title: 'Brand5',
-        image: {
-            src: brand5,
-            sources: [
-                {
-                    srcset: `${brand5.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        title: 'Новейшая косметика для лица и тела с омолаживающим эффектом',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner4,
     },
     {
         id: 6,
-        name: 'Brand6',
-        title: 'Brand6',
-        image: {
-            src: brand1,
-            sources: [
-                {
-                    srcset: `${brand1.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        title: ' Натуральный макияж Aveda, который подойдёт для каждой девушки',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner5,
     },
     {
         id: 7,
-        name: 'Brand7',
-        title: 'Brand7',
-        image: {
-            src: brand2,
-            sources: [
-                {
-                    srcset: `${brand2.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        title: 'Водостойкая губная помада L’Oreal Paris',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner6,
     },
     {
         id: 8,
-        name: 'Brand8',
-        title: 'Brand8',
-        image: {
-            src: brand3,
-            sources: [
-                {
-                    srcset: `${brand3.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        title: 'Если ты — бессовестно талантливый стилист, визажист, мастер красоты любого профиля',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner7,
     },
     {
         id: 9,
-        name: 'Brand9',
-        title: 'Brand9',
-        image: {
-            src: brand4,
-            sources: [
-                {
-                    srcset: `${brand4.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        title: 'Если ты — бессовестно талантливый стилист, визажист, мастер красоты любого профиля',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner7,
     },
     {
         id: 10,
-        name: 'Brand10',
-        title: 'Brand10',
-        image: {
-            src: brand5,
-            sources: [
-                {
-                    srcset: `${brand5.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        title: 'Если ты — бессовестно талантливый стилист, визажист, мастер красоты любого профиля',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner7,
     },
     {
         id: 11,
-        name: 'Brand11',
-        title: 'Brand11',
-        image: {
-            src: brand1,
-            sources: [
-                {
-                    srcset: `${brand1.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        title: 'Основной уход за кожей',
+        code: 'novaya-kollekcya-kosmetiki-aveda',
+        image: banner6,
+    },
+];
+
+const brands = [
+    { id: 1, name: 'Alterna', code: 'alterna', image: brand1 },
+    { id: 2, name: 'Aveda', code: 'aveda', image: brand2 },
+    { id: 3, name: 'Bungeetape', code: 'bungeetape', image: brand3 },
+    { id: 4, name: 'Christina Fitzgerald', code: 'christina_fitzgerald', image: brand4 },
+    { id: 5, name: 'Cloud Nine', code: 'cloud_nine', image: brand5 },
+    { id: 6, name: 'Dajuja', code: 'dajuja', image: brand1 },
+    { id: 7, name: 'Dyson', code: 'dyson' },
+    { id: 8, name: 'IKOO', code: 'ikoo' },
+    { id: 9, name: 'Kevin.Murphy', code: 'kevin_murphy' },
+    { id: 10, name: 'Kure Bazaar', code: 'kure_bazaar' },
+    { id: 11, name: 'La Ric', code: 'la_ric' },
+    { id: 12, name: 'Olaplex', code: 'olaplex' },
+    { id: 13, name: 'Oribe', code: 'oribe' },
+    { id: 14, name: 'R+Co', code: 'r_co' },
+];
+
+const brandsCatalog = [
+    {
+        id: 1,
+        name: 'A',
+        items: [brands[0], brands[1]],
     },
     {
-        id: 12,
-        name: 'Brand12',
-        title: 'Brand12',
-        image: {
-            src: brand2,
-            sources: [
-                {
-                    srcset: `${brand2.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        id: 2,
+        name: 'B',
+        items: [brands[2]],
     },
     {
-        id: 13,
-        name: 'Brand13',
-        title: 'Brand13',
-        image: {
-            src: brand3,
-            sources: [
-                {
-                    srcset: `${brand3.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        id: 3,
+        name: 'C',
+        items: [brands[3], brands[4]],
     },
     {
-        id: 14,
-        name: 'Brand14',
-        title: 'Brand14',
-        image: {
-            src: brand4,
-            sources: [
-                {
-                    srcset: `${brand4.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        id: 4,
+        name: 'D',
+        items: [brands[5], brands[6]],
     },
     {
-        id: 15,
-        name: 'Brand15',
-        title: 'Brand15',
-        image: {
-            src: brand5,
-            sources: [
-                {
-                    srcset: `${banner5.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        id: 5,
+        name: 'I',
+        items: [brands[7]],
+    },
+    {
+        id: 6,
+        name: 'K',
+        items: [brands[8], brands[9]],
+    },
+    {
+        id: 7,
+        name: 'L',
+        items: [brands[10]],
+    },
+    {
+        id: 8,
+        name: 'O',
+        items: [brands[11], brands[12]],
+    },
+    {
+        id: 9,
+        name: 'R',
+        items: [brands[13]],
+    },
+];
+
+const brandDetails = [
+    {
+        id: 1,
+        code: 'loreal',
+        name: 'L’Oréal Paris',
+        description: `L’Oreal — это, пожалуй, самый известный мировой бренд. 
+        Его знают и доверяют его продукции во всех странах мира. 
+        Это компания действительно уникальна. 
+        Она объединила несколько популярных и сделавших свое имя марок, но при этом логотип «L’Oreal» не теряет собственной значимости и индивидуальности. 
+        Каждая женщина при упоминании фразы «L’Oreal Paris» ассоциирует ее с качественными средствами для ухода за кожей, со стойкой и безопасной краской, с шампунями, масками и маслами, а также с возможностью сделать прекрасный макияж.`,
+    },
+
+    {
+        id: 1,
+        code: 'lipstick-queen',
+        name: 'Lipstick Queen',
+        image: brandDetail1,
+        description: `Губная помада Queen приглашает вас преодолеть косметические барьеры и пробиться с губой. 
+        Начиная с преобразующих цветов и увлажняющих и комфортных текстур и формул, мы предлагаем губную помаду для всех и каждого случая. 
+        Покупайте нашу бестселлерную губную помаду Frog Prince и другие любимые продукты у наших официальных партнеров по всему миру.`,
     },
 ];
 
@@ -1070,53 +939,85 @@ const products = [
 const masterClasses = [
     {
         id: 1,
-        name: 'Мастер-класс по макияжу (Входной билет LITE)',
-        date: '3 сентября (пт), 12:00',
+        name: 'Мастер-класс по макияжу',
+        description: '3 сентября (пт), 12:00',
         author: 'Денис Карташев, визажист',
         type: 'masterclass',
-        price: '1 900 ₽',
+        price: 'от 1 900 ₽',
         oldPrice: null,
-        image: {
-            src: productMasterclass1,
-            sources: [
-                {
-                    srcset: `${productMasterclass1.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: productMasterclass1,
     },
     {
         id: 2,
-        name: 'Мастер-класс по макияжу (Входной билет LITE)',
-        date: '6 сентября (пн), 18:00',
-        author: 'Владимир Соколов, визажист',
+        name: 'Макияж для фотографии',
+        description: 'Видео-урок',
         type: 'masterclass',
-        price: '1 900 ₽',
-        oldPrice: '1 600 ₽',
-        image: {
-            src: productMasterclass2,
-            sources: [
-                {
-                    srcset: `${productMasterclass2.replace(ext, '.webp')}`,
-                    type: 'image/webp',
-                },
-            ],
-        },
+        image: productMasterclass2,
     },
 ];
 
 const productsDetails = [
     {
         id: 1,
-        code: '4',
+        code: 'krem-dlya-britya-olaplex',
         title: 'Губная помада TOM FORD Matte Lip Color, 27, Bruised Plum',
         rating: 4,
         reviewsCount: 12,
         vendorCode: 148333731,
-        price: 3900,
-        oldPrice: 4600,
+
+        shortDescription: `Двадцать три насыщенных,
+        ярких оттенка помады воплощают в себе современную интерпретацию классики от Тома Форда. 
+        Редкое экзотическое масло муру-муру из Бразилии и масло цветков ромашки создают кремовую текстуру и обеспечивают...`,
+
+        instagramNote: 'Добавь тег @bessovestnotalantlivy в Instagram и, возможно, мы опубликуем твою фотографию',
+
+        price: {
+            value: 3900,
+            currency: 'RUB',
+        },
+
+        oldPrice: {
+            value: 4600,
+            currency: 'RUB',
+        },
+
         bonus: 80,
+
+        receiveMethods: [
+            {
+                id: receiveMethods.EXPRESS,
+                date: mockDate,
+                price: {
+                    value: 550,
+                    currency: 'RUB',
+                },
+            },
+            {
+                id: receiveMethods.DELIVERY,
+                date: addDays(mockDate, 1),
+                price: {
+                    value: 350,
+                    currency: 'RUB',
+                },
+            },
+            {
+                id: receiveMethods.PICKUP,
+                date: addDays(mockDate, 2),
+                price: {
+                    value: 0,
+                    currency: 'RUB',
+                },
+            },
+        ],
+
+        brand: {
+            name: 'brand-name',
+            code: 'brand-code',
+            image: {
+                id: 32,
+                sourceExt: 'jpg',
+            },
+        },
 
         media: [
             {
@@ -1187,11 +1088,11 @@ const productsDetails = [
             интерпретацию классики от Тома Форда. 
             Редкое экзотическое масло муру-муру из Бразилии и масло цветков ромашки создают кремовую текстуру и 
             обеспечивают невероятно гладкое нанесение.<br/><br/>
-            <b>ЧТО</b> Помада с кремовой текстурой подарит губам стойкое покрытие с эффектом сатина. 
+            <strong>ЧТО</strong> Помада с кремовой текстурой подарит губам стойкое покрытие с эффектом сатина. 
             Экстракты белой лилии и мирры в составе помады обеспечивают увлажнение и защиту, визуально делают губы более объемными.<br/><br/>
-            <b>ПРЕИМУЩЕСТВА</b> Растительные полимеры отвечают за оптимальную дисперсию цвета, обеспечивают комфортное ощущение на протяжение всего дня. 
+            <strong>ПРЕИМУЩЕСТВА</strong> Растительные полимеры отвечают за оптимальную дисперсию цвета, обеспечивают комфортное ощущение на протяжение всего дня. 
             Комплекс смягчающих масел обеспечит шелковое скольжение и равномерное нанесение. Экстракт белой лилии обладает антиоксидантными и восстанавливающими 
-            свойствами. Экстракт мирры увлажняет и борется с возрастными признаками.<br/><br/> <b>ЧЕГО ОЖИДАТЬ</b> Обладает точной цветопередачей. Насыщенная формула не 
+            свойствами. Экстракт мирры увлажняет и борется с возрастными признаками.<br/><br/> <strong>ЧЕГО ОЖИДАТЬ</strong> Обладает точной цветопередачей. Насыщенная формула не 
             оставляет ощущения утяжеления.`,
 
             image: productDescription1,
@@ -1320,6 +1221,125 @@ const productsDetails = [
         },
     },
 ];
+
+const masterClassDetails = {
+    name: 'Макияж для фото',
+    code: 'code1',
+    date: '3 сентября (пт), 12:00–18:00',
+    topText: `<p>Мастер-класс «Макияж для фото» направлен на создание образов непосредственно для коммерческих и творческих съемок. </p>
+    Рекомендуем посетить мастер-класс визажистам с любым уровнем подготовки, которые только начали или давно работают с частными клиентами, но хотят качественно изменить направление работы в сторону fashion, beauty и других коммерческих съемок.`,
+    bottomText: `На мастер-классе преподаватель расскажет и покажет главные отличия картинки в жизни и на фото, какие текстуры подойдут для создания самых трендовых эффектов (матовая, глянцевая, мокрая, сияющая кожа), как работать с крупными кадрами и какие текстуры выбирать, чтобы постпродакшн (дальнейшая обработка фото) сказал вам спасибо!`,
+    image: productMasterclass2,
+    detailImage: masterclassDetailImage1,
+
+    contacts: {
+        name: 'Тумарева Элина Леонидовна',
+        description: 'Лицензированный консультант, мастер-коуч ICI',
+        phone: '+7 (903) 233 77 11',
+        email: 'info@insight-russia.ru',
+    },
+
+    gallery: [masterclassGalleryImg1, masterclassGalleryImg2, masterclassGalleryImg3],
+
+    program: `
+    <p>— Зачем нужна команда и как с ней работать, где ее искать;</p>
+    <p>— Как придумать образ по референсу стилиста и что это такое;</p> 
+    <p>— Разбор текстур для работы с кожей, начиная с выбора ухода;</p> 
+    <p>— Вариации nude make-up: от «голого лица» до свежего образа;</p>
+    <p>— Способы нанесения тона для очень крупных кадров, чтобы кожа оставалась живой;</p>
+    <p>— Создание влажной, матовой или сияющей кожи для формата beauty съемок;</p> 
+    <p>— Универсальные и проверенные продукты для создания безупречного нюдового мейкапа;</p> 
+    <p>— Демонстрация и практическая отработка по пройденно лекции;</p>
+    <p>— Особенности работы с разным освещением в студии;</p> 
+    <p>— Создание портфолио и выбор фотографа;</p> 
+    <p>— Этапы трансформации нюдового макияжа в яркий, этапы нанесения и цветовые решения для создания единой концепции съемки;</p> 
+    <p>— Сочетание сухих, кремовых и жидких текстур в одном макияже;</p> 
+    <p>— Использование продуктов не поназначению, креативные макияжи;</p> 
+    <p>— Секреты цвета – как добиться такого же насыщенного цвета на фото, как и в жизни;</p> 
+    <p>— Влажные цветные смоки, подводка нижнего века, несколько цветных акцентов в макияже;</p> 
+    <p>— Демонстрация и практическая отработка по пройденной лекции.</p>`,
+
+    requirements: `
+    <p>— Влажные салфетки;</p> 
+    <p>— Жидкость для снятия макияжа;</p> 
+    <p>— Ершик для бровей;</p> 
+    <p>— Корректор (база или крем);</p> 
+    <p>— Кисть для хайлайтера;</p> 
+    <p>— Кисть плоская для консилера;</p> 
+    <p>— Кисть для нижнего века и ресничного контура;</p>`,
+
+    authors: [
+        {
+            id: 1,
+            firstName: 'Владимир',
+            lastName: 'Соколов',
+            nickName: '@sokolov',
+            profile: 'Ведущий стилист',
+            image: author1,
+        },
+        {
+            id: 2,
+            firstName: 'Игорь',
+            lastName: 'Борисов',
+            nickName: null,
+            profile: 'Cтилист',
+            image: null,
+        },
+        {
+            id: 3,
+            firstName: 'Владимир',
+            lastName: 'Соколов',
+            nickName: '@sokolov',
+            profile: 'Ведущий стилист',
+            image: author1,
+        },
+        {
+            id: 4,
+            firstName: 'Игорь',
+            lastName: 'Борисов',
+            nickName: null,
+            profile: 'Cтилист',
+            image: null,
+        },
+    ],
+
+    address: {
+        id: 1,
+        full: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
+        coords: [55.7521569884845, 37.66961932869719],
+    },
+
+    tickets: [
+        {
+            id: 1,
+            name: 'Входной билет LITE',
+            description: 'Возможность посетить только одну площадку на мероприятии',
+            remain: 10,
+            price: {
+                value: 5000,
+                currency: 'RUB',
+            },
+        },
+        {
+            id: 2,
+            name: 'Входной билет PRO',
+            description: 'Доступ ко всем площадкам и материалам',
+            remain: 3,
+            price: {
+                value: 7000,
+                currency: 'RUB',
+            },
+        },
+    ],
+
+    price: {
+        value: {
+            from: 5000,
+            to: 7000,
+        },
+        currency: 'RUB',
+    },
+};
 
 const typeIds = {
     product: 1,
@@ -1515,9 +1535,6 @@ const pickupPoints = [
     },
 ];
 
-const mockDate = new Date(Date.now());
-mockDate.setHours(0, 0, 0, 0);
-
 const mockDeliveryTypes = [
     {
         id: deliveryTypes.CONSOLIDATION,
@@ -1637,6 +1654,87 @@ const checkoutData = {
         bonusSpent: '0',
     },
 };
+
+// const filters = [
+//     {
+//         id: 1,
+//         title: 'Цена, ₽',
+//         name: 'price',
+//         type: 'range',
+//         max: 1000,
+//         min: 0,
+//     },
+//     {
+//         id: 2,
+//         title: 'Бренды',
+//         name: 'brand',
+//         type: 'check',
+//         items: [
+//             {
+//                 id: 1,
+//                 name: 'L’Oreal Paris',
+//                 code: 'brand-loreal',
+//             },
+//             {
+//                 id: 2,
+//                 name: 'Maybelline',
+//                 code: 'brand-maybelline',
+//             },
+//             {
+//                 id: 3,
+//                 name: 'Pupa',
+//                 code: 'brand-pupa',
+//             },
+//         ],
+//     },
+//     {
+//         id: 3,
+//         title: 'Средства',
+//         name: 'tool',
+//         type: 'check',
+//         values: [],
+//         items: [
+//             {
+//                 id: 1,
+//                 name: 'Жидкая помада для губ',
+//                 code: 'tool-zhidkaya_pomada_dlya_gub',
+//             },
+//             {
+//                 id: 2,
+//                 name: 'Помада для губ',
+//                 code: 'tool-pomada_dlya_gub',
+//             },
+//             {
+//                 id: 3,
+//                 name: 'Гигиеническая помада для губ',
+//                 code: 'tool-gigienicheskaya_pomada_dlya_gub',
+//             },
+//         ],
+//     },
+//     {
+//         id: 4,
+//         title: 'Эффекты',
+//         name: 'effect',
+//         type: 'radio',
+//         items: [
+//             {
+//                 id: 1,
+//                 name: 'Глянцевая',
+//                 code: 'effect-glyancevaya',
+//             },
+//             {
+//                 id: 2,
+//                 name: 'Матовая',
+//                 code: 'effect-matovaya',
+//             },
+//             {
+//                 id: 3,
+//                 name: 'Перламутровая',
+//                 code: 'effect-perlamutrovaya',
+//             },
+//         ],
+//     },
+// ];
 
 export default class MockHttpService extends HttpServiceBase {
     delete(path, data) {
@@ -2055,12 +2153,29 @@ export default class MockHttpService extends HttpServiceBase {
                 case '/v1/instagram':
                     setTimeout(() => resolve(instagrams), 300);
                     break;
+                    brandsCatalog;
 
                 case '/v1/brands':
                     setTimeout(() => resolve(brands), 300);
                     break;
 
-                case '/v1/product':
+                case '/v1/brand-catalog':
+                    setTimeout(() => resolve(_cloneDeep(brandsCatalog)), 300);
+                    break;
+
+                case '/v1/set-catalog':
+                    setTimeout(() => resolve(_cloneDeep(sets)), 300);
+                    break;
+
+                case '/v1/masterclasses':
+                    setTimeout(() => resolve(masterClasses), 300);
+                    break;
+
+                case '/v1/catalog/masterclass-detail':
+                    setTimeout(() => resolve(_cloneDeep(masterClassDetails)), 300);
+                    break;
+
+                case '/v1/product-detail':
                     switch (data.code) {
                         default:
                             setTimeout(() => resolve(productsDetails[0]), 300);
@@ -2074,6 +2189,16 @@ export default class MockHttpService extends HttpServiceBase {
                 case '/v1/checkout/data':
                     setTimeout(() => resolve(_cloneDeep(checkoutData)), 300);
                     break;
+
+                case '/v1/brand':
+                    if (!data.brandCode) {
+                        reject(new Error('wrong brandCode'));
+                        return;
+                    }
+                    const brand = brandDetails[0];
+                    setTimeout(() => resolve(_cloneDeep(brand)), 300);
+                    break;
+
                 default:
                     reject(new Error(`Unknown method, path: ${path}, data: ${JSON.stringify(data)}`));
             }

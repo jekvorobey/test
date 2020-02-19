@@ -1,7 +1,11 @@
 <template>
     <div class="popular-brands">
         <div class="popular-brands__most-popular">
-            <div v-for="(brand, index) in mostPopularBrands" :key="brand.id || index">
+            <div
+                class="popular-brands__most-popular-img"
+                v-for="(brand, index) in mostPopularBrands"
+                :key="brand.id || index"
+            >
                 <v-picture :image="brand.image" />
             </div>
         </div>

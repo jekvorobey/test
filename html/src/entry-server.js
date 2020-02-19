@@ -1,10 +1,25 @@
-import { serviceName } from './assets/scripts/constants';
-import createApp from './app/app';
+import { injectionType } from './assets/scripts/enums';
+import { Container } from 'inversify';
+import { injectClass, injectableClass } from './util/container';
+
 import ServiceLocator from './services/ServiceLocator';
+import ApplicationContext from './services/ApplicationContext';
 import ServerLogger from './services/LogService/ServerLogger';
 import ServerCookie from './services/CookieService/ServerCookie';
 import HttpService from './services/HttpService/MockServiceAdapter';
 import MockProgressService from './services/ProgressService/MockService';
+
+import createApp from './app/app';
+
+// Declare as injectable and its dependencies
+injectableClass(ApplicationContext);
+injectableClass(MockProgressService);
+injectableClass(ServerLogger);
+injectableClass(ServerCookie);
+injectableClass(HttpService);
+injectClass(injectionType.APPLICATION_CONTEXT, ServerCookie, 0);
+injectClass(injectionType.APPLICATION_CONTEXT, HttpService, 0);
+injectClass(injectionType.COOKIE, HttpService, 1);
 
 // This exported function will be called by `bundleRenderer`.
 // This is where we perform data-prefetching to determine the
@@ -13,32 +28,45 @@ import MockProgressService from './services/ProgressService/MockService';
 // return a Promise that resolves to the app instance.
 export default context => {
     return new Promise((resolve, reject) => {
-        const host = `${context.req.protocol}://${context.req.get('host')}`;
-        const locator = ServiceLocator.createInstance()
-            .register(serviceName.PROGRESS, () => new MockProgressService())
-            .register(serviceName.LOGGER, () => new ServerLogger())
-            .register(serviceName.COOKIE, () => new ServerCookie(context.req, context.res))
-            .register(serviceName.HTTP, () => new HttpService(host));
+        const { url, req, res, env } = context;
+        const appContext = new ApplicationContext();
+        appContext.env = env;
+        appContext.req = req;
+        appContext.res = res;
+        appContext.isServer = true;
+        appContext.baseURL = `${req.protocol}://${req.get('host')}`;
 
-        const { app, router, store } = createApp(locator);
+        // Declare bindings
+        ServiceLocator.createInstance(new Container({ skipBaseClassChecks: true }));
+        const { $container } = ServiceLocator;
 
-        const { $logger } = ServiceLocator;
-        const { url } = context;
-        const { fullPath } = router.resolve(url).route;
+        $container.bind(injectionType.APPLICATION_CONTEXT).toConstantValue(appContext);
+        $container
+            .bind(injectionType.PROGRESS)
+            .to(MockProgressService)
+            .inSingletonScope();
+        $container
+            .bind(injectionType.LOGGER)
+            .to(ServerLogger)
+            .inSingletonScope();
+        $container
+            .bind(injectionType.COOKIE)
+            .to(ServerCookie)
+            .inSingletonScope();
+        $container
+            .bind(injectionType.HTTP)
+            .to(HttpService)
+            .inSingletonScope();
 
-        if (fullPath !== url) {
-            $logger.error(`full path ${fullPath} doesn't match ${url}`);
-            reject({ url: fullPath });
-        }
+        const { app, router, store } = createApp($container);
+        const logger = $container.get(injectionType.LOGGER);
 
         // set router's location
         router.push(url);
 
         router.onReady(ctx => {
-            if (context.req.originalUrl !== ctx.fullPath) {
-                $logger.error(`full path ${fullPath} doesn't match ${url}`);
-                return reject({ url: ctx.fullPath });
-            }
+            if (appContext.redirect) return reject({ code: appContext.statusCode, url: appContext.redirect });
+            if (appContext.statusCode) res.status(appContext.statusCode);
 
             // This `rendered` hook is called when the app has finished rendering
             context.rendered = () => {

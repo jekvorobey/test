@@ -1,0 +1,101 @@
+.promocodes-view {
+    &__header {
+        display: flex;
+        align-items: baseline;
+        margin-bottom: calc(var(--gs) * 3);
+        justify-content: space-between;
+    }
+
+    &__hl {
+        margin-bottom: 0;
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 40px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+
+        @media (--tablet-lg) {
+            display: none;
+        }
+    }
+
+    &__switch {
+        width: 288px;
+
+        @media (--tablet) {
+            width: 100%;
+        }
+    }
+
+    &__table {
+        width: 100%;
+        border: none;
+        border-collapse: collapse;
+        margin-bottom: calc(var(--gs) * 4);
+
+        &-img {
+            width: 40px;
+            height: 40px;
+            align-self: center;
+            margin-right: var(--gs);
+        }
+
+        &-title {
+            flex: 1;
+        }
+
+        &-btn {
+            display: inline-flex;
+        }
+
+        &-tr {
+            border-bottom: 1px solid var(--cl-divider-grey);
+
+            &--header {
+                border-top: 1px solid var(--cl-divider-grey);
+            }
+        }
+
+        &-th,
+        &-td {
+            font-weight: normal;
+            text-align: left;
+            line-height: 24px;
+            padding: calc(var(--gs) * 2) 0;
+        }
+
+        &-td {
+            vertical-align: top;
+        }
+
+        &-th {
+            font-size: 14px;
+            color: var(--cl-grey);
+        }
+    }
+
+    &__list {
+        margin-bottom: calc(var(--gs) * 2);
+
+        &-item {
+            padding: calc(var(--gs) * 3);
+            border-bottom: 1px solid var(--cl-divider-grey);
+
+            @media (--tablet) {
+                padding: calc(var(--gs) * 2);
+            }
+
+            &-row {
+                display: flex;
+
+                @media (--tablet) {
+                    flex-direction: column;
+                }
+
+                & + & {
+                    margin-top: var(--gs);
+                }
+            }
+        }
+    }
+}

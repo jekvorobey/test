@@ -4,10 +4,10 @@ import HttpServiceBase from './base';
 import MockHttpService from './MockService';
 
 export default class MockServiceAdapter extends HttpServiceBase {
-    constructor(baseURL = '') {
-        super(baseURL);
-        this.httpServiceInstance = new HttpService(baseURL);
-        this.mockServiceInstance = new MockHttpService(baseURL);
+    constructor(context, cookie) {
+        super(context.baseURL);
+        this.httpServiceInstance = new HttpService(context, cookie);
+        this.mockServiceInstance = new MockHttpService(context);
     }
 
     /**
@@ -16,15 +16,26 @@ export default class MockServiceAdapter extends HttpServiceBase {
      * @param {*} config
      * @returns {Promise<Object>}
      */
-    delete(path, config) {
+    get(path, config) {
+        if (path.includes('/v1/auth/socialHandler/')) {
+            return this.httpServiceInstance.get(path, config);
+        }
+
         switch (path) {
-            case '/v1/cart/item':
-            case '/v1/checkout/certificate':
-            case '/v1/checkout/bonus':
-            case '/v1/checkout/promocode':
-                return this.httpServiceInstance.delete(path, config);
+            case '/v1/content/menus':
+            case '/v1/auth/is-login':
+            case '/v1/categories':
+            case '/v1/cart/data':
+            case '/v1/checkout/data':
+            case '/v1/catalog/products':
+            case '/v1/catalog/items':
+            case '/v1/catalog/product-detail':
+            case '/v1/catalog/filter':
+            case '/v1/catalog/product-groups':
+            case '/v1/catalog/product-group':
+                return this.httpServiceInstance.get(path, config);
             default:
-                return this.mockServiceInstance.delete(path, config);
+                return this.mockServiceInstance.get(path, config);
         }
     }
 
@@ -36,8 +47,18 @@ export default class MockServiceAdapter extends HttpServiceBase {
      */
     post(path, data, config) {
         switch (path) {
-            case '/v1/auth/login':
+            case '/v1/auth/loginBySocial':
+            case '/v1/auth/loginByPassword':
+            case '/v1/auth/sendSMS':
+            case '/v1/auth/checkCode':
+            case '/v1/auth/getSocialLink':
+            case '/v1/auth/registerByPassword':
+            case '/v1/auth/logout':
+            case '/v1/auth/reset/sendSMS':
+            case '/v1/auth/reset/resetPassword':
+
             case '/v1/cart/item':
+
             case '/v1/checkout/receive-method':
             case '/v1/checkout/address':
             case '/v1/checkout/pickup-point':
@@ -58,16 +79,15 @@ export default class MockServiceAdapter extends HttpServiceBase {
      * @param {*} config
      * @returns {Promise<Object>}
      */
-    get(path, config) {
+    delete(path, config) {
         switch (path) {
-            case '/v1/categories':
-            case '/v1/cart/data':
-            case '/v1/checkout/data':
-            case '/v1/catalog/items':
-            case '/v1/catalog/product-detail':
-                return this.httpServiceInstance.get(path, config);
+            case '/v1/cart/item':
+            case '/v1/checkout/certificate':
+            case '/v1/checkout/bonus':
+            case '/v1/checkout/promocode':
+                return this.httpServiceInstance.delete(path, config);
             default:
-                return this.mockServiceInstance.get(path, config);
+                return this.mockServiceInstance.delete(path, config);
         }
     }
 

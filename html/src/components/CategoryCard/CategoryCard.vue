@@ -2,7 +2,7 @@
     <div class="category-card">
         <router-link class="category-card__img" :to="url">
             <v-picture v-if="image" :image="image" :alt="name" />
-            <v-svg v-else id="category-card-empty" name="logo" width="48" height="48" />
+            <v-svg v-else id="category-card-empty" name="logo" />
         </router-link>
         {{ name }}
     </div>
@@ -11,6 +11,9 @@
 <script>
 import VSvg from '../controls/VSvg/VSvg.vue';
 import VPicture from '../controls/VPicture/VPicture.vue';
+
+import { generateCategoryUrl } from '../../util/catalog';
+import { productGroupTypes } from '../../assets/scripts/enums';
 import '../../assets/images/sprites/logo.svg';
 import './CategoryCard.css';
 
@@ -42,7 +45,7 @@ export default {
 
     computed: {
         url() {
-            return this.code ? `/catalog/${this.code}` : `/catalog`;
+            return generateCategoryUrl(productGroupTypes.CATALOG, null, this.code);
         },
     },
 };

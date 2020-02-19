@@ -23,8 +23,16 @@
         display: flex;
         height: 240px;
 
-        @media (--tablet) {
-            height: 192px;
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 100%;
+                padding-bottom: 0;
+            }
         }
 
         .v-picture {

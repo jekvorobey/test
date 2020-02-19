@@ -1,0 +1,71 @@
+.image-picker {
+    display: flex;
+    align-items: center;
+
+    &__img {
+        display: flex;
+        width: 95px;
+        background-color: var(--cl-grey);
+        border-radius: 50%;
+        margin-right: calc(var(--gs) * 3);
+
+        @media (--tablet) {
+            width: 72px;
+            margin-right: var(--gs);
+        }
+
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 100%;
+                padding-bottom: 0;
+            }
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+
+        &-controls {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--gs);
+
+            &-btn {
+                @media (--tablet) {
+                    padding: 6px calc(var(--gs) * 2);
+                }
+            }
+
+            &-link {
+                display: flex;
+                color: var(--cl-grey);
+                margin-left: var(--gs);
+
+                .icon {
+                    @media (--tablet-min) {
+                        display: none;
+                    }
+                }
+
+                span {
+                    @media (--tablet) {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        &-note {
+            @media (--tablet) {
+                font-size: 14px;
+                line-height: 24px;
+            }
+        }
+    }
+}

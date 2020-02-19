@@ -22,11 +22,10 @@
                     <v-check
                         v-for="option in filter.item.items"
                         :id="`${filter.item.name}-${option.id}`"
-                        :value="option.code"
                         :key="option.id"
                         :name="filter.item.name"
                         :checked="filterSegments[filter.item.name] && filterSegments[filter.item.name][option.code]"
-                        @change="onCheckChange($event, filter.item.name, option.code)"
+                        @change="onCheckChange($event, `${filter.item.name}-${option.code}`)"
                     >
                         {{ option.name }}
                     </v-check>
@@ -36,18 +35,17 @@
                         v-for="option in filter.item.items"
                         :id="`${filter.item.name}-${option.id}`"
                         type="radio"
-                        :value="option.code"
                         :key="option.id"
                         :name="filter.item.name"
                         :checked="filterSegments[filter.item.name] && filterSegments[filter.item.name][option.code]"
-                        @change="onRadioChange($event, filter.item.name, option.code)"
+                        @change="onRadioChange($event, `${filter.item.name}-${option.code}`)"
                     >
                         {{ option.name }}
                     </v-check>
                 </div>
             </template>
         </v-accordion>
-        <v-button class="btn--outline catalog-filter__clear-btn" :to="{ path: code ? `/catalog/${code}` : '/catalog' }">
+        <v-button class="btn--outline catalog-filter__clear-btn" :to="clearFilterUrl" replace>
             {{ btnText }}
         </v-button>
     </div>
@@ -59,8 +57,11 @@ import VRange from '../controls/VRange/VRange.vue';
 import VCheck from '../controls/VCheck/VCheck.vue';
 import VAccordion from '../controls/VAccordion/VAccordion.vue';
 
+import { NAME as CATALOG_MODULE, FILTERS } from '../../store/modules/Catalog';
+import { FILTER_SEGMENTS, ROUTE_SEGMENTS } from '../../store/modules/Catalog/getters';
+
 import _debounce from 'lodash/debounce';
-import { concatCatalogRoutePath } from '../../util/catalog';
+import { concatCatalogRoutePath, generateCategoryUrl } from '../../util/catalog';
 import { mapState, mapGetters } from 'vuex';
 import './CatalogFilter.css';
 
@@ -92,19 +93,42 @@ export default {
         };
     },
 
-    methods: {
-        onRadioChange(e, name, value) {
-            let { routeSegments } = this;
+    computed: {
+        ...mapGetters(CATALOG_MODULE, [FILTER_SEGMENTS, ROUTE_SEGMENTS]),
+        ...mapState(CATALOG_MODULE, [FILTERS]),
+        ...mapState('route', {
+            type: state => state.params.type,
+            code: state => state.params.code,
+            entityCode: state => state.params.entityCode,
+        }),
 
-            if (!routeSegments.includes(value)) routeSegments.push(value);
-            const radioRegexp = new RegExp(`^${name}-`);
-            routeSegments = routeSegments.filter(s => s === value || !s.match(radioRegexp));
-
-            this.$router.replace({ path: concatCatalogRoutePath(this.code, routeSegments) });
+        accordionFilters() {
+            return this.filters
+                ? this.filters.map(f => {
+                      return { id: f.id, item: f, title: f.title, isExpanded: true };
+                  })
+                : [];
         },
 
-        onCheckChange(e, name, value) {
-            let { routeSegments } = this;
+        clearFilterUrl() {
+            const { type, entityCode, code } = this;
+            return generateCategoryUrl(type, entityCode, code);
+        },
+    },
+
+    methods: {
+        onRadioChange(e, value) {
+            const { type, entityCode, code, routeSegments } = this;
+
+            if (!routeSegments.includes(value)) routeSegments.push(value);
+            routeSegments = routeSegments.filter(s => s === value);
+
+            const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
+            this.$router.replace({ path });
+        },
+
+        onCheckChange(e, value) {
+            const { type, entityCode, code, routeSegments } = this;
 
             if (e) {
                 if (routeSegments.includes(value)) return;
@@ -117,7 +141,8 @@ export default {
                 }
             }
 
-            this.$router.replace({ path: concatCatalogRoutePath(this.code, routeSegments) });
+            const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
+            this.$router.replace({ path });
         },
 
         onRangeChange(e, name) {
@@ -125,25 +150,9 @@ export default {
         },
     },
 
-    computed: {
-        ...mapGetters('catalog', ['filterSegments', 'routeSegments']),
-        ...mapState('catalog', ['filters']),
-        ...mapState('route', {
-            code: state => state.params.code,
-        }),
-
-        accordionFilters() {
-            return this.filters
-                ? this.filters.map(f => {
-                      return { id: f.id, item: f, title: f.title, isExpanded: true };
-                  })
-                : [];
-        },
-    },
-
     beforeMount() {
         this.debounce_rangeChange = _debounce((e, name) => {
-            let { routeSegments } = this;
+            const { type, entityCode, code, routeSegments } = this;
             const segment = `${name}-from_${e[0]}_to_${e[1]}`;
             const rangeRegex = new RegExp(`^${name}-`);
 
@@ -159,9 +168,10 @@ export default {
                 if (routeSegments[currentIndex] === segment) return;
                 routeSegments.splice(currentIndex, 1, segment);
             } else routeSegments.push(segment);
-            this.$router.replace({ path: concatCatalogRoutePath(this.code, routeSegments) });
+
+            const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
+            this.$router.replace({ path });
         }, 500);
     },
 };
 </script>
-

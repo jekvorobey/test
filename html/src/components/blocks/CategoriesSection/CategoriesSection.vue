@@ -1,9 +1,9 @@
 <template>
-    <section class="section">
-        <div class="container categories-section">
-            <div class="categories-section__grid">
+    <section class="section categories-section">
+        <div class="container categories-section__container">
+            <div class="categories-section__list">
                 <category-card
-                    class="categories-section__card"
+                    class="categories-section__item"
                     v-for="category in categories"
                     :key="category.id"
                     :name="category.name"

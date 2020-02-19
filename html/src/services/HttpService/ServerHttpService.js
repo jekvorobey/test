@@ -1,19 +1,17 @@
 import axios from 'axios';
 import HttpServiceBase from './base';
-import { $cookie } from '../ServiceLocator';
-// import { cacheAdapterEnhancer } from 'axios-extensions';
+import { httpCodes } from '../../assets/scripts/enums';
+import { HTTP_REQUEST_TIMEOUT } from '../../assets/scripts/constants';
 
 export default class ServerHttpService extends HttpServiceBase {
-    constructor(baseURL = '') {
-        super(baseURL);
+    constructor(context, cookie) {
+        super(context.baseURL);
 
         this.instance = axios.create({
-            baseURL,
+            baseURL: context.baseURL,
             withCredentials: true,
-            timeout: 20000,
-            headers: { Cookie: $cookie.cookieString || '' },
-            // cache will be enabled by default
-            // adapter: cacheAdapterEnhancer(axios.defaults.adapter),
+            timeout: HTTP_REQUEST_TIMEOUT,
+            headers: { Cookie: cookie.cookieString || '' },
         });
     }
 
@@ -27,13 +25,12 @@ export default class ServerHttpService extends HttpServiceBase {
         return new Promise(async (resolve, reject) => {
             try {
                 const resp = await this.instance.get(path, config);
-                if (resp.status === 200 || resp.status === 304) resolve(resp.data);
+                if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NOT_MODIFIED) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
                 reject(error);
             }
         });
-        // return this.instance.get(path, config);
     }
 
     /**
@@ -46,13 +43,12 @@ export default class ServerHttpService extends HttpServiceBase {
         return new Promise(async (resolve, reject) => {
             try {
                 const resp = await this.instance.post(path, data, config);
-                if (resp.status === 200 || resp.status === 304) resolve(resp.data);
+                if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NOT_MODIFIED) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
                 reject(error);
             }
         });
-        // return this.instance.post(path, config);
     }
 
     /**
@@ -65,7 +61,7 @@ export default class ServerHttpService extends HttpServiceBase {
         return new Promise(async (resolve, reject) => {
             try {
                 const resp = await this.instance.delete(path, config);
-                if (resp.status === 200 || resp.status === 204) resolve(resp.data);
+                if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NO_CONTENT) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
                 reject(error);
@@ -83,7 +79,7 @@ export default class ServerHttpService extends HttpServiceBase {
         return new Promise(async (resolve, reject) => {
             try {
                 const resp = await this.instance.put(path, data, config);
-                if (resp.status === 200 || resp.status === 204) resolve(resp.data);
+                if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NO_CONTENT) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
                 reject(error);

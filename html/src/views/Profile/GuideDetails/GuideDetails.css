@@ -1,0 +1,74 @@
+.guide-details-view {
+    &__hl {
+        margin-bottom: calc(var(--gs) * 3);
+        margin-top: 0;
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 40px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+
+        @media (--tablet) {
+            margin-bottom: calc(var(--gs) * 2);
+        }
+    }
+
+    &__container {
+        @media (--tablet) {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    &__back-link {
+        display: flex;
+        font-size: 16px;
+        line-height: 24px;
+        fill: var(--cl-grey);
+        color: var(--cl-grey);
+        text-transform: none;
+        margin-bottom: var(--gs);
+
+        @media (--tablet-lg) {
+            margin-bottom: calc(var(--gs) * 2);
+            text-transform: uppercase;
+            color: var(--cl-global);
+            fill: var(--cl-global);
+            letter-spacing: 0.02em;
+            font-weight: bold;
+        }
+    }
+
+    &__list {
+        &-item {
+            display: flex;
+
+            @media (--tablet) {
+                flex-direction: column;
+            }
+
+            & + & {
+                margin-top: calc(var(--gs) * 3);
+
+                @media (--tablet) {
+                    margin-top: calc(var(--gs) * 4);
+                }
+            }
+        }
+
+        &-desc {
+            flex: 1;
+        }
+
+        &-card {
+            width: 288px;
+            margin-right: calc(var(--gs) * 3);
+
+            @media (--tablet) {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: calc(var(--gs) * 3);
+            }
+        }
+    }
+}

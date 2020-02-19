@@ -1,52 +1,132 @@
 import { $logger } from '../../../services/ServiceLocator';
-import { getCatalogItems, getCategories, getBanners } from '../../../api';
-import { SET_ITEMS, SET_CATEGORIES, SET_BANNER, SET_LOAD as M_SET_LOAD, SET_CATEGORY_CODE } from './mutations';
+import { productGroupTypes } from '../../../assets/scripts/enums';
+import { storeErrorHandler } from '../../../util/store';
+import { getCatalogItems, getCategories, getBanners, getBrand, getFilters, getProductGroup } from '../../../api';
+import {
+    SET_FILTERS,
+    SET_ITEMS,
+    SET_ITEMS_MORE,
+    SET_CATEGORIES,
+    SET_BANNER,
+    SET_LOAD_PATH as M_SET_LOAD_PATH,
+    SET_CATEGORY_CODE,
+    SET_BRAND_CODE,
+    SET_PRODUCT_GROUP,
+    SET_TYPE,
+    SET_ENTITY_CODE,
+} from './mutations';
 
+export const FETCH_FILTERS = 'FETCH_FILTERS';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const FETCH_BANNER = 'FETCH_BANNER';
 export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
-export const FETCH_CATALOG_DATA = 'FETCH_CATALOG_DATA';
+export const FETCH_PRODUCT_GROUP = 'FETCH_PRODUCT_GROUP';
 
-export const SET_LOAD = 'SET_LOAD';
+export const SET_LOAD_PATH = 'SET_LOAD_PATH';
+
+export const FETCH_DATA_BY_TYPE = 'FETCH_DATA_BY_TYPE';
+export const FETCH_CATALOG_DATA = 'FETCH_CATALOG_DATA';
+export const FETCH_PRODUCT_GROUP_DATA = 'FETCH_PRODUCT_GROUP_DATA';
 
 export default {
-    [FETCH_BANNER]({ commit }) {
-        return getBanners()
-            .then(data => commit(SET_BANNER, data[6]))
-            .catch(error => {
-                $logger.error(`FETCH_BANNER error: ${error}`);
-                return [];
-            });
+    [SET_LOAD_PATH]({ commit }, payload) {
+        commit(M_SET_LOAD_PATH, payload);
     },
 
-    [FETCH_CATEGORIES]({ commit }) {
-        return getCategories()
-            .then(data => commit(SET_CATEGORIES, data))
-            .catch(error => {
-                $logger.error(`FETCH_CATEGORIES error: ${error}`);
-                return [];
-            });
+    async [FETCH_BANNER]({ commit }, payload) {
+        try {
+            const data = await getBanners();
+            commit(SET_BANNER, data[6]);
+        } catch (error) {
+            storeErrorHandler(FETCH_BANNER, true)(error);
+        }
     },
 
-    [FETCH_ITEMS]({ commit, state }, payload) {
-        return getCatalogItems(payload)
-            .then(data => {
-                if (payload.showMore) commit(SET_ITEMS, { items: state.items.concat(data.items), range: data.range });
-                else commit(SET_ITEMS, data);
-                commit(SET_CATEGORY_CODE, payload.filter && payload.filter.category);
-            })
-            .catch(error => {
-                $logger.error(`FETCH_ITEMS error: ${error}`);
-                return [];
-            });
+    async [FETCH_CATEGORIES]({ commit }, payload) {
+        try {
+            const data = await getCategories(payload);
+            commit(SET_CATEGORIES, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_CATEGORIES, true)(error);
+        }
     },
 
-    [SET_LOAD]({ commit }, payload = false) {
-        commit(M_SET_LOAD, payload);
+    async [FETCH_FILTERS]({ commit }, payload) {
+        try {
+            const data = await getFilters(payload);
+            commit(SET_FILTERS, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_FILTERS, true)(error);
+        }
     },
 
-    async [FETCH_CATALOG_DATA]({ dispatch, commit }, payload) {
-        await Promise.all([dispatch(FETCH_CATEGORIES), dispatch(FETCH_BANNER)]);
-        return dispatch(FETCH_ITEMS, payload).then(() => commit(M_SET_LOAD, true));
+    async [FETCH_ITEMS]({ commit, state }, payload) {
+        try {
+            const { filters } = state.productGroup || {};
+            const filter = { ...payload.filter, ...filters };
+            const data = await getCatalogItems({ ...payload, filter });
+            if (payload.showMore) commit(SET_ITEMS_MORE, data);
+            else commit(SET_ITEMS, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_ITEMS, true)(error);
+        }
+    },
+
+    async [FETCH_PRODUCT_GROUP]({ commit }, { type, entityCode }) {
+        try {
+            const data = await getProductGroup(type, entityCode);
+            commit(SET_PRODUCT_GROUP, data);
+            return data;
+        } catch (error) {
+            storeErrorHandler(FETCH_PRODUCT_GROUP, true)(error);
+        }
+    },
+
+    async [FETCH_PRODUCT_GROUP_DATA]({ dispatch }, payload = {}) {
+        try {
+            await dispatch(FETCH_PRODUCT_GROUP, { type: payload.type, entityCode: payload.entityCode });
+            await Promise.all([dispatch(FETCH_CATEGORIES, payload), dispatch(FETCH_FILTERS, payload.filter.category)]);
+            return dispatch(FETCH_ITEMS, payload);
+        } catch (error) {
+            storeErrorHandler(FETCH_PRODUCT_GROUP_DATA)(error);
+        }
+    },
+
+    async [FETCH_CATALOG_DATA]({ dispatch, commit }, payload = {}) {
+        try {
+            await Promise.all([
+                dispatch(FETCH_BANNER, payload),
+                dispatch(FETCH_CATEGORIES, payload),
+                dispatch(FETCH_FILTERS, payload.filter.category),
+            ]);
+            commit(SET_PRODUCT_GROUP, null);
+            return dispatch(FETCH_ITEMS, payload);
+        } catch (error) {
+            storeErrorHandler(FETCH_CATALOG_DATA)(error);
+        }
+    },
+
+    async [FETCH_DATA_BY_TYPE]({ dispatch, commit }, payload = { type: productGroupTypes.CATALOG }) {
+        const { type, entityCode, code, filter } = payload;
+        let fetchMethod = null;
+
+        switch (payload.type) {
+            case productGroupTypes.CATALOG:
+                fetchMethod = FETCH_CATALOG_DATA;
+                break;
+            case productGroupTypes.BRANDS:
+            case productGroupTypes.PROMO:
+            case productGroupTypes.SETS:
+                fetchMethod = FETCH_PRODUCT_GROUP_DATA;
+                break;
+            default:
+                return Promise.reject(new Error(`Wrong catalog type ${payload.type}`));
+        }
+
+        return dispatch(fetchMethod, payload).then(() => {
+            commit(SET_TYPE, type);
+            commit(SET_CATEGORY_CODE, filter.category);
+            commit(SET_ENTITY_CODE, entityCode);
+        });
     },
 };

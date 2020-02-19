@@ -1,0 +1,101 @@
+.landing-banner-card {
+    display: flex;
+    position: relative;
+
+    &__img {
+        height: 100%;
+        width: 100%;
+        font-family: 'object-fit: cover;';
+
+        @supports (object-fit: cover) {
+            font-family: inherit;
+            object-fit: cover;
+        }
+    }
+
+    &__panel {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: calc(100% - calc(var(--gs) * 27));
+        transform: translate(-50%, -50%);
+        color: var(--cl-white);
+
+        @media (--desktop-lg) {
+            width: 100%;
+        }
+
+        @media (--desktop) {
+            height: calc(100% - calc(var(--gs) * 6));
+        }
+
+        &-container {
+            display: flex;
+            justify-content: space-between;
+
+            @media (--tablet-lg) {
+                justify-content: flex-end;
+            }
+        }
+
+        &-title {
+            font-size: 40px;
+            line-height: 48px;
+            width: 40%;
+
+            &-text {
+                margin-bottom: calc(var(--gs) * 7);
+
+                @media (--tablet) {
+                    width: 59%;
+                    text-align: right;
+                    margin-bottom: calc(var(--gs) * 3);
+                }
+            }
+
+            @media (--desktop-lg) {
+                font-size: 24px;
+                line-height: 32px;
+            }
+
+            @media (--tablet-lg) {
+                font-size: 20px;
+                line-height: 24px;
+            }
+
+            @media (--tablet) {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                width: 100%;
+            }
+        }
+
+        &-bottom-text {
+            width: 30%;
+            font-size: 18px;
+            line-height: 24px;
+            text-align: center;
+
+            @media (--tablet-lg) {
+                display: none;
+            }
+        }
+
+        &-btn {
+            background-color: transparent;
+            border-color: var(--cl-white);
+            background-color: var(--cl-white);
+            color: var(--cl-global);
+
+            @media (--tablet) {
+                width: 100%;
+            }
+
+            &:hover {
+                background-color: var(--cl-white);
+                color: var(--cl-global);
+            }
+        }
+    }
+}

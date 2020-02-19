@@ -1,0 +1,29 @@
+.separator-section {
+    padding: calc(var(--gs) * 7) 0;
+
+    @media (--tablet-lg) {
+        padding: calc(var(--gs) * 3) 0;
+    }
+
+    @media (--tablet) {
+        padding: 0;
+        padding-top: calc(var(--gs) * 2);
+    }
+
+    &__container {
+        &::after {
+            content: '';
+            display: block;
+            height: 0;
+            border: 1px solid var(--cl-divider-grey);
+
+            @media (--tablet) {
+                border: none;
+            }
+        }
+
+        @media (--tablet-lg) {
+            padding: 0;
+        }
+    }
+}

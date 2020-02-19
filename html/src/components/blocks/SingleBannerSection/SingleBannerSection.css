@@ -1,6 +1,4 @@
 .single-banner-section {
-    margin-bottom: calc(var(--gs) * 6);
-
     @media (--tablet) {
         margin-bottom: 0;
         padding: 0;
@@ -8,9 +6,6 @@
     }
 
     &__inner {
-        padding-bottom: calc(var(--gs) * 6);
-        border-bottom: 1px solid var(--cl-divider-grey);
-
         @media (--tablet) {
             border-bottom: none;
         }

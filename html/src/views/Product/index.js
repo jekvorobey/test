@@ -1,3 +1,5 @@
+import { productGroupTypes } from '../../assets/scripts/enums';
+
 /**
  * @Module
  */
@@ -13,7 +15,8 @@ export default {
      */
     routes: [
         {
-            path: '/catalog/:categoryCode/:code',
+            name: 'Product',
+            path: `/:type(${productGroupTypes.CATALOG})/:categoryCode/:code`,
             component: ProductAsync,
         },
     ],

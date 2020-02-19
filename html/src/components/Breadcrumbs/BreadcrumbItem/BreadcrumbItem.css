@@ -1,0 +1,27 @@
+.breadcrumb-item {
+    color: var(--cl-grey);
+    font-size: 11px;
+    line-height: 24px;
+
+    @media (--tablet) {
+        font-size: 9px;
+        line-height: 16px;
+    }
+
+    &__link {
+        border-bottom: none;
+        text-transform: uppercase;
+        line-height: 24px;
+    }
+
+    & + & {
+        &::before {
+            content: '/';
+            margin: 0 var(--gs);
+
+            @media (--tablet) {
+                margin: 0 calc(var(--gs) / 2);
+            }
+        }
+    }
+}

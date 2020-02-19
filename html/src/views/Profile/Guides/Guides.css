@@ -1,0 +1,49 @@
+.guides-view {
+    &__hl {
+        margin-bottom: calc(var(--gs) * 3);
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 40px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+
+        @media (--tablet-lg) {
+            display: none;
+        }
+    }
+
+    &__container {
+        @media (--tablet) {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 calc(var(--gs) * -1.5);
+
+        @media (--tablet) {
+            margin: 0;
+        }
+
+        &-item {
+            width: calc(100% / 3 - calc(var(--gs) * 6 / 2));
+            margin: 0 calc(var(--gs) * 1.5);
+            margin-bottom: calc(var(--gs) * 3);
+            cursor: pointer;
+
+            @media (--tablet) {
+                width: 100%;
+                margin: 0;
+            }
+
+            & + & {
+                @media (--tablet) {
+                    margin-top: calc(var(--gs) * 2);
+                }
+            }
+        }
+    }
+}

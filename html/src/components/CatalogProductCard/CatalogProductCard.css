@@ -2,6 +2,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    cursor: pointer;
 
     &:hover &__controls {
         opacity: 1;
@@ -9,14 +10,15 @@
     }
 
     &:hover &__body {
-        background: var(--cl-elem-grey);
+        background-color: var(--cl-elem-grey);
     }
 
     &:hover &__img {
         border-color: var(--cl-divider-grey);
 
         img {
-            opacity: 0.6;
+            opacity: 0.2;
+            transition: all var(--time) ease-in;
         }
     }
 
@@ -65,7 +67,6 @@
         display: flex;
         position: relative;
         width: 100%;
-        background: var(--cl-elem-grey);
         padding: calc(var(--gs) * 4);
         border-bottom: 0.5px solid transparent;
         flex: none;
@@ -74,6 +75,25 @@
             content: '';
             display: block;
             padding-bottom: 100%;
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 100%;
+                padding-bottom: 0;
+            }
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            display: block;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--cl-global);
+            opacity: 0.03;
         }
 
         @media (--tablet) {
@@ -93,6 +113,7 @@
 
     &__controls {
         position: absolute;
+        z-index: 2;
         left: 50%;
         bottom: 23px;
         transform: translateX(-50%);
@@ -191,6 +212,7 @@
     &__wishlist-btn {
         opacity: 0;
         position: absolute;
+        z-index: 2;
         top: 20px;
         right: 20px;
 

@@ -1,0 +1,58 @@
+.cart-panel-product-card {
+    display: flex;
+    align-items: center;
+
+    &__img {
+        position: relative;
+        display: flex;
+        width: calc(var(--gs) * 8);
+        height: 100%;
+        margin-right: calc(var(--gs) * 3);
+        border-bottom: none;
+
+        .v-picture {
+            width: 100%;
+            height: 100%;
+        }
+
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 100%;
+                padding-bottom: 0;
+            }
+        }
+
+        .icon {
+            margin: auto;
+            opacity: 0.1;
+        }
+    }
+
+    &__body {
+        display: flex;
+        justify-content: space-between;
+        flex: 1;
+
+        &-name {
+            text-transform: none;
+            text-align: left;
+            padding-right: calc(var(--gs) * 2);
+        }
+
+        &-price {
+            white-space: nowrap;
+            font-size: 16px;
+            line-height: 24px;
+
+            &--old {
+                font-size: 14px;
+                line-height: 24px;
+            }
+        }
+    }
+}

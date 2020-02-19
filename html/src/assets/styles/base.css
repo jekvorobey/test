@@ -21,6 +21,10 @@
     outline: none;
 }
 
+svg:not(:root) {
+    overflow: inherit;
+}
+
 html,
 body {
     min-height: 100vh;
@@ -29,7 +33,7 @@ body {
 body {
     display: flex;
     flex-direction: column;
-    background-color: var(--cl-grey);
+    background-color: var(--cl-white);
     font-size: 16px;
     line-height: 24px;
     overflow-x: hidden;
@@ -40,6 +44,7 @@ body {
     fill: var(--cl-global);
     vertical-align: top;
     backface-visibility: hidden;
+    font-family: var(--base-font);
 }
 
 main {
@@ -200,6 +205,7 @@ fieldset {
     text-transform: uppercase;
     color: inherit;
     fill: inherit;
+    border-radius: 1px;
 
     &:hover {
         color: inherit;
@@ -213,9 +219,10 @@ fieldset {
 }
 
 :--input {
-    font-size: 14px;
-    line-height: 22px;
-    border-radius: 0;
+    font-family: var(--base-font);
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 1px;
 
     /* Прячет крестик очистки поля в IE */
 
@@ -250,6 +257,7 @@ a,
 :--btn,
 :--input {
     font-family: var(--base-font);
+
     &:disabled,
     &.is-disabled {
         cursor: default;

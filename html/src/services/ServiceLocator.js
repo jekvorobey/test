@@ -1,73 +1,63 @@
-const { serviceName } = require('../assets/scripts/constants');
+const { injectionType } = require('../assets/scripts/enums');
 
 let locatorInstance;
 module.exports = class ServiceLocator {
-    constructor() {
-        this.services = {};
+    constructor(container) {
+        this._container = container;
     }
 
     static instance() {
-        if (locatorInstance === undefined) return this.createInstance();
+        if (locatorInstance === undefined) throw new Error('instance is not created');
         return locatorInstance;
     }
 
-    static createInstance() {
-        if (locatorInstance) locatorInstance.services = null;
-        locatorInstance = new ServiceLocator();
+    static createInstance(container) {
+        if (locatorInstance) locatorInstance._container = null;
+        locatorInstance = new ServiceLocator(container);
         return locatorInstance;
     }
 
-    /**
-     *
-     * @param {String} name
-     * @param {function(ServiceLocator)} cb
-     */
-    register(name, cb) {
-        this.services[name] = {
-            cb,
-            instance: cb(this),
-        };
-        return this;
-    }
-
-    /**
-     * Получить сервис.
-     * @param {String} name
-     * @returns {*}
-     */
-    get(name) {
-        return this.services[name] ? this.services[name].instance : null;
+    static get $container() {
+        return ServiceLocator.instance()._container;
     }
 
     static get $store() {
-        return ServiceLocator.instance().get(serviceName.STORE);
+        return ServiceLocator.instance()._container.get(injectionType.STORE);
     }
 
     static get $events() {
-        return ServiceLocator.instance().get(serviceName.EVENTS);
+        return ServiceLocator.instance()._container.get(injectionType.EVENTS);
     }
 
     static get $progress() {
-        return ServiceLocator.instance().get(serviceName.PROGRESS);
+        return ServiceLocator.instance()._container.get(injectionType.PROGRESS);
     }
 
     static get $logger() {
-        return ServiceLocator.instance().get(serviceName.LOGGER);
+        return ServiceLocator.instance()._container.get(injectionType.LOGGER);
     }
 
     static get $router() {
-        return ServiceLocator.instance().get(serviceName.ROUTER);
+        return ServiceLocator.instance()._container.get(injectionType.ROUTER);
     }
 
     static get $http() {
-        return ServiceLocator.instance().get(serviceName.HTTP);
+        return ServiceLocator.instance()._container.get(injectionType.HTTP);
+    }
+
+    static get $dadata() {
+        return ServiceLocator.instance()._container.get(injectionType.DADATA);
     }
 
     static get $config() {
-        return ServiceLocator.instance().get(serviceName.CONFIG);
+        return ServiceLocator.instance()._container.get(injectionType.CONFIG);
     }
 
     static get $cookie() {
-        return ServiceLocator.instance().get(serviceName.COOKIE);
+        return ServiceLocator.instance()._container.get(injectionType.COOKIE);
+    }
+
+    static get $locale() {
+        return ServiceLocator.instance()._container.get(injectionType.LOCALIZATION);
     }
 };

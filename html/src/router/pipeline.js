@@ -4,7 +4,7 @@ function pipeline(context, middleware, index) {
 
     return () => {
         const nextPipeline = pipeline(context, middleware, index + 1);
-        nextMiddleware({ ...context, next: nextPipeline });
+        nextMiddleware({ ...context, nextMiddleware: nextPipeline });
     };
 }
 

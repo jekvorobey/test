@@ -143,21 +143,28 @@
                 <v-slider class="cart-view__featured-slider" name="cart-featured" :options="sliderOptions">
                     <catalog-product-card
                         class="swiper-slide cart-view__featured-card"
-                        v-for="product in featuredProducts"
-                        :key="product.id"
-                        :product-id="product.id"
-                        :type="product.type"
-                        :name="product.name"
-                        :href="product.href"
-                        :image="product.image"
-                        :price="product.price"
-                        :old-price="product.oldPrice"
-                        :tags="product.tags"
-                        :rating="product.rating"
+                        v-for="item in featuredProducts"
+                        :key="item.id"
+                        :product-id="item.id"
+                        :type="item.type"
+                        :name="item.name"
+                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                        :image="item.image"
+                        :price="item.price"
+                        :old-price="item.oldPrice"
+                        :tags="item.tags"
+                        :rating="item.rating"
+                        @addItem="onAddToCart(item)"
+                        @preview="onPreview(item.code)"
                     />
                 </v-slider>
             </div>
         </section>
+
+        <transition name="fade-in">
+            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
+            <add-to-cart-modal v-else-if="isAddToCartOpen" />
+        </transition>
     </section>
 </template>
 
@@ -169,6 +176,9 @@ import VInput from '../../components/controls/VInput/VInput.vue';
 
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 import VSlider from '../../components/controls/VSlider/VSlider.vue';
+
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 
 import CartMasterClassCard from '../../components/CartMasterClassCard/CartMasterClassCard.vue';
 import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
@@ -187,7 +197,10 @@ import {
     CART_TYPES,
 } from '../../store/modules/Cart/getters';
 
-import { breakpoints, cartItemTypes } from '../../assets/scripts/constants';
+import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+
+import { breakpoints, cartItemTypes } from '../../assets/scripts/enums';
 import { preparePrice } from '../../util/helpers';
 import '../../assets/images/sprites/alert.svg';
 import './Cart.css';
@@ -243,6 +256,9 @@ export default {
         CartProductCard,
         CartMasterClassCard,
         CatalogProductCard,
+
+        AddToCartModal,
+        QuickViewModal,
     },
 
     data() {
@@ -252,8 +268,17 @@ export default {
     },
 
     computed: {
+        ...mapState(MODAL_MODULE, {
+            isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
+            isAddToCartOpen: state =>
+                state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
+        }),
         ...mapState(CART_MODULE, [FEATURED_PRODUCTS, CART_DATA]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS]),
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
 
         sliderOptions() {
             return sliderOptions;
@@ -266,6 +291,19 @@ export default {
 
     methods: {
         ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        onPreview(code) {
+            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+        },
+
+        onAddToCart(item) {
+            this[CHANGE_MODAL_STATE]({
+                name: ADD_TO_CART_MODAL_NAME,
+                open: true,
+                state: { offerId: item.id, type: item.type },
+            });
+        },
 
         prepareBonus(value) {
             return preparePrice(value);

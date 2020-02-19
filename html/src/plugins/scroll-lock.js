@@ -2,8 +2,7 @@ import Vue from 'vue';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 
 /**
- * Class
- *
+ * VScrollLock плагин
  */
 class VScrollLock {
     /**

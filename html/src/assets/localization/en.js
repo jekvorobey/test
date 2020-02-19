@@ -1,7 +1,7 @@
 import flatPickrEn from 'flatpickr/dist/l10n/default';
 
-export const flatpickrLocale = flatPickrEn;
-export default {
+const flatpickrLocale = flatPickrEn;
+const main = {
     header: {
         top: {
             delivery: 'Deliveries across Russia',
@@ -9,17 +9,10 @@ export default {
             gifts: 'Bonuses from every purchase',
             help: 'Help',
         },
+
         middle: {
             search: 'Find...',
-            professionals: 'for beauty industry professionals',
-        },
-        links: {
-            catalog: 'Catalog',
-            new: 'New',
-            stocks: 'Stocks',
-            collections: 'Collections',
-            brands: 'Brands',
-            classes: 'Master-classes',
+            professionals: 'Marketplace for beauty industry professionals only',
         },
     },
 
@@ -38,13 +31,13 @@ export default {
         },
 
         made_by: 'Made by Greensight',
-        rights: '© 2019 «Shamelessly Talented».<br/> All rights reserved.',
+        rights: '© 2019 «Shamelessly Talented»',
         terms_of_use: 'Terms of use',
         offer: 'Public offer',
     },
 
     socials: {
-        socials: 'We are in social networks',
+        socials: 'Subscribe in social networks',
         facebook: 'Facebook',
         vkontakte: 'VKontakte',
         twitter: 'Twitter',
@@ -58,6 +51,12 @@ export default {
             required: 'Required',
             email: 'name@domain.com format',
         },
+    },
+
+    deliveryMethod: {
+        [1]: 'Delivery',
+        [2]: 'Express delivery',
+        [3]: 'Pickup',
     },
 
     landing: {
@@ -103,12 +102,34 @@ export default {
         },
     },
 
+    productGroups: {
+        title: {
+            catalog: 'Catalog',
+            new: 'New',
+            promo: 'Stocks',
+            sets: 'Product Sets',
+            brands: 'Brands',
+            masterclasses: 'Master-classes',
+        },
+
+        links: {
+            catalog: 'Catalog',
+            new: 'New',
+            promo: 'Promo',
+            sets: 'Sets',
+            brands: 'Brands',
+            masterclasses: 'Master-classes',
+        },
+    },
+
     cart: {
         title: {
             like: 'You may also like',
             product: 'Products',
             masterclass: 'Master-classes',
         },
+
+        items: '0 products | {n} product | {n} products',
 
         summary: {
             type: {
@@ -117,4 +138,53 @@ export default {
             },
         },
     },
+
+    profile: {
+        format: {
+            order: 'Order №{id}',
+            messages: 'Messages ({n})',
+            referal: 'Referal №{id}',
+            orderStatus: { created: 'Created', process: 'Shipping', done: 'Done', cancel: 'Canceled' },
+        },
+
+        groups: {
+            profile: 'My Profile',
+            business: 'My Business',
+            training: 'Training',
+        },
+
+        routes: {
+            Cabinet: 'Cabinet',
+            Preferences: 'My Preferences',
+            Addresses: 'Delivery Address',
+            Payment: 'Payment Methods',
+            Subscribes: 'Subscribes',
+            Messages: 'Messages',
+            MessageDetails: 'Messages',
+            Certificates: 'Certificates',
+            Bonuses: 'Bonuses',
+            Orders: 'My Orders',
+            OrderDetails: 'My Orders',
+            ReferalOrders: 'Referal orders',
+            ReferalOrderDetails: 'Referal orders',
+
+            Referal: 'Referal Program',
+            ProPreferences: 'My Professional Preferences',
+            Promopage: 'My Promopage',
+            Seo: 'Goods for Promotion',
+            Promocodes: 'My Promocodes',
+            Account: 'My Account',
+            Billing: 'Account Billing',
+            Documents: 'My Documents',
+
+            HowItWorks: 'How It Works',
+            Guides: 'Product Guide',
+            GuideDetails: 'Product Guide',
+            Masterclasses: 'My Masterclasses',
+            QnA: 'Questions and Answers',
+        },
+    },
 };
+
+const LOCALE = 'en';
+export default { main, flatpickrLocale, LOCALE };

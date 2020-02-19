@@ -1,27 +1,40 @@
 const fs = require('fs');
 const path = require('path');
+const Config = require('merge-config');
 const LRUCache = require('lru-cache');
 
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const httpProxy = require('express-http-proxy');
+const gracefulShutdown = require('http-graceful-shutdown');
 
 const favicon = require('serve-favicon');
 const compression = require('compression');
-const microcache = require('route-cache');
+const routeCache = require('route-cache');
 const expressVersion = require('express/package.json').version;
 const serverRendererVersion = require('vue-server-renderer/package.json').version;
 const { createBundleRenderer } = require('./build/custom-vue-server-renderer');
 
-const useMicroCache = process.env.MICRO_CACHE !== 'false';
 const serverInfo = `express/${expressVersion} vue-server-renderer/${serverRendererVersion}`;
 const ServerLogger = require('./src/services/LogService/ServerLogger');
 
 const logger = new ServerLogger();
 
+const resolve = file => path.resolve(__dirname, file);
+
+const serve = (resourcePath, cache) =>
+    express.static(resolve(resourcePath), {
+        maxAge: cache ? 1000 * 60 * 60 * 24 * 365 : 0,
+    });
+
+const proxy = hostname =>
+    httpProxy(hostname, {
+        proxyReqPathResolver: req => req.originalUrl,
+    });
+
 const app = express();
 const sites_folder = path.resolve(__dirname, '../../');
-const port = 3000;
 
 if (serverRendererVersion !== '2.6.10')
     logger.warn(
@@ -47,65 +60,31 @@ function createRenderer(bundle, options) {
     );
 }
 
-function resolve(file) {
-    return path.resolve(__dirname, file);
-}
-
-function serve(servePath, cache) {
-    return express.static(resolve(servePath), {
-        maxAge: cache ? 1000 * 60 * 60 * 24 * 365 : 0,
-    });
-}
-
-app.enable('trust proxy');
-app.use(cors({ credentials: true }));
-app.use(cookieParser());
-app.use(compression({ threshold: 0 }));
-app.use(favicon('../public/assets/favicon.ico'));
-app.use('/', serve('../public', true));
-app.use('/manifest.json', serve('../public/assets/manifest.json', true));
-app.use('/service-worker.js', serve('../public/assets/service-worker.js'));
-
-// since this app has no user-specific content, every page is micro-cacheable.
-// if your app involves user-specific content, you need to implement custom
-// logic to determine whether a request is cacheable based on its url and
-// headers.
-// 1-second microcache.
-// https://www.nginx.com/blog/benefits-of-microcaching-nginx/
-// app.use(microcache.cacheSeconds(1, req => useMicroCache && req.originalUrl));
-
-function render(req, res) {
+function render(req, res, env) {
     try {
         let app_root = null;
         const matches = /([^.]+)_front\.ibt-mas\.greensight\.ru/.exec(req.hostname);
         if (!matches || typeof matches[1] === 'undefined') throw new Error('Hostname is not matches by regex');
         app_root = path.resolve(sites_folder, `${matches[1]}_front.ibt-mas.greensight.ru`);
 
-        res.setHeader('Content-Type', 'text/html');
-        res.setHeader('Server', serverInfo);
-
         const handleError = err => {
             if (err.url) {
-                res.redirect(err.url);
                 logger.warn(`redirect: ${err.url}`);
-            } else if (err.code === 404) {
-                res.status(404).send('404 | Page Not Found');
-                logger.warn(`page not found: ${req.url}`);
+                res.redirect(err.code || 302, err.url);
             } else {
+                const page502 = fs.readFileSync(path.resolve(app_root, 'public/page502.html'), 'utf-8');
                 // Render Error Page or Redirect
-                res.status(500).send('500 | Internal Server Error');
+                res.status(500).send(page502);
                 logger.error(`error during render: ${req.url}`, err.stack);
             }
         };
-
-        // const env = JSON.parse(fs.readFileSync(path.resolve(app_root, '.env.json')).toString());
 
         const context = {
             title: 'IBT',
             url: req.url,
             req,
             res,
-            // env,
+            env,
         };
 
         // In production: create server renderer using template and built server bundle.
@@ -137,6 +116,13 @@ function render(req, res) {
 
         renderer.renderToString(context, (err, html) => {
             if (err) return handleError(err);
+
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
+            res.setHeader('Content-Type', 'text/html');
+            res.setHeader('Content-Length', html.length);
+            res.setHeader('Server', serverInfo);
             res.send(html);
         });
     } catch (error) {
@@ -144,8 +130,99 @@ function render(req, res) {
     }
 }
 
-app.get('*', render);
+let env = new Config();
+const config = new Config();
+let port = 3000;
+let publicPath = '/';
+let outputPath = '../public/assets';
 
-app.listen(port, () => {
-    logger.info(`server started at port ${port}`);
+let faviconConf = null;
+let serviceWorkerConf = null;
+let manifestConf = null;
+let corsConf = null;
+let compressionConf = null;
+
+let proxies = [];
+let cacheRoutes = [];
+let enable = [];
+const baseConfig = '.env.json';
+const configFileName = process.env.CONFIG || '.env.stage.json';
+
+try {
+    env.file(resolve(baseConfig));
+    if (configFileName) {
+        config.file(resolve(configFileName));
+        env.merge(config.get());
+    }
+
+    env = env.get();
+    port = process.env.PORT || env.PORT;
+    publicPath = env.PUBLIC_PATH;
+    outputPath = env.OUTPUT_PATH;
+
+    faviconConf = env.FAVICON;
+    manifestConf = env.MANIFEST;
+    serviceWorkerConf = env.SERVICE_WORKER;
+    corsConf = env.CORS;
+    compressionConf = env.COMPRESSION;
+
+    enable = env.ENABLE || [];
+    proxies = env.PROXIES || [];
+    cacheRoutes = env.CACHE_ROUTES || [];
+} catch (error) {
+    logger.error(error);
+}
+
+if (corsConf) app.use(cors(corsConf));
+if (compressionConf) app.use(compression(compressionConf));
+if (faviconConf) app.use(favicon(faviconConf.outputPath));
+if (manifestConf) app.use(manifestConf.publicPath, serve(manifestConf.outputPath, true));
+if (serviceWorkerConf) app.use(serviceWorkerConf.publicPath, serve(serviceWorkerConf.outputPath));
+
+for (let i = 0; i < enable.length; i++) {
+    const entry = enable[i];
+    app.enable(entry);
+}
+
+for (let i = 0; i < proxies.length; i++) {
+    const entry = proxies[i];
+    logger.info('proxy', `path: ${entry.path}, host: ${entry.host}`);
+    app.use(entry.path, proxy(entry.host));
+}
+
+// since this app has no user-specific content, every page is micro-cacheable.
+// if your app involves user-specific content, you need to implement custom
+// logic to determine whether a request is cacheable based on its url and
+// headers.
+// https://www.nginx.com/blog/benefits-of-microcaching-nginx/
+for (let i = 0; i < cacheRoutes.length; i++) {
+    const entry = cacheRoutes[i];
+    app.use(
+        entry.path,
+        routeCache.cacheSeconds(entry.time, req => req.originalUrl)
+    );
+}
+
+app.use(publicPath, serve(outputPath, true));
+app.use(cookieParser());
+app.get('*', (req, res) => render(req, res, env));
+app.listen(port, () => logger.success(`server started at port ${port}`));
+
+function onCleanup(signal) {
+    return new Promise(resolve => {
+        logger.info('called signal: ', signal);
+        resolve();
+    });
+}
+
+function onFinally() {
+    logger.success('server shutted down');
+}
+
+gracefulShutdown(app, {
+    signals: 'SIGINT SIGTERM',
+    timeout: 30000,
+    development: false,
+    onShutdown: onCleanup,
+    finally: onFinally,
 });

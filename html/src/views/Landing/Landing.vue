@@ -6,12 +6,18 @@
             :is="renderItem.component"
             v-bind="renderItem.data"
         />
+
+        <transition name="fade-in">
+            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
+            <add-to-cart-modal v-else-if="isAddToCartOpen" />
+        </transition>
     </section>
 </template>
 
 <script>
 import Vue from 'vue';
 
+import SeparatorSection from '../../components/blocks/SeparatorSection/SeparatorSection.vue';
 import SliderBannersSection from '../../components/blocks/SliderBannersSection/SliderBannersSection.vue';
 import ListBannersSection from '../../components/blocks/ListBannersSection/ListBannersSection.vue';
 import InstagramSection from '../../components/blocks/InstagramSection/InstagramSection.vue';
@@ -21,15 +27,24 @@ import CategoriesSection from '../../components/blocks/CategoriesSection/Categor
 import ProductsSection from '../../components/blocks/ProductsSection/ProductsSection.vue';
 import BrandsSection from '../../components/blocks/BrandsSection/BrandsSection.vue';
 
-import landingModule from '../../store/modules/Landing';
-import { mapState } from 'vuex';
-import { $store, $progress, $logger } from '../../services/ServiceLocator';
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
 
+import { $store, $progress, $logger } from '../../services/ServiceLocator';
+import { mapState, mapActions } from 'vuex';
+
+import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
+
+import landingModule, { NAME as LANDING_MODULE, RENDER_DATA } from '../../store/modules/Landing';
+import { FETCH_LANDING_DATA } from '../../store/modules/Landing/actions';
+
+import { registerModuleIfNotExists } from '../../util/store';
 import './Landing.css';
 
 export default {
     name: 'landing',
     components: {
+        SeparatorSection,
         SliderBannersSection,
         ListBannersSection,
         SingleBannerSection,
@@ -37,6 +52,9 @@ export default {
         CategoriesSection,
         ProductsSection,
         InstagramSection,
+
+        QuickViewModal,
+        AddToCartModal,
     },
 
     head: {
@@ -48,7 +66,20 @@ export default {
     },
 
     computed: {
-        ...mapState('landing', ['renderData']),
+        ...mapState(LANDING_MODULE, [RENDER_DATA]),
+        ...mapState(MODAL_MODULE, {
+            isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
+            isAddToCartOpen: state =>
+                state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
+        }),
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
+    },
+
+    methods: {
+        ...mapActions(LANDING_MODULE, [FETCH_LANDING_DATA]),
     },
 
     beforeRouteEnter(to, from, next) {
@@ -56,17 +87,13 @@ export default {
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
 
-        const register = !!$store._modulesNamespaceMap[`${landingModule.name}/`];
-        if (!register)
-            $store.registerModule(landingModule.name, landingModule, {
-                preserveState: !!$store.state.landing,
-            });
-
-        if ($store.state.landing.load) {
-            next();
-        } else {
+        //регистрируем модуль, если такого нет
+        registerModuleIfNotExists($store, LANDING_MODULE, landingModule);
+        const { load } = $store.state[LANDING_MODULE];
+        if (load) next();
+        else {
             $progress.start();
-            $store.dispatch(`${landingModule.name}/FETCH_LANDING_DATA`).then(() => next(vm => $progress.finish()));
+            $store.dispatch(`${LANDING_MODULE}/${FETCH_LANDING_DATA}`).then(() => next(vm => $progress.finish()));
         }
     },
 
@@ -79,16 +106,8 @@ export default {
         // Также имеется доступ в `this` к экземпляру компонента.
 
         this.$progress.start();
-        this.$store
-            .dispatch(`${landingModule.name}/FETCH_LANDING_DATA`)
-            .then(() => next(vm => this.$progress.finish()));
+        this[FETCH_LANDING_DATA]().then(() => this.$progress.finish());
+        next();
     },
-
-    // Server-side only
-    // This will be called by the server renderer automatically
-    //serverPrefetch() {
-    // return the Promise from the action
-    // so that the component waits before rendering
-    //},
 };
 </script>

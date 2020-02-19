@@ -1,5 +1,5 @@
 import { $logger } from '../../../services/ServiceLocator';
-import { cartItemTypes } from '../../../assets/scripts/constants';
+import { cartItemTypes } from '../../../assets/scripts/enums';
 
 export const GET_ITEMS_BY_TYPE = 'GET_ITEMS_BY_TYPE';
 export const IS_PRODUCT = 'IS_PRODUCT';
@@ -50,6 +50,7 @@ export default {
         if (productData) return productData.summary.sum;
         return '';
     },
+
     [IS_PRODUCT]: () => (item = {}) => isValidType(item.type) && item.type === cartItemTypes.PRODUCT,
 
     [IS_MASTER_CLASS]: () => (item = {}) => isValidType(item.type) && item.type === cartItemTypes.MASTERCLASS,

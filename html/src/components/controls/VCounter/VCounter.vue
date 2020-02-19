@@ -1,8 +1,14 @@
 <template>
     <div class="v-counter">
-        <button class="v-counter__btn" ref="decrement" type="button" @click="onBtnClick($event, 'decrement')">
+        <button
+            class="v-counter__btn"
+            ref="decrement"
+            type="button"
+            @click="onBtnClick($event, 'decrement')"
+            :disabled="disabled"
+        >
             <slot name="decrement">
-                <v-svg name="minus" width="24" height="24" />
+                <v-svg name="minus-small" width="16" height="16" />
             </slot>
         </button>
         <input
@@ -15,10 +21,17 @@
             :step="step"
             v-bind="$attrs"
             @change="onChange"
+            :disabled="disabled"
         />
-        <button class="v-counter__btn" ref="increment" type="button" @click="onBtnClick($event, 'increment')">
+        <button
+            class="v-counter__btn"
+            ref="increment"
+            type="button"
+            @click="onBtnClick($event, 'increment')"
+            :disabled="disabled"
+        >
             <slot name="increment">
-                <v-svg name="plus" width="24" height="24" />
+                <v-svg name="plus-small" width="16" height="16" />
             </slot>
         </button>
     </div>
@@ -27,8 +40,8 @@
 <script>
 import VSvg from '../VSvg/VSvg.vue';
 
-import '../../../assets/images/sprites/minus.svg';
-import '../../../assets/images/sprites/plus.svg';
+import '../../../assets/images/sprites/minus-small.svg';
+import '../../../assets/images/sprites/plus-small.svg';
 import './VCounter.css';
 
 const actionType = {
@@ -54,23 +67,33 @@ export default {
             type: [Number, String],
             default: 0,
         },
+
         step: {
             type: [Number, String],
             default: 1,
         },
+
         min: {
             type: [Number, String],
             default: -999,
         },
+
         max: {
             type: [Number, String],
             default: 999,
         },
+
         delay: {
             type: Number,
             default: 200,
         },
+
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
     },
+
     data() {
         const value = this.value < this.max ? this.value : this.max;
         return {
@@ -195,5 +218,3 @@ export default {
     },
 };
 </script>
-
-

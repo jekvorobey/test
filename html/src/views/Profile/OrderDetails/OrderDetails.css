@@ -1,0 +1,127 @@
+.order-details-view {
+    &__hl {
+        margin-bottom: calc(var(--gs) * 3);
+        margin-top: 0;
+        font-weight: 700;
+        font-size: 28px;
+        line-height: 40px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    &__section {
+        &-hl {
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+            margin-bottom: calc(var(--gs) * 3);
+        }
+    }
+
+    &__container {
+        @media (--tablet) {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    &__back-link {
+        display: flex;
+        font-size: 16px;
+        line-height: 24px;
+        fill: var(--cl-grey);
+        color: var(--cl-grey);
+        text-transform: none;
+        margin-bottom: var(--gs);
+
+        @media (--tablet-lg) {
+            margin-bottom: calc(var(--gs) * 2);
+            text-transform: uppercase;
+            color: var(--cl-global);
+            fill: var(--cl-global);
+            letter-spacing: 0.02em;
+            font-weight: bold;
+        }
+    }
+
+    &__details {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: calc(var(--gs) * 5);
+
+        @media (--tablet) {
+            flex-direction: column;
+        }
+
+        &-info {
+            width: 70%;
+
+            @media (--tablet) {
+                width: 100%;
+                margin-bottom: calc(var(--gs) * 3);
+            }
+        }
+
+        &-row {
+            & + & {
+                margin-top: var(--gs);
+            }
+        }
+
+        &-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            &-btn,
+            &-link {
+                font-size: 14px;
+                line-height: 24px;
+                font-weight: bold;
+                letter-spacing: 0.05em;
+            }
+
+            &-btn {
+                min-width: 190px;
+                margin-bottom: calc(var(--gs) * 3);
+            }
+
+            &-link {
+                color: var(--cl-grey);
+            }
+
+            &-btn,
+            &-link {
+                @media (--tablet) {
+                    width: 100%;
+                    text-align: center;
+                }
+            }
+        }
+    }
+
+    &__panel {
+        & + & {
+            margin-top: calc(var(--gs) * 5);
+        }
+
+        &-row {
+            width: 70%;
+            padding: 0;
+
+            & + & {
+                margin-top: var(--gs);
+            }
+
+            &:last-of-type {
+                margin-bottom: calc(var(--gs) * 3);
+            }
+        }
+
+        &-item {
+            & + & {
+                margin-top: calc(var(--gs) * 2);
+            }
+        }
+    }
+}

@@ -1,14 +1,69 @@
 import qs from 'qs';
-import { $http } from '../services/ServiceLocator';
+import axios from 'axios';
+
+import { Cache } from 'axios-extensions';
+import { $http, $logger } from '../services/ServiceLocator';
+import { REQUEST_CANCEL_MESSAGE } from '../assets/scripts/constants';
+import { interval } from '../assets/scripts/enums';
+
+let catalogItemsCancelSource = null;
+const sessionCheckCache = new Cache({ maxAge: interval.FIVE_MINUTES });
+
+// main
+
+export function getMenu() {
+    return $http.get('/v1/content/menus');
+}
 
 // auth
 
-export function checkSession() {
-    return $http.get('/v1/auth/check-session');
+export function checkSession(force = false) {
+    return $http.get('/v1/auth/is-login', {
+        cache: sessionCheckCache,
+        forceUpdate: force,
+    });
 }
 
-export function login({ email, password }) {
-    return $http.post('/v1/auth/login', { email, password });
+export function loginByPassword(payload) {
+    return $http.post('/v1/auth/loginByPassword', payload);
+}
+
+export function loginBySocial(driver, query) {
+    return $http.get(`/v1/auth/socialHandler/${driver}`, {
+        params: query,
+    });
+}
+
+export function logout() {
+    return $http.post('/v1/auth/logout');
+}
+
+export function sendSMS(phone) {
+    return $http.post('/v1/auth/sendSMS', { phone });
+}
+
+export function sendRestoreSMS(phone) {
+    return $http.post('/v1/auth/reset/sendSMS', { phone });
+}
+
+export function resetPassword(code, phone, password) {
+    return $http.post('/v1/auth/reset/resetPassword', { code, phone, password });
+}
+
+export function checkCode(code) {
+    return $http.post('/v1/auth/checkCode', { code });
+}
+
+export function registerByPassword(password) {
+    return $http.post('/v1/auth/registerByPassword', { password });
+}
+
+export function getSocialLink({ backUrl, driver, redirectUrl }) {
+    return $http.post('/v1/auth/getSocialLink', {
+        final_login_url: backUrl,
+        driver,
+        redirect_social_url: redirectUrl,
+    });
 }
 
 // search
@@ -19,12 +74,26 @@ export function search(data) {
 
 // catalog
 
-export function getProducts(data) {
-    return $http.get('/v1/products', data);
+export function getProductGroups({ type, page = 1 }) {
+    return $http.get('/v1/catalog/product-groups', {
+        params: { type_code: type, page },
+        paramsSerializer(params) {
+            return qs.stringify(params, { encode: false });
+        },
+    });
 }
 
-export function getCatalogItems({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
-    return $http.get('/v1/catalog/items', {
+export function getProductGroup(type, code) {
+    return $http.get('/v1/catalog/product-group', {
+        params: { type_code: type, code },
+        paramsSerializer(params) {
+            return qs.stringify(params, { encode: false });
+        },
+    });
+}
+
+export function getProducts({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
+    return $http.get('/v1/catalog/products', {
         params: { filter, page, orderField, orderDirection },
         paramsSerializer(params) {
             return qs.stringify(params, { encode: false });
@@ -32,16 +101,52 @@ export function getCatalogItems({ filter, orderField = 'price', orderDirection =
     });
 }
 
+export function getCatalogItems({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
+    if (catalogItemsCancelSource) {
+        catalogItemsCancelSource.cancel(REQUEST_CANCEL_MESSAGE);
+        catalogItemsCancelSource = axios.CancelToken.source();
+    } else catalogItemsCancelSource = axios.CancelToken.source();
+
+    return $http.get('/v1/catalog/items', {
+        cancelToken: catalogItemsCancelSource.token,
+        params: { filter, page, orderField, orderDirection },
+        paramsSerializer(params) {
+            return qs.stringify(params, { encode: false });
+        },
+    });
+}
+
+export function getFilters(code) {
+    return $http.get('/v1/catalog/filter', {
+        params: { categoryCode: code, needBrands: 1 },
+        paramsSerializer(params) {
+            return qs.stringify(params, { encode: false });
+        },
+    });
+}
+
 export function getCategories(data) {
-    return $http.get('/v1/categories', data);
+    return $http.get('/v1/categories');
 }
 
 export function getBanners(data) {
     return $http.get('/v1/banners', data);
 }
 
+export function getBrandCatalog(data) {
+    return $http.get('/v1/brand-catalog', data);
+}
+
+export function getSetCatalog(data) {
+    return $http.get('/v1/set-catalog', data);
+}
+
 export function getBrands(data) {
     return $http.get('/v1/brands', data);
+}
+
+export function getMasterclasses(data) {
+    return $http.get('/v1/masterclasses', data);
 }
 
 export function getInstagram(data) {
@@ -50,6 +155,16 @@ export function getInstagram(data) {
 
 export function getProduct({ code }) {
     return $http.get('/v1/catalog/product-detail', { params: { code } });
+}
+
+export function getMasterclass({ code }) {
+    return $http.get('/v1/catalog/masterclass-detail', { params: { code } });
+}
+
+//brand
+
+export function getBrand(data) {
+    return $http.get('/v1/brand', data);
 }
 
 // cart
@@ -74,6 +189,10 @@ export function getCheckoutData(data) {
 
 export function commitCheckoutData(data) {
     return $http.post('/v1/checkout/commit', data);
+}
+
+export function changeCity(data) {
+    return $http.post('/v1/checkout/city', data);
 }
 
 export function setReceiveMethod(data) {

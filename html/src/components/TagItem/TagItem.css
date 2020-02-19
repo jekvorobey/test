@@ -1,0 +1,25 @@
+.tag-item {
+    display: inline-flex;
+    justify-content: space-between;
+    font-size: 16px;
+    line-height: 32px;
+    padding-left: var(--gs);
+    margin-right: calc(var(--gs) / 2);
+    margin-bottom: var(--gs);
+    transition: transform 0.5s;
+    background-color: var(--cl-elem-grey);
+
+    &__btn {
+        display: flex;
+        align-items: center;
+        padding: 0 var(--gs);
+    }
+
+    &-leave-to {
+        opacity: 0;
+    }
+
+    &-leave-active {
+        position: absolute;
+    }
+}

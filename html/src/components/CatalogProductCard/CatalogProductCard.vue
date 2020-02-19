@@ -1,8 +1,8 @@
 <template>
-    <div class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }">
+    <router-link tag="div" class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }" :to="href">
         <div class="catalog-product-card__img">
             <v-picture v-if="image && image.id" :image="image" alt="">
-                <template v-slot:source="{ image, lazy }">
+                <template v-slot:source="{ image }">
                     <source
                         :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
                         type="image/webp"
@@ -24,36 +24,40 @@
             </v-picture>
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-card__controls">
-                <v-button class="btn--outline catalog-product-card__controls-btn" @click="onBuyButtonClick">
+                <v-button class="btn--outline catalog-product-card__controls-btn" @click.prevent="onBuyButtonClick">
                     Купить
                 </v-button>
-                <v-link tag="button" class="catalog-product-card__controls-link">Быстрый просмотр</v-link>
+                <v-link tag="button" class="catalog-product-card__controls-link" @click.prevent="onPreview">
+                    Быстрый просмотр
+                </v-link>
             </div>
         </div>
         <div class="catalog-product-card__body">
             <div class="catalog-product-card__prices">
-                <div class="text-bold catalog-product-card__price">{{ oldPrice ? `от ${price}` : price }}</div>
-                <div v-show="oldPrice" class="text-sm text-grey text-strike catalog-product-card__price">
+                <div v-if="price" class="text-bold catalog-product-card__price">
+                    {{ oldPrice ? `от ${price}` : price }}
+                </div>
+                <div v-if="oldPrice" class="text-sm text-grey text-strike catalog-product-card__price">
                     от {{ oldPrice }}
                 </div>
             </div>
-            <v-link class="link--sm catalog-product-card__link" :to="href">{{ name }}</v-link>
+            <div class="link--sm catalog-product-card__link">{{ name }}</div>
             <v-rating class="catalog-product-card__rating" :value="rating" readonly>
                 <template v-slot:activeLabel>
-                    <v-svg name="star-small" width="12" height="12" />
+                    <v-svg name="star-small" width="16" height="16" />
                 </template>
                 <template v-slot:inactiveLabel>
-                    <v-svg name="star-empty-small" width="12" height="12" />
+                    <v-svg name="star-empty-small" width="16" height="16" />
                 </template>
             </v-rating>
         </div>
         <div class="catalog-product-card__tags">
             <tag class="catalog-product-card__tags-item" v-for="(tag, index) in tags" :key="index" :text="tag" />
         </div>
-        <v-link class="catalog-product-card__wishlist-btn">
+        <v-link v-if="showWishlistBtn" tag="button" class="catalog-product-card__wishlist-btn" @click.prevent>
             <v-svg name="wishlist-middle" width="18" height="20" />
         </v-link>
-    </div>
+    </router-link>
 </template>
 
 <script>
@@ -109,7 +113,8 @@ export default {
         },
 
         href: {
-            type: String,
+            type: [Object, String],
+            default: '/',
         },
 
         image: {
@@ -135,11 +140,20 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        showWishlistBtn: {
+            type: Boolean,
+            default: true,
+        },
     },
 
     methods: {
         onBuyButtonClick() {
             this.$emit('addItem', { id: this.productId, type: this.type });
+        },
+
+        onPreview() {
+            this.$emit('preview', { id: this.productId, type: this.type });
         },
 
         generateSourcePath(x, y, id, ext) {

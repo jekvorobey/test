@@ -54,8 +54,8 @@
                     <checkout-option-card
                         class="checkout-product-panel__item-card"
                         v-for="address in addresses"
-                        :key="address.id"
-                        :selected="selectedAddress && address.id === selectedAddress.id"
+                        :key="`${address.region_guid}-${address.city_guid}-${address.house}`"
+                        :selected="selectedAddress && isEqualAddress(selectedAddress, address)"
                         @cardClick="SET_ADDRESS(address)"
                         @btnClick="onChangeAddress(address)"
                     >
@@ -121,7 +121,10 @@
                                     tag="button"
                                     @click="onChangeDate(chunkItem.id)"
                                 >
-                                    <v-svg name="edit" width="16" height="16" />{{ isTablet ? '' : ' Изменить дату' }}
+                                    <v-svg name="edit" width="16" height="16" />
+                                    <template v-if="!isTablet">
+                                        &nbsp;&nbsp;Изменить дату
+                                    </template>
                                 </v-link>
                             </div>
                             <ul class="checkout-product-panel__item-list">
@@ -324,6 +327,7 @@ import CheckoutPickupPointModal from '../CheckoutPickupPointModal/CheckoutPickup
 import CheckoutAddressPanel from '../CheckoutAddressPanel/CheckoutAddressPanel.vue';
 
 import _cloneDeep from 'lodash/cloneDeep';
+import _isEqual from 'lodash/isEqual';
 import { orderBy as _orderBy } from 'lodash/collection';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '../../../store/modules/Checkout';
@@ -384,7 +388,7 @@ import {
     deliveryTypes,
     receiveMethods,
     requestStatus,
-} from '../../../assets/scripts/constants';
+} from '../../../assets/scripts/enums';
 
 import '../../../assets/images/sprites/payment/bonus.svg';
 import '../../../assets/images/sprites/payment/visa.svg';
@@ -604,6 +608,10 @@ export default {
                 open: true,
                 state,
             });
+        },
+
+        isEqualAddress(address1, address2) {
+            return _isEqual(address1, address2);
         },
 
         onChangePickupPoint() {

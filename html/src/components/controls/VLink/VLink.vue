@@ -1,5 +1,5 @@
 <template>
-    <router-link class="link" v-if="to" :to="to" :tag="tag" v-on="handlers">
+    <router-link class="link" v-if="to" :to="to" :tag="tag" v-on="handlers" :exact="exact">
         <v-svg v-if="iconName && placement === 'before'" :name="iconName" :modifier="iconModifier" />
         <slot />
         <v-svg v-if="iconName && placement === 'after'" :name="iconName" :modifier="iconModifier" />
@@ -56,6 +56,11 @@ export default {
         },
         to: {
             type: [String, Object],
+        },
+
+        exact: {
+            type: Boolean,
+            default: false,
         },
     },
 

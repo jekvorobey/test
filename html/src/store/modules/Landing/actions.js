@@ -21,7 +21,7 @@ export const FETCH_BRANDS = 'FETCH_BRANDS';
 export const FETCH_INSTAGRAM = 'FETCH_INSTAGRAM';
 
 export default {
-    FETCH_INSTAGRAM({ commit }) {
+    [FETCH_INSTAGRAM]({ commit }) {
         return getInstagram()
             .then(data => commit(SET_INSTAGRAM, data))
             .catch(error => {
@@ -30,7 +30,7 @@ export default {
             });
     },
 
-    FETCH_BRANDS({ commit }) {
+    [FETCH_BRANDS]({ commit }) {
         return getBrands()
             .then(data => commit(SET_BRANDS, data))
             .catch(error => {
@@ -39,7 +39,7 @@ export default {
             });
     },
 
-    FETCH_BANNERS({ commit }) {
+    [FETCH_BANNERS]({ commit }) {
         return getBanners()
             .then(data => commit(SET_BANNERS, data))
             .catch(error => {
@@ -48,7 +48,7 @@ export default {
             });
     },
 
-    FETCH_CATEGORIES({ commit }) {
+    [FETCH_CATEGORIES]({ commit }) {
         return getCategories()
             .then(data => commit(SET_CATEGORIES, data))
             .catch(error => {
@@ -57,8 +57,8 @@ export default {
             });
     },
 
-    FETCH_FEATURED_PRODUCTS({ commit }) {
-        return Promise.all([getProducts(), getBanners()])
+    [FETCH_FEATURED_PRODUCTS]({ commit }, payload = {}) {
+        return Promise.all([getProducts(payload), getBanners()])
             .then(data => {
                 commit(SET_FEATURED_PRODUCTS, {
                     items: data[0] ? data[0].items.slice(8, 12) : [],
@@ -71,8 +71,8 @@ export default {
             });
     },
 
-    FETCH_NEW_PRODUCTS({ commit }) {
-        return Promise.all([getProducts(), getBanners()])
+    [FETCH_NEW_PRODUCTS]({ commit }, payload = {}) {
+        return Promise.all([getProducts(payload), getBanners()])
             .then(data => {
                 commit(SET_NEW_PRODUCTS, {
                     items: data[0] ? data[0].items.slice(0, 4) : [],
@@ -85,8 +85,8 @@ export default {
             });
     },
 
-    FETCH_BESTSELLER_PRODUCTS({ commit }) {
-        return Promise.all([getProducts(), getBanners()])
+    [FETCH_BESTSELLER_PRODUCTS]({ commit }, payload = {}) {
+        return Promise.all([getProducts(payload), getBanners()])
             .then(data => {
                 commit(SET_BESTSELLER_PRODUCTS, {
                     items: data[0] ? data[0].items.slice(4, 8) : [],
@@ -99,7 +99,7 @@ export default {
             });
     },
 
-    FETCH_LANDING_DATA({ dispatch, commit }) {
+    [FETCH_LANDING_DATA]({ dispatch, commit }) {
         return Promise.all([
             dispatch(FETCH_NEW_PRODUCTS),
             dispatch(FETCH_BESTSELLER_PRODUCTS),

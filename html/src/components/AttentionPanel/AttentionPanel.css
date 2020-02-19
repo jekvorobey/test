@@ -1,0 +1,17 @@
+.attention-panel {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: var(--cl-elem-grey);
+    padding: calc(var(--gs) * 2);
+
+    @media (--tablet) {
+        align-items: flex-start;
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        margin-right: calc(var(--gs) * 2);
+    }
+}

@@ -1,11 +1,12 @@
 @import '../assets/styles/normalize.css';
 @import '../assets/styles/animation.css';
+@import '../assets/styles/container.css';
 
 .fake-vue-body {
     display: flex;
     flex-direction: column;
     background: var(--cl-white);
-    padding-top: 150px;
+    padding-top: 168px;
     min-height: 100vh;
 
     @supports (grid-template-columns: auto) {
@@ -17,36 +18,11 @@
     }
 
     @media (--tablet-lg) {
-        padding-top: 48px;
-    }
-}
-
-.container {
-    position: relative;
-    min-width: var(--mobile-sm-size-min);
-    max-width: var(--container-max-width);
-    margin: 0 auto;
-    padding: 0 calc(var(--gs) * 13.5);
-
-    @media (--desktop) {
-        padding: 0 calc(var(--gs) * 5);
-    }
-
-    @media (--tablet-lg) {
-        padding: 0 calc(var(--gs) * 3);
+        padding-top: calc(var(--gs) * 8);
     }
 
     @media (--tablet) {
-        padding: 0 calc(var(--gs) * 2);
-    }
-}
-
-.section {
-    position: relative;
-
-    &__hl {
-        margin: 0 0 var(--g) 0;
-        text-align: center;
+        padding-top: calc(var(--gs) * 6);
     }
 }
 

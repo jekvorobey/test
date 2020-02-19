@@ -4,10 +4,12 @@
             <slot />
         </div>
         <div class="checkout-option-card__right">
-            <v-svg name="check-small" width="24" height="24" />
-            <v-link v-if="!readonly" class="checkout-option-card__right-link" tag="button" @click.stop="onBtnClick">
-                {{ btnText }}
-            </v-link>
+            <v-svg class="checkout-option-card__right-selected" name="check-small" width="24" height="24" />
+            <slot name="controls">
+                <v-link v-if="!readonly" class="checkout-option-card__right-link" tag="button" @click.stop="onBtnClick">
+                    {{ btnText }}
+                </v-link>
+            </slot>
         </div>
     </li>
 </template>

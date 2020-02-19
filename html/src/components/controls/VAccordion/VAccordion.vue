@@ -26,8 +26,8 @@
                     <v-svg
                         :class="{ 'icon--rotate-deg180': isExpanded(item) }"
                         name="arrow-down"
-                        width="24"
-                        height="24"
+                        width="16"
+                        height="16"
                     />
                 </slot>
             </button>

@@ -1,3 +1,5 @@
+import notFound from '../../router/middleware/notFound';
+
 /**
  * @Module
  */
@@ -13,9 +15,19 @@ export default {
      */
     routes: [
         {
-            path: '*',
-            name: 'NotFound',
+            name: '404',
+            path: '/404',
             component: NotFoundAsync,
+            meta: {
+                middleware: [notFound],
+            },
+        },
+        {
+            path: '*',
+            component: NotFoundAsync,
+            meta: {
+                middleware: [notFound],
+            },
         },
     ],
 };
