@@ -3,9 +3,8 @@ node_modules/
 dist/
 npm-debug.log
 yarn-error.log
+.env.json
 .env.*.json
-!.env.json
-!.env.stage.json
 .vscode
 .idea
 *.iml
