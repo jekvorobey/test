@@ -2,7 +2,7 @@
     <general-modal class="navigation-modal" type="fullscreen" @close="onClose" :is-mobile="isTabletLg">
         <template v-slot:content>
             <div class="container navigation-modal__container">
-                <navigation-panel class="navigation-modal__panel" />
+                <navigation-panel class="navigation-modal__panel" :groups="groups" />
             </div>
         </template>
     </general-modal>
@@ -24,6 +24,15 @@ export default {
     components: {
         GeneralModal,
         NavigationPanel,
+    },
+
+    props: {
+        groups: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
     },
 
     computed: {

@@ -5,16 +5,13 @@ export const UPDATE_PORTFOLIOS = 'UPDATE_PORTFOLIOS';
 export const UPDATE_PROFILES = 'UPDATE_PROFILES';
 export const UPDATE_REQUISITES = 'UPDATE_REQUISITES';
 export const UPDATE_PROMOPAGE_NAME = 'UPDATE_PROMOPAGE_NAME';
+export const UPDATE_EMAIL = 'UPDATE_EMAIL';
 
 export const UPDATE_ENTITIES = 'UPDATE_ENTITIES';
 export const DELETE_ENTITY = 'DELETE_ENTITY';
 export const DELETE_ALL_ENTITIES = 'DELETE_ALL_ENTITIES';
 
 export default {
-    [SET_PROMO_DATA](state, payload) {
-        state.promoData = payload;
-    },
-
     [UPDATE_BREADCRUMB](state, payload = []) {
         state.breadcrumbs = payload;
     },
@@ -29,6 +26,14 @@ export default {
 
     [UPDATE_PROFILES](state, payload = []) {
         state.cabinetData.profiles = payload;
+    },
+
+    [UPDATE_EMAIL](state, payload) {
+        state.cabinetData.email = payload;
+    },
+
+    [SET_PROMO_DATA](state, payload) {
+        state.promoData = payload;
     },
 
     [UPDATE_PROMOPAGE_NAME](state, payload = []) {

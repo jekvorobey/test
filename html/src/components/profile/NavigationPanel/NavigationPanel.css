@@ -26,6 +26,10 @@
             line-height: 24px;
             font-weight: 500;
 
+            &:hover {
+                text-decoration: underline;
+            }
+
             &.router-link-exact-active,
             &.router-link-active {
                 font-weight: 700;

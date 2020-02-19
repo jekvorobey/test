@@ -29,6 +29,7 @@ export const MENU = 'menu';
 export const IS_MENU_OPEN = 'isMenuOpen';
 export const IS_HELP_OPEN = 'isHelpOpen';
 export const IS_CART_OPEN = 'isCartOpen';
+export const IS_PROFILE_PANEL_OPEN = 'isProfilePanelOpen';
 export const IS_CITY_CONFIRMATION_OPEN = 'isCityConfirmationOpen';
 export const SCROLL = 'scroll';
 
@@ -57,6 +58,7 @@ export default function createStore(container) {
                 [enLocale.LOCALE]: enLocale,
             },
             [SCROLL]: false,
+            [IS_PROFILE_PANEL_OPEN]: false,
             [IS_MENU_OPEN]: false,
             [IS_HELP_OPEN]: false,
             [IS_CART_OPEN]: false,
