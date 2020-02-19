@@ -12,7 +12,6 @@ import {
     logout,
     loginByPassword,
     loginBySocial,
-    sendRestoreSMS,
     resetPassword,
 } from '../../../api';
 import { SET_HAS_SESSION } from './mutations';
@@ -27,40 +26,22 @@ export const SEND_SMS = 'SEND_SMS';
 export const CHECK_CODE = 'CHECK_CODE';
 export const REGISTER_BY_PASSWORD = 'REGISTER_BY_PASSWORD';
 export const GET_SOCIAL_LINK = 'GET_SOCIAL_LINK';
-
-export const SEND_RESTORE_SMS = 'SEND_RESTORE_SMS';
 export const RESET_PASSWORD = 'RESET_PASSWORD';
 
 export default {
-    [SEND_SMS]({ commit }, phone) {
-        return sendSMS(phone).catch(error => storeErrorHandler(SEND_SMS, true)(error));
-    },
-
-    [SEND_RESTORE_SMS]({ commit }, phone) {
-        return sendRestoreSMS(phone).catch(error => storeErrorHandler(SEND_RESTORE_SMS, true)(error));
-    },
-
-    [RESET_PASSWORD]({ commit }, { code, phone, password }) {
-        return resetPassword(code, phone, password).catch(error => storeErrorHandler(RESET_PASSWORD, true)(error));
-    },
-
-    async [CHECK_CODE]({ commit }, code) {
+    async [SEND_SMS]({ commit }, { phone, isReset }) {
         try {
-            const { isCodeValid, status, error = 'Invalid code' } = await checkCode(code);
-            if (isCodeValid || status === true || status === responseStatus.OK) return isCodeValid;
-            $logger.error(`${CHECK_CODE}: ${error}`);
-            return Promise.reject(error);
+            await sendSMS(phone, isReset);
         } catch (error) {
-            storeErrorHandler(CHECK_CODE)(error);
+            storeErrorHandler(SEND_SMS, true)(error);
         }
     },
 
-    async [REGISTER_BY_PASSWORD]({ commit }, password) {
+    async [CHECK_CODE]({ commit }, { code, isReset }) {
         try {
-            await registerByPassword(password);
-            commit(SET_HAS_SESSION, true);
+            await checkCode(code, isReset);
         } catch (error) {
-            storeErrorHandler(LOGIN_BY_PASSWORD)(error);
+            storeErrorHandler(CHECK_CODE, true)(error);
         }
     },
 
@@ -69,7 +50,7 @@ export default {
             const { url } = await getSocialLink({ backUrl, driver, redirectUrl });
             return url;
         } catch (error) {
-            storeErrorHandler(LOGIN_BY_PASSWORD)(error);
+            storeErrorHandler(GET_SOCIAL_LINK, true)(error);
         }
     },
 
@@ -78,7 +59,7 @@ export default {
             await loginByPassword(payload);
             commit(SET_HAS_SESSION, true);
         } catch (error) {
-            storeErrorHandler(LOGIN_BY_PASSWORD)(error);
+            storeErrorHandler(LOGIN_BY_PASSWORD, true)(error);
         }
     },
 
@@ -88,7 +69,7 @@ export default {
             commit(SET_HAS_SESSION, true);
             return url;
         } catch (error) {
-            storeErrorHandler(LOGIN_BY_SOCIAL)(error);
+            storeErrorHandler(LOGIN_BY_SOCIAL, true)(error);
         }
     },
 
@@ -97,7 +78,25 @@ export default {
             await logout();
             commit(SET_HAS_SESSION, false);
         } catch (error) {
-            storeErrorHandler(CHECK_SESSION)(error);
+            commit(SET_HAS_SESSION, false);
+            storeErrorHandler(LOGOUT)(error);
+        }
+    },
+
+    async [REGISTER_BY_PASSWORD]({ commit }, password) {
+        try {
+            await registerByPassword(password);
+            commit(SET_HAS_SESSION, true);
+        } catch (error) {
+            storeErrorHandler(REGISTER_BY_PASSWORD, true)(error);
+        }
+    },
+
+    async [RESET_PASSWORD]({ commit }, { phone, password }) {
+        try {
+            await resetPassword(phone, password);
+        } catch (error) {
+            storeErrorHandler(RESET_PASSWORD, true)(error);
         }
     },
 

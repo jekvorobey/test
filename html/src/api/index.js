@@ -38,20 +38,18 @@ export function logout() {
     return $http.post('/v1/auth/logout');
 }
 
-export function sendSMS(phone) {
-    return $http.post('/v1/auth/sendSMS', { phone });
+export function sendSMS(phone, isReset = false) {
+    const method = isReset ? '/v1/auth/reset/sendSMS' : '/v1/auth/sendSMS';
+    return $http.post(method, { phone });
 }
 
-export function sendRestoreSMS(phone) {
-    return $http.post('/v1/auth/reset/sendSMS', { phone });
+export function checkCode(code, isReset = false) {
+    const method = isReset ? '/v1/auth/reset/checkCode' : '/v1/auth/checkCode';
+    return $http.post(method, { code });
 }
 
-export function resetPassword(code, phone, password) {
-    return $http.post('/v1/auth/reset/resetPassword', { code, phone, password });
-}
-
-export function checkCode(code) {
-    return $http.post('/v1/auth/checkCode', { code });
+export function resetPassword(phone, password) {
+    return $http.post('/v1/auth/reset/resetPassword', { phone, password });
 }
 
 export function registerByPassword(password) {

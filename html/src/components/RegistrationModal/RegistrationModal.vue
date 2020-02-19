@@ -63,7 +63,7 @@
                             <span v-if="counter !== 0">
                                 Получить новый код можно через <strong>{{ counter }} сек.</strong>
                             </span>
-                            <v-link class="registration-modal__form-repeat" v-else tag="button" @click.stop="sendSms">
+                            <v-link v-else  class="registration-modal__form-repeat" tag="button" @click.stop="sendSms">
                                 Отправить новый код
                             </v-link>
                         </div>
@@ -353,7 +353,8 @@ export default {
 
         async checkCode() {
             try {
-                this.accepted = await this[CHECK_CODE](this.code);
+                await this[CHECK_CODE]({ code: this.code });
+                this.accepted = true;
             } catch (error) {
                 this.accepted = false;
                 this.$v.accepted.$touch();
@@ -362,7 +363,7 @@ export default {
 
         async sendSms() {
             try {
-                this.code = await this[SEND_SMS](this.phone);
+                await this[SEND_SMS]({ phone: this.phone });
                 this.startCounter();
                 this.phoneExists = false;
                 this.sent = true;

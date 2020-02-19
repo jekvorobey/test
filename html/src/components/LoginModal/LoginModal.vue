@@ -28,25 +28,27 @@
 
                     <form class="login-modal__form" @submit.prevent="onSubmit">
                         <v-input-mask
+                            class="login-modal__form-input"
                             v-model="rawRestorePhone"
                             :options="maskOptions"
                             :raw="false"
                             :error="restorePhoneError"
                         >
                             Номер телефона
+                            <template v-slot:after>
+                                <v-button class="login-modal__form-btn" type="submit">
+                                    Получить код
+                                </v-button>
+                            </template>
                         </v-input-mask>
-                        <div class="login-modal__form-submit">
-                            <v-button class="login-modal__form-submit-btn" type="submit">
-                                Получить код
-                            </v-button>
-                            <v-link class="login-modal__form-submit-link" tag="button" @click.stop="onCancelRestore">
-                                Отмена
-                            </v-link>
-                        </div>
                     </form>
+
+                    <v-link class="login-modal__form-submit-link" tag="button" @click.stop="onCancelRestore">
+                        Отмена
+                    </v-link>
                 </template>
 
-                <template v-else>
+                <template v-else-if="!accepted">
                     <p class="login-modal__desc">
                         Проверьте телефон {{ rawRestorePhone }}. Мы отправили на него новый код в СМС.
                     </p>
@@ -60,12 +62,35 @@
                             :error="codeError"
                         >
                             Код из СМС
+                            <template v-slot:after>
+                                <v-button class="login-modal__form-btn" type="submit">
+                                    Подтвердить
+                                </v-button>
+                            </template>
                             <template v-slot:error="{ error }">
                                 <transition name="slide-in-bottom" mode="out-in">
                                     <div :key="error" v-if="error">{{ error }}</div>
                                 </transition>
                             </template>
                         </v-input>
+                    </form>
+
+                    <div class="login-modal__form-timer">
+                        <span v-if="counter !== 0">
+                            Получить новый код можно через <strong>{{ counter }} сек.</strong>
+                        </span>
+                        <v-link v-else class="registration-modal__form-repeat" tag="button" @click.stop="sendSms">
+                            Отправить новый код
+                        </v-link>
+                    </div>
+                </template>
+
+                <template v-else>
+                    <p class="login-modal__desc">
+                        Введите новый пароль
+                    </p>
+
+                    <form class="login-modal__form" @submit.prevent="onSubmit">
                         <v-password
                             class="login-modal__form-input"
                             v-model="restorePassword"
@@ -149,7 +174,7 @@
                 </div>
             </div>
 
-            <div class="login-modal__footer">
+            <div class="login-modal__footer" v-if="!restore">
                 <v-button class="btn--outline login-modal__footer-btn" @click="onRegister">Зарегистрируйтесь</v-button>
                 &nbsp;&nbsp;Нет&nbsp;аккаунта?
             </div>
@@ -173,13 +198,11 @@ import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
 import {
     LOGIN_BY_PASSWORD,
     GET_SOCIAL_LINK,
-    SEND_RESTORE_SMS,
+    SEND_RESET_SMS,
     SEND_SMS,
     RESET_PASSWORD,
+    CHECK_CODE,
 } from '../../store/modules/Auth/actions';
-
-import { NAME as CART_MODULE } from '../../store/modules/Cart';
-import { FETCH_CART_DATA } from '../../store/modules/Cart/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
@@ -242,6 +265,10 @@ export default {
             valid: value => value !== true,
         },
 
+        accepted: {
+            valid: value => value === true,
+        },
+
         restoreFail: {
             valid: value => value !== true,
         },
@@ -261,8 +288,11 @@ export default {
             restorePassword: null,
             restorePasswordRepeat: null,
 
+            accepted: false,
             restore: false,
             sent: false,
+
+            counter: 59,
 
             maskOptions: { ...phoneMaskOptions },
         };
@@ -333,9 +363,7 @@ export default {
 
     watch: {
         restore(value) {
-            if (!value) {
-                this.sent = false;
-            }
+            if (!value) this.sent = false;
         },
 
         phone(value) {
@@ -349,8 +377,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(AUTH_MODULE, [LOGIN_BY_PASSWORD, GET_SOCIAL_LINK, SEND_RESTORE_SMS, RESET_PASSWORD]),
-        ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
+        ...mapActions(AUTH_MODULE, [LOGIN_BY_PASSWORD, GET_SOCIAL_LINK, SEND_SMS, RESET_PASSWORD, CHECK_CODE]),
 
         resetLoginValidation() {
             if (this.$v.phone.$dirty) this.$v.phone.$reset();
@@ -359,7 +386,17 @@ export default {
         },
 
         async onSubmit() {
-            if (this.restore && this.sent) {
+            if (!this.restore) {
+                this.$v.phone.$touch();
+                this.$v.password.$touch();
+                if (!this.$v.phone.$invalid && !this.$v.password.$invalid) this.loginByPassword();
+            } else if (!this.sent) {
+                this.$v.restorePhone.$touch();
+                if (!this.$v.restorePhone.$invalid) this.sendSms();
+            } else if (!this.accepted) {
+                this.$v.code.$touch();
+                if (!this.$v.code.$invalid) this.checkCode();
+            } else {
                 this.$v.restorePassword.$touch();
                 this.$v.restorePasswordRepeat.$touch();
                 this.$v.code.$touch();
@@ -369,30 +406,41 @@ export default {
                     !this.$v.code.$invalid
                 )
                     this.resetPassword();
-            } else if (!this.restore) {
-                this.$v.phone.$touch();
-                this.$v.password.$touch();
-                if (!this.$v.phone.$invalid && !this.$v.password.$invalid) this.loginByPassword();
-            } else {
-                this.$v.restorePhone.$touch();
-                if (!this.$v.restorePhone.$invalid) {
-                    try {
-                        await this[SEND_RESTORE_SMS](this.restorePhone);
-                        this.sent = true;
-                        this.restoreFail = false;
-                    } catch (error) {
-                        this.sent = false;
-                        this.restoreFail = true;
-                        this.$v.restoreFail.$touch();
-                    }
-                }
+            }
+        },
+
+        async sendSms() {
+            try {
+                await this[SEND_SMS]({
+                    phone: this.restorePhone,
+                    isReset: true,
+                });
+                this.sent = true;
+                this.restoreFail = false;
+                this.startCounter();
+            } catch (error) {
+                this.sent = false;
+                this.restoreFail = true;
+                this.$v.restoreFail.$touch();
+            }
+        },
+
+        async checkCode() {
+            try {
+                await this[CHECK_CODE]({
+                    code: this.code,
+                    isReset: true,
+                });
+                this.accepted = true;
+            } catch (error) {
+                this.accepted = false;
+                this.$v.accepted.$touch();
             }
         },
 
         async resetPassword() {
             try {
                 await this[RESET_PASSWORD]({
-                    code: this.code,
                     phone: this.restorePhone,
                     password: this.restorePassword,
                 });
@@ -405,9 +453,10 @@ export default {
 
         async loginByPassword() {
             try {
-                await this[LOGIN_BY_PASSWORD]({ login: this.phone, password: this.password });
-                this[FETCH_CART_DATA]();
-                this.$router.push({ name: 'Cabinet' });
+                await this[LOGIN_BY_PASSWORD]({
+                    login: this.phone,
+                    password: this.password,
+                });
                 this.onClose();
             } catch (error) {
                 this.fail = true;
@@ -436,6 +485,7 @@ export default {
 
         onCancelRestore() {
             this.restore = false;
+            this.stopCounter();
         },
 
         onRegister() {
@@ -443,10 +493,29 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: REGISTRATION_MODAL_NAME, open: true });
         },
 
+        startCounter() {
+            this.stopCounter();
+            this.counter = 59;
+
+            this.timer = setInterval(() => {
+                this.counter -= 1;
+                if (this.counter === 0) this.stopCounter();
+            }, 1000);
+        },
+
+        stopCounter() {
+            clearInterval(this.timer);
+            this.timer = null;
+        },
+
         onClose() {
             this.$emit('close');
             this.CHANGE_MODAL_STATE({ name: NAME, open: false });
         },
+    },
+
+    beforeDestroy() {
+        this.stopCounter();
     },
 };
 </script>
