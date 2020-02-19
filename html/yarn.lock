@@ -1414,10 +1414,10 @@ autoprefixer@^9.6.1, autoprefixer@^9.7.4:
     postcss "^7.0.26"
     postcss-value-parser "^4.0.2"
 
-axios-extensions@^3.0.6:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/axios-extensions/-/axios-extensions-3.0.6.tgz#c817f2e6a44a1b05949f8fd20bf978f066e694da"
-  integrity sha512-a8Aj5reFpVeMmIaJMYwTXtW/5WSGBq8KFAaBOxokkPK/Hvi/hnqNeHfMSvPQqxWPCE4r1pTe/3z7FqGLy1D6CQ==
+axios-extensions@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/axios-extensions/-/axios-extensions-3.1.1.tgz#dd746224738c54d39c380c01d4ea6e60bad0c14a"
+  integrity sha512-lNFl26syRs/fomCvj7XOcqiDUtN0WwNR46jRWeBnfmv8d6JdOU559dCkucSL04nruMLN+mpjkhvQKoIdb/gAzg==
   dependencies:
     "@types/lru-cache" "^4.1.1"
     lru-cache "^4.1.5"
@@ -7292,6 +7292,15 @@ postcss-calc@^7.0.1:
     postcss-selector-parser "^5.0.0-rc.4"
     postcss-value-parser "^3.3.1"
 
+postcss-calc@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/postcss-calc/-/postcss-calc-7.0.2.tgz#504efcd008ca0273120568b0792b16cdcde8aac1"
+  integrity sha512-rofZFHUg6ZIrvRwPeFktv06GdbDYLcGqh9EwiMutZg+a0oePCCw1zHOEiji6LCpyRcjTREtPASuUqeAvYlEVvQ==
+  dependencies:
+    postcss "^7.0.27"
+    postcss-selector-parser "^6.0.2"
+    postcss-value-parser "^4.0.2"
+
 postcss-clearfix@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/postcss-clearfix/-/postcss-clearfix-2.0.1.tgz#5170a1998f167d3190a0173445b6380c8c5c07f2"
@@ -8058,6 +8067,15 @@ postcss@^7, postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.16, po
   version "7.0.26"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.26.tgz#5ed615cfcab35ba9bbb82414a4fa88ea10429587"
   integrity sha512-IY4oRjpXWYshuTDFxMVkJDtWIk2LhsTlu8bZnbEJA4+bYT16Lvpo8Qv6EvDumhYRgzjZl489pmsY3qVgJQ08nA==
+  dependencies:
+    chalk "^2.4.2"
+    source-map "^0.6.1"
+    supports-color "^6.1.0"
+
+postcss@^7.0.27:
+  version "7.0.27"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.27.tgz#cc67cdc6b0daa375105b7c424a85567345fc54d9"
+  integrity sha512-WuQETPMcW9Uf1/22HWUWP9lgsIC+KEHg2kozMflKjbeUtw9ujvFX6QmIfozaErDkmLWS9WEnEdEe6Uo9/BNTdQ==
   dependencies:
     chalk "^2.4.2"
     source-map "^0.6.1"
