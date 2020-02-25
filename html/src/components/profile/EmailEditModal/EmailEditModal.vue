@@ -10,16 +10,37 @@
             <h4 class="email-edit-modal__hl">Редактировать Email</h4>
             <form class="email-edit-modal__form" @submit.prevent="onSubmit">
                 <v-input
+                    v-if="!sent"
                     class="email-edit-modal__form-row"
                     v-model="newEmail"
                     placeholder="Введите Email"
                     :error="newEmailError"
-                />
+                >
+                    <template v-slot:error="{ error }">
+                        <transition name="slide-in-bottom" mode="out-in">
+                            <div :key="error" v-if="error">{{ error }}</div>
+                        </transition>
+                    </template>
+                </v-input>
+                <v-input
+                    v-else
+                    type="number"
+                    class="email-edit-modal__form-row"
+                    v-model="code"
+                    placeholder="Код подтверждения"
+                    :error="codeError"
+                >
+                    <template v-slot:error="{ error }">
+                        <transition name="slide-in-bottom" mode="out-in">
+                            <div :key="error" v-if="error">{{ error }}</div>
+                        </transition>
+                    </template>
+                </v-input>
             </form>
 
             <div class="email-edit-modal__submit">
                 <v-button class="email-edit-modal__submit-btn" @click="onSubmit">
-                    Сохранить
+                    {{ sent ? 'Изменить Email' : 'Отправить код' }}
                 </v-button>
             </div>
         </template>
@@ -29,17 +50,21 @@
 import VButton from '../../controls/VButton/VButton.vue';
 import VInput from '../../controls/VInput/VInput.vue';
 import GeneralModal from '../../GeneralModal/GeneralModal.vue';
-import validationMixin, { required, email } from '../../../plugins/validation';
+import validationMixin, { required, email, minLength } from '../../../plugins/validation';
 
 import { mapActions, mapState } from 'vuex';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE, PROMO_DATA, CABINET_DATA } from '../../../store/modules/Profile';
-import { UPDATE_EMAIL } from '../../../store/modules/Profile/actions';
+import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
+import { NAME as CABINET_MODULE, EMAIL } from '../../../store/modules/Profile/modules/Cabinet';
+import { SEND_CODE, UPDATE_CREDENTIAL } from '../../../store/modules/Profile/modules/Cabinet/actions';
 
+import { verificationCodeType } from '../../../assets/scripts/enums';
 import './EmailEditModal.css';
+
+const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 
 export const NAME = 'email-edit-modal';
 
@@ -59,6 +84,11 @@ export default {
             email,
         },
 
+        code: {
+            required,
+            minLength: minLength(4),
+        },
+
         exists: {
             valid: value => value === false,
         },
@@ -66,15 +96,17 @@ export default {
 
     data() {
         return {
-            newEmail: '',
+            newEmail: null,
+            code: null,
+
+            sent: false,
             exists: false,
+            accepted: false,
         };
     },
 
     computed: {
-        ...mapState(PROFILE_MODULE, {
-            email: state => (state[CABINET_DATA] && state[CABINET_DATA].email) || '',
-        }),
+        ...mapState(CABINET_MODULE_PATH, [EMAIL]),
 
         isTablet() {
             return this.$mq.tablet;
@@ -85,30 +117,50 @@ export default {
             if (this.$v.newEmail.$dirty && !this.$v.newEmail.email) return 'Неправильный формат';
             if (this.$v.exists.$dirty && !this.$v.exists.valid) return 'Такой Email уже существует';
         },
-    },
 
-    watch: {
-        newEmail() {
-            if (this.$v.$dirty) {
-                this.exists = false;
-                this.$v.$reset();
-            }
+        codeError() {
+            if (this.$v.code.$dirty && !this.$v.code.required) return 'Обязательное поле';
+            if (this.$v.code.$dirty && !this.$v.code.minLength) return 'Неправильный код';
         },
     },
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(PROFILE_MODULE, [UPDATE_EMAIL]),
+        ...mapActions(CABINET_MODULE_PATH, [UPDATE_CREDENTIAL, SEND_CODE]),
+
+        async sendCode(destination) {
+            try {
+                await this[SEND_CODE]({
+                    destination,
+                    type: verificationCodeType.PROFILE_EMAIL,
+                });
+                this.sent = true;
+            } catch (error) {
+                this.sent = false;
+                this.accepted = false;
+            }
+        },
+
+        async updateEmail(value, code) {
+            try {
+                await this[UPDATE_CREDENTIAL]({
+                    value,
+                    code,
+                    type: verificationCodeType.PROFILE_EMAIL,
+                });
+                this.onClose();
+            } catch (error) {
+                this.accepted = false;
+            }
+        },
 
         async onSubmit() {
-            try {
-                this.$v.$touch();
-                if (!this.$v.$invalid) {
-                    await this[UPDATE_EMAIL](this.newEmail);
-                    this.onClose();
-                }
-            } catch (error) {
-                this.exists = true;
+            if (!this.sent) {
+                this.$v.newEmail.$touch();
+                if (!this.$v.newEmail.$invalid) this.sendCode(this.newEmail);
+            } else {
+                this.$v.code.$touch();
+                if (!this.$v.code.$invalid) this.updateEmail(this.newEmail, this.code);
             }
         },
 
@@ -118,7 +170,7 @@ export default {
     },
 
     beforeMount() {
-        this.newEmail = this.email;
+        this.newEmail = this[EMAIL];
     },
 };
 </script>

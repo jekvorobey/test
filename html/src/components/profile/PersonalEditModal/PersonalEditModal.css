@@ -1,20 +1,27 @@
-.email-edit-modal {
-    .modal-body {
-        padding: calc(var(--gs) * 3);
+.personal-edit-modal {
+    .popup--sm {
+        width: 440px;
+    }
 
-        @media (--tablet-min) {
-            display: flex;
-            flex-direction: column;
-        }
+    .modal-body {
+        padding: 0;
+    }
+
+    &__desc {
+        margin-bottom: calc(var(--gs) * 3);
 
         @media (--tablet) {
-            padding: 0;
+            margin-bottom: calc(var(--gs) * 2);
         }
     }
 
-    &__hl {
-        @media (--tablet) {
-            display: none;
+    &__body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+
+        @media (--tablet-lg-min) {
+            padding: calc(var(--gs) * 3);
         }
     }
 
@@ -23,26 +30,13 @@
             padding: calc(var(--gs) * 2);
         }
 
-        input[type='number'] {
-            text-align: left;
-        }
-
-        &-row {
-            width: 100%;
-
-            & + & {
-                margin-top: calc(var(--gs) * 2);
-            }
-
-            &:last-of-type {
-                margin-bottom: calc(var(--gs) * 3);
-            }
-        }
-
-        &-row &-btn {
-            @media (--tablet) {
-                width: 100%;
-            }
+        &-label {
+            display: flex;
+            margin-bottom: var(--gs);
+            cursor: text;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 24px;
         }
     }
 

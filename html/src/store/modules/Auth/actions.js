@@ -5,7 +5,7 @@ import { storeErrorHandler } from '../../../util/store';
 import {
     login,
     checkSession,
-    sendSMS,
+    sendCode,
     checkCode,
     registerByPassword,
     getSocialLink,
@@ -29,17 +29,17 @@ export const GET_SOCIAL_LINK = 'GET_SOCIAL_LINK';
 export const RESET_PASSWORD = 'RESET_PASSWORD';
 
 export default {
-    async [SEND_SMS]({ commit }, { phone, isReset }) {
+    async [SEND_SMS]({ commit }, { phone, type }) {
         try {
-            await sendSMS(phone, isReset);
+            await sendCode(phone, type);
         } catch (error) {
             storeErrorHandler(SEND_SMS, true)(error);
         }
     },
 
-    async [CHECK_CODE]({ commit }, { code, isReset }) {
+    async [CHECK_CODE]({ commit }, { code, type }) {
         try {
-            await checkCode(code, isReset);
+            await checkCode(code, type);
         } catch (error) {
             storeErrorHandler(CHECK_CODE, true)(error);
         }

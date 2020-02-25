@@ -196,6 +196,7 @@ export default {
     beforeRouteEnter(to, from, next) {
         // регистрируем модуль, если такого нет
         registerModuleIfNotExists($store, PROFILE_MODULE, profileModule);
+        console.log('beforeRouteEnter profile');
         next();
     },
 };

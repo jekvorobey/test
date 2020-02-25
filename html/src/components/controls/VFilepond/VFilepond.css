@@ -2,10 +2,6 @@
 @import '../../../../node_modules/filepond/dist/filepond.css';
 
 .v-filepond {
-    &__wrapper {
-        padding-top: calc(var(--gs) * 1.5);
-    }
-
     .filepond--root {
         font-family: var(--base-font);
 
@@ -37,17 +33,31 @@
     /* error state color */
     [data-filepond-item-state*='error'] .filepond--item-panel,
     [data-filepond-item-state*='invalid'] .filepond--item-panel {
-        background-color: red;
+        background-color: var(--cl-red);
     }
 
     [data-filepond-item-state='processing-complete'] .filepond--item-panel {
-        background-color: green;
+        background-color: var(--cl-dirty-green);
     }
 
     /* bordered drop area */
     .filepond--panel-root {
         background-color: transparent;
         border: 2px dotted var(--cl-grey);
+    }
+
+    .filepond--panel-root {
+        &[data-scalable='true'] {
+            border: 2px dashed var(--cl-grey) !important ;
+        }
+
+        &.filepond--panel {
+            &-top,
+            &-center,
+            &-bottom {
+                border: none;
+            }
+        }
     }
 
     .filepond--drop-label {

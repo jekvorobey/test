@@ -40,10 +40,6 @@ import { mapActions, mapGetters } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { UPDATE_PORTFOLIOS } from '../../../store/modules/Profile/actions';
-import { PORTFOLIOS } from '../../../store/modules/Profile/getters';
-
 import { getRandomInt } from '../../../util/helpers';
 import _cloneDeep from 'lodash/cloneDeep';
 import '../../../assets/images/sprites/cross.svg';
@@ -79,8 +75,6 @@ export default {
     },
 
     computed: {
-        ...mapGetters(PROFILE_MODULE, [PORTFOLIOS]),
-
         isTablet() {
             return this.$mq.tablet;
         },

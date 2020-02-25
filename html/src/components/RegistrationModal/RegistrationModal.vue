@@ -63,7 +63,7 @@
                             <span v-if="counter !== 0">
                                 Получить новый код можно через <strong>{{ counter }} сек.</strong>
                             </span>
-                            <v-link v-else  class="registration-modal__form-repeat" tag="button" @click.stop="sendSms">
+                            <v-link v-else class="registration-modal__form-repeat" tag="button" @click.stop="sendSms">
                                 Отправить новый код
                             </v-link>
                         </div>
@@ -178,8 +178,10 @@ import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import _cloneDeep from 'lodash/cloneDeep';
-import { phoneMaskOptions } from '../../assets/scripts/settings';
+
 import { rawPhone } from '../../util/helpers';
+import { phoneMaskOptions } from '../../assets/scripts/settings';
+import { verificationCodeType } from '../../assets/scripts/enums';
 import './RegistrationModal.css';
 
 export const NAME = 'registration-modal';
@@ -351,19 +353,12 @@ export default {
             }
         },
 
-        async checkCode() {
-            try {
-                await this[CHECK_CODE]({ code: this.code });
-                this.accepted = true;
-            } catch (error) {
-                this.accepted = false;
-                this.$v.accepted.$touch();
-            }
-        },
-
         async sendSms() {
             try {
-                await this[SEND_SMS]({ phone: this.phone });
+                await this[SEND_SMS]({
+                    phone: this.phone,
+                    type: verificationCodeType.REGISTRATION,
+                });
                 this.startCounter();
                 this.phoneExists = false;
                 this.sent = true;
@@ -373,6 +368,19 @@ export default {
 
                 this.stopCounter();
                 this.sent = false;
+            }
+        },
+
+        async checkCode() {
+            try {
+                await this[CHECK_CODE]({
+                    code: this.code,
+                    type: verificationCodeType.REGISTRATION,
+                });
+                this.accepted = true;
+            } catch (error) {
+                this.accepted = false;
+                this.$v.accepted.$touch();
             }
         },
 

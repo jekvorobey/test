@@ -2,11 +2,12 @@ import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
 
+import cabinet from './modules/Cabinet';
+
 export const NAME = 'profile';
 export const BREADCRUMBS = 'breadcrumbs';
 
 export const PROMO_DATA = 'promoData';
-export const CABINET_DATA = 'cabinetData';
 export const PREFERENCES_DATA = 'preferencesData';
 export const MESSAGES_DATA = 'messagesData';
 
@@ -20,6 +21,8 @@ export default {
     name: NAME,
     namespaced: true,
     state: {
+        cabinet: {},
+
         [BREADCRUMBS]: [],
 
         [PROMO_DATA]: null,
@@ -64,51 +67,6 @@ export default {
                 name: 'Колорист',
             },
         ],
-
-        [CABINET_DATA]: {
-            name: 'Динис',
-            lastName: 'Базгутдинов',
-            middleName: '',
-
-            bornDate: null,
-            sex: 'Мужской',
-            phone: '+7 916 123-45-67',
-            email: 'disbag@gmail.com',
-
-            portfolios: [
-                {
-                    id: 1,
-                    name: 'Работы в Инстаграме',
-                    ref: 'https://www.instagram.com/shpilka',
-                },
-                {
-                    id: 2,
-                    name: 'Портфолио «Свадебные прически»',
-                    ref: 'https://www.vargaevamarina.com/',
-                },
-            ],
-
-            profiles: [
-                {
-                    id: 1,
-                    name: 'Стилист',
-                },
-                {
-                    id: 2,
-                    name: 'Визажист',
-                },
-            ],
-
-            requisites: {
-                name: null,
-                inn: null,
-                bik: null,
-                bank: null,
-                account: null,
-                correspondentAccount: null,
-                address: null,
-            },
-        },
 
         [PREFERENCES_DATA]: {
             brands: [
@@ -179,4 +137,6 @@ export default {
     actions,
     mutations,
     getters,
+
+    modules: { cabinet },
 };

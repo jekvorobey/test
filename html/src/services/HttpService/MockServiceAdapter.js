@@ -21,6 +21,10 @@ export default class MockServiceAdapter extends HttpServiceBase {
             return this.httpServiceInstance.get(path, config);
         }
 
+        if (path.includes('/storage/certificate/')) {
+            return this.httpServiceInstance.get(path, config);
+        }
+
         switch (path) {
             case '/v1/content/menus':
             case '/v1/auth/is-login':
@@ -33,6 +37,8 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/catalog/filter':
             case '/v1/catalog/product-groups':
             case '/v1/catalog/product-group':
+
+            case '/v1/lk/profile':
                 return this.httpServiceInstance.get(path, config);
             default:
                 return this.mockServiceInstance.get(path, config);
@@ -69,6 +75,14 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/checkout/bonus':
             case '/v1/checkout/promocode':
             case '/v1/checkout/commit':
+
+            case '/v1/lk/profile/certificate':
+            case '/v1/lk/profile/avatar':
+            case '/v1/lk/profile/change-phone-code':
+            case '/v1/lk/profile/change-phone':
+            case '/v1/lk/profile/change-email-code':
+            case '/v1/lk/profile/change-email':
+            case '/v1/lk/profile/change-password':
                 return this.httpServiceInstance.post(path, data, config);
             default:
                 return this.mockServiceInstance.post(path, data, config);
@@ -82,11 +96,17 @@ export default class MockServiceAdapter extends HttpServiceBase {
      * @returns {Promise<Object>}
      */
     delete(path, config) {
+        if (path.includes('/v1/lk/profile/certificate/')) return this.httpServiceInstance.delete(path, config);
+        if (path.includes('/v1/lk/profile/social/')) return this.httpServiceInstance.delete(path, config);
+
         switch (path) {
             case '/v1/cart/item':
             case '/v1/checkout/certificate':
             case '/v1/checkout/bonus':
             case '/v1/checkout/promocode':
+
+            case '/v1/lk/profile/avatar':
+            case '/v1/lk/profile/social/vkontakte':
                 return this.httpServiceInstance.delete(path, config);
             default:
                 return this.mockServiceInstance.delete(path, config);
@@ -101,8 +121,12 @@ export default class MockServiceAdapter extends HttpServiceBase {
      */
     put(path, data, config) {
         switch (path) {
+            case '/v1/lk/profile/portfolio':
+            case '/v1/lk/profile/personal':
+            case '/v1/lk/profile/activities':
+                return this.httpServiceInstance.put(path, data, config);
             default:
-                return this.mockServiceInstance.put(path, config);
+                return this.mockServiceInstance.put(path, data, config);
         }
     }
 }

@@ -208,8 +208,9 @@ import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import _cloneDeep from 'lodash/cloneDeep';
-import { phoneMaskOptions } from '../../assets/scripts/settings';
 import { rawPhone } from '../../util/helpers';
+import { phoneMaskOptions } from '../../assets/scripts/settings';
+import { verificationCodeType } from '../../assets/scripts/enums';
 import './LoginModal.css';
 
 export const NAME = 'login-modal';
@@ -413,7 +414,7 @@ export default {
             try {
                 await this[SEND_SMS]({
                     phone: this.restorePhone,
-                    isReset: true,
+                    type: verificationCodeType.RESET_PASSWORD,
                 });
                 this.sent = true;
                 this.restoreFail = false;
@@ -429,7 +430,7 @@ export default {
             try {
                 await this[CHECK_CODE]({
                     code: this.code,
-                    isReset: true,
+                    type: verificationCodeType.RESET_PASSWORD,
                 });
                 this.accepted = true;
             } catch (error) {

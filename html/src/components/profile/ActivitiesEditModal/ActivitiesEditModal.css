@@ -1,4 +1,4 @@
-.portfolio-modal {
+.activities-edit-modal {
     .modal-body {
         padding: calc(var(--gs) * 3);
 
@@ -18,8 +18,8 @@
         flex-direction: column;
 
         @media (--tablet) {
-            height: 100%;
             padding: calc(var(--gs) * 3) calc(var(--gs) * 2);
+            height: 100%;
         }
 
         &-row {
@@ -53,7 +53,7 @@
     &__submit {
         width: 100%;
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
 
         @media (--tablet) {
             position: sticky;
@@ -66,13 +66,7 @@
 
         &-btn {
             @media (--tablet) {
-                width: calc(50% - var(--gs));
-            }
-
-            & + & {
-                @media (--tablet-min) {
-                    margin-left: calc(var(--gs) * 2);
-                }
+                width: 100%;
             }
         }
     }
