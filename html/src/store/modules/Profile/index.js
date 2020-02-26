@@ -3,6 +3,7 @@ import mutations from './mutations';
 import getters from './getters';
 
 import cabinet from './modules/Cabinet';
+import preferences from './modules/Preferences';
 
 export const NAME = 'profile';
 export const BREADCRUMBS = 'breadcrumbs';
@@ -21,65 +22,9 @@ export default {
     name: NAME,
     namespaced: true,
     state: {
-        cabinet: {},
-
         [BREADCRUMBS]: [],
 
         [PROMO_DATA]: null,
-
-        [AVAILABLE_BRANDS]: [
-            { id: 1, name: 'L’Oreal Paris' },
-            { id: 2, name: 'Carolina Herrera' },
-            { id: 3, name: 'Crystal' },
-            { id: 4, name: 'Arabesque Perfumes' },
-            { id: 5, name: 'gli elementi' },
-            { id: 6, name: 'Gliss Kur' },
-            { id: 7, name: 'Jimmy Choo' },
-            { id: 8, name: 'ADIDAS' },
-        ],
-
-        [AVAILABLE_CATEGORIES]: [
-            { id: 1, name: 'Кондиционер: Смываемый' },
-            { id: 2, name: 'Лицо' },
-            { id: 3, name: 'Глаза: Тени' },
-            { id: 4, name: 'Глаза: Подводка' },
-        ],
-
-        [AVAILABLE_PROFILES]: [
-            {
-                id: 1,
-                name: 'Стилист',
-            },
-            {
-                id: 2,
-                name: 'Визажист',
-            },
-            {
-                id: 3,
-                name: 'Парикмахер',
-            },
-            {
-                id: 4,
-                name: 'Нейл-мастер',
-            },
-            {
-                id: 5,
-                name: 'Колорист',
-            },
-        ],
-
-        [PREFERENCES_DATA]: {
-            brands: [
-                { id: 3, name: 'Crystal' },
-                { id: 4, name: 'Arabesque Perfumes' },
-                { id: 5, name: 'gli elementi' },
-            ],
-
-            categories: [
-                { id: 1, name: 'Кондиционер: Смываемый' },
-                { id: 2, name: 'Лицо' },
-            ],
-        },
 
         [MESSAGES_DATA]: {
             messages: [
@@ -138,5 +83,5 @@ export default {
     mutations,
     getters,
 
-    modules: { cabinet },
+    modules: { cabinet, preferences },
 };

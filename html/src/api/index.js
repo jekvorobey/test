@@ -154,14 +154,6 @@ export function changeProfileAvatar(formData) {
     });
 }
 
-export function deleteProfileSocial(driver) {
-    return $http.delete(`/v1/lk/profile/social/${driver}`);
-}
-
-export function deleteProfileAvatar(data) {
-    return $http.delete('/v1/lk/profile/avatar');
-}
-
 export function changeProfilePersonal({ firstName, lastName, middleName, birthday, gender }) {
     return $http.put('/v1/lk/profile/personal', {
         first_name: firstName,
@@ -170,6 +162,24 @@ export function changeProfilePersonal({ firstName, lastName, middleName, birthda
         birthday: birthday,
         gender: gender,
     });
+}
+
+export function getProfilePreferences() {
+    return $http.get(`/v1/lk/preference`);
+}
+
+export function changeProfilePreferences(type, items) {
+    return $http.put(`/v1/lk/preference/${type}`, {
+        [type]: items,
+    });
+}
+
+export function deleteProfileSocial(driver) {
+    return $http.delete(`/v1/lk/profile/social/${driver}`);
+}
+
+export function deleteProfileAvatar(data) {
+    return $http.delete('/v1/lk/profile/avatar');
 }
 
 // search

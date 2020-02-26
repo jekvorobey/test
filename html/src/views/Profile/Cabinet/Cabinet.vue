@@ -589,18 +589,27 @@ export default {
         },
     },
 
-    // serverPrefetch() {
-    //     return this[FETCH_CABINET_DATA](this.$isServer).catch(thrown => {
-    //         $logger.error('serverPrefetch', thrown);
-    //     });
-    // },
+    async serverPrefetch() {
+        try {
+            await this[FETCH_CABINET_DATA](this.$isServer);
+        } catch (error) {
+            $logger.error(error);
+        }
+    },
 
     beforeRouteEnter(to, from, next) {
+        const { load } = $store.state[PROFILE_MODULE][CABINET_MODULE];
+
+        if (load) {
+            next();
+            $store.dispatch(`${CABINET_MODULE_PATH}/${SET_LOAD}`, false);
+            return;
+        }
+
         $progress.start();
         $store
             .dispatch(`${CABINET_MODULE_PATH}/${FETCH_CABINET_DATA}`)
             .then(() => {
-                $store.dispatch(`${CABINET_MODULE_PATH}/${SET_LOAD}`, true);
                 next(vm => {
                     $progress.finish();
                 });

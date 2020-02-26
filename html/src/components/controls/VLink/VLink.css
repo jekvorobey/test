@@ -6,8 +6,8 @@
 .link.is-disabled,
 .is-disabled .link,
 .link[disabled] {
-    color: var(--cl-lg-grey);
-    fill: var(--cl-lg-grey);
-    border-color: var(--cl-lg-grey);
+    color: var(--cl-grey);
+    fill: var(--cl-grey);
+    border-color: var(--cl-grey);
     pointer-events: none;
 }

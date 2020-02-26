@@ -4,14 +4,20 @@
         <info-panel class="preferences-view__panel" header="Бренды">
             <template v-slot:controls>
                 <div class="preferences-view__panel-links">
-                    <v-link class="preferences-view__panel-link" tag="button" @click="onAddEntities(type.BRANDS)">
+                    <v-link
+                        class="preferences-view__panel-link"
+                        tag="button"
+                        @click="onAddEntities(type.BRANDS)"
+                        :disabled="actualBrands.length === availableBrands.length"
+                    >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
                     </v-link>
                     <v-link
-                        class="link--grey preferences-view__panel-link"
+                        class="preferences-view__panel-link"
                         tag="button"
                         @click="onDeleteAll(type.BRANDS)"
+                        :disabled="actualBrands.length === 0"
                     >
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Удалить все</span>
@@ -22,7 +28,7 @@
                 <transition-group tag="ul" class="preferences-view__panel-tags" name="tag-item">
                     <tag-item
                         class="preferences-view__panel-tags-item"
-                        v-for="(item, index) in brands"
+                        v-for="(item, index) in actualBrands"
                         :key="item.id"
                         :text="item.name"
                         @delete="onDeleteEntity(type.BRANDS, index)"
@@ -34,14 +40,20 @@
         <info-panel class="preferences-view__panel" header="Категории">
             <template v-slot:controls>
                 <div class="preferences-view__panel-links">
-                    <v-link class="preferences-view__panel-link" tag="button" @click="onAddEntities(type.CATEGORIES)">
+                    <v-link
+                        class="preferences-view__panel-link"
+                        tag="button"
+                        @click="onAddEntities(type.CATEGORIES)"
+                        :disabled="actualCategories.length === availableCategories.length"
+                    >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
                     </v-link>
                     <v-link
-                        class="link--grey preferences-view__panel-link"
+                        class="preferences-view__panel-link"
                         tag="button"
                         @click="onDeleteAll(type.CATEGORIES)"
+                        :disabled="actualCategories.length === 0"
                     >
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Удалить все</span>
@@ -52,7 +64,7 @@
                 <transition-group tag="ul" class="preferences-view__panel-tags" name="tag-item">
                     <tag-item
                         class="preferences-view__panel-tags-item"
-                        v-for="(item, index) in categories"
+                        v-for="(item, index) in actualCategories"
                         :key="item.id"
                         :text="item.name"
                         @delete="onDeleteEntity(type.CATEGORIES, index)"
@@ -62,7 +74,11 @@
         </info-panel>
 
         <transition name="fade">
-            <preference-edit-modal v-show="isPreferencesOpen" v-if="$isServer || isPreferencesOpen" />
+            <preference-edit-modal
+                v-show="isPreferencesOpen"
+                v-if="$isServer || isPreferencesOpen"
+                @submit="onSubmit"
+            />
         </transition>
     </section>
 </template>
@@ -78,16 +94,34 @@ import PreferenceEditModal, {
     NAME as PREFERENCES_EDIT_MODAL_NAME,
 } from '../../../components/profile/PreferenceEditModal/PreferenceEditModal.vue';
 
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE, PREFERENCES_DATA, AVAILABLE_PROFILES } from '../../../store/modules/Profile';
-import { DELETE_ENTITY, DELETE_ALL_ENTITIES } from '../../../store/modules/Profile/actions';
+import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
 
+import {
+    NAME as PREFERENCES_MODULE,
+    AVAILABLE_BRANDS,
+    AVAILABLE_CATEGORIES,
+    CUSTOMER,
+} from '../../../store/modules/Profile/modules/Preferences';
+import { BRANDS, CATEGORIES } from '../../../store/modules/Profile/modules/Preferences/getters';
+import {
+    DELETE_ENTITY,
+    DELETE_ALL_ENTITIES,
+    FETCH_PREFERENCES_DATA,
+    SET_LOAD,
+    UPDATE_ENTITIES,
+} from '../../../store/modules/Profile/modules/Preferences/actions';
+
+import { $store, $progress, $logger } from '../../../services/ServiceLocator';
+import _debounce from 'lodash/debounce';
 import '../../../assets/images/sprites/cross.svg';
 import '../../../assets/images/sprites/plus-small.svg';
 import './Preferences.css';
+
+const PREFERENCES_MODULE_PATH = `${PROFILE_MODULE}/${PREFERENCES_MODULE}`;
 
 const entityTypes = {
     BRANDS: 'brands',
@@ -108,21 +142,20 @@ export default {
         PreferenceEditModal,
     },
 
+    data() {
+        return {
+            actualBrands: [],
+            actualCategories: [],
+        };
+    },
+
     computed: {
         ...mapState(MODAL_MODULE, {
             isPreferencesOpen: state =>
                 state[MODALS][PREFERENCES_EDIT_MODAL_NAME] && state[MODALS][PREFERENCES_EDIT_MODAL_NAME].open,
         }),
-
-        ...mapState(PROFILE_MODULE, {
-            [entityTypes.BRANDS]: state =>
-                (state[PREFERENCES_DATA] && state[PREFERENCES_DATA][entityTypes.BRANDS]) || [],
-            [entityTypes.CATEGORIES]: state =>
-                (state[PREFERENCES_DATA] && state[PREFERENCES_DATA][entityTypes.CATEGORIES]) || [],
-
-            availableBrands: state => (state && state.availableBrands) || [],
-            availableCategories: state => (state && state.availableCategories) || [],
-        }),
+        ...mapState(PREFERENCES_MODULE_PATH, [AVAILABLE_BRANDS, AVAILABLE_CATEGORIES, CUSTOMER]),
+        ...mapGetters(PREFERENCES_MODULE_PATH, [BRANDS, CATEGORIES]),
 
         type() {
             return entityTypes;
@@ -139,14 +172,50 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(PROFILE_MODULE, [DELETE_ENTITY, DELETE_ALL_ENTITIES]),
+        ...mapActions(PREFERENCES_MODULE_PATH, [FETCH_PREFERENCES_DATA, UPDATE_ENTITIES]),
 
-        onDeleteEntity(type, index) {
-            this[DELETE_ENTITY]({ type, index, data: PREFERENCES_DATA });
+        onDeleteEntity(type, i) {
+            switch (type) {
+                case entityTypes.BRANDS:
+                    this.actualBrands.splice(i, 1);
+                    this.debounce_updateBrands(this.actualBrands.map(e => e.id));
+                    break;
+
+                case entityTypes.CATEGORIES:
+                    this.actualCategories.splice(i, 1);
+                    this.debounce_updateCategories(this.actualCategories.map(e => e.id));
+                    break;
+            }
         },
 
-        onDeleteAll(type) {
-            this[DELETE_ALL_ENTITIES]({ type, data: PREFERENCES_DATA });
+        async onDeleteAll(type) {
+            try {
+                await this[UPDATE_ENTITIES]({ type, items: [] });
+                switch (type) {
+                    case entityTypes.BRANDS:
+                        this.actualBrands = this[BRANDS];
+                        break;
+
+                    case entityTypes.CATEGORIES:
+                        this.actualCategories = this[CATEGORIES];
+                        break;
+                }
+            } catch (error) {}
+        },
+
+        async onSubmit({ type, items = [] }) {
+            try {
+                await this[UPDATE_ENTITIES]({ type, items });
+                switch (type) {
+                    case entityTypes.BRANDS:
+                        this.actualBrands = this[BRANDS];
+                        break;
+
+                    case entityTypes.CATEGORIES:
+                        this.actualCategories = this[CATEGORIES];
+                        break;
+                }
+            } catch (error) {}
         },
 
         onAddEntities(type) {
@@ -155,13 +224,13 @@ export default {
 
             switch (type) {
                 case entityTypes.BRANDS:
-                    availableEntities = this.availableBrands;
-                    entities = this[type];
+                    availableEntities = this[AVAILABLE_BRANDS];
+                    entities = this.actualBrands;
                     break;
 
                 case entityTypes.CATEGORIES:
-                    availableEntities = this.availableCategories;
-                    entities = this[type];
+                    availableEntities = this[AVAILABLE_CATEGORIES];
+                    entities = this.actualCategories;
                     break;
             }
 
@@ -172,10 +241,57 @@ export default {
                     type,
                     availableEntities,
                     entities,
-                    data: PREFERENCES_DATA,
                 },
             });
         },
+    },
+
+    async serverPrefetch() {
+        try {
+            await this[FETCH_PREFERENCES_DATA](this.$isServer);
+        } catch (error) {
+            $logger.error(error);
+        }
+    },
+
+    beforeRouteEnter(to, from, next) {
+        const { load } = $store.state[PROFILE_MODULE][PREFERENCES_MODULE];
+
+        if (load) {
+            next();
+            $store.dispatch(`${PREFERENCES_MODULE_PATH}/${SET_LOAD}`, false);
+            return;
+        }
+
+        $progress.start();
+        $store
+            .dispatch(`${PREFERENCES_MODULE_PATH}/${FETCH_PREFERENCES_DATA}`)
+            .then(() => {
+                next(vm => {
+                    $progress.finish();
+                });
+            })
+            .catch(thrown => {
+                $progress.fail();
+                $logger.error('beforeRouteEnter', thrown.error);
+                $progress.finish();
+                next();
+            });
+    },
+
+    beforeMount() {
+        this.actualBrands = [...this[BRANDS]];
+        this.actualCategories = [...this[CATEGORIES]];
+
+        this.debounce_updateBrands = _debounce(
+            items => this[UPDATE_ENTITIES]({ type: entityTypes.BRANDS, items }),
+            1000
+        );
+
+        this.debounce_updateCategories = _debounce(
+            items => this[UPDATE_ENTITIES]({ type: entityTypes.CATEGORIES, items }),
+            1000
+        );
     },
 };
 </script>
