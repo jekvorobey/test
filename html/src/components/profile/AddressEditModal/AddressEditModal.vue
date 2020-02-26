@@ -258,7 +258,6 @@ export default {
 
         selectedFormatAddress() {
             let address = '';
-            if (this.address.area) address += this.address.area + ' ';
             if (this.address.street) address += this.address.street + ' ';
             if (this.address.house) address += this.address.house + ' ';
             if (this.address.block) address += this.address.block;
@@ -339,9 +338,10 @@ export default {
             try {
                 let filter = [];
                 // return the matching countries as an array
-                if (this.selectedAddress && this.selectedAddress.data.city_fias_id)
+
+                if (this.address && this.address.city_guid)
                     filter.push({
-                        city_fias_id: this.selectedAddress.data.city_fias_id,
+                        city_fias_id: this.address.city_guid,
                     });
 
                 const { suggestions } = await this.findAddress(
@@ -389,8 +389,12 @@ export default {
                 address.region_guid = value.data.region_fias_id;
                 address.area = value.data.area_with_type || value.data.area;
                 address.area_guid = value.data.area_fias_id;
-                address.city = value.data.city_with_type || value.data.city;
-                address.city_guid = value.data.city_fias_id;
+                address.city =
+                    value.data.city_with_type ||
+                    value.data.city ||
+                    value.data.settlement_with_type ||
+                    value.data.settlement;
+                address.city_guid = value.data.city_fias_id || value.data.settlement_fias_id;
                 address.street = value.data.street_with_type || value.data.street;
                 address.house = value.data.house_type
                     ? `${value.data.house_type} ${value.data.house}`
@@ -408,8 +412,14 @@ export default {
         onSubmit() {
             this.$v.$touch();
             if (this.$v.$invalid) return;
-            const address = { ...this.address };
-            if (this.modalState.onSave) this.modalState.onSave(address);
+            const address = {
+                ...this.address,
+                porch: String(this.address.porch),
+                floor: String(this.address.floor),
+                flat: String(this.address.flat),
+                post_index: String(this.address.post_index),
+            };
+            this.$emit('save', address);
             this.onClose();
         },
 

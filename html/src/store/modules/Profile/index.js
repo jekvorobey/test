@@ -4,6 +4,7 @@ import getters from './getters';
 
 import cabinet from './modules/Cabinet';
 import preferences from './modules/Preferences';
+import addresses from './modules/Addresses';
 
 export const NAME = 'profile';
 export const BREADCRUMBS = 'breadcrumbs';
@@ -83,5 +84,9 @@ export default {
     mutations,
     getters,
 
-    modules: { cabinet, preferences },
+    modules: {
+        cabinet,
+        preferences,
+        addresses,
+    },
 };

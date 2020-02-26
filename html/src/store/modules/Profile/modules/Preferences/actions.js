@@ -27,7 +27,7 @@ export default {
             commit(SET_PREFERENCES_DATA, data);
             commit(SET_LOAD, isServer);
         } catch (error) {
-            storeErrorHandler(SET_PREFERENCES_DATA, true)(error);
+            storeErrorHandler(FETCH_PREFERENCES_DATA, true)(error);
         }
     },
 };

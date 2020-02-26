@@ -36,6 +36,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
 
             case '/v1/lk/profile':
             case '/v1/lk/preference':
+            case '/v1/lk/address':
                 return this.httpServiceInstance.get(path, config);
             default:
                 return this.mockServiceInstance.get(path, config);
@@ -95,6 +96,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
     delete(path, config) {
         if (path.includes('/v1/lk/profile/certificate/')) return this.httpServiceInstance.delete(path, config);
         if (path.includes('/v1/lk/profile/social/')) return this.httpServiceInstance.delete(path, config);
+        if (path.includes('/v1/lk/address/')) return this.httpServiceInstance.delete(path, config);
 
         switch (path) {
             case '/v1/cart/item':
@@ -123,6 +125,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/lk/profile/portfolio':
             case '/v1/lk/profile/personal':
             case '/v1/lk/profile/activities':
+            case '/v1/lk/address':
                 return this.httpServiceInstance.put(path, data, config);
             default:
                 return this.mockServiceInstance.put(path, data, config);

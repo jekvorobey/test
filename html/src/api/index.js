@@ -165,7 +165,7 @@ export function changeProfilePersonal({ firstName, lastName, middleName, birthda
 }
 
 export function getProfilePreferences() {
-    return $http.get(`/v1/lk/preference`);
+    return $http.get('/v1/lk/preference');
 }
 
 export function changeProfilePreferences(type, items) {
@@ -180,6 +180,16 @@ export function deleteProfileSocial(driver) {
 
 export function deleteProfileAvatar(data) {
     return $http.delete('/v1/lk/profile/avatar');
+}
+
+export function getProfileAddresses() {
+    return $http.get('/v1/lk/address');
+}
+
+export function changeProfileAddress(address) {
+    return $http.put('/v1/lk/address', {
+        address,
+    });
 }
 
 // search
