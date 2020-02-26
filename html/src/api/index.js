@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Cache } from 'axios-extensions';
 import { $http, $logger } from '../services/ServiceLocator';
 import { REQUEST_CANCEL_MESSAGE } from '../assets/scripts/constants';
-import { interval } from '../assets/scripts/enums';
+import { interval, verificationCodeType } from '../assets/scripts/enums';
 
 let catalogItemsCancelSource = null;
 const sessionCheckCache = new Cache({ maxAge: interval.FIVE_MINUTES });
@@ -38,20 +38,53 @@ export function logout() {
     return $http.post('/v1/auth/logout');
 }
 
-export function sendSMS(phone) {
-    return $http.post('/v1/auth/sendSMS', { phone });
+export function sendCode(destination, type) {
+    let method = '';
+    const data = {};
+
+    switch (type) {
+        case verificationCodeType.REGISTRATION:
+            method = '/v1/auth/sendSMS';
+            data.phone = destination;
+            break;
+        case verificationCodeType.RESET_PASSWORD:
+            method = '/v1/auth/reset/sendSMS';
+            data.phone = destination;
+            break;
+        case verificationCodeType.PROFILE_PHONE:
+            method = '/v1/lk/profile/change-phone-code';
+            data.phone = destination;
+            break;
+        case verificationCodeType.PROFILE_EMAIL:
+            method = '/v1/lk/profile/change-email-code';
+            data.email = destination;
+            break;
+
+        default:
+            return Promise.reject('Wrong verification code type');
+    }
+
+    return $http.post(method, data);
 }
 
-export function sendRestoreSMS(phone) {
-    return $http.post('/v1/auth/reset/sendSMS', { phone });
+export function checkCode(code, type) {
+    let method = '';
+    switch (type) {
+        case verificationCodeType.REGISTRATION:
+            method = '/v1/auth/checkCode';
+            break;
+        case verificationCodeType.RESET_PASSWORD:
+            method = '/v1/auth/reset/checkCode';
+            break;
+        default:
+            return Promise.reject('Wrong verification code type');
+    }
+
+    return $http.post(method, { code });
 }
 
-export function resetPassword(code, phone, password) {
-    return $http.post('/v1/auth/reset/resetPassword', { code, phone, password });
-}
-
-export function checkCode(code) {
-    return $http.post('/v1/auth/checkCode', { code });
+export function resetPassword(phone, password) {
+    return $http.post('/v1/auth/reset/resetPassword', { phone, password });
 }
 
 export function registerByPassword(password) {
@@ -63,6 +96,99 @@ export function getSocialLink({ backUrl, driver, redirectUrl }) {
         final_login_url: backUrl,
         driver,
         redirect_social_url: redirectUrl,
+    });
+}
+
+// profile
+
+export function getProfile() {
+    return $http.get('/v1/lk/profile');
+}
+
+export function uploadProfileCertificate(formData) {
+    return $http.post('/v1/lk/profile/certificate', formData, {
+        headers: { 'Content-Type': 'multipart/form-data; boundary="boundary' },
+    });
+}
+
+export function loadProfileCertificate(name) {
+    return $http.get(`/storage/certificate/${name}`, {
+        responseType: 'blob',
+    });
+}
+
+export function deleteProfileCertificate(id) {
+    return $http.delete(`/v1/lk/profile/certificate/${id}`);
+}
+
+export function changeProfileCredential(code, type) {
+    let method = '';
+    switch (type) {
+        case verificationCodeType.PROFILE_PHONE:
+            method = '/v1/lk/profile/change-phone';
+            break;
+        case verificationCodeType.PROFILE_EMAIL:
+            method = '/v1/lk/profile/change-email';
+            break;
+        default:
+            throw new Error(`Wrong verification code type: ${type}`);
+    }
+    return $http.post(method, { code: String(code) });
+}
+
+export function changeProfilePassword(data) {
+    return $http.post('/v1/lk/profile/change-password', data);
+}
+
+export function changeProfilePortfolio(portfolios) {
+    return $http.put('/v1/lk/profile/portfolio', { portfolios });
+}
+
+export function changeProfileActivities(ids) {
+    return $http.put('/v1/lk/profile/activities', { ids });
+}
+
+export function changeProfileAvatar(formData) {
+    return $http.post('/v1/lk/profile/avatar', formData, {
+        headers: { 'Content-Type': 'multipart/form-data; boundary="boundary' },
+    });
+}
+
+export function changeProfilePersonal({ firstName, lastName, middleName, birthday, gender }) {
+    return $http.put('/v1/lk/profile/personal', {
+        first_name: firstName,
+        last_name: lastName,
+        middle_name: middleName,
+        birthday: birthday,
+        gender: gender,
+    });
+}
+
+export function getProfilePreferences() {
+    return $http.get('/v1/lk/preference');
+}
+
+export function changeProfilePreferences(type, items) {
+    return $http.put(`/v1/lk/preference/${type}`, {
+        [type]: items,
+    });
+}
+
+export function deleteProfileSocial(driver) {
+    return $http.delete(`/v1/lk/profile/social/${driver}`);
+}
+
+export function deleteProfileAvatar(data) {
+    return $http.delete('/v1/lk/profile/avatar');
+}
+
+export function getProfileAddresses() {
+    return $http.get('/v1/lk/address');
+}
+
+export function changeProfileAddress(address) {
+    return $http.put('/v1/lk/address', {
+        address,
     });
 }
 

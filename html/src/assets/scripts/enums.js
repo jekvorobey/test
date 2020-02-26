@@ -142,6 +142,43 @@ export const httpCodes = Object.freeze({
     INTERNAL_SERVER_ERROR: 500,
     NOT_IMPLEMENTED: 501,
     BAD_GATEAWAY: 502,
-    SERVICE_UNAVALIABLE: 504,
+    SERVICE_UNAVAILABLE: 504,
     GATEAWAY_TIMEOUT: 505,
+});
+
+export const verificationCodeType = Object.freeze({
+    REGISTRATION: 1,
+    RESET_PASSWORD: 2,
+    PROFILE_PHONE: 3,
+    PROFILE_EMAIL: 4,
+});
+
+export const genderType = Object.freeze({
+    FEMALE: 1,
+    MALE: 2,
+});
+
+export const socials = Object.freeze({
+    VKONTAKTE: 'vkontakte',
+    FACEBOOK: 'facebook',
+    TWITTER: 'twitter',
+    INSTAGRAM: 'instagram',
+    GOOGLE: 'google',
+});
+
+export const mimeType = Object.freeze({
+    text: {
+        TEXT: 'text/plain',
+    },
+
+    image: {
+        JPEG: 'image/jpeg',
+        PNG: 'image/png',
+    },
+
+    application: {
+        PDF: 'application/pdf',
+        DOC: 'application/msword',
+        DOCX: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    },
 });

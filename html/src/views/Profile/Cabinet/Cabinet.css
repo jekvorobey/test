@@ -18,6 +18,34 @@
         @media (--tablet-lg) {
             margin-bottom: calc(var(--gs) * 4);
         }
+
+        &-placeholder {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            line-height: 40px;
+            letter-spacing: 0.05em;
+            color: var(--cl-white);
+            background-color: var(--cl-global);
+        }
+    }
+
+    &__attention {
+        margin-bottom: calc(var(--gs) * 3);
+
+        &-inner {
+            &-warning {
+                color: var(--cl-red);
+            }
+
+            &-link {
+                text-transform: none;
+                border-bottom: 1px solid var(--cl-global);
+                font-weight: normal;
+            }
+        }
     }
 
     &__panel {

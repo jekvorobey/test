@@ -45,8 +45,6 @@ import { mapActions, mapState } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { UPDATE_ENTITIES } from '../../../store/modules/Profile/actions';
 import _debounce from 'lodash/debounce';
 import './PreferenceEditModal.css';
 
@@ -85,8 +83,9 @@ export default {
         },
 
         filteredEntities() {
+            const filter = (this.filterString || '').toLowerCase();
             return this.modalState.availableEntities.filter(
-                e => !this.entities.some(se => se.id === e.id) && e.name.includes(this.filterString)
+                e => !this.entities.some(se => se.id === e.id) && (e.name || '').toLowerCase().includes(filter)
             );
         },
 
@@ -123,7 +122,6 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(PROFILE_MODULE, [UPDATE_ENTITIES]),
 
         isChecked(id) {
             return this.selectedEntities.some(e => e.id === id);
@@ -142,8 +140,8 @@ export default {
         },
 
         onSubmit() {
-            const newEntities = [...this.entities, ...this.selectedEntities];
-            this[UPDATE_ENTITIES]({ type: this.type, items: newEntities, data: this.data });
+            const newEntities = [...this.entities.map(e => e.id), ...this.selectedEntities.map(e => e.id)];
+            this.$emit('submit', { type: this.type, items: newEntities });
             this.onClose();
         },
 

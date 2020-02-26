@@ -58,7 +58,6 @@
 
         &-input {
             flex: 1;
-            margin-right: var(--gs);
 
             .v-input__container {
                 @media (--tablet) {

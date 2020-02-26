@@ -1,20 +1,43 @@
 <template>
     <div class="image-picker">
-        <div class="image-picker__img">
-            <img :src="image" alt="" />
-        </div>
-        <div class="image-picker__body">
+        <label :key="inputId" :for="inputId" class="image-picker__img" :class="{ 'image-picker__img--empty': !image }">
+            <v-picture v-if="image" :image="image" alt="" :lazy="false" />
+            <slot v-else />
+        </label>
+        <form ref="form" class="image-picker__body" enctype="multipart/form-data" @submit.prevent="onSubmit">
             <div class="image-picker__body-controls">
-                <v-button class="btn--outline image-picker__body-controls-btn">
+                <v-button
+                    class="btn--outline image-picker__body-controls-btn"
+                    @click.prevent="$refs.imagePicker.click()"
+                >
                     {{ btnText }}
                 </v-button>
-                <v-link tag="button" class="image-picker__body-controls-link">
+                <v-link
+                    v-if="image"
+                    tag="button"
+                    type="button"
+                    class="image-picker__body-controls-link"
+                    @click="onDelete"
+                >
                     <v-svg name="cross" width="24" height="24" />
                     <span>Удалить</span>
                 </v-link>
             </div>
-            <div class="text-grey image-picker__body-note">В формате png или jpg, до 1 Мб</div>
-        </div>
+            <div class="text-grey image-picker__body-note">
+                <template v-if="typeLabels">В формате {{ typeLabels }},</template> до 1 Мб
+            </div>
+            <button style="display: none" ref="submitBtn" type="submit" />
+            <input
+                :id="inputId"
+                :key="image"
+                class="image-picker__body-input"
+                ref="imagePicker"
+                type="file"
+                :name="name"
+                :accept="types"
+                @change.prevent="fileChange"
+            />
+        </form>
     </div>
 </template>
 
@@ -22,8 +45,9 @@
 import VSvg from '../../controls/VSvg/VSvg.vue';
 import VButton from '../../controls/VButton/VButton.vue';
 import VLink from '../../controls/VLink/VLink.vue';
+import VPicture from '../../controls/VPicture/VPicture.vue';
 
-import profileImg from '../../../assets/images/mock/profile.png';
+import { getRandomIntInclusive } from '../../../util/helpers';
 import '../../../assets/images/sprites/cross.svg';
 import '../../../assets/images/sprites/account-middle.svg';
 import './ImagePicker.css';
@@ -35,35 +59,47 @@ export default {
         VSvg,
         VLink,
         VButton,
+        VPicture,
     },
 
     props: {
         image: {
             type: [String, Object],
-            default: profileImg,
         },
 
-        validTypes: {
-            type: Array,
+        name: {
+            type: String,
+            default: 'file',
+        },
+
+        validTypesMap: {
+            type: Object,
+            required: true,
             default() {
-                return ['image/jpeg', 'image/jpg', 'image/png'];
+                return {};
             },
+        },
+
+        validSize: {
+            type: [Number, String],
+            default: 1000000,
         },
     },
 
     data() {
         return {
             btnText: 'Загрузить другой',
+            inputId: null,
         };
     },
 
     computed: {
-        inputId() {
-            return `image-picker-${this._uid}`;
+        types() {
+            return Object.keys(this.validTypesMap).join(', ');
         },
 
-        types() {
-            return this.validTypes.join(', ');
+        typeLabels() {
+            return Object.values(this.validTypesMap).join(', ');
         },
 
         isTablet() {
@@ -79,14 +115,37 @@ export default {
 
     methods: {
         validFileType(file) {
-            return this.validTypes.some(t => t === file.type);
+            return Boolean(this.validTypesMap[file.type]);
+        },
+
+        validFileSize(file) {
+            const validSize = Number(this.validSize);
+            return file && file.size < validSize;
         },
 
         fileChange() {
             const { files } = this.$refs.imagePicker;
-            if (files.length < 1 || !this.validFileType(files[0])) return;
-            this.$emit('fileChanged', files[0]);
+            if (files.length < 1 || !this.validFileType(files[0]) || !this.validFileSize(files[0])) {
+                alert('Большой размер или неправильный формат');
+                return;
+            }
+            const { submitBtn } = this.$refs;
+            if (submitBtn) submitBtn.click();
         },
+
+        onSubmit() {
+            const { form } = this.$refs;
+            const data = new FormData(form);
+            this.$emit('changed', data);
+        },
+
+        onDelete() {
+            this.$emit('delete');
+        },
+    },
+
+    mounted() {
+        this.inputId = `image-picker-${getRandomIntInclusive(0, 100000)}`;
     },
 };
 </script>

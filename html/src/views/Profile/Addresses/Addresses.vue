@@ -14,13 +14,13 @@
                         class="addresses-view__panel-item"
                         v-for="address in addresses"
                         :key="`${address.region_guid}-${address.city_guid || address.settlment_guid}-${address.house}`"
-                        :selected="isEqualAddress(address, selectedAddress)"
+                        :selected="!!address.default"
                         @cardClick="onSetSelectedAddress(address)"
                         @btnClick="onChangeAddress(address)"
                     >
                         {{
-                            `${address.city || address.settlement}, ${
-                                address.area || address.street ? `${address.area || address.street}, ` : ''
+                            `${address.city || address.settlement}, ${address.area ? `${address.area}, ` : ''}${
+                                address.street ? `${address.street}, ` : ''
                             }${address.house} ${address.block || ''}, ${address.post_index}`
                         }}
                     </checkout-option-card>
@@ -29,7 +29,7 @@
         </info-panel>
 
         <transition name="fade">
-            <address-edit-modal v-show="isAddressEditOpen" v-if="$isServer || isAddressEditOpen" />
+            <address-edit-modal v-show="isAddressEditOpen" v-if="$isServer || isAddressEditOpen" @save="onSave" />
         </transition>
     </section>
 </template>
@@ -45,17 +45,29 @@ import AddressEditModal, {
 } from '../../../components/profile/AddressEditModal/AddressEditModal.vue';
 
 import { mapActions, mapState } from 'vuex';
-import { $store } from '../../../services/ServiceLocator';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
+import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
+
+import { NAME as ADDRESSES_MODULE, ADDRESSES } from '../../../store/modules/Profile/modules/Addresses';
+import {
+    FETCH_ADDRESSES_DATA,
+    SET_LOAD,
+    UPDATE_ADDRESS,
+} from '../../../store/modules/Profile/modules/Addresses/actions';
+
+import { $store, $progress, $logger } from '../../../services/ServiceLocator';
+
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 
+import { getRandomIntInclusive } from '../../../util/helpers';
 import '../../../assets/images/sprites/plus-small.svg';
 import './Addresses.css';
-import { getRandomIntInclusive } from '../../../util/helpers';
+
+const ADDRESSES_MODULE_PATH = `${PROFILE_MODULE}/${ADDRESSES_MODULE}`;
 
 export default {
     name: 'addresses',
@@ -70,61 +82,8 @@ export default {
         AddressEditModal,
     },
 
-    data() {
-        const selectedAddress = {
-            id: '1',
-            value: 'г Москва, г Зеленоград, к 1134',
-            country_code: 'RU',
-            post_index: '124460',
-            region: 'г Москва',
-            region_guid: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
-            area: null,
-            area_guid: null,
-            city: 'г Зеленоград',
-            city_guid: 'ec44c0ee-bf24-41c8-9e1c-76136ab05cbf',
-            street: null,
-            house: 'к 1134',
-            block: null,
-            flat: 110,
-            floor: 14,
-            porch: 1,
-            intercom: '110',
-            comment: 'лалала',
-        };
-
-        return {
-            mounted: false,
-            selectedAddress,
-            addresses: [
-                selectedAddress,
-                // {
-                //     id="1",
-                //     postal_code: '544444',
-                //     region_guid: '0c5b2444-70a0-4232-980c-b4dc0d3f02b5',
-                //     city_guid: null,
-                //     city: null,
-                //     settlement_guid: 'ec41ee-bf24-411c8-9e1c-76136ab05cbf',
-                //     settlement: 'Поселок солнечное',
-                //     street: 'ул. Солнечная',
-                //     house: 'д. 112',
-                //     block: 'стр. 3',
-                // },
-                // {
-                //     postal_code: '134144',
-                //     region_guid: '445b2444-70a0-4932-980c-b55c0d3f02b5',
-                //     city_guid: 'ec44c0ee-bf24-41c8-9e1c-761366565cbf',
-                //     city: 'Видное',
-                //     settlement_guid: null,
-                //     settlement: null,
-                //     street: 'ул. Советская',
-                //     house: 'д. 231',
-                //     block: 'стр. 5',
-                // },
-            ],
-        };
-    },
-
     computed: {
+        ...mapState(ADDRESSES_MODULE_PATH, [ADDRESSES]),
         ...mapState(MODAL_MODULE, {
             isAddressEditOpen: state =>
                 state[MODALS][ADDRESS_EDIT_MODAL_NAME] && state[MODALS][ADDRESS_EDIT_MODAL_NAME].open,
@@ -141,6 +100,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(ADDRESSES_MODULE_PATH, [FETCH_ADDRESSES_DATA, SET_LOAD, UPDATE_ADDRESS]),
 
         isEqualAddress(address1, address2) {
             return _isEqual(address1, address2);
@@ -151,23 +111,14 @@ export default {
         },
 
         onSave(address) {
-            if (address.id) {
-                const exists = this.addresses.find(a => address.id === a.id);
-                if (exists) {
-                    const index = this.addresses.indexOf(exists);
-                    this.addresses[index] = address;
-                }
-            } else {
-                address.id = getRandomIntInclusive(0, 1000000);
-                this.addresses.push(address);
-            }
+            this[UPDATE_ADDRESS](address);
         },
 
         onAddAddress() {
             this[CHANGE_MODAL_STATE]({
                 name: ADDRESS_EDIT_MODAL_NAME,
                 open: true,
-                state: { address: {}, onSave: this.onSave },
+                state: { address: {} },
             });
         },
 
@@ -175,9 +126,42 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: ADDRESS_EDIT_MODAL_NAME,
                 open: true,
-                state: { address: { ...address }, onSave: this.onSave },
+                state: { address: { ...address } },
             });
         },
+    },
+
+    async serverPrefetch() {
+        try {
+            await this[FETCH_ADDRESSES_DATA](this.$isServer);
+        } catch (error) {
+            $logger.error(error);
+        }
+    },
+
+    beforeRouteEnter(to, from, next) {
+        const { load } = $store.state[PROFILE_MODULE][ADDRESSES_MODULE];
+
+        if (load) {
+            next();
+            $store.dispatch(`${ADDRESSES_MODULE_PATH}/${SET_LOAD}`, false);
+            return;
+        }
+
+        $progress.start();
+        $store
+            .dispatch(`${ADDRESSES_MODULE_PATH}/${FETCH_ADDRESSES_DATA}`)
+            .then(() => {
+                next(vm => {
+                    $progress.finish();
+                });
+            })
+            .catch(thrown => {
+                $progress.fail();
+                $logger.error('beforeRouteEnter', thrown.error);
+                $progress.finish();
+                next();
+            });
     },
 };
 </script>

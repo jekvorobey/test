@@ -1,4 +1,5 @@
 import flatPickrEn from 'flatpickr/dist/l10n/default';
+import { receiveMethods, genderType, socials } from '../scripts/enums';
 
 const flatpickrLocale = flatPickrEn;
 const main = {
@@ -54,9 +55,14 @@ const main = {
     },
 
     deliveryMethod: {
-        [1]: 'Delivery',
-        [2]: 'Express delivery',
-        [3]: 'Pickup',
+        [receiveMethods.DELIVERY]: 'Delivery',
+        [receiveMethods.EXPRESS]: 'Express delivery',
+        [receiveMethods.PICKUP]: 'Pickup',
+    },
+
+    genderType: {
+        [genderType.FEMALE]: 'Female',
+        [genderType.MALE]: 'Male',
     },
 
     landing: {
@@ -151,6 +157,14 @@ const main = {
             profile: 'My Profile',
             business: 'My Business',
             training: 'Training',
+        },
+
+        socials: {
+            [socials.VKONTAKTE]: 'VKontakte',
+            [socials.TWITTER]: 'Twitter',
+            [socials.INSTAGRAM]: 'Instagram',
+            [socials.FACEBOOK]: 'Facebook',
+            [socials.GOOGLE]: 'Google',
         },
 
         routes: {
