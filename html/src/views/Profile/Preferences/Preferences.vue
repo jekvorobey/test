@@ -188,19 +188,8 @@ export default {
             }
         },
 
-        async onDeleteAll(type) {
-            try {
-                await this[UPDATE_ENTITIES]({ type, items: [] });
-                switch (type) {
-                    case entityTypes.BRANDS:
-                        this.actualBrands = this[BRANDS];
-                        break;
-
-                    case entityTypes.CATEGORIES:
-                        this.actualCategories = this[CATEGORIES];
-                        break;
-                }
-            } catch (error) {}
+        onDeleteAll(type) {
+            this.onSubmit({ type, items: [] });
         },
 
         async onSubmit({ type, items = [] }) {
@@ -208,14 +197,16 @@ export default {
                 await this[UPDATE_ENTITIES]({ type, items });
                 switch (type) {
                     case entityTypes.BRANDS:
-                        this.actualBrands = this[BRANDS];
+                        this.actualBrands = [...this[BRANDS]];
                         break;
 
                     case entityTypes.CATEGORIES:
-                        this.actualCategories = this[CATEGORIES];
+                        this.actualCategories = [...this[CATEGORIES]];
                         break;
                 }
-            } catch (error) {}
+            } catch (error) {
+                $logger.error(error);
+            }
         },
 
         onAddEntities(type) {
