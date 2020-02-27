@@ -1,4 +1,5 @@
 import { mapFilterSegments, getActiveCategories } from '../../../util/catalog';
+import { productGroupTypes } from '../../../assets/scripts/enums';
 
 export const ROUTE_SEGMENTS = 'routeSegments';
 export const FILTER_SEGMENTS = 'filterSegments';
@@ -7,12 +8,33 @@ export const ACTIVE_CATEGORY = 'activeCategory';
 export const ACTIVE_PAGE = 'activePage';
 export const PAGES_COUNT = 'pagesCount';
 export const ACTIVE_CATEGORIES = 'activeCategories';
+export const ROOT_CATEGORY = 'rootCategory';
+export const BREADCRUMBS = 'breadcrumbs';
+export const SHOW_PANEL = 'showPanel';
 
 const pageSize = 12;
 
+const productGroupBase = {
+    FILTERS: 'filters',
+    PRODUCTS: 'products',
+};
+
 export default {
+    [ROOT_CATEGORY](
+        { categories, productGroup },
+        { activeCategories },
+        {
+            route: {
+                params: { type, code },
+            },
+        }
+    ) {
+        const { filters } = productGroup || {};
+        return filters ? activeCategories.find(c => c.code === filters.category) : null;
+    },
+
     [ACTIVE_CATEGORIES](
-        { categories },
+        { categories, productGroup },
         getters,
         {
             route: {
@@ -21,16 +43,25 @@ export default {
         }
     ) {
         const activeCategories = [];
+        const { filters } = productGroup || {};
+
+        let rootCategoryCode = filters ? code || filters.category : code;
+
         let found = null;
         for (let i = 0; i < categories.length; i++) {
             const rootCategory = categories[i];
-            found = getActiveCategories(code, rootCategory, activeCategories);
+            found = getActiveCategories(rootCategoryCode, rootCategory, activeCategories);
             if (found) {
                 activeCategories.unshift(found);
                 break;
             }
         }
         return activeCategories;
+    },
+
+    [BREADCRUMBS](state, { activeCategories, rootCategory }) {
+        const index = activeCategories.indexOf(rootCategory);
+        return index !== -1 ? activeCategories.slice(index + 1) : activeCategories;
     },
 
     [ACTIVE_PAGE](state, getters, { route }) {

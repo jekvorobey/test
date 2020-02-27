@@ -16,6 +16,11 @@ import {
     SET_ENTITY_CODE,
 } from './mutations';
 
+const productGroupBase = {
+    FILTERS: 'filters',
+    PRODUCTS: 'products',
+};
+
 export const FETCH_FILTERS = 'FETCH_FILTERS';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const FETCH_BANNER = 'FETCH_BANNER';
@@ -42,18 +47,18 @@ export default {
         }
     },
 
-    async [FETCH_CATEGORIES]({ commit }, payload) {
+    async [FETCH_CATEGORIES]({ commit }, { code } = {}) {
         try {
-            const data = await getCategories(payload);
+            const data = await getCategories(code);
             commit(SET_CATEGORIES, data);
         } catch (error) {
             storeErrorHandler(FETCH_CATEGORIES, true)(error);
         }
     },
 
-    async [FETCH_FILTERS]({ commit }, payload) {
+    async [FETCH_FILTERS]({ commit }, { category, excludedFilters }) {
         try {
-            const data = await getFilters(payload);
+            const data = await getFilters(category, excludedFilters);
             commit(SET_FILTERS, data);
         } catch (error) {
             storeErrorHandler(FETCH_FILTERS, true)(error);
@@ -62,8 +67,8 @@ export default {
 
     async [FETCH_ITEMS]({ commit, state }, payload) {
         try {
-            const { filters } = state.productGroup || {};
-            const filter = { ...payload.filter, ...filters };
+            const { filters = {} } = state.productGroup || {};
+            const filter = { ...payload.filter, ...filters, category: payload.filter.category || filters.category };
             const data = await getCatalogItems({ ...payload, filter });
             if (payload.showMore) commit(SET_ITEMS_MORE, data);
             else commit(SET_ITEMS, data);
@@ -82,10 +87,24 @@ export default {
         }
     },
 
-    async [FETCH_PRODUCT_GROUP_DATA]({ dispatch }, payload = {}) {
+    async [FETCH_PRODUCT_GROUP_DATA]({ dispatch, commit }, payload = {}) {
         try {
-            await dispatch(FETCH_PRODUCT_GROUP, { type: payload.type, entityCode: payload.entityCode });
-            await Promise.all([dispatch(FETCH_CATEGORIES, payload), dispatch(FETCH_FILTERS, payload.filter.category)]);
+            const { excluded_filters, based, filters } = await dispatch(FETCH_PRODUCT_GROUP, {
+                type: payload.type,
+                entityCode: payload.entityCode,
+            });
+
+            if (based === productGroupBase.FILTERS) {
+                await dispatch(FETCH_CATEGORIES, { code: filters.category });
+                await dispatch(FETCH_FILTERS, {
+                    category: payload.filter.category || filters.category,
+                    excludedFilters: excluded_filters,
+                });
+            } else {
+                commit(SET_CATEGORIES, []);
+                commit(SET_FILTERS, []);
+            }
+
             return dispatch(FETCH_ITEMS, payload);
         } catch (error) {
             storeErrorHandler(FETCH_PRODUCT_GROUP_DATA)(error);
@@ -93,13 +112,16 @@ export default {
     },
 
     async [FETCH_CATALOG_DATA]({ dispatch, commit }, payload = {}) {
+        const { filter = {} } = payload;
+
         try {
+            commit(SET_PRODUCT_GROUP, null);
             await Promise.all([
                 dispatch(FETCH_BANNER, payload),
-                dispatch(FETCH_CATEGORIES, payload),
-                dispatch(FETCH_FILTERS, payload.filter.category),
+                dispatch(FETCH_CATEGORIES),
+                dispatch(FETCH_FILTERS, { category: filter.category }),
             ]);
-            commit(SET_PRODUCT_GROUP, null);
+
             return dispatch(FETCH_ITEMS, payload);
         } catch (error) {
             storeErrorHandler(FETCH_CATALOG_DATA)(error);

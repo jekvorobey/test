@@ -23,16 +23,18 @@ export default {
     namespaced: true,
     state: {
         [LOAD_PATH]: '',
-        [PRODUCT_GROUP]: null,
-        [ENTITY_CODE]: null,
         [TYPE]: null,
-        [BANNER]: {},
-        [CATEGORY_ID]: null,
+        [ENTITY_CODE]: null,
         [CATEGORY_CODE]: null,
+
+        [PRODUCT_GROUP]: null,
+        [BANNER]: {},
+
         [CATEGORIES]: [],
+        [FILTERS]: [],
+
         [ITEMS]: [],
         [RANGE]: 0,
-        [FILTERS]: [],
     },
     actions,
     mutations,

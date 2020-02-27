@@ -6,12 +6,7 @@
         @mouseleave="onMouseOver(false)"
     >
         <div class="category-tree-item__label">
-            <router-link
-                v-if="item.code !== undefined"
-                :to="url"
-                class="category-tree-item__link"
-                :exact="item.code === ''"
-            >
+            <router-link v-if="isInteractive" :to="url" class="category-tree-item__link" :exact="item.code === ''">
                 {{ item.name }}
             </router-link>
             <span v-else class="category-tree-item__link">
@@ -26,6 +21,7 @@
                     :key="item.id || index"
                     :item="item"
                     :depth="depth + 1"
+                    :disabled="!isRoot"
                 />
             </ul>
         </transition>
@@ -34,7 +30,7 @@
 
 <script>
 import { NAME as CATALOG_MODULE } from '../../store/modules/Catalog';
-import { ACTIVE_CATEGORIES } from '../../store/modules/Catalog/getters';
+import { ACTIVE_CATEGORIES, ROOT_CATEGORY } from '../../store/modules/Catalog/getters';
 import { mapState, mapGetters } from 'vuex';
 import { generateCategoryUrl } from '../../util/catalog';
 
@@ -53,6 +49,11 @@ export default {
             type: Number,
             default: 0,
         },
+
+        disabled: {
+            type: Boolean,
+            default: true,
+        },
     },
 
     data() {
@@ -62,7 +63,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(CATALOG_MODULE, [ACTIVE_CATEGORIES]),
+        ...mapGetters(CATALOG_MODULE, [ACTIVE_CATEGORIES, ROOT_CATEGORY]),
         ...mapState('route', {
             type: state => state.params.type,
             entityCode: state => state.params.entityCode,
@@ -72,13 +73,38 @@ export default {
             return this[ACTIVE_CATEGORIES].includes(this.item);
         },
 
+        isRoot() {
+            const {
+                item: { code },
+                depth,
+                rootCategory,
+            } = this;
+
+            return rootCategory ? code === rootCategory.code : depth === 0;
+        },
+
+        isInteractive() {
+            const {
+                type,
+                item: { code },
+                rootCategory,
+                isRoot,
+                disabled,
+            } = this;
+            return rootCategory ? code && (isRoot || !disabled) : code;
+        },
+
         url() {
             const {
                 entityCode,
                 type,
                 item: { code },
+                isRoot,
+                disabled,
+                rootCategory,
             } = this;
-            return { path: generateCategoryUrl(type, entityCode, code) };
+
+            return { path: generateCategoryUrl(type, entityCode, rootCategory ? !isRoot && code : code) };
         },
 
         hasChildren() {

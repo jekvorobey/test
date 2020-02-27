@@ -12,7 +12,7 @@
                     {{ productGroup && productGroup.name }}
                 </breadcrumb-item>
                 <breadcrumb-item
-                    v-for="category in activeCategories"
+                    v-for="category in breadcrumbs"
                     :key="category.id"
                     :to="generateBreadcrumbUrl(category.code)"
                 >
@@ -42,7 +42,7 @@
         </div>
         <section class="section">
             <div class="container catalog-view__grid">
-                <div class="catalog-view__side-panel" v-if="!isTabletLg">
+                <div class="catalog-view__side-panel" v-if="!isTabletLg && categories.length > 0">
                     <ul class="catalog-view__side-panel-categories">
                         <category-tree-item
                             class="catalog-view__side-panel-categories-item"
@@ -216,7 +216,7 @@ import {
     ACTIVE_PAGE,
     PAGES_COUNT,
     ROUTE_SEGMENTS,
-    ACTIVE_CATEGORIES,
+    BREADCRUMBS,
 } from '../../store/modules/Catalog/getters';
 
 import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '../../util/catalog';
@@ -276,7 +276,7 @@ export default {
             ACTIVE_PAGE,
             PAGES_COUNT,
             ROUTE_SEGMENTS,
-            ACTIVE_CATEGORIES,
+            BREADCRUMBS,
         ]),
         ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP]),
         ...mapState(MODAL_MODULE, {
@@ -424,6 +424,8 @@ export default {
         registerModuleIfNotExists($store, CATALOG_MODULE, catalogModule);
         const { loadPath, categoryCode, entityCode, type } = $store.state[CATALOG_MODULE];
 
+        console.log('beforeRouteEnter');
+
         // если все загружено, пропускаем
         if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode) next();
         else {
@@ -467,7 +469,7 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
-
+        console.log('beforeRouteUpdate');
         if (this.showMore) {
             this.fetchCatalog(to, from, this.showMore);
         } else this.debounce_fetchCatalog(to, from);
@@ -475,6 +477,7 @@ export default {
     },
 
     beforeRouteLeave(to, from, next) {
+        console.log('beforeRouteLeave');
         // При уходе с роута отменяем запрос
         this.debounce_fetchCatalog.cancel();
         next();

@@ -67,7 +67,7 @@
                             v-for="item in items"
                             :key="item.id"
                             :title="item.name"
-                            :image="item.image"
+                            :image="item.preview_photo"
                             :to="generateCategoryUrl(item.code)"
                             button-text="Смотреть товары"
                         />
@@ -134,10 +134,11 @@ import productGroupsModule, {
     LOAD_PATH,
     TYPE,
 } from '../../store/modules/ProductGroups';
-import { BRANDS_CATALOG } from '../../store/modules/ProductGroups/getters';
+import { BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT } from '../../store/modules/ProductGroups/getters';
 import { FETCH_ITEMS, SET_LOAD_PATH, SET_TYPE } from '../../store/modules/ProductGroups/actions';
 
 import { productGroupTypes } from '../../assets/scripts/enums';
+import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants';
 import { registerModuleIfNotExists } from '../../util/store';
 import { generateCategoryUrl } from '../../util/catalog';
 import _debounce from 'lodash/debounce';
@@ -190,9 +191,7 @@ export default {
 
     data() {
         return {
-            activePage: 0,
-            pagesCount: 10,
-
+            showMore: false,
             masterclassBanners: [
                 {
                     id: 1,
@@ -301,7 +300,7 @@ export default {
     computed: {
         ...mapState([CATEGORIES]),
         ...mapState(PRODUCT_GROUPS_MODULE, [ITEMS, TYPE]),
-        ...mapGetters(PRODUCT_GROUPS_MODULE, [BRANDS_CATALOG]),
+        ...mapGetters(PRODUCT_GROUPS_MODULE, [BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT]),
 
         showList() {
             return this[TYPE] === productGroupTypes.BRANDS;
@@ -338,25 +337,33 @@ export default {
         },
 
         onShowMore() {
-            this.activePage += 1;
+            this.showMore = true;
+            this.$router.replace({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: this.activePage + 1 },
+            });
         },
 
         onPageChanged(page) {
-            this.activePage = page;
+            this.showMore = false;
+            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
         },
 
         async fetchCatalog(to, from, showMore) {
             try {
                 const {
-                    params: { type, page },
+                    fullPath,
+                    params: { type: toType },
+                    query: { page = 1, orderField = 'name' },
                 } = to;
 
                 const {
-                    params: { page: fromPage },
+                    params: { type: fromType },
+                    query: { page: fromPage = 1 },
                 } = from;
 
                 this.$progress.start();
-                await this[FETCH_ITEMS]({ type, page });
+                await this[FETCH_ITEMS]({ type: toType, page, orderField, showMore });
                 this.$progress.finish();
 
                 if (!showMore && page !== fromPage)
@@ -367,6 +374,7 @@ export default {
 
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
             } catch (error) {
+                $logger.error(error);
                 this.$progress.fail();
                 this.$progress.finish();
             }
@@ -380,7 +388,8 @@ export default {
 
         const {
             fullPath,
-            params: { type: toType, page },
+            params: { type: toType },
+            query: { page = 1, orderField = 'name' },
         } = to;
 
         // регистрируем модуль, если такого нет
@@ -392,7 +401,7 @@ export default {
         else {
             $progress.start();
             $store
-                .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, { type: toType, page })
+                .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, { type: toType, page, orderField })
                 .then(() => {
                     $store.dispatch(`${PRODUCT_GROUPS_MODULE}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
@@ -415,6 +424,7 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
+
         if (this.showMore) {
             this.fetchCatalog(to, from, this.showMore);
         } else this.debounce_fetchCatalog(to, from);

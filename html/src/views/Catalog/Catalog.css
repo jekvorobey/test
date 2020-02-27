@@ -116,23 +116,9 @@
     }
 
     &__grid {
-        display: grid;
-        grid-template-columns: 288px 1fr;
-        grid-template-rows: 1fr;
-        grid-gap: calc(var(--gs) * 8);
+        display: flex;
         overflow: hidden;
         padding-bottom: calc(var(--gs) * 7);
-
-        @media (--desktop) {
-            grid-template-columns: 256px 1fr;
-            grid-template-rows: 1fr;
-        }
-
-        @media (--tablet-lg) {
-            grid-template-columns: 1fr;
-            grid-template-rows: 1fr;
-            grid-gap: 0;
-        }
 
         @media (--tablet) {
             padding: 0;
@@ -140,6 +126,9 @@
     }
 
     &__side-panel {
+        width: 288px;
+        margin-right: calc(var(--gs) * 8);
+
         @media (--tablet-lg) {
             display: none;
         }
@@ -172,6 +161,8 @@
     }
 
     &__main {
+        flex: 1;
+
         &-header {
             display: flex;
             margin-bottom: calc(var(--gs) * 3);
