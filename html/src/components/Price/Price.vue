@@ -1,8 +1,8 @@
 <template>
-    <span class="price">
+    <component :is="tag" class="price">
         {{ computedValue }}
         &nbsp;<span v-html="currencySymbol" />
-    </span>
+    </component>
 </template>
 
 <script>
@@ -13,14 +13,19 @@ import './Price.css';
 export default {
     name: 'price',
     props: {
+        tag: {
+            type: String,
+            default: 'span',
+        },
+
         value: {
             type: [Number, Object],
-            required: true,
+            default: 0,
         },
 
         currency: {
             type: String,
-            required: true,
+            default: 'RUB',
         },
 
         type: {

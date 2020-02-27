@@ -44,6 +44,13 @@
             padding-right: calc(var(--gs) * 2);
         }
 
+        &-prices {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            text-align: right;
+        }
+
         &-price {
             white-space: nowrap;
             font-size: 16px;

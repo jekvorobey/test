@@ -99,15 +99,15 @@
                             </p>
                             <p class="cart-view__main-panel-line">
                                 Сумма заказа: {{ $t(`cart.summary.type.${activeTabItem.type}`) }}
-                                <span>{{ activeTabItem.summary.sum }}</span>
+                                <price v-bind="activeTabItem.summary.sum" />
                             </p>
                             <p class="cart-view__main-panel-line">
-                                Скидка по промокоду <span>{{ activeTabItem.summary.promoDiscount }}</span>
+                                Скидка по промокоду <price v-bind="activeTabItem.summary.promoDiscount" />
                             </p>
 
                             <div class="cart-view__main-panel-total">
                                 <p class="text-bold cart-view__main-panel-line">
-                                    Итого <span>{{ activeTabItem.summary.total }}</span>
+                                    Итого <price v-bind="activeTabItem.summary.total" />
                                 </p>
                                 <p class="text-grey text-sm cart-view__main-panel-line">
                                     Будет начислено
@@ -176,6 +176,7 @@ import VInput from '../../components/controls/VInput/VInput.vue';
 
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
 import VSlider from '../../components/controls/VSlider/VSlider.vue';
+import Price from '../../components/Price/Price.vue';
 
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
 import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
@@ -252,6 +253,8 @@ export default {
         VTabs,
         VSticky,
         VSlider,
+
+        Price,
 
         CartProductCard,
         CartMasterClassCard,

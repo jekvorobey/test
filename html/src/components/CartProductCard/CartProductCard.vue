@@ -2,7 +2,7 @@
     <li class="cart-product-card" :class="{ 'cart-product-card--small': isSmall }">
         <router-link class="cart-product-card__img" :to="href">
             <v-picture v-if="image && image.id" :image="image" alt="">
-                <template v-slot:source="{ image, lazy }">
+                <template v-slot:source="{ image }">
                     <source
                         :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
                         type="image/webp"
@@ -31,13 +31,13 @@
             </div>
 
             <div class="cart-product-card__body-prices">
-                <div class="text-bold cart-product-card__body-price">{{ price }}</div>
-                <div
-                    v-show="oldPrice"
+                <price tag="div" class="text-bold cart-product-card__body-price" v-bind="price" />
+                <price
+                    tag="div"
                     class="text-grey text-strike cart-product-card__body-price cart-product-card__body-price--old"
-                >
-                    {{ oldPrice }}
-                </div>
+                    v-if="oldPrice"
+                    v-bind="oldPrice"
+                />
             </div>
             <div class="text-grey text-sm cart-product-card__body-info">
                 <!-- неизвестно, будет ли это -->
@@ -65,6 +65,8 @@ import VLink from '../controls/VLink/VLink.vue';
 import VPicture from '../controls/VPicture/VPicture.vue';
 import VCounter from '../controls/VCounter/VCounter.vue';
 
+import Price from '../Price/Price.vue';
+
 import { generatePictureSourcePath } from '../../util/images';
 import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/cross-small.svg';
@@ -80,6 +82,8 @@ export default {
         VLink,
         VPicture,
         VCounter,
+
+        Price,
     },
 
     props: {
@@ -108,13 +112,11 @@ export default {
         },
 
         price: {
-            type: [String, Number],
-            default: null,
+            type: [Object, String],
         },
 
         oldPrice: {
-            type: [String, Number],
-            default: null,
+            type: [Object, String],
         },
 
         count: {

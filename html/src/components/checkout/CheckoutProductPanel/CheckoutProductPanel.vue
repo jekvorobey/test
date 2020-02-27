@@ -37,7 +37,7 @@
                     @cardClick="SET_RECEIVE_METHOD(method)"
                 >
                     <p class="text-bold">{{ method.title }}</p>
-                    <p>{{ method.price }}</p>
+                    <p><price v-bind="method.price" /></p>
                     <p class="text-grey text-sm">{{ method.description }}</p>
                 </checkout-option-card>
             </ul>
@@ -318,6 +318,7 @@ import VInput from '../../controls/VInput/VInput.vue';
 import VButton from '../../controls/VButton/VButton.vue';
 import VCheck from '../../controls/VCheck/VCheck.vue';
 import VSpinner from '../../controls/VSpinner/VSpinner.vue';
+import Price from '../../Price/Price.vue';
 
 import CheckoutOptionCard from '../CheckoutOptionCard/CheckoutOptionCard.vue';
 import CheckoutProductCard from '../CheckoutProductCard/CheckoutProductCard.vue';
@@ -426,6 +427,7 @@ export default {
         VInput,
         VCheck,
         VSpinner,
+        Price,
 
         CheckoutProductCard,
         CheckoutOptionCard,
