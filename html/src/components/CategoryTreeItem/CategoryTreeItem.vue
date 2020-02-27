@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import { NAME as CATALOG_MODULE } from '../../store/modules/Catalog';
-import { ACTIVE_CATEGORIES, ROOT_CATEGORY } from '../../store/modules/Catalog/getters';
+import { NAME as CATALOG_MODULE, ACTIVE_CATEGORIES } from '../../store/modules/Catalog';
+import { ROOT_CATEGORY } from '../../store/modules/Catalog/getters';
 import { mapState, mapGetters } from 'vuex';
 import { generateCategoryUrl } from '../../util/catalog';
 
@@ -63,14 +63,15 @@ export default {
     },
 
     computed: {
-        ...mapGetters(CATALOG_MODULE, [ACTIVE_CATEGORIES, ROOT_CATEGORY]),
         ...mapState('route', {
             type: state => state.params.type,
             entityCode: state => state.params.entityCode,
         }),
+        ...mapState(CATALOG_MODULE, [ACTIVE_CATEGORIES]),
+        ...mapGetters(CATALOG_MODULE, [ROOT_CATEGORY]),
 
         isActive() {
-            return this[ACTIVE_CATEGORIES].includes(this.item);
+            return this[ACTIVE_CATEGORIES].some(c => c.code === this.item.code);
         },
 
         isRoot() {

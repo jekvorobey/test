@@ -16,10 +16,6 @@
         font-weight: bold;
     }
 
-    .router-link-active {
-        font-weight: bold;
-    }
-
     &__link {
         transition: none;
         border-bottom: none;
@@ -30,6 +26,10 @@
         font-size: 14px;
         line-height: 24px;
         padding-left: calc(var(--gs) * 1.5);
+
+        .router-link-active {
+            font-weight: inherit;
+        }
     }
 
     &__list {

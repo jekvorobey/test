@@ -20,46 +20,12 @@ const productGroupBase = {
 };
 
 export default {
-    [ROOT_CATEGORY](
-        { categories, productGroup },
-        { activeCategories },
-        {
-            route: {
-                params: { type, code },
-            },
-        }
-    ) {
+    [ROOT_CATEGORY]({ activeCategories, productGroup }) {
         const { filters } = productGroup || {};
         return filters ? activeCategories.find(c => c.code === filters.category) : null;
     },
 
-    [ACTIVE_CATEGORIES](
-        { categories, productGroup },
-        getters,
-        {
-            route: {
-                params: { code },
-            },
-        }
-    ) {
-        const activeCategories = [];
-        const { filters } = productGroup || {};
-
-        let rootCategoryCode = filters ? code || filters.category : code;
-
-        let found = null;
-        for (let i = 0; i < categories.length; i++) {
-            const rootCategory = categories[i];
-            found = getActiveCategories(rootCategoryCode, rootCategory, activeCategories);
-            if (found) {
-                activeCategories.unshift(found);
-                break;
-            }
-        }
-        return activeCategories;
-    },
-
-    [BREADCRUMBS](state, { activeCategories, rootCategory }) {
+    [BREADCRUMBS]({ activeCategories }, { rootCategory }) {
         const index = activeCategories.indexOf(rootCategory);
         return index !== -1 ? activeCategories.slice(index + 1) : activeCategories;
     },
@@ -72,7 +38,7 @@ export default {
         return Math.ceil(state.range / pageSize);
     },
 
-    [ACTIVE_CATEGORY](state, { activeCategories }) {
+    [ACTIVE_CATEGORY]({ activeCategories }) {
         return activeCategories[activeCategories.length - 1];
     },
 

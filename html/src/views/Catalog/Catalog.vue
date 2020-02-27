@@ -89,7 +89,7 @@
                         />
                     </transition-group>
 
-                    <catalog-product-list class="catalog-view__main-grid" :animation="!isTablet" />
+                    <catalog-product-list :key="type" class="catalog-view__main-grid" :animation="!isTablet" />
 
                     <div class="catalog-view__main-controls" v-if="pagesCount > 1">
                         <v-button
@@ -204,12 +204,13 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import catalogModule, {
     NAME as CATALOG_MODULE,
+    TYPE,
     ITEMS,
     BANNER,
     CATEGORIES,
     PRODUCT_GROUP,
 } from '../../store/modules/Catalog';
-import { FETCH_ITEMS, SET_LOAD_PATH, FETCH_DATA_BY_TYPE } from '../../store/modules/Catalog/actions';
+import { SET_LOAD_PATH, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
 import {
     ACTIVE_TAGS,
     ACTIVE_CATEGORY,
@@ -278,7 +279,7 @@ export default {
             ROUTE_SEGMENTS,
             BREADCRUMBS,
         ]),
-        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP]),
+        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE]),
         ...mapState(MODAL_MODULE, {
             isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
             isAddToCartOpen: state =>
@@ -316,7 +317,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(CATALOG_MODULE, [FETCH_ITEMS, FETCH_DATA_BY_TYPE, SET_LOAD_PATH]),
+        ...mapActions(CATALOG_MODULE, [FETCH_CATALOG_DATA, SET_LOAD_PATH]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
@@ -359,11 +360,7 @@ export default {
             try {
                 const {
                     params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
-                    query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
-                        page: 1,
-                        orderField: 'price',
-                        orderDirection: 'desc',
-                    },
+                    query: { page = 1, orderField = 'price', orderDirection = 'desc' },
                 } = to;
 
                 const {
@@ -371,20 +368,22 @@ export default {
                 } = from;
 
                 const { query: { page: fromPage = 1 } = { page: 1 } } = from;
-                const filter = computeFilterData(pathMatch, toCode);
+                const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
 
                 this.$progress.start();
-                if (toType === fromType && toCode === fromCode && toEntityCode === fromEntityCode)
-                    await this[FETCH_ITEMS]({ filter, orderField, orderDirection, page, showMore });
-                else
-                    await this[FETCH_DATA_BY_TYPE]({
-                        type: toType,
-                        entityCode: toEntityCode,
-                        filter,
-                        orderField,
-                        orderDirection,
-                        page,
-                    });
+                await this[FETCH_CATALOG_DATA]({
+                    type: toType,
+                    entityCode: toEntityCode,
+                    code: toCode,
+
+                    filter,
+                    routeSegments,
+                    filterSegments,
+
+                    page,
+                    orderField,
+                    orderDirection,
+                });
 
                 this.setSortValue(orderField, orderDirection);
                 this.$progress.finish();
@@ -424,28 +423,28 @@ export default {
         registerModuleIfNotExists($store, CATALOG_MODULE, catalogModule);
         const { loadPath, categoryCode, entityCode, type } = $store.state[CATALOG_MODULE];
 
-        console.log('beforeRouteEnter');
-
         // если все загружено, пропускаем
-        if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode) next();
+        if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode)
+            next(vm => vm.setSortValue(orderField, orderDirection));
         else {
-            const filter = computeFilterData(pathMatch, toCode);
-            let fetchMethod = null;
-            if (toType === type && toCode === categoryCode && toEntityCode === entityCode)
-                fetchMethod = `${CATALOG_MODULE}/${FETCH_ITEMS}`;
-            else fetchMethod = `${CATALOG_MODULE}/${FETCH_DATA_BY_TYPE}`;
+            const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
 
             $progress.start();
             $store
-                .dispatch(fetchMethod, {
+                .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, {
                     type: toType,
                     entityCode: toEntityCode,
+                    code: toCode,
+
                     filter,
+                    routeSegments,
+                    filterSegments,
+
                     page,
                     orderField,
                     orderDirection,
                 })
-                .then(() => {
+                .then(data => {
                     $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
                         vm.setSortValue(orderField, orderDirection);
@@ -469,7 +468,7 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
-        console.log('beforeRouteUpdate');
+
         if (this.showMore) {
             this.fetchCatalog(to, from, this.showMore);
         } else this.debounce_fetchCatalog(to, from);
@@ -477,7 +476,6 @@ export default {
     },
 
     beforeRouteLeave(to, from, next) {
-        console.log('beforeRouteLeave');
         // При уходе с роута отменяем запрос
         this.debounce_fetchCatalog.cancel();
         next();
