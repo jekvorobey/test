@@ -192,6 +192,14 @@ export function changeProfileAddress(address) {
     });
 }
 
+export function deleteProfileAddress(id) {
+    return $http.delete(`/v1/lk/address/${id}`);
+}
+
+export function defaultProfileAddress(id) {
+    return $http.put(`/v1/lk/address/${id}/default`);
+}
+
 // search
 
 export function search(data) {

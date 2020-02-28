@@ -120,6 +120,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
      */
     put(path, data, config) {
         if (path.includes('/v1/lk/preference/')) return this.httpServiceInstance.put(path, data, config);
+        if (path.includes('/v1/lk/address/')) return this.httpServiceInstance.put(path, data, config);
 
         switch (path) {
             case '/v1/lk/profile/portfolio':
