@@ -1,4 +1,5 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
+import { receiveMethods, genderType, socials } from '../scripts/enums';
 
 const flatpickrLocale = flatPickrRu.ru;
 const main = {
@@ -54,9 +55,14 @@ const main = {
     },
 
     deliveryMethod: {
-        [1]: 'Доставка курьером',
-        [2]: 'Экспресс доставка',
-        [3]: 'Самовывоз',
+        [receiveMethods.DELIVERY]: 'Доставка курьером',
+        [receiveMethods.EXPRESS]: 'Экспресс доставка',
+        [receiveMethods.PICKUP]: 'Самовывоз',
+    },
+
+    genderType: {
+        [genderType.FEMALE]: 'Женский',
+        [genderType.MALE]: 'Мужской',
     },
 
     landing: {
@@ -151,6 +157,14 @@ const main = {
             profile: 'Личный кабинет',
             business: 'Мой бизнес',
             training: 'Обучение',
+        },
+
+        socials: {
+            [socials.VKONTAKTE]: 'VKontakte',
+            [socials.TWITTER]: 'Twitter',
+            [socials.INSTAGRAM]: 'Instagram',
+            [socials.FACEBOOK]: 'Facebook',
+            [socials.GOOGLE]: 'Google',
         },
 
         routes: {

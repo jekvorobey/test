@@ -99,17 +99,18 @@ import VInput from '../../controls/VInput/VInput.vue';
 import GeneralModal from '../../GeneralModal/GeneralModal.vue';
 import validationMixin, { required, inn, bik, rs } from '../../../plugins/validation';
 
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { REQUISITES } from '../../../store/modules/Profile/getters';
-import { UPDATE_REQUISITES } from '../../../store/modules/Profile/actions';
+import { NAME as CABINET_MODULE, REQUISITES } from '../../../store/modules/Profile/modules/Cabinet';
+import { UPDATE_REQUISITES } from '../../../store/modules/Profile/modules/Cabinet/actions';
 
 import { $dadata, $logger } from '../../../services/ServiceLocator';
 import './DetailsModal.css';
 
+const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 export const NAME = 'details-modal';
 
 export default {
@@ -175,7 +176,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(PROFILE_MODULE, [REQUISITES]),
+        ...mapState(CABINET_MODULE_PATH, [REQUISITES]),
 
         isTablet() {
             return this.$mq.tablet;
@@ -221,7 +222,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(PROFILE_MODULE, [UPDATE_REQUISITES]),
+        ...mapActions(CABINET_MODULE_PATH, [UPDATE_REQUISITES]),
 
         onClose() {
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });

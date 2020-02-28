@@ -24,11 +24,49 @@
     }
 
     &__form {
-        margin-bottom: calc(var(--gs) * 5);
-
         &-input {
+            flex: 1;
+
+            .v-input__container {
+                @media (--tablet) {
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+
             .v-input__input {
                 text-align: left;
+                @media (--tablet) {
+                    margin-bottom: calc(var(--gs) * 2);
+                }
+            }
+
+            @media (--tablet) {
+                margin-right: 0;
+                margin-bottom: calc(var(--gs) * 2);
+            }
+        }
+
+        &-input &-btn {
+            flex: none;
+            margin-left: var(--gs);
+            padding: 6px calc(var(--gs) * 2);
+
+            @media (--tablet) {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        &-password &-input {
+            margin-right: 0;
+
+            @media (--tablet) {
+                margin-bottom: 0;
+
+                &:last-of-type {
+                    margin-bottom: calc(var(--gs) * 2);
+                }
             }
         }
 
@@ -47,6 +85,7 @@
     &__socials {
         display: flex;
         align-items: center;
+        margin-top: calc(var(--gs) * 5);
 
         &-list {
             display: flex;

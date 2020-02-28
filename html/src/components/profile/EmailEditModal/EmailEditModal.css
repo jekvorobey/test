@@ -23,6 +23,10 @@
             padding: calc(var(--gs) * 2);
         }
 
+        input[type='number'] {
+            text-align: left;
+        }
+
         &-row {
             width: 100%;
 
@@ -35,21 +39,7 @@
             }
         }
 
-        &-textarea {
-            height: 232px;
-            display: flex;
-            flex-direction: column;
-
-            @media (--tablet) {
-                height: 100%;
-            }
-
-            .v-input__container {
-                height: 100%;
-            }
-        }
-
-        &-btn {
+        &-row &-btn {
             @media (--tablet) {
                 width: 100%;
             }

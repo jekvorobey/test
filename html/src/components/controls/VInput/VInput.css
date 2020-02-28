@@ -70,7 +70,7 @@
 
     &__input {
         width: 100%;
-        min-height: 40px;
+        min-height: calc(var(--gs) * 5);
         padding: 6px calc(var(--gs) * 2);
         border: 1px solid var(--cl-global);
         color: var(--cl-global);
