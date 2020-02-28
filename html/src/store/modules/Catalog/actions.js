@@ -155,22 +155,22 @@ export default {
             }
         }
 
-        const { items, range } = await dispatch(FETCH_ITEMS, {
+        data.entityCode = entityCode;
+        data.type = type;
+
+        data.routeSegments = routeSegments;
+        data.filterSegments = filterSegments;
+        data.page = page;
+
+        const itemsData = await dispatch(FETCH_ITEMS, {
             filter: { ...mergedfilter, category: mergedfilter.category || undefined },
             page,
             orderField,
             orderDirection,
         });
 
-        data.entityCode = entityCode;
-        data.type = type;
-
-        data.items = items;
-        data.range = range;
-        data.routeSegments = routeSegments;
-        data.filterSegments = filterSegments;
-        data.page = page;
-
         commit(APPLY_DATA, data);
+        if (showMore) commit(SET_ITEMS_MORE, itemsData);
+        else commit(SET_ITEMS, itemsData);
     },
 };

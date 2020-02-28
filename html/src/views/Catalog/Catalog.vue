@@ -383,6 +383,7 @@ export default {
                     page,
                     orderField,
                     orderDirection,
+                    showMore,
                 });
 
                 this.setSortValue(orderField, orderDirection);
