@@ -137,12 +137,13 @@ export default {
                 }
             }
         } else {
+            data.productGroup = null;
+
             if (state.type !== type) {
                 data.categories = await dispatch(FETCH_CATEGORIES);
                 data.banner = await dispatch(FETCH_BANNER);
             } else data.categories = state.categories;
 
-            data.productGroup = null;
             if (state.categoryCode !== mergedfilter.category) {
                 data.categoryCode = mergedfilter.category;
                 data.activeCategories = getAllActiveCategories(data.categories, mergedfilter.category);
@@ -155,7 +156,7 @@ export default {
         }
 
         const { items, range } = await dispatch(FETCH_ITEMS, {
-            filter: mergedfilter,
+            filter: { ...mergedfilter, category: mergedfilter.category || undefined },
             page,
             orderField,
             orderDirection,

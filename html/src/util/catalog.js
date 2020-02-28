@@ -88,8 +88,8 @@ export function getActiveCategories(code, item, activeItems = []) {
     return false;
 }
 
-export function computeFilterData(pathMatch, code) {
-    const filter = { category: code || undefined };
+export function computeFilterData(pathMatch, code = null) {
+    const filter = { category: code };
     const routeSegments = pathMatch ? pathMatch.split('/') : [];
     const filterSegments = mapFilterSegments(routeSegments);
     const filterNames = Object.keys(filterSegments);
