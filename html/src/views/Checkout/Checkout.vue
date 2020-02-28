@@ -102,7 +102,7 @@
                                     </v-link>
                                 </div>
                             </div>
-                            <v-button class="checkout-view__main-panel-submit" @click="onCommit">
+                            <v-button class="checkout-view__main-panel-submit" @click="onCommit" :disabled="isCommit">
                                 Перейти к оплате
                             </v-button>
                         </div>
@@ -165,6 +165,7 @@ export default {
     data() {
         return {
             inputPromocode: null,
+            isCommit: false,
         };
     },
 
@@ -198,9 +199,11 @@ export default {
 
         async onCommit() {
             try {
+                this.isCommit = true;
                 const data = await this[COMMIT_DATA]();
                 document.location.href = data.paymentUrl;
             } catch (error) {
+                this.isCommit = false;
                 $logger.error(error);
             }
         },
