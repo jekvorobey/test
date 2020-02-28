@@ -26,7 +26,7 @@
                 :banner-id="productGroup.id"
                 :bottom-text="productGroup.description"
                 :title="productGroup.name"
-                :image="productGroup.image"
+                :image="productGroup.preview_photo"
             />
 
             <catalog-banner-card

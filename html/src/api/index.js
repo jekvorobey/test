@@ -251,10 +251,11 @@ export function getFilters(categoryCode, excludedFilters) {
     });
 }
 
-export function getCategories(code = undefined) {
+export function getCategories(node_code = undefined, max_depth = undefined) {
     return $http.get('/v1/categories', {
         params: {
-            node_code: code,
+            node_code,
+            max_depth,
         },
     });
 }
