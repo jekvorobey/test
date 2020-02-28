@@ -182,3 +182,11 @@ export const mimeType = Object.freeze({
         DOCX: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     },
 });
+
+export const discountType = Object.freeze({
+    PRODUCT: 1, // Скидка на товар
+    DELIVERY: 2, // Скидка на доставку,
+    CART: 3, // Скидка на корзину,
+    CUSTOM: 4, // Скидка для Вас,
+    PROMOCODE: 5, // Скидка по промокоду,
+});
