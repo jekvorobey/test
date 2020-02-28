@@ -1,20 +1,19 @@
 import { $logger } from '../../../services/ServiceLocator';
 import { storeErrorHandler } from '../../../util/store';
 import { getProductGroups } from '../../../api';
-import { SET_ITEMS, SET_LOAD_PATH as M_SET_LOAD_PATH, SET_TYPE as M_SET_TYPE } from './mutations';
+import { SET_ITEMS_MORE, SET_ITEMS, SET_LOAD_PATH as M_SET_LOAD_PATH, SET_TYPE as M_SET_TYPE } from './mutations';
 
 export const SET_TYPE = 'SET_TYPE';
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 
 export default {
-    async [FETCH_ITEMS]({ commit, state }, { type, page }) {
+    async [FETCH_ITEMS]({ commit, state }, { type, page, orderField, showMore }) {
         try {
-            const data = await getProductGroups({ type, page });
-            // if (payload.showMore) commit(SET_ITEMS_MORE, { items: data.items, range: data.range });
-            // else commit(SET_ITEMS, { items: data.items, range: data.range });
+            const { items, range } = await getProductGroups(type, page, orderField);
+            if (showMore) commit(SET_ITEMS_MORE, { items, range });
+            else commit(SET_ITEMS, { items, range });
             commit(SET_TYPE, type);
-            commit(SET_ITEMS, { items: data, range: 0 });
         } catch (error) {
             storeErrorHandler(FETCH_ITEMS, true)(error);
         }

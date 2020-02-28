@@ -34,12 +34,12 @@
         </div>
         <div class="catalog-product-card__body">
             <div class="catalog-product-card__prices">
-                <div v-if="price" class="text-bold catalog-product-card__price">
-                    {{ oldPrice ? `от ${price}` : price }}
-                </div>
-                <div v-if="oldPrice" class="text-sm text-grey text-strike catalog-product-card__price">
-                    от {{ oldPrice }}
-                </div>
+                <price class="text-bold catalog-product-card__price" v-if="price" v-bind="price" />
+                <price
+                    class="text-sm text-grey text-strike catalog-product-card__price"
+                    v-if="oldPrice"
+                    v-bind="oldPrice"
+                />
             </div>
             <div class="link--sm catalog-product-card__link">{{ name }}</div>
             <v-rating class="catalog-product-card__rating" :value="rating" readonly>
@@ -66,7 +66,9 @@ import VLink from '../controls/VLink/VLink.vue';
 import VButton from '../controls/VButton/VButton.vue';
 import VRating from '../controls/VRating/VRating.vue';
 import VPicture from '../controls/VPicture/VPicture.vue';
+
 import Tag from '../Tag/Tag.vue';
+import Price from '../Price/Price.vue';
 
 import '../../assets/images/sprites/star-empty-small.svg';
 import '../../assets/images/sprites/star-small.svg';
@@ -87,6 +89,7 @@ export default {
         VPicture,
 
         Tag,
+        Price,
     },
 
     props: {
@@ -127,13 +130,11 @@ export default {
         },
 
         price: {
-            type: [String, Number],
-            default: null,
+            type: [Object, String],
         },
 
         oldPrice: {
-            type: [String, Number],
-            default: null,
+            type: [Object, String],
         },
 
         isSmall: {

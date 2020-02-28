@@ -18,13 +18,12 @@
         <div class="cart-panel-product-card__body">
             <v-link class="cart-panel-product-card__body-name" :to="href">{{ name }}</v-link>
             <div class="cart-panel-product-card__body-prices">
-                <div class="text-bold cart-panel-product-card__body-price">{{ price }}</div>
-                <div
-                    v-show="oldPrice"
+                <price class="text-bold cart-panel-product-card__body-price" v-bind="price" />
+                <price
                     class="text-grey text-strike cart-panel-product-card__body-price cart-panel-product-card__body-price--old"
-                >
-                    {{ oldPrice }}
-                </div>
+                    v-if="oldPrice"
+                    v-bind="oldPrice"
+                />
             </div>
         </div>
     </li>
@@ -34,6 +33,8 @@
 import VSvg from '../controls/VSvg/VSvg.vue';
 import VLink from '../controls/VLink/VLink.vue';
 import VPicture from '../controls/VPicture/VPicture.vue';
+
+import Price from '../Price/Price.vue';
 
 import { generatePictureSourcePath } from '../../util/images';
 import _debounce from 'lodash/debounce';
@@ -49,6 +50,8 @@ export default {
         VSvg,
         VLink,
         VPicture,
+
+        Price,
     },
 
     props: {
@@ -77,13 +80,11 @@ export default {
         },
 
         price: {
-            type: [String, Number],
-            default: null,
+            type: [Object, String],
         },
 
         oldPrice: {
-            type: [String, Number],
-            default: null,
+            type: [Object, String],
         },
     },
 

@@ -3,6 +3,7 @@
         v-if="animation"
         tag="ul"
         class="catalog-product-list"
+        :class="{ 'catalog-product-list--no-category': categories.length === 0 }"
         name="catalog-item"
         @before-enter="onBeforeEnterItems"
         @enter="onEnterItems"
@@ -11,6 +12,7 @@
     >
         <component
             class="catalog-product-list__item"
+            
             v-for="item in items"
             :key="item.id"
             :class="getClass(item.type)"
@@ -39,7 +41,7 @@ import CatalogBannerListCard from './CatalogBannerListCard/CatalogBannerListCard
 import CatalogProductListCard from './CatalogProductListCard/CatalogProductListCard.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as CATALOG_MODULE, ITEMS } from '../../store/modules/Catalog';
+import { NAME as CATALOG_MODULE, ITEMS, CATEGORIES } from '../../store/modules/Catalog';
 
 import { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
 import { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
@@ -69,7 +71,7 @@ export default {
     },
 
     computed: {
-        ...mapState(CATALOG_MODULE, [ITEMS]),
+        ...mapState(CATALOG_MODULE, [ITEMS, CATEGORIES]),
     },
 
     methods: {

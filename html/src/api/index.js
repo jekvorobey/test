@@ -200,9 +200,9 @@ export function search(data) {
 
 // catalog
 
-export function getProductGroups({ type, page = 1 }) {
+export function getProductGroups(type, page = 1, orderField = 'name') {
     return $http.get('/v1/catalog/product-groups', {
-        params: { type_code: type, page },
+        params: { type_code: type, page, orderField },
         paramsSerializer(params) {
             return qs.stringify(params, { encode: false });
         },
@@ -242,17 +242,21 @@ export function getCatalogItems({ filter, orderField = 'price', orderDirection =
     });
 }
 
-export function getFilters(code) {
+export function getFilters(categoryCode, excludedFilters) {
     return $http.get('/v1/catalog/filter', {
-        params: { categoryCode: code, needBrands: 1 },
+        params: { categoryCode, excludedFilters },
         paramsSerializer(params) {
             return qs.stringify(params, { encode: false });
         },
     });
 }
 
-export function getCategories(data) {
-    return $http.get('/v1/categories');
+export function getCategories(code = undefined) {
+    return $http.get('/v1/categories', {
+        params: {
+            node_code: code,
+        },
+    });
 }
 
 export function getBanners(data) {

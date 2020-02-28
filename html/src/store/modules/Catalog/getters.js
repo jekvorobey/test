@@ -1,4 +1,5 @@
 import { mapFilterSegments, getActiveCategories } from '../../../util/catalog';
+import { productGroupTypes } from '../../../assets/scripts/enums';
 
 export const ROUTE_SEGMENTS = 'routeSegments';
 export const FILTER_SEGMENTS = 'filterSegments';
@@ -7,30 +8,26 @@ export const ACTIVE_CATEGORY = 'activeCategory';
 export const ACTIVE_PAGE = 'activePage';
 export const PAGES_COUNT = 'pagesCount';
 export const ACTIVE_CATEGORIES = 'activeCategories';
+export const ROOT_CATEGORY = 'rootCategory';
+export const BREADCRUMBS = 'breadcrumbs';
+export const SHOW_PANEL = 'showPanel';
 
 const pageSize = 12;
 
+const productGroupBase = {
+    FILTERS: 'filters',
+    PRODUCTS: 'products',
+};
+
 export default {
-    [ACTIVE_CATEGORIES](
-        { categories },
-        getters,
-        {
-            route: {
-                params: { code },
-            },
-        }
-    ) {
-        const activeCategories = [];
-        let found = null;
-        for (let i = 0; i < categories.length; i++) {
-            const rootCategory = categories[i];
-            found = getActiveCategories(code, rootCategory, activeCategories);
-            if (found) {
-                activeCategories.unshift(found);
-                break;
-            }
-        }
-        return activeCategories;
+    [ROOT_CATEGORY]({ activeCategories, productGroup }) {
+        const { filters } = productGroup || {};
+        return filters ? activeCategories.find(c => c.code === filters.category) : null;
+    },
+
+    [BREADCRUMBS]({ activeCategories }, { rootCategory }) {
+        const index = activeCategories.indexOf(rootCategory);
+        return index !== -1 ? activeCategories.slice(index + 1) : activeCategories;
     },
 
     [ACTIVE_PAGE](state, getters, { route }) {
@@ -41,7 +38,7 @@ export default {
         return Math.ceil(state.range / pageSize);
     },
 
-    [ACTIVE_CATEGORY](state, { activeCategories }) {
+    [ACTIVE_CATEGORY]({ activeCategories }) {
         return activeCategories[activeCategories.length - 1];
     },
 

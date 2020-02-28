@@ -18,6 +18,9 @@ export default {
             name: 'ProductGroups',
             path: `/:type(${productGroupTypes.PROMO}|${productGroupTypes.SETS}|${productGroupTypes.BRANDS}|${productGroupTypes.MASTERCLASSES})`,
             component: ProductGroupsAsync,
+            meta: {
+                skipScroll: true,
+            },
         },
     ],
 };

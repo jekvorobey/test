@@ -10,6 +10,8 @@ export const SET_PRODUCT_GROUP = 'SET_PRODUCT_GROUP';
 export const SET_TYPE = 'SET_TYPE';
 export const SET_ENTITY_CODE = 'SET_ENTITY_CODE';
 
+export const APPLY_DATA = 'APPLY_DATA';
+
 export default {
     [SET_LOAD_PATH](state, payload = '') {
         state.loadPath = payload;
@@ -51,5 +53,9 @@ export default {
 
     [SET_ENTITY_CODE](state, payload) {
         state.entityCode = payload;
+    },
+
+    [APPLY_DATA](state, data) {
+        Object.assign(state, data);
     },
 };

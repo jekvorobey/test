@@ -30,9 +30,7 @@
             </v-button>
             <div class="cart-header-panel__total" v-if="cartItemsCount > 0">
                 {{ $tc('cart.items', cartItemsCount) }} на сумму
-                <div class="text-bold">
-                    {{ productItemsSum }}
-                </div>
+                <price tag="div" class="text-bold" v-bind="productItemsSum" />
             </div>
             <div class="cart-header-panel__total" v-else>
                 Ваша корзина пуста
@@ -44,6 +42,8 @@
 <script>
 import VLink from '../controls/VLink/VLink.vue';
 import VButton from '../controls/VButton/VButton.vue';
+
+import Price from '../Price/Price.vue';
 
 import GeneralPopupPanel from '../GeneralPopupPanel/GeneralPopupPanel.vue';
 import CartPanelProductCard from '../CartPanelProductCard/CartPanelProductCard.vue';
@@ -64,6 +64,8 @@ export default {
     components: {
         VLink,
         VButton,
+
+        Price,
 
         GeneralPopupPanel,
         CartPanelProductCard,

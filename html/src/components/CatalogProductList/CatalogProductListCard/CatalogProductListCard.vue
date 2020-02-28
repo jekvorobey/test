@@ -26,12 +26,12 @@
         </div>
         <div class="catalog-product-list-card__body" v-once>
             <div class="catalog-product-list-card__prices">
-                <div v-if="item.price" class="text-bold catalog-product-list-card__price">
-                    {{ item.oldPrice ? `от ${item.price}` : item.price }}
-                </div>
-                <div v-if="item.oldPrice" class="text-sm text-grey text-strike catalog-product-list-card__price">
-                    от {{ item.oldPrice }}
-                </div>
+                <price class="text-bold catalog-product-list-card__price" v-if="item.price" v-bind="item.price" />
+                <price
+                    class="text-sm text-grey text-strike catalog-product-list-card__price"
+                    v-if="item.oldPrice"
+                    v-bind="item.oldPrice"
+                />
             </div>
             <div class="link--sm catalog-product-list-card__link">{{ item.name }}</div>
             <div class="catalog-product-list-card__rating" v-once>
@@ -58,7 +58,9 @@ import VLink from '../../controls/VLink/VLink.vue';
 import VButton from '../../controls/VButton/VButton.vue';
 import VRating from '../../controls/VRating/VRating.vue';
 import VPicture from '../../controls/VPicture/VPicture.vue';
+
 import Tag from '../../Tag/Tag.vue';
+import Price from '../../Price/Price.vue';
 
 import '../../../assets/images/sprites/star-empty-small.svg';
 import '../../../assets/images/sprites/star-small.svg';
@@ -79,6 +81,7 @@ export default {
         VPicture,
 
         Tag,
+        Price,
     },
 
     props: {

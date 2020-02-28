@@ -12,7 +12,7 @@
                 <v-svg name="wishlist-middle" width="24" height="24" />
             </button>
             <div class="header-user-panel__item">
-                <span class="text-medium header-user-panel__item-sum">{{ productItemsSum }}</span>
+                <price class="text-medium header-user-panel__item-sum" v-bind="productItemsSum" />
                 &nbsp;&nbsp;
                 <button class="header-user-panel__item-cart" @click="onToggleCart">
                     <v-svg name="cart-middle" width="24" height="24" />
@@ -27,6 +27,8 @@
 <script>
 import VSvg from '../../controls/VSvg/VSvg.vue';
 import VLink from '../../controls/VLink/VLink.vue';
+
+import Price from '../../Price/Price.vue';
 
 import CartHeaderPanel from '../../CartHeaderPanel/CartHeaderPanel.vue';
 import ProfileNavigationPanel from '../../ProfileNavigationPanel/ProfileNavigationPanel.vue';
@@ -57,6 +59,8 @@ export default {
     components: {
         VSvg,
         VLink,
+
+        Price,
 
         CartHeaderPanel,
         ProfileNavigationPanel,

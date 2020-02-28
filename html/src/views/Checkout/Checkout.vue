@@ -24,28 +24,28 @@
                             </p>
                             <p class="checkout-view__main-panel-line">
                                 Сумма заказа: {{ $t(`cart.summary.type.${checkoutType}`) }}
-                                <span>{{ summary.sum }}</span>
+                                <price v-bind="summary.sum" />
                             </p>
 
                             <p class="checkout-view__main-panel-line">
-                                Скидка по промокоду <span>{{ summary.promoDiscount }}</span>
+                                Скидка по промокоду <price v-bind="summary.promoDiscount" />
                             </p>
 
                             <template v-if="isProduct">
                                 <p class="checkout-view__main-panel-line">
-                                    Оплата бонусами <span>{{ summary.bonusDiscount }}</span>
+                                    Оплата бонусами <price v-bind="summary.bonusDiscount" />
                                 </p>
                                 <p class="checkout-view__main-panel-line">
-                                    Оплата подарочным сертификатом <span>{{ summary.certDiscount }}</span>
+                                    Оплата подарочным сертификатом <price v-bind="summary.certDiscount" />
                                 </p>
                                 <p class="checkout-view__main-panel-line">
-                                    Доставка <span>{{ summary.delivery }}</span>
+                                    Доставка <price v-bind="summary.delivery" />
                                 </p>
                             </template>
 
                             <div class="checkout-view__main-panel-total">
                                 <p class="text-bold checkout-view__main-panel-line">
-                                    Итого <span>{{ summary.total }}</span>
+                                    Итого <price v-bind="summary.total" />
                                 </p>
                                 <p class="text-grey text-sm checkout-view__main-panel-line">
                                     Будет начислено
@@ -102,7 +102,7 @@
                                     </v-link>
                                 </div>
                             </div>
-                            <v-button class="checkout-view__main-panel-submit" @click="onCommit">
+                            <v-button class="checkout-view__main-panel-submit" @click="onCommit" :disabled="isCommit">
                                 Перейти к оплате
                             </v-button>
                         </div>
@@ -119,6 +119,8 @@ import VLink from '../../components/controls/VLink/VLink.vue';
 import VInput from '../../components/controls/VInput/VInput.vue';
 import VButton from '../../components/controls/VButton/VButton.vue';
 import VSticky from '../../components/controls/VSticky/VSticky.vue';
+
+import Price from '../../components/Price/Price.vue';
 
 import CheckoutProductPanel from '../../components/checkout/CheckoutProductPanel/CheckoutProductPanel.vue';
 import CheckoutMasterClassPanel from '../../components/checkout/CheckoutMasterClassPanel/CheckoutMasterClassPanel.vue';
@@ -155,12 +157,15 @@ export default {
         VInput,
         VSticky,
 
+        Price,
+
         CheckoutProductPanel,
     },
 
     data() {
         return {
             inputPromocode: null,
+            isCommit: false,
         };
     },
 
@@ -194,9 +199,11 @@ export default {
 
         async onCommit() {
             try {
+                this.isCommit = true;
                 const data = await this[COMMIT_DATA]();
                 document.location.href = data.paymentUrl;
             } catch (error) {
+                this.isCommit = false;
                 $logger.error(error);
             }
         },
