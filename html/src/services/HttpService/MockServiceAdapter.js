@@ -18,7 +18,6 @@ export default class MockServiceAdapter extends HttpServiceBase {
      */
     get(path, config) {
         if (path.includes('/v1/auth/socialHandler/')) return this.httpServiceInstance.get(path, config);
-
         if (path.includes('/storage/certificate/')) return this.httpServiceInstance.get(path, config);
 
         switch (path) {
@@ -37,6 +36,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/lk/profile':
             case '/v1/lk/preference':
             case '/v1/lk/address':
+            case '/v1/lk/order':
                 return this.httpServiceInstance.get(path, config);
             default:
                 return this.mockServiceInstance.get(path, config);

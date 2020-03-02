@@ -1,5 +1,5 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
-import { receiveMethods, genderType, socials } from '../scripts/enums';
+import { receiveMethods, genderType, socials, orderStatus } from '../scripts/enums';
 
 const flatpickrLocale = flatPickrRu.ru;
 const main = {
@@ -150,7 +150,18 @@ const main = {
             order: 'Заказ №{id}',
             messages: 'Сообщения ({n})',
             referal: 'Реферал №{id}',
-            orderStatus: { created: 'Создан', process: 'Передан в доставку', done: 'Доставлен', cancel: 'Отменён' },
+            orderStatus: {
+                [orderStatus.CREATED]: 'Создан',
+                [orderStatus.AWAITING_CHECK]: 'Ожидает подтверждения',
+                [orderStatus.IN_PROCESSING]: 'В обработке',
+                [orderStatus.CHECKING]: 'Проверка',
+                [orderStatus.TRANSFERRED_TO_DELIVERY]: 'Передан на доставку',
+                [orderStatus.DELIVERING]: 'В процессе доставки',
+                [orderStatus.READY_FOR_RECIPIENT]: 'В пункте выдачи',
+                [orderStatus.DONE]: 'Доставлен',
+                [orderStatus.RETURNED]: 'Возвращен',
+                [orderStatus.PRE_ORDER]: 'Предзаказ',
+            },
         },
 
         groups: {

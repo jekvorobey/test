@@ -89,17 +89,6 @@ export const suggestionTypes = Object.freeze({
     HOUSE: 'house',
 });
 
-export const orderStatus = Object.freeze({
-    /** создан */
-    CREATED: 'created',
-    /** в обработке */
-    PROCESS: 'process',
-    /** выполнен */
-    DONE: 'done',
-    /** отменен */
-    CANCEL: 'cancel',
-});
-
 export const responseStatus = Object.freeze({
     OK: 'ok',
     ERROR: 'error',
@@ -189,4 +178,27 @@ export const discountType = Object.freeze({
     CART: 3, // Скидка на корзину,
     CUSTOM: 4, // Скидка для Вас,
     PROMOCODE: 5, // Скидка по промокоду,
+});
+
+export const orderStatus = Object.freeze({
+    /* оформлен */
+    CREATED: 1,
+    /* ожидает подтверждения */
+    AWAITING_CHECK: 2,
+    /* в обработке */
+    IN_PROCESSING: 3,
+    /* проверка */
+    CHECKING: 4,
+    /* передан на доставку */
+    TRANSFERRED_TO_DELIVERY: 5,
+    /* в процессе доставки */
+    DELIVERING: 6,
+    /* находится в Пункте Выдачи */
+    READY_FOR_RECIPIENT: 7,
+    /* доставлен */
+    DONE: 8,
+    /* возвращен */
+    RETURNED: 9,
+    /* предзаказ: ожидаем поступления товара */
+    PRE_ORDER: 10,
 });
