@@ -98,6 +98,12 @@ export default {
         let excludedFilters = null;
         let mergedfilter = filter;
 
+        if (type === productGroupTypes.NEW)
+            mergedfilter = {
+                ...filter,
+                is_new: true,
+            };
+
         if (entityCode) {
             if (state.entityCode !== entityCode) {
                 data.productGroup = await dispatch(FETCH_PRODUCT_GROUP, {

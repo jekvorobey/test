@@ -6,6 +6,7 @@ const numberRegx = /\d+/g;
 export function generateCategoryUrl(type, entityCode, categoryCode) {
     switch (type) {
         case productGroupTypes.CATALOG:
+        case productGroupTypes.NEW:
             return categoryCode ? `/${type}/${categoryCode}` : `/${type}/`;
 
         case productGroupTypes.MASTERCLASSES:
@@ -25,6 +26,7 @@ export function concatCatalogRoutePath(type, entityCode, categoryCode, segments)
     let baseRoute = '';
     switch (type) {
         case productGroupTypes.CATALOG:
+        case productGroupTypes.NEW:
             baseRoute = categoryCode ? `/${type}/${categoryCode}/` : `/${type}/`;
             break;
         case productGroupTypes.PROMO:
