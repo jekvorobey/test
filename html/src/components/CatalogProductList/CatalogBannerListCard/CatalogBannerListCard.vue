@@ -2,24 +2,9 @@
     <li class="catalog-banner-list-card">
         <div class="catalog-banner-list-card__img" v-once>
             <v-picture>
-                <source
-                    v-if="item.desktopImage && item.desktopImage.id"
-                    :data-srcset="desktopImg"
-                    type="image/webp"
-                    media="(min-width: 1024px)"
-                />
-                <source
-                    v-if="item.tabletImage && item.tabletImage.id"
-                    :data-srcset="tabletImg"
-                    type="image/webp"
-                    media="(min-width: 480px)"
-                />
-                <source
-                    v-if="item.mobileImage && item.mobileImage.id"
-                    :data-srcset="mobileImg"
-                    type="image/webp"
-                    media="(max-width: 479px)"
-                />
+                <source :data-srcset="desktopImg" type="image/webp" media="(min-width: 1024px)" />
+                <source :data-srcset="tabletImg" type="image/webp" media="(min-width: 480px)" />
+                <source :data-srcset="mobileImg" type="image/webp" media="(max-width: 479px)" />
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
             </v-picture>
         </div>
@@ -79,19 +64,23 @@ export default {
 
     computed: {
         mobileImg() {
-            return generatePictureSourcePath(320, 320, this.item.mobileImage.id, 'webp');
+            const image = this.item.mobileImage || this.item.tabletImage || this.item.desktopImage;
+            return generatePictureSourcePath(320, 320, image.id, 'webp');
         },
 
         tabletImg() {
-            return generatePictureSourcePath(540, 360, this.item.tabletImage.id, 'webp');
+            const image = this.item.tabletImage || this.item.desktopImage;
+            return generatePictureSourcePath(540, 360, image.id, 'webp');
         },
 
         desktopImg() {
-            return generatePictureSourcePath(600, 400, this.item.desktopImage.id, 'webp');
+            const image = this.item.desktopImage || this.item.tabletImage;
+            return generatePictureSourcePath(600, 400, image.id, 'webp');
         },
 
         defaultImg() {
-            return generatePictureSourcePath(600, 400, this.item.desktopImage.id, this.item.desktopImage.sourceExt);
+            const image = this.item.desktopImage || this.item.tabletImage || this.item.mobileImage.id;
+            return generatePictureSourcePath(600, 400, image.id, image.sourceExt);
         },
 
         btnClasses() {
