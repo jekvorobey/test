@@ -52,7 +52,7 @@
             </v-rating>
         </div>
         <div class="catalog-product-card__tags">
-            <tag class="catalog-product-card__tags-item" v-for="(tag, index) in tags" :key="index" :text="tag" />
+            <tag class="catalog-product-card__tags-item" v-for="tag in tags" :key="tag.id" :text="tag.name" />
         </div>
         <v-link v-if="showWishlistBtn" tag="button" class="catalog-product-card__wishlist-btn" @click.prevent>
             <v-svg name="wishlist-middle" width="18" height="20" />
