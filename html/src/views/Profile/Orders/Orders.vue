@@ -2,7 +2,7 @@
     <section class="section orders-view">
         <h2 class="container container--tablet-lg orders-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
 
-        <div class="orders-view__panels">
+        <!-- <div class="orders-view__panels">
             <div class="orders-view__panel">
                 <div class="orders-view__panel-item">
                     <div class="text-grey orders-view__panel-name">Ваш уровень</div>
@@ -59,7 +59,7 @@
                     <div class="text-grey">Сумма моих заказов</div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="container container--tablet-lg">
             <filter-button class="orders-view__filter-btn" @click="filterModal = !filterModal">
@@ -111,8 +111,8 @@
                         :key="order.id"
                         @click="onOpenOrder(order.id)"
                     >
-                        <td class="orders-view__table-td">{{ order.id }}</td>
-                        <td class="orders-view__table-td">{{ order.orderDate }}</td>
+                        <td class="orders-view__table-td">{{ order.number }}</td>
+                        <td class="orders-view__table-td">{{ order.created_at }}</td>
                         <td class="orders-view__table-td">{{ order.deliveryDate }}</td>
                         <td class="orders-view__table-td">
                             <price v-bind="order.price" />
@@ -149,7 +149,7 @@
                 :key="order.id"
                 @click="onOpenOrder(order.id)"
             >
-                <info-row class="orders-view__list-item-row" name="Номер заказа" :value="order.id" />
+                <info-row class="orders-view__list-item-row" name="Номер заказа" :value="order.number" />
                 <info-row class="orders-view__list-item-row" name="Сумма">
                     <price v-bind="order.price" />
                 </info-row>
@@ -195,9 +195,17 @@ import FilterButton from '../../../components/FilterButton/FilterButton.vue';
 import Price from '../../../components/Price/Price.vue';
 import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
 
+import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
+import { NAME as ORDERS_MODULE, ORDERS } from '../../../store/modules/Profile/modules/Orders';
+import { FETCH_ORDERS } from '../../../store/modules/Profile/modules/Orders/actions';
+
 import { orderStatus } from '../../../assets/scripts/enums';
 import '../../../assets/images/sprites/arrow-updown.svg';
 import './Orders.css';
+import { mapState, mapActions } from 'vuex';
+import { $store, $progress, $logger } from '../../../services/ServiceLocator';
+
+const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
 
 export default {
     name: 'orders',
@@ -217,63 +225,118 @@ export default {
     data() {
         return {
             filterModal: false,
-            orders: [
-                {
-                    id: 124589524,
-                    orderDate: '2019-08-18',
-                    deliveryDate: '2019-08-20',
-                    price: {
-                        value: 12788,
-                        currency: 'RUB',
-                    },
-                    status: orderStatus.CREATED,
-                },
-                {
-                    id: 454654545,
-                    orderDate: '2019-08-18',
-                    deliveryDate: '2019-08-20',
-                    price: {
-                        value: 12788,
-                        currency: 'RUB',
-                    },
-                    status: orderStatus.PROCESS,
-                },
-                {
-                    id: 24823875,
-                    orderDate: '2019-08-18',
-                    deliveryDate: '2019-08-20',
-                    price: {
-                        value: 12788,
-                        currency: 'RUB',
-                    },
-                    status: orderStatus.DONE,
-                },
-                {
-                    id: 123547899,
-                    orderDate: '2019-08-18',
-                    deliveryDate: '2019-08-20',
-                    price: {
-                        value: 12788,
-                        currency: 'RUB',
-                    },
-                    status: orderStatus.CANCEL,
-                },
-            ],
+            // orders: [
+            //     {
+            //         id: 124589524,
+            //         orderDate: '2019-08-18',
+            //         deliveryDate: '2019-08-20',
+            //         price: {
+            //             value: 12788,
+            //             currency: 'RUB',
+            //         },
+            //         status: orderStatus.CREATED,
+            //     },
+            //     {
+            //         id: 454654545,
+            //         orderDate: '2019-08-18',
+            //         deliveryDate: '2019-08-20',
+            //         price: {
+            //             value: 12788,
+            //             currency: 'RUB',
+            //         },
+            //         status: orderStatus.PROCESS,
+            //     },
+            //     {
+            //         id: 24823875,
+            //         orderDate: '2019-08-18',
+            //         deliveryDate: '2019-08-20',
+            //         price: {
+            //             value: 12788,
+            //             currency: 'RUB',
+            //         },
+            //         status: orderStatus.DONE,
+            //     },
+            //     {
+            //         id: 123547899,
+            //         orderDate: '2019-08-18',
+            //         deliveryDate: '2019-08-20',
+            //         price: {
+            //             value: 12788,
+            //             currency: 'RUB',
+            //         },
+            //         status: orderStatus.CANCEL,
+            //     },
+            // ],
         };
     },
 
     computed: {
+        ...mapState(ORDERS_MODULE_PATH, [ORDERS]),
+
         isTabletLg() {
             return this.$mq.tabletLg;
         },
     },
 
-    watch: {},
-
     methods: {
+        ...mapActions(ORDERS_MODULE_PATH, [FETCH_ORDERS]),
+
         onOpenOrder(id) {
             this.$router.push({ name: 'OrderDetails', params: { orderId: id } });
         },
+    },
+
+    beforeRouteEnter(to, from, next) {
+        // вызывается до подтверждения пути, соответствующего этому компоненту.
+        // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
+        // так как к моменту вызова экземпляр ещё не создан!
+
+        const {
+            fullPath,
+            query: { page = 1, orderField = 'number', orderDirection = 'desc' },
+        } = to;
+
+        // регистрируем модуль, если такого нет
+        const { loadPath } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
+
+        // если все загружено, пропускаем
+        if (loadPath === fullPath) next();
+        else {
+            $progress.start();
+            $store
+                .dispatch(`${ORDERS_MODULE_PATH}/${FETCH_ORDERS}`, {
+                    page,
+                    orderField,
+                    orderDirection,
+                })
+                .then(data => {
+                    //$store.dispatch(`${ORDERS_MODULE}/${SET_LOAD_PATH}`, fullPath);
+                    next(vm => {
+                        $progress.finish();
+                    });
+                })
+                .catch(thrown => {
+                    if (thrown && thrown.isCancel === true) return next();
+                    $progress.fail();
+                    $logger.error('beforeRouteEnter', thrown);
+                    $progress.finish();
+                    next();
+                });
+        }
+    },
+
+    beforeRouteUpdate(to, from, next) {
+        // вызывается, когда маршрут, что рендерит этот компонент, изменился,
+        // но этот компонент будет повторно использован в новом маршруте.
+        // Например, для маршрута с динамическими параметрами `/foo/:id`, когда мы
+        // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
+        // будет использован повторно, и этот хук будет вызван когда это случится.
+        // Также имеется доступ в `this` к экземпляру компонента.
+
+        // if (this.showMore) {
+        //     this.fetchCatalog(to, from, this.showMore);
+        // } else this.debounce_fetchCatalog(to, from);
+        next();
     },
 };
 </script>

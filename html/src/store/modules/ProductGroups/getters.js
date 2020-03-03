@@ -2,7 +2,7 @@ import { generateCategoryUrl } from '../../../util/catalog';
 import { productGroupTypes } from '../../../assets/scripts/enums';
 
 function prepareBrand({ id, name, code }) {
-    return { id, name, to: generateCategoryUrl(code, null) };
+    return { id, name, to: generateCategoryUrl(productGroupTypes.BRANDS, code, null) };
 }
 
 const pageSize = 12;

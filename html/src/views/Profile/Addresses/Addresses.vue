@@ -14,22 +14,41 @@
                         class="addresses-view__panel-item"
                         v-for="address in addresses"
                         :key="`${address.region_guid}-${address.city_guid || address.settlment_guid}-${address.house}`"
-                        :selected="!!address.default"
-                        @cardClick="onSetSelectedAddress(address)"
-                        @btnClick="onChangeAddress(address)"
+                        :selected="address.default"
+                        @cardClick="onSetDefaultAddress(address)"
                     >
                         {{
                             `${address.city || address.settlement}, ${address.area ? `${address.area}, ` : ''}${
                                 address.street ? `${address.street}, ` : ''
                             }${address.house} ${address.block || ''}, ${address.post_index}`
                         }}
+                        <template v-slot:controls>
+                            <v-link
+                                class="checkout-option-card__right-link"
+                                tag="button"
+                                @click.stop="onChangeAddress(address)"
+                            >
+                                Изменить
+                            </v-link>
+                            <v-link
+                                class="checkout-option-card__right-link"
+                                tag="button"
+                                @click.stop="onDeleteAddress(address)"
+                            >
+                                Удалить
+                            </v-link>
+                        </template>
                     </checkout-option-card>
                 </ul>
             </div>
         </info-panel>
 
         <transition name="fade">
-            <address-edit-modal v-show="isAddressEditOpen" v-if="$isServer || isAddressEditOpen" @save="onSave" />
+            <address-edit-modal
+                v-show="isAddressEditOpen"
+                v-if="$isServer || isAddressEditOpen"
+                @save="onSaveAddress"
+            />
         </transition>
     </section>
 </template>
@@ -56,6 +75,8 @@ import {
     FETCH_ADDRESSES_DATA,
     SET_LOAD,
     UPDATE_ADDRESS,
+    DELETE_ADDRESS,
+    SET_DEFAULT_ADDRESS,
 } from '../../../store/modules/Profile/modules/Addresses/actions';
 
 import { $store, $progress, $logger } from '../../../services/ServiceLocator';
@@ -100,18 +121,20 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(ADDRESSES_MODULE_PATH, [FETCH_ADDRESSES_DATA, SET_LOAD, UPDATE_ADDRESS]),
+        ...mapActions(ADDRESSES_MODULE_PATH, [
+            FETCH_ADDRESSES_DATA,
+            SET_LOAD,
+            UPDATE_ADDRESS,
+            SET_DEFAULT_ADDRESS,
+            DELETE_ADDRESS,
+        ]),
 
         isEqualAddress(address1, address2) {
             return _isEqual(address1, address2);
         },
 
-        onSetSelectedAddress(address) {
-            this.selectedAddress = address;
-        },
-
-        onSave(address) {
-            this[UPDATE_ADDRESS](address);
+        onSetDefaultAddress(address) {
+            if (!address.default) this[SET_DEFAULT_ADDRESS](address.id);
         },
 
         onAddAddress() {
@@ -120,6 +143,14 @@ export default {
                 open: true,
                 state: { address: {} },
             });
+        },
+
+        onSaveAddress(address) {
+            this[UPDATE_ADDRESS](address);
+        },
+
+        onDeleteAddress(address) {
+            this[DELETE_ADDRESS](address);
         },
 
         onChangeAddress(address) {

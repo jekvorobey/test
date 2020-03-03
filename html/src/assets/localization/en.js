@@ -1,5 +1,5 @@
 import flatPickrEn from 'flatpickr/dist/l10n/default';
-import { receiveMethods, genderType, socials } from '../scripts/enums';
+import { receiveMethods, genderType, socials, orderStatus } from '../scripts/enums';
 
 const flatpickrLocale = flatPickrEn;
 const main = {
@@ -150,7 +150,18 @@ const main = {
             order: 'Order №{id}',
             messages: 'Messages ({n})',
             referal: 'Referal №{id}',
-            orderStatus: { created: 'Created', process: 'Shipping', done: 'Done', cancel: 'Canceled' },
+            orderStatus: {
+                [orderStatus.CREATED]: 'Created',
+                [orderStatus.AWAITING_CHECK]: 'Awaiting Check',
+                [orderStatus.IN_PROCESSING]: 'In Process',
+                [orderStatus.CHECKING]: 'Checking',
+                [orderStatus.TRANSFERRED_TO_DELIVERY]: 'Transferred To Delivery',
+                [orderStatus.DELIVERING]: 'Delivering',
+                [orderStatus.READY_FOR_RECIPIENT]: 'Ready for Recipient',
+                [orderStatus.DONE]: 'Done',
+                [orderStatus.RETURNED]: 'Returned',
+                [orderStatus.PRE_ORDER]: 'Preorder',
+            },
         },
 
         groups: {

@@ -192,6 +192,23 @@ export function changeProfileAddress(address) {
     });
 }
 
+export function deleteProfileAddress(id) {
+    return $http.delete(`/v1/lk/address/${id}`);
+}
+
+export function defaultProfileAddress(id) {
+    return $http.put(`/v1/lk/address/${id}/default`);
+}
+
+export function getProfileOrders({ sortDirection, sortKey, pageNum, perPage }) {
+    return $http.get('/v1/lk/order', {
+        params: { sortDirection, sortKey, pageNum, perPage },
+        paramsSerializer(params) {
+            return qs.stringify(params, { encode: false });
+        },
+    });
+}
+
 // search
 
 export function search(data) {
@@ -251,10 +268,11 @@ export function getFilters(categoryCode, excludedFilters) {
     });
 }
 
-export function getCategories(code = undefined) {
+export function getCategories(node_code = undefined, max_depth = undefined) {
     return $http.get('/v1/categories', {
         params: {
-            node_code: code,
+            node_code,
+            max_depth,
         },
     });
 }

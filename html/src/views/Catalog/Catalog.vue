@@ -26,7 +26,7 @@
                 :banner-id="productGroup.id"
                 :bottom-text="productGroup.description"
                 :title="productGroup.name"
-                :image="productGroup.image"
+                :image="productGroup.preview_photo"
             />
 
             <catalog-banner-card
@@ -286,14 +286,23 @@ export default {
                 state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
         }),
         ...mapState('route', {
-            type: state => state.params.type,
             code: state => state.params.code,
             entityCode: state => state.params.entityCode,
         }),
 
         breadcrumbRootUrl() {
             const { type } = this;
-            return { name: type === productGroupTypes.CATALOG ? 'Catalog' : 'ProductGroups', params: { type } };
+            let name = '';
+
+            switch (type) {
+                case productGroupTypes.CATALOG:
+                case productGroupTypes.NEW:
+                    name = 'Catalog';
+                    break;
+                default:
+                    name = 'ProductGroups';
+            }
+            return { name, params: { type } };
         },
 
         isTabletLg() {
@@ -383,6 +392,7 @@ export default {
                     page,
                     orderField,
                     orderDirection,
+                    showMore,
                 });
 
                 this.setSortValue(orderField, orderDirection);

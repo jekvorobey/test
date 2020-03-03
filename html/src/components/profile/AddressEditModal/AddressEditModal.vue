@@ -217,6 +217,8 @@ export default {
                 porch: '',
                 intercom: '',
                 comment: '',
+                geo_lat: '',
+                geo_lon: '',
             },
 
             coords: null,
@@ -402,9 +404,12 @@ export default {
                 address.block = value.data.block_type
                     ? `${value.data.block_type} ${value.data.block}`
                     : value.data.block;
-                if (value.data.geo_lat && value.data.geo_lon)
-                    this.coords =
-                        [Number(value.data.geo_lat), Number(value.data.geo_lon)] || this[SELECTED_CITY_COORDS];
+
+                if (value.data.geo_lat && value.data.geo_lon) {
+                    address.geo_lat = value.data.geo_lat;
+                    address.geo_lon = value.data.geo_lon;
+                }
+                this.coords = [Number(value.data.geo_lat), Number(value.data.geo_lon)] || this[SELECTED_CITY_COORDS];
                 this.address = address;
             }
         },
@@ -429,10 +434,9 @@ export default {
 
         async init() {
             if (this.modalState.address) {
+                if (this.modalState.address.geo_lat && this.modalState.address.geo_lon)
+                    this.coords = [Number(this.modalState.address.geo_lat), Number(this.modalState.address.geo_lon)];
                 this.address = { ...this.modalState.address };
-                const { suggestions } = await this.findAddress(suggestionTypes.HOUSE, this.address.value, 1);
-                const suggestion = suggestions[0];
-                if (suggestion) this.coords = [Number(suggestion.data.geo_lat), Number(suggestion.data.geo_lon)];
             }
         },
     },

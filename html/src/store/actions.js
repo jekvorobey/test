@@ -62,7 +62,7 @@ export default {
 
     async [FETCH_COMMON_DATA]({ commit }, payload) {
         try {
-            const resp = await Promise.all([getCategories(payload), getBanners(payload), getMenu()]);
+            const resp = await Promise.all([getCategories(payload, 1), getBanners(payload), getMenu()]);
             commit(SET_CATEGORIES, resp[0]);
             commit(SET_BANNER, resp[1][0]);
             commit(SET_MENU, resp[2]);

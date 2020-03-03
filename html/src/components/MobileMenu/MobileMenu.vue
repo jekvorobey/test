@@ -24,11 +24,11 @@
                     <ul class="mobile-menu__menu">
                         <li
                             class="container mobile-menu__menu-item mobile-menu__menu-item--separator"
-                            v-for="(link, index) in links"
-                            :key="link.name"
+                            v-for="(item, index) in headerMenu.items"
+                            :key="item.name"
                         >
-                            <v-link class="mobile-menu__menu-link" :to="link.to">
-                                {{ link.name }}
+                            <v-link class="mobile-menu__menu-link" :to="item.url">
+                                {{ item.name }}
                             </v-link>
                             <v-link
                                 v-if="index === 0"
@@ -134,9 +134,10 @@ import GeneralModal from '../GeneralModal/GeneralModal.vue';
 import { NAME as REGISTER_MODAL_NAME } from '../RegistrationModal/RegistrationModal.vue';
 import { NAME as CITY_SELECTION_MODAL_NAME } from '../CitySelectionModal/CitySelectionModal.vue';
 
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { CATEGORIES } from '../../store';
+import { HEADER_MENU } from '../../store/getters';
 import { SET_MENU_OPEN } from '../../store/actions';
 
 import { NAME as GEO_MODULE, SELECTED_CITY } from '../../store/modules/Geolocation';
@@ -177,6 +178,7 @@ export default {
 
     computed: {
         ...mapState([CATEGORIES]),
+        ...mapGetters([HEADER_MENU]),
         ...mapState(GEO_MODULE, {
             city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].value) || 'Выберите город',
         }),

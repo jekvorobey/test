@@ -127,7 +127,7 @@ import CategoriesSection from '../../components/blocks/CategoriesSection/Categor
 import { $store, $progress, $logger } from '../../services/ServiceLocator';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { CATEGORIES } from '../../store';
+import { CATEGORIES, SCROLL } from '../../store';
 import productGroupsModule, {
     NAME as PRODUCT_GROUPS_MODULE,
     ITEMS,
@@ -298,7 +298,7 @@ export default {
     },
 
     computed: {
-        ...mapState([CATEGORIES]),
+        ...mapState([CATEGORIES, SCROLL]),
         ...mapState(PRODUCT_GROUPS_MODULE, [ITEMS, TYPE]),
         ...mapGetters(PRODUCT_GROUPS_MODULE, [BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT]),
 
@@ -366,7 +366,7 @@ export default {
                 await this[FETCH_ITEMS]({ type: toType, page, orderField, showMore });
                 this.$progress.finish();
 
-                if (!showMore && page !== fromPage)
+                if (!showMore && this[SCROLL] && (toType !== fromType || page !== fromPage))
                     window.scrollTo({
                         top: MIN_SCROLL_VALUE + 1,
                         behavior: 'smooth',
@@ -397,7 +397,14 @@ export default {
         const { loadPath, type } = $store.state[PRODUCT_GROUPS_MODULE];
 
         // если все загружено, пропускаем
-        if (loadPath === fullPath && type === toType) next();
+        if (loadPath === fullPath && type === toType)
+            next(vm => {
+                if (!vm.$isServer && vm[SCROLL]) {
+                    window.scrollTo({
+                        top: 0,
+                    });
+                }
+            });
         else {
             $progress.start();
             $store
@@ -406,6 +413,11 @@ export default {
                     $store.dispatch(`${PRODUCT_GROUPS_MODULE}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
                         $progress.finish();
+                        if (!vm.$isServer && vm[SCROLL]) {
+                            window.scrollTo({
+                                top: 0,
+                            });
+                        }
                     });
                 })
                 .catch(error => {

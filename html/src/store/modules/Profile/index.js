@@ -5,6 +5,7 @@ import getters from './getters';
 import cabinet from './modules/Cabinet';
 import preferences from './modules/Preferences';
 import addresses from './modules/Addresses';
+import orders from './modules/Orders';
 
 export const NAME = 'profile';
 export const BREADCRUMBS = 'breadcrumbs';
@@ -88,5 +89,6 @@ export default {
         cabinet,
         preferences,
         addresses,
+        orders,
     },
 };
