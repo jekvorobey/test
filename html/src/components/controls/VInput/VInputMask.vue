@@ -156,7 +156,6 @@ export default {
          * @param event
          */
         onValueChanged(event) {
-            debugger;
             let value = this.raw ? event.target.rawValue : event.target.value;
             this.$emit('input', value);
 
