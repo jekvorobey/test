@@ -150,11 +150,9 @@
     }
 
     &__footer {
-        position: sticky;
-        z-index: 1;
-        bottom: 0;
         padding: calc(var(--gs) * 3);
         border-top: 1px solid var(--cl-divider-grey);
+        background-color: var(--cl-white);
 
         @media (--tablet) {
             padding: calc(var(--gs) * 2);
