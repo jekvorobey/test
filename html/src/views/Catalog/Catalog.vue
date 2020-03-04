@@ -222,8 +222,8 @@ import {
 
 import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '../../util/catalog';
 import { registerModuleIfNotExists } from '../../util/store';
-import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants';
-import { productGroupTypes } from '../../assets/scripts/enums';
+import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants/general';
+import { productGroupTypes } from '../../assets/scripts/enums/product';
 import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/cross-small.svg';
 import './Catalog.css';

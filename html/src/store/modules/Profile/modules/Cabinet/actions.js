@@ -1,4 +1,4 @@
-import { verificationCodeType } from '../../../../../assets/scripts/enums';
+import { verificationCodeType } from '../../../../../assets/scripts/enums/auth';
 import { storeErrorHandler } from '../../../../../util/store';
 import {
     getProfile,

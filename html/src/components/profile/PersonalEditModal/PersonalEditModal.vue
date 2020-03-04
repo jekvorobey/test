@@ -71,7 +71,7 @@ import {
 } from '../../../store/modules/Profile/modules/Cabinet';
 import { UPDATE_PERSONAL } from '../../../store/modules/Profile/modules/Cabinet/actions';
 
-import { genderType } from '../../../assets/scripts/enums';
+import { genderType } from '../../../assets/scripts/enums/profile';
 import './PersonalEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;

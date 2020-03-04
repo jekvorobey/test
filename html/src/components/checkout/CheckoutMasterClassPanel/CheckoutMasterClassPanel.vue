@@ -127,9 +127,6 @@ import VSpinner from '../../controls/VSpinner/VSpinner.vue';
 
 import CheckoutOptionCard from '../CheckoutOptionCard/CheckoutOptionCard.vue';
 
-import _cloneDeep from 'lodash/cloneDeep';
-import _isEqual from 'lodash/isEqual';
-import { orderBy as _orderBy } from 'lodash/collection';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '../../../store';
 
@@ -159,7 +156,11 @@ import {
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
-import { requestStatus } from '../../../assets/scripts/enums';
+import _cloneDeep from 'lodash/cloneDeep';
+import _isEqual from 'lodash/isEqual';
+import { orderBy as _orderBy } from 'lodash/collection';
+
+import { requestStatus } from '../../../assets/scripts/enums/general';
 
 import '../../../assets/images/sprites/payment/bonus.svg';
 import '../../../assets/images/sprites/payment/visa.svg';

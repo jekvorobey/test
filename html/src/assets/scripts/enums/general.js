@@ -37,56 +37,10 @@ export const breakpoints = Object.freeze({
     desktopXl: 1920,
 });
 
-export const cartItemTypes = Object.freeze({
-    PRODUCT: 'product',
-    MASTERCLASS: 'masterclass',
-});
-
-export const productGroupTypes = Object.freeze({
-    MASTERCLASSES: 'masterclasses',
-    CATALOG: 'catalog',
-    NEW: 'new',
-    PROMO: 'promo',
-    SETS: 'sets',
-    BRANDS: 'brands',
-});
-
-export const catalogItemTypes = Object.freeze({
-    PRODUCT: 'product',
-    BANNER: 'banner',
-});
-
-export const receiveMethods = Object.freeze({
-    DELIVERY: 1,
-    EXPRESS: 2,
-    PICKUP: 3,
-});
-
-export const deliveryMethods = Object.freeze({
-    OUTPOST_PICKUP: 1,
-    POSTOMAT_PICKUP: 2,
-    DELIVERY: 3,
-    EXPRESS: 4,
-});
-
-export const deliveryTypes = Object.freeze({
-    SPLIT: 1,
-    CONSOLIDATION: 2,
-});
-
 export const requestStatus = Object.freeze({
     PENDING: 'pending',
     SUCCESS: 'success',
     ERROR: 'error',
-});
-
-export const suggestionTypes = Object.freeze({
-    REGION: 'region',
-    AREA: 'area',
-    CITY: 'city',
-    SETTLEMENT: 'settlement',
-    STREET: 'street',
-    HOUSE: 'house',
 });
 
 export const responseStatus = Object.freeze({
@@ -135,18 +89,6 @@ export const httpCodes = Object.freeze({
     GATEAWAY_TIMEOUT: 505,
 });
 
-export const verificationCodeType = Object.freeze({
-    REGISTRATION: 1,
-    RESET_PASSWORD: 2,
-    PROFILE_PHONE: 3,
-    PROFILE_EMAIL: 4,
-});
-
-export const genderType = Object.freeze({
-    FEMALE: 1,
-    MALE: 2,
-});
-
 export const socials = Object.freeze({
     VKONTAKTE: 'vkontakte',
     FACEBOOK: 'facebook',
@@ -172,33 +114,7 @@ export const mimeType = Object.freeze({
     },
 });
 
-export const discountType = Object.freeze({
-    PRODUCT: 1, // Скидка на товар
-    DELIVERY: 2, // Скидка на доставку,
-    CART: 3, // Скидка на корзину,
-    CUSTOM: 4, // Скидка для Вас,
-    PROMOCODE: 5, // Скидка по промокоду,
-});
-
-export const orderStatus = Object.freeze({
-    /* оформлен */
-    CREATED: 1,
-    /* ожидает подтверждения */
-    AWAITING_CHECK: 2,
-    /* в обработке */
-    IN_PROCESSING: 3,
-    /* проверка */
-    CHECKING: 4,
-    /* передан на доставку */
-    TRANSFERRED_TO_DELIVERY: 5,
-    /* в процессе доставки */
-    DELIVERING: 6,
-    /* находится в Пункте Выдачи */
-    READY_FOR_RECIPIENT: 7,
-    /* доставлен */
-    DONE: 8,
-    /* возвращен */
-    RETURNED: 9,
-    /* предзаказ: ожидаем поступления товара */
-    PRE_ORDER: 10,
+export const sortDirections = Object.freeze({
+    DESC: 'desc',
+    ASC: 'asc',
 });

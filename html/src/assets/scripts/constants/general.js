@@ -17,3 +17,8 @@ export const REQUEST_CANCEL_MESSAGE = 'Request has been canceled';
  * Дефолтный таймаут при Http реквестах (20 сек)
  */
 export const HTTP_REQUEST_TIMEOUT = 20000;
+
+/**
+ * Дефолтная страница в списках
+ */
+export const DEFAULT_PAGE = 1;

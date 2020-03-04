@@ -1,5 +1,5 @@
 import { $logger } from '../../../services/ServiceLocator';
-import { responseStatus } from '../../../assets/scripts/enums';
+import { responseStatus } from '../../../assets/scripts/enums/general';
 import { storeErrorHandler } from '../../../util/store';
 
 import {

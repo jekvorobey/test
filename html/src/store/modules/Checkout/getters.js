@@ -1,4 +1,4 @@
-import { requestStatus } from '../../../assets/scripts/enums';
+import { requestStatus } from '../../../assets/scripts/enums/general';
 
 export const DELIVERY_TYPES_MAP = 'deliveryTypesMap';
 

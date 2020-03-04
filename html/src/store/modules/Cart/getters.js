@@ -1,5 +1,5 @@
 import { $logger } from '../../../services/ServiceLocator';
-import { cartItemTypes } from '../../../assets/scripts/enums';
+import { cartItemTypes } from '../../../assets/scripts/enums/product';
 
 export const GET_ITEMS_BY_TYPE = 'GET_ITEMS_BY_TYPE';
 export const IS_PRODUCT = 'IS_PRODUCT';

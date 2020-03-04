@@ -142,7 +142,7 @@ import { CHECKOUT, PROMO_CODE, SUMMARY } from '../../store/modules/Checkout/gett
 
 import { registerModuleIfNotExists } from '../../util/store';
 import { preparePrice } from '../../util/helpers';
-import { cartItemTypes } from '../../assets/scripts/enums';
+import { cartItemTypes } from '../../assets/scripts/enums/product';
 import '../../assets/images/sprites/check-small.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import './Checkout.css';

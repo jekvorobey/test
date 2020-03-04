@@ -624,8 +624,8 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '../../util/store';
 import { generatePictureSourcePath } from '../../util/images';
-import { breakpoints, productGroupTypes } from '../../assets/scripts/enums';
-import productBrand1 from '../../assets/images/mock/brandProduct1.png';
+import { breakpoints } from '../../assets/scripts/enums/general';
+import { productGroupTypes } from '../../assets/scripts/enums/product';
 
 import { generateCategoryUrl } from '../../util/catalog';
 
@@ -639,6 +639,8 @@ import '../../assets/images/sprites/star-small.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import '../../assets/images/sprites/wishlist-middle.svg';
 import './Product.css';
+
+import productBrand1 from '../../assets/images/mock/brandProduct1.png';
 
 const productGalleryOptions = {
     spaceBetween: 8,

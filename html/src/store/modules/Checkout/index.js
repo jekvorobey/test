@@ -1,4 +1,4 @@
-import { requestStatus } from '../../../assets/scripts/enums';
+import { requestStatus } from '../../../assets/scripts/enums/general';
 
 import getters, {
     RECEIVE_METHOD_STATUS,

@@ -28,7 +28,7 @@ import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '../../../store/modules/Cart
 import { NAME as MODAL_MODULE } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
-import { productGroupTypes } from '../../../assets/scripts/enums';
+import { productGroupTypes } from '../../../assets/scripts/enums/product';
 import './HeaderNavigationPanel.critical.css';
 
 export default {

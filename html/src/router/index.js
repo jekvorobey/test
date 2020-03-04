@@ -1,4 +1,4 @@
-import { injectionType } from '../assets/scripts/enums';
+import { injectionType } from '../assets/scripts/enums/general';
 import { Container, injectable, inject } from 'inversify';
 import { injectableClass } from '../util/container';
 
@@ -115,7 +115,7 @@ export default function createRouter(container) {
     });
 
     router.afterEach((to, from) => {
-        if (store) {
+        if (store && to.path !== from.path) {
             store.dispatch(SET_MENU_OPEN, false);
             store.dispatch(SET_PROFILE_PANEL_OPEN, false);
             store.dispatch(`${SEARCH_MODULE}/${SET_SEARCH}`, false);

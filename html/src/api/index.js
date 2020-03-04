@@ -3,8 +3,9 @@ import axios from 'axios';
 
 import { Cache } from 'axios-extensions';
 import { $http, $logger } from '../services/ServiceLocator';
-import { REQUEST_CANCEL_MESSAGE } from '../assets/scripts/constants';
-import { interval, verificationCodeType } from '../assets/scripts/enums';
+import { REQUEST_CANCEL_MESSAGE } from '../assets/scripts/constants/general';
+import { interval } from '../assets/scripts/enums/general';
+import { verificationCodeType } from '../assets/scripts/enums/auth';
 
 let catalogItemsCancelSource = null;
 const sessionCheckCache = new Cache({ maxAge: interval.FIVE_MINUTES });
@@ -200,7 +201,7 @@ export function defaultProfileAddress(id) {
     return $http.put(`/v1/lk/address/${id}/default`);
 }
 
-export function getProfileOrders({ sortDirection, sortKey, pageNum, perPage }) {
+export function getProfileOrders(sortDirection, sortKey, pageNum, perPage) {
     return $http.get('/v1/lk/order', {
         params: { sortDirection, sortKey, pageNum, perPage },
         paramsSerializer(params) {

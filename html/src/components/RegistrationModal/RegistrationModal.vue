@@ -180,8 +180,8 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 import _cloneDeep from 'lodash/cloneDeep';
 
 import { rawPhone } from '../../util/helpers';
-import { phoneMaskOptions } from '../../assets/scripts/settings';
-import { verificationCodeType } from '../../assets/scripts/enums';
+import { phoneMaskOptions } from '../../assets/scripts/settings/general';
+import { verificationCodeType } from '../../assets/scripts/enums/auth';
 import './RegistrationModal.css';
 
 export const NAME = 'registration-modal';

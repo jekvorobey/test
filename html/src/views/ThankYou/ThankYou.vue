@@ -76,7 +76,8 @@ import profileMasterClassImg3 from '../../assets/images/mock/profileMasterClass3
 import profileMasterClassImg4 from '../../assets/images/mock/profileMasterClass4.png';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { receiveMethods, cartItemTypes } from '../../assets/scripts/enums';
+import { receiveMethods } from '../../assets/scripts/enums/checkout';
+import { cartItemTypes } from '../../assets/scripts/enums/product';
 import './ThankYou.css';
 
 export default {

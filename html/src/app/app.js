@@ -6,7 +6,7 @@
 import '../assets/scripts/common';
 import Vue from 'vue';
 
-import { injectionType } from '../assets/scripts/enums';
+import { injectionType } from '../assets/scripts/enums/general';
 import { sync } from 'vuex-router-sync';
 import createStore from '../store';
 import createRouter from '../router';

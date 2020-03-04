@@ -137,8 +137,8 @@ import productGroupsModule, {
 import { BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT } from '../../store/modules/ProductGroups/getters';
 import { FETCH_ITEMS, SET_LOAD_PATH, SET_TYPE } from '../../store/modules/ProductGroups/actions';
 
-import { productGroupTypes } from '../../assets/scripts/enums';
-import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants';
+import { productGroupTypes } from '../../assets/scripts/enums/product';
+import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants/general';
 import { registerModuleIfNotExists } from '../../util/store';
 import { generateCategoryUrl } from '../../util/catalog';
 import _debounce from 'lodash/debounce';

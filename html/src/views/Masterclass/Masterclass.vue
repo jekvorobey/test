@@ -369,8 +369,9 @@ import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '../../util/store';
 import { generatePictureSourcePath } from '../../util/images';
 import { generateCategoryUrl } from '../../util/catalog';
-import { breakpoints, productGroupTypes } from '../../assets/scripts/enums';
-import { yaMapSettings } from '../../assets/scripts/settings';
+import { yaMapSettings } from '../../assets/scripts/settings/general';
+import { breakpoints } from '../../assets/scripts/enums/general';
+import { productGroupTypes } from '../../assets/scripts/enums/product';
 
 import '../../assets/images/sprites/socials/vkontakte-bw.svg';
 import '../../assets/images/sprites/socials/facebook-bw.svg';
