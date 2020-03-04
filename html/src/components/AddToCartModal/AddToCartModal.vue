@@ -20,7 +20,7 @@
                     <div class="add-to-cart-modal__panel" v-if="!isTablet">
                         <div class="add-to-cart-modal__panel-info">
                             В корзине {{ $tc('cart.items', cartItemsCount) }} на сумму
-                            {{ productItemsSum }}
+                            <price v-bind="productItemsSum" />
                         </div>
                         <v-button class="btn--outline add-to-cart-modal__panel-btn" @click="onClose">
                             Продолжить покупки
@@ -60,7 +60,7 @@
             <div class="add-to-cart-modal__panel" v-if="isTablet">
                 <div class="add-to-cart-modal__panel-info">
                     В корзине {{ $tc('cart.items', cartItemsCount) }} на сумму
-                    {{ productItemsSum }}
+                    <price v-bind="productItemsSum" />
                 </div>
                 <v-link class="btn--outline add-to-cart-modal__panel-link" @click="onClose">
                     Продолжить
@@ -77,6 +77,8 @@
 import VLink from '../controls/VLink/VLink.vue';
 import VButton from '../controls/VButton/VButton.vue';
 import VSpinner from '../controls/VSpinner/VSpinner.vue';
+
+import Price from '../Price/Price.vue';
 
 import CatalogProductCard from '../CatalogProductCard/CatalogProductCard.vue';
 import CartProductCard from '../CartProductCard/CartProductCard.vue';
@@ -106,6 +108,7 @@ export default {
         VButton,
         VSpinner,
 
+        Price,
         GeneralModal,
         CartProductCard,
         CatalogProductCard,
