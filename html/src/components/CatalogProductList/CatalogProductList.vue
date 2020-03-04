@@ -17,7 +17,7 @@
             :class="getClass(item.type)"
             :is="getComponent(item.type)"
             :item="item"
-            @addItem="onAddToCart($event)"
+            @addItem="onAddToCart(item)"
             @preview="onPreview(item.code)"
         />
     </transition-group>
@@ -29,7 +29,7 @@
             :class="getClass(item.type)"
             :is="getComponent(item.type)"
             :item="item"
-            @addItem="onAddToCart($event)"
+            @addItem="onAddToCart(item)"
             @preview="onPreview(item.code)"
         />
     </ul>
@@ -138,7 +138,7 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: ADD_TO_CART_MODAL_NAME,
                 open: true,
-                state: { offerId: item.id, type: item.type },
+                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
     },

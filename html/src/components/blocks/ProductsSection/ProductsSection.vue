@@ -18,6 +18,7 @@
                         :old-price="product.oldPrice"
                         :tags="product.tags"
                         :rating="product.rating"
+                        :show-buy-btn="product.stock.qty > 0"
                         @addItem="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                     />
@@ -108,7 +109,7 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: 'add-to-cart-modal',
                 open: true,
-                state: { offerId: item.id, type: item.type },
+                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
     },

@@ -58,7 +58,7 @@
                         :tags="item.tags"
                         :rating="item.rating"
                         :show-wishlist-btn="false"
-                        @addItem="ADD_CART_ITEM({ offerId: item.id })"
+                        :show-buy-btn="false"
                     />
                     <button class="promopage-view__panel-item-btn" @click.prevent>
                         <v-svg name="cross" width="24" height="24" />

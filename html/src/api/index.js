@@ -322,12 +322,12 @@ export function getCartData() {
     return $http.get('/v1/cart/data');
 }
 
-export function deleteCartItem({ offerId }) {
-    return $http.delete('/v1/cart/item', { data: { offerId } });
+export function deleteCartItem({ offerId, storeId }) {
+    return $http.delete('/v1/cart/item', { data: { offerId, storeId } });
 }
 
-export function addCartItem(data) {
-    return $http.post('/v1/cart/item', data);
+export function addCartItem({ offerId, storeId, count }) {
+    return $http.post('/v1/cart/item', { offerId, storeId, count });
 }
 
 // checkout

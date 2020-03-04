@@ -49,8 +49,16 @@
                                         :old-price="product.oldPrice"
                                         :count="count"
                                         href="/catalog"
-                                        @deleteItem="DELETE_CART_ITEM({ offerId: product.id })"
-                                        @countChange="ADD_CART_ITEM({ offerId: product.id, count: $event.count })"
+                                        @deleteItem="
+                                            DELETE_CART_ITEM({ offerId: product.id, storeId: product.stock.storeId })
+                                        "
+                                        @countChange="
+                                            ADD_CART_ITEM({
+                                                offerId: product.id,
+                                                storeId: product.stock.storeId,
+                                                count: $event.count,
+                                            })
+                                        "
                                     />
                                 </transition-group>
                             </div>
@@ -78,8 +86,16 @@
                                         :date="product.date"
                                         :author="product.author"
                                         :count="count"
-                                        @deleteItem="DELETE_CART_ITEM({ offerId: product.id })"
-                                        @countChange="ADD_CART_ITEM({ offerId: product.id, count: $event.count })"
+                                        @deleteItem="
+                                            DELETE_CART_ITEM({ offerId: product.id, storeId: product.stock.storeId })
+                                        "
+                                        @countChange="
+                                            ADD_CART_ITEM({
+                                                offerId: product.id,
+                                                storeId: product.stock.storeId,
+                                                count: $event.count,
+                                            })
+                                        "
                                         href="/catalog"
                                     />
                                 </transition-group>
@@ -154,7 +170,13 @@
                         :old-price="item.oldPrice"
                         :tags="item.tags"
                         :rating="item.rating"
-                        @addItem="onAddToCart(item)"
+                        :show-buy-btn="item.stock.qty > 0"
+                        @addItem="
+                            ADD_CART_ITEM({
+                                offerId: item.id,
+                                storeId: item.stock.storeId,
+                            })
+                        "
                         @preview="onPreview(item.code)"
                     />
                 </v-slider>
@@ -305,7 +327,7 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: ADD_TO_CART_MODAL_NAME,
                 open: true,
-                state: { offerId: item.id, type: item.type },
+                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
 

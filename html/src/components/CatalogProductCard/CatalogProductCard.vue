@@ -24,7 +24,11 @@
             </v-picture>
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-card__controls">
-                <v-button class="btn--outline catalog-product-card__controls-btn" @click.prevent="onBuyButtonClick">
+                <v-button
+                    v-if="showBuyBtn"
+                    class="btn--outline catalog-product-card__controls-btn"
+                    @click.prevent="onBuyButtonClick"
+                >
                     Купить
                 </v-button>
                 <v-link tag="button" class="catalog-product-card__controls-link" @click.prevent="onPreview">
@@ -138,6 +142,11 @@ export default {
         },
 
         isSmall: {
+            type: Boolean,
+            default: false,
+        },
+
+        showBuyBtn: {
             type: Boolean,
             default: false,
         },

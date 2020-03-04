@@ -38,14 +38,14 @@ export default {
         commit(SET_CART_DATA, {});
     },
 
-    [FETCH_CART_DATA]({ commit }, payload) {
-        return getCartData(payload)
+    [FETCH_CART_DATA]({ commit }) {
+        return getCartData()
             .then(data => commit(SET_CART_DATA, data))
             .catch(error => $logger.error(`${FETCH_CART_DATA} ${error}`));
     },
 
-    [ADD_CART_ITEM]({ commit }, payload = {}) {
-        return addCartItem(payload)
+    [ADD_CART_ITEM]({ commit }, { offerId, storeId, count } = {}) {
+        return addCartItem({ offerId, storeId, count })
             .then(data => commit(SET_CART_DATA, data))
             .catch(error => $logger.error(`${ADD_CART_ITEM} ${error}`));
     },

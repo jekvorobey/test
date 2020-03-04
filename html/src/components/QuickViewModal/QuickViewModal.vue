@@ -5,7 +5,7 @@
                 <ul class="quick-view-modal__gallery">
                     <li class="quick-view-modal__gallery-item" v-for="image in images" :key="image.id">
                         <v-picture v-if="image && image.id" :image="image" alt="">
-                            <template v-slot:source="{ image, lazy }">
+                            <template v-slot:source="{ image }">
                                 <source
                                     :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
                                     type="image/webp"
@@ -40,6 +40,7 @@
                         :price="productPreview.price"
                         :old-price="productPreview.oldPrice"
                         :bonus="productPreview.bonus"
+                        :can-buy="productPreview.stock.qty > 0"
                         @cart="onCartStateChange"
                         @wishlist="onWishlistStateChange"
                     />
@@ -128,7 +129,7 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: ADD_TO_CART_MODAL_NAME,
                 open: true,
-                state: { offerId: this.productPreview.id, type: 'product' },
+                state: { offerId: this.productPreview.id, storeId: this.productPreview.storeId, type: 'product' },
             });
         },
 

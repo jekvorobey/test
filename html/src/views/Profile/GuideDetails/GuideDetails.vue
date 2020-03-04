@@ -22,6 +22,7 @@
                         :tags="item.tags"
                         :rating="item.rating"
                         :is-small="isTablet"
+                        :show-buy-btn="item.stock.qty > 0"
                     />
                     <v-html class="container container--tablet guide-details-view__list-desc" v-html="desc" />
                 </li>
