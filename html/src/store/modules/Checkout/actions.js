@@ -1,5 +1,5 @@
 import { $logger } from '../../../services/ServiceLocator';
-import { requestStatus } from '../../../assets/scripts/enums';
+import { requestStatus } from '../../../assets/scripts/enums/general';
 import { storeErrorHandler } from '../../../util/store';
 
 import { RECEIVE_METHOD_STATUS, ADDRESS_STATUS, BONUS_STATUS, CERTIFICATE_STATUS, PROMOCODE_STATUS } from './getters';

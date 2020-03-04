@@ -327,9 +327,6 @@ import CheckoutAddressModal from '../CheckoutAddressModal/CheckoutAddressModal.v
 import CheckoutPickupPointModal from '../CheckoutPickupPointModal/CheckoutPickupPointModal.vue';
 import CheckoutAddressPanel from '../CheckoutAddressPanel/CheckoutAddressPanel.vue';
 
-import _cloneDeep from 'lodash/cloneDeep';
-import _isEqual from 'lodash/isEqual';
-import { orderBy as _orderBy } from 'lodash/collection';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '../../../store/modules/Checkout';
 import {
@@ -383,13 +380,12 @@ import {
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
-import {
-    deliveryMethods,
-    receiveTypes,
-    deliveryTypes,
-    receiveMethods,
-    requestStatus,
-} from '../../../assets/scripts/enums';
+import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '../../../assets/scripts/enums/checkout';
+import { requestStatus } from '../../../assets/scripts/enums/general';
+
+import _cloneDeep from 'lodash/cloneDeep';
+import _isEqual from 'lodash/isEqual';
+import { orderBy as _orderBy } from 'lodash/collection';
 
 import '../../../assets/images/sprites/payment/bonus.svg';
 import '../../../assets/images/sprites/payment/visa.svg';

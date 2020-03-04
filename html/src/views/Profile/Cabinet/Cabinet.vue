@@ -306,7 +306,7 @@ import {
     LOAD_CERTIFICATE,
 } from '../../../store/modules/Profile/modules/Cabinet/actions';
 
-import { socials, mimeType } from '../../../assets/scripts/enums';
+import { socials, mimeType } from '../../../assets/scripts/enums/general';
 import '../../../assets/images/sprites/edit.svg';
 import './Cabinet.css';
 

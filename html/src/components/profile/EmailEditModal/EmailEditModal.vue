@@ -61,7 +61,7 @@ import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
 import { NAME as CABINET_MODULE, EMAIL } from '../../../store/modules/Profile/modules/Cabinet';
 import { SEND_CODE, UPDATE_CREDENTIAL } from '../../../store/modules/Profile/modules/Cabinet/actions';
 
-import { verificationCodeType } from '../../../assets/scripts/enums';
+import { verificationCodeType } from '../../../assets/scripts/enums/auth';
 import './EmailEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;

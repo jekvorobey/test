@@ -259,4 +259,12 @@
             }
         }
     }
+
+    &__controls {
+        text-align: center;
+
+        &-btn {
+            width: 100%;
+        }
+    }
 }

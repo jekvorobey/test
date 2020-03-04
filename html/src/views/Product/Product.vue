@@ -5,8 +5,8 @@
                 <breadcrumb-item key="main" to="/">
                     Главная
                 </breadcrumb-item>
-                <breadcrumb-item key="Cabinet" :to="{ name: brandCode ? 'Brands' : 'Catalog' }">
-                    {{ brandCode ? 'Бренды' : 'Каталог' }}
+                <breadcrumb-item key="Catalog" :to="{ name: 'Catalog' }">
+                    Каталог
                 </breadcrumb-item>
                 <breadcrumb-item
                     v-for="category in product.categoryCodes"
@@ -158,9 +158,15 @@
                         <div class="product-view__header-detail-control-panel">
                             <v-button
                                 class="product-view__header-detail-control-panel-btn"
-                                @click.prevent="ADD_CART_ITEM({ offerId: product.id })"
+                                :disabled="!canBuy"
+                                @click.prevent="
+                                    ADD_CART_ITEM({
+                                        offerId: product.id,
+                                        storeId: product.stock.storeId,
+                                    })
+                                "
                             >
-                                Добавить в корзину
+                                {{ canBuy ? 'Добавить в корзину' : 'Нет в наличии' }}
                             </v-button>
                             <v-link class="product-view__header-detail-control-panel-wishlist">
                                 <v-svg id="product-wishlist" name="wishlist-middle" width="20" height="18" />
@@ -253,6 +259,7 @@
                                 :tags="item.tags"
                                 :rating="item.rating"
                                 :isSmall="isTabletLg"
+                                :show-buy-btn="item.stock.qty > 0"
                             />
                         </li>
                     </ul>
@@ -482,6 +489,7 @@
                         :old-price="product.oldPrice"
                         :tags="product.tags"
                         :rating="product.rating"
+                        :show-buy-btn="product.stock.qty > 0"
                         @addItem="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                     />
@@ -541,6 +549,7 @@
                         :image="product.image"
                         :tags="product.tags"
                         :rating="product.rating"
+                        :show-buy-btn="product.stock.qty > 0"
                         @addItem="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                     />
@@ -557,7 +566,13 @@
                 :price="product.price"
                 :old-price="product.oldPrice"
                 :bonus="product.bonus"
-                @addItem="ADD_CART_ITEM({ offerId: product.id })"
+                :can-buy="canBuy"
+                @addItem="
+                    ADD_CART_ITEM({
+                        offerId: product.id,
+                        storeId: product.stock.storeId,
+                    })
+                "
             />
         </transition>
 
@@ -624,8 +639,8 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '../../util/store';
 import { generatePictureSourcePath } from '../../util/images';
-import { breakpoints, productGroupTypes } from '../../assets/scripts/enums';
-import productBrand1 from '../../assets/images/mock/brandProduct1.png';
+import { breakpoints } from '../../assets/scripts/enums/general';
+import { productGroupTypes } from '../../assets/scripts/enums/product';
 
 import { generateCategoryUrl } from '../../util/catalog';
 
@@ -639,6 +654,8 @@ import '../../assets/images/sprites/star-small.svg';
 import '../../assets/images/sprites/arrow-small.svg';
 import '../../assets/images/sprites/wishlist-middle.svg';
 import './Product.css';
+
+import productBrand1 from '../../assets/images/mock/brandProduct1.png';
 
 const productGalleryOptions = {
     spaceBetween: 8,
@@ -773,6 +790,10 @@ export default {
             isGalleryOpen: state => state[MODALS][GALLERY_MODAL_NAME] && state[MODALS][GALLERY_MODAL_NAME].open,
         }),
 
+        canBuy() {
+            return this.product.stock.qty > 0;
+        },
+
         productGalleryOptions() {
             return productGalleryOptions;
         },
@@ -831,7 +852,7 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: ADD_TO_CART_MODAL_NAME,
                 open: true,
-                state: { offerId: item.id, type: item.type },
+                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
 

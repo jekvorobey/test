@@ -1,4 +1,4 @@
-import { injectionType } from './assets/scripts/enums';
+import { injectionType } from './assets/scripts/enums/general';
 import { Container } from 'inversify';
 import { injectableClass, injectClass } from './util/container';
 

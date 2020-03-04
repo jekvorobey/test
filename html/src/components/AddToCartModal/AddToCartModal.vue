@@ -15,12 +15,18 @@
                         :old-price="product.oldPrice"
                         :count="cartItem.count"
                         href="/catalog"
-                        @countChange="ADD_CART_ITEM({ offerId: product.id, count: $event.count })"
+                        @countChange="
+                            ADD_CART_ITEM({
+                                offerId: product.id,
+                                storeId: product.stock.storeId,
+                                count: $event.count,
+                            })
+                        "
                     />
                     <div class="add-to-cart-modal__panel" v-if="!isTablet">
                         <div class="add-to-cart-modal__panel-info">
                             В корзине {{ $tc('cart.items', cartItemsCount) }} на сумму
-                            {{ productItemsSum }}
+                            <price v-bind="productItemsSum" />
                         </div>
                         <v-button class="btn--outline add-to-cart-modal__panel-btn" @click="onClose">
                             Продолжить покупки
@@ -49,7 +55,8 @@
                                 :old-price="item.oldPrice"
                                 :tags="item.tags"
                                 :rating="item.rating"
-                                @addItem="onAddToCart($event)"
+                                :show-buy-btn="item.stock.qty > 0"
+                                @addItem="onAddToCart(item)"
                                 @preview="onPreview(item.code)"
                             />
                         </li>
@@ -60,7 +67,7 @@
             <div class="add-to-cart-modal__panel" v-if="isTablet">
                 <div class="add-to-cart-modal__panel-info">
                     В корзине {{ $tc('cart.items', cartItemsCount) }} на сумму
-                    {{ productItemsSum }}
+                    <price v-bind="productItemsSum" />
                 </div>
                 <v-link class="btn--outline add-to-cart-modal__panel-link" @click="onClose">
                     Продолжить
@@ -77,6 +84,8 @@
 import VLink from '../controls/VLink/VLink.vue';
 import VButton from '../controls/VButton/VButton.vue';
 import VSpinner from '../controls/VSpinner/VSpinner.vue';
+
+import Price from '../Price/Price.vue';
 
 import CatalogProductCard from '../CatalogProductCard/CatalogProductCard.vue';
 import CartProductCard from '../CartProductCard/CartProductCard.vue';
@@ -106,6 +115,7 @@ export default {
         VButton,
         VSpinner,
 
+        Price,
         GeneralModal,
         CartProductCard,
         CatalogProductCard,
@@ -165,14 +175,15 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: NAME,
                 open: true,
-                state: { offerId: item.id, type: item.type },
+                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
 
         fetchData() {
             const data = this[CART_DATA][this.modalState.type];
             this.cartItem = data ? data.items.find(i => i.p.id === this.modalState.offerId) : null;
-            if (!this.cartItem) this[ADD_CART_ITEM]({ offerId: this.modalState.offerId });
+            if (!this.cartItem)
+                this[ADD_CART_ITEM]({ offerId: this.modalState.offerId, storeId: this.modalState.storeId });
             this[FETCH_RELATIVE_PRODUCTS]({ page: getRandomIntInclusive(1, 4) });
         },
 

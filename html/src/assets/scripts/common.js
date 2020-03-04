@@ -22,8 +22,8 @@ import 'lazysizes/plugins/parent-fit/ls.parent-fit';
 import 'lazysizes/plugins/respimg/ls.respimg';
 import 'lazysizes/plugins/blur-up/ls.blur-up';
 
-import './constants';
-import './enums';
-import './regex';
+import './constants/general';
+import './enums/general';
+import './regex/general';
 
 lazysizes.cfg.blurupMode = 'auto';

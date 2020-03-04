@@ -14,6 +14,7 @@
             <v-svg v-else id="catalog-product-list-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-list-card__controls">
                 <v-button
+                    v-if="showBuyBtn"
                     class="btn--outline catalog-product-list-card__controls-btn"
                     @click.prevent="onBuyButtonClick"
                 >
@@ -91,6 +92,7 @@ export default {
                 return {
                     categoryCodes: [],
                     tags: [],
+                    stocks: { qty: 0 },
                 };
             },
         },
@@ -107,6 +109,11 @@ export default {
     },
 
     computed: {
+        showBuyBtn() {
+            const { stock: { qty = 0 } = { qty: 0 } } = this.item;
+            return qty > 0;
+        },
+
         bigImg() {
             return generatePictureSourcePath(300, 300, this.item.image.id, 'webp');
         },
@@ -127,7 +134,11 @@ export default {
 
     methods: {
         onBuyButtonClick() {
-            this.$emit('addItem', { id: this.item.id, type: this.item.type });
+            this.$emit('addItem', {
+                id: this.item.id,
+                storeId: this.item.stock.storeId,
+                type: this.item.type,
+            });
         },
 
         onPreview() {

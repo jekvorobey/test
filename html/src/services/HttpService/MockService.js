@@ -1,6 +1,7 @@
 import _cloneDeep from 'lodash/cloneDeep';
 import HttpServiceBase from './base';
-import { cartItemTypes, receiveMethods, deliveryMethods, deliveryTypes } from '../../assets/scripts/enums';
+import { cartItemTypes } from '../../assets/scripts/enums/product';
+import { receiveMethods, deliveryMethods, deliveryTypes } from '../../assets/scripts/enums/checkout';
 import { preparePrice, addDays } from '../../util/helpers';
 
 import product1 from '../../assets/images/mock/product1.png';

@@ -7,7 +7,7 @@
 
 <script>
 import { preparePrice } from '../../util/helpers';
-import { currencySymbol } from '../../assets/scripts/enums';
+import { currencySymbol } from '../../assets/scripts/enums/general';
 import './Price.css';
 
 export default {

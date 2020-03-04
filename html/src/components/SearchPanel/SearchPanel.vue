@@ -30,6 +30,7 @@
                                 :old-price="item.oldPrice"
                                 :tags="item.tags"
                                 :rating="item.rating"
+                                :show-buy-btn="item.stock.qty > 0"
                             />
                         </li>
                     </transition-group>

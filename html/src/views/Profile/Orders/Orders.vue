@@ -70,26 +70,28 @@
             <table class="orders-view__table" v-if="!isTabletLg">
                 <colgroup>
                     <col width="20%" />
-                    <col width="15%" />
                     <col width="20%" />
-                    <col width="15%" />
+                    <col width="20%" />
                     <col width="15%" />
                     <col width="15%" />
                 </colgroup>
                 <thead class="orders-view__table-head">
                     <tr class="orders-view__table-tr orders-view__table-tr--header">
                         <th class="orders-view__table-th">
-                            <v-link tag="button" class="orders-view__table-th-link">
+                            <v-link
+                                tag="button"
+                                class="orders-view__table-th-link"
+                                @click="onChangeSort(sortFields.NUMBER)"
+                            >
                                 Номер заказа&nbsp;<v-svg name="arrow-updown" width="16" height="16" />
                             </v-link>
                         </th>
                         <th class="orders-view__table-th">
-                            <v-link tag="button" class="orders-view__table-th-link">
-                                Дата заказа&nbsp;<v-svg name="arrow-updown" width="16" height="16" />
-                            </v-link>
-                        </th>
-                        <th class="orders-view__table-th">
-                            <v-link tag="button" class="orders-view__table-th-link">
+                            <v-link
+                                tag="button"
+                                class="orders-view__table-th-link"
+                                @click="onChangeSort(sortFields.CREATED_AT)"
+                            >
                                 Дата доставки&nbsp;<v-svg name="arrow-updown" width="16" height="16" />
                             </v-link>
                         </th>
@@ -97,14 +99,12 @@
                             Сумма
                         </th>
                         <th class="orders-view__table-th">
-                            <v-link tag="button" class="orders-view__table-th-link">
-                                Статус заказа&nbsp;<v-svg name="arrow-updown" width="16" height="16" />
-                            </v-link>
+                            Статус заказа
                         </th>
                         <th class="orders-view__table-th" />
                     </tr>
                 </thead>
-                <transition-group tag="tbody" name="fade-in" appear class="orders-view__table-body">
+                <tbody class="orders-view__table-body">
                     <tr
                         class="orders-view__table-tr"
                         v-for="order in orders"
@@ -113,7 +113,6 @@
                     >
                         <td class="orders-view__table-td">{{ order.number }}</td>
                         <td class="orders-view__table-td">{{ order.created_at }}</td>
-                        <td class="orders-view__table-td">{{ order.deliveryDate }}</td>
                         <td class="orders-view__table-td">
                             <price v-bind="order.price" />
                         </td>
@@ -137,7 +136,7 @@
                             </v-link>
                         </td>
                     </tr>
-                </transition-group>
+                </tbody>
             </table>
         </div>
 
@@ -153,7 +152,7 @@
                 <info-row class="orders-view__list-item-row" name="Сумма">
                     <price v-bind="order.price" />
                 </info-row>
-                <info-row class="orders-view__list-item-row" name="Дата заказа" :value="order.orderDate" />
+                <info-row class="orders-view__list-item-row" name="Дата заказа" :value="order.created_at" />
                 <info-row class="orders-view__list-item-row" name="Дата доставки" :value="order.deliveryDate" />
 
                 <template v-if="order.status === 'created'">
@@ -181,6 +180,18 @@
                 </template>
             </li>
         </ul>
+
+        <div class="container container--tablet-lg orders-view__controls" v-if="pagesCount > 1">
+            <v-button
+                class="btn--outline orders-view__controls-btn"
+                v-if="activePage < pagesCount"
+                @click="onShowMore"
+                :disabled="showMore"
+            >
+                Показать ещё
+            </v-button>
+            <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
+        </div>
     </section>
 </template>
 
@@ -189,21 +200,32 @@ import VSvg from '../../../components/controls/VSvg/VSvg.vue';
 import VLink from '../../../components/controls/VLink/VLink.vue';
 import VButton from '../../../components/controls/VButton/VButton.vue';
 import VInput from '../../../components/controls/VInput/VInput.vue';
+import VPagination from '../../../components/controls/VPagination/VPagination.vue';
 import VArcCounter from '../../../components/controls/VArcCounter/VArcCounter.vue';
 
 import FilterButton from '../../../components/FilterButton/FilterButton.vue';
 import Price from '../../../components/Price/Price.vue';
 import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
 
+import { $store, $progress, $logger } from '../../../services/ServiceLocator';
+import { mapState, mapActions, mapGetters } from 'vuex';
+
 import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { NAME as ORDERS_MODULE, ORDERS } from '../../../store/modules/Profile/modules/Orders';
+import {
+    NAME as ORDERS_MODULE,
+    ORDERS,
+    ORDER_DIRECTION,
+    ORDER_FIELD,
+    ACTIVE_PAGE,
+} from '../../../store/modules/Profile/modules/Orders';
+import { PAGES_COUNT } from '../../../store/modules/Profile/modules/Orders/getters';
 import { FETCH_ORDERS } from '../../../store/modules/Profile/modules/Orders/actions';
 
-import { orderStatus } from '../../../assets/scripts/enums';
+import { sortDirections } from '../../../assets/scripts/enums/general';
+import { orderStatus, orderPaymentStatus, sortFields } from '../../../assets/scripts/enums/order';
+import { DEFAULT_PAGE } from '../../../assets/scripts/constants/general';
 import '../../../assets/images/sprites/arrow-updown.svg';
 import './Orders.css';
-import { mapState, mapActions } from 'vuex';
-import { $store, $progress, $logger } from '../../../services/ServiceLocator';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
 
@@ -215,6 +237,7 @@ export default {
         VLink,
         VButton,
         VInput,
+        VPagination,
         VArcCounter,
 
         FilterButton,
@@ -224,54 +247,14 @@ export default {
 
     data() {
         return {
+            showMore: false,
             filterModal: false,
-            // orders: [
-            //     {
-            //         id: 124589524,
-            //         orderDate: '2019-08-18',
-            //         deliveryDate: '2019-08-20',
-            //         price: {
-            //             value: 12788,
-            //             currency: 'RUB',
-            //         },
-            //         status: orderStatus.CREATED,
-            //     },
-            //     {
-            //         id: 454654545,
-            //         orderDate: '2019-08-18',
-            //         deliveryDate: '2019-08-20',
-            //         price: {
-            //             value: 12788,
-            //             currency: 'RUB',
-            //         },
-            //         status: orderStatus.PROCESS,
-            //     },
-            //     {
-            //         id: 24823875,
-            //         orderDate: '2019-08-18',
-            //         deliveryDate: '2019-08-20',
-            //         price: {
-            //             value: 12788,
-            //             currency: 'RUB',
-            //         },
-            //         status: orderStatus.DONE,
-            //     },
-            //     {
-            //         id: 123547899,
-            //         orderDate: '2019-08-18',
-            //         deliveryDate: '2019-08-20',
-            //         price: {
-            //             value: 12788,
-            //             currency: 'RUB',
-            //         },
-            //         status: orderStatus.CANCEL,
-            //     },
-            // ],
         };
     },
 
     computed: {
-        ...mapState(ORDERS_MODULE_PATH, [ORDERS]),
+        ...mapState(ORDERS_MODULE_PATH, [ORDERS, ORDER_DIRECTION, ORDER_FIELD, ACTIVE_PAGE]),
+        ...mapGetters(ORDERS_MODULE_PATH, [PAGES_COUNT]),
 
         isTabletLg() {
             return this.$mq.tabletLg;
@@ -280,6 +263,34 @@ export default {
 
     methods: {
         ...mapActions(ORDERS_MODULE_PATH, [FETCH_ORDERS]),
+
+        onShowMore() {
+            this.showMore = true;
+            this.$router.replace({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: this[ACTIVE_PAGE] + 1 },
+            });
+        },
+
+        onPageChanged(page) {
+            this.showMore = false;
+            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+        },
+
+        onChangeSort(name) {
+            let orderField = name;
+            let orderDirection = null;
+
+            if (this[ORDER_FIELD] !== name) orderDirection = sortDirections.DESC;
+            else
+                orderDirection =
+                    this[ORDER_DIRECTION] === sortDirections.DESC ? sortDirections.ASC : sortDirections.DESC;
+
+            this.$router.replace({
+                name: 'Orders',
+                query: { orderField, orderDirection, page: DEFAULT_PAGE },
+            });
+        },
 
         onOpenOrder(id) {
             this.$router.push({ name: 'OrderDetails', params: { orderId: id } });
@@ -293,7 +304,7 @@ export default {
 
         const {
             fullPath,
-            query: { page = 1, orderField = 'number', orderDirection = 'desc' },
+            query: { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC },
         } = to;
 
         // регистрируем модуль, если такого нет
@@ -318,14 +329,12 @@ export default {
                 .catch(thrown => {
                     if (thrown && thrown.isCancel === true) return next();
                     $progress.fail();
-                    $logger.error('beforeRouteEnter', thrown);
-                    $progress.finish();
-                    next();
+                    next(false);
                 });
         }
     },
 
-    beforeRouteUpdate(to, from, next) {
+    async beforeRouteUpdate(to, from, next) {
         // вызывается, когда маршрут, что рендерит этот компонент, изменился,
         // но этот компонент будет повторно использован в новом маршруте.
         // Например, для маршрута с динамическими параметрами `/foo/:id`, когда мы
@@ -333,10 +342,25 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        // if (this.showMore) {
-        //     this.fetchCatalog(to, from, this.showMore);
-        // } else this.debounce_fetchCatalog(to, from);
-        next();
+        const {
+            query: { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC },
+        } = to;
+
+        try {
+            this.$progress.start();
+            await this[FETCH_ORDERS]({ page, orderField, orderDirection, showMore: this.showMore });
+            this.$progress.finish();
+            next();
+        } catch (error) {
+            this.$progress.fail();
+            next(false);
+        }
+
+        this.showMore = false;
+    },
+
+    beforeCreate() {
+        this.sortFields = sortFields;
     },
 };
 </script>

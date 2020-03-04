@@ -43,8 +43,8 @@ import { FETCH_CART_DATA, CLEAR_CART_DATA } from '../store/modules/Cart/actions'
 import { NAME as AUTH_MODULE, HAS_SESSION } from '../store/modules/Auth';
 import { CHECK_SESSION, LOGIN_BY_PASSWORD } from '../store/modules/Auth/actions';
 
-import { MIN_SCROLL_VALUE, SCROLL_DEBOUCE_TIME } from '../assets/scripts/constants';
-import { eventName, interval } from '../assets/scripts/enums';
+import { MIN_SCROLL_VALUE, SCROLL_DEBOUCE_TIME } from '../assets/scripts/constants/general';
+import { eventName, interval } from '../assets/scripts/enums/general';
 import { mapState, mapActions } from 'vuex';
 
 export default {

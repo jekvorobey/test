@@ -37,7 +37,7 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
 import { $dadata } from '../../services/ServiceLocator';
-import { suggestionTypes } from '../../assets/scripts/enums';
+import { suggestionTypes } from '../../assets/scripts/enums/suggestions';
 import '../../assets/images/sprites/search-middle.svg';
 import './CitySelectionModal.css';
 

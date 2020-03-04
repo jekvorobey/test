@@ -35,6 +35,7 @@
                         :old-price="item.oldPrice"
                         :tags="item.tags"
                         :rating="item.rating"
+                        :show-buy-btn="item.stock.qty > 0"
                         @addItem="onAddToCart(item)"
                         @preview="onPreview(item.code)"
                     />
@@ -66,7 +67,7 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 import { NAME as FEATURED_MODULE, FEATURED_PRODUCTS } from '../../store/modules/Featured';
 import { FETCH_FEATURED_PRODUCTS } from '../../store/modules/Featured/actions';
 
-import { breakpoints } from '../../assets/scripts/enums';
+import { breakpoints } from '../../assets/scripts/enums/general';
 
 import './NotFound.css';
 
@@ -144,7 +145,7 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: ADD_TO_CART_MODAL_NAME,
                 open: true,
-                state: { offerId: item.id, type: item.type },
+                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
     },

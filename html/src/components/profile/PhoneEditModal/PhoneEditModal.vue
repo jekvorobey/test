@@ -93,8 +93,8 @@ import { NAME as CABINET_MODULE } from '../../../store/modules/Profile/modules/C
 import { SEND_CODE, UPDATE_CREDENTIAL } from '../../../store/modules/Profile/modules/Cabinet/actions';
 
 import _cloneDeep from 'lodash/cloneDeep';
-import { phoneMaskOptions } from '../../../assets/scripts/settings';
-import { verificationCodeType } from '../../../assets/scripts/enums';
+import { phoneMaskOptions } from '../../../assets/scripts/settings/general';
+import { verificationCodeType } from '../../../assets/scripts/enums/auth';
 import { rawPhone } from '../../../util/helpers';
 import './PhoneEditModal.css';
 

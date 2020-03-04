@@ -1,7 +1,8 @@
 import { $logger } from '../../../services/ServiceLocator';
-import { productGroupTypes } from '../../../assets/scripts/enums';
+import { productGroupTypes, productGroupBase } from '../../../assets/scripts/enums/product';
 import { storeErrorHandler } from '../../../util/store';
 import { getAllActiveCategories } from '../../../util/catalog';
+
 import { getCatalogItems, getCategories, getBanners, getBrand, getFilters, getProductGroup } from '../../../api';
 import {
     SET_FILTERS,
@@ -17,11 +18,6 @@ import {
     SET_ENTITY_CODE,
     APPLY_DATA,
 } from './mutations';
-
-const productGroupBase = {
-    FILTERS: 'filters',
-    PRODUCTS: 'products',
-};
 
 const FETCH_FILTERS = 'FETCH_FILTERS';
 const FETCH_ITEMS = 'FETCH_ITEMS';

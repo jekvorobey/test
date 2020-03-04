@@ -145,7 +145,7 @@ import { NAME as GEO_MODULE, SELECTED_CITY } from '../../store/modules/Geolocati
 import { NAME as MODAL_MODULE } from '../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
-import { productGroupTypes } from '../../assets/scripts/enums';
+import { productGroupTypes } from '../../assets/scripts/enums/product';
 import '../../assets/images/sprites/socials/viber-bw.svg';
 import '../../assets/images/sprites/socials/whatsup-bw.svg';
 import '../../assets/images/sprites/socials/telegram-bw.svg';

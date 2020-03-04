@@ -17,8 +17,8 @@
             <div class="text-grey product-cart-panel__info-bonus">+{{ $t('product.bonus', { n: bonus }) }}</div>
         </div>
         <div class="product-cart-panel__controls">
-            <v-button class="product-cart-panel__controls-btn" @click="onAddToCart">
-                Добавить в корзину
+            <v-button class="product-cart-panel__controls-btn" @click="onAddToCart" :disabled="!canBuy">
+                {{ canBuy ? 'Добавить в корзину' : 'Нет в наличии' }}
             </v-button>
             <v-link class="product-cart-panel__controls-wishlist" @click="onAddToWishlist">
                 <v-svg id="product-wishlist" name="wishlist-middle" width="20" height="18" />
@@ -64,6 +64,11 @@ export default {
 
         bonus: {
             type: Number,
+        },
+
+        canBuy: {
+            type: Boolean,
+            default: false,
         },
     },
 
