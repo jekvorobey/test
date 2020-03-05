@@ -2,7 +2,6 @@
     <nav class="header-navigation-panel">
         <v-burger
             class="header-navigation-panel__burger"
-            tag="button"
             :is-open="isMenuOpen"
             @isOpenChanged="SET_MENU_OPEN($event)"
         />
