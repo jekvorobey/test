@@ -12,7 +12,13 @@
         </div>
 
         <transition name="fade">
-            <div class="v-header__mask" v-if="showMask" @touchstart.self.prevent @touchmove.self.prevent>
+            <div
+                class="v-header__mask"
+                v-if="showMask"
+                @touchstart.self.prevent="onCloseMenu"
+                @click.self.prevent="onCloseMenu"
+                @touchmove.self.prevent
+            >
                 <search-panel v-if="search" />
                 <nav-panel v-else-if="isMenuOpen" />
             </div>
@@ -24,10 +30,7 @@
 
         <transition name="fade-in">
             <login-modal key="login" v-if="isLoginOpen" />
-            <registration-modal
-                key="register"
-                v-else-if="isRegistrationOpen"
-            />
+            <registration-modal key="register" v-else-if="isRegistrationOpen" />
         </transition>
 
         <transition name="fade-in">
@@ -100,11 +103,15 @@ export default {
 
     methods: {
         ...mapActions([SET_MENU_OPEN]),
+
+        onCloseMenu() {
+            this[SET_MENU_OPEN](false);
+        },
     },
 
     watch: {
         search(value) {
-            if (value) this[SET_MENU_OPEN](false);
+            if (value) this.onCloseMenu();
         },
     },
 };

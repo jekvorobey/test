@@ -14,7 +14,6 @@
                 :type="type"
                 :autocomplete="autocomplete"
                 :aria-describedby="`${inputId}-alert`"
-                @keydown.enter.prevent
             />
             <v-button
                 v-if="!$attrs.disabled"
