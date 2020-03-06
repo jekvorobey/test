@@ -210,6 +210,16 @@ export function getProfileOrders(sortDirection, sortKey, pageNum, perPage) {
     });
 }
 
+export function getProfileOrder(id) {
+    return $http.get(`/v1/lk/order/${id}`);
+}
+
+export function getProfileOrderPaymentLink(id, backUrl) {
+    return $http.post(`/v1/lk/order/${id}/payment/${id}/start`, {
+        return_url: backUrl,
+    });
+}
+
 // search
 
 export function search(data) {

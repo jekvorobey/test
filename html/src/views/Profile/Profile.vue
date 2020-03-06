@@ -10,7 +10,7 @@
                         {{ $t('profile.routes.Cabinet') }}
                     </breadcrumb-item>
                     <breadcrumb-item
-                        v-if="$route.name !== 'Cabinet' && breadcrumbs.length === 0"
+                        v-if="$route.name !== 'Cabinet' && breadcrumbs && breadcrumbs.length === 0"
                         :key="$route.name"
                         :to="$route.path"
                     >
@@ -49,7 +49,7 @@
                         {{ $t('profile.routes.Cabinet') }}
                     </breadcrumb-item>
                     <breadcrumb-item
-                        v-if="$route.name !== 'Cabinet' && breadcrumbs.length === 0"
+                        v-if="$route.name !== 'Cabinet' && breadcrumbs && breadcrumbs.length === 0"
                         :key="$route.name"
                         :to="$route.path"
                     >

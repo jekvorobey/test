@@ -70,12 +70,22 @@ export default {
                 document.body.scrollTop > MIN_SCROLL_VALUE || document.documentElement.scrollTop > MIN_SCROLL_VALUE
             );
         },
+
+        startSessionTimer() {
+            this.stopSessionTimer();
+            this.sessionTimer = setInterval(this[CHECK_SESSION], interval.MINUTE);
+        },
+
+        stopSessionTimer() {
+            clearInterval(this.sessionTimer);
+        },
     },
 
     watch: {
         [HAS_SESSION](value) {
             if (value) this[FETCH_CART_DATA]();
             else this[CLEAR_CART_DATA]();
+            this.startSessionTimer();
         },
     },
 
@@ -91,7 +101,7 @@ export default {
     },
 
     beforeMount() {
-        this.sessionTimer = setInterval(this[CHECK_SESSION], interval.MINUTE);
+        this.startSessionTimer();
     },
 
     mounted() {
@@ -105,7 +115,7 @@ export default {
     },
 
     beforeDestroy() {
-        clearInterval(this.sessionTimer);
+        this.stopSessionTimer();
     },
 };
 </script>

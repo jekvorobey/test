@@ -6,10 +6,13 @@ import { sortFields } from '../../../../../assets/scripts/enums/order';
 import { DEFAULT_PAGE } from '../../../../../assets/scripts/constants/general';
 
 export const NAME = 'orders';
-export const LOAD = 'load';
+export const LOAD_PATH = 'loadPath';
 
 export const ORDERS = 'orders';
 export const ORDER_DETAILS = 'orderDetails';
+
+export const ORDER = 'order';
+export const DELIVERIES = 'deliveries';
 
 export const ORDER_DIRECTION = 'orderDirection';
 export const ORDER_FIELD = 'orderField';
@@ -22,10 +25,10 @@ export default {
     namespaced: true,
 
     state: {
-        [LOAD]: false,
+        [LOAD_PATH]: '',
 
         [ORDERS]: [],
-        [ORDER_DETAILS]: {},
+        [ORDER_DETAILS]: { [ORDER]: {}, [DELIVERIES]: [] },
 
         [ORDER_DIRECTION]: sortDirections.DESC,
         [ORDER_FIELD]: sortFields.NUMBER,

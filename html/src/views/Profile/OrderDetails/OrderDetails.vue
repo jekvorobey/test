@@ -5,29 +5,58 @@
                 <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем
                 заказам
             </v-link>
-            <h2 class="order-details-view__hl">{{ $t('profile.format.order', { id: orderId }) }}</h2>
+            <h2 class="order-details-view__hl">{{ $t('profile.format.order', { id: order.number }) }}</h2>
 
             <div class="order-details-view__details">
                 <div class="order-details-view__details-info">
-                    <info-row class="order-details-view__details-row" name="Сумма" value="15 780 ₽" />
-                    <info-row class="order-details-view__details-row" name="Статус заказа" value="Ожидается оплата" />
-                    <info-row class="order-details-view__details-row" name="Дата заказа" value="18 августа 2019" />
-                    <info-row class="order-details-view__details-row" name="Дата доставки" value="20 августа 2019" />
+                    <info-row class="order-details-view__details-row" name="Сумма">
+                        <price class="text-bold" v-bind="order.price" />
+                    </info-row>
                     <info-row
                         class="order-details-view__details-row"
+                        :class="orderStatusClass"
+                        name="Статус заказа"
+                        :value="orderStatus"
+                    />
+                    <info-row
+                        v-if="deliveryMethod"
+                        class="order-details-view__details-row"
+                        name="Способ доставки"
+                        :value="deliveryMethod"
+                    />
+                    <info-row
+                        class="order-details-view__details-row"
+                        name="Дата заказа"
+                        :value="formatDate(order.created_at)"
+                    />
+                    <info-row
+                        v-if="deliveryDate"
+                        class="order-details-view__details-row"
+                        name="Дата доставки"
+                        :value="deliveryDate"
+                    />
+                    <info-row
+                        v-if="deliveryAddress"
+                        class="order-details-view__details-row"
                         name="Адрес доставки"
-                        value="Москва, г. Зеленоград, Центральный проспект, к. 305"
+                        :value="deliveryAddress"
                     />
                 </div>
                 <div class="order-details-view__details-controls">
-                    <v-button class="order-details-view__details-controls-btn">Оплатить заказ</v-button>
-                    <v-button class="btn--outline order-details-view__details-controls-btn">Повторить заказ</v-button>
-                    <v-link class="order-details-view__details-controls-link">Оформить возврат</v-link>
+                    <v-button
+                        v-if="canPay"
+                        class="order-details-view__details-controls-btn"
+                        @click="onContinuePayment(order.id)"
+                    >
+                        Оплатить заказ
+                    </v-button>
+                    <!-- <v-button class="btn--outline order-details-view__details-controls-btn">Повторить заказ</v-button>
+                    <v-link class="order-details-view__details-controls-link">Оформить возврат</v-link> -->
                 </div>
             </div>
         </div>
 
-        <info-panel class="order-details-view__panel" header="Корзина">
+        <!-- <info-panel class="order-details-view__panel" header="Корзина">
             <div class="container container--tablet-lg order-details-view__container">
                 <ul class="order-details-view__panel-list">
                     <package-product-card
@@ -42,27 +71,55 @@
                     />
                 </ul>
             </div>
-        </info-panel>
+        </info-panel> -->
 
         <info-panel
             class="order-details-view__panel"
             v-for="delivery in deliveries"
-            :key="delivery.id"
-            :header="`Доставка №${delivery.id}`"
+            :key="delivery.number"
+            :header="`Доставка №${delivery.number}`"
         >
             <div class="container container--tablet-lg">
-                <info-row class="order-details-view__panel-row" name="Дата доставки" :value="delivery.date" />
-                <info-row class="order-details-view__panel-row" name="Адрес доставки" :value="delivery.address" />
+                <template v-if="deliveries.length > 1">
+                    <info-row
+                        class="order-details-view__panel-row"
+                        name="Способ доставки"
+                        :value="formatDeliveryMethod(delivery.delivery_method)"
+                    />
+                    <info-row
+                        class="order-details-view__panel-row"
+                        name="Дата доставки"
+                        :value="formatDate(delivery.delivery_at)"
+                    />
+                    <info-row
+                        class="order-details-view__panel-row"
+                        name="Статус доставки"
+                        :class="getDeliveryStatusClass(delivery.status)"
+                        :value="formatDeliveryStatus(delivery.status)"
+                    />
+                    <info-row
+                        class="order-details-view__panel-row"
+                        name="Адрес доставки"
+                        :value="formatAddress(delivery)"
+                    />
+                </template>
+
+                <info-row
+                    class="order-details-view__panel-row"
+                    name="Количество коробок"
+                    :value="formatPackageCount(delivery.package_count)"
+                />
+
                 <ul class="order-details-view__panel-list">
                     <package-product-card
                         class="order-details-view__panel-item"
-                        v-for="item in delivery.items"
-                        :key="item.id"
-                        :name="item.name"
-                        :image="item.image"
-                        :price="item.price"
-                        :old-price="item.oldPrice"
-                        :count="item.count"
+                        v-for="product in delivery.products"
+                        :key="product.id"
+                        :name="product.name"
+                        :image="product.image"
+                        :price="product.price"
+                        :old-price="product.cost"
+                        :count="product.qty"
                     />
                 </ul>
             </div>
@@ -76,22 +133,47 @@ import VLink from '../../../components/controls/VLink/VLink.vue';
 import VButton from '../../../components/controls/VButton/VButton.vue';
 import VInput from '../../../components/controls/VInput/VInput.vue';
 
+import Price from '../../../components/Price/Price.vue';
 import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
 
 import PackageProductCard from '../../../components/PackageProductCard/PackageProductCard.vue';
 
+import { $store, $progress, $logger } from '../../../services/ServiceLocator';
 import { mapActions, mapState } from 'vuex';
+
+import { LOCALE } from '../../../store';
 
 import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '../../../store/modules/Profile/actions';
+
+import { NAME as ORDERS_MODULE, ORDER_DETAILS, ORDER, DELIVERIES } from '../../../store/modules/Profile/modules/Orders';
+import {
+    FETCH_ORDER_DETAILS,
+    SET_LOAD_PATH,
+    GET_ORDER_PAYMENT_LINK,
+} from '../../../store/modules/Profile/modules/Orders/actions';
+
+import { toAddressString } from '../../../util/address';
+import { orderPaymentStatus, orderStatus, deliveryStatus } from '../../../assets/scripts/enums/order';
+import { orderDateLocaleOptions } from '../../../assets/scripts/settings/profile';
+import '../../../assets/images/sprites/arrow-small.svg';
+import './OrderDetails.css';
 
 import mockProduct1 from '../../../assets/images/mock/orderPackageProduct1.png';
 import mockProduct2 from '../../../assets/images/mock/orderPackageProduct2.png';
 import mockProduct3 from '../../../assets/images/mock/orderPackageProduct3.png';
 import mockProduct4 from '../../../assets/images/mock/orderPackageProduct4.png';
-import '../../../assets/images/sprites/arrow-small.svg';
-import './OrderDetails.css';
+import { getOrderStatusColorClass, getDeliveryStatusColorClass } from '../../../util/order';
+
+const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
+
+function updateBreadcrumbs(vm, name, params, number) {
+    vm[UPDATE_BREADCRUMB]([
+        { name: vm.$t('profile.routes.Orders'), to: { name: 'Orders' } },
+        { name: vm.$t('profile.format.order', { id: number }), to: { name, params } },
+    ]);
+}
 
 export default {
     name: 'order-details',
@@ -102,145 +184,56 @@ export default {
         VButton,
         VInput,
 
+        Price,
         InfoPanel,
         InfoRow,
 
         PackageProductCard,
     },
 
-    data() {
-        return {
-            cartItems: [
-                {
-                    id: 1,
-                    name: "Губная помада L'Oreal Paris Color Riche by J'Lo's, 103, розовый",
-                    description: 'Цвет: 27, Bruised Plum',
-                    count: 1,
-                    image: mockProduct1,
-
-                    price: {
-                        value: 3900,
-                        currency: 'RUB',
-                    },
-
-                    oldPrice: {
-                        value: 4600,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 2,
-                    name: 'Matrix Спрей для укладки волос Total results Wonder boost, 250 мл',
-                    description: null,
-                    count: 2,
-                    image: mockProduct2,
-
-                    price: {
-                        value: 1168,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 3,
-                    name: 'Wella Professionals Koleston Perfect Me+ Deep Browns Краска для волос, 60 мл',
-                    description: null,
-                    count: 1,
-                    image: mockProduct3,
-
-                    price: {
-                        value: 1899,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 4,
-                    name: 'Matrix кондиционер Total Results Moisture Me Rich, 300 мл',
-                    description: null,
-                    count: 1,
-                    image: mockProduct4,
-
-                    price: {
-                        value: 599,
-                        currency: 'RUB',
-                    },
-                },
-            ],
-            deliveries: [
-                {
-                    id: '124589524-1',
-                    date: '20 августа 2019',
-                    address: 'Москва, г. Зеленоград, Центральный проспект, к. 305',
-                    items: [
-                        {
-                            id: 1,
-                            name: "Губная помада L'Oreal Paris Color Riche by J'Lo's, 103, розовый",
-                            description: 'Цвет: 27, Bruised Plum',
-                            count: 1,
-                            image: mockProduct1,
-
-                            price: {
-                                value: 3900,
-                                currency: 'RUB',
-                            },
-
-                            oldPrice: {
-                                value: 4600,
-                                currency: 'RUB',
-                            },
-                        },
-                        {
-                            id: 2,
-                            name: 'Matrix Спрей для укладки волос Total results Wonder boost, 250 мл',
-                            description: null,
-                            count: 2,
-                            image: mockProduct2,
-
-                            price: {
-                                value: 1168,
-                                currency: 'RUB',
-                            },
-                        },
-                    ],
-                },
-                {
-                    id: '124589524-2',
-                    date: '22 августа 2019',
-                    address: 'Москва, г. Зеленоград, Центральный проспект, к. 305',
-                    items: [
-                        {
-                            id: 3,
-                            name: 'Wella Professionals Koleston Perfect Me+ Deep Browns Краска для волос, 60 мл',
-                            description: null,
-                            count: 1,
-                            image: mockProduct3,
-
-                            price: {
-                                value: 1899,
-                                currency: 'RUB',
-                            },
-                        },
-                        {
-                            id: 4,
-                            name: 'Matrix кондиционер Total Results Moisture Me Rich, 300 мл',
-                            description: null,
-                            count: 1,
-                            image: mockProduct4,
-
-                            price: {
-                                value: 599,
-                                currency: 'RUB',
-                            },
-                        },
-                    ],
-                },
-            ],
-        };
-    },
-
     computed: {
-        ...mapState('route', {
-            orderId: state => state.params && state.params.orderId,
+        ...mapState([LOCALE]),
+        ...mapState(ORDERS_MODULE_PATH, {
+            [ORDER]: state => state[ORDER_DETAILS][ORDER] || {},
+            [DELIVERIES]: state => state[ORDER_DETAILS][DELIVERIES] || [],
         }),
+
+        canPay() {
+            const { payment_status = 3 } = this[ORDER];
+            return payment_status === orderPaymentStatus.NOT_PAID;
+        },
+
+        orderStatusClass() {
+            return getOrderStatusColorClass(this.order.status, this.order.canceled);
+        },
+
+        deliveryMethod() {
+            const deliveries = this[DELIVERIES];
+            if (deliveries.length === 1) {
+                const { delivery_method } = deliveries[0];
+                return this.formatDeliveryMethod(delivery_method);
+            }
+        },
+
+        deliveryDate() {
+            const deliveries = this[DELIVERIES];
+            if (deliveries.length === 1) {
+                const { delivery_at } = deliveries[0];
+                return this.formatDate(delivery_at);
+            }
+        },
+
+        deliveryAddress() {
+            const deliveries = this[DELIVERIES];
+            if (deliveries.length === 1) {
+                return this.formatAddress(deliveries[0]);
+            }
+        },
+
+        orderStatus() {
+            const { status } = this[ORDER];
+            return this.$t(`orderStatus.${status}`);
+        },
 
         backUrl() {
             return { name: 'Orders' };
@@ -249,30 +242,80 @@ export default {
 
     methods: {
         ...mapActions(PROFILE_MODULE, [UPDATE_BREADCRUMB]),
+        ...mapActions(ORDERS_MODULE_PATH, [FETCH_ORDER_DETAILS, SET_LOAD_PATH, GET_ORDER_PAYMENT_LINK]),
+
+        async onContinuePayment(orderId) {
+            const backUrl = `${document.location.origin}/thank-you`;
+            const url = await this[GET_ORDER_PAYMENT_LINK]({ id: orderId, backUrl });
+            document.location.href = url;
+        },
+
+        getDeliveryStatusClass(status) {
+            return getDeliveryStatusColorClass(status);
+        },
+
+        formatDeliveryStatus(status) {
+            return this.$t(`deliveryStatus.${status}`);
+        },
+
+        formatAddress(delivery) {
+            const { delivery_address, point_address } = delivery;
+            return toAddressString(delivery_address || point_address);
+        },
+
+        formatDate(date) {
+            if (typeof date !== 'string') return;
+            const obj = new Date(date.split(' ')[0]);
+            return obj.toLocaleDateString(this[LOCALE], orderDateLocaleOptions);
+        },
+
+        formatPackageCount(count) {
+            return this.$t('profile.format.packageCount', { n: count });
+        },
+
+        formatDeliveryMethod(deliveryMethodId) {
+            return this.$t(`deliveryMethod.${deliveryMethodId}`);
+        },
     },
 
     beforeRouteEnter(to, from, next) {
-        const { name, params } = to;
-        next(vm => {
-            vm[UPDATE_BREADCRUMB]([
-                { name: vm.$t('profile.routes.Orders'), to: { name: 'Orders' } },
-                { name: vm.$t('profile.format.order', { id: params.orderId }), to: { name, params } },
-            ]);
-        });
+        const { fullPath, name, params } = to;
+        const { loadPath, orderDetails } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
+
+        if (loadPath === fullPath) next(vm => updateBreadcrumbs(vm, name, params, orderDetails.order.number));
+        else {
+            $progress.start();
+            $store
+                .dispatch(`${ORDERS_MODULE_PATH}/${FETCH_ORDER_DETAILS}`, params.orderId)
+                .then(({ number }) => {
+                    $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                    next(vm => {
+                        $progress.finish();
+                        updateBreadcrumbs(vm, name, params, number);
+                    });
+                })
+                .catch(error =>
+                    next(vm => {
+                        $progress.fail();
+                        updateBreadcrumbs(vm, name, params);
+                    })
+                );
+        }
     },
 
     beforeRouteUpdate(to, from, next) {
         const { name, params } = to;
 
-        this[UPDATE_BREADCRUMB]([
-            { name: vm.$t('profile.routes.Orders'), to: { name: 'Orders' } },
-            { name: vm.$t('profile.format.order', { id: params.orderId }), to: { name, params } },
-        ]);
-        next();
-    },
-
-    beforeRouteLeave(to, from, next) {
-        this[UPDATE_BREADCRUMB]([]);
+        this.$progress.start();
+        this[FETCH_ORDER_DETAILS](params.orderId)
+            .then(({ number }) => {
+                this.$progress.finish();
+                updateBreadcrumbs(this, name, params, number);
+            })
+            .catch(error => {
+                this.$progress.fail();
+                updateBreadcrumbs(this, name, params);
+            });
         next();
     },
 };

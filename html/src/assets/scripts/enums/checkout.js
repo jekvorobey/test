@@ -8,8 +8,8 @@ export const discountType = Object.freeze({
 
 export const receiveMethods = Object.freeze({
     DELIVERY: 1,
-    EXPRESS: 2,
-    PICKUP: 3,
+    PICKUP: 2,
+    EXPRESS: 3,
 });
 
 export const deliveryMethods = Object.freeze({

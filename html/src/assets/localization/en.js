@@ -2,7 +2,7 @@ import flatPickrEn from 'flatpickr/dist/l10n/default';
 import { receiveMethods } from '../scripts/enums/checkout';
 import { genderType } from '../scripts/enums/profile';
 import { socials } from '../scripts/enums/general';
-import { orderStatus } from '../scripts/enums/order';
+import { orderStatus, deliveryStatus } from '../scripts/enums/order';
 
 const flatpickrLocale = flatPickrEn;
 const main = {
@@ -57,10 +57,47 @@ const main = {
         },
     },
 
+    orderStatus: {
+        [orderStatus.CREATED]: 'Created',
+        [orderStatus.AWAITING_CHECK]: 'Awaiting Check',
+        [orderStatus.IN_PROCESSING]: 'In Processing',
+        [orderStatus.CHECKING]: 'Checking',
+        [orderStatus.TRANSFERRED_TO_DELIVERY]: 'Transferred to Delivery',
+        [orderStatus.DELIVERING]: 'In Delivery',
+        [orderStatus.READY_FOR_RECIPIENT]: 'Ready for Recipient',
+        [orderStatus.DONE]: 'Done',
+        [orderStatus.RETURNED]: 'Returned',
+        [orderStatus.PRE_ORDER]: 'Preorder',
+    },
+
+    deliveryStatus: {
+        [deliveryStatus.STATUS_CREATED]: 'Created',
+
+        [deliveryStatus.STATUS_ON_POINT_IN]: 'Accepted at the Warehouse in the use of the Shipment',
+        [deliveryStatus.STATUS_ON_WAY]: 'On the way',
+        [deliveryStatus.STATUS_ON_POINT_OUT]: 'Arrived at the Warehouse at destination',
+        [deliveryStatus.STATUS_DELIVERING]: 'Transferred to destination',
+        [deliveryStatus.STATUS_READY_FOR_RECIPIENT]: 'Ready for Recipient',
+        [deliveryStatus.STATUS_DONE]: 'Done',
+
+        [deliveryStatus.STATUS_RETURNED_FROM_DELIVERY]: 'Returned from Delivery',
+        [deliveryStatus.STATUS_PARTIAL_RETURN]: 'Partial Return',
+        [deliveryStatus.STATUS_RETURN_READY]: 'Return prepared',
+        [deliveryStatus.STATUS_RETURNING]: 'Returning to sender',
+        [deliveryStatus.STATUS_RETURNED]: 'Returned to sender',
+
+        [deliveryStatus.STATUS_LOST]: 'Lost',
+        [deliveryStatus.STATUS_PROBLEM]: 'Problem arrived',
+        [deliveryStatus.STATUS_CANCEL]: 'Canceled',
+
+        [deliveryStatus.STATUS_UNKNOWN]: 'Unknown',
+        [deliveryStatus.STATUS_NA]: 'n/a',
+    },
+
     deliveryMethod: {
         [receiveMethods.DELIVERY]: 'Delivery',
-        [receiveMethods.EXPRESS]: 'Express delivery',
         [receiveMethods.PICKUP]: 'Pickup',
+        [receiveMethods.EXPRESS]: 'Express delivery',
     },
 
     genderType: {
@@ -153,18 +190,7 @@ const main = {
             order: 'Order №{id}',
             messages: 'Messages ({n})',
             referal: 'Referal №{id}',
-            orderStatus: {
-                [orderStatus.CREATED]: 'Created',
-                [orderStatus.AWAITING_CHECK]: 'Awaiting Check',
-                [orderStatus.IN_PROCESSING]: 'In Process',
-                [orderStatus.CHECKING]: 'Checking',
-                [orderStatus.TRANSFERRED_TO_DELIVERY]: 'Transferred To Delivery',
-                [orderStatus.DELIVERING]: 'Delivering',
-                [orderStatus.READY_FOR_RECIPIENT]: 'Ready for Recipient',
-                [orderStatus.DONE]: 'Done',
-                [orderStatus.RETURNED]: 'Returned',
-                [orderStatus.PRE_ORDER]: 'Preorder',
-            },
+            packageCount: '{n} pcs.',
         },
 
         groups: {

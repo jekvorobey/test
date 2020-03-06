@@ -69,10 +69,10 @@
 
             <table class="orders-view__table" v-if="!isTabletLg">
                 <colgroup>
-                    <col width="20%" />
-                    <col width="20%" />
-                    <col width="20%" />
                     <col width="15%" />
+                    <col width="20%" />
+                    <col width="20%" />
+                    <col width="20%" />
                     <col width="15%" />
                 </colgroup>
                 <thead class="orders-view__table-head">
@@ -83,7 +83,20 @@
                                 class="orders-view__table-th-link"
                                 @click="onChangeSort(sortFields.NUMBER)"
                             >
-                                Номер заказа&nbsp;<v-svg name="arrow-updown" width="16" height="16" />
+                                Номер заказа&nbsp;
+                                <v-svg
+                                    v-if="orderField !== sortFields.NUMBER"
+                                    name="arrow-updown"
+                                    width="16"
+                                    height="16"
+                                />
+                                <v-svg
+                                    v-else-if="orderDirection === sortDirections.DESC"
+                                    name="arrow-down"
+                                    width="16"
+                                    height="16"
+                                />
+                                <v-svg v-else class="icon--rotate-deg180" name="arrow-down" width="16" height="16" />
                             </v-link>
                         </th>
                         <th class="orders-view__table-th">
@@ -92,7 +105,20 @@
                                 class="orders-view__table-th-link"
                                 @click="onChangeSort(sortFields.CREATED_AT)"
                             >
-                                Дата доставки&nbsp;<v-svg name="arrow-updown" width="16" height="16" />
+                                Дата заказа&nbsp;
+                                <v-svg
+                                    v-if="orderField !== sortFields.CREATED_AT"
+                                    name="arrow-updown"
+                                    width="16"
+                                    height="16"
+                                />
+                                <v-svg
+                                    v-else-if="orderDirection === sortDirections.DESC"
+                                    name="arrow-down"
+                                    width="16"
+                                    height="16"
+                                />
+                                <v-svg v-else class="icon--rotate-deg180" name="arrow-down" width="16" height="16" />
                             </v-link>
                         </th>
                         <th class="orders-view__table-th">
@@ -112,18 +138,24 @@
                         @click="onOpenOrder(order.id)"
                     >
                         <td class="orders-view__table-td">{{ order.number }}</td>
-                        <td class="orders-view__table-td">{{ order.created_at }}</td>
+                        <td class="orders-view__table-td">{{ formatDate(order.created_at) }}</td>
                         <td class="orders-view__table-td">
                             <price v-bind="order.price" />
                         </td>
                         <td class="orders-view__table-td">
-                            <v-button class="btn--outline" v-if="order.status === 'created'" @click.stop>
+                            <v-button
+                                class="btn--outline"
+                                v-if="order.payment_status === orderPaymentStatus.NOT_PAID"
+                                @click.stop="onContinuePayment(order.id)"
+                            >
                                 Оплатить
                             </v-button>
-                            <span v-else>{{ $t(`profile.format.orderStatus.${order.status}`) }}</span>
+                            <span :class="getOrderStatusClass(order)" v-else>
+                                {{ $t(`orderStatus.${order.status}`) }}
+                            </span>
                         </td>
                         <td class="orders-view__table-td">
-                            <v-link
+                            <!-- <v-link
                                 v-if="order.status === 'created'"
                                 class="orders-view__table-td-link"
                                 tag="button"
@@ -133,7 +165,7 @@
                             </v-link>
                             <v-link v-else class="orders-view__table-td-link" tag="button" @click.stop>
                                 Повторить
-                            </v-link>
+                            </v-link> -->
                         </td>
                     </tr>
                 </tbody>
@@ -161,22 +193,22 @@
                             Оплатить
                         </v-button>
                     </info-row>
-                    <info-row class="orders-view__list-item-row">
+                    <!-- <info-row class="orders-view__list-item-row">
                         <v-link tag="button" @click.stop>
                             Отменить
                         </v-link>
-                    </info-row>
+                    </info-row> -->
                 </template>
 
                 <template v-else>
                     <info-row class="orders-view__list-item-row" name="Cтатус">
-                        {{ $t(`profile.format.orderStatus.${order.status}`) }}
+                        {{ $t(`orderStatus.${order.status}`) }}
                     </info-row>
-                    <info-row class="orders-view__list-item-row">
+                    <!-- <info-row class="orders-view__list-item-row">
                         <v-link tag="button" @click.stop>
                             Повторить
                         </v-link>
-                    </info-row>
+                    </info-row> -->
                 </template>
             </li>
         </ul>
@@ -210,7 +242,10 @@ import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
 import { $store, $progress, $logger } from '../../../services/ServiceLocator';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
+import { LOCALE } from '../../../store';
 import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
+import { UPDATE_BREADCRUMB } from '../../../store/modules/Profile/actions';
+
 import {
     NAME as ORDERS_MODULE,
     ORDERS,
@@ -219,15 +254,26 @@ import {
     ACTIVE_PAGE,
 } from '../../../store/modules/Profile/modules/Orders';
 import { PAGES_COUNT } from '../../../store/modules/Profile/modules/Orders/getters';
-import { FETCH_ORDERS } from '../../../store/modules/Profile/modules/Orders/actions';
+import {
+    FETCH_ORDERS,
+    SET_LOAD_PATH,
+    GET_ORDER_PAYMENT_LINK,
+} from '../../../store/modules/Profile/modules/Orders/actions';
 
-import { sortDirections } from '../../../assets/scripts/enums/general';
+import { getOrderStatusColorClass } from '../../../util/order';
 import { orderStatus, orderPaymentStatus, sortFields } from '../../../assets/scripts/enums/order';
+import { orderDateLocaleOptions } from '../../../assets/scripts/settings/profile';
+import { sortDirections } from '../../../assets/scripts/enums/general';
 import { DEFAULT_PAGE } from '../../../assets/scripts/constants/general';
 import '../../../assets/images/sprites/arrow-updown.svg';
+import '../../../assets/images/sprites/arrow-down.svg';
 import './Orders.css';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
+
+function updateBreadcrumbs(vm) {
+    vm[UPDATE_BREADCRUMB]([]);
+}
 
 export default {
     name: 'orders',
@@ -253,6 +299,7 @@ export default {
     },
 
     computed: {
+        ...mapState([LOCALE]),
         ...mapState(ORDERS_MODULE_PATH, [ORDERS, ORDER_DIRECTION, ORDER_FIELD, ACTIVE_PAGE]),
         ...mapGetters(ORDERS_MODULE_PATH, [PAGES_COUNT]),
 
@@ -262,7 +309,24 @@ export default {
     },
 
     methods: {
-        ...mapActions(ORDERS_MODULE_PATH, [FETCH_ORDERS]),
+        ...mapActions(ORDERS_MODULE_PATH, [FETCH_ORDERS, SET_LOAD_PATH, GET_ORDER_PAYMENT_LINK]),
+        ...mapActions(PROFILE_MODULE, [UPDATE_BREADCRUMB]),
+
+        formatDate(date) {
+            if (typeof date !== 'string') return;
+            const obj = new Date(date.split(' ')[0]);
+            return obj.toLocaleDateString(this[LOCALE], orderDateLocaleOptions);
+        },
+
+        getOrderStatusClass(order) {
+            return getOrderStatusColorClass(order.status, order.canceled);
+        },
+
+        async onContinuePayment(orderId) {
+            const backUrl = `${document.location.origin}/thank-you`;
+            const url = await this[GET_ORDER_PAYMENT_LINK]({ id: orderId, backUrl });
+            document.location.href = url;
+        },
 
         onShowMore() {
             this.showMore = true;
@@ -307,11 +371,10 @@ export default {
             query: { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC },
         } = to;
 
-        // регистрируем модуль, если такого нет
         const { loadPath } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
 
         // если все загружено, пропускаем
-        if (loadPath === fullPath) next();
+        if (loadPath === fullPath) next(vm => updateBreadcrumbs(vm));
         else {
             $progress.start();
             $store
@@ -321,15 +384,18 @@ export default {
                     orderDirection,
                 })
                 .then(data => {
-                    //$store.dispatch(`${ORDERS_MODULE}/${SET_LOAD_PATH}`, fullPath);
+                    $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
                         $progress.finish();
+                        updateBreadcrumbs(vm);
                     });
                 })
                 .catch(thrown => {
-                    if (thrown && thrown.isCancel === true) return next();
-                    $progress.fail();
-                    next(false);
+                    if (thrown && thrown.isCancel === true) return next(vm => updateBreadcrumbs(vm));
+                    next(vm => {
+                        $progress.fail();
+                        updateBreadcrumbs(vm);
+                    });
                 });
         }
     },
@@ -361,6 +427,8 @@ export default {
 
     beforeCreate() {
         this.sortFields = sortFields;
+        this.sortDirections = sortDirections;
+        this.orderPaymentStatus = orderPaymentStatus;
     },
 };
 </script>

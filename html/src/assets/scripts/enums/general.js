@@ -118,3 +118,55 @@ export const sortDirections = Object.freeze({
     DESC: 'desc',
     ASC: 'asc',
 });
+
+export const localeDateOptions = Object.freeze({
+    weekday: {
+        NARROW: 'narrow',
+        SHORT: 'short',
+        LONG: 'long',
+    },
+
+    era: {
+        NARROW: 'narrow',
+        SHORT: 'short',
+        LONG: 'long',
+    },
+
+    year: {
+        NUMERIC: 'numeric',
+        DIGIT2: '2-digit',
+    },
+
+    month: {
+        NUMERIC: 'numeric',
+        DIGIT2: '2-digit',
+        NARROW: 'narrow',
+        SHORT: 'short',
+        LONG: 'long',
+    },
+
+    day: {
+        NUMERIC: 'numeric',
+        DIGIT2: '2-digit',
+    },
+
+    hour: {
+        NUMERIC: 'numeric',
+        DIGIT2: '2-digit',
+    },
+
+    minute: {
+        NUMERIC: 'numeric',
+        DIGIT2: '2-digit',
+    },
+
+    second: {
+        NUMERIC: 'numeric',
+        DIGIT2: '2-digit',
+    },
+
+    timeZoneName: {
+        SHORT: 'short',
+        LONG: 'long',
+    },
+});
