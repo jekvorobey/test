@@ -1,8 +1,8 @@
 <template>
     <v-popover
         popoverWrapperClass="general-popup-panel"
-        :popover-class="popoverClass"
-        trigger="manual"
+        :popover-class="[popoverClass, { 'tooltip--mounted': mounted }]"
+        :trigger="trigger"
         :placement="placement"
         :open="open"
         @hide="onHide"
@@ -50,6 +50,11 @@ export default {
             default: 'top',
         },
 
+        trigger: {
+            type: String,
+            default: 'manual',
+        },
+
         header: {
             type: String,
         },
@@ -65,6 +70,12 @@ export default {
         },
     },
 
+    data() {
+        return {
+            mounted: false,
+        };
+    },
+
     components: {
         VSvg,
         VPopover,
@@ -78,6 +89,10 @@ export default {
         onClose() {
             this.$emit('close');
         },
+    },
+
+    mounted() {
+        this.mounted = true;
     },
 };
 </script>

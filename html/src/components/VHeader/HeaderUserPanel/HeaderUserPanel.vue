@@ -1,10 +1,11 @@
 <template>
     <div class="header-user-panel">
         <div class="header-user-panel__item header-user-panel__account">
-            <button @click.prevent="onRegister">
-                <v-svg name="account-middle" width="24" height="24" />
-            </button>
-            <profile-navigation-panel v-if="!isTabletLg" />
+            <profile-navigation-panel v-if="!isTabletLg">
+                <button @click.prevent="onRegister">
+                    <v-svg name="account-middle" width="24" height="24" />
+                </button>
+            </profile-navigation-panel>
         </div>
 
         <template v-if="hasSession">
@@ -14,11 +15,12 @@
             <div class="header-user-panel__item">
                 <price class="text-medium header-user-panel__item-sum" v-bind="productItemsSum" />
                 &nbsp;&nbsp;
-                <button class="header-user-panel__item-cart" @click="onToggleCart">
-                    <v-svg name="cart-middle" width="24" height="24" />
-                    <span class="text-bold header-user-panel__item-count">{{ cartItemsCount }}</span>
-                </button>
-                <cart-header-panel v-if="!isTabletLg" />
+                <cart-header-panel class="header-user-panel__item-cart" v-if="!isTabletLg">
+                    <button @click="onToggleCart">
+                        <v-svg name="cart-middle" width="24" height="24" />
+                        <span class="text-bold header-user-panel__item-count">{{ cartItemsCount }}</span>
+                    </button>
+                </cart-header-panel>
             </div>
         </template>
     </div>

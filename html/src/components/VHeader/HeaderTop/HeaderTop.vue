@@ -18,13 +18,9 @@
                 </span>
             </div>
 
-            <button class="header-top__help" title="Помощь" @click="onToggleHelp">
+            <help-panel class="header-top__help">
                 {{ $t('header.top.help') }}<v-svg name="arrow-down" width="20" height="20" />
-            </button>
-
-            <div class="header-top__panel">
-                <help-panel v-if="!isTabletLg" />
-            </div>
+            </help-panel>
         </div>
     </div>
 </template>

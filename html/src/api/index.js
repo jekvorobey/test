@@ -270,6 +270,10 @@ export function getCatalogItems({ filter, orderField = 'price', orderDirection =
     });
 }
 
+export function getCatalogInfo() {
+    return $http.get(`/v1/lk/order/${id}`);
+}
+
 export function getFilters(categoryCode, excludedFilters) {
     return $http.get('/v1/catalog/filter', {
         params: { categoryCode, excludedFilters },

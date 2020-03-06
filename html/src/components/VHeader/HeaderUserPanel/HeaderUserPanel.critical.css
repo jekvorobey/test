@@ -8,15 +8,11 @@
         position: relative;
     }
 
-    .v-popover {
-        position: absolute;
-        bottom: calc(var(--gs) * -3);
-    }
-
     &__account {
         position: relative;
-        .v-popover {
-            right: calc(var(--gs) * -8);
+        .trigger {
+            display: flex !important;
+            align-items: center;
         }
     }
 
@@ -61,6 +57,13 @@
             width: 24px;
             font-size: 12px;
             line-height: 15px;
+        }
+
+        &-cart {
+            .trigger {
+                display: flex !important;
+                align-items: center;
+            }
         }
     }
 }

@@ -2,9 +2,7 @@
     <general-popup-panel
         popover-class="tooltip--white cart-header-panel"
         header="Мой заказ"
-        :open="isCartOpen"
-        @close="onClose"
-        @hide="onClose"
+        trigger="hover"
         show-bottom
     >
         <slot />
@@ -49,8 +47,6 @@ import GeneralPopupPanel from '../GeneralPopupPanel/GeneralPopupPanel.vue';
 import CartPanelProductCard from '../CartPanelProductCard/CartPanelProductCard.vue';
 
 import { mapActions, mapState, mapGetters } from 'vuex';
-import { IS_CART_OPEN } from '../../store';
-import { SET_CITY_CONFIRMATION_OPEN, SET_CART_OPEN } from '../../store/actions';
 
 import { NAME as CART_MODULE, CART_DATA } from '../../store/modules/Cart';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM, CART_TYPES } from '../../store/modules/Cart/getters';
@@ -72,20 +68,12 @@ export default {
     },
 
     computed: {
-        ...mapState([IS_CART_OPEN]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, PRODUCT_ITEMS_SUM]),
     },
 
     methods: {
-        ...mapActions([SET_CART_OPEN]),
-
         onToCart() {
             this.$router.push({ path: '/cart' });
-            this.onClose();
-        },
-
-        onClose() {
-            this[SET_CART_OPEN](false);
         },
     },
 };

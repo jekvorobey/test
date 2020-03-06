@@ -155,6 +155,7 @@ import {
 } from '../../../store/modules/Profile/modules/Orders/actions';
 
 import { toAddressString } from '../../../util/address';
+import { getOrderStatusColorClass, getDeliveryStatusColorClass } from '../../../util/order';
 import { orderPaymentStatus, orderStatus, deliveryStatus } from '../../../assets/scripts/enums/order';
 import { orderDateLocaleOptions } from '../../../assets/scripts/settings/profile';
 import '../../../assets/images/sprites/arrow-small.svg';
@@ -164,7 +165,6 @@ import mockProduct1 from '../../../assets/images/mock/orderPackageProduct1.png';
 import mockProduct2 from '../../../assets/images/mock/orderPackageProduct2.png';
 import mockProduct3 from '../../../assets/images/mock/orderPackageProduct3.png';
 import mockProduct4 from '../../../assets/images/mock/orderPackageProduct4.png';
-import { getOrderStatusColorClass, getDeliveryStatusColorClass } from '../../../util/order';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
 

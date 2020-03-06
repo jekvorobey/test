@@ -1,6 +1,10 @@
 .tooltip {
-    display: block !important;
+    display: none;
     z-index: 10000;
+
+    &--mounted {
+        display: block !important;
+    }
 
     .tooltip-inner {
         background: var(--cl-global);
@@ -21,14 +25,14 @@
     }
 
     &[x-placement^='top'] {
-        margin-bottom: 5px;
+        padding-bottom: 5px;
 
         .tooltip-arrow {
             border-width: 5px 5px 0 5px;
             border-left-color: transparent !important;
             border-right-color: transparent !important;
             border-bottom-color: transparent !important;
-            bottom: -5px;
+            bottom: 0;
             left: calc(50% - 5px);
             margin-top: 0;
             margin-bottom: 0;
@@ -36,14 +40,14 @@
     }
 
     &[x-placement^='bottom'] {
-        margin-top: 5px;
+        padding-top: 5px;
 
         .tooltip-arrow {
             border-width: 0 5px 5px 5px;
             border-left-color: transparent !important;
             border-right-color: transparent !important;
             border-top-color: transparent !important;
-            top: -5px;
+            top: 0;
             left: calc(50% - 5px);
             margin-top: 0;
             margin-bottom: 0;
@@ -51,14 +55,14 @@
     }
 
     &[x-placement^='right'] {
-        margin-left: 5px;
+        padding-left: 5px;
 
         .tooltip-arrow {
             border-width: 5px 5px 5px 0;
             border-left-color: transparent !important;
             border-top-color: transparent !important;
             border-bottom-color: transparent !important;
-            left: -5px;
+            left: 0;
             top: calc(50% - 5px);
             margin-left: 0;
             margin-right: 0;
@@ -66,14 +70,14 @@
     }
 
     &[x-placement^='left'] {
-        margin-right: 5px;
+        padding-right: 5px;
 
         .tooltip-arrow {
             border-width: 5px 0 5px 5px;
             border-top-color: transparent !important;
             border-right-color: transparent !important;
             border-bottom-color: transparent !important;
-            right: -5px;
+            right: 0;
             top: calc(50% - 5px);
             margin-left: 0;
             margin-right: 0;
@@ -103,7 +107,7 @@
         }
 
         .popover-arrow {
-            display: none;
+            border-color: var(--cl-white);
         }
     }
 

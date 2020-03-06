@@ -24,6 +24,7 @@ const FETCH_ITEMS = 'FETCH_ITEMS';
 const FETCH_BANNER = 'FETCH_BANNER';
 const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 const FETCH_PRODUCT_GROUP = 'FETCH_PRODUCT_GROUP';
+const FETCH_CATALOG_INFO = 'FETCH_CATALOG_INFO';
 
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 export const FETCH_CATALOG_DATA = 'FETCH_CATALOG_DATA';
@@ -74,6 +75,14 @@ export default {
         }
     },
 
+    async [FETCH_CATALOG_INFO]({ commit }, { type, entityCode }) {
+        try {
+            return await getProductGroup(type, entityCode);
+        } catch (error) {
+            storeErrorHandler(FETCH_CATALOG_INFO, true)(error);
+        }
+    },
+
     async [FETCH_CATALOG_DATA]({ state, dispatch, commit }, payload) {
         const {
             type,
@@ -99,6 +108,8 @@ export default {
                 ...filter,
                 is_new: true,
             };
+
+        //if (type === productGroupTypes.CATALOG) data.info = await dispatch(FETCH_CATALOG_INFO);
 
         if (entityCode) {
             if (state.entityCode !== entityCode) {
