@@ -32,8 +32,7 @@ import HelpPanel from '../../HelpPanel/HelpPanel.vue';
 import { NAME as CITY_SELECTION_MODAL_NAME } from '../../CitySelectionModal/CitySelectionModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { SCROLL, IS_CITY_CONFIRMATION_OPEN, IS_HELP_OPEN } from '../../../store';
-import { SET_HELP_OPEN } from '../../../store/actions';
+import { SCROLL, IS_CITY_CONFIRMATION_OPEN } from '../../../store';
 
 import { NAME as SEARCH_MODULE, SEARCH } from '../../../store/modules/Search';
 
@@ -62,7 +61,7 @@ export default {
     },
 
     computed: {
-        ...mapState([SCROLL, IS_HELP_OPEN]),
+        ...mapState([SCROLL]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
         ...mapState(GEO_MODULE, {
             city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].value) || 'Выберите город',
@@ -74,13 +73,8 @@ export default {
     },
 
     methods: {
-        ...mapActions([SET_HELP_OPEN]),
         ...mapActions(GEO_MODULE, [SET_SELECTED_CITY]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-
-        onToggleHelp() {
-            this[SET_HELP_OPEN](!this[IS_HELP_OPEN]);
-        },
 
         onOpenCitySelection() {
             this[CHANGE_MODAL_STATE]({ name: CITY_SELECTION_MODAL_NAME, open: true });

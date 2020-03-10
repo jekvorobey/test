@@ -5,6 +5,7 @@
         :trigger="trigger"
         :placement="placement"
         :open="open"
+        :disabled="disabled"
         @hide="onHide"
     >
         <slot />
@@ -12,7 +13,7 @@
             <div class="general-popup-panel__header">
                 <slot name="header">
                     <h4 class="general-popup-panel__header-hl">{{ header }}</h4>
-                    <button class="general-popup-panel__header-close" @click="onClose">
+                    <button v-if="showCloseBtn" class="general-popup-panel__header-close" @click="onClose">
                         <v-svg name="cross" width="24" height="24" />
                     </button>
                 </slot>
@@ -65,6 +66,16 @@ export default {
         },
 
         showBottom: {
+            type: Boolean,
+            default: false,
+        },
+
+        showCloseBtn: {
+            type: Boolean,
+            default: false,
+        },
+
+        disabled: {
             type: Boolean,
             default: false,
         },

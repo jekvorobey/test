@@ -4,6 +4,7 @@
         header="Мой заказ"
         trigger="hover"
         show-bottom
+        :disabled="!hasSession"
     >
         <slot />
         <template v-slot:body>
@@ -48,6 +49,8 @@ import CartPanelProductCard from '../CartPanelProductCard/CartPanelProductCard.v
 
 import { mapActions, mapState, mapGetters } from 'vuex';
 
+import { NAME as AUTH_MODULE, HAS_SESSION } from '../../store/modules/Auth';
+
 import { NAME as CART_MODULE, CART_DATA } from '../../store/modules/Cart';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM, CART_TYPES } from '../../store/modules/Cart/getters';
 
@@ -68,6 +71,7 @@ export default {
     },
 
     computed: {
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, PRODUCT_ITEMS_SUM]),
     },
 

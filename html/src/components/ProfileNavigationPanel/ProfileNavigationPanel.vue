@@ -1,5 +1,10 @@
 <template>
-    <general-popup-panel popover-class="tooltip--white profile-navigation-panel" placement="bottom" trigger="hover">
+    <general-popup-panel
+        popover-class="tooltip--white profile-navigation-panel"
+        placement="bottom"
+        trigger="hover"
+        :disabled="!hasSession"
+    >
         <slot />
         <template v-slot:header>
             <span />

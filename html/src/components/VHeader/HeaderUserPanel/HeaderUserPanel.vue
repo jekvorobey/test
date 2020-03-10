@@ -16,7 +16,7 @@
                 <price class="text-medium header-user-panel__item-sum" v-bind="productItemsSum" />
                 &nbsp;&nbsp;
                 <cart-header-panel class="header-user-panel__item-cart" v-if="!isTabletLg">
-                    <button @click="onToggleCart">
+                    <button @click="onToCart">
                         <v-svg name="cart-middle" width="24" height="24" />
                         <span class="text-bold header-user-panel__item-count">{{ cartItemsCount }}</span>
                     </button>
@@ -38,10 +38,6 @@ import ProfileNavigationPanel from '../../ProfileNavigationPanel/ProfileNavigati
 import { NAME as REGISTRATION_MODAL_NAME } from '../../RegistrationModal/RegistrationModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { IS_CART_OPEN, IS_PROFILE_PANEL_OPEN } from '../../../store';
-import { SET_CART_OPEN } from '../../../store/mutations';
-import { SET_PROFILE_PANEL_OPEN } from '../../../store/actions';
-
 import { NAME as AUTH_MODULE, HAS_SESSION } from '../../../store/modules/Auth';
 
 import { NAME as CART_MODULE, CART_ITEMS } from '../../../store/modules/Cart';
@@ -69,7 +65,6 @@ export default {
     },
 
     computed: {
-        ...mapState([IS_CART_OPEN, IS_PROFILE_PANEL_OPEN]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
 
@@ -128,18 +123,14 @@ export default {
     },
 
     methods: {
-        ...mapActions([SET_CART_OPEN, SET_PROFILE_PANEL_OPEN]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
-        onToggleCart() {
-            if (this.isTablet) {
-                this[SET_CART_OPEN](false);
-                this.$router.push({ name: 'Cart' });
-            } else this[SET_CART_OPEN](!this.isCartOpen);
+        onToCart() {
+            if (this[HAS_SESSION]) this.$router.push({ name: 'Cart' });
         },
 
         onRegister() {
-            if (this[HAS_SESSION]) this[SET_PROFILE_PANEL_OPEN](true);
+            if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
             else this[CHANGE_MODAL_STATE]({ name: REGISTRATION_MODAL_NAME, open: true });
         },
     },
