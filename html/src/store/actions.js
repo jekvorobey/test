@@ -56,7 +56,7 @@ export default {
     async [FETCH_BANNER]({ commit }) {
         try {
             const data = await getBannersByCode('header', true);
-            commit(SET_BANNER, data[0] || {});
+            commit(SET_BANNER, data || {});
         } catch (error) {
             storeErrorHandler(FETCH_BANNER)(error);
         }

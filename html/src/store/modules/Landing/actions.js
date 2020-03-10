@@ -1,5 +1,5 @@
 import { $logger } from '../../../services/ServiceLocator';
-import { getProducts, getCategories, getBanners, getBrands, getInstagram } from '../../../api';
+import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode } from '../../../api';
 import {
     SET_BESTSELLER_PRODUCTS,
     SET_NEW_PRODUCTS,
@@ -58,11 +58,11 @@ export default {
     },
 
     [FETCH_FEATURED_PRODUCTS]({ commit }, payload = {}) {
-        return Promise.all([getProducts(payload), getBanners()])
+        return Promise.all([getProducts(payload), getBannersByCode('header', true)])
             .then(data => {
                 commit(SET_FEATURED_PRODUCTS, {
                     items: data[0] ? data[0].items.slice(8, 12) : [],
-                    banner: data[1][2] ? data[1][2] : {},
+                    banner: data[1],
                 });
             })
             .catch(error => {
@@ -72,11 +72,11 @@ export default {
     },
 
     [FETCH_NEW_PRODUCTS]({ commit }, payload = {}) {
-        return Promise.all([getProducts(payload), getBanners()])
+        return Promise.all([getProducts(payload), getBannersByCode('header', true)])
             .then(data => {
                 commit(SET_NEW_PRODUCTS, {
                     items: data[0] ? data[0].items.slice(0, 4) : [],
-                    banner: data[1][0] ? data[1][0] : {},
+                    banner: data[1],
                 });
             })
             .catch(error => {
@@ -86,11 +86,11 @@ export default {
     },
 
     [FETCH_BESTSELLER_PRODUCTS]({ commit }, payload = {}) {
-        return Promise.all([getProducts(payload), getBanners()])
+        return Promise.all([getProducts(payload), getBannersByCode('header', true)])
             .then(data => {
                 commit(SET_BESTSELLER_PRODUCTS, {
                     items: data[0] ? data[0].items.slice(4, 8) : [],
-                    banner: data[1][1] ? data[1][1] : {},
+                    banner: data[1],
                 });
             })
             .catch(error => {
