@@ -1,8 +1,8 @@
 <template>
     <div class="catalog-banner-card">
-        <div class="catalog-banner-card__img">
+        <div class="catalog-banner-card__img" :class="{ 'catalog-banner-card__img--empty': !image }">
             <v-picture v-if="image" :image="image" alt="">
-                <template v-slot:source="{ image, lazy }">
+                <template v-slot:source="{ image }">
                     <source
                         :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
                         type="image/webp"

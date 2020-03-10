@@ -292,6 +292,15 @@ export function getCategories(node_code = undefined, max_depth = undefined) {
     });
 }
 
+export function getBannersByCode(typeCode, random = false) {
+    return $http.get('/v1/content/banners', {
+        params: {
+            typeCode,
+            random: Number(random),
+        },
+    });
+}
+
 export function getBanners(data) {
     return $http.get('/v1/banners', data);
 }

@@ -21,23 +21,11 @@
             </breadcrumbs>
 
             <catalog-banner-card
-                v-if="entityCode && productGroup"
-                class="catalog-view__brand"
-                :banner-id="productGroup.id"
-                :bottom-text="productGroup.description"
-                :title="productGroup.name"
-                :image="productGroup.preview_photo"
-            />
-
-            <catalog-banner-card
-                v-else
                 class="catalog-view__banner"
-                :banner-id="banner.id"
-                :image="banner.image"
-                :upper-text="banner.upperText"
-                :bottom-text="banner.bottomText"
-                :title="banner.title"
-                :btn-text="banner.btnText"
+                v-if="productGroup.banner"
+                :banner-id="productGroup.banner.id"
+                :title="productGroup.banner.name"
+                :image="productGroup.banner.desktopImage"
             />
         </div>
         <section class="section">

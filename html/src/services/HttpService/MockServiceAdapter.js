@@ -22,6 +22,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
         if (path.includes('/v1/lk/order')) return this.httpServiceInstance.get(path, config);
 
         switch (path) {
+            case '/v1/content/banners':
             case '/v1/content/menus':
             case '/v1/auth/is-login':
             case '/v1/categories':
