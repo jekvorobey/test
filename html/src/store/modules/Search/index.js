@@ -8,19 +8,21 @@ export const SEARCH_STRING = 'searchString';
 export const POPULAR_PRODUCTS = 'popularProducts';
 export const SUGGESTIONS = 'suggestions';
 
-export default {
-    name: NAME,
-    namespaced: true,
-    state: {
-        [SEARCH]: false,
-        [SEARCH_STRING]: '',
-        [SUGGESTIONS]: {
-            products: [],
-            categories: [],
+export default function createModule() {
+    return {
+        name: NAME,
+        namespaced: true,
+        state: {
+            [SEARCH]: false,
+            [SEARCH_STRING]: '',
+            [SUGGESTIONS]: {
+                products: [],
+                categories: [],
+            },
+            [POPULAR_PRODUCTS]: [],
         },
-        [POPULAR_PRODUCTS]: [],
-    },
-    actions,
-    mutations,
-    getters,
-};
+        actions,
+        mutations,
+        getters,
+    };
+}

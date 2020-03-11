@@ -6,13 +6,15 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import pipeline from './pipeline';
 
+import registration from './middleware/registration';
+
 import { SET_MENU_OPEN } from '../store/actions';
 
 import { NAME as SEARCH_MODULE } from '../store/modules/Search';
 import { SET_SEARCH } from '../store/modules/Search/actions';
 
 import { NAME as MODAL_MODULE } from '../store/modules/Modal';
-import { CLOSE_ALL } from '../store/modules/Modal/actions';
+import { CLOSE_ALL, CHANGE_MODAL_STATE } from '../store/modules/Modal/actions';
 
 /*
  * Preventing errors in console in Vue-router >= 3.1.0
@@ -88,7 +90,7 @@ export default function createRouter(container) {
 
     router.beforeEach((to, from, next) => {
         const { matched } = to;
-        const middlewares = [];
+        const middlewares = [registration];
 
         for (let i = 0; i < matched.length; i++) {
             const {
@@ -114,12 +116,15 @@ export default function createRouter(container) {
         });
     });
 
-    router.afterEach((to, from) => {
-        if (store && to.path !== from.path) {
-            store.dispatch(SET_MENU_OPEN, false);
-            store.dispatch(`${SEARCH_MODULE}/${SET_SEARCH}`, false);
-            store.dispatch(`${MODAL_MODULE}/${CLOSE_ALL}`);
-        }
+    router.onReady(() => {
+        if (!appContext.isServer)
+            router.afterEach((to, from) => {
+                if (store && to.path !== from.path) {
+                    store.dispatch(SET_MENU_OPEN, false);
+                    store.dispatch(`${SEARCH_MODULE}/${SET_SEARCH}`, false);
+                    store.dispatch(`${MODAL_MODULE}/${CLOSE_ALL}`);
+                }
+            });
     });
 
     container.bind(injectionType.ROUTER).toConstantValue(router);

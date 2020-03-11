@@ -44,6 +44,7 @@ export const FALLBACK_LOCALE = 'fallbackLocale';
  */
 export default function createStore(container) {
     const context = container.get(injectionType.APPLICATION_CONTEXT);
+
     const store = new Vuex.Store({
         strict: process.env.NODE_ENV !== 'production',
         state: {
@@ -65,13 +66,13 @@ export default function createStore(container) {
         mutations,
         actions,
         modules: {
-            modal,
-            search,
-            auth,
-            cart,
-            geolocation,
-            preview,
-            featured,
+            modal: modal(),
+            search: search(),
+            auth: auth(),
+            cart: cart(),
+            geolocation: geolocation(),
+            preview: preview(),
+            featured: featured(),
         },
     });
 

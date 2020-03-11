@@ -7,6 +7,20 @@
             <!-- </transition> -->
         </main>
         <v-footer />
+
+        <transition name="fade-in">
+            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
+            <add-to-cart-modal v-else-if="isAddToCartOpen" />
+        </transition>
+
+        <transition name="fade-in">
+            <login-modal key="login" v-if="isLoginOpen" />
+            <registration-modal key="register" v-else-if="isRegistrationOpen" />
+        </transition>
+
+        <transition name="fade-in">
+            <city-selection-modal v-if="isCitySelectionOpen" />
+        </transition>
     </div>
 </template>
 
@@ -33,6 +47,17 @@ import Price from '../components/Price/Price.vue';
 import VHeader from '../components/VHeader/VHeader.vue';
 import VFooter from '../components/VFooter/VFooter.vue';
 
+import LoginModal, { NAME as LOGIN_MODAL_NAME } from '../components/LoginModal/LoginModal.vue';
+import RegistrationModal, {
+    NAME as REGISTRATION_MODAL_NAME,
+} from '../components/RegistrationModal/RegistrationModal.vue';
+import CitySelectionModal, {
+    NAME as CITY_SELECTION_MODAL_NAME,
+} from '../components/CitySelectionModal/CitySelectionModal.vue';
+
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../components/AddToCartModal/AddToCartModal.vue';
+
 import _debounce from 'lodash/debounce';
 import { SCROLL, CATEGORIES } from '../store';
 import { SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN } from '../store/actions';
@@ -42,6 +67,9 @@ import { FETCH_CART_DATA, CLEAR_CART_DATA } from '../store/modules/Cart/actions'
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '../store/modules/Auth';
 import { CHECK_SESSION, LOGIN_BY_PASSWORD } from '../store/modules/Auth/actions';
+
+import { NAME as MODAL_MODULE, MODALS } from '../store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '../store/modules/Modal/actions';
 
 import { MIN_SCROLL_VALUE, SCROLL_DEBOUCE_TIME } from '../assets/scripts/constants/general';
 import { eventName, interval } from '../assets/scripts/enums/general';
@@ -53,17 +81,35 @@ export default {
     components: {
         VHeader,
         VFooter,
+
+        LoginModal,
+        RegistrationModal,
+        CitySelectionModal,
+        QuickViewModal,
+        AddToCartModal,
     },
 
     computed: {
         ...mapState([SCROLL]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
+
+        ...mapState(MODAL_MODULE, {
+            isRegistrationOpen: state =>
+                state[MODALS][REGISTRATION_MODAL_NAME] && state[MODALS][REGISTRATION_MODAL_NAME].open,
+            isLoginOpen: state => state[MODALS][LOGIN_MODAL_NAME] && state[MODALS][LOGIN_MODAL_NAME].open,
+            isCitySelectionOpen: state =>
+                state[MODALS][CITY_SELECTION_MODAL_NAME] && state[MODALS][CITY_SELECTION_MODAL_NAME].open,
+            isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
+            isAddToCartOpen: state =>
+                state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
+        }),
     },
 
     methods: {
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
         ...mapActions(AUTH_MODULE, [CHECK_SESSION, LOGIN_BY_PASSWORD]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onScroll() {
             this[SET_SCROLL](

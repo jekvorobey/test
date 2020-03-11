@@ -467,6 +467,31 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
+        const {
+            params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },
+            query: { page: toPage = 1, orderField: toOrderField = 'price', orderDirection: toOrderDirection = 'desc' },
+        } = to;
+
+        const {
+            params: { code: fromCode, entityCode: fromEntityCode, type: fromType, pathMatch: fromPathMatch },
+            query: {
+                page: fromPage = 1,
+                orderField: fromOrderField = 'price',
+                orderDirection: fromOrderDirection = 'desc',
+            },
+        } = from;
+
+        if (
+            toType === fromType &&
+            toEntityCode === fromEntityCode &&
+            toCode === fromCode &&
+            toPathMatch === fromPathMatch &&
+            toPage === fromPage &&
+            toOrderField === fromOrderField &&
+            toOrderDirection === fromOrderDirection
+        )
+            return next();
+
         if (this.showMore) {
             this.fetchCatalog(to, from, this.showMore);
         } else this.debounce_fetchCatalog(to, from);

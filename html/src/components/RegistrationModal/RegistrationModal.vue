@@ -232,6 +232,8 @@ export default {
 
     data() {
         return {
+            mounted: false,
+
             sent: false,
             accepted: false,
 

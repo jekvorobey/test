@@ -33,7 +33,7 @@ Vue.mixin(titleMixin);
 
 // Expose a factory function that creates a fresh set of store, router,
 // app instances on each call (which is called for each SSR request)
-export default function createApp(container) {
+export default function createApp(container, initialState = null) {
     // create store and router instances
     const store = createStore(container);
     const router = createRouter(container);
@@ -59,6 +59,8 @@ export default function createApp(container) {
         i18n,
         render: h => h(App),
     });
+
+    if (initialState) store.replaceState(initialState);
 
     // expose the app, the router and the store.
     // note we are not mounting the app here, since bootstrapping will be
