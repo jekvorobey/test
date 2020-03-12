@@ -6,6 +6,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import pipeline from './pipeline';
 
+import referalLink from './middleware/referalLink';
 import registration from './middleware/registration';
 
 import { SET_MENU_OPEN } from '../store/actions';
@@ -90,7 +91,8 @@ export default function createRouter(container) {
 
     router.beforeEach((to, from, next) => {
         const { matched } = to;
-        const middlewares = [registration];
+
+        const middlewares = [referalLink, registration];
 
         for (let i = 0; i < matched.length; i++) {
             const {

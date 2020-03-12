@@ -269,8 +269,8 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { LOCALE } from '../../../store';
 
-import { NAME as AUTH_MODULE } from '../../../store/modules/Auth';
-import { GET_SOCIAL_LINK } from '../../../store/modules/Auth/actions';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '../../../store/modules/Auth';
+import { GET_SOCIAL_LINK, CHECK_SESSION } from '../../../store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
@@ -306,7 +306,8 @@ import {
     LOAD_CERTIFICATE,
 } from '../../../store/modules/Profile/modules/Cabinet/actions';
 
-import { socials, mimeType } from '../../../assets/scripts/enums/general';
+import { socials, mimeType, httpCodes } from '../../../assets/scripts/enums/general';
+import { cancelRoute } from '../../../assets/scripts/settings/general';
 import '../../../assets/images/sprites/edit.svg';
 import './Cabinet.css';
 
@@ -616,8 +617,10 @@ export default {
             })
             .catch(thrown => {
                 $progress.fail();
-                $logger.error('beforeRouteEnter', thrown.error);
-                $progress.finish();
+                if (thrown.status === httpCodes.FORBIDDEN) {
+                    $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);
+                    return next(false);
+                }
                 next();
             });
     },
