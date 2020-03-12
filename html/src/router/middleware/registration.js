@@ -17,7 +17,7 @@ export default async function registration({ to, next, store, appContext, nextMi
                 query: { ...to.query, registration: undefined },
                 replace: true,
             };
-            next(redirect);
+            return next(redirect);
         }
         return nextMiddleware();
     } catch (error) {
