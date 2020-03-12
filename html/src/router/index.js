@@ -105,6 +105,7 @@ export default function createRouter(container) {
             to,
             from,
             next,
+            container,
             store,
             appContext,
             router,
