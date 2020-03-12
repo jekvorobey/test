@@ -12,7 +12,7 @@ export default async function referalLink({ to, next, container, nextMiddleware 
 
         if (ref) {
             const cookies = container.get(injectionType.COOKIE);
-            cookies.set('referal', ref, { maxAge: 60 * 60 * 24 });
+            cookies.set('referal', ref, { maxAge: 60 * 60 * 24, path: '/' });
 
             return next({
                 path: to.path,

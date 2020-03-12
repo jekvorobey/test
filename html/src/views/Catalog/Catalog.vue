@@ -20,13 +20,7 @@
                 </breadcrumb-item>
             </breadcrumbs>
 
-            <catalog-banner-card
-                class="catalog-view__banner"
-                v-if="productGroup.banner"
-                :banner-id="productGroup.banner.id"
-                :title="productGroup.banner.name"
-                :image="productGroup.banner.desktopImage"
-            />
+            <catalog-banner-card class="catalog-view__banner" v-if="productGroup.banner" :item="productGroup.banner" />
         </div>
         <section class="section">
             <div class="container catalog-view__grid">
