@@ -21,7 +21,7 @@
 import VButton from '../../controls/VButton/VButton.vue';
 import VPicture from '../../controls/VPicture/VPicture.vue';
 
-import { generatePictureSourcePath } from '../../../util/images';
+import { generatePictureSourcePath } from '../../../util/media';
 import './CatalogBannerListCard.css';
 
 const btnType = Object.freeze({

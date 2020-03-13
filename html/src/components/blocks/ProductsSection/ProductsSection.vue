@@ -50,7 +50,7 @@ import { NAME as MODAL_MODULE } from '../../../store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
 
 import './ProductsSection.css';
-import { generatePictureSourcePath } from '../../../util/images';
+import { generatePictureSourcePath } from '../../../util/media';
 
 export default {
     name: 'products-section',

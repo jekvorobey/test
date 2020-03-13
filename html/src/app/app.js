@@ -22,7 +22,7 @@ import '../util/router';
 import '../util/helpers';
 import '../util/container';
 import '../util/store';
-import '../util/images';
+import '../util/media';
 
 import titleMixin from '../util/title';
 

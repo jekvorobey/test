@@ -76,7 +76,7 @@ import { NAME as CART_MODULE } from '../../store/modules/Cart';
 import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 
 import { requestStatus } from '../../assets/scripts/enums/general';
-import { generatePictureSourcePath } from '../../util/images';
+import { generatePictureSourcePath } from '../../util/media';
 import './QuickViewModal.css';
 
 export const NAME = 'quick-view-modal';

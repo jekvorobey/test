@@ -70,7 +70,7 @@ export default function createRouter(container) {
         mode: 'history',
         fallback: false,
         // eslint-disable-next-line no-unused-vars
-        scrollBehavior: (to, from, savedPosition) => {
+        scrollBehavior(to, from, savedPosition) {
             if (!savedPosition && to.meta.skipScroll) return null;
             if (to.hash) return { selector: to.hash };
             if (savedPosition) return savedPosition;

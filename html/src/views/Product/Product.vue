@@ -195,17 +195,23 @@
                         <p class="text-bold product-view__header-detail-section-hl">
                             Описание и характеристики
                         </p>
-                        <p>
-                            Двадцать три насыщенных, ярких оттенка помады воплощают в себе современную интерпретацию
-                            классики от Тома Форда. Редкое экзотическое масло муру-муру из Бразилии и масло цветков
-                            ромашки создают кремовую текстуру и обеспечивают...
-                        </p>
-                        <a href="#">Подробнее</a>
+                        <v-html v-html="product.description.content" />
+                        <a class="product-view__header-detail-brand-link" href="#description">
+                            Подробнее
+                        </a>
                     </div>
-                    <div class="product-view__header-detail-section">
+                    <div v-if="productImages.brand" class="product-view__header-detail-section">
                         <div class="product-view__header-detail-brand">
-                            <img class="product-view__header-detail-brand-img" :src="mockImg" />
-                            <router-link class="product-view__header-detail-brand-link" to="/">
+                            <v-picture :key="productImages.brand.id" class="product-view__header-detail-brand-img">
+                                <source :data-src="productImages.brand.desktop" type="image/webp" />
+                                <img
+                                    class="blur-up lazyload v-picture__img"
+                                    :data-src="productImages.brand.default"
+                                    :alt="productImages.brand.alt"
+                                />
+                            </v-picture>
+
+                            <router-link class="product-view__header-detail-brand-link" :to="brandUrl">
                                 На страницу бренда
                             </router-link>
                         </div>
@@ -282,71 +288,76 @@
             </div>
         </section>
 
-        <section v-if="product.description" class="section product-view__section product-view__info">
+        <section
+            id="description"
+            v-if="product.description && (product.description.content || product.description.image)"
+            class="section product-view__section product-view__info"
+        >
             <div class="container product-view__info-container">
                 <div class="product-view__info-header">
                     <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
                     <v-html class="product-view__info-text" v-html="product.description.content" />
                 </div>
-                <!-- <div class="product-view__info-media">
+                <div class="product-view__info-media">
                     <v-picture
-                        v-if="product.description.image && product.description.image.id"
-                        :image="product.description.image"
-                        alt=""
+                        class="product-view__info-media-img"
+                        :key="productImages.description.id"
+                        v-if="productImages.description"
                     >
-                        <template v-slot:source="{ image, lazy }">
-                            <source
-                                :data-srcset="generateSourcePath(600, 600, image.id, 'webp')"
-                                type="image/webp"
-                                media="(min-width: 480px)"
-                            />
-                            <source
-                                :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                                type="image/webp"
-                                media="(max-width: 479px)"
-                            />
-                        </template>
-                        <template v-slot:fallback="{ image, lazy, alt }">
-                            <img
-                                class="blur-up lazyload v-picture__img"
-                                :data-src="generateSourcePath(600, 600, image.id, image.sourceExt)"
-                                :alt="alt"
-                            />
-                        </template>
+                        <source
+                            :data-srcset="productImages.description.tablet"
+                            type="image/webp"
+                            media="(max-width: 479px)"
+                        />
+                        <source :data-srcset="productImages.description.desktop" type="image/webp" />
+                        <img
+                            class="blur-up lazyload v-picture__img"
+                            :data-src="productImages.description.default"
+                            alt=""
+                        />
                     </v-picture>
-                </div> -->
+                    <iframe
+                        v-if="productVideos.description"
+                        class="lazyload product-view__info-media-video"
+                        :data-src="productVideos.description.videoUrl"
+                        :key="productVideos.description.id"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
+                        allowfullscreen="false"
+                    />
+                </div>
             </div>
         </section>
 
-        <section v-if="product.howto" class="section product-view__info">
+        <section
+            v-if="product.howto && (product.howto.content || product.howto.image)"
+            class="section product-view__info"
+        >
             <div class="container product-view__info-container">
                 <div class="product-view__info-header">
                     <h2 class="product-view__section-hl">{{ $t('product.title.method') }}</h2>
                     <v-html class="product-view__info-text" v-html="product.howto.content" />
                 </div>
-                <!-- <div class="product-view__info-media">
-                    <v-picture v-if="product.howto.image && product.howto.image.id" :image="product.howto.image" alt="">
-                        <template v-slot:source="{ image, lazy }">
-                            <source
-                                :data-srcset="generateSourcePath(600, 600, image.id, 'webp')"
-                                type="image/webp"
-                                media="(min-width: 480px)"
-                            />
-                            <source
-                                :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                                type="image/webp"
-                                media="(max-width: 479px)"
-                            />
-                        </template>
-                        <template v-slot:fallback="{ image, lazy, alt }">
-                            <img
-                                class="blur-up lazyload v-picture__img"
-                                :data-src="generateSourcePath(600, 600, image.id, image.sourceExt)"
-                                :alt="alt"
-                            />
-                        </template>
+                <div class="product-view__info-media">
+                    <v-picture :key="productImages.howto.id" v-if="productImages.howto">
+                        <source
+                            :data-srcset="productImages.howto.tablet"
+                            type="image/webp"
+                            media="(max-width: 479px)"
+                        />
+                        <source :data-srcset="productImages.howto.desktop" type="image/webp" />
+                        <img class="blur-up lazyload v-picture__img" :data-src="productImages.howto.default" alt="" />
                     </v-picture>
-                </div> -->
+                    <iframe
+                        v-if="productVideos.howto"
+                        class="lazyload"
+                        :data-src="productVideos.howto.videoUrl"
+                        :key="productVideos.howto.id"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
+                        allowfullscreen="false"
+                    />
+                </div>
             </div>
         </section>
 
@@ -638,7 +649,11 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '../../util/store';
-import { generatePictureSourcePath } from '../../util/images';
+import {
+    generatePictureSourcePath,
+    generateYoutubeImagePlaceholderPath,
+    generateYoutubeVideoSourcePath,
+} from '../../util/media';
 import { breakpoints } from '../../assets/scripts/enums/general';
 import { productGroupTypes } from '../../assets/scripts/enums/product';
 
@@ -790,6 +805,68 @@ export default {
             isGalleryOpen: state => state[MODALS][GALLERY_MODAL_NAME] && state[MODALS][GALLERY_MODAL_NAME].open,
         }),
 
+        brandUrl() {
+            const { brand } = this.product;
+            return generateCategoryUrl(productGroupTypes.BRANDS, brand.code);
+        },
+
+        productVideos() {
+            const videoMap = {};
+            const { howto, description } = this.product;
+
+            if (howto && howto.video) {
+                videoMap.howto = {
+                    id: howto.video,
+                    imageUrl: generateYoutubeImagePlaceholderPath(howto.video),
+                    videoUrl: generateYoutubeVideoSourcePath(howto.video),
+                };
+            }
+
+            if (description && description.video) {
+                videoMap.description = {
+                    id: description.video,
+                    imageUrl: generateYoutubeImagePlaceholderPath(description.video),
+                    videoUrl: generateYoutubeVideoSourcePath(description.video),
+                };
+            }
+
+            return videoMap;
+        },
+
+        productImages() {
+            const imageMap = {};
+            const { brand, howto, description } = this.product;
+
+            if (brand && brand.image) {
+                imageMap.brand = {
+                    id: brand.image.id,
+                    desktop: generatePictureSourcePath(null, null, brand.image.id, 'webp'),
+                    default: generatePictureSourcePath(null, null, brand.image.id, brand.image.sourceExt),
+                    alt: brand.name,
+                };
+            }
+
+            if (howto && howto.image) {
+                imageMap.howto = {
+                    id: howto.image.id,
+                    desktop: generatePictureSourcePath(null, null, howto.image.id, 'webp'),
+                    tablet: generatePictureSourcePath(320, 240, howto.image.id, 'webp'),
+                    default: generatePictureSourcePath(null, null, howto.image.id, howto.image.sourceExt),
+                };
+            }
+
+            if (description && description.image) {
+                imageMap.description = {
+                    id: description.image.id,
+                    desktop: generatePictureSourcePath(null, null, description.image.id, 'webp'),
+                    tablet: generatePictureSourcePath(320, 240, description.image.id, 'webp'),
+                    default: generatePictureSourcePath(null, null, description.image.id, description.image.sourceExt),
+                };
+            }
+
+            return imageMap;
+        },
+
         canBuy() {
             return this.product.stock.qty > 0;
         },
@@ -867,6 +944,7 @@ export default {
         // так как к моменту вызова экземпляр ещё не создан!
 
         const {
+            hash,
             params: { code },
         } = to;
 
@@ -904,7 +982,13 @@ export default {
         const {
             params: { code },
         } = to;
-        this.debounce_fetchProduct(code, fias_id, next);
+
+        const {
+            params: { code: fromCode },
+        } = from;
+
+        if (code !== fromCode) this.debounce_fetchProduct(code, fias_id, next);
+        else next();
     },
 
     beforeMount() {
@@ -912,16 +996,12 @@ export default {
             try {
                 const { productCode } = this.product;
                 this.$progress.start();
-                if (productCode !== code) {
-                    await this[FETCH_PRODUCT_DATA]({ code, city });
-                } else await Promise.resolve();
+                await this[FETCH_PRODUCT_DATA]({ code, city });
                 next();
                 this.$progress.finish();
             } catch (error) {
                 this.$progress.fail();
-                $logger.error('debounce_fetchProduct', error);
                 next(false);
-                this.$progress.finish();
             }
         }, 500);
     },

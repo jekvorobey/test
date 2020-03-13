@@ -36,7 +36,7 @@ import VPicture from '../controls/VPicture/VPicture.vue';
 
 import Price from '../Price/Price.vue';
 
-import { generatePictureSourcePath } from '../../util/images';
+import { generatePictureSourcePath } from '../../util/media';
 import _debounce from 'lodash/debounce';
 import '../../assets/images/sprites/cross-small.svg';
 import '../../assets/images/sprites/wishlist-middle.svg';

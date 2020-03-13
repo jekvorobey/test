@@ -23,7 +23,7 @@ import VSvg from '../../controls/VSvg/VSvg.vue';
 import VLink from '../../controls/VLink/VLink.vue';
 import VPicture from '../../controls/VPicture/VPicture.vue';
 
-import { generatePictureSourcePath } from '../../../util/images';
+import { generatePictureSourcePath } from '../../../util/media';
 import './CheckoutProductCard.css';
 
 export default {

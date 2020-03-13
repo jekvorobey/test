@@ -1,26 +1,22 @@
 <template>
     <router-link tag="div" class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }" :to="href">
         <div class="catalog-product-card__img">
-            <v-picture v-if="image && image.id" :image="image" alt="">
-                <template v-slot:source="{ image }">
-                    <source
-                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
-                        type="image/webp"
-                        media="(min-width: 480px)"
-                    />
-                    <source
-                        :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                        type="image/webp"
-                        media="(max-width: 479px)"
-                    />
-                </template>
-                <template v-slot:fallback="{ image, lazy, alt }">
-                    <img
-                        class="blur-up lazyload v-picture__img"
-                        :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
-                        :alt="alt"
-                    />
-                </template>
+            <v-picture v-if="image && image.id">
+                <source
+                    :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
+                    type="image/webp"
+                    media="(min-width: 480px)"
+                />
+                <source
+                    :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                    type="image/webp"
+                    media="(max-width: 479px)"
+                />
+                <img
+                    class="blur-up lazyload v-picture__img"
+                    :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
+                    alt=""
+                />
             </v-picture>
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-card__controls">
@@ -32,7 +28,7 @@
                     Купить
                 </v-button>
                 <v-link tag="button" class="catalog-product-card__controls-link" @click.prevent="onPreview">
-                    Быстрый просмотр
+                    Быстрый&nbsp;просмотр
                 </v-link>
             </div>
         </div>
@@ -80,7 +76,7 @@ import '../../assets/images/sprites/wishlist-middle.svg';
 import '../../assets/images/sprites/logo.svg';
 import './CatalogProductCard.css';
 
-import { generatePictureSourcePath } from '../../util/images';
+import { generatePictureSourcePath } from '../../util/media';
 
 export default {
     name: 'catalog-product-card',

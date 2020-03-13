@@ -117,6 +117,11 @@ export default {
             );
         },
 
+        scrollFix(hashbang) {
+            window.location.hash = null;
+            window.location.hash = hashbang;
+        },
+
         startSessionTimer() {
             this.stopSessionTimer();
             this.sessionTimer = setInterval(this[CHECK_SESSION], interval.MINUTE);
@@ -154,6 +159,9 @@ export default {
         const onSetScrollDebounce = _debounce(this.onScroll, SCROLL_DEBOUCE_TIME);
         document.addEventListener(eventName.SCROLL, onSetScrollDebounce, true);
         this.$once('hook:beforeDestroy', () => document.removeEventListener(eventName.SCROLL, onSetScrollDebounce));
+
+        // скролл страницы до хеша при первой загрузке страницы
+        if (this.$route.hash) setTimeout(() => this.scrollFix(this.$route.hash), 1);
 
         setTimeout(() => {
             this[SET_CITY_CONFIRMATION_OPEN](true);

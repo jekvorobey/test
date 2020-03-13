@@ -367,7 +367,7 @@ import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '../../util/store';
-import { generatePictureSourcePath } from '../../util/images';
+import { generatePictureSourcePath } from '../../util/media';
 import { generateCategoryUrl } from '../../util/catalog';
 import { yaMapSettings } from '../../assets/scripts/settings/general';
 import { breakpoints } from '../../assets/scripts/enums/general';
