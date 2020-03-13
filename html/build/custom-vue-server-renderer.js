@@ -8710,21 +8710,26 @@ TemplateRenderer.prototype.renderStyles = function renderStyles(context) {
 
     var initial = this.preloadFiles || [];
     var async = this.getUsedAsyncFiles(context) || [];
+
+    // ИЗМЕНЕНО
+    // добавлен reverse
     var cssFiles = initial.concat(async.reverse()).filter(({ file }) => isCSS(file));
+
     return (
+        // ИЗМЕНЕНО
         // render links for css files
+        (context.styles || '') +
+        // context.styles is a getter exposed by vue-style-loader which contains
+        // the inline component styles collected during SSR
         (cssFiles.length
             ? cssFiles
                   .map(function(ref) {
-                      var file = ref.file;
+                      const { file } = ref;
 
-                      return '<link rel="stylesheet" href="' + this$1.publicPath + file + '">';
+                      return `<link rel="stylesheet" href="${this$1.publicPath}${file}">`;
                   })
                   .join('')
-            : '') +
-        // context.styles is a getter exposed by vue-style-loader which contains
-        // the inline component styles collected during SSR
-        (context.styles || '')
+            : '')
     );
 };
 
