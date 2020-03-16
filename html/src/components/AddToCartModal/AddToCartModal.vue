@@ -102,7 +102,7 @@ import { ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS } from '@store/modules/Cart/acti
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
 
 import { getRandomIntInclusive } from '@util';
-import { generatePictureSourcePath } from '@util/media';
+import { generatePictureSourcePath } from '@util/file';
 import './AddToCartModal.css';
 
 export const NAME = 'add-to-cart-modal';

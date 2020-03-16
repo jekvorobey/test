@@ -69,7 +69,7 @@ import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/logo.svg';
 import './CatalogProductListCard.css';
 
-import { generatePictureSourcePath } from '@util/media';
+import { generatePictureSourcePath } from '@util/file';
 
 export default {
     name: 'catalog-product-list-card',

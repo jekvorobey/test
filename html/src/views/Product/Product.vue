@@ -329,6 +329,38 @@
             </div>
         </section>
 
+        <section v-if="product.instruction" class="section product-view__section product-view__instruction">
+            <div class="container">
+                <ul class="product-view__instruction-list">
+                    <product-file-card
+                        class="product-view__instruction-item"
+                        file-name="Инструкция по применению"
+                        :key="product.instruction.id"
+                        :file-id="product.instruction.id"
+                        :size="product.instruction.size"
+                        :ext="product.instruction.ext"
+                    />
+                </ul>
+            </div>
+        </section>
+
+        <section
+            v-if="product.tips && product.tips.length > 0"
+            class="section product-view__section product-view__tips"
+        >
+            <div class="container">
+                <ul class="product-view__tips-list">
+                    <product-tip-card
+                        class="product-view__tips-item"
+                        v-for="tip in product.tips"
+                        :key="tip.id"
+                        :image="tip.image"
+                        :text="tip.text"
+                    />
+                </ul>
+            </div>
+        </section>
+
         <section
             v-if="product.howto && (product.howto.content || product.howto.image)"
             class="section product-view__info"
@@ -615,9 +647,12 @@ import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbIte
 
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
+
+import ProductTipCard from '@components/product/ProductTipCard/ProductTipCard.vue';
+import ProductFileCard from '@components/product/ProductFileCard/ProductFileCard.vue';
+import ProductCartPanel from '@components/product/ProductCartPanel/ProductCartPanel.vue';
 import ProductReviewCard from '@components/product/ProductReviewCard/ProductReviewCard.vue';
 import ProductPricePanel from '@components/product/ProductPricePanel/ProductPricePanel.vue';
-import ProductCartPanel from '@components/product/ProductCartPanel/ProductCartPanel.vue';
 import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDetailPanel.vue';
 
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
@@ -653,7 +688,7 @@ import {
     generatePictureSourcePath,
     generateYoutubeImagePlaceholderPath,
     generateYoutubeVideoSourcePath,
-} from '@util/media';
+} from '@util/file';
 import { breakpoints } from '@enums';
 import { productGroupTypes } from '@enums/product';
 
@@ -669,8 +704,6 @@ import '@images/sprites/star-small.svg';
 import '@images/sprites/arrow-small.svg';
 import '@images/sprites/wishlist-middle.svg';
 import './Product.css';
-
-import productBrand1 from '@images/mock/brandProduct1.png';
 
 const productGalleryOptions = {
     spaceBetween: 8,
@@ -758,6 +791,7 @@ const instagramOptions = {
 
 export default {
     name: 'product',
+
     components: {
         VSvg,
         VButton,
@@ -773,10 +807,12 @@ export default {
 
         Price,
         CatalogProductCard,
-        ProductReviewCard,
         BannerCard,
         InstagramCard,
 
+        ProductTipCard,
+        ProductFileCard,
+        ProductReviewCard,
         ProductCartPanel,
         ProductPricePanel,
         ProductDetailPanel,
@@ -789,7 +825,6 @@ export default {
     data() {
         return {
             isPriceVisible: true,
-            mockImg: productBrand1,
         };
     },
 

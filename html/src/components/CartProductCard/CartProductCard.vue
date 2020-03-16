@@ -68,7 +68,7 @@ import VCounter from '@controls/VCounter/VCounter.vue';
 import Price from '@components/Price/Price.vue';
 
 import _debounce from 'lodash/debounce';
-import { generatePictureSourcePath } from '@util/media';
+import { generatePictureSourcePath } from '@util/file';
 
 import '@images/sprites/cross-small.svg';
 import '@images/sprites/wishlist-middle.svg';

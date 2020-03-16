@@ -44,9 +44,5 @@ export default {
     components: {
         VLink,
     },
-
-    computed: {},
-
-    methods: {},
 };
 </script>

@@ -49,7 +49,7 @@ import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { generatePictureSourcePath } from '@util/media';
+import { generatePictureSourcePath } from '@util/file';
 import './ProductsSection.css';
 
 export default {

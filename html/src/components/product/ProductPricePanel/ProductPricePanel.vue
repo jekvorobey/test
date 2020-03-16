@@ -49,7 +49,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 import Price from '@components/Price/Price.vue';
 
-import { generatePictureSourcePath } from '@util/media';
+import { generatePictureSourcePath } from '@util/file';
 import { preparePrice } from '@util';
 import '@images/sprites/wishlist-middle.svg';
 import './ProductPricePanel.css';

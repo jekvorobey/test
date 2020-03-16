@@ -24,7 +24,7 @@ import '@util/catalog';
 import '@util/router';
 import '@util/container';
 import '@util/store';
-import '@util/media';
+import '@util/file';
 
 import titleMixin from '@util/title';
 
