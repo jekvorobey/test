@@ -51,6 +51,7 @@ module.exports = {
                     path.resolve(__dirname, '../src/'),
                     path.resolve(__dirname, '../node_modules/proxy-polyfill'),
                     path.resolve(__dirname, '../node_modules/resize-detector'),
+                    path.resolve(__dirname, '../node_modules/body-scroll-lock'),
                     path.resolve(__dirname, '../node_modules/vue-clamp'),
                 ],
             },
