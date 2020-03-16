@@ -49,69 +49,12 @@
         }
     }
 
-    &__banner,
-    &__brand {
+    &__banner {
         order: 1;
         height: 240px;
 
         @media (--tablet-lg) {
             order: 0;
-        }
-
-        .catalog-banner-card__panel {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transform: none;
-
-            @media (--tablet-lg-min) {
-                height: 100%;
-                text-align: left;
-                top: 0;
-                left: 35%;
-                width: 65%;
-
-                &-title {
-                    margin-bottom: var(--gs);
-                    width: 80%;
-                }
-
-                &-btn {
-                    width: max-content;
-                    max-width: 200px;
-                }
-            }
-
-            @media (--tablet-lg) {
-                height: 100%;
-                text-align: center;
-                align-items: center;
-                top: 0;
-                left: 0;
-                width: 100%;
-                padding: calc(var(--gs) * 3);
-
-                &-title {
-                    margin-bottom: var(--gs);
-                    width: 100%;
-                }
-
-                &-btn {
-                    width: max-content;
-                    max-width: 200px;
-                }
-            }
-        }
-    }
-
-    &__brand {
-        .catalog-banner-card__panel {
-            color: var(--cl-global);
-        }
-
-        .catalog-banner-card__panel-bottom-text {
-            font-weight: normal;
-            font-size: 16px;
         }
     }
 

@@ -23,6 +23,7 @@
 <script>
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VButton from '@controls/VButton/VButton.vue';
+
 import { generatePictureSourcePath } from '@util/file';
 import './BannerCard.css';
 
