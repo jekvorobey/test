@@ -1115,10 +1115,10 @@
         }
 
         &-slider {
-            position: static;
+            position: static !important;
 
             @supports (position: initial) {
-                position: initial;
+                position: initial !important;
             }
 
             @media (--tablet-min) {
