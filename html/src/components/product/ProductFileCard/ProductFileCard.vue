@@ -8,7 +8,11 @@
                 {{ fileName }}
             </div>
             <div class="text-grey text-sm product-file-card__body-bottom">
-                <span class="text-uppercase">{{ ext }}</span> - <span>{{ fileSize }}</span>
+                <span class="text-uppercase">{{ ext }}</span>
+                <span v-if="fileSize">
+                    -
+                    <span>{{ fileSize }}</span>
+                </span>
             </div>
         </div>
     </a>
@@ -51,7 +55,7 @@ export default {
 
     computed: {
         fileSize() {
-            return formatFileSize(this.size);
+            if (this.size) return formatFileSize(this.size);
         },
 
         filePath() {

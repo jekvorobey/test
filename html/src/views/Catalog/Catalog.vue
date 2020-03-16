@@ -20,7 +20,12 @@
                 </breadcrumb-item>
             </breadcrumbs>
 
-            <catalog-banner-card class="catalog-view__banner" v-if="productGroup.banner" :item="productGroup.banner" />
+            <catalog-banner-card class="catalog-view__banner" v-if="productGroup.banner" :item="productGroup.banner">
+                <source v-if="desktopImg" :data-srcset="desktopImg" type="image/webp" media="(min-width: 1024px)" />
+                <source v-if="tabletImg" :data-srcset="tabletImg" type="image/webp" media="(min-width: 480px)" />
+                <source v-if="mobileImg" :data-srcset="mobileImg" type="image/webp" media="(max-width: 479px)" />
+                <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
+            </catalog-banner-card>
         </div>
         <section class="section">
             <div class="container catalog-view__grid">
@@ -204,6 +209,7 @@ import {
 } from '@store/modules/Catalog/getters';
 
 import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '@util/catalog';
+import { generatePictureSourcePath } from '@util/file';
 import { registerModuleIfNotExists } from '@util/store';
 import { MIN_SCROLL_VALUE } from '@constants';
 import { productGroupTypes } from '@enums/product';
@@ -294,6 +300,30 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        mobileImg() {
+            const banner = this[PRODUCT_GROUP][BANNER];
+            const image = banner.mobileImage || banner.tabletImage || banner.desktopImage;
+            if (image) return generatePictureSourcePath(320, 240, image.id, 'webp');
+        },
+
+        tabletImg() {
+            const banner = this[PRODUCT_GROUP][BANNER];
+            const image = banner.tabletImage || banner.desktopImage;
+            if (image) return generatePictureSourcePath(768, 240, image.id, 'webp');
+        },
+
+        desktopImg() {
+            const banner = this[PRODUCT_GROUP][BANNER];
+            const image = banner.desktopImage || banner.tabletImage;
+            if (image) return generatePictureSourcePath(1224, 240, image.id, 'webp');
+        },
+
+        defaultImg() {
+            const banner = this[PRODUCT_GROUP][BANNER];
+            const image = banner.desktopImage || banner.tabletImage || banner.mobileImage;
+            if (image) return generatePictureSourcePath(1224, 240, image.id, image.sourceExt);
         },
     },
 
