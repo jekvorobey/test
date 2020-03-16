@@ -2,9 +2,9 @@ import qs from 'qs';
 import axios from 'axios';
 import { Cache } from 'axios-extensions';
 
-import { $http, $logger } from '@services/ServiceLocator';
-import { REQUEST_CANCEL_MESSAGE } from '@constants/general';
-import { interval } from '@enums/general';
+import { $http, $logger } from '@services';
+import { REQUEST_CANCEL_MESSAGE } from '@constants';
+import { interval } from '@enums';
 import { verificationCodeType } from '@enums/auth';
 
 let catalogItemsCancelSource = null;

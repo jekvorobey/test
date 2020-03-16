@@ -79,12 +79,12 @@ import {
     SET_DEFAULT_ADDRESS,
 } from '@store/modules/Profile/modules/Addresses/actions';
 
-import { $store, $progress, $logger } from '@services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 
-import { getRandomIntInclusive } from '@util/helpers';
+import { getRandomIntInclusive } from '@util';
 import '@images/sprites/plus-small.svg';
 import './Addresses.css';
 

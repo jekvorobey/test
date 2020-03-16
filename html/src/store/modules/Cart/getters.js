@@ -1,4 +1,4 @@
-import { $logger } from '@services/ServiceLocator';
+import { $logger } from '@services';
 import { cartItemTypes } from '@enums/product';
 
 export const GET_ITEMS_BY_TYPE = 'GET_ITEMS_BY_TYPE';

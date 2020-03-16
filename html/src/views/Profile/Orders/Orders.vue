@@ -239,7 +239,7 @@ import FilterButton from '@components/FilterButton/FilterButton.vue';
 import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 
-import { $store, $progress, $logger } from '@services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { LOCALE } from '@store';
@@ -259,8 +259,8 @@ import { FETCH_ORDERS, SET_LOAD_PATH, GET_ORDER_PAYMENT_LINK } from '@store/modu
 import { getOrderStatusColorClass } from '@util/order';
 import { orderStatus, orderPaymentStatus, sortFields } from '@enums/order';
 import { orderDateLocaleOptions } from '@settings/profile';
-import { sortDirections } from '@enums/general';
-import { DEFAULT_PAGE } from '@constants/general';
+import { sortDirections } from '@enums';
+import { DEFAULT_PAGE } from '@constants';
 
 import '@images/sprites/arrow-updown.svg';
 import '@images/sprites/arrow-down.svg';

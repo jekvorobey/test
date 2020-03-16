@@ -1,4 +1,4 @@
-import { requestStatus } from '@enums/general';
+import { requestStatus } from '@enums';
 
 import getters, {
     RECEIVE_METHOD_STATUS,

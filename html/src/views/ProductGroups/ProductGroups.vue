@@ -124,7 +124,7 @@ import GroupList from '@components/GroupList/GroupList.vue';
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
 import CategoriesSection from '@components/blocks/CategoriesSection/CategoriesSection.vue';
 
-import { $store, $progress, $logger } from '@services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { CATEGORIES, SCROLL } from '@store';
@@ -138,7 +138,7 @@ import { BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT } from '@store/modules/Product
 import { FETCH_ITEMS, SET_LOAD_PATH, SET_TYPE } from '@store/modules/ProductGroups/actions';
 
 import { productGroupTypes } from '@enums/product';
-import { MIN_SCROLL_VALUE } from '@constants/general';
+import { MIN_SCROLL_VALUE } from '@constants';
 import { registerModuleIfNotExists } from '@util/store';
 import { generateCategoryUrl } from '@util/catalog';
 import _debounce from 'lodash/debounce';

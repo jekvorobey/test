@@ -1,5 +1,5 @@
-import { $logger } from '@services/ServiceLocator';
-import { responseStatus } from '@enums/general';
+import { $logger } from '@services';
+import { responseStatus } from '@enums';
 import { storeErrorHandler } from '@util/store';
 
 import {

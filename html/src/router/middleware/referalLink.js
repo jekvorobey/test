@@ -1,4 +1,4 @@
-import { httpCodes, injectionType, interval } from '@enums/general';
+import { httpCodes, injectionType, interval } from '@enums';
 import { breakMiddleware } from '@util/router';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';

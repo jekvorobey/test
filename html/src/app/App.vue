@@ -73,8 +73,8 @@ import { CHECK_SESSION, LOGIN_BY_PASSWORD } from '@store/modules/Auth/actions';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { MIN_SCROLL_VALUE, SCROLL_DEBOUCE_TIME } from '@constants/general';
-import { eventName, interval } from '@enums/general';
+import { MIN_SCROLL_VALUE, SCROLL_DEBOUCE_TIME } from '@constants';
+import { eventName, interval } from '@enums';
 
 export default {
     name: 'app',

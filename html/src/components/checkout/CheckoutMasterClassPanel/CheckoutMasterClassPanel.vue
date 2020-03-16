@@ -160,7 +160,7 @@ import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 import { orderBy as _orderBy } from 'lodash/collection';
 
-import { requestStatus } from '@enums/general';
+import { requestStatus } from '@enums';
 
 import '@images/sprites/payment/bonus.svg';
 import '@images/sprites/payment/visa.svg';

@@ -95,8 +95,8 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
-import { cancelRoute } from '@settings/general';
-import { $store } from '@services/ServiceLocator';
+import { cancelRoute } from '@settings';
+import { $store } from '@services';
 import { registerModuleIfNotExists } from '@util/store';
 import '@images/sprites/arrow-updown.svg';
 import '@images/sprites/home.svg';

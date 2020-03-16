@@ -1,4 +1,4 @@
-import { cancelRoute } from '@settings/general';
+import { cancelRoute } from '@settings';
 
 export function breakMiddleware(appContext, next, redirect, code) {
     if (appContext.isServer) {

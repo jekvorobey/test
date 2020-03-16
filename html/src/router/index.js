@@ -1,4 +1,4 @@
-import { injectionType } from '@enums/general';
+import { injectionType } from '@enums';
 import { Container, injectable, inject } from 'inversify';
 import { injectableClass } from '@util/container';
 

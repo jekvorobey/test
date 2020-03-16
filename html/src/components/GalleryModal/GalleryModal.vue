@@ -40,7 +40,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as PRODUCT_MODULE, PRODUCT } from '@store/modules/Product';
 
 import { generatePictureSourcePath } from '@util/media';
-import { breakpoints } from '@enums/general';
+import { breakpoints } from '@enums';
 import './GalleryModal.css';
 
 const galleryOptions = {

@@ -139,7 +139,7 @@ import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 
 import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
 
-import { $store, $progress, $logger } from '@services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 import { mapActions, mapState } from 'vuex';
 
 import { LOCALE } from '@store';

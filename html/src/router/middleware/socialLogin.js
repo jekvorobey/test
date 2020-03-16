@@ -2,7 +2,7 @@ import { breakMiddleware } from '@util/router';
 
 import { NAME as AUTH_MODULE } from '@store/modules/Auth';
 import { LOGIN_BY_SOCIAL } from '@store/modules/Auth/actions';
-import { httpCodes } from '@enums/general';
+import { httpCodes } from '@enums';
 
 export default async function socialLogin({ from, to, next, store: { state, dispatch }, appContext, resolve }) {
     try {

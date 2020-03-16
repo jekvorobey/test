@@ -177,7 +177,7 @@ import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddT
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { $store, $progress, $logger } from '@services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
@@ -205,7 +205,7 @@ import {
 
 import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '@util/catalog';
 import { registerModuleIfNotExists } from '@util/store';
-import { MIN_SCROLL_VALUE } from '@constants/general';
+import { MIN_SCROLL_VALUE } from '@constants';
 import { productGroupTypes } from '@enums/product';
 
 import '@images/sprites/cross-small.svg';

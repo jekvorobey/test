@@ -1,4 +1,4 @@
-import { $logger } from '@services/ServiceLocator';
+import { $logger } from '@services';
 import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode } from '@api';
 import {
     SET_BESTSELLER_PRODUCTS,

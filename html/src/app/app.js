@@ -3,11 +3,12 @@
  * Полифилы и базовые либы приложения
  */
 
-import '../assets/scripts/common';
+import '@scripts';
+
 import Vue from 'vue';
 import { sync } from 'vuex-router-sync';
 
-import { injectionType } from '@enums/general';
+import { injectionType } from '@enums';
 
 import createStore from '@store';
 import createRouter from '@router';
@@ -18,9 +19,9 @@ import '@plugins/meta';
 import '@plugins/scroll-lock';
 import '@plugins/observer';
 
+import '@util';
 import '@util/catalog';
 import '@util/router';
-import '@util/helpers';
 import '@util/container';
 import '@util/store';
 import '@util/media';

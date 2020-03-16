@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getMenu, getCategories, getBanners, getBannersByCode } from '@api';
-import { $logger, $locale } from '@services/ServiceLocator';
+import { $logger, $locale } from '@services';
 import { storeErrorHandler } from '@util/store';
 
 import { SET_CATEGORIES, SET_MENU, SET_BANNER } from './mutations';

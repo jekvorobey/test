@@ -1,4 +1,4 @@
-import { $logger } from '@services/ServiceLocator';
+import { $logger } from '@services';
 import { getProducts } from '@api';
 import { SET_FEATURED_PRODUCTS } from './mutations';
 

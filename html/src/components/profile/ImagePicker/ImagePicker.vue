@@ -47,7 +47,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
-import { getRandomIntInclusive } from '@util/helpers';
+import { getRandomIntInclusive } from '@util';
 import '@images/sprites/cross.svg';
 import '@images/sprites/account-middle.svg';
 import './ImagePicker.css';

@@ -103,7 +103,7 @@ import PromopageAddByLinkModal, {
     NAME as PROMOPAGE_ADD_BY_LINK_MODAL_NAME,
 } from '@components/profile/PromopageAddByLinkModal/PromopageAddByLinkModal.vue';
 
-import { $store, $progress, $logger } from '@services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';

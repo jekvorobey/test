@@ -125,7 +125,7 @@ import Price from '@components/Price/Price.vue';
 import CheckoutProductPanel from '@components/checkout/CheckoutProductPanel/CheckoutProductPanel.vue';
 import CheckoutMasterClassPanel from '@components/checkout/CheckoutMasterClassPanel/CheckoutMasterClassPanel.vue';
 
-import { $store, $logger, $progress } from '@services/ServiceLocator';
+import { $store, $logger, $progress } from '@services';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
@@ -136,7 +136,7 @@ import { FETCH_CHECKOUT_DATA, ADD_PROMOCODE, DELETE_PROMOCODE, COMMIT_DATA } fro
 import { CHECKOUT, PROMO_CODE, SUMMARY } from '@store/modules/Checkout/getters';
 
 import { registerModuleIfNotExists } from '@util/store';
-import { preparePrice } from '@util/helpers';
+import { preparePrice } from '@util';
 import { cartItemTypes } from '@enums/product';
 import '@images/sprites/check-small.svg';
 import '@images/sprites/arrow-small.svg';

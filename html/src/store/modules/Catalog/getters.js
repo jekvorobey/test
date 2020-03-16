@@ -1,5 +1,5 @@
 import { mapFilterSegments, getActiveCategories, getAllActiveCategories } from '@util/catalog';
-import { productGroupTypes } from '@enums/general';
+import { productGroupTypes } from '@enums';
 
 export const ROUTE_SEGMENTS = 'routeSegments';
 export const FILTER_SEGMENTS = 'filterSegments';

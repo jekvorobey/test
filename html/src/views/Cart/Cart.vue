@@ -223,9 +223,9 @@ import {
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { breakpoints } from '@enums/general';
+import { breakpoints } from '@enums';
 import { cartItemTypes } from '@enums/product';
-import { preparePrice } from '@util/helpers';
+import { preparePrice } from '@util';
 import '@images/sprites/alert.svg';
 import './Cart.css';
 

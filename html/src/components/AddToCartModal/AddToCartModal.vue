@@ -101,7 +101,7 @@ import { NAME as CART_MODULE, CART_DATA, RELATIVE_PRODUCTS } from '@store/module
 import { ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS } from '@store/modules/Cart/actions';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
 
-import { getRandomIntInclusive } from '@util/helpers';
+import { getRandomIntInclusive } from '@util';
 import { generatePictureSourcePath } from '@util/media';
 import './AddToCartModal.css';
 

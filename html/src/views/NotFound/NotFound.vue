@@ -67,7 +67,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as FEATURED_MODULE, FEATURED_PRODUCTS } from '@store/modules/Featured';
 import { FETCH_FEATURED_PRODUCTS } from '@store/modules/Featured/actions';
 
-import { breakpoints } from '@enums/general';
+import { breakpoints } from '@enums';
 
 import './NotFound.css';
 

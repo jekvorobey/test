@@ -35,7 +35,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 import InstagramCard from '@components/InstagramCard/InstagramCard.vue';
 
-import { breakpoints } from '@enums/general';
+import { breakpoints } from '@enums';
 import './InstagramSection.css';
 
 const sliderOptions = {

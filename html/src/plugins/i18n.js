@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { injectionType } from '@enums/general';
+import { injectionType } from '@enums';
 import { injectableClass, injectClass } from '@util/container';
 import { LOCALIZATIONS, LOCALE, FALLBACK_LOCALE } from '@store';
 

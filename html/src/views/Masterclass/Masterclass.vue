@@ -344,7 +344,7 @@ import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
-import { $store, $progress, $logger } from '@services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL } from '@store';
@@ -369,8 +369,8 @@ import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '@util/store';
 import { generatePictureSourcePath } from '@util/media';
 import { generateCategoryUrl } from '@util/catalog';
-import { yaMapSettings } from '@settings/general';
-import { breakpoints } from '@enums/general';
+import { yaMapSettings } from '@settings';
+import { breakpoints } from '@enums';
 import { productGroupTypes } from '@enums/product';
 
 import '@images/sprites/socials/vkontakte-bw.svg';

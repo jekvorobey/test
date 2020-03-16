@@ -1,4 +1,4 @@
-import { $logger } from '@services/ServiceLocator';
+import { $logger } from '@services';
 import { getBrandCatalog } from '@api';
 import { SET_ITEMS, SET_LOAD as M_SET_LOAD } from './mutations';
 

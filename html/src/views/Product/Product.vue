@@ -624,7 +624,7 @@ import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/Quick
 import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '@components/GalleryModal/GalleryModal.vue';
 
-import { $store, $progress, $logger } from '@services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { SCROLL } from '@store';
@@ -654,7 +654,7 @@ import {
     generateYoutubeImagePlaceholderPath,
     generateYoutubeVideoSourcePath,
 } from '@util/media';
-import { breakpoints } from '@enums/general';
+import { breakpoints } from '@enums';
 import { productGroupTypes } from '@enums/product';
 
 import { generateCategoryUrl } from '@util/catalog';

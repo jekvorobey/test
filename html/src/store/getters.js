@@ -1,6 +1,6 @@
 import { generateCategoryUrl } from '@util/catalog';
 import { productGroupTypes } from '@enums/product';
-import { menuCode } from '@enums/general';
+import { menuCode } from '@enums';
 
 function prepareCategory({ id, name, code, items = [] }) {
     return {

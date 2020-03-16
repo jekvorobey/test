@@ -74,12 +74,12 @@ import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
 import { mapActions, mapState } from 'vuex';
-import { $store } from '@services/ServiceLocator';
+import { $store } from '@services';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { maskCardNumber } from '@util/helpers';
+import { maskCardNumber } from '@util';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 

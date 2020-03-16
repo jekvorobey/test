@@ -209,8 +209,8 @@ import {
 } from '@store/modules/Auth/actions';
 
 import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
-import { rawPhone } from '@util/helpers';
-import { phoneMaskOptions } from '@settings/general';
+import { rawPhone } from '@util';
+import { phoneMaskOptions } from '@settings';
 import { verificationCodeType } from '@enums/auth';
 import './LoginModal.css';
 

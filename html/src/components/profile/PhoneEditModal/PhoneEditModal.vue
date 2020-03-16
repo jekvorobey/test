@@ -93,9 +93,9 @@ import { NAME as CABINET_MODULE } from '@store/modules/Profile/modules/Cabinet';
 import { SEND_CODE, UPDATE_CREDENTIAL } from '@store/modules/Profile/modules/Cabinet/actions';
 
 import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
-import { phoneMaskOptions } from '@settings/general';
+import { phoneMaskOptions } from '@settings';
 import { verificationCodeType } from '@enums/auth';
-import { rawPhone } from '@util/helpers';
+import { rawPhone } from '@util';
 import './PhoneEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;

@@ -107,7 +107,7 @@ import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as CABINET_MODULE, REQUISITES } from '@store/modules/Profile/modules/Cabinet';
 import { UPDATE_REQUISITES } from '@store/modules/Profile/modules/Cabinet/actions';
 
-import { $dadata, $logger } from '@services/ServiceLocator';
+import { $dadata, $logger } from '@services';
 import './DetailsModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;

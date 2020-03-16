@@ -22,7 +22,7 @@ import CategoriesSection from '@components/blocks/CategoriesSection/CategoriesSe
 import ProductsSection from '@components/blocks/ProductsSection/ProductsSection.vue';
 import BrandsSection from '@components/blocks/BrandsSection/BrandsSection.vue';
 
-import { $store, $progress, $logger } from '@services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions } from 'vuex';
 
 import landingModule, { NAME as LANDING_MODULE, RENDER_DATA } from '@store/modules/Landing';

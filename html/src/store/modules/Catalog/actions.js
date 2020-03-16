@@ -1,4 +1,4 @@
-import { $logger } from '@services/ServiceLocator';
+import { $logger } from '@services';
 import { productGroupTypes, productGroupBase } from '@enums/product';
 import { storeErrorHandler } from '@util/store';
 import { getAllActiveCategories } from '@util/catalog';

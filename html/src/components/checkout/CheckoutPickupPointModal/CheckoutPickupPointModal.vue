@@ -70,7 +70,7 @@ import { PICKUP_POINTS, SELECTED_DELIVERY_METHOD_ID, DELIVERY_METHODS } from '@s
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { receiveTypes } from '@enums/general';
+import { receiveTypes } from '@enums';
 import pin from '@images/icons/pin-filled.svg';
 import './CheckoutPickupPointModal.css';
 

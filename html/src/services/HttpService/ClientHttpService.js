@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { cacheAdapterEnhancer } from 'axios-extensions';
 
-import { $logger } from '@services/ServiceLocator';
-import { httpCodes } from '@enums/general';
-import { HTTP_REQUEST_TIMEOUT } from '@constants/general';
+import { $logger } from '@services';
+import { httpCodes } from '@enums';
+import { HTTP_REQUEST_TIMEOUT } from '@constants';
 
 import HttpServiceBase from './base';
 

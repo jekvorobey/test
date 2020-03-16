@@ -3,7 +3,7 @@ import HttpServiceBase from './base';
 
 import { cartItemTypes } from '@enums/product';
 import { receiveMethods, deliveryMethods, deliveryTypes } from '@enums/checkout';
-import { preparePrice, addDays } from '@util/helpers';
+import { preparePrice, addDays } from '@util';
 
 import product1 from '@images/mock/product1.png';
 import product2 from '@images/mock/product2.png';

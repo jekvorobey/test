@@ -1,7 +1,7 @@
 import flatPickrEn from 'flatpickr/dist/l10n/default';
 import { receiveMethods } from '@enums/checkout';
 import { genderType } from '@enums/profile';
-import { socials } from '@enums/general';
+import { socials } from '@enums';
 import { orderStatus, deliveryStatus } from '@enums/order';
 
 const flatpickrLocale = flatPickrEn;

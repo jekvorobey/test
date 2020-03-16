@@ -50,7 +50,7 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import Price from '@components/Price/Price.vue';
 
 import { generatePictureSourcePath } from '@util/media';
-import { preparePrice } from '@util/helpers';
+import { preparePrice } from '@util';
 import '@images/sprites/wishlist-middle.svg';
 import './ProductPricePanel.css';
 

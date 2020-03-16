@@ -1,5 +1,5 @@
 import _debounce from 'lodash/debounce';
-import { $logger } from '@services/ServiceLocator';
+import { $logger } from '@services';
 import { search, getProducts } from '@api';
 import {
     SET_SEARCH as M_SET_SEARCH,

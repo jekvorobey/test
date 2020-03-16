@@ -115,7 +115,7 @@ import {
     UPDATE_ENTITIES,
 } from '@store/modules/Profile/modules/Preferences/actions';
 
-import { $store, $progress, $logger } from '@services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 import _debounce from 'lodash/debounce';
 import '@images/sprites/cross.svg';
 import '@images/sprites/plus-small.svg';

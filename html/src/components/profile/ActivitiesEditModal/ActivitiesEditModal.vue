@@ -37,7 +37,7 @@ import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as CABINET_MODULE, ACTIVITIES, All_ACTIVITIES } from '@store/modules/Profile/modules/Cabinet';
 import { UPDATE_ACTIVITIES } from '@store/modules/Profile/modules/Cabinet/actions';
 
-import { getRandomInt } from '@util/helpers';
+import { getRandomInt } from '@util';
 import _cloneDeep from 'lodash/cloneDeep';
 import '@images/sprites/cross.svg';
 import './ActivitiesEditModal.css';

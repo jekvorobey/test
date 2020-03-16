@@ -1,16 +1,16 @@
 import Vue from 'vue';
-import { injectionType } from './assets/scripts/enums/general';
 import { Container } from 'inversify';
-import { injectableClass, injectClass } from './util/container';
+import { injectionType } from '@enums';
+import { injectableClass, injectClass } from '@util/container';
 
-import ServiceLocator from './services/ServiceLocator';
+import ServiceLocator from '@services';
 
-import ClientLogger from './services/LogService/ClientLogger';
-import ClientCookie from './services/CookieService/ClientCookie';
-import HttpService from './services/HttpService/MockServiceAdapter';
-import ProgressService from './services/ProgressService';
-import DadataHttpService from './services/HttpService/DadataHttpService';
-import ApplicationContext from './services/ApplicationContext';
+import ClientLogger from '@services/LogService/ClientLogger';
+import ClientCookie from '@services/CookieService/ClientCookie';
+import HttpService from '@services/HttpService/MockServiceAdapter';
+import ProgressService from '@services/ProgressService';
+import DadataHttpService from '@services/HttpService/DadataHttpService';
+import ApplicationContext from '@services/ApplicationContext';
 
 import createApp from './app/app';
 

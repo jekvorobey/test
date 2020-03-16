@@ -36,7 +36,7 @@ import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { $dadata } from '@services/ServiceLocator';
+import { $dadata } from '@services';
 import { suggestionTypes } from '@enums/suggestions';
 import '@images/sprites/search-middle.svg';
 import './CitySelectionModal.css';

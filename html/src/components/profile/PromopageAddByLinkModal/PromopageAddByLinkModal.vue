@@ -40,7 +40,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { getRandomInt } from '@util/helpers';
+import { getRandomInt } from '@util';
 import _cloneDeep from 'lodash/cloneDeep';
 import '@images/sprites/cross.svg';
 import './PromopageAddByLinkModal.css';

@@ -78,7 +78,7 @@ import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as CABINET_MODULE, PORTFOLIO } from '@store/modules/Profile/modules/Cabinet';
 import { UPDATE_PORTFOLIO } from '@store/modules/Profile/modules/Cabinet/actions';
 
-import { getRandomInt } from '@util/helpers';
+import { getRandomInt } from '@util';
 import '@images/sprites/cross.svg';
 import './PortfolioEditModal.css';
 

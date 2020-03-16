@@ -74,7 +74,7 @@ import {
 } from '@store/modules/Profile/modules/Cabinet';
 import { UPDATE_PERSONAL } from '@store/modules/Profile/modules/Cabinet/actions';
 
-import { httpCodes } from '@enums/general';
+import { httpCodes } from '@enums';
 import { genderType } from '@enums/profile';
 import './PersonalEditModal.css';
 

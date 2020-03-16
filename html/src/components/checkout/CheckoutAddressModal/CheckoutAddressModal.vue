@@ -129,7 +129,7 @@ import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 
 import validationMixin, { required } from '@plugins/validation';
 import { suggestionTypes } from '@enums/suggestions';
-import { $dadata } from '@services/ServiceLocator';
+import { $dadata } from '@services';
 
 import pin from '@images/icons/pin-filled.svg';
 import './CheckoutAddressModal.css';

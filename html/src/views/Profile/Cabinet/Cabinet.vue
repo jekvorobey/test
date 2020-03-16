@@ -260,7 +260,7 @@ import PasswordEditModal, {
 } from '@components/profile/PasswordEditModal/PasswordEditModal.vue';
 import DetailsModal, { NAME as DETAILS_MODAL_NAME } from '@components/profile/DetailsModal/DetailsModal.vue';
 
-import { $store, $progress, $logger } from '@services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { LOCALE } from '@store';
@@ -302,8 +302,8 @@ import {
     LOAD_CERTIFICATE,
 } from '@store/modules/Profile/modules/Cabinet/actions';
 
-import { socials, mimeType, httpCodes } from '@enums/general';
-import { cancelRoute } from '@settings/general';
+import { socials, mimeType, httpCodes } from '@enums';
+import { cancelRoute } from '@settings';
 import '@images/sprites/edit.svg';
 import './Cabinet.css';
 
