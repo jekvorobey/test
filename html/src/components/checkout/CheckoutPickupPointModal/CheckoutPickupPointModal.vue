@@ -54,23 +54,24 @@
     </general-modal>
 </template>
 <script>
-import '../../../plugins/ya-maps';
+import '@plugins/ya-maps';
 
-import VButton from '../../controls/VButton/VButton.vue';
-import VSelect from '../../controls/VSelect/VSelect.vue';
-import CheckoutOptionCard from '../CheckoutOptionCard/CheckoutOptionCard.vue';
-import GeneralModal from '../../GeneralModal/GeneralModal.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
+
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
+import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
 import { mapGetters, mapState, mapActions } from 'vuex';
-import { NAME as CHECKOUT_MODULE } from '../../../store/modules/Checkout';
-import { SET_PICKUP_POINT } from '../../../store/modules/Checkout/actions';
-import { PICKUP_POINTS, SELECTED_DELIVERY_METHOD_ID, DELIVERY_METHODS } from '../../../store/modules/Checkout/getters';
+import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
+import { SET_PICKUP_POINT } from '@store/modules/Checkout/actions';
+import { PICKUP_POINTS, SELECTED_DELIVERY_METHOD_ID, DELIVERY_METHODS } from '@store/modules/Checkout/getters';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { receiveTypes } from '../../../assets/scripts/enums/general';
-import pin from '../../../assets/images/icons/pin-filled.svg';
+import { receiveTypes } from '@enums/general';
+import pin from '@images/icons/pin-filled.svg';
 import './CheckoutPickupPointModal.css';
 
 export const NAME = 'checkout-pickup-point-modal';

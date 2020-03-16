@@ -145,83 +145,83 @@
     </section>
 </template>
 <script>
-import '../../assets/images/sprites/logo.svg';
-import '../../assets/images/sprites/logo-w.svg';
-import '../../assets/images/sprites/logo-text.svg';
+import '@images/sprites/logo.svg';
+import '@images/sprites/logo-w.svg';
+import '@images/sprites/logo-text.svg';
 
-import '../../assets/images/sprites/plus.svg';
-import '../../assets/images/sprites/minus.svg';
-import '../../assets/images/sprites/arrow-down.svg';
-import '../../assets/images/sprites/datepicker.svg';
-import '../../assets/images/sprites/cross.svg';
-import '../../assets/images/sprites/eye.svg';
-import '../../assets/images/sprites/parallel.svg';
-import '../../assets/images/sprites/mark.svg';
+import '@images/sprites/plus.svg';
+import '@images/sprites/minus.svg';
+import '@images/sprites/arrow-down.svg';
+import '@images/sprites/datepicker.svg';
+import '@images/sprites/cross.svg';
+import '@images/sprites/eye.svg';
+import '@images/sprites/parallel.svg';
+import '@images/sprites/mark.svg';
 
-import '../../assets/images/sprites/cross-small.svg';
-import '../../assets/images/sprites/arrow-down-small.svg';
-import '../../assets/images/sprites/plus-small.svg';
-import '../../assets/images/sprites/arrow-small.svg';
-import '../../assets/images/sprites/star-small.svg';
-import '../../assets/images/sprites/count-small.svg';
-import '../../assets/images/sprites/add-to-cart-small.svg';
+import '@images/sprites/cross-small.svg';
+import '@images/sprites/arrow-down-small.svg';
+import '@images/sprites/plus-small.svg';
+import '@images/sprites/arrow-small.svg';
+import '@images/sprites/star-small.svg';
+import '@images/sprites/count-small.svg';
+import '@images/sprites/add-to-cart-small.svg';
 
-import '../../assets/images/sprites/search-middle.svg';
-import '../../assets/images/sprites/account-middle.svg';
-import '../../assets/images/sprites/wishlist-middle.svg';
-import '../../assets/images/sprites/cart-middle.svg';
-import '../../assets/images/sprites/good-middle.svg';
-import '../../assets/images/sprites/info-middle.svg';
-import '../../assets/images/sprites/question-middle.svg';
-import '../../assets/images/sprites/check-middle.svg';
+import '@images/sprites/search-middle.svg';
+import '@images/sprites/account-middle.svg';
+import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/cart-middle.svg';
+import '@images/sprites/good-middle.svg';
+import '@images/sprites/info-middle.svg';
+import '@images/sprites/question-middle.svg';
+import '@images/sprites/check-middle.svg';
 
-import '../../assets/images/sprites/pin-special.svg';
-import '../../assets/images/sprites/play-special.svg';
+import '@images/sprites/pin-special.svg';
+import '@images/sprites/play-special.svg';
 
-import '../../assets/images/sprites/socials/youtube.svg';
-import '../../assets/images/sprites/socials/twitter.svg';
-import '../../assets/images/sprites/socials/ok.svg';
-import '../../assets/images/sprites/socials/google.svg';
-import '../../assets/images/sprites/socials/yandex.svg';
-import '../../assets/images/sprites/socials/whatsup.svg';
-import '../../assets/images/sprites/socials/viber.svg';
-import '../../assets/images/sprites/socials/instagram.svg';
-import '../../assets/images/sprites/socials/facebook.svg';
-import '../../assets/images/sprites/socials/telegram.svg';
-import '../../assets/images/sprites/socials/vkontakte.svg';
+import '@images/sprites/socials/youtube.svg';
+import '@images/sprites/socials/twitter.svg';
+import '@images/sprites/socials/ok.svg';
+import '@images/sprites/socials/google.svg';
+import '@images/sprites/socials/yandex.svg';
+import '@images/sprites/socials/whatsup.svg';
+import '@images/sprites/socials/viber.svg';
+import '@images/sprites/socials/instagram.svg';
+import '@images/sprites/socials/facebook.svg';
+import '@images/sprites/socials/telegram.svg';
+import '@images/sprites/socials/vkontakte.svg';
 
-import '../../assets/images/sprites/socials/youtube-bw.svg';
-import '../../assets/images/sprites/socials/twitter-bw.svg';
-import '../../assets/images/sprites/socials/ok-bw.svg';
-import '../../assets/images/sprites/socials/google-bw.svg';
-import '../../assets/images/sprites/socials/yandex-bw.svg';
-import '../../assets/images/sprites/socials/whatsup-bw.svg';
-import '../../assets/images/sprites/socials/viber-bw.svg';
-import '../../assets/images/sprites/socials/instagram-bw.svg';
-import '../../assets/images/sprites/socials/facebook-bw.svg';
-import '../../assets/images/sprites/socials/telegram-bw.svg';
-import '../../assets/images/sprites/socials/vkontakte-bw.svg';
+import '@images/sprites/socials/youtube-bw.svg';
+import '@images/sprites/socials/twitter-bw.svg';
+import '@images/sprites/socials/ok-bw.svg';
+import '@images/sprites/socials/google-bw.svg';
+import '@images/sprites/socials/yandex-bw.svg';
+import '@images/sprites/socials/whatsup-bw.svg';
+import '@images/sprites/socials/viber-bw.svg';
+import '@images/sprites/socials/instagram-bw.svg';
+import '@images/sprites/socials/facebook-bw.svg';
+import '@images/sprites/socials/telegram-bw.svg';
+import '@images/sprites/socials/vkontakte-bw.svg';
 
-import '../../assets/images/sprites/socials/youtube-color.svg';
-import '../../assets/images/sprites/socials/twitter-color.svg';
-import '../../assets/images/sprites/socials/ok-color.svg';
-import '../../assets/images/sprites/socials/google-color.svg';
-import '../../assets/images/sprites/socials/yandex-color.svg';
-import '../../assets/images/sprites/socials/whatsup-color.svg';
-import '../../assets/images/sprites/socials/viber-color.svg';
-import '../../assets/images/sprites/socials/instagram-color.svg';
-import '../../assets/images/sprites/socials/facebook-color.svg';
-import '../../assets/images/sprites/socials/telegram-color.svg';
-import '../../assets/images/sprites/socials/vkontakte-color.svg';
+import '@images/sprites/socials/youtube-color.svg';
+import '@images/sprites/socials/twitter-color.svg';
+import '@images/sprites/socials/ok-color.svg';
+import '@images/sprites/socials/google-color.svg';
+import '@images/sprites/socials/yandex-color.svg';
+import '@images/sprites/socials/whatsup-color.svg';
+import '@images/sprites/socials/viber-color.svg';
+import '@images/sprites/socials/instagram-color.svg';
+import '@images/sprites/socials/facebook-color.svg';
+import '@images/sprites/socials/telegram-color.svg';
+import '@images/sprites/socials/vkontakte-color.svg';
 
-import '../../assets/images/sprites/payment/mir.svg';
-import '../../assets/images/sprites/payment/mastercard.svg';
-import '../../assets/images/sprites/payment/visa.svg';
+import '@images/sprites/payment/mir.svg';
+import '@images/sprites/payment/mastercard.svg';
+import '@images/sprites/payment/visa.svg';
 
-import '../../assets/images/sprites/apps/app-store.svg';
-import '../../assets/images/sprites/apps/google-play.svg';
+import '@images/sprites/apps/app-store.svg';
+import '@images/sprites/apps/google-play.svg';
 
-import VSvg from '../../components/controls/VSvg/VSvg.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 import './UiKitIcons.css';
 
 export default {

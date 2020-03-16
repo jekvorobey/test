@@ -1,7 +1,7 @@
-import { getProduct } from '../../../api';
+import { getProduct } from '@api';
 import { SET_PRODUCT_PREVIEW, SET_PRODUCT_PREVIEW_STATUS } from './mutations';
-import { $logger } from '../../../services/ServiceLocator';
-import { requestStatus } from '../../../assets/scripts/enums/general';
+import { $logger } from '@services/ServiceLocator';
+import { requestStatus } from '@enums/general';
 
 export const FETCH_PRODUCT_PREVIEW = 'FETCH_PRODUCT_PREVIEW';
 

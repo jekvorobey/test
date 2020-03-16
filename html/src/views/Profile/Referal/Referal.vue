@@ -151,22 +151,22 @@
 </template>
 
 <script>
-import VButton from '../../../components/controls/VButton/VButton.vue';
-import VPagination from '../../../components/controls/VPagination/VPagination.vue';
-import VArcCounter from '../../../components/controls/VArcCounter/VArcCounter.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VPagination from '@controls/VPagination/VPagination.vue';
+import VArcCounter from '@controls/VArcCounter/VArcCounter.vue';
 
-import Price from '../../../components/Price/Price.vue';
-import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
-import FilterButton from '../../../components/FilterButton/FilterButton.vue';
+import Price from '@components/Price/Price.vue';
+import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+import FilterButton from '@components/FilterButton/FilterButton.vue';
 
-import referalProduct1 from '../../../assets/images/mock/referalProduct1.png';
-import referalProduct2 from '../../../assets/images/mock/referalProduct2.png';
-import referalProduct3 from '../../../assets/images/mock/referalProduct3.png';
+import referalProduct1 from '@images/mock/referalProduct1.png';
+import referalProduct2 from '@images/mock/referalProduct2.png';
+import referalProduct3 from '@images/mock/referalProduct3.png';
 
-import { baseChartOptions } from '../../../assets/scripts/settings/profile';
+import { baseChartOptions } from '@settings/profile';
 import './Referal.css';
 
-const VChart = () => import(/* webpackChunkName: "v-chart" */ '../../../components/controls/VChart/VChart.vue');
+const VChart = () => import(/* webpackChunkName: "v-chart" */ '@controls/VChart/VChart.vue');
 
 export default {
     name: 'referal',

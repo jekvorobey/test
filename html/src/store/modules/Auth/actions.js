@@ -1,6 +1,6 @@
-import { $logger } from '../../../services/ServiceLocator';
-import { responseStatus } from '../../../assets/scripts/enums/general';
-import { storeErrorHandler } from '../../../util/store';
+import { $logger } from '@services/ServiceLocator';
+import { responseStatus } from '@enums/general';
+import { storeErrorHandler } from '@util/store';
 
 import {
     login,
@@ -13,7 +13,7 @@ import {
     loginByPassword,
     loginBySocial,
     resetPassword,
-} from '../../../api';
+} from '@api';
 import { SET_HAS_SESSION } from './mutations';
 
 export const LOGIN_BY_SOCIAL = 'LOGIN_BY_SOCIAL';

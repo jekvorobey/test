@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import ProgressBar from '../../components/ProgressBar/ProgressBar.vue';
+import ProgressBar from '@components/ProgressBar/ProgressBar.vue';
 
 /**
  * Глобальный прогресс бар, сервис юзается только на клиенте

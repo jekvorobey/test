@@ -16,14 +16,14 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VLink from '../controls/VLink/VLink.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
-import GeneralPopupPanel from '../GeneralPopupPanel/GeneralPopupPanel.vue';
-import NavigationPanel from '../profile/NavigationPanel/NavigationPanel.vue';
+import GeneralPopupPanel from '@components/GeneralPopupPanel/GeneralPopupPanel.vue';
+import NavigationPanel from '@components/profile/NavigationPanel/NavigationPanel.vue';
 
 import { mapActions, mapState, mapGetters } from 'vuex';
-import { NAME as AUTH_MODULE, HAS_SESSION } from '../../store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
 import './ProfileNavigationPanel.css';
 

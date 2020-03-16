@@ -1,9 +1,11 @@
 import axios from 'axios';
-import HttpServiceBase from './base';
-import { $logger } from '../ServiceLocator';
 import { cacheAdapterEnhancer } from 'axios-extensions';
-import { httpCodes } from '../../assets/scripts/enums/general';
-import { HTTP_REQUEST_TIMEOUT } from '../../assets/scripts/constants/general';
+
+import { $logger } from '@services/ServiceLocator';
+import { httpCodes } from '@enums/general';
+import { HTTP_REQUEST_TIMEOUT } from '@constants/general';
+
+import HttpServiceBase from './base';
 
 export default class ClientHttpService extends HttpServiceBase {
     constructor(context) {

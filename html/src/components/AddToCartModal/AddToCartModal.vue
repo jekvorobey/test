@@ -81,28 +81,28 @@
 </template>
 
 <script>
-import VLink from '../controls/VLink/VLink.vue';
-import VButton from '../controls/VButton/VButton.vue';
-import VSpinner from '../controls/VSpinner/VSpinner.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
-import Price from '../Price/Price.vue';
+import Price from '@components/Price/Price.vue';
 
-import CatalogProductCard from '../CatalogProductCard/CatalogProductCard.vue';
-import CartProductCard from '../CartProductCard/CartProductCard.vue';
-import GeneralModal from '../GeneralModal/GeneralModal.vue';
-import { NAME as QUICK_VIEW_MODAL_NAME } from '../QuickViewModal/QuickViewModal.vue';
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
+import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as CART_MODULE, CART_DATA, RELATIVE_PRODUCTS } from '../../store/modules/Cart';
-import { ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS } from '../../store/modules/Cart/actions';
-import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '../../store/modules/Cart/getters';
+import { NAME as CART_MODULE, CART_DATA, RELATIVE_PRODUCTS } from '@store/modules/Cart';
+import { ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS } from '@store/modules/Cart/actions';
+import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
 
-import { getRandomIntInclusive } from '../../util/helpers';
-import { generatePictureSourcePath } from '../../util/media';
+import { getRandomIntInclusive } from '@util/helpers';
+import { generatePictureSourcePath } from '@util/media';
 import './AddToCartModal.css';
 
 export const NAME = 'add-to-cart-modal';

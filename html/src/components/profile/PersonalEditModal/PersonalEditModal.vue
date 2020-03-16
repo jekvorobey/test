@@ -48,22 +48,22 @@
 </template>
 
 <script>
-import VButton from '../../controls/VButton/VButton.vue';
-import VInput from '../../controls/VInput/VInput.vue';
-import VCheck from '../../controls/VCheck/VCheck.vue';
-import VDatepicker from '../../controls/VDatepicker/VDatepicker.vue';
-import GeneralModal from '../../GeneralModal/GeneralModal.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
+import VDatepicker from '@controls/VDatepicker/VDatepicker.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapState, mapActions } from 'vuex';
-import { LOCALE, LOCALIZATIONS } from '../../../store';
+import { LOCALE, LOCALIZATIONS } from '@store';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as AUTH_MODULE } from '../../../store/modules/Auth';
-import { CHECK_SESSION } from '../../../store/modules/Auth/actions';
+import { NAME as AUTH_MODULE } from '@store/modules/Auth';
+import { CHECK_SESSION } from '@store/modules/Auth/actions';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import {
     NAME as CABINET_MODULE,
     FIRST_NAME,
@@ -71,11 +71,11 @@ import {
     MIDDLE_NAME,
     BIRTHDAY,
     GENDER,
-} from '../../../store/modules/Profile/modules/Cabinet';
-import { UPDATE_PERSONAL } from '../../../store/modules/Profile/modules/Cabinet/actions';
+} from '@store/modules/Profile/modules/Cabinet';
+import { UPDATE_PERSONAL } from '@store/modules/Profile/modules/Cabinet/actions';
 
-import { httpCodes } from '../../../assets/scripts/enums/general';
-import { genderType } from '../../../assets/scripts/enums/profile';
+import { httpCodes } from '@enums/general';
+import { genderType } from '@enums/profile';
 import './PersonalEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;

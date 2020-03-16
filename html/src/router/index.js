@@ -1,6 +1,6 @@
-import { injectionType } from '../assets/scripts/enums/general';
+import { injectionType } from '@enums/general';
 import { Container, injectable, inject } from 'inversify';
-import { injectableClass } from '../util/container';
+import { injectableClass } from '@util/container';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -9,13 +9,13 @@ import pipeline from './pipeline';
 import referalLink from './middleware/referalLink';
 import registration from './middleware/registration';
 
-import { SET_MENU_OPEN } from '../store/actions';
+import { SET_MENU_OPEN } from '@store/actions';
 
-import { NAME as SEARCH_MODULE } from '../store/modules/Search';
-import { SET_SEARCH } from '../store/modules/Search/actions';
+import { NAME as SEARCH_MODULE } from '@store/modules/Search';
+import { SET_SEARCH } from '@store/modules/Search/actions';
 
-import { NAME as MODAL_MODULE } from '../store/modules/Modal';
-import { CLOSE_ALL, CHANGE_MODAL_STATE } from '../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CLOSE_ALL, CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 /*
  * Preventing errors in console in Vue-router >= 3.1.0

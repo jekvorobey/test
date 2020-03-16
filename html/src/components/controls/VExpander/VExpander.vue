@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import VLink from '../controls/VLink/VLink.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
 import './VExpander.css';
 

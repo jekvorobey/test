@@ -596,38 +596,38 @@
 </template>
 
 <script>
-import VSvg from '../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../components/controls/VLink/VLink.vue';
-import VButton from '../../components/controls/VButton/VButton.vue';
-import VSticky from '../../components/controls/VSticky/VSticky.vue';
-import VHtml from '../../components/controls/VHtml/VHtml.vue';
-import VSlider from '../../components/controls/VSlider/VSlider.vue';
-import VPicture from '../../components/controls/VPicture/VPicture.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
+import VHtml from '@controls/VHtml/VHtml.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import Price from '../../components/Price/Price.vue';
-import BannerCard from '../../components/BannerCard/BannerCard.vue';
-import InstagramCard from '../../components/InstagramCard/InstagramCard.vue';
-import VRating from '../../components/controls/VRating/VRating.vue';
-import Tag from '../../components/Tag/Tag.vue';
+import Price from '@components/Price/Price.vue';
+import BannerCard from '@components/BannerCard/BannerCard.vue';
+import InstagramCard from '@components/InstagramCard/InstagramCard.vue';
+import VRating from '@controls/VRating/VRating.vue';
+import Tag from '@components/Tag/Tag.vue';
 
-import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
-import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
-import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
-import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
-import ProductReviewCard from '../../components/ProductReviewCard/ProductReviewCard.vue';
-import ProductPricePanel from '../../components/ProductPricePanel/ProductPricePanel.vue';
-import ProductCartPanel from '../../components/ProductCartPanel/ProductCartPanel.vue';
-import ProductDetailPanel from '../../components/ProductDetailPanel/ProductDetailPanel.vue';
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
+import ProductReviewCard from '@components/product/ProductReviewCard/ProductReviewCard.vue';
+import ProductPricePanel from '@components/product/ProductPricePanel/ProductPricePanel.vue';
+import ProductCartPanel from '@components/product/ProductCartPanel/ProductCartPanel.vue';
+import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDetailPanel.vue';
 
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
-import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '../../components/GalleryModal/GalleryModal.vue';
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
+import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '@components/GalleryModal/GalleryModal.vue';
 
-import { $store, $progress, $logger } from '../../services/ServiceLocator';
+import { $store, $progress, $logger } from '@services/ServiceLocator';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { SCROLL } from '../../store';
+import { SCROLL } from '@store';
 
 import productModule, {
     NAME as PRODUCT_MODULE,
@@ -636,41 +636,41 @@ import productModule, {
     MASTERCLASSES,
     FEATURED_PRODUCTS,
     INSTAGRAM_ITEMS,
-} from '../../store/modules/Product';
-import { FETCH_PRODUCT_DATA } from '../../store/modules/Product/actions';
+} from '@store/modules/Product';
+import { FETCH_PRODUCT_DATA } from '@store/modules/Product/actions';
 
-import { NAME as CART_MODULE } from '../../store/modules/Cart';
-import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
-import { NAME as GEO_MODULE, SELECTED_CITY } from '../../store/modules/Geolocation';
+import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
-import { registerModuleIfNotExists } from '../../util/store';
+import { registerModuleIfNotExists } from '@util/store';
 import {
     generatePictureSourcePath,
     generateYoutubeImagePlaceholderPath,
     generateYoutubeVideoSourcePath,
-} from '../../util/media';
-import { breakpoints } from '../../assets/scripts/enums/general';
-import { productGroupTypes } from '../../assets/scripts/enums/product';
+} from '@util/media';
+import { breakpoints } from '@enums/general';
+import { productGroupTypes } from '@enums/product';
 
-import { generateCategoryUrl } from '../../util/catalog';
+import { generateCategoryUrl } from '@util/catalog';
 
-import '../../assets/images/sprites/socials/vkontakte-bw.svg';
-import '../../assets/images/sprites/socials/facebook-bw.svg';
-import '../../assets/images/sprites/socials/instagram-bw.svg';
+import '@images/sprites/socials/vkontakte-bw.svg';
+import '@images/sprites/socials/facebook-bw.svg';
+import '@images/sprites/socials/instagram-bw.svg';
 
-import '../../assets/images/sprites/cart-empty.svg';
-import '../../assets/images/sprites/star-empty-small.svg';
-import '../../assets/images/sprites/star-small.svg';
-import '../../assets/images/sprites/arrow-small.svg';
-import '../../assets/images/sprites/wishlist-middle.svg';
+import '@images/sprites/cart-empty.svg';
+import '@images/sprites/star-empty-small.svg';
+import '@images/sprites/star-small.svg';
+import '@images/sprites/arrow-small.svg';
+import '@images/sprites/wishlist-middle.svg';
 import './Product.css';
 
-import productBrand1 from '../../assets/images/mock/brandProduct1.png';
+import productBrand1 from '@images/mock/brandProduct1.png';
 
 const productGalleryOptions = {
     spaceBetween: 8,

@@ -35,11 +35,11 @@
 <script>
 import './Page502.critical.css';
 
-import VSvg from '../../components/controls/VSvg/VSvg.vue';
-import HeaderLogoPanel from '../../components/VHeader/HeaderLogoPanel/HeaderLogoPanel.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import HeaderLogoPanel from '@components/VHeader/HeaderLogoPanel/HeaderLogoPanel.vue';
 
-import '../../assets/images/sprites/logo.svg';
-import '../../assets/images/sprites/logo-text.svg';
+import '@images/sprites/logo.svg';
+import '@images/sprites/logo-text.svg';
 
 import './Page502.css';
 

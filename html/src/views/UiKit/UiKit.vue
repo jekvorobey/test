@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import VLink from '../../components/controls/VLink/VLink.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
 import UiKitColors from './UiKitColors.vue';
 import UiKitBase from './UiKitBase.vue';

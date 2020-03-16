@@ -42,14 +42,14 @@
 </template>
 
 <script>
-import VSvg from '../../controls/VSvg/VSvg.vue';
-import VButton from '../../controls/VButton/VButton.vue';
-import VLink from '../../controls/VLink/VLink.vue';
-import VPicture from '../../controls/VPicture/VPicture.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import { getRandomIntInclusive } from '../../../util/helpers';
-import '../../../assets/images/sprites/cross.svg';
-import '../../../assets/images/sprites/account-middle.svg';
+import { getRandomIntInclusive } from '@util/helpers';
+import '@images/sprites/cross.svg';
+import '@images/sprites/account-middle.svg';
 import './ImagePicker.css';
 
 export default {

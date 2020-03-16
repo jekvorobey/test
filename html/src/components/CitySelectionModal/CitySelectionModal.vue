@@ -23,22 +23,22 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VInput from '../controls/VInput/VInput.vue';
-import GeneralModal from '../GeneralModal/GeneralModal.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VInput from '@controls/VInput/VInput.vue';
 
-import { mapState, mapActions } from 'vuex';
-
-import { NAME as GEOLOCATION_MODULE, SELECTED_CITY } from '../../store/modules/Geolocation';
-import { SET_SELECTED_CITY } from '../../store/modules/Geolocation/actions';
-
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import _debounce from 'lodash/debounce';
-import { $dadata } from '../../services/ServiceLocator';
-import { suggestionTypes } from '../../assets/scripts/enums/suggestions';
-import '../../assets/images/sprites/search-middle.svg';
+import { mapState, mapActions } from 'vuex';
+import { NAME as GEOLOCATION_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
+import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
+
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
+import { $dadata } from '@services/ServiceLocator';
+import { suggestionTypes } from '@enums/suggestions';
+import '@images/sprites/search-middle.svg';
 import './CitySelectionModal.css';
 
 export const NAME = 'city-selection-modal';

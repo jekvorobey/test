@@ -38,10 +38,10 @@
 </template>
 
 <script>
-import VSvg from '../VSvg/VSvg.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 
-import '../../../assets/images/sprites/minus-small.svg';
-import '../../../assets/images/sprites/plus-small.svg';
+import '@images/sprites/minus-small.svg';
+import '@images/sprites/plus-small.svg';
 import './VCounter.css';
 
 const actionType = {

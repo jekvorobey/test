@@ -99,10 +99,10 @@
 </template>
 
 <script>
-import VSvg from '../VSvg/VSvg.vue';
-import VButton from '../VButton/VButton.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
 
-import '../../../../images/sprite/arrow-down.svg';
+import '@images/sprite/arrow-down.svg';
 import './VCombobox.css';
 
 const keys = {

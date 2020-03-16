@@ -1,9 +1,9 @@
-import { $logger } from '../../../services/ServiceLocator';
-import { productGroupTypes, productGroupBase } from '../../../assets/scripts/enums/product';
-import { storeErrorHandler } from '../../../util/store';
-import { getAllActiveCategories } from '../../../util/catalog';
+import { $logger } from '@services/ServiceLocator';
+import { productGroupTypes, productGroupBase } from '@enums/product';
+import { storeErrorHandler } from '@util/store';
+import { getAllActiveCategories } from '@util/catalog';
 
-import { getCatalogItems, getCategories, getBanners, getBrand, getFilters, getProductGroup } from '../../../api';
+import { getCatalogItems, getCategories, getBanners, getBrand, getFilters, getProductGroup } from '@api';
 import { SET_LOAD_PATH as M_SET_LOAD_PATH, APPLY_DATA } from './mutations';
 
 const FETCH_FILTERS = 'FETCH_FILTERS';

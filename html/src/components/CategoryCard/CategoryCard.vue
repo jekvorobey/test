@@ -9,12 +9,12 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VPicture from '../controls/VPicture/VPicture.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import { generateCategoryUrl } from '../../util/catalog';
-import { productGroupTypes } from '../../assets/scripts/enums/product';
-import '../../assets/images/sprites/logo.svg';
+import { generateCategoryUrl } from '@util/catalog';
+import { productGroupTypes } from '@enums/product';
+import '@images/sprites/logo.svg';
 import './CategoryCard.css';
 
 export default {

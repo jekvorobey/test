@@ -1,8 +1,8 @@
-import { httpCodes, injectionType } from '../../assets/scripts/enums/general';
-import { breakMiddleware } from '../../util/router';
+import { httpCodes, injectionType } from '@enums/general';
+import { breakMiddleware } from '@util/router';
 
-import { NAME as MODAL_MODULE } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 export default async function registration({ to, next, container, nextMiddleware }) {
     try {

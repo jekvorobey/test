@@ -1,11 +1,11 @@
 import qs from 'qs';
 import axios from 'axios';
-
 import { Cache } from 'axios-extensions';
-import { $http, $logger } from '../services/ServiceLocator';
-import { REQUEST_CANCEL_MESSAGE } from '../assets/scripts/constants/general';
-import { interval } from '../assets/scripts/enums/general';
-import { verificationCodeType } from '../assets/scripts/enums/auth';
+
+import { $http, $logger } from '@services/ServiceLocator';
+import { REQUEST_CANCEL_MESSAGE } from '@constants/general';
+import { interval } from '@enums/general';
+import { verificationCodeType } from '@enums/auth';
 
 let catalogItemsCancelSource = null;
 const sessionCheckCache = new Cache({ maxAge: interval.FIVE_MINUTES });

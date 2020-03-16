@@ -1,8 +1,8 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
-import { receiveMethods } from '../scripts/enums/checkout';
-import { genderType } from '../scripts/enums/profile';
-import { socials } from '../scripts/enums/general';
-import { orderStatus, deliveryStatus } from '../scripts/enums/order';
+import { receiveMethods } from '@enums/checkout';
+import { genderType } from '@enums/profile';
+import { socials } from '@enums/general';
+import { orderStatus, deliveryStatus } from '@enums/order';
 
 const flatpickrLocale = flatPickrRu.ru;
 const main = {

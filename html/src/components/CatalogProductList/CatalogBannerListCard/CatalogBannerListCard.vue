@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import VButton from '../../controls/VButton/VButton.vue';
-import VPicture from '../../controls/VPicture/VPicture.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import { generatePictureSourcePath } from '../../../util/media';
+import { generatePictureSourcePath } from '@util/media';
 import './CatalogBannerListCard.css';
 
 const btnType = Object.freeze({

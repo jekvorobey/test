@@ -1,5 +1,5 @@
-import { $logger } from '../../../services/ServiceLocator';
-import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode } from '../../../api';
+import { $logger } from '@services/ServiceLocator';
+import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode } from '@api';
 import {
     SET_BESTSELLER_PRODUCTS,
     SET_NEW_PRODUCTS,

@@ -1,4 +1,4 @@
-import { cartItemTypes } from '../../assets/scripts/enums/product';
+import { cartItemTypes } from '@enums/product';
 
 /**
  * @Module

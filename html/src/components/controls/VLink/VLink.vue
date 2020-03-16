@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import VSvg from '../VSvg/VSvg.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 
 const placements = ['before', 'after'];
 const validTags = ['a', 'button'];

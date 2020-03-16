@@ -1,7 +1,8 @@
-import { storeErrorHandler } from '../../../../../util/store';
-import { getProfileOrders, getProfileOrder, getProfileOrderPaymentLink } from '../../../../../api';
+import { storeErrorHandler } from '@util/store';
+import { getProfileOrders, getProfileOrder, getProfileOrderPaymentLink } from '@api';
+import { ORDERS_PAGE_SIZE } from '@constants/profile';
+
 import { SET_ORDERS, SET_ORDERS_MORE, SET_ORDER_DETAILS, SET_QUERY_PARAMS } from './mutations';
-import { ORDERS_PAGE_SIZE } from '../../../../../assets/scripts/constants/profile';
 
 export const FETCH_ORDERS = 'FETCH_ORDERS';
 export const FETCH_ORDER_DETAILS = 'FETCH_ORDER_DETAILS';

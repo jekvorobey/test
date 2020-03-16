@@ -20,11 +20,11 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VSticky from '../controls/VSticky/VSticky.vue';
-import VModal from '../controls/modal/modal.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
+import VModal from '@controls/modal/modal.vue';
 
-import '../../assets/images/sprites/cross.svg';
+import '@images/sprites/cross.svg';
 import './GeneralModal.css';
 
 export default {

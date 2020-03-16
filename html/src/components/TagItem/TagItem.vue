@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 
-import '../../assets/images/sprites/cross-small.svg';
+import '@images/sprites/cross-small.svg';
 import './TagItem.css';
 
 export default {

@@ -44,14 +44,14 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VButton from '../controls/VButton/VButton.vue';
-import VPicture from '../controls/VPicture/VPicture.vue';
-import Price from '../Price/Price.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
+import Price from '@components/Price/Price.vue';
 
-import { generatePictureSourcePath } from '../../util/media';
-import { preparePrice } from '../../util/helpers';
-import '../../assets/images/sprites/wishlist-middle.svg';
+import { generatePictureSourcePath } from '@util/media';
+import { preparePrice } from '@util/helpers';
+import '@images/sprites/wishlist-middle.svg';
 import './ProductPricePanel.css';
 
 export default {

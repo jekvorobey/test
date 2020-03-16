@@ -1,4 +1,4 @@
-import socialLogin from '../../router/middleware/socialLogin';
+import socialLogin from '@router/middleware/socialLogin';
 
 /**
  * @Module

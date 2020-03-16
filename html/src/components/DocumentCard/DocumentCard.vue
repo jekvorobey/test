@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import VLink from '../controls/VLink/VLink.vue';
+import VLink from '@controls/VLink/VLink.vue';
 import './DocumentCard.css';
 
 export default {

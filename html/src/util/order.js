@@ -1,4 +1,4 @@
-import { orderStatus, deliveryStatus } from '../assets/scripts/enums/order';
+import { orderStatus, deliveryStatus } from '@enums/order';
 
 export function getDeliveryStatusColorClass(status) {
     if (status === deliveryStatus.STATUS_DONE) return 'status-color-success';

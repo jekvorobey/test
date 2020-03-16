@@ -27,28 +27,28 @@
 </template>
 
 <script>
-import VSvg from '../../controls/VSvg/VSvg.vue';
-import VLink from '../../controls/VLink/VLink.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
-import Price from '../../Price/Price.vue';
+import Price from '@components/Price/Price.vue';
 
-import CartHeaderPanel from '../../CartHeaderPanel/CartHeaderPanel.vue';
-import ProfileNavigationPanel from '../../ProfileNavigationPanel/ProfileNavigationPanel.vue';
+import CartHeaderPanel from '@components/CartHeaderPanel/CartHeaderPanel.vue';
+import ProfileNavigationPanel from '@components/ProfileNavigationPanel/ProfileNavigationPanel.vue';
 
-import { NAME as REGISTRATION_MODAL_NAME } from '../../RegistrationModal/RegistrationModal.vue';
+import { NAME as REGISTRATION_MODAL_NAME } from '@components/RegistrationModal/RegistrationModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as AUTH_MODULE, HAS_SESSION } from '../../../store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
-import { NAME as CART_MODULE, CART_ITEMS } from '../../../store/modules/Cart';
-import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '../../../store/modules/Cart/getters';
+import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
+import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
 
-import { NAME as MODAL_MODULE } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import '../../../assets/images/sprites/cart-middle.svg';
-import '../../../assets/images/sprites/wishlist-middle.svg';
-import '../../../assets/images/sprites/account-middle.svg';
+import '@images/sprites/cart-middle.svg';
+import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/account-middle.svg';
 import './HeaderUserPanel.critical.css';
 
 export default {

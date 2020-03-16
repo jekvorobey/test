@@ -30,10 +30,10 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { NAME as CATALOG_MODULE } from '../../store/modules/Catalog';
-import { ROOT_CATEGORY, ACTIVE_CATEGORIES } from '../../store/modules/Catalog/getters';
+import { NAME as CATALOG_MODULE } from '@store/modules/Catalog';
+import { ROOT_CATEGORY, ACTIVE_CATEGORIES } from '@store/modules/Catalog/getters';
 
-import { generateCategoryUrl } from '../../util/catalog';
+import { generateCategoryUrl } from '@util/catalog';
 import './CategoryTreeItem.css';
 
 export default {

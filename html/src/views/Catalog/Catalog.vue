@@ -152,37 +152,38 @@
 </template>
 
 <script>
-import VSvg from '../../components/controls/VSvg/VSvg.vue';
-import VButton from '../../components/controls/VButton/VButton.vue';
-import VCheck from '../../components/controls/VCheck/VCheck.vue';
-import VPagination from '../../components/controls/VPagination/VPagination.vue';
-import VRange from '../../components/controls/VRange/VRange.vue';
-import VSelect from '../../components/controls/VSelect/VSelect.vue';
-import VSticky from '../../components/controls/VSticky/VSticky.vue';
-import VExpander from '../../components/VExpander/VExpander.vue';
-import Modal from '../../components/controls/modal/modal.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
+import VPagination from '@controls/VPagination/VPagination.vue';
+import VRange from '@controls/VRange/VRange.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
+import VExpander from '@controls/VExpander/VExpander.vue';
+import Modal from '@controls/modal/modal.vue';
 
-import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
-import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
-import FilterButton from '../../components/FilterButton/FilterButton.vue';
-import TagItem from '../../components/TagItem/TagItem.vue';
-import CategoryTreeItem from '../../components/CategoryTreeItem/CategoryTreeItem.vue';
-import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
-import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
-import CatalogProductList from '../../components/CatalogProductList/CatalogProductList.vue';
+import FilterButton from '@components/FilterButton/FilterButton.vue';
+import TagItem from '@components/TagItem/TagItem.vue';
+import CategoryTreeItem from '@components/CategoryTreeItem/CategoryTreeItem.vue';
+import CatalogFilter from '@components/CatalogFilter/CatalogFilter.vue';
+import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
+import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
 
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 
-import { $store, $progress, $logger } from '../../services/ServiceLocator';
+import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
+import { $store, $progress, $logger } from '@services/ServiceLocator';
 
-import { NAME as CART_MODULE } from '../../store/modules/Cart';
-import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import catalogModule, {
     NAME as CATALOG_MODULE,
@@ -191,8 +192,8 @@ import catalogModule, {
     BANNER,
     CATEGORIES,
     PRODUCT_GROUP,
-} from '../../store/modules/Catalog';
-import { SET_LOAD_PATH, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
+} from '@store/modules/Catalog';
+import { SET_LOAD_PATH, FETCH_CATALOG_DATA } from '@store/modules/Catalog/actions';
 import {
     ACTIVE_TAGS,
     ACTIVE_CATEGORY,
@@ -200,14 +201,14 @@ import {
     PAGES_COUNT,
     ROUTE_SEGMENTS,
     BREADCRUMBS,
-} from '../../store/modules/Catalog/getters';
+} from '@store/modules/Catalog/getters';
 
-import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '../../util/catalog';
-import { registerModuleIfNotExists } from '../../util/store';
-import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants/general';
-import { productGroupTypes } from '../../assets/scripts/enums/product';
-import _debounce from 'lodash/debounce';
-import '../../assets/images/sprites/cross-small.svg';
+import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '@util/catalog';
+import { registerModuleIfNotExists } from '@util/store';
+import { MIN_SCROLL_VALUE } from '@constants/general';
+import { productGroupTypes } from '@enums/product';
+
+import '@images/sprites/cross-small.svg';
 import './Catalog.css';
 
 export default {

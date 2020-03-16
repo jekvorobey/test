@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import VPicture from '../controls/VPicture/VPicture.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 import './GuideCard.css';
 
 export default {

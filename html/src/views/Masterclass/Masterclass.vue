@@ -324,74 +324,74 @@
 <script>
 import { yandexMap, ymapMarker } from 'vue-yandex-maps';
 
-import VSvg from '../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../components/controls/VLink/VLink.vue';
-import VButton from '../../components/controls/VButton/VButton.vue';
-import VHtml from '../../components/controls/VHtml/VHtml.vue';
-import VSlider from '../../components/controls/VSlider/VSlider.vue';
-import VPicture from '../../components/controls/VPicture/VPicture.vue';
-import VExpander from '../../components/VExpander/VExpander.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VHtml from '@controls/VHtml/VHtml.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
+import VExpander from '@controls/VExpander/VExpander.vue';
 
-import Price from '../../components/Price/Price.vue';
-import TicketCard from '../../components/TicketCard/TicketCard.vue';
-import AuthorCard from '../../components/AuthorCard/AuthorCard.vue';
-import BannerCard from '../../components/BannerCard/BannerCard.vue';
-import InstagramCard from '../../components/InstagramCard/InstagramCard.vue';
-import MasterClassBannerCard from '../../components/MasterClassBannerCard/MasterClassBannerCard.vue';
+import Price from '@components/Price/Price.vue';
+import TicketCard from '@components/TicketCard/TicketCard.vue';
+import AuthorCard from '@components/AuthorCard/AuthorCard.vue';
+import BannerCard from '@components/BannerCard/BannerCard.vue';
+import InstagramCard from '@components/InstagramCard/InstagramCard.vue';
+import MasterClassBannerCard from '@components/MasterClassBannerCard/MasterClassBannerCard.vue';
 
-import AttentionPanel from '../../components/AttentionPanel/AttentionPanel.vue';
+import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 
-import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
-import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
-import { $store, $progress, $logger } from '../../services/ServiceLocator';
+import { $store, $progress, $logger } from '@services/ServiceLocator';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { SCROLL } from '../../store';
+import { SCROLL } from '@store';
 
 import masterClassModule, {
     NAME as MASTERCLASS_MODULE,
     MASTERCLASS,
     FEATURED_MASTERCLASSES,
     INSTAGRAM_ITEMS,
-} from '../../store/modules/Masterclass';
-import { FETCH_MASTERCLASS_DATA } from '../../store/modules/Masterclass/actions';
+} from '@store/modules/Masterclass';
+import { FETCH_MASTERCLASS_DATA } from '@store/modules/Masterclass/actions';
 
-import { NAME as CART_MODULE } from '../../store/modules/Cart';
-import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
-import { NAME as GEO_MODULE, SELECTED_CITY } from '../../store/modules/Geolocation';
+import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
-import { registerModuleIfNotExists } from '../../util/store';
-import { generatePictureSourcePath } from '../../util/media';
-import { generateCategoryUrl } from '../../util/catalog';
-import { yaMapSettings } from '../../assets/scripts/settings/general';
-import { breakpoints } from '../../assets/scripts/enums/general';
-import { productGroupTypes } from '../../assets/scripts/enums/product';
+import { registerModuleIfNotExists } from '@util/store';
+import { generatePictureSourcePath } from '@util/media';
+import { generateCategoryUrl } from '@util/catalog';
+import { yaMapSettings } from '@settings/general';
+import { breakpoints } from '@enums/general';
+import { productGroupTypes } from '@enums/product';
 
-import '../../assets/images/sprites/socials/vkontakte-bw.svg';
-import '../../assets/images/sprites/socials/facebook-bw.svg';
-import '../../assets/images/sprites/socials/telegram-bw.svg';
-import '../../assets/images/sprites/socials/ok-bw.svg';
-import '../../assets/images/sprites/socials/twitter-bw.svg';
+import '@images/sprites/socials/vkontakte-bw.svg';
+import '@images/sprites/socials/facebook-bw.svg';
+import '@images/sprites/socials/telegram-bw.svg';
+import '@images/sprites/socials/ok-bw.svg';
+import '@images/sprites/socials/twitter-bw.svg';
 
-import '../../assets/images/sprites/link.svg';
-import '../../assets/images/sprites/cart-empty.svg';
-import '../../assets/images/sprites/star-empty-small.svg';
-import '../../assets/images/sprites/star-small.svg';
-import '../../assets/images/sprites/arrow-small.svg';
-import '../../assets/images/sprites/wishlist-middle.svg';
-import pin from '../../assets/images/icons/pin-filled.svg';
+import '@images/sprites/link.svg';
+import '@images/sprites/cart-empty.svg';
+import '@images/sprites/star-empty-small.svg';
+import '@images/sprites/star-small.svg';
+import '@images/sprites/arrow-small.svg';
+import '@images/sprites/wishlist-middle.svg';
+import pin from '@images/icons/pin-filled.svg';
 import './Masterclass.css';
 
-import profileMasterClassImg1 from '../../assets/images/mock/profileMasterClass1.png';
-import profileMasterClassImg2 from '../../assets/images/mock/profileMasterClass2.png';
-import profileMasterClassImg3 from '../../assets/images/mock/profileMasterClass3.png';
-import profileMasterClassImg4 from '../../assets/images/mock/profileMasterClass4.png';
+import profileMasterClassImg1 from '@images/mock/profileMasterClass1.png';
+import profileMasterClassImg2 from '@images/mock/profileMasterClass2.png';
+import profileMasterClassImg3 from '@images/mock/profileMasterClass3.png';
+import profileMasterClassImg4 from '@images/mock/profileMasterClass4.png';
 
 const sliderOptions = {
     spaceBetween: 24,

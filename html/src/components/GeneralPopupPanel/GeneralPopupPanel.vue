@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 import { VPopover } from 'v-tooltip';
 
 import { mapActions } from 'vuex';
 
-import '../../assets/images/sprites/cross.svg';
+import '@images/sprites/cross.svg';
 import './GeneralPopupPanel.css';
 
 export default {

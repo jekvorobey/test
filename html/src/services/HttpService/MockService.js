@@ -1,80 +1,81 @@
 import _cloneDeep from 'lodash/cloneDeep';
 import HttpServiceBase from './base';
-import { cartItemTypes } from '../../assets/scripts/enums/product';
-import { receiveMethods, deliveryMethods, deliveryTypes } from '../../assets/scripts/enums/checkout';
-import { preparePrice, addDays } from '../../util/helpers';
 
-import product1 from '../../assets/images/mock/product1.png';
-import product2 from '../../assets/images/mock/product2.png';
-import product3 from '../../assets/images/mock/product3.png';
-import product4 from '../../assets/images/mock/product4.png';
-import product5 from '../../assets/images/mock/product5.png';
-// import product6 from '../../assets/images/mock/product6.png';
-import product7 from '../../assets/images/mock/product7.png';
-import product8 from '../../assets/images/mock/product8.png';
-import product9 from '../../assets/images/mock/product9.png';
-import product10 from '../../assets/images/mock/product10.png';
-import product11 from '../../assets/images/mock/product11.png';
-import product12 from '../../assets/images/mock/product12.png';
+import { cartItemTypes } from '@enums/product';
+import { receiveMethods, deliveryMethods, deliveryTypes } from '@enums/checkout';
+import { preparePrice, addDays } from '@util/helpers';
 
-import instagram1 from '../../assets/images/mock/insta1.png';
-import instagram2 from '../../assets/images/mock/insta2.png';
-import instagram3 from '../../assets/images/mock/insta3.png';
-import instagram4 from '../../assets/images/mock/insta4.png';
-import instagram5 from '../../assets/images/mock/insta5.png';
-import instagram6 from '../../assets/images/mock/insta6.png';
-import instagram7 from '../../assets/images/mock/insta7.png';
-import instagram8 from '../../assets/images/mock/insta8.png';
+import product1 from '@images/mock/product1.png';
+import product2 from '@images/mock/product2.png';
+import product3 from '@images/mock/product3.png';
+import product4 from '@images/mock/product4.png';
+import product5 from '@images/mock/product5.png';
+// import product6 from '@images/mock/product6.png';
+import product7 from '@images/mock/product7.png';
+import product8 from '@images/mock/product8.png';
+import product9 from '@images/mock/product9.png';
+import product10 from '@images/mock/product10.png';
+import product11 from '@images/mock/product11.png';
+import product12 from '@images/mock/product12.png';
 
-import brand1 from '../../assets/images/mock/brand1.png';
-import brand2 from '../../assets/images/mock/brand2.png';
-import brand3 from '../../assets/images/mock/brand3.png';
-import brand4 from '../../assets/images/mock/brand4.png';
-import brand5 from '../../assets/images/mock/brand5.png';
+import instagram1 from '@images/mock/insta1.png';
+import instagram2 from '@images/mock/insta2.png';
+import instagram3 from '@images/mock/insta3.png';
+import instagram4 from '@images/mock/insta4.png';
+import instagram5 from '@images/mock/insta5.png';
+import instagram6 from '@images/mock/insta6.png';
+import instagram7 from '@images/mock/insta7.png';
+import instagram8 from '@images/mock/insta8.png';
 
-import brandDetail1 from '../../assets/images/mock/brandDetail1.jpg';
+import brand1 from '@images/mock/brand1.png';
+import brand2 from '@images/mock/brand2.png';
+import brand3 from '@images/mock/brand3.png';
+import brand4 from '@images/mock/brand4.png';
+import brand5 from '@images/mock/brand5.png';
 
-import category1 from '../../assets/images/mock/category1.png';
-import category2 from '../../assets/images/mock/category2.png';
-import category3 from '../../assets/images/mock/category3.png';
-import category4 from '../../assets/images/mock/category4.png';
-import category5 from '../../assets/images/mock/category5.png';
-import category6 from '../../assets/images/mock/category6.png';
-import category7 from '../../assets/images/mock/category7.png';
-import category8 from '../../assets/images/mock/category8.png';
+import brandDetail1 from '@images/mock/brandDetail1.jpg';
 
-import banner1 from '../../assets/images/mock/banner1.png';
-import banner2 from '../../assets/images/mock/banner2.png';
-import banner3 from '../../assets/images/mock/banner3.png';
-import banner4 from '../../assets/images/mock/banner4.png';
-import banner5 from '../../assets/images/mock/banner5.png';
-import banner6 from '../../assets/images/mock/banner6.png';
-import banner7 from '../../assets/images/mock/banner7.png';
-import banner8 from '../../assets/images/mock/banner8.png';
+import category1 from '@images/mock/category1.png';
+import category2 from '@images/mock/category2.png';
+import category3 from '@images/mock/category3.png';
+import category4 from '@images/mock/category4.png';
+import category5 from '@images/mock/category5.png';
+import category6 from '@images/mock/category6.png';
+import category7 from '@images/mock/category7.png';
+import category8 from '@images/mock/category8.png';
 
-import productBanner1 from '../../assets/images/mock/productBanner1.png';
+import banner1 from '@images/mock/banner1.png';
+import banner2 from '@images/mock/banner2.png';
+import banner3 from '@images/mock/banner3.png';
+import banner4 from '@images/mock/banner4.png';
+import banner5 from '@images/mock/banner5.png';
+import banner6 from '@images/mock/banner6.png';
+import banner7 from '@images/mock/banner7.png';
+import banner8 from '@images/mock/banner8.png';
 
-import productDetail1 from '../../assets/images/mock/productDetail1.png';
-import productDetail2 from '../../assets/images/mock/productDetail2.png';
-import productDetail3 from '../../assets/images/mock/productDetail3.png';
-import productDetail4 from '../../assets/images/mock/productDetail4.png';
+import productBanner1 from '@images/mock/productBanner1.png';
 
-import productDescription1 from '../../assets/images/mock/productDescription1.png';
-import productDescription2 from '../../assets/images/mock/productDescription2.png';
+import productDetail1 from '@images/mock/productDetail1.png';
+import productDetail2 from '@images/mock/productDetail2.png';
+import productDetail3 from '@images/mock/productDetail3.png';
+import productDetail4 from '@images/mock/productDetail4.png';
 
-import productMasterclass1 from '../../assets/images/mock/productMasterclass1.png';
-import productMasterclass2 from '../../assets/images/mock/productMasterclass2.png';
+import productDescription1 from '@images/mock/productDescription1.png';
+import productDescription2 from '@images/mock/productDescription2.png';
 
-import productReview1 from '../../assets/images/mock/productReview1.png';
-import productReview2 from '../../assets/images/mock/productReview2.png';
+import productMasterclass1 from '@images/mock/productMasterclass1.png';
+import productMasterclass2 from '@images/mock/productMasterclass2.png';
 
-import masterclassDetailImage1 from '../../assets/images/mock/masterclassDetailImage1.png';
+import productReview1 from '@images/mock/productReview1.png';
+import productReview2 from '@images/mock/productReview2.png';
 
-import masterclassGalleryImg1 from '../../assets/images/mock/masterclassGalleryImg1.png';
-import masterclassGalleryImg2 from '../../assets/images/mock/masterclassGalleryImg2.png';
-import masterclassGalleryImg3 from '../../assets/images/mock/masterclassGalleryImg3.png';
+import masterclassDetailImage1 from '@images/mock/masterclassDetailImage1.png';
 
-import author1 from '../../assets/images/mock/author1.png';
+import masterclassGalleryImg1 from '@images/mock/masterclassGalleryImg1.png';
+import masterclassGalleryImg2 from '@images/mock/masterclassGalleryImg2.png';
+import masterclassGalleryImg3 from '@images/mock/masterclassGalleryImg3.png';
+
+import author1 from '@images/mock/author1.png';
 
 const mockDate = new Date(Date.now());
 mockDate.setHours(0, 0, 0, 0);

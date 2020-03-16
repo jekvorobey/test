@@ -1,8 +1,8 @@
-import { breakMiddleware } from '../../util/router';
+import { breakMiddleware } from '@util/router';
 
-import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
-import { LOGIN_BY_SOCIAL } from '../../store/modules/Auth/actions';
-import { httpCodes } from '../../assets/scripts/enums/general';
+import { NAME as AUTH_MODULE } from '@store/modules/Auth';
+import { LOGIN_BY_SOCIAL } from '@store/modules/Auth/actions';
+import { httpCodes } from '@enums/general';
 
 export default async function socialLogin({ from, to, next, store: { state, dispatch }, appContext, resolve }) {
     try {

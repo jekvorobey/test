@@ -1,5 +1,5 @@
-import { $logger } from '../../../services/ServiceLocator';
-import { getProducts } from '../../../api';
+import { $logger } from '@services/ServiceLocator';
+import { getProducts } from '@api';
 import { SET_FEATURED_PRODUCTS } from './mutations';
 
 export const FETCH_FEATURED_PRODUCTS = 'FETCH_FEATURED_PRODUCTS';

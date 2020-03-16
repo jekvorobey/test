@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VLink from '../controls/VLink/VLink.vue';
-import VButton from '../controls/VButton/VButton.vue';
-import Price from '../Price/Price.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import Price from '@components/Price/Price.vue';
 
-import '../../assets/images/sprites/wishlist-middle.svg';
+import '@images/sprites/wishlist-middle.svg';
 import './ProductCartPanel.css';
 
 export default {

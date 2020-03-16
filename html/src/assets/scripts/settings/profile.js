@@ -1,4 +1,4 @@
-import { localeDateOptions } from '../enums/general';
+import { localeDateOptions } from '@enums/general';
 
 export const orderDateLocaleOptions = {
     month: localeDateOptions.month.DIGIT2,

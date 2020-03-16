@@ -1,8 +1,8 @@
-import { httpCodes, injectionType, interval } from '../../assets/scripts/enums/general';
-import { breakMiddleware } from '../../util/router';
+import { httpCodes, injectionType, interval } from '@enums/general';
+import { breakMiddleware } from '@util/router';
 
-import { NAME as MODAL_MODULE } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 export default async function referalLink({ to, next, container, nextMiddleware }) {
     try {

@@ -128,43 +128,43 @@
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import VButton from '../../../components/controls/VButton/VButton.vue';
-import VInput from '../../../components/controls/VInput/VInput.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
 
-import Price from '../../../components/Price/Price.vue';
-import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
-import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
+import Price from '@components/Price/Price.vue';
+import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 
-import PackageProductCard from '../../../components/PackageProductCard/PackageProductCard.vue';
+import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
 
-import { $store, $progress, $logger } from '../../../services/ServiceLocator';
+import { $store, $progress, $logger } from '@services/ServiceLocator';
 import { mapActions, mapState } from 'vuex';
 
-import { LOCALE } from '../../../store';
+import { LOCALE } from '@store';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { UPDATE_BREADCRUMB } from '../../../store/modules/Profile/actions';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
-import { NAME as ORDERS_MODULE, ORDER_DETAILS, ORDER, DELIVERIES } from '../../../store/modules/Profile/modules/Orders';
+import { NAME as ORDERS_MODULE, ORDER_DETAILS, ORDER, DELIVERIES } from '@store/modules/Profile/modules/Orders';
 import {
     FETCH_ORDER_DETAILS,
     SET_LOAD_PATH,
     GET_ORDER_PAYMENT_LINK,
-} from '../../../store/modules/Profile/modules/Orders/actions';
+} from '@store/modules/Profile/modules/Orders/actions';
 
-import { toAddressString } from '../../../util/address';
-import { getOrderStatusColorClass, getDeliveryStatusColorClass } from '../../../util/order';
-import { orderPaymentStatus, orderStatus, deliveryStatus } from '../../../assets/scripts/enums/order';
-import { orderDateLocaleOptions } from '../../../assets/scripts/settings/profile';
-import '../../../assets/images/sprites/arrow-small.svg';
+import { toAddressString } from '@util/address';
+import { getOrderStatusColorClass, getDeliveryStatusColorClass } from '@util/order';
+import { orderPaymentStatus, orderStatus, deliveryStatus } from '@enums/order';
+import { orderDateLocaleOptions } from '@settings/profile';
+import '@images/sprites/arrow-small.svg';
 import './OrderDetails.css';
 
-import mockProduct1 from '../../../assets/images/mock/orderPackageProduct1.png';
-import mockProduct2 from '../../../assets/images/mock/orderPackageProduct2.png';
-import mockProduct3 from '../../../assets/images/mock/orderPackageProduct3.png';
-import mockProduct4 from '../../../assets/images/mock/orderPackageProduct4.png';
+import mockProduct1 from '@images/mock/orderPackageProduct1.png';
+import mockProduct2 from '@images/mock/orderPackageProduct2.png';
+import mockProduct3 from '@images/mock/orderPackageProduct3.png';
+import mockProduct4 from '@images/mock/orderPackageProduct4.png';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
 

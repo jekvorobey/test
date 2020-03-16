@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import '../../assets/images/sprites/search-middle.svg';
-import '../../assets/images/sprites/cross.svg';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import '@images/sprites/search-middle.svg';
+import '@images/sprites/cross.svg';
 
 import './SearchFilter.critical.css';
 

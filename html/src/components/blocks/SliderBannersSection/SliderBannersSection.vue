@@ -22,9 +22,9 @@
 </template>
 
 <script>
-import VPicture from '../../controls/VPicture/VPicture.vue';
-import VSlider from '../../../components/controls/VSlider/VSlider.vue';
-import LandingBannerCard from '../../LandingBannerCard/LandingBannerCard.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
+import LandingBannerCard from '@components/LandingBannerCard/LandingBannerCard.vue';
 
 import './SliderBannersSection.css';
 

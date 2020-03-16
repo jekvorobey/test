@@ -497,7 +497,7 @@ span.flatpickr-weekday {
             content: '';
             width: 24px;
             height: 24px;
-            background-image: svg-load('../../../assets/images/sprites/datepicker.svg');
+            background-image: svg-load('datepicker.svg');
         }
     }
 

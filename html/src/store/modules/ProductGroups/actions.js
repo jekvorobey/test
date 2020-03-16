@@ -1,6 +1,6 @@
-import { $logger } from '../../../services/ServiceLocator';
-import { storeErrorHandler } from '../../../util/store';
-import { getProductGroups } from '../../../api';
+import { $logger } from '@services/ServiceLocator';
+import { storeErrorHandler } from '@util/store';
+import { getProductGroups } from '@api';
 import { SET_ITEMS_MORE, SET_ITEMS, SET_LOAD_PATH as M_SET_LOAD_PATH, SET_TYPE as M_SET_TYPE } from './mutations';
 
 export const SET_TYPE = 'SET_TYPE';

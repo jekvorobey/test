@@ -1,4 +1,4 @@
-import { ORDERS_PAGE_SIZE } from '../../../../../assets/scripts/constants/profile';
+import { ORDERS_PAGE_SIZE } from '@constants/profile';
 
 export const PAGES_COUNT = 'pagesCount';
 

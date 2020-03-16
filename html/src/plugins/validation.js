@@ -10,7 +10,7 @@ import {
 } from 'vuelidate/lib/validators';
 
 import { password as passwordRegx, tel as telRegx, email as emailRegx } from '../assets/scripts/regex/validation';
-import { countCheckdigit } from '../util/helpers';
+import { countCheckdigit } from '@util/helpers';
 
 function innValidation(value) {
     const inn = value || '';

@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VRating from '../controls/VRating/VRating.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VRating from '@controls/VRating/VRating.vue';
 
-import '../../assets/images/sprites/star-small.svg';
-import '../../assets/images/sprites/star-empty-small.svg';
+import '@images/sprites/star-small.svg';
+import '@images/sprites/star-empty-small.svg';
 import './ProductDetailPanel.css';
 
 export default {

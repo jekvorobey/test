@@ -1,4 +1,4 @@
-import { requestStatus } from '../../../assets/scripts/enums/general';
+import { requestStatus } from '@enums/general';
 
 import actions from './actions';
 import mutations from './mutations';

@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import VSvg from '../../controls/VSvg/VSvg.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 
-import '../../../assets/images/sprites/logo.svg';
-import '../../../assets/images/sprites/logo-text.svg';
+import '@images/sprites/logo.svg';
+import '@images/sprites/logo-text.svg';
 
 import './HeaderLogoPanel.critical.css';
 

@@ -1,9 +1,9 @@
 import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
-import { sortDirections } from '../../../../../assets/scripts/enums/general';
-import { sortFields } from '../../../../../assets/scripts/enums/order';
-import { DEFAULT_PAGE } from '../../../../../assets/scripts/constants/general';
+import { sortDirections } from '@enums/general';
+import { sortFields } from '@enums/order';
+import { DEFAULT_PAGE } from '@constants/general';
 
 export const NAME = 'orders';
 export const LOAD_PATH = 'loadPath';

@@ -38,19 +38,19 @@
     </section>
 </template>
 <script>
-import VButton from '../../controls/VButton/VButton.vue';
-import CatalogProductCard from '../../CatalogProductCard/CatalogProductCard.vue';
-import CatalogBannerCard from '../../CatalogBannerCard/CatalogBannerCard.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 
 import { mapActions } from 'vuex';
-import { NAME as CART_MODULE } from '../../../store/modules/Cart';
-import { ADD_CART_ITEM } from '../../../store/modules/Cart/actions';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
-import { NAME as MODAL_MODULE } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { generatePictureSourcePath } from '@util/media';
 import './ProductsSection.css';
-import { generatePictureSourcePath } from '../../../util/media';
 
 export default {
     name: 'products-section',

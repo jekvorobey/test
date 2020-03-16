@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import PopularBrands from '../../PopularBrands/PopularBrands.vue';
+import PopularBrands from '@components/PopularBrands/PopularBrands.vue';
 import './BrandsSection.css';
 
 export default {

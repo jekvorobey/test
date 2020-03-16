@@ -17,10 +17,10 @@
 </template>
 
 <script>
-import VSvg from '../VSvg/VSvg.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 
-import '../../../assets/images/sprites/arrow-small.svg';
-import '../../../plugins/swiper';
+import '@images/sprites/arrow-small.svg';
+import '@plugins/swiper';
 import 'swiper/dist/css/swiper.css';
 import './VSlider.css';
 

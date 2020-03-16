@@ -16,7 +16,18 @@ module.exports = {
     },
     resolve: {
         alias: {
-            images_path: path.resolve(__dirname, '../src/assets/images'),
+            ['@components']: path.resolve(__dirname, '../src/components'),
+            ['@controls']: path.resolve(__dirname, '../src/components/controls'),
+            ['@images']: path.resolve(__dirname, '../src/assets/images'),
+            ['@enums']: path.resolve(__dirname, '../src/assets/scripts/enums'),
+            ['@constants']: path.resolve(__dirname, '../src/assets/scripts/constants'),
+            ['@settings']: path.resolve(__dirname, '../src/assets/scripts/settings'),
+            ['@util']: path.resolve(__dirname, '../src/util'),
+            ['@services']: path.resolve(__dirname, '../src/services'),
+            ['@store']: path.resolve(__dirname, '../src/store'),
+            ['@router']: path.resolve(__dirname, '../src/router'),
+            ['@plugins']: path.resolve(__dirname, '../src/plugins'),
+            ['@api']: path.resolve(__dirname, '../src/api'),
         },
     },
     module: {

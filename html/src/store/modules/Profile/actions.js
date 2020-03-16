@@ -1,5 +1,5 @@
-import store, { storeErrorHandler } from '../../../util/store';
-import { getProducts } from '../../../api';
+import store, { storeErrorHandler } from '@util/store';
+import { getProducts } from '@api';
 import { SET_PROMO_DATA } from './mutations';
 
 export const FETCH_PROMO_DATA = 'FETCH_PROMO_DATA';

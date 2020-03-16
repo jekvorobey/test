@@ -31,20 +31,20 @@
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import VButton from '../../../components/controls/VButton/VButton.vue';
-import VInput from '../../../components/controls/VInput/VInput.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
 
-import MessageCard from '../../../components/MessageCard/MessageCard.vue';
+import MessageCard from '@components/MessageCard/MessageCard.vue';
 
 import { mapState, mapActions } from 'vuex';
-import { LOCALE } from '../../../store';
+import { LOCALE } from '@store';
 
-import { NAME as PROFILE_MODULE, BREADCRUMBS } from '../../../store/modules/Profile';
-import { UPDATE_BREADCRUMB } from '../../../store/modules/Profile/actions';
+import { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modules/Profile';
+import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
-import '../../../assets/images/sprites/arrow-small.svg';
+import '@images/sprites/arrow-small.svg';
 import './MessageDetails.css';
 
 export default {

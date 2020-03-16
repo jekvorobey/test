@@ -1,4 +1,4 @@
-import { productGroupTypes, productGroupBase } from '../../../assets/scripts/enums/product';
+import { productGroupTypes, productGroupBase } from '@enums/product';
 
 import actions from './actions';
 import mutations from './mutations';

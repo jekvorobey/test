@@ -61,22 +61,22 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VLink from '../controls/VLink/VLink.vue';
-import VButton from '../controls/VButton/VButton.vue';
-import VRating from '../controls/VRating/VRating.vue';
-import VPicture from '../controls/VPicture/VPicture.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VRating from '@controls/VRating/VRating.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import Tag from '../Tag/Tag.vue';
-import Price from '../Price/Price.vue';
+import Tag from '@components/Tag/Tag.vue';
+import Price from '@components/Price/Price.vue';
 
-import '../../assets/images/sprites/star-empty-small.svg';
-import '../../assets/images/sprites/star-small.svg';
-import '../../assets/images/sprites/wishlist-middle.svg';
-import '../../assets/images/sprites/logo.svg';
+import '@images/sprites/star-empty-small.svg';
+import '@images/sprites/star-small.svg';
+import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/logo.svg';
 import './CatalogProductCard.css';
 
-import { generatePictureSourcePath } from '../../util/media';
+import { generatePictureSourcePath } from '@util/media';
 
 export default {
     name: 'catalog-product-card',

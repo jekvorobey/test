@@ -228,23 +228,23 @@
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import VButton from '../../../components/controls/VButton/VButton.vue';
-import VInput from '../../../components/controls/VInput/VInput.vue';
-import VPagination from '../../../components/controls/VPagination/VPagination.vue';
-import VArcCounter from '../../../components/controls/VArcCounter/VArcCounter.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VPagination from '@controls/VPagination/VPagination.vue';
+import VArcCounter from '@controls/VArcCounter/VArcCounter.vue';
 
-import FilterButton from '../../../components/FilterButton/FilterButton.vue';
-import Price from '../../../components/Price/Price.vue';
-import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
+import FilterButton from '@components/FilterButton/FilterButton.vue';
+import Price from '@components/Price/Price.vue';
+import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 
-import { $store, $progress, $logger } from '../../../services/ServiceLocator';
+import { $store, $progress, $logger } from '@services/ServiceLocator';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { LOCALE } from '../../../store';
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { UPDATE_BREADCRUMB } from '../../../store/modules/Profile/actions';
+import { LOCALE } from '@store';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
 import {
     NAME as ORDERS_MODULE,
@@ -252,21 +252,18 @@ import {
     ORDER_DIRECTION,
     ORDER_FIELD,
     ACTIVE_PAGE,
-} from '../../../store/modules/Profile/modules/Orders';
-import { PAGES_COUNT } from '../../../store/modules/Profile/modules/Orders/getters';
-import {
-    FETCH_ORDERS,
-    SET_LOAD_PATH,
-    GET_ORDER_PAYMENT_LINK,
-} from '../../../store/modules/Profile/modules/Orders/actions';
+} from '@store/modules/Profile/modules/Orders';
+import { PAGES_COUNT } from '@store/modules/Profile/modules/Orders/getters';
+import { FETCH_ORDERS, SET_LOAD_PATH, GET_ORDER_PAYMENT_LINK } from '@store/modules/Profile/modules/Orders/actions';
 
-import { getOrderStatusColorClass } from '../../../util/order';
-import { orderStatus, orderPaymentStatus, sortFields } from '../../../assets/scripts/enums/order';
-import { orderDateLocaleOptions } from '../../../assets/scripts/settings/profile';
-import { sortDirections } from '../../../assets/scripts/enums/general';
-import { DEFAULT_PAGE } from '../../../assets/scripts/constants/general';
-import '../../../assets/images/sprites/arrow-updown.svg';
-import '../../../assets/images/sprites/arrow-down.svg';
+import { getOrderStatusColorClass } from '@util/order';
+import { orderStatus, orderPaymentStatus, sortFields } from '@enums/order';
+import { orderDateLocaleOptions } from '@settings/profile';
+import { sortDirections } from '@enums/general';
+import { DEFAULT_PAGE } from '@constants/general';
+
+import '@images/sprites/arrow-updown.svg';
+import '@images/sprites/arrow-down.svg';
 import './Orders.css';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;

@@ -1,5 +1,5 @@
-import { storeErrorHandler } from '../../../util/store';
-import { getProduct, getBanners, getProducts, getInstagram, getMasterclasses } from '../../../api';
+import { storeErrorHandler } from '@util/store';
+import { getProduct, getBanners, getProducts, getInstagram, getMasterclasses } from '@api';
 import { SET_PRODUCT, SET_BANNERS, SET_FEATURED_PRODUCTS, SET_INSTAGRAM_ITEMS, SET_MASTERCLASSES } from './mutations';
 
 export const FETCH_PRODUCT_DATA = 'FETCH_PRODUCT_DATA';

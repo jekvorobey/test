@@ -49,10 +49,7 @@
                     width: 20px;
                     height: 20px;
                     background-repeat: no-repeat;
-                    background-image: svg-load(
-                        '../../../assets/images/sprites/cross-small.svg',
-                        stroke: var(--cl-grey)
-                    );
+                    background-image: svg-load('cross-small.svg', stroke: var(--cl-grey));
                 }
             }
         }

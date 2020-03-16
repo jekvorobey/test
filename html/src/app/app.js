@@ -5,26 +5,27 @@
 
 import '../assets/scripts/common';
 import Vue from 'vue';
-
-import { injectionType } from '../assets/scripts/enums/general';
 import { sync } from 'vuex-router-sync';
-import createStore from '../store';
-import createRouter from '../router';
-import createLocalization from '../plugins/i18n';
 
-import mq from '../plugins/media';
-import '../plugins/meta';
-import '../plugins/scroll-lock';
-import '../plugins/observer';
+import { injectionType } from '@enums/general';
 
-import '../util/catalog';
-import '../util/router';
-import '../util/helpers';
-import '../util/container';
-import '../util/store';
-import '../util/media';
+import createStore from '@store';
+import createRouter from '@router';
 
-import titleMixin from '../util/title';
+import createLocalization from '@plugins/i18n';
+import mq from '@plugins/media';
+import '@plugins/meta';
+import '@plugins/scroll-lock';
+import '@plugins/observer';
+
+import '@util/catalog';
+import '@util/router';
+import '@util/helpers';
+import '@util/container';
+import '@util/store';
+import '@util/media';
+
+import titleMixin from '@util/title';
 
 import App from './App.vue';
 

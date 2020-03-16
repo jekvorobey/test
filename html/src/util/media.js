@@ -1,4 +1,4 @@
-import { $http } from '../services/ServiceLocator';
+import { $http } from '@services/ServiceLocator';
 
 export function generatePictureSourcePath(x = '', y = '', id, ext) {
     return `${$http.baseURL}/files/compressed/${id}${x ? `/${x}` : ''}${y ? `/${y}` : ''}/${ext}`;

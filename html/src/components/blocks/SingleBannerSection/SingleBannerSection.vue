@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import CatalogBannerCard from '../../CatalogBannerCard/CatalogBannerCard.vue';
+import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 import './SingleBannerSection.css';
 
 export default {

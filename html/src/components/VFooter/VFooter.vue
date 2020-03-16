@@ -79,21 +79,21 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VLink from '../controls/VLink/VLink.vue';
-import VAccordion from '../controls/VAccordion/VAccordion.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VAccordion from '@controls/VAccordion/VAccordion.vue';
 
-import '../../assets/images/sprites/socials/facebook-bw.svg';
-import '../../assets/images/sprites/socials/instagram-bw.svg';
-import '../../assets/images/sprites/socials/vkontakte-bw.svg';
-import '../../assets/images/sprites/socials/youtube-bw.svg';
+import '@images/sprites/socials/facebook-bw.svg';
+import '@images/sprites/socials/instagram-bw.svg';
+import '@images/sprites/socials/vkontakte-bw.svg';
+import '@images/sprites/socials/youtube-bw.svg';
 
-import '../../assets/images/sprites/logo.svg';
-import '../../assets/images/sprites/logo-default.svg';
+import '@images/sprites/logo.svg';
+import '@images/sprites/logo-default.svg';
 
 import './VFooter.css';
 import { mapGetters } from 'vuex';
-import { FOOTER_MENU } from '../../store/getters';
+import { FOOTER_MENU } from '@store/getters';
 
 export default {
     name: 'v-footer',

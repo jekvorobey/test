@@ -1,5 +1,5 @@
-import { generateCategoryUrl } from '../../../util/catalog';
-import { productGroupTypes } from '../../../assets/scripts/enums/product';
+import { generateCategoryUrl } from '@util/catalog';
+import { productGroupTypes } from '@enums/product';
 
 function prepareBrand({ id, name, code }) {
     return { id, name, to: generateCategoryUrl(productGroupTypes.BRANDS, code, null) };

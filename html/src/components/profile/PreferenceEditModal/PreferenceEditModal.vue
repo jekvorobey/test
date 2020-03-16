@@ -35,15 +35,15 @@
 </template>
 
 <script>
-import VSvg from '../../controls/VSvg/VSvg.vue';
-import VButton from '../../controls/VButton/VButton.vue';
-import VCheck from '../../controls/VCheck/VCheck.vue';
-import VInput from '../../controls/VInput/VInput.vue';
-import GeneralModal from '../../GeneralModal/GeneralModal.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapActions, mapState } from 'vuex';
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
 import './PreferenceEditModal.css';

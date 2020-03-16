@@ -312,23 +312,23 @@
     </div>
 </template>
 <script>
-import VSvg from '../../controls/VSvg/VSvg.vue';
-import VLink from '../../controls/VLink/VLink.vue';
-import VInput from '../../controls/VInput/VInput.vue';
-import VButton from '../../controls/VButton/VButton.vue';
-import VCheck from '../../controls/VCheck/VCheck.vue';
-import VSpinner from '../../controls/VSpinner/VSpinner.vue';
-import Price from '../../Price/Price.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
-import CheckoutOptionCard from '../CheckoutOptionCard/CheckoutOptionCard.vue';
-import CheckoutProductCard from '../CheckoutProductCard/CheckoutProductCard.vue';
-import CheckoutDateModal from '../CheckoutDateModal/CheckoutDateModal.vue';
-import CheckoutAddressModal from '../CheckoutAddressModal/CheckoutAddressModal.vue';
-import CheckoutPickupPointModal from '../CheckoutPickupPointModal/CheckoutPickupPointModal.vue';
-import CheckoutAddressPanel from '../CheckoutAddressPanel/CheckoutAddressPanel.vue';
+import Price from '@components/Price/Price.vue';
+import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
+import CheckoutProductCard from '@components/checkout/CheckoutProductCard/CheckoutProductCard.vue';
+import CheckoutDateModal from '@components/checkout/CheckoutDateModal/CheckoutDateModal.vue';
+import CheckoutAddressModal from '@components/checkout/CheckoutAddressModal/CheckoutAddressModal.vue';
+import CheckoutPickupPointModal from '@components/checkout/CheckoutPickupPointModal/CheckoutPickupPointModal.vue';
+import CheckoutAddressPanel from '@components/checkout/CheckoutAddressPanel/CheckoutAddressPanel.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '../../../store/modules/Checkout';
+import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '@store/modules/Checkout';
 import {
     SET_DATA_PROP,
     SET_RECIPIENT,
@@ -347,7 +347,7 @@ import {
     SET_SUBSCRIBE,
     SET_CONFIRMATION_TYPE,
     ADD_ADDRESS,
-} from '../../../store/modules/Checkout/actions';
+} from '@store/modules/Checkout/actions';
 
 import {
     RECIPIENTS,
@@ -375,25 +375,25 @@ import {
     CERTIFICATE_STATUS,
     PROMOCODE_STATUS,
     RECEIVE_METHOD_STATUS,
-} from '../../../store/modules/Checkout/getters';
+} from '@store/modules/Checkout/getters';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '../../../assets/scripts/enums/checkout';
-import { requestStatus } from '../../../assets/scripts/enums/general';
+import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '@enums/checkout';
+import { requestStatus } from '@enums/general';
 
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 import { orderBy as _orderBy } from 'lodash/collection';
 
-import '../../../assets/images/sprites/payment/bonus.svg';
-import '../../../assets/images/sprites/payment/visa.svg';
-import '../../../assets/images/sprites/payment/mastercard.svg';
-import '../../../assets/images/sprites/payment/mir.svg';
-import '../../../assets/images/sprites/plus.svg';
-import '../../../assets/images/sprites/edit.svg';
-import '../../../assets/images/sprites/gift.svg';
+import '@images/sprites/payment/bonus.svg';
+import '@images/sprites/payment/visa.svg';
+import '@images/sprites/payment/mastercard.svg';
+import '@images/sprites/payment/mir.svg';
+import '@images/sprites/plus.svg';
+import '@images/sprites/edit.svg';
+import '@images/sprites/gift.svg';
 import './CheckoutProductPanel.css';
 
 function prepareChunkItem(chunkItem) {

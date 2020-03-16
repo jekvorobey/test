@@ -17,7 +17,7 @@
     </div>
 </template>
 <script>
-import VCheck from '../controls/VCheck/VCheck.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
 import './RadioSwitch.css';
 
 export default {

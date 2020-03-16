@@ -94,20 +94,20 @@
     </general-modal>
 </template>
 <script>
-import VButton from '../../controls/VButton/VButton.vue';
-import VInput from '../../controls/VInput/VInput.vue';
-import GeneralModal from '../../GeneralModal/GeneralModal.vue';
-import validationMixin, { required, inn, bik, rs } from '../../../plugins/validation';
+import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
+import validationMixin, { required, inn, bik, rs } from '@plugins/validation';
 
 import { mapActions, mapState } from 'vuex';
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { NAME as CABINET_MODULE, REQUISITES } from '../../../store/modules/Profile/modules/Cabinet';
-import { UPDATE_REQUISITES } from '../../../store/modules/Profile/modules/Cabinet/actions';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as CABINET_MODULE, REQUISITES } from '@store/modules/Profile/modules/Cabinet';
+import { UPDATE_REQUISITES } from '@store/modules/Profile/modules/Cabinet/actions';
 
-import { $dadata, $logger } from '../../../services/ServiceLocator';
+import { $dadata, $logger } from '@services/ServiceLocator';
 import './DetailsModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;

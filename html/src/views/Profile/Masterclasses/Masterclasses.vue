@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import MasterClassCard from '../../../components/MasterClassCard/MasterClassCard.vue';
+import MasterClassCard from '@components/MasterClassCard/MasterClassCard.vue';
 
-import profileMasterClassImg1 from '../../../assets/images/mock/profileMasterClass1.png';
-import profileMasterClassImg2 from '../../../assets/images/mock/profileMasterClass2.png';
-import profileMasterClassImg3 from '../../../assets/images/mock/profileMasterClass3.png';
-import profileMasterClassImg4 from '../../../assets/images/mock/profileMasterClass4.png';
+import profileMasterClassImg1 from '@images/mock/profileMasterClass1.png';
+import profileMasterClassImg2 from '@images/mock/profileMasterClass2.png';
+import profileMasterClassImg3 from '@images/mock/profileMasterClass3.png';
+import profileMasterClassImg4 from '@images/mock/profileMasterClass4.png';
 
 import './Masterclasses.css';
 

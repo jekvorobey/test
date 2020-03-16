@@ -26,17 +26,17 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VLink from '../controls/VLink/VLink.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
-import GeneralPopupPanel from '../GeneralPopupPanel/GeneralPopupPanel.vue';
+import GeneralPopupPanel from '@components/GeneralPopupPanel/GeneralPopupPanel.vue';
 
 import { mapActions, mapState, mapGetters } from 'vuex';
-import { HELP_MENU } from '../../store/getters';
+import { HELP_MENU } from '@store/getters';
 
-import '../../assets/images/sprites/socials/telegram.svg';
-import '../../assets/images/sprites/socials/whatsup.svg';
-import '../../assets/images/sprites/socials/viber.svg';
+import '@images/sprites/socials/telegram.svg';
+import '@images/sprites/socials/whatsup.svg';
+import '@images/sprites/socials/viber.svg';
 import './HelpPanel.css';
 
 export default {

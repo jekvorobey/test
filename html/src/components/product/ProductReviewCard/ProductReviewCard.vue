@@ -48,14 +48,14 @@
 </template>
 
 <script>
-import VLink from '../controls/VLink/VLink.vue';
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VRating from '../controls/VRating/VRating.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VRating from '@controls/VRating/VRating.vue';
 
-import '../../assets/images/sprites/star-empty-small.svg';
-import '../../assets/images/sprites/star-small.svg';
-import '../../assets/images/sprites/like.svg';
-import '../../assets/images/sprites/dislike.svg';
+import '@images/sprites/star-empty-small.svg';
+import '@images/sprites/star-small.svg';
+import '@images/sprites/like.svg';
+import '@images/sprites/dislike.svg';
 import './ProductReviewCard.css';
 
 export default {

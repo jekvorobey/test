@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VButton from '../controls/VButton/VButton.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
 
-import '../../assets/images/sprites/filter.svg';
+import '@images/sprites/filter.svg';
 import './FilterButton.css';
 
 export default {

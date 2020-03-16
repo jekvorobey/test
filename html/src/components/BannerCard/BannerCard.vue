@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import VPicture from '../controls/VPicture/VPicture.vue';
-import VButton from '../controls/VButton/VButton.vue';
-import { generatePictureSourcePath } from '../../util/media';
+import VPicture from '@controls/VPicture/VPicture.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import { generatePictureSourcePath } from '@util/media';
 import './BannerCard.css';
 
 export default {

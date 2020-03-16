@@ -1,4 +1,4 @@
-import { productGroupTypes } from '../assets/scripts/enums/product';
+import { productGroupTypes } from '@enums/product';
 
 const rangeRegx = /from_\d*_to_\d*/;
 const numberRegx = /\d+/g;

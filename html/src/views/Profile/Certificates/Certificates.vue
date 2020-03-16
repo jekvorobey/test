@@ -66,11 +66,11 @@
 </template>
 
 <script>
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import VButton from '../../../components/controls/VButton/VButton.vue';
-import VInput from '../../../components/controls/VInput/VInput.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
 
-import AttentionPanel from '../../../components/AttentionPanel/AttentionPanel.vue';
+import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 
 import './Certificates.css';
 

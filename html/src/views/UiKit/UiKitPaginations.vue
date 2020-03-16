@@ -11,7 +11,7 @@
     </section>
 </template>
 <script>
-import VPagination from '../../components/controls/VPagination/VPagination.vue';
+import VPagination from '@controls/VPagination/VPagination.vue';
 
 export default {
     name: 'ui-kit-paginations',

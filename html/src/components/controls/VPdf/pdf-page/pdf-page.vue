@@ -9,6 +9,7 @@
 
 <script>
 import Loader from '../../../loader/loader.vue';
+
 import './pdf-page.css';
 const PIXEL_RATIO = window.devicePixelRatio || 1;
 const VIEWPORT_RATIO = 0.98;

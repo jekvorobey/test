@@ -134,18 +134,18 @@
 </template>
 
 <script>
-import VButton from '../../../components/controls/VButton/VButton.vue';
-import VSelect from '../../../components/controls/VSelect/VSelect.vue';
-import VPagination from '../../../components/controls/VPagination/VPagination.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
+import VPagination from '@controls/VPagination/VPagination.vue';
 
-import Price from '../../../components/Price/Price.vue';
-import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
-import FilterButton from '../../../components/FilterButton/FilterButton.vue';
-import referalProduct1 from '../../../assets/images/mock/referalProduct1.png';
-import referalProduct2 from '../../../assets/images/mock/referalProduct2.png';
-import referalProduct3 from '../../../assets/images/mock/referalProduct3.png';
+import Price from '@components/Price/Price.vue';
+import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+import FilterButton from '@components/FilterButton/FilterButton.vue';
+import referalProduct1 from '@images/mock/referalProduct1.png';
+import referalProduct2 from '@images/mock/referalProduct2.png';
+import referalProduct3 from '@images/mock/referalProduct3.png';
 
-import '../../../assets/images/sprites/arrow-updown.svg';
+import '@images/sprites/arrow-updown.svg';
 import './ReferalOrders.css';
 
 export default {

@@ -12,23 +12,23 @@
 <script>
 import Vue from 'vue';
 
-import SeparatorSection from '../../components/blocks/SeparatorSection/SeparatorSection.vue';
-import SliderBannersSection from '../../components/blocks/SliderBannersSection/SliderBannersSection.vue';
-import ListBannersSection from '../../components/blocks/ListBannersSection/ListBannersSection.vue';
-import InstagramSection from '../../components/blocks/InstagramSection/InstagramSection.vue';
-import SingleBannerSection from '../../components/blocks/SingleBannerSection/SingleBannerSection.vue';
+import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
+import SliderBannersSection from '@components/blocks/SliderBannersSection/SliderBannersSection.vue';
+import ListBannersSection from '@components/blocks/ListBannersSection/ListBannersSection.vue';
+import InstagramSection from '@components/blocks/InstagramSection/InstagramSection.vue';
+import SingleBannerSection from '@components/blocks/SingleBannerSection/SingleBannerSection.vue';
 
-import CategoriesSection from '../../components/blocks/CategoriesSection/CategoriesSection.vue';
-import ProductsSection from '../../components/blocks/ProductsSection/ProductsSection.vue';
-import BrandsSection from '../../components/blocks/BrandsSection/BrandsSection.vue';
+import CategoriesSection from '@components/blocks/CategoriesSection/CategoriesSection.vue';
+import ProductsSection from '@components/blocks/ProductsSection/ProductsSection.vue';
+import BrandsSection from '@components/blocks/BrandsSection/BrandsSection.vue';
 
-import { $store, $progress, $logger } from '../../services/ServiceLocator';
+import { $store, $progress, $logger } from '@services/ServiceLocator';
 import { mapState, mapActions } from 'vuex';
 
-import landingModule, { NAME as LANDING_MODULE, RENDER_DATA } from '../../store/modules/Landing';
-import { FETCH_LANDING_DATA } from '../../store/modules/Landing/actions';
+import landingModule, { NAME as LANDING_MODULE, RENDER_DATA } from '@store/modules/Landing';
+import { FETCH_LANDING_DATA } from '@store/modules/Landing/actions';
 
-import { registerModuleIfNotExists } from '../../util/store';
+import { registerModuleIfNotExists } from '@util/store';
 import './Landing.css';
 
 export default {

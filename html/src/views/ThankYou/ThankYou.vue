@@ -63,21 +63,21 @@
 </template>
 
 <script>
-import VButton from '../../components/controls/VButton/VButton.vue';
+import VButton from '@controls/VButton/VButton.vue';
 
-import InfoRow from '../../components/profile/InfoRow/InfoRow.vue';
-import InfoPanel from '../../components/profile/InfoPanel/InfoPanel.vue';
+import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 
-import AttentionPanel from '../../components/AttentionPanel/AttentionPanel.vue';
-import MasterClassCard from '../../components/MasterClassCard/MasterClassCard.vue';
-import profileMasterClassImg1 from '../../assets/images/mock/profileMasterClass1.png';
-import profileMasterClassImg2 from '../../assets/images/mock/profileMasterClass2.png';
-import profileMasterClassImg3 from '../../assets/images/mock/profileMasterClass3.png';
-import profileMasterClassImg4 from '../../assets/images/mock/profileMasterClass4.png';
+import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
+import MasterClassCard from '@components/MasterClassCard/MasterClassCard.vue';
+import profileMasterClassImg1 from '@images/mock/profileMasterClass1.png';
+import profileMasterClassImg2 from '@images/mock/profileMasterClass2.png';
+import profileMasterClassImg3 from '@images/mock/profileMasterClass3.png';
+import profileMasterClassImg4 from '@images/mock/profileMasterClass4.png';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { receiveMethods } from '../../assets/scripts/enums/checkout';
-import { cartItemTypes } from '../../assets/scripts/enums/product';
+import { receiveMethods } from '@enums/checkout';
+import { cartItemTypes } from '@enums/product';
 import './ThankYou.css';
 
 export default {

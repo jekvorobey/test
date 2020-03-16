@@ -1,5 +1,5 @@
-import { $logger } from '../../../services/ServiceLocator';
-import { getBrandCatalog } from '../../../api';
+import { $logger } from '@services/ServiceLocator';
+import { getBrandCatalog } from '@api';
 import { SET_ITEMS, SET_LOAD as M_SET_LOAD } from './mutations';
 
 export const SET_LOAD = 'SET_LOAD';

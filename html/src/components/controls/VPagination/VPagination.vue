@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import VSvg from '../VSvg/VSvg.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 import './VPagination.css';
 
 export default {

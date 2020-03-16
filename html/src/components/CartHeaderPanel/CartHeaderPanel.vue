@@ -39,22 +39,22 @@
 </template>
 
 <script>
-import VLink from '../controls/VLink/VLink.vue';
-import VButton from '../controls/VButton/VButton.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
 
-import Price from '../Price/Price.vue';
+import Price from '@components/Price/Price.vue';
 
-import GeneralPopupPanel from '../GeneralPopupPanel/GeneralPopupPanel.vue';
-import CartPanelProductCard from '../CartPanelProductCard/CartPanelProductCard.vue';
+import GeneralPopupPanel from '@components/GeneralPopupPanel/GeneralPopupPanel.vue';
+import CartPanelProductCard from '@components/CartPanelProductCard/CartPanelProductCard.vue';
 
 import { mapActions, mapState, mapGetters } from 'vuex';
 
-import { NAME as AUTH_MODULE, HAS_SESSION } from '../../store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
-import { NAME as CART_MODULE, CART_DATA } from '../../store/modules/Cart';
-import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM, CART_TYPES } from '../../store/modules/Cart/getters';
+import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
+import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM, CART_TYPES } from '@store/modules/Cart/getters';
 
-import '../../assets/images/sprites/cross.svg';
+import '@images/sprites/cross.svg';
 import './CartHeaderPanel.css';
 
 export default {

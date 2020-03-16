@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
-import { injectionType } from '../assets/scripts/enums/general';
-import { injectableClass, injectClass } from '../util/container';
+import { injectionType } from '@enums/general';
+import { injectableClass, injectClass } from '@util/container';
 
 import Vue from 'vue';
 import Vuex from 'vuex';
