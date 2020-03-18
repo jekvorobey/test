@@ -698,7 +698,7 @@ import productModule, {
     INSTAGRAM_ITEMS,
     PRODUCT_OPTIONS,
 } from '@store/modules/Product';
-import { COMBINATIONS, CHARACTERISTICS } from '../../store/modules/Product/getters';
+import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '../../store/modules/Product/getters';
 import { FETCH_PRODUCT_DATA } from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
@@ -874,7 +874,7 @@ export default {
             isGalleryOpen: state => state[MODALS][GALLERY_MODAL_NAME] && state[MODALS][GALLERY_MODAL_NAME].open,
         }),
 
-        ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS]),
+        ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION]),
         ...mapState(PRODUCT_MODULE, [
             PRODUCT,
             PRODUCT_OPTIONS,

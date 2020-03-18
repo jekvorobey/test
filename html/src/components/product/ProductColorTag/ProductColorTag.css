@@ -1,26 +1,39 @@
 .product-color-tag {
+    position: relative;
     padding: calc(var(--gs) / 4);
     transition: all var(--time) var(--timing-function);
     border-radius: 2px;
+    border: 2px solid transparent;
 
     &__square {
         width: calc(var(--gs) * 4);
         height: calc(var(--gs) * 4);
         border-radius: 2px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     }
 
     &--selected {
-        border: 2px solid;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         pointer-events: none;
     }
 
     &:hover {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         border: 2px solid;
     }
 
-    &:disabled &__square {
+    &:disabled {
         &::after {
-            /*Todo*/
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            width: 14px;
+            height: 14px;
+            background-position: center;
+            background-image: svg-load('cross-small.svg');
         }
     }
 }
