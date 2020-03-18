@@ -57,7 +57,6 @@ export default {
     async [FETCH_PRODUCT_OPTIONS]({ commit }, payload) {
         try {
             const data = await getProductOptions(payload);
-            debugger;
             commit(SET_PRODUCT_OPTIONS, data);
         } catch (error) {
             storeErrorHandler(FETCH_PRODUCT_OPTIONS)(error);

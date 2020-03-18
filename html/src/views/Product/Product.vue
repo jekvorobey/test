@@ -226,7 +226,7 @@
                             </v-picture>
 
                             <router-link
-                                v-if="product.brand.hasBrand"
+                                v-if="product.brand.hasDetail"
                                 class="product-view__header-detail-brand-link"
                                 :to="brandUrl"
                             >

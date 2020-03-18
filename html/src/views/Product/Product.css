@@ -368,10 +368,7 @@
             }
 
             &-brand {
-                @media (--tablet-lg) {
-                    padding-left: calc(var(--gs) * 3);
-                    padding-right: calc(var(--gs) * 3);
-                }
+                flex-wrap: wrap;
             }
         }
     }
