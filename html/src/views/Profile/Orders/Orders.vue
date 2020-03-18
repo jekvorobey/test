@@ -194,9 +194,14 @@
                 <info-row class="orders-view__list-item-row" name="Дата заказа" :value="order.created_at" />
                 <info-row class="orders-view__list-item-row" name="Дата доставки" :value="order.deliveryDate" />
 
-                <template v-if="order.status === 'created'">
+                <template v-if="order.payment_status === orderPaymentStatus.NOT_PAID && order.payments.length !== 0">
                     <info-row class="orders-view__list-item-row">
-                        <v-button class="btn--outline">
+                        <v-button
+                            class="btn--outline"
+                            v-for="payment in order.payments"
+                            :key="payment.id"
+                            @click.stop="onContinuePayment(order.id, payment.id)"
+                        >
                             Оплатить
                         </v-button>
                     </info-row>

@@ -1,7 +1,7 @@
 <template>
     <div class="product-option-panel">
         <div class="product-option-panel__header">
-            <div class="text-bold">{{ header }}</div>
+            <div class="text-bold text-uppercase">{{ header }}</div>
             <div v-if="note" class="text-grey text-sm">{{ note }}</div>
         </div>
         <slot />

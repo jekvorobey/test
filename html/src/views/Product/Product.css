@@ -298,20 +298,17 @@
             }
 
             &-options {
+                padding-bottom: var(--gs);
+
                 &-selected {
                     display: flex;
                     justify-content: space-between;
                 }
 
-                &-list {
-                    display: flex;
-                    flex-wrap: wrap;
-                }
-
                 &-item {
-                    & + & {
-                        margin-left: calc(var(--gs) * 2);
-                    }
+                    display: inline-block;
+                    margin-right: calc(var(--gs) * 2);
+                    margin-bottom: calc(var(--gs) * 2);
                 }
             }
 

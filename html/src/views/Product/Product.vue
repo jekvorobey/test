@@ -117,18 +117,30 @@
                         :header="char.name"
                         :note="char.note"
                     >
-                        <template v-if="char.type === 'radio'">
+                        <div class="product-view__header-detail-options-tags" v-if="char.type === 'radio'">
                             <product-option-tag
                                 class="product-view__header-detail-options-item"
                                 v-for="option in char.options"
-                                :key="option.code"
-                                :selected="isOptionSelected(char.code, option.value)"
-                                :disabled="isOptionDisabled(char.code, option.value)"
+                                :key="`${char.code}-${option.value}`"
+                                :selected="option.isSelected"
+                                :disabled="option.isDisabled"
                                 @click="onSelectOption(char.code, option.value)"
                             >
                                 {{ option.name }}
                             </product-option-tag>
-                        </template>
+                        </div>
+
+                        <div class="product-view__header-detail-options-colors" v-if="char.type === 'color'">
+                            <product-color-tag
+                                class="product-view__header-detail-options-item"
+                                v-for="option in char.options"
+                                :key="`${char.code}-${option.value}`"
+                                :color="option.value"
+                                :selected="option.isSelected"
+                                :disabled="option.isDisabled"
+                                @click="onSelectOption(char.code, option.value)"
+                            />
+                        </div>
                     </product-option-panel>
 
                     <div
@@ -198,9 +210,13 @@
                             Подробнее
                         </a>
                     </div>
-                    <div v-if="productImages.brand" class="product-view__header-detail-section">
+                    <div v-if="product.brand" class="product-view__header-detail-section">
                         <div class="product-view__header-detail-brand">
-                            <v-picture :key="productImages.brand.id" class="product-view__header-detail-brand-img">
+                            <v-picture
+                                v-if="productImages.brand"
+                                :key="productImages.brand.id"
+                                class="product-view__header-detail-brand-img"
+                            >
                                 <source :data-src="productImages.brand.desktop" type="image/webp" />
                                 <img
                                     class="blur-up lazyload v-picture__img"
@@ -209,7 +225,11 @@
                                 />
                             </v-picture>
 
-                            <router-link class="product-view__header-detail-brand-link" :to="brandUrl">
+                            <router-link
+                                v-if="product.brand.hasBrand"
+                                class="product-view__header-detail-brand-link"
+                                :to="brandUrl"
+                            >
                                 На страницу бренда
                             </router-link>
                         </div>
@@ -369,7 +389,11 @@
                     <v-html class="product-view__info-text" v-html="product.howto.content" />
                 </div>
                 <div class="product-view__info-media">
-                    <v-picture :key="productImages.howto.id" v-if="productImages.howto">
+                    <v-picture
+                        class="product-view__info-media-item product-view__info-media-item--img"
+                        :key="productImages.howto.id"
+                        v-if="productImages.howto"
+                    >
                         <source
                             :data-srcset="productImages.howto.tablet"
                             type="image/webp"
@@ -380,7 +404,7 @@
                     </v-picture>
                     <iframe
                         v-if="productVideos.howto"
-                        class="lazyload"
+                        class="lazyload product-view__info-media-item product-view__info-media-item--video"
                         :data-src="productVideos.howto.videoUrl"
                         :key="productVideos.howto.id"
                         frameborder="0"
@@ -654,6 +678,7 @@ import ProductPricePanel from '@components/product/ProductPricePanel/ProductPric
 import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDetailPanel.vue';
 import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOptionPanel.vue';
 import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
+import ProductColorTag from '../../components/product/ProductColorTag/ProductColorTag.vue';
 
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
 import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
@@ -673,14 +698,7 @@ import productModule, {
     INSTAGRAM_ITEMS,
     PRODUCT_OPTIONS,
 } from '@store/modules/Product';
-import {
-    COMBINATIONS,
-    CHARACTERISTICS,
-    SELECTED_COMBINATION,
-    IS_SELECTED,
-    IS_DISABLED,
-    GET_NEXT_COMBINATION,
-} from '../../store/modules/Product/getters';
+import { COMBINATIONS, CHARACTERISTICS } from '../../store/modules/Product/getters';
 import { FETCH_PRODUCT_DATA } from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
@@ -826,6 +844,7 @@ export default {
         ProductPricePanel,
         ProductDetailPanel,
 
+        ProductColorTag,
         ProductOptionTag,
         ProductOptionPanel,
 
@@ -855,8 +874,7 @@ export default {
             isGalleryOpen: state => state[MODALS][GALLERY_MODAL_NAME] && state[MODALS][GALLERY_MODAL_NAME].open,
         }),
 
-        ...mapGetters(PRODUCT_MODULE, [IS_SELECTED, IS_DISABLED, GET_NEXT_COMBINATION]),
-        ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, SELECTED_COMBINATION]),
+        ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS]),
         ...mapState(PRODUCT_MODULE, [
             PRODUCT,
             PRODUCT_OPTIONS,

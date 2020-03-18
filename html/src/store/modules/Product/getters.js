@@ -1,3 +1,5 @@
+const PRODUCT_OPTIONS = 'productOptions';
+
 export const COMBINATIONS = 'combinations';
 export const CHARACTERISTICS = 'characteristics';
 export const SELECTED_COMBINATION = 'selectedCombination';
@@ -7,12 +9,24 @@ export const IS_SELECTED = 'IS_SELECTED';
 export const IS_DISABLED = 'IS_DISABLED';
 
 export default {
-    [CHARACTERISTICS]({ productOptions }) {
-        return (productOptions && productOptions[CHARACTERISTICS]) || [];
+    [CHARACTERISTICS](state, getters) {
+        const characteristics = (state[PRODUCT_OPTIONS] && state[PRODUCT_OPTIONS][CHARACTERISTICS]) || [];
+        return characteristics.map(c => {
+            return {
+                ...c,
+                options: c.options.map(p => {
+                    return {
+                        ...p,
+                        isSelected: getters[IS_SELECTED](c.code, p.value),
+                        isDisabled: getters[IS_DISABLED](c.code, p.value),
+                    };
+                }),
+            };
+        });
     },
 
-    [COMBINATIONS]({ productOptions }) {
-        return (productOptions && productOptions[COMBINATIONS]) || [];
+    [COMBINATIONS](state) {
+        return (state[PRODUCT_OPTIONS] && state[PRODUCT_OPTIONS][COMBINATIONS]) || [];
     },
 
     [SELECTED_COMBINATION]({ product }, getters) {
@@ -22,7 +36,7 @@ export default {
 
     [GET_NEXT_COMBINATION]: (state, getters) => (code, value) => {
         const selectedCombination = getters[SELECTED_COMBINATION] || {};
-        const combinations = getters[COMBINATIONS] || [];
+        const combinations = state[PRODUCT_OPTIONS][COMBINATIONS] || [];
 
         return combinations.find(c => {
             let accepted = true;

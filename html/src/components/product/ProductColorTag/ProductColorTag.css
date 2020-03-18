@@ -1,0 +1,26 @@
+.product-color-tag {
+    padding: calc(var(--gs) / 4);
+    transition: all var(--time) var(--timing-function);
+    border-radius: 2px;
+
+    &__square {
+        width: calc(var(--gs) * 4);
+        height: calc(var(--gs) * 4);
+        border-radius: 2px;
+    }
+
+    &--selected {
+        border: 2px solid;
+        pointer-events: none;
+    }
+
+    &:hover {
+        border: 2px solid;
+    }
+
+    &:disabled &__square {
+        &::after {
+            /*Todo*/
+        }
+    }
+}
