@@ -115,7 +115,7 @@
                         :key="char.code"
                         v-for="char in characteristics"
                         :header="char.name"
-                        :note="char.note"
+                        :note="$tc('product.variants', char.options.length)"
                     >
                         <div class="product-view__header-detail-options-tags" v-if="char.type === 'radio'">
                             <product-option-tag
@@ -678,14 +678,14 @@ import ProductPricePanel from '@components/product/ProductPricePanel/ProductPric
 import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDetailPanel.vue';
 import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOptionPanel.vue';
 import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
-import ProductColorTag from '../../components/product/ProductColorTag/ProductColorTag.vue';
+import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag.vue';
 
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
 import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '@components/GalleryModal/GalleryModal.vue';
 
-import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
+import { $store, $progress, $logger } from '@services';
 
 import { SCROLL } from '@store';
 
@@ -698,7 +698,7 @@ import productModule, {
     INSTAGRAM_ITEMS,
     PRODUCT_OPTIONS,
 } from '@store/modules/Product';
-import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '../../store/modules/Product/getters';
+import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Product/getters';
 import { FETCH_PRODUCT_DATA } from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
