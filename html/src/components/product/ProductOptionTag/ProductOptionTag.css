@@ -1,0 +1,24 @@
+.product-option-tag {
+    padding: calc(var(--gs) / 2) var(--gs);
+    background-color: var(--cl-elem-grey);
+    transition: all var(--time) var(--timing-function);
+    text-transform: none;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+
+    &--selected {
+        background-color: var(--cl-global);
+        color: var(--cl-white);
+    }
+
+    &:hover {
+        background-color: var(--cl-grey);
+        color: var(--cl-white);
+    }
+
+    &:disabled {
+        background-color: transparent;
+        color: var(--cl-grey);
+    }
+}

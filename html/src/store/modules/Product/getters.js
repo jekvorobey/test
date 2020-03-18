@@ -8,18 +8,15 @@ export const IS_DISABLED = 'IS_DISABLED';
 
 export default {
     [CHARACTERISTICS]({ productOptions }) {
-        if (!productOptions) return [];
-        const { characteristics } = productOptions;
-        return characteristics;
+        return (productOptions && productOptions[CHARACTERISTICS]) || [];
     },
 
     [COMBINATIONS]({ productOptions }) {
-        if (!productOptions) return [];
-        const { combinations } = productOptions;
-        return combinations;
+        return (productOptions && productOptions[COMBINATIONS]) || [];
     },
 
-    [SELECTED_COMBINATION]({ product }, { combinations }) {
+    [SELECTED_COMBINATION]({ product }, getters) {
+        const combinations = getters[COMBINATIONS];
         return combinations.find(c => c.code === product.code);
     },
 

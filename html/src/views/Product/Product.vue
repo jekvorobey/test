@@ -110,40 +110,26 @@
                         </div>
                     </div>
 
-                    <div
+                    <product-option-panel
                         class="product-view__header-detail-section product-view__header-detail-options"
                         :key="char.code"
                         v-for="char in characteristics"
+                        :header="char.name"
+                        :note="char.note"
                     >
-                        <!-- <div class="product-view__header-detail-options-selected">
-                            <div>{{ product.option.title }}</div>
-                            <div class="text-grey text-sm">16 оттенков</div>
-                        </div> -->
-                        <div class="product-view__header-detail-options-list">
-                            <div
+                        <template v-if="char.type === 'radio'">
+                            <product-option-tag
                                 class="product-view__header-detail-options-item"
-                                :class="{
-                                    'product-view__header-detail-options-item--selected': isOptionSelected(
-                                        char.code,
-                                        option.value
-                                    ),
-                                    'product-view__header-detail-options-item--disabled': isOptionDisabled(
-                                        char.code,
-                                        option.value
-                                    ),
-                                }"
                                 v-for="option in char.options"
                                 :key="option.code"
+                                :selected="isOptionSelected(char.code, option.value)"
+                                :disabled="isOptionDisabled(char.code, option.value)"
                                 @click="onSelectOption(char.code, option.value)"
                             >
                                 {{ option.name }}
-                                <!-- <div
-                                    class="product-view__header-detail-options-item-square"
-                                    :style="[{ backgroundColor: option.value, outlineColor: option.value }]"
-                                /> -->
-                            </div>
-                        </div>
-                    </div>
+                            </product-option-tag>
+                        </template>
+                    </product-option-panel>
 
                     <div
                         class="product-view__header-detail-section product-view__header-detail-panels"
@@ -312,7 +298,7 @@
                 </div>
                 <div class="product-view__info-media">
                     <v-picture
-                        class="product-view__info-media-img"
+                        class="product-view__info-media-item product-view__info-media-item--img"
                         :key="productImages.description.id"
                         v-if="productImages.description"
                     >
@@ -330,7 +316,7 @@
                     </v-picture>
                     <iframe
                         v-if="productVideos.description"
-                        class="lazyload product-view__info-media-video"
+                        class="lazyload product-view__info-media-item product-view__info-media-item--video"
                         :data-src="productVideos.description.videoUrl"
                         :key="productVideos.description.id"
                         frameborder="0"
@@ -666,6 +652,8 @@ import ProductCartPanel from '@components/product/ProductCartPanel/ProductCartPa
 import ProductReviewCard from '@components/product/ProductReviewCard/ProductReviewCard.vue';
 import ProductPricePanel from '@components/product/ProductPricePanel/ProductPricePanel.vue';
 import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDetailPanel.vue';
+import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOptionPanel.vue';
+import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
 
 import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
 import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
@@ -833,9 +821,13 @@ export default {
         ProductTipCard,
         ProductFileCard,
         ProductReviewCard,
+
         ProductCartPanel,
         ProductPricePanel,
         ProductDetailPanel,
+
+        ProductOptionTag,
+        ProductOptionPanel,
 
         QuickViewModal,
         AddToCartModal,
@@ -1011,7 +1003,6 @@ export default {
         },
 
         onSelectOption(charCode, optValue) {
-            debugger;
             const { categoryCode } = this;
             const nextCombination = this[GET_NEXT_COMBINATION](charCode, optValue);
             this.$router.push({

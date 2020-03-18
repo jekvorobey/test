@@ -306,58 +306,11 @@
                 &-list {
                     display: flex;
                     flex-wrap: wrap;
-                    //margin: 0 -10px;
                 }
 
                 &-item {
-                    display: flex;
-                    width: calc(calc(100% / 8));
-                    margin-top: calc(var(--gs) * 2.5);
-
-                    @media (--desktop) {
-                        width: calc(calc(100% / 6));
-                    }
-
-                    @media (--tablet-lg) and (--tablet-min) {
-                        width: calc(calc(100% / 12));
-                    }
-
-                    &--selected {
-                        background: lightcyan;
-                    }
-
-                    &--disabled {
-                        background: lightcoral;
-                    }
-
-                    &--selected &-square {
-                        outline: 1px solid;
-                        outline-offset: 2px;
-                    }
-
-                    &-square {
-                        margin: 0 10px;
-                        width: calc(100% - 20px);
-                        min-width: 24px;
-                        max-width: 32px;
-                        border-radius: 4px;
-
-                        @media (--tablet-lg) {
-                            max-width: 40px;
-                        }
-
-                        &::after {
-                            content: '';
-                            display: block;
-                            padding-bottom: 100%;
-                            border-radius: inherit;
-
-                            /* чинит padding-bottom: 100% в FireFox для распорки */
-                            @supports (-moz-user-select: none) {
-                                margin-top: 100%;
-                                padding-bottom: 0;
-                            }
-                        }
+                    & + & {
+                        margin-left: calc(var(--gs) * 2);
                     }
                 }
             }
@@ -723,13 +676,19 @@
             flex-direction: column;
             flex: 1;
 
-            &-img,
-            &-video {
-                width: 100%;
-            }
+            &-item {
+                & + & {
+                    margin-top: calc(var(--gs) * 3);
+                }
 
-            &-video {
-                height: 320px;
+                &--img,
+                &--video {
+                    width: 100%;
+                }
+
+                &--video {
+                    height: 320px;
+                }
             }
         }
     }
