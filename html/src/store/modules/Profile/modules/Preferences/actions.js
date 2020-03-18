@@ -1,5 +1,5 @@
-import { storeErrorHandler } from '../../../../../util/store';
-import { getProfilePreferences, changeProfilePreferences } from '../../../../../api';
+import { storeErrorHandler } from '@util/store';
+import { getProfilePreferences, changeProfilePreferences } from '@api';
 import { SET_PREFERENCES_DATA, SET_ENTITIES } from './mutations';
 
 export const FETCH_PREFERENCES_DATA = 'FETCH_PREFERENCES_DATA';

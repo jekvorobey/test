@@ -47,13 +47,13 @@
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import VHtml from '../../../components/controls/VHtml/VHtml.vue';
-import VAccordion from '../../../components/controls/VAccordion/VAccordion.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VHtml from '@controls/VHtml/VHtml.vue';
+import VAccordion from '@controls/VAccordion/VAccordion.vue';
 
-import mockImg1 from '../../../assets/images/mock/howItWorks1.png';
-import '../../../assets/images/sprites/arrow-small.svg';
+import mockImg1 from '@images/mock/howItWorks1.png';
+import '@images/sprites/arrow-small.svg';
 import './HowItWorks.css';
 
 export default {

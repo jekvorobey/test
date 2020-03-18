@@ -1,3 +1,11 @@
+import { localeDateOptions } from '@enums';
+
+export const orderDateLocaleOptions = {
+    month: localeDateOptions.month.DIGIT2,
+    day: localeDateOptions.day.DIGIT2,
+    year: localeDateOptions.year.NUMERIC,
+};
+
 export const baseChartOptions = Object.freeze({
     chart: {
         toolbar: {

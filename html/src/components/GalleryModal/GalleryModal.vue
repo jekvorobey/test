@@ -27,20 +27,20 @@
 </template>
 
 <script>
-import VSlider from '../controls/VSlider/VSlider.vue';
-import VPicture from '../controls/VPicture/VPicture.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import GeneralModal from '../GeneralModal/GeneralModal.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapState, mapActions } from 'vuex';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PRODUCT_MODULE, PRODUCT } from '../../store/modules/Product';
+import { NAME as PRODUCT_MODULE, PRODUCT } from '@store/modules/Product';
 
-import { generatePictureSourcePath } from '../../util/images';
-import { breakpoints } from '../../assets/scripts/enums/general';
+import { generatePictureSourcePath } from '@util/file';
+import { breakpoints } from '@enums';
 import './GalleryModal.css';
 
 const galleryOptions = {

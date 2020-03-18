@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
-import { injectionType } from '../assets/scripts/enums/general';
-import { injectableClass, injectClass } from '../util/container';
+import { injectionType } from '@enums';
+import { injectableClass, injectClass } from '@util/container';
 
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -27,9 +27,6 @@ const ENV = 'env';
 export const MENU = 'menu';
 
 export const IS_MENU_OPEN = 'isMenuOpen';
-export const IS_HELP_OPEN = 'isHelpOpen';
-export const IS_CART_OPEN = 'isCartOpen';
-export const IS_PROFILE_PANEL_OPEN = 'isProfilePanelOpen';
 export const IS_CITY_CONFIRMATION_OPEN = 'isCityConfirmationOpen';
 export const SCROLL = 'scroll';
 
@@ -47,6 +44,7 @@ export const FALLBACK_LOCALE = 'fallbackLocale';
  */
 export default function createStore(container) {
     const context = container.get(injectionType.APPLICATION_CONTEXT);
+
     const store = new Vuex.Store({
         strict: process.env.NODE_ENV !== 'production',
         state: {
@@ -58,10 +56,7 @@ export default function createStore(container) {
                 [enLocale.LOCALE]: enLocale,
             },
             [SCROLL]: false,
-            [IS_PROFILE_PANEL_OPEN]: false,
             [IS_MENU_OPEN]: false,
-            [IS_HELP_OPEN]: false,
-            [IS_CART_OPEN]: false,
             [IS_CITY_CONFIRMATION_OPEN]: false,
             [CATEGORIES]: [],
             [BANNER]: {},
@@ -71,13 +66,13 @@ export default function createStore(container) {
         mutations,
         actions,
         modules: {
-            modal,
-            search,
-            auth,
-            cart,
-            geolocation,
-            preview,
-            featured,
+            modal: modal(),
+            search: search(),
+            auth: auth(),
+            cart: cart(),
+            geolocation: geolocation(),
+            preview: preview(),
+            featured: featured(),
         },
     });
 

@@ -28,16 +28,17 @@
     </general-modal>
 </template>
 <script>
-import VButton from '../../controls/VButton/VButton.vue';
-import VDatepicker from '../../controls/VDatepicker/VDatepicker.vue';
-import GeneralModal from '../../GeneralModal/GeneralModal.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VDatepicker from '@controls/VDatepicker/VDatepicker.vue';
+
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapState, mapActions } from 'vuex';
-import { LOCALE, LOCALIZATIONS } from '../../../store';
-import { NAME as CHECKOUT_MODULE } from '../../../store/modules/Checkout';
+import { LOCALE, LOCALIZATIONS } from '@store';
+import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import './CheckoutDateModal.css';
 

@@ -36,7 +36,7 @@ const proxy = hostname =>
 const app = express();
 const sites_folder = path.resolve(__dirname, '../../');
 
-if (serverRendererVersion !== '2.6.10')
+if (serverRendererVersion !== '2.6.11')
     logger.warn(
         'В файле custom-vue-server-renderer изменен порядок применения тегов стилей для <link> и <style> в методе renderStyles. Необходимо обновить код в файле custom-vue-server-renderer, ибо версия vue-server-renderer изменилась и надо добавить правки'
     );

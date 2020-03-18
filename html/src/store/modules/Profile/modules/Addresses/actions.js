@@ -1,10 +1,5 @@
-import { storeErrorHandler } from '../../../../../util/store';
-import {
-    getProfileAddresses,
-    changeProfileAddress,
-    defaultProfileAddress,
-    deleteProfileAddress,
-} from '../../../../../api';
+import { storeErrorHandler } from '@util/store';
+import { getProfileAddresses, changeProfileAddress, defaultProfileAddress, deleteProfileAddress } from '@api';
 import { SET_ADDRESSES_DATA } from './mutations';
 
 export const FETCH_ADDRESSES_DATA = 'FETCH_ADDRESSES_DATA';

@@ -18,40 +18,36 @@
                 </span>
             </div>
 
-            <button class="header-top__help" title="Помощь" @click="onToggleHelp">
+            <help-panel class="header-top__help">
                 {{ $t('header.top.help') }}<v-svg name="arrow-down" width="20" height="20" />
-            </button>
-
-            <div class="header-top__panel">
-                <help-panel v-if="!isTabletLg" />
-            </div>
+            </help-panel>
         </div>
     </div>
 </template>
 
 <script>
-import VSvg from '../../controls/VSvg/VSvg.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 import VClamp from 'vue-clamp';
-import HelpPanel from '../../HelpPanel/HelpPanel.vue';
-import { NAME as CITY_SELECTION_MODAL_NAME } from '../../CitySelectionModal/CitySelectionModal.vue';
+
+import HelpPanel from '@components/HelpPanel/HelpPanel.vue';
+import { NAME as CITY_SELECTION_MODAL_NAME } from '@components/CitySelectionModal/CitySelectionModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { SCROLL, IS_CITY_CONFIRMATION_OPEN, IS_HELP_OPEN } from '../../../store';
-import { SET_HELP_OPEN } from '../../../store/actions';
+import { SCROLL, IS_CITY_CONFIRMATION_OPEN } from '@store';
 
-import { NAME as SEARCH_MODULE, SEARCH } from '../../../store/modules/Search';
+import { NAME as SEARCH_MODULE, SEARCH } from '@store/modules/Search';
 
-import { NAME as GEO_MODULE, SELECTED_CITY } from '../../../store/modules/Geolocation';
-import { SET_SELECTED_CITY } from '../../../store/modules/Geolocation/actions';
+import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
+import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 
-import { NAME as MODAL_MODULE } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import '../../../assets/images/sprites/gift.svg';
-import '../../../assets/images/sprites/box.svg';
-import '../../../assets/images/sprites/delivery.svg';
-import '../../../assets/images/sprites/pin.svg';
-import '../../../assets/images/sprites/arrow-down.svg';
+import '@images/sprites/gift.svg';
+import '@images/sprites/box.svg';
+import '@images/sprites/delivery.svg';
+import '@images/sprites/pin.svg';
+import '@images/sprites/arrow-down.svg';
 
 import './HeaderTop.critical.css';
 
@@ -66,7 +62,7 @@ export default {
     },
 
     computed: {
-        ...mapState([SCROLL, IS_HELP_OPEN]),
+        ...mapState([SCROLL]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
         ...mapState(GEO_MODULE, {
             city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].value) || 'Выберите город',
@@ -78,13 +74,8 @@ export default {
     },
 
     methods: {
-        ...mapActions([SET_HELP_OPEN]),
         ...mapActions(GEO_MODULE, [SET_SELECTED_CITY]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-
-        onToggleHelp() {
-            this[SET_HELP_OPEN](!this[IS_HELP_OPEN]);
-        },
 
         onOpenCitySelection() {
             this[CHANGE_MODAL_STATE]({ name: CITY_SELECTION_MODAL_NAME, open: true });

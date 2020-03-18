@@ -22,7 +22,7 @@
             <div class="landing-banner-card__panel-container">
                 <div class="landing-banner-card__panel-title">
                     <div class="landing-banner-card__panel-title-text">{{ title }}</div>
-                    <v-button class="landing-banner-card__panel-btn">
+                    <v-button class="landing-banner-card__panel-btn" to="/?registration=true">
                         {{ btnText }}
                     </v-button>
                 </div>
@@ -42,10 +42,10 @@
 </template>
 
 <script>
-import VButton from '../controls/VButton/VButton.vue';
-import VPicture from '../controls/VPicture/VPicture.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import { generatePictureSourcePath } from '../../util/images';
+import { generatePictureSourcePath } from '@util/file';
 import './LandingBannerCard.css';
 
 export default {

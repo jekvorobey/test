@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import VButton from '../controls/VButton/VButton.vue';
-import VCounter from '../controls/VCounter/VCounter.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VCounter from '@controls/VCounter/VCounter.vue';
 
-import Price from '../Price/Price.vue';
+import Price from '@components/Price/Price.vue';
 
 import './TicketCard.css';
 

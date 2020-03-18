@@ -47,21 +47,21 @@
     </general-modal>
 </template>
 <script>
-import VButton from '../../controls/VButton/VButton.vue';
-import VInput from '../../controls/VInput/VInput.vue';
-import GeneralModal from '../../GeneralModal/GeneralModal.vue';
-import validationMixin, { required, email, minLength } from '../../../plugins/validation';
+import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
+import validationMixin, { required, email, minLength } from '@plugins/validation';
 
 import { mapActions, mapState } from 'vuex';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { NAME as CABINET_MODULE, EMAIL } from '../../../store/modules/Profile/modules/Cabinet';
-import { SEND_CODE, UPDATE_CREDENTIAL } from '../../../store/modules/Profile/modules/Cabinet/actions';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as CABINET_MODULE, EMAIL } from '@store/modules/Profile/modules/Cabinet';
+import { SEND_CODE, UPDATE_CREDENTIAL } from '@store/modules/Profile/modules/Cabinet/actions';
 
-import { verificationCodeType } from '../../../assets/scripts/enums/auth';
+import { verificationCodeType } from '@enums/auth';
 import './EmailEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;

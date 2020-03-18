@@ -31,36 +31,35 @@
 </template>
 
 <script>
-import VSvg from '../../controls/VSvg/VSvg.vue';
-import VLink from '../../controls/VLink/VLink.vue';
-import VBurger from '../../controls/VBurger/VBurger.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VBurger from '@controls/VBurger/VBurger.vue';
 
-import HeaderUserPanel from '../HeaderUserPanel/HeaderUserPanel.vue';
-import HeaderLogoPanel from '../HeaderLogoPanel/HeaderLogoPanel.vue';
-import HeaderNavigationPanel from '../HeaderNavigationPanel/HeaderNavigationPanel.vue';
-import SearchFilter from '../../SearchFilter/SearchFilter.vue';
+import HeaderUserPanel from '@components/VHeader/HeaderUserPanel/HeaderUserPanel.vue';
+import HeaderLogoPanel from '@components/VHeader/HeaderLogoPanel/HeaderLogoPanel.vue';
+import HeaderNavigationPanel from '@components/VHeader/HeaderNavigationPanel/HeaderNavigationPanel.vue';
+import SearchFilter from '@components/SearchFilter/SearchFilter.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
+import { SCROLL, IS_MENU_OPEN, CATEGORIES } from '@store';
+import { SET_MENU_OPEN } from '@store/actions';
 
-import { SCROLL, IS_MENU_OPEN, CATEGORIES } from '../../../store';
-import { SET_MENU_OPEN } from '../../../store/actions';
+import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
+import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
 
-import { NAME as CART_MODULE, CART_ITEMS } from '../../../store/modules/Cart';
-import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '../../../store/modules/Cart/getters';
+import { NAME as SEARCH_MODULE, SEARCH } from '@store/modules/Search';
+import { SET_SEARCH } from '@store/modules/Search/actions';
 
-import { NAME as SEARCH_MODULE, SEARCH } from '../../../store/modules/Search';
-import { SET_SEARCH } from '../../../store/modules/Search/actions';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as MODAL_MODULE } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import '@images/sprites/logo.svg';
+import '@images/sprites/logo-text.svg';
 
-import '../../../assets/images/sprites/logo.svg';
-import '../../../assets/images/sprites/logo-text.svg';
-
-import '../../../assets/images/sprites/search-middle.svg';
-import '../../../assets/images/sprites/cart-middle.svg';
-import '../../../assets/images/sprites/wishlist-middle.svg';
-import '../../../assets/images/sprites/account-middle.svg';
+import '@images/sprites/search-middle.svg';
+import '@images/sprites/cart-middle.svg';
+import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/account-middle.svg';
 
 import './HeaderBottom.critical.css';
 

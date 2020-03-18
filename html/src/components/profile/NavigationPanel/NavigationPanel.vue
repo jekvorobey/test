@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import VLink from '../../controls/VLink/VLink.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
 import { mapActions } from 'vuex';
-import { NAME as AUTH_MODULE } from '../../../store/modules/Auth';
-import { LOGOUT } from '../../../store/modules/Auth/actions';
+import { NAME as AUTH_MODULE } from '@store/modules/Auth';
+import { LOGOUT } from '@store/modules/Auth/actions';
 
 import './NavigationPanel.css';
 

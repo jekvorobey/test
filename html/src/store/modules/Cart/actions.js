@@ -1,7 +1,7 @@
-import { $logger } from '../../../services/ServiceLocator';
-import { getProducts, getCartData, deleteCartItem, addCartItem } from '../../../api';
+import { $logger } from '@services';
+import { getProducts, getCartData, deleteCartItem, addCartItem } from '@api';
 import { SET_CART_DATA, SET_FEATURED_PRODUCTS, SET_RELATIVE_PRODUCTS } from './mutations';
-import { getRandomIntInclusive } from '../../../util/helpers';
+import { getRandomIntInclusive } from '@util';
 
 export const CLEAR_CART_DATA = 'CLEAR_CART_DATA';
 export const FETCH_CART_DATA = 'FETCH_CART_DATA';

@@ -145,25 +145,25 @@
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import VButton from '../../../components/controls/VButton/VButton.vue';
-import VHtml from '../../../components/controls/VHtml/VHtml.vue';
-import VPagination from '../../../components/controls/VPagination/VPagination.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VHtml from '@controls/VHtml/VHtml.vue';
+import VPagination from '@controls/VPagination/VPagination.vue';
 
-import RadioSwitch from '../../../components/RadioSwitch/RadioSwitch.vue';
-import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
+import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
+import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 
-import profileSEO1 from '../../../assets/images/mock/profileSEO1.png';
-import profileSEO2 from '../../../assets/images/mock/profileSEO2.png';
-import profileSEO3 from '../../../assets/images/mock/profileSEO3.png';
-import profileSEO4 from '../../../assets/images/mock/profileSEO4.png';
+import profileSEO1 from '@images/mock/profileSEO1.png';
+import profileSEO2 from '@images/mock/profileSEO2.png';
+import profileSEO3 from '@images/mock/profileSEO3.png';
+import profileSEO4 from '@images/mock/profileSEO4.png';
 
-import '../../../assets/images/sprites/socials/facebook-bw.svg';
-import '../../../assets/images/sprites/socials/vkontakte-bw.svg';
-import '../../../assets/images/sprites/download.svg';
-import '../../../assets/images/sprites/copy.svg';
-import '../../../assets/images/sprites/link.svg';
+import '@images/sprites/socials/facebook-bw.svg';
+import '@images/sprites/socials/vkontakte-bw.svg';
+import '@images/sprites/download.svg';
+import '@images/sprites/copy.svg';
+import '@images/sprites/link.svg';
 import './Seo.css';
 
 export default {

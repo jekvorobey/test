@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { cacheAdapterEnhancer } from 'axios-extensions';
+
 import HttpServiceBase from './base';
 
 export default class DadataHttpService extends HttpServiceBase {

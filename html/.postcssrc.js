@@ -40,7 +40,9 @@ module.exports = {
         /* Автоматически конвертирует px в rem, чтобы была возможность указывать величины в пикселях согласно макету и не париться :) */
         'postcss-pxtorem': {},
         /* Позволяет загружать в background svg с возможностью менять его параметры (например, fill) в формате: background-image: svg-load(<путь>, fill: <hex-цвет>); */
-        'postcss-inline-svg': {},
+        'postcss-inline-svg': {
+            paths: ['src/assets/images/sprites', 'src/assets/images/icons'],
+        },
         /* Используем autoprefixer с поддержкой grid. */
         autoprefixer: {
             grid: 'autoplace',

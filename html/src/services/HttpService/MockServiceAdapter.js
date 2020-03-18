@@ -19,8 +19,10 @@ export default class MockServiceAdapter extends HttpServiceBase {
     get(path, config) {
         if (path.includes('/v1/auth/socialHandler/')) return this.httpServiceInstance.get(path, config);
         if (path.includes('/storage/certificate/')) return this.httpServiceInstance.get(path, config);
+        if (path.includes('/v1/lk/order')) return this.httpServiceInstance.get(path, config);
 
         switch (path) {
+            case '/v1/content/banners':
             case '/v1/content/menus':
             case '/v1/auth/is-login':
             case '/v1/categories':
@@ -36,7 +38,6 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/lk/profile':
             case '/v1/lk/preference':
             case '/v1/lk/address':
-            case '/v1/lk/order':
                 return this.httpServiceInstance.get(path, config);
             default:
                 return this.mockServiceInstance.get(path, config);
@@ -50,6 +51,8 @@ export default class MockServiceAdapter extends HttpServiceBase {
      * @returns {Promise<Object>}
      */
     post(path, data, config) {
+        if (path.includes('/v1/lk/order')) return this.httpServiceInstance.post(path, data, config);
+
         switch (path) {
             case '/v1/auth/loginBySocial':
             case '/v1/auth/loginByPassword':

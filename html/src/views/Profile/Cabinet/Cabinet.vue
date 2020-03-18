@@ -234,48 +234,44 @@
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import VFilepond, { fileValidation } from '../../../components/controls/VFilepond/VFilepond.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VFilepond, { fileValidation } from '@controls/VFilepond/VFilepond.vue';
 
-import AttentionPanel from '../../../components/AttentionPanel/AttentionPanel.vue';
+import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 
-import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
-import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
-import ImagePicker from '../../../components/profile/ImagePicker/ImagePicker.vue';
+import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
+import ImagePicker from '@components/profile/ImagePicker/ImagePicker.vue';
 
 import PortfolioEditModal, {
     NAME as PORTFOLIOS_MODAL_NAME,
-} from '../../../components/profile/PortfolioEditModal/PortfolioEditModal.vue';
-import EmailEditModal, {
-    NAME as EDIT_EMAIL_MODAL_NAME,
-} from '../../../components/profile/EmailEditModal/EmailEditModal.vue';
+} from '@components/profile/PortfolioEditModal/PortfolioEditModal.vue';
+import EmailEditModal, { NAME as EDIT_EMAIL_MODAL_NAME } from '@components/profile/EmailEditModal/EmailEditModal.vue';
 import ActivitiesEditModal, {
     NAME as ACTIVITIES_MODAL_NAME,
-} from '../../../components/profile/ActivitiesEditModal/ActivitiesEditModal.vue';
-import PhoneEditModal, {
-    NAME as EDIT_PHONE_MODAL_NAME,
-} from '../../../components/profile/PhoneEditModal/PhoneEditModal.vue';
+} from '@components/profile/ActivitiesEditModal/ActivitiesEditModal.vue';
+import PhoneEditModal, { NAME as EDIT_PHONE_MODAL_NAME } from '@components/profile/PhoneEditModal/PhoneEditModal.vue';
 import PersonalEditModal, {
     NAME as EDIT_PERSONAL_MODAL_NAME,
-} from '../../../components/profile/PersonalEditModal/PersonalEditModal.vue';
+} from '@components/profile/PersonalEditModal/PersonalEditModal.vue';
 import PasswordEditModal, {
     NAME as EDIT_PASSWORD_MODAL_NAME,
-} from '../../../components/profile/PasswordEditModal/PasswordEditModal.vue';
-import DetailsModal, { NAME as DETAILS_MODAL_NAME } from '../../../components/profile/DetailsModal/DetailsModal.vue';
+} from '@components/profile/PasswordEditModal/PasswordEditModal.vue';
+import DetailsModal, { NAME as DETAILS_MODAL_NAME } from '@components/profile/DetailsModal/DetailsModal.vue';
 
-import { $store, $progress, $logger } from '../../../services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { LOCALE } from '../../../store';
+import { LOCALE } from '@store';
 
-import { NAME as AUTH_MODULE } from '../../../store/modules/Auth';
-import { GET_SOCIAL_LINK } from '../../../store/modules/Auth/actions';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import { GET_SOCIAL_LINK, CHECK_SESSION } from '@store/modules/Auth/actions';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import {
     NAME as CABINET_MODULE,
     BIRTHDAY,
@@ -293,8 +289,8 @@ import {
     LAST_NAME,
     CAN_BUY,
     REFERRAL_PARTNER,
-} from '../../../store/modules/Profile/modules/Cabinet';
-import { FULL_NAME, PROFILES_STRING } from '../../../store/modules/Profile/modules/Cabinet/getters';
+} from '@store/modules/Profile/modules/Cabinet';
+import { FULL_NAME, PROFILES_STRING } from '@store/modules/Profile/modules/Cabinet/getters';
 import {
     SET_LOAD,
     FETCH_CABINET_DATA,
@@ -304,10 +300,11 @@ import {
     UPLOAD_CERTIFICATE,
     DELETE_CERTIFICATE,
     LOAD_CERTIFICATE,
-} from '../../../store/modules/Profile/modules/Cabinet/actions';
+} from '@store/modules/Profile/modules/Cabinet/actions';
 
-import { socials, mimeType } from '../../../assets/scripts/enums/general';
-import '../../../assets/images/sprites/edit.svg';
+import { socials, mimeType, httpCodes } from '@enums';
+import { cancelRoute } from '@settings';
+import '@images/sprites/edit.svg';
 import './Cabinet.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
@@ -616,8 +613,10 @@ export default {
             })
             .catch(thrown => {
                 $progress.fail();
-                $logger.error('beforeRouteEnter', thrown.error);
-                $progress.finish();
+                if (thrown.status === httpCodes.FORBIDDEN) {
+                    $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);
+                    return next(false);
+                }
                 next();
             });
     },

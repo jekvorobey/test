@@ -28,7 +28,7 @@
     </section>
 </template>
 <script>
-import VTable from '../../components/controls/VTable/VTable.vue';
+import VTable from '@controls/VTable/VTable.vue';
 
 export default {
     name: 'ui-kit-tables',

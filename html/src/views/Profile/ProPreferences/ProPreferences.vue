@@ -78,30 +78,30 @@
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import VCheck from '../../../components/controls/VCheck/VCheck.vue';
-import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
-import TagItem from '../../../components/TagItem/TagItem.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
+import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
+import TagItem from '@components/TagItem/TagItem.vue';
 
 import PreferenceEditModal, {
     NAME as PREFERENCES_EDIT_MODAL_NAME,
-} from '../../../components/profile/PreferenceEditModal/PreferenceEditModal.vue';
+} from '@components/profile/PreferenceEditModal/PreferenceEditModal.vue';
 
 import { mapState, mapActions } from 'vuex';
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import {
     NAME as PROFILE_MODULE,
     PREFERENCES_DATA,
     PRO_PREFERENCES_DATA,
     AVAILABLE_PROFILES,
-} from '../../../store/modules/Profile';
-import { DELETE_ENTITY, DELETE_ALL_ENTITIES, UPDATE_ENTITIES } from '../../../store/modules/Profile/actions';
+} from '@store/modules/Profile';
+import { DELETE_ENTITY, DELETE_ALL_ENTITIES, UPDATE_ENTITIES } from '@store/modules/Profile/actions';
 
-import '../../../assets/images/sprites/cross.svg';
-import '../../../assets/images/sprites/plus-small.svg';
+import '@images/sprites/cross.svg';
+import '@images/sprites/plus-small.svg';
 import './ProPreferences.css';
 
 const entityTypes = {

@@ -111,26 +111,27 @@
     </general-modal>
 </template>
 <script>
-import '../../../plugins/ya-maps';
+import '@plugins/ya-maps';
 
-import VButton from '../../controls/VButton/VButton.vue';
-import VSuggestion from '../../controls/VSuggestion/VSuggestion.vue';
-import VInput from '../../controls/VInput/VInput.vue';
-import GeneralModal from '../../GeneralModal/GeneralModal.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VSuggestion from '@controls/VSuggestion/VSuggestion.vue';
+import VInput from '@controls/VInput/VInput.vue';
+
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapGetters, mapState, mapActions } from 'vuex';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
+import { SELECTED_CITY_COORDS } from '@store/modules/Geolocation/getters';
+import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 
-import { NAME as GEO_MODULE, SELECTED_CITY } from '../../../store/modules/Geolocation';
-import { SELECTED_CITY_COORDS } from '../../../store/modules/Geolocation/getters';
-import { SET_SELECTED_CITY } from '../../../store/modules/Geolocation/actions';
+import validationMixin, { required } from '@plugins/validation';
+import { suggestionTypes } from '@enums/suggestions';
+import { $dadata } from '@services';
 
-import validationMixin, { required } from '../../../plugins/validation';
-import { suggestionTypes } from '../../../assets/scripts/enums/suggestions';
-import { $dadata } from '../../../services/ServiceLocator';
-import pin from '../../../assets/images/icons/pin-filled.svg';
+import pin from '@images/icons/pin-filled.svg';
 import './CheckoutAddressModal.css';
 
 export const NAME = 'checkout-address-modal';

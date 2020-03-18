@@ -10,7 +10,7 @@
                         {{ $t('profile.routes.Cabinet') }}
                     </breadcrumb-item>
                     <breadcrumb-item
-                        v-if="$route.name !== 'Cabinet' && breadcrumbs.length === 0"
+                        v-if="$route.name !== 'Cabinet' && breadcrumbs && breadcrumbs.length === 0"
                         :key="$route.name"
                         :to="$route.path"
                     >
@@ -49,7 +49,7 @@
                         {{ $t('profile.routes.Cabinet') }}
                     </breadcrumb-item>
                     <breadcrumb-item
-                        v-if="$route.name !== 'Cabinet' && breadcrumbs.length === 0"
+                        v-if="$route.name !== 'Cabinet' && breadcrumbs && breadcrumbs.length === 0"
                         :key="$route.name"
                         :to="$route.path"
                     >
@@ -74,32 +74,32 @@
 </template>
 
 <script>
-import VSvg from '../../components/controls/VSvg/VSvg.vue';
-import VButton from '../../components/controls/VButton/VButton.vue';
-import VSticky from '../../components/controls/VSticky/VSticky.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
 
-import InfoPanel from '../../components/profile/InfoPanel/InfoPanel.vue';
-import InfoRow from '../../components/profile/InfoRow/InfoRow.vue';
+import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
+import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 
-import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
-import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
-import NavigationPanel from '../../components/profile/NavigationPanel/NavigationPanel.vue';
+import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+import NavigationPanel from '@components/profile/NavigationPanel/NavigationPanel.vue';
 import NavigationModal, {
     NAME as NAVIGATION_MODAL_NAME,
-} from '../../components/profile/NavigationModal/NavigationModal.vue';
+} from '@components/profile/NavigationModal/NavigationModal.vue';
 
 import { mapState, mapActions } from 'vuex';
-import profileModule, { NAME as PROFILE_MODULE, BREADCRUMBS } from '../../store/modules/Profile';
+import profileModule, { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modules/Profile';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as AUTH_MODULE, HAS_SESSION } from '../../store/modules/Auth';
-import { cancelRoute } from '../../assets/scripts/settings/general';
-import { $store } from '../../services/ServiceLocator';
-import { registerModuleIfNotExists } from '../../util/store';
-import '../../assets/images/sprites/arrow-updown.svg';
-import '../../assets/images/sprites/home.svg';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import { cancelRoute } from '@settings';
+import { $store } from '@services';
+import { registerModuleIfNotExists } from '@util/store';
+import '@images/sprites/arrow-updown.svg';
+import '@images/sprites/home.svg';
 import './Profile.css';
 
 export default {

@@ -1,21 +1,32 @@
-import { storeErrorHandler } from '../../../../../util/store';
-import { getProfileOrders } from '../../../../../api';
+import { storeErrorHandler } from '@util/store';
+import { getProfileOrders, getProfileOrder, getProfileOrderPaymentLink } from '@api';
+import { ORDERS_PAGE_SIZE } from '@constants/profile';
+
 import { SET_ORDERS, SET_ORDERS_MORE, SET_ORDER_DETAILS, SET_QUERY_PARAMS } from './mutations';
-import { ORDERS_PAGE_SIZE } from '../../../../../assets/scripts/constants/profile';
 
 export const FETCH_ORDERS = 'FETCH_ORDERS';
-export const FETCH_ORDER_DETAILS = 'FETCH_ORDERS';
-export const SET_LOAD = 'SET_LOAD';
+export const FETCH_ORDER_DETAILS = 'FETCH_ORDER_DETAILS';
+export const SET_LOAD_PATH = 'SET_LOAD_PATH';
+export const GET_ORDER_PAYMENT_LINK = 'GET_ORDER_PAYMENT_LINK';
 
 export default {
-    [SET_LOAD]({ commit }, payload) {
-        commit(SET_LOAD, payload);
+    [SET_LOAD_PATH]({ commit }, payload) {
+        commit(SET_LOAD_PATH, payload);
     },
 
-    async [FETCH_ORDER_DETAILS]({ commit }, isServer) {
+    async [GET_ORDER_PAYMENT_LINK]({ commit }, { id, backUrl }) {
         try {
-            const data = await getProfilePreferences();
+            return await getProfileOrderPaymentLink(id, backUrl);
+        } catch (error) {
+            storeErrorHandler(GET_ORDER_PAYMENT_LINK)(error);
+        }
+    },
+
+    async [FETCH_ORDER_DETAILS]({ commit }, id) {
+        try {
+            const data = await getProfileOrder(id);
             commit(SET_ORDER_DETAILS, data);
+            return data.order;
         } catch (error) {
             storeErrorHandler(FETCH_ORDER_DETAILS, true)(error);
         }

@@ -90,14 +90,14 @@
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../../components/controls/VLink/VLink.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
-import RadioSwitch from '../../../components/RadioSwitch/RadioSwitch.vue';
-import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
+import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
+import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 
-import '../../../assets/images/sprites/copy.svg';
-import '../../../assets/images/sprites/edit.svg';
+import '@images/sprites/copy.svg';
+import '@images/sprites/edit.svg';
 import './Promocodes.css';
 
 export default {

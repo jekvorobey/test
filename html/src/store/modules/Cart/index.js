@@ -7,15 +7,17 @@ export const CART_DATA = 'cartData';
 export const FEATURED_PRODUCTS = 'featuredProducts';
 export const RELATIVE_PRODUCTS = 'relativeProducts';
 
-export default {
-    name: NAME,
-    namespaced: true,
-    state: {
-        [CART_DATA]: {},
-        [RELATIVE_PRODUCTS]: [],
-        [FEATURED_PRODUCTS]: [],
-    },
-    actions,
-    mutations,
-    getters,
-};
+export default function createModule() {
+    return {
+        name: NAME,
+        namespaced: true,
+        state: {
+            [CART_DATA]: {},
+            [RELATIVE_PRODUCTS]: [],
+            [FEATURED_PRODUCTS]: [],
+        },
+        actions,
+        mutations,
+        getters,
+    };
+}

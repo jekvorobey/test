@@ -1,5 +1,5 @@
 <template>
-    <v-modal class="general-modal" v-bind="$attrs" @close="$emit('close', $event)" v-if="!$isServer">
+    <v-modal v-if="!$isServer && mounted" class="general-modal" v-bind="$attrs" @close="$emit('close', $event)">
         <template v-slot:body>
             <v-sticky v-if="isMobile" class="general-modal__sticky">
                 <template v-slot:sticky>
@@ -20,11 +20,11 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VSticky from '../controls/VSticky/VSticky.vue';
-import VModal from '../controls/modal/modal.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
+import VModal from '@controls/modal/modal.vue';
 
-import '../../assets/images/sprites/cross.svg';
+import '@images/sprites/cross.svg';
 import './GeneralModal.css';
 
 export default {
@@ -37,6 +37,12 @@ export default {
         VModal,
     },
 
+    data() {
+        return {
+            mounted: false,
+        };
+    },
+
     props: {
         header: {
             type: String,
@@ -47,6 +53,10 @@ export default {
             type: Boolean,
             default: false,
         },
+    },
+
+    mounted() {
+        this.mounted = true;
     },
 };
 </script>

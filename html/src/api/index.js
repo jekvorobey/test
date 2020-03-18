@@ -1,11 +1,11 @@
 import qs from 'qs';
 import axios from 'axios';
-
 import { Cache } from 'axios-extensions';
-import { $http, $logger } from '../services/ServiceLocator';
-import { REQUEST_CANCEL_MESSAGE } from '../assets/scripts/constants/general';
-import { interval } from '../assets/scripts/enums/general';
-import { verificationCodeType } from '../assets/scripts/enums/auth';
+
+import { $http, $logger } from '@services';
+import { REQUEST_CANCEL_MESSAGE } from '@constants';
+import { interval } from '@enums';
+import { verificationCodeType } from '@enums/auth';
 
 let catalogItemsCancelSource = null;
 const sessionCheckCache = new Cache({ maxAge: interval.FIVE_MINUTES });
@@ -210,6 +210,16 @@ export function getProfileOrders(sortDirection, sortKey, pageNum, perPage) {
     });
 }
 
+export function getProfileOrder(id) {
+    return $http.get(`/v1/lk/order/${id}`);
+}
+
+export function getProfileOrderPaymentLink(id, backUrl) {
+    return $http.post(`/v1/lk/order/${id}/payment/${id}/start`, {
+        return_url: backUrl,
+    });
+}
+
 // search
 
 export function search(data) {
@@ -260,6 +270,10 @@ export function getCatalogItems({ filter, orderField = 'price', orderDirection =
     });
 }
 
+export function getCatalogInfo() {
+    return $http.get(`/v1/lk/order/${id}`);
+}
+
 export function getFilters(categoryCode, excludedFilters) {
     return $http.get('/v1/catalog/filter', {
         params: { categoryCode, excludedFilters },
@@ -274,6 +288,15 @@ export function getCategories(node_code = undefined, max_depth = undefined) {
         params: {
             node_code,
             max_depth,
+        },
+    });
+}
+
+export function getBannersByCode(typeCode, random = false) {
+    return $http.get('/v1/content/banners', {
+        params: {
+            typeCode,
+            random: Number(random),
         },
     });
 }

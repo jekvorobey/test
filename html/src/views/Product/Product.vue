@@ -195,17 +195,23 @@
                         <p class="text-bold product-view__header-detail-section-hl">
                             Описание и характеристики
                         </p>
-                        <p>
-                            Двадцать три насыщенных, ярких оттенка помады воплощают в себе современную интерпретацию
-                            классики от Тома Форда. Редкое экзотическое масло муру-муру из Бразилии и масло цветков
-                            ромашки создают кремовую текстуру и обеспечивают...
-                        </p>
-                        <a href="#">Подробнее</a>
+                        <v-html v-html="product.description.content" />
+                        <a class="product-view__header-detail-brand-link" href="#description">
+                            Подробнее
+                        </a>
                     </div>
-                    <div class="product-view__header-detail-section">
+                    <div v-if="productImages.brand" class="product-view__header-detail-section">
                         <div class="product-view__header-detail-brand">
-                            <img class="product-view__header-detail-brand-img" :src="mockImg" />
-                            <router-link class="product-view__header-detail-brand-link" to="/">
+                            <v-picture :key="productImages.brand.id" class="product-view__header-detail-brand-img">
+                                <source :data-src="productImages.brand.desktop" type="image/webp" />
+                                <img
+                                    class="blur-up lazyload v-picture__img"
+                                    :data-src="productImages.brand.default"
+                                    :alt="productImages.brand.alt"
+                                />
+                            </v-picture>
+
+                            <router-link class="product-view__header-detail-brand-link" :to="brandUrl">
                                 На страницу бренда
                             </router-link>
                         </div>
@@ -282,71 +288,108 @@
             </div>
         </section>
 
-        <section v-if="product.description" class="section product-view__section product-view__info">
+        <section
+            id="description"
+            v-if="product.description && (product.description.content || product.description.image)"
+            class="section product-view__section product-view__info"
+        >
             <div class="container product-view__info-container">
                 <div class="product-view__info-header">
                     <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
                     <v-html class="product-view__info-text" v-html="product.description.content" />
                 </div>
-                <!-- <div class="product-view__info-media">
+                <div class="product-view__info-media">
                     <v-picture
-                        v-if="product.description.image && product.description.image.id"
-                        :image="product.description.image"
-                        alt=""
+                        class="product-view__info-media-img"
+                        :key="productImages.description.id"
+                        v-if="productImages.description"
                     >
-                        <template v-slot:source="{ image, lazy }">
-                            <source
-                                :data-srcset="generateSourcePath(600, 600, image.id, 'webp')"
-                                type="image/webp"
-                                media="(min-width: 480px)"
-                            />
-                            <source
-                                :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                                type="image/webp"
-                                media="(max-width: 479px)"
-                            />
-                        </template>
-                        <template v-slot:fallback="{ image, lazy, alt }">
-                            <img
-                                class="blur-up lazyload v-picture__img"
-                                :data-src="generateSourcePath(600, 600, image.id, image.sourceExt)"
-                                :alt="alt"
-                            />
-                        </template>
+                        <source
+                            :data-srcset="productImages.description.tablet"
+                            type="image/webp"
+                            media="(max-width: 479px)"
+                        />
+                        <source :data-srcset="productImages.description.desktop" type="image/webp" />
+                        <img
+                            class="blur-up lazyload v-picture__img"
+                            :data-src="productImages.description.default"
+                            alt=""
+                        />
                     </v-picture>
-                </div> -->
+                    <iframe
+                        v-if="productVideos.description"
+                        class="lazyload product-view__info-media-video"
+                        :data-src="productVideos.description.videoUrl"
+                        :key="productVideos.description.id"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
+                        allowfullscreen="false"
+                    />
+                </div>
             </div>
         </section>
 
-        <section v-if="product.howto" class="section product-view__info">
+        <section v-if="product.instruction" class="section product-view__section product-view__instruction">
+            <div class="container">
+                <ul class="product-view__instruction-list">
+                    <product-file-card
+                        class="product-view__instruction-item"
+                        file-name="Инструкция по применению"
+                        :key="product.instruction.id"
+                        :file-id="product.instruction.id"
+                        :size="product.instruction.size"
+                        :ext="product.instruction.ext"
+                    />
+                </ul>
+            </div>
+        </section>
+
+        <section
+            v-if="product.tips && product.tips.length > 0"
+            class="section product-view__section product-view__tips"
+        >
+            <div class="container">
+                <ul class="product-view__tips-list">
+                    <product-tip-card
+                        class="product-view__tips-item"
+                        v-for="tip in product.tips"
+                        :key="tip.id"
+                        :image="tip.image"
+                        :text="tip.text"
+                    />
+                </ul>
+            </div>
+        </section>
+
+        <section
+            v-if="product.howto && (product.howto.content || product.howto.image)"
+            class="section product-view__info"
+        >
             <div class="container product-view__info-container">
                 <div class="product-view__info-header">
                     <h2 class="product-view__section-hl">{{ $t('product.title.method') }}</h2>
                     <v-html class="product-view__info-text" v-html="product.howto.content" />
                 </div>
-                <!-- <div class="product-view__info-media">
-                    <v-picture v-if="product.howto.image && product.howto.image.id" :image="product.howto.image" alt="">
-                        <template v-slot:source="{ image, lazy }">
-                            <source
-                                :data-srcset="generateSourcePath(600, 600, image.id, 'webp')"
-                                type="image/webp"
-                                media="(min-width: 480px)"
-                            />
-                            <source
-                                :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                                type="image/webp"
-                                media="(max-width: 479px)"
-                            />
-                        </template>
-                        <template v-slot:fallback="{ image, lazy, alt }">
-                            <img
-                                class="blur-up lazyload v-picture__img"
-                                :data-src="generateSourcePath(600, 600, image.id, image.sourceExt)"
-                                :alt="alt"
-                            />
-                        </template>
+                <div class="product-view__info-media">
+                    <v-picture :key="productImages.howto.id" v-if="productImages.howto">
+                        <source
+                            :data-srcset="productImages.howto.tablet"
+                            type="image/webp"
+                            media="(max-width: 479px)"
+                        />
+                        <source :data-srcset="productImages.howto.desktop" type="image/webp" />
+                        <img class="blur-up lazyload v-picture__img" :data-src="productImages.howto.default" alt="" />
                     </v-picture>
-                </div> -->
+                    <iframe
+                        v-if="productVideos.howto"
+                        class="lazyload"
+                        :data-src="productVideos.howto.videoUrl"
+                        :key="productVideos.howto.id"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
+                        allowfullscreen="false"
+                    />
+                </div>
             </div>
         </section>
 
@@ -585,38 +628,41 @@
 </template>
 
 <script>
-import VSvg from '../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../components/controls/VLink/VLink.vue';
-import VButton from '../../components/controls/VButton/VButton.vue';
-import VSticky from '../../components/controls/VSticky/VSticky.vue';
-import VHtml from '../../components/controls/VHtml/VHtml.vue';
-import VSlider from '../../components/controls/VSlider/VSlider.vue';
-import VPicture from '../../components/controls/VPicture/VPicture.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
+import VHtml from '@controls/VHtml/VHtml.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import Price from '../../components/Price/Price.vue';
-import BannerCard from '../../components/BannerCard/BannerCard.vue';
-import InstagramCard from '../../components/InstagramCard/InstagramCard.vue';
-import VRating from '../../components/controls/VRating/VRating.vue';
-import Tag from '../../components/Tag/Tag.vue';
+import Price from '@components/Price/Price.vue';
+import BannerCard from '@components/BannerCard/BannerCard.vue';
+import InstagramCard from '@components/InstagramCard/InstagramCard.vue';
+import VRating from '@controls/VRating/VRating.vue';
+import Tag from '@components/Tag/Tag.vue';
 
-import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
-import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
-import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
-import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
-import ProductReviewCard from '../../components/ProductReviewCard/ProductReviewCard.vue';
-import ProductPricePanel from '../../components/ProductPricePanel/ProductPricePanel.vue';
-import ProductCartPanel from '../../components/ProductCartPanel/ProductCartPanel.vue';
-import ProductDetailPanel from '../../components/ProductDetailPanel/ProductDetailPanel.vue';
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
-import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '../../components/GalleryModal/GalleryModal.vue';
+import ProductTipCard from '@components/product/ProductTipCard/ProductTipCard.vue';
+import ProductFileCard from '@components/product/ProductFileCard/ProductFileCard.vue';
+import ProductCartPanel from '@components/product/ProductCartPanel/ProductCartPanel.vue';
+import ProductReviewCard from '@components/product/ProductReviewCard/ProductReviewCard.vue';
+import ProductPricePanel from '@components/product/ProductPricePanel/ProductPricePanel.vue';
+import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDetailPanel.vue';
 
-import { $store, $progress, $logger } from '../../services/ServiceLocator';
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
+import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '@components/GalleryModal/GalleryModal.vue';
+
+import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { SCROLL } from '../../store';
+import { SCROLL } from '@store';
 
 import productModule, {
     NAME as PRODUCT_MODULE,
@@ -625,37 +671,39 @@ import productModule, {
     MASTERCLASSES,
     FEATURED_PRODUCTS,
     INSTAGRAM_ITEMS,
-} from '../../store/modules/Product';
-import { FETCH_PRODUCT_DATA } from '../../store/modules/Product/actions';
+} from '@store/modules/Product';
+import { FETCH_PRODUCT_DATA } from '@store/modules/Product/actions';
 
-import { NAME as CART_MODULE } from '../../store/modules/Cart';
-import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
-import { NAME as GEO_MODULE, SELECTED_CITY } from '../../store/modules/Geolocation';
+import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
-import { registerModuleIfNotExists } from '../../util/store';
-import { generatePictureSourcePath } from '../../util/images';
-import { breakpoints } from '../../assets/scripts/enums/general';
-import { productGroupTypes } from '../../assets/scripts/enums/product';
+import { registerModuleIfNotExists } from '@util/store';
+import {
+    generatePictureSourcePath,
+    generateYoutubeImagePlaceholderPath,
+    generateYoutubeVideoSourcePath,
+} from '@util/file';
+import { breakpoints } from '@enums';
+import { productGroupTypes } from '@enums/product';
 
-import { generateCategoryUrl } from '../../util/catalog';
+import { generateCategoryUrl } from '@util/catalog';
 
-import '../../assets/images/sprites/socials/vkontakte-bw.svg';
-import '../../assets/images/sprites/socials/facebook-bw.svg';
-import '../../assets/images/sprites/socials/instagram-bw.svg';
+import '@images/sprites/socials/vkontakte-bw.svg';
+import '@images/sprites/socials/facebook-bw.svg';
+import '@images/sprites/socials/instagram-bw.svg';
 
-import '../../assets/images/sprites/cart-empty.svg';
-import '../../assets/images/sprites/star-empty-small.svg';
-import '../../assets/images/sprites/star-small.svg';
-import '../../assets/images/sprites/arrow-small.svg';
-import '../../assets/images/sprites/wishlist-middle.svg';
+import '@images/sprites/cart-empty.svg';
+import '@images/sprites/star-empty-small.svg';
+import '@images/sprites/star-small.svg';
+import '@images/sprites/arrow-small.svg';
+import '@images/sprites/wishlist-middle.svg';
 import './Product.css';
-
-import productBrand1 from '../../assets/images/mock/brandProduct1.png';
 
 const productGalleryOptions = {
     spaceBetween: 8,
@@ -743,6 +791,7 @@ const instagramOptions = {
 
 export default {
     name: 'product',
+
     components: {
         VSvg,
         VButton,
@@ -758,10 +807,12 @@ export default {
 
         Price,
         CatalogProductCard,
-        ProductReviewCard,
         BannerCard,
         InstagramCard,
 
+        ProductTipCard,
+        ProductFileCard,
+        ProductReviewCard,
         ProductCartPanel,
         ProductPricePanel,
         ProductDetailPanel,
@@ -774,7 +825,6 @@ export default {
     data() {
         return {
             isPriceVisible: true,
-            mockImg: productBrand1,
         };
     },
 
@@ -789,6 +839,68 @@ export default {
                 state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
             isGalleryOpen: state => state[MODALS][GALLERY_MODAL_NAME] && state[MODALS][GALLERY_MODAL_NAME].open,
         }),
+
+        brandUrl() {
+            const { brand } = this.product;
+            return generateCategoryUrl(productGroupTypes.BRANDS, brand.code);
+        },
+
+        productVideos() {
+            const videoMap = {};
+            const { howto, description } = this.product;
+
+            if (howto && howto.video) {
+                videoMap.howto = {
+                    id: howto.video,
+                    imageUrl: generateYoutubeImagePlaceholderPath(howto.video),
+                    videoUrl: generateYoutubeVideoSourcePath(howto.video),
+                };
+            }
+
+            if (description && description.video) {
+                videoMap.description = {
+                    id: description.video,
+                    imageUrl: generateYoutubeImagePlaceholderPath(description.video),
+                    videoUrl: generateYoutubeVideoSourcePath(description.video),
+                };
+            }
+
+            return videoMap;
+        },
+
+        productImages() {
+            const imageMap = {};
+            const { brand, howto, description } = this.product;
+
+            if (brand && brand.image) {
+                imageMap.brand = {
+                    id: brand.image.id,
+                    desktop: generatePictureSourcePath(null, null, brand.image.id, 'webp'),
+                    default: generatePictureSourcePath(null, null, brand.image.id, brand.image.sourceExt),
+                    alt: brand.name,
+                };
+            }
+
+            if (howto && howto.image) {
+                imageMap.howto = {
+                    id: howto.image.id,
+                    desktop: generatePictureSourcePath(null, null, howto.image.id, 'webp'),
+                    tablet: generatePictureSourcePath(320, 240, howto.image.id, 'webp'),
+                    default: generatePictureSourcePath(null, null, howto.image.id, howto.image.sourceExt),
+                };
+            }
+
+            if (description && description.image) {
+                imageMap.description = {
+                    id: description.image.id,
+                    desktop: generatePictureSourcePath(null, null, description.image.id, 'webp'),
+                    tablet: generatePictureSourcePath(320, 240, description.image.id, 'webp'),
+                    default: generatePictureSourcePath(null, null, description.image.id, description.image.sourceExt),
+                };
+            }
+
+            return imageMap;
+        },
 
         canBuy() {
             return this.product.stock.qty > 0;
@@ -867,6 +979,7 @@ export default {
         // так как к моменту вызова экземпляр ещё не создан!
 
         const {
+            hash,
             params: { code },
         } = to;
 
@@ -904,7 +1017,13 @@ export default {
         const {
             params: { code },
         } = to;
-        this.debounce_fetchProduct(code, fias_id, next);
+
+        const {
+            params: { code: fromCode },
+        } = from;
+
+        if (code !== fromCode) this.debounce_fetchProduct(code, fias_id, next);
+        else next();
     },
 
     beforeMount() {
@@ -912,16 +1031,12 @@ export default {
             try {
                 const { productCode } = this.product;
                 this.$progress.start();
-                if (productCode !== code) {
-                    await this[FETCH_PRODUCT_DATA]({ code, city });
-                } else await Promise.resolve();
+                await this[FETCH_PRODUCT_DATA]({ code, city });
                 next();
                 this.$progress.finish();
             } catch (error) {
                 this.$progress.fail();
-                $logger.error('debounce_fetchProduct', error);
                 next(false);
-                this.$progress.finish();
             }
         }, 500);
     },

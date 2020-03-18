@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 import VClamp from 'vue-clamp';
 
-import '../../assets/images/sprites/logo.svg';
+import '@images/sprites/logo.svg';
 import './MessageCard.css';
 
 export default {

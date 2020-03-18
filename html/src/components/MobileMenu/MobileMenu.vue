@@ -124,37 +124,37 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VLink from '../controls/VLink/VLink.vue';
-import VSticky from '../controls/VSticky/VSticky.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
 import VClamp from 'vue-clamp';
 
-import GeneralModal from '../GeneralModal/GeneralModal.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
-import { NAME as REGISTER_MODAL_NAME } from '../RegistrationModal/RegistrationModal.vue';
-import { NAME as CITY_SELECTION_MODAL_NAME } from '../CitySelectionModal/CitySelectionModal.vue';
+import { NAME as REGISTER_MODAL_NAME } from '@components/RegistrationModal/RegistrationModal.vue';
+import { NAME as CITY_SELECTION_MODAL_NAME } from '@components/CitySelectionModal/CitySelectionModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { CATEGORIES } from '../../store';
-import { HEADER_MENU } from '../../store/getters';
-import { SET_MENU_OPEN } from '../../store/actions';
+import { CATEGORIES } from '@store';
+import { HEADER_MENU } from '@store/getters';
+import { SET_MENU_OPEN } from '@store/actions';
 
-import { NAME as GEO_MODULE, SELECTED_CITY } from '../../store/modules/Geolocation';
+import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
-import { NAME as MODAL_MODULE } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { productGroupTypes } from '../../assets/scripts/enums/product';
-import '../../assets/images/sprites/socials/viber-bw.svg';
-import '../../assets/images/sprites/socials/whatsup-bw.svg';
-import '../../assets/images/sprites/socials/telegram-bw.svg';
+import { productGroupTypes } from '@enums/product';
+import '@images/sprites/socials/viber-bw.svg';
+import '@images/sprites/socials/whatsup-bw.svg';
+import '@images/sprites/socials/telegram-bw.svg';
 
-import '../../assets/images/sprites/pin.svg';
-import '../../assets/images/sprites/account-middle.svg';
-import '../../assets/images/sprites/wishlist-middle.svg';
-import '../../assets/images/sprites/arrow-small.svg';
-import '../../assets/images/sprites/arrow-down.svg';
+import '@images/sprites/pin.svg';
+import '@images/sprites/account-middle.svg';
+import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/arrow-small.svg';
+import '@images/sprites/arrow-down.svg';
 import './MobileMenu.css';
 
 export default {

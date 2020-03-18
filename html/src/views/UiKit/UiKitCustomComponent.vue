@@ -9,9 +9,9 @@
 </template>
 <script>
 // import Vue from 'vue';
-// import VButton from '../../components/controls/VButton/VButton.vue';
-// import CustomComponent from '../../components/blocks/CustomComponent/CustomComponent.vue';
-// import CanvasComponent from '../../components/blocks/CanvasComponent/CanvasComponent.vue';
+// import VButton from '@controls/VButton/VButton.vue';
+// import CustomComponent from '@components/blocks/CustomComponent/CustomComponent.vue';
+// import CanvasComponent from '@components/blocks/CanvasComponent/CanvasComponent.vue';
 
 // Vue.component(VButton.name, VButton);
 

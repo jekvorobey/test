@@ -17,7 +17,7 @@
     </section>
 </template>
 <script>
-import VLink from '../../components/controls/VLink/VLink.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
 export default {
     name: 'ui-kit-links',

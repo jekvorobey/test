@@ -85,42 +85,42 @@
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../../components/controls/VLink/VLink.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
-import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
-import CatalogProductCard from '../../../components/CatalogProductCard/CatalogProductCard.vue';
+import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 
 import PromopageEditModal, {
     NAME as PROMOPAGE_EDIT_MODAL_NAME,
-} from '../../../components/profile/PromopageEditModal/PromopageEditModal.vue';
+} from '@components/profile/PromopageEditModal/PromopageEditModal.vue';
 
 import PromopageAddModal, {
     NAME as PROMOPAGE_ADD_MODAL_NAME,
-} from '../../../components/profile/PromopageAddModal/PromopageAddModal.vue';
+} from '@components/profile/PromopageAddModal/PromopageAddModal.vue';
 
 import PromopageAddByLinkModal, {
     NAME as PROMOPAGE_ADD_BY_LINK_MODAL_NAME,
-} from '../../../components/profile/PromopageAddByLinkModal/PromopageAddByLinkModal.vue';
+} from '@components/profile/PromopageAddByLinkModal/PromopageAddByLinkModal.vue';
 
-import { $store, $progress, $logger } from '../../../services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions } from 'vuex';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE, PROMO_DATA } from '../../../store/modules/Profile';
-import { FETCH_PROMO_DATA } from '../../../store/modules/Profile/actions';
+import { NAME as PROFILE_MODULE, PROMO_DATA } from '@store/modules/Profile';
+import { FETCH_PROMO_DATA } from '@store/modules/Profile/actions';
 
-import { NAME as CART_MODULE } from '../../../store/modules/Cart';
-import { ADD_CART_ITEM } from '../../../store/modules/Cart/actions';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
-import '../../../assets/images/sprites/cross.svg';
-import '../../../assets/images/sprites/copy.svg';
-import '../../../assets/images/sprites/edit.svg';
-import '../../../assets/images/sprites/link.svg';
-import '../../../assets/images/sprites/link-add.svg';
-import '../../../assets/images/sprites/plus-small.svg';
+import '@images/sprites/cross.svg';
+import '@images/sprites/copy.svg';
+import '@images/sprites/edit.svg';
+import '@images/sprites/link.svg';
+import '@images/sprites/link-add.svg';
+import '@images/sprites/plus-small.svg';
 import './Promopage.css';
 
 export default {

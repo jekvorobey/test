@@ -9,8 +9,8 @@ import {
     sameAs as sa,
 } from 'vuelidate/lib/validators';
 
-import { password as passwordRegx, tel as telRegx, email as emailRegx } from '../assets/scripts/regex/validation';
-import { countCheckdigit } from '../util/helpers';
+import { password as passwordRegx, tel as telRegx, email as emailRegx } from '@regex/validation';
+import { countCheckdigit } from '@util';
 
 function innValidation(value) {
     const inn = value || '';

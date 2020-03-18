@@ -28,9 +28,9 @@
     </section>
 </template>
 <script>
-import VDatepicker from '../../components/controls/VDatepicker/VDatepicker.vue';
+import VDatepicker from '@controls/VDatepicker/VDatepicker.vue';
 import { mapState } from 'vuex';
-import { LOCALE, LOCALIZATIONS } from '../../store';
+import { LOCALE, LOCALIZATIONS } from '@store';
 
 export default {
     name: 'ui-kit-datepicker',

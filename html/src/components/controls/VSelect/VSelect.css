@@ -121,7 +121,7 @@ fieldset[disabled] .multiselect {
 }
 .multiselect--float .multiselect__select::before {
     color: var(--cl-global);
-    background-image: svg-load('../../../assets/images/sprites/arrow-down-small.svg', fill: var(--cl-global));
+    background-image: svg-load('arrow-down-small.svg', fill: var(--cl-global));
 }
 .multiselect--float .multiselect__label {
     top: 0;
@@ -135,7 +135,7 @@ fieldset[disabled] .multiselect {
 
 .multiselect--disabled .multiselect__select::before {
     color: var(--cl-divider-grey);
-    background-image: svg-load('../../../assets/images/sprites/arrow-down-small.svg', fill: var(--cl-divider-grey));
+    background-image: svg-load('arrow-down-small.svg', fill: var(--cl-divider-grey));
 }
 
 .multiselect--disabled .multiselect__label {
@@ -217,7 +217,7 @@ fieldset[disabled] .multiselect {
     right: 0;
     width: 24px;
     height: 100%;
-    background-image: svg-load('../../../assets/images/sprites/cross-small.svg', fill: var(--cl-global));
+    background-image: svg-load('cross-small.svg', fill: var(--cl-global));
     background-size: 50%;
     background-position: center;
     background-repeat: no-repeat;
@@ -269,7 +269,7 @@ fieldset[disabled] .multiselect {
     height: 24px;
     transform: translate(-50%, -50%);
     color: var(--cl-grey);
-    background-image: svg-load('../../../assets/images/sprites/arrow-down-small.svg', fill: var(--cl-grey));
+    background-image: svg-load('arrow-down-small.svg', fill: var(--cl-grey));
 }
 .multiselect__placeholder {
     color: var(--cl-grey);

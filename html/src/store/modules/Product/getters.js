@@ -1,3 +1,3 @@
-import {} from '../../../util/catalog';
+import {} from '@util/catalog';
 
 export default {};

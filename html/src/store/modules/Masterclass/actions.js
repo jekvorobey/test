@@ -1,5 +1,5 @@
-import { storeErrorHandler } from '../../../util/store';
-import { getInstagram, getMasterclasses, getMasterclass } from '../../../api';
+import { storeErrorHandler } from '@util/store';
+import { getInstagram, getMasterclasses, getMasterclass } from '@api';
 import { SET_MASTERCLASS, SET_FEATURED, SET_INSTAGRAM_ITEMS } from './mutations';
 
 export const FETCH_MASTERCLASS_DATA = 'FETCH_MASTERCLASS_DATA';

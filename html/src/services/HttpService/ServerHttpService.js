@@ -1,7 +1,8 @@
 import axios from 'axios';
 import HttpServiceBase from './base';
-import { httpCodes } from '../../assets/scripts/enums/general';
-import { HTTP_REQUEST_TIMEOUT } from '../../assets/scripts/constants/general';
+
+import { httpCodes } from '@enums';
+import { HTTP_REQUEST_TIMEOUT } from '@constants';
 
 export default class ServerHttpService extends HttpServiceBase {
     constructor(context, cookie) {

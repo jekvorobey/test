@@ -52,16 +52,16 @@
 </template>
 
 <script>
-import VButton from '../controls/VButton/VButton.vue';
-import VRange from '../controls/VRange/VRange.vue';
-import VCheck from '../controls/VCheck/VCheck.vue';
-import VAccordion from '../controls/VAccordion/VAccordion.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VRange from '@controls/VRange/VRange.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
+import VAccordion from '@controls/VAccordion/VAccordion.vue';
 
-import { NAME as CATALOG_MODULE, FILTERS } from '../../store/modules/Catalog';
-import { FILTER_SEGMENTS, ROUTE_SEGMENTS } from '../../store/modules/Catalog/getters';
+import { NAME as CATALOG_MODULE, FILTERS } from '@store/modules/Catalog';
+import { FILTER_SEGMENTS, ROUTE_SEGMENTS } from '@store/modules/Catalog/getters';
 
 import _debounce from 'lodash/debounce';
-import { concatCatalogRoutePath, generateCategoryUrl } from '../../util/catalog';
+import { concatCatalogRoutePath, generateCategoryUrl } from '@util/catalog';
 import { mapState, mapGetters } from 'vuex';
 import './CatalogFilter.css';
 

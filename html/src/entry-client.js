@@ -1,15 +1,16 @@
-import { injectionType } from './assets/scripts/enums/general';
+import Vue from 'vue';
 import { Container } from 'inversify';
-import { injectableClass, injectClass } from './util/container';
+import { injectionType } from '@enums';
+import { injectableClass, injectClass } from '@util/container';
 
-import ServiceLocator from './services/ServiceLocator';
+import ServiceLocator from '@services';
 
-import ClientLogger from './services/LogService/ClientLogger';
-import ClientCookie from './services/CookieService/ClientCookie';
-import HttpService from './services/HttpService/MockServiceAdapter';
-import ProgressService from './services/ProgressService';
-import DadataHttpService from './services/HttpService/DadataHttpService';
-import ApplicationContext from './services/ApplicationContext';
+import ClientLogger from '@services/LogService/ClientLogger';
+import ClientCookie from '@services/CookieService/ClientCookie';
+import HttpService from '@services/HttpService/MockServiceAdapter';
+import ProgressService from '@services/ProgressService';
+import DadataHttpService from '@services/HttpService/DadataHttpService';
+import ApplicationContext from '@services/ApplicationContext';
 
 import createApp from './app/app';
 
@@ -27,6 +28,7 @@ injectClass(injectionType.COOKIE, HttpService, 1);
 
 const context = new ApplicationContext();
 context.baseURL = document.location.origin;
+context.isServer = false;
 
 // Declare bindings
 ServiceLocator.createInstance(new Container({ skipBaseClassChecks: true }));
@@ -54,14 +56,11 @@ $container
     .to(DadataHttpService)
     .inSingletonScope();
 
-const { app, router, store } = createApp($container);
+const { app, router, store } = createApp($container, window.__INITIAL_STATE__);
 
 // prime the store with server-initialized state.
 // the state is determined during SSR and inlined in the page markup.
-if (typeof window !== 'undefined' && window.__INITIAL_STATE__) {
-    // Вставляем данные в стор
-    store.replaceState(window.__INITIAL_STATE__);
-
+if (window.__INITIAL_STATE__) {
     // удаляем тег скрипта с данными, и чистим их в переменной
     const appEl = document.getElementById('app');
     appEl.parentElement.removeChild(appEl.nextElementSibling);

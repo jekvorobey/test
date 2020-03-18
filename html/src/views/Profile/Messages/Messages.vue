@@ -32,20 +32,20 @@
 </template>
 
 <script>
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import VButton from '../../../components/controls/VButton/VButton.vue';
-import VInput from '../../../components/controls/VInput/VInput.vue';
-import VPagination from '../../../components/controls/VPagination/VPagination.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VPagination from '@controls/VPagination/VPagination.vue';
 
-import MessageCard from '../../../components/MessageCard/MessageCard.vue';
-import MessageModal, { NAME as MESSAGE_MODAL_NAME } from '../../../components/profile/MessageModal/MessageModal.vue';
+import MessageCard from '@components/MessageCard/MessageCard.vue';
+import MessageModal, { NAME as MESSAGE_MODAL_NAME } from '@components/profile/MessageModal/MessageModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { MESSAGES } from '../../../store/modules/Profile/getters';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { MESSAGES } from '@store/modules/Profile/getters';
 
 import './Messages.css';
 

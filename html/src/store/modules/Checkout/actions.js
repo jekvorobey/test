@@ -1,6 +1,6 @@
-import { $logger } from '../../../services/ServiceLocator';
-import { requestStatus } from '../../../assets/scripts/enums/general';
-import { storeErrorHandler } from '../../../util/store';
+import { $logger } from '@services';
+import { requestStatus } from '@enums';
+import { storeErrorHandler } from '@util/store';
 
 import { RECEIVE_METHOD_STATUS, ADDRESS_STATUS, BONUS_STATUS, CERTIFICATE_STATUS, PROMOCODE_STATUS } from './getters';
 
@@ -30,7 +30,7 @@ import {
     deletePromocode,
     commitCheckoutData,
     changeCity,
-} from '../../../api';
+} from '@api';
 
 export const SET_RECIPIENT = 'SET_RECIPIENT';
 export const SET_RECEIVE_METHOD = 'SET_RECEIVE_METHOD';

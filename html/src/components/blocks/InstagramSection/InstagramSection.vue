@@ -31,11 +31,11 @@
 </template>
 
 <script>
-import VButton from '../../controls/VButton/VButton.vue';
-import VSlider from '../../controls/VSlider/VSlider.vue';
-import InstagramCard from '../../InstagramCard/InstagramCard.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
+import InstagramCard from '@components/InstagramCard/InstagramCard.vue';
 
-import { breakpoints } from '../../../assets/scripts/enums/general';
+import { breakpoints } from '@enums';
 import './InstagramSection.css';
 
 const sliderOptions = {

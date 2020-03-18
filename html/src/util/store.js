@@ -1,4 +1,4 @@
-import { $logger } from '../services/ServiceLocator';
+import { $logger } from '@services';
 
 export function registerModuleIfNotExists(store, name, storeModule) {
     const register = !!store._modulesNamespaceMap[`${name}/`];

@@ -65,7 +65,7 @@ module.exports = merge(base, {
             cacheGroups: {
                 vendors: {
                     // eslint-disable-next-line
-                    test: /[\\/]node_modules[\\/]/,
+                    test: /[\\/]node_modules[\\/].*\.js$/,
                     priority: -10,
                 },
                 default: {

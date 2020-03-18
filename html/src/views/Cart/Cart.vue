@@ -191,26 +191,26 @@
 </template>
 
 <script>
-import VSvg from '../../components/controls/VSvg/VSvg.vue';
-import VButton from '../../components/controls/VButton/VButton.vue';
-import VLink from '../../components/controls/VLink/VLink.vue';
-import VInput from '../../components/controls/VInput/VInput.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VInput from '@controls/VInput/VInput.vue';
 
-import VSticky from '../../components/controls/VSticky/VSticky.vue';
-import VSlider from '../../components/controls/VSlider/VSlider.vue';
-import Price from '../../components/Price/Price.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
+import Price from '@components/Price/Price.vue';
 
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 
-import CartMasterClassCard from '../../components/CartMasterClassCard/CartMasterClassCard.vue';
-import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
-import CartProductCard from '../../components/CartProductCard/CartProductCard.vue';
-import VTabs from '../../components/controls/VTabs/VTabs.vue';
+import CartMasterClassCard from '@components/CartMasterClassCard/CartMasterClassCard.vue';
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
+import VTabs from '@controls/VTabs/VTabs.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '../../store/modules/Cart';
-import { FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM } from '../../store/modules/Cart/actions';
+import { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '@store/modules/Cart';
+import { FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM } from '@store/modules/Cart/actions';
 import {
     PRODUCTS,
     MASTER_CLASSES,
@@ -218,15 +218,15 @@ import {
     IS_MASTER_CLASS,
     CART_ITEMS_COUNT,
     CART_TYPES,
-} from '../../store/modules/Cart/getters';
+} from '@store/modules/Cart/getters';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { breakpoints } from '../../assets/scripts/enums/general';
-import { cartItemTypes } from '../../assets/scripts/enums/product';
-import { preparePrice } from '../../util/helpers';
-import '../../assets/images/sprites/alert.svg';
+import { breakpoints } from '@enums';
+import { cartItemTypes } from '@enums/product';
+import { preparePrice } from '@util';
+import '@images/sprites/alert.svg';
 import './Cart.css';
 
 const itemTypes = Object.values(cartItemTypes);

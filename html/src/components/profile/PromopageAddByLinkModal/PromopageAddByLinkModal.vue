@@ -30,19 +30,19 @@
     </general-modal>
 </template>
 <script>
-import VSvg from '../../controls/VSvg/VSvg.vue';
-import VButton from '../../controls/VButton/VButton.vue';
-import VInput from '../../controls/VInput/VInput.vue';
-import GeneralModal from '../../GeneralModal/GeneralModal.vue';
-import validationMixin, { required } from '../../../plugins/validation';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
+import validationMixin, { required } from '@plugins/validation';
 
 import { mapActions, mapGetters } from 'vuex';
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { getRandomInt } from '../../../util/helpers';
+import { getRandomInt } from '@util';
 import _cloneDeep from 'lodash/cloneDeep';
-import '../../../assets/images/sprites/cross.svg';
+import '@images/sprites/cross.svg';
 import './PromopageAddByLinkModal.css';
 
 export const NAME = 'promopage-add-by-link-modal';

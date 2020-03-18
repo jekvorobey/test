@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 
-import '../../assets/images/sprites/info-middle.svg';
+import '@images/sprites/info-middle.svg';
 import './AttentionPanel.css';
 
 export default {

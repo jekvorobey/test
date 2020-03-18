@@ -53,16 +53,16 @@
     </div>
 </template>
 <script>
-import '../../../plugins/ya-maps';
-import pin from '../../../assets/images/icons/pin-filled.svg';
-import VButton from '../../controls/VButton/VButton.vue';
+import '@plugins/ya-maps';
+import pin from '@images/icons/pin-filled.svg';
+import VButton from '@controls/VButton/VButton.vue';
 
 import { mapGetters, mapActions } from 'vuex';
-import { NAME as CHECKOUT_MODULE } from '../../../store/modules/Checkout';
-import { SELECTED_PICKUP_POINT } from '../../../store/modules/Checkout/getters';
+import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
+import { SELECTED_PICKUP_POINT } from '@store/modules/Checkout/getters';
 
-import { NAME as MODAL_MODULE } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import './CheckoutAddressPanel.css';
 

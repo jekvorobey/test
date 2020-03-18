@@ -51,23 +51,23 @@
 </template>
 
 <script>
-import VButton from '../../components/controls/VButton/VButton.vue';
-import VSlider from '../../components/controls/VSlider/VSlider.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
 
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
+import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 
-import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as FEATURED_MODULE, FEATURED_PRODUCTS } from '../../store/modules/Featured';
-import { FETCH_FEATURED_PRODUCTS } from '../../store/modules/Featured/actions';
+import { NAME as FEATURED_MODULE, FEATURED_PRODUCTS } from '@store/modules/Featured';
+import { FETCH_FEATURED_PRODUCTS } from '@store/modules/Featured/actions';
 
-import { breakpoints } from '../../assets/scripts/enums/general';
+import { breakpoints } from '@enums';
 
 import './NotFound.css';
 

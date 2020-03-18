@@ -16,7 +16,25 @@ module.exports = {
     },
     resolve: {
         alias: {
-            images_path: path.resolve(__dirname, '../src/assets/images'),
+            ['@components']: path.resolve(__dirname, '../src/components'),
+            ['@controls']: path.resolve(__dirname, '../src/components/controls'),
+
+            ['@images']: path.resolve(__dirname, '../src/assets/images'),
+            ['@styles']: path.resolve(__dirname, '../src/assets/styles'),
+
+            ['@scripts']: path.resolve(__dirname, '../src/assets/scripts'),
+            ['@polyfills']: path.resolve(__dirname, '../src/assets/scripts/polyfills'),
+            ['@regex']: path.resolve(__dirname, '../src/assets/scripts/regex'),
+            ['@enums']: path.resolve(__dirname, '../src/assets/scripts/enums'),
+            ['@constants']: path.resolve(__dirname, '../src/assets/scripts/constants'),
+            ['@settings']: path.resolve(__dirname, '../src/assets/scripts/settings'),
+
+            ['@util']: path.resolve(__dirname, '../src/util'),
+            ['@services']: path.resolve(__dirname, '../src/services'),
+            ['@store']: path.resolve(__dirname, '../src/store'),
+            ['@router']: path.resolve(__dirname, '../src/router'),
+            ['@plugins']: path.resolve(__dirname, '../src/plugins'),
+            ['@api']: path.resolve(__dirname, '../src/api'),
         },
     },
     module: {
@@ -33,6 +51,7 @@ module.exports = {
                     path.resolve(__dirname, '../src/'),
                     path.resolve(__dirname, '../node_modules/proxy-polyfill'),
                     path.resolve(__dirname, '../node_modules/resize-detector'),
+                    path.resolve(__dirname, '../node_modules/body-scroll-lock'),
                     path.resolve(__dirname, '../node_modules/vue-clamp'),
                 ],
             },
