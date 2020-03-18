@@ -306,7 +306,7 @@
                 &-list {
                     display: flex;
                     flex-wrap: wrap;
-                    margin: 0 -10px;
+                    //margin: 0 -10px;
                 }
 
                 &-item {
@@ -320,6 +320,14 @@
 
                     @media (--tablet-lg) and (--tablet-min) {
                         width: calc(calc(100% / 12));
+                    }
+
+                    &--selected {
+                        background: lightcyan;
+                    }
+
+                    &--disabled {
+                        background: lightcoral;
                     }
 
                     &--selected &-square {

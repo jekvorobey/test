@@ -214,8 +214,8 @@ export function getProfileOrder(id) {
     return $http.get(`/v1/lk/order/${id}`);
 }
 
-export function getProfileOrderPaymentLink(id, backUrl) {
-    return $http.post(`/v1/lk/order/${id}/payment/${id}/start`, {
+export function getProfileOrderPaymentLink(orderId, paymentId, backUrl) {
+    return $http.post(`/v1/lk/order/${orderId}/payment/${paymentId}/start`, {
         return_url: backUrl,
     });
 }
@@ -327,6 +327,10 @@ export function getInstagram(data) {
 
 export function getProduct({ code }) {
     return $http.get('/v1/catalog/product-detail', { params: { code } });
+}
+
+export function getProductOptions(groupId) {
+    return $http.get('/v1/catalog/variants', { params: { groupId } });
 }
 
 export function getMasterclass({ code }) {

@@ -3,6 +3,10 @@ import { productGroupTypes } from '@enums/product';
 const rangeRegx = /from_\d*_to_\d*/;
 const numberRegx = /\d+/g;
 
+export function generateProductUrl(categoryCode, code) {
+    return `/${productGroupTypes.CATALOG}/${categoryCode}/${code}`;
+}
+
 export function generateCategoryUrl(type, entityCode, categoryCode) {
     switch (type) {
         case productGroupTypes.CATALOG:

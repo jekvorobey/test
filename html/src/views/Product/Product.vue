@@ -110,28 +110,40 @@
                         </div>
                     </div>
 
-                    <!-- <div class="product-view__header-detail-section product-view__header-detail-options">
-                        <div class="product-view__header-detail-options-selected">
+                    <div
+                        class="product-view__header-detail-section product-view__header-detail-options"
+                        :key="char.code"
+                        v-for="char in characteristics"
+                    >
+                        <!-- <div class="product-view__header-detail-options-selected">
                             <div>{{ product.option.title }}</div>
                             <div class="text-grey text-sm">16 оттенков</div>
-                        </div>
+                        </div> -->
                         <div class="product-view__header-detail-options-list">
                             <div
                                 class="product-view__header-detail-options-item"
                                 :class="{
-                                    'product-view__header-detail-options-item--selected':
-                                        option.value === product.option.value,
+                                    'product-view__header-detail-options-item--selected': isOptionSelected(
+                                        char.code,
+                                        option.value
+                                    ),
+                                    'product-view__header-detail-options-item--disabled': isOptionDisabled(
+                                        char.code,
+                                        option.value
+                                    ),
                                 }"
-                                v-for="option in product.options"
-                                :key="option.id"
+                                v-for="option in char.options"
+                                :key="option.code"
+                                @click="onSelectOption(char.code, option.value)"
                             >
-                                <div
+                                {{ option.name }}
+                                <!-- <div
                                     class="product-view__header-detail-options-item-square"
                                     :style="[{ backgroundColor: option.value, outlineColor: option.value }]"
-                                />
+                                /> -->
                             </div>
                         </div>
-                    </div> -->
+                    </div>
 
                     <div
                         class="product-view__header-detail-section product-view__header-detail-panels"
@@ -671,7 +683,16 @@ import productModule, {
     MASTERCLASSES,
     FEATURED_PRODUCTS,
     INSTAGRAM_ITEMS,
+    PRODUCT_OPTIONS,
 } from '@store/modules/Product';
+import {
+    COMBINATIONS,
+    CHARACTERISTICS,
+    SELECTED_COMBINATION,
+    IS_SELECTED,
+    IS_DISABLED,
+    GET_NEXT_COMBINATION,
+} from '../../store/modules/Product/getters';
 import { FETCH_PRODUCT_DATA } from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
@@ -691,8 +712,7 @@ import {
 } from '@util/file';
 import { breakpoints } from '@enums';
 import { productGroupTypes } from '@enums/product';
-
-import { generateCategoryUrl } from '@util/catalog';
+import { generateCategoryUrl, generateProductUrl } from '@util/catalog';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/facebook-bw.svg';
@@ -830,15 +850,29 @@ export default {
 
     computed: {
         ...mapState([SCROLL]),
-        ...mapState('route', { code: state => state.params.code }),
-        ...mapState(PRODUCT_MODULE, [PRODUCT, MASTERCLASSES, BANNERS, FEATURED_PRODUCTS, INSTAGRAM_ITEMS]),
+        ...mapState('route', {
+            code: state => state.params.code,
+            categoryCode: state => state.params.categoryCode,
+        }),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
+
         ...mapState(MODAL_MODULE, {
             isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
             isAddToCartOpen: state =>
                 state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
             isGalleryOpen: state => state[MODALS][GALLERY_MODAL_NAME] && state[MODALS][GALLERY_MODAL_NAME].open,
         }),
+
+        ...mapGetters(PRODUCT_MODULE, [IS_SELECTED, IS_DISABLED, GET_NEXT_COMBINATION]),
+        ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, SELECTED_COMBINATION]),
+        ...mapState(PRODUCT_MODULE, [
+            PRODUCT,
+            PRODUCT_OPTIONS,
+            MASTERCLASSES,
+            BANNERS,
+            FEATURED_PRODUCTS,
+            INSTAGRAM_ITEMS,
+        ]),
 
         brandUrl() {
             const { brand } = this.product;
@@ -944,6 +978,14 @@ export default {
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
+        isOptionSelected(code, value) {
+            return this[IS_SELECTED](code, value);
+        },
+
+        isOptionDisabled(code, value) {
+            return this[IS_DISABLED](code, value);
+        },
+
         generateSourcePath(x, y, id, ext) {
             return generatePictureSourcePath(x, y, id, ext);
         },
@@ -965,6 +1007,15 @@ export default {
                 name: ADD_TO_CART_MODAL_NAME,
                 open: true,
                 state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
+            });
+        },
+
+        onSelectOption(charCode, optValue) {
+            debugger;
+            const { categoryCode } = this;
+            const nextCombination = this[GET_NEXT_COMBINATION](charCode, optValue);
+            this.$router.push({
+                path: generateProductUrl(categoryCode, nextCombination.code),
             });
         },
 

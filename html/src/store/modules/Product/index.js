@@ -9,6 +9,7 @@ export const MASTERCLASSES = 'masterClasses';
 export const PRODUCT_ID = 'productId';
 export const PRODUCT_CODE = 'productCode';
 export const PRODUCT = 'product';
+export const PRODUCT_OPTIONS = 'productOptions';
 
 export const NAME = 'product';
 
@@ -21,6 +22,7 @@ export default {
         [BANNERS]: [],
         [MASTERCLASSES]: [],
         [PRODUCT]: {},
+        [PRODUCT_OPTIONS]: null,
         [PRODUCT_CODE]: '',
     },
     actions,

@@ -15,7 +15,7 @@ export default {
      */
     routes: [
         {
-            path: `/thank-you/:type(${cartItemTypes.MASTERCLASS}|${cartItemTypes.PRODUCT})`,
+            path: '/thank-you',
             component: ThankYouAsync,
         },
     ],

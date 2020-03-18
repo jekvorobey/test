@@ -166,7 +166,7 @@ export default {
                 case cartItemTypes.MASTERCLASS:
                     return 'Билеты успешно оформлены';
                 default:
-                    return [];
+                    return 'Заказ';
             }
         },
 
