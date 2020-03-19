@@ -325,8 +325,8 @@ export function getInstagram(data) {
     return $http.get('/v1/instagram', data);
 }
 
-export function getProduct({ code }) {
-    return $http.get('/v1/catalog/product-detail', { params: { code } });
+export function getProduct(code, referrerCode) {
+    return $http.get('/v1/catalog/product-detail', { params: { code, referrerCode } });
 }
 
 export function getProductOptions(groupId) {
@@ -358,7 +358,7 @@ export function deleteCartItem(offerId, storeId) {
 }
 
 export function addCartItem(offerId, storeId, count, referrerCode) {
-    return $http.post('/v1/cart/item', { offerId, storeId, count, referrerCode });
+    return $http.post('/v1/cart/item', { offerId, storeId, count, referrerCode: referrerCode || undefined });
 }
 
 // checkout

@@ -52,9 +52,9 @@ export default {
         }
     },
 
-    async [ADD_CART_ITEM]({ commit }, { offerId, storeId, count, referrerCode } = {}) {
+    async [ADD_CART_ITEM]({ commit }, { offerId, storeId, count, referrerCode, cookieName = 'referal' } = {}) {
         try {
-            const code = referrerCode || $cookie.get('referal');
+            const code = referrerCode || (cookieName && $cookie.get(cookieName));
             const data = await addCartItem(offerId, storeId, count, code);
             commit(SET_CART_DATA, data);
         } catch (error) {

@@ -169,12 +169,7 @@
                             <v-button
                                 class="product-view__header-detail-control-panel-btn"
                                 :disabled="!canBuy"
-                                @click.prevent="
-                                    ADD_CART_ITEM({
-                                        offerId: product.id,
-                                        storeId: product.stock.storeId,
-                                    })
-                                "
+                                @click.prevent="onBuyProduct"
                             >
                                 {{ canBuy ? 'Добавить в корзину' : 'Нет в наличии' }}
                             </v-button>
@@ -632,12 +627,7 @@
                 :old-price="product.oldPrice"
                 :bonus="product.bonus"
                 :can-buy="canBuy"
-                @addItem="
-                    ADD_CART_ITEM({
-                        offerId: product.id,
-                        storeId: product.stock.storeId,
-                    })
-                "
+                @addItem="onBuyProduct"
             />
         </transition>
 
@@ -864,6 +854,7 @@ export default {
         ...mapState('route', {
             code: state => state.params.code,
             categoryCode: state => state.params.categoryCode,
+            refCode: state => state.query.refCode,
         }),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
 
@@ -988,14 +979,6 @@ export default {
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
-        isOptionSelected(code, value) {
-            return this[IS_SELECTED](code, value);
-        },
-
-        isOptionDisabled(code, value) {
-            return this[IS_DISABLED](code, value);
-        },
-
         generateSourcePath(x, y, id, ext) {
             return generatePictureSourcePath(x, y, id, ext);
         },
@@ -1010,6 +993,22 @@ export default {
 
         onShowGallery() {
             this[CHANGE_MODAL_STATE]({ name: GALLERY_MODAL_NAME, open: true });
+        },
+
+        onBuyProduct() {
+            const {
+                refCode: referrerCode,
+                product: {
+                    id: offerId,
+                    stock: { storeId },
+                    referralCodeAllowed = false,
+                },
+            } = this;
+
+            if (referrerCode)
+                if (referralCodeAllowed) this[ADD_CART_ITEM]({ offerId, storeId, referrerCode, cookieName: null });
+                else this[ADD_CART_ITEM]({ offerId, storeId, cookieName: null });
+            else this[ADD_CART_ITEM]({ offerId, storeId });
         },
 
         onAddToCart(item) {
@@ -1041,25 +1040,23 @@ export default {
         const {
             hash,
             params: { code },
+            query: { refCode = null },
         } = to;
 
         // регистрируем модуль, если такого нет
         registerModuleIfNotExists($store, PRODUCT_MODULE, productModule);
-        const { productCode } = $store.state[PRODUCT_MODULE];
-        const {
-            selectedCity: { fias_id },
-        } = $store.state[GEO_MODULE];
+        const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
         // если все загружено, пропускаем
-        if (productCode === code) next();
+        if (productCode === code && referrerCode === refCode) next();
         else {
             $progress.start();
             $store
-                .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, city: fias_id })
+                .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
                 .then(() => next(vm => $progress.finish()))
                 .catch(error => {
                     $progress.fail();
-                    $logger.error(error);
+                    next();
                 });
         }
     },
@@ -1072,26 +1069,26 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        const { fias_id } = this.selectedCity;
-
         const {
             params: { code },
+            query: { refCode },
         } = to;
 
         const {
             params: { code: fromCode },
+            query: { refCode: fromRefCode },
         } = from;
 
-        if (code !== fromCode) this.debounce_fetchProduct(code, fias_id, next);
-        else next();
+        if (code === fromCode && refCode === fromRefCode) next();
+        else this.debounce_fetchProduct(code, refCode, next);
     },
 
     beforeMount() {
-        this.debounce_fetchProduct = _debounce(async (code, city, next) => {
+        this.debounce_fetchProduct = _debounce(async (code, referrerCode, next) => {
             try {
                 const { productCode } = this.product;
                 this.$progress.start();
-                await this[FETCH_PRODUCT_DATA]({ code, city });
+                await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
                 next();
                 this.$progress.finish();
             } catch (error) {

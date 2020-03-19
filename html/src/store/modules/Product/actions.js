@@ -7,6 +7,7 @@ import {
     SET_INSTAGRAM_ITEMS,
     SET_MASTERCLASSES,
     SET_PRODUCT_OPTIONS,
+    SET_REFERRER_CODE,
 } from './mutations';
 
 export const FETCH_PRODUCT_DATA = 'FETCH_PRODUCT_DATA';
@@ -63,11 +64,14 @@ export default {
         }
     },
 
-    async [FETCH_PRODUCT]({ state, dispatch, commit }, payload) {
+    async [FETCH_PRODUCT]({ state, dispatch, commit }, { code, referrerCode }) {
         try {
-            const data = await getProduct(payload);
+            const data = await getProduct(code, referrerCode);
             const isSameGroup = state.product.variantGroup === data.variantGroup;
+
             commit(SET_PRODUCT, data);
+            commit(SET_REFERRER_CODE, referrerCode);
+
             if (!isSameGroup)
                 if (data.variantGroup) await dispatch(FETCH_PRODUCT_OPTIONS, data.variantGroup);
                 else commit(SET_PRODUCT_OPTIONS, null);
