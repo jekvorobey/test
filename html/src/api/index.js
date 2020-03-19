@@ -349,12 +349,16 @@ export function getCartData() {
     return $http.get('/v1/cart/data');
 }
 
-export function deleteCartItem({ offerId, storeId }) {
+export function deleteCartData() {
+    return $http.delete('/v1/cart/all');
+}
+
+export function deleteCartItem(offerId, storeId) {
     return $http.delete('/v1/cart/item', { data: { offerId, storeId } });
 }
 
-export function addCartItem({ offerId, storeId, count }) {
-    return $http.post('/v1/cart/item', { offerId, storeId, count });
+export function addCartItem(offerId, storeId, count, referrerCode) {
+    return $http.post('/v1/cart/item', { offerId, storeId, count, referrerCode });
 }
 
 // checkout

@@ -12,7 +12,7 @@ export default class ClientCookie extends BaseCookie {
     }
 
     get(name, options) {
-        this.instance.get(name, options);
+        return this.instance.get(name, options);
     }
 
     set(name, value, options) {
