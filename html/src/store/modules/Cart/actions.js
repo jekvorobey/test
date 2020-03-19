@@ -52,10 +52,10 @@ export default {
         }
     },
 
-    async [ADD_CART_ITEM]({ commit }, { offerId, storeId, count } = {}) {
+    async [ADD_CART_ITEM]({ commit }, { offerId, storeId, count, referrerCode } = {}) {
         try {
-            const referrerCode = $cookie.get('referal');
-            const data = await addCartItem(offerId, storeId, count, referrerCode);
+            const code = referrerCode || $cookie.get('referal');
+            const data = await addCartItem(offerId, storeId, count, code);
             commit(SET_CART_DATA, data);
         } catch (error) {
             storeErrorHandler(ADD_CART_ITEM, error);

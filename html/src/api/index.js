@@ -228,7 +228,7 @@ export function search(data) {
 
 // catalog
 
-export function getProductGroups(type, page = 1, orderField = 'name') {
+export function getProductGroups(type, page, orderField = 'name') {
     return $http.get('/v1/catalog/product-groups', {
         params: { type_code: type, page, orderField },
         paramsSerializer(params) {

@@ -61,15 +61,7 @@ export default {
         try {
             return await getProductGroup(type, entityCode || undefined);
         } catch (error) {
-            storeErrorHandler(FETCH_PRODUCT_GROUP)(error);
-            return {
-                type,
-                based: productGroupBase.FILTERS,
-                excluded_filters: [],
-                filters: {
-                    is_new: type === productGroupTypes.NEW ? Number(type === productGroupTypes.NEW) : undefined,
-                },
-            };
+            storeErrorHandler(FETCH_PRODUCT_GROUP, true)(error);
         }
     },
 
