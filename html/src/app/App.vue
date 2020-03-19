@@ -107,6 +107,10 @@ export default {
             isAddToCartOpen: state =>
                 state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
         }),
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
     },
 
     methods: {
