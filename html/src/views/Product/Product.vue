@@ -632,9 +632,7 @@
         </transition>
 
         <transition name="fade-in">
-            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
-            <add-to-cart-modal v-else-if="isAddToCartOpen" />
-            <gallery-modal v-else-if="isGalleryOpen && !isTabletLg" />
+            <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" />
         </transition>
     </section>
 </template>
@@ -670,8 +668,6 @@ import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOp
 import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
 import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag.vue';
 
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '@components/GalleryModal/GalleryModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -838,8 +834,6 @@ export default {
         ProductOptionTag,
         ProductOptionPanel,
 
-        QuickViewModal,
-        AddToCartModal,
         GalleryModal,
     },
 
