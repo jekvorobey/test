@@ -15,22 +15,24 @@ export const MASTERCLASSES = 'masterClasses';
 
 export const NAME = 'product';
 
-export default {
-    name: NAME,
-    namespaced: true,
-    state: {
-        [REFERRER_CODE]: null,
+export default function createModule() {
+    return {
+        name: NAME,
+        namespaced: true,
+        state: {
+            [REFERRER_CODE]: null,
 
-        [PRODUCT]: {},
-        [PRODUCT_OPTIONS]: null,
-        [PRODUCT_CODE]: null,
+            [PRODUCT]: {},
+            [PRODUCT_OPTIONS]: null,
+            [PRODUCT_CODE]: null,
 
-        [FEATURED_PRODUCTS]: { items: [], range: 0 },
-        [INSTAGRAM_ITEMS]: [],
-        [BANNERS]: [],
-        [MASTERCLASSES]: [],
-    },
-    actions,
-    mutations,
-    getters,
-};
+            [FEATURED_PRODUCTS]: { items: [], range: 0 },
+            [INSTAGRAM_ITEMS]: [],
+            [BANNERS]: [],
+            [MASTERCLASSES]: [],
+        },
+        actions,
+        mutations,
+        getters,
+    };
+}

@@ -4,11 +4,11 @@
             <h2 class="seo-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
             <radio-switch
                 class="seo-view__switch"
-                v-model="selectedStatus"
-                :items="seoStatus"
+                v-model="selectedActiveStatus"
+                :items="activeStatus"
                 id="seo-switch"
                 key-field="value"
-                name="seoStatus"
+                name="activeStatus"
             />
         </div>
 
@@ -135,11 +135,16 @@
             </div>
         </info-panel> -->
 
-        <div class="container container--tablet-lg seo-view__controls">
-            <v-button class="btn--outline seo-view__controls-btn">
+        <div class="container container--tablet-lg seo-view__controls" v-if="pagesCount > 1">
+            <v-button
+                class="btn--outline seo-view__controls-btn"
+                v-if="activePage < pagesCount"
+                @click="onShowMore"
+                :disabled="showMore"
+            >
                 Показать ещё
             </v-button>
-            <v-pagination :value="1" :page-count="10" />
+            <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
     </section>
 </template>
@@ -159,12 +164,27 @@ import profileSEO2 from '@images/mock/profileSEO2.png';
 import profileSEO3 from '@images/mock/profileSEO3.png';
 import profileSEO4 from '@images/mock/profileSEO4.png';
 
+import _debounce from 'lodash/debounce';
+import { mapState, mapActions, mapGetters } from 'vuex';
+
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+
+import seoModule, { NAME as SEO_MODULE, ITEMS, ACTIVE_PAGE } from '@store/modules/Profile/modules/Seo';
+import { PAGES_COUNT } from '@store/modules/Profile/modules/Seo/getters';
+import { FETCH_PRODUCTS, SET_LOAD_PATH } from '@store/modules/Profile/modules/Seo/actions';
+
+import { $store } from '@services';
+import { registerModuleIfNotExists } from '@util/store';
+import { MIN_SCROLL_VALUE } from '../../../assets/scripts/constants';
+
 import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/download.svg';
 import '@images/sprites/copy.svg';
 import '@images/sprites/link.svg';
 import './Seo.css';
+
+const SEO_MODULE_PATH = `${PROFILE_MODULE}/${SEO_MODULE}`;
 
 export default {
     name: 'seo',
@@ -181,13 +201,13 @@ export default {
     },
 
     data() {
-        const seoStatus = [
+        const activeStatus = [
             {
-                value: 'active',
+                value: 1,
                 title: 'Действующие',
             },
             {
-                value: 'archive',
+                value: 0,
                 title: 'Архив',
             },
         ];
@@ -198,12 +218,16 @@ export default {
             profileSEO3,
             profileSEO4,
 
-            selectedStatus: seoStatus[0].value,
-            seoStatus,
+            selectedActiveStatus: activeStatus[0].value,
+            activeStatus,
+            showMore: false,
         };
     },
 
     computed: {
+        ...mapState(SEO_MODULE_PATH, [ITEMS, ACTIVE_PAGE]),
+        ...mapGetters(SEO_MODULE_PATH, [PAGES_COUNT]),
+
         isTablet() {
             return this.$mq.tablet;
         },
@@ -213,18 +237,112 @@ export default {
         },
     },
 
-    watch: {},
+    watch: {
+        selectedActiveStatus(value) {
+            this.$router.replace({
+                path: this.$route.path,
+                query: { ...this.$route.query, isActive: value },
+            });
+        },
+    },
 
-    methods: {},
+    methods: {
+        ...mapActions(SEO_MODULE_PATH, [FETCH_PRODUCTS]),
+
+        setStatus(isActive) {
+            this.selectedActiveStatus = Number(isActive);
+        },
+
+        onShowMore() {
+            this.showMore = true;
+            this.$router.replace({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: this[ACTIVE_PAGE] + 1 },
+            });
+        },
+
+        onPageChanged(page) {
+            this.showMore = false;
+            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+        },
+
+        async fetchProducts(to, from, showMore) {
+            try {
+                const {
+                    query: { page, isActive },
+                } = to;
+
+                const {
+                    query: { page: fromPage },
+                } = to;
+
+                this.$progress.start();
+
+                await this[FETCH_PRODUCTS]({
+                    page,
+                    isActive,
+                    showMore,
+                });
+
+                this.$progress.finish();
+
+                if (!showMore && page !== fromPage)
+                    window.scrollTo({
+                        top: MIN_SCROLL_VALUE + 1,
+                        behavior: 'smooth',
+                    });
+
+                if (showMore) setTimeout(() => (this.showMore = false), 200);
+            } catch (thrown) {
+                if (thrown && thrown.isCancel === true) return;
+                console.log(thrown.message);
+                this.$progress.fail();
+            }
+        },
+    },
 
     beforeRouteEnter(to, from, next) {
-        next();
+        const {
+            fullPath,
+            query: { isActive = 1, page = 1 },
+        } = to;
+
+        const { loadPath } = $store.state[PROFILE_MODULE][SEO_MODULE];
+
+        if (loadPath === fullPath) next(vm => vm.setStatus(isActive));
+        else {
+            debugger;
+            $store
+                .dispatch(`${SEO_MODULE_PATH}/${FETCH_PRODUCTS}`, { page, isActive })
+                .then(() => {
+                    $store.dispatch(`${SEO_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                    next(vm => vm.setStatus(isActive));
+                })
+                .catch(error => {
+                    $progress.fail();
+                    next();
+                });
+        }
     },
 
     beforeRouteUpdate(to, from, next) {
-        next();
+        const {
+            query: { page, isActive },
+        } = to;
+
+        const {
+            query: { page: fromPage, isActive: fromIsActive },
+        } = from;
+
+        if (page === fromPage && isActive == fromIsActive) next();
+        else {
+            this.debounce_fetchProducts(to, from, this.showMore);
+            next();
+        }
     },
 
-    beforeMount() {},
+    beforeMount() {
+        this.debounce_fetchProducts = _debounce(this.fetchProducts, 500);
+    },
 };
 </script>

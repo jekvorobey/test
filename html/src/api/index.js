@@ -220,6 +220,16 @@ export function getProfileOrderPaymentLink(orderId, paymentId, backUrl) {
     });
 }
 
+export function getProfileSeoProducts(pageNum, perPage, isActive) {
+    return $http.get('/v1/lk/promotion-product', {
+        params: {
+            pageNum,
+            perPage,
+            isActive,
+        },
+    });
+}
+
 // search
 
 export function search(data) {
