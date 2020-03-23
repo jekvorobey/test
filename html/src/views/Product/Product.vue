@@ -632,7 +632,15 @@
         </transition>
 
         <transition name="fade-in">
-            <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" />
+            <!-- <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" /> -->
+            <!-- <map-modal>
+                <template v-slot:map>
+                    <product-pickup-points-map />
+                </template>
+                <template v-slot:filter>
+                    <product-pickup-points-panel />
+                </template>
+            </map-modal> -->
         </transition>
     </section>
 </template>
@@ -668,6 +676,10 @@ import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOp
 import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
 import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag.vue';
 
+import ProductPickupPointsMap from '@components/product/ProductPickupPointsMap/ProductPickupPointsMap.vue';
+import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPanel/ProductPickupPointsPanel.vue';
+
+import MapModal, { NAME as MAP_MODAL_NAME } from '@components/MapModal/MapModal.vue';
 import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '@components/GalleryModal/GalleryModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -834,6 +846,10 @@ export default {
         ProductOptionTag,
         ProductOptionPanel,
 
+        ProductPickupPointsMap,
+        ProductPickupPointsPanel,
+
+        MapModal,
         GalleryModal,
     },
 
@@ -973,6 +989,19 @@ export default {
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
+        async fetchProduct(code, referrerCode, next) {
+            try {
+                const { productCode } = this.product;
+                this.$progress.start();
+                await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
+                next();
+                this.$progress.finish();
+            } catch (error) {
+                this.$progress.fail();
+                next(false);
+            }
+        },
+
         generateSourcePath(x, y, id, ext) {
             return generatePictureSourcePath(x, y, id, ext);
         },
@@ -987,6 +1016,10 @@ export default {
 
         onShowGallery() {
             this[CHANGE_MODAL_STATE]({ name: GALLERY_MODAL_NAME, open: true });
+        },
+
+        onShowPickupPoints() {
+            this[CHANGE_MODAL_STATE]({ name: MAP_MODAL_NAME, open: true });
         },
 
         onBuyProduct() {
@@ -1078,18 +1111,7 @@ export default {
     },
 
     beforeMount() {
-        this.debounce_fetchProduct = _debounce(async (code, referrerCode, next) => {
-            try {
-                const { productCode } = this.product;
-                this.$progress.start();
-                await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
-                next();
-                this.$progress.finish();
-            } catch (error) {
-                this.$progress.fail();
-                next(false);
-            }
-        }, 500);
+        this.debounce_fetchProduct = _debounce(this.fetchProduct, 500);
     },
 };
 </script>

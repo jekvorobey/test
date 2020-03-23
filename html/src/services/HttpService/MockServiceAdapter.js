@@ -30,6 +30,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/checkout/data':
             case '/v1/catalog/products':
             case '/v1/catalog/items':
+            case '/v1/catalog/product-detail/pickup-points':
             case '/v1/catalog/product-detail':
             case '/v1/catalog/variants':
             case '/v1/catalog/filter':
