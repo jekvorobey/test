@@ -6,7 +6,7 @@
             v-for="(item, index) in items"
             v-model="internalValue"
             :id="`radio-switch-${id}-${index}`"
-            :key="item[keyField] || index"
+            :key="item.value"
             :value="item.value"
             :name="name"
         >

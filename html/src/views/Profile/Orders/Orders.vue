@@ -143,13 +143,20 @@
                             <price v-bind="order.price" />
                         </td>
                         <td class="orders-view__table-td">
-                            <v-button
-                                class="btn--outline"
-                                v-if="order.payment_status === orderPaymentStatus.NOT_PAID"
-                                @click.stop="onContinuePayment(order.id)"
+                            <template
+                                v-if="
+                                    order.payment_status === orderPaymentStatus.NOT_PAID && order.payments.length !== 0
+                                "
                             >
-                                Оплатить
-                            </v-button>
+                                <v-button
+                                    class="btn--outline"
+                                    v-for="payment in order.payments"
+                                    :key="payment.id"
+                                    @click.stop="onContinuePayment(order.id, payment.id)"
+                                >
+                                    Оплатить
+                                </v-button>
+                            </template>
                             <span :class="getOrderStatusClass(order)" v-else>
                                 {{ $t(`orderStatus.${order.status}`) }}
                             </span>
@@ -187,9 +194,14 @@
                 <info-row class="orders-view__list-item-row" name="Дата заказа" :value="order.created_at" />
                 <info-row class="orders-view__list-item-row" name="Дата доставки" :value="order.deliveryDate" />
 
-                <template v-if="order.status === 'created'">
+                <template v-if="order.payment_status === orderPaymentStatus.NOT_PAID && order.payments.length !== 0">
                     <info-row class="orders-view__list-item-row">
-                        <v-button class="btn--outline">
+                        <v-button
+                            class="btn--outline"
+                            v-for="payment in order.payments"
+                            :key="payment.id"
+                            @click.stop="onContinuePayment(order.id, payment.id)"
+                        >
                             Оплатить
                         </v-button>
                     </info-row>
@@ -319,9 +331,9 @@ export default {
             return getOrderStatusColorClass(order.status, order.canceled);
         },
 
-        async onContinuePayment(orderId) {
+        async onContinuePayment(orderId, paymentId) {
             const backUrl = `${document.location.origin}/thank-you`;
-            const url = await this[GET_ORDER_PAYMENT_LINK]({ id: orderId, backUrl });
+            const { url } = await this[GET_ORDER_PAYMENT_LINK]({ orderId, paymentId, backUrl });
             document.location.href = url;
         },
 

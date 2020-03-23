@@ -180,15 +180,16 @@ export default {
         },
 
         fetchData() {
-            const data = this[CART_DATA][this.modalState.type];
-            this.cartItem = data ? data.items.find(i => i.p.id === this.modalState.offerId) : null;
-            if (!this.cartItem)
-                this[ADD_CART_ITEM]({ offerId: this.modalState.offerId, storeId: this.modalState.storeId });
+            const { offerId, storeId, referralCode, type, cookieName } = this.modalState;
+            const data = this[CART_DATA][type];
+
+            this.cartItem = data ? data.items.find(i => i.p.id === offerId) : null;
+            if (!this.cartItem) this[ADD_CART_ITEM]({ offerId, storeId, referralCode, cookieName });
             this[FETCH_RELATIVE_PRODUCTS]({ page: getRandomIntInclusive(1, 4) });
         },
 
         onClose() {
-            this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
+            this[CHANGE_MODAL_STATE]({ name: NAME, open: false, state: null });
         },
     },
 

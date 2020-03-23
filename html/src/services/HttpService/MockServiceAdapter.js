@@ -31,6 +31,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/catalog/products':
             case '/v1/catalog/items':
             case '/v1/catalog/product-detail':
+            case '/v1/catalog/variants':
             case '/v1/catalog/filter':
             case '/v1/catalog/product-groups':
             case '/v1/catalog/product-group':
@@ -38,6 +39,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/lk/profile':
             case '/v1/lk/preference':
             case '/v1/lk/address':
+            case '/v1/lk/promotion-product':
                 return this.httpServiceInstance.get(path, config);
             default:
                 return this.mockServiceInstance.get(path, config);
@@ -103,6 +105,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
 
         switch (path) {
             case '/v1/cart/item':
+            case '/v1/cart/all':
             case '/v1/checkout/certificate':
             case '/v1/checkout/bonus':
             case '/v1/checkout/promocode':

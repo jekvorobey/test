@@ -42,11 +42,6 @@
                 </v-slider>
             </div>
         </section>
-
-        <transition name="fade-in">
-            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
-            <add-to-cart-modal v-else-if="isAddToCartOpen" />
-        </transition>
     </section>
 </template>
 
@@ -54,8 +49,8 @@
 import VButton from '@controls/VButton/VButton.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
+import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
+import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 
@@ -111,9 +106,6 @@ export default {
         VSlider,
 
         CatalogProductCard,
-
-        AddToCartModal,
-        QuickViewModal,
     },
 
     computed: {

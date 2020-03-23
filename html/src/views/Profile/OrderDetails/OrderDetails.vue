@@ -43,13 +43,17 @@
                     />
                 </div>
                 <div class="order-details-view__details-controls">
-                    <v-button
-                        v-if="canPay"
-                        class="order-details-view__details-controls-btn"
-                        @click="onContinuePayment(order.id)"
-                    >
-                        Оплатить заказ
-                    </v-button>
+                    <template v-if="canPay">
+                        <v-button
+                            class="order-details-view__details-controls-btn"
+                            v-for="payment in order.payments"
+                            :key="payment.id"
+                            @click="onContinuePayment(order.id, payment.id)"
+                        >
+                            Оплатить заказ
+                        </v-button>
+                    </template>
+
                     <!-- <v-button class="btn--outline order-details-view__details-controls-btn">Повторить заказ</v-button>
                     <v-link class="order-details-view__details-controls-link">Оформить возврат</v-link> -->
                 </div>
@@ -199,8 +203,8 @@ export default {
         }),
 
         canPay() {
-            const { payment_status = 3 } = this[ORDER];
-            return payment_status === orderPaymentStatus.NOT_PAID;
+            const { payment_status = 3, payments = [] } = this[ORDER];
+            return payment_status === orderPaymentStatus.NOT_PAID && payments.length !== 0;
         },
 
         orderStatusClass() {

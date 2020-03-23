@@ -148,11 +148,6 @@
                 </v-expander>
             </div>
         </section>
-
-        <transition name="fade-in">
-            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
-            <add-to-cart-modal v-else-if="isAddToCartOpen" />
-        </transition>
     </section>
 </template>
 
@@ -177,8 +172,8 @@ import CatalogFilter from '@components/CatalogFilter/CatalogFilter.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
 
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
+import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
+import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -237,9 +232,6 @@ export default {
         CatalogFilter,
         CatalogProductList,
         CatalogBannerCard,
-
-        AddToCartModal,
-        QuickViewModal,
     },
 
     data() {

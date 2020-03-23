@@ -4,7 +4,7 @@
         header="Мой заказ"
         trigger="hover"
         show-bottom
-        :disabled="!hasSession"
+        :disabled="isTabletLg || !hasSession"
     >
         <slot />
         <template v-slot:body>
@@ -73,6 +73,10 @@ export default {
     computed: {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, PRODUCT_ITEMS_SUM]),
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
     },
 
     methods: {

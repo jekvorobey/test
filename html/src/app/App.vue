@@ -43,7 +43,7 @@ import VSticky from '@controls/VSticky/VSticky.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import ProgressBar from '@components/ProgressBar/ProgressBar.vue';
-import FilterButton from '../components/FilterButton/FilterButton.vue';
+import FilterButton from '@components/FilterButton/FilterButton.vue';
 import Price from '@components/Price/Price.vue';
 import TagItem from '@components/TagItem/TagItem.vue';
 
@@ -107,6 +107,10 @@ export default {
             isAddToCartOpen: state =>
                 state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
         }),
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
     },
 
     methods: {

@@ -22,34 +22,36 @@ export const PRODUCT_GROUP = 'productGroup';
 export const ROUTE_SEGMENTS = 'routeSegments';
 export const FILTER_SEGMENTS = 'filterSegments';
 
-export default {
-    name: NAME,
-    namespaced: true,
-    state: {
-        [LOAD_PATH]: null,
-        [TYPE]: null,
-        [ENTITY_CODE]: null,
-        [CATEGORY_CODE]: null,
-        [BASE_CATEGORY_CODE]: null,
+export default function createModule() {
+    return {
+        name: NAME,
+        namespaced: true,
+        state: {
+            [LOAD_PATH]: null,
+            [TYPE]: null,
+            [ENTITY_CODE]: null,
+            [CATEGORY_CODE]: null,
+            [BASE_CATEGORY_CODE]: null,
 
-        [PRODUCT_GROUP]: {
-            type: productGroupTypes.CATALOG,
-            base: productGroupBase.FILTERS,
-            excluded_filters: [],
-            filters: {},
-            [BANNER]: {},
+            [PRODUCT_GROUP]: {
+                type: productGroupTypes.CATALOG,
+                base: productGroupBase.FILTERS,
+                excluded_filters: [],
+                filters: {},
+                [BANNER]: {},
+            },
+
+            [CATEGORIES]: [],
+            [FILTERS]: [],
+
+            [ITEMS]: [],
+            [RANGE]: 0,
+
+            [ROUTE_SEGMENTS]: [],
+            [FILTER_SEGMENTS]: {},
         },
-
-        [CATEGORIES]: [],
-        [FILTERS]: [],
-
-        [ITEMS]: [],
-        [RANGE]: 0,
-
-        [ROUTE_SEGMENTS]: [],
-        [FILTER_SEGMENTS]: {},
-    },
-    actions,
-    mutations,
-    getters,
-};
+        actions,
+        mutations,
+        getters,
+    };
+}

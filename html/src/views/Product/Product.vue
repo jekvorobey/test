@@ -110,28 +110,38 @@
                         </div>
                     </div>
 
-                    <!-- <div class="product-view__header-detail-section product-view__header-detail-options">
-                        <div class="product-view__header-detail-options-selected">
-                            <div>{{ product.option.title }}</div>
-                            <div class="text-grey text-sm">16 оттенков</div>
-                        </div>
-                        <div class="product-view__header-detail-options-list">
-                            <div
+                    <product-option-panel
+                        class="product-view__header-detail-section product-view__header-detail-options"
+                        :key="char.code"
+                        v-for="char in characteristics"
+                        :header="char.name"
+                        :note="$tc('product.variants', char.options.length)"
+                    >
+                        <div class="product-view__header-detail-options-tags" v-if="char.type === 'radio'">
+                            <product-option-tag
                                 class="product-view__header-detail-options-item"
-                                :class="{
-                                    'product-view__header-detail-options-item--selected':
-                                        option.value === product.option.value,
-                                }"
-                                v-for="option in product.options"
-                                :key="option.id"
+                                v-for="option in char.options"
+                                :key="`${char.code}-${option.value}`"
+                                :selected="option.isSelected"
+                                :disabled="option.isDisabled"
+                                @click="onSelectOption(char.code, option.value)"
                             >
-                                <div
-                                    class="product-view__header-detail-options-item-square"
-                                    :style="[{ backgroundColor: option.value, outlineColor: option.value }]"
-                                />
-                            </div>
+                                {{ option.name }}
+                            </product-option-tag>
                         </div>
-                    </div> -->
+
+                        <div class="product-view__header-detail-options-colors" v-if="char.type === 'color'">
+                            <product-color-tag
+                                class="product-view__header-detail-options-item"
+                                v-for="option in char.options"
+                                :key="`${char.code}-${option.value}`"
+                                :color="option.value"
+                                :selected="option.isSelected"
+                                :disabled="option.isDisabled"
+                                @click="onSelectOption(char.code, option.value)"
+                            />
+                        </div>
+                    </product-option-panel>
 
                     <div
                         class="product-view__header-detail-section product-view__header-detail-panels"
@@ -159,12 +169,7 @@
                             <v-button
                                 class="product-view__header-detail-control-panel-btn"
                                 :disabled="!canBuy"
-                                @click.prevent="
-                                    ADD_CART_ITEM({
-                                        offerId: product.id,
-                                        storeId: product.stock.storeId,
-                                    })
-                                "
+                                @click.prevent="onBuyProduct"
                             >
                                 {{ canBuy ? 'Добавить в корзину' : 'Нет в наличии' }}
                             </v-button>
@@ -200,9 +205,13 @@
                             Подробнее
                         </a>
                     </div>
-                    <div v-if="productImages.brand" class="product-view__header-detail-section">
+                    <div v-if="product.brand" class="product-view__header-detail-section">
                         <div class="product-view__header-detail-brand">
-                            <v-picture :key="productImages.brand.id" class="product-view__header-detail-brand-img">
+                            <v-picture
+                                v-if="productImages.brand"
+                                :key="productImages.brand.id"
+                                class="product-view__header-detail-brand-img"
+                            >
                                 <source :data-src="productImages.brand.desktop" type="image/webp" />
                                 <img
                                     class="blur-up lazyload v-picture__img"
@@ -211,7 +220,11 @@
                                 />
                             </v-picture>
 
-                            <router-link class="product-view__header-detail-brand-link" :to="brandUrl">
+                            <router-link
+                                v-if="product.brand.hasDetail"
+                                class="product-view__header-detail-brand-link"
+                                :to="brandUrl"
+                            >
                                 На страницу бренда
                             </router-link>
                         </div>
@@ -300,7 +313,7 @@
                 </div>
                 <div class="product-view__info-media">
                     <v-picture
-                        class="product-view__info-media-img"
+                        class="product-view__info-media-item product-view__info-media-item--img"
                         :key="productImages.description.id"
                         v-if="productImages.description"
                     >
@@ -318,7 +331,7 @@
                     </v-picture>
                     <iframe
                         v-if="productVideos.description"
-                        class="lazyload product-view__info-media-video"
+                        class="lazyload product-view__info-media-item product-view__info-media-item--video"
                         :data-src="productVideos.description.videoUrl"
                         :key="productVideos.description.id"
                         frameborder="0"
@@ -371,7 +384,11 @@
                     <v-html class="product-view__info-text" v-html="product.howto.content" />
                 </div>
                 <div class="product-view__info-media">
-                    <v-picture :key="productImages.howto.id" v-if="productImages.howto">
+                    <v-picture
+                        class="product-view__info-media-item product-view__info-media-item--img"
+                        :key="productImages.howto.id"
+                        v-if="productImages.howto"
+                    >
                         <source
                             :data-srcset="productImages.howto.tablet"
                             type="image/webp"
@@ -382,7 +399,7 @@
                     </v-picture>
                     <iframe
                         v-if="productVideos.howto"
-                        class="lazyload"
+                        class="lazyload product-view__info-media-item product-view__info-media-item--video"
                         :data-src="productVideos.howto.videoUrl"
                         :key="productVideos.howto.id"
                         frameborder="0"
@@ -610,19 +627,12 @@
                 :old-price="product.oldPrice"
                 :bonus="product.bonus"
                 :can-buy="canBuy"
-                @addItem="
-                    ADD_CART_ITEM({
-                        offerId: product.id,
-                        storeId: product.stock.storeId,
-                    })
-                "
+                @addItem="onBuyProduct"
             />
         </transition>
 
         <transition name="fade-in">
-            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
-            <add-to-cart-modal v-else-if="isAddToCartOpen" />
-            <gallery-modal v-else-if="isGalleryOpen && !isTabletLg" />
+            <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" />
         </transition>
     </section>
 </template>
@@ -654,13 +664,14 @@ import ProductCartPanel from '@components/product/ProductCartPanel/ProductCartPa
 import ProductReviewCard from '@components/product/ProductReviewCard/ProductReviewCard.vue';
 import ProductPricePanel from '@components/product/ProductPricePanel/ProductPricePanel.vue';
 import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDetailPanel.vue';
+import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOptionPanel.vue';
+import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
+import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag.vue';
 
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '@components/GalleryModal/GalleryModal.vue';
 
-import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
+import { $store, $progress, $logger } from '@services';
 
 import { SCROLL } from '@store';
 
@@ -671,7 +682,9 @@ import productModule, {
     MASTERCLASSES,
     FEATURED_PRODUCTS,
     INSTAGRAM_ITEMS,
+    PRODUCT_OPTIONS,
 } from '@store/modules/Product';
+import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Product/getters';
 import { FETCH_PRODUCT_DATA } from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
@@ -691,8 +704,7 @@ import {
 } from '@util/file';
 import { breakpoints } from '@enums';
 import { productGroupTypes } from '@enums/product';
-
-import { generateCategoryUrl } from '@util/catalog';
+import { generateCategoryUrl, generateProductUrl } from '@util/catalog';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/facebook-bw.svg';
@@ -813,12 +825,15 @@ export default {
         ProductTipCard,
         ProductFileCard,
         ProductReviewCard,
+
         ProductCartPanel,
         ProductPricePanel,
         ProductDetailPanel,
 
-        QuickViewModal,
-        AddToCartModal,
+        ProductColorTag,
+        ProductOptionTag,
+        ProductOptionPanel,
+
         GalleryModal,
     },
 
@@ -830,15 +845,29 @@ export default {
 
     computed: {
         ...mapState([SCROLL]),
-        ...mapState('route', { code: state => state.params.code }),
-        ...mapState(PRODUCT_MODULE, [PRODUCT, MASTERCLASSES, BANNERS, FEATURED_PRODUCTS, INSTAGRAM_ITEMS]),
+        ...mapState('route', {
+            code: state => state.params.code,
+            categoryCode: state => state.params.categoryCode,
+            refCode: state => state.query.refCode,
+        }),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
+
         ...mapState(MODAL_MODULE, {
             isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
             isAddToCartOpen: state =>
                 state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
             isGalleryOpen: state => state[MODALS][GALLERY_MODAL_NAME] && state[MODALS][GALLERY_MODAL_NAME].open,
         }),
+
+        ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION]),
+        ...mapState(PRODUCT_MODULE, [
+            PRODUCT,
+            PRODUCT_OPTIONS,
+            MASTERCLASSES,
+            BANNERS,
+            FEATURED_PRODUCTS,
+            INSTAGRAM_ITEMS,
+        ]),
 
         brandUrl() {
             const { brand } = this.product;
@@ -960,11 +989,35 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: GALLERY_MODAL_NAME, open: true });
         },
 
+        onBuyProduct() {
+            const {
+                refCode: referrerCode,
+                product: {
+                    id: offerId,
+                    stock: { storeId },
+                    referralCodeAllowed = false,
+                },
+            } = this;
+
+            if (referrerCode)
+                if (referralCodeAllowed) this[ADD_CART_ITEM]({ offerId, storeId, referrerCode, cookieName: null });
+                else this[ADD_CART_ITEM]({ offerId, storeId, cookieName: null });
+            else this[ADD_CART_ITEM]({ offerId, storeId });
+        },
+
         onAddToCart(item) {
             this[CHANGE_MODAL_STATE]({
                 name: ADD_TO_CART_MODAL_NAME,
                 open: true,
                 state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
+            });
+        },
+
+        onSelectOption(charCode, optValue) {
+            const { categoryCode } = this;
+            const nextCombination = this[GET_NEXT_COMBINATION](charCode, optValue);
+            this.$router.push({
+                path: generateProductUrl(categoryCode, nextCombination.code),
             });
         },
 
@@ -981,25 +1034,23 @@ export default {
         const {
             hash,
             params: { code },
+            query: { refCode = null },
         } = to;
 
         // регистрируем модуль, если такого нет
         registerModuleIfNotExists($store, PRODUCT_MODULE, productModule);
-        const { productCode } = $store.state[PRODUCT_MODULE];
-        const {
-            selectedCity: { fias_id },
-        } = $store.state[GEO_MODULE];
+        const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
         // если все загружено, пропускаем
-        if (productCode === code) next();
+        if (productCode === code && referrerCode === refCode) next();
         else {
             $progress.start();
             $store
-                .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, city: fias_id })
+                .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
                 .then(() => next(vm => $progress.finish()))
                 .catch(error => {
                     $progress.fail();
-                    $logger.error(error);
+                    next();
                 });
         }
     },
@@ -1012,26 +1063,26 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        const { fias_id } = this.selectedCity;
-
         const {
             params: { code },
+            query: { refCode },
         } = to;
 
         const {
             params: { code: fromCode },
+            query: { refCode: fromRefCode },
         } = from;
 
-        if (code !== fromCode) this.debounce_fetchProduct(code, fias_id, next);
-        else next();
+        if (code === fromCode && refCode === fromRefCode) next();
+        else this.debounce_fetchProduct(code, refCode, next);
     },
 
     beforeMount() {
-        this.debounce_fetchProduct = _debounce(async (code, city, next) => {
+        this.debounce_fetchProduct = _debounce(async (code, referrerCode, next) => {
             try {
                 const { productCode } = this.product;
                 this.$progress.start();
-                await this[FETCH_PRODUCT_DATA]({ code, city });
+                await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
                 next();
                 this.$progress.finish();
             } catch (error) {

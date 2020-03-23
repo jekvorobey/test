@@ -214,9 +214,19 @@ export function getProfileOrder(id) {
     return $http.get(`/v1/lk/order/${id}`);
 }
 
-export function getProfileOrderPaymentLink(id, backUrl) {
-    return $http.post(`/v1/lk/order/${id}/payment/${id}/start`, {
+export function getProfileOrderPaymentLink(orderId, paymentId, backUrl) {
+    return $http.post(`/v1/lk/order/${orderId}/payment/${paymentId}/start`, {
         return_url: backUrl,
+    });
+}
+
+export function getProfileSeoProducts(pageNum, perPage, isActive) {
+    return $http.get('/v1/lk/promotion-product', {
+        params: {
+            pageNum,
+            perPage,
+            isActive,
+        },
     });
 }
 
@@ -228,7 +238,7 @@ export function search(data) {
 
 // catalog
 
-export function getProductGroups(type, page = 1, orderField = 'name') {
+export function getProductGroups(type, page, orderField = 'name') {
     return $http.get('/v1/catalog/product-groups', {
         params: { type_code: type, page, orderField },
         paramsSerializer(params) {
@@ -325,8 +335,12 @@ export function getInstagram(data) {
     return $http.get('/v1/instagram', data);
 }
 
-export function getProduct({ code }) {
-    return $http.get('/v1/catalog/product-detail', { params: { code } });
+export function getProduct(code, referrerCode) {
+    return $http.get('/v1/catalog/product-detail', { params: { code, referrerCode } });
+}
+
+export function getProductOptions(groupId) {
+    return $http.get('/v1/catalog/variants', { params: { groupId } });
 }
 
 export function getMasterclass({ code }) {
@@ -345,12 +359,16 @@ export function getCartData() {
     return $http.get('/v1/cart/data');
 }
 
-export function deleteCartItem({ offerId, storeId }) {
+export function deleteCartData() {
+    return $http.delete('/v1/cart/all');
+}
+
+export function deleteCartItem(offerId, storeId) {
     return $http.delete('/v1/cart/item', { data: { offerId, storeId } });
 }
 
-export function addCartItem({ offerId, storeId, count }) {
-    return $http.post('/v1/cart/item', { offerId, storeId, count });
+export function addCartItem(offerId, storeId, count, referrerCode) {
+    return $http.post('/v1/cart/item', { offerId, storeId, count, referrerCode: referrerCode || undefined });
 }
 
 // checkout

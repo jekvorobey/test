@@ -20,22 +20,24 @@ export const ACTIVE_PAGE = 'activePage';
 
 const PAGE_SIZE = 'pageSize';
 
-export default {
-    name: NAME,
-    namespaced: true,
+export default function createModule() {
+    return {
+        name: NAME,
+        namespaced: true,
 
-    state: {
-        [LOAD_PATH]: '',
+        state: {
+            [LOAD_PATH]: '',
 
-        [ORDERS]: [],
-        [ORDER_DETAILS]: { [ORDER]: {}, [DELIVERIES]: [] },
+            [ORDERS]: [],
+            [ORDER_DETAILS]: { [ORDER]: {}, [DELIVERIES]: [] },
 
-        [ORDER_DIRECTION]: sortDirections.DESC,
-        [ORDER_FIELD]: sortFields.NUMBER,
-        [ACTIVE_PAGE]: DEFAULT_PAGE,
-    },
+            [ORDER_DIRECTION]: sortDirections.DESC,
+            [ORDER_FIELD]: sortFields.NUMBER,
+            [ACTIVE_PAGE]: DEFAULT_PAGE,
+        },
 
-    actions,
-    mutations,
-    getters,
-};
+        actions,
+        mutations,
+        getters,
+    };
+}

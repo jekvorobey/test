@@ -126,6 +126,7 @@ const main = {
         vendorCode: 'Vendor Code {code}',
         review: '{n} Reviews',
         bonus: '{n} Bonuses',
+        variants: 'No options | {n} Option | {n} Options',
         showAll: 'Show All',
 
         title: {

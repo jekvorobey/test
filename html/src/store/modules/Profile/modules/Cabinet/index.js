@@ -26,42 +26,44 @@ export const REQUISITES = 'requisites';
 
 export const LOAD = 'load';
 
-export default {
-    name: NAME,
-    namespaced: true,
+export default function createModule() {
+    return {
+        name: NAME,
+        namespaced: true,
 
-    state: {
-        [LOAD]: false,
-        [CAN_BUY]: false,
-        [REFERRAL_PARTNER]: false,
-        [HAS_PASSWORD]: false,
+        state: {
+            [LOAD]: false,
+            [CAN_BUY]: false,
+            [REFERRAL_PARTNER]: false,
+            [HAS_PASSWORD]: false,
 
-        [AVATAR]: null,
-        [FIRST_NAME]: null,
-        [LAST_NAME]: null,
-        [MIDDLE_NAME]: null,
-        [BIRTHDAY]: null,
-        [GENDER]: null,
-        [PHONE]: null,
-        [EMAIL]: null,
-        [PORTFOLIO]: [],
-        [ACTIVITIES]: [],
-        [All_ACTIVITIES]: [],
+            [AVATAR]: null,
+            [FIRST_NAME]: null,
+            [LAST_NAME]: null,
+            [MIDDLE_NAME]: null,
+            [BIRTHDAY]: null,
+            [GENDER]: null,
+            [PHONE]: null,
+            [EMAIL]: null,
+            [PORTFOLIO]: [],
+            [ACTIVITIES]: [],
+            [All_ACTIVITIES]: [],
 
-        [SOCIAL]: [],
+            [SOCIAL]: [],
 
-        [REQUISITES]: {
-            name: null,
-            inn: null,
-            bik: null,
-            bank: null,
-            account: null,
-            correspondentAccount: null,
-            address: null,
+            [REQUISITES]: {
+                name: null,
+                inn: null,
+                bik: null,
+                bank: null,
+                account: null,
+                correspondentAccount: null,
+                address: null,
+            },
         },
-    },
 
-    actions,
-    mutations,
-    getters,
-};
+        actions,
+        mutations,
+        getters,
+    };
+}

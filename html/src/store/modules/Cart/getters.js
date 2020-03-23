@@ -47,7 +47,7 @@ export default {
 
     [PRODUCT_ITEMS_SUM]: state => {
         const productData = state.cartData[cartItemTypes.PRODUCT];
-        if (productData) return productData.summary.sum;
+        if (productData) return productData.summary.total;
         return '';
     },
 

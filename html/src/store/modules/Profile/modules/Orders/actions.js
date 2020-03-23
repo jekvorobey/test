@@ -14,9 +14,9 @@ export default {
         commit(SET_LOAD_PATH, payload);
     },
 
-    async [GET_ORDER_PAYMENT_LINK]({ commit }, { id, backUrl }) {
+    async [GET_ORDER_PAYMENT_LINK]({ commit }, { orderId, paymentId, backUrl }) {
         try {
-            return await getProfileOrderPaymentLink(id, backUrl);
+            return await getProfileOrderPaymentLink(orderId, paymentId, backUrl);
         } catch (error) {
             storeErrorHandler(GET_ORDER_PAYMENT_LINK)(error);
         }

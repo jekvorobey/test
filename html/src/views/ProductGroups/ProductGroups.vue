@@ -362,8 +362,10 @@ export default {
                     query: { page: fromPage = 1 },
                 } = from;
 
+                // для брендов нам нужны сразу все страницы
+                const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
                 this.$progress.start();
-                await this[FETCH_ITEMS]({ type: toType, page, orderField, showMore });
+                await this[FETCH_ITEMS]({ type: toType, page: fetchPage, orderField, showMore });
                 this.$progress.finish();
 
                 if (!showMore && this[SCROLL] && (toType !== fromType || page !== fromPage))
@@ -406,9 +408,11 @@ export default {
                 }
             });
         else {
+            // для брендов нам нужны сразу все страницы
+            const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
             $progress.start();
             $store
-                .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, { type: toType, page, orderField })
+                .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, { type: toType, page: fetchPage, orderField })
                 .then(() => {
                     $store.dispatch(`${PRODUCT_GROUPS_MODULE}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
