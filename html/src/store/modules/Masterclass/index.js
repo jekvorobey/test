@@ -9,16 +9,18 @@ export const MASTERCLASS_CODE = 'masterClassCode';
 export const FEATURED_MASTERCLASSES = 'featuredMasterClasses';
 export const INSTAGRAM_ITEMS = 'instagramItems';
 
-export default {
-    name: NAME,
-    namespaced: true,
-    state: {
-        [MASTERCLASS_CODE]: '',
-        [MASTERCLASS]: {},
-        [FEATURED_MASTERCLASSES]: { items: [], range: 0 },
-        [INSTAGRAM_ITEMS]: [],
-    },
-    actions,
-    mutations,
-    getters,
-};
+export default function createModule() {
+    return {
+        name: NAME,
+        namespaced: true,
+        state: {
+            [MASTERCLASS_CODE]: '',
+            [MASTERCLASS]: {},
+            [FEATURED_MASTERCLASSES]: { items: [], range: 0 },
+            [INSTAGRAM_ITEMS]: [],
+        },
+        actions,
+        mutations,
+        getters,
+    };
+}

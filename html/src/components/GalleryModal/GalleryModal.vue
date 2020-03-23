@@ -1,5 +1,5 @@
 <template>
-    <general-modal type="wide" class="gallery-modal" @close="onClose">
+    <general-modal v-if="isOpen" type="wide" class="gallery-modal" @close="onClose">
         <template v-slot:content>
             <div class="gallery-modal__gallery">
                 <v-slider name="modal-gallery-slider" class="gallery-modal__gallery-slider" :options="galleryOptions">
@@ -73,7 +73,8 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: state => state[MODALS][NAME] && state[MODALS][NAME].state,
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         ...mapState(PRODUCT_MODULE, [PRODUCT]),

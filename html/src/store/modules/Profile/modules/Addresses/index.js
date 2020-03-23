@@ -7,16 +7,18 @@ export const LOAD = 'load';
 
 export const ADDRESSES = 'addresses';
 
-export default {
-    name: NAME,
-    namespaced: true,
+export default function createModule() {
+    return {
+        name: NAME,
+        namespaced: true,
 
-    state: {
-        [LOAD]: false,
-        [ADDRESSES]: [],
-    },
+        state: {
+            [LOAD]: false,
+            [ADDRESSES]: [],
+        },
 
-    actions,
-    mutations,
-    getters,
-};
+        actions,
+        mutations,
+        getters,
+    };
+}

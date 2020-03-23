@@ -9,23 +9,25 @@ export const LOAD = 'load';
 
 export const CUSTOMER = 'customer';
 
-export default {
-    name: NAME,
-    namespaced: true,
+export default function createModule() {
+    return {
+        name: NAME,
+        namespaced: true,
 
-    state: {
-        [LOAD]: false,
+        state: {
+            [LOAD]: false,
 
-        [CUSTOMER]: {
-            brands: [],
-            categories: [],
+            [CUSTOMER]: {
+                brands: [],
+                categories: [],
+            },
+
+            [AVAILABLE_BRANDS]: [],
+            [AVAILABLE_CATEGORIES]: [],
         },
 
-        [AVAILABLE_BRANDS]: [],
-        [AVAILABLE_CATEGORIES]: [],
-    },
-
-    actions,
-    mutations,
-    getters,
-};
+        actions,
+        mutations,
+        getters,
+    };
+}

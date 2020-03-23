@@ -9,16 +9,18 @@ export const TYPE = 'type';
 export const ITEMS = 'items';
 export const RANGE = 'range';
 
-export default {
-    name: NAME,
-    namespaced: true,
-    state: {
-        [ITEMS]: [],
-        [LOAD_PATH]: '',
-        [TYPE]: null,
-        [RANGE]: 0,
-    },
-    actions,
-    mutations,
-    getters,
-};
+export default function createModule() {
+    return {
+        name: NAME,
+        namespaced: true,
+        state: {
+            [ITEMS]: [],
+            [LOAD_PATH]: '',
+            [TYPE]: null,
+            [RANGE]: 0,
+        },
+        actions,
+        mutations,
+        getters,
+    };
+}
