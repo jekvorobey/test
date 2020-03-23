@@ -339,6 +339,10 @@ export function getProduct(code, referrerCode) {
     return $http.get('/v1/catalog/product-detail', { params: { code, referrerCode } });
 }
 
+export function getProductPickupPoints(code) {
+    return $http.get('/v1/catalog/product-detail/pickup-points', { params: { code } });
+}
+
 export function getProductOptions(groupId) {
     return $http.get('/v1/catalog/variants', { params: { groupId } });
 }

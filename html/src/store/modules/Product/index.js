@@ -13,6 +13,11 @@ export const FEATURED_PRODUCTS = 'featuredProducts';
 export const BANNERS = 'banners';
 export const MASTERCLASSES = 'masterClasses';
 
+export const PICKUP_POINTS = 'pickupPoints';
+export const SELECTED_PICKUP_POINT = 'selectedPickupPoint';
+export const SELECTED_INDEX = 'selectedIndex';
+export const SELECTED_DELIVERY_METHOD_ID = 'selectedDeliveryMethodId';
+
 export const NAME = 'product';
 
 export default function createModule() {
@@ -30,6 +35,11 @@ export default function createModule() {
             [INSTAGRAM_ITEMS]: [],
             [BANNERS]: [],
             [MASTERCLASSES]: [],
+
+            [PICKUP_POINTS]: [],
+            [SELECTED_INDEX]: -1,
+            [SELECTED_PICKUP_POINT]: null,
+            [SELECTED_DELIVERY_METHOD_ID]: null,
         },
         actions,
         mutations,

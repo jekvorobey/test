@@ -75,7 +75,16 @@ export default {
         if (load) next();
         else {
             $progress.start();
-            $store.dispatch(`${LANDING_MODULE}/${FETCH_LANDING_DATA}`).then(() => next(vm => $progress.finish()));
+            $store
+                .dispatch(`${LANDING_MODULE}/${FETCH_LANDING_DATA}`)
+                .then(() => {
+                    $progress.finish();
+                    next();
+                })
+                .catch(() => {
+                    $progress.fail();
+                    next();
+                });
         }
     },
 };
