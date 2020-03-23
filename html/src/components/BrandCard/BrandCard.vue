@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import VPicture from '../controls/VPicture/VPicture.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 import './BrandCard.css';
 
 export default {

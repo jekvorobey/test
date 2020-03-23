@@ -1,6 +1,6 @@
-import { $logger } from '../../../services/ServiceLocator';
-import { responseStatus } from '../../../assets/scripts/enums';
-import { storeErrorHandler } from '../../../util/store';
+import { $logger } from '@services';
+import { responseStatus } from '@enums';
+import { storeErrorHandler } from '@util/store';
 
 import {
     login,
@@ -13,7 +13,7 @@ import {
     loginByPassword,
     loginBySocial,
     resetPassword,
-} from '../../../api';
+} from '@api';
 import { SET_HAS_SESSION } from './mutations';
 
 export const LOGIN_BY_SOCIAL = 'LOGIN_BY_SOCIAL';
@@ -54,40 +54,41 @@ export default {
         }
     },
 
-    async [LOGIN_BY_PASSWORD]({ commit }, payload) {
+    async [LOGIN_BY_PASSWORD]({ dispatch }, payload) {
         try {
             await loginByPassword(payload);
-            commit(SET_HAS_SESSION, true);
+            dispatch(CHECK_SESSION, true);
         } catch (error) {
             storeErrorHandler(LOGIN_BY_PASSWORD, true)(error);
         }
     },
 
-    async [LOGIN_BY_SOCIAL]({ state, commit }, { driver, query }) {
+    async [LOGIN_BY_SOCIAL]({ dispatch }, { driver, query }) {
         try {
             const { url } = await loginBySocial(driver, query);
-            commit(SET_HAS_SESSION, true);
+            dispatch(CHECK_SESSION, true);
             return url;
         } catch (error) {
             storeErrorHandler(LOGIN_BY_SOCIAL, true)(error);
         }
     },
 
-    async [LOGOUT]({ commit }) {
+    async [LOGOUT]({ dispatch, commit }) {
         try {
             await logout();
-            commit(SET_HAS_SESSION, false);
+            dispatch(CHECK_SESSION, true);
         } catch (error) {
             commit(SET_HAS_SESSION, false);
             storeErrorHandler(LOGOUT)(error);
         }
     },
 
-    async [REGISTER_BY_PASSWORD]({ commit }, password) {
+    async [REGISTER_BY_PASSWORD]({ dispatch, commit }, password) {
         try {
             await registerByPassword(password);
-            commit(SET_HAS_SESSION, true);
+            dispatch(CHECK_SESSION, true);
         } catch (error) {
+            commit(SET_HAS_SESSION, false);
             storeErrorHandler(REGISTER_BY_PASSWORD, true)(error);
         }
     },

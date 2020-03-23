@@ -108,46 +108,46 @@
 </template>
 
 <script>
-import VButton from '../../components/controls/VButton/VButton.vue';
-import VPagination from '../../components/controls/VPagination/VPagination.vue';
-import VExpander from '../../components/VExpander/VExpander.vue';
-import VSlider from '../../components/controls/VSlider/VSlider.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VPagination from '@controls/VPagination/VPagination.vue';
+import VExpander from '@controls/VExpander/VExpander.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
 
-import BannerCard from '../../components/BannerCard/BannerCard.vue';
-import MasterClassCard from '../../components/MasterClassCard/MasterClassCard.vue';
-import MasterClassBannerCard from '../../components/MasterClassBannerCard/MasterClassBannerCard.vue';
+import BannerCard from '@components/BannerCard/BannerCard.vue';
+import MasterClassCard from '@components/MasterClassCard/MasterClassCard.vue';
+import MasterClassBannerCard from '@components/MasterClassBannerCard/MasterClassBannerCard.vue';
 
-import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
-import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
-import GroupList from '../../components/GroupList/GroupList.vue';
-import SeparatorSection from '../../components/blocks/SeparatorSection/SeparatorSection.vue';
-import CategoriesSection from '../../components/blocks/CategoriesSection/CategoriesSection.vue';
+import GroupList from '@components/GroupList/GroupList.vue';
+import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
+import CategoriesSection from '@components/blocks/CategoriesSection/CategoriesSection.vue';
 
-import { $store, $progress, $logger } from '../../services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { CATEGORIES } from '../../store';
+import { CATEGORIES, SCROLL } from '@store';
 import productGroupsModule, {
     NAME as PRODUCT_GROUPS_MODULE,
     ITEMS,
     LOAD_PATH,
     TYPE,
-} from '../../store/modules/ProductGroups';
-import { BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT } from '../../store/modules/ProductGroups/getters';
-import { FETCH_ITEMS, SET_LOAD_PATH, SET_TYPE } from '../../store/modules/ProductGroups/actions';
+} from '@store/modules/ProductGroups';
+import { BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT } from '@store/modules/ProductGroups/getters';
+import { FETCH_ITEMS, SET_LOAD_PATH, SET_TYPE } from '@store/modules/ProductGroups/actions';
 
-import { productGroupTypes } from '../../assets/scripts/enums';
-import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants';
-import { registerModuleIfNotExists } from '../../util/store';
-import { generateCategoryUrl } from '../../util/catalog';
+import { productGroupTypes } from '@enums/product';
+import { MIN_SCROLL_VALUE } from '@constants';
+import { registerModuleIfNotExists } from '@util/store';
+import { generateCategoryUrl } from '@util/catalog';
 import _debounce from 'lodash/debounce';
 import './ProductGroups.css';
 
-import profileMasterClassImg1 from '../../assets/images/mock/profileMasterClass1.png';
-import profileMasterClassImg2 from '../../assets/images/mock/profileMasterClass2.png';
-import profileMasterClassImg3 from '../../assets/images/mock/profileMasterClass3.png';
-import profileMasterClassImg4 from '../../assets/images/mock/profileMasterClass4.png';
+import profileMasterClassImg1 from '@images/mock/profileMasterClass1.png';
+import profileMasterClassImg2 from '@images/mock/profileMasterClass2.png';
+import profileMasterClassImg3 from '@images/mock/profileMasterClass3.png';
+import profileMasterClassImg4 from '@images/mock/profileMasterClass4.png';
 
 const sliderOptions = {
     slidesPerView: 1,
@@ -298,7 +298,7 @@ export default {
     },
 
     computed: {
-        ...mapState([CATEGORIES]),
+        ...mapState([CATEGORIES, SCROLL]),
         ...mapState(PRODUCT_GROUPS_MODULE, [ITEMS, TYPE]),
         ...mapGetters(PRODUCT_GROUPS_MODULE, [BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT]),
 
@@ -362,11 +362,13 @@ export default {
                     query: { page: fromPage = 1 },
                 } = from;
 
+                // для брендов нам нужны сразу все страницы
+                const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
                 this.$progress.start();
-                await this[FETCH_ITEMS]({ type: toType, page, orderField, showMore });
+                await this[FETCH_ITEMS]({ type: toType, page: fetchPage, orderField, showMore });
                 this.$progress.finish();
 
-                if (!showMore && page !== fromPage)
+                if (!showMore && this[SCROLL] && (toType !== fromType || page !== fromPage))
                     window.scrollTo({
                         top: MIN_SCROLL_VALUE + 1,
                         behavior: 'smooth',
@@ -397,15 +399,29 @@ export default {
         const { loadPath, type } = $store.state[PRODUCT_GROUPS_MODULE];
 
         // если все загружено, пропускаем
-        if (loadPath === fullPath && type === toType) next();
+        if (loadPath === fullPath && type === toType)
+            next(vm => {
+                if (!vm.$isServer && vm[SCROLL]) {
+                    window.scrollTo({
+                        top: 0,
+                    });
+                }
+            });
         else {
+            // для брендов нам нужны сразу все страницы
+            const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
             $progress.start();
             $store
-                .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, { type: toType, page, orderField })
+                .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, { type: toType, page: fetchPage, orderField })
                 .then(() => {
                     $store.dispatch(`${PRODUCT_GROUPS_MODULE}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
                         $progress.finish();
+                        if (!vm.$isServer && vm[SCROLL]) {
+                            window.scrollTo({
+                                top: 0,
+                            });
+                        }
                     });
                 })
                 .catch(error => {

@@ -45,8 +45,8 @@
     </section>
 </template>
 <script>
-import VAccordion from '../../components/controls/VAccordion/VAccordion.vue';
-import VButton from '../../components/controls/VButton/VButton.vue';
+import VAccordion from '@controls/VAccordion/VAccordion.vue';
+import VButton from '@controls/VButton/VButton.vue';
 
 export default {
     name: 'ui-kit-accordions',

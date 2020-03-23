@@ -77,7 +77,7 @@
     </section>
 </template>
 <script>
-import VSelect from '../../components/controls/VSelect/VSelect.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
 
 export default {
     name: 'ui-kit-selects',

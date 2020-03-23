@@ -1,14 +1,11 @@
 <template>
-    <general-popup-panel popover-class="tooltip--white help-panel" :open="isHelpOpen" @hide="onClose" show-bottom>
+    <general-popup-panel popover-class="tooltip--white help-panel" trigger="hover" show-bottom>
         <slot />
         <template v-slot:header>
             <div class="help-panel__top">
                 <div class="text-grey">Каждый день с 9:00 до 21:00</div>
                 <div class="text-bold help-panel__phone">8 800 730-12-34</div>
             </div>
-            <button class="general-popup-panel__header-close" @click="onClose">
-                <v-svg name="cross" width="24" height="24" />
-            </button>
         </template>
         <template v-slot:body>
             <div class="text-grey help-panel__info">Всегда отвечаем на ваши сообщения</div>
@@ -29,20 +26,17 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VLink from '../controls/VLink/VLink.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
-import GeneralPopupPanel from '../GeneralPopupPanel/GeneralPopupPanel.vue';
+import GeneralPopupPanel from '@components/GeneralPopupPanel/GeneralPopupPanel.vue';
 
 import { mapActions, mapState, mapGetters } from 'vuex';
-import { IS_HELP_OPEN } from '../../store';
-import { SET_HELP_OPEN } from '../../store/actions';
-import { HELP_MENU } from '../../store/getters';
+import { HELP_MENU } from '@store/getters';
 
-import '../../assets/images/sprites/socials/telegram.svg';
-import '../../assets/images/sprites/socials/whatsup.svg';
-import '../../assets/images/sprites/socials/viber.svg';
-import '../../assets/images/sprites/cross.svg';
+import '@images/sprites/socials/telegram.svg';
+import '@images/sprites/socials/whatsup.svg';
+import '@images/sprites/socials/viber.svg';
 import './HelpPanel.css';
 
 export default {
@@ -56,16 +50,7 @@ export default {
     },
 
     computed: {
-        ...mapState([IS_HELP_OPEN]),
         ...mapGetters([HELP_MENU]),
-    },
-
-    methods: {
-        ...mapActions([SET_HELP_OPEN]),
-
-        onClose() {
-            this[SET_HELP_OPEN](false);
-        },
     },
 };
 </script>

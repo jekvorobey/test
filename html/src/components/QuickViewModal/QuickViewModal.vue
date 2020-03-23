@@ -5,7 +5,7 @@
                 <ul class="quick-view-modal__gallery">
                     <li class="quick-view-modal__gallery-item" v-for="image in images" :key="image.id">
                         <v-picture v-if="image && image.id" :image="image" alt="">
-                            <template v-slot:source="{ image, lazy }">
+                            <template v-slot:source="{ image }">
                                 <source
                                     :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
                                     type="image/webp"
@@ -40,6 +40,7 @@
                         :price="productPreview.price"
                         :old-price="productPreview.oldPrice"
                         :bonus="productPreview.bonus"
+                        :can-buy="productPreview.stock.qty > 0"
                         @cart="onCartStateChange"
                         @wishlist="onWishlistStateChange"
                     />
@@ -52,30 +53,29 @@
 </template>
 
 <script>
-import VButton from '../controls/VButton/VButton.vue';
-import VPicture from '../controls/VPicture/VPicture.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import GeneralModal from '../GeneralModal/GeneralModal.vue';
-import ProductCartPanel from '../ProductCartPanel/ProductCartPanel.vue';
-import ProductDetailPanel from '../ProductDetailPanel/ProductDetailPanel.vue';
-import ProductDeliveryPanel from '../ProductDeliveryPanel/ProductDeliveryPanel.vue';
-import VSpinner from '../controls/VSpinner/VSpinner.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
+import ProductCartPanel from '@components/product/ProductCartPanel/ProductCartPanel.vue';
+import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDetailPanel.vue';
+import ProductDeliveryPanel from '@components/product/ProductDeliveryPanel/ProductDeliveryPanel.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
-import { NAME as ADD_TO_CART_MODAL_NAME } from '../AddToCartModal/AddToCartModal.vue';
+import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 
 import { mapState, mapActions } from 'vuex';
+import { NAME as PREVIEW_MODULE, PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS } from '@store/modules/Preview';
+import { FETCH_PRODUCT_PREVIEW } from '@store/modules/Preview/actions';
 
-import { NAME as PREVIEW_MODULE, PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS } from '../../store/modules/Preview';
-import { FETCH_PRODUCT_PREVIEW } from '../../store/modules/Preview/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
-import { NAME as CART_MODULE } from '../../store/modules/Cart';
-import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
-
-import { requestStatus } from '../../assets/scripts/enums';
-import { generatePictureSourcePath } from '../../util/images';
+import { requestStatus } from '@enums';
+import { generatePictureSourcePath } from '@util/file';
 import './QuickViewModal.css';
 
 export const NAME = 'quick-view-modal';
@@ -128,7 +128,7 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: ADD_TO_CART_MODAL_NAME,
                 open: true,
-                state: { offerId: this.productPreview.id, type: 'product' },
+                state: { offerId: this.productPreview.id, storeId: this.productPreview.storeId, type: 'product' },
             });
         },
 

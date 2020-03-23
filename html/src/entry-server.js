@@ -1,13 +1,13 @@
-import { injectionType } from './assets/scripts/enums';
 import { Container } from 'inversify';
-import { injectClass, injectableClass } from './util/container';
+import { injectClass, injectableClass } from '@util/container';
+import { injectionType } from '@enums';
 
-import ServiceLocator from './services/ServiceLocator';
-import ApplicationContext from './services/ApplicationContext';
-import ServerLogger from './services/LogService/ServerLogger';
-import ServerCookie from './services/CookieService/ServerCookie';
-import HttpService from './services/HttpService/MockServiceAdapter';
-import MockProgressService from './services/ProgressService/MockService';
+import ServiceLocator from '@services';
+import ApplicationContext from '@services/ApplicationContext';
+import ServerLogger from '@services/LogService/ServerLogger';
+import ServerCookie from '@services/CookieService/ServerCookie';
+import HttpService from '@services/HttpService/MockServiceAdapter';
+import MockProgressService from '@services/ProgressService/MockService';
 
 import createApp from './app/app';
 

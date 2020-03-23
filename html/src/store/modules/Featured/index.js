@@ -6,13 +6,15 @@ export const FEATURED_PRODUCTS = 'featuredProducts';
 
 export const NAME = 'featured';
 
-export default {
-    name: NAME,
-    namespaced: true,
-    state: {
-        [FEATURED_PRODUCTS]: [],
-    },
-    actions,
-    mutations,
-    getters,
-};
+export default function createModule() {
+    return {
+        name: NAME,
+        namespaced: true,
+        state: {
+            [FEATURED_PRODUCTS]: [],
+        },
+        actions,
+        mutations,
+        getters,
+    };
+}

@@ -48,10 +48,10 @@
     </router-link>
 </template>
 <script>
-import VButton from '../controls/VButton/VButton.vue';
-import VPicture from '../controls/VPicture/VPicture.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import Price from '../Price/Price.vue';
+import Price from '@components/Price/Price.vue';
 
 import './MasterClassBannerCard.css';
 

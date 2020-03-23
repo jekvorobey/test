@@ -2,10 +2,9 @@
     <general-popup-panel
         popover-class="tooltip--white cart-header-panel"
         header="Мой заказ"
-        :open="isCartOpen"
-        @close="onClose"
-        @hide="onClose"
+        trigger="hover"
         show-bottom
+        :disabled="isTabletLg || !hasSession"
     >
         <slot />
         <template v-slot:body>
@@ -40,22 +39,22 @@
 </template>
 
 <script>
-import VLink from '../controls/VLink/VLink.vue';
-import VButton from '../controls/VButton/VButton.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
 
-import Price from '../Price/Price.vue';
+import Price from '@components/Price/Price.vue';
 
-import GeneralPopupPanel from '../GeneralPopupPanel/GeneralPopupPanel.vue';
-import CartPanelProductCard from '../CartPanelProductCard/CartPanelProductCard.vue';
+import GeneralPopupPanel from '@components/GeneralPopupPanel/GeneralPopupPanel.vue';
+import CartPanelProductCard from '@components/CartPanelProductCard/CartPanelProductCard.vue';
 
 import { mapActions, mapState, mapGetters } from 'vuex';
-import { IS_CART_OPEN } from '../../store';
-import { SET_CITY_CONFIRMATION_OPEN, SET_CART_OPEN } from '../../store/actions';
 
-import { NAME as CART_MODULE, CART_DATA } from '../../store/modules/Cart';
-import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM, CART_TYPES } from '../../store/modules/Cart/getters';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
-import '../../assets/images/sprites/cross.svg';
+import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
+import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM, CART_TYPES } from '@store/modules/Cart/getters';
+
+import '@images/sprites/cross.svg';
 import './CartHeaderPanel.css';
 
 export default {
@@ -72,20 +71,17 @@ export default {
     },
 
     computed: {
-        ...mapState([IS_CART_OPEN]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, PRODUCT_ITEMS_SUM]),
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
     },
 
     methods: {
-        ...mapActions([SET_CART_OPEN]),
-
         onToCart() {
             this.$router.push({ path: '/cart' });
-            this.onClose();
-        },
-
-        onClose() {
-            this[SET_CART_OPEN](false);
         },
     },
 };

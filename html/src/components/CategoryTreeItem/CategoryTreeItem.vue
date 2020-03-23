@@ -21,7 +21,7 @@
                     :key="item.id || index"
                     :item="item"
                     :depth="depth + 1"
-                    :disabled="!isRoot"
+                    :disabled="!isInteractive"
                 />
             </ul>
         </transition>
@@ -29,16 +29,16 @@
 </template>
 
 <script>
-import { NAME as CATALOG_MODULE, ACTIVE_CATEGORIES } from '../../store/modules/Catalog';
-import { ROOT_CATEGORY } from '../../store/modules/Catalog/getters';
 import { mapState, mapGetters } from 'vuex';
-import { generateCategoryUrl } from '../../util/catalog';
+import { NAME as CATALOG_MODULE } from '@store/modules/Catalog';
+import { ROOT_CATEGORY, ACTIVE_CATEGORIES } from '@store/modules/Catalog/getters';
 
+import { generateCategoryUrl } from '@util/catalog';
 import './CategoryTreeItem.css';
 
 export default {
     name: 'category-tree-item',
-    components: {},
+
     props: {
         item: {
             type: Object,
@@ -67,11 +67,11 @@ export default {
             type: state => state.params.type,
             entityCode: state => state.params.entityCode,
         }),
-        ...mapState(CATALOG_MODULE, [ACTIVE_CATEGORIES]),
-        ...mapGetters(CATALOG_MODULE, [ROOT_CATEGORY]),
+        ...mapGetters(CATALOG_MODULE, [ROOT_CATEGORY, ACTIVE_CATEGORIES]),
 
         isActive() {
-            return this[ACTIVE_CATEGORIES].some(c => c.code === this.item.code);
+            const activeCategories = this[ACTIVE_CATEGORIES] || [];
+            return activeCategories.some(c => c.code === this.item.code);
         },
 
         isRoot() {

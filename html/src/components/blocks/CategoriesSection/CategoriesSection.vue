@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import CategoryCard from '../../../components/CategoryCard/CategoryCard.vue';
+import CategoryCard from '@components/CategoryCard/CategoryCard.vue';
 import './CategoriesSection.css';
 
 export default {

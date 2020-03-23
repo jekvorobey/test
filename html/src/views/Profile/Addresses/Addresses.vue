@@ -14,57 +14,78 @@
                         class="addresses-view__panel-item"
                         v-for="address in addresses"
                         :key="`${address.region_guid}-${address.city_guid || address.settlment_guid}-${address.house}`"
-                        :selected="!!address.default"
-                        @cardClick="onSetSelectedAddress(address)"
-                        @btnClick="onChangeAddress(address)"
+                        :selected="address.default"
+                        @cardClick="onSetDefaultAddress(address)"
                     >
                         {{
                             `${address.city || address.settlement}, ${address.area ? `${address.area}, ` : ''}${
                                 address.street ? `${address.street}, ` : ''
                             }${address.house} ${address.block || ''}, ${address.post_index}`
                         }}
+                        <template v-slot:controls>
+                            <v-link
+                                class="checkout-option-card__right-link"
+                                tag="button"
+                                @click.stop="onChangeAddress(address)"
+                            >
+                                Изменить
+                            </v-link>
+                            <v-link
+                                class="checkout-option-card__right-link"
+                                tag="button"
+                                @click.stop="onDeleteAddress(address)"
+                            >
+                                Удалить
+                            </v-link>
+                        </template>
                     </checkout-option-card>
                 </ul>
             </div>
         </info-panel>
 
         <transition name="fade">
-            <address-edit-modal v-show="isAddressEditOpen" v-if="$isServer || isAddressEditOpen" @save="onSave" />
+            <address-edit-modal
+                v-show="isAddressEditOpen"
+                v-if="$isServer || isAddressEditOpen"
+                @save="onSaveAddress"
+            />
         </transition>
     </section>
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 
-import CheckoutOptionCard from '../../../components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
+import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 import AddressEditModal, {
     NAME as ADDRESS_EDIT_MODAL_NAME,
-} from '../../../components/profile/AddressEditModal/AddressEditModal.vue';
+} from '@components/profile/AddressEditModal/AddressEditModal.vue';
 
 import { mapActions, mapState } from 'vuex';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 
-import { NAME as ADDRESSES_MODULE, ADDRESSES } from '../../../store/modules/Profile/modules/Addresses';
+import { NAME as ADDRESSES_MODULE, ADDRESSES } from '@store/modules/Profile/modules/Addresses';
 import {
     FETCH_ADDRESSES_DATA,
     SET_LOAD,
     UPDATE_ADDRESS,
-} from '../../../store/modules/Profile/modules/Addresses/actions';
+    DELETE_ADDRESS,
+    SET_DEFAULT_ADDRESS,
+} from '@store/modules/Profile/modules/Addresses/actions';
 
-import { $store, $progress, $logger } from '../../../services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 
-import { getRandomIntInclusive } from '../../../util/helpers';
-import '../../../assets/images/sprites/plus-small.svg';
+import { getRandomIntInclusive } from '@util';
+import '@images/sprites/plus-small.svg';
 import './Addresses.css';
 
 const ADDRESSES_MODULE_PATH = `${PROFILE_MODULE}/${ADDRESSES_MODULE}`;
@@ -100,18 +121,20 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(ADDRESSES_MODULE_PATH, [FETCH_ADDRESSES_DATA, SET_LOAD, UPDATE_ADDRESS]),
+        ...mapActions(ADDRESSES_MODULE_PATH, [
+            FETCH_ADDRESSES_DATA,
+            SET_LOAD,
+            UPDATE_ADDRESS,
+            SET_DEFAULT_ADDRESS,
+            DELETE_ADDRESS,
+        ]),
 
         isEqualAddress(address1, address2) {
             return _isEqual(address1, address2);
         },
 
-        onSetSelectedAddress(address) {
-            this.selectedAddress = address;
-        },
-
-        onSave(address) {
-            this[UPDATE_ADDRESS](address);
+        onSetDefaultAddress(address) {
+            if (!address.default) this[SET_DEFAULT_ADDRESS](address.id);
         },
 
         onAddAddress() {
@@ -120,6 +143,14 @@ export default {
                 open: true,
                 state: { address: {} },
             });
+        },
+
+        onSaveAddress(address) {
+            this[UPDATE_ADDRESS](address);
+        },
+
+        onDeleteAddress(address) {
+            this[DELETE_ADDRESS](address);
         },
 
         onChangeAddress(address) {

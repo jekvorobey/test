@@ -22,3 +22,33 @@
 .text-uppercase {
     text-transform: uppercase;
 }
+
+.status {
+    &-color {
+        &-success {
+            color: var(--cl-status-success);
+        }
+
+        &-error {
+            color: var(--cl-status-error);
+        }
+
+        &-warning {
+            color: var(--cl-status-warning);
+        }
+    }
+
+    &-bg {
+        &-success {
+            color: var(--cl-status-success);
+        }
+
+        &-error {
+            color: var(--cl-status-error);
+        }
+
+        &-warning {
+            color: var(--cl-status-warning);
+        }
+    }
+}

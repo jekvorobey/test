@@ -1,4 +1,4 @@
-import notFound from '../../router/middleware/notFound';
+import notFound from '@router/middleware/notFound';
 
 /**
  * @Module

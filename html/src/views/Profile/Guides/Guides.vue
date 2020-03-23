@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import GuideCard from '../../../components/GuideCard/GuideCard.vue';
+import GuideCard from '@components/GuideCard/GuideCard.vue';
 
-import guideImg1 from '../../../assets/images/mock/guide1.png';
-import guideImg2 from '../../../assets/images/mock/guide2.png';
+import guideImg1 from '@images/mock/guide1.png';
+import guideImg2 from '@images/mock/guide2.png';
 import './Guides.css';
 
 export default {

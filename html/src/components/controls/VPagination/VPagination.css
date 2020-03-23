@@ -39,7 +39,7 @@
                 width: 24px;
                 height: 24px;
                 transform: rotate(90deg);
-                background-image: svg-load('../../../assets/images/sprites/arrow-small.svg', fill: var(--cl-global));
+                background-image: svg-load('arrow-small.svg', fill: var(--cl-global));
             }
         }
 
@@ -52,7 +52,7 @@
                 width: 24px;
                 height: 24px;
                 transform: rotate(270deg);
-                background-image: svg-load('../../../assets/images/sprites/arrow-small.svg', fill: var(--cl-global));
+                background-image: svg-load('arrow-small.svg', fill: var(--cl-global));
             }
         }
     }

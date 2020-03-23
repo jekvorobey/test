@@ -1,5 +1,5 @@
-import { suggestionTypes } from '../../assets/scripts/enums';
-import DadataHttpService from '../HttpService/DadataHttpService';
+import { suggestionTypes } from '@enums';
+import DadataHttpService from '@services/HttpService/DadataHttpService';
 
 /**
  * Service для Dadata

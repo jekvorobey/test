@@ -1,34 +1,34 @@
 <template>
     <router-link tag="div" class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }" :to="href">
         <div class="catalog-product-card__img">
-            <v-picture v-if="image && image.id" :image="image" alt="">
-                <template v-slot:source="{ image }">
-                    <source
-                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
-                        type="image/webp"
-                        media="(min-width: 480px)"
-                    />
-                    <source
-                        :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                        type="image/webp"
-                        media="(max-width: 479px)"
-                    />
-                </template>
-                <template v-slot:fallback="{ image, lazy, alt }">
-                    <img
-                        class="blur-up lazyload v-picture__img"
-                        :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
-                        :alt="alt"
-                    />
-                </template>
+            <v-picture v-if="image && image.id">
+                <source
+                    :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
+                    type="image/webp"
+                    media="(min-width: 480px)"
+                />
+                <source
+                    :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                    type="image/webp"
+                    media="(max-width: 479px)"
+                />
+                <img
+                    class="blur-up lazyload v-picture__img"
+                    :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
+                    alt=""
+                />
             </v-picture>
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-card__controls">
-                <v-button class="btn--outline catalog-product-card__controls-btn" @click.prevent="onBuyButtonClick">
+                <v-button
+                    v-if="showBuyBtn"
+                    class="btn--outline catalog-product-card__controls-btn"
+                    @click.prevent="onBuyButtonClick"
+                >
                     Купить
                 </v-button>
                 <v-link tag="button" class="catalog-product-card__controls-link" @click.prevent="onPreview">
-                    Быстрый просмотр
+                    Быстрый&nbsp;просмотр
                 </v-link>
             </div>
         </div>
@@ -52,7 +52,7 @@
             </v-rating>
         </div>
         <div class="catalog-product-card__tags">
-            <tag class="catalog-product-card__tags-item" v-for="(tag, index) in tags" :key="index" :text="tag" />
+            <tag class="catalog-product-card__tags-item" v-for="tag in tags" :key="tag.id" :text="tag.name" />
         </div>
         <v-link v-if="showWishlistBtn" tag="button" class="catalog-product-card__wishlist-btn" @click.prevent>
             <v-svg name="wishlist-middle" width="18" height="20" />
@@ -61,22 +61,22 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VLink from '../controls/VLink/VLink.vue';
-import VButton from '../controls/VButton/VButton.vue';
-import VRating from '../controls/VRating/VRating.vue';
-import VPicture from '../controls/VPicture/VPicture.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VRating from '@controls/VRating/VRating.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import Tag from '../Tag/Tag.vue';
-import Price from '../Price/Price.vue';
+import Tag from '@components/Tag/Tag.vue';
+import Price from '@components/Price/Price.vue';
 
-import '../../assets/images/sprites/star-empty-small.svg';
-import '../../assets/images/sprites/star-small.svg';
-import '../../assets/images/sprites/wishlist-middle.svg';
-import '../../assets/images/sprites/logo.svg';
+import '@images/sprites/star-empty-small.svg';
+import '@images/sprites/star-small.svg';
+import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/logo.svg';
 import './CatalogProductCard.css';
 
-import { generatePictureSourcePath } from '../../util/images';
+import { generatePictureSourcePath } from '@util/file';
 
 export default {
     name: 'catalog-product-card',
@@ -138,6 +138,11 @@ export default {
         },
 
         isSmall: {
+            type: Boolean,
+            default: false,
+        },
+
+        showBuyBtn: {
             type: Boolean,
             default: false,
         },

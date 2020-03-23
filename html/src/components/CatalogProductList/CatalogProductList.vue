@@ -12,13 +12,12 @@
     >
         <component
             class="catalog-product-list__item"
-            
             v-for="item in items"
             :key="item.id"
             :class="getClass(item.type)"
             :is="getComponent(item.type)"
             :item="item"
-            @addItem="onAddToCart($event)"
+            @addItem="onAddToCart(item)"
             @preview="onPreview(item.code)"
         />
     </transition-group>
@@ -30,7 +29,7 @@
             :class="getClass(item.type)"
             :is="getComponent(item.type)"
             :item="item"
-            @addItem="onAddToCart($event)"
+            @addItem="onAddToCart(item)"
             @preview="onPreview(item.code)"
         />
     </ul>
@@ -41,15 +40,15 @@ import CatalogBannerListCard from './CatalogBannerListCard/CatalogBannerListCard
 import CatalogProductListCard from './CatalogProductListCard/CatalogProductListCard.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as CATALOG_MODULE, ITEMS, CATEGORIES } from '../../store/modules/Catalog';
+import { NAME as CATALOG_MODULE, ITEMS, CATEGORIES } from '@store/modules/Catalog';
 
-import { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
-import { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
+import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
+import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { catalogItemTypes } from '../../assets/scripts/enums';
+import { catalogItemTypes } from '@enums/product';
 import './CatalogProductList.css';
 
 const itemAnimationDelayDelta = 100;
@@ -139,7 +138,7 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: ADD_TO_CART_MODAL_NAME,
                 open: true,
-                state: { offerId: item.id, type: item.type },
+                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
     },

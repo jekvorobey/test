@@ -2,7 +2,7 @@
  * @Module
  */
 
-import hasSession from '../../router/middleware/hasSession';
+import hasSession from '@router/middleware/hasSession';
 
 import Cabinet from './Cabinet/Cabinet';
 import Addresses from './Addresses/Addresses';

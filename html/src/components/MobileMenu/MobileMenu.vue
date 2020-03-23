@@ -24,11 +24,11 @@
                     <ul class="mobile-menu__menu">
                         <li
                             class="container mobile-menu__menu-item mobile-menu__menu-item--separator"
-                            v-for="(link, index) in links"
-                            :key="link.name"
+                            v-for="(item, index) in headerMenu.items"
+                            :key="item.name"
                         >
-                            <v-link class="mobile-menu__menu-link" :to="link.to">
-                                {{ link.name }}
+                            <v-link class="mobile-menu__menu-link" :to="item.url">
+                                {{ item.name }}
                             </v-link>
                             <v-link
                                 v-if="index === 0"
@@ -124,36 +124,37 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VLink from '../controls/VLink/VLink.vue';
-import VSticky from '../controls/VSticky/VSticky.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
 import VClamp from 'vue-clamp';
 
-import GeneralModal from '../GeneralModal/GeneralModal.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
-import { NAME as REGISTER_MODAL_NAME } from '../RegistrationModal/RegistrationModal.vue';
-import { NAME as CITY_SELECTION_MODAL_NAME } from '../CitySelectionModal/CitySelectionModal.vue';
+import { NAME as REGISTER_MODAL_NAME } from '@components/RegistrationModal/RegistrationModal.vue';
+import { NAME as CITY_SELECTION_MODAL_NAME } from '@components/CitySelectionModal/CitySelectionModal.vue';
 
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { CATEGORIES } from '../../store';
-import { SET_MENU_OPEN } from '../../store/actions';
+import { CATEGORIES } from '@store';
+import { HEADER_MENU } from '@store/getters';
+import { SET_MENU_OPEN } from '@store/actions';
 
-import { NAME as GEO_MODULE, SELECTED_CITY } from '../../store/modules/Geolocation';
+import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
-import { NAME as MODAL_MODULE } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { productGroupTypes } from '../../assets/scripts/enums';
-import '../../assets/images/sprites/socials/viber-bw.svg';
-import '../../assets/images/sprites/socials/whatsup-bw.svg';
-import '../../assets/images/sprites/socials/telegram-bw.svg';
+import { productGroupTypes } from '@enums/product';
+import '@images/sprites/socials/viber-bw.svg';
+import '@images/sprites/socials/whatsup-bw.svg';
+import '@images/sprites/socials/telegram-bw.svg';
 
-import '../../assets/images/sprites/pin.svg';
-import '../../assets/images/sprites/account-middle.svg';
-import '../../assets/images/sprites/wishlist-middle.svg';
-import '../../assets/images/sprites/arrow-small.svg';
-import '../../assets/images/sprites/arrow-down.svg';
+import '@images/sprites/pin.svg';
+import '@images/sprites/account-middle.svg';
+import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/arrow-small.svg';
+import '@images/sprites/arrow-down.svg';
 import './MobileMenu.css';
 
 export default {
@@ -177,6 +178,7 @@ export default {
 
     computed: {
         ...mapState([CATEGORIES]),
+        ...mapGetters([HEADER_MENU]),
         ...mapState(GEO_MODULE, {
             city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].value) || 'Выберите город',
         }),

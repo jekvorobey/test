@@ -118,22 +118,19 @@
     </div>
 </template>
 <script>
-import VSvg from '../../controls/VSvg/VSvg.vue';
-import VLink from '../../controls/VLink/VLink.vue';
-import VInput from '../../controls/VInput/VInput.vue';
-import VButton from '../../controls/VButton/VButton.vue';
-import VCheck from '../../controls/VCheck/VCheck.vue';
-import VSpinner from '../../controls/VSpinner/VSpinner.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
-import CheckoutOptionCard from '../CheckoutOptionCard/CheckoutOptionCard.vue';
+import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
-import _cloneDeep from 'lodash/cloneDeep';
-import _isEqual from 'lodash/isEqual';
-import { orderBy as _orderBy } from 'lodash/collection';
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { LOCALE } from '../../../store';
+import { LOCALE } from '@store';
 
-import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '../../../store/modules/Checkout';
+import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '@store/modules/Checkout';
 import {
     SET_RECIPIENT,
     ADD_PROMOCODE,
@@ -141,7 +138,7 @@ import {
     SET_AGREEMENT,
     SET_SUBSCRIBE,
     SET_CONFIRMATION_TYPE,
-} from '../../../store/modules/Checkout/actions';
+} from '@store/modules/Checkout/actions';
 
 import {
     RECIPIENTS,
@@ -154,18 +151,22 @@ import {
     SUBSCRIBE,
     PROMO_CODE,
     PROMOCODE_STATUS,
-} from '../../../store/modules/Checkout/getters';
+} from '@store/modules/Checkout/getters';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { requestStatus } from '../../../assets/scripts/enums';
+import _cloneDeep from 'lodash/cloneDeep';
+import _isEqual from 'lodash/isEqual';
+import { orderBy as _orderBy } from 'lodash/collection';
 
-import '../../../assets/images/sprites/payment/bonus.svg';
-import '../../../assets/images/sprites/payment/visa.svg';
-import '../../../assets/images/sprites/payment/mastercard.svg';
-import '../../../assets/images/sprites/payment/mir.svg';
-import '../../../assets/images/sprites/plus.svg';
+import { requestStatus } from '@enums';
+
+import '@images/sprites/payment/bonus.svg';
+import '@images/sprites/payment/visa.svg';
+import '@images/sprites/payment/mastercard.svg';
+import '@images/sprites/payment/mir.svg';
+import '@images/sprites/plus.svg';
 import './CheckoutMasterClassPanel.css';
 
 export default {

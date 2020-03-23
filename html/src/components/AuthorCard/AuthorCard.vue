@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import VPicture from '../controls/VPicture/VPicture.vue';
-import VButton from '../controls/VButton/VButton.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
+import VButton from '@controls/VButton/VButton.vue';
 import './AuthorCard.css';
 
 export default {

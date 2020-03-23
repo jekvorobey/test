@@ -3,29 +3,21 @@
         <div class="container">
             <div class="nav-panel__main">
                 <group-list class="nav-panel__main-list" :items="categoriesCatalog" />
-
-                <catalog-banner-card
-                    class="nav-panel__main-banner"
-                    :banner-id="banner.id"
-                    :title="banner.title"
-                    :image="banner.image"
-                    :upper-text="banner.upperText"
-                    :btn-text="banner.btnText"
-                />
+                <catalog-banner-card class="nav-panel__main-banner" :item="banner" />
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import VLink from '../controls/VLink/VLink.vue';
-import VExpander from '../VExpander/VExpander.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VExpander from '@controls/VExpander/VExpander.vue';
 
-import GroupList from '../GroupList/GroupList.vue';
-import CatalogBannerCard from '../CatalogBannerCard/CatalogBannerCard.vue';
+import GroupList from '@components/GroupList/GroupList.vue';
+import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 
-import { BANNER, IS_MENU_OPEN } from '../../store';
-import { CATEGORIES_CATALOG } from '../../store/getters';
+import { BANNER, IS_MENU_OPEN } from '@store';
+import { CATEGORIES_CATALOG } from '@store/getters';
 import { mapState, mapGetters } from 'vuex';
 
 import './NavPanel.css';

@@ -30,6 +30,7 @@
                                 :old-price="item.oldPrice"
                                 :tags="item.tags"
                                 :rating="item.rating"
+                                :show-buy-btn="item.stock.qty > 0"
                             />
                         </li>
                     </transition-group>
@@ -40,23 +41,17 @@
 </template>
 
 <script>
-import VLink from '../controls/VLink/VLink.vue';
-import CatalogProductCard from '../CatalogProductCard/CatalogProductCard.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+
+import { mapState, mapGetters, mapActions } from 'vuex';
+import { NAME as SEARCH_MODULE, SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS } from '@store/modules/Search';
+import { GET_POPULAR_PRODUCTS } from '@store/modules/Search/actions';
+
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
 import './SearchPanel.css';
-import { mapState, mapGetters, mapActions } from 'vuex';
-
-import {
-    NAME as SEARCH_MODULE,
-    SEARCH,
-    SEARCH_STRING,
-    POPULAR_PRODUCTS,
-    SUGGESTIONS,
-} from '../../store/modules/Search';
-import { GET_POPULAR_PRODUCTS } from '../../store/modules/Search/actions';
-
-import { NAME as CART_MODULE } from '../../store/modules/Cart';
-import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
 
 export default {
     name: 'search-panel',

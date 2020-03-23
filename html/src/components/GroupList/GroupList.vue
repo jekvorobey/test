@@ -42,8 +42,8 @@
 </template>
 
 <script>
-import VLink from '../controls/VLink/VLink.vue';
-import VExpander from '../VExpander/VExpander.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VExpander from '@controls/VExpander/VExpander.vue';
 import './GroupList.css';
 
 export default {

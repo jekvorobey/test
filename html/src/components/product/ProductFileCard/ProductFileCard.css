@@ -1,0 +1,15 @@
+.product-file-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: none;
+
+    &__img {
+        display: flex;
+        margin-right: calc(var(--gs) * 2.5);
+    }
+
+    &__body {
+        flex: 1;
+    }
+}

@@ -1,5 +1,8 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
-import { receiveMethods, genderType, socials } from '../scripts/enums';
+import { receiveMethods } from '@enums/checkout';
+import { genderType } from '@enums/profile';
+import { socials } from '@enums';
+import { orderStatus, deliveryStatus } from '@enums/order';
 
 const flatpickrLocale = flatPickrRu.ru;
 const main = {
@@ -54,10 +57,47 @@ const main = {
         },
     },
 
+    orderStatus: {
+        [orderStatus.CREATED]: 'Создан',
+        [orderStatus.AWAITING_CHECK]: 'Ожидает подтверждения',
+        [orderStatus.IN_PROCESSING]: 'В обработке',
+        [orderStatus.CHECKING]: 'Проверка',
+        [orderStatus.TRANSFERRED_TO_DELIVERY]: 'Передан на доставку',
+        [orderStatus.DELIVERING]: 'В процессе доставки',
+        [orderStatus.READY_FOR_RECIPIENT]: 'В пункте выдачи',
+        [orderStatus.DONE]: 'Доставлен',
+        [orderStatus.RETURNED]: 'Возвращен',
+        [orderStatus.PRE_ORDER]: 'Предзаказ',
+    },
+
+    deliveryStatus: {
+        [deliveryStatus.STATUS_CREATED]: 'Оформляется',
+
+        [deliveryStatus.STATUS_ON_POINT_IN]: 'Принят на склад в пункте отправления',
+        [deliveryStatus.STATUS_ON_WAY]: 'В пути',
+        [deliveryStatus.STATUS_ON_POINT_OUT]: 'Прибыл на склад в пункте назначения',
+        [deliveryStatus.STATUS_DELIVERING]: 'Передана на доставку в пункте назначения',
+        [deliveryStatus.STATUS_READY_FOR_RECIPIENT]: 'Готов к выдаче в пункте назначения',
+        [deliveryStatus.STATUS_DONE]: 'Доставлено',
+
+        [deliveryStatus.STATUS_RETURNED_FROM_DELIVERY]: 'Возвращен с доставки',
+        [deliveryStatus.STATUS_PARTIAL_RETURN]: 'Частичный возврат',
+        [deliveryStatus.STATUS_RETURN_READY]: 'Подготовлен возврат',
+        [deliveryStatus.STATUS_RETURNING]: 'Возвращается отправителю',
+        [deliveryStatus.STATUS_RETURNED]: 'Возвращен отправителю',
+
+        [deliveryStatus.STATUS_LOST]: 'Утеряна',
+        [deliveryStatus.STATUS_PROBLEM]: 'Возникла проблема',
+        [deliveryStatus.STATUS_CANCEL]: 'Отменена',
+
+        [deliveryStatus.STATUS_UNKNOWN]: 'Неизвестный статус',
+        [deliveryStatus.STATUS_NA]: 'n/a',
+    },
+
     deliveryMethod: {
         [receiveMethods.DELIVERY]: 'Доставка курьером',
-        [receiveMethods.EXPRESS]: 'Экспресс доставка',
         [receiveMethods.PICKUP]: 'Самовывоз',
+        [receiveMethods.EXPRESS]: 'Экспресс доставка',
     },
 
     genderType: {
@@ -86,6 +126,7 @@ const main = {
         vendorCode: 'Артикул {code}',
         review: '{n} отзывов',
         bonus: '{n} бонусов',
+        variants: 'Нет вариантов | {n} вариант | {n} вариантов',
         showAll: 'Смотреть все',
 
         title: {
@@ -150,7 +191,7 @@ const main = {
             order: 'Заказ №{id}',
             messages: 'Сообщения ({n})',
             referal: 'Реферал №{id}',
-            orderStatus: { created: 'Создан', process: 'Передан в доставку', done: 'Доставлен', cancel: 'Отменён' },
+            packageCount: '{n} шт.',
         },
 
         groups: {

@@ -1,11 +1,16 @@
-import { productGroupTypes } from '../assets/scripts/enums';
+import { productGroupTypes } from '@enums/product';
 
 const rangeRegx = /from_\d*_to_\d*/;
 const numberRegx = /\d+/g;
 
+export function generateProductUrl(categoryCode, code) {
+    return `/${productGroupTypes.CATALOG}/${categoryCode}/${code}`;
+}
+
 export function generateCategoryUrl(type, entityCode, categoryCode) {
     switch (type) {
         case productGroupTypes.CATALOG:
+        case productGroupTypes.NEW:
             return categoryCode ? `/${type}/${categoryCode}` : `/${type}/`;
 
         case productGroupTypes.MASTERCLASSES:
@@ -25,6 +30,7 @@ export function concatCatalogRoutePath(type, entityCode, categoryCode, segments)
     let baseRoute = '';
     switch (type) {
         case productGroupTypes.CATALOG:
+        case productGroupTypes.NEW:
             baseRoute = categoryCode ? `/${type}/${categoryCode}/` : `/${type}/`;
             break;
         case productGroupTypes.PROMO:

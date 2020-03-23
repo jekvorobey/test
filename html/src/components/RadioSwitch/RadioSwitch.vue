@@ -6,7 +6,7 @@
             v-for="(item, index) in items"
             v-model="internalValue"
             :id="`radio-switch-${id}-${index}`"
-            :key="item[keyField] || index"
+            :key="item.value"
             :value="item.value"
             :name="name"
         >
@@ -17,7 +17,7 @@
     </div>
 </template>
 <script>
-import VCheck from '../controls/VCheck/VCheck.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
 import './RadioSwitch.css';
 
 export default {

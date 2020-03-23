@@ -1,0 +1,47 @@
+{
+    "compilerOptions": {
+        "target": "es2017",
+        "allowSyntheticDefaultImports": false,
+        "baseUrl": "./src",
+        "paths": {
+            "@controls/*": ["components/controls/*"],
+            "@components/*": ["components/*"],
+
+            "@images/*": ["assets/images/*"],
+
+            "@styles": ["assets/styles/index.css"],
+            "@styles/*": ["assets/styles/*"],
+
+            "@scripts": ["assets/scripts/index"],
+            "@polyfills": ["assets/scripts/polyfills/index"],
+            "@polyfills/*": ["assets/scripts/polyfills/*"],
+            "@regex": ["assets/scripts/regex/index"],
+            "@regex/*": ["assets/scripts/regex/*"],
+            "@enums": ["assets/scripts/enums/index"],
+            "@enums/*": ["assets/scripts/enums/*"],
+            "@constants": ["assets/scripts/constants/index"],
+            "@constants/*": ["assets/scripts/constants/*"],
+            "@settings": ["assets/scripts/settings/index"],
+            "@settings/*": ["assets/scripts/settings/*"],
+
+            "@services": ["services/index"],
+            "@services/*": ["services/*"],
+
+            "@api": ["api/index"],
+            "@api/*": ["api/*"],
+
+            "@util": ["util/index"],
+            "@util/*": ["util/*"],
+
+            "@store": ["store/index"],
+            "@store/*": ["store/*"],
+
+            "@router": ["router/index"],
+            "@router/*": ["router/*"],
+
+            "@plugins": ["plugins/index"],
+            "@plugins/*": ["plugins/*"]
+        }
+    },
+    "exclude": ["node_modules"]
+}

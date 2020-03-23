@@ -1,10 +1,11 @@
 <template>
     <div class="header-user-panel">
         <div class="header-user-panel__item header-user-panel__account">
-            <button @click.prevent="onRegister">
-                <v-svg name="account-middle" width="24" height="24" />
-            </button>
-            <profile-navigation-panel v-if="!isTabletLg" />
+            <profile-navigation-panel v-if="!isTabletLg">
+                <button @click.prevent="onRegister">
+                    <v-svg name="account-middle" width="24" height="24" />
+                </button>
+            </profile-navigation-panel>
         </div>
 
         <template v-if="hasSession">
@@ -14,43 +15,40 @@
             <div class="header-user-panel__item">
                 <price class="text-medium header-user-panel__item-sum" v-bind="productItemsSum" />
                 &nbsp;&nbsp;
-                <button class="header-user-panel__item-cart" @click="onToggleCart">
-                    <v-svg name="cart-middle" width="24" height="24" />
-                    <span class="text-bold header-user-panel__item-count">{{ cartItemsCount }}</span>
-                </button>
-                <cart-header-panel v-if="!isTabletLg" />
+                <cart-header-panel class="header-user-panel__item-cart">
+                    <button @click="onToCart">
+                        <v-svg name="cart-middle" width="24" height="24" />
+                        <span class="text-bold header-user-panel__item-count">{{ cartItemsCount }}</span>
+                    </button>
+                </cart-header-panel>
             </div>
         </template>
     </div>
 </template>
 
 <script>
-import VSvg from '../../controls/VSvg/VSvg.vue';
-import VLink from '../../controls/VLink/VLink.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
-import Price from '../../Price/Price.vue';
+import Price from '@components/Price/Price.vue';
 
-import CartHeaderPanel from '../../CartHeaderPanel/CartHeaderPanel.vue';
-import ProfileNavigationPanel from '../../ProfileNavigationPanel/ProfileNavigationPanel.vue';
+import CartHeaderPanel from '@components/CartHeaderPanel/CartHeaderPanel.vue';
+import ProfileNavigationPanel from '@components/ProfileNavigationPanel/ProfileNavigationPanel.vue';
 
-import { NAME as REGISTRATION_MODAL_NAME } from '../../RegistrationModal/RegistrationModal.vue';
+import { NAME as REGISTRATION_MODAL_NAME } from '@components/RegistrationModal/RegistrationModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { IS_CART_OPEN, IS_PROFILE_PANEL_OPEN } from '../../../store';
-import { SET_CART_OPEN } from '../../../store/mutations';
-import { SET_PROFILE_PANEL_OPEN } from '../../../store/actions';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
-import { NAME as AUTH_MODULE, HAS_SESSION } from '../../../store/modules/Auth';
+import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
+import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
 
-import { NAME as CART_MODULE, CART_ITEMS } from '../../../store/modules/Cart';
-import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '../../../store/modules/Cart/getters';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as MODAL_MODULE } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
-
-import '../../../assets/images/sprites/cart-middle.svg';
-import '../../../assets/images/sprites/wishlist-middle.svg';
-import '../../../assets/images/sprites/account-middle.svg';
+import '@images/sprites/cart-middle.svg';
+import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/account-middle.svg';
 import './HeaderUserPanel.critical.css';
 
 export default {
@@ -67,7 +65,6 @@ export default {
     },
 
     computed: {
-        ...mapState([IS_CART_OPEN, IS_PROFILE_PANEL_OPEN]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
 
@@ -126,18 +123,14 @@ export default {
     },
 
     methods: {
-        ...mapActions([SET_CART_OPEN, SET_PROFILE_PANEL_OPEN]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
-        onToggleCart() {
-            if (this.isTablet) {
-                this[SET_CART_OPEN](false);
-                this.$router.push({ name: 'Cart' });
-            } else this[SET_CART_OPEN](!this.isCartOpen);
+        onToCart() {
+            if (this[HAS_SESSION]) this.$router.push({ name: 'Cart' });
         },
 
         onRegister() {
-            if (this[HAS_SESSION]) this[SET_PROFILE_PANEL_OPEN](true);
+            if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
             else this[CHANGE_MODAL_STATE]({ name: REGISTRATION_MODAL_NAME, open: true });
         },
     },

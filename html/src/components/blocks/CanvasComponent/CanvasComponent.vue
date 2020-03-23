@@ -20,7 +20,8 @@
 </template>
 <script>
 import _debounce from 'lodash/debounce';
-import VButton from '../../controls/VButton/VButton.vue';
+import VButton from '@controls/VButton/VButton.vue';
+
 export default {
     name: 'canvas-component',
     components: { VButton },

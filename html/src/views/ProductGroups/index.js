@@ -1,4 +1,4 @@
-import { productGroupTypes } from '../../assets/scripts/enums';
+import { productGroupTypes } from '@enums/product';
 
 /**
  * @Module

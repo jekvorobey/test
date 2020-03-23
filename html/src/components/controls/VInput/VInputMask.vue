@@ -133,7 +133,8 @@ export default {
             // when v-model is not masked (raw)
             if (this.raw && newValue === this.engine.getRawValue()) return;
             //  when v-model is masked (NOT raw)
-            if (!this.raw && newValue === this.$el.value) return;
+            if (!this.raw && newValue === this.$refs.input.value) return;
+
             // Lastly set newValue
             this.engine.setRawValue(newValue);
         },

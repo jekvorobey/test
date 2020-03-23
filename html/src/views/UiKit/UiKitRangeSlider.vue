@@ -29,7 +29,7 @@
     </section>
 </template>
 <script>
-import VRange from '../../components/controls/VRange/VRange.vue';
+import VRange from '@controls/VRange/VRange.vue';
 
 export default {
     name: 'ui-kit-range-sliders',

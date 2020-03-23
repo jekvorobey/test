@@ -69,8 +69,8 @@
 </template>
 <script>
 // Dropzone не работает в IE 11
-//import VDropzone from '../../components/controls/VDropzone/VDropzone.vue';
-import VFilepond, { origin, status, fileStatus } from '../../components/controls/VFilepond/VFilepond.vue';
+//import VDropzone from '@controls/VDropzone/VDropzone.vue';
+import VFilepond, { origin, status, fileStatus } from '@controls/VFilepond/VFilepond.vue';
 
 export default {
     name: 'ui-kit-dropzones',

@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import VSelect from '../../../components/controls/VSelect/VSelect.vue';
-import DocumentCard from '../../../components/DocumentCard/DocumentCard.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
+import DocumentCard from '@components/DocumentCard/DocumentCard.vue';
 
 import './Documents.css';
 

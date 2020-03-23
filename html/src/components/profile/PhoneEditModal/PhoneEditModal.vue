@@ -76,26 +76,26 @@
 </template>
 
 <script>
-import VLink from '../../controls/VLink/VLink.vue';
-import VButton from '../../controls/VButton/VButton.vue';
-import VInput from '../../controls/VInput/VInput.vue';
-import VInputMask from '../../controls/VInput/VInputMask.vue';
-import GeneralModal from '../../GeneralModal/GeneralModal.vue';
-
-import validationMixin, { required, minLength, password, sameAs } from '../../../plugins/validation';
-import { mapState, mapActions } from 'vuex';
-
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
-
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { NAME as CABINET_MODULE } from '../../../store/modules/Profile/modules/Cabinet';
-import { SEND_CODE, UPDATE_CREDENTIAL } from '../../../store/modules/Profile/modules/Cabinet/actions';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VInputMask from '@controls/VInput/VInputMask.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import _cloneDeep from 'lodash/cloneDeep';
-import { phoneMaskOptions } from '../../../assets/scripts/settings';
-import { verificationCodeType } from '../../../assets/scripts/enums';
-import { rawPhone } from '../../../util/helpers';
+import { mapState, mapActions } from 'vuex';
+
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as CABINET_MODULE } from '@store/modules/Profile/modules/Cabinet';
+import { SEND_CODE, UPDATE_CREDENTIAL } from '@store/modules/Profile/modules/Cabinet/actions';
+
+import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
+import { phoneMaskOptions } from '@settings';
+import { verificationCodeType } from '@enums/auth';
+import { rawPhone } from '@util';
 import './PhoneEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;

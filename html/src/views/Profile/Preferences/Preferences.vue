@@ -84,41 +84,41 @@
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import VCheck from '../../../components/controls/VCheck/VCheck.vue';
-import InfoPanel from '../../../components/profile/InfoPanel/InfoPanel.vue';
-import TagItem from '../../../components/TagItem/TagItem.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
+import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
+import TagItem from '@components/TagItem/TagItem.vue';
 
 import PreferenceEditModal, {
     NAME as PREFERENCES_EDIT_MODAL_NAME,
-} from '../../../components/profile/PreferenceEditModal/PreferenceEditModal.vue';
+} from '@components/profile/PreferenceEditModal/PreferenceEditModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 
 import {
     NAME as PREFERENCES_MODULE,
     AVAILABLE_BRANDS,
     AVAILABLE_CATEGORIES,
     CUSTOMER,
-} from '../../../store/modules/Profile/modules/Preferences';
-import { BRANDS, CATEGORIES } from '../../../store/modules/Profile/modules/Preferences/getters';
+} from '@store/modules/Profile/modules/Preferences';
+import { BRANDS, CATEGORIES } from '@store/modules/Profile/modules/Preferences/getters';
 import {
     DELETE_ENTITY,
     DELETE_ALL_ENTITIES,
     FETCH_PREFERENCES_DATA,
     SET_LOAD,
     UPDATE_ENTITIES,
-} from '../../../store/modules/Profile/modules/Preferences/actions';
+} from '@store/modules/Profile/modules/Preferences/actions';
 
-import { $store, $progress, $logger } from '../../../services/ServiceLocator';
+import { $store, $progress, $logger } from '@services';
 import _debounce from 'lodash/debounce';
-import '../../../assets/images/sprites/cross.svg';
-import '../../../assets/images/sprites/plus-small.svg';
+import '@images/sprites/cross.svg';
+import '@images/sprites/plus-small.svg';
 import './Preferences.css';
 
 const PREFERENCES_MODULE_PATH = `${PROFILE_MODULE}/${PREFERENCES_MODULE}`;

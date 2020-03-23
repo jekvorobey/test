@@ -1,4 +1,4 @@
-import hasSession from '../../router/middleware/hasSession';
+import hasSession from '@router/middleware/hasSession';
 
 /**
  * @Module

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import YmapPlugin from '../components/controls/VMap';
+import YmapPlugin from '@controls/VMap';
 
 if (typeof window !== 'undefined') {
     const settings = {

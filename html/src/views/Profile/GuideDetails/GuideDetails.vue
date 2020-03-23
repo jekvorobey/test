@@ -22,6 +22,7 @@
                         :tags="item.tags"
                         :rating="item.rating"
                         :is-small="isTablet"
+                        :show-buy-btn="item.stock.qty > 0"
                     />
                     <v-html class="container container--tablet guide-details-view__list-desc" v-html="desc" />
                 </li>
@@ -31,19 +32,19 @@
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import VHtml from '../../../components/controls/VHtml/VHtml.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VHtml from '@controls/VHtml/VHtml.vue';
 
-import CatalogProductCard from '../../../components/CatalogProductCard/CatalogProductCard.vue';
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 
 import { mapState, mapActions } from 'vuex';
-import { LOCALE } from '../../../store';
+import { LOCALE } from '@store';
 
-import { NAME as PROFILE_MODULE, BREADCRUMBS } from '../../../store/modules/Profile';
-import { UPDATE_BREADCRUMB } from '../../../store/modules/Profile/actions';
+import { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modules/Profile';
+import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
-import '../../../assets/images/sprites/arrow-small.svg';
+import '@images/sprites/arrow-small.svg';
 import './GuideDetails.css';
 
 export default {

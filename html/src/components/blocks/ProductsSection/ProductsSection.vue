@@ -18,6 +18,7 @@
                         :old-price="product.oldPrice"
                         :tags="product.tags"
                         :rating="product.rating"
+                        :show-buy-btn="product.stock.qty > 0"
                         @addItem="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                     />
@@ -26,30 +27,29 @@
                     </v-button>
                 </div>
 
-                <catalog-banner-card
-                    class="products-section__banner"
-                    :banner-id="banner.id"
-                    :btn-text="banner.btnText"
-                    :title="banner.title"
-                    :upper-text="banner.upperText"
-                    :image="banner.image"
-                />
+                <catalog-banner-card class="products-section__banner" :item="banner">
+                    <source :data-srcset="getDesktopImg(banner)" type="image/webp" media="(min-width: 1024px)" />
+                    <source :data-srcset="getTabletImg(banner)" type="image/webp" media="(min-width: 480px)" />
+                    <source :data-srcset="getMobileImg(banner)" type="image/webp" media="(max-width: 479px)" />
+                    <img class="blur-up lazyload v-picture__img" :data-src="getDefaultImg(banner)" alt="" />
+                </catalog-banner-card>
             </div>
         </div>
     </section>
 </template>
 <script>
-import VButton from '../../controls/VButton/VButton.vue';
-import CatalogProductCard from '../../CatalogProductCard/CatalogProductCard.vue';
-import CatalogBannerCard from '../../CatalogBannerCard/CatalogBannerCard.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 
 import { mapActions } from 'vuex';
-import { NAME as CART_MODULE } from '../../../store/modules/Cart';
-import { ADD_CART_ITEM } from '../../../store/modules/Cart/actions';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
-import { NAME as MODAL_MODULE } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { generatePictureSourcePath } from '@util/file';
 import './ProductsSection.css';
 
 export default {
@@ -104,11 +104,31 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: 'quick-view-modal', open: true, state: { code } });
         },
 
+        getMobileImg(item) {
+            const image = item.mobileImage || item.tabletImage || item.desktopImage;
+            if (image) return generatePictureSourcePath(320, 320, image.id, 'webp');
+        },
+
+        getTabletImg(item) {
+            const image = item.tabletImage || item.desktopImage;
+            if (image) return generatePictureSourcePath(720, 720, image.id, 'webp');
+        },
+
+        getDesktopImg(item) {
+            const image = item.desktopImage || item.tabletImage;
+            if (image) return generatePictureSourcePath(600, 900, image.id, 'webp');
+        },
+
+        getDefaultImg(item) {
+            const image = item.desktopImage || item.tabletImage || item.mobileImage;
+            if (image) return generatePictureSourcePath(600, 900, image.id, image.sourceExt);
+        },
+
         onAddToCart(item) {
             this[CHANGE_MODAL_STATE]({
                 name: 'add-to-cart-modal',
                 open: true,
-                state: { offerId: item.id, type: item.type },
+                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
     },

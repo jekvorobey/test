@@ -78,10 +78,10 @@
 </template>
 
 <script>
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import VButton from '../../../components/controls/VButton/VButton.vue';
-import VInput from '../../../components/controls/VInput/VInput.vue';
-import VPagination from '../../../components/controls/VPagination/VPagination.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VPagination from '@controls/VPagination/VPagination.vue';
 
 import './Bonuses.css';
 

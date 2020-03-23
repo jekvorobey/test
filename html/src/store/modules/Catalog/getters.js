@@ -1,5 +1,5 @@
-import { mapFilterSegments, getActiveCategories } from '../../../util/catalog';
-import { productGroupTypes } from '../../../assets/scripts/enums';
+import { mapFilterSegments, getActiveCategories, getAllActiveCategories } from '@util/catalog';
+import { productGroupTypes } from '@enums';
 
 export const ROUTE_SEGMENTS = 'routeSegments';
 export const FILTER_SEGMENTS = 'filterSegments';
@@ -20,12 +20,15 @@ const productGroupBase = {
 };
 
 export default {
-    [ROOT_CATEGORY]({ activeCategories, productGroup }) {
-        const { filters } = productGroup || {};
-        return filters ? activeCategories.find(c => c.code === filters.category) : null;
+    [ACTIVE_CATEGORIES]({ categories, baseCategoryCode, categoryCode }) {
+        return getAllActiveCategories(categories, categoryCode || baseCategoryCode);
     },
 
-    [BREADCRUMBS]({ activeCategories }, { rootCategory }) {
+    [ROOT_CATEGORY]({ baseCategoryCode }, { activeCategories }) {
+        return activeCategories.find(c => c.code === baseCategoryCode);
+    },
+
+    [BREADCRUMBS](state, { rootCategory, activeCategories }) {
         const index = activeCategories.indexOf(rootCategory);
         return index !== -1 ? activeCategories.slice(index + 1) : activeCategories;
     },
@@ -38,7 +41,7 @@ export default {
         return Math.ceil(state.range / pageSize);
     },
 
-    [ACTIVE_CATEGORY]({ activeCategories }) {
+    [ACTIVE_CATEGORY](state, { activeCategories }) {
         return activeCategories[activeCategories.length - 1];
     },
 

@@ -14,7 +14,6 @@
                 :type="type"
                 :autocomplete="autocomplete"
                 :aria-describedby="`${inputId}-alert`"
-                @keydown.enter.prevent
             />
             <v-button
                 v-if="!$attrs.disabled"
@@ -35,12 +34,12 @@
 </template>
 
 <script>
-import VSvg from '../VSvg/VSvg.vue';
-import VButton from '../VButton/VButton.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
 
-import inputMixin from '../VInput/inputMixin';
-import '../../../assets/images/sprites/eye.svg';
-import '../../../assets/images/sprites/eye-crossed.svg';
+import inputMixin from '@controls/VInput/inputMixin';
+import '@images/sprites/eye.svg';
+import '@images/sprites/eye-crossed.svg';
 import './VPassword.css';
 
 export default {

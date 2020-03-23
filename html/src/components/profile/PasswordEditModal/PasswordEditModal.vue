@@ -48,20 +48,20 @@
     </general-modal>
 </template>
 <script>
-import VButton from '../../controls/VButton/VButton.vue';
-import VPassword from '../../controls/VPassword/VPassword.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VPassword from '@controls/VPassword/VPassword.vue';
 
-import GeneralModal from '../../GeneralModal/GeneralModal.vue';
-import validationMixin, { required, password, minLength } from '../../../plugins/validation';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
+import validationMixin, { required, password, minLength } from '@plugins/validation';
 
 import { mapActions, mapState } from 'vuex';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { NAME as CABINET_MODULE, PHONE, HAS_PASSWORD } from '../../../store/modules/Profile/modules/Cabinet';
-import { UPDATE_PASSWORD } from '../../../store/modules/Profile/modules/Cabinet/actions';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as CABINET_MODULE, PHONE, HAS_PASSWORD } from '@store/modules/Profile/modules/Cabinet';
+import { UPDATE_PASSWORD } from '@store/modules/Profile/modules/Cabinet/actions';
 
 import './PasswordEditModal.css';
 

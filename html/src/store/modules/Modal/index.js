@@ -5,13 +5,15 @@ import getters from './getters';
 export const NAME = 'modal';
 export const MODALS = 'modals';
 
-export default {
-    name: NAME,
-    namespaced: true,
-    state: {
-        modals: {},
-    },
-    actions,
-    mutations,
-    getters,
-};
+export default function createModule() {
+    return {
+        name: NAME,
+        namespaced: true,
+        state: {
+            [MODALS]: {},
+        },
+        actions,
+        mutations,
+        getters,
+    };
+}

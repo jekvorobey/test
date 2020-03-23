@@ -30,17 +30,17 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
-import VLink from '../controls/VLink/VLink.vue';
-import VPicture from '../controls/VPicture/VPicture.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import Price from '../Price/Price.vue';
+import Price from '@components/Price/Price.vue';
 
-import { generatePictureSourcePath } from '../../util/images';
+import { generatePictureSourcePath } from '@util/file';
 import _debounce from 'lodash/debounce';
-import '../../assets/images/sprites/cross-small.svg';
-import '../../assets/images/sprites/wishlist-middle.svg';
-import '../../assets/images/sprites/logo.svg';
+import '@images/sprites/cross-small.svg';
+import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/logo.svg';
 import './CartPanelProductCard.css';
 
 export default {

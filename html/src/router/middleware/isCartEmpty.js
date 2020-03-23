@@ -1,8 +1,8 @@
-import { breakMiddleware } from '../../util/router';
+import { breakMiddleware } from '@util/router';
 
-import { NAME as CART_MODULE } from '../../store/modules/Cart';
-import { CART_ITEMS_COUNT } from '../../store/modules/Cart/getters';
-import { FETCH_CART_DATA } from '../../store/modules/Cart/actions';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { CART_ITEMS_COUNT } from '@store/modules/Cart/getters';
+import { FETCH_CART_DATA } from '@store/modules/Cart/actions';
 
 export default async function isCartEmpty({ next, store: { dispatch, state, getters }, appContext, nextMiddleware }) {
     try {

@@ -3,28 +3,30 @@
  * Полифилы и базовые либы приложения
  */
 
-import '../assets/scripts/common';
+import '@scripts';
+
 import Vue from 'vue';
-
-import { injectionType } from '../assets/scripts/enums';
 import { sync } from 'vuex-router-sync';
-import createStore from '../store';
-import createRouter from '../router';
-import createLocalization from '../plugins/i18n';
 
-import mq from '../plugins/media';
-import '../plugins/meta';
-import '../plugins/scroll-lock';
-import '../plugins/observer';
+import { injectionType } from '@enums';
 
-import '../util/catalog';
-import '../util/router';
-import '../util/helpers';
-import '../util/container';
-import '../util/store';
-import '../util/images';
+import createStore from '@store';
+import createRouter from '@router';
 
-import titleMixin from '../util/title';
+import createLocalization from '@plugins/i18n';
+import mq from '@plugins/media';
+import '@plugins/meta';
+import '@plugins/scroll-lock';
+import '@plugins/observer';
+
+import '@util';
+import '@util/catalog';
+import '@util/router';
+import '@util/container';
+import '@util/store';
+import '@util/file';
+
+import titleMixin from '@util/title';
 
 import App from './App.vue';
 
@@ -33,7 +35,7 @@ Vue.mixin(titleMixin);
 
 // Expose a factory function that creates a fresh set of store, router,
 // app instances on each call (which is called for each SSR request)
-export default function createApp(container) {
+export default function createApp(container, initialState = null) {
     // create store and router instances
     const store = createStore(container);
     const router = createRouter(container);
@@ -59,6 +61,8 @@ export default function createApp(container) {
         i18n,
         render: h => h(App),
     });
+
+    if (initialState) store.replaceState(initialState);
 
     // expose the app, the router and the store.
     // note we are not mounting the app here, since bootstrapping will be

@@ -114,37 +114,32 @@
 </template>
 
 <script>
-import VSvg from '../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../components/controls/VLink/VLink.vue';
-import VInput from '../../components/controls/VInput/VInput.vue';
-import VButton from '../../components/controls/VButton/VButton.vue';
-import VSticky from '../../components/controls/VSticky/VSticky.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
 
-import Price from '../../components/Price/Price.vue';
+import Price from '@components/Price/Price.vue';
 
-import CheckoutProductPanel from '../../components/checkout/CheckoutProductPanel/CheckoutProductPanel.vue';
-import CheckoutMasterClassPanel from '../../components/checkout/CheckoutMasterClassPanel/CheckoutMasterClassPanel.vue';
+import CheckoutProductPanel from '@components/checkout/CheckoutProductPanel/CheckoutProductPanel.vue';
+import CheckoutMasterClassPanel from '@components/checkout/CheckoutMasterClassPanel/CheckoutMasterClassPanel.vue';
 
-import { $store, $logger, $progress } from '../../services/ServiceLocator';
+import { $store, $logger, $progress } from '@services';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as CART_MODULE, CART_DATA } from '../../store/modules/Cart';
-import { CART_ITEMS_COUNT } from '../../store/modules/Cart/getters';
+import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
+import { CART_ITEMS_COUNT } from '@store/modules/Cart/getters';
 
-import checkoutModule, { NAME as CHECKOUT_MODULE, CHECKOUT_TYPE, CHECKOUT_DATA } from '../../store/modules/Checkout';
-import {
-    FETCH_CHECKOUT_DATA,
-    ADD_PROMOCODE,
-    DELETE_PROMOCODE,
-    COMMIT_DATA,
-} from '../../store/modules/Checkout/actions';
-import { CHECKOUT, PROMO_CODE, SUMMARY } from '../../store/modules/Checkout/getters';
+import checkoutModule, { NAME as CHECKOUT_MODULE, CHECKOUT_TYPE, CHECKOUT_DATA } from '@store/modules/Checkout';
+import { FETCH_CHECKOUT_DATA, ADD_PROMOCODE, DELETE_PROMOCODE, COMMIT_DATA } from '@store/modules/Checkout/actions';
+import { CHECKOUT, PROMO_CODE, SUMMARY } from '@store/modules/Checkout/getters';
 
-import { registerModuleIfNotExists } from '../../util/store';
-import { preparePrice } from '../../util/helpers';
-import { cartItemTypes } from '../../assets/scripts/enums';
-import '../../assets/images/sprites/check-small.svg';
-import '../../assets/images/sprites/arrow-small.svg';
+import { registerModuleIfNotExists } from '@util/store';
+import { preparePrice } from '@util';
+import { cartItemTypes } from '@enums/product';
+import '@images/sprites/check-small.svg';
+import '@images/sprites/arrow-small.svg';
 import './Checkout.css';
 
 export default {

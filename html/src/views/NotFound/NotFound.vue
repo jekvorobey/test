@@ -35,38 +35,34 @@
                         :old-price="item.oldPrice"
                         :tags="item.tags"
                         :rating="item.rating"
+                        :show-buy-btn="item.stock.qty > 0"
                         @addItem="onAddToCart(item)"
                         @preview="onPreview(item.code)"
                     />
                 </v-slider>
             </div>
         </section>
-
-        <transition name="fade-in">
-            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
-            <add-to-cart-modal v-else-if="isAddToCartOpen" />
-        </transition>
     </section>
 </template>
 
 <script>
-import VButton from '../../components/controls/VButton/VButton.vue';
-import VSlider from '../../components/controls/VSlider/VSlider.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
 
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
+import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
+import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 
-import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as FEATURED_MODULE, FEATURED_PRODUCTS } from '../../store/modules/Featured';
-import { FETCH_FEATURED_PRODUCTS } from '../../store/modules/Featured/actions';
+import { NAME as FEATURED_MODULE, FEATURED_PRODUCTS } from '@store/modules/Featured';
+import { FETCH_FEATURED_PRODUCTS } from '@store/modules/Featured/actions';
 
-import { breakpoints } from '../../assets/scripts/enums';
+import { breakpoints } from '@enums';
 
 import './NotFound.css';
 
@@ -110,9 +106,6 @@ export default {
         VSlider,
 
         CatalogProductCard,
-
-        AddToCartModal,
-        QuickViewModal,
     },
 
     computed: {
@@ -144,7 +137,7 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: ADD_TO_CART_MODAL_NAME,
                 open: true,
-                state: { offerId: item.id, type: item.type },
+                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
     },

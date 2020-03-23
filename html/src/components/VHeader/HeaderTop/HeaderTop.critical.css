@@ -63,6 +63,11 @@
         @media (--desktop-lg) {
             padding-left: calc(var(--gs) * 2);
         }
+
+        .trigger {
+            display: flex !important;
+            align-items: center;
+        }
     }
 
     &__container {

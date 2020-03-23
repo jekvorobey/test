@@ -5,13 +5,15 @@ import getters from './getters';
 export const NAME = 'auth';
 export const HAS_SESSION = 'hasSession';
 
-export default {
-    name: NAME,
-    namespaced: true,
-    state: {
-        [HAS_SESSION]: false,
-    },
-    actions,
-    mutations,
-    getters,
-};
+export default function createModule() {
+    return {
+        name: NAME,
+        namespaced: true,
+        state: {
+            [HAS_SESSION]: false,
+        },
+        actions,
+        mutations,
+        getters,
+    };
+}

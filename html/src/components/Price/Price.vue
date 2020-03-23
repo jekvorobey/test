@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import { preparePrice } from '../../util/helpers';
-import { currencySymbol } from '../../assets/scripts/enums';
+import { preparePrice } from '@util';
+import { currencySymbol } from '@enums';
 import './Price.css';
 
 export default {

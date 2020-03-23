@@ -91,7 +91,7 @@
 </template>
 <script>
 import { VPopover } from 'v-tooltip';
-import VButton from '../../components/controls/VButton/VButton.vue';
+import VButton from '@controls/VButton/VButton.vue';
 
 export default {
     name: 'ui-kit-tooltips',

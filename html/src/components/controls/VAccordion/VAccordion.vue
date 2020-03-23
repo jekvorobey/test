@@ -57,9 +57,9 @@
 </template>
 
 <script>
-import VSvg from '../VSvg/VSvg.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 
-import '../../../assets/images/sprites/arrow-down.svg';
+import '@images/sprites/arrow-down.svg';
 import './VAccordion.css';
 
 export default {

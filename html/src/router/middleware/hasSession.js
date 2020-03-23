@@ -1,8 +1,8 @@
-import { breakMiddleware } from '../../util/router';
+import { breakMiddleware } from '@util/router';
 
-import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
-import { CHECK_SESSION } from '../../store/modules/Auth/actions';
-import { httpCodes } from '../../assets/scripts/enums';
+import { NAME as AUTH_MODULE } from '@store/modules/Auth';
+import { CHECK_SESSION } from '@store/modules/Auth/actions';
+import { httpCodes } from '@enums';
 
 export default async function hasSession({ next, store: { dispatch }, appContext, nextMiddleware }) {
     try {

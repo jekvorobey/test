@@ -6,7 +6,7 @@
         :to="href"
     >
         <div class="catalog-product-list-card__img" v-once>
-            <v-picture v-if="item.image && item.image.id" alt="">
+            <v-picture v-if="item.image && item.image.id">
                 <source :data-srcset="bigImg" type="image/webp" media="(min-width: 480px)" />
                 <source :data-srcset="smallImg" type="image/webp" media="(max-width: 479px)" />
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
@@ -14,13 +14,14 @@
             <v-svg v-else id="catalog-product-list-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-list-card__controls">
                 <v-button
+                    v-if="showBuyBtn"
                     class="btn--outline catalog-product-list-card__controls-btn"
                     @click.prevent="onBuyButtonClick"
                 >
                     Купить
                 </v-button>
                 <v-link tag="button" class="catalog-product-list-card__controls-link" @click.prevent="onPreview">
-                    Быстрый просмотр
+                    Быстрый&nbsp;просмотр
                 </v-link>
             </div>
         </div>
@@ -44,7 +45,7 @@
             </div>
         </div>
         <div class="catalog-product-list-card__tags" v-once>
-            <tag class="catalog-product-list-card__tags-item" v-for="tag in item.tags" :key="tag" :text="tag" />
+            <tag class="catalog-product-list-card__tags-item" v-for="tag in item.tags" :key="tag.id" :text="tag.name" />
         </div>
         <v-link v-if="showWishlistBtn" tag="button" class="catalog-product-list-card__wishlist-btn" @click.prevent>
             <v-svg name="wishlist-middle" width="24" height="24" />
@@ -53,22 +54,22 @@
 </template>
 
 <script>
-import VSvg from '../../controls/VSvg/VSvg.vue';
-import VLink from '../../controls/VLink/VLink.vue';
-import VButton from '../../controls/VButton/VButton.vue';
-import VRating from '../../controls/VRating/VRating.vue';
-import VPicture from '../../controls/VPicture/VPicture.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VRating from '@controls/VRating/VRating.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import Tag from '../../Tag/Tag.vue';
-import Price from '../../Price/Price.vue';
+import Tag from '@components/Tag/Tag.vue';
+import Price from '@components/Price/Price.vue';
 
-import '../../../assets/images/sprites/star-empty-small.svg';
-import '../../../assets/images/sprites/star-small.svg';
-import '../../../assets/images/sprites/wishlist-middle.svg';
-import '../../../assets/images/sprites/logo.svg';
+import '@images/sprites/star-empty-small.svg';
+import '@images/sprites/star-small.svg';
+import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/logo.svg';
 import './CatalogProductListCard.css';
 
-import { generatePictureSourcePath } from '../../../util/images';
+import { generatePictureSourcePath } from '@util/file';
 
 export default {
     name: 'catalog-product-list-card',
@@ -91,6 +92,7 @@ export default {
                 return {
                     categoryCodes: [],
                     tags: [],
+                    stocks: { qty: 0 },
                 };
             },
         },
@@ -107,6 +109,11 @@ export default {
     },
 
     computed: {
+        showBuyBtn() {
+            const { stock: { qty = 0 } = { qty: 0 } } = this.item;
+            return qty > 0;
+        },
+
         bigImg() {
             return generatePictureSourcePath(300, 300, this.item.image.id, 'webp');
         },
@@ -127,7 +134,11 @@ export default {
 
     methods: {
         onBuyButtonClick() {
-            this.$emit('addItem', { id: this.item.id, type: this.item.type });
+            this.$emit('addItem', {
+                id: this.item.id,
+                storeId: this.item.stock.storeId,
+                type: this.item.type,
+            });
         },
 
         onPreview() {

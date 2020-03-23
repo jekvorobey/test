@@ -1,5 +1,5 @@
-import { verificationCodeType } from '../../../../../assets/scripts/enums';
-import { storeErrorHandler } from '../../../../../util/store';
+import { verificationCodeType } from '@enums/auth';
+import { storeErrorHandler } from '@util/store';
 import {
     getProfile,
     changeProfileActivities,
@@ -14,7 +14,7 @@ import {
     uploadProfileCertificate,
     deleteProfileCertificate,
     loadProfileCertificate,
-} from '../../../../../api';
+} from '@api';
 import { SET_CABINET_DATA, UPDATE_PHONE, UPDATE_EMAIL } from './mutations';
 
 export const FETCH_CABINET_DATA = 'FETCH_CABINET_DATA';

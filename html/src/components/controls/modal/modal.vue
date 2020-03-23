@@ -47,8 +47,9 @@
 </template>
 
 <script>
-import VSvg from '../VSvg/VSvg.vue';
-import '../../../assets/images/sprites/cross.svg';
+import VSvg from '@controls/VSvg/VSvg.vue';
+
+import '@images/sprites/cross.svg';
 import './modal.css';
 
 export default {

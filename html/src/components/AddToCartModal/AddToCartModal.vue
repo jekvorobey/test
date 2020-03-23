@@ -15,12 +15,18 @@
                         :old-price="product.oldPrice"
                         :count="cartItem.count"
                         href="/catalog"
-                        @countChange="ADD_CART_ITEM({ offerId: product.id, count: $event.count })"
+                        @countChange="
+                            ADD_CART_ITEM({
+                                offerId: product.id,
+                                storeId: product.stock.storeId,
+                                count: $event.count,
+                            })
+                        "
                     />
                     <div class="add-to-cart-modal__panel" v-if="!isTablet">
                         <div class="add-to-cart-modal__panel-info">
                             В корзине {{ $tc('cart.items', cartItemsCount) }} на сумму
-                            {{ productItemsSum }}
+                            <price v-bind="productItemsSum" />
                         </div>
                         <v-button class="btn--outline add-to-cart-modal__panel-btn" @click="onClose">
                             Продолжить покупки
@@ -49,7 +55,8 @@
                                 :old-price="item.oldPrice"
                                 :tags="item.tags"
                                 :rating="item.rating"
-                                @addItem="onAddToCart($event)"
+                                :show-buy-btn="item.stock.qty > 0"
+                                @addItem="onAddToCart(item)"
                                 @preview="onPreview(item.code)"
                             />
                         </li>
@@ -60,7 +67,7 @@
             <div class="add-to-cart-modal__panel" v-if="isTablet">
                 <div class="add-to-cart-modal__panel-info">
                     В корзине {{ $tc('cart.items', cartItemsCount) }} на сумму
-                    {{ productItemsSum }}
+                    <price v-bind="productItemsSum" />
                 </div>
                 <v-link class="btn--outline add-to-cart-modal__panel-link" @click="onClose">
                     Продолжить
@@ -74,26 +81,28 @@
 </template>
 
 <script>
-import VLink from '../controls/VLink/VLink.vue';
-import VButton from '../controls/VButton/VButton.vue';
-import VSpinner from '../controls/VSpinner/VSpinner.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
-import CatalogProductCard from '../CatalogProductCard/CatalogProductCard.vue';
-import CartProductCard from '../CartProductCard/CartProductCard.vue';
-import GeneralModal from '../GeneralModal/GeneralModal.vue';
-import { NAME as QUICK_VIEW_MODAL_NAME } from '../QuickViewModal/QuickViewModal.vue';
+import Price from '@components/Price/Price.vue';
+
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
+import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as CART_MODULE, CART_DATA, RELATIVE_PRODUCTS } from '../../store/modules/Cart';
-import { ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS } from '../../store/modules/Cart/actions';
-import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '../../store/modules/Cart/getters';
+import { NAME as CART_MODULE, CART_DATA, RELATIVE_PRODUCTS } from '@store/modules/Cart';
+import { ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS } from '@store/modules/Cart/actions';
+import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
 
-import { getRandomIntInclusive } from '../../util/helpers';
-import { generatePictureSourcePath } from '../../util/images';
+import { getRandomIntInclusive } from '@util';
+import { generatePictureSourcePath } from '@util/file';
 import './AddToCartModal.css';
 
 export const NAME = 'add-to-cart-modal';
@@ -106,6 +115,7 @@ export default {
         VButton,
         VSpinner,
 
+        Price,
         GeneralModal,
         CartProductCard,
         CatalogProductCard,
@@ -165,19 +175,21 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: NAME,
                 open: true,
-                state: { offerId: item.id, type: item.type },
+                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
 
         fetchData() {
-            const data = this[CART_DATA][this.modalState.type];
-            this.cartItem = data ? data.items.find(i => i.p.id === this.modalState.offerId) : null;
-            if (!this.cartItem) this[ADD_CART_ITEM]({ offerId: this.modalState.offerId });
+            const { offerId, storeId, referralCode, type, cookieName } = this.modalState;
+            const data = this[CART_DATA][type];
+
+            this.cartItem = data ? data.items.find(i => i.p.id === offerId) : null;
+            if (!this.cartItem) this[ADD_CART_ITEM]({ offerId, storeId, referralCode, cookieName });
             this[FETCH_RELATIVE_PRODUCTS]({ page: getRandomIntInclusive(1, 4) });
         },
 
         onClose() {
-            this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
+            this[CHANGE_MODAL_STATE]({ name: NAME, open: false, state: null });
         },
     },
 

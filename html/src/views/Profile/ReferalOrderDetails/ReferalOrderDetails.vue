@@ -123,24 +123,24 @@
 </template>
 
 <script>
-import VSvg from '../../../components/controls/VSvg/VSvg.vue';
-import VLink from '../../../components/controls/VLink/VLink.vue';
-import VCheck from '../../../components/controls/VCheck/VCheck.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
 
-import Price from '../../../components/Price/Price.vue';
-import FilterButton from '../../../components/FilterButton/FilterButton.vue';
-import InfoRow from '../../../components/profile/InfoRow/InfoRow.vue';
+import Price from '@components/Price/Price.vue';
+import FilterButton from '@components/FilterButton/FilterButton.vue';
+import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 
 import { mapActions, mapState } from 'vuex';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { UPDATE_BREADCRUMB } from '../../../store/modules/Profile/actions';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
-import referalProduct1 from '../../../assets/images/mock/referalProduct1.png';
-import referalProduct2 from '../../../assets/images/mock/referalProduct2.png';
-import referalProduct3 from '../../../assets/images/mock/referalProduct3.png';
+import referalProduct1 from '@images/mock/referalProduct1.png';
+import referalProduct2 from '@images/mock/referalProduct2.png';
+import referalProduct3 from '@images/mock/referalProduct3.png';
 
-import '../../../assets/images/sprites/arrow-small.svg';
+import '@images/sprites/arrow-small.svg';
 import './ReferalOrderDetails.css';
 
 export default {

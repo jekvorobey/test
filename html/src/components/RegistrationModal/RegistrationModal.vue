@@ -160,28 +160,27 @@
 </template>
 
 <script>
-import VLink from '../controls/VLink/VLink.vue';
-import VButton from '../controls/VButton/VButton.vue';
-import VPassword from '../controls/VPassword/VPassword.vue';
-import VInput from '../controls/VInput/VInput.vue';
-import VInputMask from '../controls/VInput/VInputMask.vue';
-import GeneralModal from '../GeneralModal/GeneralModal.vue';
-import { NAME as LOGIN_MODAL_NAME } from '../LoginModal/LoginModal.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VPassword from '@controls/VPassword/VPassword.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VInputMask from '@controls/VInput/VInputMask.vue';
 
-import validationMixin, { required, minLength, password, sameAs } from '../../plugins/validation';
-import { mapState, mapActions } from 'vuex';
-
-import { NAME as AUTH_MODULE } from '../../store/modules/Auth';
-import { SEND_SMS, CHECK_CODE, REGISTER_BY_PASSWORD, GET_SOCIAL_LINK } from '../../store/modules/Auth/actions';
-
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
+import { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
 
 import _cloneDeep from 'lodash/cloneDeep';
+import { mapState, mapActions } from 'vuex';
+import { NAME as AUTH_MODULE } from '@store/modules/Auth';
+import { SEND_SMS, CHECK_CODE, REGISTER_BY_PASSWORD, GET_SOCIAL_LINK } from '@store/modules/Auth/actions';
 
-import { rawPhone } from '../../util/helpers';
-import { phoneMaskOptions } from '../../assets/scripts/settings';
-import { verificationCodeType } from '../../assets/scripts/enums';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
+import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
+import { rawPhone } from '@util';
+import { phoneMaskOptions } from '@settings';
+import { verificationCodeType } from '@enums/auth';
 import './RegistrationModal.css';
 
 export const NAME = 'registration-modal';
@@ -232,6 +231,8 @@ export default {
 
     data() {
         return {
+            mounted: false,
+
             sent: false,
             accepted: false,
 

@@ -20,25 +20,12 @@
                 </breadcrumb-item>
             </breadcrumbs>
 
-            <catalog-banner-card
-                v-if="entityCode && productGroup"
-                class="catalog-view__brand"
-                :banner-id="productGroup.id"
-                :bottom-text="productGroup.description"
-                :title="productGroup.name"
-                :image="productGroup.image"
-            />
-
-            <catalog-banner-card
-                v-else
-                class="catalog-view__banner"
-                :banner-id="banner.id"
-                :image="banner.image"
-                :upper-text="banner.upperText"
-                :bottom-text="banner.bottomText"
-                :title="banner.title"
-                :btn-text="banner.btnText"
-            />
+            <catalog-banner-card class="catalog-view__banner" v-if="productGroup.banner" :item="productGroup.banner">
+                <source v-if="desktopImg" :data-srcset="desktopImg" type="image/webp" media="(min-width: 1024px)" />
+                <source v-if="tabletImg" :data-srcset="tabletImg" type="image/webp" media="(min-width: 480px)" />
+                <source v-if="mobileImg" :data-srcset="mobileImg" type="image/webp" media="(max-width: 479px)" />
+                <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
+            </catalog-banner-card>
         </div>
         <section class="section">
             <div class="container catalog-view__grid">
@@ -161,46 +148,42 @@
                 </v-expander>
             </div>
         </section>
-
-        <transition name="fade-in">
-            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
-            <add-to-cart-modal v-else-if="isAddToCartOpen" />
-        </transition>
     </section>
 </template>
 
 <script>
-import VSvg from '../../components/controls/VSvg/VSvg.vue';
-import VButton from '../../components/controls/VButton/VButton.vue';
-import VCheck from '../../components/controls/VCheck/VCheck.vue';
-import VPagination from '../../components/controls/VPagination/VPagination.vue';
-import VRange from '../../components/controls/VRange/VRange.vue';
-import VSelect from '../../components/controls/VSelect/VSelect.vue';
-import VSticky from '../../components/controls/VSticky/VSticky.vue';
-import VExpander from '../../components/VExpander/VExpander.vue';
-import Modal from '../../components/controls/modal/modal.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
+import VPagination from '@controls/VPagination/VPagination.vue';
+import VRange from '@controls/VRange/VRange.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
+import VExpander from '@controls/VExpander/VExpander.vue';
+import Modal from '@controls/modal/modal.vue';
 
-import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs.vue';
-import BreadcrumbItem from '../../components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
-import FilterButton from '../../components/FilterButton/FilterButton.vue';
-import TagItem from '../../components/TagItem/TagItem.vue';
-import CategoryTreeItem from '../../components/CategoryTreeItem/CategoryTreeItem.vue';
-import CatalogFilter from '../../components/CatalogFilter/CatalogFilter.vue';
-import CatalogBannerCard from '../../components/CatalogBannerCard/CatalogBannerCard.vue';
-import CatalogProductList from '../../components/CatalogProductList/CatalogProductList.vue';
+import FilterButton from '@components/FilterButton/FilterButton.vue';
+import TagItem from '@components/TagItem/TagItem.vue';
+import CategoryTreeItem from '@components/CategoryTreeItem/CategoryTreeItem.vue';
+import CatalogFilter from '@components/CatalogFilter/CatalogFilter.vue';
+import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
+import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
 
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
+import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
+import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 
-import { $store, $progress, $logger } from '../../services/ServiceLocator';
+import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
+import { $store, $progress, $logger } from '@services';
 
-import { NAME as CART_MODULE } from '../../store/modules/Cart';
-import { ADD_CART_ITEM } from '../../store/modules/Cart/actions';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import catalogModule, {
     NAME as CATALOG_MODULE,
@@ -209,8 +192,8 @@ import catalogModule, {
     BANNER,
     CATEGORIES,
     PRODUCT_GROUP,
-} from '../../store/modules/Catalog';
-import { SET_LOAD_PATH, FETCH_CATALOG_DATA } from '../../store/modules/Catalog/actions';
+} from '@store/modules/Catalog';
+import { SET_LOAD_PATH, FETCH_CATALOG_DATA } from '@store/modules/Catalog/actions';
 import {
     ACTIVE_TAGS,
     ACTIVE_CATEGORY,
@@ -218,14 +201,15 @@ import {
     PAGES_COUNT,
     ROUTE_SEGMENTS,
     BREADCRUMBS,
-} from '../../store/modules/Catalog/getters';
+} from '@store/modules/Catalog/getters';
 
-import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '../../util/catalog';
-import { registerModuleIfNotExists } from '../../util/store';
-import { MIN_SCROLL_VALUE } from '../../assets/scripts/constants';
-import { productGroupTypes } from '../../assets/scripts/enums';
-import _debounce from 'lodash/debounce';
-import '../../assets/images/sprites/cross-small.svg';
+import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '@util/catalog';
+import { generatePictureSourcePath } from '@util/file';
+import { registerModuleIfNotExists } from '@util/store';
+import { MIN_SCROLL_VALUE } from '@constants';
+import { productGroupTypes } from '@enums/product';
+
+import '@images/sprites/cross-small.svg';
 import './Catalog.css';
 
 export default {
@@ -248,9 +232,6 @@ export default {
         CatalogFilter,
         CatalogProductList,
         CatalogBannerCard,
-
-        AddToCartModal,
-        QuickViewModal,
     },
 
     data() {
@@ -286,14 +267,23 @@ export default {
                 state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
         }),
         ...mapState('route', {
-            type: state => state.params.type,
             code: state => state.params.code,
             entityCode: state => state.params.entityCode,
         }),
 
         breadcrumbRootUrl() {
             const { type } = this;
-            return { name: type === productGroupTypes.CATALOG ? 'Catalog' : 'ProductGroups', params: { type } };
+            let name = '';
+
+            switch (type) {
+                case productGroupTypes.CATALOG:
+                case productGroupTypes.NEW:
+                    name = 'Catalog';
+                    break;
+                default:
+                    name = 'ProductGroups';
+            }
+            return { name, params: { type } };
         },
 
         isTabletLg() {
@@ -302,6 +292,30 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        mobileImg() {
+            const banner = this[PRODUCT_GROUP][BANNER];
+            const image = banner.mobileImage || banner.tabletImage || banner.desktopImage;
+            if (image) return generatePictureSourcePath(320, 240, image.id, 'webp');
+        },
+
+        tabletImg() {
+            const banner = this[PRODUCT_GROUP][BANNER];
+            const image = banner.tabletImage || banner.desktopImage;
+            if (image) return generatePictureSourcePath(768, 240, image.id, 'webp');
+        },
+
+        desktopImg() {
+            const banner = this[PRODUCT_GROUP][BANNER];
+            const image = banner.desktopImage || banner.tabletImage;
+            if (image) return generatePictureSourcePath(1224, 240, image.id, 'webp');
+        },
+
+        defaultImg() {
+            const banner = this[PRODUCT_GROUP][BANNER];
+            const image = banner.desktopImage || banner.tabletImage || banner.mobileImage;
+            if (image) return generatePictureSourcePath(1224, 240, image.id, image.sourceExt);
         },
     },
 
@@ -383,6 +397,7 @@ export default {
                     page,
                     orderField,
                     orderDirection,
+                    showMore,
                 });
 
                 this.setSortValue(orderField, orderDirection);
@@ -468,6 +483,31 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
+
+        const {
+            params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },
+            query: { page: toPage = 1, orderField: toOrderField = 'price', orderDirection: toOrderDirection = 'desc' },
+        } = to;
+
+        const {
+            params: { code: fromCode, entityCode: fromEntityCode, type: fromType, pathMatch: fromPathMatch },
+            query: {
+                page: fromPage = 1,
+                orderField: fromOrderField = 'price',
+                orderDirection: fromOrderDirection = 'desc',
+            },
+        } = from;
+
+        if (
+            toType === fromType &&
+            toEntityCode === fromEntityCode &&
+            toCode === fromCode &&
+            toPathMatch === fromPathMatch &&
+            toPage === fromPage &&
+            toOrderField === fromOrderField &&
+            toOrderDirection === fromOrderDirection
+        )
+            return next();
 
         if (this.showMore) {
             this.fetchCatalog(to, from, this.showMore);

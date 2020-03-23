@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import VCheck from '../../components/controls/VCheck/VCheck.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
 
 export default {
     name: 'ui-kit-radio-buttons',

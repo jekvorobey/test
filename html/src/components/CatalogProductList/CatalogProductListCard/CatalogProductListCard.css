@@ -210,10 +210,10 @@
         &-star {
             width: calc(var(--gs) * 2);
             height: calc(var(--gs) * 2);
-            background-image: svg-load('../../../assets/images/sprites/star-small.svg');
+            background-image: svg-load('star-small.svg');
 
             &--empty {
-                background-image: svg-load('../../../assets/images/sprites/star-empty-small.svg');
+                background-image: svg-load('star-empty-small.svg');
             }
         }
     }

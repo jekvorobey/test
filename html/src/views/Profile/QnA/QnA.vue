@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import VAccordion from '../../../components/controls/VAccordion/VAccordion.vue';
+import VAccordion from '@controls/VAccordion/VAccordion.vue';
 import './QnA.css';
 
 export default {

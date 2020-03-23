@@ -49,8 +49,8 @@
                                         :old-price="product.oldPrice"
                                         :count="count"
                                         href="/catalog"
-                                        @deleteItem="DELETE_CART_ITEM({ offerId: product.id })"
-                                        @countChange="ADD_CART_ITEM({ offerId: product.id, count: $event.count })"
+                                        @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
+                                        @countChange="onAddCartItem(product.id, product.stock.storeId, $event.count)"
                                     />
                                 </transition-group>
                             </div>
@@ -78,15 +78,15 @@
                                         :date="product.date"
                                         :author="product.author"
                                         :count="count"
-                                        @deleteItem="DELETE_CART_ITEM({ offerId: product.id })"
-                                        @countChange="ADD_CART_ITEM({ offerId: product.id, count: $event.count })"
+                                        @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
+                                        @countChange="onAddCartItem(product.id, product.stock.storeId, $event.count)"
                                         href="/catalog"
                                     />
                                 </transition-group>
                             </div>
                         </template>
                     </v-tabs>
-                    <v-link class="cart-view__main-clear" tag="button">
+                    <v-link class="cart-view__main-clear" tag="button" @click="onClearCart">
                         <v-svg name="cross-small" width="13" height="13" />
                         &nbsp;&nbsp;Очистить корзину
                     </v-link>
@@ -154,41 +154,37 @@
                         :old-price="item.oldPrice"
                         :tags="item.tags"
                         :rating="item.rating"
-                        @addItem="onAddToCart(item)"
+                        :show-buy-btn="item.stock.qty > 0"
+                        @addItem="onAddCartItem(item.id, item.stock.storeId)"
                         @preview="onPreview(item.code)"
                     />
                 </v-slider>
             </div>
         </section>
-
-        <transition name="fade-in">
-            <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
-            <add-to-cart-modal v-else-if="isAddToCartOpen" />
-        </transition>
     </section>
 </template>
 
 <script>
-import VSvg from '../../components/controls/VSvg/VSvg.vue';
-import VButton from '../../components/controls/VButton/VButton.vue';
-import VLink from '../../components/controls/VLink/VLink.vue';
-import VInput from '../../components/controls/VInput/VInput.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VInput from '@controls/VInput/VInput.vue';
 
-import VSticky from '../../components/controls/VSticky/VSticky.vue';
-import VSlider from '../../components/controls/VSlider/VSlider.vue';
-import Price from '../../components/Price/Price.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
+import Price from '@components/Price/Price.vue';
 
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '../../components/QuickViewModal/QuickViewModal.vue';
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '../../components/AddToCartModal/AddToCartModal.vue';
+import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
+import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 
-import CartMasterClassCard from '../../components/CartMasterClassCard/CartMasterClassCard.vue';
-import CatalogProductCard from '../../components/CatalogProductCard/CatalogProductCard.vue';
-import CartProductCard from '../../components/CartProductCard/CartProductCard.vue';
-import VTabs from '../../components/controls/VTabs/VTabs.vue';
+import CartMasterClassCard from '@components/CartMasterClassCard/CartMasterClassCard.vue';
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
+import VTabs from '@controls/VTabs/VTabs.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '../../store/modules/Cart';
-import { FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM } from '../../store/modules/Cart/actions';
+import { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '@store/modules/Cart';
+import { FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM, CLEAR_CART_DATA } from '@store/modules/Cart/actions';
 import {
     PRODUCTS,
     MASTER_CLASSES,
@@ -196,14 +192,15 @@ import {
     IS_MASTER_CLASS,
     CART_ITEMS_COUNT,
     CART_TYPES,
-} from '../../store/modules/Cart/getters';
+} from '@store/modules/Cart/getters';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { breakpoints, cartItemTypes } from '../../assets/scripts/enums';
-import { preparePrice } from '../../util/helpers';
-import '../../assets/images/sprites/alert.svg';
+import { breakpoints } from '@enums';
+import { cartItemTypes } from '@enums/product';
+import { preparePrice } from '@util';
+import '@images/sprites/alert.svg';
 import './Cart.css';
 
 const itemTypes = Object.values(cartItemTypes);
@@ -259,9 +256,6 @@ export default {
         CartProductCard,
         CartMasterClassCard,
         CatalogProductCard,
-
-        AddToCartModal,
-        QuickViewModal,
     },
 
     data() {
@@ -293,18 +287,22 @@ export default {
     },
 
     methods: {
-        ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM, CLEAR_CART_DATA]),
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+        },
+
+        onClearCart() {
+            this[CLEAR_CART_DATA]();
         },
 
         onAddToCart(item) {
             this[CHANGE_MODAL_STATE]({
                 name: ADD_TO_CART_MODAL_NAME,
                 open: true,
-                state: { offerId: item.id, type: item.type },
+                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
 
@@ -331,6 +329,14 @@ export default {
                     reject(error);
                 }
             });
+        },
+
+        onAddCartItem(offerId, storeId, count) {
+            this[ADD_CART_ITEM]({ offerId, storeId, count });
+        },
+
+        onDeleteCartItem(offerId, storeId) {
+            this[DELETE_CART_ITEM]({ offerId, storeId });
         },
 
         async onEnterItems(el, done) {

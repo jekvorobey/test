@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import VSticky from '../VSticky/VSticky.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
 import PdfControlPanel from './pdf-control-panel/pdf-control-panel.vue';
 import PdfPage from './pdf-page/pdf-page.vue';
 import './VPdf.css';

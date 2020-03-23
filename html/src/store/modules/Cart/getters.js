@@ -1,5 +1,5 @@
-import { $logger } from '../../../services/ServiceLocator';
-import { cartItemTypes } from '../../../assets/scripts/enums';
+import { $logger } from '@services';
+import { cartItemTypes } from '@enums/product';
 
 export const GET_ITEMS_BY_TYPE = 'GET_ITEMS_BY_TYPE';
 export const IS_PRODUCT = 'IS_PRODUCT';
@@ -47,7 +47,7 @@ export default {
 
     [PRODUCT_ITEMS_SUM]: state => {
         const productData = state.cartData[cartItemTypes.PRODUCT];
-        if (productData) return productData.summary.sum;
+        if (productData) return productData.summary.total;
         return '';
     },
 

@@ -1,6 +1,6 @@
-import { cartItemTypes } from '../../assets/scripts/enums';
-import isCartEmpty from '../../router/middleware/isCartEmpty';
-import hasSession from '../../router/middleware/hasSession';
+import { cartItemTypes } from '@enums/product';
+import isCartEmpty from '@router/middleware/isCartEmpty';
+import hasSession from '@router/middleware/hasSession';
 
 /**
  * @Module

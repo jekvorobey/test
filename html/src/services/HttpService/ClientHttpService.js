@@ -1,9 +1,11 @@
 import axios from 'axios';
-import HttpServiceBase from './base';
-import { $logger } from '../ServiceLocator';
 import { cacheAdapterEnhancer } from 'axios-extensions';
-import { httpCodes } from '../../assets/scripts/enums';
-import { HTTP_REQUEST_TIMEOUT } from '../../assets/scripts/constants';
+
+import { $logger } from '@services';
+import { httpCodes } from '@enums';
+import { HTTP_REQUEST_TIMEOUT } from '@constants';
+
+import HttpServiceBase from './base';
 
 export default class ClientHttpService extends HttpServiceBase {
     constructor(context) {
@@ -31,7 +33,9 @@ export default class ClientHttpService extends HttpServiceBase {
                 if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NOT_MODIFIED) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (thrown) {
-                reject({ isCancel: axios.isCancel(thrown), message: thrown.message });
+                let status = null;
+                if (thrown.response) status = thrown.response.status;
+                reject({ isCancel: axios.isCancel(thrown), message: thrown.message, status });
             }
         });
     }
@@ -49,7 +53,9 @@ export default class ClientHttpService extends HttpServiceBase {
                 if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NOT_MODIFIED) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (thrown) {
-                reject({ isCancel: axios.isCancel(thrown), message: thrown.message });
+                let status = null;
+                if (thrown.response) status = thrown.response.status;
+                reject({ isCancel: axios.isCancel(thrown), message: thrown.message, status });
             }
         });
     }
@@ -67,7 +73,9 @@ export default class ClientHttpService extends HttpServiceBase {
                 if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NO_CONTENT) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (thrown) {
-                reject({ isCancel: axios.isCancel(thrown), message: thrown.message });
+                let status = null;
+                if (thrown.response) status = thrown.response.status;
+                reject({ isCancel: axios.isCancel(thrown), message: thrown.message, status });
             }
         });
     }
@@ -85,7 +93,9 @@ export default class ClientHttpService extends HttpServiceBase {
                 if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NO_CONTENT) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (thrown) {
-                reject({ isCancel: axios.isCancel(thrown), message: thrown.message });
+                let status = null;
+                if (thrown.response) status = thrown.response.status;
+                reject({ isCancel: axios.isCancel(thrown), message: thrown.message, status });
             }
         });
     }

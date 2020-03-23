@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import BannerCard from '../../BannerCard/BannerCard.vue';
+import BannerCard from '@components/BannerCard/BannerCard.vue';
 import './ListBannersSection.css';
 
 export default {

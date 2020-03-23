@@ -7,9 +7,7 @@
             Мастер Табы
         </p>
         <v-tabs :items="items" key-field="id">
-            <template v-slot:tab-1="{ item }">
-                Кастомная вкладка {{ item.title }}
-            </template>
+            <template v-slot:tab-1="{ item }"> Кастомная вкладка {{ item.title }} </template>
             <template v-slot:panel-0="{ item }">
                 Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего
                 сердца. Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив,
@@ -51,13 +49,13 @@
     </section>
 </template>
 <script>
-import VSvg from '../../components/controls/VSvg/VSvg.vue';
-import VButton from '../../components/controls/VButton/VButton.vue';
-import VInput from '../../components/controls/VInput/VInput.vue';
-import VDatepicker from '../../components/controls/VDatepicker/VDatepicker.vue';
-import VTabs from '../../components/controls/VTabs/VTabs.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VDatepicker from '@controls/VDatepicker/VDatepicker.vue';
+import VTabs from '@controls/VTabs/VTabs.vue';
 
-import '../../assets/images/sprites/datepicker.svg';
+import '@images/sprites/datepicker.svg';
 import './UiKitTabs.css';
 
 export default {

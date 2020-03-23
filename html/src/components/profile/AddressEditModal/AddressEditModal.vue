@@ -128,29 +128,30 @@
 <script>
 import { yandexMap, ymapMarker } from 'vue-yandex-maps';
 
-import VSvg from '../../controls/VSvg/VSvg.vue';
-import VButton from '../../controls/VButton/VButton.vue';
-import VSuggestion from '../../controls/VSuggestion/VSuggestion.vue';
-import VInput from '../../controls/VInput/VInput.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VSuggestion from '@controls/VSuggestion/VSuggestion.vue';
+import VInput from '@controls/VInput/VInput.vue';
 
-import RadioSwitch from '../../RadioSwitch/RadioSwitch.vue';
-import GeneralModal from '../../GeneralModal/GeneralModal.vue';
+import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapGetters, mapState, mapActions } from 'vuex';
 
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as GEO_MODULE, SELECTED_CITY } from '../../../store/modules/Geolocation';
-import { SELECTED_CITY_COORDS } from '../../../store/modules/Geolocation/getters';
-import { SET_SELECTED_CITY } from '../../../store/modules/Geolocation/actions';
+import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
+import { SELECTED_CITY_COORDS } from '@store/modules/Geolocation/getters';
+import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 
-import validationMixin, { required } from '../../../plugins/validation';
-import { suggestionTypes } from '../../../assets/scripts/enums';
-import { $dadata } from '../../../services/ServiceLocator';
-import '../../../assets/images/sprites/list.svg';
-import '../../../assets/images/sprites/map.svg';
-import pin from '../../../assets/images/icons/pin-filled.svg';
+import validationMixin, { required } from '@plugins/validation';
+import { suggestionTypes } from '@enums/suggestions';
+import { $dadata } from '@services';
+
+import pin from '@images/icons/pin-filled.svg';
+import '@images/sprites/list.svg';
+import '@images/sprites/map.svg';
 import './AddressEditModal.css';
 
 export const NAME = 'address-edit-modal';
@@ -217,6 +218,8 @@ export default {
                 porch: '',
                 intercom: '',
                 comment: '',
+                geo_lat: '',
+                geo_lon: '',
             },
 
             coords: null,
@@ -402,9 +405,12 @@ export default {
                 address.block = value.data.block_type
                     ? `${value.data.block_type} ${value.data.block}`
                     : value.data.block;
-                if (value.data.geo_lat && value.data.geo_lon)
-                    this.coords =
-                        [Number(value.data.geo_lat), Number(value.data.geo_lon)] || this[SELECTED_CITY_COORDS];
+
+                if (value.data.geo_lat && value.data.geo_lon) {
+                    address.geo_lat = value.data.geo_lat;
+                    address.geo_lon = value.data.geo_lon;
+                }
+                this.coords = [Number(value.data.geo_lat), Number(value.data.geo_lon)] || this[SELECTED_CITY_COORDS];
                 this.address = address;
             }
         },
@@ -429,10 +435,9 @@ export default {
 
         async init() {
             if (this.modalState.address) {
+                if (this.modalState.address.geo_lat && this.modalState.address.geo_lon)
+                    this.coords = [Number(this.modalState.address.geo_lat), Number(this.modalState.address.geo_lon)];
                 this.address = { ...this.modalState.address };
-                const { suggestions } = await this.findAddress(suggestionTypes.HOUSE, this.address.value, 1);
-                const suggestion = suggestions[0];
-                if (suggestion) this.coords = [Number(suggestion.data.geo_lat), Number(suggestion.data.geo_lon)];
             }
         },
     },

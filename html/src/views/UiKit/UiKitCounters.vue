@@ -16,7 +16,7 @@
     </section>
 </template>
 <script>
-import VCounter from '../../components/controls/VCounter/VCounter.vue';
+import VCounter from '@controls/VCounter/VCounter.vue';
 
 export default {
     name: 'ui-kit-counters',

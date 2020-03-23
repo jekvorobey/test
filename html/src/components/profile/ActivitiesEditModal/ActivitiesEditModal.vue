@@ -24,22 +24,22 @@
     </general-modal>
 </template>
 <script>
-import VSvg from '../../controls/VSvg/VSvg.vue';
-import VButton from '../../controls/VButton/VButton.vue';
-import VCheck from '../../controls/VCheck/VCheck.vue';
-import GeneralModal from '../../GeneralModal/GeneralModal.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VCheck from '@controls/VCheck/VCheck.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapActions, mapGetters, mapState } from 'vuex';
-import { NAME as MODAL_MODULE, MODALS } from '../../../store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '../../../store/modules/Modal/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE } from '../../../store/modules/Profile';
-import { NAME as CABINET_MODULE, ACTIVITIES, All_ACTIVITIES } from '../../../store/modules/Profile/modules/Cabinet';
-import { UPDATE_ACTIVITIES } from '../../../store/modules/Profile/modules/Cabinet/actions';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as CABINET_MODULE, ACTIVITIES, All_ACTIVITIES } from '@store/modules/Profile/modules/Cabinet';
+import { UPDATE_ACTIVITIES } from '@store/modules/Profile/modules/Cabinet/actions';
 
-import { getRandomInt } from '../../../util/helpers';
+import { getRandomInt } from '@util';
 import _cloneDeep from 'lodash/cloneDeep';
-import '../../../assets/images/sprites/cross.svg';
+import '@images/sprites/cross.svg';
 import './ActivitiesEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
