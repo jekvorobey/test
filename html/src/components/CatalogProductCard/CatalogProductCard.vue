@@ -1,32 +1,20 @@
 <template>
     <router-link tag="div" class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }" :to="href">
         <div class="catalog-product-card__img">
-            <v-picture v-if="image && image.id">
-                <source
-                    :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
-                    type="image/webp"
-                    media="(min-width: 480px)"
-                />
-                <source
-                    :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                    type="image/webp"
-                    media="(max-width: 479px)"
-                />
-                <img
-                    class="blur-up lazyload v-picture__img"
-                    :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
-                    alt=""
-                />
+            <v-picture :key="image.id" v-if="image && image.id">
+                <source v-if="bigImg" :data-srcset="bigImg" type="image/webp" media="(min-width: 480px)" />
+                <source v-if="smallImg" :data-srcset="smallImg" type="image/webp" media="(max-width: 479px)" />
+                <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
             </v-picture>
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-card__controls">
-                <v-button
+                <buy-button
                     v-if="showBuyBtn"
                     class="btn--outline catalog-product-card__controls-btn"
                     @click.prevent="onBuyButtonClick"
                 >
                     Купить
-                </v-button>
+                </buy-button>
                 <v-link tag="button" class="catalog-product-card__controls-link" @click.prevent="onPreview">
                     Быстрый&nbsp;просмотр
                 </v-link>
@@ -63,12 +51,15 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
-import VButton from '@controls/VButton/VButton.vue';
 import VRating from '@controls/VRating/VRating.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import Tag from '@components/Tag/Tag.vue';
 import Price from '@components/Price/Price.vue';
+import BuyButton from '../BuyButton/BuyButton.vue';
+
+import { fileExtension } from '@enums';
+import { generatePictureSourcePath } from '@util/file';
 
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
@@ -76,20 +67,18 @@ import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/logo.svg';
 import './CatalogProductCard.css';
 
-import { generatePictureSourcePath } from '@util/file';
-
 export default {
     name: 'catalog-product-card',
 
     components: {
         VSvg,
         VLink,
-        VButton,
         VRating,
         VPicture,
 
         Tag,
         Price,
+        BuyButton,
     },
 
     props: {
@@ -150,6 +139,33 @@ export default {
         showWishlistBtn: {
             type: Boolean,
             default: true,
+        },
+    },
+
+    computed: {
+        isObjectImage() {
+            return this.image && this.image.id;
+        },
+
+        bigImg() {
+            return (
+                (this.isObjectImage && generatePictureSourcePath(300, 300, this.image.id, fileExtension.image.WEBP)) ||
+                this.image
+            );
+        },
+
+        smallImg() {
+            return (
+                (this.isObjectImage && generatePictureSourcePath(200, 200, this.image.id, fileExtension.image.WEBP)) ||
+                this.image
+            );
+        },
+
+        defaultImg() {
+            return (
+                (this.isObjectImage && generatePictureSourcePath(200, 200, this.image.id, this.image.sourceExt)) ||
+                this.image
+            );
         },
     },
 

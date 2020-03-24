@@ -53,7 +53,6 @@
 </template>
 
 <script>
-import VButton from '@controls/VButton/VButton.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
@@ -84,7 +83,6 @@ export default {
     name: NAME,
 
     components: {
-        VButton,
         VPicture,
         VSpinner,
 

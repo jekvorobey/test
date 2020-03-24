@@ -71,7 +71,7 @@ import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
 import { FETCH_CART_DATA, CLEAR_CART_DATA } from '@store/modules/Cart/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
-import { CHECK_SESSION, LOGIN_BY_PASSWORD } from '@store/modules/Auth/actions';
+import { CHECK_SESSION, FETCH_USER } from '@store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -116,7 +116,7 @@ export default {
     methods: {
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
-        ...mapActions(AUTH_MODULE, [CHECK_SESSION, LOGIN_BY_PASSWORD]),
+        ...mapActions(AUTH_MODULE, [CHECK_SESSION, FETCH_USER]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onScroll() {
@@ -150,9 +150,8 @@ export default {
 
     async serverPrefetch() {
         try {
-            await this[FETCH_COMMON_DATA]();
-            await this[CHECK_SESSION](true);
-            if (this[HAS_SESSION]) await this[FETCH_CART_DATA]();
+            await Promise.all([this[FETCH_COMMON_DATA](), this[CHECK_SESSION](true)]);
+            if (this[HAS_SESSION]) await Promise.all([this[FETCH_USER](), this[FETCH_CART_DATA]()]);
             else return Promise.resolve();
         } catch (error) {
             return Promise.resolve();

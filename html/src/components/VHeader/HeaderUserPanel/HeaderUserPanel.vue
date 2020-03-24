@@ -8,11 +8,11 @@
             </profile-navigation-panel>
         </div>
 
-        <template v-if="hasSession">
+        <template v-if="hasSession && canBuy">
             <button class="header-user-panel__item">
                 <v-svg name="wishlist-middle" width="24" height="24" />
             </button>
-            <div class="header-user-panel__item">
+            <div v-if="canBuy" class="header-user-panel__item">
                 <price class="text-medium header-user-panel__item-sum" v-bind="productItemsSum" />
                 &nbsp;&nbsp;
                 <cart-header-panel class="header-user-panel__item-cart">
@@ -38,7 +38,7 @@ import ProfileNavigationPanel from '@components/ProfileNavigationPanel/ProfileNa
 import { NAME as REGISTRATION_MODAL_NAME } from '@components/RegistrationModal/RegistrationModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY } from '@store/modules/Auth';
 
 import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
@@ -65,8 +65,11 @@ export default {
     },
 
     computed: {
-        ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapState(AUTH_MODULE, {
+            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
+        }),
 
         groups() {
             return [
@@ -126,7 +129,7 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onToCart() {
-            if (this[HAS_SESSION]) this.$router.push({ name: 'Cart' });
+            if (this[HAS_SESSION] && this[CAN_BUY]) this.$router.push({ name: 'Cart' });
         },
 
         onRegister() {

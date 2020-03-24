@@ -25,6 +25,10 @@ export function checkSession(force = false) {
     });
 }
 
+export function getUser() {
+    return $http.get('/v1/auth/user');
+}
+
 export function loginByPassword(payload) {
     return $http.post('/v1/auth/loginByPassword', payload);
 }
@@ -363,7 +367,7 @@ export function getCartData() {
     return $http.get('/v1/cart/data');
 }
 
-export function deleteCartData() {
+export function deleteAllItems() {
     return $http.delete('/v1/cart/all');
 }
 

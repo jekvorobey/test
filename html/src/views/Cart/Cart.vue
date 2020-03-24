@@ -184,7 +184,12 @@ import VTabs from '@controls/VTabs/VTabs.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '@store/modules/Cart';
-import { FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM, CLEAR_CART_DATA } from '@store/modules/Cart/actions';
+import {
+    FETCH_FEATURED_PRODUCTS,
+    DELETE_CART_ITEM,
+    ADD_CART_ITEM,
+    DELETE_ALL_ITEMS,
+} from '@store/modules/Cart/actions';
 import {
     PRODUCTS,
     MASTER_CLASSES,
@@ -194,7 +199,7 @@ import {
     CART_TYPES,
 } from '@store/modules/Cart/getters';
 
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { breakpoints } from '@enums';
@@ -265,11 +270,6 @@ export default {
     },
 
     computed: {
-        ...mapState(MODAL_MODULE, {
-            isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
-            isAddToCartOpen: state =>
-                state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
-        }),
         ...mapState(CART_MODULE, [FEATURED_PRODUCTS, CART_DATA]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS]),
 
@@ -288,26 +288,26 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM, CLEAR_CART_DATA]),
+        ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM, DELETE_ALL_ITEMS]),
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
         },
 
         onClearCart() {
-            this[CLEAR_CART_DATA]();
-        },
-
-        onAddToCart(item) {
-            this[CHANGE_MODAL_STATE]({
-                name: ADD_TO_CART_MODAL_NAME,
-                open: true,
-                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
-            });
+            this[DELETE_ALL_ITEMS]();
         },
 
         prepareBonus(value) {
             return preparePrice(value);
+        },
+
+        onAddCartItem(offerId, storeId, count) {
+            this[ADD_CART_ITEM]({ offerId, storeId, count });
+        },
+
+        onDeleteCartItem(offerId, storeId) {
+            this[DELETE_CART_ITEM]({ offerId, storeId });
         },
 
         onBeforeEnterItems(el) {
@@ -329,14 +329,6 @@ export default {
                     reject(error);
                 }
             });
-        },
-
-        onAddCartItem(offerId, storeId, count) {
-            this[ADD_CART_ITEM]({ offerId, storeId, count });
-        },
-
-        onDeleteCartItem(offerId, storeId) {
-            this[DELETE_CART_ITEM]({ offerId, storeId });
         },
 
         async onEnterItems(el, done) {
