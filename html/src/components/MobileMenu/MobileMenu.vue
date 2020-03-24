@@ -4,7 +4,7 @@
             <button
                 v-if="!showCategories"
                 class="mobile-menu__header-btn mobile-menu__header-btn--close"
-                @click="SET_MENU_OPEN(false)"
+                @click="onSetMenu(false)"
             >
                 <v-svg name="cross" width="24" height="24" />Меню
             </button>
@@ -13,7 +13,7 @@
                     <v-svg name="arrow-small" width="24" height="24" />
                     {{ selectedCategoryName }}
                 </button>
-                <button class="mobile-menu__header-btn" @click="SET_MENU_OPEN(false)">
+                <button class="mobile-menu__header-btn" @click="onSetMenu(false)">
                     <v-svg name="cross" width="24" height="24" />
                 </button>
             </template>
@@ -140,6 +140,8 @@ import { CATEGORIES } from '@store';
 import { HEADER_MENU } from '@store/getters';
 import { SET_MENU_OPEN } from '@store/actions';
 
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
@@ -179,6 +181,7 @@ export default {
     computed: {
         ...mapState([CATEGORIES]),
         ...mapGetters([HEADER_MENU]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(GEO_MODULE, {
             city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].value) || 'Выберите город',
         }),
@@ -237,6 +240,10 @@ export default {
         ...mapActions([SET_MENU_OPEN]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
+        onSetMenu(open) {
+            this[SET_MENU_OPEN](open);
+        },
+
         onCategoryClick(item) {
             this.selectedCategories.push(item);
         },
@@ -252,8 +259,8 @@ export default {
         },
 
         onRegister() {
-            this[SET_MENU_OPEN](false);
-            this[CHANGE_MODAL_STATE]({ name: REGISTER_MODAL_NAME, open: true });
+            if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
+            else this[CHANGE_MODAL_STATE]({ name: REGISTER_MODAL_NAME, open: true });
         },
     },
 };
