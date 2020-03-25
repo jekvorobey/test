@@ -2,17 +2,9 @@
     <div class="product-price-panel">
         <div class="container product-price-panel__container">
             <div class="product-price-panel__img" v-if="image">
-                <v-picture :image="image" alt="">
-                    <template v-slot:source="{ image, lazy }">
-                        <source :data-srcset="generateSourcePath(56, 56, image.id, 'webp')" type="image/webp" />
-                    </template>
-                    <template v-slot:fallback="{ image, lazy, alt }">
-                        <img
-                            class="blur-up lazyload v-picture__img"
-                            :data-src="generateSourcePath(56, 56, image.id, image.sourceExt)"
-                            :alt="alt"
-                        />
-                    </template>
+                <v-picture :key="image && image.id" v-if="image" alt="">
+                    <source :data-srcset="smallImage" type="image/webp" />
+                    <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
                 </v-picture>
             </div>
 
@@ -31,24 +23,26 @@
                 </div>
             </div>
 
-            <v-button
+            <buy-button
                 class="product-price-panel__btn"
                 :class="{ 'btn--outline': !isTablet }"
                 @click.prevent="onBuyBtnClick"
                 :disabled="!canBuy"
             >
                 {{ canBuy ? 'В корзину' : 'Нет в наличии' }}
-            </v-button>
+            </buy-button>
         </div>
     </div>
 </template>
 
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
-import VButton from '@controls/VButton/VButton.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
-import Price from '@components/Price/Price.vue';
 
+import Price from '@components/Price/Price.vue';
+import BuyButton from '@components/BuyButton/BuyButton.vue';
+
+import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 import { preparePrice } from '@util';
 import '@images/sprites/wishlist-middle.svg';
@@ -59,9 +53,10 @@ export default {
 
     components: {
         VSvg,
-        VButton,
         VPicture,
+
         Price,
+        BuyButton,
     },
 
     props: {
@@ -92,6 +87,18 @@ export default {
     },
 
     computed: {
+        smallImage() {
+            if (this.image && this.image.id)
+                return generatePictureSourcePath(56, 56, this.image.id, fileExtension.image.WEBP);
+            return this.image;
+        },
+
+        defaultImage() {
+            if (this.image && this.image.id)
+                return generatePictureSourcePath(56, 56, this.image.id, this.image.sourceExt);
+            return this.image;
+        },
+
         computedBonus() {
             return preparePrice(this.bonus);
         },
@@ -102,10 +109,6 @@ export default {
     },
 
     methods: {
-        generateSourcePath(x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext);
-        },
-
         onWishlistBtnClick() {
             this.$emit('addWishlist');
         },
