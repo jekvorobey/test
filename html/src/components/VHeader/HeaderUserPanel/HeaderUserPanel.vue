@@ -8,7 +8,7 @@
             </profile-navigation-panel>
         </div>
 
-        <template v-if="hasSession && canBuy">
+        <template v-if="hasSession">
             <button class="header-user-panel__item">
                 <v-svg name="wishlist-middle" width="24" height="24" />
             </button>
@@ -70,51 +70,6 @@ export default {
         ...mapState(AUTH_MODULE, {
             [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
         }),
-
-        groups() {
-            return [
-                {
-                    id: 1,
-                    name: this.$t('profile.groups.profile'),
-                    routes: [
-                        { name: 'Cabinet', exact: true },
-                        { name: 'Preferences', exact: true },
-                        { name: 'Addresses', exact: true },
-                        { name: 'Payment', exact: true },
-                        { name: 'Subscribes', exact: true },
-                        { name: 'Messages', displayName: this.$tc('profile.format.messages', 5) },
-                        { name: 'Certificates', exact: true },
-                        { name: 'Bonuses', exact: true },
-                        { name: 'Orders' },
-                        { name: 'ReferalOrders' },
-                    ],
-                },
-                {
-                    id: 2,
-                    name: this.$t('profile.groups.business'),
-                    routes: [
-                        { name: 'Referal', exact: true },
-                        { name: 'ProPreferences', exact: true },
-                        { name: 'Promopage', exact: true },
-                        { name: 'Seo', exact: true },
-                        { name: 'Promocodes', exact: true },
-                        { name: 'Account', exact: true },
-                        { name: 'Billing', exact: true },
-                        { name: 'Documents', exact: true },
-                    ],
-                },
-                {
-                    id: 3,
-                    name: this.$t('profile.groups.training'),
-                    routes: [
-                        { name: 'HowItWorks', exact: true },
-                        { name: 'Guides' },
-                        { name: 'Masterclasses', exact: true },
-                        { name: 'QnA', exact: true },
-                    ],
-                },
-            ];
-        },
 
         isTablet() {
             return this.$mq.tablet;

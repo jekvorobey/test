@@ -2,6 +2,8 @@
  * @Module
  */
 
+import isUserReferral from '@router/middleware/isUserReferral';
+
 const ProPreferencesAsync = () => import(/* webpackChunkName: "pro-preferences-view" */ './ProPreferences.vue');
 
 /**
@@ -16,6 +18,10 @@ export default {
             name: 'ProPreferences',
             path: 'pro-preferences',
             component: ProPreferencesAsync,
+
+            meta: {
+                middleware: [isUserReferral],
+            },
         },
     ],
 };

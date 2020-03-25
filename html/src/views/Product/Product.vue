@@ -665,8 +665,9 @@ import {
     generateYoutubeImagePlaceholderPath,
     generateYoutubeVideoSourcePath,
 } from '@util/file';
-import { breakpoints, fileExtension } from '@enums';
+import { breakpoints, fileExtension, httpCodes } from '@enums';
 import { productGroupTypes } from '@enums/product';
+import { createNotFoundRoute } from '@util/router';
 import { generateCategoryUrl, generateProductUrl } from '@util/catalog';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
@@ -937,16 +938,22 @@ export default {
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
-        async fetchProduct(code, referrerCode, next) {
+        async fetchProduct(to, from, next) {
+            const {
+                path,
+                params: { code },
+                query: { refCode: referrerCode },
+            } = to;
+
             try {
-                const { productCode } = this.product;
                 this.$progress.start();
                 await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
                 next();
-                this.$progress.finish();
             } catch (error) {
                 this.$progress.fail();
-                next(false);
+                if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
+                else next(false);
+                this.$progress.finish();
             }
         },
 
@@ -1035,7 +1042,9 @@ export default {
                 .then(() => next(vm => $progress.finish()))
                 .catch(error => {
                     $progress.fail();
-                    next();
+                    if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
+                    else next(new Error(error.message));
+                    $progress.finish();
                 });
         }
     },
@@ -1059,7 +1068,7 @@ export default {
         } = from;
 
         if (code === fromCode && refCode === fromRefCode) next();
-        else this.debounce_fetchProduct(code, refCode, next);
+        else this.debounce_fetchProduct(to, from, next);
     },
 
     beforeMount() {

@@ -16,11 +16,7 @@ export default function createModule() {
         namespaced: true,
         state: {
             [HAS_SESSION]: false,
-            [USER]: {
-                [CAN_BUY]: false,
-                [REFERRAL_PARTNER]: false,
-                [REFERRAL_CODE]: null,
-            },
+            [USER]: null,
         },
         actions,
         mutations,

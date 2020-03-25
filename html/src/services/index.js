@@ -49,8 +49,8 @@ module.exports = class ServiceLocator {
         return ServiceLocator.instance()._container.get(injectionType.DADATA);
     }
 
-    static get $config() {
-        return ServiceLocator.instance()._container.get(injectionType.CONFIG);
+    static get $context() {
+        return ServiceLocator.instance()._container.get(injectionType.APPLICATION_CONTEXT);
     }
 
     static get $cookie() {

@@ -2,6 +2,8 @@
  * @Module
  */
 
+import isUserReferral from '@router/middleware/isUserReferral';
+
 const PromocodesAsync = () => import(/* webpackChunkName: "promocodes-view" */ './Promocodes.vue');
 
 /**
@@ -16,6 +18,10 @@ export default {
             name: 'Promocodes',
             path: 'promocodes',
             component: PromocodesAsync,
+
+            meta: {
+                middleware: [isUserReferral],
+            },
         },
     ],
 };

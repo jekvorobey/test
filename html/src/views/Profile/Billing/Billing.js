@@ -2,6 +2,8 @@
  * @Module
  */
 
+import isUserReferral from '@router/middleware/isUserReferral';
+
 const BillingAsync = () => import(/* webpackChunkName: "billing-view" */ './Billing.vue');
 
 /**
@@ -16,6 +18,10 @@ export default {
             name: 'Billing',
             path: 'billing',
             component: BillingAsync,
+
+            meta: {
+                middleware: [isUserReferral],
+            },
         },
     ],
 };

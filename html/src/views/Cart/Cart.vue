@@ -202,6 +202,9 @@ import {
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+
+import { cancelRoute } from '@settings';
 import { breakpoints } from '@enums';
 import { cartItemTypes } from '@enums/product';
 import { preparePrice } from '@util';
@@ -270,6 +273,7 @@ export default {
     },
 
     computed: {
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(CART_MODULE, [FEATURED_PRODUCTS, CART_DATA]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS]),
 
@@ -283,6 +287,12 @@ export default {
 
         activeTabItem() {
             return this.cartTypes[this.activeTab];
+        },
+    },
+
+    watch: {
+        [HAS_SESSION](value) {
+            if (!value) this.$router.replace(cancelRoute.path);
         },
     },
 

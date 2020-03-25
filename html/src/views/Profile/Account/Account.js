@@ -4,6 +4,8 @@
 
 const AccountAsync = () => import(/* webpackChunkName: "account-view" */ './Account.vue');
 
+import isUserReferral from '@router/middleware/isUserReferral';
+
 /**
  * Модуль компонента Account
  */
@@ -16,6 +18,10 @@ export default {
             name: 'Account',
             path: 'account',
             component: AccountAsync,
+
+            meta: {
+                middleware: [isUserReferral],
+            },
         },
     ],
 };

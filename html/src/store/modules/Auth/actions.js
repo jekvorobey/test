@@ -118,12 +118,17 @@ export default {
 
     async [FETCH_USER]({ commit }) {
         try {
-            const { can_buy: canBuy, referrer_code: referrerCode, referrer_partner: referrerPartner } = await getUser();
-            commit(SET_USER, { canBuy, referrerCode, referrerPartner });
+            let user = null;
+            const { can_buy: canBuy, referral_code: referralCode, referral_partner: referralPartner } = await getUser();
+            user = { canBuy, referralCode, referralPartner };
+            commit(SET_USER, user);
+            return user;
         } catch (error) {
+            user = {};
             commit(SET_HAS_SESSION, false);
-            commit(SET_USER, {});
+            commit(SET_USER, user);
             storeErrorHandler(FETCH_USER)(error);
+            return user;
         }
     },
 };

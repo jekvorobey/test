@@ -94,7 +94,8 @@ import profileModule, { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modul
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
+
 import { cancelRoute } from '@settings';
 import { $store } from '@services';
 import { registerModuleIfNotExists } from '@util/store';
@@ -119,6 +120,9 @@ export default {
     computed: {
         ...mapState(PROFILE_MODULE, [BREADCRUMBS]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+        }),
 
         ...mapState(MODAL_MODULE, {
             isNavigationOpen: state =>
@@ -126,7 +130,7 @@ export default {
         }),
 
         groups() {
-            return [
+            const groups = [
                 {
                     id: 1,
                     name: this.$t('profile.groups.profile'),
@@ -143,7 +147,10 @@ export default {
                         { name: 'ReferalOrders' },
                     ],
                 },
-                {
+            ];
+
+            if (this[REFERRAL_PARTNER])
+                groups.push({
                     id: 2,
                     name: this.$t('profile.groups.business'),
                     routes: [
@@ -156,18 +163,20 @@ export default {
                         { name: 'Billing', exact: true },
                         { name: 'Documents', exact: true },
                     ],
-                },
-                {
-                    id: 3,
-                    name: this.$t('profile.groups.training'),
-                    routes: [
-                        { name: 'HowItWorks', exact: true },
-                        { name: 'Guides' },
-                        { name: 'Masterclasses', exact: true },
-                        { name: 'QnA', exact: true },
-                    ],
-                },
-            ];
+                });
+
+            groups.push({
+                id: 3,
+                name: this.$t('profile.groups.training'),
+                routes: [
+                    { name: 'HowItWorks', exact: true },
+                    { name: 'Guides' },
+                    { name: 'Masterclasses', exact: true },
+                    { name: 'QnA', exact: true },
+                ],
+            });
+
+            return groups;
         },
 
         isTabletLg() {

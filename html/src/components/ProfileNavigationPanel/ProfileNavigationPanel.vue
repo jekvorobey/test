@@ -23,7 +23,7 @@ import GeneralPopupPanel from '@components/GeneralPopupPanel/GeneralPopupPanel.v
 import NavigationPanel from '@components/profile/NavigationPanel/NavigationPanel.vue';
 
 import { mapActions, mapState, mapGetters } from 'vuex';
-import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
 
 import './ProfileNavigationPanel.css';
 
@@ -40,9 +40,12 @@ export default {
 
     computed: {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+        }),
 
         groups() {
-            return [
+            const groups = [
                 {
                     id: 1,
                     routes: [
@@ -52,7 +55,10 @@ export default {
                         { name: 'ReferalOrders' },
                     ],
                 },
-                {
+            ];
+
+            if (this[REFERRAL_PARTNER])
+                groups.push({
                     id: 2,
                     routes: [
                         { name: 'Referal', exact: true },
@@ -61,8 +67,9 @@ export default {
                         { name: 'Documents', exact: true },
                         { name: 'Masterclasses', exact: true },
                     ],
-                },
-            ];
+                });
+
+            return groups;
         },
     },
 };

@@ -2,6 +2,8 @@
  * @Module
  */
 
+import isUserReferral from '@router/middleware/isUserReferral';
+
 const SeoAsync = () => import(/* webpackChunkName: "seo-view" */ './Seo.vue');
 
 /**
@@ -16,6 +18,10 @@ export default {
             name: 'Seo',
             path: 'seo',
             component: SeoAsync,
+
+            meta: {
+                middleware: [isUserReferral],
+            },
         },
     ],
 };

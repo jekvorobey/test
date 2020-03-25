@@ -6,7 +6,7 @@ export default {
         state.hasSession = payload;
     },
 
-    [SET_USER](state, payload = {}) {
+    [SET_USER](state, payload = null) {
         state.user = payload;
     },
 };

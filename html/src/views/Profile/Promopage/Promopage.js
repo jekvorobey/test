@@ -2,6 +2,8 @@
  * @Module
  */
 
+import isUserReferral from '@router/middleware/isUserReferral';
+
 const PromopageAsync = () => import(/* webpackChunkName: "promopage-view" */ './Promopage.vue');
 
 /**
@@ -16,6 +18,10 @@ export default {
             name: 'Promopage',
             path: 'promopage',
             component: PromopageAsync,
+
+            meta: {
+                middleware: [isUserReferral],
+            },
         },
     ],
 };
