@@ -1,7 +1,7 @@
 <template>
     <yandex-map :zoom="zoom" :coords="coords" :controls="[]" :cluster-options="clusterOptions">
         <ymap-marker
-            v-for="point in points"
+            v-for="(point, index) in points"
             :key="point.key"
             :markerId="point.markerId"
             :coords="point.coords"
@@ -18,7 +18,8 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 import { NAME as GEO_MODULE } from '@store/modules/Geolocation';
 import { SELECTED_CITY_COORDS } from '@store/modules/Geolocation/getters';
 
-import { NAME as PRODUCT_MODULE, PICKUP_POINTS, SELECTED_PICKUP_POINT } from '@store/modules/Product';
+import { NAME as PRODUCT_MODULE, SELECTED_PICKUP_POINT } from '@store/modules/Product';
+import { FILTERED_PICKUP_POINTS } from '@store/modules/Product/getters';
 import { SET_SELECTED_PICKUP_POINT } from '@store/modules/Product/actions';
 
 import selectedPin from '@images/icons/pin-filled-selected.svg';
@@ -60,7 +61,8 @@ export default {
     },
 
     computed: {
-        ...mapState(PRODUCT_MODULE, [PICKUP_POINTS, SELECTED_PICKUP_POINT]),
+        ...mapState(PRODUCT_MODULE, [SELECTED_PICKUP_POINT]),
+        ...mapGetters(PRODUCT_MODULE, [FILTERED_PICKUP_POINTS]),
         ...mapGetters(GEO_MODULE, [SELECTED_CITY_COORDS]),
 
         coords() {
@@ -69,7 +71,7 @@ export default {
         },
 
         points() {
-            const pickupPoints = this[PICKUP_POINTS] || {};
+            const pickupPoints = this[FILTERED_PICKUP_POINTS] || [];
             const selectedPoint = this[SELECTED_PICKUP_POINT];
 
             return pickupPoints.map(p => {

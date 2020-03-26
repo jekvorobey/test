@@ -2,23 +2,44 @@
     <div class="product-delivery-panel">
         <p>
             Получить в
-            <a>г. Москва&nbsp;<v-svg name="arrow-down" width="12" height="12"/></a>
+            <button class="product-delivery-panel__btn" title="Выбрать город" @click="onOpenCitySelection">
+                <v-clamp :max-lines="1" autoresize>{{ city }}</v-clamp>
+                <v-svg name="arrow-down" width="16" height="16" />
+            </button>
         </p>
-        <p>
-            Экспресс доставка курьером — 550 ₽,
+        <p v-for="method in deliveryMethods" :key="method.deliveryMethod">
+            <template v-if="method.deliveryMethod === receiveMethods.PICKUP">
+                {{ $t(`product.deliveryMethod.${method.deliveryMethod}[0]`) }}
+                <button class="product-delivery-panel__btn" title="Выбрать город" @click="onOpenPickupPoints">
+                    {{ $t(`product.deliveryMethod.${method.deliveryMethod}[1]`) }}
+                </button>
+            </template>
+            <template v-else>
+                {{ $t(`product.deliveryMethod.${method.deliveryMethod}`) }}
+            </template>
+
+            —
+            <price v-if="method.cost && method.cost.value > 0" v-bind="method.cost" />
+            <template v-else> {{ $t('product.freeDelivery') }} </template>,
             <span class="text-grey">сегодня,&nbsp;21&nbsp;июня</span>
-        </p>
-        <p>Доставка курьером — 350 ₽, <span class="text-grey">завтра,&nbsp;22&nbsp;июня</span></p>
-        <p>
-            Из пунктов <a>выдачи</a> или <a>постаматов</a> — бесплатно,
-            <span class="text-grey">23&nbsp;июня</span>
         </p>
     </div>
 </template>
 
 <script>
+import VClamp from 'vue-clamp';
 import VSvg from '@controls/VSvg/VSvg.vue';
 
+import Price from '@components/Price/Price.vue';
+import { NAME as CITY_SELECTION_MODAL_NAME } from '@components/CitySelectionModal/CitySelectionModal.vue';
+
+import { mapState, mapActions } from 'vuex';
+import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
+
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
+import { receiveMethods } from '@enums/checkout';
 import '@images/sprites/arrow-down.svg';
 import './ProductDeliveryPanel.css';
 
@@ -27,8 +48,47 @@ export default {
 
     components: {
         VSvg,
+        VClamp,
+
+        Price,
     },
 
-    props: {},
+    props: {
+        deliveryMethods: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
+
+        pickupPoints: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
+    },
+
+    computed: {
+        ...mapState(GEO_MODULE, {
+            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].value) || 'Выберите город',
+        }),
+    },
+
+    methods: {
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        onOpenCitySelection() {
+            this[CHANGE_MODAL_STATE]({ name: CITY_SELECTION_MODAL_NAME, open: true });
+        },
+
+        onOpenPickupPoints() {
+            this.$emit('pickupPoints');
+        },
+    },
+
+    beforeCreate() {
+        this.receiveMethods = receiveMethods;
+    },
 };
 </script>

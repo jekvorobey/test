@@ -13,11 +13,41 @@
 
     .modal-body {
         padding: 0;
-        height: 680px;
         display: flex;
+
+        @media (--tablet-lg-min) {
+            height: 680px;
+        }
 
         @media (--tablet-lg) {
             height: 100%;
+        }
+    }
+
+    &__switch {
+        background-color: var(--cl-white);
+        border: none;
+        box-shadow: 0 -1px 0 #eff1f3, 0 0 20px rgba(0, 0, 0, 0.1);
+
+        .radio-switch__radio {
+            background-color: var(--cl-white);
+            color: var(--cl-grey);
+            fill: var(--cl-grey);
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 24px;
+            letter-spacing: 0.02em;
+
+            input[type='radio']:checked + label {
+                background-color: var(--cl-white);
+                color: var(--cl-global);
+                fill: var(--cl-global);
+            }
+
+            input[type='radio'] + label {
+                background-color: var(--cl-white);
+                padding: 14px calc(var(--gs) * 2);
+            }
         }
     }
 
@@ -36,17 +66,12 @@
     }
 
     &__filter {
-        overflow: hidden;
         width: 440px;
         display: flex;
         flex-direction: column;
         padding-top: calc(var(--gs) * 3);
 
         @media (--tablet-lg) {
-            width: 40%;
-        }
-
-        @media (--tablet) {
             width: 100%;
         }
 

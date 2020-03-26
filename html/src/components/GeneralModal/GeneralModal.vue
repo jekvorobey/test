@@ -11,6 +11,7 @@
                             </button>
                         </slot>
                     </div>
+                    <slot name="after" />
                 </template>
                 <slot name="content" />
             </v-sticky>

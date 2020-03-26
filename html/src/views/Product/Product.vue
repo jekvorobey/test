@@ -30,26 +30,22 @@
                                 v-for="image in product.media"
                                 :key="image.id"
                             >
-                                <v-picture v-if="image && image.id" :image="image" alt="">
-                                    <template v-slot:source="{ image }">
-                                        <source
-                                            :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
-                                            type="image/webp"
-                                            media="(min-width: 480px)"
-                                        />
-                                        <source
-                                            :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                                            type="image/webp"
-                                            media="(max-width: 479px)"
-                                        />
-                                    </template>
-                                    <template v-slot:fallback="{ image, lazy, alt }">
-                                        <img
-                                            class="blur-up lazyload v-picture__img"
-                                            :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
-                                            :alt="alt"
-                                        />
-                                    </template>
+                                <v-picture v-if="image && image.id">
+                                    <source
+                                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
+                                        type="image/webp"
+                                        media="(min-width: 480px)"
+                                    />
+                                    <source
+                                        :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                                        type="image/webp"
+                                        media="(max-width: 479px)"
+                                    />
+                                    <img
+                                        class="blur-up lazyload v-picture__img"
+                                        :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
+                                        alt=""
+                                    />
                                 </v-picture>
                             </div>
                         </div>
@@ -64,26 +60,22 @@
                                 v-for="image in product.media"
                                 :key="image.id"
                             >
-                                <v-picture v-if="image && image.id" :image="image" alt="">
-                                    <template v-slot:source="{ image }">
-                                        <source
-                                            :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
-                                            type="image/webp"
-                                            media="(min-width: 480px)"
-                                        />
-                                        <source
-                                            :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                                            type="image/webp"
-                                            media="(max-width: 479px)"
-                                        />
-                                    </template>
-                                    <template v-slot:fallback="{ image, lazy, alt }">
-                                        <img
-                                            class="blur-up lazyload v-picture__img"
-                                            :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
-                                            :alt="alt"
-                                        />
-                                    </template>
+                                <v-picture v-if="image && image.id">
+                                    <source
+                                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
+                                        type="image/webp"
+                                        media="(min-width: 480px)"
+                                    />
+                                    <source
+                                        :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                                        type="image/webp"
+                                        media="(max-width: 479px)"
+                                    />
+                                    <img
+                                        class="blur-up lazyload v-picture__img"
+                                        :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
+                                        alt=""
+                                    />
                                 </v-picture>
                             </div>
                         </v-slider>
@@ -142,7 +134,11 @@
                         @wishlist="onWishlistStateChange"
                     />
 
-                    <product-delivery-panel class="product-view__header-detail-section" />
+                    <product-delivery-panel
+                        class="product-view__header-detail-section"
+                        :delivery-methods="product.deliveryMethods"
+                        @pickupPoints="onShowPickupPoints"
+                    />
 
                     <div class="product-view__header-detail-section">
                         <p class="text-bold product-view__header-detail-section-hl">
@@ -581,7 +577,10 @@
 
         <transition name="fade-in">
             <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" />
-            <map-modal>
+        </transition>
+
+        <transition name="fade-in">
+            <map-modal v-if="$isServer || isModalOpen">
                 <template v-slot:map>
                     <product-pickup-points-map />
                 </template>
@@ -648,7 +647,7 @@ import productModule, {
     PRODUCT_OPTIONS,
 } from '@store/modules/Product';
 import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Product/getters';
-import { FETCH_PRODUCT_DATA } from '@store/modules/Product/actions';
+import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS } from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
@@ -818,10 +817,12 @@ export default {
             code: state => state.params.code,
             categoryCode: state => state.params.categoryCode,
             refCode: state => state.query.refCode,
+            modal: state => state.query.modal,
         }),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {
             isGalleryOpen: state => state[MODALS][GALLERY_MODAL_NAME] && state[MODALS][GALLERY_MODAL_NAME].open,
+            isModalOpen: state => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
         }),
 
         ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION]),
@@ -931,10 +932,14 @@ export default {
             // const { fias_id } = value;
             // this.debounce_fetchProduct(to, from);
         },
+
+        modal(value) {
+            this.handleModalQuery(value);
+        },
     },
 
     methods: {
-        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA]),
+        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
@@ -948,6 +953,7 @@ export default {
             try {
                 this.$progress.start();
                 await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
+                this.$progress.finish();
                 next();
             } catch (error) {
                 this.$progress.fail();
@@ -965,16 +971,34 @@ export default {
             return { path: generateCategoryUrl(productGroupTypes.CATALOG, null, code) };
         },
 
+        handleModalQuery(value) {
+            if (!value) return;
+
+            switch (value) {
+                case 'pickup':
+                    this.onShowPickupPoints();
+                    break;
+                case 'gallery':
+                    this.onShowGallery();
+                    break;
+                default:
+                    break;
+            }
+
+            this.$router.replace({
+                path: this.$route.path,
+                params: { ...this.$route.params },
+                query: { ...this.$route.query, modal: undefined },
+                hash: this.$route.hash,
+            });
+        },
+
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
         },
 
         onShowGallery() {
             this[CHANGE_MODAL_STATE]({ name: GALLERY_MODAL_NAME, open: true });
-        },
-
-        onShowPickupPoints() {
-            this[CHANGE_MODAL_STATE]({ name: MAP_MODAL_NAME, open: true });
         },
 
         onWishlistStateChange() {
@@ -1005,6 +1029,18 @@ export default {
             });
         },
 
+        async onShowPickupPoints() {
+            try {
+                await this[FETCH_PRODUCT_PICKUP_POINTS](this[PRODUCT]);
+                this[CHANGE_MODAL_STATE]({
+                    name: MAP_MODAL_NAME,
+                    open: true,
+                });
+            } catch (error) {
+                alert('Произошла ошибка');
+            }
+        },
+
         onSelectOption(charCode, optValue) {
             const { categoryCode } = this;
             const nextCombination = this[GET_NEXT_COMBINATION](charCode, optValue);
@@ -1024,9 +1060,10 @@ export default {
         // так как к моменту вызова экземпляр ещё не создан!
 
         const {
+            path,
             hash,
             params: { code },
-            query: { refCode = null },
+            query: { refCode = null, modal },
         } = to;
 
         // регистрируем модуль, если такого нет
@@ -1034,12 +1071,17 @@ export default {
         const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
         // если все загружено, пропускаем
-        if (productCode === code && referrerCode === refCode) next();
+        if (productCode === code && referrerCode === refCode) next(vm => vm.handleModalQuery(modal));
         else {
             $progress.start();
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
-                .then(() => next(vm => $progress.finish()))
+                .then(() =>
+                    next(vm => {
+                        $progress.finish();
+                        vm.handleModalQuery(modal);
+                    })
+                )
                 .catch(error => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
@@ -1059,7 +1101,7 @@ export default {
 
         const {
             params: { code },
-            query: { refCode },
+            query: { refCode, modal },
         } = to;
 
         const {

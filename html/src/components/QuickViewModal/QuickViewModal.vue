@@ -4,26 +4,10 @@
             <div class="quick-view-modal__body" v-if="!isPending">
                 <ul class="quick-view-modal__gallery">
                     <li class="quick-view-modal__gallery-item" v-for="image in images" :key="image.id">
-                        <v-picture v-if="image && image.id" :image="image" alt="">
-                            <template v-slot:source="{ image }">
-                                <source
-                                    :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
-                                    type="image/webp"
-                                    media="(min-width: 480px)"
-                                />
-                                <source
-                                    :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                                    type="image/webp"
-                                    media="(max-width: 479px)"
-                                />
-                            </template>
-                            <template v-slot:fallback="{ image, lazy, alt }">
-                                <img
-                                    class="blur-up lazyload v-picture__img"
-                                    :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
-                                    :alt="alt"
-                                />
-                            </template>
+                        <v-picture>
+                            <source :data-srcset="image.bigImage" type="image/webp" media="(min-width: 480px)" />
+                            <source :data-srcset="image.smallImage" type="image/webp" media="(max-width: 479px)" />
+                            <img class="blur-up lazyload v-picture__img" :data-src="image.defaultImage" alt="" />
                         </v-picture>
                     </li>
                 </ul>
@@ -44,7 +28,10 @@
                         @cart="onCartStateChange"
                         @wishlist="onWishlistStateChange"
                     />
-                    <product-delivery-panel />
+                    <product-delivery-panel
+                        :deliveryMethods="productPreview.deliveryMethods"
+                        @pickupPoints="onPickupPoints"
+                    />
                 </div>
             </div>
             <v-spinner class="quick-view-modal__spinner" :show="isPending" />
@@ -73,8 +60,9 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
-import { requestStatus } from '@enums';
+import { requestStatus, fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
+import { generateProductUrl } from '@util/catalog';
 import './QuickViewModal.css';
 
 export const NAME = 'quick-view-modal';
@@ -101,8 +89,15 @@ export default {
         ...mapState(PREVIEW_MODULE, [PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS]),
 
         images() {
-            const preview = this[PRODUCT_PREVIEW];
-            return preview ? preview.media.slice(0, 4) : [];
+            const { media } = this[PRODUCT_PREVIEW] || {};
+            return media.slice(0, 4).map(i => {
+                return {
+                    ...i,
+                    bigImage: generatePictureSourcePath(300, 300, i.id, fileExtension.image.WEBP),
+                    smallImage: generatePictureSourcePath(200, 200, i.id, fileExtension.image.WEBP),
+                    defaultImage: generatePictureSourcePath(300, 300, i.id, i.sourceExt),
+                };
+            });
         },
 
         isPending() {
@@ -115,11 +110,18 @@ export default {
         ...mapActions(PREVIEW_MODULE, [FETCH_PRODUCT_PREVIEW]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
 
-        generateSourcePath(x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext);
+        onPickupPoints() {
+            const { categoryCodes, code } = this[PRODUCT_PREVIEW] || {};
+            const category = categoryCodes[categoryCodes.length - 1];
+            const path = generateProductUrl(category.code, code);
+            this.$router.push({ path, query: { modal: 'pickup' } }, () => {
+                this.onClose();
+            });
         },
 
-        onWishlistStateChange() {},
+        onWishlistStateChange() {
+            debugger;
+        },
 
         onCartStateChange() {
             this.onClose();

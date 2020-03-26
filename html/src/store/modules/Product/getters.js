@@ -8,7 +8,19 @@ export const GET_NEXT_COMBINATION = 'GET_NEXT_COMBINATION';
 export const IS_SELECTED = 'IS_SELECTED';
 export const IS_DISABLED = 'IS_DISABLED';
 
+export const FILTERED_PICKUP_POINTS = 'filteredPickupPoints';
+
+const PICKUP_POINTS = 'pickupPoints';
+const SELECTED_PICKUP_POINT_TYPE = 'selectedPickupPointType';
+
 export default {
+    [FILTERED_PICKUP_POINTS](state) {
+        const pickupPoints = state[PICKUP_POINTS] || [];
+        const selectedPickupPointType = state[SELECTED_PICKUP_POINT_TYPE] || {};
+
+        return pickupPoints.filter(p => p.methodID === selectedPickupPointType.id);
+    },
+
     [CHARACTERISTICS](state, getters) {
         const characteristics = (state[PRODUCT_OPTIONS] && state[PRODUCT_OPTIONS][CHARACTERISTICS]) || [];
         return characteristics.map(c => {
