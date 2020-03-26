@@ -2,17 +2,16 @@
     <div class="product-pickup-points-panel">
         <div class="product-pickup-points-panel__header">
             <h3 class="product-pickup-points-panel__header-hl">Выбор пункта выдачи</h3>
-            <div class="product-pickup-points-panel__header-controls">
-                <v-select placeholder="Станция метро" :options="[]" />
-                <!-- <v-select
+            <!-- <div class="product-pickup-points-panel__header-controls">
+                <v-select
                     v-model="selectedDeliveryMethod"
                     placeholder="Тип пункта выдачи"
                     track-by="id"
                     label="title"
                     :options="deliveryMethods"
                     :searchable="false"
-                /> -->
-            </div>
+                />
+            </div> -->
         </div>
 
         <ul
@@ -20,7 +19,7 @@
             :class="{
                 'product-pickup-points-panel__list--selected': selectedPickupPoint,
             }"
-            v-scroll-lock="true"
+            v-scroll-lock="mounted"
         >
             <checkout-option-card
                 class="product-pickup-points-panel__list-item"
@@ -61,6 +60,12 @@ export default {
         CheckoutOptionCard,
     },
 
+    data() {
+        return {
+            mounted: false,
+        };
+    },
+
     computed: {
         ...mapState(PRODUCT_MODULE, [PICKUP_POINTS, SELECTED_INDEX, SELECTED_PICKUP_POINT]),
     },
@@ -81,6 +86,14 @@ export default {
         onPointClick(point, index) {
             this[SET_SELECTED_PICKUP_POINT]({ point, index });
         },
+    },
+
+    mounted() {
+        this.mounted = true;
+    },
+
+    beforeDestroy() {
+        this.mounted = false;
     },
 };
 </script>

@@ -1,21 +1,12 @@
 <template>
-    <yandex-map
-        :zoom="zoom"
-        :coords="coords"
-        :controls="[]"
-        :cluster-options="clusterOptions"
-        :use-object-manager="true"
-        @map-was-initialized="onInit"
-    >
+    <yandex-map :zoom="zoom" :coords="coords" :controls="[]" :cluster-options="clusterOptions">
         <ymap-marker
-            :id="point.markerId"
-            v-for="(point, index) in points"
+            v-for="point in points"
             :key="point.key"
             :markerId="point.markerId"
             :coords="point.coords"
             :icon="point.icon"
-            :properties="point.properties"
-            cluster-name="default-cluster"
+            :cluster-name="point.clusterName"
             @click="onPointClick($event, point.entity, index)"
         />
     </yandex-map>
@@ -78,18 +69,18 @@ export default {
         },
 
         points() {
-            const pickupPoints = this[PICKUP_POINTS] || [];
+            const pickupPoints = this[PICKUP_POINTS] || {};
             const selectedPoint = this[SELECTED_PICKUP_POINT];
 
-            return pickupPoints.map((p, index) => {
+            return pickupPoints.map(p => {
                 const isSelected = selectedPoint && selectedPoint.id === p.id;
                 return {
                     entity: p,
-                    key: `${p.id}-${p.methodID}`,
+                    key: `${p.id}-${p.methodID}-${Math.random()}`,
                     markerId: `marker-${p.id}`,
                     coords: p.map.coords,
-                    properties: { pointId: p.id, index },
                     icon: isSelected ? this.selectedMarkerIcon : this.markerIcon,
+                    clusterName: 'default-cluster',
                 };
             });
         },
@@ -108,13 +99,6 @@ export default {
 
         onPointClick(e, point, index) {
             this[SET_SELECTED_PICKUP_POINT]({ point, index });
-        },
-
-        onInit(map) {
-            map.geoObjects.events.add('click', function(e) {
-                console.log(e);
-                debugger;
-            });
         },
     },
 };

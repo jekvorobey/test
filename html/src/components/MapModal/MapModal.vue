@@ -1,5 +1,5 @@
 <template>
-    <general-modal class="map-modal" @close="onClose" :is-scroll-locked="false" :is-mobile="isTablet">
+    <general-modal v-if="isOpen" class="map-modal" @close="onClose" :is-scroll-locked="false" :is-mobile="isTablet">
         <template v-slot:content>
             <div class="map-modal__map">
                 <slot v-if="showMap && !isTablet" name="map" />

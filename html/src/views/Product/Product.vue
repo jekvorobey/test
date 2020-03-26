@@ -632,15 +632,15 @@
         </transition>
 
         <transition name="fade-in">
-            <!-- <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" /> -->
-            <!-- <map-modal>
+            <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" />
+            <map-modal>
                 <template v-slot:map>
                     <product-pickup-points-map />
                 </template>
                 <template v-slot:filter>
                     <product-pickup-points-panel />
                 </template>
-            </map-modal> -->
+            </map-modal>
         </transition>
     </section>
 </template>
