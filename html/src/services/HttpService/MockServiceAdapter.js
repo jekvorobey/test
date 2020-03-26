@@ -25,6 +25,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/content/banners':
             case '/v1/content/menus':
             case '/v1/auth/is-login':
+            case '/v1/auth/user':
             case '/v1/categories':
             case '/v1/cart/data':
             case '/v1/checkout/data':

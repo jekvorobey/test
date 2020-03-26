@@ -129,6 +129,12 @@ const main = {
         variants: 'No options | {n} Option | {n} Options',
         showAll: 'Show All',
 
+        deliveryMethod: {
+            [receiveMethods.DELIVERY]: 'Delivery',
+            [receiveMethods.PICKUP]: ['From pickup', 'points'],
+            [receiveMethods.EXPRESS]: 'Express Delivery',
+        },
+
         title: {
             masterClasses: 'Master Classes with this product',
             characteristics: 'Characteristics',

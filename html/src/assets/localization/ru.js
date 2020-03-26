@@ -1,7 +1,7 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
+import { socials } from '@enums';
 import { receiveMethods } from '@enums/checkout';
 import { genderType } from '@enums/profile';
-import { socials } from '@enums';
 import { orderStatus, deliveryStatus } from '@enums/order';
 
 const flatpickrLocale = flatPickrRu.ru;
@@ -128,6 +128,12 @@ const main = {
         bonus: '{n} бонусов',
         variants: 'Нет вариантов | {n} вариант | {n} вариантов',
         showAll: 'Смотреть все',
+
+        deliveryMethod: {
+            [receiveMethods.DELIVERY]: 'Доставка курьером',
+            [receiveMethods.PICKUP]: ['Из пунктов', 'выдачи'],
+            [receiveMethods.EXPRESS]: 'Экспресс доставка курьером',
+        },
 
         title: {
             masterClasses: 'Мастер-классы с этим продуктом',

@@ -70,8 +70,8 @@ import { SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN } from '@stor
 import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
 import { FETCH_CART_DATA, CLEAR_CART_DATA } from '@store/modules/Cart/actions';
 
-import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
-import { CHECK_SESSION, LOGIN_BY_PASSWORD } from '@store/modules/Auth/actions';
+import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
+import { CHECK_SESSION, FETCH_USER } from '@store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -95,7 +95,10 @@ export default {
 
     computed: {
         ...mapState([SCROLL]),
-        ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION, USER]),
+        ...mapState(AUTH_MODULE, {
+            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
+        }),
 
         ...mapState(MODAL_MODULE, {
             isRegistrationOpen: state =>
@@ -116,7 +119,7 @@ export default {
     methods: {
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
-        ...mapActions(AUTH_MODULE, [CHECK_SESSION, LOGIN_BY_PASSWORD]),
+        ...mapActions(AUTH_MODULE, [CHECK_SESSION, FETCH_USER]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onScroll() {
@@ -141,19 +144,22 @@ export default {
     },
 
     watch: {
-        [HAS_SESSION](value) {
-            if (value) this[FETCH_CART_DATA]();
-            else this[CLEAR_CART_DATA]();
+        async [HAS_SESSION](value) {
+            if (value) {
+                await this[FETCH_USER]();
+                if (this[CAN_BUY]) this[FETCH_CART_DATA]();
+            } else this[CLEAR_CART_DATA]();
             this.startSessionTimer();
         },
     },
 
     async serverPrefetch() {
         try {
-            await this[FETCH_COMMON_DATA]();
-            await this[CHECK_SESSION](true);
-            if (this[HAS_SESSION]) await this[FETCH_CART_DATA]();
-            else return Promise.resolve();
+            await Promise.all([this[FETCH_COMMON_DATA](), this[CHECK_SESSION](true)]);
+            if (this[HAS_SESSION]) {
+                if (!this[USER]) await this[FETCH_USER]();
+                if (this[CAN_BUY]) await this[FETCH_CART_DATA]();
+            } else return Promise.resolve();
         } catch (error) {
             return Promise.resolve();
         }

@@ -196,8 +196,8 @@
                             file-validate-type-label-expected-types="Типы {allTypes}"
                             :file-validate-type-label-expected-types-map="expectedTypesMap"
                             :label-idle="labelTemplate"
-                            :acceptedFileTypes="acceptedTypes"
-                            :fileValidateTypeDetectType="fileValidateTypeDetectType"
+                            :accepted-file-types="acceptedTypes"
+                            :file-validate-type-detect-type="fileValidateTypeDetectType"
                             :files="files"
                             :server="serverOptions"
                             :chunk-uploads="false"
@@ -265,7 +265,7 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { LOCALE } from '@store';
 
-import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY, REFERRAL_PARTNER } from '@store/modules/Auth';
 import { GET_SOCIAL_LINK, CHECK_SESSION } from '@store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -287,8 +287,6 @@ import {
     CERTIFICATES,
     FIRST_NAME,
     LAST_NAME,
-    CAN_BUY,
-    REFERRAL_PARTNER,
 } from '@store/modules/Profile/modules/Cabinet';
 import { FULL_NAME, PROFILES_STRING } from '@store/modules/Profile/modules/Cabinet/getters';
 import {
@@ -356,6 +354,11 @@ export default {
 
     computed: {
         ...mapState([LOCALE]),
+        ...mapState(AUTH_MODULE, {
+            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+        }),
+
         ...mapState(MODAL_MODULE, {
             isDetailsOpen: state => state[MODALS][DETAILS_MODAL_NAME] && state[MODALS][DETAILS_MODAL_NAME].open,
             isPortofioEditOpen: state =>
@@ -369,6 +372,7 @@ export default {
             isPasswordEditOpen: state =>
                 state[MODALS][EDIT_PASSWORD_MODAL_NAME] && state[MODALS][EDIT_PASSWORD_MODAL_NAME].open,
         }),
+
         ...mapState(CABINET_MODULE_PATH, [
             CAN_BUY,
             AVATAR,

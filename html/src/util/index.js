@@ -179,6 +179,27 @@ export function addDays(date, days) {
     return result;
 }
 
+export function saveToClipboard(text) {
+    const textArea = document.createElement('textarea');
+    textArea.className = 'clipboard-input';
+    textArea.value = text;
+
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    let successful = false;
+
+    try {
+        successful = document.execCommand('copy');
+    } catch (err) {
+        successful = false;
+        alert('Произошла ошибка при копировании');
+    }
+
+    document.body.removeChild(textArea);
+    return successful;
+}
+
 export default {
     countCheckdigit,
     preparePrice,

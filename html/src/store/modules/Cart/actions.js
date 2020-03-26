@@ -1,5 +1,5 @@
 import { $logger, $cookie } from '@services';
-import { getProducts, getCartData, deleteCartItem, addCartItem, deleteCartData } from '@api';
+import { getProducts, getCartData, deleteCartItem, addCartItem, deleteAllItems } from '@api';
 import { getRandomIntInclusive } from '@util';
 import { storeErrorHandler } from '@util/store';
 
@@ -7,8 +7,11 @@ import { SET_CART_DATA, SET_FEATURED_PRODUCTS, SET_RELATIVE_PRODUCTS } from './m
 
 export const CLEAR_CART_DATA = 'CLEAR_CART_DATA';
 export const FETCH_CART_DATA = 'FETCH_CART_DATA';
+
 export const FETCH_RELATIVE_PRODUCTS = 'FETCH_RELATIVE_PRODUCTS';
 export const FETCH_FEATURED_PRODUCTS = 'FETCH_FEATURED_PRODUCTS';
+
+export const DELETE_ALL_ITEMS = 'DELETE_ALL_ITEMS';
 export const DELETE_CART_ITEM = 'DELETE_CART_ITEM';
 export const ADD_CART_ITEM = 'ADD_CART_ITEM';
 
@@ -34,9 +37,13 @@ export default {
         }
     },
 
-    async [CLEAR_CART_DATA]({ commit }) {
+    [CLEAR_CART_DATA]({ commit }) {
+        commit(SET_CART_DATA, {});
+    },
+
+    async [DELETE_ALL_ITEMS]({ commit }) {
         try {
-            await deleteCartData();
+            await deleteAllItems();
             commit(SET_CART_DATA, {});
         } catch (error) {
             storeErrorHandler(FETCH_CART_DATA, error);

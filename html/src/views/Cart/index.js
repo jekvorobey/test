@@ -1,4 +1,5 @@
 import hasSession from '@router/middleware/hasSession';
+import canUserBuy from '@router/middleware/canUserBuy';
 
 /**
  * @Module
@@ -20,7 +21,7 @@ export default {
             component: CartAsync,
 
             meta: {
-                middleware: [hasSession],
+                middleware: [hasSession, canUserBuy],
             },
         },
     ],

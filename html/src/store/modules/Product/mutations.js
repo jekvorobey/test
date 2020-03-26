@@ -8,7 +8,9 @@ export const SET_BANNERS = 'SET_BANNERS';
 export const SET_MASTERCLASSES = 'SET_MASTERCLASSES';
 export const SET_FEATURED_PRODUCTS = 'SET_FEATURED_PRODUCTS';
 export const SET_INSTAGRAM_ITEMS = 'SET_INSTAGRAM_ITEMS';
+
 export const SET_SELECTED_PICKUP_POINT = 'SET_SELECTED_PICKUP_POINT';
+export const SET_SELECTED_PICKUP_POINT_TYPE = 'SET_SELECTED_PICKUP_POINT_TYPE';
 
 export default {
     [SET_PRODUCT](state, payload = {}) {
@@ -23,6 +25,10 @@ export default {
     [SET_SELECTED_PICKUP_POINT](state, { point, index }) {
         state.selectedIndex = index;
         state.selectedPickupPoint = point;
+    },
+
+    [SET_SELECTED_PICKUP_POINT_TYPE](state, payload) {
+        state.selectedPickupPointType = payload;
     },
 
     [SET_PRODUCT_OPTIONS](state, payload = null) {

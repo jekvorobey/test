@@ -15,15 +15,8 @@ export default {
      */
     routes: [
         {
-            name: '404',
-            path: '/404',
-            component: NotFoundAsync,
-            meta: {
-                middleware: [notFound],
-            },
-        },
-        {
             path: '*',
+            name: 'NotFound',
             component: NotFoundAsync,
             meta: {
                 middleware: [notFound],

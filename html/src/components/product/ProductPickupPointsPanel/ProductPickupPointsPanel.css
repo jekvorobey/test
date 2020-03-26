@@ -1,14 +1,10 @@
 .product-pickup-points-panel {
-    overflow: hidden;
     width: 440px;
     display: flex;
     flex-direction: column;
+    height: 100%;
 
     @media (--tablet-lg) {
-        width: 40%;
-    }
-
-    @media (--tablet) {
         width: 100%;
     }
 
@@ -52,12 +48,21 @@
     }
 
     &__list {
+        flex: 1;
         overflow: auto;
 
         &-item {
             border: none;
             border-bottom: 1px solid var(--cl-divider-grey);
             width: 100%;
+
+            @media (--tablet-lg) {
+                padding: calc(var(--gs) * 2) calc(var(--gs) * 3);
+            }
+
+            @media (--tablet) {
+                padding: calc(var(--gs) * 2);
+            }
         }
 
         &--selected &-item {

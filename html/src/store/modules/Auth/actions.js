@@ -3,30 +3,33 @@ import { responseStatus } from '@enums';
 import { storeErrorHandler } from '@util/store';
 
 import {
-    login,
     checkSession,
-    sendCode,
-    checkCode,
-    registerByPassword,
-    getSocialLink,
-    logout,
+    login,
     loginByPassword,
     loginBySocial,
+    logout,
+    registerByPassword,
+    getSocialLink,
+    sendCode,
+    checkCode,
     resetPassword,
+    getUser,
 } from '@api';
-import { SET_HAS_SESSION } from './mutations';
+import { SET_HAS_SESSION, SET_USER } from './mutations';
 
-export const LOGIN_BY_SOCIAL = 'LOGIN_BY_SOCIAL';
-export const LOGIN_BY_PASSWORD = 'LOGIN_BY_PASSWORD';
-export const LOGOUT = 'LOGOUT';
-export const REGISTER = 'REGISTER';
 export const CHECK_SESSION = 'CHECK_SESSION';
 
+export const LOGOUT = 'LOGOUT';
+export const LOGIN_BY_SOCIAL = 'LOGIN_BY_SOCIAL';
+export const LOGIN_BY_PASSWORD = 'LOGIN_BY_PASSWORD';
+
+export const GET_SOCIAL_LINK = 'GET_SOCIAL_LINK';
+export const REGISTER_BY_PASSWORD = 'REGISTER_BY_PASSWORD';
 export const SEND_SMS = 'SEND_SMS';
 export const CHECK_CODE = 'CHECK_CODE';
-export const REGISTER_BY_PASSWORD = 'REGISTER_BY_PASSWORD';
-export const GET_SOCIAL_LINK = 'GET_SOCIAL_LINK';
+
 export const RESET_PASSWORD = 'RESET_PASSWORD';
+export const FETCH_USER = 'FETCH_USER';
 
 export default {
     async [SEND_SMS]({ commit }, { phone, type }) {
@@ -110,6 +113,22 @@ export default {
             commit(SET_HAS_SESSION, false);
             storeErrorHandler(CHECK_SESSION, true)(error);
             return false;
+        }
+    },
+
+    async [FETCH_USER]({ commit }) {
+        try {
+            let user = null;
+            const { can_buy: canBuy, referral_code: referralCode, referral_partner: referralPartner } = await getUser();
+            user = { canBuy, referralCode, referralPartner };
+            commit(SET_USER, user);
+            return user;
+        } catch (error) {
+            user = {};
+            commit(SET_HAS_SESSION, false);
+            commit(SET_USER, user);
+            storeErrorHandler(FETCH_USER)(error);
+            return user;
         }
     },
 };

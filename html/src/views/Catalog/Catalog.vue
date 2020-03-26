@@ -206,8 +206,10 @@ import {
 import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { registerModuleIfNotExists } from '@util/store';
-import { MIN_SCROLL_VALUE } from '@constants';
 import { productGroupTypes } from '@enums/product';
+import { sortFields } from '@enums/catalog';
+import { sortDirections, fileExtension } from '@enums';
+import { MIN_SCROLL_VALUE } from '@constants';
 
 import '@images/sprites/cross-small.svg';
 import './Catalog.css';
@@ -236,8 +238,8 @@ export default {
 
     data() {
         const sortOptions = [
-            { id: 1, title: 'Сначала подороже', field: 'price', direction: 'desc' },
-            { id: 2, title: 'Сначала подешевле', field: 'price', direction: 'asc' },
+            { id: 1, title: 'Сначала подороже', field: sortFields.PRICE, direction: sortDirections.DESC },
+            { id: 2, title: 'Сначала подешевле', field: sortFields.PRICE, direction: sortDirections.ASC },
             // { id: 3, title: 'Популярное', field: 'price', direction: 'desc' },
             // { id: 4, title: 'Новинки', field: '', direction: '' },
             // { id: 5, title: 'По размеру скидки', field: '', direction: '' },
@@ -297,19 +299,19 @@ export default {
         mobileImg() {
             const banner = this[PRODUCT_GROUP][BANNER];
             const image = banner.mobileImage || banner.tabletImage || banner.desktopImage;
-            if (image) return generatePictureSourcePath(320, 240, image.id, 'webp');
+            if (image) return generatePictureSourcePath(320, 240, image.id, fileExtension.image.WEBP);
         },
 
         tabletImg() {
             const banner = this[PRODUCT_GROUP][BANNER];
             const image = banner.tabletImage || banner.desktopImage;
-            if (image) return generatePictureSourcePath(768, 240, image.id, 'webp');
+            if (image) return generatePictureSourcePath(768, 240, image.id, fileExtension.image.WEBP);
         },
 
         desktopImg() {
             const banner = this[PRODUCT_GROUP][BANNER];
             const image = banner.desktopImage || banner.tabletImage;
-            if (image) return generatePictureSourcePath(1224, 240, image.id, 'webp');
+            if (image) return generatePictureSourcePath(1224, 240, image.id, fileExtension.image.WEBP);
         },
 
         defaultImg() {
@@ -374,7 +376,7 @@ export default {
             try {
                 const {
                     params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
-                    query: { page = 1, orderField = 'price', orderDirection = 'desc' },
+                    query: { page = 1, orderField = sortFields.PRICE, orderDirection = sortDirections.DESC },
                 } = to;
 
                 const {
@@ -413,8 +415,6 @@ export default {
             } catch (thrown) {
                 if (thrown && thrown.isCancel === true) return;
                 this.$progress.fail();
-                $logger.error('fetchCatalog', thrown);
-                this.$progress.finish();
             }
         },
     },
@@ -427,10 +427,10 @@ export default {
         const {
             fullPath,
             params: { code: toCode = null, entityCode: toEntityCode = null, type: toType, pathMatch },
-            query: { page = 1, orderField = 'price', orderDirection = 'desc' } = {
+            query: { page = 1, orderField = sortFields.PRICE, orderDirection = sortDirections.DESC } = {
                 page: 1,
-                orderField: 'price',
-                orderDirection: 'desc',
+                orderField: sortFields.PRICE,
+                orderDirection: sortDirections.DESC,
             },
         } = to;
 
@@ -469,8 +469,6 @@ export default {
                 .catch(thrown => {
                     if (thrown && thrown.isCancel === true) return next();
                     $progress.fail();
-                    $logger.error('beforeRouteEnter', thrown);
-                    $progress.finish();
                     next();
                 });
         }
@@ -486,15 +484,19 @@ export default {
 
         const {
             params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },
-            query: { page: toPage = 1, orderField: toOrderField = 'price', orderDirection: toOrderDirection = 'desc' },
+            query: {
+                page: toPage = 1,
+                orderField: toOrderField = sortFields.PRICE,
+                orderDirection: toOrderDirection = sortDirections.DESC,
+            },
         } = to;
 
         const {
             params: { code: fromCode, entityCode: fromEntityCode, type: fromType, pathMatch: fromPathMatch },
             query: {
                 page: fromPage = 1,
-                orderField: fromOrderField = 'price',
-                orderDirection: fromOrderDirection = 'desc',
+                orderField: fromOrderField = sortFields.PRICE,
+                orderDirection: fromOrderDirection = sortDirections.DESC,
             },
         } = from;
 

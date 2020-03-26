@@ -31,8 +31,13 @@ export const FETCH_BANNERS = 'FETCH_BANNERS';
 export const FETCH_MASTERCLASSES = 'FETCH_MASTERCLASSES';
 
 export const SET_SELECTED_PICKUP_POINT = 'SET_SELECTED_PICKUP_POINT';
+export const SET_SELECTED_PICKUP_POINT_TYPE = 'SET_SELECTED_PICKUP_POINT_TYPE';
 
 export default {
+    [SET_SELECTED_PICKUP_POINT_TYPE]({ commit }, payload) {
+        commit(SET_SELECTED_PICKUP_POINT_TYPE, payload);
+    },
+
     [SET_SELECTED_PICKUP_POINT]({ commit }, payload) {
         commit(SET_SELECTED_PICKUP_POINT, payload);
     },
@@ -73,7 +78,7 @@ export default {
         }
     },
 
-    async [FETCH_PRODUCT_PICKUP_POINTS]({ state, dispatch, commit }, { code }) {
+    async [FETCH_PRODUCT_PICKUP_POINTS]({ dispatch, commit }, { code }) {
         try {
             const data = await getProductPickupPoints(code);
             commit(SET_PICKUP_POINTS, data);
@@ -110,7 +115,6 @@ export default {
     async [FETCH_PRODUCT_DATA]({ dispatch }, payload) {
         return await Promise.all([
             dispatch(FETCH_PRODUCT, payload),
-            dispatch(FETCH_PRODUCT_PICKUP_POINTS, payload),
             dispatch(FETCH_BANNERS, payload),
             dispatch(FETCH_FEATURED_PRODUCTS, payload),
             dispatch(FETCH_INSTAGRAM_ITEMS, payload),

@@ -30,26 +30,22 @@
                                 v-for="image in product.media"
                                 :key="image.id"
                             >
-                                <v-picture v-if="image && image.id" :image="image" alt="">
-                                    <template v-slot:source="{ image }">
-                                        <source
-                                            :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
-                                            type="image/webp"
-                                            media="(min-width: 480px)"
-                                        />
-                                        <source
-                                            :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                                            type="image/webp"
-                                            media="(max-width: 479px)"
-                                        />
-                                    </template>
-                                    <template v-slot:fallback="{ image, lazy, alt }">
-                                        <img
-                                            class="blur-up lazyload v-picture__img"
-                                            :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
-                                            :alt="alt"
-                                        />
-                                    </template>
+                                <v-picture v-if="image && image.id">
+                                    <source
+                                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
+                                        type="image/webp"
+                                        media="(min-width: 480px)"
+                                    />
+                                    <source
+                                        :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                                        type="image/webp"
+                                        media="(max-width: 479px)"
+                                    />
+                                    <img
+                                        class="blur-up lazyload v-picture__img"
+                                        :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
+                                        alt=""
+                                    />
                                 </v-picture>
                             </div>
                         </div>
@@ -64,51 +60,35 @@
                                 v-for="image in product.media"
                                 :key="image.id"
                             >
-                                <v-picture v-if="image && image.id" :image="image" alt="">
-                                    <template v-slot:source="{ image }">
-                                        <source
-                                            :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
-                                            type="image/webp"
-                                            media="(min-width: 480px)"
-                                        />
-                                        <source
-                                            :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                                            type="image/webp"
-                                            media="(max-width: 479px)"
-                                        />
-                                    </template>
-                                    <template v-slot:fallback="{ image, lazy, alt }">
-                                        <img
-                                            class="blur-up lazyload v-picture__img"
-                                            :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
-                                            :alt="alt"
-                                        />
-                                    </template>
+                                <v-picture v-if="image && image.id">
+                                    <source
+                                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
+                                        type="image/webp"
+                                        media="(min-width: 480px)"
+                                    />
+                                    <source
+                                        :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
+                                        type="image/webp"
+                                        media="(max-width: 479px)"
+                                    />
+                                    <img
+                                        class="blur-up lazyload v-picture__img"
+                                        :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
+                                        alt=""
+                                    />
                                 </v-picture>
                             </div>
                         </v-slider>
                     </template>
                 </v-sticky>
                 <div class="product-view__header-detail">
-                    <h1 class="product-view__header-detail-hl">
-                        {{ product.title }}
-                    </h1>
-                    <div class="product-view__header-detail-info">
-                        <v-rating class="product-view__header-detail-info-rating" :value="product.rating" readonly>
-                            <template v-slot:activeLabel>
-                                <v-svg name="star-small" width="16" height="16" />
-                            </template>
-                            <template v-slot:inactiveLabel>
-                                <v-svg name="star-empty-small" width="16" height="16" />
-                            </template>
-                        </v-rating>
-                        <div class="text-grey product-view__header-detail-info-review">
-                            {{ $t('product.review', { n: product.reviewsCount }) }}
-                        </div>
-                        <div class="text-grey product-view__header-detail-info-code">
-                            {{ $t('product.vendorCode', { code: product.vendorCode }) }}
-                        </div>
-                    </div>
+                    <product-detail-panel
+                        class="product-view__header-detail-info"
+                        :title="product.title"
+                        :reviews-count="product.reviewsCount"
+                        :vendor-code="product.vendorCode"
+                        :rating="product.rating"
+                    />
 
                     <product-option-panel
                         class="product-view__header-detail-section product-view__header-detail-options"
@@ -143,58 +123,22 @@
                         </div>
                     </product-option-panel>
 
-                    <div
-                        class="product-view__header-detail-section product-view__header-detail-panels"
+                    <product-cart-panel
                         v-observe-visibility="onPriceVisibilityChanged"
-                    >
-                        <div class="product-view__header-detail-price-panel">
-                            <div class="product-view__header-detail-price-panel-prices">
-                                <price
-                                    class="text-bold product-view__header-detail-price-panel-current"
-                                    :value="product.price.value"
-                                    :currency="product.price.currency"
-                                />
-                                <price
-                                    v-if="product.oldPrice"
-                                    class="text-grey text-strike product-view__header-detail-price-panel-old"
-                                    :value="product.oldPrice.value"
-                                    :currency="product.oldPrice.currency"
-                                />
-                            </div>
-                            <div class="text-grey product-view__header-detail-price-panel-bonus">
-                                +{{ $t('product.bonus', { n: product.bonus }) }}
-                            </div>
-                        </div>
-                        <div class="product-view__header-detail-control-panel">
-                            <v-button
-                                class="product-view__header-detail-control-panel-btn"
-                                :disabled="!canBuy"
-                                @click.prevent="onBuyProduct"
-                            >
-                                {{ canBuy ? 'Добавить в корзину' : 'Нет в наличии' }}
-                            </v-button>
-                            <v-link class="product-view__header-detail-control-panel-wishlist">
-                                <v-svg id="product-wishlist" name="wishlist-middle" width="20" height="18" />
-                                &nbsp;В избранное
-                            </v-link>
-                        </div>
-                    </div>
+                        class="product-view__header-detail-section product-view__header-detail-panels"
+                        :price="product.price"
+                        :old-price="product.oldPrice"
+                        :bonus="product.bonus"
+                        :can-buy="product.stock.qty > 0"
+                        @cart="onBuyProduct"
+                        @wishlist="onWishlistStateChange"
+                    />
 
-                    <div class="product-view__header-detail-section">
-                        <p>
-                            Получить в
-                            <a href="#">г. Москва&nbsp;<v-svg name="arrow-down" width="12" height="12"/></a>
-                        </p>
-                        <p>
-                            Экспресс доставка курьером — 550 ₽,
-                            <span class="text-grey">сегодня,&nbsp;21&nbsp;июня</span>
-                        </p>
-                        <p>Доставка курьером — 350 ₽, <span class="text-grey">завтра,&nbsp;22&nbsp;июня</span></p>
-                        <p>
-                            Из пунктов <a href="#">выдачи</a> или <a href="#">постаматов</a> — бесплатно,
-                            <span class="text-grey">23&nbsp;июня</span>
-                        </p>
-                    </div>
+                    <product-delivery-panel
+                        class="product-view__header-detail-section"
+                        :delivery-methods="product.deliveryMethods"
+                        @pickupPoints="onShowPickupPoints"
+                    />
 
                     <div class="product-view__header-detail-section">
                         <p class="text-bold product-view__header-detail-section-hl">
@@ -632,15 +576,18 @@
         </transition>
 
         <transition name="fade-in">
-            <!-- <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" /> -->
-            <!-- <map-modal>
+            <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" />
+        </transition>
+
+        <transition name="fade-in">
+            <map-modal v-if="$isServer || isModalOpen">
                 <template v-slot:map>
                     <product-pickup-points-map />
                 </template>
                 <template v-slot:filter>
                     <product-pickup-points-panel />
                 </template>
-            </map-modal> -->
+            </map-modal>
         </transition>
     </section>
 </template>
@@ -672,6 +619,7 @@ import ProductCartPanel from '@components/product/ProductCartPanel/ProductCartPa
 import ProductReviewCard from '@components/product/ProductReviewCard/ProductReviewCard.vue';
 import ProductPricePanel from '@components/product/ProductPricePanel/ProductPricePanel.vue';
 import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDetailPanel.vue';
+import ProductDeliveryPanel from '@components/product/ProductDeliveryPanel/ProductDeliveryPanel.vue';
 import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOptionPanel.vue';
 import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
 import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag.vue';
@@ -679,6 +627,8 @@ import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag
 import ProductPickupPointsMap from '@components/product/ProductPickupPointsMap/ProductPickupPointsMap.vue';
 import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPanel/ProductPickupPointsPanel.vue';
 
+import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
+import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 import MapModal, { NAME as MAP_MODAL_NAME } from '@components/MapModal/MapModal.vue';
 import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '@components/GalleryModal/GalleryModal.vue';
 
@@ -697,7 +647,7 @@ import productModule, {
     PRODUCT_OPTIONS,
 } from '@store/modules/Product';
 import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Product/getters';
-import { FETCH_PRODUCT_DATA } from '@store/modules/Product/actions';
+import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS } from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
@@ -714,8 +664,9 @@ import {
     generateYoutubeImagePlaceholderPath,
     generateYoutubeVideoSourcePath,
 } from '@util/file';
-import { breakpoints } from '@enums';
+import { breakpoints, fileExtension, httpCodes } from '@enums';
 import { productGroupTypes } from '@enums/product';
+import { createNotFoundRoute } from '@util/router';
 import { generateCategoryUrl, generateProductUrl } from '@util/catalog';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
@@ -841,6 +792,7 @@ export default {
         ProductCartPanel,
         ProductPricePanel,
         ProductDetailPanel,
+        ProductDeliveryPanel,
 
         ProductColorTag,
         ProductOptionTag,
@@ -865,14 +817,12 @@ export default {
             code: state => state.params.code,
             categoryCode: state => state.params.categoryCode,
             refCode: state => state.query.refCode,
+            modal: state => state.query.modal,
         }),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
-
         ...mapState(MODAL_MODULE, {
-            isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
-            isAddToCartOpen: state =>
-                state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
             isGalleryOpen: state => state[MODALS][GALLERY_MODAL_NAME] && state[MODALS][GALLERY_MODAL_NAME].open,
+            isModalOpen: state => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
         }),
 
         ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION]),
@@ -920,7 +870,7 @@ export default {
             if (brand && brand.image) {
                 imageMap.brand = {
                     id: brand.image.id,
-                    desktop: generatePictureSourcePath(null, null, brand.image.id, 'webp'),
+                    desktop: generatePictureSourcePath(null, null, brand.image.id, fileExtension.image.WEBP),
                     default: generatePictureSourcePath(null, null, brand.image.id, brand.image.sourceExt),
                     alt: brand.name,
                 };
@@ -929,8 +879,8 @@ export default {
             if (howto && howto.image) {
                 imageMap.howto = {
                     id: howto.image.id,
-                    desktop: generatePictureSourcePath(null, null, howto.image.id, 'webp'),
-                    tablet: generatePictureSourcePath(320, 240, howto.image.id, 'webp'),
+                    desktop: generatePictureSourcePath(null, null, howto.image.id, fileExtension.image.WEBP),
+                    tablet: generatePictureSourcePath(320, 240, howto.image.id, fileExtension.image.WEBP),
                     default: generatePictureSourcePath(null, null, howto.image.id, howto.image.sourceExt),
                 };
             }
@@ -938,8 +888,8 @@ export default {
             if (description && description.image) {
                 imageMap.description = {
                     id: description.image.id,
-                    desktop: generatePictureSourcePath(null, null, description.image.id, 'webp'),
-                    tablet: generatePictureSourcePath(320, 240, description.image.id, 'webp'),
+                    desktop: generatePictureSourcePath(null, null, description.image.id, fileExtension.image.WEBP),
+                    tablet: generatePictureSourcePath(320, 240, description.image.id, fileExtension.image.WEBP),
                     default: generatePictureSourcePath(null, null, description.image.id, description.image.sourceExt),
                 };
             }
@@ -982,23 +932,34 @@ export default {
             // const { fias_id } = value;
             // this.debounce_fetchProduct(to, from);
         },
+
+        modal(value) {
+            this.handleModalQuery(value);
+        },
     },
 
     methods: {
-        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA]),
+        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
-        async fetchProduct(code, referrerCode, next) {
+        async fetchProduct(to, from, next) {
+            const {
+                path,
+                params: { code },
+                query: { refCode: referrerCode },
+            } = to;
+
             try {
-                const { productCode } = this.product;
                 this.$progress.start();
                 await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
-                next();
                 this.$progress.finish();
+                next();
             } catch (error) {
                 this.$progress.fail();
-                next(false);
+                if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
+                else next(false);
+                this.$progress.finish();
             }
         },
 
@@ -1010,6 +971,28 @@ export default {
             return { path: generateCategoryUrl(productGroupTypes.CATALOG, null, code) };
         },
 
+        handleModalQuery(value) {
+            if (!value) return;
+
+            switch (value) {
+                case 'pickup':
+                    this.onShowPickupPoints();
+                    break;
+                case 'gallery':
+                    this.onShowGallery();
+                    break;
+                default:
+                    break;
+            }
+
+            this.$router.replace({
+                path: this.$route.path,
+                params: { ...this.$route.params },
+                query: { ...this.$route.query, modal: undefined },
+                hash: this.$route.hash,
+            });
+        },
+
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
         },
@@ -1018,8 +1001,8 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: GALLERY_MODAL_NAME, open: true });
         },
 
-        onShowPickupPoints() {
-            this[CHANGE_MODAL_STATE]({ name: MAP_MODAL_NAME, open: true });
+        onWishlistStateChange() {
+            debugger;
         },
 
         onBuyProduct() {
@@ -1046,6 +1029,18 @@ export default {
             });
         },
 
+        async onShowPickupPoints() {
+            try {
+                await this[FETCH_PRODUCT_PICKUP_POINTS](this[PRODUCT]);
+                this[CHANGE_MODAL_STATE]({
+                    name: MAP_MODAL_NAME,
+                    open: true,
+                });
+            } catch (error) {
+                alert('Произошла ошибка');
+            }
+        },
+
         onSelectOption(charCode, optValue) {
             const { categoryCode } = this;
             const nextCombination = this[GET_NEXT_COMBINATION](charCode, optValue);
@@ -1065,9 +1060,10 @@ export default {
         // так как к моменту вызова экземпляр ещё не создан!
 
         const {
+            path,
             hash,
             params: { code },
-            query: { refCode = null },
+            query: { refCode = null, modal },
         } = to;
 
         // регистрируем модуль, если такого нет
@@ -1075,15 +1071,22 @@ export default {
         const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
         // если все загружено, пропускаем
-        if (productCode === code && referrerCode === refCode) next();
+        if (productCode === code && referrerCode === refCode) next(vm => vm.handleModalQuery(modal));
         else {
             $progress.start();
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
-                .then(() => next(vm => $progress.finish()))
+                .then(() =>
+                    next(vm => {
+                        $progress.finish();
+                        vm.handleModalQuery(modal);
+                    })
+                )
                 .catch(error => {
                     $progress.fail();
-                    next();
+                    if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
+                    else next(new Error(error.message));
+                    $progress.finish();
                 });
         }
     },
@@ -1098,7 +1101,7 @@ export default {
 
         const {
             params: { code },
-            query: { refCode },
+            query: { refCode, modal },
         } = to;
 
         const {
@@ -1107,7 +1110,7 @@ export default {
         } = from;
 
         if (code === fromCode && refCode === fromRefCode) next();
-        else this.debounce_fetchProduct(code, refCode, next);
+        else this.debounce_fetchProduct(to, from, next);
     },
 
     beforeMount() {

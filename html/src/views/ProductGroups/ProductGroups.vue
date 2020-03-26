@@ -111,9 +111,7 @@
 import VButton from '@controls/VButton/VButton.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
-import VSlider from '@controls/VSlider/VSlider.vue';
 
-import BannerCard from '@components/BannerCard/BannerCard.vue';
 import MasterClassCard from '@components/MasterClassCard/MasterClassCard.vue';
 import MasterClassBannerCard from '@components/MasterClassBannerCard/MasterClassBannerCard.vue';
 
@@ -122,6 +120,8 @@ import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbIte
 
 import GroupList from '@components/GroupList/GroupList.vue';
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
+import BannerCard from '@components/BannerCard/BannerCard.vue';
 import CategoriesSection from '@components/blocks/CategoriesSection/CategoriesSection.vue';
 
 import { $store, $progress, $logger } from '@services';
