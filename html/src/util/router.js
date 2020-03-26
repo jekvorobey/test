@@ -7,3 +7,13 @@ export function breakMiddleware(appContext, next, redirect, code) {
     }
     next(cancelRoute);
 }
+
+export function createNotFoundRoute(route) {
+    return {
+        name: 'NotFound',
+        params: [route.path],
+        query: { ...route.query },
+        hash: route.hash,
+        replace: true,
+    };
+}

@@ -97,6 +97,20 @@ export const socials = Object.freeze({
     GOOGLE: 'google',
 });
 
+export const fileExtension = Object.freeze({
+    application: {
+        PDF: 'pdf',
+        DOC: 'doc',
+        DOCX: 'docx',
+    },
+
+    image: {
+        JPEG: 'jpeg',
+        PNG: 'png',
+        WEBP: 'webp',
+    },
+});
+
 export const mimeType = Object.freeze({
     text: {
         TEXT: 'text/plain',

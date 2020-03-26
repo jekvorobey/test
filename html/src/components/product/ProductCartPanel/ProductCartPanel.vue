@@ -17,9 +17,9 @@
             <div class="text-grey product-cart-panel__info-bonus">+{{ $t('product.bonus', { n: bonus }) }}</div>
         </div>
         <div class="product-cart-panel__controls">
-            <v-button class="product-cart-panel__controls-btn" @click="onAddToCart" :disabled="!canBuy">
+            <buy-button class="product-cart-panel__controls-btn" @click="onAddToCart" :disabled="!canBuy">
                 {{ canBuy ? 'Добавить в корзину' : 'Нет в наличии' }}
-            </v-button>
+            </buy-button>
             <v-link class="product-cart-panel__controls-wishlist" @click="onAddToWishlist">
                 <v-svg id="product-wishlist" name="wishlist-middle" width="20" height="18" />
                 &nbsp;В избранное
@@ -31,20 +31,22 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
-import VButton from '@controls/VButton/VButton.vue';
+
 import Price from '@components/Price/Price.vue';
+import BuyButton from '../../BuyButton/BuyButton.vue';
 
 import '@images/sprites/wishlist-middle.svg';
 import './ProductCartPanel.css';
 
 export default {
     name: 'product-cart-panel',
+
     components: {
         VSvg,
         VLink,
-        VButton,
 
         Price,
+        BuyButton,
     },
 
     props: {

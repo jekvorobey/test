@@ -1,6 +1,7 @@
 /**
  * @Module
  */
+import isUserReferral from '@router/middleware/isUserReferral';
 
 const ReferalAsync = () => import(/* webpackChunkName: "referal-view" */ './Referal.vue');
 
@@ -16,6 +17,10 @@ export default {
             path: 'referal',
             name: 'Referal',
             component: ReferalAsync,
+
+            meta: {
+                middleware: [isUserReferral],
+            },
         },
     ],
 };

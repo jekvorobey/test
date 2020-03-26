@@ -13,13 +13,13 @@
             </v-picture>
             <v-svg v-else id="catalog-product-list-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-list-card__controls">
-                <v-button
+                <buy-button
                     v-if="showBuyBtn"
                     class="btn--outline catalog-product-list-card__controls-btn"
                     @click.prevent="onBuyButtonClick"
                 >
                     Купить
-                </v-button>
+                </buy-button>
                 <v-link tag="button" class="catalog-product-list-card__controls-link" @click.prevent="onPreview">
                     Быстрый&nbsp;просмотр
                 </v-link>
@@ -56,12 +56,15 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
-import VButton from '@controls/VButton/VButton.vue';
 import VRating from '@controls/VRating/VRating.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import Tag from '@components/Tag/Tag.vue';
 import Price from '@components/Price/Price.vue';
+import BuyButton from '@components/BuyButton/BuyButton.vue';
+
+import { generateProductUrl } from '@util/catalog';
+import { generatePictureSourcePath } from '@util/file';
 
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
@@ -69,20 +72,18 @@ import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/logo.svg';
 import './CatalogProductListCard.css';
 
-import { generatePictureSourcePath } from '@util/file';
-
 export default {
     name: 'catalog-product-list-card',
 
     components: {
         VSvg,
         VLink,
-        VButton,
         VRating,
         VPicture,
 
         Tag,
         Price,
+        BuyButton,
     },
 
     props: {
@@ -127,8 +128,7 @@ export default {
         },
 
         href() {
-            if (!this.item.categoryCodes || this.item.categoryCodes.length === 0) return '/catalog';
-            return `/catalog/${this.item.categoryCodes[this.item.categoryCodes.length - 1]}/${this.item.code}`;
+            return generateProductUrl(this.item.categoryCodes[this.item.categoryCodes.length - 1], this.item.code);
         },
     },
 

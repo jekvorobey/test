@@ -1,9 +1,16 @@
+import { $context } from '@services';
 import { productGroupTypes } from '@enums/product';
 
 const rangeRegx = /from_\d*_to_\d*/;
 const numberRegx = /\d+/g;
 
-export function generateProductUrl(categoryCode, code) {
+export function generateAbsoluteProductUrl(categoryCode, code, refCode) {
+    if (refCode) return `${$context.baseURL}/${productGroupTypes.CATALOG}/${categoryCode}/${code}?refCode=${refCode}`;
+    return `${$context.baseURL}/${productGroupTypes.CATALOG}/${categoryCode}/${code}`;
+}
+
+export function generateProductUrl(categoryCode, code, refCode) {
+    if (refCode) return `/${productGroupTypes.CATALOG}/${categoryCode}/${code}?refCode=${refCode}`;
     return `/${productGroupTypes.CATALOG}/${categoryCode}/${code}`;
 }
 

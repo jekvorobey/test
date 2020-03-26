@@ -29,7 +29,9 @@ export default class ServerHttpService extends HttpServiceBase {
                 if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NOT_MODIFIED) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
-                reject(error);
+                let status = null;
+                if (error.response) status = error.response.status;
+                reject({ isCancel: axios.isCancel(error), message: error.message, status });
             }
         });
     }
@@ -47,7 +49,9 @@ export default class ServerHttpService extends HttpServiceBase {
                 if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NOT_MODIFIED) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
-                reject(error);
+                let status = null;
+                if (error.response) status = error.response.status;
+                reject({ isCancel: axios.isCancel(error), message: error.message, status });
             }
         });
     }
@@ -65,7 +69,9 @@ export default class ServerHttpService extends HttpServiceBase {
                 if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NO_CONTENT) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
-                reject(error);
+                let status = null;
+                if (error.response) status = error.response.status;
+                reject({ isCancel: axios.isCancel(error), message: error.message, status });
             }
         });
     }
@@ -83,7 +89,9 @@ export default class ServerHttpService extends HttpServiceBase {
                 if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NO_CONTENT) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (error) {
-                reject(error);
+                let status = null;
+                if (error.response) status = error.response.status;
+                reject({ isCancel: axios.isCancel(error), message: error.message, status });
             }
         });
     }
