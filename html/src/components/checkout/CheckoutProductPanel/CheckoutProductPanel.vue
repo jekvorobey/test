@@ -53,13 +53,17 @@
                 <ul v-if="isDelivery" class="checkout-product-panel__item-list">
                     <checkout-option-card
                         class="checkout-product-panel__item-card"
-                        v-for="address in addresses"
-                        :key="`${address.region_guid}-${address.city_guid}-${address.house}`"
+                        v-for="(address, index) in addresses"
+                        :key="`${address.region_guid}-${address.city_guid || address.settlment_guid}-${address.house}`"
                         :selected="selectedAddress && isEqualAddress(selectedAddress, address)"
                         @cardClick="SET_ADDRESS(address)"
-                        @btnClick="onChangeAddress(address)"
+                        @btnClick="onChangeAddress(address, index)"
                     >
-                        {{ `${address.city}, ${address.street ? `${address.street}, ` : ''}${address.house}` }}
+                        {{
+                            `${address.city || address.settlement}, ${address.area ? `${address.area}, ` : ''}${
+                                address.street ? `${address.street}, ` : ''
+                            }${address.house} ${address.block || ''}, ${address.post_index}`
+                        }}
                     </checkout-option-card>
                 </ul>
                 <checkout-address-panel v-else @changeAddress="onChangePickupPoint" />
@@ -307,7 +311,12 @@
         </transition>
 
         <transition name="fade">
-            <checkout-address-modal v-if="isAddressModalOpen" @addressSubmit="onAddressSubmit" />
+            <address-edit-modal
+                v-show="isAddressModalOpen"
+                v-if="$isServer || isAddressModalOpen"
+                @save="onSaveAddress"
+                @close="onCloseAddressModal"
+            />
         </transition>
     </div>
 </template>
@@ -323,9 +332,12 @@ import Price from '@components/Price/Price.vue';
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 import CheckoutProductCard from '@components/checkout/CheckoutProductCard/CheckoutProductCard.vue';
 import CheckoutDateModal from '@components/checkout/CheckoutDateModal/CheckoutDateModal.vue';
-import CheckoutAddressModal from '@components/checkout/CheckoutAddressModal/CheckoutAddressModal.vue';
 import CheckoutPickupPointModal from '@components/checkout/CheckoutPickupPointModal/CheckoutPickupPointModal.vue';
 import CheckoutAddressPanel from '@components/checkout/CheckoutAddressPanel/CheckoutAddressPanel.vue';
+
+import AddressEditModal, {
+    NAME as ADDRESS_EDIT_MODAL,
+} from '@components/profile/AddressEditModal/AddressEditModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '@store/modules/Checkout';
@@ -347,6 +359,7 @@ import {
     SET_SUBSCRIBE,
     SET_CONFIRMATION_TYPE,
     ADD_ADDRESS,
+    CHANGE_ADDRESS,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -428,15 +441,17 @@ export default {
         CheckoutProductCard,
         CheckoutOptionCard,
         CheckoutDateModal,
-        CheckoutAddressModal,
         CheckoutPickupPointModal,
         CheckoutAddressPanel,
+
+        AddressEditModal,
     },
 
     data() {
         return {
             bonusAmount: null,
             certificateCode: null,
+            addressIndexToChange: null,
         };
     },
 
@@ -447,8 +462,7 @@ export default {
                 state[MODALS][CheckoutPickupPointModal.name] && state[MODALS][CheckoutPickupPointModal.name].open,
             isDateModalOpen: state =>
                 state[MODALS][CheckoutDateModal.name] && state[MODALS][CheckoutDateModal.name].open,
-            isAddressModalOpen: state =>
-                state[MODALS][CheckoutAddressModal.name] && state[MODALS][CheckoutAddressModal.name].open,
+            isAddressModalOpen: state => state[MODALS][ADDRESS_EDIT_MODAL] && state[MODALS][ADDRESS_EDIT_MODAL].open,
         }),
 
         ...mapGetters(CHECKOUT_MODULE, [
@@ -546,6 +560,7 @@ export default {
 
             SET_ADDRESS,
             ADD_ADDRESS,
+            CHANGE_ADDRESS,
 
             ADD_BONUS,
             DELETE_BONUS,
@@ -616,16 +631,22 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: CheckoutPickupPointModal.name, open: true });
         },
 
-        onChangeAddress(address) {
-            this[CHANGE_MODAL_STATE]({ name: CheckoutAddressModal.name, open: true, state: { address } });
+        onChangeAddress(address, index) {
+            this.addressIndexToChange = index;
+            this[CHANGE_MODAL_STATE]({ name: ADDRESS_EDIT_MODAL, open: true, state: { address: { ...address } } });
         },
 
         onAddAddress() {
-            this[CHANGE_MODAL_STATE]({ name: CheckoutAddressModal.name, open: true });
+            this[CHANGE_MODAL_STATE]({ name: ADDRESS_EDIT_MODAL, open: true, state: { address: {} } });
         },
 
-        onAddressSubmit(address) {
-            this[ADD_ADDRESS](address);
+        onSaveAddress(address) {
+            if (this.addressIndexToChange !== null) this[CHANGE_ADDRESS]({ index: this.addressIndexToChange, address });
+            else this[ADD_ADDRESS](address);
+        },
+
+        onCloseAddressModal() {
+            this.addressIndexToChange = null;
         },
 
         onAddRecipient() {
