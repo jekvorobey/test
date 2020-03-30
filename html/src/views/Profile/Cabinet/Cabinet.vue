@@ -374,7 +374,6 @@ export default {
         }),
 
         ...mapState(CABINET_MODULE_PATH, [
-            CAN_BUY,
             AVATAR,
             BIRTHDAY,
             GENDER,
@@ -388,7 +387,6 @@ export default {
             CERTIFICATES,
             LAST_NAME,
             FIRST_NAME,
-            REFERRAL_PARTNER,
         ]),
         ...mapGetters(CABINET_MODULE_PATH, [FULL_NAME, PROFILES_STRING]),
 
