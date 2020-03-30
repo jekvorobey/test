@@ -1,16 +1,73 @@
 <template>
-    <general-modal v-if="isOpen" class="checkout-recipient-modal" @close="onClose">
+    <general-modal
+        v-if="isOpen"
+        type="sm"
+        class="checkout-recipient-modal"
+        :header="header"
+        @close="onClose"
+        :is-mobile="isTablet"
+    >
         <template v-slot:content>
-            <h3 class="checkout-recipient-modal__hl">Дата доставки</h3>
+            <div class="checkout-recipient-modal__body">
+                <h3 v-if="!isTablet" class="checkout-recipient-modal__hl">{{ header }}</h3>
+                <form class="checkout-recipient-modal__form" @submit.prevent="onSubmit">
+                    <v-input
+                        class="checkout-recipient-modal__form-row"
+                        v-model="form.name"
+                        placeholder="Введите имя и фамилию"
+                        :error="nameError"
+                    >
+                        Имя и Фамилия<span>*</span>
+                        <template v-slot:error="{ error }">
+                            <transition name="slide-in-bottom" mode="out-in">
+                                <div :key="error" v-if="error">{{ error }}</div>
+                            </transition>
+                        </template>
+                    </v-input>
+                    <v-input-mask
+                        class="checkout-recipient-modal__form-row"
+                        v-model="form.phone"
+                        :raw="false"
+                        placeholder="+7 ___ ___-__-__"
+                        :options="maskOptions"
+                        :error="phoneError"
+                    >
+                        Телефон<span>*</span>
+                        <template v-slot:error="{ error }">
+                            <transition name="slide-in-bottom" mode="out-in">
+                                <div :key="error" v-if="error">{{ error }}</div>
+                            </transition>
+                        </template>
+                    </v-input-mask>
+                    <v-input class="checkout-recipient-modal__form-row" v-model="form.email" :error="emailError">
+                        Email
+                        <template v-slot:error="{ error }">
+                            <transition name="slide-in-bottom" mode="out-in">
+                                <div :key="error" v-if="error">{{ error }}</div>
+                            </transition>
+                        </template>
+                    </v-input>
+                </form>
+            </div>
+
+            <attention-panel class="checkout-recipient-modal__panel">
+                При получении документа необходимо иметь с собой документ, удостоверяющий личность
+            </attention-panel>
 
             <div class="checkout-recipient-modal__submit">
-                <v-button @click="onChanged">Подтвердить доставку</v-button>
+                <v-button class="checkout-recipient-modal__submit-btn" @click="onSubmit">
+                    Сохранить
+                </v-button>
             </div>
         </template>
     </general-modal>
 </template>
 <script>
 import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VInputMask from '@controls/VInput/VInputMask.vue';
+
+import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapState, mapActions } from 'vuex';
@@ -19,69 +76,108 @@ import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import './CheckoutDateModal.css';
+import validationMixin, { required, minLength, email } from '@plugins/validation';
+import { getRandomIntInclusive } from '@util';
+import { phoneMaskOptions } from '@settings';
+import './CheckoutRecipientModal.css';
 
 export const NAME = 'checkout-recipient-modal';
 
 export default {
     name: NAME,
+    mixins: [validationMixin],
 
     components: {
         VButton,
+        VInput,
+        VInputMask,
+
         GeneralModal,
+        AttentionPanel,
+    },
+
+    validations: {
+        form: {
+            name: {
+                required,
+            },
+
+            phone: {
+                required,
+                minLength: minLength(12),
+            },
+
+            email: {
+                email,
+            },
+        },
     },
 
     data() {
         return {
-            selectedDate: null,
-            availableDates: [],
+            form: {
+                id: getRandomIntInclusive(0, 100000),
+                name: null,
+                phone: null,
+                email: null,
+            },
+
+            maskOptions: { ...phoneMaskOptions },
         };
     },
 
     computed: {
-        ...mapState(['locale']),
         ...mapState(MODAL_MODULE, {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
-            state: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
-        maxDate() {
-            return this.availableDates.length > 0 ? this.availableDates[this.availableDates.length - 1] : null;
+        isTablet() {
+            return this.$mq.tablet;
         },
 
-        minDate() {
-            return this.availableDates.length > 0 ? this.availableDates[0] : null;
+        header() {
+            return 'Получатель';
+        },
+
+        emailError() {
+            if (this.$v.form.email.$dirty && !this.$v.form.email.email) return 'Неправильный формат';
+        },
+
+        nameError() {
+            if (this.$v.form.name.$dirty && !this.$v.form.name.required) return 'Обязательное поле';
+        },
+
+        phoneError() {
+            if (this.$v.form.phone.$dirty) {
+                if (!this.$v.form.phone.required) return 'Обязательное поле';
+                if (!this.$v.form.phone.minLength) return 'Неверно введен номер';
+            }
         },
     },
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
-        onSelectPoint(point) {
-            this.onClose();
-        },
-
-        onChanged() {
-            this.$emit('changed', { ...this.state, selectedDate: this.selectedDate });
+        onSubmit() {
+            this.$v.$touch();
+            if (this.$v.$invalid) return;
+            this.$emit('save', { ...this.form });
             this.onClose();
         },
 
         onClose() {
             this.$emit('close');
-            this.CHANGE_MODAL_STATE({ name: NAME, open: false });
+            this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
+        },
+
+        init() {
+            if (this.modalState.recipient) this.form = Object.assign({}, this.form, this.modalState.recipient);
         },
     },
 
-    watch: {
-        state(value) {
-            this.availableDates = this.state.availableDates;
-            this.selectedDate = this.state.selectedDate;
-        },
-    },
-
-    created() {
-        this.availableDates = this.state.availableDates || [];
-        this.selectedDate = this.state.selectedDate || [];
+    beforeMount() {
+        this.init();
     },
 };
 </script>

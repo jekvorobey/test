@@ -4,10 +4,43 @@
     }
 
     .modal-body {
-        padding: calc(var(--gs) * 3);
+        @media (--tablet-min) {
+            padding: calc(var(--gs) * 3);
+        }
+    }
+
+    &__body {
+        @media (--tablet) {
+            padding: calc(var(--gs) * 2);
+        }
+    }
+
+    &__panel {
+        flex-wrap: nowrap;
+        align-items: center;
+
+        margin-bottom: calc(var(--gs) * 3);
     }
 
     &__submit {
-        text-align: center;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: auto;
+
+        @media (--tablet) {
+            position: sticky;
+            justify-content: space-between;
+            bottom: 0;
+            padding: var(--gs) calc(var(--gs) * 2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            background-color: var(--cl-white);
+        }
+
+        &-btn {
+            @media (--tablet) {
+                width: 100%;
+            }
+        }
     }
 }

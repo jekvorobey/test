@@ -170,6 +170,7 @@ export default {
         /* istanbul ignore if */
         if (this.engine) return;
         this.engine = new Cleave(this.$refs.input, this.getOptions(this.options));
+        this.engine.setRawValue(this.value);
     },
 
     /**

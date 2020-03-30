@@ -429,10 +429,11 @@ export default {
         },
 
         onClose() {
-            this.CHANGE_MODAL_STATE({ name: NAME, open: false, state: { address: null, onSave: null } });
+            this.$emit('close');
+            this[CHANGE_MODAL_STATE]({ name: NAME, open: false, state: { address: null, onSave: null } });
         },
 
-        async init() {
+        init() {
             if (this.modalState.address) {
                 if (this.modalState.address.geo_lat && this.modalState.address.geo_lon)
                     this.coords = [Number(this.modalState.address.geo_lat), Number(this.modalState.address.geo_lon)];

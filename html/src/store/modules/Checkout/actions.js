@@ -16,6 +16,8 @@ import {
     CHANGE_CHUNK_DATE as M_CHANGE_CHUNK_DATE,
     ADD_ADDRESS as M_ADD_ADDRESS,
     CHANGE_ADDRESS as M_CHANGE_ADDRESS,
+    ADD_RECIPIENT as M_ADD_RECIPIENT,
+    CHANGE_RECIPIENT as M_CHANGE_RECIPIENT,
 } from './mutations';
 
 import {
@@ -33,10 +35,8 @@ import {
     changeCity,
 } from '@api';
 
-export const SET_RECIPIENT = 'SET_RECIPIENT';
 export const SET_RECEIVE_METHOD = 'SET_RECEIVE_METHOD';
 export const SET_DELIVERY_TYPE = 'SET_DELIVERY_TYPE';
-export const SET_ADDRESS = 'SET_ADDRESS';
 export const SET_PICKUP_POINT = 'SET_PICKUP_POINT';
 export const SET_AGREEMENT = 'SET_AGREEMENT';
 export const SET_SUBSCRIBE = 'SET_SUBSCRIBE';
@@ -52,6 +52,11 @@ export const DELETE_CERTIFICATE = 'DELETE_CERTIFICATE';
 export const ADD_PROMOCODE = 'ADD_PROMOCODE';
 export const DELETE_PROMOCODE = 'DELETE_PROMOCODE';
 
+export const SET_RECIPIENT = 'SET_RECIPIENT';
+export const ADD_RECIPIENT = 'ADD_RECIPIENT';
+export const CHANGE_RECIPIENT = 'CHANGE_RECIPIENT';
+
+export const SET_ADDRESS = 'SET_ADDRESS';
 export const ADD_ADDRESS = 'ADD_ADDRESS';
 export const CHANGE_ADDRESS = 'CHANGE_ADDRESS';
 
@@ -202,6 +207,21 @@ export default {
         return dispatch(SET_ADDRESS, address);
     },
 
+    [CHANGE_RECIPIENT]({ dispatch, commit }, payload = {}) {
+        const { index, address } = payload;
+        commit(M_CHANGE_RECIPIENT, payload);
+        return dispatch(SET_RECIPIENT, address);
+    },
+
+    [ADD_RECIPIENT]({ dispatch, commit }, recipient) {
+        debugger;
+        commit(M_ADD_RECIPIENT, recipient);
+    },
+
+    [SET_RECIPIENT]({ commit }, payload) {
+        commit(M_SET_RECIPIENT, payload);
+    },
+
     [SET_CONFIRMATION_TYPE]({ commit }, payload) {
         commit(M_SET_CONFIRMATION_TYPE, payload);
     },
@@ -212,10 +232,6 @@ export default {
 
     [SET_SUBSCRIBE]({ commit }, payload) {
         commit(M_SET_SUBSCRIBE, payload);
-    },
-
-    [SET_RECIPIENT]({ commit }, payload) {
-        commit(M_SET_RECIPIENT, payload);
     },
 
     [SET_DELIVERY_TYPE]({ commit }, payload) {
