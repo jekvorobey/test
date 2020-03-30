@@ -57,7 +57,6 @@ export default {
     },
 
     [CHANGE_ADDRESS](state, { index, address }) {
-        debugger;
         const existAddress = state.checkoutData.addresses[index];
         if (existAddress) Object.assign(existAddress, address);
     },
