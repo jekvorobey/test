@@ -385,7 +385,6 @@ export default {
         onApplyAddress(value) {
             const address = { ...this.address };
             if (value) {
-                address.value = value.value;
                 address.country_code = value.data.country_iso_code;
                 if (value.data.postal_code) address.post_index = value.data.postal_code;
                 address.region = value.data.region_with_type || value.data.region;

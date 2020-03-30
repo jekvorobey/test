@@ -11,6 +11,7 @@ export const SET_CONFIRMATION_TYPE = 'SET_CONFIRMATION_TYPE';
 export const CHANGE_CHUNK_DATE = 'CHANGE_CHUNK_DATE';
 
 export const ADD_ADDRESS = 'ADD_ADDRESS';
+export const CHANGE_ADDRESS = 'CHANGE_ADDRESS';
 
 export default {
     [SET_STATUS](state, payload = {}) {
@@ -53,5 +54,10 @@ export default {
 
     [ADD_ADDRESS](state, payload) {
         state.checkoutData.addresses.push(payload);
+    },
+
+    [CHANGE_ADDRESS](state, { index, address }) {
+        const existAddress = state.checkoutData.addresses[index];
+        if (existAddress) Object.assign(existAddress, address);
     },
 };

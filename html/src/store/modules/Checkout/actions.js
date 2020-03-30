@@ -15,6 +15,7 @@ import {
     SET_CONFIRMATION_TYPE as M_SET_CONFIRMATION_TYPE,
     CHANGE_CHUNK_DATE as M_CHANGE_CHUNK_DATE,
     ADD_ADDRESS as M_ADD_ADDRESS,
+    CHANGE_ADDRESS as M_CHANGE_ADDRESS,
 } from './mutations';
 
 import {
@@ -190,9 +191,15 @@ export default {
             });
     },
 
-    [ADD_ADDRESS]({ dispatch, commit }, payload) {
-        commit(M_ADD_ADDRESS, payload);
-        return dispatch(SET_ADDRESS, payload);
+    [CHANGE_ADDRESS]({ dispatch, commit }, payload = {}) {
+        const { index, address } = payload;
+        commit(M_CHANGE_ADDRESS, payload);
+        return dispatch(SET_ADDRESS, address);
+    },
+
+    [ADD_ADDRESS]({ dispatch, commit }, address) {
+        commit(M_ADD_ADDRESS, address);
+        return dispatch(SET_ADDRESS, address);
     },
 
     [SET_CONFIRMATION_TYPE]({ commit }, payload) {
