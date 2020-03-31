@@ -36,7 +36,7 @@ import Price from '@components/Price/Price.vue';
 import CartHeaderPanel from '@components/CartHeaderPanel/CartHeaderPanel.vue';
 import ProfileNavigationPanel from '@components/ProfileNavigationPanel/ProfileNavigationPanel.vue';
 
-import { NAME as REGISTRATION_MODAL_NAME } from '@components/RegistrationModal/RegistrationModal.vue';
+import { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY } from '@store/modules/Auth';
@@ -90,7 +90,7 @@ export default {
 
         onRegister() {
             if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
-            else this[CHANGE_MODAL_STATE]({ name: REGISTRATION_MODAL_NAME, open: true });
+            else this[CHANGE_MODAL_STATE]({ name: LOGIN_MODAL_NAME, open: true });
         },
     },
 };
