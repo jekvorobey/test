@@ -7,7 +7,7 @@
 <script>
 import VButton from '@controls/VButton/VButton.vue';
 
-import { NAME as REGISTRATION_MODAL_NAME } from '@components/RegistrationModal/RegistrationModal.vue';
+import { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
 
 import { mapState, mapActions } from 'vuex';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
@@ -47,7 +47,7 @@ export default {
         checkPermissions() {
             const hasSession = this[HAS_SESSION];
             if (!hasSession) {
-                this[CHANGE_MODAL_STATE]({ name: REGISTRATION_MODAL_NAME, open: true });
+                this[CHANGE_MODAL_STATE]({ name: LOGIN_MODAL_NAME, open: true });
                 return false;
             }
 

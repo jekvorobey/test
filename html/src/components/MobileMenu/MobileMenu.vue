@@ -131,7 +131,7 @@ import VClamp from 'vue-clamp';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
-import { NAME as REGISTER_MODAL_NAME } from '@components/RegistrationModal/RegistrationModal.vue';
+import { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
 import { NAME as CITY_SELECTION_MODAL_NAME } from '@components/CitySelectionModal/CitySelectionModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -260,7 +260,7 @@ export default {
 
         onRegister() {
             if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
-            else this[CHANGE_MODAL_STATE]({ name: REGISTER_MODAL_NAME, open: true });
+            else this[CHANGE_MODAL_STATE]({ name: LOGIN_MODAL_NAME, open: true });
         },
     },
 };
