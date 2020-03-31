@@ -101,15 +101,17 @@
                                 Сумма заказа: {{ $t(`cart.summary.type.${activeTabItem.type}`) }}
                                 <price v-bind="activeTabItem.summary.sum" />
                             </p>
-                            <p class="cart-view__main-panel-line">
+                            <!-- #58322  -->
+                            <!-- <p class="cart-view__main-panel-line">
                                 Скидка по промокоду <price v-bind="activeTabItem.summary.promoDiscount" />
-                            </p>
+                            </p> -->
 
                             <div class="cart-view__main-panel-total">
                                 <p class="text-bold cart-view__main-panel-line">
                                     Итого <price v-bind="activeTabItem.summary.total" />
                                 </p>
-                                <p class="text-grey text-sm cart-view__main-panel-line">
+                                <!-- #58322  -->
+                                <!-- <p class="text-grey text-sm cart-view__main-panel-line">
                                     Будет начислено
                                     <span>
                                         {{
@@ -119,15 +121,16 @@
                                         }}
                                         бонусов
                                     </span>
-                                </p>
+                                </p> -->
                             </div>
-
-                            <div class="cart-view__main-panel-promo">
+                            <!-- #58322  -->
+                            <!-- <div class="cart-view__main-panel-promo">
+                                
                                 <v-input class="cart-view__main-panel-promo-input" placeholder="Введите промокод" />
                                 <v-button class="btn--outline cart-view__main-panel-promo-btn">
                                     Применить
                                 </v-button>
-                            </div>
+                            </div> -->
                             <v-button class="cart-view__main-panel-submit" :to="`/checkout/${activeTabItem.type}`">
                                 Оформить заказ
                             </v-button>

@@ -42,47 +42,6 @@ export const PROMOCODE_STATUS = 'promocodeStatus';
 
 export const SUMMARY = 'summary';
 
-// const checkoutData = {
-//     recipients: [...recipients],
-//     addresses: [...addresses],
-//     pickupPoints: [...pickupPoints],
-//     receiveMethods: [...receiveMethods],
-//     paymentMethods: [...paymentMethods],
-//     confirmationTypes: [...confirmationTypes],
-//     deliveryTypes: [],
-//     availableBonus: 300,
-
-//     input: {
-//         receiveMethodID: receiveMethods[0].id,
-//         deliveryMethodID: receiveMethods[0].methods[0].id,
-//         paymentMethodID: paymentMethods[0].id,
-//         confirmationTypeID: confirmationTypes[0].id,
-
-//         recipient: recipients[0],
-//         address: addresses[0],
-//         pickupPoint: null,
-//         deliveryType: null,
-
-//         subscribe: 0,
-//         agreement: 0,
-
-//         promocode: null,
-//         bonus: 0,
-//         certificates: [],
-//     },
-
-//     summary: {
-//         sum: '6 704 ₽',
-//         discount: '0 ₽',
-//         certificate: '0 ₽',
-//         bonusPay: '0 ₽',
-//         delivery: 'Бесплатно',
-//         total: '6 704 ₽',
-//         bonusGet: '+ 1 488',
-//         bonusSpent: '0',
-//     },
-// };
-
 export default {
     [AVAILABLE_BONUS]: state => state.checkoutData[AVAILABLE_BONUS],
 

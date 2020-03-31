@@ -19,9 +19,9 @@ export default {
     },
 
     [SET_CABINET_DATA](state, payload = {}) {
-        state.canBuy = payload.canBuy;
-        state.referralPartner = payload.referral_partner;
-        state.hasPassword = payload.has_password;
+        state.canBuy = payload.canBuy || false;
+        state.referralPartner = payload.referral_partner || false;
+        state.hasPassword = payload.has_password || false;
 
         state.avatar = payload.avatar;
         state.firstName = payload.first_name;
@@ -37,7 +37,7 @@ export default {
 
         state.social = payload.social;
         state.certificates = payload.certificates;
-        state.requisites = payload.requisites;
+        state.requisites = payload.requisites || {};
     },
 
     [UPDATE_PERSONAL](state, payload = {}) {

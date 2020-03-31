@@ -7,14 +7,15 @@
             <ul class="checkout-product-panel__item-list">
                 <checkout-option-card
                     class="checkout-product-panel__item-card"
-                    v-for="recipient in recipients"
+                    v-for="(recipient, index) in recipients"
                     :key="recipient.id"
-                    :selected="recipient.id === selectedRecipient.id"
-                    @cardClick="SET_RECIPIENT(recipient)"
+                    :selected="selectedAddress && isEqualObject(recipient, selectedRecipient)"
+                    @cardClick="onSetRecipient(recipient)"
+                    @btnClick="onChangeRecipient(recipient, index)"
                 >
                     <p>{{ recipient.name }}</p>
                     <p>{{ recipient.email }}</p>
-                    <p>{{ recipient.phone }}</p>
+                    <p>{{ formatPhoneNumber(recipient.phone) }}</p>
                 </checkout-option-card>
             </ul>
             <v-link class="checkout-product-panel__item-header-link" tag="button" @click="onAddRecipient">
@@ -55,7 +56,7 @@
                         class="checkout-product-panel__item-card"
                         v-for="(address, index) in addresses"
                         :key="`${address.region_guid}-${address.city_guid || address.settlment_guid}-${address.house}`"
-                        :selected="selectedAddress && isEqualAddress(selectedAddress, address)"
+                        :selected="selectedAddress && isEqualObject(selectedAddress, address)"
                         @cardClick="SET_ADDRESS(address)"
                         @btnClick="onChangeAddress(address, index)"
                     >
@@ -169,8 +170,8 @@
                     </div>
                 </checkout-option-card>
             </ul>
-
-            <div
+            <!-- #58322  -->
+            <!-- <div
                 class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--bonus"
             >
                 <div class="checkout-product-panel__item-header">
@@ -215,6 +216,7 @@
                     </v-link>
                 </div>
             </div>
+            
             <div
                 class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--sertificate"
             >
@@ -259,7 +261,7 @@
                         Активировать
                     </v-button>
                 </div>
-            </div>
+            </div> -->
 
             <div
                 class="checkout-product-panel__item checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--settings"
@@ -311,8 +313,15 @@
         </transition>
 
         <transition name="fade">
+            <checkout-recipient-modal
+                v-if="$isServer || isRecipientModalOpen"
+                @save="onSaveRecipient"
+                @close="onCloseRecipientModal"
+            />
+        </transition>
+
+        <transition name="fade">
             <address-edit-modal
-                v-show="isAddressModalOpen"
                 v-if="$isServer || isAddressModalOpen"
                 @save="onSaveAddress"
                 @close="onCloseAddressModal"
@@ -335,11 +344,16 @@ import CheckoutDateModal from '@components/checkout/CheckoutDateModal/CheckoutDa
 import CheckoutPickupPointModal from '@components/checkout/CheckoutPickupPointModal/CheckoutPickupPointModal.vue';
 import CheckoutAddressPanel from '@components/checkout/CheckoutAddressPanel/CheckoutAddressPanel.vue';
 
+import CheckoutRecipientModal, {
+    NAME as CHECKOUT_RECIPIENT_MODAL,
+} from '@components/checkout/CheckoutRecipientModal/CheckoutRecipientModal.vue';
+
 import AddressEditModal, {
     NAME as ADDRESS_EDIT_MODAL,
 } from '@components/profile/AddressEditModal/AddressEditModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
+import { LOCALE } from '@store';
 import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '@store/modules/Checkout';
 import {
     SET_DATA_PROP,
@@ -360,6 +374,8 @@ import {
     SET_CONFIRMATION_TYPE,
     ADD_ADDRESS,
     CHANGE_ADDRESS,
+    ADD_RECIPIENT,
+    CHANGE_RECIPIENT,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -393,6 +409,7 @@ import {
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { formatPhoneNumber } from '@util';
 import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '@enums/checkout';
 import { requestStatus } from '@enums';
 
@@ -443,6 +460,7 @@ export default {
         CheckoutDateModal,
         CheckoutPickupPointModal,
         CheckoutAddressPanel,
+        CheckoutRecipientModal,
 
         AddressEditModal,
     },
@@ -451,18 +469,21 @@ export default {
         return {
             bonusAmount: null,
             certificateCode: null,
+            recipientIndexToChange: null,
             addressIndexToChange: null,
         };
     },
 
     computed: {
-        ...mapState(['locale']),
+        ...mapState([LOCALE]),
         ...mapState(MODAL_MODULE, {
             isPickupPointModalOpen: state =>
                 state[MODALS][CheckoutPickupPointModal.name] && state[MODALS][CheckoutPickupPointModal.name].open,
             isDateModalOpen: state =>
                 state[MODALS][CheckoutDateModal.name] && state[MODALS][CheckoutDateModal.name].open,
             isAddressModalOpen: state => state[MODALS][ADDRESS_EDIT_MODAL] && state[MODALS][ADDRESS_EDIT_MODAL].open,
+            isRecipientModalOpen: state =>
+                state[MODALS][CHECKOUT_RECIPIENT_MODAL] && state[MODALS][CHECKOUT_RECIPIENT_MODAL].open,
         }),
 
         ...mapGetters(CHECKOUT_MODULE, [
@@ -550,7 +571,6 @@ export default {
     methods: {
         ...mapActions(CHECKOUT_MODULE, [
             CHANGE_CHUNK_DATE,
-            SET_RECIPIENT,
             SET_RECEIVE_METHOD,
 
             SET_DELIVERY_TYPE,
@@ -570,14 +590,22 @@ export default {
 
             ADD_PROMOCODE,
             DELETE_PROMOCODE,
+
+            SET_RECIPIENT,
+            ADD_RECIPIENT,
+            CHANGE_RECIPIENT,
         ]),
 
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
+        formatPhoneNumber(phone) {
+            return formatPhoneNumber(phone);
+        },
+
         generateChunkNote(chunkItem) {
             const options = { month: 'long', day: 'numeric' };
             const date = new Date(chunkItem.selectedDate);
-            return date.toLocaleDateString(this.locale, options);
+            return date.toLocaleDateString(this[LOCALE], options);
         },
 
         generatePackageNote(deliveryType) {
@@ -585,7 +613,7 @@ export default {
 
             if (deliveryType.typeID === deliveryTypes.CONSOLIDATION) {
                 const date = new Date(deliveryType.items[0].selectedDate);
-                return `Доставим всё ${date.toLocaleDateString(this.locale, options)}`;
+                return `Доставим всё ${date.toLocaleDateString(this[LOCALE], options)}`;
             }
 
             const note = 'Доставим';
@@ -623,12 +651,35 @@ export default {
             });
         },
 
-        isEqualAddress(address1, address2) {
-            return _isEqual(address1, address2);
+        isEqualObject(obj1, obj2) {
+            return _isEqual(obj1, obj2);
         },
 
-        onChangePickupPoint() {
-            this[CHANGE_MODAL_STATE]({ name: CheckoutPickupPointModal.name, open: true });
+        onSetRecipient(recipient) {
+            this[SET_RECIPIENT](recipient);
+        },
+
+        onChangeRecipient(recipient, index) {
+            this.recipientIndexToChange = index;
+            this[CHANGE_MODAL_STATE]({
+                name: CHECKOUT_RECIPIENT_MODAL,
+                open: true,
+                state: { recipient: { ...recipient } },
+            });
+        },
+
+        onAddRecipient() {
+            this[CHANGE_MODAL_STATE]({ name: CHECKOUT_RECIPIENT_MODAL, open: true, state: { recipient: {} } });
+        },
+
+        onSaveRecipient(recipient) {
+            if (this.recipientIndexToChange !== null)
+                this[CHANGE_RECIPIENT]({ index: this.recipientIndexToChange, recipient });
+            else this[ADD_RECIPIENT](recipient);
+        },
+
+        onCloseRecipientModal() {
+            this.recipientIndexToChange = null;
         },
 
         onChangeAddress(address, index) {
@@ -649,8 +700,8 @@ export default {
             this.addressIndexToChange = null;
         },
 
-        onAddRecipient() {
-            this[CHANGE_MODAL_STATE]({ name: 'checkout-recipient-modal', open: true });
+        onChangePickupPoint() {
+            this[CHANGE_MODAL_STATE]({ name: CheckoutPickupPointModal.name, open: true });
         },
     },
 };

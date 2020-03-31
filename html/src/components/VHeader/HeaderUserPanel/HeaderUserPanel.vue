@@ -9,9 +9,10 @@
         </div>
 
         <template v-if="hasSession">
-            <button class="header-user-panel__item">
+            <!-- #58322  -->
+            <!-- <button class="header-user-panel__item">
                 <v-svg name="wishlist-middle" width="24" height="24" />
-            </button>
+            </button> -->
             <div v-if="canBuy" class="header-user-panel__item">
                 <price class="text-medium header-user-panel__item-sum" v-bind="productItemsSum" />
                 &nbsp;&nbsp;
