@@ -13,9 +13,10 @@
                 />
             </v-slider>
 
-            <v-button class="btn--outline instagram-section__link">
+            <!-- #58322  -->
+            <!-- <v-button class="btn--outline instagram-section__link">
                 {{ btnText }}
-            </v-button>
+            </v-button> -->
 
             <div v-if="!isTabletLg" class="instagram-section__grid instagram-section__grid--initialized">
                 <instagram-card

@@ -22,9 +22,10 @@
                         @addItem="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                     />
-                    <v-button class="btn--outline products-section__link" :to="btnLink">
+                    <!-- #58322  -->
+                    <!-- <v-button class="btn--outline products-section__link" :to="btnLink">
                         {{ btnText }}
-                    </v-button>
+                    </v-button> -->
                 </div>
 
                 <catalog-banner-card class="products-section__banner" :item="banner">
