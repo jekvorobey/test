@@ -45,9 +45,9 @@
                 </div>
             </template>
         </v-accordion>
-        <v-button class="btn--outline catalog-filter__clear-btn" :to="clearFilterUrl" replace>
+        <!-- <v-button class="btn--outline catalog-filter__clear-btn" :to="clearFilterUrl" replace>
             {{ btnText }}
-        </v-button>
+        </v-button> -->
     </div>
 </template>
 
@@ -71,10 +71,10 @@ export default {
     components: { VButton, VCheck, VRange, VAccordion },
 
     props: {
-        btnText: {
-            type: String,
-            default: 'Очистить фильтры',
-        },
+        // btnText: {
+        //     type: String,
+        //     default: 'Очистить фильтры',
+        // },
     },
 
     data() {
