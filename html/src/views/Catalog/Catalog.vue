@@ -39,7 +39,7 @@
                         />
                     </ul>
                     <catalog-filter class="catalog-view__side-panel-filters" />
-                    <v-button class="btn--outline catalog-view__clear-btn" :to="clearFilterUrl" replace>
+                    <v-button class="btn--outline catalog-view__side-panel-clear-btn" :to="clearFilterUrl" replace>
                         Очистить фильтры
                     </v-button>
                 </div>
@@ -129,11 +129,11 @@
                         </div>
 
                         <catalog-filter class="catalog-view__modal-filter-panel" />
-                        <div class="catalog-view__modal-nav">
-                            <v-button class="btn--outline catalog-view__clear-btn catalog-view__clear-modal-btn" :to="clearFilterUrl" replace>
+                        <div class="catalog-view__modal-filter-controls">
+                            <v-button class="btn--outline catalog-view__modal-filter-clear-btn" :to="clearFilterUrl" replace>
                                 Очистить
                             </v-button>
-                            <v-button class="catalog-view__close-modal-btn" @click="filterModal = !filterModal">Показать</v-button>
+                            <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal">Показать</v-button>
                         </div>
                     </v-sticky>
                 </template>
