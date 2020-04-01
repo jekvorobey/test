@@ -69,6 +69,7 @@
                         </v-slider>
                     </template>
                 </v-sticky>
+
                 <div class="product-view__header-detail">
                     <product-detail-panel
                         class="product-view__header-detail-info"
@@ -132,7 +133,9 @@
                         <p class="text-bold product-view__header-detail-section-hl">
                             Описание и характеристики
                         </p>
-                        <v-html v-html="product.description.content" />
+                        <v-clamp tag="p" :max-lines="maxDescriptionLines" :autoresize="true">
+                            {{ product.description.content }}
+                        </v-clamp>
                         <a class="product-view__header-detail-brand-link" href="#description">
                             Подробнее
                         </a>
@@ -241,7 +244,7 @@
             <div class="container product-view__info-container">
                 <div class="product-view__info-header">
                     <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
-                    <v-html class="product-view__info-text" v-html="product.description.content" />
+                    <p class="product-view__info-text">{{ product.description.content }}</p>
                 </div>
                 <div class="product-view__info-media">
                     <v-picture
@@ -585,6 +588,7 @@
 </template>
 
 <script>
+import VClamp from 'vue-clamp';
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
@@ -764,6 +768,7 @@ export default {
         VSvg,
         VButton,
         VLink,
+        VClamp,
         VRating,
         VSticky,
         VHtml,
@@ -899,6 +904,10 @@ export default {
             } else imageMap.media = [];
 
             return imageMap;
+        },
+
+        maxDescriptionLines() {
+            return 5;
         },
 
         canBuy() {
