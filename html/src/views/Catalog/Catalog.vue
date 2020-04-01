@@ -39,6 +39,9 @@
                         />
                     </ul>
                     <catalog-filter class="catalog-view__side-panel-filters" />
+                    <v-button class="btn--outline catalog-view__clear-btn" :to="clearFilterUrl" replace>
+                        Очистить фильтры
+                    </v-button>
                 </div>
                 <div class="catalog-view__main">
                     <div class="catalog-view__main-header">
@@ -126,6 +129,12 @@
                         </div>
 
                         <catalog-filter class="catalog-view__modal-filter-panel" />
+                        <div class="catalog-view__modal-nav">
+                            <v-button class="btn--outline catalog-view__clear-btn catalog-view__clear-modal-btn" :to="clearFilterUrl" replace>
+                                Очистить
+                            </v-button>
+                            <v-button class="catalog-view__close-modal-btn" @click="filterModal = !filterModal">Показать</v-button>
+                        </div>
                     </v-sticky>
                 </template>
             </modal>
@@ -318,6 +327,11 @@ export default {
             const banner = this[PRODUCT_GROUP][BANNER];
             const image = banner.desktopImage || banner.tabletImage || banner.mobileImage;
             if (image) return generatePictureSourcePath(1224, 240, image.id, image.sourceExt);
+        },
+
+        clearFilterUrl() {
+            const { type, entityCode, code } = this;
+            return generateCategoryUrl(type, entityCode, code);
         },
     },
 
