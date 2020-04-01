@@ -21,6 +21,10 @@
     &__panel {
         overflow: hidden;
 
+        .info-panel__header-hl {
+            flex: initial;
+        }
+
         & + & {
             margin-top: calc(var(--gs) * 7);
         }

@@ -52,7 +52,7 @@ export default {
         }
     },
 
-    async [SEARCH_PRODUCTS]({ commit }, { query, limit }) {
+    async [SEARCH_PRODUCTS]({ commit }, { query, limit = 10 }) {
         try {
             const { products } = await getProfilePromopageProducts(query, limit);
             commit(SET_SEARCH_RESULTS, products);

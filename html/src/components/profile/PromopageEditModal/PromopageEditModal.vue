@@ -1,5 +1,6 @@
 <template>
     <general-modal
+        v-if="isOpen"
         class="promopage-edit-modal"
         type="sm"
         header="Редактировать заголовок"
@@ -11,9 +12,9 @@
             <form class="promopage-edit-modal__form" @submit.prevent="onSubmit">
                 <v-input
                     class="promopage-edit-modal__form-row"
-                    v-model="newName"
+                    v-model="newTitle"
                     placeholder="Введите заголовок"
-                    :error="newNameError"
+                    :error="newTitleError"
                 />
             </form>
 
@@ -29,17 +30,19 @@
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
-import validationMixin, { required } from '@plugins/validation';
 
 import { mapActions, mapState } from 'vuex';
-
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE, PROMO_DATA } from '@store/modules/Profile';
-import { UPDATE_PROMOPAGE_NAME } from '@store/modules/Profile/actions';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as PROMOPAGE_MODULE, TITLE } from '@store/modules/Profile/modules/Promopage';
+import { SET_PROMOPAGE_TITLE } from '@store/modules/Profile/modules/Promopage/actions';
 
+import validationMixin, { required } from '@plugins/validation';
 import './PromopageEditModal.css';
+
+const PROMOPAGE_MODULE_PATH = `${PROFILE_MODULE}/${PROMOPAGE_MODULE}`;
 
 export const NAME = 'promopage-edit-modal';
 
@@ -54,39 +57,40 @@ export default {
     },
 
     validations: {
-        newName: {
+        newTitle: {
             required,
         },
     },
 
     data() {
         return {
-            newName: '',
+            newTitle: '',
         };
     },
 
     computed: {
-        ...mapState(PROFILE_MODULE, {
-            name: state => (state[PROMO_DATA] && state[PROMO_DATA].name) || '',
+        ...mapState(PROMOPAGE_MODULE_PATH, [TITLE]),
+        ...mapState(MODAL_MODULE, {
+            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
         }),
 
         isTablet() {
             return this.$mq.tablet;
         },
 
-        newNameError() {
-            if (this.$v.newName.$dirty && this.$v.newName.$invalid) return 'Обязательное поле';
+        newTitleError() {
+            if (this.$v.newTitle.$dirty && this.$v.newTitle.$invalid) return 'Обязательное поле';
         },
     },
 
     methods: {
+        ...mapActions(PROMOPAGE_MODULE_PATH, [SET_PROMOPAGE_TITLE]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(PROFILE_MODULE, [UPDATE_PROMOPAGE_NAME]),
 
         onSubmit() {
             this.$v.$touch();
             if (!this.$v.$invalid) {
-                this[UPDATE_PROMOPAGE_NAME](this.newName);
+                this[SET_PROMOPAGE_TITLE](this.newTitle);
                 this.onClose();
             }
         },
@@ -97,7 +101,7 @@ export default {
     },
 
     beforeMount() {
-        this.newName = this.name;
+        this.newTitle = this[TITLE];
     },
 };
 </script>

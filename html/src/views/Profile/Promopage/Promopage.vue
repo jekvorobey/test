@@ -57,16 +57,12 @@
 
         <transition name="fade">
             <promopage-edit-modal
-                v-show="isNameEditOpen"
                 v-if="$isServer || (isNameEditOpen && !isProductAddOpen && !isProductAddByLinkOpen)"
             />
         </transition>
 
         <transition name="fade">
-            <promopage-add-modal
-                v-show="isProductAddOpen"
-                v-if="$isServer || (!isNameEditOpen && isProductAddOpen && !isProductAddByLinkOpen)"
-            />
+            <promopage-add-modal v-if="$isServer || (!isNameEditOpen && isProductAddOpen && !isProductAddByLinkOpen)" />
         </transition>
 
         <transition name="fade">

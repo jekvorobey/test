@@ -4,7 +4,7 @@ export const UPDATE_BREADCRUMB = 'UPDATE_BREADCRUMB';
 export const UPDATE_PORTFOLIO = 'UPDATE_PORTFOLIO';
 export const UPDATE_PROFILES = 'UPDATE_PROFILES';
 export const UPDATE_REQUISITES = 'UPDATE_REQUISITES';
-export const UPDATE_PROMOPAGE_NAME = 'UPDATE_PROMOPAGE_NAME';
+export const SET_PROMOPAGE_TITLE = 'SET_PROMOPAGE_TITLE';
 export const UPDATE_CREDENTIAL = 'UPDATE_CREDENTIAL';
 
 export const UPDATE_ENTITIES = 'UPDATE_ENTITIES';
@@ -20,8 +20,8 @@ export default {
         state.promoData = payload;
     },
 
-    [UPDATE_PROMOPAGE_NAME](state, payload = []) {
-        state.promoData.name = payload;
+    [SET_PROMOPAGE_TITLE](state, payload = []) {
+        state.title = payload;
     },
 
     [UPDATE_ENTITIES](state, payload) {
