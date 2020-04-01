@@ -485,7 +485,7 @@
                         :tags="product.tags"
                         :rating="product.rating"
                         :show-buy-btn="product.stock.qty > 0"
-                        @addItem="onAddToCart(product)"
+                        @add-item="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                     />
                 </v-slider>
@@ -546,7 +546,7 @@
                         :tags="product.tags"
                         :rating="product.rating"
                         :show-buy-btn="product.stock.qty > 0"
-                        @addItem="onAddToCart(product)"
+                        @add-item="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                     />
                 </div>
@@ -563,7 +563,7 @@
                 :old-price="product.oldPrice"
                 :bonus="product.bonus"
                 :can-buy="canBuy"
-                @addItem="onBuyProduct"
+                @add-item="onBuyProduct"
             />
         </transition>
 

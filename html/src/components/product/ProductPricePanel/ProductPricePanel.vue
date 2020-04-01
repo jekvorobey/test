@@ -114,7 +114,7 @@ export default {
         },
 
         onBuyBtnClick() {
-            this.$emit('addItem');
+            this.$emit('add-item');
         },
     },
 };
