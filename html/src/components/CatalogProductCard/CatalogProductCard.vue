@@ -171,7 +171,7 @@ export default {
 
     methods: {
         onBuyButtonClick() {
-            this.$emit('addItem', { id: this.productId, type: this.type });
+            this.$emit('add-item', { id: this.productId, type: this.type });
         },
 
         onPreview() {

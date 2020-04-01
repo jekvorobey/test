@@ -158,7 +158,7 @@
                         :tags="item.tags"
                         :rating="item.rating"
                         :show-buy-btn="item.stock.qty > 0"
-                        @addItem="onAddCartItem(item.id, item.stock.storeId)"
+                        @add-item="onAddCartItem(item.id, item.stock.storeId)"
                         @preview="onPreview(item.code)"
                     />
                 </v-slider>
