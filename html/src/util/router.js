@@ -14,6 +14,5 @@ export function createNotFoundRoute(route) {
         params: [route.path],
         query: { ...route.query },
         hash: route.hash,
-        replace: true,
     };
 }

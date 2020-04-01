@@ -6,7 +6,8 @@ import cabinet from './modules/Cabinet';
 import preferences from './modules/Preferences';
 import addresses from './modules/Addresses';
 import orders from './modules/Orders';
-import seo from './modules/Seo/index';
+import seo from './modules/Seo';
+import promopage from './modules/Promopage';
 
 export const NAME = 'profile';
 export const BREADCRUMBS = 'breadcrumbs';
@@ -94,6 +95,7 @@ export default function createModule() {
             addresses: addresses(),
             orders: orders(),
             seo: seo(),
+            promopage: promopage(),
         },
     };
 }

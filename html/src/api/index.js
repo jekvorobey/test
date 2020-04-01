@@ -234,6 +234,42 @@ export function getProfileSeoProducts(pageNum, perPage, isActive) {
     });
 }
 
+export function getProfilePromopage(pageNum, perPage) {
+    return $http.get('/v1/lk/promo-page', {
+        params: {
+            pageNum,
+            perPage,
+        },
+    });
+}
+
+export function getProfilePromopageProducts(name, limit) {
+    return $http.get('/v1/lk/promo-page/products', {
+        params: {
+            name,
+            limit,
+        },
+    });
+}
+
+export function setProfilePromopageTitle(name) {
+    return $http.put('/v1/lk/promo-page/name', {
+        promo_page_name: name,
+    });
+}
+
+export function addProfilePromopageProductByCode(code) {
+    return $http.put(`/v1/lk/promo-page/products/by-code/${code}`);
+}
+
+export function addProfilePromopageProductById(id) {
+    return $http.put(`/v1/lk/promo-page/products/by-id/${id}`);
+}
+
+export function deleteProfilePromopageProductById(id) {
+    return $http.delete(`/v1/lk/promo-page/products/by-id/${id}`);
+}
+
 // search
 
 export function search(data) {

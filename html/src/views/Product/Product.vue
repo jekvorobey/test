@@ -26,26 +26,20 @@
                     <template v-slot:sticky>
                         <div v-if="!isTabletLg" class="product-view__header-gallery" @click.prevent="onShowGallery">
                             <div
+                                v-if="!productImages.media || !productImages.media.length"
+                                class="product-view__header-gallery-item product-view__header-gallery-item--empty"
+                            >
+                                <v-svg name="logo" width="56" height="56" />
+                            </div>
+                            <div
                                 class="product-view__header-gallery-item"
-                                v-for="image in product.media"
+                                v-for="image in productImages.media"
                                 :key="image.id"
                             >
                                 <v-picture v-if="image && image.id">
-                                    <source
-                                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
-                                        type="image/webp"
-                                        media="(min-width: 480px)"
-                                    />
-                                    <source
-                                        :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                                        type="image/webp"
-                                        media="(max-width: 479px)"
-                                    />
-                                    <img
-                                        class="blur-up lazyload v-picture__img"
-                                        :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
-                                        alt=""
-                                    />
+                                    <source :data-srcset="image.desktop" type="image/webp" media="(min-width: 480px)" />
+                                    <source :data-srcset="image.tablet" type="image/webp" media="(max-width: 479px)" />
+                                    <img class="blur-up lazyload v-picture__img" :data-src="image.default" alt="" />
                                 </v-picture>
                             </div>
                         </div>
@@ -56,26 +50,20 @@
                             :options="productGalleryOptions"
                         >
                             <div
+                                v-if="!productImages.media || !productImages.media.length"
+                                class="swiper-slide product-view__header-gallery-item product-view__header-gallery-item--empty"
+                            >
+                                <v-svg name="logo" width="56" height="56" />
+                            </div>
+                            <div
                                 class="swiper-slide product-view__header-gallery-item"
-                                v-for="image in product.media"
+                                v-for="image in productImages.media"
                                 :key="image.id"
                             >
-                                <v-picture v-if="image && image.id">
-                                    <source
-                                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
-                                        type="image/webp"
-                                        media="(min-width: 480px)"
-                                    />
-                                    <source
-                                        :data-srcset="generateSourcePath(200, 200, image.id, 'webp')"
-                                        type="image/webp"
-                                        media="(max-width: 479px)"
-                                    />
-                                    <img
-                                        class="blur-up lazyload v-picture__img"
-                                        :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
-                                        alt=""
-                                    />
+                                <v-picture>
+                                    <source :data-srcset="image.desktop" type="image/webp" media="(min-width: 480px)" />
+                                    <source :data-srcset="image.tablet" type="image/webp" media="(max-width: 479px)" />
+                                    <img class="blur-up lazyload v-picture__img" :data-src="image.default" alt="" />
                                 </v-picture>
                             </div>
                         </v-slider>
@@ -678,6 +666,7 @@ import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/arrow-small.svg';
 import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/logo.svg';
 import './Product.css';
 
 const productGalleryOptions = {
@@ -865,7 +854,7 @@ export default {
 
         productImages() {
             const imageMap = {};
-            const { brand, howto, description } = this.product;
+            const { brand, howto, description, media } = this.product;
 
             if (brand && brand.image) {
                 imageMap.brand = {
@@ -893,6 +882,17 @@ export default {
                     default: generatePictureSourcePath(null, null, description.image.id, description.image.sourceExt),
                 };
             }
+
+            if (Array.isArray(media) && media.length > 0) {
+                imageMap.media = media.map(image => {
+                    return {
+                        ...image,
+                        desktop: generatePictureSourcePath(300, 300, image.id, fileExtension.image.WEBP),
+                        tablet: generatePictureSourcePath(200, 200, image.id, fileExtension.image.WEBP),
+                        default: generatePictureSourcePath(300, 300, image.id, image.sourceExt),
+                    };
+                });
+            } else imageMap.media = [];
 
             return imageMap;
         },

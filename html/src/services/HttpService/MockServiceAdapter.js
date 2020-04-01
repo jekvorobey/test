@@ -42,6 +42,8 @@ export default class MockServiceAdapter extends HttpServiceBase {
             case '/v1/lk/preference':
             case '/v1/lk/address':
             case '/v1/lk/promotion-product':
+            case '/v1/lk/promo-page':
+            case '/v1/lk/promo-page/products':
                 return this.httpServiceInstance.get(path, config);
             default:
                 return this.mockServiceInstance.get(path, config);
@@ -101,6 +103,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
      * @returns {Promise<Object>}
      */
     delete(path, config) {
+        if (path.includes('/v1/lk/promo-page/products/by-id/')) return this.httpServiceInstance.delete(path, config);
         if (path.includes('/v1/lk/profile/certificate/')) return this.httpServiceInstance.delete(path, config);
         if (path.includes('/v1/lk/profile/social/')) return this.httpServiceInstance.delete(path, config);
         if (path.includes('/v1/lk/address/')) return this.httpServiceInstance.delete(path, config);
@@ -127,10 +130,14 @@ export default class MockServiceAdapter extends HttpServiceBase {
      * @returns {Promise<Object>}
      */
     put(path, data, config) {
+        if (path.includes('/v1/lk/promo-page/products/by-code/'))
+            return this.httpServiceInstance.put(path, data, config);
+        if (path.includes('/v1/lk/promo-page/products/by-id/')) return this.httpServiceInstance.put(path, data, config);
         if (path.includes('/v1/lk/preference/')) return this.httpServiceInstance.put(path, data, config);
         if (path.includes('/v1/lk/address/')) return this.httpServiceInstance.put(path, data, config);
 
         switch (path) {
+            case '/v1/lk/promo-page/name':
             case '/v1/lk/profile/portfolio':
             case '/v1/lk/profile/personal':
             case '/v1/lk/profile/activities':

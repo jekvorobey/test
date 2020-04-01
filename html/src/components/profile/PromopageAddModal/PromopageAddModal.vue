@@ -1,5 +1,6 @@
 <template>
     <general-modal
+        v-if="isOpen"
         type="sm"
         class="promopage-add-modal"
         header="Добавить продукт"
@@ -18,14 +19,14 @@
             <ul class="promopage-add-modal__list">
                 <cart-panel-product-card
                     class="cart-header-panel__list-item"
-                    v-for="product in products"
-                    :key="product.id"
-                    :product-id="product.id"
-                    :type="product.type"
-                    :name="product.name"
-                    :image="product.image"
-                    :price="product.price"
-                    :old-price="product.oldPrice"
+                    v-for="item in searchItems"
+                    :key="item.id"
+                    :product-id="item.id"
+                    :type="item.type"
+                    :name="item.name"
+                    :image="item.image"
+                    :price="item.price"
+                    :old-price="item.oldPrice"
                     href="/catalog"
                 />
             </ul>
@@ -52,10 +53,12 @@ import { mapActions, mapState } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE, PROMO_DATA } from '@store/modules/Profile';
-import { FETCH_PROMO_DATA } from '@store/modules/Profile/actions';
-
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as PROMOPAGE_MODULE, TITLE, SEARCH_ITEMS } from '@store/modules/Profile/modules/Promopage';
+import { SEARCH_PRODUCTS } from '@store/modules/Profile/modules/Promopage/actions';
 import './PromopageAddModal.css';
+
+const PROMOPAGE_MODULE_PATH = `${PROFILE_MODULE}/${PROMOPAGE_MODULE}`;
 
 export const NAME = 'promopage-add-modal';
 
@@ -71,15 +74,10 @@ export default {
         CartPanelProductCard,
     },
 
-    data() {
-        return {
-            filterString: '',
-        };
-    },
-
     computed: {
-        ...mapState(PROFILE_MODULE, {
-            products: state => (state[PROMO_DATA] ? state[PROMO_DATA].products : []),
+        ...mapState(PROMOPAGE_MODULE_PATH, [SEARCH_ITEMS]),
+        ...mapState(MODAL_MODULE, {
+            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
         }),
 
         isTablet() {
@@ -89,10 +87,10 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(PROFILE_MODULE, []),
+        ...mapActions(PROMOPAGE_MODULE_PATH, [SEARCH_PRODUCTS]),
 
-        onFilterChange(filterString) {
-            this.filterString = filterString;
+        onFilterChange(query) {
+            this[SEARCH_PRODUCTS]({ query });
         },
 
         onSubmit() {

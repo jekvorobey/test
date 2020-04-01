@@ -46,7 +46,7 @@ export default {
             await deleteAllItems();
             commit(SET_CART_DATA, {});
         } catch (error) {
-            storeErrorHandler(FETCH_CART_DATA, error);
+            storeErrorHandler(DELETE_ALL_ITEMS, error);
         }
     },
 
