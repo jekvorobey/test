@@ -14,7 +14,7 @@
         position: relative;
         display: flex;
         width: 40%;
-        max-width: 56px;
+        max-width: 64px;
         height: 100%;
         padding: var(--gs);
         margin-right: calc(var(--gs) * 2);

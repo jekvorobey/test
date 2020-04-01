@@ -267,7 +267,8 @@
                 class="checkout-product-panel__item checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--settings"
             >
                 <div class="checkout-product-panel__item-panel">
-                    <v-check
+                    <!-- #58436 -->
+                    <!-- <v-check
                         id="check-promo"
                         :checked="subscribe"
                         class="checkout-product-panel__item-panel-check"
@@ -275,7 +276,7 @@
                         @change="SET_SUBSCRIBE(Number($event))"
                     >
                         Сообщать мне об акциях, скидках и специальных предложениях
-                    </v-check>
+                    </v-check> -->
                     <v-check
                         id="check-agreement"
                         :checked="agreement"
