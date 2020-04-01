@@ -45,9 +45,6 @@
                 </div>
             </template>
         </v-accordion>
-        <!-- <v-button class="btn--outline catalog-filter__clear-btn" :to="clearFilterUrl" replace>
-            {{ btnText }}
-        </v-button> -->
     </div>
 </template>
 
@@ -69,13 +66,6 @@ export default {
     name: 'catalog-filter',
 
     components: { VButton, VCheck, VRange, VAccordion },
-
-    props: {
-        // btnText: {
-        //     type: String,
-        //     default: 'Очистить фильтры',
-        // },
-    },
 
     data() {
         return {
@@ -108,11 +98,6 @@ export default {
                       return { id: f.id, item: f, title: f.title, isExpanded: true };
                   })
                 : [];
-        },
-
-        clearFilterUrl() {
-            const { type, entityCode, code } = this;
-            return generateCategoryUrl(type, entityCode, code);
         },
     },
 
