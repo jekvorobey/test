@@ -998,6 +998,8 @@ export default {
         },
 
         onShowGallery() {
+            const { media } = this.productImages;
+            if (!media || !media.length) return;
             this[CHANGE_MODAL_STATE]({ name: GALLERY_MODAL_NAME, open: true });
         },
 

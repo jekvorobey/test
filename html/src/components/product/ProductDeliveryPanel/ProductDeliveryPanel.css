@@ -8,4 +8,8 @@
         text-transform: none;
         border-bottom: 1px solid var(--cl-global);
     }
+
+    &__price {
+        vertical-align: inherit;
+    }
 }

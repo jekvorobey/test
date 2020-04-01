@@ -621,7 +621,7 @@ export default {
             const uniqueDates = Array.from(new Set(deliveryType.items.map(i => i.selectedDate)));
             return uniqueDates.reduce(
                 (accum, current, index) =>
-                    accum + `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(this.locale, options)}`,
+                    accum + `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(this[LOCALE], options)}`,
                 'Доставим'
             );
         },

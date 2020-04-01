@@ -19,9 +19,13 @@
             </template>
 
             —
-            <price v-if="method.cost && method.cost.value > 0" v-bind="method.cost" />
-            <template v-else> {{ $t('product.freeDelivery') }} </template>,
-            <span class="text-grey">сегодня,&nbsp;21&nbsp;июня</span>
+            <price
+                class="product-delivery-panel__price"
+                v-if="method.cost && method.cost.value > 0"
+                v-bind="method.cost"
+            />
+            <span v-else> {{ $t('product.freeDelivery') }} </span>,
+            <span class="text-grey">{{ formatDate(method.date) }}</span>
         </p>
     </div>
 </template>
@@ -34,6 +38,7 @@ import Price from '@components/Price/Price.vue';
 import { NAME as CITY_SELECTION_MODAL_NAME } from '@components/CitySelectionModal/CitySelectionModal.vue';
 
 import { mapState, mapActions } from 'vuex';
+import { LOCALE } from '@store';
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
@@ -70,6 +75,7 @@ export default {
     },
 
     computed: {
+        ...mapState([LOCALE]),
         ...mapState(GEO_MODULE, {
             city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].value) || 'Выберите город',
         }),
@@ -77,6 +83,12 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        formatDate(date) {
+            const dateObj = new Date(date);
+            const options = { month: 'long', day: 'numeric' };
+            return dateObj.toLocaleDateString(this[LOCALE], options);
+        },
 
         onOpenCitySelection() {
             this[CHANGE_MODAL_STATE]({ name: CITY_SELECTION_MODAL_NAME, open: true });
