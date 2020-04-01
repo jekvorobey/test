@@ -88,7 +88,7 @@ export default {
 
     data() {
         return {
-            btnText: 'Загрузить другой',
+            btnText: 'Загрузить фото',
             inputId: null,
         };
     },
@@ -109,7 +109,7 @@ export default {
 
     watch: {
         isTablet(value) {
-            this.btnText = value ? 'Загрузить другой' : 'Загрузить новое фото';
+            this.btnText = value ? 'Загрузить фото' : 'Загрузить новое фото';
         },
     },
 

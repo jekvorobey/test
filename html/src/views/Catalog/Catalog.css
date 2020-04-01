@@ -101,6 +101,11 @@
                 }
             }
         }
+
+        &-clear-btn {
+            margin-bottom: calc(var(--gs) * 4);
+            width: 100%;
+        }
     }
 
     &__main {
@@ -345,6 +350,38 @@
                 flex-grow: 1;
             }
         }
+        &-controls {
+            @media(--tablet-lg) {
+                position: sticky;
+                display: flex;
+                bottom: 0;
+                z-index: 1;
+                padding: calc(var(--gs) * 1.5) calc(var(--gs) * 2);
+                background-color: var(--cl-global-invert);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            }
+        }
+        &-clear-btn {
+            &:hover {
+                @media(--tablet-lg) {
+                    color: var(--cl-global);
+                    background: var(--cl-global-invert);
+                }
+            }
+            @media(--tablet-lg) {
+                margin-bottom: 0;
+                width: auto;
+                padding: 0;
+                margin: 6px calc(var(--gs) * 2);
+                border: none;
+                border-bottom: 2px solid var(--cl-global);
+            }
+        }
+        &-close-btn {
+            @media(--tablet-lg) {
+                width: 100%;
+            }
+        }
     }
 
     &__seo {
@@ -360,42 +397,6 @@
                 padding-top: 0;
                 border-top: none;
             }
-        }
-    }
-    &__clear-btn {
-        margin-bottom: calc(var(--gs) * 4);
-        width: 100%;
-    }
-    &__modal-nav {
-        @media(--tablet-lg) {
-            position: sticky;
-            display: flex;
-            bottom: 0;
-            z-index: 1;
-            padding: calc(var(--gs) * 1.5) calc(var(--gs) * 2);
-            background-color: var(--cl-global-invert);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-        }
-    }
-    &__clear-modal-btn {
-        &:hover {
-            @media(--tablet-lg) {
-                color: var(--cl-global);
-                background: var(--cl-global-invert);
-            }
-        }
-        @media(--tablet-lg) {
-            margin-bottom: 0;
-            width: auto;
-            padding: 0;
-            margin: 6px calc(var(--gs) * 2);
-            border: none;
-            border-bottom: 2px solid var(--cl-global);
-        }
-    }
-    &__close-modal-btn {
-        @media(--tablet-lg) {
-            width: 100%;
         }
     }
 }
