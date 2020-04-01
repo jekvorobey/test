@@ -7,6 +7,10 @@
                 <v-svg name="arrow-down" width="16" height="16" />
             </button>
         </p>
+        <p class="status-color-error" v-if="!deliveryMethods || !deliveryMethods.length">
+            Доставка в данный регион не осуществляется.<br />
+            Выбирете другой населенный пункт.
+        </p>
         <p v-for="method in deliveryMethods" :key="method.deliveryMethod">
             <template v-if="method.deliveryMethod === receiveMethods.PICKUP">
                 {{ $t(`product.deliveryMethod.${method.deliveryMethod}[0]`) }}
