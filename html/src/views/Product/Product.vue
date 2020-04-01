@@ -363,7 +363,8 @@
             </div>
         </section>
 
-        <section v-if="masterClasses && masterClasses.length > 0" class="section product-view__masterclass">
+        <!-- #58437 -->
+        <!-- <section v-if="masterClasses && masterClasses.length > 0" class="section product-view__masterclass">
             <div class="container product-view__masterclass-container">
                 <h2 class="product-view__section-hl product-view__masterclass-hl">
                     {{ $t('product.title.masterClasses') }}
@@ -395,9 +396,10 @@
                     {{ $t('product.showAll') }}
                 </v-button>
             </div>
-        </section>
+        </section> -->
 
-        <section class="section product-view__section">
+        <!-- #58437 -->
+        <!-- <section class="section product-view__section">
             <div class="container product-view__reviews">
                 <div class="product-view__reviews-inner">
                     <div class="product-view__reviews-header">
@@ -444,9 +446,10 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
-        <section class="section product-view__section product-view__banners">
+        <!-- #58437 -->
+        <!-- <section class="section product-view__section product-view__banners">
             <div class="container product-view__banners-container">
                 <h2 class="product-view__section-hl product-view__banners-hl">
                     {{ $t('product.title.compilations') }}
@@ -462,7 +465,7 @@
                     />
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <section class="section product-view__section product-view__like">
             <div class="container product-view__like-container">
@@ -520,9 +523,10 @@
                 <div class="text-grey product-view__instagram-note">
                     Добавь тег @bessovestnotalantlivy в Instagram и, возможно, мы опубликуем твою фотографию
                 </div>
-                <v-button class="btn--outline product-view__section-link product-view__instagram-link">
+                <!-- #58437 -->
+                <!-- <v-button class="btn--outline product-view__section-link product-view__instagram-link">
                     {{ $t('landing.subscribe') }}
-                </v-button>
+                </v-button> -->
             </div>
         </section>
 
