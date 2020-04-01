@@ -39,7 +39,7 @@
             </form>
 
             <div class="email-edit-modal__submit">
-                <v-button class="email-edit-modal__submit-btn" @click="onSubmit">
+                <v-button class="email-edit-modal__submit-btn" @click="onSubmit" :disabled="isDisabledGetCodeBtn">
                     {{ sent ? 'Изменить Email' : 'Отправить код' }}
                 </v-button>
             </div>
@@ -102,6 +102,7 @@ export default {
             sent: false,
             exists: false,
             accepted: false,
+            isDisabledGetCodeBtn: false,
         };
     },
 
@@ -130,12 +131,15 @@ export default {
 
         async sendCode(destination) {
             try {
+                this.isDisabledGetCodeBtn = true;
                 await this[SEND_CODE]({
                     destination,
                     type: verificationCodeType.PROFILE_EMAIL,
                 });
+                this.isDisabledGetCodeBtn = false;
                 this.sent = true;
             } catch (error) {
+                this.isDisabledGetCodeBtn = false;
                 this.sent = false;
                 this.accepted = false;
             }
