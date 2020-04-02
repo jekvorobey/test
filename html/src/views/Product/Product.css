@@ -1,6 +1,6 @@
 .product-view {
     .hook {
-        top: calc(var(--gs) * -16);
+        top: calc(var(--gs) * -32);
 
         @media (--tablet-lg) {
             top: calc(var(--gs) * -18);
@@ -9,6 +9,10 @@
         @media (--tablet) {
             top: calc(var(--gs) * -8);
         }
+    }
+
+    &--scroll .hook {
+        top: calc(var(--gs) * -16);
     }
 
     &__breadcrumbs {

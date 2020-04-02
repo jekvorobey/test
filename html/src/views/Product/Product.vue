@@ -1,5 +1,5 @@
 <template>
-    <section class="section product-view">
+    <section class="section product-view" :class="{ 'product-view--scroll': scroll }">
         <div class="container">
             <breadcrumbs class="product-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
