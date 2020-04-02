@@ -51,7 +51,7 @@
             </div>
 
             <attention-panel class="checkout-recipient-modal__panel">
-                При получении документа необходимо иметь с собой документ, удостоверяющий личность
+                При получении заказа необходимо иметь с собой документ, удостоверяющий личность
             </attention-panel>
 
             <div class="checkout-recipient-modal__submit">

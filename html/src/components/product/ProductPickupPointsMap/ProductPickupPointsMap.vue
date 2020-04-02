@@ -67,7 +67,7 @@ export default {
 
         coords() {
             const selectedPoint = this[SELECTED_PICKUP_POINT];
-            return (selectedPoint && selectedPoint.map.coords) || this[SELECTED_CITY_COORDS] || [55.755814, 37.617635];
+            return (selectedPoint && selectedPoint.map.coords) || this[SELECTED_CITY_COORDS];
         },
 
         points() {
@@ -102,6 +102,10 @@ export default {
         onPointClick(e, point, index) {
             this[SET_SELECTED_PICKUP_POINT]({ point, index });
         },
+    },
+
+    destroyed() {
+        this[SET_SELECTED_PICKUP_POINT]({ point: null, index: -1 });
     },
 };
 </script>

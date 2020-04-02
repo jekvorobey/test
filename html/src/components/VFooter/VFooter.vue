@@ -8,10 +8,15 @@
                     </v-link>
                 </div>
                 <div class="v-footer__col" :key="col.title" v-for="col in links">
-                    <p class="v-footer__col-title">{{ col.title }}</p>
+                    <router-link v-if="col.url" class="v-footer__col-title" :to="col.url">{{ col.title }}</router-link>
+                    <a v-else class="v-footer__col-title">{{ col.title }}</a>
+
                     <ul class="v-footer__links">
                         <li class="v-footer__links-item" :key="link.name" v-for="link in col.items" :title="link.name">
-                            <a class="v-footer__link" :href="link.href">{{ link.name }}</a>
+                            <router-link v-if="link.url" class="v-footer__link" :to="link.url">
+                                {{ link.name }}
+                            </router-link>
+                            <a v-else class="v-footer__link">{{ col.title }}</a>
                         </li>
                     </ul>
                 </div>
@@ -140,10 +145,11 @@ export default {
         },
 
         links() {
-            const menuItems = this[FOOTER_MENU].items || [];
+            const menuItems = (this[FOOTER_MENU] && this[FOOTER_MENU].items) || [];
             return menuItems.map(mi => {
                 return {
                     title: mi.name,
+                    url: mi.url,
                     isExpanded: false,
                     items: mi.children.map(i => {
                         return {

@@ -19,7 +19,7 @@
                         :tags="product.tags"
                         :rating="product.rating"
                         :show-buy-btn="product.stock.qty > 0"
-                        @addItem="onAddToCart(product)"
+                        @add-item="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                     />
                     <!-- #58322  -->

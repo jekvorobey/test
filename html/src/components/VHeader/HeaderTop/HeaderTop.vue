@@ -65,7 +65,7 @@ export default {
         ...mapState([SCROLL]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
         ...mapState(GEO_MODULE, {
-            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].value) || 'Выберите город',
+            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
 
         isTabletLg() {

@@ -69,6 +69,7 @@
                         </v-slider>
                     </template>
                 </v-sticky>
+
                 <div class="product-view__header-detail">
                     <product-detail-panel
                         class="product-view__header-detail-info"
@@ -125,14 +126,19 @@
                     <product-delivery-panel
                         class="product-view__header-detail-section"
                         :delivery-methods="product.deliveryMethods"
-                        @pickupPoints="onShowPickupPoints"
+                        @pickup-points="onShowPickupPoints"
                     />
 
-                    <div class="product-view__header-detail-section">
+                    <div
+                        v-if="product.description && product.description.content"
+                        class="product-view__header-detail-section"
+                    >
                         <p class="text-bold product-view__header-detail-section-hl">
                             Описание и характеристики
                         </p>
-                        <v-html v-html="product.description.content" />
+                        <v-clamp tag="p" :max-lines="maxDescriptionLines" :autoresize="true">
+                            {{ product.description.content }}
+                        </v-clamp>
                         <a class="product-view__header-detail-brand-link" href="#description">
                             Подробнее
                         </a>
@@ -234,14 +240,14 @@
         </section>
 
         <section
-            id="description"
             v-if="product.description && (product.description.content || product.description.image)"
             class="section product-view__section product-view__info"
         >
             <div class="container product-view__info-container">
+                <div id="description" class="hook" />
                 <div class="product-view__info-header">
                     <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
-                    <v-html class="product-view__info-text" v-html="product.description.content" />
+                    <p class="product-view__info-text">{{ product.description.content }}</p>
                 </div>
                 <div class="product-view__info-media">
                     <v-picture
@@ -363,7 +369,8 @@
             </div>
         </section>
 
-        <section v-if="masterClasses && masterClasses.length > 0" class="section product-view__masterclass">
+        <!-- #58437 -->
+        <!-- <section v-if="masterClasses && masterClasses.length > 0" class="section product-view__masterclass">
             <div class="container product-view__masterclass-container">
                 <h2 class="product-view__section-hl product-view__masterclass-hl">
                     {{ $t('product.title.masterClasses') }}
@@ -395,9 +402,10 @@
                     {{ $t('product.showAll') }}
                 </v-button>
             </div>
-        </section>
+        </section> -->
 
-        <section class="section product-view__section">
+        <!-- #58437 -->
+        <!-- <section class="section product-view__section">
             <div class="container product-view__reviews">
                 <div class="product-view__reviews-inner">
                     <div class="product-view__reviews-header">
@@ -444,9 +452,10 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
-        <section class="section product-view__section product-view__banners">
+        <!-- #58437 -->
+        <!-- <section class="section product-view__section product-view__banners">
             <div class="container product-view__banners-container">
                 <h2 class="product-view__section-hl product-view__banners-hl">
                     {{ $t('product.title.compilations') }}
@@ -462,7 +471,7 @@
                     />
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <section class="section product-view__section product-view__like">
             <div class="container product-view__like-container">
@@ -482,7 +491,7 @@
                         :tags="product.tags"
                         :rating="product.rating"
                         :show-buy-btn="product.stock.qty > 0"
-                        @addItem="onAddToCart(product)"
+                        @add-item="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                     />
                 </v-slider>
@@ -520,9 +529,10 @@
                 <div class="text-grey product-view__instagram-note">
                     Добавь тег @bessovestnotalantlivy в Instagram и, возможно, мы опубликуем твою фотографию
                 </div>
-                <v-button class="btn--outline product-view__section-link product-view__instagram-link">
+                <!-- #58437 -->
+                <!-- <v-button class="btn--outline product-view__section-link product-view__instagram-link">
                     {{ $t('landing.subscribe') }}
-                </v-button>
+                </v-button> -->
             </div>
         </section>
 
@@ -542,7 +552,7 @@
                         :tags="product.tags"
                         :rating="product.rating"
                         :show-buy-btn="product.stock.qty > 0"
-                        @addItem="onAddToCart(product)"
+                        @add-item="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                     />
                 </div>
@@ -559,7 +569,7 @@
                 :old-price="product.oldPrice"
                 :bonus="product.bonus"
                 :can-buy="canBuy"
-                @addItem="onBuyProduct"
+                @add-item="onBuyProduct"
             />
         </transition>
 
@@ -581,6 +591,7 @@
 </template>
 
 <script>
+import VClamp from 'vue-clamp';
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
@@ -760,6 +771,7 @@ export default {
         VSvg,
         VButton,
         VLink,
+        VClamp,
         VRating,
         VSticky,
         VHtml,
@@ -897,6 +909,10 @@ export default {
             return imageMap;
         },
 
+        maxDescriptionLines() {
+            return 5;
+        },
+
         canBuy() {
             return this.product.stock.qty > 0;
         },
@@ -928,9 +944,7 @@ export default {
 
     watch: {
         [SELECTED_CITY](value) {
-            // const { productCode } = this.product;
-            // const { fias_id } = value;
-            // this.debounce_fetchProduct(to, from);
+            this.onSelectedCityChanged(value);
         },
 
         modal(value) {
@@ -993,11 +1007,24 @@ export default {
             });
         },
 
+        async onSelectedCityChanged() {
+            try {
+                const { code, refCode: referrerCode } = this;
+                this.$progress.start();
+                await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
+                this.$progress.finish();
+            } catch (error) {
+                this.$progress.fail();
+            }
+        },
+
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
         },
 
         onShowGallery() {
+            const { media } = this.productImages;
+            if (!media || !media.length) return;
             this[CHANGE_MODAL_STATE]({ name: GALLERY_MODAL_NAME, open: true });
         },
 

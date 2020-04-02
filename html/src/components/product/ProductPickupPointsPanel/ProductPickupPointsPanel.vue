@@ -92,7 +92,7 @@ export default {
             if (value) {
                 const { options = [] } = this.$refs;
                 const selectedCard = options[value];
-                if (selectedCard) selectedCard.$el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                if (selectedCard) selectedCard.$el.scrollIntoView({ block: 'center' });
             }
         },
 
@@ -116,7 +116,7 @@ export default {
             if (isVisible && this[SELECTED_INDEX] !== -1) {
                 const { options } = this.$refs;
                 const selectedCard = options[this[SELECTED_INDEX]];
-                if (selectedCard) selectedCard.$el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                if (selectedCard) selectedCard.$el.scrollIntoView({ block: 'center' });
             }
         },
 

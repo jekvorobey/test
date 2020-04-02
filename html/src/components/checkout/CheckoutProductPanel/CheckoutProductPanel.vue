@@ -4,12 +4,13 @@
             <div class="checkout-product-panel__item-header">
                 <h2 class="checkout-product-panel__item-header-hl">Получатель</h2>
             </div>
+
             <ul class="checkout-product-panel__item-list">
                 <checkout-option-card
                     class="checkout-product-panel__item-card"
                     v-for="(recipient, index) in recipients"
                     :key="recipient.id"
-                    :selected="selectedAddress && isEqualObject(recipient, selectedRecipient)"
+                    :selected="selectedRecipient && isEqualObject(recipient, selectedRecipient)"
                     @cardClick="onSetRecipient(recipient)"
                     @btnClick="onChangeRecipient(recipient, index)"
                 >
@@ -18,16 +19,19 @@
                     <p>{{ formatPhoneNumber(recipient.phone) }}</p>
                 </checkout-option-card>
             </ul>
+
             <v-link class="checkout-product-panel__item-header-link" tag="button" @click="onAddRecipient">
                 <v-svg name="plus" width="24" height="24" />&nbsp;Добавить нового получателя
             </v-link>
         </div>
+
         <div class="checkout-product-panel__item checkout-product-panel__item--receive-method">
             <div class="checkout-product-panel__item-header">
                 <h2 class="checkout-product-panel__item-header-hl">
                     Способ получения&nbsp;<v-spinner width="24" height="24" :show="isReceiveMethodPending" />
                 </h2>
             </div>
+
             <ul class="checkout-product-panel__item-list">
                 <checkout-option-card
                     class="checkout-product-panel__item-card"
@@ -35,7 +39,7 @@
                     :key="method.id"
                     :selected="method.id === selectedReceiveMethodID"
                     readonly
-                    @cardClick="SET_RECEIVE_METHOD(method)"
+                    @cardClick="onSetReceiveMethod(method)"
                 >
                     <p class="text-bold">{{ method.title }}</p>
                     <p><price v-bind="method.price" /></p>
@@ -43,32 +47,23 @@
                 </checkout-option-card>
             </ul>
         </div>
+
         <div class="checkout-product-panel__item">
-            <div class="checkout-product-panel__item-header">
+            <div
+                class="checkout-product-panel__item-header"
+                :class="{ 'checkout-product-panel__item-header--error': addressError }"
+            >
                 <h2 class="checkout-product-panel__item-header-hl">
                     {{ isDelivery ? 'Адрес доставки' : 'Пункт самовывоза' }}&nbsp;
                     <v-spinner width="24" height="24" :show="isAddressPending" />
                 </h2>
             </div>
+
             <transition name="fade-in">
-                <ul v-if="isDelivery" class="checkout-product-panel__item-list">
-                    <checkout-option-card
-                        class="checkout-product-panel__item-card"
-                        v-for="(address, index) in addresses"
-                        :key="`${address.region_guid}-${address.city_guid || address.settlment_guid}-${address.house}`"
-                        :selected="selectedAddress && isEqualObject(selectedAddress, address)"
-                        @cardClick="SET_ADDRESS(address)"
-                        @btnClick="onChangeAddress(address, index)"
-                    >
-                        {{
-                            `${address.city || address.settlement}, ${address.area ? `${address.area}, ` : ''}${
-                                address.street ? `${address.street}, ` : ''
-                            }${address.house} ${address.block || ''}, ${address.post_index}`
-                        }}
-                    </checkout-option-card>
-                </ul>
-                <checkout-address-panel v-else @changeAddress="onChangePickupPoint" />
+                <checkout-address-panel v-if="isDelivery" @change-address="onChangeAddress" />
+                <checkout-pickup-point-panel v-else @change-address="onChangePickupPoint" />
             </transition>
+
             <v-link
                 v-if="isDelivery"
                 class="checkout-product-panel__item-header-link"
@@ -77,6 +72,7 @@
             >
                 <v-svg name="plus" width="24" height="24" />&nbsp;Добавить новый адрес
             </v-link>
+
             <v-link
                 v-else-if="selectedPickupPoint"
                 class="checkout-product-panel__item-header-link"
@@ -91,6 +87,7 @@
             <div class="checkout-product-panel__item-header">
                 <h2 class="checkout-product-panel__item-header-hl">Дата и время доставки</h2>
             </div>
+
             <transition name="fade-in" mode="out-in">
                 <div key="not-empty" v-if="showPanels">
                     <ul
@@ -110,6 +107,7 @@
                             <p class="text-grey text-sm">{{ generatePackageNote(deliveryType) }}</p>
                         </checkout-option-card>
                     </ul>
+
                     <transition-group v-if="selectedDeliveryType" tag="ul" name="chunk-item">
                         <li
                             class="checkout-product-panel__item checkout-product-panel__item--child"
@@ -120,6 +118,7 @@
                                 <h3 class="checkout-product-panel__item-header-hl">
                                     {{ generateChunkNote(chunkItem) }}
                                 </h3>
+
                                 <v-link
                                     v-if="chunkItem.availableDates && chunkItem.availableDates.length > 1"
                                     class="checkout-product-panel__item-header-link"
@@ -144,6 +143,7 @@
                         </li>
                     </transition-group>
                 </div>
+
                 <div key="empty" v-else class="checkout-product-panel__item-empty">
                     <h3 class="text-bold">Выберите адрес</h3>
                 </div>
@@ -153,6 +153,7 @@
             <div class="checkout-product-panel__item-header">
                 <h2 class="checkout-product-panel__item-header-hl">Способ оплаты</h2>
             </div>
+
             <ul class="checkout-product-panel__item-list">
                 <checkout-option-card
                     class="checkout-product-panel__item-card"
@@ -267,7 +268,8 @@
                 class="checkout-product-panel__item checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--settings"
             >
                 <div class="checkout-product-panel__item-panel">
-                    <v-check
+                    <!-- #58436 -->
+                    <!-- <v-check
                         id="check-promo"
                         :checked="subscribe"
                         class="checkout-product-panel__item-panel-check"
@@ -275,17 +277,23 @@
                         @change="SET_SUBSCRIBE(Number($event))"
                     >
                         Сообщать мне об акциях, скидках и специальных предложениях
-                    </v-check>
+                    </v-check> -->
                     <v-check
                         id="check-agreement"
                         :checked="agreement"
                         class="checkout-product-panel__item-panel-check"
                         name="agreement"
-                        @change="SET_AGREEMENT(Number($event))"
+                        @change="onSetAgreement($event)"
                     >
                         Я согласен с условиями <router-link to="/">заказа и доставки</router-link>
                     </v-check>
+                    <transition name="slide-in-bottom" mode="out-in">
+                        <div class="status-color-error" :key="agreementError" v-if="agreementError">
+                            {{ agreementError }}
+                        </div>
+                    </transition>
                 </div>
+
                 <div class="checkout-product-panel__item-panel">
                     <v-check
                         class="checkout-product-panel__item-panel-check"
@@ -296,7 +304,7 @@
                         :model-value="selectedConfirmationTypeID"
                         :value="confirmation.id"
                         :name="confirmation.type"
-                        @change="SET_CONFIRMATION_TYPE($event)"
+                        @change="onSetConfirmationType"
                     >
                         {{ confirmation.title }}
                     </v-check>
@@ -342,6 +350,7 @@ import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/Checkout
 import CheckoutProductCard from '@components/checkout/CheckoutProductCard/CheckoutProductCard.vue';
 import CheckoutDateModal from '@components/checkout/CheckoutDateModal/CheckoutDateModal.vue';
 import CheckoutPickupPointModal from '@components/checkout/CheckoutPickupPointModal/CheckoutPickupPointModal.vue';
+import CheckoutPickupPointPanel from '@components/checkout/CheckoutPickupPointPanel/CheckoutPickupPointPanel.vue';
 import CheckoutAddressPanel from '@components/checkout/CheckoutAddressPanel/CheckoutAddressPanel.vue';
 
 import CheckoutRecipientModal, {
@@ -409,6 +418,7 @@ import {
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import validationMixin, { required } from '@plugins/validation';
 import { formatPhoneNumber } from '@util';
 import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '@enums/checkout';
 import { requestStatus } from '@enums';
@@ -446,6 +456,8 @@ function prepareDeliveryType(deliveryType) {
 
 export default {
     name: 'checkout-product-panel',
+    mixins: [validationMixin],
+
     components: {
         VSvg,
         VLink,
@@ -457,12 +469,50 @@ export default {
 
         CheckoutProductCard,
         CheckoutOptionCard,
-        CheckoutDateModal,
-        CheckoutPickupPointModal,
         CheckoutAddressPanel,
+        CheckoutPickupPointPanel,
+        CheckoutDateModal,
         CheckoutRecipientModal,
+        CheckoutPickupPointModal,
 
         AddressEditModal,
+    },
+
+    validations() {
+        const selectedId = this[SELECTED_RECEIVE_METHOD_ID];
+        switch (selectedId) {
+            case receiveMethods.PICKUP:
+                return {
+                    [AGREEMENT]: {
+                        valid: value => value === true,
+                    },
+
+                    [SELECTED_RECIPIENT]: {
+                        required,
+                    },
+
+                    [SELECTED_PICKUP_POINT]: {
+                        required,
+                    },
+                };
+
+            case receiveMethods.DELIVERY:
+            case receiveMethods.EXPRESS:
+            default:
+                return {
+                    [AGREEMENT]: {
+                        valid: value => value === true,
+                    },
+
+                    [SELECTED_RECIPIENT]: {
+                        required,
+                    },
+
+                    [SELECTED_ADDRESS]: {
+                        required,
+                    },
+                };
+        }
     },
 
     data() {
@@ -566,6 +616,28 @@ export default {
                 selectedReceiveMethodID === receiveMethods.EXPRESS
             );
         },
+
+        agreementError() {
+            if (this.$v.agreement.$dirty && !this.$v.agreement.valid)
+                return 'Подтвердите согласие с условиями заказа и доставки';
+        },
+
+        addressError() {
+            const selectedId = this[SELECTED_RECEIVE_METHOD_ID];
+            switch (selectedId) {
+                case receiveMethods.PICKUP:
+                    if (this.$v.selectedPickupPoint.$dirty && !this.$v.selectedPickupPoint.required)
+                        return 'Укажите пункт самовывоза';
+                    break;
+
+                case receiveMethods.DELIVERY:
+                case receiveMethods.EXPRESS:
+                default:
+                    if (this.$v.selectedAddress.$dirty && !this.$v.selectedAddress.required)
+                        return 'Укажите адрес доставки';
+                    break;
+            }
+        },
     },
 
     methods: {
@@ -598,6 +670,11 @@ export default {
 
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
+        validate() {
+            this.$v.$touch();
+            return !this.$v.$invalid;
+        },
+
         formatPhoneNumber(phone) {
             return formatPhoneNumber(phone);
         },
@@ -620,9 +697,21 @@ export default {
             const uniqueDates = Array.from(new Set(deliveryType.items.map(i => i.selectedDate)));
             return uniqueDates.reduce(
                 (accum, current, index) =>
-                    accum + `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(this.locale, options)}`,
+                    accum + `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(this[LOCALE], options)}`,
                 'Доставим'
             );
+        },
+
+        onSetConfirmationType(value) {
+            this[SET_CONFIRMATION_TYPE](value);
+        },
+
+        onSetReceiveMethod(method) {
+            this[SET_RECEIVE_METHOD](method);
+        },
+
+        onSetAgreement(value) {
+            this[SET_AGREEMENT](Number(value));
         },
 
         onSetDeliveryType(id) {
@@ -645,7 +734,7 @@ export default {
             };
 
             this[CHANGE_MODAL_STATE]({
-                name: 'checkout-date-modal',
+                name: CheckoutDateModal.name,
                 open: true,
                 state,
             });
@@ -682,7 +771,7 @@ export default {
             this.recipientIndexToChange = null;
         },
 
-        onChangeAddress(address, index) {
+        onChangeAddress({ address, index }) {
             this.addressIndexToChange = index;
             this[CHANGE_MODAL_STATE]({ name: ADDRESS_EDIT_MODAL, open: true, state: { address: { ...address } } });
         },

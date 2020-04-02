@@ -134,7 +134,7 @@ export default {
 
     methods: {
         onBuyButtonClick() {
-            this.$emit('addItem', {
+            this.$emit('add-item', {
                 id: this.item.id,
                 storeId: this.item.stock.storeId,
                 type: this.item.type,

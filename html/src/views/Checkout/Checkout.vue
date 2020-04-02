@@ -14,7 +14,7 @@
         <section class="section checkout-view__main">
             <div class="container checkout-view__main-container">
                 <div class="checkout-view__main-body">
-                    <component :is="checkoutPanel" />
+                    <component ref="panel" :is="checkoutPanel" />
                 </div>
                 <v-sticky class="checkout-view__main-sticky">
                     <template v-slot:sticky>
@@ -197,9 +197,12 @@ export default {
 
         async onCommit() {
             try {
+                const { panel } = this.$refs;
+                if (!panel.validate()) return;
+
                 this.isCommit = true;
-                const data = await this[COMMIT_DATA]();
-                document.location.href = data.paymentUrl;
+                const { paymentUrl } = await this[COMMIT_DATA]();
+                document.location.href = paymentUrl;
             } catch (error) {
                 this.isCommit = false;
                 $logger.error(error);

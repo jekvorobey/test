@@ -56,7 +56,7 @@
                                 :tags="item.tags"
                                 :rating="item.rating"
                                 :show-buy-btn="item.stock.qty > 0"
-                                @addItem="onAddToCart(item)"
+                                @add-item="onAddToCart(item)"
                                 @preview="onPreview(item.code)"
                             />
                         </li>

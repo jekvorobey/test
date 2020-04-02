@@ -66,7 +66,7 @@ export function sendCode(destination, type) {
             break;
 
         default:
-            return Promise.reject('Wrong verification code type');
+            throw new Error('Wrong verification code type');
     }
 
     return $http.post(method, data);
@@ -82,7 +82,7 @@ export function checkCode(code, type) {
             method = '/v1/auth/reset/checkCode';
             break;
         default:
-            return Promise.reject('Wrong verification code type');
+            throw new Error('Wrong verification code type');
     }
 
     return $http.post(method, { code });
@@ -101,6 +101,13 @@ export function getSocialLink({ backUrl, driver, redirectUrl }) {
         final_login_url: backUrl,
         driver,
         redirect_social_url: redirectUrl,
+    });
+}
+
+export function setCity({ name, fias_id }) {
+    return $http.put('/v1/auth/city', {
+        name,
+        fias_id,
     });
 }
 

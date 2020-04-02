@@ -17,7 +17,7 @@
             :class="getClass(item.type)"
             :is="getComponent(item.type)"
             :item="item"
-            @addItem="onAddToCart(item)"
+            @add-item="onAddToCart(item)"
             @preview="onPreview(item.code)"
         />
     </transition-group>
@@ -29,7 +29,7 @@
             :class="getClass(item.type)"
             :is="getComponent(item.type)"
             :item="item"
-            @addItem="onAddToCart(item)"
+            @add-item="onAddToCart(item)"
             @preview="onPreview(item.code)"
         />
     </ul>
