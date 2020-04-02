@@ -126,7 +126,7 @@
                     <product-delivery-panel
                         class="product-view__header-detail-section"
                         :delivery-methods="product.deliveryMethods"
-                        @pickupPoints="onShowPickupPoints"
+                        @pickup-points="onShowPickupPoints"
                     />
 
                     <div
@@ -944,9 +944,7 @@ export default {
 
     watch: {
         [SELECTED_CITY](value) {
-            // const { productCode } = this.product;
-            // const { fias_id } = value;
-            // this.debounce_fetchProduct(to, from);
+            this.onSelectedCityChanged(value);
         },
 
         modal(value) {
@@ -1007,6 +1005,17 @@ export default {
                 query: { ...this.$route.query, modal: undefined },
                 hash: this.$route.hash,
             });
+        },
+
+        async onSelectedCityChanged() {
+            try {
+                const { code, refCode: referrerCode } = this;
+                this.$progress.start();
+                await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
+                this.$progress.finish();
+            } catch (error) {
+                this.$progress.fail();
+            }
         },
 
         onPreview(code) {

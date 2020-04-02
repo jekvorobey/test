@@ -81,7 +81,7 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(GEO_MODULE, {
-            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].value) || 'Выберите город',
+            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
     },
 
@@ -99,7 +99,7 @@ export default {
         },
 
         onOpenPickupPoints() {
-            this.$emit('pickupPoints');
+            this.$emit('pickup-points');
         },
     },
 

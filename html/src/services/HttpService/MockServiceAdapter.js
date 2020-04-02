@@ -137,6 +137,8 @@ export default class MockServiceAdapter extends HttpServiceBase {
         if (path.includes('/v1/lk/address/')) return this.httpServiceInstance.put(path, data, config);
 
         switch (path) {
+            case '/v1/auth/city':
+
             case '/v1/lk/promo-page/name':
             case '/v1/lk/profile/portfolio':
             case '/v1/lk/profile/personal':

@@ -36,7 +36,7 @@ import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { $dadata } from '@services';
+import { $dadata, $logger } from '@services';
 import { suggestionTypes } from '@enums/suggestions';
 import '@images/sprites/search-middle.svg';
 import './CitySelectionModal.css';
@@ -79,7 +79,7 @@ export default {
 
         async onCityInputChange(query = '') {
             try {
-                const suggestQuery = query || (this[SELECTED_CITY] && this[SELECTED_CITY].value);
+                const suggestQuery = query || (this[SELECTED_CITY] && this[SELECTED_CITY].name);
                 // return the matching countries as an array
                 const { suggestions } = await this.findAddress(suggestionTypes.CITY, suggestQuery, 20);
                 this.suggestions = suggestions;
@@ -115,8 +115,31 @@ export default {
             });
         },
 
-        onSubmit(city) {
-            this[SET_SELECTED_CITY](city);
+        async onSubmit(suggestion) {
+            try {
+                const { suggestions } = await this.findAddress(suggestionTypes.CITY, suggestion.value, 1);
+                const selectedCitySuggestion = suggestions[0];
+                if (selectedCitySuggestion) {
+                    const {
+                        city_with_type,
+                        city_fias_id,
+                        settlement_with_type,
+                        settlement_fias_id,
+                        geo_lat,
+                        geo_lon,
+                    } = selectedCitySuggestion.data;
+
+                    this[SET_SELECTED_CITY]({
+                        name: city_with_type || settlement_with_type,
+                        fias_id: city_fias_id || settlement_fias_id,
+                        geo_lat: geo_lat,
+                        geo_lon: geo_lon,
+                    });
+                }
+            } catch (error) {
+                $logger.log(error);
+            }
+
             this.onClose();
         },
 

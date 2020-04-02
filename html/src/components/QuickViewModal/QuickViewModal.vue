@@ -30,7 +30,7 @@
                     />
                     <product-delivery-panel
                         :deliveryMethods="productPreview.deliveryMethods"
-                        @pickupPoints="onPickupPoints"
+                        @pickup-points="onPickupPoints"
                     />
                 </div>
             </div>
@@ -60,7 +60,10 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
+import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
+
 import { requestStatus, fileExtension } from '@enums';
+import { cartItemTypes } from '@enums/product';
 import { generatePictureSourcePath } from '@util/file';
 import { generateProductUrl } from '@util/catalog';
 import './QuickViewModal.css';
@@ -87,6 +90,7 @@ export default {
         }),
 
         ...mapState(PREVIEW_MODULE, [PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS]),
+        ...mapState(GEO_MODULE, [SELECTED_CITY]),
 
         images() {
             const { media } = this[PRODUCT_PREVIEW] || {};
@@ -105,6 +109,12 @@ export default {
         },
     },
 
+    watch: {
+        [SELECTED_CITY](value) {
+            this.onSelectedCityChanged(value);
+        },
+    },
+
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(PREVIEW_MODULE, [FETCH_PRODUCT_PREVIEW]),
@@ -119,6 +129,10 @@ export default {
             });
         },
 
+        async onSelectedCityChanged() {
+            this[FETCH_PRODUCT_PREVIEW](this.modalState);
+        },
+
         onWishlistStateChange() {
             debugger;
         },
@@ -128,7 +142,11 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: ADD_TO_CART_MODAL_NAME,
                 open: true,
-                state: { offerId: this.productPreview.id, storeId: this.productPreview.storeId, type: 'product' },
+                state: {
+                    offerId: this.productPreview.id,
+                    storeId: this.productPreview.storeId,
+                    type: cartItemTypes.PRODUCT,
+                },
             });
         },
 
