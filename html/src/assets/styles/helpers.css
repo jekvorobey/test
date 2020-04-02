@@ -61,3 +61,20 @@
     left: 0;
     z-index: 0;
 }
+
+.hook {
+    position: absolute;
+    top: calc(var(--gs) * -14);
+    left: 0;
+    z-index: 1;
+    height: 0;
+    width: 0;
+
+    @media (--tablet-lg) {
+        top: calc(var(--gs) * -8);
+    }
+
+    @media (--tablet) {
+        top: calc(var(--gs) * -6);
+    }
+}

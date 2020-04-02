@@ -129,7 +129,10 @@
                         @pickupPoints="onShowPickupPoints"
                     />
 
-                    <div class="product-view__header-detail-section">
+                    <div
+                        v-if="product.description && product.description.content"
+                        class="product-view__header-detail-section"
+                    >
                         <p class="text-bold product-view__header-detail-section-hl">
                             Описание и характеристики
                         </p>
@@ -237,11 +240,11 @@
         </section>
 
         <section
-            id="description"
             v-if="product.description && (product.description.content || product.description.image)"
             class="section product-view__section product-view__info"
         >
             <div class="container product-view__info-container">
+                <div id="description" class="hook" />
                 <div class="product-view__info-header">
                     <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
                     <p class="product-view__info-text">{{ product.description.content }}</p>

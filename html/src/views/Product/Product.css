@@ -1,4 +1,16 @@
 .product-view {
+    .hook {
+        top: calc(var(--gs) * -16);
+
+        @media (--tablet-lg) {
+            top: calc(var(--gs) * -18);
+        }
+
+        @media (--tablet) {
+            top: calc(var(--gs) * -8);
+        }
+    }
+
     &__breadcrumbs {
         margin: var(--gs) 0;
     }
