@@ -8,6 +8,7 @@
 import VButton from '@controls/VButton/VButton.vue';
 
 import { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
+import { NAME as NOTIFICATION_MODAL_NAME } from '@components/NotificationModal/NotificationModal.vue';
 
 import { mapState, mapActions } from 'vuex';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
@@ -53,7 +54,10 @@ export default {
 
             const canBuy = this[CAN_BUY];
             if (!canBuy) {
-                alert('Статус вашего профиля не подтвержден');
+                this[CHANGE_MODAL_STATE]({ name: NOTIFICATION_MODAL_NAME, open: true, state: {
+                    title: 'Уведомление',
+                    message: 'Статус вашего профиля не подтверждён'
+                }});
                 return false;
             }
             return hasSession && canBuy;
