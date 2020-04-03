@@ -310,7 +310,7 @@ export default {
                 if (!this.$v.restorePhone.minLength) return 'Неверно введен номер';
             }
 
-            if (this.$v.restoreFail.$dirty && !this.$v.restoreFail.valid) return 'Неправильный телефон';
+            if (this.$v.restoreFail.$dirty && !this.$v.restoreFail.valid) return 'Номер телефона не найден, проверьте номер или зарегистрируйтесь';
         },
 
         restorePasswordError() {

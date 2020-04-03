@@ -1,6 +1,6 @@
 <template>
-    <div id="app" class="fake-vue-body" :class="{ 'fake-vue-body--scroll': scroll }">
-        <v-header />
+    <div id="app" class="fake-vue-body" :class="{ 'fake-vue-body--scroll': scroll, 'fake-vue-body--hidden-header': hideDefaultHeader }">
+        <v-header v-if="!hideDefaultHeader" />
         <main>
             <!-- <transition name="fade" mode="out-in"> -->
             <router-view class="view" />
@@ -102,6 +102,10 @@ export default {
         ...mapState(AUTH_MODULE, [HAS_SESSION, USER]),
         ...mapState(AUTH_MODULE, {
             [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
+        }),
+
+        ...mapState('route', {
+            hideDefaultHeader: state => state.meta.hideDefaultHeader
         }),
 
         ...mapState(MODAL_MODULE, {

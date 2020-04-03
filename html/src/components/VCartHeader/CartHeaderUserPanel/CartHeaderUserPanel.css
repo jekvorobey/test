@@ -1,0 +1,35 @@
+.cart-header-user-panel {
+    max-width: calc(var(--gs) * 40);
+    display: flex;
+    align-items: center;
+
+    &__link {
+        border-bottom: none;
+    }
+
+    &__help {
+        display: flex;
+        align-items: center;
+        padding-left: calc(var(--gs) * 2);
+
+        .trigger {
+            /* Переназначение style, important необходим */
+            display: flex !important;
+            align-items: center;
+        }
+    }
+
+    &__controls {
+        display: flex;
+        align-items: center;
+    }
+
+    &__account {
+        display: flex;
+    }
+
+    &__btn {
+        display: flex;
+        margin-left: calc(var(--gs) * 2.5);
+    }
+}

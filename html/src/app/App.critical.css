@@ -17,6 +17,12 @@
         padding-top: 48px;
     }
 
+    &--hidden-header {
+        /* переопределение всех адаптивных стилей для того, чтобы документ
+        не скакал при скрытом хедере. important нужен. */
+        padding-top: 0 !important;
+    }
+
     @media (--tablet-lg) {
         padding-top: calc(var(--gs) * 8);
     }

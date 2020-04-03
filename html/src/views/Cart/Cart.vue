@@ -1,5 +1,6 @@
 <template>
     <section class="section cart-view">
+        <v-cart-header />
         <div class="container">
             <h1 class="cart-view__section-hl">Моя корзина</h1>
         </div>
@@ -125,7 +126,6 @@
                             </div>
                             <!-- #58322  -->
                             <!-- <div class="cart-view__main-panel-promo">
-                                
                                 <v-input class="cart-view__main-panel-promo-input" placeholder="Введите промокод" />
                                 <v-button class="btn--outline cart-view__main-panel-promo-btn">
                                     Применить
@@ -176,6 +176,7 @@ import VInput from '@controls/VInput/VInput.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 import Price from '@components/Price/Price.vue';
+import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
 
 import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
 import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
@@ -261,6 +262,7 @@ export default {
         VTabs,
         VSticky,
         VSlider,
+        VCartHeader,
 
         Price,
 
