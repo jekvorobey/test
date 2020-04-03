@@ -1,10 +1,32 @@
 .notification-modal {
-
     &__message {
         margin-bottom: calc(var(--gs) * 3);
     }
 
     .modal-body {
         padding: 0;
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        padding: calc(var(--gs) * 3);
+
+        @media (--tablet) {
+            height: 100%;
+            padding: calc(var(--gs) * 2);
+        }
+    }
+
+    &__message {
+        margin-bottom: calc(var(--gs) * 3);
+    }
+
+    &__btn {
+        margin-top: auto;
+
+        @media (--tablet-min) {
+            align-self: flex-end;
+        }
     }
 }

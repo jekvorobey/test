@@ -45,7 +45,6 @@ import BuyButton from '@components/BuyButton/BuyButton.vue';
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 import { preparePrice } from '@util';
-import '@images/sprites/wishlist-middle.svg';
 import './ProductPricePanel.css';
 
 export default {
@@ -109,10 +108,6 @@ export default {
     },
 
     methods: {
-        onWishlistBtnClick() {
-            this.$emit('addWishlist');
-        },
-
         onBuyBtnClick() {
             this.$emit('add-item');
         },

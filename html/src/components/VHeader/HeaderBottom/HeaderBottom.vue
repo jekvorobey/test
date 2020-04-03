@@ -58,7 +58,6 @@ import '@images/sprites/logo-text.svg';
 
 import '@images/sprites/search-middle.svg';
 import '@images/sprites/cart-middle.svg';
-import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/account-middle.svg';
 
 import './HeaderBottom.critical.css';

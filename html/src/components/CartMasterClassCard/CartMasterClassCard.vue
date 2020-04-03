@@ -23,10 +23,11 @@
                 <div>{{ author }}</div>
             </div>
             <div class="cart-master-class-card__body-controls">
-                <v-link class="cart-master-class-card__body-controls-link" tag="button">
+                <!-- #58539 -->
+                <!-- <v-link class="cart-master-class-card__body-controls-link" tag="button">
                     <v-svg name="wishlist-middle" width="15" height="13" />
                     {{ isTablet ? '' : '&nbsp;Перенести в избранное' }}
-                </v-link>
+                </v-link> -->
                 <v-link class="cart-master-class-card__body-controls-link" tag="button" @click="onDeleteClick">
                     <v-svg name="cross-small" width="10" height="10" />
                     {{ isTablet ? '' : '&nbsp;Удалить' }}
@@ -133,4 +134,3 @@ export default {
     },
 };
 </script>
-
