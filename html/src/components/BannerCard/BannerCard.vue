@@ -59,13 +59,13 @@ export default {
 
     computed: {
         desktopImage() {
-            const { image = {} } = this;
-            return generatePictureSourcePath(400, 240, image.id, fileExtension.WEBP);
+            if (this.image && this.image.id)
+                return generatePictureSourcePath(400, 240, this.image.id, fileExtension.WEBP);
         },
 
         defaultImage() {
-            const { image = {} } = this;
-            return generatePictureSourcePath(400, 240, image.id, image.sourceExt);
+            if (this.image && this.image.id)
+                return generatePictureSourcePath(400, 240, this.image.id, this.image.sourceExt);
         },
     },
 };
