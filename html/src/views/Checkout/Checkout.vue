@@ -1,5 +1,6 @@
 <template>
     <section class="section checkout-view">
+        <v-cart-header />
         <div class="container">
             <div class="checkout-view__header">
                 <h1 class="checkout-view__header-hl">
@@ -124,6 +125,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
 
 import Price from '@components/Price/Price.vue';
+import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
 
 import CheckoutProductPanel from '@components/checkout/CheckoutProductPanel/CheckoutProductPanel.vue';
 import CheckoutMasterClassPanel from '@components/checkout/CheckoutMasterClassPanel/CheckoutMasterClassPanel.vue';
@@ -154,6 +156,7 @@ export default {
         VButton,
         VInput,
         VSticky,
+        VCartHeader,
 
         Price,
 
