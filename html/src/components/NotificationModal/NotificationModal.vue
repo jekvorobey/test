@@ -1,14 +1,15 @@
 <template>
     <general-modal type="sm" class="notification-modal" :header="title" @close="onClose" :is-mobile="isTablet">
         <template v-slot:content>
-            <div class="login-modal__body">
-                <h3 class="login-modal__hl">{{ title }}</h3>
+            <div class="notification-modal__body">
+                <h3 v-if="!isTablet" class="notification-modal__hl">{{ title }}</h3>
                 <p class="notification-modal__message">{{ message }}</p>
                 <v-button class="notification-modal__btn" @click="onClose">{{ btnText }}</v-button>
             </div>
         </template>
     </general-modal>
 </template>
+
 <script>
 import VButton from '@controls/VButton/VButton.vue';
 
