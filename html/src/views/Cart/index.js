@@ -21,6 +21,7 @@ export default {
             component: CartAsync,
 
             meta: {
+                hideDefaultHeader: true,
                 middleware: [hasSession, canUserBuy],
             },
         },

@@ -8,6 +8,7 @@ import pipeline from './pipeline';
 
 import referalLink from './middleware/referalLink';
 import registration from './middleware/registration';
+import setGeolocation from './middleware/setGeolocation';
 
 import { SET_MENU_OPEN } from '@store/actions';
 
@@ -92,7 +93,7 @@ export default function createRouter(container) {
     router.beforeEach((to, from, next) => {
         const { matched } = to;
 
-        const middlewares = [referalLink, registration];
+        const middlewares = [referalLink, registration, setGeolocation];
 
         for (let i = 0; i < matched.length; i++) {
             const {

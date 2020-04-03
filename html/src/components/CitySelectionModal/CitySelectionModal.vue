@@ -30,7 +30,7 @@ import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions } from 'vuex';
-import { NAME as GEOLOCATION_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
+import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -59,7 +59,7 @@ export default {
     },
 
     computed: {
-        ...mapState(GEOLOCATION_MODULE, [SELECTED_CITY]),
+        ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
@@ -75,7 +75,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(GEOLOCATION_MODULE, [SET_SELECTED_CITY]),
+        ...mapActions(GEO_MODULE, [SET_SELECTED_CITY]),
 
         async onCityInputChange(query = '') {
             try {
@@ -130,10 +130,13 @@ export default {
                     } = selectedCitySuggestion.data;
 
                     this[SET_SELECTED_CITY]({
-                        name: city_with_type || settlement_with_type,
-                        fias_id: city_fias_id || settlement_fias_id,
-                        geo_lat: geo_lat,
-                        geo_lon: geo_lon,
+                        city: {
+                            name: city_with_type || settlement_with_type,
+                            fias_id: city_fias_id || settlement_fias_id,
+                            geo_lat: geo_lat,
+                            geo_lon: geo_lon,
+                        },
+                        setCookie: true,
                     });
                 }
             } catch (error) {

@@ -7,6 +7,7 @@ import ApplicationContext from '@services/ApplicationContext';
 import ServerLogger from '@services/LogService/ServerLogger';
 import ServerCookie from '@services/CookieService/ServerCookie';
 import HttpService from '@services/HttpService/MockServiceAdapter';
+import DadataHttpService from '@services/HttpService/DadataHttpService';
 import MockProgressService from '@services/ProgressService/MockService';
 
 import createApp from './app/app';
@@ -17,9 +18,12 @@ injectableClass(MockProgressService);
 injectableClass(ServerLogger);
 injectableClass(ServerCookie);
 injectableClass(HttpService);
+injectableClass(DadataHttpService);
+
 injectClass(injectionType.APPLICATION_CONTEXT, ServerCookie, 0);
 injectClass(injectionType.APPLICATION_CONTEXT, HttpService, 0);
 injectClass(injectionType.COOKIE, HttpService, 1);
+injectClass(injectionType.STORE, DadataHttpService, 0);
 
 // This exported function will be called by `bundleRenderer`.
 // This is where we perform data-prefetching to determine the
@@ -56,6 +60,10 @@ export default context => {
         $container
             .bind(injectionType.HTTP)
             .to(HttpService)
+            .inSingletonScope();
+        $container
+            .bind(injectionType.DADATA)
+            .to(DadataHttpService)
             .inSingletonScope();
 
         const { app, router, store } = createApp($container);

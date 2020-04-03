@@ -51,6 +51,8 @@ export default function createApp(container, initialState = null) {
     */
     sync(store, router);
 
+    if (initialState) store.replaceState(initialState);
+
     // create the app instance.
     // here we inject the router, store and ssr context to all child components,
     // making them available everywhere as `this.$router` and `this.$store`.
@@ -61,8 +63,6 @@ export default function createApp(container, initialState = null) {
         i18n,
         render: h => h(App),
     });
-
-    if (initialState) store.replaceState(initialState);
 
     // expose the app, the router and the store.
     // note we are not mounting the app here, since bootstrapping will be

@@ -1,0 +1,23 @@
+.cart-header-region-panel {
+    max-width: calc(var(--gs) * 40);
+
+    &__city {
+        display: flex;
+        align-items: center;
+
+        &-name {
+            font-size: 16px;
+            text-transform: none;
+        }
+
+        .icon {
+            margin-right: var(--gs);
+        }
+    }
+
+    &__description {
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--cl-grey);
+    }
+}

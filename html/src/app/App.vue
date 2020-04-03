@@ -1,6 +1,6 @@
 <template>
-    <div id="app" class="fake-vue-body" :class="{ 'fake-vue-body--scroll': scroll }">
-        <v-header />
+    <div id="app" class="fake-vue-body" :class="{ 'fake-vue-body--scroll': scroll, 'fake-vue-body--hidden-header': hideDefaultHeader }">
+        <v-header v-if="!hideDefaultHeader" />
         <main>
             <!-- <transition name="fade" mode="out-in"> -->
             <router-view class="view" />
@@ -67,6 +67,9 @@ import { mapState, mapActions } from 'vuex';
 import { SCROLL, CATEGORIES } from '@store';
 import { SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN } from '@store/actions';
 
+import { NAME as GEO_MODULE } from '@store/modules/Geolocation';
+import { SET_SELECTED_CITY_BY_IP } from '@store/modules/Geolocation/actions';
+
 import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
 import { FETCH_CART_DATA, CLEAR_CART_DATA } from '@store/modules/Cart/actions';
 
@@ -76,8 +79,9 @@ import { CHECK_SESSION, FETCH_USER } from '@store/modules/Auth/actions';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { MIN_SCROLL_VALUE, SCROLL_DEBOUCE_TIME } from '@constants';
+import { $cookie } from '@services';
 import { eventName, interval } from '@enums';
+import { MIN_SCROLL_VALUE, SCROLL_DEBOUCE_TIME } from '@constants';
 
 export default {
     name: 'app',
@@ -100,6 +104,10 @@ export default {
             [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
         }),
 
+        ...mapState('route', {
+            hideDefaultHeader: state => state.meta.hideDefaultHeader
+        }),
+
         ...mapState(MODAL_MODULE, {
             isRegistrationOpen: state =>
                 state[MODALS][REGISTRATION_MODAL_NAME] && state[MODALS][REGISTRATION_MODAL_NAME].open,
@@ -118,9 +126,15 @@ export default {
 
     methods: {
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN]),
-        ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
+        ...mapActions(GEO_MODULE, [SET_SELECTED_CITY_BY_IP]),
         ...mapActions(AUTH_MODULE, [CHECK_SESSION, FETCH_USER]),
+        ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        onCheckCitySelection() {
+            const geoData = $cookie.get('ibt_geoc');
+            this[SET_CITY_CONFIRMATION_OPEN](!geoData);
+        },
 
         onScroll() {
             this[SET_SCROLL](
@@ -128,9 +142,9 @@ export default {
             );
         },
 
-        scrollFix(hashbang) {
+        scrollFix() {
             window.location.hash = null;
-            window.location.hash = hashbang;
+            window.location.hash = this.$route.hash;
         },
 
         startSessionTimer() {
@@ -175,11 +189,8 @@ export default {
         this.$once('hook:beforeDestroy', () => document.removeEventListener(eventName.SCROLL, onSetScrollDebounce));
 
         // скролл страницы до хеша при первой загрузке страницы
-        if (this.$route.hash) setTimeout(() => this.scrollFix(this.$route.hash), 1);
-
-        setTimeout(() => {
-            this[SET_CITY_CONFIRMATION_OPEN](true);
-        }, interval.TWO_SECONDS);
+        if (this.$route.hash) setTimeout(this.scrollFix, 1);
+        setTimeout(this.onCheckCitySelection, interval.TWO_SECONDS);
     },
 
     beforeDestroy() {

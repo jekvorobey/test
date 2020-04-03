@@ -22,6 +22,7 @@ export default {
             path: `/checkout/:type(${cartItemTypes.PRODUCT}|${cartItemTypes.MASTERCLASS})`,
             component: CheckoutAsync,
             meta: {
+                hideDefaultHeader: true,
                 middleware: [hasSession, canUserBuy, isCartEmpty],
             },
         },
