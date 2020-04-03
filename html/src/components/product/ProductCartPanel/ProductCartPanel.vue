@@ -20,10 +20,11 @@
             <buy-button class="product-cart-panel__controls-btn" @click="onAddToCart" :disabled="!canBuy">
                 {{ canBuy ? 'Добавить в корзину' : 'Нет в наличии' }}
             </buy-button>
-            <v-link class="product-cart-panel__controls-wishlist" @click="onAddToWishlist">
+            <!-- #58539 -->
+            <!-- <v-link class="product-cart-panel__controls-wishlist" @click="onAddToWishlist">
                 <v-svg id="product-wishlist" name="wishlist-middle" width="20" height="18" />
                 &nbsp;В избранное
-            </v-link>
+            </v-link> -->
         </div>
     </div>
 </template>

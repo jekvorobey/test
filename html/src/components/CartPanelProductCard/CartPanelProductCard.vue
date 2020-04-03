@@ -1,17 +1,9 @@
 <template>
     <li class="cart-panel-product-card">
         <router-link class="cart-panel-product-card__img" :to="href">
-            <v-picture v-if="image && image.id" :image="image" alt="">
-                <template v-slot:source="{ image }">
-                    <source :data-srcset="generateSourcePath(300, 300, image.id, 'webp')" type="image/webp" />
-                </template>
-                <template v-slot:fallback="{ image, lazy, alt }">
-                    <img
-                        class="blur-up lazyload v-picture__img"
-                        :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
-                        :alt="alt"
-                    />
-                </template>
+            <v-picture v-if="image && image.id" :image="image">
+                <source :data-srcset="desktopImage" type="image/webp" />
+                <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
             </v-picture>
             <v-svg v-else id="cart-panel-product-card-empty" name="logo" width="48" height="48" />
         </router-link>
@@ -39,9 +31,9 @@ import Price from '@components/Price/Price.vue';
 import { generatePictureSourcePath } from '@util/file';
 import _debounce from 'lodash/debounce';
 import '@images/sprites/cross-small.svg';
-import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/logo.svg';
 import './CartPanelProductCard.css';
+import { fileExtension } from '../../assets/scripts/enums';
 
 export default {
     name: 'cart-panel-product-card',
@@ -89,14 +81,18 @@ export default {
     },
 
     computed: {
+        desktopImage() {
+            if (this.image && this.image.id)
+                return generatePictureSourcePath(300, 300, this.image.id, fileExtension.image.WEBP);
+        },
+
+        defaultImage() {
+            if (this.image && this.image.id)
+                return generatePictureSourcePath(300, 300, this.image.id, this.image.sourceExt);
+        },
+
         isTablet() {
             return this.$mq.tablet;
-        },
-    },
-
-    methods: {
-        generateSourcePath(x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext);
         },
     },
 };

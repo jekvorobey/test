@@ -49,11 +49,12 @@
                                 <v-svg name="account-middle" width="24" height="24" />Личный кабинет
                             </v-link>
                         </li>
-                        <li class="container mobile-menu__menu-item">
+                        <!-- #58539 -->
+                        <!-- <li class="container mobile-menu__menu-item">
                             <v-link class="mobile-menu__menu-link" to="/">
                                 <v-svg name="wishlist-middle" width="24" height="24" /> Избранное
                             </v-link>
-                        </li>
+                        </li> -->
                         <li class="container mobile-menu__menu-item mobile-menu__menu-item--separator">
                             <v-link tag="button" class="mobile-menu__menu-link" @click.prevent="onOpenCitySelection">
                                 <v-svg name="pin" width="24" height="24" />
