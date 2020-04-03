@@ -62,11 +62,14 @@ export const menuCode = Object.freeze({
 
 export const interval = Object.freeze({
     SECOND: 1000,
-    TWO_SECONDS: 2000,
-    MINUTE: 60000,
-    FIVE_MINUTES: 300000,
-    TEN_MINUTES: 600000,
-    HOUR: 6000000,
+    TWO_SECONDS: 2 * 1000,
+    MINUTE: 60 * 1000,
+    FIVE_MINUTES: 5 * 60 * 1000,
+    TEN_MINUTES: 10 * 60 * 1000,
+    HALF_HOUR: 30 * 60 * 1000,
+    HOUR: 60 * 60 * 1000,
+    DAY: 24 * 60 * 60 * 1000,
+    WEEK: 7 * 24 * 60 * 60 * 1000,
 });
 
 export const httpCodes = Object.freeze({
