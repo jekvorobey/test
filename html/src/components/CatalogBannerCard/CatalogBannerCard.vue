@@ -1,7 +1,7 @@
 <template>
     <li class="catalog-banner-card">
         <div class="catalog-banner-card__img">
-            <v-picture :key="image.id">
+            <v-picture :key="item.id">
                 <slot>
                     <source v-if="desktopImg" :data-srcset="desktopImg" type="image/webp" media="(min-width: 1024px)" />
                     <source v-if="tabletImg" :data-srcset="tabletImg" type="image/webp" media="(min-width: 480px)" />
