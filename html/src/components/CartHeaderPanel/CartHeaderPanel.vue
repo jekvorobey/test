@@ -19,7 +19,7 @@
                     :image="product.image"
                     :price="product.price"
                     :old-price="product.oldPrice"
-                    href="/catalog"
+                    :href="generateItemProductUrl(product)"
                 />
             </ul>
         </template>
@@ -54,6 +54,7 @@ import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM, CART_TYPES } from '@store/modules/Cart/getters';
 
+import { generateProductUrl } from '@util/catalog';
 import '@images/sprites/cross.svg';
 import './CartHeaderPanel.css';
 
@@ -80,6 +81,13 @@ export default {
     },
 
     methods: {
+        generateItemProductUrl(product) {
+            if (Array.isArray(product.categoryCodes)) {
+                const categoryCode = product.categoryCodes[product.categoryCodes.length - 1];
+                return generateProductUrl(categoryCode, product.code);
+            }
+        },
+
         onToCart() {
             this.$router.push({ path: '/cart' });
         },

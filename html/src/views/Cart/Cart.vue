@@ -49,7 +49,7 @@
                                         :price="product.price"
                                         :old-price="product.oldPrice"
                                         :count="count"
-                                        href="/catalog"
+                                        :href="generateItemProductUrl(product)"
                                         @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
                                         @countChange="onAddCartItem(product.id, product.stock.storeId, $event.count)"
                                     />
@@ -212,6 +212,7 @@ import { cancelRoute } from '@settings';
 import { breakpoints } from '@enums';
 import { cartItemTypes } from '@enums/product';
 import { preparePrice } from '@util';
+import { generateProductUrl } from '@util/catalog';
 import '@images/sprites/alert.svg';
 import './Cart.css';
 
@@ -304,6 +305,13 @@ export default {
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM, DELETE_ALL_ITEMS]),
+
+        generateItemProductUrl(product) {
+            if (Array.isArray(product.categoryCodes)) {
+                const categoryCode = product.categoryCodes[product.categoryCodes.length - 1];
+                return generateProductUrl(categoryCode, product.code);
+            }
+        },
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });

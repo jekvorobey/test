@@ -1,0 +1,2 @@
+.breadcrumbs{margin:8px 0;display:flex;flex-wrap:wrap}
+.breadcrumb-item{color:#7d7d7d;font-size:.6875rem;line-height:1.5rem}@media (max-width:767px){.breadcrumb-item{font-size:.5625rem;line-height:1rem}}.breadcrumb-item__link{border-bottom:none;text-transform:uppercase;line-height:1.5rem}.breadcrumb-item+.breadcrumb-item:before{content:"/";margin:0 8px}@media (max-width:767px){.breadcrumb-item+.breadcrumb-item:before{margin:0 4px}}
