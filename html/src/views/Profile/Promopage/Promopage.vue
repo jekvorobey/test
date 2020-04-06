@@ -104,6 +104,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as PROMOPAGE_MODULE, TITLE, ITEMS, RANGE, ACTIVE_PAGE } from '@store/modules/Profile/modules/Promopage';
 import { FETCH_PROMOPAGE, SET_LOAD_PATH } from '@store/modules/Profile/modules/Promopage/actions';
 
+import { generateProductUrl } from '@util/catalog';
 import { DEFAULT_PAGE } from '@constants';
 import '@images/sprites/cross.svg';
 import '@images/sprites/copy.svg';
@@ -112,7 +113,6 @@ import '@images/sprites/link.svg';
 import '@images/sprites/link-add.svg';
 import '@images/sprites/plus-small.svg';
 import './Promopage.css';
-import { generateProductUrl } from '../../../util/catalog';
 
 const PROMOPAGE_MODULE_PATH = `${PROFILE_MODULE}/${PROMOPAGE_MODULE}`;
 
