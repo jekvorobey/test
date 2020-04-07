@@ -1,7 +1,7 @@
 <template>
     <li class="cart-panel-product-card">
         <router-link class="cart-panel-product-card__img" :to="href">
-            <v-picture v-if="image && image.id" :image="image">
+            <v-picture :key="image.id" v-if="image && image.id">
                 <source :data-srcset="desktopImage" type="image/webp" />
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
             </v-picture>

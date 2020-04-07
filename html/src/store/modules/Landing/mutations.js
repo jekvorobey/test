@@ -69,13 +69,14 @@ export default {
                 id: 5,
                 component: 'separator-section',
             },
-            {
-                id: 6,
-                component: 'single-banner-section',
-                data: {
-                    banner: state.banners[10],
-                },
-            },
+            // #58612
+            // {
+            //     id: 6,
+            //     component: 'single-banner-section',
+            //     data: {
+            //         banner: state.banners[10],
+            //     },
+            // },
             {
                 id: 7,
                 component: 'separator-section',

@@ -1,5 +1,5 @@
 <template>
-    <div class="v-suggestions">
+    <div class="v-suggestions" :class="{ 'v-suggestions--invalid': error }">
         <label class="v-suggestions__label">
             <slot />
         </label>
@@ -9,7 +9,7 @@
             v-model="query"
             type="text"
             autocomplete="false"
-            class="v-suggestions-input"
+            class="v-suggestions__input"
             :class="extendedOptions.inputClass"
             :placeholder="extendedOptions.placeholder"
             @keydown="onKeyDown"

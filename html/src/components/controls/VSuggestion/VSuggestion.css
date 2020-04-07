@@ -24,7 +24,7 @@
     left: 0;
     top: 100%;
     width: 100%;
-    max-height: 400px;
+    max-height: 300px;
     overflow: auto;
     z-index: 100;
     background: var(--cl-white);
@@ -61,6 +61,11 @@
     &:focus {
         outline: none;
     }
+}
+
+.v-suggestions--invalid input {
+    border-color: var(--cl-red) !important;
+    color: var(--cl-red) !important;
 }
 
 .v-suggestions .selected {

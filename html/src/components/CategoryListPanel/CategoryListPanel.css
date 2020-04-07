@@ -1,0 +1,31 @@
+.category-list-panel {
+
+    &__item {
+        line-height: normal;
+
+        &:not(:last-child) {
+            margin-bottom: calc(var(--gs) * 2);
+        }
+    }
+
+    &__link {
+        border-bottom: none;
+
+        &:hover {
+            border-bottom: 1px solid var(--cl-global);
+        }
+    }
+
+    .general-popup-panel {
+
+        &__header {
+            display: none;
+        }
+
+        .tooltip-inner {
+            position: relative;
+            padding: calc(var(--gs) * 2) 0;
+            width: calc(var(--gs) * 30);
+        }
+    }
+}
