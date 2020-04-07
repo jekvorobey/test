@@ -15,8 +15,8 @@
                     @btnClick="onChangeRecipient(recipient, index)"
                 >
                     <p>{{ recipient.name }}</p>
-                    <p>{{ recipient.email }}</p>
                     <p>{{ formatPhoneNumber(recipient.phone) }}</p>
+                    <p>{{ recipient.email }}</p>
                 </checkout-option-card>
             </ul>
 
