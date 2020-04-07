@@ -1,5 +1,5 @@
 <template>
-    <section class="section-widget">
+    <section class="section section-widget">
         <div class="container">
             <component class="section-widget__title" :is="tag">
                 {{ title }}
