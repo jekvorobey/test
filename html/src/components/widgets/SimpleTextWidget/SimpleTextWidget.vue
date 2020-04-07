@@ -1,8 +1,6 @@
 <template>
     <div class="simple-text-widget">
-        <div class="simple-text-widget__content">
-            {{ content }}
-        </div>
+        {{ content }}
     </div>
 </template>
 

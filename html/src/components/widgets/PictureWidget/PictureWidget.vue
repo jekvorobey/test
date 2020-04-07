@@ -1,7 +1,5 @@
 <template>
-    <div class="picture-widget">
-        <v-picture class="picture-widget__picture" v-if="content" :image="content" />
-    </div>
+    <v-picture class="picture-widget" v-if="content" :image="content" />
 </template>
 
 <script>

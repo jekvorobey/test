@@ -1,7 +1,5 @@
 <template>
-    <div class="html-text-widget">
-        <v-html class="html-text-widget__content" v-html="content" />
-    </div>
+    <v-html class="html-text-widget" v-html="content" />
 </template>
 
 <script>
