@@ -14,7 +14,7 @@
                         v-for="suggestion in suggestions"
                         :key="suggestion.data.city_fias_id || suggestion.data.settlement_fias_id"
                     >
-                        <button class="city-selection-modal__list-btn" @click="onSubmit(city)">
+                        <button class="city-selection-modal__list-btn" @click="onSubmit(suggestion)">
                             {{ suggestion.data.city_with_type || suggestion.data.settlement_with_type }}
                         </button>
                     </li>
