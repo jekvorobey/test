@@ -1,23 +1,30 @@
 <template>
     <section class="section custom-view">
-        <div class="container">
-            <component
-                v-for="renderItem in renderData"
-                :key="renderItem.id"
-                :is="renderItem.component"
-                v-bind="renderItem.data"
-            />
-        </div>
+        <component
+            v-for="renderItem in renderData"
+            :key="renderItem.id"
+            :is="renderItem.component"
+            v-bind="renderItem.data"
+        />
     </section>
 </template>
 
 <script>
+import Vue from 'vue';
+import SimpleTextWidget from '@components/widgets/SimpleTextWidget/SimpleTextWidget.vue';
+import HtmlTextWidget from '@components/widgets/HtmlTextWidget/HtmlTextWidget.vue';
+import PictureWidget from '@components/widgets/PictureWidget/PictureWidget.vue';
 import SectionWidget from '@components/widgets/SectionWidget/SectionWidget.vue';
 
 import widgetImage from '@images/mock/widgetImage.jpg';
 import catalogBanner from '@images/mock/catalogBanner2.jpg';
 
 import './Custom.css';
+
+Vue.component(SimpleTextWidget.name, SimpleTextWidget);
+Vue.component(HtmlTextWidget.name, HtmlTextWidget);
+Vue.component(PictureWidget.name, PictureWidget);
+Vue.component(SectionWidget.name, SectionWidget);
 
 export default {
     name: 'custom',
@@ -32,11 +39,9 @@ export default {
                     id: 1,
                     component: 'section-widget',
                     data: {
-                        title: {
-                            type: 2,
-                            content: 'Заголовок H2',
-                        },
-                        components: [
+                        tag: 'h3',
+                        title: 'Заголовок H2',
+                        children: [
                             {
                                 id: 1,
                                 component: 'simple-text-widget',
