@@ -11,10 +11,12 @@
                 <ul class="city-selection-modal__list">
                     <li
                         class="city-selection-modal__list-item"
-                        v-for="city in suggestions"
-                        :key="city.city_fias_id || city.settlement_fias_id"
+                        v-for="suggestion in suggestions"
+                        :key="suggestion.data.city_fias_id || suggestion.data.settlement_fias_id"
                     >
-                        <button class="city-selection-modal__list-btn" @click="onSubmit(city)">{{ city.value }}</button>
+                        <button class="city-selection-modal__list-btn" @click="onSubmit(city)">
+                            {{ suggestion.data.city_with_type || suggestion.data.settlement_with_type }}
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -121,9 +123,9 @@ export default {
                 const selectedCitySuggestion = suggestions[0];
                 if (selectedCitySuggestion) {
                     const {
-                        city_with_type,
+                        city,
                         city_fias_id,
-                        settlement_with_type,
+                        settlement,
                         settlement_fias_id,
                         geo_lat,
                         geo_lon,
@@ -131,7 +133,7 @@ export default {
 
                     this[SET_SELECTED_CITY]({
                         city: {
-                            name: city_with_type || settlement_with_type,
+                            name: city || settlement,
                             fias_id: city_fias_id || settlement_fias_id,
                             geo_lat: geo_lat,
                             geo_lon: geo_lon,

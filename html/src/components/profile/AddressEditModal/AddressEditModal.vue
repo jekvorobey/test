@@ -42,10 +42,16 @@
                         :items="cities"
                         @input="onCityInputChange"
                         @selected="onCitySelected"
+                        :error="cityError"
                     >
                         Ваш населенный пункт
                         <template v-slot:item="{ item }">
                             {{ item.value }}
+                        </template>
+                        <template v-slot:error="{ error }">
+                            <transition name="slide-in-bottom" mode="out-in">
+                                <div :key="error" v-if="error">{{ error }}</div>
+                            </transition>
                         </template>
                     </v-suggestion>
 
@@ -55,8 +61,14 @@
                         type="number"
                         maxlength="6"
                         min="1"
+                        :error="indexError"
                     >
                         Индекс
+                        <template v-slot:error="{ error }">
+                            <transition name="slide-in-bottom" mode="out-in">
+                                <div :key="error" v-if="error">{{ error }}</div>
+                            </transition>
+                        </template>
                     </v-input>
                 </div>
 
@@ -68,17 +80,21 @@
                         :items="addresses"
                         @input="onAddressInputChange"
                         @selected="onAddressSelected"
+                        :error="houseError"
                     >
                         Улица, дом, корпус
                         <template v-slot:item="{ item }">
                             {{ formatAddress(item) }}
                         </template>
+                        <template v-slot:error="{ error }">
+                            <transition name="slide-in-bottom" mode="out-in">
+                                <div :key="error" v-if="error">{{ error }}</div>
+                            </transition>
+                        </template>
                     </v-suggestion>
                     <v-input
                         v-model="address.flat"
                         class="address-edit-modal__form-column address-edit-modal__form-column--30"
-                        type="number"
-                        min="1"
                     >
                         Квартира/офис
                     </v-input>
@@ -148,20 +164,15 @@ import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 import validationMixin, { required } from '@plugins/validation';
 import { suggestionTypes } from '@enums/suggestions';
 import { $dadata } from '@services';
+import { yaMapSettings } from '@settings';
 
 import pin from '@images/icons/pin-filled.svg';
 import '@images/sprites/list.svg';
 import '@images/sprites/map.svg';
 import './AddressEditModal.css';
 
-export const NAME = 'address-edit-modal';
 
-const settings = {
-    apiKey: '46c69919-a571-416e-8198-189ed26c6a79',
-    lang: 'ru_RU',
-    coordorder: 'latlong',
-    version: '2.1',
-};
+export const NAME = 'address-edit-modal';
 
 export default {
     name: NAME,
@@ -181,19 +192,15 @@ export default {
 
     validations: {
         address: {
+            city: {
+                required,
+            },
+
+            house: {
+                required,
+            },
+
             post_index: {
-                required,
-            },
-
-            flat: {
-                required,
-            },
-
-            floor: {
-                required,
-            },
-
-            porch: {
                 required,
             },
         },
@@ -251,10 +258,6 @@ export default {
         }),
         ...mapGetters(GEO_MODULE, [SELECTED_CITY_COORDS]),
 
-        isTabletLg() {
-            return this.$mq.tabletLg;
-        },
-
         computedCoords() {
             return this.coords || this[SELECTED_CITY_COORDS];
         },
@@ -268,7 +271,26 @@ export default {
         },
 
         mapSettings() {
-            return settings;
+            return { ...yaMapSettings};
+        },
+
+        cityError(){
+            if (this.$v.address.city.$dirty && !this.$v.address.city.required) 
+                return 'Обязательное поле';
+        },
+
+        houseError(){
+            if (this.$v.address.house.$dirty && !this.$v.address.house.required) 
+                return 'Обязательное поле';
+        },
+
+        indexError(){
+            if (this.$v.address.post_index.$dirty && !this.$v.address.post_index.required) 
+                return 'Обязательное поле';
+        },
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
         },
 
         isMap() {

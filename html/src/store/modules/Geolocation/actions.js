@@ -10,7 +10,7 @@ export const SET_SELECTED_CITY = 'SET_SELECTED_CITY';
 export const SET_SELECTED_CITY_BY_IP = 'SET_SELECTED_CITY_BY_IP';
 
 const defaultCity = {
-    name: 'г Москва',
+    name: 'Москва',
     fias_id: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
     geo_lat: '55.7540471',
     geo_lon: '37.620405',
@@ -34,17 +34,10 @@ export default {
             });
 
             if (location) {
-                const {
-                    city_with_type,
-                    city_fias_id,
-                    settlement_with_type,
-                    settlement_fias_id,
-                    geo_lat,
-                    geo_lon,
-                } = location.data;
+                const { city, city_fias_id, settlement, settlement_fias_id, geo_lat, geo_lon } = location.data;
 
                 return {
-                    name: city_with_type || settlement_with_type,
+                    name: city || settlement,
                     fias_id: city_fias_id || settlement_fias_id,
                     geo_lat,
                     geo_lon,
