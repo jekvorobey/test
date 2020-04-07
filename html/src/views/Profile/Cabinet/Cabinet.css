@@ -29,6 +29,10 @@
             letter-spacing: 0.05em;
             color: var(--cl-white);
             background-color: var(--cl-global);
+
+            &--icon {
+                background-color: var(--cl-elem-grey);
+            }
         }
     }
 
