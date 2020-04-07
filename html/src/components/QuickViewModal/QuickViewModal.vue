@@ -24,10 +24,12 @@
                         :price="productPreview.price"
                         :old-price="productPreview.oldPrice"
                         :bonus="productPreview.bonus"
-                        :can-buy="productPreview.stock.qty > 0"
+                        :disabled="!canBuy"
                         @cart="onCartStateChange"
                         @wishlist="onWishlistStateChange"
-                    />
+                    >
+                        {{ buyBtnText }}
+                    </product-cart-panel>
                     <product-delivery-panel
                         :deliveryMethods="productPreview.deliveryMethods"
                         @pickup-points="onPickupPoints"
@@ -50,7 +52,7 @@ import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
 import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as PREVIEW_MODULE, PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS } from '@store/modules/Preview';
 import { FETCH_PRODUCT_PREVIEW } from '@store/modules/Preview/actions';
 
@@ -58,6 +60,7 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { IS_IN_CART } from '@store/modules/Cart/getters';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
@@ -91,6 +94,7 @@ export default {
 
         ...mapState(PREVIEW_MODULE, [PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
+        ...mapGetters(CART_MODULE, [IS_IN_CART]),
 
         images() {
             const { media } = this[PRODUCT_PREVIEW] || {};
@@ -102,6 +106,21 @@ export default {
                     defaultImage: generatePictureSourcePath(300, 300, i.id, i.sourceExt),
                 };
             });
+        },
+
+        inCart(){
+            const { id } = this[PRODUCT_PREVIEW];
+            return this[IS_IN_CART](cartItemTypes.PRODUCT, id);
+        },
+
+        canBuy() {
+            const { stock } = this[PRODUCT_PREVIEW];
+            return stock && stock.qty > 0;
+        },
+
+        buyBtnText(){
+            if(!this.canBuy) return 'Нет в наличии';
+            return this.inCart ? 'В корзине' : "Добавить в корзину";
         },
 
         isPending() {
