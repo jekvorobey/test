@@ -9,8 +9,14 @@
                 @changed="onImageChanged"
                 @delete="onImageDelete"
             >
-                <div class="cabinet-view__avatar-placeholder">
-                    {{ avatarPlaceholder }}
+                <div
+                    class="cabinet-view__avatar-placeholder"
+                    :class="{ 'cabinet-view__avatar-placeholder--icon': !avatarPlaceholder }"
+                >
+                    <template v-if="avatarPlaceholder">
+                        {{ avatarPlaceholder }}
+                    </template>
+                    <v-svg v-else name="account-middle" width="32" height="32" />
                 </div>
             </image-picker>
         </div>
@@ -303,6 +309,7 @@ import {
 import { socials, mimeType, httpCodes } from '@enums';
 import { cancelRoute } from '@settings';
 import '@images/sprites/edit.svg';
+import '@images/sprites/account-middle.svg';
 import './Cabinet.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
