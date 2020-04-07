@@ -12,10 +12,16 @@
                     <li
                         class="city-selection-modal__list-item"
                         v-for="suggestion in suggestions"
-                        :key="suggestion.data.city_fias_id || suggestion.data.settlement_fias_id"
+                        :key="suggestion.value"
                     >
                         <button class="city-selection-modal__list-btn" @click="onSubmit(suggestion)">
-                            {{ suggestion.data.city_with_type || suggestion.data.settlement_with_type }}
+                            <template v-if="suggestion.data.settlement_with_type">
+                                {{ suggestion.data.settlement_with_type }},
+                            </template>
+
+                            <template v-if="suggestion.data.city_with_type">
+                                {{ suggestion.data.city_with_type }}
+                            </template>
                         </button>
                     </li>
                 </ul>
@@ -133,8 +139,8 @@ export default {
 
                     this[SET_SELECTED_CITY]({
                         city: {
-                            name: city || settlement,
-                            fias_id: city_fias_id || settlement_fias_id,
+                            name: settlement || city,
+                            fias_id: settlement_fias_id || city_fias_id,
                             geo_lat: geo_lat,
                             geo_lon: geo_lon,
                         },
