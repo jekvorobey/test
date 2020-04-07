@@ -4,6 +4,7 @@ import { cartItemTypes } from '@enums/product';
 export const GET_ITEMS_BY_TYPE = 'GET_ITEMS_BY_TYPE';
 export const IS_PRODUCT = 'IS_PRODUCT';
 export const IS_MASTER_CLASS = 'IS_MASTER_CLASS';
+export const IS_IN_CART = 'IS_IN_CART';
 
 export const PRODUCTS = 'products';
 export const MASTER_CLASSES = 'masterClasses';
@@ -14,7 +15,7 @@ export const PRODUCT_ITEMS_SUM = 'productItemsSum';
 const itemTypes = Object.values(cartItemTypes);
 
 function isValidType(type) {
-    const isValid = itemTypes.some(t => t === type);
+    const isValid = itemTypes.some((t) => t === type);
     if (!isValid) $logger.warn(`Unknown cart item type ${type}`);
     return isValid;
 }
@@ -35,7 +36,7 @@ export default {
         return itemsCount;
     },
 
-    [CART_TYPES]: state => {
+    [CART_TYPES]: (state) => {
         const types = itemTypes.reduce((accum, current) => {
             const type = state.cartData[current];
 
@@ -45,10 +46,15 @@ export default {
         return types;
     },
 
-    [PRODUCT_ITEMS_SUM]: state => {
+    [PRODUCT_ITEMS_SUM]: (state) => {
         const productData = state.cartData[cartItemTypes.PRODUCT];
         if (productData) return productData.summary.total;
         return '';
+    },
+
+    [IS_IN_CART]: (state, getters) => (type, id) => {
+        const data = state.cartData[type];
+        return data && data.items.some((i) => i.p.id === id);
     },
 
     [IS_PRODUCT]: () => (item = {}) => isValidType(item.type) && item.type === cartItemTypes.PRODUCT,

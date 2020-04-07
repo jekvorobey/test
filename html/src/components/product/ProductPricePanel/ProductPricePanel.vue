@@ -27,9 +27,9 @@
                 class="product-price-panel__btn"
                 :class="{ 'btn--outline': !isTablet }"
                 @click.prevent="onBuyBtnClick"
-                :disabled="!canBuy"
+                :disabled="disabled"
             >
-                {{ canBuy ? 'В корзину' : 'Нет в наличии' }}
+                <slot />
             </buy-button>
         </div>
     </div>
@@ -79,7 +79,7 @@ export default {
             type: [String, Number],
         },
 
-        canBuy: {
+        disabled: {
             type: Boolean,
             default: false,
         },

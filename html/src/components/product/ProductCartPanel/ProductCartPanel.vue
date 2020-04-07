@@ -17,8 +17,8 @@
             <div class="text-grey product-cart-panel__info-bonus">+{{ $t('product.bonus', { n: bonus }) }}</div>
         </div>
         <div class="product-cart-panel__controls">
-            <buy-button class="product-cart-panel__controls-btn" @click="onAddToCart" :disabled="!canBuy">
-                {{ canBuy ? 'Добавить в корзину' : 'Нет в наличии' }}
+            <buy-button class="product-cart-panel__controls-btn" @click="onAddToCart" :disabled="disabled">
+                <slot />
             </buy-button>
             <!-- #58539 -->
             <!-- <v-link class="product-cart-panel__controls-wishlist" @click="onAddToWishlist">
@@ -34,7 +34,7 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 
 import Price from '@components/Price/Price.vue';
-import BuyButton from '../../BuyButton/BuyButton.vue';
+import BuyButton from '@components/BuyButton/BuyButton.vue';
 
 import '@images/sprites/wishlist-middle.svg';
 import './ProductCartPanel.css';
@@ -69,7 +69,7 @@ export default {
             type: Number,
         },
 
-        canBuy: {
+        disabled: {
             type: Boolean,
             default: false,
         },

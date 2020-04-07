@@ -118,10 +118,12 @@
                         :price="product.price"
                         :old-price="product.oldPrice"
                         :bonus="product.bonus"
-                        :can-buy="product.stock.qty > 0"
+                        :disabled="!canBuy"
                         @cart="onBuyProduct"
                         @wishlist="onWishlistStateChange"
-                    />
+                    >
+                        {{ buyBtnText }}
+                    </product-cart-panel>
 
                     <product-delivery-panel
                         class="product-view__header-detail-section"
@@ -568,9 +570,11 @@
                 :price="product.price"
                 :old-price="product.oldPrice"
                 :bonus="product.bonus"
-                :can-buy="canBuy"
+                :disabled="!canBuy"
                 @add-item="onBuyProduct"
-            />
+            >
+                {{ buyBtnText }}
+            </product-price-panel>
         </transition>
 
         <transition name="fade-in">
@@ -649,6 +653,7 @@ import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modu
 import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS } from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { IS_IN_CART } from '@store/modules/Cart/getters';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
@@ -664,7 +669,7 @@ import {
     generateYoutubeVideoSourcePath,
 } from '@util/file';
 import { breakpoints, fileExtension, httpCodes } from '@enums';
-import { productGroupTypes } from '@enums/product';
+import { productGroupTypes, cartItemTypes } from '@enums/product';
 import { createNotFoundRoute } from '@util/router';
 import { generateCategoryUrl, generateProductUrl } from '@util/catalog';
 
@@ -836,6 +841,17 @@ export default {
             INSTAGRAM_ITEMS,
         ]),
 
+        ...mapGetters(CART_MODULE, [IS_IN_CART]),
+        
+        inCart(){
+            const { id } = this[PRODUCT];
+            return this[IS_IN_CART](cartItemTypes.PRODUCT, id);
+        },
+
+        canBuy() {
+            return this.product.stock.qty > 0;
+        },
+
         brandUrl() {
             const { brand } = this.product;
             return generateCategoryUrl(productGroupTypes.BRANDS, brand.code);
@@ -913,8 +929,9 @@ export default {
             return 5;
         },
 
-        canBuy() {
-            return this.product.stock.qty > 0;
+        buyBtnText(){
+            if(!this.canBuy) return 'Нет в наличии';
+            return this.inCart ? 'В корзине' : "Добавить в корзину";
         },
 
         productGalleryOptions() {
@@ -1033,6 +1050,11 @@ export default {
         },
 
         onBuyProduct() {
+            if(this.inCart) {
+                this.$router.push({ name: 'Cart'})
+                return;
+            }
+
             const {
                 refCode: referrerCode,
                 product: {
