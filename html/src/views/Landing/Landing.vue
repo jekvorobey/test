@@ -44,13 +44,13 @@ export default {
         InstagramSection,
     },
 
-    head: {
-        title: {
-            inner: 'landing',
-            separator: '-',
-            complement: ' Welcome!',
-        },
-    },
+    // head: {
+    //     title: {
+    //         inner: 'landing',
+    //         separator: '-',
+    //         complement: ' Welcome!',
+    //     },
+    // },
 
     computed: {
         ...mapState(LANDING_MODULE, [RENDER_DATA]),
