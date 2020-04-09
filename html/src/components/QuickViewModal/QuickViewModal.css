@@ -83,6 +83,16 @@
                     padding-bottom: 0;
                 }
             }
+
+            &--empty {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .icon {
+                    opacity: 0.1;
+                }
+            }
         }
     }
 

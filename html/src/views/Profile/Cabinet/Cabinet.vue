@@ -11,7 +11,7 @@
             >
                 <div
                     class="cabinet-view__avatar-placeholder"
-                    :class="{ 'cabinet-view__avatar-placeholder--icon': !avatarPlaceholder }"
+                    :class="{ 'cabinet-view__avatar-placeholder--empty': !avatarPlaceholder }"
                 >
                     <template v-if="avatarPlaceholder">
                         {{ avatarPlaceholder }}

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import CheckoutOptionCard from '../CheckoutOptionCard/CheckoutOptionCard.vue';
+import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
 import { mapGetters, mapActions } from 'vuex';
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';

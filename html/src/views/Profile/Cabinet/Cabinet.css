@@ -30,8 +30,12 @@
             color: var(--cl-white);
             background-color: var(--cl-global);
 
-            &--icon {
+            &--empty {
                 background-color: var(--cl-elem-grey);
+
+                .icon {
+                    opacity: 0.1;
+                }
             }
         }
     }

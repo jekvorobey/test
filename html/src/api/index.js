@@ -327,10 +327,6 @@ export function getCatalogItems({ filter, orderField = 'price', orderDirection =
     });
 }
 
-export function getCatalogInfo() {
-    return $http.get(`/v1/lk/order/${id}`);
-}
-
 export function getFilters(categoryCode, excludedFilters) {
     return $http.get('/v1/catalog/filter', {
         params: { categoryCode, excludedFilters },
@@ -340,11 +336,11 @@ export function getFilters(categoryCode, excludedFilters) {
     });
 }
 
-export function getCategories(node_code = undefined, max_depth = undefined) {
+export function getCategories(node_code, max_depth) {
     return $http.get('/v1/categories', {
         params: {
-            node_code,
-            max_depth,
+            node_code: node_code || undefined,
+            max_depth: max_depth || undefined,
         },
     });
 }

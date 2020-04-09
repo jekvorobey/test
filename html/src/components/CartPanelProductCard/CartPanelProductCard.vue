@@ -28,12 +28,12 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 
 import Price from '@components/Price/Price.vue';
 
+import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 import _debounce from 'lodash/debounce';
 import '@images/sprites/cross-small.svg';
 import '@images/sprites/logo.svg';
 import './CartPanelProductCard.css';
-import { fileExtension } from '../../assets/scripts/enums';
 
 export default {
     name: 'cart-panel-product-card',

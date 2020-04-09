@@ -3,6 +3,12 @@
         <template v-slot:content>
             <div class="quick-view-modal__body" v-if="!isPending">
                 <ul class="quick-view-modal__gallery">
+                    <li
+                        v-if="!images || !images.length"
+                        class="quick-view-modal__gallery-item quick-view-modal__gallery-item--empty"
+                    >
+                        <v-svg name="logo" width="56" height="56" />
+                    </li>
                     <li class="quick-view-modal__gallery-item" v-for="image in images" :key="image.id">
                         <v-picture>
                             <source :data-srcset="image.bigImage" type="image/webp" media="(min-width: 480px)" />
@@ -42,6 +48,7 @@
 </template>
 
 <script>
+import VSvg from '@controls/VSvg/VSvg.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
@@ -69,7 +76,9 @@ import { requestStatus, fileExtension } from '@enums';
 import { cartItemTypes } from '@enums/product';
 import { generatePictureSourcePath } from '@util/file';
 import { generateProductUrl } from '@util/catalog';
+import '@images/sprites/logo.svg';
 import './QuickViewModal.css';
+
 
 export const NAME = 'quick-view-modal';
 
@@ -77,6 +86,7 @@ export default {
     name: NAME,
 
     components: {
+        VSvg,
         VPicture,
         VSpinner,
 
