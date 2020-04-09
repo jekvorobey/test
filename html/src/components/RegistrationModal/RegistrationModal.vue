@@ -5,7 +5,7 @@
                 <h3 v-if="!isTablet" class="registration-modal__hl">{{ header }}</h3>
                 <div class="registration-modal__desc">
                     <template v-if="!sent">
-                        На указанный номер телефона будет выслан код по СМС, введите его для регистрации
+                        На указанный номер телефона будет выслан код по СМС, введите его для регистрации.
                     </template>
 
                     <template v-else-if="!accepted">
@@ -14,7 +14,9 @@
                     </template>
 
                     <template v-else>
-                        Придумайте пароль для входа в Личный кабинет
+                        Придумайте пароль для входа в Личный кабинет.<br />
+                        Пароль должен содержать, как минимум, одну заглавную, одну строчную латинские буквы и одну
+                        цифру.
                     </template>
                 </div>
 
@@ -30,7 +32,12 @@
                         >
                             Номер телефона
                             <template v-slot:after>
-                                <v-button class="registration-modal__form-btn" type="submit" :disabled="isDisabledGetCodeBtn">Получить код</v-button>
+                                <v-button
+                                    class="registration-modal__form-btn"
+                                    type="submit"
+                                    :disabled="isDisabledGetCodeBtn"
+                                    >Получить код</v-button
+                                >
                             </template>
                             <template v-slot:error="{ error }">
                                 <transition name="slide-in-bottom" mode="out-in">
@@ -101,13 +108,28 @@
                 <div v-if="!accepted" class="registration-modal__socials">
                     <div class="registration-modal__socials-list">
                         <button class="registration-modal__socials-item" @click="onRegisterBySocial('google')">
-                            <v-svg name="google-bw" height="19" width="20" class="registration-modal__socials-item--google" />
+                            <v-svg
+                                name="google-bw"
+                                height="19"
+                                width="20"
+                                class="registration-modal__socials-item--google"
+                            />
                         </button>
                         <button class="registration-modal__socials-item" @click="onRegisterBySocial('vkontakte')">
-                            <v-svg name="vkontakte-bw" height="22" width="21" class="registration-modal__socials-item--vkontake" />
+                            <v-svg
+                                name="vkontakte-bw"
+                                height="22"
+                                width="21"
+                                class="registration-modal__socials-item--vkontake"
+                            />
                         </button>
                         <button class="registration-modal__socials-item" @click="onRegisterBySocial('facebook')">
-                            <v-svg name="facebook-bw" height="20" width="20" class="registration-modal__socials-item--facebook" />
+                            <v-svg
+                                name="facebook-bw"
+                                height="20"
+                                width="20"
+                                class="registration-modal__socials-item--facebook"
+                            />
                         </button>
                     </div>
                     <span class="registration-modal__socials-text">Или зарегистрируйтесь через соцсеть</span>

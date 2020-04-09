@@ -2,7 +2,11 @@
     <div class="header-bottom" :class="{ 'header-bottom--scroll': scroll && !isTabletLg }">
         <div class="header-bottom__main" v-if="!scroll">
             <div class="container header-bottom__container">
-                <search-filter class="header-bottom__main-search" input-id="upper-filter" />
+                <search-filter
+                    class="header-bottom__main-search"
+                    input-id="upper-filter"
+                    :style="{ visibility: 'hidden' }"
+                />
                 <header-logo-panel v-show="!search">
                     {{ $t('header.middle.professionals') }}
                 </header-logo-panel>
@@ -22,7 +26,11 @@
                     <v-svg name="logo" width="30" height="30" />
                 </router-link>
                 <template v-if="scroll || isTabletLg">
-                    <search-filter class="header-bottom__bottom-search" input-id="bottom-filter" />
+                    <search-filter
+                        :style="{ visibility: 'hidden' }"
+                        class="header-bottom__bottom-search"
+                        input-id="bottom-filter"
+                    />
                     <header-user-panel class="header-bottom__bottom-user" />
                 </template>
             </div>

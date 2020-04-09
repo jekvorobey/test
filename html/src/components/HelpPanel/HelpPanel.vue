@@ -4,7 +4,7 @@
         <template v-slot:header>
             <div class="help-panel__top">
                 <div class="text-grey">Каждый день с 9:00 до 21:00</div>
-                <div class="text-bold help-panel__phone">8 800 730-12-34</div>
+                <div class="text-bold help-panel__phone">8 800 707-90-70</div>
             </div>
         </template>
         <template v-slot:body>
