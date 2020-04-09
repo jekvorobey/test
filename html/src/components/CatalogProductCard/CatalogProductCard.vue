@@ -57,7 +57,7 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 
 import Tag from '@components/Tag/Tag.vue';
 import Price from '@components/Price/Price.vue';
-import BuyButton from '../BuyButton/BuyButton.vue';
+import BuyButton from '@components/BuyButton/BuyButton.vue';
 
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';

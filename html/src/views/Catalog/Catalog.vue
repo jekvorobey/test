@@ -49,7 +49,8 @@
                             <h1 class="catalog-view__main-header-hl">
                                 {{ activeCategory ? activeCategory.name : 'Все категории' }}
                             </h1>
-                            <p class="text-grey catalog-view__main-header-text">489 продуктов</p>
+                            <!-- todo Количество товаров -->
+                            <!-- <p class="text-grey catalog-view__main-header-text">489 продуктов</p> -->
                         </div>
 
                         <v-select
@@ -130,10 +131,16 @@
 
                         <catalog-filter class="catalog-view__modal-filter-panel" />
                         <div class="catalog-view__modal-filter-controls">
-                            <v-button class="btn--outline catalog-view__modal-filter-clear-btn" :to="clearFilterUrl" replace>
+                            <v-button
+                                class="btn--outline catalog-view__modal-filter-clear-btn"
+                                :to="clearFilterUrl"
+                                replace
+                            >
                                 Очистить
                             </v-button>
-                            <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal">Показать</v-button>
+                            <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal"
+                                >Показать</v-button
+                            >
                         </div>
                     </v-sticky>
                 </template>

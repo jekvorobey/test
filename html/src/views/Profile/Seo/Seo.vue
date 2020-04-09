@@ -106,6 +106,7 @@ import { FETCH_PRODUCTS, SET_LOAD_PATH } from '@store/modules/Profile/modules/Se
 import { $store } from '@services';
 import { fileExtension } from '@enums';
 import { MIN_SCROLL_VALUE } from '@constants';
+import { saveToClipboard } from '@util';
 import { registerModuleIfNotExists } from '@util/store';
 import { generatePictureSourcePath } from '@util/file';
 import { generateProductUrl, generateAbsoluteProductUrl } from '@util/catalog';
@@ -116,7 +117,7 @@ import '@images/sprites/download.svg';
 import '@images/sprites/copy.svg';
 import '@images/sprites/link.svg';
 import './Seo.css';
-import { saveToClipboard } from '../../../util';
+
 
 const SEO_MODULE_PATH = `${PROFILE_MODULE}/${SEO_MODULE}`;
 
