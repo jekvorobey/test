@@ -1,9 +1,15 @@
 <template>
-    <general-modal class="checkout-pickup-point-modal" @close="onClose" :is-scroll-locked="false" :is-mobile="isTablet">
+    <general-modal
+        class="checkout-pickup-point-modal"
+        :type="isTabletLg ? 'fullscreen' : 'wide'"
+        @close="onClose"
+        :is-scroll-locked="false"
+        :is-mobile="isTabletLg"
+    >
         <template v-slot:content>
-            <div class="checkout-pickup-point-modal__map">
+            <div class="checkout-pickup-point-modal__map" v-if="!isTabletLg">
                 <yandex-map
-                    v-if="showMap && !isTablet"
+                    v-if="showMap"
                     :zoom="11"
                     :coords="coords"
                     :controls="[]"
@@ -20,11 +26,60 @@
                     />
                 </yandex-map>
             </div>
-            <div class="checkout-pickup-point-modal__filter">
+
+            <div
+                class="container container--tablet-lg checkout-pickup-point-modal__details"
+                v-if="selectedPickupPoint"
+                v-scroll-lock="selectedPickupPoint"
+            >
+                <v-link class="checkout-pickup-point-modal__details-back-link" tag="button" @click.stop="onBackClick">
+                    <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад к
+                    списку
+                </v-link>
+                <div class="checkout-pickup-point-modal__details-info">
+                    <div class="checkout-pickup-point-modal__details-info-main">
+                        <h3 class="checkout-pickup-point-modal__details-info-main-hl">
+                            {{ selectedPickupPoint.title }}
+                        </h3>
+                        <div>{{ selectedPickupPoint.name }}</div>
+                        <div>{{ selectedPickupPoint.phone }}</div>
+                    </div>
+                    <div class="checkout-pickup-point-modal__details-info-schedule">
+                        {{ selectedPickupPoint.startDate }}
+                        <ul class="checkout-pickup-point-modal__details-info-schedule-list">
+                            <li
+                                class="checkout-pickup-point-modal__details-info-schedule-item"
+                                v-for="item in selectedPickupPoint.schedule"
+                                :key="item.id"
+                            >
+                                <div>{{ item.title }}</div>
+                                <div>{{ item.time }}</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="checkout-pickup-point-modal__details-desc">
+                    <div class="text-bold">
+                        Как добраться
+                    </div>
+                    {{ selectedPickupPoint.description }}
+                </div>
+                <div class="checkout-pickup-point-modal__details-payment">
+                    <div class="text-bold">
+                        Принимаются к оплате
+                    </div>
+                    {{ selectedPickupPoint.payment }}
+                </div>
+                <v-button class="checkout-pickup-point-modal__details-accept" @click.stop="onSelectPoint">
+                    Выбрать
+                </v-button>
+            </div>
+
+            <div class="checkout-pickup-point-modal__filter" v-else>
                 <div class="container checkout-pickup-point-modal__filter-header">
                     <h3 class="checkout-pickup-point-modal__filter-header-hl">Выбор пункта выдачи</h3>
                     <div class="checkout-pickup-point-modal__filter-header-controls">
-                        <v-select placeholder="Станция метро" :options="[]" />
+                        <!-- <v-select placeholder="Станция метро" :options="[]" /> -->
                         <v-select
                             v-model="selectedDeliveryMethod"
                             placeholder="Тип пункта выдачи"
@@ -42,7 +97,7 @@
                         v-for="point in filteredPickupPoints"
                         :key="point.id"
                         readonly
-                        @cardClick="onSelectPoint(point)"
+                        @cardClick="onShowPoint(point)"
                     >
                         <p class="text-bold">{{ point.title }}</p>
                         <p>{{ point.name }}</p>
@@ -56,6 +111,8 @@
 <script>
 import '@plugins/ya-maps';
 
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
 
@@ -72,6 +129,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { receiveTypes } from '@enums';
 import pin from '@images/icons/pin-filled.svg';
+import '@images/sprites/arrow-small.svg';
 import './CheckoutPickupPointModal.css';
 
 export const NAME = 'checkout-pickup-point-modal';
@@ -80,6 +138,8 @@ export default {
     name: NAME,
 
     components: {
+        VSvg,
+        VLink,
         VButton,
         VSelect,
 
@@ -89,6 +149,7 @@ export default {
 
     data() {
         return {
+            selectedPickupPoint: null,
             selectedDeliveryMethod: null,
             showMap: false,
             coords: [55.755814, 37.617635],
@@ -128,8 +189,8 @@ export default {
             };
         },
 
-        isTablet() {
-            return this.$mq.tablet;
+        isTabletLg() {
+            return this.$mq.tabletLg;
         },
     },
 
@@ -137,9 +198,18 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(CHECKOUT_MODULE, [SET_PICKUP_POINT]),
 
+        onShowPoint(point) {
+            this.selectedPickupPoint = point;
+        },
+
         onSelectPoint(point) {
-            this[SET_PICKUP_POINT](point);
+            this[SET_PICKUP_POINT](this.selectedPickupPoint);
+            this.selectedPickupPoint = null;
             this.onClose();
+        },
+
+        onBackClick(){
+            this.selectedPickupPoint = null;
         },
 
         onClose() {

@@ -35,20 +35,96 @@
         }
     }
 
+    &__details,
     &__filter {
-        overflow: hidden;
-        width: 440px;
         display: flex;
         flex-direction: column;
-        padding-top: calc(var(--gs) * 3);
+        width: 440px;
+        height: 100%;
+        overflow: hidden;
 
         @media (--tablet-lg) {
-            width: 40%;
-        }
-
-        @media (--tablet) {
             width: 100%;
         }
+    }
+
+    &__details {
+        @media (--tablet-lg-min) {
+            padding: calc(var(--gs) * 3);
+        }
+
+        @media (--tablet-lg) {
+            padding-top: calc(var(--gs) * 2);
+        }
+
+        &-back-link {
+            display: flex;
+            font-size: 20px;
+            line-height: 24px;
+            fill: var(--cl-grey);
+            color: var(--cl-grey);
+            text-transform: none;
+            margin-bottom: calc(var(--gs) * 3);
+        }
+
+        &-info {
+            margin-bottom: calc(var(--gs) * 2);
+
+            @media (--tablet-lg) {
+                flex-wrap: wrap;
+            }
+
+            &-main {
+                margin-bottom: var(--gs);
+
+                &-hl {
+                    font-weight: 500;
+                    font-size: 20px;
+                    line-height: 24px;
+                    margin-bottom: 0;
+                }
+            }
+
+            &-schedule {
+                color: var(--cl-grey);
+                font-size: 14px;
+
+                &-list {
+                    @media (--tablet-min) and (--tablet-lg) {
+                        width: 40%;
+                    }
+                }
+
+                &-item {
+                    width: 50%;
+                    display: flex;
+                    justify-content: space-between;
+
+                    @media (--desktop) {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+
+        &-desc,
+        &-payment {
+            margin-bottom: calc(var(--gs) * 2);
+        }
+
+        &-accept {
+            @media (--tablet-min) {
+                align-self: flex-start;
+            }
+
+            @media (--tablet) {
+                margin-bottom: auto;
+            }
+        }
+    }
+
+    &__filter {
+        padding-top: calc(var(--gs) * 3);
 
         &-header {
             margin: 0;
@@ -91,10 +167,15 @@
 
         &-list {
             overflow: auto;
+
             &-item {
                 border: none;
                 border-bottom: 1px solid var(--cl-divider-grey);
                 width: 100%;
+
+                @media (--tablet-min) and (--tablet-lg) {
+                    padding: calc(var(--gs) * 3);
+                }
             }
         }
     }

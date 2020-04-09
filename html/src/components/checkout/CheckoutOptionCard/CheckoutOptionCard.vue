@@ -1,12 +1,12 @@
 <template>
-    <li class="checkout-option-card" :class="{ 'checkout-option-card--selected': selected }" @click="onCardClick">
+    <li class="checkout-option-card" :class="{ 'checkout-option-card--selected': selected }" @click.stop="onCardClick">
         <div class="checkout-option-card__left">
             <slot />
         </div>
         <div class="checkout-option-card__right">
             <v-svg class="checkout-option-card__right-selected" name="check-small" width="24" height="24" />
             <slot name="controls">
-                <v-link v-if="!readonly" class="checkout-option-card__right-link" tag="button" @click.stop="onBtnClick">
+                <v-link class="checkout-option-card__right-link" v-if="!readonly" tag="button" @click.stop="onBtnClick">
                     {{ btnText }}
                 </v-link>
             </slot>
