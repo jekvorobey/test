@@ -119,4 +119,12 @@
             width: 100%;
         }
     }
+
+    &__controls {
+        text-align: center;
+
+        &-btn {
+            width: 100%;
+        }
+    }
 }

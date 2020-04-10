@@ -1,5 +1,6 @@
 <template>
     <general-modal
+        v-if="isOpen"
         class="promopage-add-by-link-modal"
         header="Добавить продукт по ссылке"
         @close="onClose"
@@ -36,14 +37,19 @@ import VInput from '@controls/VInput/VInput.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import validationMixin, { required } from '@plugins/validation';
 
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as PROMOPAGE_MODULE } from '@store/modules/Profile/modules/Promopage';
+import { SEARCH_PRODUCTS, ADD_PRODUCTS } from '@store/modules/Profile/modules/Promopage/actions';
+
 import { getRandomInt } from '@util';
 import _cloneDeep from 'lodash/cloneDeep';
-import '@images/sprites/cross.svg';
 import './PromopageAddByLinkModal.css';
+
+const PROMOPAGE_MODULE_PATH = `${PROFILE_MODULE}/${PROMOPAGE_MODULE}`;
 
 export const NAME = 'promopage-add-by-link-modal';
 
@@ -70,11 +76,15 @@ export default {
 
     data() {
         return {
-            links: [{ id: getRandomInt(0, 10000000), ref: null }],
+            links: [{  ref: null }],
         };
     },
 
     computed: {
+        ...mapState(MODAL_MODULE, {
+            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+        }),
+        
         isTablet() {
             return this.$mq.tablet;
         },
@@ -90,20 +100,21 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(PROMOPAGE_MODULE_PATH, [ADD_PRODUCTS]),
 
         refError(ref) {
             if (ref.$dirty && !ref.required) return 'Обязательное поле';
         },
 
         onAddLink() {
-            this.links.push({ id: getRandomInt(0, 10000000), ref: null });
+            this.links.push({ ref: null });
         },
 
         onSubmit() {
             this.$v.$touch();
-            if (!this.$v.$invalid) {
-                this.onClose();
-            }
+            if (!this.$v.$invalid) 
+                this[ADD_PRODUCTS]({ items: this.links.map(l => l.ref.split('/').slice(-1)), refresh: true })
+            this.onClose();
         },
 
         onClose() {

@@ -15,10 +15,13 @@
                 </template>
             </v-input>
 
-            <h6 class="promopage-add-modal__title">В вашем избранном</h6>
+            <!-- <h6 class="promopage-add-modal__title">В вашем избранном</h6> -->
             <ul class="promopage-add-modal__list">
                 <cart-panel-product-card
-                    class="cart-header-panel__list-item"
+                    class="promopage-add-modal__list-item"
+                    :class="{
+                        'promopage-add-modal__list-item--selected': isSelected(item.productId),
+                    }"
                     v-for="item in searchItems"
                     :key="item.id"
                     :product-id="item.id"
@@ -27,12 +30,12 @@
                     :image="item.image"
                     :price="item.price"
                     :old-price="item.oldPrice"
-                    href="/catalog"
+                    @click.native="onSelectItem(item.productId)"
                 />
             </ul>
 
             <div class="promopage-add-modal__submit">
-                <v-button class="promopage-add-modal__submit-btn" @click="onSubmit">
+                <v-button class="promopage-add-modal__submit-btn" @click="onSubmit" :disabled="!selectedItemId">
                     Добавить
                 </v-button>
             </div>
@@ -55,7 +58,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as PROMOPAGE_MODULE, TITLE, SEARCH_ITEMS } from '@store/modules/Profile/modules/Promopage';
-import { SEARCH_PRODUCTS } from '@store/modules/Profile/modules/Promopage/actions';
+import { SEARCH_PRODUCTS, ADD_PRODUCT } from '@store/modules/Profile/modules/Promopage/actions';
 import './PromopageAddModal.css';
 
 const PROMOPAGE_MODULE_PATH = `${PROFILE_MODULE}/${PROMOPAGE_MODULE}`;
@@ -74,6 +77,12 @@ export default {
         CartPanelProductCard,
     },
 
+    data(){
+        return {
+            selectedItemId: null,
+        };
+    },
+
     computed: {
         ...mapState(PROMOPAGE_MODULE_PATH, [SEARCH_ITEMS]),
         ...mapState(MODAL_MODULE, {
@@ -85,15 +94,30 @@ export default {
         },
     },
 
+    watch: {
+        [SEARCH_ITEMS](){
+            this.selectedItemId = null;
+        },
+    },
+
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(PROMOPAGE_MODULE_PATH, [SEARCH_PRODUCTS]),
+        ...mapActions(PROMOPAGE_MODULE_PATH, [SEARCH_PRODUCTS, ADD_PRODUCT]),
+
+        isSelected(id){
+            return this.selectedItemId && this.selectedItemId === id;
+        },
+
+        onSelectItem(id){
+            this.selectedItemId = id;
+        },
 
         onFilterChange(query) {
             this[SEARCH_PRODUCTS]({ query });
         },
 
-        onSubmit() {
+        async onSubmit() {
+            if(this.selectedItemId) this[ADD_PRODUCT]({ id: this.selectedItemId, refresh: true });
             this.onClose();
         },
 

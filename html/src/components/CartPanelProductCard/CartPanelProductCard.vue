@@ -1,12 +1,20 @@
 <template>
     <li class="cart-panel-product-card">
-        <router-link class="cart-panel-product-card__img" :to="href">
+        <router-link v-if="href" class="cart-panel-product-card__img" :to="href">
             <v-picture :key="image.id" v-if="image && image.id">
                 <source :data-srcset="desktopImage" type="image/webp" />
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
             </v-picture>
             <v-svg v-else id="cart-panel-product-card-empty" name="logo" width="48" height="48" />
         </router-link>
+        <div class="cart-panel-product-card__img" v-else>
+            <v-picture :key="image.id" v-if="image && image.id">
+                <source :data-srcset="desktopImage" type="image/webp" />
+                <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
+            </v-picture>
+            <v-svg v-else id="cart-panel-product-card-empty" name="logo" width="48" height="48" />
+        </div>
+
         <div class="cart-panel-product-card__body">
             <v-link class="cart-panel-product-card__body-name" :to="href">{{ name }}</v-link>
             <div class="cart-panel-product-card__body-prices">
@@ -64,7 +72,6 @@ export default {
 
         href: {
             type: String,
-            default: '/',
         },
 
         image: {
