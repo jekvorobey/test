@@ -45,41 +45,6 @@ mockDate.setHours(0, 0, 0, 0);
 
 const ext = /\.(jpe?g|png)$/i;
 
-const categories = [
-    {
-        id: 1,
-        name: 'Шампунь',
-    },
-    {
-        id: 2,
-        name: 'Шампунь для жирных волос',
-    },
-    {
-        id: 3,
-        name: 'Шампунь для вьющихся волос',
-    },
-    {
-        id: 4,
-        name: 'Шампунь-спрей',
-    },
-    {
-        id: 5,
-        name: 'Восстанавливающий шампунь',
-    },
-    {
-        id: 6,
-        name: 'Шампунь для окрашенных волос',
-    },
-    {
-        id: 7,
-        name: 'Шампунь для объема',
-    },
-    {
-        id: 8,
-        name: 'Шампунь для мужчин',
-    },
-];
-
 const instagrams = [
     {
         id: 1,
@@ -434,6 +399,15 @@ export default class MockHttpService extends HttpServiceBase {
     }
 
     post(path, data) {
+        return new Promise((resolve, reject) => {
+            switch (path) {
+                default:
+                    reject(new Error(`Unknown method, path: ${path}, data: ${JSON.stringify(data)}`));
+            }
+        });
+    }
+
+    put(path, data) {
         return new Promise((resolve, reject) => {
             switch (path) {
                 default:
