@@ -471,3 +471,23 @@ export function deletePromocode(data) {
 export function changeReceiveMethod(data) {
     return $http.post('/v1/checkout/receive-method', data);
 }
+
+export function getFavoritesData(page, orderField, orderDirection) {
+    return $http.get('/v1/lk/favorites', { params: {
+            page,
+            orderField,
+            orderDirection,
+    }});
+}
+
+export function addFavoritesItem(product_id) {
+    return $http.post(`/v1/lk/favorites/${product_id}`);
+}
+
+export function deleteFavoritesItem(product_id) {
+    return $http.delete(`/v1/lk/favorites/${product_id}`);
+}
+
+export function deleteAllFavorites() {
+    return $http.delete('/v1/lk/favorites/all');
+}
