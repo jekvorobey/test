@@ -9,12 +9,6 @@ export const IS_IN_FAVORITES = 'IS_IN_FAVORITES';
 
 const itemTypes = Object.values(favoritesItemTypes);
 
-function isValidType(type) {
-    const isValid = itemTypes.some((t) => t === type);
-    if (!isValid) $logger.warn(`Unknown cart item type ${type}`);
-    return isValid;
-}
-
 export default {
 
     [FAVORITES_ITEMS_COUNT]: (state, getters) => {
@@ -34,7 +28,7 @@ export default {
 
     [FAVORITES_TYPES]: (state) => {
         const types = itemTypes.reduce((accum, current) => {
-            const type = state.cartData[current];
+            const type = state.favoritesData[current];
 
             if (type) accum.push(type);
             return accum;
