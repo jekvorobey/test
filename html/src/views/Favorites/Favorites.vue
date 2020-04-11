@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import './Favorites.css';
+
 export default {
     name: 'favorites',
 }
