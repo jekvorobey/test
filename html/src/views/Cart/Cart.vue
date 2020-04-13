@@ -98,21 +98,22 @@
                             <p class="text-grey cart-view__main-panel-info">
                                 Внимание: продукты и мастер-классы оплачиваются отдельно
                             </p>
+
                             <p class="cart-view__main-panel-line">
                                 Сумма заказа: {{ $t(`cart.summary.type.${activeTabItem.type}`) }}
                                 <price v-bind="activeTabItem.summary.sum" />
                             </p>
-                            <!-- #58322  -->
-                            <!-- <p class="cart-view__main-panel-line">
+
+                            <p class="cart-view__main-panel-line">
                                 Скидка по промокоду <price v-bind="activeTabItem.summary.promoDiscount" />
-                            </p> -->
+                            </p>
 
                             <div class="cart-view__main-panel-total">
                                 <p class="text-bold cart-view__main-panel-line">
                                     Итого <price v-bind="activeTabItem.summary.total" />
                                 </p>
-                                <!-- #58322  -->
-                                <!-- <p class="text-grey text-sm cart-view__main-panel-line">
+
+                                <p class="text-grey text-sm cart-view__main-panel-line">
                                     Будет начислено
                                     <span>
                                         {{
@@ -122,15 +123,14 @@
                                         }}
                                         бонусов
                                     </span>
-                                </p> -->
+                                </p>
                             </div>
-                            <!-- #58322  -->
-                            <!-- <div class="cart-view__main-panel-promo">
+                            <div class="cart-view__main-panel-promo">
                                 <v-input class="cart-view__main-panel-promo-input" placeholder="Введите промокод" />
                                 <v-button class="btn--outline cart-view__main-panel-promo-btn">
                                     Применить
                                 </v-button>
-                            </div> -->
+                            </div>
                             <v-button class="cart-view__main-panel-submit" :to="`/checkout/${activeTabItem.type}`">
                                 Оформить заказ
                             </v-button>

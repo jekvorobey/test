@@ -171,8 +171,8 @@
                     </div>
                 </checkout-option-card>
             </ul>
-            <!-- #58322  -->
-            <!-- <div
+
+            <div
                 class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--bonus"
             >
                 <div class="checkout-product-panel__item-header">
@@ -217,7 +217,7 @@
                     </v-link>
                 </div>
             </div>
-            
+
             <div
                 class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--sertificate"
             >
@@ -262,7 +262,7 @@
                         Активировать
                     </v-button>
                 </div>
-            </div> -->
+            </div>
 
             <div
                 class="checkout-product-panel__item checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--settings"

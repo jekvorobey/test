@@ -203,35 +203,6 @@ export default {
                 : this.$t(`productGroups.links.${productGroupTypes.CATALOG}`);
         },
 
-        links() {
-            return [
-                {
-                    to: { name: 'Catalog', params: { type: productGroupTypes.CATALOG } },
-                    name: this.$t(`productGroups.links.${productGroupTypes.CATALOG}`),
-                },
-                {
-                    to: { name: 'Catalog', params: { type: productGroupTypes.CATALOG } },
-                    name: this.$t(`productGroups.links.${productGroupTypes.NEW}`),
-                },
-                {
-                    to: { name: 'ProductGroups', params: { type: productGroupTypes.PROMO } },
-                    name: this.$t(`productGroups.links.${productGroupTypes.PROMO}`),
-                },
-                {
-                    to: { name: 'ProductGroups', params: { type: productGroupTypes.SETS } },
-                    name: this.$t(`productGroups.links.${productGroupTypes.SETS}`),
-                },
-                {
-                    to: { name: 'ProductGroups', params: { type: productGroupTypes.BRANDS } },
-                    name: this.$t(`productGroups.links.${productGroupTypes.BRANDS}`),
-                },
-                {
-                    to: { name: 'ProductGroups', params: { type: productGroupTypes.MASTERCLASSES } },
-                    name: this.$t(`productGroups.links.${productGroupTypes.MASTERCLASSES}`),
-                },
-            ];
-        },
-
         isTabletLg() {
             return this.$mq.tabletLg;
         },
