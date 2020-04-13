@@ -1,7 +1,8 @@
 <template>
     <section class="section favorites-view">
         <div class="container favorites-view__header">
-            <h1 class="favorites-view__header-h1">Избранное
+            <h1 class="favorites-view__header-h1">
+                Избранное
                 <span class="favorites-view__header-counter" v-if="pagesCount > 0">{{ pagesCount }} продуктов</span>
             </h1>
         </div>
@@ -124,7 +125,8 @@ export default {
 
         const { loadPath } = $store.state[FAVORITES_MODULE];
 
-        if (loadPath !== fullPath) {
+        if (loadPath === fullPath) next();
+        else {
             $progress.start();
             $store
                 .dispatch(`${FAVORITES_MODULE}/${FETCH_FAVORITES}`, {
