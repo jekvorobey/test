@@ -14,8 +14,8 @@ export default {
         state.favorites = payload;
     },
     [SET_FAVORITES_MORE](state, { items, range }) {
-        state.items.favorites.push(...items);
-        state.favorites.range = range || 0;
+        state.favorites.push(...items);
+        state.range = range || 0;
     },
     [SET_QUERY_PARAMS](state, { page = 1, orderField, orderDirection }) {
         state.activePage = Number(page);

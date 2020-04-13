@@ -8,6 +8,6 @@ export const FAVORITES_COUNT = 'favoritesCount';
 
 export default {
     [PAGES_COUNT](state) {
-        return Math.ceil(state.favorites.range / FAVORITES_PAGE_SIZE);
+        return Math.ceil(state.range / FAVORITES_PAGE_SIZE);
     },
 };
