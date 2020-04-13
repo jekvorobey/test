@@ -53,12 +53,12 @@ export default function createModule() {
 
             [REQUISITES]: {
                 name: null,
-                inn: null,
-                bik: null,
-                bank: null,
-                account: null,
-                correspondentAccount: null,
                 address: null,
+                inn: null,
+                account: null,
+                bank: null,
+                bik: null,
+                correspondentAccount: null,
             },
         },
 

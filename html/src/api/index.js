@@ -277,6 +277,18 @@ export function deleteProfilePromopageProductById(id) {
     return $http.delete(`/v1/lk/promo-page/products/by-id/${id}`);
 }
 
+export function changeProfileRequisites(name, address, inn, account, bank, bik, correspondentAccount) {
+    return $http.put('/v1/lk/profile/legal-info', {
+        legal_info_company_name: name,
+        legal_info_company_address: address,
+        legal_info_inn: inn,
+        legal_info_payment_account: account,
+        legal_info_bik: bik,
+        legal_info_bank: bank,
+        legal_info_bank_correspondent_account: correspondentAccount,
+    });
+}
+
 // search
 
 export function search(data) {
@@ -473,11 +485,13 @@ export function changeReceiveMethod(data) {
 }
 
 export function getFavoritesData(page, orderField, orderDirection) {
-    return $http.get('/v1/lk/favorites', { params: {
+    return $http.get('/v1/lk/favorites', {
+        params: {
             page,
             orderField,
             orderDirection,
-    }});
+        },
+    });
 }
 
 export function addFavoritesItem(product_id) {

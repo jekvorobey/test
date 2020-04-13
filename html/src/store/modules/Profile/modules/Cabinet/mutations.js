@@ -19,25 +19,63 @@ export default {
     },
 
     [SET_CABINET_DATA](state, payload = {}) {
-        state.canBuy = payload.canBuy || false;
-        state.referralPartner = payload.referral_partner || false;
-        state.hasPassword = payload.has_password || false;
+        const {
+            canBuy,
+            referral_partner,
+            has_password,
 
-        state.avatar = payload.avatar;
-        state.firstName = payload.first_name;
-        state.lastName = payload.last_name;
-        state.middleName = payload.middle_name;
-        state.birthday = payload.birthday;
-        state.gender = payload.gender;
-        state.phone = payload.phone;
-        state.email = payload.email;
-        state.portfolio = payload.portfolio;
-        state.activities = payload.activities;
-        state.allActivities = payload.activitiesAll;
+            avatar,
+            first_name,
+            last_name,
+            middle_name,
+            birthday,
+            gender,
+            phone,
+            email,
+            portfolio,
+            activities,
+            activitiesAll,
 
-        state.social = payload.social;
-        state.certificates = payload.certificates;
-        state.requisites = payload.requisites || {};
+            social,
+            certificates,
+
+            legal_info_company_name,
+            legal_info_company_address,
+            legal_info_inn,
+            legal_info_payment_account,
+            legal_info_bik,
+            legal_info_bank,
+            legal_info_bank_correspondent_account,
+        } = payload;
+
+        state.canBuy = canBuy || false;
+        state.referralPartner = referral_partner || false;
+        state.hasPassword = has_password || false;
+
+        state.avatar = avatar;
+        state.firstName = first_name;
+        state.lastName = last_name;
+        state.middleName = middle_name;
+        state.birthday = birthday;
+        state.gender = gender;
+        state.phone = phone;
+        state.email = email;
+        state.portfolio = portfolio;
+        state.activities = activities;
+        state.allActivities = activitiesAll;
+
+        state.social = social;
+        state.certificates = certificates;
+
+        state.requisites = {
+            name: legal_info_company_name || null,
+            address: legal_info_company_address || null,
+            inn: legal_info_inn || null,
+            account: legal_info_payment_account || null,
+            bik: legal_info_bik || null,
+            bank: legal_info_bank || null,
+            correspondentAccount: legal_info_bank_correspondent_account || null,
+        };
     },
 
     [UPDATE_PERSONAL](state, payload = {}) {
