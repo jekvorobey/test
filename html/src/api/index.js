@@ -472,7 +472,7 @@ export function changeReceiveMethod(data) {
     return $http.post('/v1/checkout/receive-method', data);
 }
 
-export function getFavoritesData(page, orderField, orderDirection) {
+export function getFavorites(page, orderField, orderDirection) {
     return $http.get('/v1/lk/favorites', { params: {
             page,
             orderField,

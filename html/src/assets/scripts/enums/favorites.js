@@ -1,3 +1,3 @@
-export const favoritesItemTypes = Object.freeze({
-    PRODUCT: 'product',
+export const sortFields = Object.freeze({
+    ID: 'id',
 });
