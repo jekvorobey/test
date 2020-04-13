@@ -20,8 +20,6 @@ export const ORDER_FIELD = 'orderField';
 export const ACTIVE_PAGE = 'activePage';
 export const RANGE = 'range';
 
-const PAGE_SIZE = 'pageSize';
-
 export default function createModule() {
     return {
         name: NAME,
