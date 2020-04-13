@@ -13,6 +13,7 @@ export const FAVORITES = 'favorites';
 export const FAVORITES_DIRECTION = 'orderDirection';
 export const FAVORITES_FIELD = 'orderField';
 export const ACTIVE_PAGE = 'activePage';
+export const RANGE = 'range';
 
 export default function createModule() {
     return {
@@ -22,6 +23,7 @@ export default function createModule() {
             [LOAD_PATH]: '',
 
             [FAVORITES]: [],
+            [RANGE]: 0,
 
             [FAVORITES_DIRECTION]: sortDirections.DESC,
             [FAVORITES_FIELD]: sortFields.ID,
