@@ -1,0 +1,126 @@
+.referral-code-edit-modal {
+    .popup--sm {
+        width: 440px;
+    }
+
+    .modal-body {
+        padding: 0;
+    }
+
+    &__body {
+        flex-grow: 1;
+    }
+
+    &__footer,
+    &__body {
+        padding: calc(var(--gs) * 3);
+        @media (--tablet) {
+            padding: calc(var(--gs) * 2);
+        }
+    }
+
+    &__desc {
+        margin-bottom: calc(var(--gs) * 3);
+
+        @media (--tablet) {
+            margin-bottom: calc(var(--gs) * 2);
+        }
+    }
+
+    &__form {
+        &-confirmation,
+        &-phone {
+            display: flex;
+            align-items: flex-end;
+
+            @media (--tablet) {
+                flex-wrap: wrap;
+            }
+        }
+
+        &-repeat {
+            text-transform: none;
+            border-bottom: 1px solid var(--cl-global);
+        }
+
+        &-timer {
+            margin-bottom: var(--gs);
+        }
+
+        &-info,
+        &-timer {
+            @media (--tablet) {
+                display: block;
+                text-align: center;
+                margin-bottom: calc(var(--gs) * 2);
+            }
+        }
+
+        &-input {
+            flex: 1;
+            margin-right: var(--gs);
+
+            .v-input__container {
+                @media (--tablet) {
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+
+            .v-input__input {
+                @media (--tablet) {
+                    margin-bottom: calc(var(--gs) * 2);
+                }
+            }
+
+            @media (--tablet) {
+                margin-right: 0;
+                margin-bottom: calc(var(--gs) * 2);
+            }
+        }
+
+        &-input &-btn {
+            flex: none;
+            margin-left: var(--gs);
+            padding: 6px calc(var(--gs) * 2);
+
+            @media (--tablet) {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        &-password &-input {
+            margin-right: 0;
+
+            @media (--tablet) {
+                margin-bottom: 0;
+
+                &:last-of-type {
+                    margin-bottom: calc(var(--gs) * 2);
+                }
+            }
+        }
+    }
+
+    &__footer {
+        position: sticky;
+        z-index: 1;
+        bottom: 0;
+        padding: calc(var(--gs) * 3);
+        border-top: 1px solid var(--cl-divider-grey);
+
+        @media (--tablet) {
+            padding: calc(var(--gs) * 2);
+        }
+
+        &-btn {
+            width: 120px;
+            margin-right: calc(var(--gs) * 3);
+
+            @media (--tablet) {
+                width: 50%;
+            }
+        }
+    }
+}

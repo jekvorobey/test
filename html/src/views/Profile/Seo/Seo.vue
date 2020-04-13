@@ -208,7 +208,7 @@ export default {
 
         onCopyToClipboard(e, text) {
             const result = saveToClipboard(text);
-            var msg = result ? 'Успешно скопировано' : 'Не удается скопировать';
+            const msg = result ? 'Успешно скопировано' : 'Не удается скопировать';
             alert(msg);
             e.target.focus();
         },

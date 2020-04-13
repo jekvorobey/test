@@ -289,6 +289,12 @@ export function changeProfileRequisites(name, address, inn, account, bank, bik, 
     });
 }
 
+export function changeProfileReferralCode(code) {
+    return $http.put('/v1/lk/profile/referral-code', {
+        code,
+    });
+}
+
 // search
 
 export function search(data) {

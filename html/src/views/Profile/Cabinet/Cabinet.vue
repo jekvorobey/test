@@ -114,6 +114,27 @@
             </div>
         </info-panel>
 
+        <info-panel class="cabinet-view__panel" v-if="referralPartner" header="Реферальные данные">
+            <template v-slot:controls>
+                <v-link v-if="hasPhone" class="cabinet-view__panel-link" tag="button" @click="onOpenPasswordModal">
+                    <v-svg name="edit" :width="iconSize" :height="iconSize" />
+                    <span>&nbsp;&nbsp;Изменить</span>
+                </v-link>
+            </template>
+            <div class="container container--tablet-lg">
+                <ul class="cabinet-view__panel-list">
+                    <info-row class="cabinet-view__panel-item" name="Ваш реферальный код" :value="referralCode" />
+                    <info-row class="cabinet-view__panel-item" name="Реферальная ссылка">
+                        <v-link class="cabinet-view__panel-link" tag="button" @click="onCopyToClipboard($event)">
+                            <v-svg name="link" :width="iconSize" :height="iconSize" />
+                            <span>&nbsp;&nbsp;Скопировать ссылку</span>
+                        </v-link>
+                    </info-row>
+                    <!-- <info-row class="cabinet-view__panel-item" name="Персональная скидка" :value="" /> -->
+                </ul>
+            </div>
+        </info-panel>
+
         <info-panel class="cabinet-view__panel" header="Пароль">
             <template v-slot:controls>
                 <v-link v-if="hasPhone" class="cabinet-view__panel-link" tag="button" @click="onOpenPasswordModal">
@@ -152,7 +173,12 @@
 
         <info-panel v-if="referralPartner" class="cabinet-view__panel" header="Реквизиты">
             <template v-slot:controls>
-                <v-link class="cabinet-view__panel-link" tag="button" @click="onOpenDetailsModal">
+                <v-link
+                    v-if="canEditReferralCode"
+                    class="cabinet-view__panel-link"
+                    tag="button"
+                    @click="onOpenReferralCodeModal"
+                >
                     <v-svg name="edit" :width="iconSize" :height="iconSize" />
                     <span>&nbsp;&nbsp;Изменить</span>
                 </v-link>
@@ -265,13 +291,14 @@ import PasswordEditModal, {
     NAME as EDIT_PASSWORD_MODAL_NAME,
 } from '@components/profile/PasswordEditModal/PasswordEditModal.vue';
 import DetailsModal, { NAME as DETAILS_MODAL_NAME } from '@components/profile/DetailsModal/DetailsModal.vue';
+import ReferralCodeEditModal, { NAME as REFERRAL_CODE_EDIT_MODAL_NAME } from '@components/profile/ReferralCodeEditModal/ReferralCodeEditModal.vue';
 
 import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { LOCALE } from '@store';
 
-import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY, REFERRAL_PARTNER } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY, REFERRAL_PARTNER, REFERRAL_CODE } from '@store/modules/Auth';
 import { GET_SOCIAL_LINK, CHECK_SESSION } from '@store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -293,6 +320,7 @@ import {
     CERTIFICATES,
     FIRST_NAME,
     LAST_NAME,
+    CAN_EDIT_REFERRAL_CODE,
 } from '@store/modules/Profile/modules/Cabinet';
 import { FULL_NAME, PROFILES_STRING } from '@store/modules/Profile/modules/Cabinet/getters';
 import {
@@ -308,7 +336,10 @@ import {
 
 import { socials, mimeType, httpCodes } from '@enums';
 import { cancelRoute } from '@settings';
+import { saveToClipboard } from '@util';
+import { generateReferralLink } from '@util/profile';
 import '@images/sprites/edit.svg';
+import '@images/sprites/link.svg';
 import '@images/sprites/account-middle.svg';
 import './Cabinet.css';
 
@@ -364,6 +395,7 @@ export default {
         ...mapState(AUTH_MODULE, {
             [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
         }),
 
         ...mapState(MODAL_MODULE, {
@@ -378,6 +410,8 @@ export default {
                 state[MODALS][EDIT_PERSONAL_MODAL_NAME] && state[MODALS][EDIT_PERSONAL_MODAL_NAME].open,
             isPasswordEditOpen: state =>
                 state[MODALS][EDIT_PASSWORD_MODAL_NAME] && state[MODALS][EDIT_PASSWORD_MODAL_NAME].open,
+            isCodeEditOpen: state =>
+                state[MODALS][REFERRAL_CODE_EDIT_MODAL_NAME] && state[MODALS][REFERRAL_CODE_EDIT_MODAL_NAME].open,
         }),
 
         ...mapState(CABINET_MODULE_PATH, [
@@ -394,6 +428,8 @@ export default {
             CERTIFICATES,
             LAST_NAME,
             FIRST_NAME,
+
+            CAN_EDIT_REFERRAL_CODE,
         ]),
         ...mapGetters(CABINET_MODULE_PATH, [FULL_NAME, PROFILES_STRING]),
 
@@ -535,6 +571,14 @@ export default {
             return fileValidation(source, type);
         },
 
+        onCopyToClipboard(e) {
+            const link = generateReferralLink(this[REFERRAL_CODE]);
+            const result = saveToClipboard(link);
+            const msg = result ? 'Успешно скопировано' : 'Не удается скопировать';
+            alert(msg);
+            e.target.focus();
+        },
+
         onScrollToPrivate() {
             const { panel } = this.$refs;
             window.scrollTo({
@@ -592,6 +636,10 @@ export default {
 
         onOpenPasswordModal() {
             this[CHANGE_MODAL_STATE]({ name: EDIT_PASSWORD_MODAL_NAME, open: true });
+        },
+
+        onOpenReferralCodeModal(){
+            this[CHANGE_MODAL_STATE]({ name: REFERRAL_CODE_EDIT_MODAL_NAME, open: true });
         },
     },
 

@@ -20,7 +20,7 @@ export default {
 
     [SET_CABINET_DATA](state, payload = {}) {
         const {
-            canBuy,
+            can_edit_referral_code,
             referral_partner,
             has_password,
 
@@ -48,7 +48,7 @@ export default {
             legal_info_bank_correspondent_account,
         } = payload;
 
-        state.canBuy = canBuy || false;
+        state.canEditReferralCode = can_edit_referral_code || false;
         state.referralPartner = referral_partner || false;
         state.hasPassword = has_password || false;
 

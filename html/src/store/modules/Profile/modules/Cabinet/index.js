@@ -4,7 +4,7 @@ import getters from './getters';
 
 export const NAME = 'cabinet';
 
-export const CAN_BUY = 'canBuy';
+export const CAN_EDIT_REFERRAL_CODE = 'canEditReferralCode';
 export const REFERRAL_PARTNER = 'referralPartner';
 export const HAS_PASSWORD = 'hasPassword';
 
@@ -23,7 +23,6 @@ export const All_ACTIVITIES = 'allActivities';
 export const SOCIAL = 'social';
 export const CERTIFICATES = 'certificates';
 export const REQUISITES = 'requisites';
-
 export const LOAD = 'load';
 
 export default function createModule() {
@@ -33,7 +32,7 @@ export default function createModule() {
 
         state: {
             [LOAD]: false,
-            [CAN_BUY]: false,
+            [CAN_EDIT_REFERRAL_CODE]: false,
             [REFERRAL_PARTNER]: false,
             [HAS_PASSWORD]: false,
 
