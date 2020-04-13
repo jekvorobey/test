@@ -58,16 +58,17 @@ const main = {
     },
 
     orderStatus: {
+        [orderStatus.PRE_ORDER]: 'Предзаказ: ожидаем поступления товара',
         [orderStatus.CREATED]: 'Создан',
-        [orderStatus.AWAITING_CHECK]: 'Ожидает подтверждения',
+        [orderStatus.AWAITING_CHECK]: 'В обработке',
+        [orderStatus.CHECKING]: 'В обработке',
+        [orderStatus.AWAITING_CONFIRMATION]: 'В обработке',
         [orderStatus.IN_PROCESSING]: 'В обработке',
-        [orderStatus.CHECKING]: 'Проверка',
-        [orderStatus.TRANSFERRED_TO_DELIVERY]: 'Передан на доставку',
+        [orderStatus.TRANSFERRED_TO_DELIVERY]: 'В обработке',
         [orderStatus.DELIVERING]: 'В процессе доставки',
         [orderStatus.READY_FOR_RECIPIENT]: 'В пункте выдачи',
         [orderStatus.DONE]: 'Доставлен',
         [orderStatus.RETURNED]: 'Возвращен',
-        [orderStatus.PRE_ORDER]: 'Предзаказ',
     },
 
     deliveryStatus: {
