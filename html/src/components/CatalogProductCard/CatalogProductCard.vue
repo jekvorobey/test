@@ -42,10 +42,8 @@
         <div class="catalog-product-card__tags">
             <tag class="catalog-product-card__tags-item" v-for="tag in tags" :key="tag.id" :text="tag.name" />
         </div>
-        <!-- #58539 -->
-        <!-- <v-link v-if="showWishlistBtn" tag="button" class="catalog-product-card__wishlist-btn" @click.prevent>
-            <v-svg name="wishlist-middle" width="18" height="20" />
-        </v-link> -->
+        <favorites-button class="catalog-product-card__wishlist-btn"  :isActive="inFavorites" @click.prevent="onFavoritesBtnClick" v-if="showWishlistBtn" >
+        </favorites-button>
     </router-link>
 </template>
 
@@ -58,6 +56,7 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import Tag from '@components/Tag/Tag.vue';
 import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
+import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
@@ -80,6 +79,7 @@ export default {
         Tag,
         Price,
         BuyButton,
+        FavoritesButton,
     },
 
     props: {
@@ -141,6 +141,11 @@ export default {
             type: Boolean,
             default: true,
         },
+
+        inFavorites: {
+            type: Boolean,
+            default: false,
+        }
     },
 
     computed: {
@@ -173,6 +178,10 @@ export default {
     methods: {
         onBuyButtonClick() {
             this.$emit('add-item', { id: this.productId, type: this.type });
+        },
+
+        onFavoritesBtnClick() {
+            this.$emit('add-favorites-item', { id: this.productId });
         },
 
         onPreview() {
