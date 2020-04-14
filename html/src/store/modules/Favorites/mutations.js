@@ -33,7 +33,6 @@ export default {
     },
 
     [ADD_TO_FAVORITES_ALL](state, productId) {
-        console.log(productId)
         state.favoritesAll.push(productId);
     }
 };
