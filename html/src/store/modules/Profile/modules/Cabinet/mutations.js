@@ -1,6 +1,8 @@
 export const SET_CABINET_DATA = 'SET_CABINET_DATA';
 
 export const SET_LOAD = 'SET_LOAD';
+export const SET_CAN_EDIT_CODE = 'SET_CAN_EDIT_CODE';
+
 export const UPDATE_EMAIL = 'UPDATE_EMAIL';
 export const UPDATE_PHONE = 'UPDATE_PHONE';
 export const UPDATE_PORTFOLIO = 'UPDATE_PORTFOLIO';
@@ -16,6 +18,10 @@ export const DELETE_CERTIFICATE = 'DELETE_CERTIFICATE';
 export default {
     [SET_LOAD](state, payload = false) {
         state.load = payload;
+    },
+
+    [SET_CAN_EDIT_CODE](state, payload) {
+        state.canEditReferralCode = payload || false;
     },
 
     [SET_CABINET_DATA](state, payload = {}) {

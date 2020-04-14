@@ -31,6 +31,8 @@ export const CHECK_CODE = 'CHECK_CODE';
 export const RESET_PASSWORD = 'RESET_PASSWORD';
 export const FETCH_USER = 'FETCH_USER';
 
+export const SET_REFERRER_CODE = 'SET_REFERRER_CODE';
+
 export default {
     async [SEND_SMS]({ commit }, { phone, type }) {
         try {
@@ -114,6 +116,10 @@ export default {
             storeErrorHandler(CHECK_SESSION, true)(error);
             return false;
         }
+    },
+
+    [SET_REFERRER_CODE]({ commit }, code) {
+        commit(SET_REFERRER_CODE, code);
     },
 
     async [FETCH_USER]({ commit }) {

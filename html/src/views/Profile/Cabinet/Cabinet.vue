@@ -116,7 +116,12 @@
 
         <info-panel class="cabinet-view__panel" v-if="referralPartner" header="Реферальные данные">
             <template v-slot:controls>
-                <v-link v-if="hasPhone" class="cabinet-view__panel-link" tag="button" @click="onOpenPasswordModal">
+                <v-link
+                    v-if="!canEditReferralCode"
+                    class="cabinet-view__panel-link"
+                    tag="button"
+                    @click="onOpenReferralCodeModal"
+                >
                     <v-svg name="edit" :width="iconSize" :height="iconSize" />
                     <span>&nbsp;&nbsp;Изменить</span>
                 </v-link>
@@ -262,6 +267,9 @@
         <transition name="fade">
             <details-modal v-if="$isServer || isDetailsOpen" />
         </transition>
+        <transition name="fade">
+            <referral-code-edit-modal v-if="$isServer || isCodeEditOpen" />
+        </transition>
     </section>
 </template>
 
@@ -381,6 +389,7 @@ export default {
         PhoneEditModal,
         PersonalEditModal,
         PasswordEditModal,
+        ReferralCodeEditModal,
     },
 
     data() {
