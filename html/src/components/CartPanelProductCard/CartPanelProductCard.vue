@@ -95,7 +95,7 @@ export default {
 
         defaultImage() {
             if (this.image && this.image.id)
-                return generatePictureSourcePath(300, 300, this.image.id, this.image.sourceExt);
+                return generatePictureSourcePath(300, 300, this.image.id);
         },
 
         isTablet() {

@@ -42,8 +42,12 @@
         <div class="catalog-product-card__tags">
             <tag class="catalog-product-card__tags-item" v-for="tag in tags" :key="tag.id" :text="tag.name" />
         </div>
-        <favorites-button class="catalog-product-card__wishlist-btn"  :isActive="inFavorites" @click.prevent="onFavoritesBtnClick" v-if="showWishlistBtn" >
-        </favorites-button>
+        <favorites-button
+            class="catalog-product-card__wishlist-btn"
+            :isActive="inFavorites"
+            @click.prevent="onFavoritesBtnClick"
+            v-if="showWishlistBtn"
+        />
     </router-link>
 </template>
 
@@ -171,7 +175,7 @@ export default {
 
         defaultImg() {
             return (
-                (this.isObjectImage && generatePictureSourcePath(200, 200, this.image.id, this.image.sourceExt)) ||
+                (this.isObjectImage && generatePictureSourcePath(200, 200, this.image.id)) ||
                 this.image
             );
         },

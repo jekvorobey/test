@@ -24,6 +24,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import { generatePictureSourcePath } from '@util/file';
+import { fileExtension } from '../../assets/scripts/enums';
 import './CatalogBannerCard.css';
 
 const btnType = Object.freeze({
@@ -67,22 +68,22 @@ export default {
     computed: {
         mobileImg() {
             const image = this.item.mobileImage || this.item.tabletImage || this.item.desktopImage;
-            if (image) return generatePictureSourcePath(360, 400, image.id, 'webp');
+            if (image) return generatePictureSourcePath(360, 400, image.id, fileExtension.image.WEBP);
         },
 
         tabletImg() {
             const image = this.item.tabletImage || this.item.desktopImage;
-            if (image) return generatePictureSourcePath(360, 400, image.id, 'webp');
+            if (image) return generatePictureSourcePath(360, 400, image.id, fileExtension.image.WEBP);
         },
 
         desktopImg() {
             const image = this.item.desktopImage || this.item.tabletImage;
-            if (image) return generatePictureSourcePath(400, 600, image.id, 'webp');
+            if (image) return generatePictureSourcePath(400, 600, image.id, fileExtension.image.WEBP);
         },
 
         defaultImg() {
             const image = this.item.desktopImage || this.item.tabletImage || this.item.mobileImage;
-            if (image) return generatePictureSourcePath(400, 600, image.id, image.sourceExt);
+            if (image) return generatePictureSourcePath(400, 600, image.id);
         },
 
         btnClasses() {
