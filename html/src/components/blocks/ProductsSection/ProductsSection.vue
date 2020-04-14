@@ -21,6 +21,7 @@
                         :show-buy-btn="product.stock.qty > 0"
                         @add-item="onAddToCart(product)"
                         @preview="onPreview(product.code)"
+                        @add-favorites-item="onAddToFavorites(product)"
                     />
                     <!-- #58322  -->
                     <!-- <v-button class="btn--outline products-section__link" :to="btnLink">
@@ -46,6 +47,9 @@ import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.v
 import { mapActions } from 'vuex';
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
+
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { ADD_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -100,6 +104,7 @@ export default {
     methods: {
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(FAVORITES_MODULE, [ADD_FAVORITES_ITEM]),
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: 'quick-view-modal', open: true, state: { code } });
@@ -132,6 +137,10 @@ export default {
                 state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
+
+        onAddToFavorites(item) {
+            this[ADD_FAVORITES_ITEM]({ productId: item.productId });
+        }
     },
 };
 </script>

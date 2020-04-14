@@ -9,12 +9,13 @@ import {
     deleteAllFavorites,
 } from '@api';
 
-import { SET_FAVORITES, SET_QUERY_PARAMS, SET_FAVORITES_ALL } from './mutations';
+import { SET_FAVORITES, SET_QUERY_PARAMS, SET_FAVORITES_ALL, ADD_TO_FAVORITES_ALL } from './mutations';
 
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 
 export const FETCH_FAVORITES = 'FETCH_FAVORITES';
 export const FETCH_FAVORITES_ALL = 'FETCH_FAVORITES_ALL';
+export const ADD_FAVORITES_ITEM = 'ADD_FAVORITES_ITEM';
 
 export default {
 
@@ -53,6 +54,15 @@ export default {
             commit(SET_FAVORITES_ALL, data);
         } catch(error) {
             storeErrorHandler(FETCH_FAVORITES_ALL, error);
+        }
+    },
+
+    async [ADD_FAVORITES_ITEM]({ commit }, { productId }) {
+        try {
+            await addFavoritesItem(Number(productId));
+            commit(ADD_TO_FAVORITES_ALL, Number(productId));
+        } catch(error) {
+            storeErrorHandler(ADD_FAVORITES_ITEM, error);
         }
     }
 };
