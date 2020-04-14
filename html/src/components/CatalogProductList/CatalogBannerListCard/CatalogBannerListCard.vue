@@ -22,6 +22,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import { generatePictureSourcePath } from '@util/file';
+import { fileExtension } from '../../../assets/scripts/enums';
 import './CatalogBannerListCard.css';
 
 const btnType = Object.freeze({
@@ -65,22 +66,22 @@ export default {
     computed: {
         mobileImg() {
             const image = this.item.mobileImage || this.item.tabletImage || this.item.desktopImage;
-            return generatePictureSourcePath(320, 320, image.id, 'webp');
+            return generatePictureSourcePath(320, 320, image.id, fileExtension.image.WEBP);
         },
 
         tabletImg() {
             const image = this.item.tabletImage || this.item.desktopImage;
-            return generatePictureSourcePath(540, 360, image.id, 'webp');
+            return generatePictureSourcePath(540, 360, image.id, fileExtension.image.WEBP);
         },
 
         desktopImg() {
             const image = this.item.desktopImage || this.item.tabletImage;
-            return generatePictureSourcePath(600, 400, image.id, 'webp');
+            return generatePictureSourcePath(600, 400, image.id, fileExtension.image.WEBP);
         },
 
         defaultImg() {
             const image = this.item.desktopImage || this.item.tabletImage || this.item.mobileImage.id;
-            return generatePictureSourcePath(600, 400, image.id, image.sourceExt);
+            return generatePictureSourcePath(600, 400, image.id);
         },
 
         btnClasses() {

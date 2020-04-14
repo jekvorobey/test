@@ -113,7 +113,7 @@ export default {
                     ...i,
                     bigImage: generatePictureSourcePath(300, 300, i.id, fileExtension.image.WEBP),
                     smallImage: generatePictureSourcePath(200, 200, i.id, fileExtension.image.WEBP),
-                    defaultImage: generatePictureSourcePath(300, 300, i.id, i.sourceExt),
+                    defaultImage: generatePictureSourcePath(300, 300, i.id),
                 };
             });
         },

@@ -54,6 +54,7 @@ import { ADD_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { fileExtension } from '../../../assets/scripts/enums';
 import { generatePictureSourcePath } from '@util/file';
 import './ProductsSection.css';
 
@@ -112,22 +113,22 @@ export default {
 
         getMobileImg(item) {
             const image = item.mobileImage || item.tabletImage || item.desktopImage;
-            if (image) return generatePictureSourcePath(320, 320, image.id, 'webp');
+            if (image) return generatePictureSourcePath(320, 320, image.id, fileExtension.image.WEBP);
         },
 
         getTabletImg(item) {
             const image = item.tabletImage || item.desktopImage;
-            if (image) return generatePictureSourcePath(720, 720, image.id, 'webp');
+            if (image) return generatePictureSourcePath(720, 720, image.id, fileExtension.image.WEBP);
         },
 
         getDesktopImg(item) {
             const image = item.desktopImage || item.tabletImage;
-            if (image) return generatePictureSourcePath(600, 900, image.id, 'webp');
+            if (image) return generatePictureSourcePath(600, 900, image.id, fileExtension.image.WEBP);
         },
 
         getDefaultImg(item) {
             const image = item.desktopImage || item.tabletImage || item.mobileImage;
-            if (image) return generatePictureSourcePath(600, 900, image.id, image.sourceExt);
+            if (image) return generatePictureSourcePath(600, 900, image.id);
         },
 
         onAddToCart(item) {

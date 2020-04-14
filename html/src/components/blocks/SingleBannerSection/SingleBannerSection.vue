@@ -15,6 +15,8 @@
 
 <script>
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
+
+import { fileExtension } from '../../../assets/scripts/enums';
 import './SingleBannerSection.css';
 
 export default {
@@ -36,22 +38,22 @@ export default {
     computed: {
         mobileImg() {
             const image = this.banner.mobileImage || this.banner.tabletImage || this.banner.desktopImage;
-            if (image) return generatePictureSourcePath(320, 240, image.id, 'webp');
+            if (image) return generatePictureSourcePath(320, 240, image.id, fileExtension.image.WEBP);
         },
 
         tabletImg() {
             const image = this.banner.tabletImage || this.banner.desktopImage;
-            if (image) return generatePictureSourcePath(768, 240, image.id, 'webp');
+            if (image) return generatePictureSourcePath(768, 240, image.id, fileExtension.image.WEBP);
         },
 
         desktopImg() {
             const image = this.banner.desktopImage || this.banner.tabletImage;
-            if (image) return generatePictureSourcePath(1224, 240, image.id, 'webp');
+            if (image) return generatePictureSourcePath(1224, 240, image.id, fileExtension.image.WEBP);
         },
 
         defaultImg() {
             const image = this.banner.desktopImage || this.banner.tabletImage || this.banner.mobileImage;
-            if (image) return generatePictureSourcePath(1224, 240, image.id, image.sourceExt);
+            if (image) return generatePictureSourcePath(1224, 240, image.id);
         },
     },
 };

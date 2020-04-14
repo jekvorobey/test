@@ -333,7 +333,7 @@ export default {
         defaultImg() {
             const banner = this[PRODUCT_GROUP][BANNER];
             const image = banner.desktopImage || banner.tabletImage || banner.mobileImage;
-            if (image) return generatePictureSourcePath(1224, 240, image.id, image.sourceExt);
+            if (image) return generatePictureSourcePath(1224, 240, image.id);
         },
 
         clearFilterUrl() {

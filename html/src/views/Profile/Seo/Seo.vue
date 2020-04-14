@@ -12,12 +12,7 @@
             />
         </div>
 
-        <info-panel
-            class="seo-view__panel"
-            :header="item.product_name"
-            v-for="(item, index) in seoProducts"
-            :key="item.id"
-        >
+        <info-panel class="seo-view__panel" :header="item.product_name" v-for="item in seoProducts" :key="item.id">
             <template v-slot:controls>
                 <div class="seo-view__panel-links">
                     <!-- <v-link class="seo-view__panel-link" tag="button">
@@ -174,7 +169,7 @@ export default {
                         return {
                             id: f.id,
                             image: generatePictureSourcePath(null, null, f.id, fileExtension.image.WEBP),
-                            defaultImage: generatePictureSourcePath(null, null, f.id, f.sourceExt),
+                            defaultImage: generatePictureSourcePath(null, null, f.id),
                         };
                     }),
                 };

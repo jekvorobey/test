@@ -888,7 +888,7 @@ export default {
                 imageMap.brand = {
                     id: brand.image.id,
                     desktop: generatePictureSourcePath(null, null, brand.image.id, fileExtension.image.WEBP),
-                    default: generatePictureSourcePath(null, null, brand.image.id, brand.image.sourceExt),
+                    default: generatePictureSourcePath(null, null, brand.image.id),
                     alt: brand.name,
                 };
             }
@@ -898,7 +898,7 @@ export default {
                     id: howto.image.id,
                     desktop: generatePictureSourcePath(null, null, howto.image.id, fileExtension.image.WEBP),
                     tablet: generatePictureSourcePath(320, 240, howto.image.id, fileExtension.image.WEBP),
-                    default: generatePictureSourcePath(null, null, howto.image.id, howto.image.sourceExt),
+                    default: generatePictureSourcePath(null, null, howto.image.id),
                 };
             }
 
@@ -907,7 +907,7 @@ export default {
                     id: description.image.id,
                     desktop: generatePictureSourcePath(null, null, description.image.id, fileExtension.image.WEBP),
                     tablet: generatePictureSourcePath(320, 240, description.image.id, fileExtension.image.WEBP),
-                    default: generatePictureSourcePath(null, null, description.image.id, description.image.sourceExt),
+                    default: generatePictureSourcePath(null, null, description.image.id),
                 };
             }
 
@@ -917,7 +917,7 @@ export default {
                         ...image,
                         desktop: generatePictureSourcePath(300, 300, image.id, fileExtension.image.WEBP),
                         tablet: generatePictureSourcePath(200, 200, image.id, fileExtension.image.WEBP),
-                        default: generatePictureSourcePath(300, 300, image.id, image.sourceExt),
+                        default: generatePictureSourcePath(300, 300, image.id),
                     };
                 });
             } else imageMap.media = [];

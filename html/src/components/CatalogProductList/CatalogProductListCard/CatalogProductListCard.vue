@@ -64,6 +64,7 @@ import Tag from '@components/Tag/Tag.vue';
 import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 
+import { fileExtension } from '../../../assets/scripts/enums';
 import { generateProductUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 
@@ -117,15 +118,15 @@ export default {
         },
 
         bigImg() {
-            return generatePictureSourcePath(300, 300, this.item.image.id, 'webp');
+            return generatePictureSourcePath(300, 300, this.item.image.id, fileExtension.image.WEBP);
         },
 
         smallImg() {
-            return generatePictureSourcePath(200, 200, this.item.image.id, 'webp');
+            return generatePictureSourcePath(200, 200, this.item.image.id, fileExtension.image.WEBP);
         },
 
         defaultImg() {
-            return generatePictureSourcePath(200, 200, this.item.image.id, this.item.image.sourceExt);
+            return generatePictureSourcePath(200, 200, this.item.image.id);
         },
 
         href() {
