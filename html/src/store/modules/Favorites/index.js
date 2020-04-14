@@ -9,6 +9,7 @@ export const NAME = 'favorites';
 export const LOAD_PATH = 'loadPath';
 
 export const FAVORITES = 'favorites';
+export const FAVORITES_ALL = 'favoritesAll';
 
 export const FAVORITES_DIRECTION = 'orderDirection';
 export const FAVORITES_FIELD = 'orderField';
@@ -23,6 +24,7 @@ export default function createModule() {
             [LOAD_PATH]: '',
 
             [FAVORITES]: [],
+            [FAVORITES_ALL]: [],
             [RANGE]: 0,
 
             [FAVORITES_DIRECTION]: sortDirections.DESC,

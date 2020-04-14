@@ -79,6 +79,9 @@ import { SET_SELECTED_CITY_BY_IP } from '@store/modules/Geolocation/actions';
 import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
 import { FETCH_CART_DATA, CLEAR_CART_DATA } from '@store/modules/Cart/actions';
 
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { FETCH_FAVORITES_ALL } from '@store/modules/Favorites/actions';
+
 import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
 import { CHECK_SESSION, FETCH_USER } from '@store/modules/Auth/actions';
 
@@ -139,6 +142,7 @@ export default {
         ...mapActions(AUTH_MODULE, [CHECK_SESSION, FETCH_USER]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(FAVORITES_MODULE, [FETCH_FAVORITES_ALL]),
 
         onCheckCitySelection() {
             const geoData = $cookie.get('ibt_geoc');
@@ -171,6 +175,7 @@ export default {
             if (value) {
                 await this[FETCH_USER]();
                 if (this[CAN_BUY]) this[FETCH_CART_DATA]();
+                await this[FETCH_FAVORITES_ALL]();
             } else this[CLEAR_CART_DATA]();
             this.startSessionTimer();
         },
@@ -182,6 +187,7 @@ export default {
             if (this[HAS_SESSION]) {
                 if (!this[USER]) await this[FETCH_USER]();
                 if (this[CAN_BUY]) await this[FETCH_CART_DATA]();
+                await this[FETCH_FAVORITES_ALL]();
             } else return Promise.resolve();
         } catch (error) {
             return Promise.resolve();

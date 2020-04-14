@@ -511,3 +511,7 @@ export function deleteFavoritesItem(product_id) {
 export function deleteAllFavorites() {
     return $http.delete('/v1/lk/favorites/all');
 }
+
+export function getFavoritesAll() {
+    return $http.get('/v1/lk/favorites/all');
+}

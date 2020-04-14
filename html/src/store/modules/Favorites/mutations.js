@@ -2,6 +2,7 @@
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 
 export const SET_FAVORITES = 'SET_FAVORITES';
+export const SET_FAVORITES_ALL = 'SET_FAVORITES_ALL';
 export const SET_FAVORITES_MORE = 'SET_FAVORITES_MORE';
 
 export const SET_QUERY_PARAMS = 'SET_QUERY_PARAMS';
@@ -22,4 +23,7 @@ export default {
         state.orderField = orderField;
         state.orderDirection = orderDirection;
     },
+    [SET_FAVORITES_ALL](state, payload ) {
+        state.favoritesAll = payload;
+    }
 };

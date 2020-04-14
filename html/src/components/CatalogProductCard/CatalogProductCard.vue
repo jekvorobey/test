@@ -58,6 +58,11 @@ import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 
+import { mapGetters, mapActions, mapState } from 'vuex';
+
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
+
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 
@@ -141,14 +146,11 @@ export default {
             type: Boolean,
             default: true,
         },
-
-        inFavorites: {
-            type: Boolean,
-            default: false,
-        }
     },
 
     computed: {
+        ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+
         isObjectImage() {
             return this.image && this.image.id;
         },
@@ -172,6 +174,10 @@ export default {
                 (this.isObjectImage && generatePictureSourcePath(200, 200, this.image.id, this.image.sourceExt)) ||
                 this.image
             );
+        },
+
+        inFavorites() {
+            return this[IS_IN_FAVORITES](this.productId);
         },
     },
 

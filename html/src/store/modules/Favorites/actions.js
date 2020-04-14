@@ -3,15 +3,18 @@ import { storeErrorHandler } from '@util/store';
 
 import {
     getFavorites,
+    getFavoritesAll,
     addFavoritesItem,
     deleteFavoritesItem,
-    deleteAllFavorites
+    deleteAllFavorites,
 } from '@api';
 
-import { SET_FAVORITES, SET_QUERY_PARAMS } from './mutations';
+import { SET_FAVORITES, SET_QUERY_PARAMS, SET_FAVORITES_ALL } from './mutations';
+
+export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 
 export const FETCH_FAVORITES = 'FETCH_FAVORITES';
-export const SET_LOAD_PATH = 'SET_LOAD_PATH';
+export const FETCH_FAVORITES_ALL = 'FETCH_FAVORITES_ALL';
 
 export default {
 
@@ -43,4 +46,13 @@ export default {
             storeErrorHandler(FETCH_FAVORITES, error);
         }
     },
+
+    async [FETCH_FAVORITES_ALL]({ commit }) {
+        try {
+            const data = await getFavoritesAll();
+            commit(SET_FAVORITES_ALL, data);
+        } catch(error) {
+            storeErrorHandler(FETCH_FAVORITES_ALL, error);
+        }
+    }
 };
