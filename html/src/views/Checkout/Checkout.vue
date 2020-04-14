@@ -27,19 +27,18 @@
                                 Сумма заказа: {{ $t(`cart.summary.type.${checkoutType}`) }}
                                 <price v-bind="summary.sum" />
                             </p>
-                            <p class="checkout-view__main-panel-line">
-                                Скидка по промокоду <price v-bind="summary.promoDiscount" />
-                            </p>
 
                             <template v-if="isProduct">
                                 <p class="checkout-view__main-panel-line">
-                                    Оплата бонусами <price v-bind="summary.bonusDiscount" />
-                                </p>
-                                <p class="checkout-view__main-panel-line">
-                                    Оплата подарочным сертификатом <price v-bind="summary.certDiscount" />
-                                </p>
-                                <p class="checkout-view__main-panel-line">
                                     Доставка <price v-bind="summary.delivery" />
+                                </p>
+                                <p
+                                    class="checkout-view__main-panel-line"
+                                    v-for="discount in summary.discounts"
+                                    :key="discount.type"
+                                >
+                                    {{ $t(`cart.summary.discount.${discount.type}`) }}
+                                    <span>-<price v-bind="discount.value" /></span>
                                 </p>
                             </template>
 

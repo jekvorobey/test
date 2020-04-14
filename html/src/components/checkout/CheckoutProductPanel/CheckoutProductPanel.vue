@@ -42,7 +42,10 @@
                     @cardClick="onSetReceiveMethod(method)"
                 >
                     <p class="text-bold">{{ method.title }}</p>
-                    <p><price v-bind="method.price" /></p>
+                    <p>
+                        <price v-bind="method.price" />&nbsp;
+                        <price v-if="method.cost" class="text-grey text-sm text-strike" v-bind="method.cost" />
+                    </p>
                     <p class="text-grey text-sm">{{ method.description }}</p>
                 </checkout-option-card>
             </ul>

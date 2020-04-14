@@ -104,8 +104,13 @@
                                 <price v-bind="activeTabItem.summary.sum" />
                             </p>
 
-                            <p class="cart-view__main-panel-line">
-                                Скидка по промокоду <price v-bind="activeTabItem.summary.promoDiscount" />
+                            <p
+                                class="cart-view__main-panel-line"
+                                v-for="discount in activeTabItem.summary.discounts"
+                                :key="discount.type"
+                            >
+                                {{ $t(`cart.summary.discount.${discount.type}`) }}
+                                <span>-<price v-bind="discount.value" /></span>
                             </p>
 
                             <div class="cart-view__main-panel-total">

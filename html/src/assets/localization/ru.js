@@ -1,6 +1,6 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
 import { socials } from '@enums';
-import { receiveMethods } from '@enums/checkout';
+import { receiveMethods, discountType } from '@enums/checkout';
 import { genderType } from '@enums/profile';
 import { orderStatus, deliveryStatus } from '@enums/order';
 
@@ -189,6 +189,14 @@ const main = {
             type: {
                 product: 'Продукты',
                 masterclass: 'Мастер-классы',
+            },
+
+            discount: {
+                [discountType.PRODUCT]: 'Скидка на товар',
+                [discountType.DELIVERY]: 'Скидка на доставку',
+                [discountType.CART]: 'Скидка на корзину',
+                [discountType.CUSTOM]: 'Скидка для Вас',
+                [discountType.PROMOCODE]: 'Скидка по промокоду',
             },
         },
     },
