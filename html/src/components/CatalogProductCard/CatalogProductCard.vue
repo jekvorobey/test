@@ -44,9 +44,10 @@
         </div>
         <favorites-button
             class="catalog-product-card__wishlist-btn"
+            :class="{ 'catalog-product-card__wishlist-btn--active': inFavorites }"
+            v-if="showWishlistBtn"
             :isActive="inFavorites"
             @click.prevent="onFavoritesBtnClick"
-            v-if="showWishlistBtn"
         />
     </router-link>
 </template>
@@ -97,6 +98,11 @@ export default {
             default() {
                 return [];
             },
+        },
+
+        offerId: {
+            type: [String, Number],
+            required: true,
         },
 
         productId: {
@@ -187,11 +193,11 @@ export default {
 
     methods: {
         onBuyButtonClick() {
-            this.$emit('add-item', { id: this.productId, type: this.type });
+            this.$emit('add-item', { id: this.offerId, type: this.type });
         },
 
         onFavoritesBtnClick() {
-            this.$emit('add-favorites-item', { id: this.productId });
+            this.$emit('toggle-favorite-item', { id: this.productId });
         },
 
         onPreview() {
