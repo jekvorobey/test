@@ -69,6 +69,9 @@ import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { IS_IN_CART } from '@store/modules/Cart/getters';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
+
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
 import { requestStatus, fileExtension, modalName } from '@enums';
@@ -96,8 +99,8 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
-            modalState: (state) => state[MODALS][NAME] && state[MODALS][NAME].state,
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            modalState: state => state[MODALS][NAME] && state[MODALS][NAME].state,
         }),
 
         ...mapState(PREVIEW_MODULE, [PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS]),
@@ -106,7 +109,7 @@ export default {
 
         images() {
             const { media } = this[PRODUCT_PREVIEW] || {};
-            return media.slice(0, 4).map((i) => {
+            return media.slice(0, 4).map(i => {
                 return {
                     ...i,
                     bigImage: generatePictureSourcePath(300, 300, i.id, fileExtension.image.WEBP),
@@ -146,6 +149,7 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(PREVIEW_MODULE, [FETCH_PRODUCT_PREVIEW]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         onPickupPoints() {
             const { categoryCodes, code } = this[PRODUCT_PREVIEW] || {};
@@ -160,8 +164,8 @@ export default {
             this[FETCH_PRODUCT_PREVIEW](this.modalState);
         },
 
-        onWishlistStateChange() {
-            debugger;
+        onToggleFavorite() {
+            this[TOGGLE_FAVORITES_ITEM](this.productPreview.productId);
         },
 
         onCartStateChange() {

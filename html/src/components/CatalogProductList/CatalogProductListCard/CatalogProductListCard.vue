@@ -158,7 +158,6 @@ export default {
         },
 
         onToggleFavorite() {
-            debugger;
             this.$emit('toggle-favorite-item', { productId: this.item.productId });
         },
 
