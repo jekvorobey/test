@@ -7,7 +7,8 @@
                     <cart-product-card
                         class="add-to-cart-modal__card"
                         :key="product.id"
-                        :product-id="product.id"
+                        :offer-id="product.id"
+                        :product-id="product.productId"
                         :type="product.type"
                         :name="product.name"
                         :image="product.image"
@@ -134,7 +135,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
         ...mapState(CART_MODULE, [CART_DATA, RELATIVE_PRODUCTS]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
@@ -159,7 +160,7 @@ export default {
     watch: {
         [CART_DATA]() {
             const data = this[CART_DATA][this.modalState.type];
-            this.cartItem = data ? data.items.find((i) => i.p.id === this.modalState.offerId) : null;
+            this.cartItem = data ? data.items.find(i => i.p.id === this.modalState.offerId) : null;
         },
 
         modalState() {
@@ -170,6 +171,7 @@ export default {
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS]),
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
@@ -192,7 +194,7 @@ export default {
             const { offerId, storeId, referralCode, type, cookieName } = this.modalState;
             const data = this[CART_DATA][type];
 
-            this.cartItem = data ? data.items.find((i) => i.p.id === offerId) : null;
+            this.cartItem = data ? data.items.find(i => i.p.id === offerId) : null;
             if (!this.cartItem) this[ADD_CART_ITEM]({ offerId, storeId, referralCode, cookieName });
             this[FETCH_RELATIVE_PRODUCTS]({ page: getRandomIntInclusive(1, 4) });
         },

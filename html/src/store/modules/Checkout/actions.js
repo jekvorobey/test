@@ -69,11 +69,11 @@ export default {
     [CHANGE_CITY]({ commit, state }, payload) {
         commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.PENDING });
         return changeCity({ city: payload, data: state.checkoutData })
-            .then(data => {
+            .then((data) => {
                 commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.SUCCESS });
                 commit(SET_DATA, data);
             })
-            .catch(error => {
+            .catch((error) => {
                 commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.ERROR });
                 storeErrorHandler(CHANGE_CITY, true)(error);
             });
@@ -82,11 +82,11 @@ export default {
     [SET_RECEIVE_METHOD]({ commit, state }, payload) {
         commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.PENDING });
         return setReceiveMethod({ method: payload, data: state.checkoutData })
-            .then(data => {
+            .then((data) => {
                 commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.SUCCESS });
                 commit(SET_DATA, data);
             })
-            .catch(error => {
+            .catch((error) => {
                 commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.ERROR });
                 storeErrorHandler(SET_RECEIVE_METHOD, true)(error);
             });
@@ -95,11 +95,11 @@ export default {
     [SET_ADDRESS]({ commit, state }, payload) {
         commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
         return setAddress({ address: payload, data: state.checkoutData })
-            .then(data => {
+            .then((data) => {
                 commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
                 commit(SET_DATA, data);
             })
-            .catch(error => {
+            .catch((error) => {
                 commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
                 storeErrorHandler(SET_ADDRESS, true)(error);
             });
@@ -108,11 +108,11 @@ export default {
     [SET_PICKUP_POINT]({ commit, state }, payload) {
         commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
         return setPickupPoint({ pickupPoint: payload, data: state.checkoutData })
-            .then(data => {
+            .then((data) => {
                 commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
                 commit(SET_DATA, data);
             })
-            .catch(error => {
+            .catch((error) => {
                 commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
                 storeErrorHandler(SET_PICKUP_POINT, true)(error);
             });
@@ -121,11 +121,11 @@ export default {
     [ADD_BONUS]({ commit, state }, payload) {
         commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.PENDING });
         return addBonus({ bonus: payload, data: state.checkoutData })
-            .then(data => {
+            .then((data) => {
                 commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.SUCCESS });
                 commit(SET_DATA, data);
             })
-            .catch(error => {
+            .catch((error) => {
                 commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.ERROR });
                 storeErrorHandler(ADD_BONUS, true)(error);
             });
@@ -134,11 +134,11 @@ export default {
     [DELETE_BONUS]({ commit, state }) {
         commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.PENDING });
         return deleteBonus({ data: state.checkoutData })
-            .then(data => {
+            .then((data) => {
                 commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.SUCCESS });
                 commit(SET_DATA, data);
             })
-            .catch(error => {
+            .catch((error) => {
                 commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.ERROR });
                 storeErrorHandler(DELETE_BONUS, true)(error);
             });
@@ -147,11 +147,11 @@ export default {
     [ADD_CERTIFICATE]({ commit, state }, payload) {
         commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.PENDING });
         return addCertificate({ code: payload, data: state.checkoutData })
-            .then(data => {
+            .then((data) => {
                 commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.SUCCESS });
                 commit(SET_DATA, data);
             })
-            .catch(error => {
+            .catch((error) => {
                 commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.ERROR });
                 storeErrorHandler(ADD_CERTIFICATE, true)(error);
             });
@@ -160,11 +160,11 @@ export default {
     [DELETE_CERTIFICATE]({ commit, state }, payload) {
         commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.PENDING });
         return deleteCertificate({ code: payload, data: state.checkoutData })
-            .then(data => {
+            .then((data) => {
                 commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.SUCCESS });
                 commit(SET_DATA, data);
             })
-            .catch(error => {
+            .catch((error) => {
                 commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.ERROR });
                 storeErrorHandler(DELETE_CERTIFICATE, true)(error);
             });
@@ -173,11 +173,11 @@ export default {
     [ADD_PROMOCODE]({ commit, state }, payload) {
         commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
         return addPromocode({ promocode: payload, data: state.checkoutData })
-            .then(data => {
+            .then((data) => {
                 commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
                 commit(SET_DATA, data);
             })
-            .catch(error => {
+            .catch((error) => {
                 commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
                 storeErrorHandler(ADD_PROMOCODE, true)(error);
             });
@@ -186,11 +186,11 @@ export default {
     [DELETE_PROMOCODE]({ commit, state }) {
         commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
         return deletePromocode({ data: state.checkoutData })
-            .then(data => {
+            .then((data) => {
                 commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
                 commit(SET_DATA, data);
             })
-            .catch(error => {
+            .catch((error) => {
                 commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
                 storeErrorHandler(DELETE_PROMOCODE, true)(error);
             });
@@ -214,7 +214,6 @@ export default {
     },
 
     [ADD_RECIPIENT]({ dispatch, commit }, recipient) {
-        debugger;
         commit(M_ADD_RECIPIENT, recipient);
     },
 
@@ -244,16 +243,16 @@ export default {
 
     [COMMIT_DATA]({ state }) {
         return commitCheckoutData({ data: state.checkoutData })
-            .then(data => data)
-            .catch(error => storeErrorHandler(COMMIT_DATA, true)(error));
+            .then((data) => data)
+            .catch((error) => storeErrorHandler(COMMIT_DATA, true)(error));
     },
 
     [FETCH_CHECKOUT_DATA]({ commit }, payload) {
         return getCheckoutData(payload)
-            .then(data => {
+            .then((data) => {
                 commit(SET_TYPE, payload);
                 commit(SET_DATA, data);
             })
-            .catch(error => storeErrorHandler(FETCH_CHECKOUT_DATA)(error));
+            .catch((error) => storeErrorHandler(FETCH_CHECKOUT_DATA)(error));
     },
 };

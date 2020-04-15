@@ -46,7 +46,7 @@ export default {
     },
 
     [CHANGE_CHUNK_DATE](state, { id, selectedDate }) {
-        const chunkItem = state.checkoutData.input.deliveryType.items.find(i => i.id === id);
+        const chunkItem = state.checkoutData.input.deliveryType.items.find((i) => i.id === id);
         if (!chunkItem) return;
         chunkItem.selectedDate = selectedDate;
     },
@@ -65,7 +65,6 @@ export default {
     },
 
     [ADD_RECIPIENT](state, payload) {
-        debugger;
         state.checkoutData.recipients.push(payload);
         state.checkoutData.input.recipient = payload;
     },
