@@ -7,6 +7,7 @@
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
             </v-picture>
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
+
             <div class="catalog-product-card__controls">
                 <buy-button
                     v-if="showBuyBtn"
@@ -20,6 +21,7 @@
                 </v-link>
             </div>
         </div>
+
         <div class="catalog-product-card__body">
             <div class="catalog-product-card__prices">
                 <price class="text-bold catalog-product-card__price" v-if="price" v-bind="price" />
@@ -29,7 +31,11 @@
                     v-bind="oldPrice"
                 />
             </div>
-            <div class="link--sm catalog-product-card__link">{{ name }}</div>
+
+            <div class="link--sm catalog-product-card__link">
+                {{ name }}
+            </div>
+
             <v-rating class="catalog-product-card__rating" :value="rating" readonly>
                 <template v-slot:activeLabel>
                     <v-svg name="star-small" width="16" height="16" />
@@ -39,9 +45,11 @@
                 </template>
             </v-rating>
         </div>
+
         <div class="catalog-product-card__tags">
             <tag class="catalog-product-card__tags-item" v-for="tag in tags" :key="tag.id" :text="tag.name" />
         </div>
+
         <favorites-button
             class="catalog-product-card__wishlist-btn"
             :class="{ 'catalog-product-card__wishlist-btn--active': inFavorites }"
@@ -180,10 +188,7 @@ export default {
         },
 
         defaultImg() {
-            return (
-                (this.isObjectImage && generatePictureSourcePath(200, 200, this.image.id)) ||
-                this.image
-            );
+            return (this.isObjectImage && generatePictureSourcePath(200, 200, this.image.id)) || this.image;
         },
 
         inFavorites() {

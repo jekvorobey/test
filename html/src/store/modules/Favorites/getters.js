@@ -10,19 +10,20 @@ export const IS_IN_FAVORITES = 'isInFavorites';
 
 export default {
     [PAGES_COUNT](state) {
-        return Math.ceil(state.favorites.range / FAVORITES_PAGE_SIZE);
+        return Math.ceil(state.range / FAVORITES_PAGE_SIZE);
     },
 
-    [FAVORITES_MAP](state) {
+    [FAVORITES_MAP]({ favoritesAll }) {
         const result = {};
-        for (let i = 0; i < state.favoritesAll.length; i++) {
-            const id = state.favoritesAll[i];
+        for (let i = 0; i < favoritesAll.length; i++) {
+            const id = favoritesAll[i];
             result[id] = id;
         }
         return result;
     },
 
     [IS_IN_FAVORITES]: (state, getters) => (id) => {
-        return !!getters[FAVORITES_MAP][id];
+        const result = Boolean(getters[FAVORITES_MAP][id]);
+        return result;
     },
 };

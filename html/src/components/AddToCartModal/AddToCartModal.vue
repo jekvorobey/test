@@ -46,7 +46,8 @@
                         <li class="add-to-cart-modal__relative-item" v-for="item in products" :key="item.id">
                             <catalog-product-card
                                 class="add-to-cart-modal__relative-card"
-                                :product-id="item.id"
+                                :offer-id="item.id"
+                                :product-id="item.productId"
                                 :name="item.name"
                                 :type="item.type"
                                 :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
@@ -58,6 +59,7 @@
                                 :show-buy-btn="item.stock.qty > 0"
                                 @add-item="onAddToCart(item)"
                                 @preview="onPreview(item.code)"
+                                @toggle-favorite-item="onToggleFavorite(item)"
                             />
                         </li>
                     </ul>
@@ -99,6 +101,9 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as CART_MODULE, CART_DATA, RELATIVE_PRODUCTS } from '@store/modules/Cart';
 import { ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS } from '@store/modules/Cart/actions';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
+
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { modalName } from '@enums';
 import { getRandomIntInclusive } from '@util';
@@ -177,6 +182,10 @@ export default {
                 open: true,
                 state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
+        },
+
+        onToggleFavorite({ productId }) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
         },
 
         fetchData() {

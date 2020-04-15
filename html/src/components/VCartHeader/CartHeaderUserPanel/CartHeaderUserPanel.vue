@@ -7,16 +7,15 @@
         </help-panel>
         <template v-if="hasSession">
             <div class="cart-header-user-panel__controls">
+                <router-link class="cart-header-user-panel__btn" to="/favorites">
+                    <v-svg name="wishlist-middle" width="24" height="24" />
+                </router-link>
+
                 <profile-navigation-panel class="cart-header-user-panel__account">
                     <button @click.prevent="onRegister" class="cart-header-user-panel__btn">
                         <v-svg name="account-middle" width="24" height="24" />
                     </button>
                 </profile-navigation-panel>
-                <!-- Скрыто из-за отсутствия избранных
-                    <button class="cart-header-user-panel__btn">
-                    <v-svg name="wishlist-middle" width="24" height="24" />
-                    </button>
-                -->
             </div>
         </template>
     </div>
@@ -52,7 +51,7 @@ export default {
     computed: {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
+            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
         }),
     },
 

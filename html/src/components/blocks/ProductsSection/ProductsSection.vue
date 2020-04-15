@@ -7,21 +7,22 @@
                 <div class="products-section__cards">
                     <catalog-product-card
                         class="products-section__card"
-                        v-for="product in items"
-                        :key="product.id"
-                        :product-id="product.id"
-                        :name="product.name"
-                        :type="product.type"
-                        :href="`/catalog/${product.categoryCodes[product.categoryCodes.length - 1]}/${product.code}`"
-                        :image="product.image"
-                        :price="product.price"
-                        :old-price="product.oldPrice"
-                        :tags="product.tags"
-                        :rating="product.rating"
-                        :show-buy-btn="product.stock.qty > 0"
-                        @add-item="onAddToCart(product)"
-                        @preview="onPreview(product.code)"
-                        @add-favorites-item="onAddToFavorites(product)"
+                        v-for="item in items"
+                        :key="item.id"
+                        :offer-id="item.id"
+                        :product-id="item.productId"
+                        :name="item.name"
+                        :type="item.type"
+                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                        :image="item.image"
+                        :price="item.price"
+                        :old-price="item.oldPrice"
+                        :tags="item.tags"
+                        :rating="item.rating"
+                        :show-buy-btn="item.stock.qty > 0"
+                        @add-item="onAddToCart(item)"
+                        @preview="onPreview(item.code)"
+                        @toggle-favorite-item="onToggleFavorite(item)"
                     />
                     <!-- #58322  -->
                     <!-- <v-button class="btn--outline products-section__link" :to="btnLink">
@@ -49,12 +50,12 @@ import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
-import { ADD_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
+import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { fileExtension } from '@enums';
+import { fileExtension, modalName } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 import './ProductsSection.css';
 
@@ -105,7 +106,7 @@ export default {
     methods: {
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(FAVORITES_MODULE, [ADD_FAVORITES_ITEM]),
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: 'quick-view-modal', open: true, state: { code } });
@@ -133,14 +134,14 @@ export default {
 
         onAddToCart(item) {
             this[CHANGE_MODAL_STATE]({
-                name: 'add-to-cart-modal',
+                name: modalName.general.ADD_TO_CART,
                 open: true,
                 state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
 
-        onAddToFavorites(item) {
-            this[ADD_FAVORITES_ITEM]({ productId: item.productId });
+        onToggleFavorite({ productId }) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
         },
     },
 };

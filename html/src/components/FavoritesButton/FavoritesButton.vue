@@ -1,7 +1,15 @@
 <template>
     <v-link tag="button" v-on="handlers">
-        <v-svg name="wishlist-full" width="18" height="20" v-if="isActive" />
-        <v-svg name="wishlist-middle" width="18" height="20" v-else />
+        <template v-if="isSmall">
+            <v-svg name="wishlist-small-full" width="16" height="16" v-if="isActive" />
+            <v-svg name="wishlist-small" width="16" height="16" v-else />
+        </template>
+        <template v-else>
+            <v-svg name="wishlist-full" width="24" height="24" v-if="isActive" />
+            <v-svg name="wishlist-middle" width="24" height="24" v-else />
+        </template>
+
+        <slot />
     </v-link>
 </template>
 
@@ -17,6 +25,8 @@ import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 import { modalName } from '@enums';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/wishlist-full.svg';
+import '@images/sprites/wishlist-small.svg';
+import '@images/sprites/wishlist-small-full.svg';
 import './FavoritesButton.css';
 
 export default {
@@ -32,6 +42,11 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        isSmall: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
@@ -40,7 +55,7 @@ export default {
         handlers() {
             const keys = Object.keys(this.$listeners);
             const handlers = {};
-            keys.forEach((k) => (handlers[k] = (e) => this.$emit(k, e)));
+            keys.forEach(k => (handlers[k] = e => this.$emit(k, e)));
             handlers.click = this.onBtnClick;
             return handlers;
         },

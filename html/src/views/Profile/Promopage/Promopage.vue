@@ -47,8 +47,8 @@
             </div>
 
             <ul class="promopage-view__panel-list">
-                <li class="promopage-view__panel-item" v-for="product in products" :key="product.id">
-                    <catalog-product-card class="promopage-view__panel-card" v-bind="product" />
+                <li class="promopage-view__panel-item" v-for="item in products" :key="item.id">
+                    <catalog-product-card class="promopage-view__panel-card" v-bind="item" :offer-id="item.id" />
                     <button class="promopage-view__panel-item-btn" @click.prevent="onDeleteProduct(product.productId)">
                         <v-svg name="cross" width="24" height="24" />
                     </button>

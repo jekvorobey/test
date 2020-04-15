@@ -115,12 +115,13 @@
                     <product-cart-panel
                         v-observe-visibility="onPriceVisibilityChanged"
                         class="product-view__header-detail-section product-view__header-detail-panels"
+                        :product-id="product.productId"
                         :price="product.price"
                         :old-price="product.oldPrice"
                         :bonus="product.bonus"
                         :disabled="!canBuy"
                         @cart="onBuyProduct"
-                        @wishlist="onWishlistStateChange"
+                        @wishlist="onToggleFavorite(product.productId)"
                     >
                         {{ buyBtnText }}
                     </product-cart-panel>
@@ -209,7 +210,8 @@
                         >
                             <catalog-product-card
                                 class="product-view__profitable-card"
-                                :product-id="item.id"
+                                :offer-id="item.id"
+                                :product-id="item.productId"
                                 :name="item.name"
                                 :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
                                 :image="item.image"
@@ -481,20 +483,22 @@
                 <v-slider class="product-view__like-slider" name="also-like" :options="sliderOptions">
                     <catalog-product-card
                         class="swiper-slide product-view__like-card"
-                        v-for="product in featuredProducts.items"
-                        :key="product.id"
-                        :product-id="product.id"
-                        :name="product.name"
-                        :type="product.type"
-                        :href="`/catalog/${product.categoryCodes[product.categoryCodes.length - 1]}/${product.code}`"
-                        :image="product.image"
-                        :price="product.price"
-                        :old-price="product.oldPrice"
-                        :tags="product.tags"
-                        :rating="product.rating"
-                        :show-buy-btn="product.stock.qty > 0"
-                        @add-item="onAddToCart(product)"
-                        @preview="onPreview(product.code)"
+                        v-for="item in featuredProducts.items"
+                        :key="item.id"
+                        :offer-id="item.id"
+                        :product-id="item.productId"
+                        :name="item.name"
+                        :type="item.type"
+                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                        :image="item.image"
+                        :price="item.price"
+                        :old-price="item.oldPrice"
+                        :tags="item.tags"
+                        :rating="item.rating"
+                        :show-buy-btn="item.stock.qty > 0"
+                        @add-item="onAddToCart(item)"
+                        @preview="onPreview(item.code)"
+                        @toggle-favorite-item="onToggleFavorite(item.productId)"
                     />
                 </v-slider>
             </div>
@@ -544,18 +548,20 @@
                 <div class="product-view__history-grid">
                     <catalog-product-card
                         class="product-view__history-card"
-                        v-for="product in featuredProducts.items.slice(0, 6)"
-                        :key="product.id"
-                        :product-id="product.id"
-                        :type="product.type"
-                        :name="product.name"
-                        :href="`/catalog/${product.categoryCodes[product.categoryCodes.length - 1]}/${product.code}`"
-                        :image="product.image"
-                        :tags="product.tags"
-                        :rating="product.rating"
-                        :show-buy-btn="product.stock.qty > 0"
-                        @add-item="onAddToCart(product)"
-                        @preview="onPreview(product.code)"
+                        v-for="item in featuredProducts.items.slice(0, 6)"
+                        :key="item.id"
+                        :offer-id="item.id"
+                        :product-id="item.productId"
+                        :type="item.type"
+                        :name="item.name"
+                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                        :image="item.image"
+                        :tags="item.tags"
+                        :rating="item.rating"
+                        :show-buy-btn="item.stock.qty > 0"
+                        @add-item="onAddToCart(item)"
+                        @preview="onPreview(item.code)"
+                        @toggle-favorite-item="onToggleFavorite(item.productId)"
                     />
                 </div>
             </div>
@@ -655,6 +661,8 @@ import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '@util/store';
@@ -969,6 +977,7 @@ export default {
         ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         async fetchProduct(to, from, next) {
             const {
@@ -1031,6 +1040,10 @@ export default {
             }
         },
 
+        onToggleFavorite(productId) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
+        },
+
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
         },
@@ -1039,10 +1052,6 @@ export default {
             const { media } = this.productImages;
             if (!media || !media.length) return;
             this[CHANGE_MODAL_STATE]({ name: modalName.product.GALLERY, open: true });
-        },
-
-        onWishlistStateChange() {
-            debugger;
         },
 
         onBuyProduct() {

@@ -42,7 +42,8 @@
                                         v-for="({ p: product, count }, index) in type.items"
                                         :data-index="index"
                                         :key="product.id"
-                                        :product-id="product.id"
+                                        :offer-id="product.id"
+                                        :product-id="product.productId"
                                         :type="product.type"
                                         :name="product.name"
                                         :image="product.image"
@@ -51,6 +52,7 @@
                                         :count="count"
                                         :href="generateItemProductUrl(product)"
                                         @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
+                                        @toggle-favorite-item="onToggleFavorite(product)"
                                         @countChange="onAddCartItem(product.id, product.stock.storeId, $event.count)"
                                     />
                                 </transition-group>
@@ -153,7 +155,8 @@
                         class="swiper-slide cart-view__featured-card"
                         v-for="item in featuredProducts"
                         :key="item.id"
-                        :product-id="item.id"
+                        :offer-id="item.id"
+                        :product-id="item.productId"
                         :type="item.type"
                         :name="item.name"
                         :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
@@ -165,6 +168,7 @@
                         :show-buy-btn="item.stock.qty > 0"
                         @add-item="onAddCartItem(item.id, item.stock.storeId)"
                         @preview="onPreview(item.code)"
+                        @toggle-favorite-item="onToggleFavorite(item)"
                     />
                 </v-slider>
             </div>
@@ -209,6 +213,9 @@ import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { cancelRoute } from '@settings';
 import { breakpoints, modalName } from '@enums';
@@ -307,12 +314,17 @@ export default {
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM, DELETE_ALL_ITEMS]),
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         generateItemProductUrl(product) {
             if (Array.isArray(product.categoryCodes)) {
                 const categoryCode = product.categoryCodes[product.categoryCodes.length - 1];
                 return generateProductUrl(categoryCode, product.code);
             }
+        },
+
+        onToggleFavorite({ productId }) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
         },
 
         onPreview(code) {
@@ -323,16 +335,16 @@ export default {
             this[DELETE_ALL_ITEMS]();
         },
 
-        prepareBonus(value) {
-            return preparePrice(value);
-        },
-
         onAddCartItem(offerId, storeId, count) {
             this[ADD_CART_ITEM]({ offerId, storeId, count });
         },
 
         onDeleteCartItem(offerId, storeId) {
             this[DELETE_CART_ITEM]({ offerId, storeId });
+        },
+
+        prepareBonus(value) {
+            return preparePrice(value);
         },
 
         onBeforeEnterItems(el) {

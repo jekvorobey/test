@@ -26,7 +26,8 @@
                         class="swiper-slide not-found-view__featured-card"
                         v-for="item in featuredProducts"
                         :key="item.id"
-                        :product-id="item.id"
+                        :offer-id="item.id"
+                        :product-id="item.productId"
                         :type="item.type"
                         :name="item.name"
                         :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
@@ -38,6 +39,7 @@
                         :show-buy-btn="item.stock.qty > 0"
                         @add-item="onAddToCart(item)"
                         @preview="onPreview(item.code)"
+                        @toggle-favorite-item="onToggleFavorite(item)"
                     />
                 </v-slider>
             </div>
@@ -58,6 +60,9 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as FEATURED_MODULE, FEATURED_PRODUCTS } from '@store/modules/Featured';
 import { FETCH_FEATURED_PRODUCTS } from '@store/modules/Featured/actions';
+
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { breakpoints, modalName } from '@enums';
 
@@ -120,6 +125,11 @@ export default {
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FEATURED_MODULE, [FETCH_FEATURED_PRODUCTS]),
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
+
+        onToggleFavorite({ productId }) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
+        },
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });

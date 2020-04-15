@@ -35,11 +35,11 @@ export default {
     },
 
     [ADD_FAVORITES_ITEM](state, productId) {
-        state.favoritesAll.push(productId);
+        state.favoritesAll = [...state.favoritesAll, productId];
     },
 
     [DELETE_FAVORITES_ITEM](state, productId) {
-        const id = state.favoritesAll.indexOf(id);
+        const id = state.favoritesAll.indexOf(productId);
         if (id !== -1) state.favoritesAll.splice(id, 1);
 
         const productIndex = state.favorites.findIndex((item) => item.productId === productId);

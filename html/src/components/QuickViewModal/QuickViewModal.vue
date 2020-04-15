@@ -27,12 +27,13 @@
                     />
                     <product-cart-panel
                         class="quick-view-modal__detail-cart"
+                        :productId="productPreview.productId"
                         :price="productPreview.price"
                         :old-price="productPreview.oldPrice"
                         :bonus="productPreview.bonus"
                         :disabled="!canBuy"
                         @cart="onCartStateChange"
-                        @wishlist="onWishlistStateChange"
+                        @wishlist="onToggleFavorite(productPreview.productId)"
                     >
                         {{ buyBtnText }}
                     </product-cart-panel>

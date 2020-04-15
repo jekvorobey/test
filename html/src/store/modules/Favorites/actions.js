@@ -49,7 +49,7 @@ export default {
     async [ADD_FAVORITES_ITEM]({ commit }, productId) {
         try {
             await addFavoritesItem(productId);
-            commit(ADD_TO_FAVORITES_ALL, productId);
+            commit(ADD_FAVORITES_ITEM, productId);
         } catch (error) {
             storeErrorHandler(ADD_FAVORITES_ITEM, error);
         }
