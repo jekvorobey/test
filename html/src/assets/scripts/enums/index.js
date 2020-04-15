@@ -1,3 +1,43 @@
+export const modalName = Object.freeze({
+    general: {
+        LOGIN: 'login-modal',
+        REGISTRATION: 'registration-modal',
+        QUICK_VIEW: 'quick-view-modal',
+        ADD_TO_CART: 'add-to-cart-modal',
+        CITY_SELECTION: 'city-selection-modal',
+        NOTIFICATION: 'notification-modal',
+    },
+
+    product: {
+        GALLERY: 'gallery-modal',
+    },
+
+    checkout: {
+        RECIPIENT_EDIT: 'checkout-recipient-modal',
+        DATE_EDIT: 'checkout-date-modal',
+        PICKUP_POINT: 'checkout-pickup-point-modal',
+    },
+
+    profile: {
+        MESSAGE: 'message-modal',
+        ADDRESS_EDIT: 'address-edit-modal',
+        REFERRAL_CODE_EDIT: 'referral-code-edit-modal',
+        PASSWORD_EDIT: 'password-edit-modal',
+        ACTIVITIES_EDIT: 'activities-edit-modal',
+        PORTFOLIO_EDIT: 'portfolio-edit-modal',
+        EMAIL_EDIT: 'email-edit-modal',
+        PHONE_EDIT: 'phone-edit-modal',
+        PERSONAL_EDIT: 'personal-edit-modal',
+        DETAILS: 'details-modal',
+        NAVIGATION: 'navigation-modal',
+        PREFERENCE_EDIT: 'preference-edit-modal',
+
+        PROMO_ADD_BY_LINK: 'promopage-add-by-link-modal',
+        PROMO_ADD: 'promopage-add-modal',
+        PROMO_EDIT: 'promopage-edit-modal',
+    },
+});
+
 /**
  * Имена сервисов
  */

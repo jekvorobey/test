@@ -356,13 +356,8 @@ import CheckoutPickupPointModal from '@components/checkout/CheckoutPickupPointMo
 import CheckoutPickupPointPanel from '@components/checkout/CheckoutPickupPointPanel/CheckoutPickupPointPanel.vue';
 import CheckoutAddressPanel from '@components/checkout/CheckoutAddressPanel/CheckoutAddressPanel.vue';
 
-import CheckoutRecipientModal, {
-    NAME as CHECKOUT_RECIPIENT_MODAL,
-} from '@components/checkout/CheckoutRecipientModal/CheckoutRecipientModal.vue';
-
-import AddressEditModal, {
-    NAME as ADDRESS_EDIT_MODAL,
-} from '@components/profile/AddressEditModal/AddressEditModal.vue';
+import CheckoutRecipientModal from '@components/checkout/CheckoutRecipientModal/CheckoutRecipientModal.vue';
+import AddressEditModal from '@components/profile/AddressEditModal/AddressEditModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
@@ -424,7 +419,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import validationMixin, { required } from '@plugins/validation';
 import { formatPhoneNumber } from '@util';
 import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '@enums/checkout';
-import { requestStatus } from '@enums';
+import { requestStatus, modalName } from '@enums';
 
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
@@ -443,7 +438,7 @@ function prepareChunkItem(chunkItem) {
     return {
         ...chunkItem,
         selectedDate: new Date(chunkItem.selectedDate),
-        availableDates: chunkItem.availableDates.map(d => new Date(d)),
+        availableDates: chunkItem.availableDates.map((d) => new Date(d)),
     };
 }
 
@@ -487,7 +482,7 @@ export default {
             case receiveMethods.PICKUP:
                 return {
                     [AGREEMENT]: {
-                        valid: value => value === true,
+                        valid: (value) => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -504,7 +499,7 @@ export default {
             default:
                 return {
                     [AGREEMENT]: {
-                        valid: value => value === true,
+                        valid: (value) => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -530,13 +525,15 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(MODAL_MODULE, {
-            isPickupPointModalOpen: state =>
+            isPickupPointModalOpen: (state) =>
                 state[MODALS][CheckoutPickupPointModal.name] && state[MODALS][CheckoutPickupPointModal.name].open,
-            isDateModalOpen: state =>
+            isDateModalOpen: (state) =>
                 state[MODALS][CheckoutDateModal.name] && state[MODALS][CheckoutDateModal.name].open,
-            isAddressModalOpen: state => state[MODALS][ADDRESS_EDIT_MODAL] && state[MODALS][ADDRESS_EDIT_MODAL].open,
-            isRecipientModalOpen: state =>
-                state[MODALS][CHECKOUT_RECIPIENT_MODAL] && state[MODALS][CHECKOUT_RECIPIENT_MODAL].open,
+            isAddressModalOpen: (state) =>
+                state[MODALS][modalName.profile.ADDRESS_EDIT] && state[MODALS][modalName.profile.ADDRESS_EDIT].open,
+            isRecipientModalOpen: (state) =>
+                state[MODALS][modalName.checkout.RECIPIENT_EDIT] &&
+                state[MODALS][modalName.checkout.RECIPIENT_EDIT].open,
         }),
 
         ...mapGetters(CHECKOUT_MODULE, [
@@ -697,7 +694,7 @@ export default {
             }
 
             const note = 'Доставим';
-            const uniqueDates = Array.from(new Set(deliveryType.items.map(i => i.selectedDate)));
+            const uniqueDates = Array.from(new Set(deliveryType.items.map((i) => i.selectedDate)));
             return uniqueDates.reduce(
                 (accum, current, index) =>
                     accum + `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(this[LOCALE], options)}`,
@@ -718,7 +715,7 @@ export default {
         },
 
         onSetDeliveryType(id) {
-            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find(t => t.id === id);
+            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find((t) => t.id === id);
             this[SET_DELIVERY_TYPE](selectedType);
         },
 
@@ -728,7 +725,7 @@ export default {
 
         onChangeDate(chunkItemId) {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
-            const chunkItem = deliveryType.items.find(i => i.id === chunkItemId);
+            const chunkItem = deliveryType.items.find((i) => i.id === chunkItemId);
 
             const state = {
                 id: chunkItem.id,
@@ -754,14 +751,14 @@ export default {
         onChangeRecipient(recipient, index) {
             this.recipientIndexToChange = index;
             this[CHANGE_MODAL_STATE]({
-                name: CHECKOUT_RECIPIENT_MODAL,
+                name: modalName.checkout.RECIPIENT_EDIT,
                 open: true,
                 state: { recipient: { ...recipient } },
             });
         },
 
         onAddRecipient() {
-            this[CHANGE_MODAL_STATE]({ name: CHECKOUT_RECIPIENT_MODAL, open: true, state: { recipient: {} } });
+            this[CHANGE_MODAL_STATE]({ name: modalName.checkout.RECIPIENT_EDIT, open: true, state: { recipient: {} } });
         },
 
         onSaveRecipient(recipient) {
@@ -776,11 +773,15 @@ export default {
 
         onChangeAddress({ address, index }) {
             this.addressIndexToChange = index;
-            this[CHANGE_MODAL_STATE]({ name: ADDRESS_EDIT_MODAL, open: true, state: { address: { ...address } } });
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.profile.ADDRESS_EDIT,
+                open: true,
+                state: { address: { ...address } },
+            });
         },
 
         onAddAddress() {
-            this[CHANGE_MODAL_STATE]({ name: ADDRESS_EDIT_MODAL, open: true, state: { address: {} } });
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.ADDRESS_EDIT, open: true, state: { address: {} } });
         },
 
         onSaveAddress(address) {

@@ -30,25 +30,21 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import VClamp from 'vue-clamp';
 
 import HelpPanel from '@components/HelpPanel/HelpPanel.vue';
-import { NAME as CITY_SELECTION_MODAL_NAME } from '@components/CitySelectionModal/CitySelectionModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, IS_CITY_CONFIRMATION_OPEN } from '@store';
-
 import { NAME as SEARCH_MODULE, SEARCH } from '@store/modules/Search';
-
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
-
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { modalName } from '@enums';
 import '@images/sprites/gift.svg';
 import '@images/sprites/box.svg';
 import '@images/sprites/delivery.svg';
 import '@images/sprites/pin.svg';
 import '@images/sprites/arrow-down.svg';
-
 import './HeaderTop.critical.css';
 
 export default {
@@ -65,7 +61,7 @@ export default {
         ...mapState([SCROLL]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
         ...mapState(GEO_MODULE, {
-            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
 
         isTabletLg() {
@@ -78,7 +74,7 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onOpenCitySelection() {
-            this[CHANGE_MODAL_STATE]({ name: CITY_SELECTION_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.CITY_SELECTION, open: true });
         },
     },
 };

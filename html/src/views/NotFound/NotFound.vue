@@ -49,9 +49,6 @@
 import VButton from '@controls/VButton/VButton.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 
-import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
-import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
-
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -62,7 +59,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as FEATURED_MODULE, FEATURED_PRODUCTS } from '@store/modules/Featured';
 import { FETCH_FEATURED_PRODUCTS } from '@store/modules/Featured/actions';
 
-import { breakpoints } from '@enums';
+import { breakpoints, modalName } from '@enums';
 
 import './NotFound.css';
 
@@ -109,11 +106,6 @@ export default {
     },
 
     computed: {
-        ...mapState(MODAL_MODULE, {
-            isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
-            isAddToCartOpen: state =>
-                state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
-        }),
         ...mapState(FEATURED_MODULE, [FEATURED_PRODUCTS]),
 
         isTabletLg() {
@@ -130,12 +122,12 @@ export default {
         ...mapActions(FEATURED_MODULE, [FETCH_FEATURED_PRODUCTS]),
 
         onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
         },
 
         onAddToCart(item) {
             this[CHANGE_MODAL_STATE]({
-                name: ADD_TO_CART_MODAL_NAME,
+                name: modalName.general.ADD_TO_CART,
                 open: true,
                 state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });

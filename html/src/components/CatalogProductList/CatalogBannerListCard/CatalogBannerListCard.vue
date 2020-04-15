@@ -22,7 +22,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import { generatePictureSourcePath } from '@util/file';
-import { fileExtension } from '../../../assets/scripts/enums';
+import { fileExtension } from '@enums';
 import './CatalogBannerListCard.css';
 
 const btnType = Object.freeze({

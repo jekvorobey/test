@@ -34,9 +34,10 @@ import validationMixin, { required } from '@plugins/validation';
 import { mapActions } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+import { modalName } from '@enums';
 import './MessageModal.css';
 
-export const NAME = 'message-modal';
+const NAME = modalName.profile.MESSAGE;
 
 export default {
     name: NAME,

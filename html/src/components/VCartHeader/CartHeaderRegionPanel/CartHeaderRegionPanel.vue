@@ -15,21 +15,17 @@
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue';
 import VClamp from 'vue-clamp';
-
-import { NAME as CITY_SELECTION_MODAL_NAME } from '@components/CitySelectionModal/CitySelectionModal.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
-
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { modalName } from '@enums';
 import '@images/sprites/pin.svg';
-
 import './CartHeaderRegionPanel.css';
 
 export default {
@@ -42,7 +38,7 @@ export default {
 
     computed: {
         ...mapState(GEO_MODULE, {
-            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
     },
 
@@ -51,8 +47,8 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onOpenCitySelection() {
-            this[CHANGE_MODAL_STATE]({ name: CITY_SELECTION_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.CITY_SELECTION, open: true });
         },
-    }
+    },
 };
 </script>

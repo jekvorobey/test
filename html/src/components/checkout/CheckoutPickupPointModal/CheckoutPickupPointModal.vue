@@ -127,12 +127,12 @@ import { PICKUP_POINTS, SELECTED_DELIVERY_METHOD_ID, DELIVERY_METHODS } from '@s
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { receiveTypes } from '@enums';
+import { receiveTypes, modalName } from '@enums';
 import pin from '@images/icons/pin-filled.svg';
 import '@images/sprites/arrow-small.svg';
 import './CheckoutPickupPointModal.css';
 
-export const NAME = 'checkout-pickup-point-modal';
+const NAME = modalName.checkout.PICKUP_POINT;
 
 export default {
     name: NAME,
@@ -172,12 +172,12 @@ export default {
     computed: {
         ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, DELIVERY_METHODS, SELECTED_DELIVERY_METHOD_ID]),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         filteredPickupPoints() {
             return this[PICKUP_POINTS].filter(
-                p => !this.selectedDeliveryMethod || p.methodID === this.selectedDeliveryMethod.id
+                (p) => !this.selectedDeliveryMethod || p.methodID === this.selectedDeliveryMethod.id
             );
         },
 
@@ -208,7 +208,7 @@ export default {
             this.onClose();
         },
 
-        onBackClick(){
+        onBackClick() {
             this.selectedPickupPoint = null;
         },
 

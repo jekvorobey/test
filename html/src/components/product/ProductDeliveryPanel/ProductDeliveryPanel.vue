@@ -39,15 +39,14 @@ import VClamp from 'vue-clamp';
 import VSvg from '@controls/VSvg/VSvg.vue';
 
 import Price from '@components/Price/Price.vue';
-import { NAME as CITY_SELECTION_MODAL_NAME } from '@components/CitySelectionModal/CitySelectionModal.vue';
 
 import { mapState, mapActions } from 'vuex';
 import { LOCALE } from '@store';
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
-
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { modalName } from '@enums';
 import { receiveMethods } from '@enums/checkout';
 import '@images/sprites/arrow-down.svg';
 import './ProductDeliveryPanel.css';
@@ -81,7 +80,7 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(GEO_MODULE, {
-            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
     },
 
@@ -95,7 +94,7 @@ export default {
         },
 
         onOpenCitySelection() {
-            this[CHANGE_MODAL_STATE]({ name: CITY_SELECTION_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.CITY_SELECTION, open: true });
         },
 
         onOpenPickupPoints() {

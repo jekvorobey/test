@@ -162,17 +162,17 @@ import { SELECTED_CITY_COORDS } from '@store/modules/Geolocation/getters';
 import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 
 import validationMixin, { required } from '@plugins/validation';
-import { suggestionTypes } from '@enums/suggestions';
 import { $dadata } from '@services';
 import { yaMapSettings } from '@settings';
+import { modalName } from '@enums';
+import { suggestionTypes } from '@enums/suggestions';
 
 import pin from '@images/icons/pin-filled.svg';
 import '@images/sprites/list.svg';
 import '@images/sprites/map.svg';
 import './AddressEditModal.css';
 
-
-export const NAME = 'address-edit-modal';
+const NAME = modalName.profile.ADDRESS_EDIT;
 
 export default {
     name: NAME,
@@ -254,7 +254,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
         ...mapGetters(GEO_MODULE, [SELECTED_CITY_COORDS]),
 
@@ -271,22 +271,19 @@ export default {
         },
 
         mapSettings() {
-            return { ...yaMapSettings};
+            return { ...yaMapSettings };
         },
 
-        cityError(){
-            if (this.$v.address.city.$dirty && !this.$v.address.city.required) 
-                return 'Обязательное поле';
+        cityError() {
+            if (this.$v.address.city.$dirty && !this.$v.address.city.required) return 'Обязательное поле';
         },
 
-        houseError(){
-            if (this.$v.address.house.$dirty && !this.$v.address.house.required) 
-                return 'Обязательное поле';
+        houseError() {
+            if (this.$v.address.house.$dirty && !this.$v.address.house.required) return 'Обязательное поле';
         },
 
-        indexError(){
-            if (this.$v.address.post_index.$dirty && !this.$v.address.post_index.required) 
-                return 'Обязательное поле';
+        indexError() {
+            if (this.$v.address.post_index.$dirty && !this.$v.address.post_index.required) return 'Обязательное поле';
         },
 
         isTabletLg() {
@@ -391,15 +388,14 @@ export default {
                 radius_meters: 1000,
             });
 
-            const selected = suggestions.find(s => s.data.house);
+            const selected = suggestions.find((s) => s.data.house);
             this.onApplyAddress(selected);
         },
 
         formatAddress(item) {
-            return `${item.data.street_with_type ||
-                item.data.city_district_with_type ||
-                item.data.settlement_with_type ||
-                ''} ${item.data.house_type} ${item.data.house} ${
+            return `${
+                item.data.street_with_type || item.data.city_district_with_type || item.data.settlement_with_type || ''
+            } ${item.data.house_type} ${item.data.house} ${
                 item.data.block ? `${item.data.block_type} ${item.data.block}` : ''
             }`;
         },

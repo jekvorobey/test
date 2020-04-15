@@ -16,7 +16,7 @@
 <script>
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 
-import { fileExtension } from '../../../assets/scripts/enums';
+import { fileExtension } from '@enums';
 import './SingleBannerSection.css';
 
 export default {

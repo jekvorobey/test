@@ -79,12 +79,12 @@ import { NAME as CABINET_MODULE, PORTFOLIO } from '@store/modules/Profile/module
 import { UPDATE_PORTFOLIO } from '@store/modules/Profile/modules/Cabinet/actions';
 
 import { getRandomInt } from '@util';
+import { modalName } from '@enums';
 import '@images/sprites/cross.svg';
 import './PortfolioEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
-
-export const NAME = 'portfolio-edit-modal';
+const NAME = modalName.profile.PORTFOLIO_EDIT;
 
 export default {
     name: NAME,
@@ -163,7 +163,7 @@ export default {
     },
 
     beforeMount() {
-        this.editablePortfolio = this[PORTFOLIO].map(p => {
+        this.editablePortfolio = this[PORTFOLIO].map((p) => {
             return { ...p };
         });
     },

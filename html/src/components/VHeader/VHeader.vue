@@ -39,19 +39,11 @@ import MobileMenu from '@components/MobileMenu/MobileMenu.vue';
 import SearchPanel from '@components/SearchPanel/SearchPanel.vue';
 import CityConfirmationPanel from '@components/CityConfirmationPanel/CityConfirmationPanel.vue';
 
-import { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
-import { NAME as REGISTRATION_MODAL_NAME } from '@components/RegistrationModal/RegistrationModal.vue';
-import CitySelectionModal, {
-    NAME as CITY_SELECTION_MODAL_NAME,
-} from '@components/CitySelectionModal/CitySelectionModal.vue';
-
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, IS_MENU_OPEN, IS_CITY_CONFIRMATION_OPEN } from '@store';
 import { SET_MENU_OPEN } from '@store/actions';
-
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
-
 import { NAME as SEARCH_MODULE, SEARCH } from '@store/modules/Search';
 
 import './VHeader.critical.css';
@@ -68,7 +60,6 @@ export default {
         NavPanel,
         MobileMenu,
 
-        CitySelectionModal,
         CityConfirmationPanel,
     },
 

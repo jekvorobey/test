@@ -630,14 +630,11 @@ import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag
 import ProductPickupPointsMap from '@components/product/ProductPickupPointsMap/ProductPickupPointsMap.vue';
 import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPanel/ProductPickupPointsPanel.vue';
 
-import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
-import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 import MapModal, { NAME as MAP_MODAL_NAME } from '@components/MapModal/MapModal.vue';
-import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '@components/GalleryModal/GalleryModal.vue';
+import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '@services';
-
 import { SCROLL } from '@store';
 
 import productModule, {
@@ -655,9 +652,7 @@ import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS } from '@store/modules/
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { IS_IN_CART } from '@store/modules/Cart/getters';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
-
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
-
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
@@ -668,7 +663,7 @@ import {
     generateYoutubeImagePlaceholderPath,
     generateYoutubeVideoSourcePath,
 } from '@util/file';
-import { breakpoints, fileExtension, httpCodes } from '@enums';
+import { breakpoints, fileExtension, httpCodes, modalName } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
 import { createNotFoundRoute } from '@util/router';
 import { generateCategoryUrl, generateProductUrl } from '@util/catalog';
@@ -820,15 +815,16 @@ export default {
     computed: {
         ...mapState([SCROLL]),
         ...mapState('route', {
-            code: state => state.params.code,
-            categoryCode: state => state.params.categoryCode,
-            refCode: state => state.query.refCode,
-            modal: state => state.query.modal,
+            code: (state) => state.params.code,
+            categoryCode: (state) => state.params.categoryCode,
+            refCode: (state) => state.query.refCode,
+            modal: (state) => state.query.modal,
         }),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {
-            isGalleryOpen: state => state[MODALS][GALLERY_MODAL_NAME] && state[MODALS][GALLERY_MODAL_NAME].open,
-            isModalOpen: state => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
+            isGalleryOpen: (state) =>
+                state[MODALS][modalName.product.GALLERY] && state[MODALS][modalName.product.GALLERY].open,
+            isModalOpen: (state) => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
         }),
 
         ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION]),
@@ -842,8 +838,8 @@ export default {
         ]),
 
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
-        
-        inCart(){
+
+        inCart() {
             const { id } = this[PRODUCT];
             return this[IS_IN_CART](cartItemTypes.PRODUCT, id);
         },
@@ -912,7 +908,7 @@ export default {
             }
 
             if (Array.isArray(media) && media.length > 0) {
-                imageMap.media = media.map(image => {
+                imageMap.media = media.map((image) => {
                     return {
                         ...image,
                         desktop: generatePictureSourcePath(300, 300, image.id, fileExtension.image.WEBP),
@@ -929,9 +925,9 @@ export default {
             return 5;
         },
 
-        buyBtnText(){
-            if(!this.canBuy) return 'Нет в наличии';
-            return this.inCart ? 'В корзине' : "Добавить в корзину";
+        buyBtnText() {
+            if (!this.canBuy) return 'Нет в наличии';
+            return this.inCart ? 'В корзине' : 'Добавить в корзину';
         },
 
         productGalleryOptions() {
@@ -1036,13 +1032,13 @@ export default {
         },
 
         onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
         },
 
         onShowGallery() {
             const { media } = this.productImages;
             if (!media || !media.length) return;
-            this[CHANGE_MODAL_STATE]({ name: GALLERY_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.product.GALLERY, open: true });
         },
 
         onWishlistStateChange() {
@@ -1050,8 +1046,8 @@ export default {
         },
 
         onBuyProduct() {
-            if(this.inCart) {
-                this.$router.push({ name: 'Cart'})
+            if (this.inCart) {
+                this.$router.push({ name: 'Cart' });
                 return;
             }
 
@@ -1072,7 +1068,7 @@ export default {
 
         onAddToCart(item) {
             this[CHANGE_MODAL_STATE]({
-                name: ADD_TO_CART_MODAL_NAME,
+                name: modalName.general.ADD_TO_CART,
                 open: true,
                 state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
@@ -1120,18 +1116,18 @@ export default {
         const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
         // если все загружено, пропускаем
-        if (productCode === code && referrerCode === refCode) next(vm => vm.handleModalQuery(modal));
+        if (productCode === code && referrerCode === refCode) next((vm) => vm.handleModalQuery(modal));
         else {
             $progress.start();
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
                 .then(() =>
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                         vm.handleModalQuery(modal);
                     })
                 )
-                .catch(error => {
+                .catch((error) => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
                     else next(new Error(error.message));

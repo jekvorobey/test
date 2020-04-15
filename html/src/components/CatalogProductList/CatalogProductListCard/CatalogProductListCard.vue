@@ -64,7 +64,7 @@ import Tag from '@components/Tag/Tag.vue';
 import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 
-import { fileExtension } from '../../../assets/scripts/enums';
+import { fileExtension } from '@enums';
 import { generateProductUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 

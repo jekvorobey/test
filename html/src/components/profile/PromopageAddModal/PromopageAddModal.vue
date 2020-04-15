@@ -59,11 +59,11 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as PROMOPAGE_MODULE, TITLE, SEARCH_ITEMS } from '@store/modules/Profile/modules/Promopage';
 import { SEARCH_PRODUCTS, ADD_PRODUCT } from '@store/modules/Profile/modules/Promopage/actions';
+import { modalName } from '@enums';
 import './PromopageAddModal.css';
 
 const PROMOPAGE_MODULE_PATH = `${PROFILE_MODULE}/${PROMOPAGE_MODULE}`;
-
-export const NAME = 'promopage-add-modal';
+const NAME = modalName.profile.PROMO_ADD;
 
 export default {
     name: NAME,
@@ -77,7 +77,7 @@ export default {
         CartPanelProductCard,
     },
 
-    data(){
+    data() {
         return {
             selectedItemId: null,
         };
@@ -86,7 +86,7 @@ export default {
     computed: {
         ...mapState(PROMOPAGE_MODULE_PATH, [SEARCH_ITEMS]),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+            isOpen: (state) => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
         }),
 
         isTablet() {
@@ -95,7 +95,7 @@ export default {
     },
 
     watch: {
-        [SEARCH_ITEMS](){
+        [SEARCH_ITEMS]() {
             this.selectedItemId = null;
         },
     },
@@ -104,11 +104,11 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(PROMOPAGE_MODULE_PATH, [SEARCH_PRODUCTS, ADD_PRODUCT]),
 
-        isSelected(id){
+        isSelected(id) {
             return this.selectedItemId && this.selectedItemId === id;
         },
 
-        onSelectItem(id){
+        onSelectItem(id) {
             this.selectedItemId = id;
         },
 
@@ -117,7 +117,7 @@ export default {
         },
 
         async onSubmit() {
-            if(this.selectedItemId) this[ADD_PRODUCT]({ id: this.selectedItemId, refresh: true });
+            if (this.selectedItemId) this[ADD_PRODUCT]({ id: this.selectedItemId, refresh: true });
             this.onClose();
         },
 

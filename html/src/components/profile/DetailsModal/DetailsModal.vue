@@ -109,10 +109,11 @@ import { NAME as CABINET_MODULE, REQUISITES } from '@store/modules/Profile/modul
 import { UPDATE_REQUISITES } from '@store/modules/Profile/modules/Cabinet/actions';
 
 import { $dadata, $logger } from '@services';
+import { modalName } from '@enums';
 import './DetailsModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
-export const NAME = 'details-modal';
+const NAME = modalName.profile.DETAILS;
 
 export default {
     name: NAME,
@@ -142,12 +143,12 @@ export default {
             account: {
                 required,
                 rs: rs('bik'),
-            }, 
-            
+            },
+
             bank: {
                 required,
-            }, 
-            
+            },
+
             bik: {
                 required,
                 bik,
@@ -189,8 +190,7 @@ export default {
         },
 
         innError() {
-            if (this.$v.form.inn.$dirty && this.$v.form.inn.$invalid)
-                return 'Неправильный ИНН';
+            if (this.$v.form.inn.$dirty && this.$v.form.inn.$invalid) return 'Неправильный ИНН';
         },
 
         bikError() {
@@ -274,7 +274,7 @@ export default {
 
     beforeMount() {
         const requisites = this[REQUISITES] || {};
-        this.form = { ...requisites};
+        this.form = { ...requisites };
     },
 };
 </script>

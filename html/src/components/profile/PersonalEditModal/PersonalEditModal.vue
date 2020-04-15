@@ -74,13 +74,12 @@ import {
 } from '@store/modules/Profile/modules/Cabinet';
 import { UPDATE_PERSONAL } from '@store/modules/Profile/modules/Cabinet/actions';
 
-import { httpCodes } from '@enums';
+import { httpCodes, modalName } from '@enums';
 import { genderType } from '@enums/profile';
 import './PersonalEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
-
-export const NAME = 'personal-edit-modal';
+const NAME = modalName.profile.PERSONAL_EDIT;
 
 export default {
     name: NAME,
@@ -108,12 +107,12 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState({
-            datepickerLocale: state =>
+            datepickerLocale: (state) =>
                 state[LOCALIZATIONS][state[LOCALE]] && state[LOCALIZATIONS][state[LOCALE]].flatpickrLocale,
         }),
         ...mapState(CABINET_MODULE_PATH, [FIRST_NAME, LAST_NAME, MIDDLE_NAME, BIRTHDAY, GENDER]),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         header() {

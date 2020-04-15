@@ -54,7 +54,7 @@ import { ADD_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { fileExtension } from '../../../assets/scripts/enums';
+import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 import './ProductsSection.css';
 
@@ -141,7 +141,7 @@ export default {
 
         onAddToFavorites(item) {
             this[ADD_FAVORITES_ITEM]({ productId: item.productId });
-        }
+        },
     },
 };
 </script>

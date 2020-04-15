@@ -61,12 +61,12 @@ import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as CABINET_MODULE, EMAIL } from '@store/modules/Profile/modules/Cabinet';
 import { SEND_CODE, UPDATE_CREDENTIAL } from '@store/modules/Profile/modules/Cabinet/actions';
 
+import { modalName } from '@enums';
 import { verificationCodeType } from '@enums/auth';
 import './EmailEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
-
-export const NAME = 'email-edit-modal';
+const NAME = modalName.profile.EMAIL_EDIT;
 
 export default {
     name: NAME,
@@ -90,7 +90,7 @@ export default {
         },
 
         exists: {
-            valid: value => value === false,
+            valid: (value) => value === false,
         },
     },
 

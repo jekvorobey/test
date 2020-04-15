@@ -9,16 +9,14 @@
 import VLink from '@controls/VLink/VLink.vue';
 import VSvg from '@controls/VSvg/VSvg.vue';
 
-import { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
-
 import { mapState, mapActions } from 'vuex';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
+import { modalName } from '@enums';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/wishlist-full.svg';
-
 import './FavoritesButton.css';
 
 export default {
@@ -33,7 +31,7 @@ export default {
         isActive: {
             type: Boolean,
             default: false,
-        }
+        },
     },
 
     computed: {
@@ -42,7 +40,7 @@ export default {
         handlers() {
             const keys = Object.keys(this.$listeners);
             const handlers = {};
-            keys.forEach(k => (handlers[k] = e => this.$emit(k, e)));
+            keys.forEach((k) => (handlers[k] = (e) => this.$emit(k, e)));
             handlers.click = this.onBtnClick;
             return handlers;
         },
@@ -59,7 +57,7 @@ export default {
         checkPermissions() {
             const hasSession = this[HAS_SESSION];
             if (!hasSession) {
-                this[CHANGE_MODAL_STATE]({ name: LOGIN_MODAL_NAME, open: true });
+                this[CHANGE_MODAL_STATE]({ name: modalName.general.LOGIN, open: true });
                 return false;
             }
             return hasSession;
