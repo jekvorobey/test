@@ -1,5 +1,5 @@
 import { $logger } from '@services';
-import { storeErrorHandler } from '@util/store';
+import store, { storeErrorHandler } from '@util/store';
 
 import {
     getFavorites,
@@ -16,6 +16,8 @@ export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 export const FETCH_FAVORITES = 'FETCH_FAVORITES';
 export const FETCH_FAVORITES_ALL = 'FETCH_FAVORITES_ALL';
 export const ADD_FAVORITES_ITEM = 'ADD_FAVORITES_ITEM';
+export const DELETE_FAVORITES_ITEM = 'DELETE_FAVORITES_ITEM';
+export const DELETE_FAVORITES_ALL = 'DELETE_FAVORITES_ALL';
 
 export default {
 
@@ -63,6 +65,25 @@ export default {
             commit(ADD_TO_FAVORITES_ALL, Number(productId));
         } catch(error) {
             storeErrorHandler(ADD_FAVORITES_ITEM, error);
+        }
+    },
+
+    async [DELETE_FAVORITES_ITEM]({ commit }, { productId }) {
+        try {
+            const id = Number(productId);
+            await deleteFavoritesItem(id);
+            commit(DELETE_FAVORITES_ITEM(id));
+        } catch(error) {
+            storeErrorHandler(DELETE_FAVORITES_ITEM, error);
+        }
+    },
+
+    async [DELETE_FAVORITES_ALL]({ commit }) {
+        try {
+            await deleteAllFavorites();
+            commit(DELETE_FAVORITES_ALL);
+        } catch(error) {
+            storeErrorHandler(DELETE_FAVORITES_ALL, error);
         }
     }
 };

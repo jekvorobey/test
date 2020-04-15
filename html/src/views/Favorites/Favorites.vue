@@ -3,10 +3,10 @@
         <div class="container favorites-view__header">
             <h1 class="favorites-view__header-h1">
                 Избранное
-                <span class="favorites-view__header-counter">{{ favorites.items.length }} продуктов</span>
+                <span class="favorites-view__header-counter">{{ favorites.length }} продуктов</span>
             </h1>
         </div>
-        <div class="container favorites-container" v-if="favorites.items.length > 0">
+        <div class="container favorites-container" v-if="favorites.length > 0">
             <ul class="favorites-product-list">
                 <catalog-product-card
                     class="favorites-product-list__item"
