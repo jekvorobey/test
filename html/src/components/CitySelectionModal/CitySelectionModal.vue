@@ -45,11 +45,12 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { $dadata, $logger } from '@services';
+import { modalName } from '@enums';
 import { suggestionTypes } from '@enums/suggestions';
 import '@images/sprites/search-middle.svg';
 import './CitySelectionModal.css';
 
-export const NAME = 'city-selection-modal';
+const NAME = modalName.general.CITY_SELECTION;
 
 export default {
     name: NAME,
@@ -69,7 +70,7 @@ export default {
     computed: {
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         header() {

@@ -90,9 +90,7 @@ import VCheck from '@controls/VCheck/VCheck.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import TagItem from '@components/TagItem/TagItem.vue';
 
-import PreferenceEditModal, {
-    NAME as PREFERENCES_EDIT_MODAL_NAME,
-} from '@components/profile/PreferenceEditModal/PreferenceEditModal.vue';
+import PreferenceEditModal from '@components/profile/PreferenceEditModal/PreferenceEditModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -115,8 +113,9 @@ import {
     UPDATE_ENTITIES,
 } from '@store/modules/Profile/modules/Preferences/actions';
 
-import { $store, $progress, $logger } from '@services';
 import _debounce from 'lodash/debounce';
+import { $store, $progress, $logger } from '@services';
+import { modalName } from '@enums';
 import '@images/sprites/cross.svg';
 import '@images/sprites/plus-small.svg';
 import './Preferences.css';
@@ -151,8 +150,9 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isPreferencesOpen: state =>
-                state[MODALS][PREFERENCES_EDIT_MODAL_NAME] && state[MODALS][PREFERENCES_EDIT_MODAL_NAME].open,
+            isPreferencesOpen: (state) =>
+                state[MODALS][modalName.profile.PREFERENCE_EDIT] &&
+                state[MODALS][modalName.profile.PREFERENCE_EDIT].open,
         }),
         ...mapState(PREFERENCES_MODULE_PATH, [AVAILABLE_BRANDS, AVAILABLE_CATEGORIES, CUSTOMER]),
         ...mapGetters(PREFERENCES_MODULE_PATH, [BRANDS, CATEGORIES]),
@@ -178,12 +178,12 @@ export default {
             switch (type) {
                 case entityTypes.BRANDS:
                     this.actualBrands.splice(i, 1);
-                    this.debounce_updateBrands(this.actualBrands.map(e => e.id));
+                    this.debounce_updateBrands(this.actualBrands.map((e) => e.id));
                     break;
 
                 case entityTypes.CATEGORIES:
                     this.actualCategories.splice(i, 1);
-                    this.debounce_updateCategories(this.actualCategories.map(e => e.id));
+                    this.debounce_updateCategories(this.actualCategories.map((e) => e.id));
                     break;
             }
         },
@@ -226,7 +226,7 @@ export default {
             }
 
             this[CHANGE_MODAL_STATE]({
-                name: PREFERENCES_EDIT_MODAL_NAME,
+                name: modalName.profile.PREFERENCE_EDIT,
                 open: true,
                 state: {
                     type,
@@ -258,11 +258,11 @@ export default {
         $store
             .dispatch(`${PREFERENCES_MODULE_PATH}/${FETCH_PREFERENCES_DATA}`)
             .then(() => {
-                next(vm => {
+                next((vm) => {
                     $progress.finish();
                 });
             })
-            .catch(thrown => {
+            .catch((thrown) => {
                 $progress.fail();
                 $logger.error('beforeRouteEnter', thrown.error);
                 $progress.finish();
@@ -275,12 +275,12 @@ export default {
         this.actualCategories = [...this[CATEGORIES]];
 
         this.debounce_updateBrands = _debounce(
-            items => this[UPDATE_ENTITIES]({ type: entityTypes.BRANDS, items }),
+            (items) => this[UPDATE_ENTITIES]({ type: entityTypes.BRANDS, items }),
             1000
         );
 
         this.debounce_updateCategories = _debounce(
-            items => this[UPDATE_ENTITIES]({ type: entityTypes.CATEGORIES, items }),
+            (items) => this[UPDATE_ENTITIES]({ type: entityTypes.CATEGORIES, items }),
             1000
         );
     },

@@ -284,22 +284,14 @@ import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import ImagePicker from '@components/profile/ImagePicker/ImagePicker.vue';
 
-import PortfolioEditModal, {
-    NAME as PORTFOLIOS_MODAL_NAME,
-} from '@components/profile/PortfolioEditModal/PortfolioEditModal.vue';
-import EmailEditModal, { NAME as EDIT_EMAIL_MODAL_NAME } from '@components/profile/EmailEditModal/EmailEditModal.vue';
-import ActivitiesEditModal, {
-    NAME as ACTIVITIES_MODAL_NAME,
-} from '@components/profile/ActivitiesEditModal/ActivitiesEditModal.vue';
-import PhoneEditModal, { NAME as EDIT_PHONE_MODAL_NAME } from '@components/profile/PhoneEditModal/PhoneEditModal.vue';
-import PersonalEditModal, {
-    NAME as EDIT_PERSONAL_MODAL_NAME,
-} from '@components/profile/PersonalEditModal/PersonalEditModal.vue';
-import PasswordEditModal, {
-    NAME as EDIT_PASSWORD_MODAL_NAME,
-} from '@components/profile/PasswordEditModal/PasswordEditModal.vue';
-import DetailsModal, { NAME as DETAILS_MODAL_NAME } from '@components/profile/DetailsModal/DetailsModal.vue';
-import ReferralCodeEditModal, { NAME as REFERRAL_CODE_EDIT_MODAL_NAME } from '@components/profile/ReferralCodeEditModal/ReferralCodeEditModal.vue';
+import PortfolioEditModal from '@components/profile/PortfolioEditModal/PortfolioEditModal.vue';
+import EmailEditModal from '@components/profile/EmailEditModal/EmailEditModal.vue';
+import ActivitiesEditModal from '@components/profile/ActivitiesEditModal/ActivitiesEditModal.vue';
+import PhoneEditModal from '@components/profile/PhoneEditModal/PhoneEditModal.vue';
+import PersonalEditModal from '@components/profile/PersonalEditModal/PersonalEditModal.vue';
+import PasswordEditModal from '@components/profile/PasswordEditModal/PasswordEditModal.vue';
+import DetailsModal from '@components/profile/DetailsModal/DetailsModal.vue';
+import ReferralCodeEditModal from '@components/profile/ReferralCodeEditModal/ReferralCodeEditModal.vue';
 
 import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -342,7 +334,7 @@ import {
     LOAD_CERTIFICATE,
 } from '@store/modules/Profile/modules/Cabinet/actions';
 
-import { socials, mimeType, httpCodes } from '@enums';
+import { socials, mimeType, httpCodes, modalName } from '@enums';
 import { cancelRoute } from '@settings';
 import { saveToClipboard } from '@util';
 import { generateReferralLink } from '@util/profile';
@@ -402,25 +394,30 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
-            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
+            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || false,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isDetailsOpen: state => state[MODALS][DETAILS_MODAL_NAME] && state[MODALS][DETAILS_MODAL_NAME].open,
-            isPortofioEditOpen: state =>
-                state[MODALS][PORTFOLIOS_MODAL_NAME] && state[MODALS][PORTFOLIOS_MODAL_NAME].open,
-            isActivitiesEditOpen: state =>
-                state[MODALS][ACTIVITIES_MODAL_NAME] && state[MODALS][ACTIVITIES_MODAL_NAME].open,
-            isEmailEditOpen: state => state[MODALS][EDIT_EMAIL_MODAL_NAME] && state[MODALS][EDIT_EMAIL_MODAL_NAME].open,
-            isPhoneEditOpen: state => state[MODALS][EDIT_PHONE_MODAL_NAME] && state[MODALS][EDIT_PHONE_MODAL_NAME].open,
-            isPersonalEditOpen: state =>
-                state[MODALS][EDIT_PERSONAL_MODAL_NAME] && state[MODALS][EDIT_PERSONAL_MODAL_NAME].open,
-            isPasswordEditOpen: state =>
-                state[MODALS][EDIT_PASSWORD_MODAL_NAME] && state[MODALS][EDIT_PASSWORD_MODAL_NAME].open,
-            isCodeEditOpen: state =>
-                state[MODALS][REFERRAL_CODE_EDIT_MODAL_NAME] && state[MODALS][REFERRAL_CODE_EDIT_MODAL_NAME].open,
+            isDetailsOpen: (state) =>
+                state[MODALS][modalName.profile.DETAILS] && state[MODALS][modalName.profile.DETAILS].open,
+            isPortofioEditOpen: (state) =>
+                state[MODALS][modalName.profile.PORTFOLIO_EDIT] && state[MODALS][modalName.profile.PORTFOLIO_EDIT].open,
+            isActivitiesEditOpen: (state) =>
+                state[MODALS][modalName.profile.ACTIVITIES_EDIT] &&
+                state[MODALS][modalName.profile.ACTIVITIES_EDIT].open,
+            isEmailEditOpen: (state) =>
+                state[MODALS][modalName.profile.EMAIL_EDIT] && state[MODALS][modalName.profile.EMAIL_EDIT].open,
+            isPhoneEditOpen: (state) =>
+                state[MODALS][modalName.profile.PHONE_EDIT] && state[MODALS][modalName.profile.PHONE_EDIT].open,
+            isPersonalEditOpen: (state) =>
+                state[MODALS][modalName.profile.PERSONAL_EDIT] && state[MODALS][modalName.profile.PERSONAL_EDIT].open,
+            isPasswordEditOpen: (state) =>
+                state[MODALS][modalName.profile.PASSWORD_EDIT] && state[MODALS][modalName.profile.PASSWORD_EDIT].open,
+            isCodeEditOpen: (state) =>
+                state[MODALS][modalName.profile.REFERRAL_CODE_EDIT] &&
+                state[MODALS][modalName.profile.REFERRAL_CODE_EDIT].open,
         }),
 
         ...mapState(CABINET_MODULE_PATH, [
@@ -518,9 +515,9 @@ export default {
         },
 
         avatarPlaceholder() {
-            return `${(this[LAST_NAME] && this[LAST_NAME].slice(0, 1)) || ''}${(this[FIRST_NAME] &&
-                this[FIRST_NAME].slice(0, 1)) ||
-                ''}`;
+            return `${(this[LAST_NAME] && this[LAST_NAME].slice(0, 1)) || ''}${
+                (this[FIRST_NAME] && this[FIRST_NAME].slice(0, 1)) || ''
+            }`;
         },
 
         labelTemplate() {
@@ -546,7 +543,7 @@ export default {
         socialMap() {
             const social = this[SOCIAL] || [];
             const socialMap = {};
-            social.forEach(d => (socialMap[d.driver] = d));
+            social.forEach((d) => (socialMap[d.driver] = d));
             return socialMap;
         },
 
@@ -620,35 +617,35 @@ export default {
         },
 
         onOpenDetailsModal() {
-            this[CHANGE_MODAL_STATE]({ name: DETAILS_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.DETAILS, open: true });
         },
 
         onOpenPortfoliosModal() {
-            this[CHANGE_MODAL_STATE]({ name: PORTFOLIOS_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.PORTFOLIO_EDIT, open: true });
         },
 
         onOpenActivitiesEditModal() {
-            this[CHANGE_MODAL_STATE]({ name: ACTIVITIES_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.ACTIVITIES_EDIT, open: true });
         },
 
         onOpenEmailModal() {
-            this[CHANGE_MODAL_STATE]({ name: EDIT_EMAIL_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.EMAIL_EDIT, open: true });
         },
 
         onOpenPhoneModal() {
-            this[CHANGE_MODAL_STATE]({ name: EDIT_PHONE_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.PHONE_EDIT, open: true });
         },
 
         onOpenPersonalModal() {
-            this[CHANGE_MODAL_STATE]({ name: EDIT_PERSONAL_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.PERSONAL_EDIT, open: true });
         },
 
         onOpenPasswordModal() {
-            this[CHANGE_MODAL_STATE]({ name: EDIT_PASSWORD_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.PASSWORD_EDIT, open: true });
         },
 
-        onOpenReferralCodeModal(){
-            this[CHANGE_MODAL_STATE]({ name: REFERRAL_CODE_EDIT_MODAL_NAME, open: true });
+        onOpenReferralCodeModal() {
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.REFERRAL_CODE_EDIT, open: true });
         },
     },
 
@@ -673,11 +670,11 @@ export default {
         $store
             .dispatch(`${CABINET_MODULE_PATH}/${FETCH_CABINET_DATA}`)
             .then(() => {
-                next(vm => {
+                next((vm) => {
                     $progress.finish();
                 });
             })
-            .catch(thrown => {
+            .catch((thrown) => {
                 $progress.fail();
                 if (thrown.status === httpCodes.FORBIDDEN) {
                     $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);
@@ -689,7 +686,7 @@ export default {
 
     beforeMount() {
         const certificates = this[CERTIFICATES];
-        this.files = certificates.map(c => {
+        this.files = certificates.map((c) => {
             return {
                 source: c,
                 options: {

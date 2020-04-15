@@ -46,9 +46,10 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
+import { modalName } from '@enums';
 import './PreferenceEditModal.css';
 
-export const NAME = 'preference-edit-modal';
+const NAME = modalName.profile.PREFERENCE_EDIT;
 
 export default {
     name: NAME,
@@ -70,7 +71,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: state =>
+            modalState: (state) =>
                 (state[MODALS][NAME] && state[MODALS][NAME].state) || { availableEntities: [], entities: [] },
         }),
 
@@ -85,7 +86,7 @@ export default {
         filteredEntities() {
             const filter = (this.filterString || '').toLowerCase();
             return this.modalState.availableEntities.filter(
-                e => !this.entities.some(se => se.id === e.id) && (e.name || '').toLowerCase().includes(filter)
+                (e) => !this.entities.some((se) => se.id === e.id) && (e.name || '').toLowerCase().includes(filter)
             );
         },
 
@@ -124,7 +125,7 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         isChecked(id) {
-            return this.selectedEntities.some(e => e.id === id);
+            return this.selectedEntities.some((e) => e.id === id);
         },
 
         onFilterChange(filterString) {
@@ -140,7 +141,7 @@ export default {
         },
 
         onSubmit() {
-            const newEntities = [...this.entities.map(e => e.id), ...this.selectedEntities.map(e => e.id)];
+            const newEntities = [...this.entities.map((e) => e.id), ...this.selectedEntities.map((e) => e.id)];
             this.$emit('submit', { type: this.type, items: newEntities });
             this.onClose();
         },

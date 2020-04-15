@@ -73,11 +73,8 @@ import { FETCH_FAVORITES, SET_LOAD_PATH, TOGGLE_FAVORITES_ITEM } from '@store/mo
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
-import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
-
 import { DEFAULT_PAGE } from '@constants';
-
+import { modalName } from '@enums';
 import './Favorites.css';
 
 export default {
@@ -122,12 +119,12 @@ export default {
         },
 
         onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
         },
 
         onAddToCart({ id, stock, type }) {
             this[CHANGE_MODAL_STATE]({
-                name: ADD_TO_CART_MODAL_NAME,
+                name: modalName.general.ADD_TO_CART,
                 open: true,
                 state: { offerId: id, storeId: stock.storeId, type },
             });

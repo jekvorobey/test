@@ -90,7 +90,6 @@ import Price from '@components/Price/Price.vue';
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
-import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
@@ -101,11 +100,12 @@ import { NAME as CART_MODULE, CART_DATA, RELATIVE_PRODUCTS } from '@store/module
 import { ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS } from '@store/modules/Cart/actions';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
 
+import { modalName } from '@enums';
 import { getRandomIntInclusive } from '@util';
 import { generatePictureSourcePath } from '@util/file';
 import './AddToCartModal.css';
 
-export const NAME = 'add-to-cart-modal';
+const NAME = modalName.general.ADD_TO_CART;
 
 export default {
     name: NAME,
@@ -129,7 +129,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
         ...mapState(CART_MODULE, [CART_DATA, RELATIVE_PRODUCTS]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
@@ -154,7 +154,7 @@ export default {
     watch: {
         [CART_DATA]() {
             const data = this[CART_DATA][this.modalState.type];
-            this.cartItem = data ? data.items.find(i => i.p.id === this.modalState.offerId) : null;
+            this.cartItem = data ? data.items.find((i) => i.p.id === this.modalState.offerId) : null;
         },
 
         modalState() {
@@ -168,7 +168,7 @@ export default {
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
-            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
         },
 
         onAddToCart(item) {
@@ -183,7 +183,7 @@ export default {
             const { offerId, storeId, referralCode, type, cookieName } = this.modalState;
             const data = this[CART_DATA][type];
 
-            this.cartItem = data ? data.items.find(i => i.p.id === offerId) : null;
+            this.cartItem = data ? data.items.find((i) => i.p.id === offerId) : null;
             if (!this.cartItem) this[ADD_CART_ITEM]({ offerId, storeId, referralCode, cookieName });
             this[FETCH_RELATIVE_PRODUCTS]({ page: getRandomIntInclusive(1, 4) });
         },

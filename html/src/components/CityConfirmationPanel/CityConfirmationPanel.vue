@@ -21,18 +21,16 @@ import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 
 import GeneralPopupPanel from '@components/GeneralPopupPanel/GeneralPopupPanel.vue';
-import { NAME as CITY_SELECTION_MODAL } from '@components/CitySelectionModal/CitySelectionModal.vue';
 
 import { mapActions, mapState } from 'vuex';
 import { IS_CITY_CONFIRMATION_OPEN } from '@store';
 import { SET_CITY_CONFIRMATION_OPEN } from '@store/actions';
-
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
-
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { modalName } from '@enums';
 import '@images/sprites/cross.svg';
 import './CityConfirmationPanel.css';
 
@@ -66,7 +64,7 @@ export default {
 
         onSelectCity() {
             this.onClose();
-            this[CHANGE_MODAL_STATE]({ name: CITY_SELECTION_MODAL, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.CITY_SELECTION, open: true });
         },
 
         onAccept() {

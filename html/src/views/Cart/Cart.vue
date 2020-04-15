@@ -183,9 +183,6 @@ import VSlider from '@controls/VSlider/VSlider.vue';
 import Price from '@components/Price/Price.vue';
 import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
 
-import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
-import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
-
 import CartMasterClassCard from '@components/CartMasterClassCard/CartMasterClassCard.vue';
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
@@ -214,7 +211,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
 import { cancelRoute } from '@settings';
-import { breakpoints } from '@enums';
+import { breakpoints, modalName } from '@enums';
 import { cartItemTypes } from '@enums/product';
 import { preparePrice } from '@util';
 import { generateProductUrl } from '@util/catalog';
@@ -319,7 +316,7 @@ export default {
         },
 
         onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
         },
 
         onClearCart() {

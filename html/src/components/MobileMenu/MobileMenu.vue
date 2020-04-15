@@ -132,22 +132,16 @@ import VClamp from 'vue-clamp';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
-import { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
-import { NAME as CITY_SELECTION_MODAL_NAME } from '@components/CitySelectionModal/CitySelectionModal.vue';
-
 import { mapState, mapActions, mapGetters } from 'vuex';
-
 import { CATEGORIES } from '@store';
 import { HEADER_MENU } from '@store/getters';
 import { SET_MENU_OPEN } from '@store/actions';
-
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
-
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
-
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { modalName } from '@enums';
 import { productGroupTypes } from '@enums/product';
 import '@images/sprites/socials/viber-bw.svg';
 import '@images/sprites/socials/whatsup-bw.svg';
@@ -184,7 +178,7 @@ export default {
         ...mapGetters([HEADER_MENU]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(GEO_MODULE, {
-            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
 
         currentCategories() {
@@ -222,7 +216,7 @@ export default {
 
         onOpenCitySelection() {
             this[SET_MENU_OPEN](false);
-            this[CHANGE_MODAL_STATE]({ name: CITY_SELECTION_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.CITY_SELECTION, open: true });
         },
 
         onBackClick() {
@@ -232,7 +226,7 @@ export default {
 
         onRegister() {
             if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
-            else this[CHANGE_MODAL_STATE]({ name: LOGIN_MODAL_NAME, open: true });
+            else this[CHANGE_MODAL_STATE]({ name: modalName.general.LOGIN, open: true });
         },
     },
 };

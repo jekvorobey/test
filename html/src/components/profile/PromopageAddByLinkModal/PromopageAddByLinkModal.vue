@@ -45,13 +45,13 @@ import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as PROMOPAGE_MODULE } from '@store/modules/Profile/modules/Promopage';
 import { SEARCH_PRODUCTS, ADD_PRODUCTS } from '@store/modules/Profile/modules/Promopage/actions';
 
-import { getRandomInt } from '@util';
 import _cloneDeep from 'lodash/cloneDeep';
+import { getRandomInt } from '@util';
+import { modalName } from '@enums';
 import './PromopageAddByLinkModal.css';
 
 const PROMOPAGE_MODULE_PATH = `${PROFILE_MODULE}/${PROMOPAGE_MODULE}`;
-
-export const NAME = 'promopage-add-by-link-modal';
+const NAME = modalName.profile.PROMO_ADD_BY_LINK;
 
 export default {
     name: NAME,
@@ -76,15 +76,15 @@ export default {
 
     data() {
         return {
-            links: [{  ref: null }],
+            links: [{ ref: null }],
         };
     },
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+            isOpen: (state) => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
         }),
-        
+
         isTablet() {
             return this.$mq.tablet;
         },
@@ -112,8 +112,8 @@ export default {
 
         onSubmit() {
             this.$v.$touch();
-            if (!this.$v.$invalid) 
-                this[ADD_PRODUCTS]({ items: this.links.map(l => l.ref.split('/').slice(-1)), refresh: true })
+            if (!this.$v.$invalid)
+                this[ADD_PRODUCTS]({ items: this.links.map((l) => l.ref.split('/').slice(-1)), refresh: true });
             this.onClose();
         },
 

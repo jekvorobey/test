@@ -14,9 +14,11 @@ import NavigationPanel from '@components/profile/NavigationPanel/NavigationPanel
 import { mapActions } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
+import { modalName } from '@enums';
 import './NavigationModal.css';
 
-export const NAME = 'navigation-modal';
+const NAME = modalName.profile.NAVIGATION;
 
 export default {
     name: NAME,

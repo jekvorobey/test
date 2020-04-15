@@ -28,19 +28,15 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import HelpPanel from '@components/HelpPanel/HelpPanel.vue';
 import ProfileNavigationPanel from '@components/ProfileNavigationPanel/ProfileNavigationPanel.vue';
 
-import { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
-
 import { mapState, mapActions, mapGetters } from 'vuex';
-
 import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY } from '@store/modules/Auth';
-
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { modalName } from '@enums';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/account-middle.svg';
 import '@images/sprites/arrow-down.svg';
-
 import './CartHeaderUserPanel.css';
 
 export default {
@@ -56,7 +52,7 @@ export default {
     computed: {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
+            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
         }),
     },
 
@@ -65,7 +61,7 @@ export default {
 
         onRegister() {
             if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
-            else this[CHANGE_MODAL_STATE]({ name: LOGIN_MODAL_NAME, open: true });
+            else this[CHANGE_MODAL_STATE]({ name: modalName.general.LOGIN, open: true });
         },
     },
 };
