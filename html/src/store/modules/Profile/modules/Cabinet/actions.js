@@ -2,6 +2,7 @@ import { verificationCodeType } from '@enums/auth';
 import { storeErrorHandler } from '@util/store';
 import {
     getProfile,
+    changeProfileRequisites,
     changeProfileActivities,
     changeProfilePortfolio,
     changeProfileCredential,
@@ -14,17 +15,19 @@ import {
     uploadProfileCertificate,
     deleteProfileCertificate,
     loadProfileCertificate,
+    changeProfileReferralCode,
 } from '@api';
 import { SET_CABINET_DATA, UPDATE_PHONE, UPDATE_EMAIL } from './mutations';
 
 export const FETCH_CABINET_DATA = 'FETCH_CABINET_DATA';
 export const UPDATE_PORTFOLIO = 'UPDATE_PORTFOLIO';
 export const UPDATE_ACTIVITIES = 'UPDATE_ACTIVITIES';
-export const UPDATE_REQUISITES = 'UPDATE_REQUISITES';
 export const UPDATE_CREDENTIAL = 'UPDATE_CREDENTIAL';
 export const UPDATE_PERSONAL = 'UPDATE_PERSONAL';
 export const UPDATE_AVATAR = 'UPDATE_AVATAR';
 export const UPDATE_PASSWORD = 'UPDATE_PASSWORD';
+export const UPDATE_REQUISITES = 'UPDATE_REQUISITES';
+export const UPDATE_REFERRER_CODE = 'UPDATE_REFERRER_CODE';
 
 export const UPLOAD_CERTIFICATE = 'UPLOAD_CERTIFICATE';
 export const LOAD_CERTIFICATE = 'LOAD_CERTIFICATE';
@@ -37,9 +40,15 @@ export const SEND_CODE = 'SEND_CODE';
 
 export const SET_LOAD = 'SET_LOAD';
 
+export const SET_CAN_EDIT_CODE = 'SET_CAN_EDIT_CODE';
+
 export default {
     [SET_LOAD]({ commit }, payload) {
         commit(SET_LOAD, payload);
+    },
+
+    [SET_CAN_EDIT_CODE]({ commit }, payload) {
+        commit(SET_CAN_EDIT_CODE, payload);
     },
 
     async [SEND_CODE]({ state, commit }, { destination, type }) {
@@ -137,7 +146,7 @@ export default {
 
     async [UPDATE_ACTIVITIES]({ state, commit }, payload = []) {
         try {
-            await changeProfileActivities(payload.map(a => a.id));
+            await changeProfileActivities(payload.map((a) => a.id));
             commit(UPDATE_ACTIVITIES, payload);
         } catch (error) {
             storeErrorHandler(UPDATE_ACTIVITIES, true)(error);
@@ -154,7 +163,30 @@ export default {
     },
 
     async [UPDATE_REQUISITES]({ commit }, payload = {}) {
-        commit(UPDATE_REQUISITES, payload);
+        try {
+            const {
+                name = null,
+                address = null,
+                inn = null,
+                account = null,
+                bank = null,
+                bik = null,
+                correspondentAccount = null,
+            } = payload;
+
+            await changeProfileRequisites(name, address, inn, account, bank, bik, correspondentAccount);
+            commit(UPDATE_REQUISITES, payload);
+        } catch (error) {
+            storeErrorHandler(UPDATE_REQUISITES, true)(error);
+        }
+    },
+
+    async [UPDATE_REFERRER_CODE]({ commit }, code) {
+        try {
+            return await changeProfileReferralCode(code);
+        } catch (error) {
+            storeErrorHandler(UPDATE_REFERRER_CODE, true)(error);
+        }
     },
 
     async [FETCH_CABINET_DATA]({ commit }, isServer) {

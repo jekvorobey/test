@@ -54,6 +54,7 @@
             <v-svg name="count-small" width="18" height="18" />
             <v-svg name="eye" width="17" height="16" />
             <v-svg name="wishlist-middle" width="17" height="18" />
+            <v-svg name="wishlist-full" width="16" height="17" />
             <v-svg name="add-to-cart-small" width="27" height="18" />
         </p>
 
@@ -66,6 +67,7 @@
             <v-svg name="cart-middle" width="20" height="20" />
             <v-svg name="good-middle" width="20" height="20" />
             <v-svg name="wishlist-middle" width="20" height="20" />
+            <v-svg name="wishlist-full" width="18" height="18" />
             <v-svg name="cross" width="20" height="20" />
             <v-svg name="info-middle" width="20" height="20" />
             <v-svg name="question-middle" width="20" height="20" />
@@ -169,6 +171,7 @@ import '@images/sprites/add-to-cart-small.svg';
 import '@images/sprites/search-middle.svg';
 import '@images/sprites/account-middle.svg';
 import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/wishlist-full.svg';
 import '@images/sprites/cart-middle.svg';
 import '@images/sprites/good-middle.svg';
 import '@images/sprites/info-middle.svg';

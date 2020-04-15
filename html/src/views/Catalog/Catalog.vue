@@ -83,14 +83,14 @@
                     <catalog-product-list :key="type" class="catalog-view__main-grid" :animation="!isTablet" />
 
                     <div class="catalog-view__main-controls" v-if="pagesCount > 1">
-                        <v-button
+                        <show-more-button
                             v-if="activePage < pagesCount"
-                            class="btn--outline catalog-view__main-controls-btn"
+                            btn-class="btn--outline catalog-view__main-controls-btn"
                             @click="onShowMore"
-                            :disabled="showMore"
+                            :show-preloader="showMore"
                         >
                             Показать ещё
-                        </v-button>
+                        </show-more-button>
                         <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
                     </div>
                 </div>
@@ -187,9 +187,7 @@ import CategoryTreeItem from '@components/CategoryTreeItem/CategoryTreeItem.vue'
 import CatalogFilter from '@components/CatalogFilter/CatalogFilter.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
-
-import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
-import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -250,6 +248,7 @@ export default {
         CatalogFilter,
         CatalogProductList,
         CatalogBannerCard,
+        ShowMoreButton,
     },
 
     data() {
@@ -279,14 +278,9 @@ export default {
             BREADCRUMBS,
         ]),
         ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE]),
-        ...mapState(MODAL_MODULE, {
-            isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
-            isAddToCartOpen: state =>
-                state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
-        }),
         ...mapState('route', {
-            code: state => state.params.code,
-            entityCode: state => state.params.entityCode,
+            code: (state) => state.params.code,
+            entityCode: (state) => state.params.entityCode,
         }),
 
         breadcrumbRootUrl() {
@@ -333,7 +327,7 @@ export default {
         defaultImg() {
             const banner = this[PRODUCT_GROUP][BANNER];
             const image = banner.desktopImage || banner.tabletImage || banner.mobileImage;
-            if (image) return generatePictureSourcePath(1224, 240, image.id, image.sourceExt);
+            if (image) return generatePictureSourcePath(1224, 240, image.id);
         },
 
         clearFilterUrl() {
@@ -365,7 +359,7 @@ export default {
 
         setSortValue(field, direction) {
             this.sortValue =
-                this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
+                this.sortOptions.find((o) => o.field === field && o.direction === direction) || this.sortOptions[0];
         },
 
         onClickDeleteTag(value) {
@@ -461,7 +455,7 @@ export default {
 
         // если все загружено, пропускаем
         if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode)
-            next(vm => vm.setSortValue(orderField, orderDirection));
+            next((vm) => vm.setSortValue(orderField, orderDirection));
         else {
             const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
 
@@ -480,14 +474,14 @@ export default {
                     orderField,
                     orderDirection,
                 })
-                .then(data => {
+                .then((data) => {
                     $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         vm.setSortValue(orderField, orderDirection);
                         $progress.finish();
                     });
                 })
-                .catch(thrown => {
+                .catch((thrown) => {
                     if (thrown && thrown.isCancel === true) return next();
                     $progress.fail();
                     next();

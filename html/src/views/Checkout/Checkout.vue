@@ -27,21 +27,18 @@
                                 Сумма заказа: {{ $t(`cart.summary.type.${checkoutType}`) }}
                                 <price v-bind="summary.sum" />
                             </p>
-                            <!-- #58322  -->
-                            <!-- <p class="checkout-view__main-panel-line">
-                                Скидка по промокоду <price v-bind="summary.promoDiscount" />
-                            </p> -->
 
                             <template v-if="isProduct">
-                                <!-- #58322  -->
-                                <!-- <p class="checkout-view__main-panel-line">
-                                    Оплата бонусами <price v-bind="summary.bonusDiscount" />
-                                </p>
-                                <p class="checkout-view__main-panel-line">
-                                    Оплата подарочным сертификатом <price v-bind="summary.certDiscount" />
-                                </p> -->
                                 <p class="checkout-view__main-panel-line">
                                     Доставка <price v-bind="summary.delivery" />
+                                </p>
+                                <p
+                                    class="checkout-view__main-panel-line"
+                                    v-for="discount in summary.discounts"
+                                    :key="discount.type"
+                                >
+                                    {{ $t(`cart.summary.discount.${discount.type}`) }}
+                                    <span>-<price v-bind="discount.value" /></span>
                                 </p>
                             </template>
 
@@ -49,8 +46,7 @@
                                 <p class="text-bold checkout-view__main-panel-line">
                                     Итого <price v-bind="summary.total" />
                                 </p>
-                                <!-- #58322  -->
-                                <!-- <p class="text-grey text-sm checkout-view__main-panel-line">
+                                <p class="text-grey text-sm checkout-view__main-panel-line">
                                     Будет начислено
                                     <span>
                                         {{
@@ -71,11 +67,10 @@
                                         }}
                                         &nbsp;бонусов
                                     </span>
-                                </p> -->
+                                </p>
                             </div>
 
-                            <!-- #58322  -->
-                            <!-- <div v-if="!promocode" class="checkout-view__main-panel-promo">
+                            <div v-if="!promocode" class="checkout-view__main-panel-promo">
                                 <v-input
                                     v-model="inputPromocode"
                                     class="checkout-view__main-panel-promo-input"
@@ -105,7 +100,7 @@
                                         Отменить
                                     </v-link>
                                 </div>
-                            </div> -->
+                            </div>
                             <v-button class="checkout-view__main-panel-submit" @click="onCommit" :disabled="isCommit">
                                 Перейти к оплате
                             </v-button>

@@ -84,9 +84,7 @@ import VCheck from '@controls/VCheck/VCheck.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import TagItem from '@components/TagItem/TagItem.vue';
 
-import PreferenceEditModal, {
-    NAME as PREFERENCES_EDIT_MODAL_NAME,
-} from '@components/profile/PreferenceEditModal/PreferenceEditModal.vue';
+import PreferenceEditModal from '@components/profile/PreferenceEditModal/PreferenceEditModal.vue';
 
 import { mapState, mapActions } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -100,6 +98,7 @@ import {
 } from '@store/modules/Profile';
 import { DELETE_ENTITY, DELETE_ALL_ENTITIES, UPDATE_ENTITIES } from '@store/modules/Profile/actions';
 
+import { modalName } from '@enums';
 import '@images/sprites/cross.svg';
 import '@images/sprites/plus-small.svg';
 import './ProPreferences.css';
@@ -132,22 +131,24 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isPreferencesOpen: state =>
-                state[MODALS][PREFERENCES_EDIT_MODAL_NAME] && state[MODALS][PREFERENCES_EDIT_MODAL_NAME].open,
+            isPreferencesOpen: (state) =>
+                state[MODALS][modalName.profile.PREFERENCE_EDIT] &&
+                state[MODALS][modalName.profile.PREFERENCE_EDIT].open,
         }),
 
         ...mapState(PROFILE_MODULE, {
-            [entityTypes.BRANDS]: state =>
+            [entityTypes.BRANDS]: (state) =>
                 (state[PRO_PREFERENCES_DATA] && state[PRO_PREFERENCES_DATA][entityTypes.BRANDS]) || [],
-            [entityTypes.CATEGORIES]: state =>
+            [entityTypes.CATEGORIES]: (state) =>
                 (state[PRO_PREFERENCES_DATA] && state[PRO_PREFERENCES_DATA][entityTypes.CATEGORIES]) || [],
 
-            preferencesBrands: state => (state[PREFERENCES_DATA] && state[PREFERENCES_DATA][entityTypes.BRANDS]) || [],
-            preferencesCategories: state =>
+            preferencesBrands: (state) =>
+                (state[PREFERENCES_DATA] && state[PREFERENCES_DATA][entityTypes.BRANDS]) || [],
+            preferencesCategories: (state) =>
                 (state[PREFERENCES_DATA] && state[PREFERENCES_DATA][entityTypes.CATEGORIES]) || [],
 
-            availableBrands: state => (state && state.availableBrands) || [],
-            availableCategories: state => (state && state.availableCategories) || [],
+            availableBrands: (state) => (state && state.availableBrands) || [],
+            availableCategories: (state) => (state && state.availableCategories) || [],
         }),
 
         type() {
@@ -212,7 +213,7 @@ export default {
             }
 
             this[CHANGE_MODAL_STATE]({
-                name: PREFERENCES_EDIT_MODAL_NAME,
+                name: modalName.profile.PREFERENCE_EDIT,
                 open: true,
                 state: {
                     type,

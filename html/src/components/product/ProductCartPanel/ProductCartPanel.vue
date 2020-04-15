@@ -20,11 +20,14 @@
             <buy-button class="product-cart-panel__controls-btn" @click="onAddToCart" :disabled="disabled">
                 <slot />
             </buy-button>
-            <!-- #58539 -->
-            <!-- <v-link class="product-cart-panel__controls-wishlist" @click="onAddToWishlist">
-                <v-svg id="product-wishlist" name="wishlist-middle" width="20" height="18" />
-                &nbsp;В избранное
-            </v-link> -->
+
+            <favorites-button
+                class="product-cart-panel__controls-wishlist"
+                @click="onAddToWishlist"
+                :isActive="inFavorites"
+            >
+                &nbsp;{{ favoritesBtnText }}
+            </favorites-button>
         </div>
     </div>
 </template>
@@ -35,6 +38,11 @@ import VLink from '@controls/VLink/VLink.vue';
 
 import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
+import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
+
+import { mapGetters, mapActions, mapState } from 'vuex';
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
 import '@images/sprites/wishlist-middle.svg';
 import './ProductCartPanel.css';
@@ -48,9 +56,15 @@ export default {
 
         Price,
         BuyButton,
+        FavoritesButton,
     },
 
     props: {
+        productId: {
+            type: [Number, String],
+            required: true,
+        },
+
         price: {
             type: Object,
             default() {
@@ -72,6 +86,18 @@ export default {
         disabled: {
             type: Boolean,
             default: false,
+        },
+    },
+
+    computed: {
+        ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+
+        favoritesBtnText() {
+            return this.inFavorites ? 'В избранном' : 'В избранноe';
+        },
+
+        inFavorites() {
+            return this[IS_IN_FAVORITES](this.productId);
         },
     },
 

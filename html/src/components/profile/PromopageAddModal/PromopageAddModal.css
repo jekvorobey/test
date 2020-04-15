@@ -71,8 +71,14 @@
 
         &-item {
             padding: 1px;
+            cursor: pointer;
+
             & + & {
                 margin-top: var(--gs);
+            }
+
+            &--selected {
+                background-color: var(--cl-elem-grey);
             }
         }
 

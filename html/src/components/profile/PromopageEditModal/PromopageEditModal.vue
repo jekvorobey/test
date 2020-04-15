@@ -40,11 +40,11 @@ import { NAME as PROMOPAGE_MODULE, TITLE } from '@store/modules/Profile/modules/
 import { SET_PROMOPAGE_TITLE } from '@store/modules/Profile/modules/Promopage/actions';
 
 import validationMixin, { required } from '@plugins/validation';
+import { modalName } from '@enums';
 import './PromopageEditModal.css';
 
 const PROMOPAGE_MODULE_PATH = `${PROFILE_MODULE}/${PROMOPAGE_MODULE}`;
-
-export const NAME = 'promopage-edit-modal';
+const NAME = modalName.profile.PROMO_EDIT;
 
 export default {
     name: NAME,
@@ -71,7 +71,7 @@ export default {
     computed: {
         ...mapState(PROMOPAGE_MODULE_PATH, [TITLE]),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+            isOpen: (state) => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
         }),
 
         isTablet() {

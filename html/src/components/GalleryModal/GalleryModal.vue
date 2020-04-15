@@ -14,7 +14,7 @@
                             <template v-slot:fallback="{ image, lazy, alt }">
                                 <img
                                     class="blur-up lazyload v-picture__img"
-                                    :data-src="generateSourcePath(750, 750, image.id, image.sourceExt)"
+                                    :data-src="generateSourcePath(750, 750, image.id)"
                                     :alt="alt"
                                 />
                             </template>
@@ -40,7 +40,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as PRODUCT_MODULE, PRODUCT } from '@store/modules/Product';
 
 import { generatePictureSourcePath } from '@util/file';
-import { breakpoints } from '@enums';
+import { breakpoints, modalName } from '@enums';
 import './GalleryModal.css';
 
 const galleryOptions = {
@@ -59,7 +59,7 @@ const galleryOptions = {
     },
 };
 
-export const NAME = 'gallery-modal';
+const NAME = modalName.product.GALLERY_MODAL;
 
 export default {
     name: NAME,
@@ -73,8 +73,8 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         ...mapState(PRODUCT_MODULE, [PRODUCT]),

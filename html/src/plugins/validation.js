@@ -9,7 +9,12 @@ import {
     sameAs as sa,
 } from 'vuelidate/lib/validators';
 
-import { password as passwordRegx, tel as telRegx, email as emailRegx } from '@regex/validation';
+import {
+    password as passwordRegx,
+    tel as telRegx,
+    email as emailRegx,
+    referrerCode as referrerCodeRegx,
+} from '@regex/validation';
 import { countCheckdigit } from '@util';
 
 function innValidation(value) {
@@ -51,7 +56,7 @@ function rsValidation(rs, bik) {
 }
 
 function rsWithParams(prop) {
-    return helpers.withParams({ type: 'rs', bik: prop }, function(value, parentVm) {
+    return helpers.withParams({ type: 'rs', bik: prop }, function (value, parentVm) {
         return rsValidation(value, helpers.ref(prop, this, parentVm));
     });
 }
@@ -63,6 +68,7 @@ function bikValidation(bik) {
     return bik.length === 9 && !/[^0-9]/.test(bik);
 }
 
+export const referrerCode = helpers.regex('referrerCode', referrerCodeRegx);
 export const password = helpers.regex('password', passwordRegx);
 export const tel = helpers.regex('tel', telRegx);
 export const email = helpers.regex('email', emailRegx);

@@ -12,12 +12,7 @@
             />
         </div>
 
-        <info-panel
-            class="seo-view__panel"
-            :header="item.product_name"
-            v-for="(item, index) in seoProducts"
-            :key="item.id"
-        >
+        <info-panel class="seo-view__panel" :header="item.product_name" v-for="item in seoProducts" :key="item.id">
             <template v-slot:controls>
                 <div class="seo-view__panel-links">
                     <!-- <v-link class="seo-view__panel-link" tag="button">
@@ -69,14 +64,14 @@
         </info-panel>
 
         <div class="container container--tablet-lg seo-view__controls" v-if="pagesCount > 1">
-            <v-button
-                class="btn--outline seo-view__controls-btn"
+            <show-more-button
+                btn-class="btn--outline seo-view__controls-btn"
                 v-if="activePage < pagesCount"
                 @click="onShowMore"
-                :disabled="showMore"
+                :show-preloader="showMore"
             >
                 Показать ещё
-            </v-button>
+            </show-more-button>
             <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
     </section>
@@ -92,6 +87,7 @@ import VPagination from '@controls/VPagination/VPagination.vue';
 
 import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -118,7 +114,6 @@ import '@images/sprites/copy.svg';
 import '@images/sprites/link.svg';
 import './Seo.css';
 
-
 const SEO_MODULE_PATH = `${PROFILE_MODULE}/${SEO_MODULE}`;
 
 export default {
@@ -134,6 +129,7 @@ export default {
 
         RadioSwitch,
         InfoPanel,
+        ShowMoreButton,
     },
 
     data() {
@@ -174,7 +170,7 @@ export default {
                         return {
                             id: f.id,
                             image: generatePictureSourcePath(null, null, f.id, fileExtension.image.WEBP),
-                            defaultImage: generatePictureSourcePath(null, null, f.id, f.sourceExt),
+                            defaultImage: generatePictureSourcePath(null, null, f.id),
                         };
                     }),
                 };
@@ -208,7 +204,7 @@ export default {
 
         onCopyToClipboard(e, text) {
             const result = saveToClipboard(text);
-            var msg = result ? 'Успешно скопировано' : 'Не удается скопировать';
+            const msg = result ? 'Успешно скопировано' : 'Не удается скопировать';
             alert(msg);
             e.target.focus();
         },

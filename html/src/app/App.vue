@@ -1,5 +1,9 @@
 <template>
-    <div id="app" class="fake-vue-body" :class="{ 'fake-vue-body--scroll': scroll, 'fake-vue-body--hidden-header': hideDefaultHeader }">
+    <div
+        id="app"
+        class="fake-vue-body"
+        :class="{ 'fake-vue-body--scroll': scroll, 'fake-vue-body--hidden-header': hideDefaultHeader }"
+    >
         <v-header v-if="!hideDefaultHeader" />
         <main>
             <!-- <transition name="fade" mode="out-in"> -->
@@ -54,18 +58,12 @@ import TagItem from '@components/TagItem/TagItem.vue';
 import VHeader from '@components/VHeader/VHeader.vue';
 import VFooter from '@components/VFooter/VFooter.vue';
 
-import LoginModal, { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
-import RegistrationModal, {
-    NAME as REGISTRATION_MODAL_NAME,
-} from '@components/RegistrationModal/RegistrationModal.vue';
-import CitySelectionModal, {
-    NAME as CITY_SELECTION_MODAL_NAME,
-} from '@components/CitySelectionModal/CitySelectionModal.vue';
-
-import QuickViewModal, { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
-import AddToCartModal, { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
-
-import NotificationModal, { NAME as NOTIFICATION_MODAL_NAME } from '@components/NotificationModal/NotificationModal.vue';
+import LoginModal from '@components/LoginModal/LoginModal.vue';
+import RegistrationModal from '@components/RegistrationModal/RegistrationModal.vue';
+import CitySelectionModal from '@components/CitySelectionModal/CitySelectionModal.vue';
+import QuickViewModal from '@components/QuickViewModal/QuickViewModal.vue';
+import AddToCartModal from '@components/AddToCartModal/AddToCartModal.vue';
+import NotificationModal from '@components/NotificationModal/NotificationModal.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions } from 'vuex';
@@ -79,6 +77,9 @@ import { SET_SELECTED_CITY_BY_IP } from '@store/modules/Geolocation/actions';
 import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
 import { FETCH_CART_DATA, CLEAR_CART_DATA } from '@store/modules/Cart/actions';
 
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { FETCH_FAVORITES_ALL } from '@store/modules/Favorites/actions';
+
 import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
 import { CHECK_SESSION, FETCH_USER } from '@store/modules/Auth/actions';
 
@@ -86,7 +87,7 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { $cookie } from '@services';
-import { eventName, interval } from '@enums';
+import { eventName, interval, modalName } from '@enums';
 import { MIN_SCROLL_VALUE, SCROLL_DEBOUCE_TIME } from '@constants';
 
 export default {
@@ -108,24 +109,26 @@ export default {
         ...mapState([SCROLL]),
         ...mapState(AUTH_MODULE, [HAS_SESSION, USER]),
         ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
+            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
         }),
 
         ...mapState('route', {
-            hideDefaultHeader: state => state.meta.hideDefaultHeader
+            hideDefaultHeader: (state) => state.meta.hideDefaultHeader,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isRegistrationOpen: state =>
-                state[MODALS][REGISTRATION_MODAL_NAME] && state[MODALS][REGISTRATION_MODAL_NAME].open,
-            isLoginOpen: state => state[MODALS][LOGIN_MODAL_NAME] && state[MODALS][LOGIN_MODAL_NAME].open,
-            isCitySelectionOpen: state =>
-                state[MODALS][CITY_SELECTION_MODAL_NAME] && state[MODALS][CITY_SELECTION_MODAL_NAME].open,
-            isQuickViewOpen: state => state[MODALS][QUICK_VIEW_MODAL_NAME] && state[MODALS][QUICK_VIEW_MODAL_NAME].open,
-            isAddToCartOpen: state =>
-                state[MODALS][ADD_TO_CART_MODAL_NAME] && state[MODALS][ADD_TO_CART_MODAL_NAME].open,
-            isNotificationOpen: state =>
-                state[MODALS][NOTIFICATION_MODAL_NAME] && state[MODALS][NOTIFICATION_MODAL_NAME].open,
+            isRegistrationOpen: (state) =>
+                state[MODALS][modalName.general.REGISTRATION] && state[MODALS][modalName.general.REGISTRATION].open,
+            isLoginOpen: (state) =>
+                state[MODALS][modalName.general.LOGIN] && state[MODALS][modalName.general.LOGIN].open,
+            isCitySelectionOpen: (state) =>
+                state[MODALS][modalName.general.CITY_SELECTION] && state[MODALS][modalName.general.CITY_SELECTION].open,
+            isQuickViewOpen: (state) =>
+                state[MODALS][modalName.general.QUICK_VIEW] && state[MODALS][modalName.general.QUICK_VIEW].open,
+            isAddToCartOpen: (state) =>
+                state[MODALS][modalName.general.ADD_TO_CART] && state[MODALS][modalName.general.ADD_TO_CART].open,
+            isNotificationOpen: (state) =>
+                state[MODALS][modalName.general.NOTIFICATION] && state[MODALS][modalName.general.NOTIFICATION].open,
         }),
 
         isTabletLg() {
@@ -139,6 +142,7 @@ export default {
         ...mapActions(AUTH_MODULE, [CHECK_SESSION, FETCH_USER]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(FAVORITES_MODULE, [FETCH_FAVORITES_ALL]),
 
         onCheckCitySelection() {
             const geoData = $cookie.get('ibt_geoc');
@@ -171,6 +175,7 @@ export default {
             if (value) {
                 await this[FETCH_USER]();
                 if (this[CAN_BUY]) this[FETCH_CART_DATA]();
+                await this[FETCH_FAVORITES_ALL]();
             } else this[CLEAR_CART_DATA]();
             this.startSessionTimer();
         },
@@ -182,6 +187,7 @@ export default {
             if (this[HAS_SESSION]) {
                 if (!this[USER]) await this[FETCH_USER]();
                 if (this[CAN_BUY]) await this[FETCH_CART_DATA]();
+                await this[FETCH_FAVORITES_ALL]();
             } else return Promise.resolve();
         } catch (error) {
             return Promise.resolve();

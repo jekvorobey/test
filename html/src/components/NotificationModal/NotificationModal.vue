@@ -20,9 +20,10 @@ import { mapState, mapActions } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { modalName } from '@enums';
 import './NotificationModal.css';
 
-export const NAME = 'notification-modal';
+const NAME = modalName.general.NOTIFICATION;
 
 export default {
     name: NAME,
@@ -34,7 +35,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         isTablet() {

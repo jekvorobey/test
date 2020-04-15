@@ -8,7 +8,7 @@
                 <template v-slot:fallback="{ image, alt }">
                     <img
                         class="blur-up lazyload v-picture__img"
-                        :data-src="generateSourcePath(64, 64, image.id, image.sourceExt)"
+                        :data-src="generateSourcePath(64, 64, image.id)"
                         :alt="alt"
                     />
                 </template>

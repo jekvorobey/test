@@ -94,7 +94,7 @@ export default {
 
         defaultImage() {
             if (this.image && this.image.id)
-                return generatePictureSourcePath(56, 56, this.image.id, this.image.sourceExt);
+                return generatePictureSourcePath(56, 56, this.image.id);
             return this.image;
         },
 

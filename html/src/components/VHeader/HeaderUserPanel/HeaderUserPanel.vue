@@ -9,10 +9,10 @@
         </div>
 
         <template v-if="hasSession">
-            <!-- #58322  -->
-            <!-- <button class="header-user-panel__item">
+            <router-link class="header-user-panel__item" to="/favorites">
                 <v-svg name="wishlist-middle" width="24" height="24" />
-            </button> -->
+            </router-link>
+
             <div v-if="canBuy" class="header-user-panel__item">
                 <price class="text-medium header-user-panel__item-sum" v-bind="productItemsSum" />
                 &nbsp;&nbsp;
@@ -36,17 +36,14 @@ import Price from '@components/Price/Price.vue';
 import CartHeaderPanel from '@components/CartHeaderPanel/CartHeaderPanel.vue';
 import ProfileNavigationPanel from '@components/ProfileNavigationPanel/ProfileNavigationPanel.vue';
 
-import { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
-
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY } from '@store/modules/Auth';
-
 import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
-
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { modalName } from '@enums';
 import '@images/sprites/cart-middle.svg';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/account-middle.svg';
@@ -69,7 +66,7 @@ export default {
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
+            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
         }),
 
         isTablet() {
@@ -90,7 +87,7 @@ export default {
 
         onRegister() {
             if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
-            else this[CHANGE_MODAL_STATE]({ name: LOGIN_MODAL_NAME, open: true });
+            else this[CHANGE_MODAL_STATE]({ name: modalName.general.LOGIN, open: true });
         },
     },
 };

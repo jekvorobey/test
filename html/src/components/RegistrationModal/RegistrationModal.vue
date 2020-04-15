@@ -153,7 +153,6 @@ import VInput from '@controls/VInput/VInput.vue';
 import VInputMask from '@controls/VInput/VInputMask.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
-import { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
 
 import _cloneDeep from 'lodash/cloneDeep';
 import { mapState, mapActions } from 'vuex';
@@ -166,13 +165,14 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
 import { rawPhone } from '@util';
 import { phoneMaskOptions } from '@settings';
+import { modalName } from '@enums';
 import { verificationCodeType } from '@enums/auth';
 import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/google-bw.svg';
 import './RegistrationModal.css';
 
-export const NAME = 'registration-modal';
+const NAME = modalName.general.REGISTRATION;
 
 export default {
     name: NAME,
@@ -207,7 +207,7 @@ export default {
         },
 
         phoneExists: {
-            exists: value => value === false,
+            exists: (value) => value === false,
         },
 
         code: {
@@ -215,7 +215,7 @@ export default {
         },
 
         accepted: {
-            valid: value => value === true,
+            valid: (value) => value === true,
         },
     },
 
@@ -246,7 +246,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         phone() {
@@ -322,7 +322,7 @@ export default {
 
         onLogin() {
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
-            this[CHANGE_MODAL_STATE]({ name: LOGIN_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.LOGIN, open: true });
         },
 
         async onRegisterBySocial(driver) {

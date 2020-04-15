@@ -46,7 +46,8 @@
                         <li class="add-to-cart-modal__relative-item" v-for="item in products" :key="item.id">
                             <catalog-product-card
                                 class="add-to-cart-modal__relative-card"
-                                :product-id="item.id"
+                                :offer-id="item.id"
+                                :product-id="item.productId"
                                 :name="item.name"
                                 :type="item.type"
                                 :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
@@ -58,6 +59,7 @@
                                 :show-buy-btn="item.stock.qty > 0"
                                 @add-item="onAddToCart(item)"
                                 @preview="onPreview(item.code)"
+                                @toggle-favorite-item="onToggleFavorite(item)"
                             />
                         </li>
                     </ul>
@@ -90,7 +92,6 @@ import Price from '@components/Price/Price.vue';
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
-import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
@@ -101,11 +102,15 @@ import { NAME as CART_MODULE, CART_DATA, RELATIVE_PRODUCTS } from '@store/module
 import { ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS } from '@store/modules/Cart/actions';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
 
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
+
+import { modalName } from '@enums';
 import { getRandomIntInclusive } from '@util';
 import { generatePictureSourcePath } from '@util/file';
 import './AddToCartModal.css';
 
-export const NAME = 'add-to-cart-modal';
+const NAME = modalName.general.ADD_TO_CART;
 
 export default {
     name: NAME,
@@ -129,7 +134,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
         ...mapState(CART_MODULE, [CART_DATA, RELATIVE_PRODUCTS]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
@@ -154,7 +159,7 @@ export default {
     watch: {
         [CART_DATA]() {
             const data = this[CART_DATA][this.modalState.type];
-            this.cartItem = data ? data.items.find(i => i.p.id === this.modalState.offerId) : null;
+            this.cartItem = data ? data.items.find((i) => i.p.id === this.modalState.offerId) : null;
         },
 
         modalState() {
@@ -168,7 +173,7 @@ export default {
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
-            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
         },
 
         onAddToCart(item) {
@@ -179,11 +184,15 @@ export default {
             });
         },
 
+        onToggleFavorite({ productId }) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
+        },
+
         fetchData() {
             const { offerId, storeId, referralCode, type, cookieName } = this.modalState;
             const data = this[CART_DATA][type];
 
-            this.cartItem = data ? data.items.find(i => i.p.id === offerId) : null;
+            this.cartItem = data ? data.items.find((i) => i.p.id === offerId) : null;
             if (!this.cartItem) this[ADD_CART_ITEM]({ offerId, storeId, referralCode, cookieName });
             this[FETCH_RELATIVE_PRODUCTS]({ page: getRandomIntInclusive(1, 4) });
         },

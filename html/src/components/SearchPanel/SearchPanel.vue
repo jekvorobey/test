@@ -21,7 +21,8 @@
                     <transition-group tag="ul" name="item" class="search-panel__products-list" appear>
                         <li class="search-panel__products-card" v-for="item in products" :key="item.id">
                             <catalog-product-card
-                                :product-id="item.id"
+                                :offer-id="item.id"
+                                :product-id="item.productId"
                                 :name="item.name"
                                 :type="item.type"
                                 href="/"
@@ -64,7 +65,7 @@ export default {
     computed: {
         ...mapState(SEARCH_MODULE, [SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS]),
         ...mapState(SEARCH_MODULE, {
-            categories: state => state[SUGGESTIONS].categories,
+            categories: (state) => state[SUGGESTIONS].categories,
         }),
 
         products() {

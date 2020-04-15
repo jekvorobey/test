@@ -1,24 +1,36 @@
 export const orderStatus = Object.freeze({
+    /* предзаказ: ожидаем поступления товара */
+    PRE_ORDER: 0,
+
     /* оформлен */
     CREATED: 1,
-    /* ожидает подтверждения */
+
+    /* ожидает проверки АОЗ */
     AWAITING_CHECK: 2,
+
+    /* проверка АОЗ */
+    CHECKING: 3,
+
+    /* Ожидает подтверждения мерчантом */
+    AWAITING_CONFIRMATION: 4,
+
     /* в обработке */
-    IN_PROCESSING: 3,
-    /* проверка */
-    CHECKING: 4,
+    IN_PROCESSING: 5,
+
     /* передан на доставку */
-    TRANSFERRED_TO_DELIVERY: 5,
+    TRANSFERRED_TO_DELIVERY: 6,
+
     /* в процессе доставки */
-    DELIVERING: 6,
+    DELIVERING: 7,
+
     /* находится в Пункте Выдачи */
-    READY_FOR_RECIPIENT: 7,
+    READY_FOR_RECIPIENT: 8,
+
     /* доставлен */
-    DONE: 8,
+    DONE: 9,
+
     /* возвращен */
-    RETURNED: 9,
-    /* предзаказ: ожидаем поступления товара */
-    PRE_ORDER: 10,
+    RETURNED: 10,
 
     // реально НЕ СУЩЕСТВУЕТ в системе, вместо него флаг в ордере
     CANCELED: 100,

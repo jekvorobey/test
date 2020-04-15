@@ -50,25 +50,23 @@ export default {
                     id: 1,
                     routes: [
                         { name: 'Cabinet', exact: true },
-                        // #58322
-                        // { name: 'Messages', displayName: this.$tc('profile.format.messages', 5) },
+                        { name: 'Messages', displayName: this.$tc('profile.format.messages', 5) },
                         { name: 'Orders' },
                     ],
                 },
             ];
 
-            // #58322
-            // if (this[REFERRAL_PARTNER])
-            //     groups.push({
-            //         id: 2,
-            //         routes: [
-            //             { name: 'Referal', exact: true },
-            //             { name: 'Account', exact: true },
-            //             { name: 'Billing', exact: true },
-            //             { name: 'Documents', exact: true },
-            //             // { name: 'Masterclasses', exact: true },
-            //         ],
-            //     });
+            if (this[REFERRAL_PARTNER])
+                groups.push({
+                    id: 2,
+                    routes: [
+                        { name: 'Referal', exact: true },
+                        { name: 'Account', exact: true },
+                        { name: 'Billing', exact: true },
+                        { name: 'Documents', exact: true },
+                        // { name: 'Masterclasses', exact: true },
+                    ],
+                });
 
             return groups;
         },

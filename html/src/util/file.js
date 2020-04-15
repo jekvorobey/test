@@ -5,7 +5,7 @@ export function generateFileOriginalPath(id) {
 }
 
 export function generatePictureSourcePath(x = '', y = '', id, ext) {
-    return `${$http.baseURL}/files/compressed/${id}${x ? `/${x}` : ''}${y ? `/${y}` : ''}/${ext}`;
+    return `${$http.baseURL}/files/compressed/${id}${x ? `/${x}` : ''}${y ? `/${y}` : ''}/${ext || 'orig'}`;
 }
 
 export function generateYoutubeVideoSourcePath(videoId) {

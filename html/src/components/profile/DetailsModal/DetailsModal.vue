@@ -15,9 +15,10 @@
                 <div class="details-modal__form-row">
                     <v-input
                         class="details-modal__form-column"
-                        v-model="$v.form.inn.$model"
                         maxLength="12"
+                        :value="$v.form.inn.$model"
                         :error="innError"
+                        @input="onInnChange"
                     >
                         ИНН
                     </v-input>
@@ -31,7 +32,7 @@
                         <v-input v-model="form.account" maxLength="20" :error="accountError">
                             Расчетный счет
                         </v-input>
-                        <v-input v-model="$v.form.bik.$model" :error="bikError">
+                        <v-input :value="$v.form.bik.$model" :error="bikError" @input="onBikChange">
                             БИК
                         </v-input>
                     </div>
@@ -54,7 +55,7 @@
                     Наименование ИП
                 </v-input>
 
-                <v-input v-model="$v.form.inn.$model" maxLength="12" :error="innError">
+                <v-input :value="$v.form.inn.$model" maxLength="12" :error="innError" @input="onInnChange">
                     ИНН
                 </v-input>
 
@@ -62,7 +63,7 @@
                     Расчетный счет
                 </v-input>
 
-                <v-input v-model="$v.form.bik.$model" :error="bikError" maxLength="9">
+                <v-input :value="$v.form.bik.$model" :error="bikError" maxLength="9" @input="onBikChange">
                     БИК
                 </v-input>
 
@@ -108,10 +109,11 @@ import { NAME as CABINET_MODULE, REQUISITES } from '@store/modules/Profile/modul
 import { UPDATE_REQUISITES } from '@store/modules/Profile/modules/Cabinet/actions';
 
 import { $dadata, $logger } from '@services';
+import { modalName } from '@enums';
 import './DetailsModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
-export const NAME = 'details-modal';
+const NAME = modalName.profile.DETAILS;
 
 export default {
     name: NAME,
@@ -125,13 +127,17 @@ export default {
 
     validations: {
         form: {
+            name: {
+                required,
+            },
+
+            address: {
+                required,
+            },
+
             inn: {
                 required,
                 inn,
-            },
-
-            correspondentAccount: {
-                required,
             },
 
             account: {
@@ -139,20 +145,16 @@ export default {
                 rs: rs('bik'),
             },
 
+            bank: {
+                required,
+            },
+
             bik: {
                 required,
                 bik,
             },
 
-            name: {
-                required,
-            },
-
-            bank: {
-                required,
-            },
-
-            address: {
+            correspondentAccount: {
                 required,
             },
         },
@@ -162,12 +164,12 @@ export default {
         return {
             form: {
                 name: null,
-                inn: null,
-                bik: null,
-                bank: null,
-                account: null,
-                correspondentAccount: null,
                 address: null,
+                inn: null,
+                account: null,
+                bank: null,
+                bik: null,
+                correspondentAccount: null,
             },
 
             existBank: false,
@@ -188,8 +190,7 @@ export default {
         },
 
         innError() {
-            if (this.$v.form.inn.$dirty && (this.$v.form.inn.$invalid || this.$v.form.name.$invalid))
-                return 'Неправильный ИНН';
+            if (this.$v.form.inn.$dirty && this.$v.form.inn.$invalid) return 'Неправильный ИНН';
         },
 
         bikError() {
@@ -201,22 +202,6 @@ export default {
                     this.$v.form.address.$invalid)
             )
                 return 'Неправильный БИК';
-        },
-    },
-
-    watch: {
-        ['form.inn']: {
-            handler(value) {
-                if (!this.$v.form.inn.$invalid) this.findCompany(value);
-                else this.resetCompany();
-            },
-        },
-
-        ['form.bik']: {
-            handler(value) {
-                if (!this.$v.form.bik.$invalid) this.findBank(value);
-                else this.resetBank();
-            },
         },
     },
 
@@ -266,6 +251,18 @@ export default {
             }
         },
 
+        onInnChange(value) {
+            this.form.inn = value;
+            if (!this.$v.form.inn.$invalid) this.findCompany(value);
+            else this.resetCompany();
+        },
+
+        onBikChange(value) {
+            this.form.bik = value;
+            if (!this.$v.form.bik.$invalid) this.findBank(value);
+            else this.resetBank();
+        },
+
         onSubmit() {
             this.$v.$touch();
             if (!this.$v.$invalid) {
@@ -276,7 +273,8 @@ export default {
     },
 
     beforeMount() {
-        this.form = { ...this[REQUISITES] };
+        const requisites = this[REQUISITES] || {};
+        this.form = { ...requisites };
     },
 };
 </script>
