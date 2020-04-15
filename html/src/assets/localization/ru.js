@@ -1,6 +1,6 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
 import { socials } from '@enums';
-import { receiveMethods } from '@enums/checkout';
+import { receiveMethods, discountType } from '@enums/checkout';
 import { genderType } from '@enums/profile';
 import { orderStatus, deliveryStatus } from '@enums/order';
 
@@ -58,16 +58,17 @@ const main = {
     },
 
     orderStatus: {
+        [orderStatus.PRE_ORDER]: 'Предзаказ: ожидаем поступления товара',
         [orderStatus.CREATED]: 'Создан',
-        [orderStatus.AWAITING_CHECK]: 'Ожидает подтверждения',
+        [orderStatus.AWAITING_CHECK]: 'В обработке',
+        [orderStatus.CHECKING]: 'В обработке',
+        [orderStatus.AWAITING_CONFIRMATION]: 'В обработке',
         [orderStatus.IN_PROCESSING]: 'В обработке',
-        [orderStatus.CHECKING]: 'Проверка',
-        [orderStatus.TRANSFERRED_TO_DELIVERY]: 'Передан на доставку',
+        [orderStatus.TRANSFERRED_TO_DELIVERY]: 'В обработке',
         [orderStatus.DELIVERING]: 'В процессе доставки',
         [orderStatus.READY_FOR_RECIPIENT]: 'В пункте выдачи',
         [orderStatus.DONE]: 'Доставлен',
         [orderStatus.RETURNED]: 'Возвращен',
-        [orderStatus.PRE_ORDER]: 'Предзаказ',
     },
 
     deliveryStatus: {
@@ -188,6 +189,14 @@ const main = {
             type: {
                 product: 'Продукты',
                 masterclass: 'Мастер-классы',
+            },
+
+            discount: {
+                [discountType.PRODUCT]: 'Скидка на товар',
+                [discountType.DELIVERY]: 'Скидка на доставку',
+                [discountType.CART]: 'Скидка на корзину',
+                [discountType.CUSTOM]: 'Скидка для Вас',
+                [discountType.PROMOCODE]: 'Скидка по промокоду',
             },
         },
     },

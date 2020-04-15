@@ -18,6 +18,7 @@
 
     &__item {
         margin-left: calc(var(--gs) * 3);
+        border-bottom: none;
 
         @media (--desktop) {
             margin-left: calc(var(--gs) * 2);

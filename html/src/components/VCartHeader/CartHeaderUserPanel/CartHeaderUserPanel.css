@@ -31,5 +31,6 @@
     &__btn {
         display: flex;
         margin-left: calc(var(--gs) * 2.5);
+        border-bottom: none;
     }
 }

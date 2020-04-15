@@ -17,7 +17,7 @@
                 <template v-slot:fallback="{ image, lazy, alt }">
                     <img
                         class="blur-up lazyload v-picture__img"
-                        :data-src="generateSourcePath(300, 300, image.id, image.sourceExt)"
+                        :data-src="generateSourcePath(300, 300, image.id)"
                         :alt="alt"
                     />
                 </template>
@@ -47,14 +47,18 @@
             <!-- #58322  -->
             <div class="text-grey cart-product-card__body-bonus" :style="{ visibility: 'hidden' }">+ 80 бонусов</div>
             <div class="cart-product-card__body-controls">
-                <!-- #58322  -->
-                <!-- <v-link class="cart-product-card__body-controls-link" tag="button">
-                    <v-svg name="wishlist-middle" width="16" height="16" />
-                    {{ isTablet ? '' : '&nbsp;Перенести в избранное' }}
-                </v-link> -->
+                <favorites-button
+                    class="cart-product-card__body-controls-link"
+                    :is-active="inFavorites"
+                    is-small
+                    @click="onToggleFavorite"
+                >
+                    &nbsp;{{ favoritesBtnText }}
+                </favorites-button>
+
                 <v-link class="cart-product-card__body-controls-link" tag="button" @click="onDeleteClick">
                     <v-svg name="cross-small" width="10" height="10" />
-                    {{ isTablet ? '' : '&nbsp;Удалить' }}
+                    &nbsp;{{ deleteBtnText }}
                 </v-link>
             </div>
         </div>
@@ -68,6 +72,12 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import VCounter from '@controls/VCounter/VCounter.vue';
 
 import Price from '@components/Price/Price.vue';
+import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
+
+import { mapGetters, mapActions, mapState } from 'vuex';
+
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
 import _debounce from 'lodash/debounce';
 import { generatePictureSourcePath } from '@util/file';
@@ -87,9 +97,15 @@ export default {
         VCounter,
 
         Price,
+        FavoritesButton,
     },
 
     props: {
+        offerId: {
+            type: [String, Number],
+            required: true,
+        },
+
         productId: {
             type: [String, Number],
             required: true,
@@ -134,19 +150,40 @@ export default {
     },
 
     computed: {
+        ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+
+        favoritesBtnText() {
+            if (this.isTablet) return '';
+            if (this.inFavorites) return 'В избранном';
+            return 'Перенести в избранное';
+        },
+
+        deleteBtnText() {
+            if (this.isTablet) return '';
+            return 'Удалить';
+        },
+
+        inFavorites() {
+            return this[IS_IN_FAVORITES](this.productId);
+        },
+
         isTablet() {
             return this.$mq.tablet;
         },
     },
 
     methods: {
+        onToggleFavorite(value) {
+            this.$emit('toggle-favorite-item', { productId: this.productId });
+        },
+
         onCountChange(value) {
-            if (value > 0) this.$emit('countChange', { id: this.productId, type: this.type, count: value });
-            else this.$emit('deleteItem', { id: this.productId, type: this.type });
+            if (value > 0) this.$emit('countChange', { id: this.offerId, type: this.type, count: value });
+            else this.$emit('deleteItem', { id: this.offerId, type: this.type });
         },
 
         onDeleteClick() {
-            this.$emit('deleteItem', { id: this.productId, type: this.type });
+            this.$emit('deleteItem', { id: this.offerId, type: this.type });
         },
 
         generateSourcePath(x, y, id, ext) {

@@ -74,13 +74,14 @@
                     </ul>
 
                     <div class="product-groups-view__sets-controls" v-if="pagesCount > 1">
-                        <v-button
+                        <show-more-button
                             v-if="activePage < pagesCount"
-                            class="btn--outline product-groups-view__sets-controls-btn"
+                            btn-class="btn--outline product-groups-view__sets-controls-btn"
                             @click="onShowMore"
+                            :show-preloader="showMore"
                         >
                             Показать ещё
-                        </v-button>
+                        </show-more-button>
                         <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
                     </div>
                 </div>
@@ -123,6 +124,7 @@ import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSecti
 import VSlider from '@controls/VSlider/VSlider.vue';
 import BannerCard from '@components/BannerCard/BannerCard.vue';
 import CategoriesSection from '@components/blocks/CategoriesSection/CategoriesSection.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import { $store, $progress, $logger } from '@services';
 
@@ -187,6 +189,7 @@ export default {
         GroupList,
         SeparatorSection,
         CategoriesSection,
+        ShowMoreButton,
     },
 
     data() {

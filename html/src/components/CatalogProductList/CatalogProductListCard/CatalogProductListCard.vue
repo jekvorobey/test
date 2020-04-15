@@ -47,10 +47,13 @@
         <div class="catalog-product-list-card__tags" v-once>
             <tag class="catalog-product-list-card__tags-item" v-for="tag in item.tags" :key="tag.id" :text="tag.name" />
         </div>
-        <!-- #58539 -->
-        <!-- <v-link v-if="showWishlistBtn" tag="button" class="catalog-product-list-card__wishlist-btn" @click.prevent>
-            <v-svg name="wishlist-middle" width="24" height="24" />
-        </v-link> -->
+
+        <favorites-button
+            class="catalog-product-list-card__wishlist-btn"
+            :class="{ 'catalog-product-list-card__wishlist-btn--active': inFavorites }"
+            @click="onToggleFavorite"
+            :is-active="inFavorites"
+        />
     </router-link>
 </template>
 
@@ -63,13 +66,18 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import Tag from '@components/Tag/Tag.vue';
 import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
+import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 
+import { mapGetters } from 'vuex';
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
+
+import { fileExtension } from '@enums';
 import { generateProductUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
-import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/logo.svg';
 import './CatalogProductListCard.css';
 
@@ -85,6 +93,7 @@ export default {
         Tag,
         Price,
         BuyButton,
+        FavoritesButton,
     },
 
     props: {
@@ -111,21 +120,27 @@ export default {
     },
 
     computed: {
+        ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+
+        inFavorites() {
+            return this[IS_IN_FAVORITES](this.item.productId);
+        },
+
         showBuyBtn() {
             const { stock: { qty = 0 } = { qty: 0 } } = this.item;
             return qty > 0;
         },
 
         bigImg() {
-            return generatePictureSourcePath(300, 300, this.item.image.id, 'webp');
+            return generatePictureSourcePath(300, 300, this.item.image.id, fileExtension.image.WEBP);
         },
 
         smallImg() {
-            return generatePictureSourcePath(200, 200, this.item.image.id, 'webp');
+            return generatePictureSourcePath(200, 200, this.item.image.id, fileExtension.image.WEBP);
         },
 
         defaultImg() {
-            return generatePictureSourcePath(200, 200, this.item.image.id, this.item.image.sourceExt);
+            return generatePictureSourcePath(200, 200, this.item.image.id);
         },
 
         href() {
@@ -140,6 +155,11 @@ export default {
                 storeId: this.item.stock.storeId,
                 type: this.item.type,
             });
+        },
+
+        onToggleFavorite() {
+            debugger;
+            this.$emit('toggle-favorite-item', { productId: this.item.productId });
         },
 
         onPreview() {

@@ -1,6 +1,8 @@
 export const SET_CABINET_DATA = 'SET_CABINET_DATA';
 
 export const SET_LOAD = 'SET_LOAD';
+export const SET_CAN_EDIT_CODE = 'SET_CAN_EDIT_CODE';
+
 export const UPDATE_EMAIL = 'UPDATE_EMAIL';
 export const UPDATE_PHONE = 'UPDATE_PHONE';
 export const UPDATE_PORTFOLIO = 'UPDATE_PORTFOLIO';
@@ -18,26 +20,68 @@ export default {
         state.load = payload;
     },
 
+    [SET_CAN_EDIT_CODE](state, payload) {
+        state.canEditReferralCode = payload || false;
+    },
+
     [SET_CABINET_DATA](state, payload = {}) {
-        state.canBuy = payload.canBuy || false;
-        state.referralPartner = payload.referral_partner || false;
-        state.hasPassword = payload.has_password || false;
+        const {
+            can_edit_referral_code,
+            referral_partner,
+            has_password,
 
-        state.avatar = payload.avatar;
-        state.firstName = payload.first_name;
-        state.lastName = payload.last_name;
-        state.middleName = payload.middle_name;
-        state.birthday = payload.birthday;
-        state.gender = payload.gender;
-        state.phone = payload.phone;
-        state.email = payload.email;
-        state.portfolio = payload.portfolio;
-        state.activities = payload.activities;
-        state.allActivities = payload.activitiesAll;
+            avatar,
+            first_name,
+            last_name,
+            middle_name,
+            birthday,
+            gender,
+            phone,
+            email,
+            portfolio,
+            activities,
+            activitiesAll,
 
-        state.social = payload.social;
-        state.certificates = payload.certificates;
-        state.requisites = payload.requisites || {};
+            social,
+            certificates,
+
+            legal_info_company_name,
+            legal_info_company_address,
+            legal_info_inn,
+            legal_info_payment_account,
+            legal_info_bik,
+            legal_info_bank,
+            legal_info_bank_correspondent_account,
+        } = payload;
+
+        state.canEditReferralCode = can_edit_referral_code || false;
+        state.referralPartner = referral_partner || false;
+        state.hasPassword = has_password || false;
+
+        state.avatar = avatar;
+        state.firstName = first_name;
+        state.lastName = last_name;
+        state.middleName = middle_name;
+        state.birthday = birthday;
+        state.gender = gender;
+        state.phone = phone;
+        state.email = email;
+        state.portfolio = portfolio;
+        state.activities = activities;
+        state.allActivities = activitiesAll;
+
+        state.social = social;
+        state.certificates = certificates;
+
+        state.requisites = {
+            name: legal_info_company_name || null,
+            address: legal_info_company_address || null,
+            inn: legal_info_inn || null,
+            account: legal_info_payment_account || null,
+            bik: legal_info_bik || null,
+            bank: legal_info_bank || null,
+            correspondentAccount: legal_info_bank_correspondent_account || null,
+        };
     },
 
     [UPDATE_PERSONAL](state, payload = {}) {

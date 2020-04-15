@@ -59,15 +59,11 @@ import VLink from '@controls/VLink/VLink.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
-import AddressEditModal, {
-    NAME as ADDRESS_EDIT_MODAL_NAME,
-} from '@components/profile/AddressEditModal/AddressEditModal.vue';
+import AddressEditModal from '@components/profile/AddressEditModal/AddressEditModal.vue';
 
 import { mapActions, mapState } from 'vuex';
-
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
-
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 
 import { NAME as ADDRESSES_MODULE, ADDRESSES } from '@store/modules/Profile/modules/Addresses';
@@ -79,11 +75,10 @@ import {
     SET_DEFAULT_ADDRESS,
 } from '@store/modules/Profile/modules/Addresses/actions';
 
-import { $store, $progress, $logger } from '@services';
-
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
-
+import { modalName } from '@enums';
+import { $store, $progress, $logger } from '@services';
 import { getRandomIntInclusive } from '@util';
 import '@images/sprites/plus-small.svg';
 import './Addresses.css';
@@ -106,8 +101,8 @@ export default {
     computed: {
         ...mapState(ADDRESSES_MODULE_PATH, [ADDRESSES]),
         ...mapState(MODAL_MODULE, {
-            isAddressEditOpen: state =>
-                state[MODALS][ADDRESS_EDIT_MODAL_NAME] && state[MODALS][ADDRESS_EDIT_MODAL_NAME].open,
+            isAddressEditOpen: (state) =>
+                state[MODALS][modalName.profile.ADDRESS_EDIT] && state[MODALS][modalName.profile.ADDRESS_EDIT].open,
         }),
 
         isTablet() {
@@ -139,7 +134,7 @@ export default {
 
         onAddAddress() {
             this[CHANGE_MODAL_STATE]({
-                name: ADDRESS_EDIT_MODAL_NAME,
+                name: modalName.profile.ADDRESS_EDIT,
                 open: true,
                 state: { address: {} },
             });
@@ -155,7 +150,7 @@ export default {
 
         onChangeAddress(address) {
             this[CHANGE_MODAL_STATE]({
-                name: ADDRESS_EDIT_MODAL_NAME,
+                name: modalName.profile.ADDRESS_EDIT,
                 open: true,
                 state: { address: { ...address } },
             });
@@ -183,11 +178,11 @@ export default {
         $store
             .dispatch(`${ADDRESSES_MODULE_PATH}/${FETCH_ADDRESSES_DATA}`)
             .then(() => {
-                next(vm => {
+                next((vm) => {
                     $progress.finish();
                 });
             })
-            .catch(thrown => {
+            .catch((thrown) => {
                 $progress.fail();
                 $logger.error('beforeRouteEnter', thrown.error);
                 $progress.finish();

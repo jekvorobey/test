@@ -19,6 +19,7 @@
             :item="item"
             @add-item="onAddToCart(item)"
             @preview="onPreview(item.code)"
+            @toggle-favorite-item="onToggleFavorite(item.productId)"
         />
     </transition-group>
     <ul v-else class="catalog-product-list">
@@ -31,6 +32,7 @@
             :item="item"
             @add-item="onAddToCart(item)"
             @preview="onPreview(item.code)"
+            @toggle-favorite-item="onToggleFavorite(item.productId)"
         />
     </ul>
 </template>
@@ -42,12 +44,13 @@ import CatalogProductListCard from './CatalogProductListCard/CatalogProductListC
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CATALOG_MODULE, ITEMS, CATEGORIES } from '@store/modules/Catalog';
 
-import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
-import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
-
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
+
+import { modalName } from '@enums';
 import { catalogItemTypes } from '@enums/product';
 import './CatalogProductList.css';
 
@@ -75,6 +78,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         getComponent(type) {
             switch (type) {
@@ -130,13 +134,17 @@ export default {
             });
         },
 
+        onToggleFavorite(productId) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
+        },
+
         onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
         },
 
         onAddToCart(item) {
             this[CHANGE_MODAL_STATE]({
-                name: ADD_TO_CART_MODAL_NAME,
+                name: modalName.general.ADD_TO_CART,
                 open: true,
                 state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });

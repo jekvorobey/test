@@ -115,12 +115,13 @@
                     <product-cart-panel
                         v-observe-visibility="onPriceVisibilityChanged"
                         class="product-view__header-detail-section product-view__header-detail-panels"
+                        :product-id="product.productId"
                         :price="product.price"
                         :old-price="product.oldPrice"
                         :bonus="product.bonus"
                         :disabled="!canBuy"
                         @cart="onBuyProduct"
-                        @wishlist="onWishlistStateChange"
+                        @wishlist="onToggleFavorite(product.productId)"
                     >
                         {{ buyBtnText }}
                     </product-cart-panel>
@@ -209,7 +210,8 @@
                         >
                             <catalog-product-card
                                 class="product-view__profitable-card"
-                                :product-id="item.id"
+                                :offer-id="item.id"
+                                :product-id="item.productId"
                                 :name="item.name"
                                 :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
                                 :image="item.image"
@@ -481,20 +483,22 @@
                 <v-slider class="product-view__like-slider" name="also-like" :options="sliderOptions">
                     <catalog-product-card
                         class="swiper-slide product-view__like-card"
-                        v-for="product in featuredProducts.items"
-                        :key="product.id"
-                        :product-id="product.id"
-                        :name="product.name"
-                        :type="product.type"
-                        :href="`/catalog/${product.categoryCodes[product.categoryCodes.length - 1]}/${product.code}`"
-                        :image="product.image"
-                        :price="product.price"
-                        :old-price="product.oldPrice"
-                        :tags="product.tags"
-                        :rating="product.rating"
-                        :show-buy-btn="product.stock.qty > 0"
-                        @add-item="onAddToCart(product)"
-                        @preview="onPreview(product.code)"
+                        v-for="item in featuredProducts.items"
+                        :key="item.id"
+                        :offer-id="item.id"
+                        :product-id="item.productId"
+                        :name="item.name"
+                        :type="item.type"
+                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                        :image="item.image"
+                        :price="item.price"
+                        :old-price="item.oldPrice"
+                        :tags="item.tags"
+                        :rating="item.rating"
+                        :show-buy-btn="item.stock.qty > 0"
+                        @add-item="onAddToCart(item)"
+                        @preview="onPreview(item.code)"
+                        @toggle-favorite-item="onToggleFavorite(item.productId)"
                     />
                 </v-slider>
             </div>
@@ -544,18 +548,20 @@
                 <div class="product-view__history-grid">
                     <catalog-product-card
                         class="product-view__history-card"
-                        v-for="product in featuredProducts.items.slice(0, 6)"
-                        :key="product.id"
-                        :product-id="product.id"
-                        :type="product.type"
-                        :name="product.name"
-                        :href="`/catalog/${product.categoryCodes[product.categoryCodes.length - 1]}/${product.code}`"
-                        :image="product.image"
-                        :tags="product.tags"
-                        :rating="product.rating"
-                        :show-buy-btn="product.stock.qty > 0"
-                        @add-item="onAddToCart(product)"
-                        @preview="onPreview(product.code)"
+                        v-for="item in featuredProducts.items.slice(0, 6)"
+                        :key="item.id"
+                        :offer-id="item.id"
+                        :product-id="item.productId"
+                        :type="item.type"
+                        :name="item.name"
+                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                        :image="item.image"
+                        :tags="item.tags"
+                        :rating="item.rating"
+                        :show-buy-btn="item.stock.qty > 0"
+                        @add-item="onAddToCart(item)"
+                        @preview="onPreview(item.code)"
+                        @toggle-favorite-item="onToggleFavorite(item.productId)"
                     />
                 </div>
             </div>
@@ -630,14 +636,11 @@ import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag
 import ProductPickupPointsMap from '@components/product/ProductPickupPointsMap/ProductPickupPointsMap.vue';
 import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPanel/ProductPickupPointsPanel.vue';
 
-import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
-import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 import MapModal, { NAME as MAP_MODAL_NAME } from '@components/MapModal/MapModal.vue';
-import GalleryModal, { NAME as GALLERY_MODAL_NAME } from '@components/GalleryModal/GalleryModal.vue';
+import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '@services';
-
 import { SCROLL } from '@store';
 
 import productModule, {
@@ -655,11 +658,11 @@ import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS } from '@store/modules/
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { IS_IN_CART } from '@store/modules/Cart/getters';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
-
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
-
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '@util/store';
@@ -668,7 +671,7 @@ import {
     generateYoutubeImagePlaceholderPath,
     generateYoutubeVideoSourcePath,
 } from '@util/file';
-import { breakpoints, fileExtension, httpCodes } from '@enums';
+import { breakpoints, fileExtension, httpCodes, modalName } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
 import { createNotFoundRoute } from '@util/router';
 import { generateCategoryUrl, generateProductUrl } from '@util/catalog';
@@ -820,15 +823,16 @@ export default {
     computed: {
         ...mapState([SCROLL]),
         ...mapState('route', {
-            code: state => state.params.code,
-            categoryCode: state => state.params.categoryCode,
-            refCode: state => state.query.refCode,
-            modal: state => state.query.modal,
+            code: (state) => state.params.code,
+            categoryCode: (state) => state.params.categoryCode,
+            refCode: (state) => state.query.refCode,
+            modal: (state) => state.query.modal,
         }),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {
-            isGalleryOpen: state => state[MODALS][GALLERY_MODAL_NAME] && state[MODALS][GALLERY_MODAL_NAME].open,
-            isModalOpen: state => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
+            isGalleryOpen: (state) =>
+                state[MODALS][modalName.product.GALLERY] && state[MODALS][modalName.product.GALLERY].open,
+            isModalOpen: (state) => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
         }),
 
         ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION]),
@@ -842,8 +846,8 @@ export default {
         ]),
 
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
-        
-        inCart(){
+
+        inCart() {
             const { id } = this[PRODUCT];
             return this[IS_IN_CART](cartItemTypes.PRODUCT, id);
         },
@@ -888,7 +892,7 @@ export default {
                 imageMap.brand = {
                     id: brand.image.id,
                     desktop: generatePictureSourcePath(null, null, brand.image.id, fileExtension.image.WEBP),
-                    default: generatePictureSourcePath(null, null, brand.image.id, brand.image.sourceExt),
+                    default: generatePictureSourcePath(null, null, brand.image.id),
                     alt: brand.name,
                 };
             }
@@ -898,7 +902,7 @@ export default {
                     id: howto.image.id,
                     desktop: generatePictureSourcePath(null, null, howto.image.id, fileExtension.image.WEBP),
                     tablet: generatePictureSourcePath(320, 240, howto.image.id, fileExtension.image.WEBP),
-                    default: generatePictureSourcePath(null, null, howto.image.id, howto.image.sourceExt),
+                    default: generatePictureSourcePath(null, null, howto.image.id),
                 };
             }
 
@@ -907,17 +911,17 @@ export default {
                     id: description.image.id,
                     desktop: generatePictureSourcePath(null, null, description.image.id, fileExtension.image.WEBP),
                     tablet: generatePictureSourcePath(320, 240, description.image.id, fileExtension.image.WEBP),
-                    default: generatePictureSourcePath(null, null, description.image.id, description.image.sourceExt),
+                    default: generatePictureSourcePath(null, null, description.image.id),
                 };
             }
 
             if (Array.isArray(media) && media.length > 0) {
-                imageMap.media = media.map(image => {
+                imageMap.media = media.map((image) => {
                     return {
                         ...image,
                         desktop: generatePictureSourcePath(300, 300, image.id, fileExtension.image.WEBP),
                         tablet: generatePictureSourcePath(200, 200, image.id, fileExtension.image.WEBP),
-                        default: generatePictureSourcePath(300, 300, image.id, image.sourceExt),
+                        default: generatePictureSourcePath(300, 300, image.id),
                     };
                 });
             } else imageMap.media = [];
@@ -929,9 +933,9 @@ export default {
             return 5;
         },
 
-        buyBtnText(){
-            if(!this.canBuy) return 'Нет в наличии';
-            return this.inCart ? 'В корзине' : "Добавить в корзину";
+        buyBtnText() {
+            if (!this.canBuy) return 'Нет в наличии';
+            return this.inCart ? 'В корзине' : 'Добавить в корзину';
         },
 
         productGalleryOptions() {
@@ -973,6 +977,7 @@ export default {
         ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         async fetchProduct(to, from, next) {
             const {
@@ -1035,23 +1040,23 @@ export default {
             }
         },
 
+        onToggleFavorite(productId) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
+        },
+
         onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
         },
 
         onShowGallery() {
             const { media } = this.productImages;
             if (!media || !media.length) return;
-            this[CHANGE_MODAL_STATE]({ name: GALLERY_MODAL_NAME, open: true });
-        },
-
-        onWishlistStateChange() {
-            debugger;
+            this[CHANGE_MODAL_STATE]({ name: modalName.product.GALLERY, open: true });
         },
 
         onBuyProduct() {
-            if(this.inCart) {
-                this.$router.push({ name: 'Cart'})
+            if (this.inCart) {
+                this.$router.push({ name: 'Cart' });
                 return;
             }
 
@@ -1072,7 +1077,7 @@ export default {
 
         onAddToCart(item) {
             this[CHANGE_MODAL_STATE]({
-                name: ADD_TO_CART_MODAL_NAME,
+                name: modalName.general.ADD_TO_CART,
                 open: true,
                 state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
@@ -1120,18 +1125,18 @@ export default {
         const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
         // если все загружено, пропускаем
-        if (productCode === code && referrerCode === refCode) next(vm => vm.handleModalQuery(modal));
+        if (productCode === code && referrerCode === refCode) next((vm) => vm.handleModalQuery(modal));
         else {
             $progress.start();
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
                 .then(() =>
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                         vm.handleModalQuery(modal);
                     })
                 )
-                .catch(error => {
+                .catch((error) => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
                     else next(new Error(error.message));

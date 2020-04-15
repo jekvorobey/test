@@ -12,7 +12,8 @@
                 <li class="guide-details-view__list-item" v-for="{ product: item, desc } in guides" :key="item.id">
                     <catalog-product-card
                         class="guide-details-view__list-card"
-                        :product-id="item.id"
+                        :offer-id="item.id"
+                        :product-id="item.productId"
                         :name="item.name"
                         :type="item.type"
                         :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
@@ -104,7 +105,7 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState('route', {
-            guideId: state => state.params && state.params.guideId,
+            guideId: (state) => state.params && state.params.guideId,
         }),
 
         backUrl() {
@@ -122,7 +123,7 @@ export default {
 
     beforeRouteEnter(to, from, next) {
         const { name, params } = to;
-        next(vm => {
+        next((vm) => {
             vm[UPDATE_BREADCRUMB]([
                 { name: vm.$t('profile.routes.Guides'), to: { name: 'Guides' } },
                 { name: 'ШАМПУНИ И КОНДИЦИОНЕРЫ AVEDA ДЛЯ ВЬЮЩИХСЯ ВОЛОС', to: { name, params } },

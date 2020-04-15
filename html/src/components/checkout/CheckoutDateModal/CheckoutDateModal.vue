@@ -40,9 +40,10 @@ import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { modalName } from '@enums';
 import './CheckoutDateModal.css';
 
-export const NAME = 'checkout-date-modal';
+const NAME = modalName.checkout.DATE_EDIT;
 
 export default {
     name: NAME,
@@ -62,12 +63,12 @@ export default {
 
     computed: {
         ...mapState({
-            datepickerLocale: state =>
+            datepickerLocale: (state) =>
                 state[LOCALIZATIONS][state[LOCALE]] && state[LOCALIZATIONS][state[LOCALE]].flatpickrLocale,
         }),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
-            state: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            state: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         maxDate() {

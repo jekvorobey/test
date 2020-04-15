@@ -37,14 +37,14 @@ import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as CABINET_MODULE, ACTIVITIES, All_ACTIVITIES } from '@store/modules/Profile/modules/Cabinet';
 import { UPDATE_ACTIVITIES } from '@store/modules/Profile/modules/Cabinet/actions';
 
+import { modalName } from '@enums';
 import { getRandomInt } from '@util';
 import _cloneDeep from 'lodash/cloneDeep';
 import '@images/sprites/cross.svg';
 import './ActivitiesEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
-
-export const NAME = 'activities-edit-modal';
+const NAME = modalName.profile.ACTIVITIES_EDIT;
 
 export default {
     name: NAME,
@@ -79,7 +79,7 @@ export default {
         ...mapActions(CABINET_MODULE_PATH, [UPDATE_ACTIVITIES]),
 
         onSubmit() {
-            const newActivities = this[All_ACTIVITIES].filter(p => this.selectedActivities.includes(p.id));
+            const newActivities = this[All_ACTIVITIES].filter((p) => this.selectedActivities.includes(p.id));
             this[UPDATE_ACTIVITIES](newActivities);
             this.onClose();
         },
@@ -90,7 +90,7 @@ export default {
     },
 
     beforeMount() {
-        this.selectedActivities = this[ACTIVITIES].map(p => p.id);
+        this.selectedActivities = this[ACTIVITIES].map((p) => p.id);
     },
 };
 </script>

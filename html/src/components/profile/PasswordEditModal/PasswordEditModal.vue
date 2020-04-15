@@ -63,11 +63,11 @@ import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as CABINET_MODULE, PHONE, HAS_PASSWORD } from '@store/modules/Profile/modules/Cabinet';
 import { UPDATE_PASSWORD } from '@store/modules/Profile/modules/Cabinet/actions';
 
+import { modalName } from '@enums';
 import './PasswordEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
-
-export const NAME = 'password-edit-modal';
+const NAME = modalName.profile.PASSWORD_EDIT;
 
 export default {
     name: NAME,
@@ -114,7 +114,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
         ...mapState(CABINET_MODULE_PATH, [PHONE, HAS_PASSWORD]),
 

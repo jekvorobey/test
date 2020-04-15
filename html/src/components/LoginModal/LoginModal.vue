@@ -127,10 +127,20 @@
                             <v-svg name="google-bw" height="19" width="20" class="login-modal__socials-item--google" />
                         </button>
                         <button class="login-modal__socials-item" @click="onLoginBySocial('vkontakte')">
-                            <v-svg name="vkontakte-bw" height="22" width="21" class="login-modal__socials-item--vkontake" />
+                            <v-svg
+                                name="vkontakte-bw"
+                                height="22"
+                                width="21"
+                                class="login-modal__socials-item--vkontake"
+                            />
                         </button>
                         <button class="login-modal__socials-item" @click="onLoginBySocial('facebook')">
-                            <v-svg name="facebook-bw" height="20" width="20" class="login_modal__socials-item--facebook" />
+                            <v-svg
+                                name="facebook-bw"
+                                height="20"
+                                width="20"
+                                class="login_modal__socials-item--facebook"
+                            />
                         </button>
                     </div>
                     <span class="login-modal__socials-text">Войти через соцсеть</span>
@@ -153,7 +163,6 @@ import VInputMask from '@controls/VInput/VInputMask.vue';
 import VPassword from '@controls/VPassword/VPassword.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
-import { NAME as REGISTRATION_MODAL_NAME } from '@components/RegistrationModal/RegistrationModal.vue';
 
 import _cloneDeep from 'lodash/cloneDeep';
 import { mapState, mapActions } from 'vuex';
@@ -174,13 +183,14 @@ import {
 import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
 import { rawPhone } from '@util';
 import { phoneMaskOptions } from '@settings';
+import { modalName } from '@enums';
 import { verificationCodeType } from '@enums/auth';
 import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/google-bw.svg';
 import './LoginModal.css';
 
-export const NAME = 'login-modal';
+const NAME = modalName.general.LOGIN;
 
 export default {
     name: NAME,
@@ -230,15 +240,15 @@ export default {
         },
 
         fail: {
-            valid: value => value !== true,
+            valid: (value) => value !== true,
         },
 
         accepted: {
-            valid: value => value === true,
+            valid: (value) => value === true,
         },
 
         restoreFail: {
-            valid: value => value !== true,
+            valid: (value) => value !== true,
         },
     },
 
@@ -310,7 +320,8 @@ export default {
                 if (!this.$v.restorePhone.minLength) return 'Неверно введен номер';
             }
 
-            if (this.$v.restoreFail.$dirty && !this.$v.restoreFail.valid) return 'Номер телефона не найден, проверьте номер или зарегистрируйтесь';
+            if (this.$v.restoreFail.$dirty && !this.$v.restoreFail.valid)
+                return 'Номер телефона не найден, проверьте номер или зарегистрируйтесь';
         },
 
         restorePasswordError() {
@@ -462,7 +473,7 @@ export default {
 
         onRegister() {
             this.onClose();
-            this[CHANGE_MODAL_STATE]({ name: REGISTRATION_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.REGISTRATION, open: true });
         },
 
         startCounter() {

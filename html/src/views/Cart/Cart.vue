@@ -42,7 +42,8 @@
                                         v-for="({ p: product, count }, index) in type.items"
                                         :data-index="index"
                                         :key="product.id"
-                                        :product-id="product.id"
+                                        :offer-id="product.id"
+                                        :product-id="product.productId"
                                         :type="product.type"
                                         :name="product.name"
                                         :image="product.image"
@@ -51,6 +52,7 @@
                                         :count="count"
                                         :href="generateItemProductUrl(product)"
                                         @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
+                                        @toggle-favorite-item="onToggleFavorite(product)"
                                         @countChange="onAddCartItem(product.id, product.stock.storeId, $event.count)"
                                     />
                                 </transition-group>
@@ -98,21 +100,27 @@
                             <p class="text-grey cart-view__main-panel-info">
                                 Внимание: продукты и мастер-классы оплачиваются отдельно
                             </p>
+
                             <p class="cart-view__main-panel-line">
                                 Сумма заказа: {{ $t(`cart.summary.type.${activeTabItem.type}`) }}
                                 <price v-bind="activeTabItem.summary.sum" />
                             </p>
-                            <!-- #58322  -->
-                            <!-- <p class="cart-view__main-panel-line">
-                                Скидка по промокоду <price v-bind="activeTabItem.summary.promoDiscount" />
-                            </p> -->
+
+                            <p
+                                class="cart-view__main-panel-line"
+                                v-for="discount in activeTabItem.summary.discounts"
+                                :key="discount.type"
+                            >
+                                {{ $t(`cart.summary.discount.${discount.type}`) }}
+                                <span>-<price v-bind="discount.value" /></span>
+                            </p>
 
                             <div class="cart-view__main-panel-total">
                                 <p class="text-bold cart-view__main-panel-line">
                                     Итого <price v-bind="activeTabItem.summary.total" />
                                 </p>
-                                <!-- #58322  -->
-                                <!-- <p class="text-grey text-sm cart-view__main-panel-line">
+
+                                <p class="text-grey text-sm cart-view__main-panel-line">
                                     Будет начислено
                                     <span>
                                         {{
@@ -122,15 +130,14 @@
                                         }}
                                         бонусов
                                     </span>
-                                </p> -->
+                                </p>
                             </div>
-                            <!-- #58322  -->
-                            <!-- <div class="cart-view__main-panel-promo">
+                            <div class="cart-view__main-panel-promo">
                                 <v-input class="cart-view__main-panel-promo-input" placeholder="Введите промокод" />
                                 <v-button class="btn--outline cart-view__main-panel-promo-btn">
                                     Применить
                                 </v-button>
-                            </div> -->
+                            </div>
                             <v-button class="cart-view__main-panel-submit" :to="`/checkout/${activeTabItem.type}`">
                                 Оформить заказ
                             </v-button>
@@ -148,7 +155,8 @@
                         class="swiper-slide cart-view__featured-card"
                         v-for="item in featuredProducts"
                         :key="item.id"
-                        :product-id="item.id"
+                        :offer-id="item.id"
+                        :product-id="item.productId"
                         :type="item.type"
                         :name="item.name"
                         :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
@@ -160,6 +168,7 @@
                         :show-buy-btn="item.stock.qty > 0"
                         @add-item="onAddCartItem(item.id, item.stock.storeId)"
                         @preview="onPreview(item.code)"
+                        @toggle-favorite-item="onToggleFavorite(item)"
                     />
                 </v-slider>
             </div>
@@ -177,9 +186,6 @@ import VSticky from '@controls/VSticky/VSticky.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 import Price from '@components/Price/Price.vue';
 import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
-
-import { NAME as QUICK_VIEW_MODAL_NAME } from '@components/QuickViewModal/QuickViewModal.vue';
-import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
 
 import CartMasterClassCard from '@components/CartMasterClassCard/CartMasterClassCard.vue';
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
@@ -208,8 +214,11 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
+
 import { cancelRoute } from '@settings';
-import { breakpoints } from '@enums';
+import { breakpoints, modalName } from '@enums';
 import { cartItemTypes } from '@enums/product';
 import { preparePrice } from '@util';
 import { generateProductUrl } from '@util/catalog';
@@ -305,6 +314,7 @@ export default {
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM, DELETE_ALL_ITEMS]),
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         generateItemProductUrl(product) {
             if (Array.isArray(product.categoryCodes)) {
@@ -313,16 +323,16 @@ export default {
             }
         },
 
+        onToggleFavorite({ productId }) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
+        },
+
         onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
         },
 
         onClearCart() {
             this[DELETE_ALL_ITEMS]();
-        },
-
-        prepareBonus(value) {
-            return preparePrice(value);
         },
 
         onAddCartItem(offerId, storeId, count) {
@@ -331,6 +341,10 @@ export default {
 
         onDeleteCartItem(offerId, storeId) {
             this[DELETE_CART_ITEM]({ offerId, storeId });
+        },
+
+        prepareBonus(value) {
+            return preparePrice(value);
         },
 
         onBeforeEnterItems(el) {

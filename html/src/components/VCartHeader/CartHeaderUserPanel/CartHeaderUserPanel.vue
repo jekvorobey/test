@@ -7,16 +7,15 @@
         </help-panel>
         <template v-if="hasSession">
             <div class="cart-header-user-panel__controls">
+                <router-link class="cart-header-user-panel__btn" to="/favorites">
+                    <v-svg name="wishlist-middle" width="24" height="24" />
+                </router-link>
+
                 <profile-navigation-panel class="cart-header-user-panel__account">
                     <button @click.prevent="onRegister" class="cart-header-user-panel__btn">
                         <v-svg name="account-middle" width="24" height="24" />
                     </button>
                 </profile-navigation-panel>
-                <!-- Скрыто из-за отсутствия избранных
-                    <button class="cart-header-user-panel__btn">
-                    <v-svg name="wishlist-middle" width="24" height="24" />
-                    </button>
-                -->
             </div>
         </template>
     </div>
@@ -28,19 +27,15 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import HelpPanel from '@components/HelpPanel/HelpPanel.vue';
 import ProfileNavigationPanel from '@components/ProfileNavigationPanel/ProfileNavigationPanel.vue';
 
-import { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
-
 import { mapState, mapActions, mapGetters } from 'vuex';
-
 import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY } from '@store/modules/Auth';
-
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { modalName } from '@enums';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/account-middle.svg';
 import '@images/sprites/arrow-down.svg';
-
 import './CartHeaderUserPanel.css';
 
 export default {
@@ -65,7 +60,7 @@ export default {
 
         onRegister() {
             if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
-            else this[CHANGE_MODAL_STATE]({ name: LOGIN_MODAL_NAME, open: true });
+            else this[CHANGE_MODAL_STATE]({ name: modalName.general.LOGIN, open: true });
         },
     },
 };

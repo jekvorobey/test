@@ -84,9 +84,7 @@ import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 import NavigationPanel from '@components/profile/NavigationPanel/NavigationPanel.vue';
-import NavigationModal, {
-    NAME as NAVIGATION_MODAL_NAME,
-} from '@components/profile/NavigationModal/NavigationModal.vue';
+import NavigationModal from '@components/profile/NavigationModal/NavigationModal.vue';
 
 import { mapState, mapActions } from 'vuex';
 import profileModule, { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modules/Profile';
@@ -98,6 +96,7 @@ import { NAME as AUTH_MODULE, HAS_SESSION, USER, REFERRAL_PARTNER } from '@store
 
 import { cancelRoute } from '@settings';
 import { $store } from '@services';
+import { modalName } from '@enums';
 import { registerModuleIfNotExists } from '@util/store';
 import '@images/sprites/arrow-updown.svg';
 import '@images/sprites/home.svg';
@@ -121,12 +120,12 @@ export default {
         ...mapState(PROFILE_MODULE, [BREADCRUMBS]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isNavigationOpen: state =>
-                state[MODALS][NAVIGATION_MODAL_NAME] && state[MODALS][NAVIGATION_MODAL_NAME].open,
+            isNavigationOpen: (state) =>
+                state[MODALS][modalName.profile.NAVIGATION] && state[MODALS][modalName.profile.NAVIGATION].open,
         }),
 
         groups() {
@@ -139,33 +138,30 @@ export default {
                         { name: 'Preferences', exact: true },
                         { name: 'Addresses', exact: true },
                         { name: 'Payment', exact: true },
-                        // #58322
-                        // { name: 'Subscribes', exact: true },
-                        // { name: 'Messages', displayName: this.$tc('profile.format.messages', 5) },
-                        // { name: 'Certificates', exact: true },
-                        // { name: 'Bonuses', exact: true },
+                        { name: 'Subscribes', exact: true },
+                        { name: 'Messages', displayName: this.$tc('profile.format.messages', 5) },
+                        { name: 'Certificates', exact: true },
+                        { name: 'Bonuses', exact: true },
                         { name: 'Orders' },
-                        // { name: 'ReferalOrders' },
                     ],
                 },
             ];
 
-            // #58322
-            // if (this[REFERRAL_PARTNER])
-            //     groups.push({
-            //         id: 2,
-            //         name: this.$t('profile.groups.business'),
-            //         routes: [
-            //             { name: 'Referal', exact: true },
-            //             { name: 'ProPreferences', exact: true },
-            //             { name: 'Promopage', exact: true },
-            //             { name: 'Seo', exact: true },
-            //             { name: 'Promocodes', exact: true },
-            //             { name: 'Account', exact: true },
-            //             { name: 'Billing', exact: true },
-            //             { name: 'Documents', exact: true },
-            //         ],
-            //     });
+            if (this[REFERRAL_PARTNER])
+                groups.push({
+                    id: 2,
+                    name: this.$t('profile.groups.business'),
+                    routes: [
+                        { name: 'Referal', exact: true },
+                        { name: 'ProPreferences', exact: true },
+                        { name: 'Promopage', exact: true },
+                        { name: 'Seo', exact: true },
+                        { name: 'Promocodes', exact: true },
+                        { name: 'Account', exact: true },
+                        { name: 'Billing', exact: true },
+                        { name: 'Documents', exact: true },
+                    ],
+                });
 
             // #58322
             // groups.push({
@@ -201,7 +197,7 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onOpenNavigation() {
-            this[CHANGE_MODAL_STATE]({ name: NAVIGATION_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.NAVIGATION, open: true });
         },
     },
 

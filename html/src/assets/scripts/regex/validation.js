@@ -14,6 +14,11 @@ export const nameRu = /^[ \-а-яё]*$/i;
 export const nameEn = /^[ \-a-z]*$/i;
 
 /**
+ * Код реферала (латинские буквы, цифры, тире и подчеркивание).
+ */
+export const referrerCode = /^[_\-A-Za-z0-9]*$/i;
+
+/**
  * Пароль (как минимум 1 заглавная и строчная латинские буквы и 1 цифра).
  */
 export const password = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[A-Za-z]).*$/;
@@ -38,4 +43,4 @@ export const date = /^(?:31(\.)(?:0?[13578]|1[02])\1|(?:29|30)(\.)(?:0?[,13-9]|1
  */
 export const email = /^(([^\s"(),.:;<>@[\]]+(\.[^\s"(),.:;<>@[\]]+)*)|(".+"))@(([^\s"(),.:;<>@[\]]+\.)+[^\s"(),.:;<>@[\]]{2,})$/i;
 
-export default { email, tel, date, kpp, password, nameEn, nameRu, nameAll };
+export default { email, tel, date, kpp, password, nameEn, nameRu, nameAll, referrerCode };

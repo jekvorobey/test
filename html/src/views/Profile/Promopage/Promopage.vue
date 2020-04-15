@@ -24,10 +24,11 @@
                         &nbsp;&nbsp;Добавить по ссылке
                     </v-link>
 
-                    <v-link class="promopage-view__panel-link" tag="button">
+                    <!-- #58050 Закоментированно пока нету страниц -->
+                    <!-- <v-link class="promopage-view__panel-link" tag="button">
                         <v-svg name="link" :width="iconSize" :height="iconSize" />
                         &nbsp;&nbsp;Скопировать ссылку
-                    </v-link>
+                    </v-link> -->
                 </div>
             </template>
 
@@ -46,14 +47,26 @@
             </div>
 
             <ul class="promopage-view__panel-list">
-                <li class="promopage-view__panel-item" v-for="product in products" :key="product.id">
-                    <catalog-product-card class="promopage-view__panel-card" v-bind="product" />
-                    <button class="promopage-view__panel-item-btn" @click.prevent>
+                <li class="promopage-view__panel-item" v-for="item in products" :key="item.id">
+                    <catalog-product-card class="promopage-view__panel-card" v-bind="item" :offer-id="item.id" />
+                    <button class="promopage-view__panel-item-btn" @click.prevent="onDeleteProduct(product.productId)">
                         <v-svg name="cross" width="24" height="24" />
                     </button>
                 </li>
             </ul>
         </info-panel>
+
+        <div class="container container--tablet-lg promopage-view__controls" v-if="pagesCount > 1">
+            <show-more-button
+                btn-class="btn--outline promopage-view__controls-btn"
+                v-if="activePage < pagesCount"
+                @click="onShowMore"
+                :show-preloader="showMore"
+            >
+                Показать ещё
+            </show-more-button>
+            <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
+        </div>
 
         <transition name="fade">
             <promopage-edit-modal
@@ -67,7 +80,6 @@
 
         <transition name="fade">
             <promopage-add-by-link-modal
-                v-show="isProductAddByLinkOpen"
                 v-if="$isServer || (!isNameEditOpen && !isProductAddOpen && isProductAddByLinkOpen)"
             />
         </transition>
@@ -77,35 +89,30 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VPagination from '@controls/VPagination/VPagination.vue';
 
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
-import PromopageEditModal, {
-    NAME as PROMOPAGE_EDIT_MODAL_NAME,
-} from '@components/profile/PromopageEditModal/PromopageEditModal.vue';
-
-import PromopageAddModal, {
-    NAME as PROMOPAGE_ADD_MODAL_NAME,
-} from '@components/profile/PromopageAddModal/PromopageAddModal.vue';
-
-import PromopageAddByLinkModal, {
-    NAME as PROMOPAGE_ADD_BY_LINK_MODAL_NAME,
-} from '@components/profile/PromopageAddByLinkModal/PromopageAddByLinkModal.vue';
+import PromopageEditModal from '@components/profile/PromopageEditModal/PromopageEditModal.vue';
+import PromopageAddModal from '@components/profile/PromopageAddModal/PromopageAddModal.vue';
+import PromopageAddByLinkModal from '@components/profile/PromopageAddByLinkModal/PromopageAddByLinkModal.vue';
 
 import { $store, $progress, $logger } from '@services';
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
-
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
-
 import { NAME as PROMOPAGE_MODULE, TITLE, ITEMS, RANGE, ACTIVE_PAGE } from '@store/modules/Profile/modules/Promopage';
-import { FETCH_PROMOPAGE, SET_LOAD_PATH } from '@store/modules/Profile/modules/Promopage/actions';
+import { PAGES_COUNT } from '@store/modules/Profile/modules/Promopage/getters';
+import { FETCH_PROMOPAGE, SET_LOAD_PATH, DELETE_PRODUCT } from '@store/modules/Profile/modules/Promopage/actions';
 
 import { generateProductUrl } from '@util/catalog';
 import { DEFAULT_PAGE } from '@constants';
+import { modalName } from '@enums';
 import '@images/sprites/cross.svg';
 import '@images/sprites/copy.svg';
 import '@images/sprites/edit.svg';
@@ -122,24 +129,36 @@ export default {
     components: {
         VSvg,
         VLink,
+        VButton,
+        VPagination,
 
         InfoPanel,
         CatalogProductCard,
+        ShowMoreButton,
 
         PromopageEditModal,
         PromopageAddModal,
         PromopageAddByLinkModal,
     },
 
+    data() {
+        return {
+            showMore: false,
+        };
+    },
+
     computed: {
-        ...mapState(PROMOPAGE_MODULE_PATH, [TITLE, ITEMS, RANGE]),
+        ...mapState(PROMOPAGE_MODULE_PATH, [TITLE, ITEMS, RANGE, ACTIVE_PAGE]),
+        ...mapGetters(PROMOPAGE_MODULE_PATH, [PAGES_COUNT]),
+
         ...mapState(MODAL_MODULE, {
             isNameEditOpen: state =>
-                state[MODALS][PROMOPAGE_EDIT_MODAL_NAME] && state[MODALS][PROMOPAGE_EDIT_MODAL_NAME].open,
+                state[MODALS][modalName.profile.PROMO_EDIT] && state[MODALS][modalName.profile.PROMO_EDIT].open,
             isProductAddOpen: state =>
-                state[MODALS][PROMOPAGE_ADD_MODAL_NAME] && state[MODALS][PROMOPAGE_ADD_MODAL_NAME].open,
+                state[MODALS][modalName.profile.PROMO_ADD] && state[MODALS][modalName.profile.PROMO_ADD].open,
             isProductAddByLinkOpen: state =>
-                state[MODALS][PROMOPAGE_ADD_BY_LINK_MODAL_NAME] && state[MODALS][PROMOPAGE_ADD_BY_LINK_MODAL_NAME].open,
+                state[MODALS][modalName.profile.PROMO_ADD_BY_LINK] &&
+                state[MODALS][modalName.profile.PROMO_ADD_BY_LINK].open,
         }),
 
         products() {
@@ -163,20 +182,43 @@ export default {
         },
     },
 
+    watch: {
+        [ACTIVE_PAGE](value) {
+            this.onPageChanged(value);
+        },
+    },
+
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(PROMOPAGE_MODULE_PATH, [FETCH_PROMOPAGE]),
+        ...mapActions(PROMOPAGE_MODULE_PATH, [FETCH_PROMOPAGE, DELETE_PRODUCT]),
+
+        onDeleteProduct(id) {
+            this[DELETE_PRODUCT]({ id, refresh: true });
+        },
 
         onAddProduct() {
-            this[CHANGE_MODAL_STATE]({ name: PROMOPAGE_ADD_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.PROMO_ADD, open: true });
         },
 
         onAddProductByLink() {
-            this[CHANGE_MODAL_STATE]({ name: PROMOPAGE_ADD_BY_LINK_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.PROMO_ADD_BY_LINK, open: true });
         },
 
         onEditName() {
-            this[CHANGE_MODAL_STATE]({ name: PROMOPAGE_EDIT_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.PROMO_EDIT, open: true });
+        },
+
+        onShowMore() {
+            this.showMore = true;
+            this.$router.replace({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: this[ACTIVE_PAGE] + 1 },
+            });
+        },
+
+        onPageChanged(page) {
+            this.showMore = false;
+            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
         },
     },
 
@@ -203,6 +245,33 @@ export default {
                     $logger.error(error);
                 });
         }
+    },
+
+    async beforeRouteUpdate(to, from, next) {
+        // вызывается, когда маршрут, что рендерит этот компонент, изменился,
+        // но этот компонент будет повторно использован в новом маршруте.
+        // Например, для маршрута с динамическими параметрами `/foo/:id`, когда мы
+        // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
+        // будет использован повторно, и этот хук будет вызван когда это случится.
+        // Также имеется доступ в `this` к экземпляру компонента.
+
+        const {
+            query: { page = DEFAULT_PAGE },
+        } = to;
+
+        if (page == this.activePage) return next();
+
+        try {
+            this.$progress.start();
+            await this[FETCH_PROMOPAGE]({ page, showMore: this.showMore });
+            this.$progress.finish();
+            next();
+        } catch (error) {
+            this.$progress.fail();
+            next(false);
+        }
+
+        this.showMore = false;
     },
 };
 </script>

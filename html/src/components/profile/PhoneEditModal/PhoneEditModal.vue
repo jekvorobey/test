@@ -95,12 +95,12 @@ import { SEND_CODE, UPDATE_CREDENTIAL } from '@store/modules/Profile/modules/Cab
 import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
 import { phoneMaskOptions } from '@settings';
 import { verificationCodeType } from '@enums/auth';
+import { modalName } from '@enums';
 import { rawPhone } from '@util';
 import './PhoneEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
-
-export const NAME = 'phone-edit-modal';
+const NAME = modalName.profile.PHONE_EDIT;
 
 export default {
     name: NAME,
@@ -142,7 +142,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         phone() {

@@ -6,9 +6,15 @@ export const SET_SEARCH_RESULTS = 'SET_SEARCH_RESULTS';
 export const SET_PRODUCTS = 'SET_PRODUCTS';
 export const SET_PRODUCTS_MORE = 'SET_PRODUCTS_MORE';
 
+export const SET_QUERY_PARAMS = 'SET_QUERY_PARAMS';
+
 export default {
     [SET_LOAD_PATH](state, payload = '') {
         state.loadPath = payload;
+    },
+
+    [SET_QUERY_PARAMS](state, { page = 1 }) {
+        state.activePage = Number(page);
     },
 
     [SET_TITLE](state, payload) {

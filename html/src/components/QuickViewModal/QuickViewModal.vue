@@ -27,12 +27,13 @@
                     />
                     <product-cart-panel
                         class="quick-view-modal__detail-cart"
+                        :productId="productPreview.productId"
                         :price="productPreview.price"
                         :old-price="productPreview.oldPrice"
                         :bonus="productPreview.bonus"
                         :disabled="!canBuy"
                         @cart="onCartStateChange"
-                        @wishlist="onWishlistStateChange"
+                        @wishlist="onToggleFavorite(productPreview.productId)"
                     >
                         {{ buyBtnText }}
                     </product-cart-panel>
@@ -57,8 +58,6 @@ import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDe
 import ProductDeliveryPanel from '@components/product/ProductDeliveryPanel/ProductDeliveryPanel.vue';
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
-import { NAME as ADD_TO_CART_MODAL_NAME } from '@components/AddToCartModal/AddToCartModal.vue';
-
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as PREVIEW_MODULE, PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS } from '@store/modules/Preview';
 import { FETCH_PRODUCT_PREVIEW } from '@store/modules/Preview/actions';
@@ -72,15 +71,14 @@ import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
-import { requestStatus, fileExtension } from '@enums';
+import { requestStatus, fileExtension, modalName } from '@enums';
 import { cartItemTypes } from '@enums/product';
 import { generatePictureSourcePath } from '@util/file';
 import { generateProductUrl } from '@util/catalog';
 import '@images/sprites/logo.svg';
 import './QuickViewModal.css';
 
-
-export const NAME = 'quick-view-modal';
+const NAME = modalName.general.QUICK_VIEW;
 
 export default {
     name: NAME,
@@ -98,8 +96,8 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
-            modalState: state => state[MODALS][NAME] && state[MODALS][NAME].state,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            modalState: (state) => state[MODALS][NAME] && state[MODALS][NAME].state,
         }),
 
         ...mapState(PREVIEW_MODULE, [PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS]),
@@ -108,17 +106,17 @@ export default {
 
         images() {
             const { media } = this[PRODUCT_PREVIEW] || {};
-            return media.slice(0, 4).map(i => {
+            return media.slice(0, 4).map((i) => {
                 return {
                     ...i,
                     bigImage: generatePictureSourcePath(300, 300, i.id, fileExtension.image.WEBP),
                     smallImage: generatePictureSourcePath(200, 200, i.id, fileExtension.image.WEBP),
-                    defaultImage: generatePictureSourcePath(300, 300, i.id, i.sourceExt),
+                    defaultImage: generatePictureSourcePath(300, 300, i.id),
                 };
             });
         },
 
-        inCart(){
+        inCart() {
             const { id } = this[PRODUCT_PREVIEW];
             return this[IS_IN_CART](cartItemTypes.PRODUCT, id);
         },
@@ -128,9 +126,9 @@ export default {
             return stock && stock.qty > 0;
         },
 
-        buyBtnText(){
-            if(!this.canBuy) return 'Нет в наличии';
-            return this.inCart ? 'В корзине' : "Добавить в корзину";
+        buyBtnText() {
+            if (!this.canBuy) return 'Нет в наличии';
+            return this.inCart ? 'В корзине' : 'Добавить в корзину';
         },
 
         isPending() {
@@ -169,7 +167,7 @@ export default {
         onCartStateChange() {
             this.onClose();
             this[CHANGE_MODAL_STATE]({
-                name: ADD_TO_CART_MODAL_NAME,
+                name: modalName.general.ADD_TO_CART,
                 open: true,
                 state: {
                     offerId: this.productPreview.id,

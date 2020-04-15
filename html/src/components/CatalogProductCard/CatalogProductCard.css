@@ -220,5 +220,9 @@
             top: 8px;
             right: 12px;
         }
+
+        &--active {
+            opacity: 1 !important;
+        }
     }
 }

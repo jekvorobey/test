@@ -1,5 +1,5 @@
 import flatPickrEn from 'flatpickr/dist/l10n/default';
-import { receiveMethods } from '@enums/checkout';
+import { receiveMethods, discountType } from '@enums/checkout';
 import { genderType } from '@enums/profile';
 import { socials } from '@enums';
 import { orderStatus, deliveryStatus } from '@enums/order';
@@ -58,16 +58,17 @@ const main = {
     },
 
     orderStatus: {
+        [orderStatus.PRE_ORDER]: 'Preorder',
         [orderStatus.CREATED]: 'Created',
-        [orderStatus.AWAITING_CHECK]: 'Awaiting Check',
+        [orderStatus.AWAITING_CHECK]: 'In Processing',
         [orderStatus.IN_PROCESSING]: 'In Processing',
-        [orderStatus.CHECKING]: 'Checking',
-        [orderStatus.TRANSFERRED_TO_DELIVERY]: 'Transferred to Delivery',
+        [orderStatus.CHECKING]: 'In Processing',
+        [orderStatus.AWAITING_CONFIRMATION]: 'In Processing',
+        [orderStatus.TRANSFERRED_TO_DELIVERY]: 'In Processing',
         [orderStatus.DELIVERING]: 'In Delivery',
         [orderStatus.READY_FOR_RECIPIENT]: 'Ready for Recipient',
         [orderStatus.DONE]: 'Done',
         [orderStatus.RETURNED]: 'Returned',
-        [orderStatus.PRE_ORDER]: 'Preorder',
     },
 
     deliveryStatus: {
@@ -188,6 +189,14 @@ const main = {
             type: {
                 product: 'Products',
                 masterclass: 'Master-classes',
+            },
+
+            discount: {
+                [discountType.PRODUCT]: 'Product Discount',
+                [discountType.DELIVERY]: 'Delivery Discount',
+                [discountType.CART]: 'Cart Discount',
+                [discountType.CUSTOM]: 'Discount for You',
+                [discountType.PROMOCODE]: 'Promocode Discount',
             },
         },
     },

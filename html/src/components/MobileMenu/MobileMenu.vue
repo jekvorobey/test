@@ -49,12 +49,11 @@
                                 <v-svg name="account-middle" width="24" height="24" />Личный кабинет
                             </v-link>
                         </li>
-                        <!-- #58539 -->
-                        <!-- <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/">
+                        <li class="container mobile-menu__menu-item" v-if="hasSession">
+                            <v-link class="mobile-menu__menu-link" to="/favorites">
                                 <v-svg name="wishlist-middle" width="24" height="24" /> Избранное
                             </v-link>
-                        </li> -->
+                        </li>
                         <li class="container mobile-menu__menu-item mobile-menu__menu-item--separator">
                             <v-link tag="button" class="mobile-menu__menu-link" @click.prevent="onOpenCitySelection">
                                 <v-svg name="pin" width="24" height="24" />
@@ -132,22 +131,16 @@ import VClamp from 'vue-clamp';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
-import { NAME as LOGIN_MODAL_NAME } from '@components/LoginModal/LoginModal.vue';
-import { NAME as CITY_SELECTION_MODAL_NAME } from '@components/CitySelectionModal/CitySelectionModal.vue';
-
 import { mapState, mapActions, mapGetters } from 'vuex';
-
 import { CATEGORIES } from '@store';
 import { HEADER_MENU } from '@store/getters';
 import { SET_MENU_OPEN } from '@store/actions';
-
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
-
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
-
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { modalName } from '@enums';
 import { productGroupTypes } from '@enums/product';
 import '@images/sprites/socials/viber-bw.svg';
 import '@images/sprites/socials/whatsup-bw.svg';
@@ -184,7 +177,7 @@ export default {
         ...mapGetters([HEADER_MENU]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(GEO_MODULE, {
-            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
 
         currentCategories() {
@@ -201,35 +194,6 @@ export default {
             return this.selectedCategory
                 ? this.selectedCategory.name
                 : this.$t(`productGroups.links.${productGroupTypes.CATALOG}`);
-        },
-
-        links() {
-            return [
-                {
-                    to: { name: 'Catalog', params: { type: productGroupTypes.CATALOG } },
-                    name: this.$t(`productGroups.links.${productGroupTypes.CATALOG}`),
-                },
-                {
-                    to: { name: 'Catalog', params: { type: productGroupTypes.CATALOG } },
-                    name: this.$t(`productGroups.links.${productGroupTypes.NEW}`),
-                },
-                {
-                    to: { name: 'ProductGroups', params: { type: productGroupTypes.PROMO } },
-                    name: this.$t(`productGroups.links.${productGroupTypes.PROMO}`),
-                },
-                {
-                    to: { name: 'ProductGroups', params: { type: productGroupTypes.SETS } },
-                    name: this.$t(`productGroups.links.${productGroupTypes.SETS}`),
-                },
-                {
-                    to: { name: 'ProductGroups', params: { type: productGroupTypes.BRANDS } },
-                    name: this.$t(`productGroups.links.${productGroupTypes.BRANDS}`),
-                },
-                {
-                    to: { name: 'ProductGroups', params: { type: productGroupTypes.MASTERCLASSES } },
-                    name: this.$t(`productGroups.links.${productGroupTypes.MASTERCLASSES}`),
-                },
-            ];
         },
 
         isTabletLg() {
@@ -251,7 +215,7 @@ export default {
 
         onOpenCitySelection() {
             this[SET_MENU_OPEN](false);
-            this[CHANGE_MODAL_STATE]({ name: CITY_SELECTION_MODAL_NAME, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.CITY_SELECTION, open: true });
         },
 
         onBackClick() {
@@ -261,7 +225,7 @@ export default {
 
         onRegister() {
             if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
-            else this[CHANGE_MODAL_STATE]({ name: LOGIN_MODAL_NAME, open: true });
+            else this[CHANGE_MODAL_STATE]({ name: modalName.general.LOGIN, open: true });
         },
     },
 };

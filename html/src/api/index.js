@@ -1,14 +1,27 @@
 import qs from 'qs';
 import axios from 'axios';
-import { Cache } from 'axios-extensions';
+import {
+    Cache
+} from 'axios-extensions';
 
-import { $http, $logger } from '@services';
-import { REQUEST_CANCEL_MESSAGE } from '@constants';
-import { interval } from '@enums';
-import { verificationCodeType } from '@enums/auth';
+import {
+    $http,
+    $logger
+} from '@services';
+import {
+    REQUEST_CANCEL_MESSAGE
+} from '@constants';
+import {
+    interval
+} from '@enums';
+import {
+    verificationCodeType
+} from '@enums/auth';
 
 let catalogItemsCancelSource = null;
-const sessionCheckCache = new Cache({ maxAge: interval.FIVE_MINUTES });
+const sessionCheckCache = new Cache({
+    maxAge: interval.FIVE_MINUTES
+});
 
 // main
 
@@ -85,18 +98,29 @@ export function checkCode(code, type) {
             throw new Error('Wrong verification code type');
     }
 
-    return $http.post(method, { code });
+    return $http.post(method, {
+        code
+    });
 }
 
 export function resetPassword(phone, password) {
-    return $http.post('/v1/auth/reset/resetPassword', { phone, password });
+    return $http.post('/v1/auth/reset/resetPassword', {
+        phone,
+        password
+    });
 }
 
 export function registerByPassword(password) {
-    return $http.post('/v1/auth/registerByPassword', { password });
+    return $http.post('/v1/auth/registerByPassword', {
+        password
+    });
 }
 
-export function getSocialLink({ backUrl, driver, redirectUrl }) {
+export function getSocialLink({
+    backUrl,
+    driver,
+    redirectUrl
+}) {
     return $http.post('/v1/auth/getSocialLink', {
         final_login_url: backUrl,
         driver,
@@ -104,7 +128,10 @@ export function getSocialLink({ backUrl, driver, redirectUrl }) {
     });
 }
 
-export function setCity({ name, fias_id }) {
+export function setCity({
+    name,
+    fias_id
+}) {
     return $http.put('/v1/auth/city', {
         name,
         fias_id,
@@ -119,7 +146,9 @@ export function getProfile() {
 
 export function uploadProfileCertificate(formData) {
     return $http.post('/v1/lk/profile/certificate', formData, {
-        headers: { 'Content-Type': 'multipart/form-data; boundary="boundary' },
+        headers: {
+            'Content-Type': 'multipart/form-data; boundary="boundary'
+        },
     });
 }
 
@@ -145,7 +174,9 @@ export function changeProfileCredential(code, type) {
         default:
             throw new Error(`Wrong verification code type: ${type}`);
     }
-    return $http.post(method, { code: String(code) });
+    return $http.post(method, {
+        code: String(code)
+    });
 }
 
 export function changeProfilePassword(data) {
@@ -153,20 +184,32 @@ export function changeProfilePassword(data) {
 }
 
 export function changeProfilePortfolio(portfolios) {
-    return $http.put('/v1/lk/profile/portfolio', { portfolios });
+    return $http.put('/v1/lk/profile/portfolio', {
+        portfolios
+    });
 }
 
 export function changeProfileActivities(ids) {
-    return $http.put('/v1/lk/profile/activities', { ids });
+    return $http.put('/v1/lk/profile/activities', {
+        ids
+    });
 }
 
 export function changeProfileAvatar(formData) {
     return $http.post('/v1/lk/profile/avatar', formData, {
-        headers: { 'Content-Type': 'multipart/form-data; boundary="boundary' },
+        headers: {
+            'Content-Type': 'multipart/form-data; boundary="boundary'
+        },
     });
 }
 
-export function changeProfilePersonal({ firstName, lastName, middleName, birthday, gender }) {
+export function changeProfilePersonal({
+    firstName,
+    lastName,
+    middleName,
+    birthday,
+    gender
+}) {
     return $http.put('/v1/lk/profile/personal', {
         first_name: firstName,
         last_name: lastName,
@@ -214,9 +257,16 @@ export function defaultProfileAddress(id) {
 
 export function getProfileOrders(sortDirection, sortKey, pageNum, perPage) {
     return $http.get('/v1/lk/order', {
-        params: { sortDirection, sortKey, pageNum, perPage },
+        params: {
+            sortDirection,
+            sortKey,
+            pageNum,
+            perPage
+        },
         paramsSerializer(params) {
-            return qs.stringify(params, { encode: false });
+            return qs.stringify(params, {
+                encode: false
+            });
         },
     });
 }
@@ -277,6 +327,24 @@ export function deleteProfilePromopageProductById(id) {
     return $http.delete(`/v1/lk/promo-page/products/by-id/${id}`);
 }
 
+export function changeProfileRequisites(name, address, inn, account, bank, bik, correspondentAccount) {
+    return $http.put('/v1/lk/profile/legal-info', {
+        legal_info_company_name: name,
+        legal_info_company_address: address,
+        legal_info_inn: inn,
+        legal_info_payment_account: account,
+        legal_info_bik: bik,
+        legal_info_bank: bank,
+        legal_info_bank_correspondent_account: correspondentAccount,
+    });
+}
+
+export function changeProfileReferralCode(code) {
+    return $http.put('/v1/lk/profile/referral-code', {
+        code,
+    });
+}
+
 // search
 
 export function search(data) {
@@ -287,32 +355,60 @@ export function search(data) {
 
 export function getProductGroups(type, page, orderField = 'name') {
     return $http.get('/v1/catalog/product-groups', {
-        params: { type_code: type, page, orderField },
+        params: {
+            type_code: type,
+            page,
+            orderField
+        },
         paramsSerializer(params) {
-            return qs.stringify(params, { encode: false });
+            return qs.stringify(params, {
+                encode: false
+            });
         },
     });
 }
 
 export function getProductGroup(type, code) {
     return $http.get('/v1/catalog/product-group', {
-        params: { type_code: type, code },
+        params: {
+            type_code: type,
+            code
+        },
         paramsSerializer(params) {
-            return qs.stringify(params, { encode: false });
+            return qs.stringify(params, {
+                encode: false
+            });
         },
     });
 }
 
-export function getProducts({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
+export function getProducts({
+    filter,
+    orderField = 'price',
+    orderDirection = 'desc',
+    page = 1
+}) {
     return $http.get('/v1/catalog/products', {
-        params: { filter, page, orderField, orderDirection },
+        params: {
+            filter,
+            page,
+            orderField,
+            orderDirection
+        },
         paramsSerializer(params) {
-            return qs.stringify(params, { encode: false });
+            return qs.stringify(params, {
+                encode: false
+            });
         },
     });
 }
 
-export function getCatalogItems({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
+export function getCatalogItems({
+    filter,
+    orderField = 'price',
+    orderDirection = 'desc',
+    page = 1
+}) {
     if (catalogItemsCancelSource) {
         catalogItemsCancelSource.cancel(REQUEST_CANCEL_MESSAGE);
         catalogItemsCancelSource = axios.CancelToken.source();
@@ -320,18 +416,30 @@ export function getCatalogItems({ filter, orderField = 'price', orderDirection =
 
     return $http.get('/v1/catalog/items', {
         cancelToken: catalogItemsCancelSource.token,
-        params: { filter, page, orderField, orderDirection },
+        params: {
+            filter,
+            page,
+            orderField,
+            orderDirection
+        },
         paramsSerializer(params) {
-            return qs.stringify(params, { encode: false });
+            return qs.stringify(params, {
+                encode: false
+            });
         },
     });
 }
 
 export function getFilters(categoryCode, excludedFilters) {
     return $http.get('/v1/catalog/filter', {
-        params: { categoryCode, excludedFilters },
+        params: {
+            categoryCode,
+            excludedFilters
+        },
         paramsSerializer(params) {
-            return qs.stringify(params, { encode: false });
+            return qs.stringify(params, {
+                encode: false
+            });
         },
     });
 }
@@ -379,19 +487,38 @@ export function getInstagram(data) {
 }
 
 export function getProduct(code, referrerCode) {
-    return $http.get('/v1/catalog/product-detail', { params: { code, referrerCode } });
+    return $http.get('/v1/catalog/product-detail', {
+        params: {
+            code,
+            referrerCode
+        }
+    });
 }
 
 export function getProductPickupPoints(code) {
-    return $http.get('/v1/catalog/product-detail/pickup-points', { params: { code } });
+    return $http.get('/v1/catalog/product-detail/pickup-points', {
+        params: {
+            code
+        }
+    });
 }
 
 export function getProductOptions(groupId) {
-    return $http.get('/v1/catalog/variants', { params: { groupId } });
+    return $http.get('/v1/catalog/variants', {
+        params: {
+            groupId
+        }
+    });
 }
 
-export function getMasterclass({ code }) {
-    return $http.get('/v1/catalog/masterclass-detail', { params: { code } });
+export function getMasterclass({
+    code
+}) {
+    return $http.get('/v1/catalog/masterclass-detail', {
+        params: {
+            code
+        }
+    });
 }
 
 //brand
@@ -411,11 +538,21 @@ export function deleteAllItems() {
 }
 
 export function deleteCartItem(offerId, storeId) {
-    return $http.delete('/v1/cart/item', { data: { offerId, storeId } });
+    return $http.delete('/v1/cart/item', {
+        data: {
+            offerId,
+            storeId
+        }
+    });
 }
 
 export function addCartItem(offerId, storeId, count, referrerCode) {
-    return $http.post('/v1/cart/item', { offerId, storeId, count, referrerCode: referrerCode || undefined });
+    return $http.post('/v1/cart/item', {
+        offerId,
+        storeId,
+        count,
+        referrerCode: referrerCode || undefined
+    });
 }
 
 // checkout
@@ -470,4 +607,33 @@ export function deletePromocode(data) {
 
 export function changeReceiveMethod(data) {
     return $http.post('/v1/checkout/receive-method', data);
+}
+
+// favorites
+
+export function getFavorites(pageNum, perPage, orderField, orderDirection) {
+    return $http.get('/v1/lk/favorites', {
+        params: {
+            pageNum,
+            perPage,
+            orderField,
+            orderDirection,
+        },
+    });
+}
+
+export function addFavoritesItem(product_id) {
+    return $http.post(`/v1/lk/favorites/${product_id}`);
+}
+
+export function deleteFavoritesItem(product_id) {
+    return $http.delete(`/v1/lk/favorites/${product_id}`);
+}
+
+export function deleteAllFavorites() {
+    return $http.delete('/v1/lk/favorites/all');
+}
+
+export function getFavoritesAll() {
+    return $http.get('/v1/lk/favorites/all');
 }

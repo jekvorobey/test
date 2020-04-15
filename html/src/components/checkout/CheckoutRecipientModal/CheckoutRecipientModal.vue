@@ -78,10 +78,11 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import validationMixin, { required, minLength, email } from '@plugins/validation';
 import { getRandomIntInclusive } from '@util';
+import { modalName } from '@enums';
 import { phoneMaskOptions } from '@settings';
 import './CheckoutRecipientModal.css';
 
-export const NAME = 'checkout-recipient-modal';
+const NAME = modalName.checkout.RECIPIENT_EDIT;
 
 export default {
     name: NAME,
@@ -128,8 +129,8 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         isTablet() {
