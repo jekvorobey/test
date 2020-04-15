@@ -226,14 +226,14 @@
         </ul>
 
         <div class="container container--tablet-lg orders-view__controls" v-if="pagesCount > 1">
-            <v-button
-                class="btn--outline orders-view__controls-btn"
+            <show-more-button
                 v-if="activePage < pagesCount"
+                btn-class="btn--outline orders-view__controls-btn"
                 @click="onShowMore"
-                :disabled="showMore"
+                :show-preloader="showMore"
             >
                 Показать ещё
-            </v-button>
+            </show-more-button>
             <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
     </section>
@@ -250,6 +250,7 @@ import VArcCounter from '@controls/VArcCounter/VArcCounter.vue';
 import FilterButton from '@components/FilterButton/FilterButton.vue';
 import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -298,6 +299,7 @@ export default {
         FilterButton,
         Price,
         InfoRow,
+        ShowMoreButton,
     },
 
     data() {

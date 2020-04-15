@@ -68,9 +68,9 @@
 
         <div class="bonuses-view__controls">
             <div class="container container--tablet-lg">
-                <v-button class="btn--outline bonuses-view__controls-btn">
+                <show-more-button btn-class="btn--outline bonuses-view__controls-btn">
                     Показать ещё
-                </v-button>
+                </show-more-button>
                 <v-pagination v-model="page" :page-count="10" />
             </div>
         </div>
@@ -83,6 +83,8 @@ import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 
+import ShowMoreButtom from '@components/ShowMoreButton/ShowMoreButton.vue';
+
 import './Bonuses.css';
 
 export default {
@@ -93,6 +95,8 @@ export default {
         VButton,
         VInput,
         VPagination,
+
+        ShowMoreButtom,
     },
 
     data() {

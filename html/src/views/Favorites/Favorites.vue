@@ -27,14 +27,15 @@
                 />
             </ul>
             <div class="favorites-view__main-controls">
-                <v-button
-                    class="btn--outline favorites-view__main-controls-btn"
+                <show-more-button
                     v-if="activePage < pagesCount"
+                    btn-class="btn--outline favorites-view__main-controls-btn"
+                    preloader-class="favorites-view__preloader"
+                    :show-preloader="showMore"
                     @click="onShowMore"
-                    :disabled="showMore"
                 >
                     Показать ещё
-                </v-button>
+                </show-more-button>
                 <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
             </div>
         </div>
@@ -47,12 +48,20 @@
 <script>
 import VButton from '@controls/VButton/VButton.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
+
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger, $route, $router } from '@services';
 
-import { NAME as FAVORITES_MODULE, FAVORITES, FAVORITES_DIRECTION, FAVORITES_FIELD, ACTIVE_PAGE } from '@store/modules/Favorites';
+import {
+    NAME as FAVORITES_MODULE,
+    FAVORITES,
+    FAVORITES_DIRECTION,
+    FAVORITES_FIELD,
+    ACTIVE_PAGE,
+} from '@store/modules/Favorites';
 import { PAGES_COUNT } from '@store/modules/Favorites/getters';
 import { FETCH_FAVORITES, SET_LOAD_PATH } from '@store/modules/Favorites/actions';
 
@@ -73,6 +82,7 @@ export default {
         VButton,
         VPagination,
         CatalogProductCard,
+        ShowMoreButton,
     },
 
     data() {
@@ -117,7 +127,6 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
-
         const {
             fullPath,
             query: { page = DEFAULT_PAGE },
@@ -130,7 +139,7 @@ export default {
             $progress.start();
             $store
                 .dispatch(`${FAVORITES_MODULE}/${FETCH_FAVORITES}`, {
-                    page
+                    page,
                 })
                 .then(data => {
                     $store.dispatch(`${FAVORITES_MODULE}/${SET_LOAD_PATH}`, fullPath);
@@ -148,7 +157,6 @@ export default {
     },
 
     async beforeRouteUpdate(to, from, next) {
-
         const {
             query: { page = DEFAULT_PAGE },
         } = to;
@@ -165,5 +173,5 @@ export default {
 
         this.showMore = false;
     },
-}
+};
 </script>

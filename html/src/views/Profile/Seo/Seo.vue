@@ -64,14 +64,14 @@
         </info-panel>
 
         <div class="container container--tablet-lg seo-view__controls" v-if="pagesCount > 1">
-            <v-button
-                class="btn--outline seo-view__controls-btn"
+            <show-more-button
+                btn-class="btn--outline seo-view__controls-btn"
                 v-if="activePage < pagesCount"
                 @click="onShowMore"
-                :disabled="showMore"
+                :show-preloader="showMore"
             >
                 Показать ещё
-            </v-button>
+            </show-more-button>
             <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
     </section>
@@ -87,6 +87,7 @@ import VPagination from '@controls/VPagination/VPagination.vue';
 
 import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -113,7 +114,6 @@ import '@images/sprites/copy.svg';
 import '@images/sprites/link.svg';
 import './Seo.css';
 
-
 const SEO_MODULE_PATH = `${PROFILE_MODULE}/${SEO_MODULE}`;
 
 export default {
@@ -129,6 +129,7 @@ export default {
 
         RadioSwitch,
         InfoPanel,
+        ShowMoreButton,
     },
 
     data() {

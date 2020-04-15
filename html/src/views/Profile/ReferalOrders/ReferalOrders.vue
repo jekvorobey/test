@@ -123,10 +123,10 @@
                 </li>
             </ul>
 
-            <div class=" container contaiter--tablet-lg referal-orders-view__controls">
-                <v-button class="btn--outline referal-orders-view__controls-btn">
+            <div class="container contaiter--tablet-lg referal-orders-view__controls">
+                <show-more-button btn-class="btn--outline referal-orders-view__controls-btn">
                     Показать ещё
-                </v-button>
+                </show-more-button>
                 <v-pagination v-model="page" :page-count="10" />
             </div>
         </section>
@@ -141,6 +141,8 @@ import VPagination from '@controls/VPagination/VPagination.vue';
 import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import FilterButton from '@components/FilterButton/FilterButton.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
+
 import referalProduct1 from '@images/mock/referalProduct1.png';
 import referalProduct2 from '@images/mock/referalProduct2.png';
 import referalProduct3 from '@images/mock/referalProduct3.png';
@@ -159,6 +161,7 @@ export default {
         FilterButton,
         InfoRow,
         Price,
+        ShowMoreButton,
     },
 
     data() {

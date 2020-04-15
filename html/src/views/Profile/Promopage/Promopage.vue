@@ -57,14 +57,14 @@
         </info-panel>
 
         <div class="container container--tablet-lg promopage-view__controls" v-if="pagesCount > 1">
-            <v-button
-                class="btn--outline promopage-view__controls-btn"
+            <show-more-button
+                btn-class="btn--outline promopage-view__controls-btn"
                 v-if="activePage < pagesCount"
                 @click="onShowMore"
-                :disabled="showMore"
+                :show-preloader="showMore"
             >
                 Показать ещё
-            </v-button>
+            </show-more-button>
             <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
 
@@ -94,6 +94,7 @@ import VPagination from '@controls/VPagination/VPagination.vue';
 
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import PromopageEditModal, {
     NAME as PROMOPAGE_EDIT_MODAL_NAME,
@@ -142,13 +143,14 @@ export default {
 
         InfoPanel,
         CatalogProductCard,
+        ShowMoreButton,
 
         PromopageEditModal,
         PromopageAddModal,
         PromopageAddByLinkModal,
     },
 
-    data(){
+    data() {
         return {
             showMore: false,
         };
@@ -189,7 +191,7 @@ export default {
     },
 
     watch: {
-        [ACTIVE_PAGE](value){
+        [ACTIVE_PAGE](value) {
             this.onPageChanged(value);
         },
     },
@@ -202,7 +204,7 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: PROMOPAGE_ADD_MODAL_NAME, open: true });
         },
 
-        onDeleteProduct(id){
+        onDeleteProduct(id) {
             this[DELETE_PRODUCT]({ id, refresh: true });
         },
 
@@ -265,7 +267,7 @@ export default {
             query: { page = DEFAULT_PAGE },
         } = to;
 
-        if(page == this.activePage) return next();
+        if (page == this.activePage) return next();
 
         try {
             this.$progress.start();

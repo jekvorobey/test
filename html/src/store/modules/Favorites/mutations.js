@@ -1,4 +1,6 @@
-import { DELETE } from "../../../../node_modules/fast-diff/diff";
+import {
+    DELETE
+} from "../../../../node_modules/fast-diff/diff";
 
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 
@@ -20,18 +22,25 @@ export default {
         state.favorites = payload;
     },
 
-    [SET_FAVORITES_MORE](state, { items, range }) {
+    [SET_FAVORITES_MORE](state, {
+        items,
+        range
+    }) {
         state.favorites.push(...items);
         state.range = range || 0;
     },
 
-    [SET_QUERY_PARAMS](state, { page = 1, orderField, orderDirection }) {
+    [SET_QUERY_PARAMS](state, {
+        page = 1,
+        orderField,
+        orderDirection
+    }) {
         state.activePage = Number(page);
         state.orderField = orderField;
         state.orderDirection = orderDirection;
     },
 
-    [SET_FAVORITES_ALL](state, payload ) {
+    [SET_FAVORITES_ALL](state, payload) {
         state.favoritesAll = payload;
     },
 
