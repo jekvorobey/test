@@ -31,7 +31,8 @@
                     @toggle-favorite-item="onToggleFavorite(product)"
                 />
             </ul>
-            <div class="favorites-view__main-controls">
+
+            <div class="favorites-view__main-controls" v-if="pagesCount > 1">
                 <show-more-button
                     v-if="activePage < pagesCount"
                     btn-class="btn--outline favorites-view__main-controls-btn"
