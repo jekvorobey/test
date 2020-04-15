@@ -31,17 +31,16 @@
                     @toggle-favorite-item="onToggleFavorite(product)"
                 />
             </ul>
-
-            <div class="favorites-view__main-controls" v-if="pagesCount > 1">
-                <v-button
-                    class="btn--outline favorites-view__main-controls-btn"
+            <div class="favorites-view__main-controls">
+                <show-more-button
                     v-if="activePage < pagesCount"
+                    btn-class="btn--outline favorites-view__main-controls-btn"
+                    preloader-class="favorites-view__preloader"
+                    :show-preloader="showMore"
                     @click="onShowMore"
-                    :disabled="showMore"
                 >
                     Показать ещё
-                </v-button>
-
+                </show-more-button>
                 <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
             </div>
         </div>
@@ -55,7 +54,9 @@
 <script>
 import VButton from '@controls/VButton/VButton.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
+
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger, $route, $router } from '@services';
@@ -84,6 +85,7 @@ export default {
         VButton,
         VPagination,
         CatalogProductCard,
+        ShowMoreButton,
     },
 
     data() {
@@ -146,15 +148,15 @@ export default {
                 .dispatch(`${FAVORITES_MODULE}/${FETCH_FAVORITES}`, {
                     page,
                 })
-                .then((data) => {
+                .then(data => {
                     $store.dispatch(`${FAVORITES_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
+                    next(vm => {
                         $progress.finish();
                     });
                 })
-                .catch((thrown) => {
+                .catch(thrown => {
                     if (thrown && thrown.isCancel === true) return true;
-                    next((vm) => {
+                    next(vm => {
                         $progress.fail();
                     });
                 });

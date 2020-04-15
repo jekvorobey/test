@@ -14,18 +14,28 @@ export default {
         state.loadPath = payload;
     },
 
-    [SET_QUERY_PARAMS](state, { page = 1, orderField, orderDirection }) {
+    [SET_QUERY_PARAMS](state, {
+        page = 1,
+        orderField,
+        orderDirection
+    }) {
         state.activePage = Number(page);
         state.orderField = orderField;
         state.orderDirection = orderDirection;
     },
 
-    [SET_FAVORITES](state, { items = [], range }) {
+    [SET_FAVORITES](state, {
+        items = [],
+        range
+    }) {
         state.favorites = items;
         state.range = range || 0;
     },
 
-    [SET_FAVORITES_MORE](state, { items = [], range }) {
+    [SET_FAVORITES_MORE](state, {
+        items = [],
+        range
+    }) {
         state.favorites.push(...items);
         state.range = range || 0;
     },

@@ -76,9 +76,9 @@
         </ul>
 
         <div class="container container--tablet-lg account-view__controls">
-            <v-button class="btn--outline account-view__controls-btn">
+            <show-more-button btn-class="btn--outline account-view__controls-btn">
                 Показать ещё
-            </v-button>
+            </show-more-button>
             <v-pagination v-model="page" :page-count="10" />
         </div>
     </section>
@@ -93,6 +93,8 @@ import VPagination from '@controls/VPagination/VPagination.vue';
 
 import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
+
 import './Account.css';
 
 export default {
@@ -107,6 +109,7 @@ export default {
 
         Price,
         InfoRow,
+        ShowMoreButton,
     },
 
     data() {

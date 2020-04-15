@@ -1,6 +1,10 @@
-import { $logger } from '@services';
+import {
+    $logger
+} from '@services';
 
-import { FAVORITES_PAGE_SIZE } from '@constants/favorites';
+import {
+    FAVORITES_PAGE_SIZE
+} from '@constants/favorites';
 
 export const PAGES_COUNT = 'pagesCount';
 

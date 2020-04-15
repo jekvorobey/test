@@ -142,9 +142,9 @@
         </ul>
 
         <div class="container container--tablet-lg referal-view__controls">
-            <v-button class="btn--outline referal-view__controls-btn">
+            <show-more-button btn-class="btn--outline referal-view__controls-btn">
                 Показать ещё
-            </v-button>
+            </show-more-button>
             <v-pagination v-model="page" :page-count="10" />
         </div>
     </section>
@@ -158,6 +158,7 @@ import VArcCounter from '@controls/VArcCounter/VArcCounter.vue';
 import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import FilterButton from '@components/FilterButton/FilterButton.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import referalProduct1 from '@images/mock/referalProduct1.png';
 import referalProduct2 from '@images/mock/referalProduct2.png';
@@ -180,6 +181,7 @@ export default {
         Price,
         InfoRow,
         FilterButton,
+        ShowMoreButton,
     },
 
     data() {

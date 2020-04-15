@@ -83,14 +83,14 @@
                     <catalog-product-list :key="type" class="catalog-view__main-grid" :animation="!isTablet" />
 
                     <div class="catalog-view__main-controls" v-if="pagesCount > 1">
-                        <v-button
+                        <show-more-button
                             v-if="activePage < pagesCount"
-                            class="btn--outline catalog-view__main-controls-btn"
+                            btn-class="btn--outline catalog-view__main-controls-btn"
                             @click="onShowMore"
-                            :disabled="showMore"
+                            :show-preloader="showMore"
                         >
                             Показать ещё
-                        </v-button>
+                        </show-more-button>
                         <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
                     </div>
                 </div>
@@ -187,6 +187,7 @@ import CategoryTreeItem from '@components/CategoryTreeItem/CategoryTreeItem.vue'
 import CatalogFilter from '@components/CatalogFilter/CatalogFilter.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -247,6 +248,7 @@ export default {
         CatalogFilter,
         CatalogProductList,
         CatalogBannerCard,
+        ShowMoreButton,
     },
 
     data() {

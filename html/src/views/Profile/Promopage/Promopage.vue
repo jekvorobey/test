@@ -57,14 +57,14 @@
         </info-panel>
 
         <div class="container container--tablet-lg promopage-view__controls" v-if="pagesCount > 1">
-            <v-button
-                class="btn--outline promopage-view__controls-btn"
+            <show-more-button
+                btn-class="btn--outline promopage-view__controls-btn"
                 v-if="activePage < pagesCount"
                 @click="onShowMore"
-                :disabled="showMore"
+                :show-preloader="showMore"
             >
                 Показать ещё
-            </v-button>
+            </show-more-button>
             <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
 
@@ -94,6 +94,7 @@ import VPagination from '@controls/VPagination/VPagination.vue';
 
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import PromopageEditModal from '@components/profile/PromopageEditModal/PromopageEditModal.vue';
 import PromopageAddModal from '@components/profile/PromopageAddModal/PromopageAddModal.vue';
@@ -133,6 +134,7 @@ export default {
 
         InfoPanel,
         CatalogProductCard,
+        ShowMoreButton,
 
         PromopageEditModal,
         PromopageAddModal,
@@ -150,18 +152,18 @@ export default {
         ...mapGetters(PROMOPAGE_MODULE_PATH, [PAGES_COUNT]),
 
         ...mapState(MODAL_MODULE, {
-            isNameEditOpen: (state) =>
+            isNameEditOpen: state =>
                 state[MODALS][modalName.profile.PROMO_EDIT] && state[MODALS][modalName.profile.PROMO_EDIT].open,
-            isProductAddOpen: (state) =>
+            isProductAddOpen: state =>
                 state[MODALS][modalName.profile.PROMO_ADD] && state[MODALS][modalName.profile.PROMO_ADD].open,
-            isProductAddByLinkOpen: (state) =>
+            isProductAddByLinkOpen: state =>
                 state[MODALS][modalName.profile.PROMO_ADD_BY_LINK] &&
                 state[MODALS][modalName.profile.PROMO_ADD_BY_LINK].open,
         }),
 
         products() {
             const items = this[ITEMS] || [];
-            return items.map((item) => {
+            return items.map(item => {
                 return {
                     ...item,
                     href: generateProductUrl(item.categoryCodes[item.categoryCodes.length - 1], item.code),
@@ -236,10 +238,10 @@ export default {
                 .dispatch(`${PROMOPAGE_MODULE_PATH}/${FETCH_PROMOPAGE}`, { page })
                 .then(() => {
                     $store.dispatch(`${PROMOPAGE_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => $progress.finish());
+                    next(vm => $progress.finish());
                 })
-                .catch((error) => {
-                    next((vm) => $progress.fail());
+                .catch(error => {
+                    next(vm => $progress.fail());
                     $logger.error(error);
                 });
         }
