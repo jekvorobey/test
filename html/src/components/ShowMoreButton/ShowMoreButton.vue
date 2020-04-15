@@ -1,5 +1,5 @@
 <template>
-    <v-button :class="btnClass" v-if="!showPreloader">
+    <v-button :class="btnClass" v-if="!showPreloader" v-on="handlers">
         <slot />
     </v-button>
     <img :src="preloaderIcon" class="preloader" :class="preloaderClass" width="30" height="30" v-else />

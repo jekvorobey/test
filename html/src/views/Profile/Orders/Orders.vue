@@ -229,7 +229,7 @@
             <show-more-button
                 v-if="activePage < pagesCount"
                 btn-class="btn--outline orders-view__controls-btn"
-                @click="onShowMore"
+                @click.prevent="onShowMore"
                 :show-preloader="showMore"
             >
                 Показать ещё

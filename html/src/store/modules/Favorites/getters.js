@@ -14,7 +14,7 @@ export const IS_IN_FAVORITES = 'isInFavorites';
 
 export default {
     [PAGES_COUNT](state) {
-        return Math.ceil(state.favorites.range / FAVORITES_PAGE_SIZE);
+        return Math.ceil(state.range / FAVORITES_PAGE_SIZE);
     },
 
     [FAVORITES_MAP](state) {
