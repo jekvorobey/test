@@ -3,16 +3,20 @@
         <div class="container favorites-view__header">
             <h1 class="favorites-view__header-h1">
                 Избранное
-                <span class="favorites-view__header-counter">{{ favorites.length }} продуктов</span>
+                <span class="favorites-view__header-counter" v-if="favorites.length > 0">
+                    {{ favorites.length }} продуктов
+                </span>
             </h1>
         </div>
+
         <div class="container favorites-container" v-if="favorites.length > 0">
             <ul class="favorites-product-list">
                 <catalog-product-card
                     class="favorites-product-list__item"
-                    v-for="product in favorites.items"
+                    v-for="product in favorites"
                     :key="product.id"
-                    :product-id="product.id"
+                    :offer-id="product.id"
+                    :product-id="product.productId"
                     :name="product.name"
                     :type="product.type"
                     :href="`/catalog/${product.categoryCodes[product.categoryCodes.length - 1]}/${product.code}`"
@@ -24,6 +28,7 @@
                     :show-buy-btn="product.stock.qty > 0"
                     @add-item="onAddToCart(product)"
                     @preview="onPreview(product.code)"
+                    @toggle-favorite-item="onToggleFavorite(product)"
                 />
             </ul>
             <div class="favorites-view__main-controls">
@@ -39,6 +44,7 @@
                 <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
             </div>
         </div>
+
         <div class="container" v-else>
             <p>Ничего не найдено</p>
         </div>
@@ -63,7 +69,7 @@ import {
     ACTIVE_PAGE,
 } from '@store/modules/Favorites';
 import { PAGES_COUNT } from '@store/modules/Favorites/getters';
-import { FETCH_FAVORITES, SET_LOAD_PATH } from '@store/modules/Favorites/actions';
+import { FETCH_FAVORITES, SET_LOAD_PATH, TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -97,7 +103,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(FAVORITES_MODULE, [FETCH_FAVORITES, SET_LOAD_PATH]),
+        ...mapActions(FAVORITES_MODULE, [FETCH_FAVORITES, SET_LOAD_PATH, TOGGLE_FAVORITES_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onShowMore() {
@@ -113,15 +119,19 @@ export default {
             this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
         },
 
+        onToggleFavorite({ productId }) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
+        },
+
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: QUICK_VIEW_MODAL_NAME, open: true, state: { code } });
         },
 
-        onAddToCart(item) {
+        onAddToCart({ id, stock, type }) {
             this[CHANGE_MODAL_STATE]({
                 name: ADD_TO_CART_MODAL_NAME,
                 open: true,
-                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
+                state: { offerId: id, storeId: stock.storeId, type },
             });
         },
     },

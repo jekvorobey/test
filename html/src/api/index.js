@@ -492,10 +492,11 @@ export function changeReceiveMethod(data) {
 
 // favorites
 
-export function getFavorites(page, orderField, orderDirection) {
+export function getFavorites(pageNum, perPage, orderField, orderDirection) {
     return $http.get('/v1/lk/favorites', {
         params: {
-            page,
+            pageNum,
+            perPage,
             orderField,
             orderDirection,
         },
