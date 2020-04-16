@@ -59,7 +59,7 @@ const galleryOptions = {
     },
 };
 
-const NAME = modalName.product.GALLERY_MODAL;
+const NAME = modalName.product.GALLERY;
 
 export default {
     name: NAME,
@@ -73,8 +73,8 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
-            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         ...mapState(PRODUCT_MODULE, [PRODUCT]),
