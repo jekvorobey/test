@@ -76,6 +76,7 @@
                         <col width="12%" />
                         <col width="12%" />
                     </colgroup>
+
                     <thead class="referal-view__table-head">
                         <tr class="referal-view__table-tr referal-view__table-tr--header">
                             <th class="referal-view__table-th">Товар</th>
@@ -87,6 +88,7 @@
                             <th class="referal-view__table-th">Сумма вознаграждения</th>
                         </tr>
                     </thead>
+
                     <transition-group tag="tbody" name="fade-in" appear class="referal-view__table-body">
                         <tr class="referal-view__table-tr" v-for="order in orders" :key="order.id">
                             <td class="referal-view__table-td">
@@ -164,9 +166,15 @@ import referalProduct1 from '@images/mock/referalProduct1.png';
 import referalProduct2 from '@images/mock/referalProduct2.png';
 import referalProduct3 from '@images/mock/referalProduct3.png';
 
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as REFERRAL_MODULE } from '@store/modules/Profile/modules/Referral';
+import { FETCH_REFERRAL_DATA } from '@store/modules/Profile/modules/Referral/actions';
+
+import { $store, $progress } from '@services';
 import { baseChartOptions } from '@settings/profile';
 import './Referal.css';
 
+const REFERRAL_MODULE_PATH = `${PROFILE_MODULE}/${REFERRAL_MODULE}`;
 const VChart = () => import(/* webpackChunkName: "v-chart" */ '@controls/VChart/VChart.vue');
 
 export default {
@@ -282,6 +290,31 @@ export default {
 
     methods: {
         onImageChanged(image) {},
+    },
+
+    async serverPrefetch() {
+        try {
+            return await this[FETCH_REFERRAL_DATA](this.$isServer);
+        } catch (error) {
+            $logger.error(error);
+        }
+    },
+
+    beforeRouteEnter(to, from, next) {
+        const { load } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
+
+        $$progress.start();
+        $store
+            .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`)
+            .then(() => {
+                next(vm => {
+                    $progress.finish();
+                });
+            })
+            .catch(thrown => {
+                $progress.fail();
+                next();
+            });
     },
 
     mounted() {

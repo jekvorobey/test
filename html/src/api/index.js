@@ -321,6 +321,18 @@ export function changeProfileReferralCode(code) {
     });
 }
 
+export function getReferralData() {
+    return $http.get('/v1/lk/order-referral');
+}
+
+export function getReferralOrders() {
+    return $http.get('/v1/lk/order-referral/orders');
+}
+
+export function getReferralOrderDetails(id) {
+    return $http.get(`/v1/lk/order-referral/${id}`);
+}
+
 // search
 
 export function search(data) {
