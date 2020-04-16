@@ -613,3 +613,21 @@ export function deleteAllFavorites() {
 export function getFavoritesAll() {
     return $http.get('/v1/lk/favorites/all');
 }
+
+// documents
+
+export function getDocumentsStatuses() {
+    return $http.get('/v1/lk/documents/statuses');
+}
+
+export function setDocumentStatus(documentId, status) {
+    return $http.put(`/v1/lk/documents/${documentId}`, {
+        status: statusId,
+    });
+}
+
+export function getDocumentsByStatus(status) {
+    return $http.get('/v1/lk/documents', {
+        status,
+    });
+}
