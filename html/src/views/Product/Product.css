@@ -749,6 +749,7 @@
             &-title {
                 color: var(--cl-grey);
                 width: 50%;
+                min-width: 50%;
                 padding-right: calc(var(--gs) * 3);
             }
         }
