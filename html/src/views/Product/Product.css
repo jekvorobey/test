@@ -735,6 +735,7 @@
             width: calc(50% - calc(var(--gs) * 3 / 2));
             display: flex;
             line-height: 24px;
+            overflow: hidden;
 
             @media (--tablet-lg) {
                 width: 100%;
