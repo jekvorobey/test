@@ -321,6 +321,18 @@ export function changeProfileReferralCode(code) {
     });
 }
 
+export function getReferralData() {
+    return $http.get('/v1/lk/order-referral');
+}
+
+export function getReferralOrders() {
+    return $http.get('/v1/lk/order-referral/orders');
+}
+
+export function getReferralOrderDetails(id) {
+    return $http.get(`/v1/lk/order-referral/${id}`);
+}
+
 // search
 
 export function search(data) {
@@ -600,4 +612,22 @@ export function deleteAllFavorites() {
 
 export function getFavoritesAll() {
     return $http.get('/v1/lk/favorites/all');
+}
+
+// documents
+
+export function getDocumentsStatuses() {
+    return $http.get('/v1/lk/documents/statuses');
+}
+
+export function setDocumentStatus(documentId, status) {
+    return $http.put(`/v1/lk/documents/${documentId}`, {
+        status: statusId,
+    });
+}
+
+export function getDocumentsByStatus(status) {
+    return $http.get('/v1/lk/documents', {
+        status,
+    });
 }

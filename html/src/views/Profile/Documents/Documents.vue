@@ -31,6 +31,15 @@
 import VSelect from '@controls/VSelect/VSelect.vue';
 import DocumentCard from '@components/DocumentCard/DocumentCard.vue';
 
+import { mapState, mapActions, mapGetters } from 'vuex';
+
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+
+import { NAME as DOCUMENTS_MODULE, ITEMS } from '@store/modules/Profile/modules/Documents';
+import { LOAD_PATH, FETCH_DOCUMENTS } from '@store/modules/Profile/modules/Documents/actions';
+
+const DOCUMENTS_MODULE_PATH = `${PROFILE_MODULE}/${DOCUMENTS_MODULE}`;
+
 import './Documents.css';
 
 export default {
@@ -43,7 +52,7 @@ export default {
     },
 
     data() {
-        const sortTypes = ['Всё время'];
+        const sortTypes = ['Все типы'];
 
         return {
             selectedSortType: sortTypes[0],

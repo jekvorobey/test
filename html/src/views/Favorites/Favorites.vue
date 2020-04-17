@@ -1,38 +1,52 @@
 <template>
     <section class="section favorites-view">
-        <div class="container favorites-view__header">
-            <h1 class="favorites-view__header-h1">
-                Избранное
-                <span class="favorites-view__header-counter" v-if="favorites.length > 0">
-                    {{ favorites.length }} продуктов
-                </span>
-            </h1>
+        <div class="container">
+            <breadcrumbs class="favorites-view__breadcrumbs">
+                <breadcrumb-item key="main" to="/">
+                    Главная
+                </breadcrumb-item>
+                <breadcrumb-item key="Favorites" :to="$route.fullPath">
+                    Избранное
+                </breadcrumb-item>
+            </breadcrumbs>
         </div>
 
-        <div class="container favorites-container" v-if="favorites.length > 0">
-            <ul class="favorites-product-list">
-                <catalog-product-card
-                    class="favorites-product-list__item"
-                    v-for="product in favorites"
-                    :key="product.id"
-                    :offer-id="product.id"
-                    :product-id="product.productId"
-                    :name="product.name"
-                    :type="product.type"
-                    :href="`/catalog/${product.categoryCodes[product.categoryCodes.length - 1]}/${product.code}`"
-                    :image="product.image"
-                    :price="product.price"
-                    :old-price="product.oldPrice"
-                    :tags="product.tags"
-                    :rating="product.rating"
-                    :show-buy-btn="product.stock.qty > 0"
-                    @add-item="onAddToCart(product)"
-                    @preview="onPreview(product.code)"
-                    @toggle-favorite-item="onToggleFavorite(product)"
-                />
-            </ul>
+        <section class="section favorites-view__section">
+            <div class="container favorites-view__header">
+                <h1 class="favorites-view__header-hl">
+                    Избранное
+                    <span class="favorites-view__header-counter" v-if="favorites.length > 0">
+                        {{ favorites.length }} продуктов
+                    </span>
+                </h1>
+            </div>
 
-            <div class="favorites-view__main-controls" v-if="pagesCount > 1">
+            <div class="container favorites-view__section-container" v-if="favorites.length > 0">
+                <ul class="favorites-view__list">
+                    <catalog-product-card
+                        class="favorites-view__list-item"
+                        v-for="product in favorites"
+                        :key="product.id"
+                        :offer-id="product.id"
+                        :product-id="product.productId"
+                        :name="product.name"
+                        :type="product.type"
+                        :href="`/catalog/${product.categoryCodes[product.categoryCodes.length - 1]}/${product.code}`"
+                        :image="product.image"
+                        :price="product.price"
+                        :old-price="product.oldPrice"
+                        :tags="product.tags"
+                        :rating="product.rating"
+                        :show-buy-btn="product.stock.qty > 0"
+                        @add-item="onAddToCart(product)"
+                        @preview="onPreview(product.code)"
+                        @toggle-favorite-item="onToggleFavorite(product)"
+                    />
+                </ul>
+            </div>
+            <p class="container" v-else>Ничего не найдено</p>
+
+            <div class="container favorites-view__main-controls" v-if="pagesCount > 1">
                 <show-more-button
                     v-if="activePage < pagesCount"
                     btn-class="btn--outline favorites-view__main-controls-btn"
@@ -44,11 +58,7 @@
                 </show-more-button>
                 <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
             </div>
-        </div>
-
-        <div class="container" v-else>
-            <p>Ничего не найдено</p>
-        </div>
+        </section>
     </section>
 </template>
 
@@ -58,6 +68,9 @@ import VPagination from '@controls/VPagination/VPagination.vue';
 
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
+
+import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger, $route, $router } from '@services';
@@ -85,8 +98,11 @@ export default {
     components: {
         VButton,
         VPagination,
+
         CatalogProductCard,
         ShowMoreButton,
+        Breadcrumbs,
+        BreadcrumbItem,
     },
 
     data() {

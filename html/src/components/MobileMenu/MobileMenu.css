@@ -38,9 +38,25 @@
             align-items: center;
             text-align: left;
 
-            .icon {
+            &-container {
+                display: flex;
                 flex: none;
+                position: relative;
                 margin-right: calc(var(--gs) * 2);
+            }
+
+            &-count {
+                position: absolute;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                right: 0;
+                top: 48%;
+                transform: translateY(-50%);
+                width: 24px;
+                font-size: 10px;
+                line-height: 16px;
+                color: var(--cl-white);
             }
         }
 

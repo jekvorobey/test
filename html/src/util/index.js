@@ -144,6 +144,19 @@ export function preparePrice(number, decimals, dec_point, thousands_sep) {
     return minus + km + kw + kd;
 }
 
+function round(n, precision) {
+    const prec = Math.pow(10, precision);
+    return Math.round(n * prec) / prec;
+}
+
+export function shortNumberFormat(n) {
+    const abbrev = [' тыс', ' млн', ' млрд'];
+    let base = Math.floor(Math.log(Math.abs(n)) / Math.log(1000));
+    const suffix = abbrev[Math.min(2, base - 1)];
+    base = abbrev.indexOf(suffix) + 1;
+    return suffix ? round(n / Math.pow(1000, base), 2) + suffix : '' + n;
+}
+
 /**
  * Вычисляет контрольное число.
  *

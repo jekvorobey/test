@@ -322,5 +322,10 @@ export default {
             });
         next();
     },
+
+    beforeRouteLeave(to, from, next) {
+        this[UPDATE_BREADCRUMB]([]);
+        next();
+    },
 };
 </script>

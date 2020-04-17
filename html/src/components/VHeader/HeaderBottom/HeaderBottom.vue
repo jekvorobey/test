@@ -20,11 +20,14 @@
                         <v-svg name="logo" width="30" height="30" />
                     </router-link>
                 </template>
+
                 <header-navigation-panel class="header-bottom__bottom-nav" />
+
                 <router-link class="header-bottom__bottom-logo-middle" to="/">
                     <v-svg name="logo-text" width="278" height="28" />
                     <v-svg name="logo" width="30" height="30" />
                 </router-link>
+
                 <template v-if="scroll || isTabletLg">
                     <search-filter
                         :style="{ visibility: 'hidden' }"

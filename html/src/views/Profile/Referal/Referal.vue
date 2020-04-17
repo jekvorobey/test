@@ -5,11 +5,11 @@
             <div class="referal-view__panel">
                 <div class="referal-view__panel-item">
                     <div class="text-grey referal-view__panel-name">Ваш уровень</div>
-                    <div class="referal-view__panel-level">Золотой</div>
+                    <div class="referal-view__panel-level">{{ levelData.currentLevelName }}</div>
                 </div>
                 <div class="referal-view__panel-item">
                     <div class="text-grey referal-view__panel-name">Следующий уровень</div>
-                    <div class="text-grey referal-view__panel-level">Платиновый</div>
+                    <div class="text-grey referal-view__panel-level">{{ levelData.nextLevelName }}</div>
                 </div>
 
                 <a class="referal-view__panel-link">Подробнее о реферальной программе</a>
@@ -20,17 +20,17 @@
                         <v-arc-counter
                             stroke="#BDBDBD"
                             activeStroke="#141116"
-                            text="23"
+                            :text="referralArcData.current"
                             :start="-120"
                             :end="120"
                             :activeWidth="16"
                             :strokeWidth="16"
-                            :dashCount="30"
-                            :activeCount="23"
+                            :dashCount="referralArcData.next"
+                            :activeCount="referralArcData.current"
                         />
                         <div class="text-grey referal-view__panel-item-label">
                             <span>0</span>
-                            <span>30</span>
+                            <span>{{ referralArcData.next }}</span>
                         </div>
                     </div>
                     <div class="text-grey">Новых рефералов</div>
@@ -40,17 +40,17 @@
                         <v-arc-counter
                             stroke="#BDBDBD"
                             activeStroke="#141116"
-                            text="750 860 ₽"
+                            :text="formatArcSum(sumArcData.current)"
                             :start="-120"
                             :end="120"
                             :activeWidth="16"
                             :strokeWidth="16"
-                            :dashCount="10"
-                            :activeCount="7"
+                            :dashCount="sumArcData.next"
+                            :activeCount="sumArcData.current"
                         />
                         <div class="text-grey referal-view__panel-item-label">
                             <span>0</span>
-                            <span>1 млн</span>
+                            <span>{{ shortNumberFormat(sumArcData.next) }}</span>
                         </div>
                     </div>
                     <div class="text-grey">Сумма заказов</div>
@@ -76,6 +76,7 @@
                         <col width="12%" />
                         <col width="12%" />
                     </colgroup>
+
                     <thead class="referal-view__table-head">
                         <tr class="referal-view__table-tr referal-view__table-tr--header">
                             <th class="referal-view__table-th">Товар</th>
@@ -87,6 +88,7 @@
                             <th class="referal-view__table-th">Сумма вознаграждения</th>
                         </tr>
                     </thead>
+
                     <transition-group tag="tbody" name="fade-in" appear class="referal-view__table-body">
                         <tr class="referal-view__table-tr" v-for="order in orders" :key="order.id">
                             <td class="referal-view__table-td">
@@ -160,13 +162,25 @@ import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import FilterButton from '@components/FilterButton/FilterButton.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
+import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+
 import referalProduct1 from '@images/mock/referalProduct1.png';
 import referalProduct2 from '@images/mock/referalProduct2.png';
 import referalProduct3 from '@images/mock/referalProduct3.png';
 
+import { mapActions, mapGetters, mapState } from 'vuex';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as REFERRAL_MODULE } from '@store/modules/Profile/modules/Referral';
+import { FETCH_REFERRAL_DATA } from '@store/modules/Profile/modules/Referral/actions';
+import { REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA } from '@store/modules/Profile/modules/Referral/getters';
+
+import { preparePrice, shortNumberFormat } from '@util';
+import { $store, $progress, $logger } from '@services';
 import { baseChartOptions } from '@settings/profile';
 import './Referal.css';
 
+const REFERRAL_MODULE_PATH = `${PROFILE_MODULE}/${REFERRAL_MODULE}`;
 const VChart = () => import(/* webpackChunkName: "v-chart" */ '@controls/VChart/VChart.vue');
 
 export default {
@@ -273,6 +287,8 @@ export default {
     },
 
     computed: {
+        ...mapGetters(REFERRAL_MODULE_PATH, [REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA]),
+
         isTabletLg() {
             return this.$mq.tabletLg;
         },
@@ -281,7 +297,40 @@ export default {
     watch: {},
 
     methods: {
-        onImageChanged(image) {},
+        ...mapActions(REFERRAL_MODULE_PATH, [FETCH_REFERRAL_DATA]),
+
+        formatArcSum(sum) {
+            return `${preparePrice(sum)} ₽`;
+        },
+
+        shortNumberFormat(sum) {
+            return shortNumberFormat(sum);
+        },
+    },
+
+    async serverPrefetch() {
+        try {
+            return await this[FETCH_REFERRAL_DATA](this.$isServer);
+        } catch (error) {
+            $logger.error(error);
+        }
+    },
+
+    beforeRouteEnter(to, from, next) {
+        const { load } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
+
+        $progress.start();
+        $store
+            .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`)
+            .then(() => {
+                next(vm => {
+                    $progress.finish();
+                });
+            })
+            .catch(thrown => {
+                $progress.fail();
+                next();
+            });
     },
 
     mounted() {

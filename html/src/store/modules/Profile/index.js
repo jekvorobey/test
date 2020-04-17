@@ -8,6 +8,8 @@ import addresses from './modules/Addresses';
 import orders from './modules/Orders';
 import seo from './modules/Seo';
 import promopage from './modules/Promopage';
+import documents from './modules/Documents';
+import referral from './modules/Referral';
 
 export const NAME = 'profile';
 export const BREADCRUMBS = 'breadcrumbs';
@@ -81,8 +83,18 @@ export default function createModule() {
             },
 
             [PRO_PREFERENCES_DATA]: {
-                brands: [{ id: 5, name: 'gli elementi' }],
-                categories: [{ id: 1, name: 'Кондиционер: Смываемый' }],
+                brands: [
+                    {
+                        id: 5,
+                        name: 'gli elementi',
+                    },
+                ],
+                categories: [
+                    {
+                        id: 1,
+                        name: 'Кондиционер: Смываемый',
+                    },
+                ],
             },
         },
         actions,
@@ -96,6 +108,8 @@ export default function createModule() {
             orders: orders(),
             seo: seo(),
             promopage: promopage(),
+            documents: documents(),
+            referral: referral(),
         },
     };
 }

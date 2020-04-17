@@ -46,17 +46,29 @@
                         </li>
                         <li class="container mobile-menu__menu-item">
                             <v-link tag="button" class="mobile-menu__menu-link" @click="onRegister">
-                                <v-svg name="account-middle" width="24" height="24" />Личный кабинет
+                                <v-svg
+                                    class="mobile-menu__menu-link-container"
+                                    name="account-middle"
+                                    width="24"
+                                    height="24"
+                                />Личный кабинет
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item" v-if="hasSession">
                             <v-link class="mobile-menu__menu-link" to="/favorites">
-                                <v-svg name="wishlist-middle" width="24" height="24" /> Избранное
+                                <span class="mobile-menu__menu-link-container">
+                                    <v-svg :name="favoriteItemsIcon" width="24" height="24" />
+                                    <span class="mobile-menu__menu-link-count" v-if="hasFavoriteItems">
+                                        {{ favoriteItemsCount }}
+                                    </span>
+                                </span>
+
+                                Избранное
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item mobile-menu__menu-item--separator">
                             <v-link tag="button" class="mobile-menu__menu-link" @click.prevent="onOpenCitySelection">
-                                <v-svg name="pin" width="24" height="24" />
+                                <v-svg class="mobile-menu__menu-link-container" name="pin" width="24" height="24" />
                                 <v-clamp :max-lines="2" autoresize>{{ city }}</v-clamp>
                             </v-link>
                             <v-link tag="button" class="mobile-menu__menu-btn" @click.prevent="onOpenCitySelection">
@@ -135,10 +147,15 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { CATEGORIES } from '@store';
 import { HEADER_MENU } from '@store/getters';
 import { SET_MENU_OPEN } from '@store/actions';
+
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
+
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { FAVORITE_ITEMS_COUNT } from '@store/modules/Favorites/getters';
 
 import { modalName } from '@enums';
 import { productGroupTypes } from '@enums/product';
@@ -149,6 +166,7 @@ import '@images/sprites/socials/telegram-bw.svg';
 import '@images/sprites/pin.svg';
 import '@images/sprites/account-middle.svg';
 import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/wishlist-full.svg';
 import '@images/sprites/arrow-small.svg';
 import '@images/sprites/arrow-down.svg';
 import './MobileMenu.css';
@@ -176,9 +194,18 @@ export default {
         ...mapState([CATEGORIES]),
         ...mapGetters([HEADER_MENU]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapGetters(FAVORITES_MODULE, [FAVORITE_ITEMS_COUNT]),
         ...mapState(GEO_MODULE, {
-            city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
+
+        favoriteItemsIcon() {
+            return this.hasFavoriteItems ? 'wishlist-full' : 'wishlist-middle';
+        },
+
+        hasFavoriteItems() {
+            return this[FAVORITE_ITEMS_COUNT] > 0;
+        },
 
         currentCategories() {
             return this.selectedCategory ? this.selectedCategory.items : this.categories;
