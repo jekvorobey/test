@@ -197,6 +197,11 @@ export default {
         onClearFavorites() {
             this[DELETE_FAVORITES_ALL]();
         },
+
+        setSortValue(field, direction) {
+            this.sortValue =
+                this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -207,7 +212,7 @@ export default {
 
         const { loadPath } = $store.state[FAVORITES_MODULE];
 
-        if (loadPath === fullPath) next();
+        if (loadPath === fullPath) next(vm => vm.setSortValue(orderField, orderDirection));
         else {
             $progress.start();
             $store
@@ -219,6 +224,7 @@ export default {
                 .then(data => {
                     $store.dispatch(`${FAVORITES_MODULE}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
+                        vm.setSortValue(orderField, orderDirection);
                         $progress.finish();
                     });
                 })
@@ -238,7 +244,10 @@ export default {
 
         try {
             this.$progress.start();
+
             await this[FETCH_FAVORITES]({ page, orderField, orderDirection, showMore: this.showMore });
+
+            this.setSortValue(orderField, orderDirection);
             this.$progress.finish();
             next();
         } catch (error) {
