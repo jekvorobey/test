@@ -66,7 +66,7 @@
         position: relative;
         display: flex;
         flex-wrap: wrap;
-        margin: 0 calc(calc(var(--gs) * 6) / -4);
+        margin: 0 calc(var(--gs) * -3 / 2);
 
         @media (--tablet) {
             justify-content: space-between;
@@ -74,14 +74,17 @@
         }
 
         &-item {
-            width: calc(calc(100% / 3) - calc(var(--gs) * 3));
-            margin: 0 calc(calc(var(--gs) * 6) / 4);
+            width: calc(calc(100% / 4) - calc(var(--gs) * 3));
+            margin: 0 calc(var(--gs) * 3 / 2);
             margin-bottom: calc(var(--gs) * 3);
             transition: all 0.5s;
-            max-width: calc(var(--gs) * 36);
+
+            @media (--tablet-lg) {
+                width: calc(calc(100% / 3) - calc(var(--gs) * 3));
+            }
 
             @media (--tablet) {
-                width: calc(50% - 4px);
+                width: calc(50% - calc(var(--gs) / 2));
                 margin: 0;
                 margin-bottom: calc(var(--gs) * 2);
             }
