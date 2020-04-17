@@ -5,7 +5,7 @@ import getters from './getters';
 export const NAME = 'referral';
 export const LOAD = 'load';
 
-export const REFERRAL_DATA = 'referralData';
+const REFERRAL_DATA = 'levelData';
 
 export default function createModule() {
     return {
