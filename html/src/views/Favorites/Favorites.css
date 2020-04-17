@@ -37,6 +37,10 @@
         justify-content: space-between;
         margin-bottom: calc(var(--gs) * 2);
 
+        @media (--tablet) {
+            flex-direction: column;
+        }
+
         &-hl {
             font-size: 28px;
             text-transform: uppercase;
@@ -88,6 +92,35 @@
                 margin: 0;
                 margin-bottom: calc(var(--gs) * 2);
             }
+        }
+    }
+
+    &__filters {
+        display: flex;
+        align-items: flex-start;
+
+        @media (--tablet) {
+            flex-direction: column;
+        }
+
+        &-btn {
+            display: flex;
+            align-items: center;
+            color: var(--cl-grey);
+            fill: var(--cl-grey);
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+            margin-right: calc(var(--gs) * 1.5);
+        }
+
+        &-icon {
+            &--clear {
+                margin-right: var(--gs);
+            }
+        }
+
+        &-sort {
+            min-width: calc(var(--gs) * 36);
         }
     }
 }
