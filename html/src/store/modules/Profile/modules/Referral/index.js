@@ -2,7 +2,7 @@ import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
 
-export const NAME = 'addresses';
+export const NAME = 'referral';
 export const LOAD = 'load';
 
 export const REFERRAL_DATA = 'referralData';

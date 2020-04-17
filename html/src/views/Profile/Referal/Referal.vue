@@ -162,6 +162,9 @@ import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import FilterButton from '@components/FilterButton/FilterButton.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
+import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+
 import referalProduct1 from '@images/mock/referalProduct1.png';
 import referalProduct2 from '@images/mock/referalProduct2.png';
 import referalProduct3 from '@images/mock/referalProduct3.png';
@@ -170,7 +173,7 @@ import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as REFERRAL_MODULE } from '@store/modules/Profile/modules/Referral';
 import { FETCH_REFERRAL_DATA } from '@store/modules/Profile/modules/Referral/actions';
 
-import { $store, $progress } from '@services';
+import { $store, $progress, $logger } from '@services';
 import { baseChartOptions } from '@settings/profile';
 import './Referal.css';
 
@@ -303,7 +306,7 @@ export default {
     beforeRouteEnter(to, from, next) {
         const { load } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
 
-        $$progress.start();
+        $progress.start();
         $store
             .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`)
             .then(() => {
