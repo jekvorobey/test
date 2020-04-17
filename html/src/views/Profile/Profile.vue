@@ -120,11 +120,11 @@ export default {
         ...mapState(PROFILE_MODULE, [BREADCRUMBS]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isNavigationOpen: (state) =>
+            isNavigationOpen: state =>
                 state[MODALS][modalName.profile.NAVIGATION] && state[MODALS][modalName.profile.NAVIGATION].open,
         }),
 
@@ -138,30 +138,33 @@ export default {
                         { name: 'Preferences', exact: true },
                         { name: 'Addresses', exact: true },
                         { name: 'Payment', exact: true },
-                        { name: 'Subscribes', exact: true },
-                        { name: 'Messages', displayName: this.$tc('profile.format.messages', 5) },
-                        { name: 'Certificates', exact: true },
-                        { name: 'Bonuses', exact: true },
+                        // #58322
+                        // { name: 'Subscribes', exact: true },
+                        // { name: 'Messages', displayName: this.$tc('profile.format.messages', 5) },
+                        // { name: 'Certificates', exact: true },
+                        // { name: 'Bonuses', exact: true },
                         { name: 'Orders' },
+                        // { name: 'ReferalOrders' },
                     ],
                 },
             ];
 
-            if (this[REFERRAL_PARTNER])
-                groups.push({
-                    id: 2,
-                    name: this.$t('profile.groups.business'),
-                    routes: [
-                        { name: 'Referal', exact: true },
-                        { name: 'ProPreferences', exact: true },
-                        { name: 'Promopage', exact: true },
-                        { name: 'Seo', exact: true },
-                        { name: 'Promocodes', exact: true },
-                        { name: 'Account', exact: true },
-                        { name: 'Billing', exact: true },
-                        { name: 'Documents', exact: true },
-                    ],
-                });
+            // #58322
+            // if (this[REFERRAL_PARTNER])
+            //     groups.push({
+            //         id: 2,
+            //         name: this.$t('profile.groups.business'),
+            //         routes: [
+            //             { name: 'Referal', exact: true },
+            //             { name: 'ProPreferences', exact: true },
+            //             { name: 'Promopage', exact: true },
+            //             { name: 'Seo', exact: true },
+            //             { name: 'Promocodes', exact: true },
+            //             { name: 'Account', exact: true },
+            //             { name: 'Billing', exact: true },
+            //             { name: 'Documents', exact: true },
+            //         ],
+            //     });
 
             // #58322
             // groups.push({

@@ -61,6 +61,17 @@
                 margin-right: 0;
             }
         }
+
+        &-user {
+            .header-user-panel__item--wishlist {
+                fill: var(--cl-white);
+                color: var(--cl-global);
+
+                .header-user-panel__item-count {
+                    font-weight: 700;
+                }
+            }
+        }
     }
 
     &__bottom {

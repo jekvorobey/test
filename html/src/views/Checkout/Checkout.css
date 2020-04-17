@@ -193,7 +193,7 @@
             }
 
             .v-sticky__container {
-                top: calc(var(--gs) * 9);
+                top: calc(var(--gs) * 2);
             }
         }
 
