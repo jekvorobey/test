@@ -178,12 +178,7 @@
 
         <info-panel v-if="referralPartner" class="cabinet-view__panel" header="Реквизиты">
             <template v-slot:controls>
-                <v-link
-                    v-if="canEditReferralCode"
-                    class="cabinet-view__panel-link"
-                    tag="button"
-                    @click="onOpenReferralCodeModal"
-                >
+                <v-link class="cabinet-view__panel-link" tag="button" @click="onOpenDetailsModal">
                     <v-svg name="edit" :width="iconSize" :height="iconSize" />
                     <span>&nbsp;&nbsp;Изменить</span>
                 </v-link>
