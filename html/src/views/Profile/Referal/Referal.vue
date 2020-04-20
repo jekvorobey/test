@@ -90,13 +90,20 @@
                     </thead>
 
                     <transition-group tag="tbody" name="fade-in" appear class="referal-view__table-body">
-                        <tr class="referal-view__table-tr" v-for="order in orders" :key="order.id">
+                        <tr class="referal-view__table-tr" v-for="order in orders" :key="order.name">
                             <td class="referal-view__table-td">
-                                <div class="referal-view__table-img">
-                                    <img :src="order.image" />
+                                <div
+                                    class="referal-view__table-img"
+                                    :class="{ 'referal-view__table-img--empty': !order.image || !order.image.id }"
+                                >
+                                    <v-picture v-if="order.image && order.image.id" :key="order.image.id">
+                                        <source :data-srcset="order.desktopImage" type="image/webp" />
+                                        <img class="blur-up lazyload v-picture__img" :data-src="order.defaultImage" />
+                                    </v-picture>
+                                    <v-svg v-else name="logo" width="32" height="32" />
                                 </div>
                                 <div class="referal-view__table-title">
-                                    {{ order.title }}
+                                    {{ order.name }}
                                 </div>
                             </td>
                             <td class="referal-view__table-td">{{ order.qty }} шт</td>
@@ -104,10 +111,10 @@
                             <td class="referal-view__table-td">{{ order.referalId }}</td>
                             <td class="referal-view__table-td">{{ order.date }}</td>
                             <td class="referal-view__table-td">
-                                <price v-bind="order.price" />
+                                <price v-bind="order.price_product" />
                             </td>
                             <td class="referal-view__table-td">
-                                <price v-bind="order.refund" />
+                                <price v-bind="order.price_commission" />
                             </td>
                         </tr>
                     </transition-group>
@@ -121,13 +128,20 @@
         </div>
 
         <ul class="referal-view__list" v-if="isTabletLg">
-            <li class="referal-view__list-item" v-for="order in orders" :key="order.id">
+            <li class="referal-view__list-item" v-for="order in orders" :key="order.name">
                 <info-row class="referal-view__list-item-row" name="Товар">
-                    <div class="referal-view__table-img">
-                        <img :src="order.image" width="40" height="40" />
+                    <div
+                        class="referal-view__table-img"
+                        :class="{ 'referal-view__table-img--empty': !order.image || !order.image.id }"
+                    >
+                        <v-picture v-if="order.image && order.image.id" :key="order.image.id">
+                            <source :data-srcset="order.desktopImage" type="image/webp" />
+                            <img class="blur-up lazyload v-picture__img" :data-src="order.defaultImage" />
+                        </v-picture>
+                        <v-svg v-else name="logo" width="32" height="32" />
                     </div>
                     <div class="referal-view__table-title">
-                        {{ order.title }}
+                        {{ order.name }}
                     </div>
                 </info-row>
                 <info-row class="referal-view__list-item-row" name="Кол-во"> {{ order.qty }} шт. </info-row>
@@ -135,25 +149,27 @@
                 <info-row class="referal-view__list-item-row" name="Источник" :value="order.source" />
                 <info-row class="referal-view__list-item-row" name="Дата заказа" :value="order.date" />
                 <info-row class="referal-view__list-item-row" name="Сумма">
-                    <price v-bind="order.price" />
+                    <price v-bind="order.price_product" />
                 </info-row>
                 <info-row class="referal-view__list-item-row" name="Сумма вознаграждения">
-                    <price v-bind="order.refund" />
+                    <price v-bind="order.price_commission" />
                 </info-row>
             </li>
         </ul>
 
-        <div class="container container--tablet-lg referal-view__controls">
+        <div class="container container--tablet-lg referal-view__controls" v-if="pagesCount > 1">
             <show-more-button btn-class="btn--outline referal-view__controls-btn">
                 Показать ещё
             </show-more-button>
-            <v-pagination v-model="page" :page-count="10" />
+            <v-pagination v-model="activePage" :page-count="pagesCount" />
         </div>
     </section>
 </template>
 
 <script>
+import VSvg from '@controls/VSvg/VSvg.vue';
 import VButton from '@controls/VButton/VButton.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VArcCounter from '@controls/VArcCounter/VArcCounter.vue';
 
@@ -165,19 +181,27 @@ import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
-import referalProduct1 from '@images/mock/referalProduct1.png';
-import referalProduct2 from '@images/mock/referalProduct2.png';
-import referalProduct3 from '@images/mock/referalProduct3.png';
-
 import { mapActions, mapGetters, mapState } from 'vuex';
+import { LOCALE } from '@store';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
-import { NAME as REFERRAL_MODULE } from '@store/modules/Profile/modules/Referral';
-import { FETCH_REFERRAL_DATA } from '@store/modules/Profile/modules/Referral/actions';
-import { REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA } from '@store/modules/Profile/modules/Referral/getters';
+import { NAME as REFERRAL_MODULE, ITEMS, ACTIVE_PAGE } from '@store/modules/Profile/modules/Referral';
+import { FETCH_REFERRAL_DATA, SET_LOAD_PATH } from '@store/modules/Profile/modules/Referral/actions';
+import {
+    REFERRAL_ARC_DATA,
+    SUM_ARC_DATA,
+    LEVEL_DATA,
+    PAGES_COUNT,
+} from '@store/modules/Profile/modules/Referral/getters';
 
-import { preparePrice, shortNumberFormat } from '@util';
-import { $store, $progress, $logger } from '@services';
+import { fileExtension, sortDirections } from '@enums';
+import { referralOrderSortFields } from '@enums/profile';
+import { DEFAULT_PAGE } from '@constants';
+import { defaultDateSettings } from '@settings';
 import { baseChartOptions } from '@settings/profile';
+import { preparePrice, shortNumberFormat } from '@util';
+import { generatePictureSourcePath } from '@util/file';
+import { $store, $progress, $logger } from '@services';
+import '@images/sprites/logo.svg';
 import './Referal.css';
 
 const REFERRAL_MODULE_PATH = `${PROFILE_MODULE}/${REFERRAL_MODULE}`;
@@ -187,7 +211,9 @@ export default {
     name: 'referal',
 
     components: {
+        VSvg,
         VButton,
+        VPicture,
         VPagination,
         VArcCounter,
         VChart,
@@ -200,69 +226,11 @@ export default {
 
     data() {
         return {
-            page: 1,
             isMounted: false,
-            referalProduct1,
-            referalProduct2,
-            referalProduct3,
 
             chartOptions: {
                 ...baseChartOptions,
             },
-
-            orders: [
-                {
-                    id: 1,
-                    referalId: 154,
-                    image: referalProduct1,
-                    title: "Губная помада L'Oreal Paris Color Riche Collection Privee by J'Lo's увлажняющая",
-                    qty: 1,
-                    source: 'Реферальная ссылка',
-                    date: '16.08.19',
-                    price: {
-                        value: 2789,
-                        currency: 'RUB',
-                    },
-                    refund: {
-                        value: 278,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 2,
-                    referalId: 154,
-                    image: referalProduct2,
-                    title: 'Matrix Спрей для укладки волос Total results Wonder boost, 250 мл',
-                    qty: 2,
-                    source: 'Промокод SOKOLOV',
-                    date: '16.08.19',
-                    price: {
-                        value: 2789,
-                        currency: 'RUB',
-                    },
-                    refund: {
-                        value: 278,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 3,
-                    referalId: 469,
-                    image: referalProduct3,
-                    title: "Губная помада L'Oreal Paris Color Riche Collection Privee by J'Lo's увлажняющая",
-                    qty: 1,
-                    source: 'Реферальная ссылка',
-                    date: '16.08.19',
-                    price: {
-                        value: 1349,
-                        currency: 'RUB',
-                    },
-                    refund: {
-                        value: 145,
-                        currency: 'RUB',
-                    },
-                },
-            ],
 
             series: [
                 {
@@ -287,7 +255,28 @@ export default {
     },
 
     computed: {
-        ...mapGetters(REFERRAL_MODULE_PATH, [REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA]),
+        ...mapState([LOCALE]),
+        ...mapState(REFERRAL_MODULE_PATH, [ITEMS, ACTIVE_PAGE]),
+        ...mapGetters(REFERRAL_MODULE_PATH, [REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, PAGES_COUNT]),
+
+        orders() {
+            const items = this[ITEMS] || [];
+
+            return items.map(i => {
+                const desktopImage = i.image && generatePictureSourcePath(40, 40, i.image.id, fileExtension.image.WEBP);
+                const defaultImage = i.image && generatePictureSourcePath(40, 40, i.image.id);
+                const date =
+                    i.order_date && new Date(i.order_date).toLocaleDateString(this[LOCALE], defaultDateSettings);
+
+                return {
+                    ...i,
+                    qty: Number(i.qty),
+                    date,
+                    defaultImage,
+                    desktopImage,
+                };
+            });
+        },
 
         isTabletLg() {
             return this.$mq.tabletLg;
@@ -297,7 +286,7 @@ export default {
     watch: {},
 
     methods: {
-        ...mapActions(REFERRAL_MODULE_PATH, [FETCH_REFERRAL_DATA]),
+        ...mapActions(REFERRAL_MODULE_PATH, [FETCH_REFERRAL_DATA, SET_LOAD_PATH]),
 
         formatArcSum(sum) {
             return `${preparePrice(sum)} ₽`;
@@ -310,18 +299,37 @@ export default {
 
     async serverPrefetch() {
         try {
-            return await this[FETCH_REFERRAL_DATA]({});
+            const {
+                fullPath,
+                query: {
+                    page = DEFAULT_PAGE,
+                    orderField = referralOrderSortFields.NAME,
+                    orderDirection = sortDirections.DESC,
+                },
+            } = this.$route;
+
+            await this[FETCH_REFERRAL_DATA]({ page, orderField, orderDirection });
+            this[SET_LOAD_PATH](fullPath);
         } catch (error) {
             $logger.error(error);
         }
     },
 
     beforeRouteEnter(to, from, next) {
-        //const { load } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
+        const {
+            fullPath,
+            query: {
+                page = DEFAULT_PAGE,
+                orderField = referralOrderSortFields.NAME,
+                orderDirection = sortDirections.DESC,
+            },
+        } = to;
+
+        const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
 
         $progress.start();
         $store
-            .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`, {})
+            .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`, { page, orderField, orderDirection })
             .then(() => {
                 next(vm => {
                     $progress.finish();

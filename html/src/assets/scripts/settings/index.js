@@ -1,3 +1,11 @@
+import { localeDateOptions } from '@enums';
+
+export const defaultDateSettings = Object.freeze({
+    day: localeDateOptions.day.DIGIT2,
+    month: localeDateOptions.month.DIGIT2,
+    year: localeDateOptions.year.DIGIT2,
+});
+
 export const cancelRoute = Object.freeze({
     path: '/',
     replace: true,
