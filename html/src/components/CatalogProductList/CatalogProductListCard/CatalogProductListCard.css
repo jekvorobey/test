@@ -230,6 +230,10 @@
             right: 12px;
         }
 
+        @media (--tablet-lg) {
+            opacity: 1;
+        }
+
         &--active {
             opacity: 1 !important;
         }
