@@ -22,6 +22,14 @@
         </div>
         <section class="section">
             <div class="container product-view__header">
+                <div class="product-view__header-mobile-controls" v-if="isTablet">
+                    <favorites-button
+                        class="product-view__wishlist-btn"
+                        :class="{ 'product-view__wishlist-btn--active': inFavorites }"
+                        :isActive="inFavorites"
+                        @click.prevent="onToggleFavorite(product.productId)"
+                    />
+                </div>
                 <v-sticky class="product-view__header-sticky">
                     <template v-slot:sticky>
                         <div v-if="!isTabletLg" class="product-view__header-gallery" @click.prevent="onShowGallery">
@@ -619,6 +627,8 @@ import Tag from '@components/Tag/Tag.vue';
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
+import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
+
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 
@@ -663,6 +673,7 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
+import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
 import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '@util/store';
@@ -794,6 +805,8 @@ export default {
         BannerCard,
         InstagramCard,
 
+        FavoritesButton,
+
         ProductTipCard,
         ProductFileCard,
         ProductReviewCard,
@@ -823,16 +836,16 @@ export default {
     computed: {
         ...mapState([SCROLL]),
         ...mapState('route', {
-            code: (state) => state.params.code,
-            categoryCode: (state) => state.params.categoryCode,
-            refCode: (state) => state.query.refCode,
-            modal: (state) => state.query.modal,
+            code: state => state.params.code,
+            categoryCode: state => state.params.categoryCode,
+            refCode: state => state.query.refCode,
+            modal: state => state.query.modal,
         }),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {
-            isGalleryOpen: (state) =>
+            isGalleryOpen: state =>
                 state[MODALS][modalName.product.GALLERY] && state[MODALS][modalName.product.GALLERY].open,
-            isModalOpen: (state) => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
+            isModalOpen: state => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
         }),
 
         ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION]),
@@ -847,9 +860,16 @@ export default {
 
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
 
+        ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+
         inCart() {
             const { id } = this[PRODUCT];
             return this[IS_IN_CART](cartItemTypes.PRODUCT, id);
+        },
+
+        inFavorites() {
+            const { productId } = this[PRODUCT];
+            return this[IS_IN_FAVORITES](productId);
         },
 
         canBuy() {
@@ -916,7 +936,7 @@ export default {
             }
 
             if (Array.isArray(media) && media.length > 0) {
-                imageMap.media = media.map((image) => {
+                imageMap.media = media.map(image => {
                     return {
                         ...image,
                         desktop: generatePictureSourcePath(300, 300, image.id, fileExtension.image.WEBP),
@@ -1125,18 +1145,18 @@ export default {
         const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
         // если все загружено, пропускаем
-        if (productCode === code && referrerCode === refCode) next((vm) => vm.handleModalQuery(modal));
+        if (productCode === code && referrerCode === refCode) next(vm => vm.handleModalQuery(modal));
         else {
             $progress.start();
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
                 .then(() =>
-                    next((vm) => {
+                    next(vm => {
                         $progress.finish();
                         vm.handleModalQuery(modal);
                     })
                 )
-                .catch((error) => {
+                .catch(error => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
                     else next(new Error(error.message));
