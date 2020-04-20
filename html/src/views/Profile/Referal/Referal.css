@@ -178,10 +178,21 @@
         margin-bottom: calc(var(--gs) * 4);
 
         &-img {
-            width: 40px;
-            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             align-self: center;
             margin-right: var(--gs);
+            width: calc(var(--gs) * 5);
+            height: calc(var(--gs) * 5);
+
+            &--empty {
+                background-color: var(--cl-elem-grey);
+            }
+
+            .icon {
+                opacity: 0.1;
+            }
         }
 
         &-title {
