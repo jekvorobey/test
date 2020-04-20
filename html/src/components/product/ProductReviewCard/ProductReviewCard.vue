@@ -52,6 +52,7 @@ import VLink from '@controls/VLink/VLink.vue';
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VRating from '@controls/VRating/VRating.vue';
 
+import { monthLongDateSettings } from '@settings';
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/like.svg';
@@ -85,8 +86,7 @@ export default {
     computed: {
         computedDate() {
             const date = new Date(this.date);
-            var options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return date.toLocaleString(this.locale, options);
+            return date.toLocaleString(this.locale, monthLongDateSettings);
         },
     },
 };

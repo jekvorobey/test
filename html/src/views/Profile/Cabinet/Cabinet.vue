@@ -335,7 +335,7 @@ import {
 } from '@store/modules/Profile/modules/Cabinet/actions';
 
 import { socials, mimeType, httpCodes, modalName } from '@enums';
-import { cancelRoute } from '@settings';
+import { cancelRoute, monthLongDateSettings } from '@settings';
 import { saveToClipboard } from '@util';
 import { generateReferralLink } from '@util/profile';
 import '@images/sprites/edit.svg';
@@ -394,28 +394,28 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
-            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
-            [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || false,
+            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isDetailsOpen: (state) =>
+            isDetailsOpen: state =>
                 state[MODALS][modalName.profile.DETAILS] && state[MODALS][modalName.profile.DETAILS].open,
-            isPortofioEditOpen: (state) =>
+            isPortofioEditOpen: state =>
                 state[MODALS][modalName.profile.PORTFOLIO_EDIT] && state[MODALS][modalName.profile.PORTFOLIO_EDIT].open,
-            isActivitiesEditOpen: (state) =>
+            isActivitiesEditOpen: state =>
                 state[MODALS][modalName.profile.ACTIVITIES_EDIT] &&
                 state[MODALS][modalName.profile.ACTIVITIES_EDIT].open,
-            isEmailEditOpen: (state) =>
+            isEmailEditOpen: state =>
                 state[MODALS][modalName.profile.EMAIL_EDIT] && state[MODALS][modalName.profile.EMAIL_EDIT].open,
-            isPhoneEditOpen: (state) =>
+            isPhoneEditOpen: state =>
                 state[MODALS][modalName.profile.PHONE_EDIT] && state[MODALS][modalName.profile.PHONE_EDIT].open,
-            isPersonalEditOpen: (state) =>
+            isPersonalEditOpen: state =>
                 state[MODALS][modalName.profile.PERSONAL_EDIT] && state[MODALS][modalName.profile.PERSONAL_EDIT].open,
-            isPasswordEditOpen: (state) =>
+            isPasswordEditOpen: state =>
                 state[MODALS][modalName.profile.PASSWORD_EDIT] && state[MODALS][modalName.profile.PASSWORD_EDIT].open,
-            isCodeEditOpen: (state) =>
+            isCodeEditOpen: state =>
                 state[MODALS][modalName.profile.REFERRAL_CODE_EDIT] &&
                 state[MODALS][modalName.profile.REFERRAL_CODE_EDIT].open,
         }),
@@ -509,15 +509,14 @@ export default {
         computedBirthday() {
             const birthday = this[BIRTHDAY];
             if (!birthday) return null;
-            const options = { month: 'long', day: 'numeric', year: 'numeric' };
             const date = new Date(birthday);
-            return date.toLocaleDateString(this[LOCALE], options);
+            return date.toLocaleDateString(this[LOCALE], monthLongDateSettings);
         },
 
         avatarPlaceholder() {
-            return `${(this[LAST_NAME] && this[LAST_NAME].slice(0, 1)) || ''}${
-                (this[FIRST_NAME] && this[FIRST_NAME].slice(0, 1)) || ''
-            }`;
+            return `${(this[LAST_NAME] && this[LAST_NAME].slice(0, 1)) || ''}${(this[FIRST_NAME] &&
+                this[FIRST_NAME].slice(0, 1)) ||
+                ''}`;
         },
 
         labelTemplate() {
@@ -543,7 +542,7 @@ export default {
         socialMap() {
             const social = this[SOCIAL] || [];
             const socialMap = {};
-            social.forEach((d) => (socialMap[d.driver] = d));
+            social.forEach(d => (socialMap[d.driver] = d));
             return socialMap;
         },
 
@@ -670,11 +669,11 @@ export default {
         $store
             .dispatch(`${CABINET_MODULE_PATH}/${FETCH_CABINET_DATA}`)
             .then(() => {
-                next((vm) => {
+                next(vm => {
                     $progress.finish();
                 });
             })
-            .catch((thrown) => {
+            .catch(thrown => {
                 $progress.fail();
                 if (thrown.status === httpCodes.FORBIDDEN) {
                     $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);
@@ -686,7 +685,7 @@ export default {
 
     beforeMount() {
         const certificates = this[CERTIFICATES];
-        this.files = certificates.map((c) => {
+        this.files = certificates.map(c => {
             return {
                 source: c,
                 options: {
