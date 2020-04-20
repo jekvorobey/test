@@ -172,7 +172,7 @@ export default {
 
     [ADD_PROMOCODE]({ commit, state }, payload) {
         commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
-        return addPromocode({ promocode: payload, data: state.checkoutData })
+        return addPromocode({ promoCode: payload, data: state.checkoutData })
             .then((data) => {
                 commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
                 commit(SET_DATA, data);

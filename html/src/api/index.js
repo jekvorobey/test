@@ -325,8 +325,15 @@ export function getReferralData() {
     return $http.get('/v1/lk/order-referral');
 }
 
-export function getReferralOrders() {
-    return $http.get('/v1/lk/order-referral/orders');
+export function getReferralOrders(pageNum, perPage, sortKey = 'name', sortDirection = 'desc') {
+    return $http.get('/v1/lk/order-referral/orders', {
+        params: {
+            pageNum,
+            perPage,
+            sortKey,
+            sortDirection,
+        },
+    });
 }
 
 export function getReferralOrderDetails(id) {
@@ -574,11 +581,11 @@ export function deleteBonus(data) {
 }
 
 export function addPromocode(data) {
-    return $http.post('/v1/checkout/promocode', data);
+    return $http.post('/v1/checkout/promo-code', data);
 }
 
 export function deletePromocode(data) {
-    return $http.post('/v1/checkout/promocode', data);
+    return $http.post('/v1/checkout/promo-code', data);
 }
 
 export function changeReceiveMethod(data) {

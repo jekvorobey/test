@@ -19,6 +19,22 @@
                         {{ favorites.length }} продуктов
                     </span>
                 </h1>
+                <div class="favorites-view__filters" v-if="favorites.length > 0">
+                    <v-button class="btn--transparent favorites-view__filters-btn" @click="onClearFavorites">
+                        <v-svg class="favorites-view__filters-icon" name="cross" width="24" height="24" />
+                        Очистить все
+                    </v-button>
+                    <v-select
+                        class="favorites-view__filters-sort"
+                        label="title"
+                        track-by="id"
+                        v-model="sortValue"
+                        :options="sortOptions"
+                        :searchable="false"
+                        :allow-empty="false"
+                        :show-labels="false"
+                    />
+                </div>
             </div>
 
             <div class="container favorites-view__section-container" v-if="favorites.length > 0">
@@ -65,6 +81,8 @@
 <script>
 import VButton from '@controls/VButton/VButton.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
@@ -83,13 +101,21 @@ import {
     ACTIVE_PAGE,
 } from '@store/modules/Favorites';
 import { PAGES_COUNT } from '@store/modules/Favorites/getters';
-import { FETCH_FAVORITES, SET_LOAD_PATH, TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
+import {
+    FETCH_FAVORITES,
+    SET_LOAD_PATH,
+    TOGGLE_FAVORITES_ITEM,
+    DELETE_FAVORITES_ALL,
+} from '@store/modules/Favorites/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { DEFAULT_PAGE } from '@constants';
-import { modalName } from '@enums';
+import { modalName, sortDirections } from '@enums';
+
+import { sortFields } from '@enums/favorites';
+
 import './Favorites.css';
 
 export default {
@@ -98,6 +124,8 @@ export default {
     components: {
         VButton,
         VPagination,
+        VSelect,
+        VSvg,
 
         CatalogProductCard,
         ShowMoreButton,
@@ -106,7 +134,13 @@ export default {
     },
 
     data() {
+        const sortOptions = [
+            { id: 1, title: 'Сначала подороже', field: sortFields.PRICE, direction: sortDirections.DESC },
+            { id: 2, title: 'Сначала подешевле', field: sortFields.PRICE, direction: sortDirections.ASC },
+        ];
         return {
+            sortValue: sortOptions[0],
+            sortOptions,
             showMore: false,
         };
     },
@@ -116,8 +150,19 @@ export default {
         ...mapGetters(FAVORITES_MODULE, [PAGES_COUNT]),
     },
 
+    watch: {
+        sortValue(value, oldValue) {
+            if (value !== oldValue) {
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: { orderField: value.field, orderDirection: value.direction },
+                });
+            }
+        },
+    },
+
     methods: {
-        ...mapActions(FAVORITES_MODULE, [FETCH_FAVORITES, SET_LOAD_PATH, TOGGLE_FAVORITES_ITEM]),
+        ...mapActions(FAVORITES_MODULE, [FETCH_FAVORITES, SET_LOAD_PATH, TOGGLE_FAVORITES_ITEM, DELETE_FAVORITES_ALL]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onShowMore() {
@@ -148,26 +193,38 @@ export default {
                 state: { offerId: id, storeId: stock.storeId, type },
             });
         },
+
+        onClearFavorites() {
+            this[DELETE_FAVORITES_ALL]();
+        },
+
+        setSortValue(field, direction) {
+            this.sortValue =
+                this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
+        },
     },
 
     beforeRouteEnter(to, from, next) {
         const {
             fullPath,
-            query: { page = DEFAULT_PAGE },
+            query: { page = DEFAULT_PAGE, orderField = sortFields.PRICE, orderDirection = sortDirections.DESC },
         } = to;
 
         const { loadPath } = $store.state[FAVORITES_MODULE];
 
-        if (loadPath === fullPath) next();
+        if (loadPath === fullPath) next(vm => vm.setSortValue(orderField, orderDirection));
         else {
             $progress.start();
             $store
                 .dispatch(`${FAVORITES_MODULE}/${FETCH_FAVORITES}`, {
                     page,
+                    orderField,
+                    orderDirection,
                 })
                 .then(data => {
                     $store.dispatch(`${FAVORITES_MODULE}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
+                        vm.setSortValue(orderField, orderDirection);
                         $progress.finish();
                     });
                 })
@@ -182,12 +239,15 @@ export default {
 
     async beforeRouteUpdate(to, from, next) {
         const {
-            query: { page = DEFAULT_PAGE },
+            query: { page = DEFAULT_PAGE, orderField = sortFields.PRICE, orderDirection = sortDirections.DESC },
         } = to;
 
         try {
             this.$progress.start();
-            await this[FETCH_FAVORITES]({ page, showMore: this.showMore });
+
+            await this[FETCH_FAVORITES]({ page, orderField, orderDirection, showMore: this.showMore });
+
+            this.setSortValue(orderField, orderDirection);
             this.$progress.finish();
             next();
         } catch (error) {
