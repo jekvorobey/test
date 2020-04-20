@@ -82,7 +82,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
         }),
 
         isTablet() {
@@ -112,9 +112,10 @@ export default {
 
         onSubmit() {
             this.$v.$touch();
-            if (!this.$v.$invalid)
-                this[ADD_PRODUCTS]({ items: this.links.map((l) => l.ref.split('/').slice(-1)), refresh: true });
-            this.onClose();
+            if (!this.$v.$invalid) {
+                this[ADD_PRODUCTS]({ items: this.links.map(l => l.ref.split('/').slice(-1)), refresh: true });
+                this.onClose();
+            }
         },
 
         onClose() {

@@ -22,10 +22,10 @@
 
     &.is-disabled,
     &:disabled {
-        background-color: var(--cl-divider-grey);
-        border-color: var(--cl-divider-grey);
-        color: var(--cl-grey);
-        fill: var(--cl-grey);
+        background-color: var(--cl-grey);
+        border-color: var(--cl-grey);
+        color: var(--cl-white);
+        fill: var(--cl-white);
         pointer-events: none;
     }
 
@@ -74,9 +74,9 @@
         &.is-disabled,
         &:disabled {
             background-color: transparent;
-            border-color: var(--cl-divider-grey);
-            color: var(--cl-divider-grey);
-            fill: var(--cl-divider-grey);
+            border-color: var(--cl-grey);
+            color: var(--cl-grey);
+            fill: var(--cl-grey);
         }
     }
 
