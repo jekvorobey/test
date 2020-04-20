@@ -7,29 +7,44 @@ export const LEVEL_DATA = 'levelData';
 
 export default {
     [LEVEL_DATA](state) {
-        const { level } = state[REFERRAL_DATA];
+        const {
+            level: { current_level, next_level } = {
+                current_level: {},
+                next_level: {},
+            },
+        } = state[REFERRAL_DATA];
 
         return {
-            currentLevelName: level.current_level.name,
-            nextLevelName: level.next_level.name,
+            currentLevelName: current_level.name,
+            nextLevelName: next_level.name,
         };
     },
 
     [REFERRAL_ARC_DATA](state) {
-        const { level } = state[REFERRAL_DATA];
+        const {
+            level: { current_level, next_level } = {
+                current_level: {},
+                next_level: {},
+            },
+        } = state[REFERRAL_DATA];
 
         return {
-            current: level.current_level.referral_count,
-            next: level.next_level.referral_count,
+            current: current_level.referral_count,
+            next: next_level.referral_count,
         };
     },
 
     [SUM_ARC_DATA](state) {
-        const { level } = state[REFERRAL_DATA];
+        const {
+            level: { current_level, next_level } = {
+                current_level: {},
+                next_level: {},
+            },
+        } = state[REFERRAL_DATA];
 
         return {
-            current: level.current_level.referral_count,
-            next: level.next_level.referral_count,
+            current: current_level.referral_count,
+            next: next_level.referral_count,
         };
     },
 };

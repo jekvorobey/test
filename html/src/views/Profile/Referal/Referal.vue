@@ -310,18 +310,18 @@ export default {
 
     async serverPrefetch() {
         try {
-            return await this[FETCH_REFERRAL_DATA](this.$isServer);
+            return await this[FETCH_REFERRAL_DATA]({});
         } catch (error) {
             $logger.error(error);
         }
     },
 
     beforeRouteEnter(to, from, next) {
-        const { load } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
+        //const { load } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
 
         $progress.start();
         $store
-            .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`)
+            .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`, {})
             .then(() => {
                 next(vm => {
                     $progress.finish();
