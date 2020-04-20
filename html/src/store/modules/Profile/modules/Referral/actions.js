@@ -1,12 +1,19 @@
+import { DEFAULT_PAGE } from '@constants';
 import { REFERRAL_ORDERS_PAGE_SIZE } from '@constants/profile';
 import { storeErrorHandler } from '@util/store';
 
-import { getReferralData, getReferralOrders } from '@api';
-import { SET_REFERRAL_DATA, SET_ORDERS, SET_QUERY_PARAMS } from './mutations';
-import { DEFAULT_PAGE } from '@constants';
+import { getReferralData, getReferralOrders, getReferralOrderDetails } from '@api';
+import {
+    SET_REFERRAL_DATA,
+    SET_ORDERS,
+    SET_ORDERS_MORE,
+    SET_QUERY_PARAMS,
+    SET_REFERRAL_ORDER_DETAILS,
+} from './mutations';
 
 export const FETCH_REFERRAL_DATA = 'FETCH_REFERRAL_DATA';
 export const FETCH_STATISTICS = 'FETCH_STATISTICS';
+export const FETCH_REFERRER_ORDER_DETAILS = 'FETCH_REFERRER_ORDER_DETAILS';
 export const FETCH_ORDERS = 'FETCH_ORDERS';
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 
@@ -21,6 +28,15 @@ export default {
             commit(SET_REFERRAL_DATA, data);
         } catch (error) {
             storeErrorHandler(FETCH_STATISTICS)(error);
+        }
+    },
+
+    async [FETCH_REFERRER_ORDER_DETAILS]({ commit }, id) {
+        try {
+            const data = await getReferralOrderDetails(id);
+            commit(SET_REFERRAL_ORDER_DETAILS, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_REFERRER_ORDER_DETAILS)(error);
         }
     },
 
@@ -48,9 +64,10 @@ export default {
 
     async [FETCH_REFERRAL_DATA]({ dispatch, commit }, { page = DEFAULT_PAGE, orderField, orderDirection }) {
         try {
-            await dispatch(FETCH_STATISTICS);
-            await dispatch(FETCH_ORDERS, { page, orderField, orderDirection });
-            //commit(SET_LOAD, isServer);
+            await Promise.all([
+                dispatch(FETCH_STATISTICS),
+                dispatch(FETCH_ORDERS, { page, orderField, orderDirection }),
+            ]);
         } catch (error) {
             storeErrorHandler(FETCH_REFERRAL_DATA, true)(error);
         }

@@ -4,7 +4,7 @@ export const SET_REFERRAL_DATA = 'SET_REFERRAL_DATA';
 export const SET_ORDERS = 'SET_ORDERS';
 export const SET_ORDERS_MORE = 'SET_ORDERS_MORE';
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
-
+export const SET_REFERRAL_ORDER_DETAILS = 'SET_REFERRAL_ORDER_DETAILS';
 export const SET_QUERY_PARAMS = 'SET_QUERY_PARAMS';
 
 export default {
@@ -16,6 +16,10 @@ export default {
         state.activePage = Number(page);
         state.orderField = orderField;
         state.orderDirection = orderDirection;
+    },
+
+    [SET_REFERRAL_ORDER_DETAILS](state, payload = {}) {
+        state.referralOrderDetails = payload;
     },
 
     [SET_ORDERS](state, payload = {}) {

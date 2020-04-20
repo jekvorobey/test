@@ -20,6 +20,7 @@ export default {
 
             meta: {
                 middleware: [isUserReferral],
+                skipScroll: true,
             },
         },
     ],

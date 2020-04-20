@@ -1,4 +1,4 @@
-import { ORDERS_PAGE_SIZE } from '@constants/profile';
+import { REFERRAL_ORDERS_PAGE_SIZE } from '@constants/profile';
 
 const CHART_DATA = 'chartData';
 const REFERRAL_DATA = 'referralData';
@@ -9,8 +9,8 @@ export const LEVEL_DATA = 'levelData';
 export const PAGES_COUNT = 'pagesCount';
 
 export default {
-    [PAGES_COUNT](state) {
-        return Math.ceil(state.range / ORDERS_PAGE_SIZE);
+    [PAGES_COUNT]({ range }) {
+        return Math.ceil(range / REFERRAL_ORDERS_PAGE_SIZE);
     },
 
     [LEVEL_DATA](state) {
