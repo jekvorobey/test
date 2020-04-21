@@ -235,7 +235,6 @@ const main = {
             Bonuses: 'Bonuses',
             Orders: 'My Orders',
             OrderDetails: 'My Orders',
-            ReferalOrders: 'Referal orders',
             ReferalOrderDetails: 'Referal orders',
 
             Referal: 'Referal Program',
@@ -244,7 +243,6 @@ const main = {
             Seo: 'Goods for Promotion',
             Promocodes: 'My Promocodes',
             Account: 'My Account',
-            Billing: 'Account Billing',
             Documents: 'My Documents',
 
             HowItWorks: 'How It Works',

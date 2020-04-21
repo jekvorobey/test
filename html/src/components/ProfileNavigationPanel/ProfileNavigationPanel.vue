@@ -62,7 +62,6 @@ export default {
                     routes: [
                         { name: 'Referal', exact: true },
                         { name: 'Account', exact: true },
-                        { name: 'Billing', exact: true },
                         { name: 'Documents', exact: true },
                         // { name: 'Masterclasses', exact: true },
                     ],

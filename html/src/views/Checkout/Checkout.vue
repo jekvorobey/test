@@ -79,6 +79,7 @@
                                 <v-button
                                     class="btn--outline checkout-view__main-panel-promo-btn"
                                     @click="ADD_PROMOCODE(inputPromocode)"
+                                    :disabled="!inputPromocode"
                                 >
                                     Применить
                                 </v-button>

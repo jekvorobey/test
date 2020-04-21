@@ -99,8 +99,11 @@ import seoModule, { NAME as SEO_MODULE, ITEMS, ACTIVE_PAGE } from '@store/module
 import { PAGES_COUNT } from '@store/modules/Profile/modules/Seo/getters';
 import { FETCH_PRODUCTS, SET_LOAD_PATH } from '@store/modules/Profile/modules/Seo/actions';
 
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
 import { $store } from '@services';
-import { fileExtension } from '@enums';
+import { fileExtension, modalName } from '@enums';
 import { MIN_SCROLL_VALUE } from '@constants';
 import { saveToClipboard } from '@util';
 import { registerModuleIfNotExists } from '@util/store';
@@ -197,6 +200,7 @@ export default {
 
     methods: {
         ...mapActions(SEO_MODULE_PATH, [FETCH_PRODUCTS]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         setStatus(isActive) {
             this.selectedActiveStatus = Number(isActive);
@@ -204,8 +208,8 @@ export default {
 
         onCopyToClipboard(e, text) {
             const result = saveToClipboard(text);
-            const msg = result ? 'Успешно скопировано' : 'Не удается скопировать';
-            alert(msg);
+            const message = result ? 'Успешно скопировано' : 'Не удается скопировать';
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
             e.target.focus();
         },
 

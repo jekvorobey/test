@@ -80,7 +80,7 @@
                     <thead class="referal-view__table-head">
                         <tr class="referal-view__table-tr referal-view__table-tr--header">
                             <th class="referal-view__table-th">Товар</th>
-                            <th class="referal-view__table-th">Количество</th>
+                            <th class="referal-view__table-th">Кол-во</th>
                             <th class="referal-view__table-th">ID реферала</th>
                             <th class="referal-view__table-th">Источник</th>
                             <th class="referal-view__table-th">Дата заказа</th>
@@ -89,7 +89,7 @@
                         </tr>
                     </thead>
 
-                    <transition-group tag="tbody" name="fade-in" appear class="referal-view__table-body">
+                    <transition-group class="referal-view__table-body" tag="tbody" name="fade-in" appear>
                         <tr class="referal-view__table-tr" v-for="order in orders" :key="order.name">
                             <td class="referal-view__table-td">
                                 <div
@@ -107,8 +107,16 @@
                                 </div>
                             </td>
                             <td class="referal-view__table-td">{{ order.qty }} шт</td>
-                            <td class="referal-view__table-td">{{ order.source }}</td>
-                            <td class="referal-view__table-td">{{ order.referalId }}</td>
+                            <td class="referal-view__table-td">
+                                <router-link
+                                    :to="{ name: 'ReferalOrderDetails', params: { referalId: order.customer_id } }"
+                                >
+                                    {{ order.customer_id }}
+                                </router-link>
+                            </td>
+                            <td class="referal-view__table-td">
+                                {{ order.source }}
+                            </td>
                             <td class="referal-view__table-td">{{ order.date }}</td>
                             <td class="referal-view__table-td">
                                 <price v-bind="order.price_product" />
@@ -145,7 +153,11 @@
                     </div>
                 </info-row>
                 <info-row class="referal-view__list-item-row" name="Кол-во"> {{ order.qty }} шт. </info-row>
-                <info-row class="referal-view__list-item-row" name="ID реферала" :value="order.referalId" />
+                <info-row class="referal-view__list-item-row" name="ID реферала">
+                    <router-link :to="{ name: 'ReferalOrderDetails', params: { referalId: order.customer_id } }">
+                        {{ order.customer_id }}
+                    </router-link>
+                </info-row>
                 <info-row class="referal-view__list-item-row" name="Источник" :value="order.source" />
                 <info-row class="referal-view__list-item-row" name="Дата заказа" :value="order.date" />
                 <info-row class="referal-view__list-item-row" name="Сумма">
@@ -158,10 +170,15 @@
         </ul>
 
         <div class="container container--tablet-lg referal-view__controls" v-if="pagesCount > 1">
-            <show-more-button btn-class="btn--outline referal-view__controls-btn">
+            <show-more-button
+                v-if="activePage < pagesCount"
+                btn-class="btn--outline referal-view__controls-btn"
+                @click.prevent="onShowMore"
+                :show-preloader="showMore"
+            >
                 Показать ещё
             </show-more-button>
-            <v-pagination v-model="activePage" :page-count="pagesCount" />
+            <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
     </section>
 </template>
@@ -185,7 +202,7 @@ import { mapActions, mapGetters, mapState } from 'vuex';
 import { LOCALE } from '@store';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as REFERRAL_MODULE, ITEMS, ACTIVE_PAGE } from '@store/modules/Profile/modules/Referral';
-import { FETCH_REFERRAL_DATA, SET_LOAD_PATH } from '@store/modules/Profile/modules/Referral/actions';
+import { FETCH_REFERRAL_DATA, SET_LOAD_PATH, FETCH_ORDERS } from '@store/modules/Profile/modules/Referral/actions';
 import {
     REFERRAL_ARC_DATA,
     SUM_ARC_DATA,
@@ -196,7 +213,7 @@ import {
 import { fileExtension, sortDirections } from '@enums';
 import { referralOrderSortFields } from '@enums/profile';
 import { DEFAULT_PAGE } from '@constants';
-import { defaultDateSettings } from '@settings';
+import { digit2DateSettings } from '@settings';
 import { baseChartOptions } from '@settings/profile';
 import { preparePrice, shortNumberFormat } from '@util';
 import { generatePictureSourcePath } from '@util/file';
@@ -227,6 +244,7 @@ export default {
     data() {
         return {
             isMounted: false,
+            showMore: false,
 
             chartOptions: {
                 ...baseChartOptions,
@@ -266,7 +284,7 @@ export default {
                 const desktopImage = i.image && generatePictureSourcePath(40, 40, i.image.id, fileExtension.image.WEBP);
                 const defaultImage = i.image && generatePictureSourcePath(40, 40, i.image.id);
                 const date =
-                    i.order_date && new Date(i.order_date).toLocaleDateString(this[LOCALE], defaultDateSettings);
+                    i.order_date && new Date(i.order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
 
                 return {
                     ...i,
@@ -286,7 +304,24 @@ export default {
     watch: {},
 
     methods: {
-        ...mapActions(REFERRAL_MODULE_PATH, [FETCH_REFERRAL_DATA, SET_LOAD_PATH]),
+        ...mapActions(REFERRAL_MODULE_PATH, [FETCH_REFERRAL_DATA, FETCH_ORDERS, SET_LOAD_PATH]),
+
+        onOpenOrder(id) {
+            this.$router.push({ name: 'ReferalOrderDetails', params: { referalId: id } });
+        },
+
+        onShowMore() {
+            this.showMore = true;
+            this.$router.replace({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: this[ACTIVE_PAGE] + 1 },
+            });
+        },
+
+        onPageChanged(page) {
+            this.showMore = false;
+            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+        },
 
         formatArcSum(sum) {
             return `${preparePrice(sum)} ₽`;
@@ -327,18 +362,57 @@ export default {
 
         const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
 
-        $progress.start();
-        $store
-            .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`, { page, orderField, orderDirection })
-            .then(() => {
-                next(vm => {
-                    $progress.finish();
+        if (loadPath === fullPath) next();
+        else {
+            $progress.start();
+            $store
+                .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`, { page, orderField, orderDirection })
+                .then(() => {
+                    next(vm => {
+                        $progress.finish();
+                    });
+                })
+                .catch(thrown => {
+                    $progress.fail();
+                    next();
                 });
-            })
-            .catch(thrown => {
-                $progress.fail();
-                next();
-            });
+        }
+    },
+
+    async beforeRouteUpdate(to, from, next) {
+        // вызывается, когда маршрут, что рендерит этот компонент, изменился,
+        // но этот компонент будет повторно использован в новом маршруте.
+        // Например, для маршрута с динамическими параметрами `/foo/:id`, когда мы
+        // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
+        // будет использован повторно, и этот хук будет вызван когда это случится.
+        // Также имеется доступ в `this` к экземпляру компонента.
+
+        const {
+            fullPath,
+            query: {
+                page = DEFAULT_PAGE,
+                orderField = referralOrderSortFields.NAME,
+                orderDirection = sortDirections.DESC,
+            },
+        } = to;
+
+        try {
+            this.$progress.start();
+            await this[FETCH_ORDERS]({ page, orderField, orderDirection, showMore: this.showMore });
+            this.$progress.finish();
+            next();
+        } catch (error) {
+            this.$progress.fail();
+            next(false);
+        }
+
+        this.showMore = false;
+    },
+
+    beforeCreate() {
+        // this.sortFields = sortFields;
+        // this.sortDirections = sortDirections;
+        // this.orderPaymentStatus = orderPaymentStatus;
     },
 
     mounted() {

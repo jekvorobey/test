@@ -396,6 +396,19 @@
                 flex-wrap: wrap;
             }
         }
+
+        &-mobile {
+            &-controls {
+                display: none;
+
+                @media (--tablet) {
+                    /* такое число в z-index нужно для того, чтобы кнопки были минимум на 1 индекс выше слайдера */
+                    display: block;
+                    position: relative;
+                    z-index: 51;
+                }
+            }
+        }
     }
 
     &__socials {
@@ -1293,6 +1306,18 @@
             .product-price-panel__name {
                 display: none;
             }
+        }
+    }
+
+    &__wishlist-btn {
+        position: absolute;
+        z-index: 2;
+        top: 20px;
+        right: 20px;
+
+        @media (--tablet) {
+            top: 8px;
+            right: 12px;
         }
     }
 }

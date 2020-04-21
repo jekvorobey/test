@@ -82,7 +82,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
         }),
 
         isTablet() {
@@ -110,11 +110,32 @@ export default {
             this.links.push({ ref: null });
         },
 
-        onSubmit() {
+        handleErrorLinks(errorLinks) {
+            if (Array.isArray(errorLinks) && errorLinks.length > 0)
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.NOTIFICATION,
+                    open: true,
+                    state: {
+                        title: 'Не удалось добавить товар',
+                        message: `Не удалось добавить товары по указанным ссылкам:\n\n${errorLinks
+                            .map((l, index) => `${index + 1}) ${l}`)
+                            .join('\n')}`,
+                    },
+                });
+        },
+
+        async onSubmit() {
             this.$v.$touch();
-            if (!this.$v.$invalid)
-                this[ADD_PRODUCTS]({ items: this.links.map((l) => l.ref.split('/').slice(-1)), refresh: true });
-            this.onClose();
+            if (!this.$v.$invalid) {
+                try {
+                    await this[ADD_PRODUCTS]({ links: this.links, refresh: true });
+                    this.onClose();
+                } catch (error) {
+                    this.onClose();
+                    const { errorLinks } = error;
+                    this.handleErrorLinks(errorLinks);
+                }
+            }
         },
 
         onClose() {

@@ -3,12 +3,12 @@
         v-if="isOpen"
         class="promopage-edit-modal"
         type="sm"
-        header="Редактировать заголовок"
+        header="Редактировать название промостраницы"
         @close="onClose"
         :is-mobile="isTablet"
     >
         <template v-slot:content>
-            <h4 class="promopage-edit-modal__hl">Редактировать заголовок</h4>
+            <h4 class="promopage-edit-modal__hl">Редактировать название промостраницы</h4>
             <form class="promopage-edit-modal__form" @submit.prevent="onSubmit">
                 <v-input
                     class="promopage-edit-modal__form-row"
@@ -71,7 +71,7 @@ export default {
     computed: {
         ...mapState(PROMOPAGE_MODULE_PATH, [TITLE]),
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
         }),
 
         isTablet() {

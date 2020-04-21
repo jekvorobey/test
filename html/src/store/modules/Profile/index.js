@@ -10,6 +10,7 @@ import seo from './modules/Seo';
 import promopage from './modules/Promopage';
 import documents from './modules/Documents';
 import referral from './modules/Referral';
+import billing from './modules/Billing';
 
 export const NAME = 'profile';
 export const BREADCRUMBS = 'breadcrumbs';
@@ -110,6 +111,7 @@ export default function createModule() {
             promopage: promopage(),
             documents: documents(),
             referral: referral(),
+            billing: billing(),
         },
     };
 }
