@@ -574,8 +574,8 @@ export default {
         onCopyToClipboard(e) {
             const link = generateReferralLink(this[REFERRAL_CODE]);
             const result = saveToClipboard(link);
-            const msg = result ? 'Успешно скопировано' : 'Не удается скопировать';
-            alert(msg);
+            const message = result ? 'Успешно скопировано' : 'Не удается скопировать';
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
             e.target.focus();
         },
 
