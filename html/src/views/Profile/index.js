@@ -15,7 +15,6 @@ import Certificates from './Certificates/Certificates';
 import Bonuses from './Bonuses/Bonuses';
 import Orders from './Orders/Orders';
 import OrderDetails from './OrderDetails/OrderDetails';
-import ReferalOrders from './ReferalOrders/ReferalOrders';
 import ReferalOrderDetails from './ReferalOrderDetails/ReferalOrderDetails';
 
 import Referal from './Referal/Referal';
@@ -24,7 +23,6 @@ import Promopage from './Promopage/Promopage';
 import ProPreferences from './ProPreferences/ProPreferences';
 import Seo from './Seo/Seo';
 import Account from './Account/Account';
-import Billing from './Billing/Billing';
 import Documents from './Documents/Documents';
 
 import HowItWorks from './HowItWorks/HowItWorks';
@@ -63,7 +61,6 @@ export default {
                 ...Bonuses.routes,
                 ...Orders.routes,
                 ...OrderDetails.routes,
-                ...ReferalOrders.routes,
                 ...ReferalOrderDetails.routes,
 
                 ...Referal.routes,
@@ -72,7 +69,6 @@ export default {
                 ...ProPreferences.routes,
                 ...Seo.routes,
                 ...Account.routes,
-                ...Billing.routes,
                 ...Documents.routes,
 
                 ...HowItWorks.routes,

@@ -340,6 +340,19 @@ export function getReferralOrderDetails(id) {
     return $http.get(`/v1/lk/order-referral/${id}`);
 }
 
+export function getBillingData() {
+    return $http.get('/v1/lk/bill');
+}
+
+export function getBillingOperations(pageNum, perPage) {
+    return $http.get('/v1/lk/bill/operations', {
+        params: {
+            pageNum,
+            perPage,
+        },
+    });
+}
+
 // search
 
 export function search(data) {

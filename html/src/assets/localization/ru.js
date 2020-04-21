@@ -235,7 +235,6 @@ const main = {
             Bonuses: 'Бонусная программа',
             Orders: 'Мои Заказы',
             OrderDetails: 'Мои Заказы',
-            ReferalOrders: 'Реферальные заказы',
             ReferalOrderDetails: 'Реферальные заказы',
 
             Referal: 'Реферальная программа',
@@ -244,7 +243,6 @@ const main = {
             Seo: 'Товары для продвижения',
             Promocodes: 'Мои промокоды',
             Account: 'Мой счет',
-            Billing: 'Биллинг по счету',
             Documents: 'Мои документы',
 
             HowItWorks: 'Как работать с платформой',

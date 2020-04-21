@@ -158,7 +158,6 @@ export default {
                         { name: 'Seo', exact: true },
                         { name: 'Promocodes', exact: true },
                         { name: 'Account', exact: true },
-                        { name: 'Billing', exact: true },
                         { name: 'Documents', exact: true },
                     ],
                 });

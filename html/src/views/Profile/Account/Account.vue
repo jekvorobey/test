@@ -5,7 +5,9 @@
         <div class="account-view__panels">
             <div class="account-view__panel">
                 <div class="text-grey">На вашем счете</div>
-                <div class="text-bold account-view__panel-count">1 587 ₽</div>
+                <div class="account-view__panel-count">
+                    <price class="text-bold" v-bind="billingData.referral_bill" />
+                </div>
             </div>
             <div class="account-view__panel">
                 <div class="account-view__panel-top">
@@ -40,6 +42,7 @@
                         <col width="25%" />
                         <col width="15%" />
                     </colgroup>
+
                     <thead class="account-view__table-head">
                         <tr class="account-view__table-tr account-view__table-tr--header">
                             <th class="account-view__table-th">Заказ/событие</th>
@@ -48,14 +51,18 @@
                             <th class="account-view__table-th">Начислено/cписано</th>
                         </tr>
                     </thead>
+
                     <transition-group tag="tbody" name="fade-in" appear class="account-view__table-body">
-                        <tr class="account-view__table-tr" v-for="event in events" :key="event.id">
-                            <td class="account-view__table-td">{{ event.eventId }}</td>
-                            <td class="account-view__table-td">{{ event.date }}</td>
-                            <td class="account-view__table-td">{{ event.operation }}</td>
+                        <tr
+                            class="account-view__table-tr"
+                            v-for="(operation, index) in operations"
+                            :key="operation.id || index"
+                        >
+                            <td class="account-view__table-td">{{ operation.action_id }}</td>
+                            <td class="account-view__table-td">{{ operation.date }}</td>
+                            <td class="account-view__table-td">{{ operation.type }}</td>
                             <td class="account-view__table-td">
-                                <span v-if="event.delta.minus">-</span>&nbsp;
-                                <price v-bind="event.delta" />
+                                <price v-bind="operation.value" />
                             </td>
                         </tr>
                     </transition-group>
@@ -64,22 +71,29 @@
         </section>
 
         <ul class="account-view__list" v-if="isTabletLg">
-            <li class="container container--tablet-lg account-view__list-item" v-for="event in events" :key="event.id">
-                <info-row class="account-view__list-item-row" name="Заказ/событие" :value="event.eventId" />
-                <info-row class="account-view__list-item-row" name="Дата" :value="event.date" />
-                <info-row class="account-view__list-item-row" name="Операция" :value="event.operation" />
+            <li
+                class="container container--tablet-lg account-view__list-item"
+                v-for="(operation, index) in operations"
+                :key="operation.id || index"
+            >
+                <info-row class="account-view__list-item-row" name="Заказ/событие" :value="operation.action_Id" />
+                <info-row class="account-view__list-item-row" name="Дата" :value="operation.date" />
+                <info-row class="account-view__list-item-row" name="Операция" :value="operation.type" />
                 <info-row class="account-view__list-item-row" name="Начислено/cписано">
-                    <span v-if="event.delta.minus">-</span>&nbsp;
-                    <price v-bind="event.delta" />
+                    <price v-bind="operation.value" />
                 </info-row>
             </li>
         </ul>
 
-        <div class="container container--tablet-lg account-view__controls">
-            <show-more-button btn-class="btn--outline account-view__controls-btn">
+        <div class="container container--tablet-lg account-view__controls" v-if="pagesCount > 1">
+            <show-more-button
+                v-if="activePage < pagesCount"
+                btn-class="btn--outline account-view__controls-btn"
+                @click="onShowMore"
+            >
                 Показать ещё
             </show-more-button>
-            <v-pagination v-model="page" :page-count="10" />
+            <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
     </section>
 </template>
@@ -95,7 +109,20 @@ import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
+import { mapState, mapActions, mapGetters } from 'vuex';
+
+import { LOCALE } from '@store';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as BILLING_MODULE, ITEMS, ACTIVE_PAGE, BILLING_DATA } from '@store/modules/Profile/modules/Billing';
+import { PAGES_COUNT } from '@store/modules/Profile/modules/Billing/getters';
+import { FETCH_BILLING_DATA, SET_LOAD_PATH, FETCH_OPERATIONS } from '@store/modules/Profile/modules/Billing/actions';
+
+import { DEFAULT_PAGE } from '@constants';
+import { monthLongDateSettings } from '@settings';
+import { $store, $progress, $logger } from '@services';
 import './Account.css';
+
+const BILLING_MODULE_PATH = `${PROFILE_MODULE}/${BILLING_MODULE}`;
 
 export default {
     name: 'account',
@@ -116,7 +143,7 @@ export default {
         const cards = ['MasterCard **** 8515', 'VISA **** 5000', 'Добавить новую карту'];
 
         return {
-            page: 1,
+            showMore: false,
             selectedCard: cards[0],
             cards,
             events: [
@@ -168,13 +195,101 @@ export default {
     },
 
     computed: {
+        ...mapState([LOCALE]),
+        ...mapState(BILLING_MODULE_PATH, [BILLING_DATA, ITEMS, ACTIVE_PAGE]),
+        ...mapGetters(BILLING_MODULE_PATH, [PAGES_COUNT]),
+
+        operations() {
+            const items = this[ITEMS] || [];
+            return items.map(i => {
+                const dateObj = i.created_at && new Date(i.created_at);
+                const date = dateObj.toLocaleDateString(this[LOCALE], monthLongDateSettings);
+
+                return {
+                    ...i,
+                    date,
+                };
+            });
+        },
+
         isTabletLg() {
             return this.$mq.tabletLg;
         },
     },
 
-    watch: {},
+    methods: {
+        onShowMore() {
+            this.showMore = true;
+            this.$router.replace({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: this[ACTIVE_PAGE] + 1 },
+            });
+        },
 
-    methods: {},
+        onPageChanged(page) {
+            this.showMore = false;
+            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+        },
+    },
+
+    beforeRouteEnter(to, from, next) {
+        // вызывается до подтверждения пути, соответствующего этому компоненту.
+        // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
+        // так как к моменту вызова экземпляр ещё не создан!
+
+        const {
+            fullPath,
+            query: { page = DEFAULT_PAGE },
+        } = to;
+
+        const { loadPath } = $store.state[PROFILE_MODULE][BILLING_MODULE];
+
+        // если все загружено, пропускаем
+        if (loadPath === fullPath) next();
+        else {
+            $progress.start();
+            $store
+                .dispatch(`${BILLING_MODULE_PATH}/${FETCH_BILLING_DATA}`, {
+                    page,
+                })
+                .then(data => {
+                    $store.dispatch(`${BILLING_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                    next(vm => {
+                        $progress.finish();
+                    });
+                })
+                .catch(thrown => {
+                    if (thrown && thrown.isCancel === true) return next();
+                    next(vm => {
+                        $progress.fail();
+                    });
+                });
+        }
+    },
+
+    async beforeRouteUpdate(to, from, next) {
+        // вызывается, когда маршрут, что рендерит этот компонент, изменился,
+        // но этот компонент будет повторно использован в новом маршруте.
+        // Например, для маршрута с динамическими параметрами `/foo/:id`, когда мы
+        // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
+        // будет использован повторно, и этот хук будет вызван когда это случится.
+        // Также имеется доступ в `this` к экземпляру компонента.
+
+        const {
+            query: { page = DEFAULT_PAGE },
+        } = to;
+
+        try {
+            this.$progress.start();
+            await this[FETCH_OPERATIONS]({ page, showMore: this.showMore });
+            this.$progress.finish();
+            next();
+        } catch (error) {
+            this.$progress.fail();
+            next(false);
+        }
+
+        this.showMore = false;
+    },
 };
 </script>
