@@ -1,3 +1,4 @@
+import { httpCodes } from '@enums';
 import { storeErrorHandler } from '@util/store';
 import { PROMOPAGE_PRODUCTS_PAGE_SIZE } from '@constants/profile';
 import { DEFAULT_PAGE } from '@constants';
@@ -13,14 +14,11 @@ import {
 import { SET_PRODUCTS, SET_PRODUCTS_MORE, SET_TITLE, SET_SEARCH_RESULTS, SET_QUERY_PARAMS } from './mutations';
 
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
-
 export const FETCH_PROMOPAGE = 'FETCH_PROMOPAGE';
 export const SEARCH_PRODUCTS = 'SEARCH_PRODUCTS';
 export const SET_PROMOPAGE_TITLE = 'SET_PROMOPAGE_TITLE';
-
 export const ADD_PRODUCT = 'ADD_PRODUCT';
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
-
 export const ADD_PRODUCTS = 'ADD_PRODUCTS';
 
 export default {
@@ -48,23 +46,39 @@ export default {
     },
 
     async [ADD_PRODUCT]({ dispatch }, payload = {}) {
+        const { id, link, refresh = false, bubbleOnError = true } = payload;
+
         try {
-            const { id, code, refresh = false } = payload;
             if (id) await addProfilePromopageProductById(id);
-            else if (code) await addProfilePromopageProductByCode(code);
+            else if (link) {
+                const code = link.split('/').slice(-1);
+                await addProfilePromopageProductByCode(code);
+            }
             if (refresh) dispatch(FETCH_PROMOPAGE, {});
         } catch (error) {
-            storeErrorHandler(ADD_PRODUCT, true)(error);
+            storeErrorHandler(ADD_PRODUCT, bubbleOnError)(error);
+            if (error.status === httpCodes.NOT_FOUND) return link;
         }
     },
 
     async [ADD_PRODUCTS]({ dispatch }, payload = {}) {
         try {
-            const { items = [], refresh = false } = payload;
-            await Promise.all(items.map((i) => dispatch(ADD_PRODUCT, { code: i })));
+            const { links = [], refresh = false } = payload;
+            const promises = links.map((i) => {
+                return dispatch(ADD_PRODUCT, { link: i.ref, bubbleOnError: false });
+            });
+            let errorLinks = await Promise.all(promises);
+            errorLinks = errorLinks.filter((l) => !!l);
+
             if (refresh) dispatch(FETCH_PROMOPAGE, {});
+            if (errorLinks.length > 0)
+                throw {
+                    errorLinks,
+                    message: 'Something went wrong or not found',
+                    isCancel: false,
+                };
         } catch (error) {
-            storeErrorHandler(ADD_PRODUCTS)(error);
+            storeErrorHandler(ADD_PRODUCTS, true)(error);
         }
     },
 

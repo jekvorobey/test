@@ -35,7 +35,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         isTablet() {
