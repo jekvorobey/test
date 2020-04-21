@@ -353,6 +353,14 @@ export function getBillingOperations(pageNum, perPage) {
     });
 }
 
+export function getPromocodeData(isArchive = 0) {
+    return $http.get('/v1/lk/promo-code/', {
+        params: {
+            archive: Number(isArchive),
+        },
+    });
+}
+
 // search
 
 export function search(data) {

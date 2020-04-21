@@ -11,6 +11,7 @@ import promopage from './modules/Promopage';
 import documents from './modules/Documents';
 import referral from './modules/Referral';
 import billing from './modules/Billing';
+import promocodes from './modules/Promocodes';
 
 export const NAME = 'profile';
 export const BREADCRUMBS = 'breadcrumbs';
@@ -31,8 +32,6 @@ export default function createModule() {
         namespaced: true,
         state: {
             [BREADCRUMBS]: [],
-
-            [PROMO_DATA]: null,
 
             [MESSAGES_DATA]: {
                 messages: [
@@ -112,6 +111,7 @@ export default function createModule() {
             documents: documents(),
             referral: referral(),
             billing: billing(),
+            promocodes: promocodes(),
         },
     };
 }
