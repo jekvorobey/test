@@ -1,3 +1,4 @@
+import { injectionType } from '@enums';
 import { breakMiddleware } from '@util/router';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
