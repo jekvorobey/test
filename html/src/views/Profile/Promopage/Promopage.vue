@@ -24,11 +24,10 @@
                         &nbsp;&nbsp;Добавить по ссылке
                     </v-link>
 
-                    <!-- #58050 Закоментированно пока нету страниц -->
-                    <!-- <v-link class="promopage-view__panel-link" tag="button">
+                    <v-link class="promopage-view__panel-link" tag="button" @click="onCopyReferralLink">
                         <v-svg name="link" :width="iconSize" :height="iconSize" />
                         &nbsp;&nbsp;Скопировать ссылку
-                    </v-link> -->
+                    </v-link>
                 </div>
             </template>
 
@@ -104,13 +103,18 @@ import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
+
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
 import { NAME as PROMOPAGE_MODULE, TITLE, ITEMS, RANGE, ACTIVE_PAGE } from '@store/modules/Profile/modules/Promopage';
 import { PAGES_COUNT } from '@store/modules/Profile/modules/Promopage/getters';
 import { FETCH_PROMOPAGE, SET_LOAD_PATH, DELETE_PRODUCT } from '@store/modules/Profile/modules/Promopage/actions';
 
+import { saveToClipboard } from '@util';
 import { generateProductUrl } from '@util/catalog';
+import { generateReferralPromopageLink } from '@util/profile';
 import { DEFAULT_PAGE } from '@constants';
 import { modalName } from '@enums';
 import '@images/sprites/cross.svg';
@@ -150,6 +154,10 @@ export default {
     computed: {
         ...mapState(PROMOPAGE_MODULE_PATH, [TITLE, ITEMS, RANGE, ACTIVE_PAGE]),
         ...mapGetters(PROMOPAGE_MODULE_PATH, [PAGES_COUNT]),
+
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || null,
+        }),
 
         ...mapState(MODAL_MODULE, {
             isNameEditOpen: state =>
@@ -191,6 +199,14 @@ export default {
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(PROMOPAGE_MODULE_PATH, [FETCH_PROMOPAGE, DELETE_PRODUCT]),
+
+        onCopyReferralLink(e) {
+            const link = generateReferralPromopageLink(this[REFERRAL_CODE]);
+            const result = saveToClipboard(link);
+            const message = result ? 'Успешно скопировано' : 'Не удается скопировать';
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
+            e.target.focus();
+        },
 
         onDeleteProduct(id) {
             this[DELETE_PRODUCT]({ id, refresh: true });
