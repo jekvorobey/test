@@ -120,6 +120,12 @@ export function setCity({ name, fias_id }) {
     });
 }
 
+export function setSessionReferralCode(referral_code) {
+    return $http.post('/v1/auth/referralCode', {
+        referral_code,
+    });
+}
+
 // profile
 
 export function getProfile() {

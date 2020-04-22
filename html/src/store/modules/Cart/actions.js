@@ -1,3 +1,4 @@
+import { cookieNames } from '@enums';
 import { $logger, $cookie } from '@services';
 import { getProducts, getCartData, deleteCartItem, addCartItem, deleteAllItems } from '@api';
 import { getRandomIntInclusive } from '@util';
@@ -59,7 +60,10 @@ export default {
         }
     },
 
-    async [ADD_CART_ITEM]({ commit }, { offerId, storeId, count, referrerCode, cookieName = 'referal' } = {}) {
+    async [ADD_CART_ITEM](
+        { commit },
+        { offerId, storeId, count, referrerCode, cookieName = cookieNames.REFERRAL } = {}
+    ) {
         try {
             const code = referrerCode || (cookieName && $cookie.get(cookieName));
             const data = await addCartItem(offerId, storeId, count, code);

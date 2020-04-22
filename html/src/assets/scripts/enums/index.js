@@ -227,3 +227,8 @@ export const localeDateOptions = Object.freeze({
         LONG: 'long',
     },
 });
+
+export const cookieNames = Object.freeze({
+    REFERRAL: 'referral',
+    IBT_GEOLOCATION: 'ibt_geoc',
+});

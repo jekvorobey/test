@@ -1,8 +1,8 @@
-import { httpCodes, injectionType, interval } from '@enums';
+import { httpCodes, injectionType, interval, cookieNames } from '@enums';
 import { breakMiddleware } from '@util/router';
 
-import { NAME as MODAL_MODULE } from '@store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+import { NAME as AUTH_MODULE } from '@store/modules/Auth';
+import { SET_SESSION_REFERRAL_CODE } from '@store/modules/Auth/actions';
 
 export default async function referalLink({ to, next, container, nextMiddleware }) {
     try {
@@ -12,7 +12,11 @@ export default async function referalLink({ to, next, container, nextMiddleware 
 
         if (ref) {
             const cookies = container.get(injectionType.COOKIE);
-            cookies.set('referal', ref, { maxAge: 60 * 60 * 24, path: '/' });
+            const store = container.get(injectionType.STORE);
+
+            // maxAge в секундах
+            cookies.set(cookieNames.REFERRAL, ref, { maxAge: interval.DAY / interval.SECOND, path: '/' });
+            store.dispatch(`${AUTH_MODULE}/${SET_SESSION_REFERRAL_CODE}`, ref);
 
             return next({
                 path: to.path,
