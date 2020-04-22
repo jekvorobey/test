@@ -24,12 +24,12 @@ import { CLOSE_ALL, CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
  * https://router.vuejs.org/ru/api/#router-push
  * */
 const routerMethods = ['push', 'replace'];
-routerMethods.forEach(method => {
+routerMethods.forEach((method) => {
     const originalCall = VueRouter.prototype[method];
 
-    VueRouter.prototype[method] = function(location, onResolve, onReject) {
+    VueRouter.prototype[method] = function (location, onResolve, onReject) {
         if (onResolve || onReject) return originalCall.call(this, location, onResolve, onReject);
-        return originalCall.call(this, location).catch(err => err);
+        return originalCall.call(this, location).catch((err) => err);
     };
 });
 
@@ -40,7 +40,7 @@ let keys = [];
 
 function importViews(r) {
     keys = r.keys();
-    keys.forEach(key => {
+    keys.forEach((key) => {
         routes.push(...r(key).default.routes);
     });
 }
@@ -109,9 +109,6 @@ export default function createRouter(container) {
             from,
             next,
             container,
-            store,
-            appContext,
-            router,
         };
 
         return middlewares[0]({
