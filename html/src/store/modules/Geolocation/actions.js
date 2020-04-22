@@ -1,8 +1,9 @@
+import { interval, cookieNames } from '@enums';
+import { $dadata, $context, $cookie } from '@services';
+import { storeErrorHandler } from '@util/store';
+
 import { setCity } from '@api';
 import { MUTATE_SELECTED_CITY } from './mutations';
-import { storeErrorHandler } from '@util/store';
-import { $dadata, $context, $cookie } from '@services';
-import { interval } from '@enums';
 
 const GET_SELECTED_CITY_BY_IP = 'GET_SELECTED_CITY_BY_IP';
 
@@ -21,7 +22,8 @@ export default {
         try {
             await setCity(city);
             commit(MUTATE_SELECTED_CITY, city);
-            if (setCookie) $cookie.set('ibt_geoc', JSON.stringify(city), { maxAge: interval.WEEK, path: '/' });
+            if (setCookie)
+                $cookie.set(cookieNames.IBT_GEOLOCATION, JSON.stringify(city), { maxAge: interval.WEEK, path: '/' });
         } catch (error) {
             storeErrorHandler(SET_SELECTED_CITY)(error);
         }
@@ -52,7 +54,7 @@ export default {
 
     async [SET_SELECTED_CITY_BY_IP]({ dispatch, state }) {
         try {
-            let city = $cookie.get('ibt_geoc');
+            let city = $cookie.get(cookieNames.IBT_GEOLOCATION);
             if (!city) city = await dispatch(GET_SELECTED_CITY_BY_IP, $context.req.ip);
 
             await dispatch(SET_SELECTED_CITY, {

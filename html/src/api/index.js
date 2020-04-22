@@ -120,6 +120,12 @@ export function setCity({ name, fias_id }) {
     });
 }
 
+export function setSessionReferralCode(referral_code) {
+    return $http.post('/v1/auth/referralCode', {
+        referral_code,
+    });
+}
+
 // profile
 
 export function getProfile() {
@@ -349,6 +355,14 @@ export function getBillingOperations(pageNum, perPage) {
         params: {
             pageNum,
             perPage,
+        },
+    });
+}
+
+export function getPromocodeData(isArchive = 0) {
+    return $http.get('/v1/lk/promo-code/', {
+        params: {
+            archive: Number(isArchive),
         },
     });
 }

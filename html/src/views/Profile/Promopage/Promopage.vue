@@ -242,7 +242,6 @@ export default {
                 })
                 .catch(error => {
                     next(vm => $progress.fail());
-                    $logger.error(error);
                 });
         }
     },
