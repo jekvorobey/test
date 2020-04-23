@@ -3,7 +3,7 @@ import { storeErrorHandler } from '@util/store';
 import { FAVORITES_PAGE_SIZE } from '@constants/favorites';
 
 import { getFavorites, getFavoritesAll, addFavoritesItem, deleteFavoritesItem, deleteAllFavorites } from '@api';
-import { SET_FAVORITES, SET_QUERY_PARAMS, SET_FAVORITES_ALL } from './mutations';
+import { SET_FAVORITES, SET_QUERY_PARAMS, SET_FAVORITES_ALL, SET_FAVORITES_MORE } from './mutations';
 import { IS_IN_FAVORITES } from './getters';
 
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
