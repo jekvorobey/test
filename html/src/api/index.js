@@ -120,6 +120,12 @@ export function setCity({ name, fias_id }) {
     });
 }
 
+export function setSessionReferralCode(referral_code) {
+    return $http.post('/v1/auth/referralCode', {
+        referral_code,
+    });
+}
+
 // profile
 
 export function getProfile() {
@@ -231,6 +237,10 @@ export function defaultProfileAddress(id) {
     return $http.put(`/v1/lk/address/${id}/default`);
 }
 
+export function getProfileOrdersInfo() {
+    return $http.get('/v1/lk/order/info');
+}
+
 export function getProfileOrders(sortDirection, sortKey, pageNum, perPage) {
     return $http.get('/v1/lk/order', {
         params: {
@@ -238,11 +248,6 @@ export function getProfileOrders(sortDirection, sortKey, pageNum, perPage) {
             sortKey,
             pageNum,
             perPage,
-        },
-        paramsSerializer(params) {
-            return qs.stringify(params, {
-                encode: false,
-            });
         },
     });
 }
@@ -349,6 +354,14 @@ export function getBillingOperations(pageNum, perPage) {
         params: {
             pageNum,
             perPage,
+        },
+    });
+}
+
+export function getPromocodeData(isArchive = 0) {
+    return $http.get('/v1/lk/promo-code/', {
+        params: {
+            archive: Number(isArchive),
         },
     });
 }

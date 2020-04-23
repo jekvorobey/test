@@ -21,6 +21,7 @@ export default {
 
             meta: {
                 middleware: [hasSession],
+                skipScroll: true,
             },
         },
     ],

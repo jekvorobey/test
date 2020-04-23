@@ -14,6 +14,7 @@ import {
     checkCode,
     resetPassword,
     getUser,
+    setSessionReferralCode,
 } from '@api';
 import { SET_HAS_SESSION, SET_USER } from './mutations';
 
@@ -32,8 +33,13 @@ export const RESET_PASSWORD = 'RESET_PASSWORD';
 export const FETCH_USER = 'FETCH_USER';
 
 export const SET_REFERRER_CODE = 'SET_REFERRER_CODE';
+export const SET_SESSION_REFERRAL_CODE = 'SET_SESSION_REFERRAL_CODE';
 
 export default {
+    [SET_REFERRER_CODE]({ commit }, code) {
+        commit(SET_REFERRER_CODE, code);
+    },
+
     async [SEND_SMS]({ commit }, { phone, type }) {
         try {
             await sendCode(phone, type);
@@ -118,13 +124,18 @@ export default {
         }
     },
 
-    [SET_REFERRER_CODE]({ commit }, code) {
-        commit(SET_REFERRER_CODE, code);
+    async [SET_SESSION_REFERRAL_CODE](context, code) {
+        try {
+            await setSessionReferralCode(code);
+        } catch (error) {
+            storeErrorHandler(SET_SESSION_REFERRAL_CODE)(error);
+        }
     },
 
     async [FETCH_USER]({ commit }) {
+        let user = null;
+
         try {
-            let user = null;
             const { can_buy: canBuy, referral_code: referralCode, referral_partner: referralPartner } = await getUser();
             user = { canBuy, referralCode, referralPartner };
             commit(SET_USER, user);

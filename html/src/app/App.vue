@@ -87,7 +87,7 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { $cookie } from '@services';
-import { eventName, interval, modalName } from '@enums';
+import { eventName, interval, modalName, cookieNames } from '@enums';
 import { MIN_SCROLL_VALUE, SCROLL_DEBOUCE_TIME } from '@constants';
 
 export default {
@@ -109,25 +109,24 @@ export default {
         ...mapState([SCROLL]),
         ...mapState(AUTH_MODULE, [HAS_SESSION, USER]),
         ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
+            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
         }),
 
         ...mapState('route', {
-            hideDefaultHeader: (state) => state.meta.hideDefaultHeader,
+            hideDefaultHeader: state => state.meta.hideDefaultHeader,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isRegistrationOpen: (state) =>
+            isRegistrationOpen: state =>
                 state[MODALS][modalName.general.REGISTRATION] && state[MODALS][modalName.general.REGISTRATION].open,
-            isLoginOpen: (state) =>
-                state[MODALS][modalName.general.LOGIN] && state[MODALS][modalName.general.LOGIN].open,
-            isCitySelectionOpen: (state) =>
+            isLoginOpen: state => state[MODALS][modalName.general.LOGIN] && state[MODALS][modalName.general.LOGIN].open,
+            isCitySelectionOpen: state =>
                 state[MODALS][modalName.general.CITY_SELECTION] && state[MODALS][modalName.general.CITY_SELECTION].open,
-            isQuickViewOpen: (state) =>
+            isQuickViewOpen: state =>
                 state[MODALS][modalName.general.QUICK_VIEW] && state[MODALS][modalName.general.QUICK_VIEW].open,
-            isAddToCartOpen: (state) =>
+            isAddToCartOpen: state =>
                 state[MODALS][modalName.general.ADD_TO_CART] && state[MODALS][modalName.general.ADD_TO_CART].open,
-            isNotificationOpen: (state) =>
+            isNotificationOpen: state =>
                 state[MODALS][modalName.general.NOTIFICATION] && state[MODALS][modalName.general.NOTIFICATION].open,
         }),
 
@@ -145,7 +144,7 @@ export default {
         ...mapActions(FAVORITES_MODULE, [FETCH_FAVORITES_ALL]),
 
         onCheckCitySelection() {
-            const geoData = $cookie.get('ibt_geoc');
+            const geoData = $cookie.get(cookieNames.IBT_GEOLOCATION);
             this[SET_CITY_CONFIRMATION_OPEN](!geoData);
         },
 

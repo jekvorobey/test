@@ -117,7 +117,7 @@
         <info-panel class="cabinet-view__panel" v-if="referralPartner" header="Реферальные данные">
             <template v-slot:controls>
                 <v-link
-                    v-if="!canEditReferralCode"
+                    v-if="canEditReferralCode"
                     class="cabinet-view__panel-link"
                     tag="button"
                     @click="onOpenReferralCodeModal"

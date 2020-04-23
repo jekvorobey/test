@@ -1,4 +1,4 @@
-import { httpCodes, injectionType } from '@enums';
+import { httpCodes, injectionType, modalName } from '@enums';
 import { breakMiddleware } from '@util/router';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
@@ -12,7 +12,10 @@ export default async function registration({ to, next, container, nextMiddleware
 
         if (registration) {
             const store = container.get(injectionType.STORE);
-            store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, { name: 'registration-modal', open: true });
+            store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
+                name: modalName.general.REGISTRATION,
+                open: true,
+            });
 
             return next({
                 path: to.path,
@@ -22,6 +25,7 @@ export default async function registration({ to, next, container, nextMiddleware
         }
         return nextMiddleware();
     } catch (error) {
+        const appContext = container.get(injectionType.APPLICATION_CONTEXT);
         breakMiddleware(appContext, next, null, httpCodes.INTERNAL_SERVER_ERROR);
     }
 }

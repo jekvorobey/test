@@ -2,15 +2,15 @@
     <section class="section orders-view">
         <h2 class="container container--tablet-lg orders-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
 
-        <!-- <div class="orders-view__panels">
+        <div class="orders-view__panels" v-if="referralPartner">
             <div class="orders-view__panel">
                 <div class="orders-view__panel-item">
                     <div class="text-grey orders-view__panel-name">Ваш уровень</div>
-                    <div class="orders-view__panel-level">Золотой</div>
+                    <div class="orders-view__panel-level">{{ levelData.currentLevelName }}</div>
                 </div>
                 <div class="orders-view__panel-item">
                     <div class="text-grey orders-view__panel-name">Следующий уровень</div>
-                    <div class="text-grey orders-view__panel-level">Платиновый</div>
+                    <div class="text-grey orders-view__panel-level">{{ levelData.nextLevelName }}</div>
                 </div>
 
                 <a class="orders-view__panel-link">Подробнее о реферальной программе</a>
@@ -22,17 +22,17 @@
                         <v-arc-counter
                             stroke="#BDBDBD"
                             activeStroke="#141116"
-                            text="2"
+                            :text="referralArcData.current"
                             :start="-120"
                             :end="120"
                             :activeWidth="16"
                             :strokeWidth="16"
-                            :dashCount="10"
-                            :activeCount="2"
+                            :dashCount="referralArcData.next"
+                            :activeCount="referralArcData.current"
                         />
                         <div class="text-grey orders-view__panel-item-label">
-                            <span>2</span>
-                            <span>10</span>
+                            <span>0</span>
+                            <span>{{ referralArcData.next }}</span>
                         </div>
                     </div>
 
@@ -43,23 +43,23 @@
                         <v-arc-counter
                             stroke="#BDBDBD"
                             activeStroke="#141116"
-                            text="15 780 ₽"
+                            :text="formatArcSum(sumArcData.current)"
                             :start="-120"
                             :end="120"
                             :activeWidth="16"
                             :strokeWidth="16"
-                            :dashCount="10"
-                            :activeCount="1"
+                            :dashCount="sumArcData.next"
+                            :activeCount="sumArcData.current"
                         />
                         <div class="text-grey orders-view__panel-item-label">
                             <span>0</span>
-                            <span>300к</span>
+                            <span>{{ shortNumberFormat(sumArcData.next) }}</span>
                         </div>
                     </div>
                     <div class="text-grey">Сумма моих заказов</div>
                 </div>
             </div>
-        </div> -->
+        </div>
 
         <div class="container container--tablet-lg">
             <filter-button class="orders-view__filter-btn" @click="filterModal = !filterModal">
@@ -259,6 +259,8 @@ import { LOCALE } from '@store';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
+import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
+
 import {
     NAME as ORDERS_MODULE,
     ORDERS,
@@ -266,9 +268,20 @@ import {
     ORDER_FIELD,
     ACTIVE_PAGE,
 } from '@store/modules/Profile/modules/Orders';
-import { PAGES_COUNT } from '@store/modules/Profile/modules/Orders/getters';
-import { FETCH_ORDERS, SET_LOAD_PATH, GET_ORDER_PAYMENT_LINK } from '@store/modules/Profile/modules/Orders/actions';
+import {
+    REFERRAL_ARC_DATA,
+    SUM_ARC_DATA,
+    LEVEL_DATA,
+    PAGES_COUNT,
+} from '@store/modules/Profile/modules/Orders/getters';
+import {
+    FETCH_ORDERS,
+    SET_LOAD_PATH,
+    GET_ORDER_PAYMENT_LINK,
+    FETCH_ORDERS_DATA,
+} from '@store/modules/Profile/modules/Orders/actions';
 
+import { preparePrice, shortNumberFormat } from '@util';
 import { getOrderStatusColorClass } from '@util/order';
 import { orderStatus, orderPaymentStatus, sortFields } from '@enums/order';
 import { orderDateLocaleOptions } from '@settings/profile';
@@ -312,7 +325,10 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(ORDERS_MODULE_PATH, [ORDERS, ORDER_DIRECTION, ORDER_FIELD, ACTIVE_PAGE]),
-        ...mapGetters(ORDERS_MODULE_PATH, [PAGES_COUNT]),
+        ...mapGetters(ORDERS_MODULE_PATH, [PAGES_COUNT, REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA]),
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+        }),
 
         isTabletLg() {
             return this.$mq.tabletLg;
@@ -327,6 +343,14 @@ export default {
             if (typeof date !== 'string') return;
             const obj = new Date(date.split(' ')[0]);
             return obj.toLocaleDateString(this[LOCALE], orderDateLocaleOptions);
+        },
+
+        formatArcSum(sum) {
+            return `${preparePrice(sum)} ₽`;
+        },
+
+        shortNumberFormat(sum) {
+            return shortNumberFormat(sum);
         },
 
         getOrderStatusClass(order) {
@@ -389,7 +413,7 @@ export default {
         else {
             $progress.start();
             $store
-                .dispatch(`${ORDERS_MODULE_PATH}/${FETCH_ORDERS}`, {
+                .dispatch(`${ORDERS_MODULE_PATH}/${FETCH_ORDERS_DATA}`, {
                     page,
                     orderField,
                     orderDirection,
