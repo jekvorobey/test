@@ -3,6 +3,7 @@
  */
 
 import hasSession from '@router/middleware/hasSession';
+import setUser from '@router/middleware/setUser';
 
 import Cabinet from './Cabinet/Cabinet';
 import Addresses from './Addresses/Addresses';
@@ -46,7 +47,7 @@ export default {
             component: ProfileAsync,
 
             meta: {
-                middleware: [hasSession],
+                middleware: [hasSession, setUser],
             },
 
             children: [
