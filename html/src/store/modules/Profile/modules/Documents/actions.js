@@ -18,7 +18,7 @@ export default {
         try {
             await Promise.all(dispatch(FETCH_DOCUMENTS, { type, status }), dispatch(FETCH_FILTERS));
         } catch (error) {
-            storeErrorHandler(FETCH_DOCUMENTS_DATA, error);
+            storeErrorHandler(FETCH_DOCUMENTS_DATA, true)(error);
         }
     },
 
