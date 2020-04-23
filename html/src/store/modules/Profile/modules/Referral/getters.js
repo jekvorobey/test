@@ -50,8 +50,8 @@ export default {
         } = state[REFERRAL_DATA];
 
         return {
-            current: current_level.referral_count,
-            next: next_level.referral_count,
+            current: current_level.order_referral_sum,
+            next: next_level.order_referral_sum,
         };
     },
 };

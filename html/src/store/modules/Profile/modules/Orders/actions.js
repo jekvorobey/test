@@ -1,9 +1,12 @@
 import { storeErrorHandler } from '@util/store';
-import { getProfileOrders, getProfileOrder, getProfileOrderPaymentLink } from '@api';
+import { getProfileOrdersInfo, getProfileOrders, getProfileOrder, getProfileOrderPaymentLink } from '@api';
 import { ORDERS_PAGE_SIZE } from '@constants/profile';
 
-import { SET_ORDERS, SET_ORDERS_MORE, SET_ORDER_DETAILS, SET_QUERY_PARAMS } from './mutations';
+import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
+import { SET_ORDERS, SET_ORDERS_MORE, SET_ORDER_DETAILS, SET_QUERY_PARAMS, SET_REFERRAL_DATA } from './mutations';
 
+export const FETCH_ORDERS_DATA = 'FETCH_ORDERS_DATA';
+export const FETCH_STATISTICS = 'FETCH_STATISTICS';
 export const FETCH_ORDERS = 'FETCH_ORDERS';
 export const FETCH_ORDER_DETAILS = 'FETCH_ORDER_DETAILS';
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
@@ -46,6 +49,32 @@ export default {
             else commit(SET_ORDERS, { items, range });
         } catch (error) {
             storeErrorHandler(FETCH_ORDERS, true)(error);
+        }
+    },
+
+    async [FETCH_STATISTICS]({ state, commit, rootState }) {
+        try {
+            const isReferral = rootState[AUTH_MODULE][USER][REFERRAL_PARTNER] || false;
+            if (isReferral) {
+                const data = await getProfileOrdersInfo();
+                commit(SET_REFERRAL_DATA, data);
+            }
+        } catch (error) {
+            storeErrorHandler(FETCH_STATISTICS)(error);
+        }
+    },
+
+    async [FETCH_ORDERS_DATA](
+        { dispatch, commit, rootState },
+        { page = DEFAULT_PAGE, orderField, orderDirection, showMore = false }
+    ) {
+        try {
+            await Promise.all([
+                dispatch(FETCH_STATISTICS),
+                dispatch(FETCH_ORDERS, { page, orderField, orderDirection, showMore }),
+            ]);
+        } catch (error) {
+            storeErrorHandler(FETCH_ORDERS_DATA, true)(error);
         }
     },
 };
