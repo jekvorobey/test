@@ -133,8 +133,9 @@ export default {
     },
 
     async [FETCH_USER]({ commit }) {
+        let user = null;
+
         try {
-            let user = null;
             const { can_buy: canBuy, referral_code: referralCode, referral_partner: referralPartner } = await getUser();
             user = { canBuy, referralCode, referralPartner };
             commit(SET_USER, user);

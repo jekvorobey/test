@@ -6,6 +6,8 @@ import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
 
+const REFERRAL_DATA = 'referralData';
+
 export const NAME = 'orders';
 export const LOAD_PATH = 'loadPath';
 
@@ -28,6 +30,7 @@ export default function createModule() {
         state: {
             [LOAD_PATH]: '',
 
+            [REFERRAL_DATA]: {},
             [ORDERS]: [],
             [RANGE]: 0,
             [ORDER_DETAILS]: { [ORDER]: {}, [DELIVERIES]: [] },

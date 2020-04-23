@@ -237,6 +237,10 @@ export function defaultProfileAddress(id) {
     return $http.put(`/v1/lk/address/${id}/default`);
 }
 
+export function getProfileOrdersInfo() {
+    return $http.get('/v1/lk/order/info');
+}
+
 export function getProfileOrders(sortDirection, sortKey, pageNum, perPage) {
     return $http.get('/v1/lk/order', {
         params: {
@@ -244,11 +248,6 @@ export function getProfileOrders(sortDirection, sortKey, pageNum, perPage) {
             sortKey,
             pageNum,
             perPage,
-        },
-        paramsSerializer(params) {
-            return qs.stringify(params, {
-                encode: false,
-            });
         },
     });
 }

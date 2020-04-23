@@ -83,7 +83,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 
-import ShowMoreButtom from '@components/ShowMoreButton/ShowMoreButton.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import './Bonuses.css';
 
@@ -96,7 +96,7 @@ export default {
         VInput,
         VPagination,
 
-        ShowMoreButtom,
+        ShowMoreButton,
     },
 
     data() {
