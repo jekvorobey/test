@@ -6,6 +6,7 @@ export const NAME = 'documents';
 
 export const LOAD_PATH = 'loadPath';
 export const ITEMS = 'items';
+export const FILTERS = 'filters';
 
 export default function createModule() {
     return {
@@ -15,6 +16,7 @@ export default function createModule() {
         state: {
             [LOAD_PATH]: '',
             [ITEMS]: [],
+            [FILTERS]: {},
         },
 
         actions,

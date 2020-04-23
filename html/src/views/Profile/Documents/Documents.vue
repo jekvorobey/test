@@ -31,12 +31,15 @@
 import VSelect from '@controls/VSelect/VSelect.vue';
 import DocumentCard from '@components/DocumentCard/DocumentCard.vue';
 
+import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 
-import { NAME as DOCUMENTS_MODULE, ITEMS } from '@store/modules/Profile/modules/Documents';
-import { LOAD_PATH, FETCH_DOCUMENTS } from '@store/modules/Profile/modules/Documents/actions';
+import { NAME as DOCUMENTS_MODULE, ITEMS, FILTERS } from '@store/modules/Profile/modules/Documents';
+import { SET_LOAD_PATH, FETCH_DOCUMENTS, FETCH_DOCUMENTS_DATA } from '@store/modules/Profile/modules/Documents/actions';
+
+import { formatFileSize } from '@util/file';
 
 const DOCUMENTS_MODULE_PATH = `${PROFILE_MODULE}/${DOCUMENTS_MODULE}`;
 
@@ -57,51 +60,51 @@ export default {
         return {
             selectedSortType: sortTypes[0],
             sortTypes,
-
-            documents: [
-                {
-                    id: 1,
-                    type: 'Контракт',
-                    name: 'Контракт от 03.09.2019 — Соколов Владимир Аркадьевич',
-                    ext: 'docx',
-                    size: '1,6 Мб',
-                },
-                {
-                    id: 2,
-                    type: 'Акт',
-                    name: 'Акт №4587-568722',
-                    ext: 'docx',
-                    size: '1,3 Мб',
-                },
-                {
-                    id: 3,
-                    type: 'Отчет',
-                    name: 'Отчет по зачислению/списанию средств на счет амбассадора',
-                    ext: 'docx',
-                    size: '1,6 Мб',
-                },
-                {
-                    id: 4,
-                    type: 'Акт',
-                    name: 'Акт №4587-568722',
-                    ext: 'docx',
-                    size: '3,6 Мб',
-                },
-                {
-                    id: 5,
-                    type: 'Отчет',
-                    name: 'Отчет по зачислению/списанию средств на счет амбассадора',
-                    ext: 'docx',
-                    size: '1,6 Мб',
-                },
-            ],
         };
     },
 
-    computed: {},
+    computed: {
+        ...mapState(DOCUMENTS_MODULE_PATH, [ITEMS, FILTERS]),
+
+        documents() {
+            return this.items.map(item => {
+                return {
+                    id: item.id,
+                    type: this.filters.types[item.type],
+                    name: item.name.replace(/\.[0-9a-z]{1,6}/g, ''),
+                    ext: item.ext,
+                    size: formatFileSize(item.size),
+                };
+            });
+        },
+    },
 
     watch: {},
 
-    methods: {},
+    methods: {
+        ...mapActions(DOCUMENTS_MODULE_PATH, [FETCH_DOCUMENTS_DATA, FETCH_DOCUMENTS]),
+    },
+
+    beforeRouteEnter(to, from, next) {
+        const { fullPath } = to;
+
+        const { loadPath } = $store.state[PROFILE_MODULE][DOCUMENTS_MODULE];
+
+        // если все загружено, пропускаем
+        if (fullPath === loadPath) next();
+        else {
+            $progress.start();
+            $store
+                .dispatch(`${DOCUMENTS_MODULE_PATH}/${FETCH_DOCUMENTS_DATA}`)
+                .then(() => {
+                    $store.dispatch(`${DOCUMENTS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                    next(vm => $progress.finish());
+                })
+                .catch(error => {
+                    next(vm => $progress.fail());
+                    $logger.error(error);
+                });
+        }
+    },
 };
 </script>

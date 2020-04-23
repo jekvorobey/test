@@ -636,18 +636,15 @@ export function getFavoritesAll() {
 
 // documents
 
-export function getDocumentsStatuses() {
-    return $http.get('/v1/lk/documents/statuses');
-}
-
-export function setDocumentStatus(documentId, status) {
-    return $http.put(`/v1/lk/documents/${documentId}`, {
-        status: statusId,
-    });
-}
-
-export function getDocumentsByStatus(status) {
+export function getDocuments({ type, status }) {
     return $http.get('/v1/lk/documents', {
-        status,
+        params: {
+            type,
+            status,
+        },
     });
+}
+
+export function getDocumentsFilters() {
+    return $http.get('/v1/lk/documents/filters');
 }
