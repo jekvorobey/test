@@ -19,6 +19,8 @@
             font-size: 14px;
             line-height: 24px;
             letter-spacing: 0.05em;
+            border-bottom: none;
+            text-transform: uppercase;
         }
     }
 }
