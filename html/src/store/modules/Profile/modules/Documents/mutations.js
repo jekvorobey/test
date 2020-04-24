@@ -1,13 +1,18 @@
-export const LOAD_PATH = 'LOAD_PATH';
+export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 
 export const SET_DOCUMENTS = 'SET_DOCUMENTS';
+export const SET_FILTERS = 'SET_FILTERS';
 
 export default {
-    [LOAD_PATH](state, payload = '') {
+    [SET_LOAD_PATH](state, payload = '') {
         state.loadPath = payload;
     },
 
-    [SET_DOCUMENTS](state, items) {
+    [SET_DOCUMENTS](state, items = []) {
         state.items = items;
+    },
+
+    [SET_FILTERS](state, data = {}) {
+        state.filters = data;
     },
 };

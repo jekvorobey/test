@@ -237,6 +237,10 @@ export function defaultProfileAddress(id) {
     return $http.put(`/v1/lk/address/${id}/default`);
 }
 
+export function getProfileOrdersInfo() {
+    return $http.get('/v1/lk/order/info');
+}
+
 export function getProfileOrders(sortDirection, sortKey, pageNum, perPage) {
     return $http.get('/v1/lk/order', {
         params: {
@@ -244,11 +248,6 @@ export function getProfileOrders(sortDirection, sortKey, pageNum, perPage) {
             sortKey,
             pageNum,
             perPage,
-        },
-        paramsSerializer(params) {
-            return qs.stringify(params, {
-                encode: false,
-            });
         },
     });
 }
@@ -650,18 +649,15 @@ export function getFavoritesAll() {
 
 // documents
 
-export function getDocumentsStatuses() {
-    return $http.get('/v1/lk/documents/statuses');
-}
-
-export function setDocumentStatus(documentId, status) {
-    return $http.put(`/v1/lk/documents/${documentId}`, {
-        status: statusId,
-    });
-}
-
-export function getDocumentsByStatus(status) {
+export function getDocuments({ type, status }) {
     return $http.get('/v1/lk/documents', {
-        status,
+        params: {
+            type,
+            status,
+        },
     });
+}
+
+export function getDocumentsFilters() {
+    return $http.get('/v1/lk/documents/filters');
 }

@@ -10,7 +10,6 @@ export default async function canUserBuy({ next, container, nextMiddleware }) {
 
     try {
         let user = state[AUTH_MODULE][USER];
-        if (!user) user = await dispatch(`${AUTH_MODULE}/${FETCH_USER}`);
         if (!user[CAN_BUY]) breakMiddleware(appContext, next, null, httpCodes.FORBIDDEN);
         else nextMiddleware();
     } catch (error) {
