@@ -105,7 +105,8 @@ export default {
         ...mapActions(DOCUMENTS_MODULE_PATH, [FETCH_DOCUMENTS_DATA, FETCH_DOCUMENTS]),
 
         setSortType(field) {
-            this.selectedSortType = this.sortTypes.find(o => o.field === Number(field)) || this.sortTypes[0];
+            const fieldCode = Number(field);
+            this.selectedSortType = this.sortTypes.find(o => o.field === fieldCode) || this.sortTypes[0];
         },
     },
 

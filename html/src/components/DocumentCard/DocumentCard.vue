@@ -7,7 +7,7 @@
             {{ name }}
         </div>
         <div class="document-card__bottom">
-            <a class="document-card__bottom-link" :href="href">Скачать</a>
+            <a class="document-card__bottom-link" :href="href" download>Скачать</a>
             <span class="text-grey text-sm">
                 {{ size }}, <span class="text-uppercase">{{ ext }}</span>
             </span>
