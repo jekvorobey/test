@@ -4,22 +4,24 @@
             <h2 class="promocodes-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
             <radio-switch
                 class="promocodes-view__switch"
-                v-model="selectedStatus"
+                :value="selectedStatus"
                 :items="promocodeStatus"
                 id="promocode-switch"
                 key-field="value"
                 name="promocodeStatus"
+                @input="onStatusChanged"
             />
         </div>
 
         <div class="container container--tablet-lg">
             <table class="promocodes-view__table" v-if="!isTabletLg">
                 <colgroup>
-                    <col width="20%" />
+                    <col width="25%" />
                     <col width="25%" />
                     <col width="15%" />
-                    <col width="40%" />
+                    <col width="35%" />
                 </colgroup>
+
                 <thead class="promocodes-view__table-head">
                     <tr class="promocodes-view__table-tr promocodes-view__table-tr--header">
                         <th class="promocodes-view__table-th">Промокод</th>
@@ -28,27 +30,107 @@
                         <th class="promocodes-view__table-th">Категория товаров</th>
                     </tr>
                 </thead>
+
                 <transition-group tag="tbody" name="fade-in" appear class="promocodes-view__table-body">
-                    <tr class="promocodes-view__table-tr" v-for="promocode in promocodes" :key="promocode.code">
+                    <tr class="promocodes-view__table-tr" v-for="promocode in items" :key="promocode.code">
                         <td class="promocodes-view__table-td">
                             {{ promocode.code }}&nbsp;&nbsp;
-                            <button class="promocodes-view__table-btn">
+                            <button class="promocodes-view__table-btn" @click="onCopyCode($event, promocode.code)">
                                 <v-svg name="copy" width="16" height="16" />
                             </button>
                         </td>
-                        <td class="promocodes-view__table-td">{{ promocode.startDate }} – {{ promocode.endDate }}</td>
-                        <td class="promocodes-view__table-td">{{ promocode.discount }}</td>
                         <td class="promocodes-view__table-td">
-                            <template v-if="promocode.allow && isString(promocode.allow)">
-                                {{ promocode.allow }}
-                            </template>
+                            <template v-if="!promocode.endDate && promocode.startDate">c</template>
+                            {{ promocode.startDate }}
                             <template
-                                v-else-if="promocode.allow && Array.isArray(promocode.allow)"
-                                v-for="{ name, items } in promocode.allow"
+                                v-if="
+                                    (promocode.startDate && promocode.endDate) ||
+                                    (!promocode.startDate && !promocode.endDate)
+                                "
                             >
-                                {{ name }}:
-                                <div v-for="item in items" :key="item">- {{ item }}</div>
+                                –
                             </template>
+                            <template v-if="!promocode.startDate && promocode.endDate">по</template>
+                            {{ promocode.endDate }}
+                        </td>
+                        <td class="promocodes-view__table-td">
+                            <template v-if="promocode.discount">
+                                {{ promocode.discount }}
+                            </template>
+                            <template v-else> – </template>
+                        </td>
+                        <td class="promocodes-view__table-td">
+                            <template v-if="promocode.type !== promocodeType.PRODUCT">Все товары</template>
+                            <div
+                                class="promocodes-view__category-panel"
+                                v-else-if="promocode.brands && promocode.brands.items.length > 0"
+                            >
+                                <div class="promocodes-view__category-panel-header">
+                                    <button
+                                        class="promocodes-view__category-panel-btn"
+                                        @click="onToggleIsOpen(promocode.brands)"
+                                    >
+                                        Бренды:
+                                    </button>
+                                    &nbsp;<v-svg
+                                        :class="{ 'icon--rotate-deg180': promocode.brands.isOpen }"
+                                        name="arrow-down"
+                                        width="16"
+                                        height="16"
+                                    />
+                                </div>
+
+                                <ul class="promocodes-view__category-panel-list" v-if="promocode.brands.isOpen">
+                                    <li v-for="brand in promocode.brands.items" :key="brand.id">- {{ brand.name }}</li>
+                                </ul>
+                            </div>
+                            <div
+                                class="promocodes-view__category-panel"
+                                v-else-if="promocode.categories && promocode.categories.items.length > 0"
+                            >
+                                <div class="promocodes-view__category-panel-header">
+                                    <button
+                                        class="promocodes-view__category-panel-btn"
+                                        @click="onToggleIsOpen(promocode.categories)"
+                                    >
+                                        Категории:
+                                    </button>
+                                    &nbsp;<v-svg name="arrow-down" width="16" height="16" />
+                                </div>
+
+                                <ul class="promocodes-view__category-panel-list" v-if="promocode.categories.isOpen">
+                                    <li v-for="category in promocode.categories.items" :key="category.id">
+                                        - {{ category.name }}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div
+                                class="promocodes-view__category-panel"
+                                v-else-if="promocode.offers"
+                                v-for="key in Object.keys(promocode.offers)"
+                                :key="key"
+                            >
+                                <div class="promocodes-view__category-panel-header">
+                                    <button
+                                        class="promocodes-view__category-panel-btn"
+                                        @click="onToggleIsOpen(promocode.offers[key])"
+                                    >
+                                        {{ key }}:
+                                    </button>
+                                    &nbsp;<v-svg
+                                        :class="{ 'icon--rotate-deg180': promocode.offers[key].isOpen }"
+                                        name="arrow-down"
+                                        width="16"
+                                        height="16"
+                                    />
+                                </div>
+
+                                <ul class="promocodes-view__category-panel-list" v-if="promocode.offers[key].isOpen">
+                                    <li v-for="offer in promocode.offers[key].items" :key="offer.name">
+                                        - {{ offer.name }}
+                                    </li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                 </transition-group>
@@ -63,25 +145,87 @@
             >
                 <info-row class="promocodes-view__list-item-row" name="Промокод">
                     {{ promocode.code }}&nbsp;&nbsp;
-                    <button class="promocodes-view__table-btn">
+                    <button class="promocodes-view__table-btn" @click="onCopyCode($event, promocode.code)">
                         <v-svg name="copy" width="16" height="16" />
                     </button>
                 </info-row>
                 <info-row class="promocodes-view__list-item-row" name="Срок действия">
-                    {{ promocode.startDate }} – {{ promocode.endDate }}
+                    <template v-if="!promocode.endDate && promocode.startDate">c</template>
+                    {{ promocode.startDate }}
+                    <template v-if="promocode.startDate && promocode.endDate">–</template>
+                    <template v-if="!promocode.startDate && promocode.endDate">по</template>
+                    {{ promocode.endDate }}
                 </info-row>
                 <info-row class="promocodes-view__list-item-row" name="Скидка" :value="promocode.discount" />
                 <info-row class="promocodes-view__list-item-row" name="Категория товаров">
-                    <template v-if="promocode.allow && isString(promocode.allow)">
-                        {{ promocode.allow }}
-                    </template>
+                    <template v-if="promocode.type !== promocodeType.PRODUCT">Все товары</template>
                     <div
-                        v-else-if="promocode.allow && Array.isArray(promocode.allow)"
-                        v-for="{ name, items } in promocode.allow"
-                        :key="name"
+                        class="promocodes-view__category-panel"
+                        v-else-if="promocode.brands && promocode.brands.items.length > 0"
                     >
-                        <div>{{ name }}:</div>
-                        <div v-for="item in items" :key="item">- {{ item }}</div>
+                        <div class="promocodes-view__category-panel-header">
+                            <button
+                                class="promocodes-view__category-panel-btn"
+                                @click="onToggleIsOpen(promocode.brands)"
+                            >
+                                Бренды:
+                            </button>
+                            &nbsp;<v-svg
+                                :class="{ 'icon--rotate-deg180': promocode.brands.isOpen }"
+                                name="arrow-down"
+                                width="16"
+                                height="16"
+                            />
+                        </div>
+
+                        <ul class="promocodes-view__category-panel-list" v-if="promocode.brands.isOpen">
+                            <li v-for="brand in promocode.brands.items" :key="brand.id">- {{ brand.name }}</li>
+                        </ul>
+                    </div>
+                    <div
+                        class="promocodes-view__category-panel"
+                        v-else-if="promocode.categories && promocode.categories.items.length > 0"
+                    >
+                        <div class="promocodes-view__category-panel-header">
+                            <button
+                                class="promocodes-view__category-panel-btn"
+                                @click="onToggleIsOpen(promocode.categories)"
+                            >
+                                Категории:
+                            </button>
+                            &nbsp;<v-svg name="arrow-down" width="16" height="16" />
+                        </div>
+
+                        <ul class="promocodes-view__category-panel-list" v-if="promocode.categories.isOpen">
+                            <li v-for="category in promocode.categories.items" :key="category.id">
+                                - {{ category.name }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div
+                        class="promocodes-view__category-panel"
+                        v-else-if="promocode.offers"
+                        v-for="key in Object.keys(promocode.offers)"
+                        :key="key"
+                    >
+                        <div class="promocodes-view__category-panel-header">
+                            <button
+                                class="promocodes-view__category-panel-btn"
+                                @click="onToggleIsOpen(promocode.offers[key])"
+                            >
+                                {{ key }}:
+                            </button>
+                            &nbsp;<v-svg
+                                :class="{ 'icon--rotate-deg180': promocode.offers[key].isOpen }"
+                                name="arrow-down"
+                                width="16"
+                                height="16"
+                            />
+                        </div>
+
+                        <ul class="promocodes-view__category-panel-list" v-if="promocode.offers[key].isOpen">
+                            <li v-for="offer in promocode.offers[key].items" :key="offer.name">- {{ offer.name }}</li>
+                        </ul>
                     </div>
                 </info-row>
             </li>
@@ -99,15 +243,23 @@ import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { LOCALE } from '@store';
+
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
-import { NAME as PROMOCODES_MODULE } from '@store/modules/Profile/modules/Promocodes';
+import { NAME as PROMOCODES_MODULE, ITEMS } from '@store/modules/Profile/modules/Promocodes';
+
 import { PROMOCODES } from '@store/modules/Profile/modules/Promocodes/getters';
 import { FETCH_PROMOCODES_DATA, SET_LOAD_PATH } from '@store/modules/Profile/modules/Promocodes/actions';
 
+import { modalName } from '@enums';
+import { promocodeType } from '@enums/checkout';
 import { digit2DateSettings } from '@settings';
+import { saveToClipboard } from '@util';
 import { $store, $progress, $logger } from '@services';
 import '@images/sprites/copy.svg';
-import '@images/sprites/edit.svg';
+import '@images/sprites/arrow-down.svg';
 import './Promocodes.css';
 
 const PROMOCODES_MODULE_PATH = `${PROFILE_MODULE}/${PROMOCODES_MODULE}`;
@@ -126,11 +278,11 @@ export default {
     data() {
         const promocodeStatus = [
             {
-                value: 'active',
+                value: 0,
                 title: 'Действующие',
             },
             {
-                value: 'archive',
+                value: 1,
                 title: 'Архив',
             },
         ];
@@ -138,6 +290,7 @@ export default {
         return {
             selectedStatus: promocodeStatus[0].value,
             promocodeStatus,
+            items: [],
         };
     },
 
@@ -151,8 +304,32 @@ export default {
     },
 
     methods: {
-        isString(obj) {
-            return typeof obj === 'string';
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(PROMOCODES_MODULE_PATH, [FETCH_PROMOCODES_DATA]),
+
+        onStatusChanged(value) {
+            this.$router.replace({ path: this.$route.path, query: { isArchive: value } });
+        },
+
+        setFilterValue(value) {
+            this.selectedStatus = Number(value);
+        },
+
+        onCopyCode(e, code) {
+            const result = saveToClipboard(code);
+            const message = result ? 'Успешно скопировано' : 'Не удается скопировать';
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
+            e.target.focus();
+        },
+
+        onToggleIsOpen(item) {
+            item.isOpen = !item.isOpen;
+        },
+    },
+
+    watch: {
+        [PROMOCODES](value) {
+            this.items = value || [];
         },
     },
 
@@ -165,18 +342,23 @@ export default {
         const { loadPath } = $store.state[PROFILE_MODULE][PROMOCODES_MODULE];
 
         // если все загружено, пропускаем
-        if (fullPath === loadPath) next();
+        if (fullPath === loadPath) next(vm => vm.setFilterValue(isArchive));
         else {
             $progress.start();
             $store
                 .dispatch(`${PROMOCODES_MODULE_PATH}/${FETCH_PROMOCODES_DATA}`, isArchive)
                 .then(() => {
                     $store.dispatch(`${PROMOCODES_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => $progress.finish());
+                    next(vm => {
+                        vm.setFilterValue(isArchive);
+                        $progress.finish();
+                    });
                 })
-                .catch(error => {
-                    next(vm => $progress.fail());
-                });
+                .catch(error =>
+                    next(vm => {
+                        $progress.fail();
+                    })
+                );
         }
     },
 
@@ -196,7 +378,7 @@ export default {
             query: { isArchive: fromIsArchive },
         } = from;
 
-        if (isArchive === fromIsArchive) return next();
+        if (isArchive == fromIsArchive) return next();
 
         try {
             this.$progress.start();
@@ -207,6 +389,11 @@ export default {
             this.$progress.fail();
             next(false);
         }
+    },
+
+    created() {
+        this.promocodeType = promocodeType;
+        this.items = this[PROMOCODES];
     },
 };
 </script>
