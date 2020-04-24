@@ -16,7 +16,7 @@ export default {
 
     async [FETCH_DOCUMENTS_DATA]({ commit, dispatch }, { type = null, status = null } = {}) {
         try {
-            await Promise.all(dispatch(FETCH_DOCUMENTS, { type, status }), dispatch(FETCH_FILTERS));
+            await Promise.all([dispatch(FETCH_DOCUMENTS, { type, status }), dispatch(FETCH_FILTERS)]);
         } catch (error) {
             storeErrorHandler(FETCH_DOCUMENTS_DATA, true)(error);
         }
