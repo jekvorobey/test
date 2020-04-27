@@ -6,13 +6,12 @@ import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
 
-const REFERRAL_DATA = 'referralData';
-
 export const NAME = 'referral';
 export const LOAD = 'load';
 export const ITEMS = 'items';
 export const RANGE = 'range';
 
+export const REFERRAL_DATA = 'referralData';
 export const REFERRER_ID = 'referrerId';
 export const REFERRAL_ORDER_DETAILS = 'referralOrderDetails';
 export const ORDER_DIRECTION = 'orderDirection';
@@ -27,7 +26,7 @@ export default function createModule() {
         state: {
             [LOAD]: false,
 
-            [REFERRAL_DATA]: {},
+            [REFERRAL_DATA]: null,
             [ITEMS]: [],
             [RANGE]: 0,
 

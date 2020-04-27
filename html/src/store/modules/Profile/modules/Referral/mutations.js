@@ -32,7 +32,7 @@ export default {
         state.range = range || 0;
     },
 
-    [SET_REFERRAL_DATA](state, payload = {}) {
+    [SET_REFERRAL_DATA](state, payload) {
         state.referralData = payload;
     },
 };

@@ -1,9 +1,12 @@
 /**
  * @Module
  */
+import { $store, $logger } from '@services';
+import { registerModuleIfNotExists } from '@util/store';
 
 import hasSession from '@router/middleware/hasSession';
 import setUser from '@router/middleware/setUser';
+import registerModule from '@router/middleware/registerModule';
 
 import Cabinet from './Cabinet/Cabinet';
 import Addresses from './Addresses/Addresses';
@@ -33,6 +36,7 @@ import Masterclasses from './Masterclasses/Masterclasses';
 import QnA from './QnA/QnA';
 
 const ProfileAsync = () => import(/* webpackChunkName: "profile-view" */ './Profile.vue');
+const ProfileModuleAsync = () => import(/* webpackChunkName: "profile-view" */ '@store/modules/Profile');
 
 /**
  * Модуль компонента Profile
@@ -47,7 +51,7 @@ export default {
             component: ProfileAsync,
 
             meta: {
-                middleware: [hasSession, setUser],
+                middleware: [hasSession, setUser, registerModule(ProfileModuleAsync)],
             },
 
             children: [

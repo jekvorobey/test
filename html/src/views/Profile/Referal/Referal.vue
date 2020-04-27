@@ -1,7 +1,7 @@
 <template>
     <section class="section referal-view">
         <h2 class="referal-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
-        <div class="referal-view__panels">
+        <div class="referal-view__panels" v-if="referralData">
             <div class="referal-view__panel">
                 <div class="referal-view__panel-item">
                     <div class="text-grey referal-view__panel-name">Ваш уровень</div>
@@ -18,15 +18,9 @@
                 <div class="referal-view__panel-item">
                     <div class="referal-view__panel-item-counter">
                         <v-arc-counter
-                            stroke="#BDBDBD"
-                            activeStroke="#141116"
+                            v-bind="arcSettings"
                             :text="referralArcData.current"
-                            :start="-120"
-                            :end="120"
-                            :activeWidth="16"
-                            :strokeWidth="16"
-                            :dashCount="referralArcData.next"
-                            :activeCount="referralArcData.current"
+                            :active-count="referralArcData.currentPercent"
                         />
                         <div class="text-grey referal-view__panel-item-label">
                             <span>0</span>
@@ -38,15 +32,9 @@
                 <div class="referal-view__panel-item">
                     <div class="referal-view__panel-item-counter">
                         <v-arc-counter
-                            stroke="#BDBDBD"
-                            activeStroke="#141116"
+                            v-bind="arcSettings"
                             :text="formatArcSum(sumArcData.current)"
-                            :start="-120"
-                            :end="120"
-                            :activeWidth="16"
-                            :strokeWidth="16"
-                            :dashCount="sumArcData.next"
-                            :activeCount="sumArcData.current"
+                            :active-count="sumArcData.currentPercent"
                         />
                         <div class="text-grey referal-view__panel-item-label">
                             <span>0</span>
@@ -90,7 +78,7 @@
                     </thead>
 
                     <transition-group class="referal-view__table-body" tag="tbody" name="fade-in" appear>
-                        <tr class="referal-view__table-tr" v-for="order in orders" :key="order.name">
+                        <tr class="referal-view__table-tr" v-for="order in orders" :key="order.id">
                             <td class="referal-view__table-td">
                                 <div
                                     class="referal-view__table-img"
@@ -136,7 +124,7 @@
         </div>
 
         <ul class="referal-view__list" v-if="isTabletLg">
-            <li class="referal-view__list-item" v-for="order in orders" :key="order.name">
+            <li class="referal-view__list-item" v-for="order in orders" :key="order.id">
                 <info-row class="referal-view__list-item-row" name="Товар">
                     <div
                         class="referal-view__table-img"
@@ -201,7 +189,7 @@ import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbIte
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { LOCALE } from '@store';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
-import { NAME as REFERRAL_MODULE, ITEMS, ACTIVE_PAGE } from '@store/modules/Profile/modules/Referral';
+import { NAME as REFERRAL_MODULE, ITEMS, ACTIVE_PAGE, REFERRAL_DATA } from '@store/modules/Profile/modules/Referral';
 import { FETCH_REFERRAL_DATA, SET_LOAD_PATH, FETCH_ORDERS } from '@store/modules/Profile/modules/Referral/actions';
 import {
     REFERRAL_ARC_DATA,
@@ -274,8 +262,20 @@ export default {
 
     computed: {
         ...mapState([LOCALE]),
-        ...mapState(REFERRAL_MODULE_PATH, [ITEMS, ACTIVE_PAGE]),
+        ...mapState(REFERRAL_MODULE_PATH, [ITEMS, ACTIVE_PAGE, REFERRAL_DATA]),
         ...mapGetters(REFERRAL_MODULE_PATH, [REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, PAGES_COUNT]),
+
+        arcSettings() {
+            return {
+                start: -120,
+                end: 120,
+                activeWidth: 16,
+                strokeWidth: 16,
+                stroke: '#BDBDBD',
+                activeStroke: '#141116',
+                dashCount: 100,
+            };
+        },
 
         orders() {
             const items = this[ITEMS] || [];

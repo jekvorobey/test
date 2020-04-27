@@ -2,9 +2,10 @@
  * @Module
  */
 
-const AccountAsync = () => import(/* webpackChunkName: "account-view" */ './Account.vue');
-
 import isUserReferral from '@router/middleware/isUserReferral';
+import createCard from '@router/middleware/createCard';
+
+const AccountAsync = () => import(/* webpackChunkName: "account-view" */ './Account.vue');
 
 /**
  * Модуль компонента Account
@@ -21,6 +22,13 @@ export default {
 
             meta: {
                 middleware: [isUserReferral],
+                skipScroll: true,
+            },
+        },
+        {
+            path: 'account-card',
+            meta: {
+                middleware: [isUserReferral, createCard],
             },
         },
     ],

@@ -111,6 +111,10 @@
             &-input {
                 width: 30%;
                 margin-right: calc(var(--gs) * 2);
+
+                input[type='number'] {
+                    text-align: left;
+                }
             }
 
             &-btn {

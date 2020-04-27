@@ -358,6 +358,20 @@ export function getBillingOperations(pageNum, perPage) {
     });
 }
 
+export function postCashOut(card_id, value) {
+    return $http.post('/v1/lk/bill/cash-out', { card_id, value });
+}
+
+export function createYaCard(card_panmask, card_synonim, card_country_code, card_type, account_number) {
+    return $http.post('/v1/lk/bill/ya-card', {
+        card_panmask,
+        card_synonim,
+        card_country_code,
+        card_type,
+        account_number,
+    });
+}
+
 export function getPromocodeData(isArchive = 0) {
     return $http.get('/v1/lk/promo-code/', {
         params: {

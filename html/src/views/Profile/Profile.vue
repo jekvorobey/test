@@ -199,11 +199,5 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: modalName.profile.NAVIGATION, open: true });
         },
     },
-
-    beforeRouteEnter(to, from, next) {
-        // регистрируем модуль, если такого нет
-        registerModuleIfNotExists($store, PROFILE_MODULE, profileModule);
-        next();
-    },
 };
 </script>
