@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <ul class="promopage-view__panel-list">
+            <ul class="promopage-view__panel-list" v-if="items && items.length">
                 <li class="promopage-view__panel-item" v-for="item in products" :key="item.id">
                     <catalog-product-card class="promopage-view__panel-card" v-bind="item" :offer-id="item.id" />
                     <button class="promopage-view__panel-item-btn" @click.prevent="onDeleteProduct(item.productId)">
@@ -53,6 +53,15 @@
                     </button>
                 </li>
             </ul>
+
+            <div class="promopage-view__attention" v-else>
+                <v-svg name="info-middle" class="promopage-view__attention-icon" width="24" height="24" />
+                <p class="promopage-view__attention-text">
+                    Вы еще не добавляли товары на персональную промо-страницу.<br />
+                    Добавьте ваши любимые продукты, чтобы рекомендовать их своей аудитории.
+                </p>
+                <v-button class="btn btn--outline" @click="onAddProduct">Добавить</v-button>
+            </div>
         </info-panel>
 
         <div class="container container--tablet-lg promopage-view__controls" v-if="pagesCount > 1">
@@ -123,6 +132,7 @@ import '@images/sprites/edit.svg';
 import '@images/sprites/link.svg';
 import '@images/sprites/link-add.svg';
 import '@images/sprites/plus-small.svg';
+import '@images/sprites/info-middle.svg';
 import './Promopage.css';
 
 const PROMOPAGE_MODULE_PATH = `${PROFILE_MODULE}/${PROMOPAGE_MODULE}`;
