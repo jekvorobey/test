@@ -2,16 +2,10 @@
     <general-modal class="details-modal" header="Реквизиты" @close="onClose" :is-mobile="isTablet">
         <template v-slot:content>
             <h4 class="details-modal__hl">Реквизиты</h4>
+            <span class="details-modal__disclaimer"
+                >Часть полей будет заполнена автоматически после заполнения ИНН</span
+            >
             <form class="details-modal__form" v-if="!isTablet">
-                <div class="details-modal__form-row">
-                    <v-input class="details-modal__form-column" :value="$v.form.name.$model" disabled>
-                        Наименование ИП
-                    </v-input>
-                    <v-input class="details-modal__form-column" :value="$v.form.bank.$model" disabled>
-                        Банк
-                    </v-input>
-                </div>
-
                 <div class="details-modal__form-row">
                     <v-input
                         class="details-modal__form-column"
@@ -21,6 +15,15 @@
                         @input="onInnChange"
                     >
                         ИНН
+                    </v-input>
+                    <v-input class="details-modal__form-column" :value="$v.form.bank.$model" disabled>
+                        Банк
+                    </v-input>
+                </div>
+
+                <div class="details-modal__form-row">
+                    <v-input class="details-modal__form-column" :value="$v.form.name.$model" disabled>
+                        Наименование ИП
                     </v-input>
                     <v-input class="details-modal__form-column" :value="$v.form.correspondentAccount.$model" disabled>
                         Корреспондентский счет банка
@@ -51,12 +54,12 @@
                 </div>
             </form>
             <form class="details-modal__form" v-else>
-                <v-input :value="$v.form.name.$model" disabled>
-                    Наименование ИП
-                </v-input>
-
                 <v-input :value="$v.form.inn.$model" maxLength="12" :error="innError" @input="onInnChange">
                     ИНН
+                </v-input>
+
+                <v-input :value="$v.form.name.$model" disabled>
+                    Наименование ИП
                 </v-input>
 
                 <v-input v-model="form.account" maxLength="20" :error="accountError">

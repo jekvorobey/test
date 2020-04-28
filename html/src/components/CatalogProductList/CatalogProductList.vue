@@ -3,7 +3,7 @@
         v-if="animation"
         tag="ul"
         class="catalog-product-list"
-        :class="{ 'catalog-product-list--no-category': categories.length === 0 }"
+        :class="{ 'catalog-product-list--fullscreen': fullscreen }"
         name="catalog-item"
         @before-enter="onBeforeEnterItems"
         @enter="onEnterItems"
@@ -42,7 +42,6 @@ import CatalogBannerListCard from './CatalogBannerListCard/CatalogBannerListCard
 import CatalogProductListCard from './CatalogProductListCard/CatalogProductListCard.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as CATALOG_MODULE, ITEMS, CATEGORIES } from '@store/modules/Catalog';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -61,19 +60,27 @@ export default {
     name: 'catalog-product-list',
 
     props: {
+        items: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
+
         animation: {
             type: Boolean,
             default: true,
+        },
+
+        fullscreen: {
+            type: Boolean,
+            default: false,
         },
     },
 
     components: {
         CatalogBannerListCard,
         CatalogProductListCard,
-    },
-
-    computed: {
-        ...mapState(CATALOG_MODULE, [ITEMS, CATEGORIES]),
     },
 
     methods: {

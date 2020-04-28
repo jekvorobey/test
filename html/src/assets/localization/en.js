@@ -1,6 +1,6 @@
 import flatPickrEn from 'flatpickr/dist/l10n/default';
 import { receiveMethods, discountType } from '@enums/checkout';
-import { genderType } from '@enums/profile';
+import { genderType, billingOperationType } from '@enums/profile';
 import { socials } from '@enums';
 import { orderStatus, deliveryStatus } from '@enums/order';
 
@@ -55,6 +55,14 @@ const main = {
             required: 'Required',
             email: 'name@domain.com format',
         },
+    },
+
+    billingOperationType: {
+        [billingOperationType.EARNING]: 'Earning',
+        [billingOperationType.PAYMENT]: 'Payment',
+        [billingOperationType.REFUND]: 'Refund',
+        [billingOperationType.WITHDRAW]: 'Withdraw',
+        [billingOperationType.ADJUSTMENT]: 'Adjustment',
     },
 
     orderStatus: {

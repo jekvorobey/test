@@ -40,7 +40,7 @@
         }
     }
 
-    &--no-category &__item {
+    &--fullscreen &__item {
         width: calc(calc(100% / 4) - calc(var(--gs) * 3));
         margin: 0 calc(calc(var(--gs) * 6) / 4);
         margin-bottom: calc(var(--gs) * 3);

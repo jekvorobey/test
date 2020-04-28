@@ -19,13 +19,27 @@
                 <div class="account-view__panel-bottom">
                     <v-select
                         class="account-view__panel-bottom-select"
-                        v-model="selectedCard"
+                        label="label"
+                        track-by="id"
+                        :value="selectedCard"
                         :options="cards"
                         :searchable="false"
                         :show-labels="false"
+                        @input="onChangeSelectedCard"
                     />
-                    <v-input class="account-view__panel-bottom-input" placeholder="Сумма от 0 до 1 587 ₽" />
-                    <v-button class="account-view__panel-bottom-btn">
+                    <v-input
+                        class="account-view__panel-bottom-input"
+                        type="number"
+                        v-model="amount"
+                        min="0"
+                        :max="billingData.referral_bill.value"
+                        placeholder="Введите сумму"
+                    />
+                    <v-button
+                        class="account-view__panel-bottom-btn"
+                        :disabled="!selectedCard || !amount"
+                        @click="onClickCashOut"
+                    >
                         Оформить вывод
                     </v-button>
                 </div>
@@ -53,12 +67,8 @@
                     </thead>
 
                     <transition-group tag="tbody" name="fade-in" appear class="account-view__table-body">
-                        <tr
-                            class="account-view__table-tr"
-                            v-for="(operation, index) in operations"
-                            :key="operation.id || index"
-                        >
-                            <td class="account-view__table-td">{{ operation.action_id }}</td>
+                        <tr class="account-view__table-tr" v-for="operation in operations" :key="operation.id">
+                            <td class="account-view__table-td">{{ operation.action_id || '-' }}</td>
                             <td class="account-view__table-td">{{ operation.date }}</td>
                             <td class="account-view__table-td">{{ operation.type }}</td>
                             <td class="account-view__table-td">
@@ -73,10 +83,10 @@
         <ul class="account-view__list" v-if="isTabletLg">
             <li
                 class="container container--tablet-lg account-view__list-item"
-                v-for="(operation, index) in operations"
-                :key="operation.id || index"
+                v-for="operation in operations"
+                :key="operation.id"
             >
-                <info-row class="account-view__list-item-row" name="Заказ/событие" :value="operation.action_Id" />
+                <info-row class="account-view__list-item-row" name="Заказ/событие" :value="operation.action_id" />
                 <info-row class="account-view__list-item-row" name="Дата" :value="operation.date" />
                 <info-row class="account-view__list-item-row" name="Операция" :value="operation.type" />
                 <info-row class="account-view__list-item-row" name="Начислено/cписано">
@@ -113,13 +123,32 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { LOCALE } from '@store';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
-import { NAME as BILLING_MODULE, ITEMS, ACTIVE_PAGE, BILLING_DATA } from '@store/modules/Profile/modules/Billing';
+import {
+    NAME as BILLING_MODULE,
+    ITEMS,
+    ACTIVE_PAGE,
+    BILLING_DATA,
+    SELECTED_CARD,
+    CARD_CREATION_STATUS,
+} from '@store/modules/Profile/modules/Billing';
 import { PAGES_COUNT } from '@store/modules/Profile/modules/Billing/getters';
-import { FETCH_BILLING_DATA, SET_LOAD_PATH, FETCH_OPERATIONS } from '@store/modules/Profile/modules/Billing/actions';
+import {
+    FETCH_BILLING_DATA,
+    SET_LOAD_PATH,
+    FETCH_OPERATIONS,
+    SET_SELECTED_CARD,
+    POST_CASH_OUT,
+    SET_CARD_CREATION_STATUS,
+} from '@store/modules/Profile/modules/Billing/actions';
 
+import { $store, $progress, $logger } from '@services';
 import { DEFAULT_PAGE } from '@constants';
 import { monthLongDateSettings } from '@settings';
-import { $store, $progress, $logger } from '@services';
+import { currencySymbol } from '@enums';
+import { cardIdentificationStatus } from '@enums/profile';
+import { preparePrice } from '@util';
+import { generateYandexCardAuthUrl, generateYandexCardAuthBackUrl } from '@util/profile';
+
 import './Account.css';
 
 const BILLING_MODULE_PATH = `${PROFILE_MODULE}/${BILLING_MODULE}`;
@@ -140,74 +169,54 @@ export default {
     },
 
     data() {
-        const cards = ['MasterCard **** 8515', 'VISA **** 5000', 'Добавить новую карту'];
-
         return {
             showMore: false,
-            selectedCard: cards[0],
-            cards,
-            events: [
-                {
-                    id: 1,
-                    eventId: 15487488,
-                    date: '18 августа 2019',
-                    operation: 'Оплата заказа',
-                    delta: {
-                        minus: true,
-                        value: 1463,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 2,
-                    eventId: 15487488,
-                    date: '15 августа 2019',
-                    operation: 'Оплата заказа',
-                    delta: {
-                        minus: true,
-                        value: 4780,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 3,
-                    eventId: 15487488,
-                    date: '9 августа 2019',
-                    operation: 'Вывод средств',
-                    delta: {
-                        minus: true,
-                        value: 6880,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 4,
-                    eventId: 15487364,
-                    date: '27 июля 2019',
-                    operation: 'Начисление вознаграждения',
-                    delta: {
-                        value: 7888,
-                        currency: 'RUB',
-                    },
-                },
-            ],
+            amount: null,
         };
     },
 
     computed: {
         ...mapState([LOCALE]),
-        ...mapState(BILLING_MODULE_PATH, [BILLING_DATA, ITEMS, ACTIVE_PAGE]),
+        ...mapState(BILLING_MODULE_PATH, [BILLING_DATA, ITEMS, ACTIVE_PAGE, SELECTED_CARD, CARD_CREATION_STATUS]),
         ...mapGetters(BILLING_MODULE_PATH, [PAGES_COUNT]),
+
+        newCardOption() {
+            const backUrl = generateYandexCardAuthBackUrl();
+            return {
+                id: 'add',
+                label: 'Добавить новую карту',
+                url: generateYandexCardAuthUrl(backUrl, backUrl),
+            };
+        },
+
+        avaliableAmountPlaceholder() {
+            const { referral_bill = {} } = this[BILLING_DATA] || {};
+            const amount = preparePrice(referral_bill.value);
+            return `Сумма до ${amount} руб.`;
+        },
+
+        cards() {
+            const { cards = [] } = this[BILLING_DATA] || {};
+            const cardList = cards.map(c => ({
+                ...c,
+                label: `${c.card_type} ${c.card_panmask}`,
+            }));
+
+            cardList.push(this.newCardOption);
+            return cardList;
+        },
 
         operations() {
             const items = this[ITEMS] || [];
             return items.map(i => {
                 const dateObj = i.created_at && new Date(i.created_at);
                 const date = dateObj.toLocaleDateString(this[LOCALE], monthLongDateSettings);
+                const type = this.$t(`billingOperationType.${i.type}`);
 
                 return {
                     ...i,
                     date,
+                    type,
                 };
             });
         },
@@ -217,7 +226,36 @@ export default {
         },
     },
 
+    watch: {
+        [SELECTED_CARD](value) {
+            if (value && value.url) document.location.href = value.url;
+        },
+    },
+
     methods: {
+        ...mapActions(BILLING_MODULE_PATH, [
+            SET_SELECTED_CARD,
+            POST_CASH_OUT,
+            SET_CARD_CREATION_STATUS,
+            FETCH_BILLING_DATA,
+            FETCH_OPERATIONS,
+        ]),
+
+        onChangeSelectedCard(card) {
+            this[SET_SELECTED_CARD](card);
+        },
+
+        async onClickCashOut() {
+            try {
+                const { id } = this[SELECTED_CARD] || {};
+                await this[POST_CASH_OUT]({ cardId: id, value: this.amount });
+                await this[FETCH_BILLING_DATA]({});
+                this.$router.replace({ path: this.$route.path });
+            } catch (error) {
+                alert('Произошла ошибка при переводе денег');
+            }
+        },
+
         onShowMore() {
             this.showMore = true;
             this.$router.replace({
@@ -279,17 +317,29 @@ export default {
             query: { page = DEFAULT_PAGE },
         } = to;
 
+        if (page == this[ACTIVE_PAGE]) return next();
+
         try {
             this.$progress.start();
             await this[FETCH_OPERATIONS]({ page, showMore: this.showMore });
             this.$progress.finish();
             next();
         } catch (error) {
+            console.log(error);
             this.$progress.fail();
             next(false);
         }
 
         this.showMore = false;
+    },
+
+    beforeRouteLeave(to, from, next) {
+        this[SET_CARD_CREATION_STATUS](null);
+        next();
+    },
+
+    created() {
+        this.cardStatus = cardIdentificationStatus;
     },
 };
 </script>

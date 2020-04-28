@@ -1,7 +1,7 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
 import { socials } from '@enums';
 import { receiveMethods, discountType } from '@enums/checkout';
-import { genderType } from '@enums/profile';
+import { genderType, billingOperationType } from '@enums/profile';
 import { orderStatus, deliveryStatus } from '@enums/order';
 
 const flatpickrLocale = flatPickrRu.ru;
@@ -55,6 +55,14 @@ const main = {
             required: 'Обязательное поле',
             email: 'Формат name@domain.com',
         },
+    },
+
+    billingOperationType: {
+        [billingOperationType.EARNING]: 'Начисление',
+        [billingOperationType.PAYMENT]: 'Оплата',
+        [billingOperationType.REFUND]: 'Возврат',
+        [billingOperationType.WITHDRAW]: 'Вывод стредств',
+        [billingOperationType.ADJUSTMENT]: 'Корректировка',
     },
 
     orderStatus: {

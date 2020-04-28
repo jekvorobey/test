@@ -1,20 +1,55 @@
-import { storeErrorHandler } from '@util/store';
-import { getBillingData, getBillingOperations } from '@api';
+import { DEFAULT_PAGE } from '@constants';
 import { BILLING_OPERATIONS_PAGE_SIZE } from '@constants/profile';
+import { cardIdentificationStatus } from '@enums/profile';
+import { storeErrorHandler } from '@util/store';
 
+import { getBillingData, getBillingOperations, postCashOut, createYaCard } from '@api';
 import { SET_QUERY_PARAMS, SET_OPERATIONS, SET_OPERATIONS_MORE, SET_BILLING_DATA } from './mutations';
 
 export const FETCH_OPERATIONS = 'FETCH_OPERATIONS';
 export const FETCH_STATISTICS = 'FETCH_STATISTICS';
 export const FETCH_BILLING_DATA = 'FETCH_BILLING_DATA';
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
+export const SET_SELECTED_CARD = 'SET_SELECTED_CARD';
+export const POST_CASH_OUT = 'POST_CASH_OUT';
+export const CREATE_CARD = 'CREATE_CARD';
+export const SET_CARD_CREATION_STATUS = 'SET_CARD_CREATION_STATUS';
 
 export default {
     [SET_LOAD_PATH]({ commit }, payload) {
         commit(SET_LOAD_PATH, payload);
     },
 
-    async [FETCH_BILLING_DATA]({ dispatch }, { page, showMore = false }) {
+    [SET_SELECTED_CARD]({ commit }, payload) {
+        commit(SET_SELECTED_CARD, payload);
+    },
+
+    [SET_CARD_CREATION_STATUS]({ commit }, payload) {
+        commit(SET_CARD_CREATION_STATUS, payload);
+    },
+
+    async [CREATE_CARD](
+        { dispatch },
+        { identificationStatus, cardPanmask, cardSynonim, cardCountryCode, cardType, accountNumber }
+    ) {
+        try {
+            if (identificationStatus === cardIdentificationStatus.SUCCESS)
+                await createYaCard(cardPanmask, cardSynonim, cardCountryCode, cardType, accountNumber);
+            commit(SET_CARD_CREATION_STATUS, identificationStatus);
+        } catch (error) {
+            storeErrorHandler(CREATE_CARD, true)(error);
+        }
+    },
+
+    async [POST_CASH_OUT]({ dispatch }, { cardId, value }) {
+        try {
+            await postCashOut(cardId, value);
+        } catch (error) {
+            storeErrorHandler(POST_CASH_OUT, true)(error);
+        }
+    },
+
+    async [FETCH_BILLING_DATA]({ dispatch }, { page = DEFAULT_PAGE, showMore = false }) {
         try {
             await Promise.all([dispatch(FETCH_STATISTICS), dispatch(FETCH_OPERATIONS, { page, showMore })]);
         } catch (error) {

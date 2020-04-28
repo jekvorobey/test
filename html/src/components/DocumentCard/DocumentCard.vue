@@ -7,7 +7,7 @@
             {{ name }}
         </div>
         <div class="document-card__bottom">
-            <v-link class="document-card__bottom-link">Скачать</v-link>
+            <a class="document-card__bottom-link" :href="href" download>Скачать</a>
             <span class="text-grey text-sm">
                 {{ size }}, <span class="text-uppercase">{{ ext }}</span>
             </span>
@@ -37,6 +37,10 @@ export default {
         },
 
         ext: {
+            type: String,
+        },
+
+        href: {
             type: String,
         },
     },

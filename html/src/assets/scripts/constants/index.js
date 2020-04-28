@@ -22,3 +22,8 @@ export const HTTP_REQUEST_TIMEOUT = 20000;
  * Дефолтная страница в списках
  */
 export const DEFAULT_PAGE = 1;
+
+/**
+ * Дефолтный размер страницы каталога
+ */
+export const DEFAULT_CATALOG_PAGE_SIZE = 12;

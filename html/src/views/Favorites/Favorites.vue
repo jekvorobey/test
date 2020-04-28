@@ -15,8 +15,8 @@
             <div class="container favorites-view__header">
                 <h1 class="favorites-view__header-hl">
                     Избранное
-                    <span class="favorites-view__header-counter" v-if="favorites.length > 0">
-                        {{ favorites.length }} продуктов
+                    <span class="favorites-view__header-counter" v-if="favoritesAll.length > 0">
+                        {{ favoritesAll.length }} продуктов
                     </span>
                 </h1>
                 <div class="favorites-view__filters" v-if="favorites.length > 0">
@@ -91,11 +91,12 @@ import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { $store, $progress, $logger, $route, $router } from '@services';
+import { $store, $progress, $logger } from '@services';
 
 import {
     NAME as FAVORITES_MODULE,
     FAVORITES,
+    FAVORITES_ALL,
     FAVORITES_DIRECTION,
     FAVORITES_FIELD,
     ACTIVE_PAGE,
@@ -146,7 +147,7 @@ export default {
     },
 
     computed: {
-        ...mapState(FAVORITES_MODULE, [FAVORITES, FAVORITES_DIRECTION, FAVORITES_FIELD, ACTIVE_PAGE]),
+        ...mapState(FAVORITES_MODULE, [FAVORITES, FAVORITES_ALL, FAVORITES_DIRECTION, FAVORITES_FIELD, ACTIVE_PAGE]),
         ...mapGetters(FAVORITES_MODULE, [PAGES_COUNT]),
     },
 
