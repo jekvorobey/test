@@ -100,7 +100,7 @@ export default {
     computed: {
         ...mapState(MODAL_MODULE, {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
-            modalState: state => state[MODALS][NAME] && state[MODALS][NAME].state,
+            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         ...mapState(PREVIEW_MODULE, [PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS]),
@@ -169,14 +169,18 @@ export default {
         },
 
         onCartStateChange() {
+            const { referralCode } = this.modalState;
+            const { id, stock } = this.productPreview;
+
             this.onClose();
             this[CHANGE_MODAL_STATE]({
                 name: modalName.general.ADD_TO_CART,
                 open: true,
                 state: {
-                    offerId: this.productPreview.id,
-                    storeId: this.productPreview.storeId,
+                    offerId: id,
+                    storeId: stock.storeId,
                     type: cartItemTypes.PRODUCT,
+                    referralCode,
                 },
             });
         },

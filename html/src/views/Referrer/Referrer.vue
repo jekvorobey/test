@@ -22,7 +22,12 @@
             </div>
 
             <div class="container referrer-view__list">
-                <catalog-product-list v-if="items && items.length > 0" :items="items" fullscreen />
+                <catalog-product-list
+                    v-if="items && items.length > 0"
+                    :items="items"
+                    :referral-code="code"
+                    fullscreen
+                />
                 <p class="referrer-view__list-empty" v-else>Ничего не найдено</p>
             </div>
 
@@ -111,6 +116,10 @@ export default {
     computed: {
         ...mapState(REFERRER_MODULE, [TITLE, ITEMS, ACTIVE_PAGE]),
         ...mapGetters(REFERRER_MODULE, [PAGES_COUNT]),
+
+        ...mapState('route', {
+            code: state => state.params.code,
+        }),
     },
 
     methods: {

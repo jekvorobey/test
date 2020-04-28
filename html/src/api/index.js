@@ -589,7 +589,7 @@ export function addCartItem(offerId, storeId, count, referrerCode) {
         offerId,
         storeId,
         count,
-        referrerCode: referrerCode || undefined,
+        referrerCode: referrerCode ? String(referrerCode) : undefined,
     });
 }
 

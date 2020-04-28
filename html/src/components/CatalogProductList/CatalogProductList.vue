@@ -67,6 +67,10 @@ export default {
             },
         },
 
+        referralCode: {
+            type: String,
+        },
+
         animation: {
             type: Boolean,
             default: true,
@@ -146,14 +150,23 @@ export default {
         },
 
         onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.QUICK_VIEW,
+                open: true,
+                state: { code, referralCode: this.referralCode },
+            });
         },
 
         onAddToCart(item) {
             this[CHANGE_MODAL_STATE]({
                 name: modalName.general.ADD_TO_CART,
                 open: true,
-                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
+                state: {
+                    offerId: item.id,
+                    storeId: item.stock.storeId,
+                    type: item.type,
+                    referralCode: this.referralCode,
+                },
             });
         },
     },

@@ -16,13 +16,7 @@
                         :old-price="product.oldPrice"
                         :count="cartItem.count"
                         href="/catalog"
-                        @countChange="
-                            ADD_CART_ITEM({
-                                offerId: product.id,
-                                storeId: product.stock.storeId,
-                                count: $event.count,
-                            })
-                        "
+                        @countChange="onCountChange($event.count, product)"
                     />
                     <div class="add-to-cart-modal__panel" v-if="!isTablet">
                         <div class="add-to-cart-modal__panel-info">
@@ -173,16 +167,30 @@ export default {
         ...mapActions(CART_MODULE, [ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
+        onCountChange(count, product) {
+            const { referralCode } = this.modalState;
+            const { id, stock } = product;
+            this[ADD_CART_ITEM]({ offerId: id, storeId: stock.storeId, count: count, referrerCode: referralCode });
+        },
+
         onPreview(code) {
+            const { referralCode } = this.modalState;
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
-            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code, referralCode } });
         },
 
         onAddToCart(item) {
+            const { referralCode } = this.modalState;
+
             this[CHANGE_MODAL_STATE]({
                 name: NAME,
                 open: true,
-                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
+                state: {
+                    offerId: item.id,
+                    storeId: item.stock.storeId,
+                    type: item.type,
+                    referralCode,
+                },
             });
         },
 
@@ -195,7 +203,7 @@ export default {
             const data = this[CART_DATA][type];
 
             this.cartItem = data ? data.items.find(i => i.p.id === offerId) : null;
-            if (!this.cartItem) this[ADD_CART_ITEM]({ offerId, storeId, referralCode, cookieName });
+            if (!this.cartItem) this[ADD_CART_ITEM]({ offerId, storeId, referrerCode: referralCode, cookieName });
             this[FETCH_RELATIVE_PRODUCTS]({ page: getRandomIntInclusive(1, 4) });
         },
 
