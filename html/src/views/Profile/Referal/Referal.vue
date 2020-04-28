@@ -54,7 +54,7 @@
 
             <div class="container container--tablet-lg">
                 <section class="referal-view__section">
-                    <h3 class="referal-view__section-hl">История заказов реферала</h3>
+                    <h3 class="referal-view__section-hl">История заказов рефералов</h3>
 
                     <table class="referal-view__table" v-if="!isTabletLg">
                         <colgroup>
@@ -169,28 +169,28 @@
                 </p>
                 <ul class="list list--dashed referal-view__attention-list">
                     <li class="referal-view__attention-list-item">
-                        <v-link class="referal-view__attention-link" tag="button" @click="onCopyToClipboard($event)"
-                            >скопировать</v-link
-                        >
+                        <v-link class="referal-view__attention-link" tag="button" @click="onCopyToClipboard($event)">
+                            скопировать
+                        </v-link>
                         реферальную ссылку и разместить её в соцсетях
                     </li>
                     <li class="referal-view__attention-list-item">
                         собрать собственную
-                        <v-link class="referal-view__attention-link" tag="button" :to="{ name: 'Promopage' }"
-                            >промо-страницу</v-link
-                        >
+                        <v-link class="referal-view__attention-link" tag="button" :to="{ name: 'Promopage' }">
+                            промо-страницу
+                        </v-link>
                         с товарами
                     </li>
                     <li class="referal-view__attention-list-item">
-                        <v-link class="referal-view__attention-link" tag="button" :to="{ name: 'Messages' }"
-                            >запросить</v-link
-                        >
+                        <v-link class="referal-view__attention-link" tag="button" :to="{ name: 'Messages' }">
+                            запросить
+                        </v-link>
                         промо-код
                     </li>
                     <li class="referal-view__attention-list-item">
-                        <v-link class="referal-view__attention-link" tag="button" :to="{ name: 'Seo' }"
-                            >расшарить</v-link
-                        >
+                        <v-link class="referal-view__attention-link" tag="button" :to="{ name: 'Seo' }">
+                            расшарить
+                        </v-link>
                         товары для продвижения
                     </li>
                 </ul>
@@ -313,7 +313,9 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(REFERRAL_MODULE_PATH, [ITEMS, ACTIVE_PAGE, REFERRAL_DATA]),
-        ...mapState(AUTH_MODULE, { [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false }),
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
+        }),
 
         ...mapGetters(REFERRAL_MODULE_PATH, [REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, PAGES_COUNT]),
 
