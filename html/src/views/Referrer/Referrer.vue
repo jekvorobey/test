@@ -66,11 +66,11 @@ import VButton from '@controls/VButton/VButton.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
 
-import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
-import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
-
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+
+import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
+import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '@services';
