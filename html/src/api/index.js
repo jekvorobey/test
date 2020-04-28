@@ -380,6 +380,21 @@ export function getPromocodeData(isArchive = 0) {
     });
 }
 
+// referrer
+
+export function getReferrerData(code) {
+    return $http.get(`/v1/promo-page/${code}`);
+}
+
+export function getReferrerProducts(id, pageNum, perPage) {
+    return $http.get(`/v1/promo-page/${id}/products`, {
+        params: {
+            pageNum,
+            perPage,
+        },
+    });
+}
+
 // search
 
 export function search(data) {

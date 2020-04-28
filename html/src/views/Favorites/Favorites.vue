@@ -91,7 +91,7 @@ import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { $store, $progress, $logger, $route, $router } from '@services';
+import { $store, $progress, $logger } from '@services';
 
 import {
     NAME as FAVORITES_MODULE,
