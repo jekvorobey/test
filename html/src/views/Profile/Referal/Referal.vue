@@ -46,116 +46,156 @@
             </div>
         </div>
 
-        <section class="referal-view__section referal-view__graph">
-            <h3 class="container container--tablet-lg referal-view__section-hl">Новые рефералы</h3>
-            <v-chart v-if="isMounted" type="line" :options="chartOptions" :series="series" height="350px" />
-        </section>
-
-        <div class="container container--tablet-lg">
-            <section class="referal-view__section">
-                <h3 class="referal-view__section-hl">История заказов реферала</h3>
-
-                <table class="referal-view__table" v-if="!isTabletLg">
-                    <colgroup>
-                        <col width="40%" />
-                        <col width="12%" />
-                        <col width="12%" />
-                        <col width="12%" />
-                        <col width="12%" />
-                        <col width="12%" />
-                    </colgroup>
-
-                    <thead class="referal-view__table-head">
-                        <tr class="referal-view__table-tr referal-view__table-tr--header">
-                            <th class="referal-view__table-th">Товар</th>
-                            <th class="referal-view__table-th">Кол-во</th>
-                            <th class="referal-view__table-th">ID реферала</th>
-                            <th class="referal-view__table-th">Источник</th>
-                            <th class="referal-view__table-th">Дата заказа</th>
-                            <th class="referal-view__table-th">Сумма</th>
-                            <th class="referal-view__table-th">Сумма вознаграждения</th>
-                        </tr>
-                    </thead>
-
-                    <transition-group class="referal-view__table-body" tag="tbody" name="fade-in" appear>
-                        <tr class="referal-view__table-tr" v-for="order in orders" :key="order.id">
-                            <td class="referal-view__table-td">
-                                <div
-                                    class="referal-view__table-img"
-                                    :class="{ 'referal-view__table-img--empty': !order.image || !order.image.id }"
-                                >
-                                    <v-picture v-if="order.image && order.image.id" :key="order.image.id">
-                                        <source :data-srcset="order.desktopImage" type="image/webp" />
-                                        <img class="blur-up lazyload v-picture__img" :data-src="order.defaultImage" />
-                                    </v-picture>
-                                    <v-svg v-else name="logo" width="32" height="32" />
-                                </div>
-                                <div class="referal-view__table-title">
-                                    {{ order.name }}
-                                </div>
-                            </td>
-                            <td class="referal-view__table-td">{{ order.qty }} шт</td>
-                            <td class="referal-view__table-td">
-                                <router-link
-                                    :to="{ name: 'ReferalOrderDetails', params: { referalId: order.customer_id } }"
-                                >
-                                    {{ order.customer_id }}
-                                </router-link>
-                            </td>
-                            <td class="referal-view__table-td">
-                                {{ order.source }}
-                            </td>
-                            <td class="referal-view__table-td">{{ order.date }}</td>
-                            <td class="referal-view__table-td">
-                                <price v-bind="order.price_product" />
-                            </td>
-                            <td class="referal-view__table-td">
-                                <price v-bind="order.price_commission" />
-                            </td>
-                        </tr>
-                    </transition-group>
-                </table>
+        <template v-if="orders && orders.length">
+            <section class="referal-view__section referal-view__graph">
+                <h3 class="container container--tablet-lg referal-view__section-hl">Новые рефералы</h3>
+                <v-chart v-if="isMounted" type="line" :options="chartOptions" :series="series" height="350px" />
             </section>
 
-            <filter-button class="referal-view__filter-btn" @click="filterModal = !filterModal">
-                Фильтр и сортировка&nbsp;&nbsp;
-                <span class="text-grey">4</span>
-            </filter-button>
-        </div>
+            <div class="container container--tablet-lg">
+                <section class="referal-view__section">
+                    <h3 class="referal-view__section-hl">История заказов реферала</h3>
 
-        <ul class="referal-view__list" v-if="isTabletLg">
-            <li class="referal-view__list-item" v-for="order in orders" :key="order.id">
-                <info-row class="referal-view__list-item-row" name="Товар">
-                    <div
-                        class="referal-view__table-img"
-                        :class="{ 'referal-view__table-img--empty': !order.image || !order.image.id }"
-                    >
-                        <v-picture v-if="order.image && order.image.id" :key="order.image.id">
-                            <source :data-srcset="order.desktopImage" type="image/webp" />
-                            <img class="blur-up lazyload v-picture__img" :data-src="order.defaultImage" />
-                        </v-picture>
-                        <v-svg v-else name="logo" width="32" height="32" />
-                    </div>
-                    <div class="referal-view__table-title">
-                        {{ order.name }}
-                    </div>
-                </info-row>
-                <info-row class="referal-view__list-item-row" name="Кол-во"> {{ order.qty }} шт. </info-row>
-                <info-row class="referal-view__list-item-row" name="ID реферала">
-                    <router-link :to="{ name: 'ReferalOrderDetails', params: { referalId: order.customer_id } }">
-                        {{ order.customer_id }}
-                    </router-link>
-                </info-row>
-                <info-row class="referal-view__list-item-row" name="Источник" :value="order.source" />
-                <info-row class="referal-view__list-item-row" name="Дата заказа" :value="order.date" />
-                <info-row class="referal-view__list-item-row" name="Сумма">
-                    <price v-bind="order.price_product" />
-                </info-row>
-                <info-row class="referal-view__list-item-row" name="Сумма вознаграждения">
-                    <price v-bind="order.price_commission" />
-                </info-row>
-            </li>
-        </ul>
+                    <table class="referal-view__table" v-if="!isTabletLg">
+                        <colgroup>
+                            <col width="40%" />
+                            <col width="12%" />
+                            <col width="12%" />
+                            <col width="12%" />
+                            <col width="12%" />
+                            <col width="12%" />
+                        </colgroup>
+
+                        <thead class="referal-view__table-head">
+                            <tr class="referal-view__table-tr referal-view__table-tr--header">
+                                <th class="referal-view__table-th">Товар</th>
+                                <th class="referal-view__table-th">Кол-во</th>
+                                <th class="referal-view__table-th">ID реферала</th>
+                                <th class="referal-view__table-th">Источник</th>
+                                <th class="referal-view__table-th">Дата заказа</th>
+                                <th class="referal-view__table-th">Сумма</th>
+                                <th class="referal-view__table-th">Сумма вознаграждения</th>
+                            </tr>
+                        </thead>
+
+                        <transition-group class="referal-view__table-body" tag="tbody" name="fade-in" appear>
+                            <tr class="referal-view__table-tr" v-for="order in orders" :key="order.id">
+                                <td class="referal-view__table-td">
+                                    <div
+                                        class="referal-view__table-img"
+                                        :class="{ 'referal-view__table-img--empty': !order.image || !order.image.id }"
+                                    >
+                                        <v-picture v-if="order.image && order.image.id" :key="order.image.id">
+                                            <source :data-srcset="order.desktopImage" type="image/webp" />
+                                            <img
+                                                class="blur-up lazyload v-picture__img"
+                                                :data-src="order.defaultImage"
+                                            />
+                                        </v-picture>
+                                        <v-svg v-else name="logo" width="32" height="32" />
+                                    </div>
+                                    <div class="referal-view__table-title">
+                                        {{ order.name }}
+                                    </div>
+                                </td>
+                                <td class="referal-view__table-td">{{ order.qty }} шт</td>
+                                <td class="referal-view__table-td">
+                                    <router-link
+                                        :to="{ name: 'ReferalOrderDetails', params: { referalId: order.customer_id } }"
+                                    >
+                                        {{ order.customer_id }}
+                                    </router-link>
+                                </td>
+                                <td class="referal-view__table-td">
+                                    {{ order.source }}
+                                </td>
+                                <td class="referal-view__table-td">{{ order.date }}</td>
+                                <td class="referal-view__table-td">
+                                    <price v-bind="order.price_product" />
+                                </td>
+                                <td class="referal-view__table-td">
+                                    <price v-bind="order.price_commission" />
+                                </td>
+                            </tr>
+                        </transition-group>
+                    </table>
+                </section>
+
+                <filter-button class="referal-view__filter-btn" @click="filterModal = !filterModal">
+                    Фильтр и сортировка&nbsp;&nbsp;
+                    <span class="text-grey">4</span>
+                </filter-button>
+            </div>
+
+            <ul class="referal-view__list" v-if="isTabletLg">
+                <li class="referal-view__list-item" v-for="order in orders" :key="order.id">
+                    <info-row class="referal-view__list-item-row" name="Товар">
+                        <div
+                            class="referal-view__table-img"
+                            :class="{ 'referal-view__table-img--empty': !order.image || !order.image.id }"
+                        >
+                            <v-picture v-if="order.image && order.image.id" :key="order.image.id">
+                                <source :data-srcset="order.desktopImage" type="image/webp" />
+                                <img class="blur-up lazyload v-picture__img" :data-src="order.defaultImage" />
+                            </v-picture>
+                            <v-svg v-else name="logo" width="32" height="32" />
+                        </div>
+                        <div class="referal-view__table-title">
+                            {{ order.name }}
+                        </div>
+                    </info-row>
+                    <info-row class="referal-view__list-item-row" name="Кол-во"> {{ order.qty }} шт. </info-row>
+                    <info-row class="referal-view__list-item-row" name="ID реферала">
+                        <router-link :to="{ name: 'ReferalOrderDetails', params: { referalId: order.customer_id } }">
+                            {{ order.customer_id }}
+                        </router-link>
+                    </info-row>
+                    <info-row class="referal-view__list-item-row" name="Источник" :value="order.source" />
+                    <info-row class="referal-view__list-item-row" name="Дата заказа" :value="order.date" />
+                    <info-row class="referal-view__list-item-row" name="Сумма">
+                        <price v-bind="order.price_product" />
+                    </info-row>
+                    <info-row class="referal-view__list-item-row" name="Сумма вознаграждения">
+                        <price v-bind="order.price_commission" />
+                    </info-row>
+                </li>
+            </ul>
+        </template>
+        <attention-panel class="referal-view__attention-panel" v-else>
+            <div class="referal-view__attention-section">
+                <p class="referal-view__attention-text">
+                    Вам еще не начислялись вознаграждения за покупки рефералов. Воспользуйтесь одним из маркетинговых
+                    инструменов для привлечения аудитории:
+                </p>
+                <ul class="list list--dashed referal-view__attention-list">
+                    <li class="referal-view__attention-list-item">
+                        <v-link class="referal-view__attention-link" tag="button" @click="onCopyToClipboard($event)"
+                            >скопировать</v-link
+                        >
+                        реферальную ссылку и разместить её в соцсетях
+                    </li>
+                    <li class="referal-view__attention-list-item">
+                        собрать собственную
+                        <v-link class="referal-view__attention-link" tag="button" :to="{ name: 'Promopage' }"
+                            >промо-страницу</v-link
+                        >
+                        с товарами
+                    </li>
+                    <li class="referal-view__attention-list-item">
+                        <v-link class="referal-view__attention-link" tag="button" :to="{ name: 'Messages' }"
+                            >запросить</v-link
+                        >
+                        промо-код
+                    </li>
+                    <li class="referal-view__attention-list-item">
+                        <v-link class="referal-view__attention-link" tag="button" :to="{ name: 'Seo' }"
+                            >расшарить</v-link
+                        >
+                        товары для продвижения
+                    </li>
+                </ul>
+            </div>
+        </attention-panel>
 
         <div class="container container--tablet-lg referal-view__controls" v-if="pagesCount > 1">
             <show-more-button
@@ -177,11 +217,13 @@ import VButton from '@controls/VButton/VButton.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VArcCounter from '@controls/VArcCounter/VArcCounter.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
 import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import FilterButton from '@components/FilterButton/FilterButton.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
+import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
@@ -198,13 +240,19 @@ import {
     PAGES_COUNT,
 } from '@store/modules/Profile/modules/Referral/getters';
 
-import { fileExtension, sortDirections } from '@enums';
+import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
+
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
+import { fileExtension, sortDirections, modalName } from '@enums';
 import { referralOrderSortFields } from '@enums/profile';
 import { DEFAULT_PAGE } from '@constants';
 import { digit2DateSettings } from '@settings';
 import { baseChartOptions } from '@settings/profile';
-import { preparePrice, shortNumberFormat } from '@util';
+import { preparePrice, shortNumberFormat, saveToClipboard } from '@util';
 import { generatePictureSourcePath } from '@util/file';
+import { generateReferralLink } from '@util/profile';
 import { $store, $progress, $logger } from '@services';
 import '@images/sprites/logo.svg';
 import './Referal.css';
@@ -220,6 +268,7 @@ export default {
         VButton,
         VPicture,
         VPagination,
+        VLink,
         VArcCounter,
         VChart,
 
@@ -227,6 +276,7 @@ export default {
         InfoRow,
         FilterButton,
         ShowMoreButton,
+        AttentionPanel,
     },
 
     data() {
@@ -263,6 +313,8 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(REFERRAL_MODULE_PATH, [ITEMS, ACTIVE_PAGE, REFERRAL_DATA]),
+        ...mapState(AUTH_MODULE, { [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false }),
+
         ...mapGetters(REFERRAL_MODULE_PATH, [REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, PAGES_COUNT]),
 
         arcSettings() {
@@ -305,6 +357,7 @@ export default {
 
     methods: {
         ...mapActions(REFERRAL_MODULE_PATH, [FETCH_REFERRAL_DATA, FETCH_ORDERS, SET_LOAD_PATH]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onOpenOrder(id) {
             this.$router.push({ name: 'ReferalOrderDetails', params: { referalId: id } });
@@ -329,6 +382,14 @@ export default {
 
         shortNumberFormat(sum) {
             return shortNumberFormat(sum);
+        },
+
+        onCopyToClipboard(e) {
+            const link = generateReferralLink(this[REFERRAL_CODE]);
+            const result = saveToClipboard(link);
+            const message = result ? 'Успешно скопировано' : 'Не удается скопировать';
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
+            e.target.focus();
         },
     },
 
