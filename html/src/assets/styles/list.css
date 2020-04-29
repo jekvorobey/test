@@ -36,6 +36,16 @@ ul {
                 }
             }
         }
+
+        &--dashed {
+            & > li {
+                &::before {
+                    height: 2px;
+                    border-radius: 0;
+                    top: 12px;
+                }
+            }
+        }
     }
 }
 

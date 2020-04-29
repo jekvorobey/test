@@ -102,7 +102,7 @@ import { FETCH_PRODUCTS, SET_LOAD_PATH } from '@store/modules/Profile/modules/Se
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { $store } from '@services';
+import { $store, $progress } from '@services';
 import { fileExtension, modalName } from '@enums';
 import { MIN_SCROLL_VALUE } from '@constants';
 import { saveToClipboard } from '@util';
