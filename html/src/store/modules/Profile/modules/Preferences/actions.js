@@ -19,10 +19,10 @@ export default {
         commit(SET_TYPE, payload);
     },
 
-    async [UPDATE_ENTITIES]({ commit }, { preferenceType, type, items = [] }) {
+    async [UPDATE_ENTITIES]({ commit }, { prefType, type, items = [] }) {
         try {
-            await changeProfilePreferences(preferenceType, type, items);
-            commit(SET_ENTITIES, { preferenceType, type, items });
+            await changeProfilePreferences(prefType, type, items);
+            commit(SET_ENTITIES, { prefType, type, items });
         } catch (error) {
             storeErrorHandler(UPDATE_ENTITIES)(error);
         }
@@ -31,7 +31,7 @@ export default {
     async [FETCH_PREFERENCES]({ commit }, prefType) {
         try {
             const data = await getProfilePreferences(prefType);
-            commit(SET_PREFERENCES, { preferenceType: prefType, data });
+            commit(SET_PREFERENCES_DATA, { prefType, data });
         } catch (error) {
             storeErrorHandler(FETCH_PREFERENCES)(error);
         }

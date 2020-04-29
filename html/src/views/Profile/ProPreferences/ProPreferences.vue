@@ -131,24 +131,23 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isPreferencesOpen: (state) =>
+            isPreferencesOpen: state =>
                 state[MODALS][modalName.profile.PREFERENCE_EDIT] &&
                 state[MODALS][modalName.profile.PREFERENCE_EDIT].open,
         }),
 
         ...mapState(PROFILE_MODULE, {
-            [entityTypes.BRANDS]: (state) =>
+            [entityTypes.BRANDS]: state =>
                 (state[PRO_PREFERENCES_DATA] && state[PRO_PREFERENCES_DATA][entityTypes.BRANDS]) || [],
-            [entityTypes.CATEGORIES]: (state) =>
+            [entityTypes.CATEGORIES]: state =>
                 (state[PRO_PREFERENCES_DATA] && state[PRO_PREFERENCES_DATA][entityTypes.CATEGORIES]) || [],
 
-            preferencesBrands: (state) =>
-                (state[PREFERENCES_DATA] && state[PREFERENCES_DATA][entityTypes.BRANDS]) || [],
-            preferencesCategories: (state) =>
+            preferencesBrands: state => (state[PREFERENCES_DATA] && state[PREFERENCES_DATA][entityTypes.BRANDS]) || [],
+            preferencesCategories: state =>
                 (state[PREFERENCES_DATA] && state[PREFERENCES_DATA][entityTypes.CATEGORIES]) || [],
 
-            availableBrands: (state) => (state && state.availableBrands) || [],
-            availableCategories: (state) => (state && state.availableCategories) || [],
+            availableBrands: state => (state && state.availableBrands) || [],
+            availableCategories: state => (state && state.availableCategories) || [],
         }),
 
         type() {

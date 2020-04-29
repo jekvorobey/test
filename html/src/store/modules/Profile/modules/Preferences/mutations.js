@@ -14,15 +14,15 @@ export default {
     },
 
     [SET_PREFERENCES_DATA](state, payload = {}) {
-        const { preferenceType = null, data = {} } = payload;
-        if (preferenceType) {
-            state.preferencesData[preferenceType].customer = data.customer || {};
+        const { prefType = null, data = {} } = payload;
+        if (prefType) {
+            state.preferencesData[prefType].customer = data.customer || {};
             state.availableBrands = data.brands || [];
             state.availableCategories = data.categories || [];
         }
     },
 
-    [SET_ENTITIES](state, { preferencesType, type, items }) {
-        state.preferencesData[preferencesType].customer[type] = items;
+    [SET_ENTITIES](state, { prefType, type, items }) {
+        state.preferencesData[prefType].customer[type] = items;
     },
 };
