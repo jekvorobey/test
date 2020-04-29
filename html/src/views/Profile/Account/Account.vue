@@ -46,54 +46,92 @@
             </div>
         </div>
 
-        <section class="account-view__section">
-            <div class="container container--tablet-lg">
-                <h3 class="account-view__section-hl">История начислений</h3>
-                <table class="account-view__table" v-if="!isTabletLg">
-                    <colgroup>
-                        <col width="35%" />
-                        <col width="25%" />
-                        <col width="25%" />
-                        <col width="15%" />
-                    </colgroup>
+        <template v-if="operations && operations.length">
+            <section class="account-view__section">
+                <div class="container container--tablet-lg">
+                    <h3 class="account-view__section-hl">История начислений</h3>
+                    <table class="account-view__table" v-if="!isTabletLg">
+                        <colgroup>
+                            <col width="35%" />
+                            <col width="25%" />
+                            <col width="25%" />
+                            <col width="15%" />
+                        </colgroup>
 
-                    <thead class="account-view__table-head">
-                        <tr class="account-view__table-tr account-view__table-tr--header">
-                            <th class="account-view__table-th">Заказ/событие</th>
-                            <th class="account-view__table-th">Дата</th>
-                            <th class="account-view__table-th">Операция</th>
-                            <th class="account-view__table-th">Начислено/cписано</th>
-                        </tr>
-                    </thead>
+                        <thead class="account-view__table-head">
+                            <tr class="account-view__table-tr account-view__table-tr--header">
+                                <th class="account-view__table-th">Заказ/событие</th>
+                                <th class="account-view__table-th">Дата</th>
+                                <th class="account-view__table-th">Операция</th>
+                                <th class="account-view__table-th">Начислено/cписано</th>
+                            </tr>
+                        </thead>
 
-                    <transition-group tag="tbody" name="fade-in" appear class="account-view__table-body">
-                        <tr class="account-view__table-tr" v-for="operation in operations" :key="operation.id">
-                            <td class="account-view__table-td">{{ operation.action_id || '-' }}</td>
-                            <td class="account-view__table-td">{{ operation.date }}</td>
-                            <td class="account-view__table-td">{{ operation.type }}</td>
-                            <td class="account-view__table-td">
-                                <price v-bind="operation.value" />
-                            </td>
-                        </tr>
-                    </transition-group>
-                </table>
+                        <transition-group tag="tbody" name="fade-in" appear class="account-view__table-body">
+                            <tr class="account-view__table-tr" v-for="operation in operations" :key="operation.id">
+                                <td class="account-view__table-td">{{ operation.action_id || '-' }}</td>
+                                <td class="account-view__table-td">{{ operation.date }}</td>
+                                <td class="account-view__table-td">{{ operation.type }}</td>
+                                <td class="account-view__table-td">
+                                    <price v-bind="operation.value" />
+                                </td>
+                            </tr>
+                        </transition-group>
+                    </table>
+                </div>
+            </section>
+
+            <ul class="account-view__list" v-if="isTabletLg">
+                <li
+                    class="container container--tablet-lg account-view__list-item"
+                    v-for="operation in operations"
+                    :key="operation.id"
+                >
+                    <info-row class="account-view__list-item-row" name="Заказ/событие" :value="operation.action_id" />
+                    <info-row class="account-view__list-item-row" name="Дата" :value="operation.date" />
+                    <info-row class="account-view__list-item-row" name="Операция" :value="operation.type" />
+                    <info-row class="account-view__list-item-row" name="Начислено/cписано">
+                        <price v-bind="operation.value" />
+                    </info-row>
+                </li>
+            </ul>
+        </template>
+
+        <attention-panel class="account-view__attention-panel" v-else>
+            <div class="account-view__attention-section">
+                <p class="account-view__attention-text">
+                    Вам еще не начислялись вознаграждения за покупки рефералов. Воспользуйтесь одним из маркетинговых
+                    инструменов для привлечения аудитории:
+                </p>
+                <ul class="list list--dashed account-view__attention-list">
+                    <li class="account-view__attention-list-item">
+                        <v-link class="account-view__attention-link" tag="button" @click="onCopyToClipboard($event)">
+                            скопировать
+                        </v-link>
+                        реферальную ссылку и разместить её в соцсетях
+                    </li>
+                    <li class="account-view__attention-list-item">
+                        собрать собственную
+                        <v-link class="account-view__attention-link" tag="button" :to="{ name: 'Promopage' }">
+                            промо-страницу
+                        </v-link>
+                        с товарами
+                    </li>
+                    <li class="account-view__attention-list-item">
+                        <v-link class="account-view__attention-link" tag="button" :to="{ name: 'Messages' }">
+                            запросить
+                        </v-link>
+                        промо-код
+                    </li>
+                    <li class="account-view__attention-list-item">
+                        <v-link class="account-view__attention-link" tag="button" :to="{ name: 'Seo' }">
+                            расшарить
+                        </v-link>
+                        товары для продвижения
+                    </li>
+                </ul>
             </div>
-        </section>
-
-        <ul class="account-view__list" v-if="isTabletLg">
-            <li
-                class="container container--tablet-lg account-view__list-item"
-                v-for="operation in operations"
-                :key="operation.id"
-            >
-                <info-row class="account-view__list-item-row" name="Заказ/событие" :value="operation.action_id" />
-                <info-row class="account-view__list-item-row" name="Дата" :value="operation.date" />
-                <info-row class="account-view__list-item-row" name="Операция" :value="operation.type" />
-                <info-row class="account-view__list-item-row" name="Начислено/cписано">
-                    <price v-bind="operation.value" />
-                </info-row>
-            </li>
-        </ul>
+        </attention-panel>
 
         <div class="container container--tablet-lg account-view__controls" v-if="pagesCount > 1">
             <show-more-button
@@ -118,6 +156,7 @@ import VPagination from '@controls/VPagination/VPagination.vue';
 import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
+import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
@@ -141,13 +180,18 @@ import {
     SET_CARD_CREATION_STATUS,
 } from '@store/modules/Profile/modules/Billing/actions';
 
+import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
+
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
 import { $store, $progress, $logger } from '@services';
 import { DEFAULT_PAGE } from '@constants';
 import { monthLongDateSettings } from '@settings';
-import { currencySymbol } from '@enums';
+import { currencySymbol, modalName } from '@enums';
 import { cardIdentificationStatus } from '@enums/profile';
-import { preparePrice } from '@util';
-import { generateYandexCardAuthUrl, generateYandexCardAuthBackUrl } from '@util/profile';
+import { preparePrice, saveToClipboard } from '@util';
+import { generateYandexCardAuthUrl, generateYandexCardAuthBackUrl, generateReferralLink } from '@util/profile';
 
 import './Account.css';
 
@@ -166,6 +210,7 @@ export default {
         Price,
         InfoRow,
         ShowMoreButton,
+        AttentionPanel,
     },
 
     data() {
@@ -178,6 +223,10 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(BILLING_MODULE_PATH, [BILLING_DATA, ITEMS, ACTIVE_PAGE, SELECTED_CARD, CARD_CREATION_STATUS]),
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
+        }),
+
         ...mapGetters(BILLING_MODULE_PATH, [PAGES_COUNT]),
 
         newCardOption() {
@@ -240,6 +289,7 @@ export default {
             FETCH_BILLING_DATA,
             FETCH_OPERATIONS,
         ]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onChangeSelectedCard(card) {
             this[SET_SELECTED_CARD](card);
@@ -267,6 +317,14 @@ export default {
         onPageChanged(page) {
             this.showMore = false;
             this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+        },
+
+        onCopyToClipboard(e) {
+            const link = generateReferralLink(this[REFERRAL_CODE]);
+            const result = saveToClipboard(link);
+            const message = result ? 'Успешно скопировано' : 'Не удается скопировать';
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
+            e.target.focus();
         },
     },
 

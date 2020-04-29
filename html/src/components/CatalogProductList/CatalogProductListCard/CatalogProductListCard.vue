@@ -7,8 +7,10 @@
     >
         <div class="catalog-product-list-card__img" v-once>
             <v-picture v-if="item.image && item.image.id">
-                <source :data-srcset="bigImg" type="image/webp" media="(min-width: 480px)" />
-                <source :data-srcset="smallImg" type="image/webp" media="(max-width: 479px)" />
+                <source :data-srcset="bigImg.webp" type="image/webp" media="(min-width: 480px)" />
+                <source :data-srcset="bigImg.orig" media="(min-width: 480px)" />
+                <source :data-srcset="smallImg.webp" type="image/webp" media="(max-width: 479px)" />
+                <source :data-srcset="smallImg.orig" media="(max-width: 479px)" />
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
             </v-picture>
             <v-svg v-else id="catalog-product-list-card-empty" name="logo" width="48" height="48" />
@@ -132,15 +134,24 @@ export default {
         },
 
         bigImg() {
-            return generatePictureSourcePath(300, 300, this.item.image.id, fileExtension.image.WEBP);
+            const { image } = this.item;
+            return {
+                webp: generatePictureSourcePath(300, 300, image.id, fileExtension.image.WEBP),
+                orig: generatePictureSourcePath(300, 300, image.id),
+            };
         },
 
         smallImg() {
-            return generatePictureSourcePath(200, 200, this.item.image.id, fileExtension.image.WEBP);
+            const { image } = this.item;
+            return {
+                webp: generatePictureSourcePath(200, 200, image.id, fileExtension.image.WEBP),
+                orig: generatePictureSourcePath(200, 200, image.id),
+            };
         },
 
         defaultImg() {
-            return generatePictureSourcePath(200, 200, this.item.image.id);
+            const { image } = this.item;
+            return generatePictureSourcePath(200, 200, image.id);
         },
 
         href() {

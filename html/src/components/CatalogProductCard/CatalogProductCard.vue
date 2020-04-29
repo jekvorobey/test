@@ -2,8 +2,10 @@
     <router-link tag="div" class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }" :to="href">
         <div class="catalog-product-card__img">
             <v-picture :key="image.id" v-if="image && image.id">
-                <source v-if="bigImg" :data-srcset="bigImg" type="image/webp" media="(min-width: 480px)" />
-                <source v-if="smallImg" :data-srcset="smallImg" type="image/webp" media="(max-width: 479px)" />
+                <source :data-srcset="bigImg.webp" type="image/webp" media="(min-width: 480px)" />
+                <source :data-srcset="bigImg.orig" media="(min-width: 480px)" />
+                <source :data-srcset="smallImg.webp" type="image/webp" media="(max-width: 479px)" />
+                <source :data-srcset="smallImg.orig" media="(max-width: 479px)" />
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
             </v-picture>
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
@@ -134,7 +136,7 @@ export default {
         },
 
         image: {
-            type: [String, Object],
+            type: Object,
         },
 
         rating: {
@@ -169,26 +171,22 @@ export default {
     computed: {
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
 
-        isObjectImage() {
-            return this.image && this.image.id;
-        },
-
         bigImg() {
-            return (
-                (this.isObjectImage && generatePictureSourcePath(300, 300, this.image.id, fileExtension.image.WEBP)) ||
-                this.image
-            );
+            return {
+                webp: generatePictureSourcePath(300, 300, this.image.id, fileExtension.image.WEBP),
+                orig: generatePictureSourcePath(300, 300, this.image.id),
+            };
         },
 
         smallImg() {
-            return (
-                (this.isObjectImage && generatePictureSourcePath(200, 200, this.image.id, fileExtension.image.WEBP)) ||
-                this.image
-            );
+            return {
+                webp: generatePictureSourcePath(200, 200, this.image.id, fileExtension.image.WEBP),
+                orig: generatePictureSourcePath(200, 200, this.image.id),
+            };
         },
 
         defaultImg() {
-            return (this.isObjectImage && generatePictureSourcePath(200, 200, this.image.id)) || this.image;
+            return generatePictureSourcePath(200, 200, this.image.id);
         },
 
         inFavorites() {

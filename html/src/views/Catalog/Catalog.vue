@@ -21,9 +21,12 @@
             </breadcrumbs>
 
             <catalog-banner-card class="catalog-view__banner" v-if="productGroup.banner" :item="productGroup.banner">
-                <source v-if="desktopImg" :data-srcset="desktopImg" type="image/webp" media="(min-width: 1024px)" />
-                <source v-if="tabletImg" :data-srcset="tabletImg" type="image/webp" media="(min-width: 480px)" />
-                <source v-if="mobileImg" :data-srcset="mobileImg" type="image/webp" media="(max-width: 479px)" />
+                <source :data-srcset="desktopImg.webp" type="image/webp" media="(min-width: 1024px)" />
+                <source :data-srcset="desktopImg.orig" media="(min-width: 1024px)" />
+                <source :data-srcset="tabletImg.webp" type="image/webp" media="(min-width: 768px)" />
+                <source :data-srcset="tabletImg.orig" media="(min-width: 768px)" />
+                <source :data-srcset="mobileImg.webp" type="image/webp" media="(min-width: 320px)" />
+                <source :data-srcset="mobileImg.orig" media="(min-width: 320px)" />
                 <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
             </catalog-banner-card>
         </div>
@@ -313,25 +316,37 @@ export default {
         },
 
         mobileImg() {
-            const banner = this[PRODUCT_GROUP][BANNER];
+            const banner = this[PRODUCT_GROUP][BANNER] || {};
             const image = banner.mobileImage || banner.tabletImage || banner.desktopImage;
-            if (image) return generatePictureSourcePath(320, 240, image.id, fileExtension.image.WEBP);
+            if (image)
+                return {
+                    webp: generatePictureSourcePath(320, 240, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(320, 240, image.id),
+                };
         },
 
         tabletImg() {
-            const banner = this[PRODUCT_GROUP][BANNER];
+            const banner = this[PRODUCT_GROUP][BANNER] || {};
             const image = banner.tabletImage || banner.desktopImage;
-            if (image) return generatePictureSourcePath(768, 240, image.id, fileExtension.image.WEBP);
+            if (image)
+                return {
+                    webp: generatePictureSourcePath(768, 240, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(768, 240, image.id),
+                };
         },
 
         desktopImg() {
-            const banner = this[PRODUCT_GROUP][BANNER];
+            const banner = this[PRODUCT_GROUP][BANNER] || {};
             const image = banner.desktopImage || banner.tabletImage;
-            if (image) return generatePictureSourcePath(1224, 240, image.id, fileExtension.image.WEBP);
+            if (image)
+                return {
+                    webp: generatePictureSourcePath(1224, 240, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(1224, 240, image.id),
+                };
         },
 
-        defaultImg() {
-            const banner = this[PRODUCT_GROUP][BANNER];
+        defaultImg(item) {
+            const banner = this[PRODUCT_GROUP][BANNER] || {};
             const image = banner.desktopImage || banner.tabletImage || banner.mobileImage;
             if (image) return generatePictureSourcePath(1224, 240, image.id);
         },
