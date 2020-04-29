@@ -31,10 +31,13 @@
                 </div>
 
                 <catalog-banner-card class="products-section__banner" :item="banner">
-                    <source :data-srcset="getDesktopImg(banner)" type="image/webp" media="(min-width: 1024px)" />
-                    <source :data-srcset="getTabletImg(banner)" type="image/webp" media="(min-width: 480px)" />
-                    <source :data-srcset="getMobileImg(banner)" type="image/webp" media="(max-width: 479px)" />
-                    <img class="blur-up lazyload v-picture__img" :data-src="getDefaultImg(banner)" alt="" />
+                    <source :data-srcset="desktopImage.webp" type="image/webp" media="(min-width: 1024px)" />
+                    <source :data-srcset="desktopImage.orig" media="(min-width: 1024px)" />
+                    <source :data-srcset="tabletImage.webp" type="image/webp" media="(min-width: 768px)" />
+                    <source :data-srcset="tabletImage.orig" media="(min-width: 768px)" />
+                    <source :data-srcset="mobileImage.webp" type="image/webp" media="(min-width: 320px)" />
+                    <source :data-srcset="mobileImage.orig" media="(min-width: 320px)" />
+                    <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
                 </catalog-banner-card>
             </div>
         </div>
@@ -103,6 +106,40 @@ export default {
         },
     },
 
+    computed: {
+        mobileImage() {
+            const image = this.banner.mobileImage || this.banner.tabletImage || this.banner.desktopImage;
+            if (image)
+                return {
+                    webp: generatePictureSourcePath(320, 320, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(320, 320, image.id),
+                };
+        },
+
+        tabletImage() {
+            const image = this.banner.tabletImage || this.banner.desktopImage;
+            if (image)
+                return {
+                    webp: generatePictureSourcePath(472, 352, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(472, 352, image.id),
+                };
+        },
+
+        desktopImage() {
+            const image = this.banner.desktopImage || this.banner.tabletImage;
+            if (image)
+                return {
+                    webp: generatePictureSourcePath(600, 888, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(600, 888, image.id),
+                };
+        },
+
+        defaultImage(item) {
+            const image = this.banner.desktopImage || this.banner.tabletImage || this.banner.mobileImage;
+            if (image) return generatePictureSourcePath(600, 888, image.id);
+        },
+    },
+
     methods: {
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
@@ -110,26 +147,6 @@ export default {
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: 'quick-view-modal', open: true, state: { code } });
-        },
-
-        getMobileImg(item) {
-            const image = item.mobileImage || item.tabletImage || item.desktopImage;
-            if (image) return generatePictureSourcePath(320, 320, image.id, fileExtension.image.WEBP);
-        },
-
-        getTabletImg(item) {
-            const image = item.tabletImage || item.desktopImage;
-            if (image) return generatePictureSourcePath(720, 720, image.id, fileExtension.image.WEBP);
-        },
-
-        getDesktopImg(item) {
-            const image = item.desktopImage || item.tabletImage;
-            if (image) return generatePictureSourcePath(600, 900, image.id, fileExtension.image.WEBP);
-        },
-
-        getDefaultImg(item) {
-            const image = item.desktopImage || item.tabletImage || item.mobileImage;
-            if (image) return generatePictureSourcePath(600, 900, image.id);
         },
 
         onAddToCart(item) {
