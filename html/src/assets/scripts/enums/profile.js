@@ -20,3 +20,13 @@ export const cardIdentificationStatus = Object.freeze({
     FAIL: 'fail', // неудачно
     ERROR: 'error', // ошибка
 });
+
+export const preferenceType = Object.freeze({
+    PERSONAL: 1, // Личные предпочтения
+    PROFESSIONAL: 2, // Профессиональные
+});
+
+export const preferenceEntityTypes = Object.freeze({
+    BRANDS: 'brands',
+    CATEGORIES: 'categories',
+});

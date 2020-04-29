@@ -111,10 +111,12 @@ import {
     FETCH_PREFERENCES_DATA,
     SET_LOAD,
     UPDATE_ENTITIES,
+    SET_TYPE,
 } from '@store/modules/Profile/modules/Preferences/actions';
 
 import _debounce from 'lodash/debounce';
 import { $store, $progress, $logger } from '@services';
+import { preferenceEntityTypes, preferenceType } from '@enums/profile';
 import { modalName } from '@enums';
 import '@images/sprites/cross.svg';
 import '@images/sprites/plus-small.svg';
@@ -122,10 +124,14 @@ import './Preferences.css';
 
 const PREFERENCES_MODULE_PATH = `${PROFILE_MODULE}/${PREFERENCES_MODULE}`;
 
-const entityTypes = {
-    BRANDS: 'brands',
-    CATEGORIES: 'categories',
-};
+function getPreferenceType(name) {
+    switch (name) {
+        case 'Preferences':
+            return preferenceType.PERSONAL;
+        case 'ProPreferences':
+            return preferenceType.PROFESSIONAL;
+    }
+}
 
 export default {
     name: 'preferences',
@@ -150,15 +156,20 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isPreferencesOpen: (state) =>
+            isPreferencesOpen: state =>
                 state[MODALS][modalName.profile.PREFERENCE_EDIT] &&
                 state[MODALS][modalName.profile.PREFERENCE_EDIT].open,
         }),
         ...mapState(PREFERENCES_MODULE_PATH, [AVAILABLE_BRANDS, AVAILABLE_CATEGORIES, CUSTOMER]),
         ...mapGetters(PREFERENCES_MODULE_PATH, [BRANDS, CATEGORIES]),
 
+        preferenceType() {
+            const { name } = this.$route;
+            return this.getPreferenceType(name);
+        },
+
         type() {
-            return entityTypes;
+            return preferenceEntityTypes;
         },
 
         isTablet() {
@@ -172,18 +183,18 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(PREFERENCES_MODULE_PATH, [FETCH_PREFERENCES_DATA, UPDATE_ENTITIES]),
+        ...mapActions(PREFERENCES_MODULE_PATH, [FETCH_PREFERENCES_DATA, UPDATE_ENTITIES, SET_TYPE]),
 
         onDeleteEntity(type, i) {
             switch (type) {
-                case entityTypes.BRANDS:
+                case preferenceEntityTypes.BRANDS:
                     this.actualBrands.splice(i, 1);
-                    this.debounce_updateBrands(this.actualBrands.map((e) => e.id));
+                    this.debounce_updateBrands(this.actualBrands.map(e => e.id));
                     break;
 
-                case entityTypes.CATEGORIES:
+                case preferenceEntityTypes.CATEGORIES:
                     this.actualCategories.splice(i, 1);
-                    this.debounce_updateCategories(this.actualCategories.map((e) => e.id));
+                    this.debounce_updateCategories(this.actualCategories.map(e => e.id));
                     break;
             }
         },
@@ -196,11 +207,11 @@ export default {
             try {
                 await this[UPDATE_ENTITIES]({ type, items });
                 switch (type) {
-                    case entityTypes.BRANDS:
+                    case preferenceEntityTypes.BRANDS:
                         this.actualBrands = [...this[BRANDS]];
                         break;
 
-                    case entityTypes.CATEGORIES:
+                    case preferenceEntityTypes.CATEGORIES:
                         this.actualCategories = [...this[CATEGORIES]];
                         break;
                 }
@@ -210,16 +221,18 @@ export default {
         },
 
         onAddEntities(type) {
+            const { preferenceType } = this;
+
             let availableEntities = [];
             let entities = [];
 
             switch (type) {
-                case entityTypes.BRANDS:
+                case preferenceEntityTypes.BRANDS:
                     availableEntities = this[AVAILABLE_BRANDS];
                     entities = this.actualBrands;
                     break;
 
-                case entityTypes.CATEGORIES:
+                case preferenceEntityTypes.CATEGORIES:
                     availableEntities = this[AVAILABLE_CATEGORIES];
                     entities = this.actualCategories;
                     break;
@@ -230,6 +243,7 @@ export default {
                 open: true,
                 state: {
                     type,
+                    preferenceType,
                     availableEntities,
                     entities,
                 },
@@ -239,13 +253,18 @@ export default {
 
     async serverPrefetch() {
         try {
-            await this[FETCH_PREFERENCES_DATA](this.$isServer);
+            await this[FETCH_PREFERENCES_DATA]({
+                preferenceType: preferenceType.PERSONAL,
+                isServer: this.$isServer,
+            });
+            this[SET_TYPE](this.preferenceType);
         } catch (error) {
             $logger.error(error);
         }
     },
 
     beforeRouteEnter(to, from, next) {
+        const { name } = to;
         const { load } = $store.state[PROFILE_MODULE][PREFERENCES_MODULE];
 
         if (load) {
@@ -254,19 +273,20 @@ export default {
             return;
         }
 
+        const type = getPreferenceType(name);
+
         $progress.start();
         $store
             .dispatch(`${PREFERENCES_MODULE_PATH}/${FETCH_PREFERENCES_DATA}`)
             .then(() => {
-                next((vm) => {
+                next(vm => {
                     $progress.finish();
                 });
             })
-            .catch((thrown) => {
-                $progress.fail();
-                $logger.error('beforeRouteEnter', thrown.error);
-                $progress.finish();
-                next();
+            .catch(thrown => {
+                next(vm => {
+                    $progress.fail();
+                });
             });
     },
 
@@ -275,12 +295,12 @@ export default {
         this.actualCategories = [...this[CATEGORIES]];
 
         this.debounce_updateBrands = _debounce(
-            (items) => this[UPDATE_ENTITIES]({ type: entityTypes.BRANDS, items }),
+            items => this[UPDATE_ENTITIES]({ type: preferenceEntityTypes.BRANDS, items }),
             1000
         );
 
         this.debounce_updateCategories = _debounce(
-            (items) => this[UPDATE_ENTITIES]({ type: entityTypes.CATEGORIES, items }),
+            items => this[UPDATE_ENTITIES]({ type: preferenceEntityTypes.CATEGORIES, items }),
             1000
         );
     },
