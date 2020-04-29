@@ -71,7 +71,6 @@ export default {
                 ...Referal.routes,
                 ...Promocodes.routes,
                 ...Promopage.routes,
-                ...ProPreferences.routes,
                 ...Seo.routes,
                 ...Account.routes,
                 ...Documents.routes,

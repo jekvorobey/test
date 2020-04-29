@@ -201,13 +201,13 @@ export function changeProfilePersonal({ firstName, lastName, middleName, birthda
     });
 }
 
-export function getProfilePreferences() {
-    return $http.get('/v1/lk/preference');
+export function getProfilePreferences(type) {
+    return $http.get(`/v1/lk/preferences/${type}`);
 }
 
-export function changeProfilePreferences(type, items) {
-    return $http.put(`/v1/lk/preference/${type}`, {
-        [type]: items,
+export function changeProfilePreferences(type, entityType, items) {
+    return $http.put(`/v1/lk/preferences/${type}/${entityType}`, {
+        [entityType]: items,
     });
 }
 
