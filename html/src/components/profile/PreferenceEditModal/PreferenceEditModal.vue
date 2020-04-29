@@ -1,5 +1,12 @@
 <template>
-    <general-modal type="sm" class="preference-edit-modal" :header="header" @close="onClose" :is-mobile="isTablet">
+    <general-modal
+        v-if="isOpen"
+        type="sm"
+        class="preference-edit-modal"
+        :header="header"
+        @close="onClose"
+        :is-mobile="isTablet"
+    >
         <template v-slot:content>
             <h3 class="preference-edit-modal__hl">{{ header }}</h3>
             <v-input class="preference-edit-modal__input" @input="debounce_onFilterChange">
@@ -71,9 +78,14 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: (state) =>
+            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+            modalState: state =>
                 (state[MODALS][NAME] && state[MODALS][NAME].state) || { availableEntities: [], entities: [] },
         }),
+
+        prefType() {
+            return this.modalState.prefType;
+        },
 
         type() {
             return this.modalState.type;
@@ -86,7 +98,7 @@ export default {
         filteredEntities() {
             const filter = (this.filterString || '').toLowerCase();
             return this.modalState.availableEntities.filter(
-                (e) => !this.entities.some((se) => se.id === e.id) && (e.name || '').toLowerCase().includes(filter)
+                e => !this.entities.some(se => se.id === e.id) && (e.name || '').toLowerCase().includes(filter)
             );
         },
 
@@ -125,7 +137,7 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         isChecked(id) {
-            return this.selectedEntities.some((e) => e.id === id);
+            return this.selectedEntities.some(e => e.id === id);
         },
 
         onFilterChange(filterString) {
@@ -141,8 +153,10 @@ export default {
         },
 
         onSubmit() {
-            const newEntities = [...this.entities.map((e) => e.id), ...this.selectedEntities.map((e) => e.id)];
-            this.$emit('submit', { type: this.type, items: newEntities });
+            const { type, prefType } = this;
+
+            const newEntities = [...this.entities.map(e => e.id), ...this.selectedEntities.map(e => e.id)];
+            this.$emit('submit', { prefType, type, items: newEntities });
             this.onClose();
         },
 

@@ -17,10 +17,7 @@ export const NAME = 'profile';
 export const BREADCRUMBS = 'breadcrumbs';
 
 export const PROMO_DATA = 'promoData';
-export const PREFERENCES_DATA = 'preferencesData';
 export const MESSAGES_DATA = 'messagesData';
-
-export const PRO_PREFERENCES_DATA = 'proPreferencesData';
 
 export const AVAILABLE_PROFILES = 'availableProfiles';
 export const AVAILABLE_CATEGORIES = 'availableCategories';
@@ -80,21 +77,6 @@ export default function createModule() {
                 ],
 
                 messageDetail: null,
-            },
-
-            [PRO_PREFERENCES_DATA]: {
-                brands: [
-                    {
-                        id: 5,
-                        name: 'gli elementi',
-                    },
-                ],
-                categories: [
-                    {
-                        id: 1,
-                        name: 'Кондиционер: Смываемый',
-                    },
-                ],
             },
         },
         actions,

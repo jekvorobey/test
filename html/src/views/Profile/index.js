@@ -24,7 +24,6 @@ import ReferalOrderDetails from './ReferalOrderDetails/ReferalOrderDetails';
 import Referal from './Referal/Referal';
 import Promocodes from './Promocodes/Promocodes';
 import Promopage from './Promopage/Promopage';
-import ProPreferences from './ProPreferences/ProPreferences';
 import Seo from './Seo/Seo';
 import Account from './Account/Account';
 import Documents from './Documents/Documents';

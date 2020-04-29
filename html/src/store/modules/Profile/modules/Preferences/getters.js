@@ -1,3 +1,5 @@
+import { preferenceType } from '@enums/profile';
+
 const TYPE = 'type';
 const PREFERENCES_DATA = 'preferencesData';
 const CUSTOMER = 'customer';
@@ -9,6 +11,8 @@ const CATEGORIES_MAP = 'categoriesMap';
 
 export const BRANDS = 'brands';
 export const CATEGORIES = 'categories';
+
+export const GET_CUSTOMER_BY_TYPE = 'GET_CUSTOMER_BY_TYPE';
 
 export default {
     [BRANDS](state, getters) {
@@ -24,7 +28,7 @@ export default {
     },
 
     [BRANDS_MAP](state) {
-        const type = state[TYPE];
+        const type = state[TYPE] || preferenceType.PROFESSIONAL;
         const brands = state[PREFERENCES_DATA][type][CUSTOMER][BRANDS] || [];
         const map = {};
         for (const brandId of brands) map[brandId] = brandId;
@@ -32,10 +36,14 @@ export default {
     },
 
     [CATEGORIES_MAP](state) {
-        const type = state[TYPE];
+        const type = state[TYPE] || preferenceType.PROFESSIONAL;
         const categories = state[PREFERENCES_DATA][type][CUSTOMER][CATEGORIES] || [];
         const map = {};
         for (const categoryId of categories) map[categoryId] = categoryId;
         return map;
+    },
+
+    [GET_CUSTOMER_BY_TYPE]: (state) => (type) => {
+        return state[PREFERENCES_DATA][type][CUSTOMER] || {};
     },
 };
