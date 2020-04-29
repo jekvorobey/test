@@ -232,4 +232,31 @@
             width: 100%;
         }
     }
+
+    &__attention {
+        &-panel {
+            flex-wrap: nowrap;
+            align-items: flex-start;
+
+            @media (--tablet) {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            & > .attention-panel__icon {
+                margin-top: calc(var(--gs) * 1.5);
+
+                @media (--tablet) {
+                    margin-top: 0;
+                    margin-bottom: calc(var(--gs) * 1.5);
+                }
+            }
+        }
+
+        &-link {
+            text-transform: none;
+            text-decoration: underline;
+            font-weight: normal;
+        }
+    }
 }
