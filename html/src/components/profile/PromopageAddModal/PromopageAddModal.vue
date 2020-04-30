@@ -16,7 +16,7 @@
             </v-input>
 
             <!-- <h6 class="promopage-add-modal__title">В вашем избранном</h6> -->
-            <v-scroll>
+            <v-scroll class="promopage-add-modal__scroll">
                 <ul class="promopage-add-modal__list">
                     <cart-panel-product-card
                         class="promopage-add-modal__list-item"
