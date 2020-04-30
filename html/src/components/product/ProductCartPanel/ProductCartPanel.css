@@ -46,6 +46,7 @@
 
         &-wishlist {
             font-weight: 700;
+            max-width: calc(var(--gs) * 22);
         }
     }
 }

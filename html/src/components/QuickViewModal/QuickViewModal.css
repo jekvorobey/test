@@ -9,6 +9,10 @@
         padding: calc(var(--gs) * 3);
     }
 
+    .modal-wrapper {
+        margin-top: calc(var(--gs) * 8);
+    }
+
     &__body {
         display: flex;
     }
@@ -21,6 +25,10 @@
             padding-bottom: calc(var(--gs) * 3);
             margin-bottom: calc(var(--gs) * 3);
             border-bottom: 1px solid var(--cl-divider-grey);
+        }
+
+        &-header {
+            padding-right: calc(var(--gs) * 3);
         }
     }
 
