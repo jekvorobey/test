@@ -28,6 +28,7 @@ export default {
         const {
             can_edit_referral_code,
             referral_partner,
+            referral_personal_discount,
             has_password,
 
             avatar,
@@ -69,6 +70,7 @@ export default {
         state.portfolio = portfolio;
         state.activities = activities;
         state.allActivities = activitiesAll;
+        state.referralPersonalDiscount = referral_personal_discount;
 
         state.social = social;
         state.certificates = certificates;

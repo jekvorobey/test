@@ -19,6 +19,7 @@ export const EMAIL = 'email';
 export const PORTFOLIO = 'portfolio';
 export const ACTIVITIES = 'activities';
 export const All_ACTIVITIES = 'allActivities';
+export const REFERRAL_PERSONAL_DISCOUNT = 'referralPersonalDiscount';
 
 export const SOCIAL = 'social';
 export const CERTIFICATES = 'certificates';
@@ -47,6 +48,7 @@ export default function createModule() {
             [PORTFOLIO]: [],
             [ACTIVITIES]: [],
             [All_ACTIVITIES]: [],
+            [REFERRAL_PERSONAL_DISCOUNT]: null,
 
             [SOCIAL]: [],
 
