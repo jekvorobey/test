@@ -90,7 +90,7 @@ export default {
     computed: {
         ...mapState(PROMOPAGE_MODULE_PATH, [SEARCH_ITEMS]),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+            isOpen: (state) => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
         }),
 
         isTablet() {

@@ -30,7 +30,7 @@ injectClass(injectionType.STORE, DadataHttpService, 0);
 // state of our application before actually rendering it.
 // Since data fetching is async, this function is expected to
 // return a Promise that resolves to the app instance.
-export default context => {
+export default (context) => {
     return new Promise((resolve, reject) => {
         const { url, req, res, env } = context;
         const appContext = new ApplicationContext();
@@ -45,34 +45,18 @@ export default context => {
         const { $container } = ServiceLocator;
 
         $container.bind(injectionType.APPLICATION_CONTEXT).toConstantValue(appContext);
-        $container
-            .bind(injectionType.PROGRESS)
-            .to(MockProgressService)
-            .inSingletonScope();
-        $container
-            .bind(injectionType.LOGGER)
-            .to(ServerLogger)
-            .inSingletonScope();
-        $container
-            .bind(injectionType.COOKIE)
-            .to(ServerCookie)
-            .inSingletonScope();
-        $container
-            .bind(injectionType.HTTP)
-            .to(HttpService)
-            .inSingletonScope();
-        $container
-            .bind(injectionType.DADATA)
-            .to(DadataHttpService)
-            .inSingletonScope();
+        $container.bind(injectionType.PROGRESS).to(MockProgressService).inSingletonScope();
+        $container.bind(injectionType.LOGGER).to(ServerLogger).inSingletonScope();
+        $container.bind(injectionType.COOKIE).to(ServerCookie).inSingletonScope();
+        $container.bind(injectionType.HTTP).to(HttpService).inSingletonScope();
+        $container.bind(injectionType.DADATA).to(DadataHttpService).inSingletonScope();
 
         const { app, router, store } = createApp($container);
-        const logger = $container.get(injectionType.LOGGER);
 
         // set router's location
         router.push(url);
 
-        router.onReady(ctx => {
+        router.onReady((ctx) => {
             if (appContext.redirect) return reject({ code: appContext.statusCode, url: appContext.redirect });
             if (appContext.statusCode) res.status(appContext.statusCode);
 
