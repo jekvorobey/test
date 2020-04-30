@@ -1,0 +1,11 @@
+.v-scroll {
+    .__bar {
+        &-is-vertical {
+            width: 4px !important;
+            background: var(--cl-global) !important;
+        }
+    }
+    .__view {
+        padding-right: var(--gs);
+    }
+}
