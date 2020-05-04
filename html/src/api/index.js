@@ -262,6 +262,10 @@ export function getProfileOrderPaymentLink(orderId, paymentId, backUrl) {
     });
 }
 
+export function repeatOrder(id) {
+    return $http.post(`/v1/lk/order/${id}/repeat`);
+}
+
 export function getProfileSeoProducts(pageNum, perPage, isActive) {
     return $http.get('/v1/lk/promotion-product', {
         params: {
