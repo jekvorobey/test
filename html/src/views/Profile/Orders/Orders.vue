@@ -221,11 +221,11 @@
                     <info-row class="orders-view__list-item-row" name="Cтатус">
                         {{ $t(`orderStatus.${order.status}`) }}
                     </info-row>
-                    <!-- <info-row class="orders-view__list-item-row">
-                        <v-link tag="button" @click.stop>
+                    <info-row class="orders-view__list-item-row">
+                        <v-link tag="button" @click.stop="onRepeatOrder(order)">
                             Повторить
                         </v-link>
-                    </info-row> -->
+                    </info-row>
                 </template>
             </li>
         </ul>

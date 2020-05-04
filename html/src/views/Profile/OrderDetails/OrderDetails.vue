@@ -54,8 +54,12 @@
                         </v-button>
                     </template>
 
-                    <!-- <v-button class="btn--outline order-details-view__details-controls-btn">Повторить заказ</v-button>
-                    <v-link class="order-details-view__details-controls-link">Оформить возврат</v-link> -->
+                    <v-button
+                        class="btn--outline order-details-view__details-controls-btn"
+                        @click.stop="onRepeatOrder(order.id)"
+                        >Повторить заказ</v-button
+                    >
+                    <!-- <v-link class="order-details-view__details-controls-link">Оформить возврат</v-link> -->
                 </div>
             </div>
         </div>
@@ -156,7 +160,11 @@ import {
     FETCH_ORDER_DETAILS,
     SET_LOAD_PATH,
     GET_ORDER_PAYMENT_LINK,
+    REPEAT_ORDER,
 } from '@store/modules/Profile/modules/Orders/actions';
+
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { FETCH_CART_DATA } from '@store/modules/Cart/actions';
 
 import { toAddressString } from '@util/address';
 import { getOrderStatusColorClass, getDeliveryStatusColorClass } from '@util/order';
@@ -246,12 +254,17 @@ export default {
 
     methods: {
         ...mapActions(PROFILE_MODULE, [UPDATE_BREADCRUMB]),
-        ...mapActions(ORDERS_MODULE_PATH, [FETCH_ORDER_DETAILS, SET_LOAD_PATH, GET_ORDER_PAYMENT_LINK]),
+        ...mapActions(ORDERS_MODULE_PATH, [FETCH_ORDER_DETAILS, SET_LOAD_PATH, GET_ORDER_PAYMENT_LINK, REPEAT_ORDER]),
+        ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
 
         async onContinuePayment(orderId) {
             const backUrl = `${document.location.origin}/thank-you`;
             const url = await this[GET_ORDER_PAYMENT_LINK]({ id: orderId, backUrl });
             document.location.href = url;
+        },
+
+        async onRepeatOrder(orderId) {
+            Promise.resolve(this[REPEAT_ORDER](orderId)).then(this[FETCH_CART_DATA]());
         },
 
         getDeliveryStatusClass(status) {
