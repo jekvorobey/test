@@ -20,6 +20,10 @@
         color: var(--cl-global);
     }
 
+    &--big {
+        height: calc(var(--gs) * 6);
+    }
+
     &.is-disabled,
     &:disabled {
         background-color: var(--cl-grey);

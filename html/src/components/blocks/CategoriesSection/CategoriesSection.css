@@ -20,7 +20,6 @@
 
     &__item {
         width: calc(var(--gs) * 15);
-        padding-bottom: calc(var(--gs) * 2);
 
         @media (--tablet) {
             width: calc(var(--gs) * 8);

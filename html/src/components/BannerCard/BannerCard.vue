@@ -64,8 +64,7 @@ export default {
         },
 
         defaultImage() {
-            if (this.image && this.image.id)
-                return generatePictureSourcePath(400, 240, this.image.id);
+            if (this.image && this.image.id) return generatePictureSourcePath(400, 240, this.image.id);
         },
     },
 };

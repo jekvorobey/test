@@ -27,6 +27,8 @@
 
         &-tags {
             &-item {
+                margin-right: calc(var(--gs) * 2);
+                margin-bottom: calc(var(--gs) * 2);
                 @media (--tablet) {
                     width: 100%;
                 }

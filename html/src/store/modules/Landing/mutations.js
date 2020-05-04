@@ -77,10 +77,11 @@ export default {
             //         banner: state.banners[10],
             //     },
             // },
-            {
-                id: 7,
-                component: 'separator-section',
-            },
+            // #59115
+            // {
+            //     id: 7,
+            //     component: 'separator-section',
+            // },
             {
                 id: 8,
                 component: 'products-section',
