@@ -8,7 +8,6 @@
 
         &-item {
             padding: calc(var(--gs) * 2) 0;
-            padding-right: calc(var(--gs) * 2);
             border-bottom: 1px solid var(--cl-divider-grey);
 
             &:last-of-type {
