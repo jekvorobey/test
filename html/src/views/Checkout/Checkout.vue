@@ -214,7 +214,7 @@ export default {
         },
     },
 
-    beforeRouteEnter(to, from, next) {
+    async beforeRouteEnter(to, from, next) {
         // вызывается до подтверждения пути, соответствующего этому компоненту.
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
@@ -227,8 +227,10 @@ export default {
         registerModuleIfNotExists($store, CHECKOUT_MODULE, checkoutModule);
         const { checkoutType } = $store.state[CHECKOUT_MODULE];
 
-        if (checkoutType === type) return next();
-        else {
+        if (checkoutType === type) {
+            await $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type);
+            return next();
+        } else {
             $progress.start();
             $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type).then(() => {
                 next(vm => $progress.finish());

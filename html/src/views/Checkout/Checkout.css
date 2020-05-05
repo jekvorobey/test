@@ -227,7 +227,7 @@
                 margin-bottom: calc(var(--gs) * 2);
 
                 &--success {
-                    background-color: #eff1f3;
+                    background-color: var(--cl-divider-grey);
                     padding: var(--gs) calc(var(--gs) * 2);
                 }
 

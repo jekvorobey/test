@@ -597,6 +597,14 @@ export function addCartItem(offerId, storeId, count, referrerCode) {
     });
 }
 
+export function addCartPromocode(data) {
+    return $http.post('/v1/cart/promo-code', data);
+}
+
+export function deleteCartPromocode(data) {
+    return $http.post('/v1/cart/promo-code', data);
+}
+
 // checkout
 
 export function getCheckoutData(data) {

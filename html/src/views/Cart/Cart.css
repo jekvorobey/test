@@ -189,6 +189,23 @@
                 display: flex;
                 margin-bottom: calc(var(--gs) * 2);
 
+                &--success {
+                    background-color: var(--cl-divider-grey);
+                    padding: var(--gs) calc(var(--gs) * 2);
+                }
+
+                &--success &-icon {
+                    margin-right: var(--gs);
+                }
+
+                &--success &-link {
+                    text-transform: none;
+                    font-size: 14px;
+                    line-height: 24px;
+                    font-weight: normal;
+                    color: var(--cl-grey);
+                }
+
                 &-btn {
                     padding: 6px calc(var(--gs) * 2);
                 }
