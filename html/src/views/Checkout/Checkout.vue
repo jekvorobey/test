@@ -130,16 +130,24 @@ import CheckoutMasterClassPanel from '@components/checkout/CheckoutMasterClassPa
 import { $store, $logger, $progress } from '@services';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+
 import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
 import { CART_ITEMS_COUNT } from '@store/modules/Cart/getters';
 
-import checkoutModule, { NAME as CHECKOUT_MODULE, CHECKOUT_TYPE, CHECKOUT_DATA } from '@store/modules/Checkout';
-import { FETCH_CHECKOUT_DATA, ADD_PROMOCODE, DELETE_PROMOCODE, COMMIT_DATA } from '@store/modules/Checkout/actions';
+import { NAME as CHECKOUT_MODULE, CHECKOUT_TYPE, CHECKOUT_DATA } from '@store/modules/Checkout';
+import {
+    FETCH_CHECKOUT_DATA,
+    ADD_PROMOCODE,
+    DELETE_PROMOCODE,
+    COMMIT_DATA,
+    CLEAR_CHECKOUT_DATA,
+} from '@store/modules/Checkout/actions';
 import { CHECKOUT, PROMO_CODE, SUMMARY, RECEIVE_METHODS } from '@store/modules/Checkout/getters';
 
-import { registerModuleIfNotExists } from '@util/store';
 import { preparePrice } from '@util';
 import { cartItemTypes } from '@enums/product';
+import { cancelRoute } from '@settings';
 import '@images/sprites/check-small.svg';
 import '@images/sprites/arrow-small.svg';
 import './Checkout.css';
@@ -168,6 +176,7 @@ export default {
     },
 
     computed: {
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(CART_MODULE, [CART_DATA]),
         ...mapState(CHECKOUT_MODULE, [CHECKOUT_TYPE, CHECKOUT_DATA]),
         ...mapState('route', {
@@ -197,8 +206,20 @@ export default {
         },
     },
 
+    watch: {
+        [HAS_SESSION](value) {
+            if (!value) this.$router.replace(cancelRoute.path);
+        },
+    },
+
     methods: {
-        ...mapActions(CHECKOUT_MODULE, [FETCH_CHECKOUT_DATA, ADD_PROMOCODE, DELETE_PROMOCODE, COMMIT_DATA]),
+        ...mapActions(CHECKOUT_MODULE, [
+            FETCH_CHECKOUT_DATA,
+            CLEAR_CHECKOUT_DATA,
+            ADD_PROMOCODE,
+            DELETE_PROMOCODE,
+            COMMIT_DATA,
+        ]),
 
         async onCommit() {
             try {
@@ -219,7 +240,7 @@ export default {
         },
     },
 
-    async beforeRouteEnter(to, from, next) {
+    beforeRouteEnter(to, from, next) {
         // вызывается до подтверждения пути, соответствующего этому компоненту.
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
@@ -228,22 +249,19 @@ export default {
             params: { type },
         } = to;
 
-        //регистрируем модуль, если такого нет
-        registerModuleIfNotExists($store, CHECKOUT_MODULE, checkoutModule);
-        const { checkoutType } = $store.state[CHECKOUT_MODULE];
+        const checkoutData = $store.state[CHECKOUT_MODULE][CHECKOUT_DATA];
 
-        if (checkoutType === type) {
-            await $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type);
-            return next();
-        } else {
+        if (checkoutData) next();
+        else {
             $progress.start();
-            $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type).then(() => {
-                next(vm => $progress.finish());
-            });
+            $store
+                .dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type)
+                .then(() => next(vm => $progress.finish()))
+                .catch(() => next(vm => $progress.fail()));
         }
     },
 
-    beforeRouteUpdate(to, from, next) {
+    async beforeRouteUpdate(to, from, next) {
         // вызывается когда маршрут, что рендерит этот компонент изменился,
         // но этот компонент будет повторно использован в новом маршруте.
         // Например, для маршрута с динамическими параметрами `/foo/:id`, когда мы
@@ -251,15 +269,23 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        const {
-            params: { type },
-        } = to;
+        try {
+            const {
+                params: { type },
+            } = to;
 
-        this.$progress.start();
-        this[FETCH_CHECKOUT_DATA](type)
-            .then(() => this.$progress.finish())
-            .catch(() => this.$progress.fail());
-        next();
+            this.$progress.start();
+            await this[FETCH_CHECKOUT_DATA](type);
+            this.$progress.finish();
+            next();
+        } catch (error) {
+            this.$progress.fail();
+            next(false);
+        }
+    },
+
+    beforeDestroy() {
+        this[CLEAR_CHECKOUT_DATA]();
     },
 };
 </script>

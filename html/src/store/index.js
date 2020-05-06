@@ -12,6 +12,7 @@ import auth from './modules/Auth';
 import modal from './modules/Modal';
 import search from './modules/Search';
 import cart from './modules/Cart';
+import checkout from './modules/Checkout';
 import preview from './modules/Preview';
 import featured from './modules/Featured';
 import geolocation from './modules/Geolocation';
@@ -63,14 +64,17 @@ export default function createStore(container) {
             [BANNER]: {},
             [ENV]: context.env,
         },
+
         getters,
         mutations,
         actions,
+
         modules: {
             modal: modal(),
             search: search(),
             auth: auth(),
             cart: cart(),
+            checkout: checkout(),
             geolocation: geolocation(),
             preview: preview(),
             featured: featured(),

@@ -28,7 +28,7 @@ export default function createModule() {
                 [PROMOCODE_STATUS]: requestStatus.SUCCESS,
                 [ADDRESS_STATUS]: requestStatus.SUCCESS,
             },
-            [CHECKOUT_DATA]: { input: {}, summary: {} },
+            [CHECKOUT_DATA]: null,
             [CHECKOUT_TYPE]: null,
         },
         actions,

@@ -43,45 +43,45 @@ export const PROMOCODE_STATUS = 'promocodeStatus';
 export const SUMMARY = 'summary';
 
 export default {
-    [AVAILABLE_BONUS]: (state) => state.checkoutData[AVAILABLE_BONUS],
+    [AVAILABLE_BONUS]: (state) => (state.checkoutData && state.checkoutData[AVAILABLE_BONUS]) || [],
 
-    [RECIPIENTS]: (state) => state.checkoutData[RECIPIENTS] || [],
-    [ADDRESSES]: (state) => state.checkoutData[ADDRESSES] || [],
-    [PICKUP_POINTS]: (state) => state.checkoutData[PICKUP_POINTS] || [],
+    [RECIPIENTS]: (state) => (state.checkoutData && state.checkoutData[RECIPIENTS]) || [],
+    [ADDRESSES]: (state) => (state.checkoutData && state.checkoutData[ADDRESSES]) || [],
+    [PICKUP_POINTS]: (state) => (state.checkoutData && state.checkoutData[PICKUP_POINTS]) || [],
 
-    [RECEIVE_METHODS]: (state) => state.checkoutData[RECEIVE_METHODS] || [],
-    [PAYMENT_METHODS]: (state) => state.checkoutData[PAYMENT_METHODS] || [],
+    [RECEIVE_METHODS]: (state) => (state.checkoutData && state.checkoutData[RECEIVE_METHODS]) || [],
+    [PAYMENT_METHODS]: (state) => (state.checkoutData && state.checkoutData[PAYMENT_METHODS]) || [],
 
-    [CONFIRMATION_TYPES]: (state) => state.checkoutData[CONFIRMATION_TYPES] || [],
+    [CONFIRMATION_TYPES]: (state) => (state.checkoutData && state.checkoutData[CONFIRMATION_TYPES]) || [],
 
-    [DELIVERY_TYPES]: (state) => state.checkoutData[DELIVERY_TYPES] || [],
+    [DELIVERY_TYPES]: (state) => (state.checkoutData && state.checkoutData[DELIVERY_TYPES]) || [],
 
-    [CHECKOUT_INPUT]: (state) => state.checkoutData.input || {},
+    [CHECKOUT_INPUT]: (state) => (state.checkoutData && state.checkoutData.input) || {},
 
     [DELIVERY_METHODS]: (state, getters) => {
-        const receiveMethod = state.checkoutData.receiveMethods.find(
-            (m) => m.id === getters[SELECTED_RECEIVE_METHOD_ID]
-        );
+        const receiveMethod =
+            state.checkoutData &&
+            state.checkoutData.receiveMethods.find((m) => m.id === getters[SELECTED_RECEIVE_METHOD_ID]);
         return receiveMethod ? receiveMethod.methods : [];
     },
 
-    [SELECTED_RECEIVE_METHOD_ID]: (state) => state.checkoutData.input.receiveMethodID,
-    [SELECTED_DELIVERY_METHOD_ID]: (state) => state.checkoutData.input.deliveryMethodID,
-    [SELECTED_PAYMENT_METHOD_ID]: (state) => state.checkoutData.input.paymentMethodID,
-    [SELECTED_CONFIRMATION_TYPE_ID]: (state) => state.checkoutData.input.confirmationTypeID,
+    [SELECTED_RECEIVE_METHOD_ID]: (state) => state.checkoutData && state.checkoutData.input.receiveMethodID,
+    [SELECTED_DELIVERY_METHOD_ID]: (state) => state.checkoutData && state.checkoutData.input.deliveryMethodID,
+    [SELECTED_PAYMENT_METHOD_ID]: (state) => state.checkoutData && state.checkoutData.input.paymentMethodID,
+    [SELECTED_CONFIRMATION_TYPE_ID]: (state) => state.checkoutData && state.checkoutData.input.confirmationTypeID,
 
-    [SELECTED_RECIPIENT]: (state) => state.checkoutData.input.recipient,
-    [SELECTED_ADDRESS]: (state) => state.checkoutData.input.address,
-    [SELECTED_PICKUP_POINT]: (state) => state.checkoutData.input.pickupPoint,
-    [SELECTED_DELIVERY_TYPE]: (state) => state.checkoutData.input.deliveryType,
+    [SELECTED_RECIPIENT]: (state) => state.checkoutData && state.checkoutData.input.recipient,
+    [SELECTED_ADDRESS]: (state) => state.checkoutData && state.checkoutData.input.address,
+    [SELECTED_PICKUP_POINT]: (state) => state.checkoutData && state.checkoutData.input.pickupPoint,
+    [SELECTED_DELIVERY_TYPE]: (state) => state.checkoutData && state.checkoutData.input.deliveryType,
 
-    [BONUS]: (state) => state.checkoutData.input.bonus,
-    [PROMO_CODE]: (state) => state.checkoutData.input.promoCode,
-    [SUBSCRIBE]: (state) => !!state.checkoutData.input.subscribe,
-    [AGREEMENT]: (state) => !!state.checkoutData.input.agreement,
-    [CERTIFICATES]: (state) => state.checkoutData.input.certificates || [],
+    [BONUS]: (state) => state.checkoutData && state.checkoutData.input.bonus,
+    [PROMO_CODE]: (state) => state.checkoutData && state.checkoutData.input.promoCode,
+    [SUBSCRIBE]: (state) => state.checkoutData && !!state.checkoutData.input.subscribe,
+    [AGREEMENT]: (state) => state.checkoutData && !!state.checkoutData.input.agreement,
+    [CERTIFICATES]: (state) => (state.checkoutData && state.checkoutData.input.certificates) || [],
 
-    [SUMMARY]: (state) => state.checkoutData[SUMMARY],
+    [SUMMARY]: (state) => (state.checkoutData && state.checkoutData[SUMMARY]) || {},
 
     [CHECKOUT_STATUS]: (state) => state[CHECKOUT_STATUS] || {},
     [RECEIVE_METHOD_STATUS]: (state) => state[CHECKOUT_STATUS][RECEIVE_METHOD_STATUS] || requestStatus.SUCCESS,
