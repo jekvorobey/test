@@ -1,6 +1,14 @@
 .checkout-product-panel {
     counter-reset: item;
 
+    &__attention {
+        flex-wrap: nowrap;
+
+        @media (--tablet-lg) {
+            margin-bottom: calc(var(--gs) * 3);
+        }
+    }
+
     &__item {
         position: relative;
         margin-bottom: calc(var(--gs) * 2);

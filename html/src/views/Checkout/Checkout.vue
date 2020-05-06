@@ -17,7 +17,7 @@
                 <div class="checkout-view__main-body">
                     <component ref="panel" :is="checkoutPanel" />
                 </div>
-                <v-sticky class="checkout-view__main-sticky">
+                <v-sticky class="checkout-view__main-sticky" v-if="canDeliver">
                     <template v-slot:sticky>
                         <div class="checkout-view__main-panel">
                             <p v-if="isProduct" class="text-grey checkout-view__main-panel-info">
@@ -135,7 +135,7 @@ import { CART_ITEMS_COUNT } from '@store/modules/Cart/getters';
 
 import checkoutModule, { NAME as CHECKOUT_MODULE, CHECKOUT_TYPE, CHECKOUT_DATA } from '@store/modules/Checkout';
 import { FETCH_CHECKOUT_DATA, ADD_PROMOCODE, DELETE_PROMOCODE, COMMIT_DATA } from '@store/modules/Checkout/actions';
-import { CHECKOUT, PROMO_CODE, SUMMARY } from '@store/modules/Checkout/getters';
+import { CHECKOUT, PROMO_CODE, SUMMARY, RECEIVE_METHODS } from '@store/modules/Checkout/getters';
 
 import { registerModuleIfNotExists } from '@util/store';
 import { preparePrice } from '@util';
@@ -174,10 +174,15 @@ export default {
             checkoutType: state => state.params.type,
         }),
 
-        ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMARY]),
+        ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMARY, RECEIVE_METHODS]),
 
         isProduct() {
             return this.checkoutType === cartItemTypes.PRODUCT;
+        },
+
+        canDeliver() {
+            const receiveMethods = this[RECEIVE_METHODS];
+            return this.isProduct && receiveMethods && receiveMethods.length > 0;
         },
 
         checkoutPanel() {
