@@ -60,12 +60,11 @@ export default {
     computed: {
         desktopImage() {
             if (this.image && this.image.id)
-                return generatePictureSourcePath(400, 240, this.image.id, fileExtension.image.WEBP);
+                return generatePictureSourcePath(392, 240, this.image.id, fileExtension.image.WEBP);
         },
 
         defaultImage() {
-            if (this.image && this.image.id)
-                return generatePictureSourcePath(400, 240, this.image.id);
+            if (this.image && this.image.id) return generatePictureSourcePath(392, 240, this.image.id);
         },
     },
 };
