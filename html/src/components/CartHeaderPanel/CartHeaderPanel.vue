@@ -25,7 +25,7 @@
         </template>
         <template v-slot:bottom>
             <v-button class="btn--outline cart-header-panel__controls-btn" @click="onToCart">
-                В корзину
+                Оформить заказ
             </v-button>
             <div class="cart-header-panel__total" v-if="cartItemsCount > 0">
                 {{ $tc('cart.items', cartItemsCount) }} на сумму

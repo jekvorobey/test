@@ -125,4 +125,13 @@
             margin-right: auto;
         }
     }
+
+    &__no-account {
+        margin-left: calc(var(--gs) * 3);
+    }
+
+    &__close-btn {
+        top: calc(var(--gs) * 2);
+        right: calc(var(--gs) * 2);
+    }
 }

@@ -135,7 +135,11 @@
                             <span>&nbsp;&nbsp;Скопировать ссылку</span>
                         </v-link>
                     </info-row>
-                    <!-- <info-row class="cabinet-view__panel-item" name="Персональная скидка" :value="" /> -->
+                    <info-row
+                        class="cabinet-view__panel-item"
+                        name="Персональная скидка"
+                        :value="referralPersonalDiscount.percent"
+                    />
                 </ul>
             </div>
         </info-panel>
@@ -316,6 +320,7 @@ import {
     FIRST_NAME,
     LAST_NAME,
     CAN_EDIT_REFERRAL_CODE,
+    REFERRAL_PERSONAL_DISCOUNT,
 } from '@store/modules/Profile/modules/Cabinet';
 import { FULL_NAME, PROFILES_STRING } from '@store/modules/Profile/modules/Cabinet/getters';
 import {
@@ -429,6 +434,7 @@ export default {
             CERTIFICATES,
             LAST_NAME,
             FIRST_NAME,
+            REFERRAL_PERSONAL_DISCOUNT,
 
             CAN_EDIT_REFERRAL_CODE,
         ]),

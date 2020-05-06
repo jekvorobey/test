@@ -1,10 +1,19 @@
-import { cookieNames } from '@enums';
+import { cookieNames, requestStatus } from '@enums';
 import { $logger, $cookie } from '@services';
-import { getProducts, getCartData, deleteCartItem, addCartItem, deleteAllItems } from '@api';
+import {
+    getProducts,
+    getCartData,
+    deleteCartItem,
+    addCartItem,
+    deleteAllItems,
+    addCartPromocode,
+    deleteCartPromocode,
+} from '@api';
 import { getRandomIntInclusive } from '@util';
 import { storeErrorHandler } from '@util/store';
 
-import { SET_CART_DATA, SET_FEATURED_PRODUCTS, SET_RELATIVE_PRODUCTS } from './mutations';
+import { SET_CART_DATA, SET_FEATURED_PRODUCTS, SET_RELATIVE_PRODUCTS, SET_STATUS } from './mutations';
+import { PROMOCODE_STATUS } from './getters';
 
 export const CLEAR_CART_DATA = 'CLEAR_CART_DATA';
 export const FETCH_CART_DATA = 'FETCH_CART_DATA';
@@ -15,6 +24,9 @@ export const FETCH_FEATURED_PRODUCTS = 'FETCH_FEATURED_PRODUCTS';
 export const DELETE_ALL_ITEMS = 'DELETE_ALL_ITEMS';
 export const DELETE_CART_ITEM = 'DELETE_CART_ITEM';
 export const ADD_CART_ITEM = 'ADD_CART_ITEM';
+
+export const ADD_PROMOCODE = 'ADD_PROMOCODE';
+export const DELETE_PROMOCODE = 'DELETE_PROMOCODE';
 
 export default {
     async [FETCH_FEATURED_PRODUCTS]({ commit }, payload = {}) {
@@ -80,5 +92,31 @@ export default {
         } catch (error) {
             storeErrorHandler(DELETE_CART_ITEM, error);
         }
+    },
+
+    async [ADD_PROMOCODE]({ commit, state }, payload) {
+        commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
+        return addCartPromocode({ promoCode: payload, data: state.cartData })
+            .then((data) => {
+                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
+                commit(SET_CART_DATA, data);
+            })
+            .catch((error) => {
+                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
+                storeErrorHandler(ADD_PROMOCODE, true)(error);
+            });
+    },
+
+    [DELETE_PROMOCODE]({ commit, state }) {
+        commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
+        return deleteCartPromocode({ data: state.cartData })
+            .then((data) => {
+                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
+                commit(SET_CART_DATA, data);
+            })
+            .catch((error) => {
+                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
+                storeErrorHandler(DELETE_PROMOCODE, true)(error);
+            });
     },
 };

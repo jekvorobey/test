@@ -262,6 +262,10 @@ export function getProfileOrderPaymentLink(orderId, paymentId, backUrl) {
     });
 }
 
+export function repeatOrder(id) {
+    return $http.post(`/v1/lk/order/${id}/repeat`);
+}
+
 export function getProfileSeoProducts(pageNum, perPage, isActive) {
     return $http.get('/v1/lk/promotion-product', {
         params: {
@@ -591,6 +595,14 @@ export function addCartItem(offerId, storeId, count, referrerCode) {
         count,
         referrerCode: referrerCode ? String(referrerCode) : undefined,
     });
+}
+
+export function addCartPromocode(data) {
+    return $http.post('/v1/cart/promo-code', data);
+}
+
+export function deleteCartPromocode(data) {
+    return $http.post('/v1/cart/promo-code', data);
 }
 
 // checkout

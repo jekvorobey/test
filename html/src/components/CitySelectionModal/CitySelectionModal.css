@@ -6,6 +6,7 @@
 
     .modal-body {
         padding: calc(var(--gs) * 3);
+        padding-bottom: calc(var(--gs) * 4);
         overflow: hidden;
         display: flex;
         flex-direction: column;
@@ -68,6 +69,7 @@
             line-height: 24px;
             text-align: left;
             text-transform: none;
+            font-weight: normal;
 
             &:hover {
                 text-decoration: underline;

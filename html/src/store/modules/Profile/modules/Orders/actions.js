@@ -1,5 +1,5 @@
-import { storeErrorHandler } from '@util/store';
-import { getProfileOrdersInfo, getProfileOrders, getProfileOrder, getProfileOrderPaymentLink } from '@api';
+import store, { storeErrorHandler } from '@util/store';
+import { getProfileOrdersInfo, getProfileOrders, getProfileOrder, getProfileOrderPaymentLink, repeatOrder } from '@api';
 import { ORDERS_PAGE_SIZE } from '@constants/profile';
 
 import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
@@ -11,6 +11,7 @@ export const FETCH_ORDERS = 'FETCH_ORDERS';
 export const FETCH_ORDER_DETAILS = 'FETCH_ORDER_DETAILS';
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 export const GET_ORDER_PAYMENT_LINK = 'GET_ORDER_PAYMENT_LINK';
+export const REPEAT_ORDER = 'REPEAT_ORDER';
 
 export default {
     [SET_LOAD_PATH]({ commit }, payload) {
@@ -75,6 +76,14 @@ export default {
             ]);
         } catch (error) {
             storeErrorHandler(FETCH_ORDERS_DATA, true)(error);
+        }
+    },
+
+    async [REPEAT_ORDER]({ commit }, id) {
+        try {
+            await repeatOrder(id);
+        } catch (error) {
+            storeErrorHandler(REPEAT_ORDER, error);
         }
     },
 };

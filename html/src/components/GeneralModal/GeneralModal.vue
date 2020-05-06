@@ -1,5 +1,11 @@
 <template>
-    <v-modal v-if="!$isServer && mounted" class="general-modal" v-bind="$attrs" @close="$emit('close', $event)">
+    <v-modal
+        v-if="!$isServer && mounted"
+        class="general-modal"
+        v-bind="$attrs"
+        @close="$emit('close', $event)"
+        :closeBtnClass="closeBtnClass"
+    >
         <template v-slot:body>
             <v-sticky v-if="isMobile" class="general-modal__sticky">
                 <template v-slot:sticky>
@@ -53,6 +59,11 @@ export default {
         isMobile: {
             type: Boolean,
             default: false,
+        },
+
+        closeBtnClass: {
+            type: String,
+            default: '',
         },
     },
 

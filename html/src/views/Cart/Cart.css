@@ -87,6 +87,7 @@
             }
 
             .v-tabs__header {
+                border-bottom: 1px solid var(--cl-divider-grey);
                 @media (--tablet) {
                     margin: 0 calc(var(--gs) * 2);
                 }
@@ -187,6 +188,23 @@
             &-promo {
                 display: flex;
                 margin-bottom: calc(var(--gs) * 2);
+
+                &--success {
+                    background-color: var(--cl-divider-grey);
+                    padding: var(--gs) calc(var(--gs) * 2);
+                }
+
+                &--success &-icon {
+                    margin-right: var(--gs);
+                }
+
+                &--success &-link {
+                    text-transform: none;
+                    font-size: 14px;
+                    line-height: 24px;
+                    font-weight: normal;
+                    color: var(--cl-grey);
+                }
 
                 &-btn {
                     padding: 6px calc(var(--gs) * 2);

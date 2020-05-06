@@ -38,6 +38,20 @@
         </p>
 
         <p class="text-grey">
+            Мастер кнопка стандартная большая
+        </p>
+        <p>
+            <v-button class="btn btn--big" style="width: 184px;">
+                Оформить
+            </v-button>
+        </p>
+        <p>
+            <v-button class="btn btn--big" style="width: 184px;" disabled>
+                Оформить
+            </v-button>
+        </p>
+
+        <p class="text-grey">
             Мастер кнопка стандартная с обводкой
         </p>
 
