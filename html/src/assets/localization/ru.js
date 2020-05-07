@@ -258,6 +258,8 @@ const main = {
             GuideDetails: 'Гиды по продуктам',
             Masterclasses: 'Мои мастер-классы',
             QnA: 'Вопросы и ответы',
+
+            ReturnPage: 'Возврат',
         },
     },
 };
