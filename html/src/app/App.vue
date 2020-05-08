@@ -40,6 +40,9 @@ import './App.css';
  * Базовые компоненты страницы
  */
 
+import Vue from 'vue';
+import SocialSharing from 'vue-social-sharing';
+
 // Часто используемые(и маленькие) компоненты лучше добавить сразу в основной бандл,
 // ибо они используются повсеместно на всех страницах, и смысла выносить их в отдельный бандл и грузить отдельно нет
 import VSvg from '@controls/VSvg/VSvg.vue';
@@ -92,6 +95,9 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { $cookie } from '@services';
 import { eventName, interval, modalName, cookieNames } from '@enums';
 import { MIN_SCROLL_VALUE, SCROLL_DEBOUCE_TIME } from '@constants';
+
+Vue.use(SocialSharing);
+Vue.component('v-svg', VSvg);
 
 export default {
     name: 'app',

@@ -44,7 +44,9 @@
                     </a>
                 </div>
 
-                <v-html class="seo-view__panel-content" v-html="item.description" />
+                <p class="seo-view__panel-content">
+                    {{ item.description }}
+                </p>
 
                 <ul class="seo-view__panel-list">
                     <li class="seo-view__panel-item" v-for="file in item.files" :key="file.id">
@@ -57,8 +59,21 @@
 
                 <div class="text-bold seo-view__panel-share">
                     Поделиться
-                    <v-svg name="vkontakte-bw" width="24" height="24" />
-                    <v-svg name="facebook-bw" width="24" height="24" />
+                    <social-sharing
+                        :url="item.link"
+                        :title="item.product_name"
+                        :description="item.description"
+                        inline-template
+                    >
+                        <div :style="{ display: 'flex' }">
+                            <network class="network" network="vk">
+                                <v-svg name="vkontakte-bw" width="24" height="24" />
+                            </network>
+                            <network class="network" network="facebook">
+                                <v-svg name="facebook-bw" width="24" height="24" />
+                            </network>
+                        </div>
+                    </social-sharing>
                 </div>
             </div>
         </info-panel>
@@ -158,18 +173,18 @@ export default {
         ...mapState(SEO_MODULE_PATH, [ITEMS, ACTIVE_PAGE]),
         ...mapGetters(SEO_MODULE_PATH, [PAGES_COUNT]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || null,
+            [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || null,
         }),
 
         seoProducts() {
             const items = this[ITEMS] || [];
             const referralCode = this[REFERRAL_CODE];
 
-            return items.map(i => {
+            return items.map((i) => {
                 return {
                     ...i,
                     link: generateAbsoluteProductUrl(i.category_code, i.product_code, referralCode),
-                    files: i.files.map(f => {
+                    files: i.files.map((f) => {
                         return {
                             id: f.id,
                             image: generatePictureSourcePath(null, null, f.id, fileExtension.image.WEBP),
@@ -269,15 +284,15 @@ export default {
 
         const { loadPath } = $store.state[PROFILE_MODULE][SEO_MODULE];
 
-        if (loadPath === fullPath) next(vm => vm.setStatus(isActive));
+        if (loadPath === fullPath) next((vm) => vm.setStatus(isActive));
         else {
             $store
                 .dispatch(`${SEO_MODULE_PATH}/${FETCH_PRODUCTS}`, { page, isActive })
                 .then(() => {
                     $store.dispatch(`${SEO_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => vm.setStatus(isActive));
+                    next((vm) => vm.setStatus(isActive));
                 })
-                .catch(error => {
+                .catch((error) => {
                     $progress.fail();
                     next();
                 });
