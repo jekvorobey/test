@@ -83,7 +83,7 @@ export default {
         try {
             await repeatOrder(id);
         } catch (error) {
-            storeErrorHandler(REPEAT_ORDER, error);
+            storeErrorHandler(REPEAT_ORDER, true)(error);
         }
     },
 };

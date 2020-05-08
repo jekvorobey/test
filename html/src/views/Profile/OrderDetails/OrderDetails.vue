@@ -49,6 +49,7 @@
                             v-for="payment in order.payments"
                             :key="payment.id"
                             @click="onContinuePayment(order.id, payment.id)"
+                            :disabled="isDisabled"
                         >
                             Оплатить заказ
                         </v-button>
@@ -57,6 +58,7 @@
                     <v-button
                         class="btn--outline order-details-view__details-controls-btn"
                         @click.stop="onRepeatOrder(order.id)"
+                        :disabled="isDisabled"
                         >Повторить заказ</v-button
                     >
                     <!-- <v-link class="order-details-view__details-controls-link">Оформить возврат</v-link> -->
@@ -203,6 +205,12 @@ export default {
         PackageProductCard,
     },
 
+    data() {
+        return {
+            isDisabled: false,
+        };
+    },
+
     computed: {
         ...mapState([LOCALE]),
         ...mapState(ORDERS_MODULE_PATH, {
@@ -264,7 +272,15 @@ export default {
         },
 
         async onRepeatOrder(orderId) {
-            Promise.resolve(this[REPEAT_ORDER](orderId)).then(this[FETCH_CART_DATA]().then(this.$router.push({path: '/cart'})));
+            try {
+                this.isDisabled = true;
+                await this[REPEAT_ORDER](orderId);
+                await this[FETCH_CART_DATA]();
+                this.$router.push({ path: '/cart' });
+                this.isDisabled = false;
+            } catch (error) {
+                this.isDisabled = false;
+            }
         },
 
         getDeliveryStatusClass(status) {

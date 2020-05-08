@@ -153,6 +153,7 @@
                                     v-for="payment in order.payments"
                                     :key="payment.id"
                                     @click.stop="onContinuePayment(order.id, payment.id)"
+                                    :disabled="isDisabled"
                                 >
                                     Оплатить
                                 </v-button>
@@ -167,6 +168,7 @@
                                 class="orders-view__table-td-link"
                                 tag="button"
                                 @click.stop
+                                :disabled="isDisabled"
                             >
                                 Отменить
                             </v-link>
@@ -175,6 +177,7 @@
                                 class="orders-view__table-td-link"
                                 tag="button"
                                 @click.stop="onRepeatOrder(order)"
+                                :disabled="isDisabled"
                             >
                                 Повторить
                             </v-link>
@@ -206,6 +209,7 @@
                             v-for="payment in order.payments"
                             :key="payment.id"
                             @click.stop="onContinuePayment(order.id, payment.id)"
+                            :disabled="isDisabled"
                         >
                             Оплатить
                         </v-button>
@@ -222,7 +226,7 @@
                         {{ $t(`orderStatus.${order.status}`) }}
                     </info-row>
                     <info-row class="orders-view__list-item-row">
-                        <v-link tag="button" @click.stop="onRepeatOrder(order)">
+                        <v-link tag="button" @click.stop="onRepeatOrder(order)" :disabled="isDisabled">
                             Повторить
                         </v-link>
                     </info-row>
@@ -328,6 +332,7 @@ export default {
         return {
             showMore: false,
             filterModal: false,
+            isDisabled: false,
         };
     },
 
@@ -406,9 +411,15 @@ export default {
         },
 
         async onRepeatOrder({ id }) {
-            Promise.resolve(this[REPEAT_ORDER](id)).then(
-                this[FETCH_CART_DATA]().then(this.$router.push({ path: '/cart' }))
-            );
+            try {
+                this.isDisabled = true;
+                await this[REPEAT_ORDER](id);
+                await this[FETCH_CART_DATA]();
+                this.$router.push({ path: '/cart' });
+                this.isDisabled = false;
+            } catch (error) {
+                this.isDisabled = false;
+            }
         },
     },
 
