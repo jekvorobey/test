@@ -406,7 +406,9 @@ export default {
         },
 
         async onRepeatOrder({ id }) {
-            Promise.resolve(this[REPEAT_ORDER](id)).then(this[FETCH_CART_DATA]());
+            Promise.resolve(this[REPEAT_ORDER](id)).then(
+                this[FETCH_CART_DATA]().then(this.$router.push({ path: '/cart' }))
+            );
         },
     },
 

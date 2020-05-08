@@ -264,7 +264,7 @@ export default {
         },
 
         async onRepeatOrder(orderId) {
-            Promise.resolve(this[REPEAT_ORDER](orderId)).then(this[FETCH_CART_DATA]());
+            Promise.resolve(this[REPEAT_ORDER](orderId)).then(this[FETCH_CART_DATA]().then(this.$router.push({path: '/cart'})));
         },
 
         getDeliveryStatusClass(status) {
