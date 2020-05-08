@@ -78,3 +78,7 @@
         top: calc(var(--gs) * -6);
     }
 }
+
+.network {
+    display: flex;
+}

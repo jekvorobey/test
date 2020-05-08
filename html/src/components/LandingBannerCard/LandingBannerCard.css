@@ -87,6 +87,7 @@
             border-color: var(--cl-white);
             background-color: var(--cl-white);
             color: var(--cl-global);
+            line-height: calc(var(--gs) * 4);
 
             @media (--tablet) {
                 width: 100%;

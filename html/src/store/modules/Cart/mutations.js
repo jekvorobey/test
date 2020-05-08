@@ -1,6 +1,7 @@
 export const SET_CART_DATA = 'SET_CART_DATA';
 export const SET_FEATURED_PRODUCTS = 'SET_FEATURED_PRODUCTS';
 export const SET_RELATIVE_PRODUCTS = 'SET_RELATIVE_PRODUCTS';
+export const SET_STATUS = 'SET_STATUS';
 
 export default {
     [SET_CART_DATA](state, payload = {}) {
@@ -13,5 +14,9 @@ export default {
 
     [SET_RELATIVE_PRODUCTS](state, payload = []) {
         state.relativeProducts = payload;
+    },
+
+    [SET_STATUS](state, payload = {}) {
+        state.cartStatus[payload.name] = payload.value;
     },
 };

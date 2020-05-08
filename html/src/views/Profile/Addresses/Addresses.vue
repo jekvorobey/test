@@ -23,20 +23,22 @@
                             }${address.house} ${address.block || ''}, ${address.post_index}`
                         }}
                         <template v-slot:controls>
-                            <v-link
-                                class="checkout-option-card__right-link"
-                                tag="button"
-                                @click.stop="onChangeAddress(address)"
-                            >
-                                Изменить
-                            </v-link>
-                            <v-link
-                                class="checkout-option-card__right-link"
-                                tag="button"
-                                @click.stop="onDeleteAddress(address)"
-                            >
-                                Удалить
-                            </v-link>
+                            <div class="checkout-option-card__controls">
+                                <v-link
+                                    class="checkout-option-card__right-link"
+                                    tag="button"
+                                    @click.stop="onChangeAddress(address)"
+                                >
+                                    <v-svg name="edit" width="16" height="16" />
+                                </v-link>
+                                <v-link
+                                    class="checkout-option-card__right-link"
+                                    tag="button"
+                                    @click.stop="onDeleteAddress(address)"
+                                >
+                                    <v-svg name="cross" width="16" height="16" />
+                                </v-link>
+                            </div>
                         </template>
                     </checkout-option-card>
                 </ul>
@@ -101,7 +103,7 @@ export default {
     computed: {
         ...mapState(ADDRESSES_MODULE_PATH, [ADDRESSES]),
         ...mapState(MODAL_MODULE, {
-            isAddressEditOpen: (state) =>
+            isAddressEditOpen: state =>
                 state[MODALS][modalName.profile.ADDRESS_EDIT] && state[MODALS][modalName.profile.ADDRESS_EDIT].open,
         }),
 
@@ -178,11 +180,11 @@ export default {
         $store
             .dispatch(`${ADDRESSES_MODULE_PATH}/${FETCH_ADDRESSES_DATA}`)
             .then(() => {
-                next((vm) => {
+                next(vm => {
                     $progress.finish();
                 });
             })
-            .catch((thrown) => {
+            .catch(thrown => {
                 $progress.fail();
                 $logger.error('beforeRouteEnter', thrown.error);
                 $progress.finish();

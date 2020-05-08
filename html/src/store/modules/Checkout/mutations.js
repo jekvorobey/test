@@ -25,7 +25,7 @@ export default {
         state.checkoutType = payload;
     },
 
-    [SET_DATA](state, payload = {}) {
+    [SET_DATA](state, payload = null) {
         state.checkoutData = payload;
     },
 

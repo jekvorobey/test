@@ -1154,6 +1154,11 @@
                 }
             }
 
+            .swiper-button-disabled {
+                visibility: visible;
+                opacity: 0.1;
+            }
+
             @media (--tablet) {
                 padding: 0;
                 position: relative;

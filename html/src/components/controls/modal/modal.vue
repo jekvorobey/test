@@ -37,6 +37,7 @@
                     type="button"
                     title="Закрыть"
                     class="modal-default-button popup__close"
+                    :class="closeBtnClass"
                     @click="$emit('close')"
                 >
                     <v-svg name="cross" width="24" height="24" />
@@ -75,6 +76,10 @@ export default {
         showCloseBtn: {
             type: Boolean,
             default: true,
+        },
+        closeBtnClass: {
+            type: String,
+            default: '',
         },
     },
     data() {

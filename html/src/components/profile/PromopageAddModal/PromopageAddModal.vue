@@ -16,23 +16,25 @@
             </v-input>
 
             <!-- <h6 class="promopage-add-modal__title">В вашем избранном</h6> -->
-            <ul class="promopage-add-modal__list">
-                <cart-panel-product-card
-                    class="promopage-add-modal__list-item"
-                    :class="{
-                        'promopage-add-modal__list-item--selected': isSelected(item.productId),
-                    }"
-                    v-for="item in searchItems"
-                    :key="item.id"
-                    :product-id="item.id"
-                    :type="item.type"
-                    :name="item.name"
-                    :image="item.image"
-                    :price="item.price"
-                    :old-price="item.oldPrice"
-                    @click.native="onSelectItem(item.productId)"
-                />
-            </ul>
+            <v-scroll class="promopage-add-modal__scroll">
+                <ul class="promopage-add-modal__list">
+                    <cart-panel-product-card
+                        class="promopage-add-modal__list-item"
+                        :class="{
+                            'promopage-add-modal__list-item--selected': isSelected(item.productId),
+                        }"
+                        v-for="item in searchItems"
+                        :key="item.id"
+                        :product-id="item.id"
+                        :type="item.type"
+                        :name="item.name"
+                        :image="item.image"
+                        :price="item.price"
+                        :old-price="item.oldPrice"
+                        @click.native="onSelectItem(item.productId)"
+                    />
+                </ul>
+            </v-scroll>
 
             <div class="promopage-add-modal__submit">
                 <v-button class="promopage-add-modal__submit-btn" @click="onSubmit" :disabled="!selectedItemId">
@@ -47,6 +49,7 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
+import VScroll from '@controls/VScroll/VScroll.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import CartPanelProductCard from '@components/CartPanelProductCard/CartPanelProductCard.vue';
@@ -73,6 +76,7 @@ export default {
         VButton,
         VInput,
         GeneralModal,
+        VScroll,
 
         CartPanelProductCard,
     },

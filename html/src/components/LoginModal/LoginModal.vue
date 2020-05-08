@@ -1,5 +1,12 @@
 <template>
-    <general-modal type="sm" class="login-modal" :header="header" @close="onClose" :is-mobile="isTablet">
+    <general-modal
+        type="sm"
+        class="login-modal"
+        :header="header"
+        @close="onClose"
+        :is-mobile="isTablet"
+        close-btn-class="login-modal__close-btn"
+    >
         <template v-slot:content>
             <div class="login-modal__body">
                 <h3 class="login-modal__hl">{{ header }}</h3>
@@ -149,7 +156,7 @@
 
             <div class="login-modal__footer" v-if="!restore">
                 <v-button class="btn--outline login-modal__footer-btn" @click="onRegister">Зарегистрируйтесь</v-button>
-                &nbsp;&nbsp;Нет&nbsp;аккаунта?
+                <span class="login-modal__no-account">Нет аккаунта?</span>
             </div>
         </template>
     </general-modal>
@@ -240,15 +247,15 @@ export default {
         },
 
         fail: {
-            valid: (value) => value !== true,
+            valid: value => value !== true,
         },
 
         accepted: {
-            valid: (value) => value === true,
+            valid: value => value === true,
         },
 
         restoreFail: {
-            valid: (value) => value !== true,
+            valid: value => value !== true,
         },
     },
 

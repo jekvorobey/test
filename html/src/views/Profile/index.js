@@ -34,6 +34,8 @@ import GuideDetails from './GuideDetails/GuideDetails';
 import Masterclasses from './Masterclasses/Masterclasses';
 import QnA from './QnA/QnA';
 
+import ReturnPage from './Return/Return';
+
 const ProfileAsync = () => import(/* webpackChunkName: "profile-view" */ './Profile.vue');
 const ProfileModuleAsync = () => import(/* webpackChunkName: "profile-view" */ '@store/modules/Profile');
 
@@ -79,6 +81,8 @@ export default {
                 ...GuideDetails.routes,
                 ...Masterclasses.routes,
                 ...QnA.routes,
+
+                ...ReturnPage.routes,
 
                 {
                     path: '*',

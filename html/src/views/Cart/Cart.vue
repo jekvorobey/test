@@ -132,11 +132,34 @@
                                     </span>
                                 </p>
                             </div>
-                            <div class="cart-view__main-panel-promo">
-                                <v-input class="cart-view__main-panel-promo-input" placeholder="Введите промокод" />
-                                <v-button class="btn--outline cart-view__main-panel-promo-btn">
+                            <div v-if="!promocode" class="cart-view__main-panel-promo">
+                                <v-input
+                                    class="cart-view__main-panel-promo-input"
+                                    placeholder="Введите промокод"
+                                    v-model="inputPromocode"
+                                />
+                                <v-button
+                                    class="btn--outline cart-view__main-panel-promo-btn"
+                                    @click="ADD_PROMOCODE(inputPromocode)"
+                                    :disabled="!inputPromocode"
+                                >
                                     Применить
                                 </v-button>
+                            </div>
+                            <div v-else class="cart-view__main-panel-promo cart-view__main-panel-promo--success">
+                                <div class="cart-view__main-panel-promo-icon">
+                                    <v-svg name="check-small" width="16" height="16" />
+                                </div>
+                                <div>
+                                    Промокод&nbsp;{{ promocode }}&nbsp;применён
+                                    <v-link
+                                        tag="button"
+                                        class="cart-view__main-panel-promo-link"
+                                        @click="DELETE_PROMOCODE(promocode)"
+                                    >
+                                        Отменить
+                                    </v-link>
+                                </div>
                             </div>
                             <v-button class="cart-view__main-panel-submit" :to="`/checkout/${activeTabItem.type}`">
                                 Оформить заказ
@@ -192,13 +215,18 @@ import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCar
 import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
 import VTabs from '@controls/VTabs/VTabs.vue';
 
+import { $store, $logger, $progress } from '@services';
+
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '@store/modules/Cart';
+import cartModule, { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '@store/modules/Cart';
 import {
     FETCH_FEATURED_PRODUCTS,
     DELETE_CART_ITEM,
     ADD_CART_ITEM,
     DELETE_ALL_ITEMS,
+    ADD_PROMOCODE,
+    DELETE_PROMOCODE,
+    FETCH_CART_DATA,
 } from '@store/modules/Cart/actions';
 import {
     PRODUCTS,
@@ -207,6 +235,7 @@ import {
     IS_MASTER_CLASS,
     CART_ITEMS_COUNT,
     CART_TYPES,
+    PROMO_CODE,
 } from '@store/modules/Cart/getters';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
@@ -222,6 +251,8 @@ import { breakpoints, modalName } from '@enums';
 import { cartItemTypes } from '@enums/product';
 import { preparePrice } from '@util';
 import { generateProductUrl } from '@util/catalog';
+import { registerModuleIfNotExists } from '@util/store';
+
 import '@images/sprites/alert.svg';
 import './Cart.css';
 
@@ -284,13 +315,14 @@ export default {
     data() {
         return {
             activeTab: 0,
+            inputPromocode: null,
         };
     },
 
     computed: {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(CART_MODULE, [FEATURED_PRODUCTS, CART_DATA]),
-        ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS]),
+        ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS, PROMO_CODE]),
 
         isTabletLg() {
             return this.$mq.tabletLg;
@@ -313,7 +345,14 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(CART_MODULE, [FETCH_FEATURED_PRODUCTS, DELETE_CART_ITEM, ADD_CART_ITEM, DELETE_ALL_ITEMS]),
+        ...mapActions(CART_MODULE, [
+            FETCH_FEATURED_PRODUCTS,
+            DELETE_CART_ITEM,
+            ADD_CART_ITEM,
+            DELETE_ALL_ITEMS,
+            ADD_PROMOCODE,
+            DELETE_PROMOCODE,
+        ]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         generateItemProductUrl(product) {
@@ -385,6 +424,15 @@ export default {
                 done();
             });
         },
+    },
+
+    async beforeRouteEnter(to, from, next) {
+        //регистрируем модуль, если такого нет
+        registerModuleIfNotExists($store, CART_MODULE, cartModule);
+
+        // Обновляем данные корзины, для корректной синхроназиации промокодов и данных корзины при перепрыгивании между страницами.
+        await $store.dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`);
+        return next();
     },
 
     mounted() {

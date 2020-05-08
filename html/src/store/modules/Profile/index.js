@@ -12,6 +12,7 @@ import documents from './modules/Documents';
 import referral from './modules/Referral';
 import billing from './modules/Billing';
 import promocodes from './modules/Promocodes';
+import returnPage from './modules/ReturnPage';
 
 export const NAME = 'profile';
 export const BREADCRUMBS = 'breadcrumbs';
@@ -94,6 +95,7 @@ export default function createModule() {
             referral: referral(),
             billing: billing(),
             promocodes: promocodes(),
+            returnPage: returnPage(),
         },
     };
 }

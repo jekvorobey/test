@@ -201,7 +201,7 @@
         width: 44px;
         height: 44px;
         z-index: 1;
-        fill: var(--cl-grey);
+        fill: var(--cl-global);
         transition: all $time ease;
         cursor: pointer;
 

@@ -61,6 +61,7 @@ export const ADD_ADDRESS = 'ADD_ADDRESS';
 export const CHANGE_ADDRESS = 'CHANGE_ADDRESS';
 
 export const FETCH_CHECKOUT_DATA = 'FETCH_CHECKOUT_DATA';
+export const CLEAR_CHECKOUT_DATA = 'CLEAR_CHECKOUT_DATA';
 export const CHANGE_CHUNK_DATE = 'CHANGE_CHUNK_DATE';
 
 export const COMMIT_DATA = 'COMMIT_DATA';
@@ -247,12 +248,21 @@ export default {
             .catch((error) => storeErrorHandler(COMMIT_DATA, true)(error));
     },
 
-    [FETCH_CHECKOUT_DATA]({ commit }, payload) {
-        return getCheckoutData(payload)
-            .then((data) => {
-                commit(SET_TYPE, payload);
-                commit(SET_DATA, data);
-            })
-            .catch((error) => storeErrorHandler(FETCH_CHECKOUT_DATA)(error));
+    [CLEAR_CHECKOUT_DATA]({ commit }) {
+        try {
+            commit(SET_DATA);
+        } catch (error) {
+            storeErrorHandler(CLEAR_CHECKOUT_DATA)(error);
+        }
+    },
+
+    async [FETCH_CHECKOUT_DATA]({ commit }, payload) {
+        try {
+            const data = await getCheckoutData(payload);
+            commit(SET_TYPE, payload);
+            commit(SET_DATA, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_CHECKOUT_DATA)(error);
+        }
     },
 };

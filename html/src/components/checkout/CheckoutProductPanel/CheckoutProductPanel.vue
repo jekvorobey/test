@@ -1,278 +1,279 @@
 <template>
     <div class="checkout-product-panel">
-        <div class="checkout-product-panel__item">
-            <div class="checkout-product-panel__item-header">
-                <h2 class="checkout-product-panel__item-header-hl">Получатель</h2>
-            </div>
-
-            <ul class="checkout-product-panel__item-list">
-                <checkout-option-card
-                    class="checkout-product-panel__item-card"
-                    v-for="(recipient, index) in recipients"
-                    :key="recipient.id"
-                    :selected="selectedRecipient && isEqualObject(recipient, selectedRecipient)"
-                    @cardClick="onSetRecipient(recipient)"
-                    @btnClick="onChangeRecipient(recipient, index)"
-                >
-                    <p>{{ recipient.name }}</p>
-                    <p>{{ formatPhoneNumber(recipient.phone) }}</p>
-                    <p>{{ recipient.email }}</p>
-                </checkout-option-card>
-            </ul>
-
-            <v-link class="checkout-product-panel__item-header-link" tag="button" @click="onAddRecipient">
-                <v-svg name="plus" width="24" height="24" />&nbsp;Добавить нового получателя
-            </v-link>
-        </div>
-
-        <div class="checkout-product-panel__item checkout-product-panel__item--receive-method">
-            <div class="checkout-product-panel__item-header">
-                <h2 class="checkout-product-panel__item-header-hl">
-                    Способ получения&nbsp;<v-spinner width="24" height="24" :show="isReceiveMethodPending" />
-                </h2>
-            </div>
-
-            <ul class="checkout-product-panel__item-list">
-                <checkout-option-card
-                    class="checkout-product-panel__item-card"
-                    v-for="method in receiveMethods"
-                    :key="method.id"
-                    :selected="method.id === selectedReceiveMethodID"
-                    readonly
-                    @cardClick="onSetReceiveMethod(method)"
-                >
-                    <p class="text-bold">{{ method.title }}</p>
-                    <p>
-                        <price v-bind="method.price" />&nbsp;
-                        <price v-if="method.cost" class="text-grey text-sm text-strike" v-bind="method.cost" />
-                    </p>
-                    <p class="text-grey text-sm">{{ method.description }}</p>
-                </checkout-option-card>
-            </ul>
-        </div>
-
-        <div class="checkout-product-panel__item">
-            <div
-                class="checkout-product-panel__item-header"
-                :class="{ 'checkout-product-panel__item-header--error': addressError }"
-            >
-                <h2 class="checkout-product-panel__item-header-hl">
-                    {{ isDelivery ? 'Адрес доставки' : 'Пункт самовывоза' }}&nbsp;
-                    <v-spinner width="24" height="24" :show="isAddressPending" />
-                </h2>
-            </div>
-
-            <transition name="fade-in">
-                <checkout-address-panel v-if="isDelivery" @change-address="onChangeAddress" />
-                <checkout-pickup-point-panel v-else @change-address="onChangePickupPoint" />
-            </transition>
-
-            <v-link
-                v-if="isDelivery"
-                class="checkout-product-panel__item-header-link"
-                tag="button"
-                @click="onAddAddress"
-            >
-                <v-svg name="plus" width="24" height="24" />&nbsp;Добавить новый адрес
-            </v-link>
-
-            <v-link
-                v-else-if="selectedPickupPoint"
-                class="checkout-product-panel__item-header-link"
-                tag="button"
-                @click="onChangePickupPoint"
-            >
-                <v-svg name="pin" width="16" height="16" />&nbsp;&nbsp;Выбрать другой
-            </v-link>
-        </div>
-
-        <div class="checkout-product-panel__item checkout-product-panel__item--delivery">
-            <div class="checkout-product-panel__item-header">
-                <h2 class="checkout-product-panel__item-header-hl">Дата и время доставки</h2>
-            </div>
-
-            <transition name="fade-in" mode="out-in">
-                <div key="not-empty" v-if="showPanels">
-                    <ul
-                        class="checkout-product-panel__item-list"
-                        v-if="computedDeliveryTypes && computedDeliveryTypes.length > 1"
-                    >
-                        <checkout-option-card
-                            class="checkout-product-panel__item-card"
-                            v-for="deliveryType in computedDeliveryTypes"
-                            :key="`delivery-type-${deliveryType.id}-${deliveryType.methodID}`"
-                            :selected="deliveryType.id === selectedDeliveryType.id"
-                            readonly
-                            @cardClick="onSetDeliveryType(deliveryType.id)"
-                        >
-                            <p class="text-bold">{{ deliveryType.title }}</p>
-                            <p>{{ deliveryType.description }}</p>
-                            <p class="text-grey text-sm">{{ generatePackageNote(deliveryType) }}</p>
-                        </checkout-option-card>
-                    </ul>
-
-                    <transition-group v-if="selectedDeliveryType" tag="ul" name="chunk-item">
-                        <li
-                            class="checkout-product-panel__item checkout-product-panel__item--child"
-                            v-for="chunkItem in computedSelectedDeliveryType.items"
-                            :key="chunkItem.id"
-                        >
-                            <div class="checkout-product-panel__item-header">
-                                <h3 class="checkout-product-panel__item-header-hl">
-                                    {{ generateChunkNote(chunkItem) }}
-                                </h3>
-
-                                <v-link
-                                    v-if="chunkItem.availableDates && chunkItem.availableDates.length > 1"
-                                    class="checkout-product-panel__item-header-link"
-                                    tag="button"
-                                    @click="onChangeDate(chunkItem.id)"
-                                >
-                                    <v-svg name="edit" width="16" height="16" />
-                                    <template v-if="!isTablet">
-                                        &nbsp;&nbsp;Изменить дату
-                                    </template>
-                                </v-link>
-                            </div>
-                            <ul class="checkout-product-panel__item-list">
-                                <checkout-product-card
-                                    class="checkout-product-panel__item-card"
-                                    v-for="item in chunkItem.items"
-                                    :key="item.id"
-                                    :name="item.name"
-                                    :image="item.image"
-                                />
-                            </ul>
-                        </li>
-                    </transition-group>
-                </div>
-
-                <div key="empty" v-else class="checkout-product-panel__item-empty">
-                    <h3 class="text-bold">Выберите адрес</h3>
-                </div>
-            </transition>
-        </div>
-        <div class="checkout-product-panel__item checkout-product-panel__item--payment">
-            <div class="checkout-product-panel__item-header">
-                <h2 class="checkout-product-panel__item-header-hl">Способ оплаты</h2>
-            </div>
-
-            <ul class="checkout-product-panel__item-list">
-                <checkout-option-card
-                    class="checkout-product-panel__item-card"
-                    v-for="method in paymentMethods"
-                    :key="method.id"
-                    :selected="method.id === selectedPaymentMethodID"
-                    readonly
-                >
-                    <p class="text-bold">{{ method.title }}</p>
-                    <br />
-                    <div class="checkout-product-panel__item-payment" v-if="method.type === 'card'">
-                        <v-svg name="visa" width="40" height="24" />
-                        <v-svg name="mastercard" width="40" height="24" />
-                        <v-svg name="mir" width="40" height="24" />
-                    </div>
-                </checkout-option-card>
-            </ul>
-
-            <div
-                class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--bonus"
-            >
+        <template v-if="canDeliver">
+            <div class="checkout-product-panel__item">
                 <div class="checkout-product-panel__item-header">
-                    <h3 class="checkout-product-panel__item-header-hl">
-                        <v-svg name="bonus" width="24" height="24" />&nbsp;Оплата бонусами&nbsp;
-                        <v-spinner width="24" height="24" :show="isBonusPending" />
-                    </h3>
+                    <h2 class="checkout-product-panel__item-header-hl">Получатель</h2>
                 </div>
-                <div v-if="!bonus" class="checkout-product-panel__item-controls">
-                    <template v-if="availableBonus > 0">
+
+                <ul class="checkout-product-panel__item-list">
+                    <checkout-option-card
+                        class="checkout-product-panel__item-card"
+                        v-for="(recipient, index) in recipients"
+                        :key="recipient.id"
+                        :selected="selectedRecipient && isEqualObject(recipient, selectedRecipient)"
+                        @cardClick="onSetRecipient(recipient)"
+                        @btnClick="onChangeRecipient(recipient, index)"
+                    >
+                        <p>{{ recipient.name }}</p>
+                        <p>{{ formatPhoneNumber(recipient.phone) }}</p>
+                        <p>{{ recipient.email }}</p>
+                    </checkout-option-card>
+                </ul>
+
+                <v-link class="checkout-product-panel__item-header-link" tag="button" @click="onAddRecipient">
+                    <v-svg name="plus" width="24" height="24" />&nbsp;Добавить нового получателя
+                </v-link>
+            </div>
+
+            <div class="checkout-product-panel__item checkout-product-panel__item--receive-method">
+                <div class="checkout-product-panel__item-header">
+                    <h2 class="checkout-product-panel__item-header-hl">
+                        Способ получения&nbsp;<v-spinner width="24" height="24" :show="isReceiveMethodPending" />
+                    </h2>
+                </div>
+
+                <ul class="checkout-product-panel__item-list">
+                    <checkout-option-card
+                        class="checkout-product-panel__item-card"
+                        v-for="method in receiveMethods"
+                        :key="method.id"
+                        :selected="method.id === selectedReceiveMethodID"
+                        readonly
+                        @cardClick="onSetReceiveMethod(method)"
+                    >
+                        <p class="text-bold">{{ method.title }}</p>
+                        <p>
+                            <price v-bind="method.price" />&nbsp;
+                            <price v-if="method.cost" class="text-grey text-sm text-strike" v-bind="method.cost" />
+                        </p>
+                        <p class="text-grey text-sm">{{ method.description }}</p>
+                    </checkout-option-card>
+                </ul>
+            </div>
+
+            <div class="checkout-product-panel__item">
+                <div
+                    class="checkout-product-panel__item-header"
+                    :class="{ 'checkout-product-panel__item-header--error': addressError }"
+                >
+                    <h2 class="checkout-product-panel__item-header-hl">
+                        {{ isDelivery ? 'Адрес доставки' : 'Пункт самовывоза' }}&nbsp;
+                        <v-spinner width="24" height="24" :show="isAddressPending" />
+                    </h2>
+                </div>
+
+                <transition name="fade-in">
+                    <checkout-address-panel v-if="isDelivery" @change-address="onChangeAddress" />
+                    <checkout-pickup-point-panel v-else @change-address="onChangePickupPoint" />
+                </transition>
+
+                <v-link
+                    v-if="isDelivery"
+                    class="checkout-product-panel__item-header-link"
+                    tag="button"
+                    @click="onAddAddress"
+                >
+                    <v-svg name="plus" width="24" height="24" />&nbsp;Добавить новый адрес
+                </v-link>
+
+                <v-link
+                    v-else-if="selectedPickupPoint"
+                    class="checkout-product-panel__item-header-link"
+                    tag="button"
+                    @click="onChangePickupPoint"
+                >
+                    <v-svg name="pin" width="16" height="16" />&nbsp;&nbsp;Выбрать другой
+                </v-link>
+            </div>
+
+            <div class="checkout-product-panel__item checkout-product-panel__item--delivery">
+                <div class="checkout-product-panel__item-header">
+                    <h2 class="checkout-product-panel__item-header-hl">Дата и время доставки</h2>
+                </div>
+
+                <transition name="fade-in" mode="out-in">
+                    <div key="not-empty" v-if="showPanels">
+                        <ul
+                            class="checkout-product-panel__item-list"
+                            v-if="computedDeliveryTypes && computedDeliveryTypes.length > 1"
+                        >
+                            <checkout-option-card
+                                class="checkout-product-panel__item-card"
+                                v-for="deliveryType in computedDeliveryTypes"
+                                :key="`delivery-type-${deliveryType.id}-${deliveryType.methodID}`"
+                                :selected="deliveryType.id === selectedDeliveryType.id"
+                                readonly
+                                @cardClick="onSetDeliveryType(deliveryType.id)"
+                            >
+                                <p class="text-bold">{{ deliveryType.title }}</p>
+                                <p>{{ deliveryType.description }}</p>
+                                <p class="text-grey text-sm">{{ generatePackageNote(deliveryType) }}</p>
+                            </checkout-option-card>
+                        </ul>
+
+                        <transition-group v-if="selectedDeliveryType" tag="ul" name="chunk-item">
+                            <li
+                                class="checkout-product-panel__item checkout-product-panel__item--child"
+                                v-for="chunkItem in computedSelectedDeliveryType.items"
+                                :key="chunkItem.id"
+                            >
+                                <div class="checkout-product-panel__item-header">
+                                    <h3 class="checkout-product-panel__item-header-hl">
+                                        {{ generateChunkNote(chunkItem) }}
+                                    </h3>
+
+                                    <v-link
+                                        v-if="chunkItem.availableDates && chunkItem.availableDates.length > 1"
+                                        class="checkout-product-panel__item-header-link"
+                                        tag="button"
+                                        @click="onChangeDate(chunkItem.id)"
+                                    >
+                                        <v-svg name="edit" width="16" height="16" />
+                                        <template v-if="!isTablet">
+                                            &nbsp;&nbsp;Изменить дату
+                                        </template>
+                                    </v-link>
+                                </div>
+                                <ul class="checkout-product-panel__item-list">
+                                    <checkout-product-card
+                                        class="checkout-product-panel__item-card"
+                                        v-for="item in chunkItem.items"
+                                        :key="item.id"
+                                        :name="item.name"
+                                        :image="item.image"
+                                    />
+                                </ul>
+                            </li>
+                        </transition-group>
+                    </div>
+
+                    <div key="empty" v-else class="checkout-product-panel__item-empty">
+                        <h3 class="text-bold">Выберите адрес</h3>
+                    </div>
+                </transition>
+            </div>
+            <div class="checkout-product-panel__item checkout-product-panel__item--payment">
+                <div class="checkout-product-panel__item-header">
+                    <h2 class="checkout-product-panel__item-header-hl">Способ оплаты</h2>
+                </div>
+
+                <ul class="checkout-product-panel__item-list">
+                    <checkout-option-card
+                        class="checkout-product-panel__item-card"
+                        v-for="method in paymentMethods"
+                        :key="method.id"
+                        :selected="method.id === selectedPaymentMethodID"
+                        readonly
+                    >
+                        <p class="text-bold">{{ method.title }}</p>
+                        <br />
+                        <div class="checkout-product-panel__item-payment" v-if="method.type === 'card'">
+                            <v-svg name="visa" width="40" height="24" />
+                            <v-svg name="mastercard" width="40" height="24" />
+                            <v-svg name="mir" width="40" height="24" />
+                        </div>
+                    </checkout-option-card>
+                </ul>
+
+                <div
+                    class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--bonus"
+                >
+                    <div class="checkout-product-panel__item-header">
+                        <h3 class="checkout-product-panel__item-header-hl">
+                            <v-svg name="bonus" width="24" height="24" />&nbsp;Оплата бонусами&nbsp;
+                            <v-spinner width="24" height="24" :show="isBonusPending" />
+                        </h3>
+                    </div>
+                    <div v-if="!bonus" class="checkout-product-panel__item-controls">
+                        <template v-if="availableBonus > 0">
+                            <v-input
+                                type="number"
+                                min="1"
+                                :max="availableBonus"
+                                class="checkout-product-panel__item-controls-input"
+                                placeholder="Сколько бонусов использовать?"
+                                v-model="bonusAmount"
+                                @keydown.enter.prevent="ADD_BONUS(bonusAmount)"
+                            />
+                            <v-button
+                                class="btn--outline checkout-product-panel__item-controls-btn"
+                                @click="ADD_BONUS(bonusAmount)"
+                                :disabled="!bonusAmount"
+                            >
+                                Применить
+                            </v-button>
+                        </template>
+                        <span class="checkout-product-panel__item-controls-text">
+                            На вашем счёте:&nbsp;
+                            <strong class="text-bold">{{ availableBonus }}&nbsp;бонусов</strong>
+                            <br v-show="isTablet" />
+                            <span class="text-grey">(1 бонус = 1 рубль)</span>
+                        </span>
+                    </div>
+                    <div v-else class="checkout-product-panel__item-card">
+                        <span>
+                            Будет использовано {{ bonus }} бонусных баллов&nbsp;
+                            <span class="text-grey">(1 бонус = 1 рубль)</span>
+                        </span>
+                        <v-link class="checkout-product-panel__item-card-link" tag="button" @click="DELETE_BONUS">
+                            Отменить
+                        </v-link>
+                    </div>
+                </div>
+
+                <div
+                    class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--sertificate"
+                >
+                    <div class="checkout-product-panel__item-header">
+                        <h3 class="checkout-product-panel__item-header-hl">
+                            <v-svg name="gift" width="24" height="24" />&nbsp;Оплата сертификатом&nbsp;
+                            <v-spinner width="24" height="24" :show="isCertificatePending" />
+                        </h3>
+                    </div>
+                    <ul class="checkout-product-panel__item-list">
+                        <li
+                            class="checkout-product-panel__item-card"
+                            v-for="certificate in certificates"
+                            :key="certificate.code"
+                        >
+                            <span>
+                                Будет оплачено {{ certificate.amount }} подарочным сертификатом —
+                                {{ certificate.code }}
+                            </span>
+                            <v-link
+                                class="checkout-product-panel__item-card-link"
+                                tag="button"
+                                @click="DELETE_CERTIFICATE(certificate.code)"
+                            >
+                                Отменить
+                            </v-link>
+                        </li>
+                    </ul>
+                    <div class="checkout-product-panel__item-controls">
                         <v-input
-                            type="number"
-                            min="1"
-                            :max="availableBonus"
+                            v-model="certificateCode"
                             class="checkout-product-panel__item-controls-input"
-                            placeholder="Сколько бонусов использовать?"
-                            v-model="bonusAmount"
-                            @keydown.enter.prevent="ADD_BONUS(bonusAmount)"
+                            placeholder="Введите номер сертификата"
+                            @keydown.enter.prevent="ADD_CERTIFICATE(certificateCode)"
                         />
                         <v-button
                             class="btn--outline checkout-product-panel__item-controls-btn"
-                            @click="ADD_BONUS(bonusAmount)"
-                            :disabled="!bonusAmount"
+                            :disabled="!certificateCode"
+                            @click="ADD_CERTIFICATE(certificateCode)"
+                            @mousedown.prevent
                         >
-                            Применить
+                            Активировать
                         </v-button>
-                    </template>
-                    <span class="checkout-product-panel__item-controls-text">
-                        На вашем счёте:&nbsp;
-                        <strong class="text-bold">{{ availableBonus }}&nbsp;бонусов</strong>
-                        <br v-show="isTablet" />
-                        <span class="text-grey">(1 бонус = 1 рубль)</span>
-                    </span>
+                    </div>
                 </div>
-                <div v-else class="checkout-product-panel__item-card">
-                    <span>
-                        Будет использовано {{ bonus }} бонусных баллов&nbsp;
-                        <span class="text-grey">(1 бонус = 1 рубль)</span>
-                    </span>
-                    <v-link class="checkout-product-panel__item-card-link" tag="button" @click="DELETE_BONUS">
-                        Отменить
-                    </v-link>
-                </div>
-            </div>
 
-            <div
-                class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--sertificate"
-            >
-                <div class="checkout-product-panel__item-header">
-                    <h3 class="checkout-product-panel__item-header-hl">
-                        <v-svg name="gift" width="24" height="24" />&nbsp;Оплата сертификатом&nbsp;
-                        <v-spinner width="24" height="24" :show="isCertificatePending" />
-                    </h3>
-                </div>
-                <ul class="checkout-product-panel__item-list">
-                    <li
-                        class="checkout-product-panel__item-card"
-                        v-for="certificate in certificates"
-                        :key="certificate.code"
-                    >
-                        <span>
-                            Будет оплачено {{ certificate.amount }} подарочным сертификатом —
-                            {{ certificate.code }}
-                        </span>
-                        <v-link
-                            class="checkout-product-panel__item-card-link"
-                            tag="button"
-                            @click="DELETE_CERTIFICATE(certificate.code)"
-                        >
-                            Отменить
-                        </v-link>
-                    </li>
-                </ul>
-                <div class="checkout-product-panel__item-controls">
-                    <v-input
-                        v-model="certificateCode"
-                        class="checkout-product-panel__item-controls-input"
-                        placeholder="Введите номер сертификата"
-                        @keydown.enter.prevent="ADD_CERTIFICATE(certificateCode)"
-                    />
-                    <v-button
-                        class="btn--outline checkout-product-panel__item-controls-btn"
-                        :disabled="!certificateCode"
-                        @click="ADD_CERTIFICATE(certificateCode)"
-                        @mousedown.prevent
-                    >
-                        Активировать
-                    </v-button>
-                </div>
-            </div>
-
-            <div
-                class="checkout-product-panel__item checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--settings"
-            >
-                <div class="checkout-product-panel__item-panel">
-                    <!-- #58436 -->
-                    <!-- <v-check
+                <div
+                    class="checkout-product-panel__item checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--settings"
+                >
+                    <div class="checkout-product-panel__item-panel">
+                        <!-- #58436 -->
+                        <!-- <v-check
                         id="check-promo"
                         :checked="subscribe"
                         class="checkout-product-panel__item-panel-check"
@@ -281,39 +282,45 @@
                     >
                         Сообщать мне об акциях, скидках и специальных предложениях
                     </v-check> -->
-                    <v-check
-                        id="check-agreement"
-                        :checked="agreement"
-                        class="checkout-product-panel__item-panel-check"
-                        name="agreement"
-                        @change="onSetAgreement($event)"
-                    >
-                        Я согласен с условиями <router-link to="/">заказа и доставки</router-link>
-                    </v-check>
-                    <transition name="slide-in-bottom" mode="out-in">
-                        <div class="status-color-error" :key="agreementError" v-if="agreementError">
-                            {{ agreementError }}
-                        </div>
-                    </transition>
-                </div>
+                        <v-check
+                            id="check-agreement"
+                            :checked="agreement"
+                            class="checkout-product-panel__item-panel-check"
+                            name="agreement"
+                            @change="onSetAgreement($event)"
+                        >
+                            Я согласен с условиями <router-link to="/">заказа и доставки</router-link>
+                        </v-check>
+                        <transition name="slide-in-bottom" mode="out-in">
+                            <div class="status-color-error" :key="agreementError" v-if="agreementError">
+                                {{ agreementError }}
+                            </div>
+                        </transition>
+                    </div>
 
-                <div class="checkout-product-panel__item-panel">
-                    <v-check
-                        class="checkout-product-panel__item-panel-check"
-                        type="radio"
-                        v-for="confirmation in confirmationTypes"
-                        :key="confirmation.id"
-                        :id="`check-accept-${confirmation.id}`"
-                        :model-value="selectedConfirmationTypeID"
-                        :value="confirmation.id"
-                        :name="confirmation.type"
-                        @change="onSetConfirmationType"
-                    >
-                        {{ confirmation.title }}
-                    </v-check>
+                    <div class="checkout-product-panel__item-panel">
+                        <v-check
+                            class="checkout-product-panel__item-panel-check"
+                            type="radio"
+                            v-for="confirmation in confirmationTypes"
+                            :key="confirmation.id"
+                            :id="`check-accept-${confirmation.id}`"
+                            :model-value="selectedConfirmationTypeID"
+                            :value="confirmation.id"
+                            :name="confirmation.type"
+                            @change="onSetConfirmationType"
+                        >
+                            {{ confirmation.title }}
+                        </v-check>
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
+        <attention-panel class="checkout-product-panel__attention" v-else>
+            К сожалению, по данным параметрам заказа доставка не может быть реализована. <br />
+            Возможно, доставка в ваш регион не осуществляется. <br />Пожалуйста, выберете другой регион для доставки или
+            проверьте параметры Вашего заказа.
+        </attention-panel>
 
         <transition name="fade">
             <checkout-pickup-point-modal v-if="isPickupPointModalOpen" />
@@ -349,6 +356,7 @@ import VCheck from '@controls/VCheck/VCheck.vue';
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
 import Price from '@components/Price/Price.vue';
+import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 import CheckoutProductCard from '@components/checkout/CheckoutProductCard/CheckoutProductCard.vue';
 import CheckoutDateModal from '@components/checkout/CheckoutDateModal/CheckoutDateModal.vue';
@@ -438,7 +446,7 @@ function prepareChunkItem(chunkItem) {
     return {
         ...chunkItem,
         selectedDate: new Date(chunkItem.selectedDate),
-        availableDates: chunkItem.availableDates.map((d) => new Date(d)),
+        availableDates: chunkItem.availableDates.map(d => new Date(d)),
     };
 }
 
@@ -463,7 +471,9 @@ export default {
         VInput,
         VCheck,
         VSpinner,
+
         Price,
+        AttentionPanel,
 
         CheckoutProductCard,
         CheckoutOptionCard,
@@ -482,7 +492,7 @@ export default {
             case receiveMethods.PICKUP:
                 return {
                     [AGREEMENT]: {
-                        valid: (value) => value === true,
+                        valid: value => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -499,7 +509,7 @@ export default {
             default:
                 return {
                     [AGREEMENT]: {
-                        valid: (value) => value === true,
+                        valid: value => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -525,13 +535,13 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(MODAL_MODULE, {
-            isPickupPointModalOpen: (state) =>
+            isPickupPointModalOpen: state =>
                 state[MODALS][CheckoutPickupPointModal.name] && state[MODALS][CheckoutPickupPointModal.name].open,
-            isDateModalOpen: (state) =>
+            isDateModalOpen: state =>
                 state[MODALS][CheckoutDateModal.name] && state[MODALS][CheckoutDateModal.name].open,
-            isAddressModalOpen: (state) =>
+            isAddressModalOpen: state =>
                 state[MODALS][modalName.profile.ADDRESS_EDIT] && state[MODALS][modalName.profile.ADDRESS_EDIT].open,
-            isRecipientModalOpen: (state) =>
+            isRecipientModalOpen: state =>
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT] &&
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT].open,
         }),
@@ -583,6 +593,11 @@ export default {
 
         isReceiveMethodPending() {
             return this[RECEIVE_METHOD_STATUS] === requestStatus.PENDING;
+        },
+
+        canDeliver() {
+            const receiveMethods = this[RECEIVE_METHODS];
+            return receiveMethods && receiveMethods.length > 0;
         },
 
         isAddressPending() {
@@ -694,7 +709,7 @@ export default {
             }
 
             const note = 'Доставим';
-            const uniqueDates = Array.from(new Set(deliveryType.items.map((i) => i.selectedDate)));
+            const uniqueDates = Array.from(new Set(deliveryType.items.map(i => i.selectedDate)));
             return uniqueDates.reduce(
                 (accum, current, index) =>
                     accum + `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(this[LOCALE], options)}`,
@@ -715,7 +730,7 @@ export default {
         },
 
         onSetDeliveryType(id) {
-            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find((t) => t.id === id);
+            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find(t => t.id === id);
             this[SET_DELIVERY_TYPE](selectedType);
         },
 
@@ -725,7 +740,7 @@ export default {
 
         onChangeDate(chunkItemId) {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
-            const chunkItem = deliveryType.items.find((i) => i.id === chunkItemId);
+            const chunkItem = deliveryType.items.find(i => i.id === chunkItemId);
 
             const state = {
                 id: chunkItem.id,

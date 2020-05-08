@@ -52,7 +52,15 @@
             line-height: 24px;
             color: var(--cl-grey);
             text-transform: none;
+
+            &:not(:last-child) {
+                margin-right: calc(var(--gs) * 2);
+            }
         }
+    }
+
+    &__controls {
+        display: flex;
     }
 
     p {

@@ -153,6 +153,7 @@
                                     v-for="payment in order.payments"
                                     :key="payment.id"
                                     @click.stop="onContinuePayment(order.id, payment.id)"
+                                    :disabled="isDisabled"
                                 >
                                     Оплатить
                                 </v-button>
@@ -162,17 +163,24 @@
                             </span>
                         </td>
                         <td class="orders-view__table-td">
-                            <!-- <v-link
+                            <v-link
                                 v-if="order.status === 'created'"
                                 class="orders-view__table-td-link"
                                 tag="button"
                                 @click.stop
+                                :disabled="isDisabled"
                             >
                                 Отменить
                             </v-link>
-                            <v-link v-else class="orders-view__table-td-link" tag="button" @click.stop>
+                            <v-link
+                                v-else
+                                class="orders-view__table-td-link"
+                                tag="button"
+                                @click.stop="onRepeatOrder(order)"
+                                :disabled="isDisabled"
+                            >
                                 Повторить
-                            </v-link> -->
+                            </v-link>
                         </td>
                     </tr>
                 </tbody>
@@ -201,6 +209,7 @@
                             v-for="payment in order.payments"
                             :key="payment.id"
                             @click.stop="onContinuePayment(order.id, payment.id)"
+                            :disabled="isDisabled"
                         >
                             Оплатить
                         </v-button>
@@ -216,11 +225,11 @@
                     <info-row class="orders-view__list-item-row" name="Cтатус">
                         {{ $t(`orderStatus.${order.status}`) }}
                     </info-row>
-                    <!-- <info-row class="orders-view__list-item-row">
-                        <v-link tag="button" @click.stop>
+                    <info-row class="orders-view__list-item-row">
+                        <v-link tag="button" @click.stop="onRepeatOrder(order)" :disabled="isDisabled">
                             Повторить
                         </v-link>
-                    </info-row> -->
+                    </info-row>
                 </template>
             </li>
         </ul>
@@ -261,6 +270,9 @@ import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
 import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
 
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { FETCH_CART_DATA } from '@store/modules/Cart/actions';
+
 import {
     NAME as ORDERS_MODULE,
     ORDERS,
@@ -279,6 +291,7 @@ import {
     SET_LOAD_PATH,
     GET_ORDER_PAYMENT_LINK,
     FETCH_ORDERS_DATA,
+    REPEAT_ORDER,
 } from '@store/modules/Profile/modules/Orders/actions';
 
 import { preparePrice, shortNumberFormat } from '@util';
@@ -319,6 +332,7 @@ export default {
         return {
             showMore: false,
             filterModal: false,
+            isDisabled: false,
         };
     },
 
@@ -336,8 +350,9 @@ export default {
     },
 
     methods: {
-        ...mapActions(ORDERS_MODULE_PATH, [FETCH_ORDERS, SET_LOAD_PATH, GET_ORDER_PAYMENT_LINK]),
+        ...mapActions(ORDERS_MODULE_PATH, [FETCH_ORDERS, SET_LOAD_PATH, GET_ORDER_PAYMENT_LINK, REPEAT_ORDER]),
         ...mapActions(PROFILE_MODULE, [UPDATE_BREADCRUMB]),
+        ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
 
         formatDate(date) {
             if (typeof date !== 'string') return;
@@ -393,6 +408,18 @@ export default {
 
         onOpenOrder(id) {
             this.$router.push({ name: 'OrderDetails', params: { orderId: id } });
+        },
+
+        async onRepeatOrder({ id }) {
+            try {
+                this.isDisabled = true;
+                await this[REPEAT_ORDER](id);
+                await this[FETCH_CART_DATA]();
+                this.$router.push({ path: '/cart' });
+                this.isDisabled = false;
+            } catch (error) {
+                this.isDisabled = false;
+            }
         },
     },
 

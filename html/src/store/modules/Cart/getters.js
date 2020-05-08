@@ -1,5 +1,6 @@
 import { $logger } from '@services';
 import { cartItemTypes } from '@enums/product';
+import { requestStatus } from '@enums';
 
 export const GET_ITEMS_BY_TYPE = 'GET_ITEMS_BY_TYPE';
 export const IS_PRODUCT = 'IS_PRODUCT';
@@ -11,6 +12,10 @@ export const MASTER_CLASSES = 'masterClasses';
 export const CART_TYPES = 'cartTypes';
 export const CART_ITEMS_COUNT = 'cartItemsCount';
 export const PRODUCT_ITEMS_SUM = 'productItemsSum';
+export const PROMO_CODE = 'promocode';
+
+export const PROMOCODE_STATUS = 'promocodeStatus';
+export const CART_STATUS = 'cartStatus';
 
 const itemTypes = Object.values(cartItemTypes);
 
@@ -21,6 +26,8 @@ function isValidType(type) {
 }
 
 export default {
+    [PROMO_CODE]: (state) => state.cartData.product.input.promoCode,
+
     [CART_ITEMS_COUNT]: (state, getters) => {
         const itemsCount = getters[CART_TYPES].reduce((accum, current) => {
             let count = 0;
@@ -60,4 +67,6 @@ export default {
     [IS_PRODUCT]: () => (item = {}) => isValidType(item.type) && item.type === cartItemTypes.PRODUCT,
 
     [IS_MASTER_CLASS]: () => (item = {}) => isValidType(item.type) && item.type === cartItemTypes.MASTERCLASS,
+
+    [PROMOCODE_STATUS]: (state) => state[CART_STATUS][PROMOCODE_STATUS] || requestStatus.SUCCESS,
 };

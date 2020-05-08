@@ -40,6 +40,9 @@ import './App.css';
  * Базовые компоненты страницы
  */
 
+import Vue from 'vue';
+import SocialSharing from 'vue-social-sharing';
+
 // Часто используемые(и маленькие) компоненты лучше добавить сразу в основной бандл,
 // ибо они используются повсеместно на всех страницах, и смысла выносить их в отдельный бандл и грузить отдельно нет
 import VSvg from '@controls/VSvg/VSvg.vue';
@@ -77,6 +80,9 @@ import { SET_SELECTED_CITY_BY_IP } from '@store/modules/Geolocation/actions';
 import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
 import { FETCH_CART_DATA, CLEAR_CART_DATA } from '@store/modules/Cart/actions';
 
+import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
+import { CLEAR_CHECKOUT_DATA } from '@store/modules/Checkout/actions';
+
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { FETCH_FAVORITES_ALL } from '@store/modules/Favorites/actions';
 
@@ -89,6 +95,9 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { $cookie } from '@services';
 import { eventName, interval, modalName, cookieNames } from '@enums';
 import { MIN_SCROLL_VALUE, SCROLL_DEBOUCE_TIME } from '@constants';
+
+Vue.use(SocialSharing);
+Vue.component('v-svg', VSvg);
 
 export default {
     name: 'app',
@@ -140,6 +149,7 @@ export default {
         ...mapActions(GEO_MODULE, [SET_SELECTED_CITY_BY_IP]),
         ...mapActions(AUTH_MODULE, [CHECK_SESSION, FETCH_USER]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
+        ...mapActions(CHECKOUT_MODULE, [CLEAR_CHECKOUT_DATA]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [FETCH_FAVORITES_ALL]),
 
@@ -175,7 +185,10 @@ export default {
                 await this[FETCH_USER]();
                 if (this[CAN_BUY]) this[FETCH_CART_DATA]();
                 await this[FETCH_FAVORITES_ALL]();
-            } else this[CLEAR_CART_DATA]();
+            } else {
+                this[CLEAR_CART_DATA]();
+                this[CLEAR_CHECKOUT_DATA]();
+            }
             this.startSessionTimer();
         },
     },

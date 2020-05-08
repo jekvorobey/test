@@ -30,3 +30,8 @@ export const preferenceEntityTypes = Object.freeze({
     BRANDS: 'brands',
     CATEGORIES: 'categories',
 });
+
+export const returnFormSteps = Object.freeze({
+    SELECT: 1,
+    CHECK: 2,
+});

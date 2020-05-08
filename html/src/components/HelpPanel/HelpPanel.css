@@ -26,9 +26,11 @@
 
     &__socials {
         margin-bottom: calc(var(--gs) * 4);
+        display: flex;
 
-        .icon {
+        &-icon {
             margin-left: calc(var(--gs) * 3);
+            cursor: pointer;
 
             &:first-of-type {
                 margin-left: 0;

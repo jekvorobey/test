@@ -10,7 +10,7 @@
             <ul class="category-list-panel__list">
                 <li class="category-list-panel__item" v-for="item in subcategories" :key="item.id">
                     <router-link class="category-list-panel__link" :to="item.href">
-                        {{ item.name }}
+                        <span class="category-list-panel__link-text">{{ item.name }}</span>
                     </router-link>
                 </li>
             </ul>
@@ -48,7 +48,7 @@ export default {
         },
 
         subcategories() {
-            return this.items.map((item) => {
+            return this.items.map(item => {
                 return {
                     ...item,
                     href: generateCategoryUrl(productGroupTypes.CATALOG, null, item.code),

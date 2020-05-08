@@ -22,7 +22,7 @@
             <div class="landing-banner-card__panel-container">
                 <div class="landing-banner-card__panel-title">
                     <div class="landing-banner-card__panel-title-text">{{ title }}</div>
-                    <v-button class="landing-banner-card__panel-btn" to="/?registration=true">
+                    <v-button class="landing-banner-card__panel-btn btn--big" to="/?registration=true">
                         {{ btnText }}
                     </v-button>
                 </div>

@@ -3,7 +3,11 @@
         <template v-slot:content>
             <div class="city-selection-modal__body">
                 <h3 class="city-selection-modal__hl">{{ header }}</h3>
-                <v-input class="city-selection-modal__input" @input="debounce_onCityInputChange">
+                <v-input
+                    class="city-selection-modal__input"
+                    @input="debounce_onCityInputChange"
+                    placeholder="Ваш город"
+                >
                     <template v-slot:after>
                         <v-svg name="search-middle" width="24" height="24" />
                     </template>
@@ -70,7 +74,7 @@ export default {
     computed: {
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         header() {
