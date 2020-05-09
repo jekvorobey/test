@@ -6,7 +6,7 @@ export const MIN_SCROLL_VALUE = 1;
 /**
  * Интервал дебаунса на обновление скролла
  */
-export const SCROLL_DEBOUCE_TIME = 20;
+export const SCROLL_DEBOUNCE_TIME = 20;
 
 /**
  * Сообщение при отмене запроса
