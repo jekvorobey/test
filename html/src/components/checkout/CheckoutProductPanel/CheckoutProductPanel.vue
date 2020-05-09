@@ -143,6 +143,7 @@
                                         :key="item.id"
                                         :name="item.name"
                                         :image="item.image"
+                                        :href="generateItemProductUrl(item)"
                                     />
                                 </ul>
                             </li>
@@ -435,6 +436,8 @@ import { SCROLL_DEBOUNCE_TIME } from '@constants';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 import { orderBy as _orderBy } from 'lodash/collection';
+
+import { generateProductUrl } from '@util/catalog';
 
 import '@images/sprites/payment/bonus.svg';
 import '@images/sprites/payment/visa.svg';
@@ -824,6 +827,13 @@ export default {
         scrollToError(element) {
             const panelScrollOffset = 24;
             window.scrollTo({ top: getPosition(element).y - panelScrollOffset, behavior: 'smooth' });
+        },
+
+        generateItemProductUrl(product) {
+            if (Array.isArray(product.categoryCodes)) {
+                const categoryCode = product.categoryCodes[product.categoryCodes.length - 1];
+                return generateProductUrl(categoryCode, product.code);
+            }
         },
     },
 

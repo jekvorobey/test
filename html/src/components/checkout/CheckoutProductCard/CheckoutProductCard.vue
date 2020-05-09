@@ -1,6 +1,6 @@
 <template>
     <li class="checkout-product-card">
-        <router-link class="checkout-product-card__img" to="/catalog">
+        <router-link class="checkout-product-card__img" :to="href">
             <v-picture v-if="image && image.id" :image="image" alt="">
                 <template v-slot:source="{ image, lazy }">
                     <source :data-srcset="generateSourcePath(56, 56, image.id, 'webp')" type="image/webp" />
@@ -43,6 +43,10 @@ export default {
 
         image: {
             type: [String, Object],
+        },
+
+        href: {
+            type: String,
         },
     },
 
