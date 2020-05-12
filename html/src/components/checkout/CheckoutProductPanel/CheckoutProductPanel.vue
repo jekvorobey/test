@@ -56,6 +56,7 @@
                 <div
                     class="checkout-product-panel__item-header"
                     :class="{ 'checkout-product-panel__item-header--error': addressError }"
+                    ref="address"
                 >
                     <h2 class="checkout-product-panel__item-header-hl">
                         {{ isDelivery ? 'Адрес доставки' : 'Пункт самовывоза' }}&nbsp;
@@ -88,7 +89,7 @@
             </div>
 
             <div class="checkout-product-panel__item checkout-product-panel__item--delivery">
-                <div class="checkout-product-panel__item-header">
+                <div class="checkout-product-panel__item-header" ref="date">
                     <h2 class="checkout-product-panel__item-header-hl">Дата и время доставки</h2>
                 </div>
 
@@ -142,6 +143,7 @@
                                         :key="item.id"
                                         :name="item.name"
                                         :image="item.image"
+                                        :href="generateItemProductUrl(item)"
                                     />
                                 </ul>
                             </li>
@@ -271,7 +273,7 @@
                 <div
                     class="checkout-product-panel__item checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--settings"
                 >
-                    <div class="checkout-product-panel__item-panel">
+                    <div class="checkout-product-panel__item-panel" ref="agreement">
                         <!-- #58436 -->
                         <!-- <v-check
                         id="check-promo"
@@ -367,6 +369,7 @@ import CheckoutAddressPanel from '@components/checkout/CheckoutAddressPanel/Chec
 import CheckoutRecipientModal from '@components/checkout/CheckoutRecipientModal/CheckoutRecipientModal.vue';
 import AddressEditModal from '@components/profile/AddressEditModal/AddressEditModal.vue';
 
+import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
 import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '@store/modules/Checkout';
@@ -425,13 +428,16 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import validationMixin, { required } from '@plugins/validation';
-import { formatPhoneNumber } from '@util';
+import { formatPhoneNumber, getPosition } from '@util';
 import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '@enums/checkout';
 import { requestStatus, modalName } from '@enums';
+import { SCROLL_DEBOUNCE_TIME } from '@constants';
 
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 import { orderBy as _orderBy } from 'lodash/collection';
+
+import { generateProductUrl } from '@util/catalog';
 
 import '@images/sprites/payment/bonus.svg';
 import '@images/sprites/payment/visa.svg';
@@ -633,23 +639,29 @@ export default {
         },
 
         agreementError() {
-            if (this.$v.agreement.$dirty && !this.$v.agreement.valid)
+            if (this.$v.agreement.$dirty && !this.$v.agreement.valid) {
+                this.debounce_scrollToError(this.$refs.agreement);
                 return 'Подтвердите согласие с условиями заказа и доставки';
+            }
         },
 
         addressError() {
             const selectedId = this[SELECTED_RECEIVE_METHOD_ID];
             switch (selectedId) {
                 case receiveMethods.PICKUP:
-                    if (this.$v.selectedPickupPoint.$dirty && !this.$v.selectedPickupPoint.required)
+                    if (this.$v.selectedPickupPoint.$dirty && !this.$v.selectedPickupPoint.required) {
+                        this.debounce_scrollToError(this.$refs.address);
                         return 'Укажите пункт самовывоза';
+                    }
                     break;
 
                 case receiveMethods.DELIVERY:
                 case receiveMethods.EXPRESS:
                 default:
-                    if (this.$v.selectedAddress.$dirty && !this.$v.selectedAddress.required)
+                    if (this.$v.selectedAddress.$dirty && !this.$v.selectedAddress.required) {
+                        this.debounce_scrollToError(this.$refs.address);
                         return 'Укажите адрес доставки';
+                    }
                     break;
             }
         },
@@ -811,6 +823,22 @@ export default {
         onChangePickupPoint() {
             this[CHANGE_MODAL_STATE]({ name: CheckoutPickupPointModal.name, open: true });
         },
+
+        scrollToError(element) {
+            const panelScrollOffset = 24;
+            window.scrollTo({ top: getPosition(element).y - panelScrollOffset, behavior: 'smooth' });
+        },
+
+        generateItemProductUrl(product) {
+            if (Array.isArray(product.categoryCodes)) {
+                const categoryCode = product.categoryCodes[product.categoryCodes.length - 1];
+                return generateProductUrl(categoryCode, product.code);
+            }
+        },
+    },
+
+    mounted() {
+        this.debounce_scrollToError = _debounce(this.scrollToError, SCROLL_DEBOUNCE_TIME);
     },
 };
 </script>

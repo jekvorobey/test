@@ -35,3 +35,8 @@ export const returnFormSteps = Object.freeze({
     SELECT: 1,
     CHECK: 2,
 });
+
+export const referralSource = Object.freeze({
+    PROMOCODE: 1, // промокод
+    LINK: 2, // реферальная ссылка
+});

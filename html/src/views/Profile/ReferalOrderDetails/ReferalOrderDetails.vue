@@ -8,13 +8,14 @@
             <h2 class="referal-order-details-view__hl">{{ $t('profile.format.referal', { id: referalId }) }}</h2>
             <section class="referal-order-details-view__details">
                 <div class="referal-order-details-view__details-info">
-                    <!-- <info-row class="referal-order-details-view__details-row" name="Заказал товаров" value="12" />
-                    <info-row class="referal-order-details-view__details-row" name="Сумма заказов" value="745 856 ₽" />
                     <info-row
                         class="referal-order-details-view__details-row"
-                        name="Источник"
-                        value="Промокод SOKOLOV"
-                    /> -->
+                        name="Заказал товаров"
+                        :value="referralOrderDetails.totalCount"
+                    />
+                    <info-row class="referal-order-details-view__details-row" name="Сумма заказов">
+                        <price v-bind="referralOrderDetails.totalPrice" />
+                    </info-row>
                     <info-row
                         class="referal-order-details-view__details-row"
                         name="Дата привязки реферала"
@@ -29,27 +30,27 @@
                     <div class="referal-order-details-view__section-sources">
                         <v-check
                             class="referal-order-details-view__section-check"
-                            v-for="source in referalSources"
-                            v-model="referalSource"
+                            v-for="source in referralSources"
+                            v-model="referralSource"
                             name="referal-source"
                             type="radio"
                             :id="`${source.value}-${source.id}`"
-                            :key="source.id"
-                            :value="source.id"
+                            :key="source.value"
+                            :value="source.value"
                         >
                             {{ source.name }}
                         </v-check>
                     </div>
                 </div>
 
-                <filter-button
+                <!-- <filter-button
                     v-if="isTabletLg"
                     class="referal-orders-view__filter-btn"
                     @click="filterModal = !filterModal"
                 >
                     Фильтр и сортировка&nbsp;&nbsp;
                     <span class="text-grey">4</span>
-                </filter-button>
+                </filter-button> -->
 
                 <table class="referal-order-details-view__table" v-if="!isTabletLg">
                     <colgroup>
@@ -71,7 +72,11 @@
                         </tr>
                     </thead>
                     <transition-group tag="tbody" name="fade-in" appear class="referal-order-details-view__table-body">
-                        <tr class="referal-order-details-view__table-tr" v-for="order in orders" :key="order.name">
+                        <tr
+                            class="referal-order-details-view__table-tr"
+                            v-for="order in filteredOrders"
+                            :key="order.id"
+                        >
                             <td class="referal-order-details-view__table-td">
                                 <div
                                     class="referal-order-details-view__table-img"
@@ -90,7 +95,7 @@
                                 </div>
                             </td>
                             <td class="referal-order-details-view__table-td">{{ order.qty }} шт</td>
-                            <td class="referal-order-details-view__table-td">{{ order.source }}</td>
+                            <td class="referal-order-details-view__table-td">{{ order.sourceString }}</td>
                             <td class="referal-order-details-view__table-td">{{ order.date }}</td>
                             <td class="referal-order-details-view__table-td">
                                 <price v-bind="order.price_product" />
@@ -105,7 +110,7 @@
         </div>
 
         <ul class="referal-order-details-view__list" v-if="isTabletLg">
-            <li class="referal-order-details-view__list-item" v-for="order in orders" :key="order.id">
+            <li class="referal-order-details-view__list-item" v-for="order in filteredOrders" :key="order.id">
                 <info-row class="referal-order-details-view__list-item-row" name="Товар">
                     <div
                         class="referal-order-details-view__table-img"
@@ -124,7 +129,11 @@
                 <info-row class="referal-order-details-view__list-item-row" name="Кол-во">
                     {{ order.qty }} шт.
                 </info-row>
-                <info-row class="referal-order-details-view__list-item-row" name="Источник" :value="order.source" />
+                <info-row
+                    class="referal-order-details-view__list-item-row"
+                    name="Источник"
+                    :value="order.sourceString"
+                />
                 <info-row class="referal-order-details-view__list-item-row" name="Дата заказа" :value="order.date" />
                 <info-row class="referal-order-details-view__list-item-row" name="Сумма">
                     <price v-bind="order.price_product" />
@@ -157,10 +166,12 @@ import { NAME as REFERRAL_MODULE, REFERRAL_ORDER_DETAILS } from '@store/modules/
 import { FETCH_REFERRER_ORDER_DETAILS } from '@store/modules/Profile/modules/Referral/actions';
 
 import { fileExtension, sortDirections } from '@enums';
+import { referralSource } from '@enums/profile';
 import { DEFAULT_PAGE } from '@constants';
 import { digit2DateSettings, monthLongDateSettings } from '@settings';
 import { generatePictureSourcePath } from '@util/file';
 import { $store, $progress, $logger } from '@services';
+
 import '@images/sprites/logo.svg';
 import '@images/sprites/arrow-small.svg';
 import './ReferalOrderDetails.css';
@@ -183,64 +194,11 @@ export default {
 
     data() {
         return {
-            // orders: [
-            //     {
-            //         id: 1,
-            //         referalId: 154,
-            //         image: referalProduct1,
-            //         title: "Губная помада L'Oreal Paris Color Riche Collection Privee by J'Lo's увлажняющая",
-            //         qty: 1,
-            //         source: 'Реферальная ссылка',
-            //         date: '16.08.19',
-            //         price: {
-            //             value: 2789,
-            //             currency: 'RUB',
-            //         },
-            //         refund: {
-            //             value: 278,
-            //             currency: 'RUB',
-            //         },
-            //     },
-            //     {
-            //         id: 2,
-            //         referalId: 154,
-            //         image: referalProduct2,
-            //         title: 'Matrix Спрей для укладки волос Total results Wonder boost, 250 мл',
-            //         qty: 2,
-            //         source: 'Промокод SOKOLOV',
-            //         date: '16.08.19',
-            //         price: {
-            //             value: 2789,
-            //             currency: 'RUB',
-            //         },
-            //         refund: {
-            //             value: 278,
-            //             currency: 'RUB',
-            //         },
-            //     },
-            //     {
-            //         id: 3,
-            //         referalId: 469,
-            //         image: referalProduct3,
-            //         title: "Губная помада L'Oreal Paris Color Riche Collection Privee by J'Lo's увлажняющая",
-            //         qty: 1,
-            //         source: 'Реферальная ссылка',
-            //         date: '16.08.19',
-            //         price: {
-            //             value: 1349,
-            //             currency: 'RUB',
-            //         },
-            //         refund: {
-            //             value: 145,
-            //             currency: 'RUB',
-            //         },
-            //     },
-            // ],
-            referalSource: 1,
-            referalSources: [
-                { id: 1, value: 'all', name: 'Все источники' },
-                { id: 2, value: 'referal', name: 'Реферальная ссылка' },
-                { id: 3, value: 'promo', name: 'Промокод' },
+            referralSource: null,
+            referralSources: [
+                { id: 1, value: null, name: 'Все источники' },
+                { id: 2, value: referralSource.LINK, name: 'Реферальная ссылка' },
+                { id: 3, value: referralSource.PROMOCODE, name: 'Промокод' },
             ],
         };
     },
@@ -258,15 +216,22 @@ export default {
                 const defaultImage = i.image && generatePictureSourcePath(40, 40, i.image.id);
                 const date =
                     i.order_date && new Date(i.order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
+                const sourceString = this.$t(`referralSource.${i.source}`);
 
                 return {
                     ...i,
                     qty: Number(i.qty),
+                    sourceString,
                     date,
                     defaultImage,
                     desktopImage,
                 };
             });
+        },
+
+        filteredOrders() {
+            const { referralSource, orders } = this;
+            return orders.filter(o => !referralSource || o.source === referralSource);
         },
 
         registerDate() {

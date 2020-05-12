@@ -231,6 +231,24 @@ export function formatPhoneNumber(str, code = 7) {
     return null;
 }
 
+/**
+ * returns the absolute position of an element regardless of position/float issues
+ * @param {HTMLElement} el - element to return position for
+ * @returns {object} { x: num, y: num }
+ */
+export function getPosition(el) {
+    var x = 0,
+        y = 0;
+
+    while (el != null && (el.tagName || '').toLowerCase() != 'html') {
+        x += el.offsetLeft || 0;
+        y += el.offsetTop || 0;
+        el = el.parentElement;
+    }
+
+    return { x: parseInt(x, 10), y: parseInt(y, 10) };
+}
+
 export default {
     countCheckdigit,
     preparePrice,
@@ -240,4 +258,5 @@ export default {
     dateToString,
     getRandomInt,
     getRandomIntInclusive,
+    getPosition,
 };

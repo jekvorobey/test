@@ -1,6 +1,6 @@
 import flatPickrEn from 'flatpickr/dist/l10n/default';
 import { receiveMethods, discountType } from '@enums/checkout';
-import { genderType, billingOperationType } from '@enums/profile';
+import { genderType, billingOperationType, referralSource } from '@enums/profile';
 import { socials } from '@enums';
 import { orderStatus, deliveryStatus } from '@enums/order';
 
@@ -107,6 +107,11 @@ const main = {
         [receiveMethods.DELIVERY]: 'Delivery',
         [receiveMethods.PICKUP]: 'Pickup',
         [receiveMethods.EXPRESS]: 'Express delivery',
+    },
+
+    referralSource: {
+        [referralSource.PROMOCODE]: 'Promocode',
+        [referralSource.LINK]: 'Referral link',
     },
 
     genderType: {
