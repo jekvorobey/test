@@ -1,7 +1,7 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
 import { socials } from '@enums';
 import { receiveMethods, discountType } from '@enums/checkout';
-import { genderType, billingOperationType } from '@enums/profile';
+import { genderType, billingOperationType, referralSource } from '@enums/profile';
 import { orderStatus, deliveryStatus } from '@enums/order';
 
 const flatpickrLocale = flatPickrRu.ru;
@@ -107,6 +107,11 @@ const main = {
         [receiveMethods.DELIVERY]: 'Доставка курьером',
         [receiveMethods.PICKUP]: 'Доставка в ПВЗ',
         [receiveMethods.EXPRESS]: 'Экспресс доставка',
+    },
+
+    referralSource: {
+        [referralSource.PROMOCODE]: 'Промокод',
+        [referralSource.LINK]: 'Реферальная ссылка',
     },
 
     genderType: {

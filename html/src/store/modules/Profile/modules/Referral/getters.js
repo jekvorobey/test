@@ -7,10 +7,15 @@ export const REFERRAL_ARC_DATA = 'referralArcData';
 export const SUM_ARC_DATA = 'sumArcData';
 export const LEVEL_DATA = 'levelData';
 export const PAGES_COUNT = 'pagesCount';
+export const REFERRALS = 'referrals';
 
 export default {
     [PAGES_COUNT]({ range }) {
         return Math.ceil(range / REFERRAL_ORDERS_PAGE_SIZE);
+    },
+
+    [REFERRALS](state) {
+        return (state[REFERRAL_DATA] && state[REFERRAL_DATA][REFERRALS]) || [];
     },
 
     [LEVEL_DATA](state) {

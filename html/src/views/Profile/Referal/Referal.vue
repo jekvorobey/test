@@ -107,7 +107,7 @@
                                     </router-link>
                                 </td>
                                 <td class="referal-view__table-td">
-                                    {{ order.source }}
+                                    {{ order.sourceString }}
                                 </td>
                                 <td class="referal-view__table-td">{{ order.date }}</td>
                                 <td class="referal-view__table-td">
@@ -150,7 +150,7 @@
                             {{ order.customer_id }}
                         </router-link>
                     </info-row>
-                    <info-row class="referal-view__list-item-row" name="Источник" :value="order.source" />
+                    <info-row class="referal-view__list-item-row" name="Источник" :value="order.sourceString" />
                     <info-row class="referal-view__list-item-row" name="Дата заказа" :value="order.date" />
                     <info-row class="referal-view__list-item-row" name="Сумма">
                         <price v-bind="order.price_product" />
@@ -238,6 +238,7 @@ import {
     SUM_ARC_DATA,
     LEVEL_DATA,
     PAGES_COUNT,
+    REFERRALS,
 } from '@store/modules/Profile/modules/Referral/getters';
 
 import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
@@ -287,26 +288,6 @@ export default {
             chartOptions: {
                 ...baseChartOptions,
             },
-
-            series: [
-                {
-                    name: 'Новые рефералы',
-                    data: [
-                        [1, 5],
-                        [2, 8],
-                        [3, 7],
-                        [4, 21],
-                        [5, 15],
-                        [6, 12],
-                        [7, 13],
-                        [8, 12],
-                        [9, 3],
-                        [10, 5],
-                        [11, 24],
-                        [12, null],
-                    ],
-                },
-            ],
         };
     },
 
@@ -317,7 +298,7 @@ export default {
             [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
         }),
 
-        ...mapGetters(REFERRAL_MODULE_PATH, [REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, PAGES_COUNT]),
+        ...mapGetters(REFERRAL_MODULE_PATH, [REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, PAGES_COUNT, REFERRALS]),
 
         arcSettings() {
             return {
@@ -331,6 +312,16 @@ export default {
             };
         },
 
+        series() {
+            const data = this[REFERRALS] || [];
+            return [
+                {
+                    name: 'Новые рефералы',
+                    data,
+                },
+            ];
+        },
+
         orders() {
             const items = this[ITEMS] || [];
 
@@ -339,10 +330,12 @@ export default {
                 const defaultImage = i.image && generatePictureSourcePath(40, 40, i.image.id);
                 const date =
                     i.order_date && new Date(i.order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
+                const sourceString = this.$t(`referralSource.${i.source}`);
 
                 return {
                     ...i,
                     qty: Number(i.qty),
+                    sourceString,
                     date,
                     defaultImage,
                     desktopImage,
@@ -354,8 +347,6 @@ export default {
             return this.$mq.tabletLg;
         },
     },
-
-    watch: {},
 
     methods: {
         ...mapActions(REFERRAL_MODULE_PATH, [FETCH_REFERRAL_DATA, FETCH_ORDERS, SET_LOAD_PATH]),
