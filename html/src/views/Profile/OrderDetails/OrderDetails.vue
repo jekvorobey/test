@@ -12,29 +12,55 @@
                     <info-row class="order-details-view__details-row" name="Сумма">
                         <price class="text-bold" v-bind="order.price" />
                     </info-row>
+
                     <info-row
                         class="order-details-view__details-row"
                         :class="orderStatusClass"
                         name="Статус заказа"
                         :value="orderStatus"
                     />
+
                     <info-row
                         v-if="deliveryMethod"
                         class="order-details-view__details-row"
                         name="Способ доставки"
                         :value="deliveryMethod"
                     />
+
                     <info-row
                         class="order-details-view__details-row"
                         name="Дата заказа"
                         :value="formatDate(order.created_at)"
                     />
+
                     <info-row
                         v-if="deliveryDate"
                         class="order-details-view__details-row"
                         name="Дата доставки"
                         :value="deliveryDate"
                     />
+
+                    <template v-if="deliveryPoint && deliveryMethodId === deliveryMethods.PICKUP">
+                        <br />
+                        <info-row
+                            class="order-details-view__details-row"
+                            name="Наименование ПВЗ"
+                            :value="deliveryPoint.name"
+                        />
+                        <info-row class="order-details-view__details-row" name="Телефон" :value="deliveryPoint.phone" />
+                        <info-row
+                            v-if="deliveryPoint.schedule"
+                            class="order-details-view__details-row"
+                            name="Время работы"
+                        >
+                            <div v-for="(schedule, index) in deliveryPoint.schedule" :key="schedule.id">
+                                {{ schedule.title }}
+                                {{ schedule.time
+                                }}<template v-if="index !== deliveryPoint.schedule.length - 1">,&nbsp;</template>
+                            </div>
+                        </info-row>
+                    </template>
+
                     <info-row
                         v-if="deliveryAddress"
                         class="order-details-view__details-row"
@@ -107,6 +133,28 @@
                         :class="getDeliveryStatusClass(delivery.status)"
                         :value="formatDeliveryStatus(delivery.status)"
                     />
+
+                    <template v-if="delivery.point && delivery.delivery_method === deliveryMethods.PICKUP">
+                        <br />
+                        <info-row
+                            class="order-details-view__panel-row"
+                            name="Наименование ПВЗ"
+                            :value="delivery.point.name"
+                        />
+                        <info-row class="order-details-view__panel-row" name="Телефон" :value="delivery.point.phone" />
+                        <info-row
+                            v-if="delivery.point.schedule"
+                            class="order-details-view__panel-row"
+                            name="Время работы"
+                        >
+                            <div v-for="(schedule, index) in delivery.point.schedule" :key="schedule.id">
+                                {{ schedule.title }}
+                                {{ schedule.time
+                                }}<template v-if="index !== delivery.point.schedule.length - 1">,&nbsp;</template>
+                            </div>
+                        </info-row>
+                    </template>
+
                     <info-row
                         class="order-details-view__panel-row"
                         name="Адрес доставки"
@@ -172,6 +220,7 @@ import { toAddressString } from '@util/address';
 import { getOrderStatusColorClass, getDeliveryStatusColorClass } from '@util/order';
 import { orderPaymentStatus, orderStatus, deliveryStatus } from '@enums/order';
 import { orderDateLocaleOptions } from '@settings/profile';
+import { receiveMethods } from '@enums/checkout';
 import '@images/sprites/arrow-small.svg';
 import './OrderDetails.css';
 
@@ -235,6 +284,14 @@ export default {
             }
         },
 
+        deliveryMethodId() {
+            const deliveries = this[DELIVERIES];
+            if (deliveries.length === 1) {
+                const { delivery_method } = deliveries[0];
+                return delivery_method;
+            }
+        },
+
         deliveryDate() {
             const deliveries = this[DELIVERIES];
             if (deliveries.length === 1) {
@@ -245,9 +302,12 @@ export default {
 
         deliveryAddress() {
             const deliveries = this[DELIVERIES];
-            if (deliveries.length === 1) {
-                return this.formatAddress(deliveries[0]);
-            }
+            if (deliveries.length === 1) return this.formatAddress(deliveries[0]);
+        },
+
+        deliveryPoint() {
+            const deliveries = this[DELIVERIES];
+            if (deliveries.length === 1) return deliveries[0].point;
         },
 
         orderStatus() {
@@ -292,8 +352,8 @@ export default {
         },
 
         formatAddress(delivery) {
-            const { delivery_address, point_address } = delivery;
-            return toAddressString(delivery_address || point_address);
+            const { delivery_address, point } = delivery;
+            return (delivery_address && toAddressString(delivery_address)) || point.address.address_string;
         },
 
         formatDate(date) {
@@ -355,6 +415,10 @@ export default {
     beforeRouteLeave(to, from, next) {
         this[UPDATE_BREADCRUMB]([]);
         next();
+    },
+
+    beforeMount() {
+        this.deliveryMethods = receiveMethods;
     },
 };
 </script>

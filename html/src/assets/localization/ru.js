@@ -105,7 +105,7 @@ const main = {
 
     deliveryMethod: {
         [receiveMethods.DELIVERY]: 'Доставка курьером',
-        [receiveMethods.PICKUP]: 'Самовывоз',
+        [receiveMethods.PICKUP]: 'Доставка в ПВЗ',
         [receiveMethods.EXPRESS]: 'Экспресс доставка',
     },
 
