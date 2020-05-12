@@ -94,7 +94,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { $cookie } from '@services';
 import { eventName, interval, modalName, cookieNames } from '@enums';
-import { MIN_SCROLL_VALUE, SCROLL_DEBOUCE_TIME } from '@constants';
+import { MIN_SCROLL_VALUE, SCROLL_DEBOUNCE_TIME } from '@constants';
 
 Vue.use(SocialSharing);
 Vue.component('v-svg', VSvg);
@@ -211,7 +211,7 @@ export default {
     },
 
     mounted() {
-        const onSetScrollDebounce = _debounce(this.onScroll, SCROLL_DEBOUCE_TIME);
+        const onSetScrollDebounce = _debounce(this.onScroll, SCROLL_DEBOUNCE_TIME);
         document.addEventListener(eventName.SCROLL, onSetScrollDebounce, true);
         this.$once('hook:beforeDestroy', () => document.removeEventListener(eventName.SCROLL, onSetScrollDebounce));
 

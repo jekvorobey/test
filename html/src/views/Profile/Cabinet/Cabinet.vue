@@ -138,7 +138,7 @@
                     <info-row
                         class="cabinet-view__panel-item"
                         name="Персональная скидка"
-                        :value="referralPersonalDiscount.percent"
+                        :value="referralPersonalDiscount.percent ? `${referralPersonalDiscount.percent}%` : '-'"
                     />
                 </ul>
             </div>

@@ -22,7 +22,7 @@
                 <price class="text-bold package-product-card__body-price" v-bind="price" />
                 <price
                     class="text-grey text-strike package-product-card__body-price--old"
-                    v-if="oldPrice"
+                    v-if="oldPrice && oldPrice.value !== price.value"
                     v-bind="oldPrice"
                 />
             </div>
