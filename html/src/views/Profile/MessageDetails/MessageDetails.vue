@@ -5,20 +5,20 @@
                 <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем
                 сообщениям
             </v-link>
-            <h2 class="message-details-view__hl">{{ messageId }} Доставка в Зеленоград</h2>
+            <h2 class="message-details-view__hl">{{ chatId }} Доставка в Зеленоград</h2>
         </div>
 
         <ul class="message-details-view__list">
             <message-card
                 tabindex="0"
                 class="message-details-view__list-item"
-                v-for="message in messages"
+                v-for="message in items"
                 :key="message.id"
                 :message="message.message"
                 :name="message.name"
                 :last-name="message.lastName"
                 :title="`${message.name || ''} ${message.lastName || ''}`"
-                :date="formatDate(message.date)"
+                :date="message.date"
                 :is-system="message.isSystem"
             />
         </ul>
@@ -44,8 +44,15 @@ import { LOCALE } from '@store';
 import { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
+import { NAME as MESSAGES_MODULE, MESSAGES } from '@store/modules/Profile/modules/Messages';
+import { FETCH_CHAT_MESSAGES } from '@store/modules/Profile/modules/Messages/actions';
+
+import { $store, $progress } from '@services';
+
 import '@images/sprites/arrow-small.svg';
 import './MessageDetails.css';
+
+const MESSAGES_MODULE_PATH = `${PROFILE_MODULE}/${MESSAGES_MODULE}`;
 
 export default {
     name: 'message-details',
@@ -60,48 +67,20 @@ export default {
     },
 
     data() {
-        return {
-            messages: [
-                {
-                    id: 1,
-                    name: 'Владимир',
-                    lastName: 'Соколов',
-                    message: 'Добрый день! Подскажите, планируете ли осуществлять доставку в Зеленоград?',
-                    isRead: true,
-                    isSystem: false,
-                    date: '2019-07-23 15:23',
-                },
-
-                {
-                    id: 2,
-                    name: 'Команда Бессовестно Талантливый',
-                    lastName: null,
-                    title: 'Оплата через юрлицо',
-                    message:
-                        'Добрый день, Владимир! Да, скоро будем доставлять заказы и в Зеленоград тоже. Можно будет выбрать как курьерскую доставку, так и самовывоз из пунктов выдачи DPD и Boxberry.',
-                    isRead: true,
-                    isSystem: true,
-                    date: '2019-07-23 15:48',
-                },
-                {
-                    id: 3,
-                    name: 'Команда Бессовестно Талантливый',
-                    lastName: null,
-                    title: 'Шампуни Aveda',
-                    message: 'К сожалению, пока что шампуней Aveda нет в наличии. Но вы можете обратить внимание на...',
-                    isRead: true,
-                    isSystem: true,
-                    date: '2019-07-24 10:02',
-                },
-            ],
-        };
+        return {};
     },
 
     computed: {
         ...mapState([LOCALE]),
+        ...mapState(MESSAGES_MODULE_PATH, [MESSAGES]),
         ...mapState('route', {
-            messageId: state => state.params && state.params.messageId,
+            chatId: state => state.params && state.params.chatId,
         }),
+
+        items() {
+            const messages = this[MESSAGES] || [];
+            return messages.map(m => ({ ...m, date: this.formatDate(m.date) }));
+        },
 
         backUrl() {
             return { name: 'Messages' };
@@ -113,29 +92,26 @@ export default {
 
         formatDate(date) {
             const dateObj = new Date(date);
-            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-            return dateObj.toLocaleDateString(this[LOCALE], options);
+            return dateObj.toLocaleDateString(this[LOCALE]);
         },
     },
 
     beforeRouteEnter(to, from, next) {
         const { name, params } = to;
-        next(vm => {
-            vm[UPDATE_BREADCRUMB]([
-                { name: vm.$t('profile.routes.Messages'), to: { name: 'Messages' } },
-                { name: params.messageId, to: { name, params } },
-            ]);
-        });
-    },
 
-    beforeRouteUpdate(to, from, next) {
-        const { name, params } = to;
-
-        this[UPDATE_BREADCRUMB]([
-            { name: vm.$t('profile.routes.Messages'), to: { name: 'Messages' } },
-            { name: params.messageId, to: { name, params } },
-        ]);
-        next();
+        $progress.start();
+        $store
+            .dispatch(`${MESSAGES_MODULE_PATH}/${FETCH_CHAT_MESSAGES}`, params.chatId)
+            .then(() =>
+                next(vm => {
+                    $progress.finish();
+                    vm[UPDATE_BREADCRUMB]([
+                        { name: vm.$t('profile.routes.Messages'), to: { name: 'Messages' } },
+                        { name: params.chatId, to: { name, params } },
+                    ]);
+                })
+            )
+            .catch(error => next(vm => $progress.fail()));
     },
 
     beforeRouteLeave(to, from, next) {

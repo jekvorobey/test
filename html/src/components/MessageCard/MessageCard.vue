@@ -18,7 +18,7 @@
                 <v-clamp v-if="useClamp" :max-lines="1" autoresize>{{ message }}</v-clamp>
                 <span v-else>{{ message }}</span>
             </div>
-            <span class="text-sm text-grey message-card__date-mobile">{{ date }}</span>
+            <span class="text-sm text-grey message-card__body-date-mobile">{{ date }}</span>
         </div>
     </li>
 </template>

@@ -13,6 +13,7 @@ import referral from './modules/Referral';
 import billing from './modules/Billing';
 import promocodes from './modules/Promocodes';
 import returnPage from './modules/ReturnPage';
+import messages from './modules/Messages';
 
 export const NAME = 'profile';
 export const BREADCRUMBS = 'breadcrumbs';
@@ -30,55 +31,6 @@ export default function createModule() {
         namespaced: true,
         state: {
             [BREADCRUMBS]: [],
-
-            [MESSAGES_DATA]: {
-                messages: [
-                    {
-                        id: 56835,
-                        name: null,
-                        lastName: null,
-                        title: 'Начисление баллов за заказ №125-7865564-6',
-                        message:
-                            'Добрый день, Владимир! Мы разобрались в вашей ситуации — 1500 бонусов за заказ №125-7, Добрый день, Владимир! Мы разобрались в вашей ситуации — 1500 бонусов за заказ №125-7',
-                        isRead: false,
-                        isSystem: true,
-                        date: '2019-07-28',
-                    },
-                    {
-                        id: 56822,
-                        name: 'Владимир',
-                        lastName: 'Соколов',
-                        title: 'Доставка в Зеленоград',
-                        message: 'Ок, спасибо!',
-                        isRead: true,
-                        isSystem: false,
-                        date: '2019-07-18',
-                    },
-                    {
-                        id: 56577,
-                        name: null,
-                        lastName: null,
-                        title: 'Оплата через юрлицо',
-                        message: 'Всегда рады вам помочь!',
-                        isRead: true,
-                        isSystem: true,
-                        date: '2019-07-02',
-                    },
-                    {
-                        id: 56547,
-                        name: null,
-                        lastName: null,
-                        title: 'Шампуни Aveda',
-                        message:
-                            'К сожалению, пока что шампуней Aveda нет в наличии. Но вы можете обратить внимание на...',
-                        isRead: true,
-                        isSystem: true,
-                        date: '2019-07-02',
-                    },
-                ],
-
-                messageDetail: null,
-            },
         },
         actions,
         mutations,
@@ -96,6 +48,7 @@ export default function createModule() {
             billing: billing(),
             promocodes: promocodes(),
             returnPage: returnPage(),
+            messages: messages(),
         },
     };
 }

@@ -384,6 +384,22 @@ export function getPromocodeData(isArchive = 0) {
     });
 }
 
+export function getProfileChats() {
+    return $http.get('/v1/lk/messages/');
+}
+
+export function createProfileChat(formData) {
+    return $http.post('/v1/lk/messages/', formData);
+}
+
+export function getProfileChatMessages(chatId) {
+    return $http.get(`/v1/lk/messages/${chatId}`);
+}
+
+export function createProfileChatMessage(chatId, formData) {
+    return $http.post(`/v1/lk/messages/${chatId}`, formData);
+}
+
 // referrer
 
 export function getReferrerData(code) {
