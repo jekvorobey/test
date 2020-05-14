@@ -133,10 +133,10 @@
                     </table>
                 </section>
 
-                <filter-button class="referal-view__filter-btn" @click="filterModal = !filterModal">
+                <!-- <filter-button class="referal-view__filter-btn" @click="filterModal = !filterModal">
                     Фильтр и сортировка&nbsp;&nbsp;
                     <span class="text-grey">4</span>
-                </filter-button>
+                </filter-button> -->
             </div>
 
             <ul class="referal-view__list" v-if="isTabletLg">

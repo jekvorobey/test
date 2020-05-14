@@ -80,6 +80,10 @@
                 padding-top: 0;
                 width: 100%;
             }
+
+            @media (--tablet) {
+                padding: calc(var(--gs) * 2);
+            }
         }
 
         &--empty {
