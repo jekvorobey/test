@@ -35,7 +35,7 @@ export default {
         };
     },
 
-    [REFERRAL_ARC_DATA](state) {
+    [REFERRAL_ARC_DATA](state, getters) {
         const { current_level, next_level } = getters[LEVEL] || {
             current_level: {},
             next_level: {},
@@ -51,7 +51,7 @@ export default {
         };
     },
 
-    [SUM_ARC_DATA](state) {
+    [SUM_ARC_DATA](state, getters) {
         const { current_level, next_level } = getters[LEVEL] || {
             current_level: {},
             next_level: {},
