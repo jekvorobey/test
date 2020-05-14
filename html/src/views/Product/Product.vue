@@ -45,8 +45,18 @@
                                 :key="image.id"
                             >
                                 <v-picture v-if="image && image.id">
-                                    <source :data-srcset="image.desktop" type="image/webp" media="(min-width: 480px)" />
-                                    <source :data-srcset="image.tablet" type="image/webp" media="(max-width: 479px)" />
+                                    <source
+                                        :data-srcset="image.desktop.webp"
+                                        type="image/webp"
+                                        media="(min-width: 480px)"
+                                    />
+                                    <source :data-srcset="image.desktop.orig" media="(min-width: 480px)" />
+                                    <source
+                                        :data-srcset="image.tablet.webp"
+                                        type="image/webp"
+                                        media="(max-width: 479px)"
+                                    />
+                                    <source :data-srcset="image.tablet.orig" media="(max-width: 479px)" />
                                     <img class="blur-up lazyload v-picture__img" :data-src="image.default" alt="" />
                                 </v-picture>
                             </div>
@@ -69,8 +79,18 @@
                                 :key="image.id"
                             >
                                 <v-picture>
-                                    <source :data-srcset="image.desktop" type="image/webp" media="(min-width: 480px)" />
-                                    <source :data-srcset="image.tablet" type="image/webp" media="(max-width: 479px)" />
+                                    <source
+                                        :data-srcset="image.desktop.webp"
+                                        type="image/webp"
+                                        media="(min-width: 480px)"
+                                    />
+                                    <source :data-srcset="image.desktop.orig" media="(min-width: 480px)" />
+                                    <source
+                                        :data-srcset="image.tablet.webp"
+                                        type="image/webp"
+                                        media="(max-width: 479px)"
+                                    />
+                                    <source :data-srcset="image.tablet.orig" media="(max-width: 479px)" />
                                     <img class="blur-up lazyload v-picture__img" :data-src="image.default" alt="" />
                                 </v-picture>
                             </div>
@@ -941,12 +961,31 @@ export default {
             }
 
             if (Array.isArray(media) && media.length > 0) {
+                const defaultDesktopSize = media.length === 1 ? 504 : 328;
+                const defaultTabletSize = 200;
+
                 imageMap.media = media.map(image => {
                     return {
                         ...image,
-                        desktop: generatePictureSourcePath(300, 300, image.id, fileExtension.image.WEBP),
-                        tablet: generatePictureSourcePath(200, 200, image.id, fileExtension.image.WEBP),
-                        default: generatePictureSourcePath(300, 300, image.id),
+                        desktop: {
+                            webp: generatePictureSourcePath(
+                                defaultDesktopSize,
+                                defaultDesktopSize,
+                                image.id,
+                                fileExtension.image.WEBP
+                            ),
+                            orig: generatePictureSourcePath(defaultDesktopSize, defaultDesktopSize, image.id),
+                        },
+                        tablet: {
+                            webp: generatePictureSourcePath(
+                                defaultTabletSize,
+                                defaultTabletSize,
+                                image.id,
+                                fileExtension.image.WEBP
+                            ),
+                            orig: generatePictureSourcePath(defaultTabletSize, defaultTabletSize, image.id),
+                        },
+                        default: generatePictureSourcePath(defaultDesktopSize, defaultDesktopSize, image.id),
                     };
                 });
             } else imageMap.media = [];
