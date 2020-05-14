@@ -653,7 +653,10 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '@services';
 import { SCROLL } from '@store';
 
-import productModule, {
+import { NAME as AUTH_MODULE } from '@store/modules/Auth';
+import { SET_SESSION_REFERRAL_CODE } from '@store/modules/Auth/actions';
+
+import {
     NAME as PRODUCT_MODULE,
     PRODUCT,
     BANNERS,
@@ -668,23 +671,25 @@ import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS } from '@store/modules/
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { IS_IN_CART } from '@store/modules/Cart/getters';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
+
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
+
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
 import _debounce from 'lodash/debounce';
-import { registerModuleIfNotExists } from '@util/store';
 import {
     generatePictureSourcePath,
     generateYoutubeImagePlaceholderPath,
     generateYoutubeVideoSourcePath,
 } from '@util/file';
+import { createNotFoundRoute } from '@util/router';
 import { breakpoints, fileExtension, httpCodes, modalName } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
-import { createNotFoundRoute } from '@util/router';
 import { generateCategoryUrl, generateProductUrl } from '@util/catalog';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
@@ -994,6 +999,7 @@ export default {
     },
 
     methods: {
+        ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE]),
         ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
@@ -1140,8 +1146,6 @@ export default {
             query: { refCode = null, modal },
         } = to;
 
-        // регистрируем модуль, если такого нет
-        registerModuleIfNotExists($store, PRODUCT_MODULE, productModule);
         const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
         // если все загружено, пропускаем
@@ -1185,6 +1189,12 @@ export default {
 
         if (code === fromCode && refCode === fromRefCode) next();
         else this.debounce_fetchProduct(to, from, next);
+    },
+
+    created() {
+        // Если перезошел переход со страницы реферального партнера,
+        // записываем его код в сессию для регистрации
+        if (this.refCode) this[SET_SESSION_REFERRAL_CODE](this.refCode);
     },
 
     beforeMount() {

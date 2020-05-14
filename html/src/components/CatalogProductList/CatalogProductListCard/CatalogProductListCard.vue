@@ -110,6 +110,10 @@ export default {
             },
         },
 
+        referralCode: {
+            type: String,
+        },
+
         isSmall: {
             type: Boolean,
             default: false,
@@ -155,7 +159,11 @@ export default {
         },
 
         href() {
-            return generateProductUrl(this.item.categoryCodes[this.item.categoryCodes.length - 1], this.item.code);
+            return generateProductUrl(
+                this.item.categoryCodes[this.item.categoryCodes.length - 1],
+                this.item.code,
+                this.referralCode
+            );
         },
     },
 

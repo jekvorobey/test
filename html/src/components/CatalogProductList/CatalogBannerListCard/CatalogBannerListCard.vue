@@ -64,6 +64,10 @@ export default {
                 return {};
             },
         },
+
+        referralCode: {
+            type: String,
+        },
     },
 
     computed: {

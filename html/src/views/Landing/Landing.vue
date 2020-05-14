@@ -25,14 +25,14 @@ import BrandsSection from '@components/blocks/BrandsSection/BrandsSection.vue';
 import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions } from 'vuex';
 
-import landingModule, { NAME as LANDING_MODULE, RENDER_DATA } from '@store/modules/Landing';
+import { NAME as LANDING_MODULE, RENDER_DATA } from '@store/modules/Landing';
 import { FETCH_LANDING_DATA } from '@store/modules/Landing/actions';
 
-import { registerModuleIfNotExists } from '@util/store';
 import './Landing.css';
 
 export default {
     name: 'landing',
+
     components: {
         SeparatorSection,
         SliderBannersSection,
@@ -69,9 +69,8 @@ export default {
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
 
-        //регистрируем модуль, если такого нет
-        registerModuleIfNotExists($store, LANDING_MODULE, landingModule);
         const { load } = $store.state[LANDING_MODULE];
+
         if (load) next();
         else {
             $progress.start();
