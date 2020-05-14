@@ -27,8 +27,8 @@ export default {
         } = state[REFERRAL_DATA] || {};
 
         return {
-            currentLevelName: current_level.name,
-            nextLevelName: next_level.name,
+            currentLevelName: current_level && current_level.name,
+            nextLevelName: next_level && next_level.name,
         };
     },
 
@@ -41,9 +41,12 @@ export default {
         } = state[REFERRAL_DATA] || {};
 
         return {
-            current: current_level.referral_count,
-            next: next_level.referral_count,
-            currentPercent: Math.round((current_level.referral_count * 100) / next_level.referral_count),
+            current: current_level && current_level.referral_count,
+            next: next_level && next_level.referral_count,
+            currentPercent:
+                current_level &&
+                next_level &&
+                Math.round((current_level.referral_count * 100) / next_level.referral_count),
         };
     },
 
@@ -56,9 +59,12 @@ export default {
         } = state[REFERRAL_DATA] || {};
 
         return {
-            current: current_level.order_referral_sum,
-            next: next_level.order_referral_sum,
-            currentPercent: Math.round((current_level.order_referral_sum * 100) / next_level.order_referral_sum),
+            current: current_level && current_level.order_referral_sum,
+            next: next_level && next_level.order_referral_sum,
+            currentPercent:
+                current_level &&
+                next_level &&
+                Math.round((current_level.order_referral_sum * 100) / next_level.order_referral_sum),
         };
     },
 };

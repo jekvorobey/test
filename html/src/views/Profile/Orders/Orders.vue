@@ -8,7 +8,11 @@
                     <div class="text-grey orders-view__panel-name">Ваш уровень</div>
                     <div class="orders-view__panel-level">{{ levelData.currentLevelName }}</div>
                 </div>
-                <div class="orders-view__panel-item">
+                <div
+                    class="orders-view__panel-item"
+                    v-if="levelData.nextLevelName || (!levelData.nextLevelName && isTabletLg && !isTablet)"
+                    :style="{ visibility: levelData.nextLevelName ? 'visible' : 'hidden' }"
+                >
                     <div class="text-grey orders-view__panel-name">Следующий уровень</div>
                     <div class="text-grey orders-view__panel-level">{{ levelData.nextLevelName }}</div>
                 </div>
@@ -16,56 +20,52 @@
                 <a class="orders-view__panel-link">Подробнее о реферальной программе</a>
             </div>
 
-            <div class="orders-view__panel">
-                <div class="orders-view__panel-item">
-                    <div class="orders-view__panel-item-counter">
-                        <v-arc-counter
-                            stroke="#BDBDBD"
-                            activeStroke="#141116"
-                            :text="referralArcData.current"
-                            :start="-120"
-                            :end="120"
-                            :activeWidth="16"
-                            :strokeWidth="16"
-                            :dashCount="referralArcData.next"
-                            :activeCount="referralArcData.current"
-                        />
-                        <div class="text-grey orders-view__panel-item-label">
-                            <span>0</span>
-                            <span>{{ referralArcData.next }}</span>
+            <div class="orders-view__panel" :class="{ 'orders-view__panel--empty': !levelData.nextLevelName }">
+                <template v-if="levelData.nextLevelName">
+                    <div class="orders-view__panel-item">
+                        <div class="orders-view__panel-item-counter">
+                            <v-arc-counter
+                                v-bind="arcSettings"
+                                :text="referralArcData.current"
+                                :dashCount="referralArcData.next"
+                                :activeCount="referralArcData.current"
+                            />
+                            <div class="text-grey orders-view__panel-item-label">
+                                <span>0</span>
+                                <span>{{ referralArcData.next }}</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="text-grey">Новых заказов</div>
-                </div>
-                <div class="orders-view__panel-item">
-                    <div class="orders-view__panel-item-counter">
-                        <v-arc-counter
-                            stroke="#BDBDBD"
-                            activeStroke="#141116"
-                            :text="formatArcSum(sumArcData.current)"
-                            :start="-120"
-                            :end="120"
-                            :activeWidth="16"
-                            :strokeWidth="16"
-                            :dashCount="sumArcData.next"
-                            :activeCount="sumArcData.current"
-                        />
-                        <div class="text-grey orders-view__panel-item-label">
-                            <span>0</span>
-                            <span>{{ shortNumberFormat(sumArcData.next) }}</span>
-                        </div>
+                        <div class="text-grey">Новых заказов</div>
                     </div>
-                    <div class="text-grey">Сумма моих заказов</div>
+                    <div class="orders-view__panel-item">
+                        <div class="orders-view__panel-item-counter">
+                            <v-arc-counter
+                                v-bind="arcSettings"
+                                :text="formatArcSum(sumArcData.current)"
+                                :dashCount="sumArcData.next"
+                                :activeCount="sumArcData.current"
+                            />
+                            <div class="text-grey orders-view__panel-item-label">
+                                <span>0</span>
+                                <span>{{ shortNumberFormat(sumArcData.next) }}</span>
+                            </div>
+                        </div>
+                        <div class="text-grey">Сумма моих заказов</div>
+                    </div>
+                </template>
+                <div class="orders-view__panel-item" v-else>
+                    <h2>Поздравляем!</h2>
+                    Вы достигли максимального уровня!
                 </div>
             </div>
         </div>
 
         <div class="container container--tablet-lg">
-            <filter-button class="orders-view__filter-btn" @click="filterModal = !filterModal">
+            <!-- <filter-button class="orders-view__filter-btn" @click="filterModal = !filterModal">
                 Фильтр и сортировка&nbsp;&nbsp;
                 <span class="text-grey">4</span>
-            </filter-button>
+            </filter-button> -->
 
             <table class="orders-view__table" v-if="!isTabletLg">
                 <colgroup>
@@ -344,8 +344,24 @@ export default {
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
+        arcSettings() {
+            return {
+                start: -120,
+                end: 120,
+                activeWidth: 16,
+                strokeWidth: 16,
+                stroke: '#BDBDBD',
+                activeStroke: '#141116',
+                dashCount: 100,
+            };
+        },
+
         isTabletLg() {
             return this.$mq.tabletLg;
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 

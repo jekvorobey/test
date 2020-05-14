@@ -49,6 +49,10 @@
         background-color: var(--cl-elem-grey);
         padding: calc(var(--gs) * 4) calc(var(--gs) * 3);
 
+        @media (--tablet) {
+            padding: calc(var(--gs) * 2);
+        }
+
         &:first-child {
             flex-wrap: wrap;
 
@@ -88,6 +92,19 @@
                 padding-top: 0;
                 width: 100%;
             }
+        }
+
+        &--empty {
+            justify-content: flex-start !important;
+            padding: calc(var(--gs) * 3) !important;
+
+            @media (--tablet) {
+                padding: calc(var(--gs) * 2) !important;
+            }
+        }
+
+        &--empty &-item {
+            align-items: flex-start !important;
         }
 
         &-item {

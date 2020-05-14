@@ -7,41 +7,53 @@
                     <div class="text-grey referal-view__panel-name">Ваш уровень</div>
                     <div class="referal-view__panel-level">{{ levelData.currentLevelName }}</div>
                 </div>
-                <div class="referal-view__panel-item">
-                    <div class="text-grey referal-view__panel-name">Следующий уровень</div>
+                <div
+                    class="referal-view__panel-item"
+                    v-if="levelData.nextLevelName || (!levelData.nextLevelName && isTabletLg && !isTablet)"
+                    :style="{ visibility: levelData.nextLevelName ? 'visible' : 'hidden' }"
+                >
+                    <div class="text-grey referal-view__panel-name">
+                        Следующий уровень
+                    </div>
                     <div class="text-grey referal-view__panel-level">{{ levelData.nextLevelName }}</div>
                 </div>
 
                 <a class="referal-view__panel-link">Подробнее о реферальной программе</a>
             </div>
-            <div class="referal-view__panel">
-                <div class="referal-view__panel-item">
-                    <div class="referal-view__panel-item-counter">
-                        <v-arc-counter
-                            v-bind="arcSettings"
-                            :text="referralArcData.current"
-                            :active-count="referralArcData.currentPercent"
-                        />
-                        <div class="text-grey referal-view__panel-item-label">
-                            <span>0</span>
-                            <span>{{ referralArcData.next }}</span>
+            <div class="referal-view__panel" :class="{ 'referal-view__panel--empty': !levelData.nextLevelName }">
+                <template v-if="levelData.nextLevelName">
+                    <div class="referal-view__panel-item">
+                        <div class="referal-view__panel-item-counter">
+                            <v-arc-counter
+                                v-bind="arcSettings"
+                                :text="referralArcData.current"
+                                :active-count="referralArcData.currentPercent"
+                            />
+                            <div class="text-grey referal-view__panel-item-label">
+                                <span>0</span>
+                                <span>{{ referralArcData.next }}</span>
+                            </div>
                         </div>
+                        <div class="text-grey">Новых рефералов</div>
                     </div>
-                    <div class="text-grey">Новых рефералов</div>
-                </div>
-                <div class="referal-view__panel-item">
-                    <div class="referal-view__panel-item-counter">
-                        <v-arc-counter
-                            v-bind="arcSettings"
-                            :text="formatArcSum(sumArcData.current)"
-                            :active-count="sumArcData.currentPercent"
-                        />
-                        <div class="text-grey referal-view__panel-item-label">
-                            <span>0</span>
-                            <span>{{ shortNumberFormat(sumArcData.next) }}</span>
+                    <div class="referal-view__panel-item">
+                        <div class="referal-view__panel-item-counter">
+                            <v-arc-counter
+                                v-bind="arcSettings"
+                                :text="formatArcSum(sumArcData.current)"
+                                :active-count="sumArcData.currentPercent"
+                            />
+                            <div class="text-grey referal-view__panel-item-label">
+                                <span>0</span>
+                                <span>{{ shortNumberFormat(sumArcData.next) }}</span>
+                            </div>
                         </div>
+                        <div class="text-grey">Сумма заказов</div>
                     </div>
-                    <div class="text-grey">Сумма заказов</div>
+                </template>
+                <div class="referal-view__panel-item" v-else>
+                    <h2>Поздравляем!</h2>
+                    Вы достигли максимального уровня!
                 </div>
             </div>
         </div>
@@ -345,6 +357,10 @@ export default {
 
         isTabletLg() {
             return this.$mq.tabletLg;
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 
