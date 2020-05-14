@@ -2,7 +2,7 @@
     <section class="section orders-view">
         <h2 class="container container--tablet-lg orders-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
 
-        <div class="orders-view__panels" v-if="referralPartner">
+        <div class="orders-view__panels" v-if="referralPartner && referralData && level">
             <div class="orders-view__panel">
                 <div class="orders-view__panel-item">
                     <div class="text-grey orders-view__panel-name">Ваш уровень</div>
@@ -27,8 +27,7 @@
                             <v-arc-counter
                                 v-bind="arcSettings"
                                 :text="referralArcData.current"
-                                :dashCount="referralArcData.next"
-                                :activeCount="referralArcData.current"
+                                :activeCount="referralArcData.currentPercent"
                             />
                             <div class="text-grey orders-view__panel-item-label">
                                 <span>0</span>
@@ -43,8 +42,7 @@
                             <v-arc-counter
                                 v-bind="arcSettings"
                                 :text="formatArcSum(sumArcData.current)"
-                                :dashCount="sumArcData.next"
-                                :activeCount="sumArcData.current"
+                                :activeCount="sumArcData.currentPercent"
                             />
                             <div class="text-grey orders-view__panel-item-label">
                                 <span>0</span>
@@ -279,12 +277,14 @@ import {
     ORDER_DIRECTION,
     ORDER_FIELD,
     ACTIVE_PAGE,
+    REFERRAL_DATA,
 } from '@store/modules/Profile/modules/Orders';
 import {
     REFERRAL_ARC_DATA,
     SUM_ARC_DATA,
     LEVEL_DATA,
     PAGES_COUNT,
+    LEVEL,
 } from '@store/modules/Profile/modules/Orders/getters';
 import {
     FETCH_ORDERS,
@@ -338,8 +338,8 @@ export default {
 
     computed: {
         ...mapState([LOCALE]),
-        ...mapState(ORDERS_MODULE_PATH, [ORDERS, ORDER_DIRECTION, ORDER_FIELD, ACTIVE_PAGE]),
-        ...mapGetters(ORDERS_MODULE_PATH, [PAGES_COUNT, REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA]),
+        ...mapState(ORDERS_MODULE_PATH, [ORDERS, ORDER_DIRECTION, ORDER_FIELD, ACTIVE_PAGE, REFERRAL_DATA]),
+        ...mapGetters(ORDERS_MODULE_PATH, [PAGES_COUNT, REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, LEVEL]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),

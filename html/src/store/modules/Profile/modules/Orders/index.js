@@ -6,7 +6,7 @@ import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
 
-const REFERRAL_DATA = 'referralData';
+export const REFERRAL_DATA = 'referralData';
 
 export const NAME = 'orders';
 export const LOAD_PATH = 'loadPath';

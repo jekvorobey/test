@@ -1,7 +1,7 @@
 <template>
     <section class="section referal-view">
         <h2 class="referal-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
-        <div class="referal-view__panels" v-if="referralData">
+        <div class="referal-view__panels" v-if="referralData && level">
             <div class="referal-view__panel">
                 <div class="referal-view__panel-item">
                     <div class="text-grey referal-view__panel-name">Ваш уровень</div>
@@ -251,6 +251,7 @@ import {
     LEVEL_DATA,
     PAGES_COUNT,
     REFERRALS,
+    LEVEL,
 } from '@store/modules/Profile/modules/Referral/getters';
 
 import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
@@ -310,7 +311,14 @@ export default {
             [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
         }),
 
-        ...mapGetters(REFERRAL_MODULE_PATH, [REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, PAGES_COUNT, REFERRALS]),
+        ...mapGetters(REFERRAL_MODULE_PATH, [
+            REFERRAL_ARC_DATA,
+            SUM_ARC_DATA,
+            LEVEL_DATA,
+            PAGES_COUNT,
+            REFERRALS,
+            LEVEL,
+        ]),
 
         arcSettings() {
             return {
