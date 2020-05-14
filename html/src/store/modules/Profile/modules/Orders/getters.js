@@ -36,12 +36,12 @@ export default {
         };
 
         return {
-            current: current_level && current_level.referral_count,
-            next: next_level && next_level.referral_count,
+            current: current_level && current_level.order_personal_count,
+            next: next_level && next_level.order_personal_count,
             currentPercent:
                 current_level &&
                 next_level &&
-                Math.round((current_level.referral_count * 100) / next_level.referral_count),
+                Math.round((current_level.order_personal_count * 100) / next_level.order_personal_count),
         };
     },
 
@@ -52,12 +52,12 @@ export default {
         };
 
         return {
-            current: current_level && current_level.order_referral_sum,
-            next: next_level && next_level.order_referral_sum,
+            current: current_level && current_level.order_personal_sum,
+            next: next_level && next_level.order_personal_sum,
             currentPercent:
                 current_level &&
                 next_level &&
-                Math.round((current_level.order_referral_sum * 100) / next_level.order_referral_sum),
+                Math.round((current_level.order_personal_sum * 100) / next_level.order_personal_sum),
         };
     },
 };
