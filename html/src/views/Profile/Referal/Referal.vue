@@ -1,47 +1,59 @@
 <template>
     <section class="section referal-view">
         <h2 class="referal-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
-        <div class="referal-view__panels" v-if="referralData">
+        <div class="referal-view__panels" v-if="referralData && level">
             <div class="referal-view__panel">
                 <div class="referal-view__panel-item">
                     <div class="text-grey referal-view__panel-name">Ваш уровень</div>
                     <div class="referal-view__panel-level">{{ levelData.currentLevelName }}</div>
                 </div>
-                <div class="referal-view__panel-item">
-                    <div class="text-grey referal-view__panel-name">Следующий уровень</div>
+                <div
+                    class="referal-view__panel-item"
+                    v-if="levelData.nextLevelName || (!levelData.nextLevelName && isTabletLg && !isTablet)"
+                    :style="{ visibility: levelData.nextLevelName ? 'visible' : 'hidden' }"
+                >
+                    <div class="text-grey referal-view__panel-name">
+                        Следующий уровень
+                    </div>
                     <div class="text-grey referal-view__panel-level">{{ levelData.nextLevelName }}</div>
                 </div>
 
                 <a class="referal-view__panel-link">Подробнее о реферальной программе</a>
             </div>
-            <div class="referal-view__panel">
-                <div class="referal-view__panel-item">
-                    <div class="referal-view__panel-item-counter">
-                        <v-arc-counter
-                            v-bind="arcSettings"
-                            :text="referralArcData.current"
-                            :active-count="referralArcData.currentPercent"
-                        />
-                        <div class="text-grey referal-view__panel-item-label">
-                            <span>0</span>
-                            <span>{{ referralArcData.next }}</span>
+            <div class="referal-view__panel" :class="{ 'referal-view__panel--empty': !levelData.nextLevelName }">
+                <template v-if="levelData.nextLevelName">
+                    <div class="referal-view__panel-item">
+                        <div class="referal-view__panel-item-counter">
+                            <v-arc-counter
+                                v-bind="arcSettings"
+                                :text="referralArcData.current"
+                                :active-count="referralArcData.currentPercent"
+                            />
+                            <div class="text-grey referal-view__panel-item-label">
+                                <span>0</span>
+                                <span>{{ referralArcData.next }}</span>
+                            </div>
                         </div>
+                        <div class="text-grey">Новых рефералов</div>
                     </div>
-                    <div class="text-grey">Новых рефералов</div>
-                </div>
-                <div class="referal-view__panel-item">
-                    <div class="referal-view__panel-item-counter">
-                        <v-arc-counter
-                            v-bind="arcSettings"
-                            :text="formatArcSum(sumArcData.current)"
-                            :active-count="sumArcData.currentPercent"
-                        />
-                        <div class="text-grey referal-view__panel-item-label">
-                            <span>0</span>
-                            <span>{{ shortNumberFormat(sumArcData.next) }}</span>
+                    <div class="referal-view__panel-item">
+                        <div class="referal-view__panel-item-counter">
+                            <v-arc-counter
+                                v-bind="arcSettings"
+                                :text="formatArcSum(sumArcData.current)"
+                                :active-count="sumArcData.currentPercent"
+                            />
+                            <div class="text-grey referal-view__panel-item-label">
+                                <span>0</span>
+                                <span>{{ shortNumberFormat(sumArcData.next) }}</span>
+                            </div>
                         </div>
+                        <div class="text-grey">Сумма заказов</div>
                     </div>
-                    <div class="text-grey">Сумма заказов</div>
+                </template>
+                <div class="referal-view__panel-item" v-else>
+                    <h2>Поздравляем!</h2>
+                    Вы достигли максимального уровня!
                 </div>
             </div>
         </div>
@@ -121,10 +133,10 @@
                     </table>
                 </section>
 
-                <filter-button class="referal-view__filter-btn" @click="filterModal = !filterModal">
+                <!-- <filter-button class="referal-view__filter-btn" @click="filterModal = !filterModal">
                     Фильтр и сортировка&nbsp;&nbsp;
                     <span class="text-grey">4</span>
-                </filter-button>
+                </filter-button> -->
             </div>
 
             <ul class="referal-view__list" v-if="isTabletLg">
@@ -239,6 +251,7 @@ import {
     LEVEL_DATA,
     PAGES_COUNT,
     REFERRALS,
+    LEVEL,
 } from '@store/modules/Profile/modules/Referral/getters';
 
 import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
@@ -298,7 +311,14 @@ export default {
             [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
         }),
 
-        ...mapGetters(REFERRAL_MODULE_PATH, [REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, PAGES_COUNT, REFERRALS]),
+        ...mapGetters(REFERRAL_MODULE_PATH, [
+            REFERRAL_ARC_DATA,
+            SUM_ARC_DATA,
+            LEVEL_DATA,
+            PAGES_COUNT,
+            REFERRALS,
+            LEVEL,
+        ]),
 
         arcSettings() {
             return {
@@ -345,6 +365,10 @@ export default {
 
         isTabletLg() {
             return this.$mq.tabletLg;
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 

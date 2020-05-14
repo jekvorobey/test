@@ -112,9 +112,9 @@ export default {
             return media.slice(0, 4).map(i => {
                 return {
                     ...i,
-                    bigImage: generatePictureSourcePath(300, 300, i.id, fileExtension.image.WEBP),
+                    bigImage: generatePictureSourcePath(504, 504, i.id, fileExtension.image.WEBP),
                     smallImage: generatePictureSourcePath(200, 200, i.id, fileExtension.image.WEBP),
-                    defaultImage: generatePictureSourcePath(300, 300, i.id),
+                    defaultImage: generatePictureSourcePath(504, 504, i.id),
                 };
             });
         },

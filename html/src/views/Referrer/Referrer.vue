@@ -80,6 +80,9 @@ import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '@services';
 
+import { NAME as AUTH_MODULE } from '@store/modules/Auth';
+import { SET_SESSION_REFERRAL_CODE } from '@store/modules/Auth/actions';
+
 import { NAME as REFERRER_MODULE, ITEMS, ACTIVE_PAGE, TITLE } from '@store/modules/Referrer';
 import { PAGES_COUNT } from '@store/modules/Referrer/getters';
 import { FETCH_REFERRER_DATA, FETCH_ITEMS, SET_LOAD_PATH } from '@store/modules/Referrer/actions';
@@ -123,6 +126,7 @@ export default {
     },
 
     methods: {
+        ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE]),
         ...mapActions(REFERRER_MODULE, [FETCH_REFERRER_DATA, SET_LOAD_PATH]),
 
         onShowMore() {
@@ -192,6 +196,10 @@ export default {
         }
 
         this.showMore = false;
+    },
+
+    created() {
+        this[SET_SESSION_REFERRAL_CODE](this.code);
     },
 };
 </script>

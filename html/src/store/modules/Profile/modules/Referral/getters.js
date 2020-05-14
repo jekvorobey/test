@@ -8,6 +8,7 @@ export const SUM_ARC_DATA = 'sumArcData';
 export const LEVEL_DATA = 'levelData';
 export const PAGES_COUNT = 'pagesCount';
 export const REFERRALS = 'referrals';
+export const LEVEL = 'level';
 
 export default {
     [PAGES_COUNT]({ range }) {
@@ -18,47 +19,51 @@ export default {
         return (state[REFERRAL_DATA] && state[REFERRAL_DATA][REFERRALS]) || [];
     },
 
-    [LEVEL_DATA](state) {
-        const {
-            level: { current_level, next_level } = {
-                current_level: {},
-                next_level: {},
-            },
-        } = state[REFERRAL_DATA] || {};
+    [LEVEL](state) {
+        return (state[REFERRAL_DATA] && state[REFERRAL_DATA][LEVEL]) || null;
+    },
+
+    [LEVEL_DATA](state, getters) {
+        const { current_level, next_level } = getters[LEVEL] || {
+            current_level: {},
+            next_level: {},
+        };
 
         return {
-            currentLevelName: current_level.name,
-            nextLevelName: next_level.name,
+            currentLevelName: current_level && current_level.name,
+            nextLevelName: next_level && next_level.name,
         };
     },
 
-    [REFERRAL_ARC_DATA](state) {
-        const {
-            level: { current_level, next_level } = {
-                current_level: {},
-                next_level: {},
-            },
-        } = state[REFERRAL_DATA] || {};
+    [REFERRAL_ARC_DATA](state, getters) {
+        const { current_level, next_level } = getters[LEVEL] || {
+            current_level: {},
+            next_level: {},
+        };
 
         return {
-            current: current_level.referral_count,
-            next: next_level.referral_count,
-            currentPercent: Math.round((current_level.referral_count * 100) / next_level.referral_count),
+            current: current_level && current_level.referral_count,
+            next: next_level && next_level.referral_count,
+            currentPercent:
+                current_level &&
+                next_level &&
+                Math.round((current_level.referral_count * 100) / next_level.referral_count),
         };
     },
 
-    [SUM_ARC_DATA](state) {
-        const {
-            level: { current_level, next_level } = {
-                current_level: {},
-                next_level: {},
-            },
-        } = state[REFERRAL_DATA] || {};
+    [SUM_ARC_DATA](state, getters) {
+        const { current_level, next_level } = getters[LEVEL] || {
+            current_level: {},
+            next_level: {},
+        };
 
         return {
-            current: current_level.order_referral_sum,
-            next: next_level.order_referral_sum,
-            currentPercent: Math.round((current_level.order_referral_sum * 100) / next_level.order_referral_sum),
+            current: current_level && current_level.order_referral_sum,
+            next: next_level && next_level.order_referral_sum,
+            currentPercent:
+                current_level &&
+                next_level &&
+                Math.round((current_level.order_referral_sum * 100) / next_level.order_referral_sum),
         };
     },
 };

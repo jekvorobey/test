@@ -1,9 +1,16 @@
 <template>
-    <general-modal class="message-modal" type="sm" header="Новое сообщение" @close="onClose" :is-mobile="isTablet">
+    <general-modal
+        v-if="isOpen"
+        class="message-modal"
+        type="sm"
+        header="Новое сообщение"
+        @close="onClose"
+        :is-mobile="isTablet"
+    >
         <template v-slot:content>
             <h4 class="message-modal__hl">Новое сообщение</h4>
-            <form class="message-modal__form">
-                <v-input class="message-modal__form-row" v-model="subject" placeholder="Введите тему">
+            <form class="message-modal__form" ref="form" enctype="multipart/form-data" @submit.prevent="onSubmit">
+                <v-input class="message-modal__form-row" v-model="theme" name="theme" placeholder="Введите тему">
                     Тема
                 </v-input>
 
@@ -12,14 +19,17 @@
                     class="message-modal__form-row message-modal__form-textarea"
                     tag="textarea"
                     placeholder="Текст сообщения"
+                    name="message"
                     :rows="3"
                     :auto-height="false"
                 >
                     Сообщение
                 </v-input>
 
-                <v-button class="message-modal__submit-btn" @click="onClose">
-                    Добавить получателя
+                <!-- <input type="file" name="files[]" /> -->
+
+                <v-button class="message-modal__submit-btn" @click="onSubmit">
+                    Создать чат
                 </v-button>
             </form>
         </template>
@@ -31,12 +41,18 @@ import VInput from '@controls/VInput/VInput.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import validationMixin, { required } from '@plugins/validation';
 
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as MESSAGES_MODULE } from '@store/modules/Profile/modules/Messages';
+import { CREATE_CHAT } from '@store/modules/Profile/modules/Messages/actions';
+
 import { modalName } from '@enums';
 import './MessageModal.css';
 
+const MESSAGES_MODULE_PATH = `${PROFILE_MODULE}/${MESSAGES_MODULE}`;
 const NAME = modalName.profile.MESSAGE;
 
 export default {
@@ -49,14 +65,28 @@ export default {
         GeneralModal,
     },
 
+    validations: {
+        theme: {
+            required,
+        },
+
+        message: {
+            required,
+        },
+    },
+
     data() {
         return {
-            subject: '',
+            theme: '',
             message: '',
         };
     },
 
     computed: {
+        ...mapState(MODAL_MODULE, {
+            isOpen: state => state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
+        }),
+
         isTablet() {
             return this.$mq.tablet;
         },
@@ -64,8 +94,25 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(MESSAGES_MODULE_PATH, [CREATE_CHAT]),
+
+        async onSubmit() {
+            if (this.$v.$invalid) return;
+
+            try {
+                const { form } = this.$refs;
+                const formData = new FormData(form);
+                debugger;
+                await this[CREATE_CHAT](formData);
+                this.$emit('created');
+                this.onClose();
+            } catch (error) {
+                this.onClose();
+            }
+        },
 
         onClose() {
+            this.$emit('close');
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
         },
     },

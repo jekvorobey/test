@@ -2,13 +2,17 @@
     <section class="section orders-view">
         <h2 class="container container--tablet-lg orders-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
 
-        <div class="orders-view__panels" v-if="referralPartner">
+        <div class="orders-view__panels" v-if="referralPartner && referralData && level">
             <div class="orders-view__panel">
                 <div class="orders-view__panel-item">
                     <div class="text-grey orders-view__panel-name">Ваш уровень</div>
                     <div class="orders-view__panel-level">{{ levelData.currentLevelName }}</div>
                 </div>
-                <div class="orders-view__panel-item">
+                <div
+                    class="orders-view__panel-item"
+                    v-if="levelData.nextLevelName || (!levelData.nextLevelName && isTabletLg && !isTablet)"
+                    :style="{ visibility: levelData.nextLevelName ? 'visible' : 'hidden' }"
+                >
                     <div class="text-grey orders-view__panel-name">Следующий уровень</div>
                     <div class="text-grey orders-view__panel-level">{{ levelData.nextLevelName }}</div>
                 </div>
@@ -16,56 +20,50 @@
                 <a class="orders-view__panel-link">Подробнее о реферальной программе</a>
             </div>
 
-            <div class="orders-view__panel">
-                <div class="orders-view__panel-item">
-                    <div class="orders-view__panel-item-counter">
-                        <v-arc-counter
-                            stroke="#BDBDBD"
-                            activeStroke="#141116"
-                            :text="referralArcData.current"
-                            :start="-120"
-                            :end="120"
-                            :activeWidth="16"
-                            :strokeWidth="16"
-                            :dashCount="referralArcData.next"
-                            :activeCount="referralArcData.current"
-                        />
-                        <div class="text-grey orders-view__panel-item-label">
-                            <span>0</span>
-                            <span>{{ referralArcData.next }}</span>
+            <div class="orders-view__panel" :class="{ 'orders-view__panel--empty': !levelData.nextLevelName }">
+                <template v-if="levelData.nextLevelName">
+                    <div class="orders-view__panel-item">
+                        <div class="orders-view__panel-item-counter">
+                            <v-arc-counter
+                                v-bind="arcSettings"
+                                :text="referralArcData.current"
+                                :activeCount="referralArcData.currentPercent"
+                            />
+                            <div class="text-grey orders-view__panel-item-label">
+                                <span>0</span>
+                                <span>{{ referralArcData.next }}</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="text-grey">Новых заказов</div>
-                </div>
-                <div class="orders-view__panel-item">
-                    <div class="orders-view__panel-item-counter">
-                        <v-arc-counter
-                            stroke="#BDBDBD"
-                            activeStroke="#141116"
-                            :text="formatArcSum(sumArcData.current)"
-                            :start="-120"
-                            :end="120"
-                            :activeWidth="16"
-                            :strokeWidth="16"
-                            :dashCount="sumArcData.next"
-                            :activeCount="sumArcData.current"
-                        />
-                        <div class="text-grey orders-view__panel-item-label">
-                            <span>0</span>
-                            <span>{{ shortNumberFormat(sumArcData.next) }}</span>
-                        </div>
+                        <div class="text-grey">Новых заказов</div>
                     </div>
-                    <div class="text-grey">Сумма моих заказов</div>
+                    <div class="orders-view__panel-item">
+                        <div class="orders-view__panel-item-counter">
+                            <v-arc-counter
+                                v-bind="arcSettings"
+                                :text="formatArcSum(sumArcData.current)"
+                                :activeCount="sumArcData.currentPercent"
+                            />
+                            <div class="text-grey orders-view__panel-item-label">
+                                <span>0</span>
+                                <span>{{ shortNumberFormat(sumArcData.next) }}</span>
+                            </div>
+                        </div>
+                        <div class="text-grey">Сумма моих заказов</div>
+                    </div>
+                </template>
+                <div class="orders-view__panel-item" v-else>
+                    <h2>Поздравляем!</h2>
+                    Вы достигли максимального уровня!
                 </div>
             </div>
         </div>
 
         <div class="container container--tablet-lg">
-            <filter-button class="orders-view__filter-btn" @click="filterModal = !filterModal">
+            <!-- <filter-button class="orders-view__filter-btn" @click="filterModal = !filterModal">
                 Фильтр и сортировка&nbsp;&nbsp;
                 <span class="text-grey">4</span>
-            </filter-button>
+            </filter-button> -->
 
             <table class="orders-view__table" v-if="!isTabletLg">
                 <colgroup>
@@ -279,12 +277,14 @@ import {
     ORDER_DIRECTION,
     ORDER_FIELD,
     ACTIVE_PAGE,
+    REFERRAL_DATA,
 } from '@store/modules/Profile/modules/Orders';
 import {
     REFERRAL_ARC_DATA,
     SUM_ARC_DATA,
     LEVEL_DATA,
     PAGES_COUNT,
+    LEVEL,
 } from '@store/modules/Profile/modules/Orders/getters';
 import {
     FETCH_ORDERS,
@@ -338,14 +338,30 @@ export default {
 
     computed: {
         ...mapState([LOCALE]),
-        ...mapState(ORDERS_MODULE_PATH, [ORDERS, ORDER_DIRECTION, ORDER_FIELD, ACTIVE_PAGE]),
-        ...mapGetters(ORDERS_MODULE_PATH, [PAGES_COUNT, REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA]),
+        ...mapState(ORDERS_MODULE_PATH, [ORDERS, ORDER_DIRECTION, ORDER_FIELD, ACTIVE_PAGE, REFERRAL_DATA]),
+        ...mapGetters(ORDERS_MODULE_PATH, [PAGES_COUNT, REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, LEVEL]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
+        arcSettings() {
+            return {
+                start: -120,
+                end: 120,
+                activeWidth: 16,
+                strokeWidth: 16,
+                stroke: '#BDBDBD',
+                activeStroke: '#141116',
+                dashCount: 100,
+            };
+        },
+
         isTabletLg() {
             return this.$mq.tabletLg;
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 

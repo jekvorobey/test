@@ -6,6 +6,12 @@ export const digit2DateSettings = Object.freeze({
     year: localeDateOptions.year.DIGIT2,
 });
 
+export const numericYearDateSettings = Object.freeze({
+    day: localeDateOptions.day.DIGIT2,
+    month: localeDateOptions.month.DIGIT2,
+    year: localeDateOptions.year.NUMERIC,
+});
+
 export const monthLongDateSettings = Object.freeze({
     day: localeDateOptions.day.NUMERIC,
     month: localeDateOptions.month.LONG,
