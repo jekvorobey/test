@@ -7,9 +7,15 @@ import { SET_PRODUCTS, SET_PRODUCTS_MORE } from './mutations';
 export const FETCH_PRODUCTS = 'FETCH_PRODUCTS';
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 
+export const SET_GALLERY_IMAGES = 'SET_GALLERY_IMAGES';
+
 export default {
     [SET_LOAD_PATH]({ commit }, payload) {
         commit(SET_LOAD_PATH, payload);
+    },
+
+    [SET_GALLERY_IMAGES]({ commit }, payload) {
+        commit(SET_GALLERY_IMAGES, payload);
     },
 
     async [FETCH_PRODUCTS]({ commit }, { page = 1, isActive = 1, showMore = false }) {

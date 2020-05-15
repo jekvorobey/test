@@ -192,6 +192,16 @@ export function addDays(date, days) {
     return result;
 }
 
+export function downloadFile(path, ext) {
+    const downloadLink = document.createElement('a');
+    downloadLink.setAttribute('class', 'download-input');
+    downloadLink.setAttribute('href', path);
+    downloadLink.setAttribute('download', 'download');
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
+
 export function saveToClipboard(text) {
     const textArea = document.createElement('textarea');
     textArea.className = 'clipboard-input';

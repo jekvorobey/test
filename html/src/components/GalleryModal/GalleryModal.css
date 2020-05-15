@@ -23,7 +23,11 @@
     }
 
     &__gallery {
-        .swiper-wrapper {
+        display: flex;
+        height: 100%;
+
+        &-slider {
+            flex: 1;
             padding-bottom: calc(var(--gs) * 11);
         }
 

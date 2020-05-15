@@ -87,6 +87,7 @@
 
             &-link {
                 font-family: 'Roboto', Arial, sans-serif;
+                overflow-wrap: break-word;
             }
         }
 
@@ -98,6 +99,7 @@
             display: flex;
             flex-wrap: wrap;
             margin: 0 calc(var(--gs) / -2);
+            cursor: pointer;
         }
 
         &-item {
@@ -120,7 +122,7 @@
             img {
                 height: 100%;
                 width: 100%;
-                object-fit: cover;
+                object-fit: contain;
             }
         }
 
