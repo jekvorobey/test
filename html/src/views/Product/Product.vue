@@ -612,7 +612,13 @@
         </transition>
 
         <transition name="fade-in">
-            <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" />
+            <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" :images="productImages.gallery">
+                <template v-slot:image="{ image }">
+                    <source :data-srcset="image.desktop.webp" type="image/webp" />
+                    <source :data-srcset="image.desktop.orig" />
+                    <img class="blur-up lazyload v-picture__img" :data-src="image.default" alt="" />
+                </template>
+            </gallery-modal>
         </transition>
 
         <transition name="fade-in">
@@ -710,7 +716,7 @@ import {
 import { createNotFoundRoute } from '@util/router';
 import { breakpoints, fileExtension, httpCodes, modalName } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
-import { generateCategoryUrl, generateProductUrl } from '@util/catalog';
+import { generateCategoryUrl, generateProductUrl, prepareProductImage } from '@util/catalog';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/facebook-bw.svg';
@@ -961,34 +967,16 @@ export default {
             }
 
             if (Array.isArray(media) && media.length > 0) {
-                const defaultDesktopSize = media.length === 1 ? 504 : 328;
-                const defaultTabletSize = 200;
+                const desktopSize = media.length === 1 ? 504 : 328;
+                const gallerySize = 744;
+                const tabletSize = 200;
 
-                imageMap.media = media.map(image => {
-                    return {
-                        ...image,
-                        desktop: {
-                            webp: generatePictureSourcePath(
-                                defaultDesktopSize,
-                                defaultDesktopSize,
-                                image.id,
-                                fileExtension.image.WEBP
-                            ),
-                            orig: generatePictureSourcePath(defaultDesktopSize, defaultDesktopSize, image.id),
-                        },
-                        tablet: {
-                            webp: generatePictureSourcePath(
-                                defaultTabletSize,
-                                defaultTabletSize,
-                                image.id,
-                                fileExtension.image.WEBP
-                            ),
-                            orig: generatePictureSourcePath(defaultTabletSize, defaultTabletSize, image.id),
-                        },
-                        default: generatePictureSourcePath(defaultDesktopSize, defaultDesktopSize, image.id),
-                    };
-                });
-            } else imageMap.media = [];
+                imageMap.media = media.map(image => prepareProductImage(image, desktopSize, tabletSize));
+                imageMap.gallery = media.map(image => prepareProductImage(image, gallerySize));
+            } else {
+                imageMap.media = [];
+                imageMap.gallery = [];
+            }
 
             return imageMap;
         },
@@ -1064,10 +1052,6 @@ export default {
             }
         },
 
-        generateSourcePath(x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext);
-        },
-
         generateBreadcrumbUrl(code) {
             return { path: generateCategoryUrl(productGroupTypes.CATALOG, null, code) };
         },
@@ -1114,8 +1098,8 @@ export default {
         },
 
         onShowGallery() {
-            const { media } = this.productImages;
-            if (!media || !media.length) return;
+            const { gallery } = this.productImages;
+            if (!gallery || !gallery.length) return;
             this[CHANGE_MODAL_STATE]({ name: modalName.product.GALLERY, open: true });
         },
 

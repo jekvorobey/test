@@ -1,5 +1,7 @@
 import { $context } from '@services';
 import { productGroupTypes } from '@enums/product';
+import { fileExtension } from '@enums';
+import { generatePictureSourcePath } from '@util/file';
 
 const rangeRegx = /from_\d*_to_\d*/;
 const numberRegx = /\d+/g;
@@ -50,7 +52,7 @@ export function concatCatalogRoutePath(type, entityCode, categoryCode, segments)
     }
 
     const basePath = segments.length > 0 ? `${baseRoute}filters` : baseRoute;
-    return basePath.concat(...segments.map(s => `/${s}`));
+    return basePath.concat(...segments.map((s) => `/${s}`));
 }
 
 export function mapFilterSegments(urlSegments) {
@@ -61,7 +63,7 @@ export function mapFilterSegments(urlSegments) {
         const value = segment.split('-')[1];
         if (rangeRegx.test(segment)) {
             const numbers = segment.match(numberRegx);
-            segments[name] = numbers.map(n => +n);
+            segments[name] = numbers.map((n) => +n);
         } else {
             if (!segments[name]) segments[name] = {};
             segments[name][value] = value;
@@ -115,6 +117,21 @@ export function computeFilterData(pathMatch, code = null) {
         else filter[filterName] = Object.keys(segment);
     }
     return { filter, routeSegments, filterSegments };
+}
+
+export function prepareProductImage(image, desktopSize, tabletSize) {
+    return {
+        ...image,
+        desktop: {
+            webp: generatePictureSourcePath(desktopSize, desktopSize, image.id, fileExtension.image.WEBP),
+            orig: generatePictureSourcePath(desktopSize, desktopSize, image.id),
+        },
+        tablet: tabletSize && {
+            webp: generatePictureSourcePath(tabletSize, tabletSize, image.id, fileExtension.image.WEBP),
+            orig: generatePictureSourcePath(tabletSize, tabletSize, image.id),
+        },
+        default: generatePictureSourcePath(desktopSize, desktopSize, image.id),
+    };
 }
 
 export default {

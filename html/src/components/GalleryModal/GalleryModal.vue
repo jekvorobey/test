@@ -4,20 +4,18 @@
             <div class="gallery-modal__gallery">
                 <v-slider name="modal-gallery-slider" class="gallery-modal__gallery-slider" :options="galleryOptions">
                     <div class="swiper-slide gallery-modal__gallery-item" v-for="image in images" :key="image.id">
-                        <v-picture v-if="image && image.id" :image="image" alt="">
-                            <template v-slot:source="{ image, lazy }">
+                        <v-picture :key="image.id" v-if="image && image.id">
+                            <slot name="image" :image="image">
                                 <source
-                                    :data-srcset="generateSourcePath(750, 750, image.id, 'webp')"
+                                    :data-srcset="generateSourcePath(null, null, image.id, 'webp')"
                                     type="image/webp"
                                 />
-                            </template>
-                            <template v-slot:fallback="{ image, lazy, alt }">
                                 <img
                                     class="blur-up lazyload v-picture__img"
-                                    :data-src="generateSourcePath(750, 750, image.id)"
-                                    :alt="alt"
+                                    :data-src="generateSourcePath(null, null, image.id)"
+                                    alt=""
                                 />
-                            </template>
+                            </slot>
                         </v-picture>
                     </div>
                 </v-slider>
@@ -36,8 +34,6 @@ import { mapState, mapActions } from 'vuex';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
-
-import { NAME as PRODUCT_MODULE, PRODUCT } from '@store/modules/Product';
 
 import { generatePictureSourcePath } from '@util/file';
 import { breakpoints, modalName } from '@enums';
@@ -71,22 +67,27 @@ export default {
         GeneralModal,
     },
 
+    props: {
+        images: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
+
+        galleryOptions: {
+            type: Object,
+            default() {
+                return galleryOptions;
+            },
+        },
+    },
+
     computed: {
         ...mapState(MODAL_MODULE, {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
             modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
-
-        ...mapState(PRODUCT_MODULE, [PRODUCT]),
-
-        galleryOptions() {
-            return galleryOptions;
-        },
-
-        images() {
-            const product = this[PRODUCT];
-            return product ? product.media : [];
-        },
     },
 
     methods: {
