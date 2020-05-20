@@ -43,7 +43,7 @@ export const PROMOCODE_STATUS = 'promocodeStatus';
 export const SUMMARY = 'summary';
 
 export default {
-    [AVAILABLE_BONUS]: (state) => (state.checkoutData && state.checkoutData[AVAILABLE_BONUS]) || [],
+    [AVAILABLE_BONUS]: (state) => (state.checkoutData && state.checkoutData[AVAILABLE_BONUS]) || 0,
 
     [RECIPIENTS]: (state) => (state.checkoutData && state.checkoutData[RECIPIENTS]) || [],
     [ADDRESSES]: (state) => (state.checkoutData && state.checkoutData[ADDRESSES]) || [],
