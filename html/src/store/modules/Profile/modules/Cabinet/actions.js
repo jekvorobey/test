@@ -63,7 +63,7 @@ export default {
         try {
             return await uploadProfileCertificate(payload);
         } catch (error) {
-            storeErrorHandler(UPLOAD_CERTIFICATE, true)(error);
+            storeErrorHandler(UPLOAD_CERTIFICATE)(error);
         }
     },
 
@@ -158,7 +158,7 @@ export default {
             await changeProfilePortfolio(payload);
             commit(UPDATE_PORTFOLIO, payload);
         } catch (error) {
-            storeErrorHandler(UPDATE_PORTFOLIO, true)(error);
+            storeErrorHandler(UPDATE_PORTFOLIO)(error);
         }
     },
 

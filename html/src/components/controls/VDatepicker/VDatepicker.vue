@@ -20,13 +20,11 @@
                 :id="inputId"
                 :disabled="disabled"
                 :aria-describedby="`${inputId}-alert`"
-                @focus="setFocus(true)"
-                @blur="setFocus(false)"
                 autocomplete="off"
             />
             <div class="v-datepicker__icon" />
         </div>
-        <div :id="`${inputId}-alert`" class="error-message v-datepicker__error" role="alert">
+        <div v-if="showError" :id="`${inputId}-alert`" class="error-message v-datepicker__error" role="alert">
             <slot name="error" :error="error">
                 {{ error }}
             </slot>
@@ -77,7 +75,15 @@ export default {
             default: false,
         },
 
-        error: String,
+        showError: {
+            type: Boolean,
+            default: true,
+        },
+
+        error: {
+            type: [String, Boolean],
+            default: null,
+        },
 
         allowInput: {
             type: Boolean,
@@ -107,6 +113,16 @@ export default {
 
         minDate: {
             type: [String, Date],
+        },
+
+        altInput: {
+            type: Boolean,
+            default: false,
+        },
+
+        altFormat: {
+            type: String,
+            default: null,
         },
 
         dateFormat: {
@@ -188,19 +204,36 @@ export default {
                 maxDate: this.maxDate,
                 nextArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
                 prevArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
+
                 onChange(selectedDates, dateStr, instance) {
                     that.internal_value = [...dateStr.split(', ')];
                 },
+
                 onOpen() {
                     that.open = true;
                 },
-                onClose() {
+
+                onClose(selectedDates, dateStr, instance) {
+                    const event = new KeyboardEvent('keydown', {
+                        bubbles: true,
+                        cancelable: true,
+                        keyCode: 13,
+                    });
+
+                    if (instance.config.altInput) instance.altInput.dispatchEvent(event);
+                    else instance.input.dispatchEvent(event);
+
                     that.open = false;
                 },
+
                 onReady() {
                     that.initialized = true;
                 },
             };
+            if (this.altInput) {
+                config.altInput = this.altInput;
+                config.altFormat = this.altFormat;
+            }
             if (this.dateFormat) config.dateFormat = this.dateFormat;
             if (this.inline) config.appendTo = datepicker;
             if (this.disable && this.disable.length > 0) config.disable = this.disable;

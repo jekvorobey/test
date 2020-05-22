@@ -115,8 +115,8 @@ const main = {
     },
 
     genderType: {
-        [genderType.FEMALE]: 'Female',
         [genderType.MALE]: 'Male',
+        [genderType.FEMALE]: 'Female',
     },
 
     landing: {

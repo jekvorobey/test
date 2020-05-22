@@ -22,7 +22,7 @@ https://flatpickr.js.org/
 
 :root {
     /* Ширина календаря (320px - поля страницы) */
-    --flatpickr-calendar-width: calc((var(--gs) * 50) - (var(--gs) * 3) * 2);
+    --flatpickr-calendar-width: calc((var(--gs) * 42) - (var(--gs) * 3) * 2);
 
     /* Ширина полей календаря */
     --flatpickr-calendar-padding: calc(var(--gs) * 2);

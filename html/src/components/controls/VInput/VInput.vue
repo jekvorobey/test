@@ -42,7 +42,7 @@
             />
             <slot name="after" />
         </div>
-        <div :id="`${inputId}-alert`" class="error-message v-input__error" role="alert">
+        <div v-if="showError" :id="`${inputId}-alert`" class="error-message v-input__error" role="alert">
             <slot name="error" :error="error">
                 {{ error }}
             </slot>
@@ -93,7 +93,15 @@ export default {
             default: true,
         },
 
-        error: String,
+        showError: {
+            type: Boolean,
+            default: true,
+        },
+
+        error: {
+            type: [String, Boolean],
+            default: null,
+        },
     },
     data() {
         return {

@@ -7,10 +7,7 @@
 
 <script>
 import VButton from '@controls/VButton/VButton.vue';
-import VSvg from '@controls/VSvg/VSvg.vue';
-
 import preloader from '@images/icons/preloader.svg';
-
 import './ShowMoreButton.css';
 
 export default {
@@ -18,7 +15,6 @@ export default {
 
     components: {
         VButton,
-        VSvg,
     },
 
     props: {

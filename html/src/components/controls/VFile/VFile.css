@@ -1,0 +1,56 @@
+.v-file {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 calc(var(--gs) * -1);
+    user-select: none;
+
+    @media (--tablet) {
+        margin: 0;
+    }
+
+    &__item {
+        padding: var(--gs);
+        border: 2px solid var(--cl-elem-grey);
+        border-radius: 5px;
+        width: calc(calc(100% / 5) - calc(var(--gs) * 2));
+        height: 120px;
+        margin: 0 var(--gs) calc(var(--gs) * 2);
+
+        @media (--tablet) {
+            width: 100%;
+            margin: 0;
+            margin-bottom: calc(var(--gs) * 2);
+        }
+    }
+
+    &__form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        border-radius: 5px;
+        border: 2px dashed var(--cl-global);
+        cursor: pointer;
+
+        &-label {
+            font-size: 14px;
+            line-height: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: inherit;
+
+            &-title {
+                letter-spacing: 0.05em;
+                line-height: 24px;
+                text-transform: uppercase;
+            }
+        }
+
+        &-input {
+            display: none;
+        }
+    }
+}
