@@ -115,7 +115,6 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
-import VFilepond, { fileValidation } from '@controls/VFilepond/VFilepond.vue';
 
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 
@@ -165,10 +164,8 @@ import {
 } from '@store/modules/Profile/modules/Cabinet/actions';
 import { FULL_NAME } from '@store/modules/Profile/modules/Cabinet/getters';
 
-import { socials, mimeType, httpCodes, modalName } from '@enums';
-import { cancelRoute, monthLongDateSettings } from '@settings';
-import { saveToClipboard } from '@util';
-import { generateReferralLink } from '@util/profile';
+import { socials, httpCodes, modalName, mimeType } from '@enums';
+import { cancelRoute } from '@settings';
 import '@images/sprites/edit.svg';
 import '@images/sprites/link.svg';
 import '@images/sprites/account-middle.svg';
@@ -181,14 +178,6 @@ const avatarAcceptedTypes = {
     [mimeType.image.PNG]: '.png',
 };
 
-const acceptedTypes = {
-    [mimeType.image.JPEG]: '.jpg',
-    [mimeType.image.PNG]: '.png',
-    [mimeType.application.PDF]: '.pdf',
-    [mimeType.application.DOC]: '.doc',
-    [mimeType.application.DOCX]: '.docx',
-};
-
 const panelScrollOffset = 24;
 
 export default {
@@ -198,7 +187,6 @@ export default {
         VSvg,
         VLink,
         VButton,
-        VFilepond,
 
         AttentionPanel,
 
@@ -256,10 +244,6 @@ export default {
 
         avatarAcceptedTypes() {
             return avatarAcceptedTypes;
-        },
-
-        acceptedTypes() {
-            return Object.keys(this.expectedTypesMap);
         },
 
         expectedTypesMap() {
