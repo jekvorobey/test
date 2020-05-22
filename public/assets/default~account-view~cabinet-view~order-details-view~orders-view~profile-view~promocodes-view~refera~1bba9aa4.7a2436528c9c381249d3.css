@@ -1,0 +1,1 @@
+.info-row{display:flex}@media (max-width:767px){.info-row{flex-direction:column}}.info-row__name{width:33.33333%;margin-right:24px}@media (max-width:767px){.info-row__name{width:100%;margin-right:0;margin-bottom:8px}}.info-row__value{display:flex;flex:1}@media (max-width:767px){.info-row__value{width:100%}}.info-row__link{width:auto}
