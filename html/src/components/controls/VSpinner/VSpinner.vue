@@ -1,19 +1,11 @@
 <template>
-    <transition>
-        <svg
-            class="v-spinner"
-            :class="{ show: show }"
-            v-show="show"
-            :width="width"
-            :height="height"
-            viewBox="0 0 44 44"
-        >
-            <circle class="path" fill="none" stroke-width="4" stroke-linecap="round" cx="22" cy="22" r="20"></circle>
-        </svg>
+    <transition name="fade-in">
+        <img class="v-spinner" v-show="show" :style="style" :src="icon" :width="width" :height="height" />
     </transition>
 </template>
 
 <script>
+import preloader from '@images/icons/preloader.svg';
 import './VSpinner.css';
 
 export default {
@@ -33,6 +25,20 @@ export default {
             default: 44,
         },
     },
+
+    computed: {
+        icon() {
+            return preloader;
+        },
+
+        style() {
+            return {
+                width: `${this.width}px`,
+                height: `${this.height}px`,
+            };
+        },
+    },
+
     serverCacheKey: props => `${props.show}-${props.width}-${props.height}`,
 };
 </script>

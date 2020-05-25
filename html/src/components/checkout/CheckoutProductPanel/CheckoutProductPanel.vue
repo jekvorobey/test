@@ -210,13 +210,13 @@
                             На вашем счёте:&nbsp;
                             <strong class="text-bold">{{ availableBonus }}&nbsp;бонусов</strong>
                             <br v-show="isTablet" />
-                            <span class="text-grey">(1 бонус = 1 рубль)</span>
+                            <span class="text-grey">({{ bonusPerRub }} бонус = 1 рубль)</span>
                         </span>
                     </div>
                     <div v-else class="checkout-product-panel__item-card">
                         <span>
                             Будет использовано {{ bonus }} бонусных баллов&nbsp;
-                            <span class="text-grey">(1 бонус = 1 рубль)</span>
+                            <span class="text-grey">({{ bonusPerRub }} бонус = 1 рубль)</span>
                         </span>
                         <v-link class="checkout-product-panel__item-card-link" tag="button" @click="DELETE_BONUS">
                             Отменить
@@ -416,6 +416,7 @@ import {
     SUBSCRIBE,
     PROMO_CODE,
     SELECTED_CONFIRMATION_TYPE_ID,
+    BONUS_PER_RUB,
     AVAILABLE_BONUS,
     ADDRESS_STATUS,
     BONUS_STATUS,
@@ -553,6 +554,7 @@ export default {
         }),
 
         ...mapGetters(CHECKOUT_MODULE, [
+            BONUS_PER_RUB,
             AVAILABLE_BONUS,
             RECIPIENTS,
             SELECTED_RECIPIENT,
