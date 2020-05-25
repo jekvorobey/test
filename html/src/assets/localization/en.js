@@ -1,6 +1,6 @@
 import flatPickrEn from 'flatpickr/dist/l10n/default';
 import { receiveMethods, discountType } from '@enums/checkout';
-import { genderType, billingOperationType, referralSource } from '@enums/profile';
+import { genderType, billingOperationType, referralSource, bonusStatus } from '@enums/profile';
 import { socials } from '@enums';
 import { orderStatus, deliveryStatus } from '@enums/order';
 
@@ -117,6 +117,13 @@ const main = {
     genderType: {
         [genderType.MALE]: 'Male',
         [genderType.FEMALE]: 'Female',
+    },
+
+    bonusStatus: {
+        [bonusStatus.DELAYED]: 'Delayed',
+        [bonusStatus.ACTIVE]: 'Active',
+        [bonusStatus.FINISHED]: 'Finished',
+        [bonusStatus.TAKEN]: 'Taken',
     },
 
     landing: {

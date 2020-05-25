@@ -400,6 +400,15 @@ export function createProfileChatMessage(chatId, formData) {
     return $http.post(`/v1/lk/messages/${chatId}`, formData);
 }
 
+export function getBonusesData(pageNum, perPage) {
+    return $http.get('/v1/lk/bonuses/', {
+        params: {
+            pageNum,
+            perPage,
+        },
+    });
+}
+
 // referrer
 
 export function getReferrerData(code) {
