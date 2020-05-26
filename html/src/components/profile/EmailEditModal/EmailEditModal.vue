@@ -1,47 +1,51 @@
 <template>
     <general-modal
-        class="email-edit-modal"
+        v-if="isOpen"
         type="sm"
-        header="Редактировать Email"
-        :is-mobile="isTablet"
+        class="email-edit-modal"
+        :header="header"
         @close="onClose"
+        :is-mobile="isTablet"
     >
         <template v-slot:content>
-            <h4 class="email-edit-modal__hl">Редактировать Email</h4>
-            <form class="email-edit-modal__form" @submit.prevent="onSubmit">
-                <v-input
-                    v-if="!sent"
-                    class="email-edit-modal__form-row"
-                    v-model="newEmail"
-                    placeholder="Введите Email"
-                    :error="newEmailError"
-                >
-                    <template v-slot:error="{ error }">
-                        <transition name="slide-in-bottom" mode="out-in">
-                            <div :key="error" v-if="error">{{ error }}</div>
-                        </transition>
-                    </template>
-                </v-input>
-                <v-input
-                    v-else
-                    type="number"
-                    class="email-edit-modal__form-row"
-                    v-model="code"
-                    placeholder="Код подтверждения"
-                    :error="codeError"
-                >
-                    <template v-slot:error="{ error }">
-                        <transition name="slide-in-bottom" mode="out-in">
-                            <div :key="error" v-if="error">{{ error }}</div>
-                        </transition>
-                    </template>
-                </v-input>
-            </form>
+            <div class="email-edit-modal__body">
+                <h3 v-if="!isTablet" class="email-edit-modal__hl">{{ header }}</h3>
+                <div class="email-edit-modal__desc">
+                    Мы отправили код на <strong>{{ email }}</strong>
+                    , введите его для подтверждения.
+                </div>
 
-            <div class="email-edit-modal__submit">
-                <v-button class="email-edit-modal__submit-btn" @click="onSubmit" :disabled="isDisabledGetCodeBtn">
-                    {{ sent ? 'Изменить Email' : 'Отправить код' }}
-                </v-button>
+                <form class="email-edit-modal__form" @submit.prevent="onSubmit">
+                    <div class="email-edit-modal__form-confirmation">
+                        <v-input
+                            type="number"
+                            class="email-edit-modal__form-input"
+                            maxLength="4"
+                            v-model="code"
+                            :error="codeError"
+                        >
+                            Код из письма
+                            <template v-slot:after>
+                                <v-button class="email-edit-modal__form-btn" type="submit">
+                                    Отправить
+                                </v-button>
+                            </template>
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error" v-if="error">{{ error }}</div>
+                                </transition>
+                            </template>
+                        </v-input>
+                    </div>
+                    <div class="email-edit-modal__form-timer">
+                        <span v-if="counter !== 0">
+                            Получить новый код можно через <strong>{{ counter }} сек.</strong>
+                        </span>
+                        <v-link class="email-edit-modal__form-repeat" v-else tag="button" @click.stop="sendCode(email)">
+                            Отправить новый код
+                        </v-link>
+                    </div>
+                </form>
             </div>
         </template>
     </general-modal>
@@ -50,7 +54,7 @@
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
-import validationMixin, { required, email, minLength } from '@plugins/validation';
+import validationMixin, { required, minLength } from '@plugins/validation';
 
 import { mapActions, mapState } from 'vuex';
 
@@ -79,49 +83,57 @@ export default {
     },
 
     validations: {
-        newEmail: {
-            required,
-            email,
-        },
-
         code: {
             required,
             minLength: minLength(4),
         },
 
         exists: {
-            valid: (value) => value === false,
+            valid: value => value === false,
+        },
+    },
+
+    props: {
+        email: {
+            type: String,
         },
     },
 
     data() {
         return {
-            newEmail: null,
             code: null,
-
-            sent: false,
             exists: false,
-            accepted: false,
             isDisabledGetCodeBtn: false,
+            counter: 59,
         };
     },
 
     computed: {
-        ...mapState(CABINET_MODULE_PATH, [EMAIL]),
+        ...mapState(MODAL_MODULE, {
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+        }),
+
+        header() {
+            return 'Редактировать E-mail';
+        },
 
         isTablet() {
             return this.$mq.tablet;
         },
 
-        newEmailError() {
-            if (this.$v.newEmail.$dirty && !this.$v.newEmail.required) return 'Обязательное поле';
-            if (this.$v.newEmail.$dirty && !this.$v.newEmail.email) return 'Неправильный формат';
-            if (this.$v.exists.$dirty && !this.$v.exists.valid) return 'Такой Email уже существует';
-        },
-
         codeError() {
             if (this.$v.code.$dirty && !this.$v.code.required) return 'Обязательное поле';
             if (this.$v.code.$dirty && !this.$v.code.minLength) return 'Неправильный код';
+            if (this.$v.exists.$dirty && !this.$v.exists.valid) return 'Такой Email уже существует';
+        },
+    },
+
+    watch: {
+        code() {
+            if (this.$v.code.$dirty) {
+                this.exists = false;
+                this.$v.code.$reset();
+            }
         },
     },
 
@@ -131,41 +143,48 @@ export default {
 
         async sendCode(destination) {
             try {
-                this.isDisabledGetCodeBtn = true;
                 await this[SEND_CODE]({
                     destination,
                     type: verificationCodeType.PROFILE_EMAIL,
                 });
-                this.isDisabledGetCodeBtn = false;
-                this.sent = true;
             } catch (error) {
-                this.isDisabledGetCodeBtn = false;
-                this.sent = false;
-                this.accepted = false;
+                this.exists = true;
             }
         },
 
         async updateEmail(value, code) {
             try {
+                this.isDisabledGetCodeBtn = true;
                 await this[UPDATE_CREDENTIAL]({
                     value,
                     code,
                     type: verificationCodeType.PROFILE_EMAIL,
                 });
+                this.isDisabledGetCodeBtn = false;
                 this.onClose();
             } catch (error) {
-                this.accepted = false;
+                this.isDisabledGetCodeBtn = false;
             }
         },
 
         async onSubmit() {
-            if (!this.sent) {
-                this.$v.newEmail.$touch();
-                if (!this.$v.newEmail.$invalid) this.sendCode(this.newEmail);
-            } else {
-                this.$v.code.$touch();
-                if (!this.$v.code.$invalid) this.updateEmail(this.newEmail, this.code);
-            }
+            this.$v.code.$touch();
+            if (!this.$v.code.$invalid) this.updateEmail(this.email, this.code);
+        },
+
+        startCounter() {
+            this.stopCounter();
+            this.counter = 59;
+
+            this.timer = setInterval(() => {
+                this.counter -= 1;
+                if (this.counter === 0) this.stopCounter();
+            }, 1000);
+        },
+
+        stopCounter() {
+            clearInterval(this.timer);
+            this.timer = null;
         },
 
         onClose() {
@@ -174,7 +193,12 @@ export default {
     },
 
     beforeMount() {
-        this.newEmail = this[EMAIL];
+        this.sendCode(this.email);
+        this.startCounter();
+    },
+
+    beforeDestroy() {
+        this.stopCounter();
     },
 };
 </script>

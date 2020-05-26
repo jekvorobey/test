@@ -14,6 +14,7 @@ import billing from './modules/Billing';
 import promocodes from './modules/Promocodes';
 import returnPage from './modules/ReturnPage';
 import messages from './modules/Messages';
+import bonuses from './modules/Bonuses';
 
 export const NAME = 'profile';
 export const BREADCRUMBS = 'breadcrumbs';
@@ -49,6 +50,7 @@ export default function createModule() {
             promocodes: promocodes(),
             returnPage: returnPage(),
             messages: messages(),
+            bonuses: bonuses(),
         },
     };
 }

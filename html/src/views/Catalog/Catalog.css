@@ -69,7 +69,7 @@
     }
 
     &__side-panel {
-        width: 288px;
+        width: 248px;
         margin-right: calc(var(--gs) * 8);
 
         @media (--tablet-lg) {
@@ -351,7 +351,7 @@
             }
         }
         &-controls {
-            @media(--tablet-lg) {
+            @media (--tablet-lg) {
                 position: sticky;
                 display: flex;
                 bottom: 0;
@@ -363,12 +363,12 @@
         }
         &-clear-btn {
             &:hover {
-                @media(--tablet-lg) {
+                @media (--tablet-lg) {
                     color: var(--cl-global);
                     background: var(--cl-global-invert);
                 }
             }
-            @media(--tablet-lg) {
+            @media (--tablet-lg) {
                 margin-bottom: 0;
                 width: auto;
                 padding: 0;
@@ -378,7 +378,7 @@
             }
         }
         &-close-btn {
-            @media(--tablet-lg) {
+            @media (--tablet-lg) {
                 width: 100%;
             }
         }

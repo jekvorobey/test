@@ -25,7 +25,7 @@
             />
             <slot name="after" />
         </div>
-        <div :id="`${inputId}-alert`" class="error-message v-input__error" role="alert">
+        <div v-if="showError" :id="`${inputId}-alert`" class="error-message v-input__error" role="alert">
             <slot name="error" :error="error">
                 {{ error }}
             </slot>
@@ -79,7 +79,15 @@ export default {
             default: false,
         },
 
-        error: String,
+        showError: {
+            type: Boolean,
+            default: true,
+        },
+
+        error: {
+            type: [String, Boolean],
+            default: null,
+        },
     },
 
     data() {
@@ -87,6 +95,7 @@ export default {
             inputId: `v-input-id-${this._uid}`,
             focus: false,
             engine: null,
+            isInitialized: false,
         };
     },
 
@@ -156,13 +165,12 @@ export default {
          * @param event
          */
         onValueChanged(event) {
+            if (!this.isInitialized) return;
             let value = this.raw ? event.target.rawValue : event.target.value;
             this.$emit('input', value);
 
             // Call original callback method
-            if (typeof this.onValueChangedFn === 'function') {
-                this.onValueChangedFn.call(this, event);
-            }
+            if (typeof this.onValueChangedFn === 'function') this.onValueChangedFn.call(this, event);
         },
     },
 
@@ -171,6 +179,7 @@ export default {
         if (this.engine) return;
         this.engine = new Cleave(this.$refs.input, this.getOptions(this.options));
         this.engine.setRawValue(this.value);
+        this.isInitialized = true;
     },
 
     /**

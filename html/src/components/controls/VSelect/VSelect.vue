@@ -49,6 +49,7 @@
                     </slot>
                 </template>
             </slot>
+
             <transition name="multiselect__loading">
                 <slot name="loading">
                     <div v-show="loading" class="multiselect__spinner" />
@@ -60,17 +61,20 @@
                     <template>{{ currentOptionLabel }}</template>
                 </slot>
             </span>
-            <!-- <span v-if="isPlaceholderVisible" class="multiselect__placeholder" @mousedown.prevent="toggle">
+
+            <span v-if="isPlaceholderVisible" class="multiselect__placeholder" @mousedown.prevent="toggle">
                 <slot name="placeholder">
                     {{ placeholder }}
                 </slot>
-            </span> -->
+            </span>
         </div>
-        <div class="error-message multiselect__error" role="alert">
+
+        <div v-if="showError" class="error-message multiselect__error" role="alert">
             <slot name="error" :error="error">
                 {{ error }}
             </slot>
         </div>
+
         <div class="multiselect__container" v-show="isOpen">
             <input
                 ref="search"
@@ -320,13 +324,18 @@ export default {
             type: String,
             default: null,
         },
+
+        showError: {
+            type: Boolean,
+            default: false,
+        },
     },
     computed: {
         isSingleLabelVisible() {
             return (this.singleValue || this.singleValue === 0) && !this.visibleValues.length;
         },
         isPlaceholderVisible() {
-            return !this.internalValue.length && !this.isOpen;
+            return ((this.multiple && !this.visibleValues.length) || !this.internalValue.length) && !this.isOpen;
         },
         visibleValues() {
             return this.multiple ? this.internalValue.slice(0, this.limit) : [];

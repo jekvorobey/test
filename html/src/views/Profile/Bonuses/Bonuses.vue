@@ -5,14 +5,24 @@
         <div class="bonuses-view__panel">
             <div class="bonuses-view__panel-col">
                 <div class="text-grey bonuses-view__panel-label">Ваши бонусы</div>
-                <div class="text-bold bonuses-view__panel-count">1 587</div>
+                <div class="text-bold bonuses-view__panel-count">{{ info.available }}</div>
             </div>
             <div class="bonuses-view__panel-col">
-                <div class="text-grey bonuses-view__panel-label">Ближайшее&nbsp;сгорание: 9 сентября 2019</div>
-                <div class="text-medium bonuses-view__panel-burn">238 бонусов</div>
+                <div class="text-grey bonuses-view__panel-label">
+                    Ближайшее&nbsp;сгорание:
+                    <template v-if="info.next_debit_date">
+                        {{ nextDebDate }}
+                    </template>
+                    <template v-else>
+                        нет
+                    </template>
+                </div>
+                <div class="text-medium bonuses-view__panel-burn" v-if="info.next_debit_sum">
+                    {{ info.next_debit_sum }} бонусов
+                </div>
             </div>
             <div class="bonuses-view__panel-col">
-                <div class="text-bold bonuses-view__panel-amount">1 бонус = 1 рубль</div>
+                <div class="text-bold bonuses-view__panel-amount">{{ info.bonus_per_rub }} бонус = 1 рубль</div>
                 <div>
                     <router-link to="/">Подробнее о бонусной программе</router-link>
                 </div>
@@ -37,41 +47,33 @@
                     <thead class="bonuses-view__table-head">
                         <tr class="bonuses-view__table-tr bonuses-view__table-tr--header">
                             <th class="bonuses-view__table-th">Заказ / событие</th>
-                            <th class="bonuses-view__table-th">Списано&nbsp;всего<br />30 749</th>
-                            <th class="bonuses-view__table-th">Начислено&nbsp;всего<br />32 336</th>
+                            <th class="bonuses-view__table-th">Списано&nbsp;всего<br />{{ info.debit_all }}</th>
+                            <th class="bonuses-view__table-th">Начислено&nbsp;всего<br />{{ info.received_all }}</th>
                             <th class="bonuses-view__table-th">Дата</th>
                         </tr>
                     </thead>
                     <transition-group tag="tbody" name="fade-in" appear class="bonuses-view__table-body">
-                        <tr class="bonuses-view__table-tr" key="1">
-                            <td class="bonuses-view__table-td">15487654</td>
-                            <td class="bonuses-view__table-td">499</td>
-                            <td class="bonuses-view__table-td">1 463</td>
-                            <td class="bonuses-view__table-td">18 августа 2019</td>
-                        </tr>
-                        <tr class="bonuses-view__table-tr" key="2">
-                            <td class="bonuses-view__table-td">Промоакция</td>
-                            <td class="bonuses-view__table-td"></td>
-                            <td class="bonuses-view__table-td">500</td>
-                            <td class="bonuses-view__table-td">15 августа 2019</td>
-                        </tr>
-                        <tr class="bonuses-view__table-tr" key="3">
-                            <td class="bonuses-view__table-td">Сгорание</td>
-                            <td class="bonuses-view__table-td">154</td>
-                            <td class="bonuses-view__table-td"></td>
-                            <td class="bonuses-view__table-td">9 августа 2019</td>
+                        <tr class="bonuses-view__table-tr" v-for="item in bonuses" :key="item.id">
+                            <td class="bonuses-view__table-td">{{ item.name }}</td>
+                            <td class="bonuses-view__table-td">{{ item.value }}</td>
+                            <td class="bonuses-view__table-td">{{ item.status }}</td>
+                            <td class="bonuses-view__table-td">{{ item.date }}</td>
                         </tr>
                     </transition-group>
                 </table>
             </div>
         </section>
 
-        <div class="bonuses-view__controls">
+        <div class="bonuses-view__controls" v-if="pagesCount > 1">
             <div class="container container--tablet-lg">
-                <show-more-button btn-class="btn--outline bonuses-view__controls-btn">
+                <show-more-button
+                    v-if="activePage !== pagesCount"
+                    btn-class="btn--outline bonuses-view__controls-btn"
+                    @click="onShowMore"
+                >
                     Показать ещё
                 </show-more-button>
-                <v-pagination v-model="page" :page-count="10" />
+                <v-pagination :value="activePage" :page-count="pagesCount" @change="onPageChanged" />
             </div>
         </div>
     </section>
@@ -85,7 +87,26 @@ import VPagination from '@controls/VPagination/VPagination.vue';
 
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
+import { mapActions, mapGetters, mapState } from 'vuex';
+import { LOCALE } from '@store';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import {
+    NAME as BONUSES_MODULE,
+    ITEMS,
+    ACTIVE_PAGE,
+    RANGE,
+    BONUSES,
+    INFO,
+} from '@store/modules/Profile/modules/Bonuses';
+import { SET_LOAD_PATH, FETCH_BONUSES_DATA } from '@store/modules/Profile/modules/Bonuses/actions';
+import { PAGES_COUNT } from '@store/modules/Profile/modules/Bonuses/getters';
+
+import { DEFAULT_PAGE } from '@constants';
+import { $store, $progress } from '@services';
+import { numericYearDateSettings } from '@settings';
 import './Bonuses.css';
+
+const BONUSES_MODULE_PATH = `${PROFILE_MODULE}/${BONUSES_MODULE}`;
 
 export default {
     name: 'bonuses',
@@ -101,18 +122,105 @@ export default {
 
     data() {
         return {
-            page: 1,
+            showMore: false,
         };
     },
 
     computed: {
+        ...mapState([LOCALE]),
+        ...mapState(BONUSES_MODULE_PATH, [ITEMS, ACTIVE_PAGE, BONUSES, INFO]),
+        ...mapGetters(BONUSES_MODULE_PATH, [PAGES_COUNT]),
+
+        nextDebDate() {
+            const { next_debit_date } = this[INFO] || {};
+            const dateObj = new Date(next_debit_date);
+            return dateObj.toLocaleDateString(this[LOCALE], numericYearDateSettings);
+        },
+
+        bonuses() {
+            const items = this[ITEMS] || [];
+            return items.map(i => {
+                const dateObj = new Date(i.created_at);
+
+                return {
+                    ...i,
+                    status: this.$t(`bonusStatus.${i.status}`),
+                    date: dateObj.toLocaleDateString(this[LOCALE], numericYearDateSettings),
+                };
+            });
+        },
+
         isTablet() {
             return this.$mq.tablet;
         },
     },
 
-    watch: {},
+    methods: {
+        ...mapActions(BONUSES_MODULE_PATH, [FETCH_BONUSES_DATA]),
 
-    methods: {},
+        onShowMore() {
+            this.showMore = true;
+            this.$router.replace({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: this[ACTIVE_PAGE] + 1 },
+            });
+        },
+
+        onPageChanged(page) {
+            this.showMore = false;
+            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+        },
+    },
+
+    beforeRouteEnter(to, from, next) {
+        const {
+            fullPath,
+            query: { page = DEFAULT_PAGE },
+        } = to;
+
+        const { loadPath } = $store.state[PROFILE_MODULE][BONUSES_MODULE];
+
+        if (loadPath === fullPath) next();
+        else {
+            $progress.start();
+            $store
+                .dispatch(`${BONUSES_MODULE_PATH}/${FETCH_BONUSES_DATA}`, { page })
+                .then(() => {
+                    $store.dispatch(`${BONUSES_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                    next(vm => {
+                        $progress.finish();
+                    });
+                })
+                .catch(thrown => {
+                    $progress.fail();
+                    next();
+                });
+        }
+    },
+
+    async beforeRouteUpdate(to, from, next) {
+        // вызывается, когда маршрут, что рендерит этот компонент, изменился,
+        // но этот компонент будет повторно использован в новом маршруте.
+        // Например, для маршрута с динамическими параметрами `/foo/:id`, когда мы
+        // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
+        // будет использован повторно, и этот хук будет вызван когда это случится.
+        // Также имеется доступ в `this` к экземпляру компонента.
+
+        const {
+            query: { page = DEFAULT_PAGE },
+        } = to;
+
+        try {
+            this.$progress.start();
+            await this[FETCH_BONUSES_DATA]({ page, showMore: this.showMore });
+            this.$progress.finish();
+            next();
+        } catch (error) {
+            this.$progress.fail();
+            next(false);
+        }
+
+        this.showMore = false;
+    },
 };
 </script>

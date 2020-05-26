@@ -10,6 +10,7 @@ export const LOAD_PATH = 'loadPath';
 export const ITEMS = 'items';
 export const ACTIVE_PAGE = 'activePage';
 export const RANGE = 'range';
+export const GALLERY_IMAGES = 'galleryImages';
 
 export default function createModule() {
     return {
@@ -21,6 +22,7 @@ export default function createModule() {
             [ITEMS]: [],
             [RANGE]: 0,
             [ACTIVE_PAGE]: DEFAULT_PAGE,
+            [GALLERY_IMAGES]: [],
         },
 
         actions,

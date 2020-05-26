@@ -1,0 +1,27 @@
+.cabinet-requisites-panel {
+    &__item {
+        align-items: baseline;
+
+        & + & {
+            margin-top: calc(var(--gs) * 2);
+        }
+
+        &-input {
+            flex: 1;
+            max-width: 288px;
+
+            @media (--tablet-lg-min) and (--desktop) {
+                max-width: 258px;
+            }
+        }
+
+        &-textarea {
+            width: 100%;
+
+            textarea {
+                line-height: 24px;
+                height: 64px;
+            }
+        }
+    }
+}

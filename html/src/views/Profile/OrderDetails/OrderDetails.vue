@@ -10,7 +10,11 @@
             <div class="order-details-view__details">
                 <div class="order-details-view__details-info">
                     <info-row class="order-details-view__details-row" name="Сумма">
-                        <price class="text-bold" v-bind="order.price" />
+                        <price class="text-medium" v-bind="order.price" />
+                    </info-row>
+
+                    <info-row v-if="order.delivery_price" class="order-details-view__details-row" name="Доставка">
+                        <price class="text-medium" v-bind="order.delivery_price" />
                     </info-row>
 
                     <info-row

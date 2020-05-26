@@ -33,6 +33,12 @@
                                     Доставка <price v-if="summary.delivery.value" v-bind="summary.delivery" />
                                     <span v-else>{{ summary.delivery }}</span>
                                 </p>
+
+                                <p class="checkout-view__main-panel-line" v-if="bonusPayment > 0">
+                                    Оплата бонусами
+                                    <span> -<price :value="bonusPayment" currency="RUB" /> </span>
+                                </p>
+
                                 <p
                                     class="checkout-view__main-panel-line"
                                     v-for="discount in summary.discounts"
@@ -143,7 +149,7 @@ import {
     COMMIT_DATA,
     CLEAR_CHECKOUT_DATA,
 } from '@store/modules/Checkout/actions';
-import { CHECKOUT, PROMO_CODE, SUMMARY, RECEIVE_METHODS } from '@store/modules/Checkout/getters';
+import { CHECKOUT, PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT } from '@store/modules/Checkout/getters';
 
 import { preparePrice } from '@util';
 import { cartItemTypes } from '@enums/product';
@@ -183,7 +189,7 @@ export default {
             checkoutType: state => state.params.type,
         }),
 
-        ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMARY, RECEIVE_METHODS]),
+        ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT]),
 
         isProduct() {
             return this.checkoutType === cartItemTypes.PRODUCT;

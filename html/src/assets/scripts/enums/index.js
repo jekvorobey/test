@@ -23,12 +23,9 @@ export const modalName = Object.freeze({
         ADDRESS_EDIT: 'address-edit-modal',
         REFERRAL_CODE_EDIT: 'referral-code-edit-modal',
         PASSWORD_EDIT: 'password-edit-modal',
-        ACTIVITIES_EDIT: 'activities-edit-modal',
         PORTFOLIO_EDIT: 'portfolio-edit-modal',
         EMAIL_EDIT: 'email-edit-modal',
         PHONE_EDIT: 'phone-edit-modal',
-        PERSONAL_EDIT: 'personal-edit-modal',
-        DETAILS: 'details-modal',
         NAVIGATION: 'navigation-modal',
         PREFERENCE_EDIT: 'preference-edit-modal',
 

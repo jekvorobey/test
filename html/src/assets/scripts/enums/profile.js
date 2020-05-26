@@ -40,3 +40,10 @@ export const referralSource = Object.freeze({
     PROMOCODE: 1, // промокод
     LINK: 2, // реферальная ссылка
 });
+
+export const bonusStatus = Object.freeze({
+    DELAYED: 1, //- на удержании
+    ACTIVE: 2, //- активный
+    FINISHED: 3, // - завершен
+    TAKEN: 4, // - списание
+});

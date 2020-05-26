@@ -15,10 +15,15 @@
         <info-panel class="seo-view__panel" :header="item.product_name" v-for="item in seoProducts" :key="item.id">
             <template v-slot:controls>
                 <div class="seo-view__panel-links">
-                    <!-- <v-link class="seo-view__panel-link" tag="button">
+                    <v-link
+                        v-if="item.files && item.files.length > 0"
+                        class="seo-view__panel-link"
+                        tag="button"
+                        @click="onDownloadFiles(item.files)"
+                    >
                         <v-svg name="download" :width="iconSize" :height="iconSize" />
-                        <span>&nbsp;&nbsp;Скачать</span>
-                    </v-link> -->
+                        <span>&nbsp;&nbsp;Скачать всё</span>
+                    </v-link>
 
                     <v-link
                         class="seo-view__panel-link"
@@ -48,11 +53,16 @@
                     {{ item.description }}
                 </p>
 
-                <ul class="seo-view__panel-list">
+                <ul
+                    v-if="item.files && item.files.length > 0"
+                    class="seo-view__panel-list"
+                    @click="onOpenGallery(item.files)"
+                >
                     <li class="seo-view__panel-item" v-for="file in item.files" :key="file.id">
                         <v-picture>
-                            <source :data-srcset="file.image" type="image/webp" />
-                            <img class="blur-up lazyload v-picture__img" :data-src="file.defaultImage" alt="" />
+                            <source :data-srcset="file.desktop.webp" type="image/webp" />
+                            <source :data-srcset="file.desktop.orig" />
+                            <img class="blur-up lazyload v-picture__img" :data-src="file.default" alt="" />
                         </v-picture>
                     </li>
                 </ul>
@@ -89,6 +99,16 @@
             </show-more-button>
             <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
+
+        <transition name="fade-in">
+            <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" :images="galleryImages">
+                <template v-slot:image="{ image }">
+                    <source :data-srcset="image.desktop.webp" type="image/webp" />
+                    <source :data-srcset="image.desktop.orig" />
+                    <img class="blur-up lazyload v-picture__img" :data-src="image.default" alt="" />
+                </template>
+            </gallery-modal>
+        </transition>
     </section>
 </template>
 
@@ -103,6 +123,7 @@ import VPagination from '@controls/VPagination/VPagination.vue';
 import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
+import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -110,20 +131,20 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as AUTH_MODULE, USER, REFERRAL_CODE } from '@store/modules/Auth';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 
-import seoModule, { NAME as SEO_MODULE, ITEMS, ACTIVE_PAGE } from '@store/modules/Profile/modules/Seo';
+import { NAME as SEO_MODULE, ITEMS, ACTIVE_PAGE, GALLERY_IMAGES } from '@store/modules/Profile/modules/Seo';
 import { PAGES_COUNT } from '@store/modules/Profile/modules/Seo/getters';
-import { FETCH_PRODUCTS, SET_LOAD_PATH } from '@store/modules/Profile/modules/Seo/actions';
+import { FETCH_PRODUCTS, SET_LOAD_PATH, SET_GALLERY_IMAGES } from '@store/modules/Profile/modules/Seo/actions';
 
-import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { $store, $progress } from '@services';
 import { fileExtension, modalName } from '@enums';
 import { MIN_SCROLL_VALUE } from '@constants';
-import { saveToClipboard } from '@util';
+import { saveToClipboard, downloadFile } from '@util';
 import { registerModuleIfNotExists } from '@util/store';
 import { generatePictureSourcePath } from '@util/file';
-import { generateProductUrl, generateAbsoluteProductUrl } from '@util/catalog';
+import { generateProductUrl, generateAbsoluteProductUrl, prepareProductImage } from '@util/catalog';
 
 import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
@@ -148,6 +169,7 @@ export default {
         RadioSwitch,
         InfoPanel,
         ShowMoreButton,
+        GalleryModal,
     },
 
     data() {
@@ -170,29 +192,32 @@ export default {
     },
 
     computed: {
-        ...mapState(SEO_MODULE_PATH, [ITEMS, ACTIVE_PAGE]),
+        ...mapState(SEO_MODULE_PATH, [ITEMS, ACTIVE_PAGE, GALLERY_IMAGES]),
         ...mapGetters(SEO_MODULE_PATH, [PAGES_COUNT]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || null,
+            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || null,
+        }),
+
+        ...mapState(MODAL_MODULE, {
+            isGalleryOpen: state =>
+                state[MODALS][modalName.product.GALLERY] && state[MODALS][modalName.product.GALLERY].open,
         }),
 
         seoProducts() {
             const items = this[ITEMS] || [];
             const referralCode = this[REFERRAL_CODE];
 
-            return items.map((i) => {
+            return items.map(i => {
                 return {
                     ...i,
                     link: generateAbsoluteProductUrl(i.category_code, i.product_code, referralCode),
-                    files: i.files.map((f) => {
-                        return {
-                            id: f.id,
-                            image: generatePictureSourcePath(null, null, f.id, fileExtension.image.WEBP),
-                            defaultImage: generatePictureSourcePath(null, null, f.id),
-                        };
-                    }),
+                    files: i.files.map(f => prepareProductImage(f)),
                 };
             });
+        },
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
         },
 
         isTablet() {
@@ -214,11 +239,21 @@ export default {
     },
 
     methods: {
-        ...mapActions(SEO_MODULE_PATH, [FETCH_PRODUCTS]),
+        ...mapActions(SEO_MODULE_PATH, [FETCH_PRODUCTS, SET_GALLERY_IMAGES]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         setStatus(isActive) {
             this.selectedActiveStatus = Number(isActive);
+        },
+
+        onOpenGallery(images) {
+            this[SET_GALLERY_IMAGES](images);
+            this[CHANGE_MODAL_STATE]({ name: modalName.product.GALLERY, open: true });
+        },
+
+        onDownloadFiles(files) {
+            if (Array.isArray(files))
+                for (const file of files) downloadFile(generatePictureSourcePath(null, null, file.id));
         },
 
         onCopyToClipboard(e, text) {
@@ -284,15 +319,15 @@ export default {
 
         const { loadPath } = $store.state[PROFILE_MODULE][SEO_MODULE];
 
-        if (loadPath === fullPath) next((vm) => vm.setStatus(isActive));
+        if (loadPath === fullPath) next(vm => vm.setStatus(isActive));
         else {
             $store
                 .dispatch(`${SEO_MODULE_PATH}/${FETCH_PRODUCTS}`, { page, isActive })
                 .then(() => {
                     $store.dispatch(`${SEO_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => vm.setStatus(isActive));
+                    next(vm => vm.setStatus(isActive));
                 })
-                .catch((error) => {
+                .catch(error => {
                     $progress.fail();
                     next();
                 });
