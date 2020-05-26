@@ -29,6 +29,10 @@
         <transition name="fade-in">
             <notification-modal v-if="isNotificationOpen" />
         </transition>
+
+        <transition name="fade-in">
+            <auth-modal v-if="isAuthOpen" />
+        </transition>
     </div>
 </template>
 
@@ -67,6 +71,7 @@ import CitySelectionModal from '@components/CitySelectionModal/CitySelectionModa
 import QuickViewModal from '@components/QuickViewModal/QuickViewModal.vue';
 import AddToCartModal from '@components/AddToCartModal/AddToCartModal.vue';
 import NotificationModal from '@components/NotificationModal/NotificationModal.vue';
+import AuthModal from '@components/AuthModal/AuthModal.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions } from 'vuex';
@@ -112,6 +117,7 @@ export default {
         QuickViewModal,
         AddToCartModal,
         NotificationModal,
+        AuthModal,
     },
 
     computed: {
@@ -137,6 +143,8 @@ export default {
                 state[MODALS][modalName.general.ADD_TO_CART] && state[MODALS][modalName.general.ADD_TO_CART].open,
             isNotificationOpen: state =>
                 state[MODALS][modalName.general.NOTIFICATION] && state[MODALS][modalName.general.NOTIFICATION].open,
+            isAuthOpen: state =>
+                state[MODALS][modalName.general.AUTH] && state[MODALS][modalName.general.AUTH].open,
         }),
 
         isTabletLg() {

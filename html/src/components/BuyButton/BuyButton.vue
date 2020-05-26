@@ -47,7 +47,9 @@ export default {
         checkPermissions() {
             const hasSession = this[HAS_SESSION];
             if (!hasSession) {
-                this[CHANGE_MODAL_STATE]({ name: modalName.general.LOGIN, open: true });
+                this[CHANGE_MODAL_STATE]({ name: modalName.general.AUTH, open: true, state: {
+                    activeTab: 'login',
+                }});
                 return false;
             }
 

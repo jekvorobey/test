@@ -252,7 +252,9 @@ export default {
 
         onRegister() {
             if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
-            else this[CHANGE_MODAL_STATE]({ name: modalName.general.LOGIN, open: true });
+            else this[CHANGE_MODAL_STATE]({ name: modalName.general.AUTH, open: true, state: {
+                activeTab: 'login',
+            }});
         },
     },
 };

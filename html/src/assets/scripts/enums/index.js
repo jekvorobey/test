@@ -6,6 +6,7 @@ export const modalName = Object.freeze({
         ADD_TO_CART: 'add-to-cart-modal',
         CITY_SELECTION: 'city-selection-modal',
         NOTIFICATION: 'notification-modal',
+        AUTH: 'auth-modal',
     },
 
     product: {
