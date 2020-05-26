@@ -21,12 +21,18 @@
             </breadcrumbs>
 
             <catalog-banner-card class="catalog-view__banner" v-if="productGroup.banner" :item="productGroup.banner">
-                <source :data-srcset="desktopImg.webp" type="image/webp" media="(min-width: 1024px)" />
-                <source :data-srcset="desktopImg.orig" media="(min-width: 1024px)" />
-                <source :data-srcset="tabletImg.webp" type="image/webp" media="(min-width: 768px)" />
-                <source :data-srcset="tabletImg.orig" media="(min-width: 768px)" />
-                <source :data-srcset="mobileImg.webp" type="image/webp" media="(min-width: 320px)" />
-                <source :data-srcset="mobileImg.orig" media="(min-width: 320px)" />
+                <template v-if="desktopImg">
+                    <source :data-srcset="desktopImg.webp" type="image/webp" media="(min-width: 1024px)" />
+                    <source :data-srcset="desktopImg.orig" media="(min-width: 1024px)" />
+                </template>
+                <template v-if="tabletImg">
+                    <source :data-srcset="tabletImg.webp" type="image/webp" media="(min-width: 768px)" />
+                    <source :data-srcset="tabletImg.orig" media="(min-width: 768px)" />
+                </template>
+                <template v-if="mobileImg">
+                    <source :data-srcset="mobileImg.webp" type="image/webp" media="(min-width: 320px)" />
+                    <source :data-srcset="mobileImg.orig" media="(min-width: 320px)" />
+                </template>
                 <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
             </catalog-banner-card>
         </div>
