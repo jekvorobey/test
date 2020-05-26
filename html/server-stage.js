@@ -212,7 +212,10 @@ app.use('/catalog/export', async (req, res, next) => {
         const {
             body: { file_id, type },
         } = await request.get(`${baseURL}/v1/catalog/export`).query({ ...req.query });
-        res.redirect(`${baseURL}/files/original/${file_id}`);
+        const fileRes = await request.get(`${baseURL}/files/original/${file_id}`);
+        res.setHeader('content-type', fileRes.get('content-type'));
+        res.setHeader('content-disposition', fileRes.get('content-disposition'));
+        res.send(fileRes.text);
     } catch (error) {
         res.status(error.status).send(error.response && error.response.text);
     }
