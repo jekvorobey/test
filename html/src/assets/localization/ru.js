@@ -1,7 +1,7 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
 import { socials } from '@enums';
 import { receiveMethods, discountType } from '@enums/checkout';
-import { genderType, billingOperationType, referralSource } from '@enums/profile';
+import { genderType, billingOperationType, referralSource, bonusStatus } from '@enums/profile';
 import { orderStatus, deliveryStatus } from '@enums/order';
 
 const flatpickrLocale = flatPickrRu.ru;
@@ -117,6 +117,13 @@ const main = {
     genderType: {
         [genderType.FEMALE]: 'Женский',
         [genderType.MALE]: 'Мужской',
+    },
+
+    bonusStatus: {
+        [bonusStatus.DELAYED]: 'На удержании',
+        [bonusStatus.ACTIVE]: 'Активный',
+        [bonusStatus.FINISHED]: 'Завершен',
+        [bonusStatus.TAKEN]: 'Cписание',
     },
 
     landing: {

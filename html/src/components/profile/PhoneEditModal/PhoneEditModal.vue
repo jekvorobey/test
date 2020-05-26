@@ -11,64 +11,40 @@
             <div class="phone-edit-modal__body">
                 <h3 v-if="!isTablet" class="phone-edit-modal__hl">{{ header }}</h3>
                 <div class="phone-edit-modal__desc">
-                    <template v-if="!sent">
-                        На указанный номер телефона будет выслан код по СМС, введите его для регистрации
-                    </template>
-
-                    <template v-else> Мы отправили код на {{ rawPhone }}, введите его для регистрации. </template>
+                    Мы отправили код на <strong>{{ formatPhone }}</strong>
+                    , введите его для подтверждения.
                 </div>
 
                 <form class="phone-edit-modal__form" @submit.prevent="onSubmit">
-                    <div v-if="!sent" class="phone-edit-modal__form-phone">
-                        <v-input-mask
+                    <div class="phone-edit-modal__form-confirmation">
+                        <v-input
+                            type="number"
                             class="phone-edit-modal__form-input"
-                            v-model="rawPhone"
-                            placeholder="+7 ___ ___-__-__"
-                            :raw="false"
-                            :options="maskOptions"
-                            :error="phoneError"
+                            maxLength="4"
+                            v-model="code"
+                            :error="codeError"
                         >
-                            Номер телефона
+                            Код из СМС
                             <template v-slot:after>
-                                <v-button class="phone-edit-modal__form-btn" type="submit">Получить код</v-button>
+                                <v-button class="phone-edit-modal__form-btn" type="submit">
+                                    Отправить
+                                </v-button>
                             </template>
                             <template v-slot:error="{ error }">
                                 <transition name="slide-in-bottom" mode="out-in">
                                     <div :key="error" v-if="error">{{ error }}</div>
                                 </transition>
                             </template>
-                        </v-input-mask>
+                        </v-input>
                     </div>
-
-                    <template v-else-if="!accepted">
-                        <div class="phone-edit-modal__form-confirmation">
-                            <v-input
-                                type="number"
-                                class="phone-edit-modal__form-input"
-                                maxLength="4"
-                                v-model="code"
-                                :error="codeError"
-                            >
-                                Код из СМС
-                                <template v-slot:after>
-                                    <v-button class="phone-edit-modal__form-btn" type="submit">Регистрация</v-button>
-                                </template>
-                                <template v-slot:error="{ error }">
-                                    <transition name="slide-in-bottom" mode="out-in">
-                                        <div :key="error" v-if="error">{{ error }}</div>
-                                    </transition>
-                                </template>
-                            </v-input>
-                        </div>
-                        <div class="phone-edit-modal__form-timer">
-                            <span v-if="counter !== 0">
-                                Получить новый код можно через <strong>{{ counter }} сек.</strong>
-                            </span>
-                            <v-link class="phone-edit-modal__form-repeat" v-else tag="button" @click.stop="sendSms">
-                                Отправить новый код
-                            </v-link>
-                        </div>
-                    </template>
+                    <div class="phone-edit-modal__form-timer">
+                        <span v-if="counter !== 0">
+                            Получить новый код можно через <strong>{{ counter }} сек.</strong>
+                        </span>
+                        <v-link class="phone-edit-modal__form-repeat" v-else tag="button" @click.stop="sendCode(phone)">
+                            Отправить новый код
+                        </v-link>
+                    </div>
                 </form>
             </div>
         </template>
@@ -96,7 +72,7 @@ import validationMixin, { required, minLength, password, sameAs } from '@plugins
 import { phoneMaskOptions } from '@settings';
 import { verificationCodeType } from '@enums/auth';
 import { modalName } from '@enums';
-import { rawPhone } from '@util';
+import { formatPhoneNumber } from '@util';
 import './PhoneEditModal.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
@@ -115,38 +91,38 @@ export default {
     },
 
     validations: {
-        phone: {
-            required,
-            minLength: minLength(12),
-        },
-
         code: {
             required,
             minLength: minLength(4),
+        },
+
+        exists: {
+            valid: value => value === false,
+        },
+    },
+
+    props: {
+        phone: {
+            type: String,
+            required: true,
         },
     },
 
     data() {
         return {
-            sent: false,
-
-            rawPhone: null,
             code: null,
+            exists: false,
             counter: 59,
-
-            maskOptions: {
-                ...phoneMaskOptions,
-            },
         };
     },
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
-        phone() {
-            return rawPhone(this.rawPhone);
+        formatPhone() {
+            return formatPhoneNumber(this.phone);
         },
 
         header() {
@@ -158,28 +134,18 @@ export default {
         },
 
         codeError() {
-            if (this.$v.code.$dirty) {
-                if (!this.$v.code.required) return 'Обязательное поле';
-                if (!this.$v.code.minLength) return 'Неверно введен номер';
-            }
-        },
-
-        phoneError() {
-            if (this.$v.phone.$dirty) {
-                if (!this.$v.phone.required) return 'Обязательное поле';
-                if (!this.$v.phone.minLength) return 'Неверно введен номер';
-            }
+            if (this.$v.code.$dirty && !this.$v.code.required) return 'Обязательное поле';
+            if (this.$v.code.$dirty && !this.$v.code.minLength) return 'Неверно введен номер';
+            if (this.$v.exists.$dirty && !this.$v.exists.valid) return 'Такой телефон уже существует';
         },
     },
 
     watch: {
-        phone() {
-            if (this.$v.phone.$dirty) this.$v.phone.$reset();
-        },
-
         code() {
-            if (this.$v.code.$dirty) this.$v.code.$reset();
-            //if (this.$v.accepted.$dirty) this.$v.accepted.$reset();
+            if (this.$v.code.$dirty) {
+                this.exists = false;
+                this.$v.code.$reset();
+            }
         },
     },
 
@@ -208,9 +174,9 @@ export default {
                     destination,
                     type: verificationCodeType.PROFILE_PHONE,
                 });
-                this.sent = true;
             } catch (error) {
-                this.sent = false;
+                this.exists = true;
+                this.$v.exists.$touch();
             }
         },
 
@@ -223,24 +189,25 @@ export default {
                 });
                 this.onClose();
             } catch (error) {
-                this.accepted = false;
+                this.exists = true;
+                this.$v.exists.$touch();
             }
         },
 
         async onSubmit() {
-            if (!this.sent) {
-                this.$v.phone.$touch();
-                if (!this.$v.phone.$invalid) this.sendCode(this.phone);
-            } else {
-                this.$v.code.$touch();
-                if (!this.$v.code.$invalid) this.updatePhone(this.phone, this.code);
-            }
+            this.$v.code.$touch();
+            if (!this.$v.code.$invalid) this.updatePhone(this.phone, this.code);
         },
 
         onClose() {
             this.$emit('close');
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
         },
+    },
+
+    beforeMount() {
+        this.sendCode(this.phone);
+        this.startCounter();
     },
 
     beforeDestroy() {

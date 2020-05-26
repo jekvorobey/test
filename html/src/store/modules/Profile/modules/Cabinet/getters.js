@@ -4,14 +4,14 @@ export const FULL_NAME = 'fullName';
 export default {
     [PROFILES_STRING]: (state, getters) => {
         const profiles = state.activities;
-        return profiles ? profiles.map(p => p.name).join(', ') : '';
+        return profiles ? profiles.map((p) => p.name).join(', ') : '';
     },
 
     [FULL_NAME]({ firstName, lastName, middleName }) {
         let fullName = '';
         if (lastName) fullName += lastName + ' ';
         if (firstName) fullName += firstName + ' ';
-        if (middleName) fullName += middleName + ' ';
+        if (middleName) fullName += middleName;
         return fullName;
     },
 };

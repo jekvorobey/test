@@ -1,10 +1,10 @@
 .portfolio-edit-modal {
-    .modal-body {
-        padding: calc(var(--gs) * 3);
+    .popup {
+        width: 648px;
+    }
 
-        @media (--tablet) {
-            padding: 0;
-        }
+    .modal-body {
+        padding: 0;
     }
 
     &__hl {
@@ -13,14 +13,26 @@
         }
     }
 
+    &__section {
+        padding: calc(var(--gs) * 3);
+
+        @media (--tablet) {
+            padding: calc(var(--gs) * 2);
+        }
+
+        &:first-child {
+            border-bottom: 1px solid var(--cl-divider-grey);
+        }
+    }
+
+    &__info {
+        margin-bottom: calc(var(--gs) * 2);
+    }
+
     &__list {
         display: flex;
         flex-direction: column;
-
-        @media (--tablet) {
-            height: 100%;
-            padding: calc(var(--gs) * 3) calc(var(--gs) * 2);
-        }
+        margin-bottom: calc(var(--gs) * 2);
 
         &-row {
             position: relative;
@@ -30,20 +42,47 @@
 
             @media (--tablet) {
                 flex-wrap: wrap;
-                margin-bottom: calc(var(--gs) * 3);
+                margin: 0;
+                padding-bottom: calc(var(--gs) * 2);
+                border-bottom: 1px solid var(--cl-divider-grey);
+            }
+
+            & + & {
+                margin-top: var(--gs);
             }
 
             &-btn {
                 position: absolute;
-                top: 0;
+                top: 50%;
                 right: 0;
+                transform: translate(-8px, -50%);
+                height: 24px;
+                width: 24px;
                 z-index: 1;
             }
         }
 
         &-column {
-            width: calc(50% - calc(var(--gs) * 1.5));
+            width: calc(50% - calc(var(--gs) / 2));
 
+            @media (--tablet) {
+                width: 100%;
+            }
+
+            & + & {
+                @media (--tablet) {
+                    margin-top: var(--gs);
+                }
+            }
+
+            &:last-child {
+                .v-input__input {
+                    padding-right: calc(var(--gs) * 4);
+                }
+            }
+        }
+
+        &-btn {
             @media (--tablet) {
                 width: 100%;
             }
@@ -54,8 +93,10 @@
         width: 100%;
         display: flex;
         justify-content: flex-start;
+        padding: 0 calc(var(--gs) * 3) calc(var(--gs) * 3);
 
         @media (--tablet) {
+            margin-top: auto;
             position: sticky;
             justify-content: space-between;
             bottom: 0;
@@ -66,13 +107,7 @@
 
         &-btn {
             @media (--tablet) {
-                width: calc(50% - var(--gs));
-            }
-
-            & + & {
-                @media (--tablet-min) {
-                    margin-left: calc(var(--gs) * 2);
-                }
+                width: 100%;
             }
         }
     }

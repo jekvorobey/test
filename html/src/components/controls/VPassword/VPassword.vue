@@ -25,7 +25,7 @@
             </v-button>
         </div>
 
-        <div :id="`${inputId}-alert`" class="error-message v-password__error" role="alert">
+        <div v-if="showError" :id="`${inputId}-alert`" class="error-message v-password__error" role="alert">
             <slot name="error" :error="error">
                 {{ error }}
             </slot>
@@ -46,13 +46,16 @@ export default {
     name: 'v-password',
     inheritAttrs: false,
     mixins: [inputMixin],
+
     components: {
         VButton,
         VSvg,
     },
+
     props: {
         value: {},
     },
+
     data() {
         return {
             showPassword: false,
@@ -60,11 +63,13 @@ export default {
             inputId: `v-password-id-${this._uid}`,
         };
     },
+
     computed: {
         type() {
             return this.showPassword ? 'text' : 'password';
         },
     },
+
     methods: {
         changePasswordState(e) {
             this.showPassword = !this.showPassword;

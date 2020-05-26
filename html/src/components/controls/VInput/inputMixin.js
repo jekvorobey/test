@@ -1,6 +1,14 @@
 export default {
     props: {
-        error: String,
+        showError: {
+            type: Boolean,
+            default: true,
+        },
+
+        error: {
+            type: [String, Boolean],
+            default: null,
+        },
     },
 
     computed: {

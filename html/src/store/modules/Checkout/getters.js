@@ -10,6 +10,8 @@ export const AGREEMENT = 'agreement';
 export const CHECKOUT = 'checkout';
 export const PROMO_CODE = 'promocode';
 
+export const BONUS_PAYMENT = 'bonusPayment';
+export const BONUS_PER_RUB = 'bonusPerRub';
 export const AVAILABLE_BONUS = 'availableBonus';
 export const RECIPIENTS = 'recipients';
 export const ADDRESSES = 'addresses';
@@ -42,46 +44,56 @@ export const PROMOCODE_STATUS = 'promocodeStatus';
 
 export const SUMMARY = 'summary';
 
+const CHECKOUT_DATA = 'checkoutData';
+const INPUT = 'input';
+
 export default {
-    [AVAILABLE_BONUS]: (state) => (state.checkoutData && state.checkoutData[AVAILABLE_BONUS]) || 0,
+    [BONUS_PER_RUB]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][BONUS_PER_RUB]) || 0,
+    [AVAILABLE_BONUS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][AVAILABLE_BONUS]) || 0,
 
-    [RECIPIENTS]: (state) => (state.checkoutData && state.checkoutData[RECIPIENTS]) || [],
-    [ADDRESSES]: (state) => (state.checkoutData && state.checkoutData[ADDRESSES]) || [],
-    [PICKUP_POINTS]: (state) => (state.checkoutData && state.checkoutData[PICKUP_POINTS]) || [],
+    [RECIPIENTS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][RECIPIENTS]) || [],
+    [ADDRESSES]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][ADDRESSES]) || [],
+    [PICKUP_POINTS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][PICKUP_POINTS]) || [],
 
-    [RECEIVE_METHODS]: (state) => (state.checkoutData && state.checkoutData[RECEIVE_METHODS]) || [],
-    [PAYMENT_METHODS]: (state) => (state.checkoutData && state.checkoutData[PAYMENT_METHODS]) || [],
+    [RECEIVE_METHODS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][RECEIVE_METHODS]) || [],
+    [PAYMENT_METHODS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][PAYMENT_METHODS]) || [],
 
-    [CONFIRMATION_TYPES]: (state) => (state.checkoutData && state.checkoutData[CONFIRMATION_TYPES]) || [],
+    [CONFIRMATION_TYPES]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][CONFIRMATION_TYPES]) || [],
 
-    [DELIVERY_TYPES]: (state) => (state.checkoutData && state.checkoutData[DELIVERY_TYPES]) || [],
+    [DELIVERY_TYPES]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][DELIVERY_TYPES]) || [],
 
-    [CHECKOUT_INPUT]: (state) => (state.checkoutData && state.checkoutData.input) || {},
+    [CHECKOUT_INPUT]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][INPUT]) || {},
 
     [DELIVERY_METHODS]: (state, getters) => {
         const receiveMethod =
-            state.checkoutData &&
-            state.checkoutData.receiveMethods.find((m) => m.id === getters[SELECTED_RECEIVE_METHOD_ID]);
+            state[CHECKOUT_DATA] &&
+            state[CHECKOUT_DATA][RECEIVE_METHODS].find((m) => m.id === getters[SELECTED_RECEIVE_METHOD_ID]);
         return receiveMethod ? receiveMethod.methods : [];
     },
 
-    [SELECTED_RECEIVE_METHOD_ID]: (state) => state.checkoutData && state.checkoutData.input.receiveMethodID,
-    [SELECTED_DELIVERY_METHOD_ID]: (state) => state.checkoutData && state.checkoutData.input.deliveryMethodID,
-    [SELECTED_PAYMENT_METHOD_ID]: (state) => state.checkoutData && state.checkoutData.input.paymentMethodID,
-    [SELECTED_CONFIRMATION_TYPE_ID]: (state) => state.checkoutData && state.checkoutData.input.confirmationTypeID,
+    [SELECTED_RECEIVE_METHOD_ID]: (state) => state[CHECKOUT_DATA] && state[CHECKOUT_DATA][INPUT].receiveMethodID,
+    [SELECTED_DELIVERY_METHOD_ID]: (state) => state[CHECKOUT_DATA] && state[CHECKOUT_DATA][INPUT].deliveryMethodID,
+    [SELECTED_PAYMENT_METHOD_ID]: (state) => state[CHECKOUT_DATA] && state[CHECKOUT_DATA][INPUT].paymentMethodID,
+    [SELECTED_CONFIRMATION_TYPE_ID]: (state) => state[CHECKOUT_DATA] && state[CHECKOUT_DATA][INPUT].confirmationTypeID,
 
-    [SELECTED_RECIPIENT]: (state) => state.checkoutData && state.checkoutData.input.recipient,
-    [SELECTED_ADDRESS]: (state) => state.checkoutData && state.checkoutData.input.address,
-    [SELECTED_PICKUP_POINT]: (state) => state.checkoutData && state.checkoutData.input.pickupPoint,
-    [SELECTED_DELIVERY_TYPE]: (state) => state.checkoutData && state.checkoutData.input.deliveryType,
+    [SELECTED_RECIPIENT]: (state) => state[CHECKOUT_DATA] && state[CHECKOUT_DATA][INPUT].recipient,
+    [SELECTED_ADDRESS]: (state) => state[CHECKOUT_DATA] && state[CHECKOUT_DATA][INPUT].address,
+    [SELECTED_PICKUP_POINT]: (state) => state[CHECKOUT_DATA] && state[CHECKOUT_DATA][INPUT].pickupPoint,
+    [SELECTED_DELIVERY_TYPE]: (state) => state[CHECKOUT_DATA] && state[CHECKOUT_DATA][INPUT].deliveryType,
 
-    [BONUS]: (state) => state.checkoutData && state.checkoutData.input.bonus,
-    [PROMO_CODE]: (state) => state.checkoutData && state.checkoutData.input.promoCode,
-    [SUBSCRIBE]: (state) => state.checkoutData && !!state.checkoutData.input.subscribe,
-    [AGREEMENT]: (state) => state.checkoutData && !!state.checkoutData.input.agreement,
-    [CERTIFICATES]: (state) => (state.checkoutData && state.checkoutData.input.certificates) || [],
+    [BONUS]: (state) => state[CHECKOUT_DATA] && state[CHECKOUT_DATA][INPUT].bonus,
+    [PROMO_CODE]: (state) => state[CHECKOUT_DATA] && state[CHECKOUT_DATA][INPUT].promoCode,
+    [SUBSCRIBE]: (state) => state[CHECKOUT_DATA] && !!state[CHECKOUT_DATA][INPUT].subscribe,
+    [AGREEMENT]: (state) => state[CHECKOUT_DATA] && !!state[CHECKOUT_DATA][INPUT].agreement,
+    [CERTIFICATES]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][INPUT].certificates) || [],
 
-    [SUMMARY]: (state) => (state.checkoutData && state.checkoutData[SUMMARY]) || {},
+    [SUMMARY]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][SUMMARY]) || {},
+
+    [BONUS_PAYMENT]: (state, getters) => {
+        const { bonusSpent = 0 } = getters[SUMMARY];
+        const bonusPerRub = getters[BONUS_PER_RUB];
+        return bonusSpent * bonusPerRub;
+    },
 
     [CHECKOUT_STATUS]: (state) => state[CHECKOUT_STATUS] || {},
     [RECEIVE_METHOD_STATUS]: (state) => state[CHECKOUT_STATUS][RECEIVE_METHOD_STATUS] || requestStatus.SUCCESS,

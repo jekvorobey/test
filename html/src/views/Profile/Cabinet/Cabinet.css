@@ -42,16 +42,37 @@
 
     &__attention {
         margin-bottom: calc(var(--gs) * 3);
+        flex-wrap: nowrap;
+
+        & + & {
+            margin-top: calc(var(--gs) * 2);
+        }
 
         &-inner {
-            &-warning {
-                color: var(--cl-red);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex: 1;
+
+            @media (--tablet) {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            &-info {
+                @media (--tablet) {
+                    margin-bottom: calc(var(--gs) * 2);
+                }
             }
 
             &-link {
                 text-transform: none;
                 border-bottom: 1px solid var(--cl-global);
                 font-weight: normal;
+            }
+
+            &-btn {
+                flex: none;
             }
         }
     }

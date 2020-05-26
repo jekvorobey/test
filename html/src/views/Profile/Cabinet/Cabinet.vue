@@ -21,128 +21,43 @@
             </image-picker>
         </div>
 
-        <attention-panel v-if="!canBuy" class="cabinet-view__attention">
+        <attention-panel v-if="!referralPartner" class="cabinet-view__attention">
             <div class="cabinet-view__attention-inner">
-                <div>Статус: <strong class="cabinet-view__attention-inner-warning">Нет доступа к покупкам</strong></div>
-                <template v-if="!phone || (portfolio && portfolio.length === 0)">
-                    Чтобы получить доступ к покупкам, заполните
-                    <v-link tag="button" class="cabinet-view__attention-inner-link" @click.prevent="onScrollToPrivate">
-                        портфолио и телефон
-                    </v-link>
-                </template>
-                <template v-else>
-                    В данный момент наши эксперты изучают Ваше портфолио
-                </template>
+                <div class="cabinet-view__attention-inner-info">
+                    <strong>Профессиональный статус: не подтвержден</strong><br />
+                    <template v-if="!phone || (portfolio && portfolio.length === 0)">
+                        Укажи ссылку на свой аккаунт бьюти-профессионала в соцсетях или загрузи скан профильного диплома
+                        либо другого подтверждающего документа.
+                    </template>
+                    <template v-else>
+                        В данный момент наши эксперты изучают Ваше портфолио
+                    </template>
+                </div>
+                <v-button
+                    v-if="!phone || (portfolio && portfolio.length === 0)"
+                    class="btn--outline cabinet-view__attention-inner-btn"
+                    @click="onOpenPortfoliosModal"
+                >
+                    Подтвердить статус
+                </v-button>
             </div>
         </attention-panel>
 
-        <info-panel ref="panel" class="cabinet-view__panel" header="Личные данные">
-            <template v-slot:controls>
-                <v-link class="cabinet-view__panel-link" tag="button" @click="onOpenPersonalModal">
-                    <v-svg name="edit" :width="iconSize" :height="iconSize" />
-                    <span>&nbsp;&nbsp;Изменить</span>
-                </v-link>
-            </template>
-            <div class="container container--tablet-lg">
-                <ul class="cabinet-view__panel-list">
-                    <info-row class="cabinet-view__panel-item" name="ФИО" :value="fullName" />
-                    <info-row class="cabinet-view__panel-item" name="Дата рождения" :value="computedBirthday" />
-                    <info-row class="cabinet-view__panel-item" name="Пол">
-                        {{ gender ? $t(`genderType.${gender}`) : '' }}
-                    </info-row>
-                    <info-row class="cabinet-view__panel-item" name="Номер телефона" :value="phone">
-                        <template v-slot:link>
-                            <v-link
-                                class="cabinet-view__panel-item-link"
-                                tag="button"
-                                @click.prevent="onOpenPhoneModal"
-                            >
-                                Изменить
-                            </v-link>
-                        </template>
-                    </info-row>
-                    <info-row class="cabinet-view__panel-item" name="Email" :value="email">
-                        <template v-slot:link>
-                            <v-link
-                                class="cabinet-view__panel-item-link"
-                                tag="button"
-                                @click.prevent="onOpenEmailModal"
-                            >
-                                Изменить
-                            </v-link>
-                        </template>
-                    </info-row>
-                    <info-row class="cabinet-view__panel-item" name="Портфолио">
-                        <ul v-if="portfolio && portfolio.length > 0">
-                            <li v-for="(item, index) in portfolio" :key="index">
-                                <a
-                                    class="cabinet-view__panel-item-link"
-                                    :href="item.link"
-                                    rel="noopener noreferrer"
-                                    target="_blank"
-                                >
-                                    {{ item.name }}
-                                </a>
-                            </li>
-                        </ul>
-                        <template v-else>
-                            -
-                        </template>
-
-                        <template v-slot:link>
-                            <v-link
-                                class="cabinet-view__panel-item-link"
-                                tag="button"
-                                @click.prevent="onOpenPortfoliosModal"
-                            >
-                                {{ portfolio && portfolio.length > 0 ? 'Изменить' : 'Заполнить' }}
-                            </v-link>
-                        </template>
-                    </info-row>
-                    <info-row class="cabinet-view__panel-item" name="Профиль" :value="profilesString">
-                        <template v-slot:link>
-                            <v-link
-                                class="cabinet-view__panel-item-link"
-                                tag="button"
-                                @click.prevent="onOpenActivitiesEditModal"
-                            >
-                                {{ profilesString ? 'Изменить' : 'Заполнить' }}
-                            </v-link>
-                        </template>
-                    </info-row>
-                </ul>
+        <attention-panel v-if="!fullName || !hasPhone" class="cabinet-view__attention">
+            <div class="cabinet-view__attention-inner">
+                <div class="cabinet-view__attention-inner-info">
+                    <strong>Заполни профиль для совершения покупок</strong><br />
+                    Чтобы получить доступ к покупкам, укажи свои ФИО и номер телефона
+                </div>
+                <v-button class="btn--outline cabinet-view__attention-inner-btn" @click="onScrollToPrivate">
+                    Заполнить данные
+                </v-button>
             </div>
-        </info-panel>
+        </attention-panel>
 
-        <info-panel class="cabinet-view__panel" v-if="referralPartner" header="Реферальные данные">
-            <template v-slot:controls>
-                <v-link
-                    v-if="canEditReferralCode"
-                    class="cabinet-view__panel-link"
-                    tag="button"
-                    @click="onOpenReferralCodeModal"
-                >
-                    <v-svg name="edit" :width="iconSize" :height="iconSize" />
-                    <span>&nbsp;&nbsp;Изменить</span>
-                </v-link>
-            </template>
-            <div class="container container--tablet-lg">
-                <ul class="cabinet-view__panel-list">
-                    <info-row class="cabinet-view__panel-item" name="Ваш реферальный код" :value="referralCode" />
-                    <info-row class="cabinet-view__panel-item" name="Реферальная ссылка">
-                        <v-link class="cabinet-view__panel-link" tag="button" @click="onCopyToClipboard($event)">
-                            <v-svg name="link" :width="iconSize" :height="iconSize" />
-                            <span>&nbsp;&nbsp;Скопировать ссылку</span>
-                        </v-link>
-                    </info-row>
-                    <info-row
-                        class="cabinet-view__panel-item"
-                        name="Персональная скидка"
-                        :value="referralPersonalDiscount.percent ? `${referralPersonalDiscount.percent}%` : '-'"
-                    />
-                </ul>
-            </div>
-        </info-panel>
+        <cabinet-info-panel ref="personal" class="cabinet-view__panel" />
+
+        <cabinet-referral-panel v-if="referralPartner" class="cabinet-view__panel" />
 
         <info-panel class="cabinet-view__panel" header="Пароль">
             <template v-slot:controls>
@@ -180,94 +95,14 @@
             </div>
         </info-panel>
 
-        <info-panel v-if="referralPartner" class="cabinet-view__panel" header="Реквизиты">
-            <template v-slot:controls>
-                <v-link class="cabinet-view__panel-link" tag="button" @click="onOpenDetailsModal">
-                    <v-svg name="edit" :width="iconSize" :height="iconSize" />
-                    <span>&nbsp;&nbsp;Изменить</span>
-                </v-link>
-            </template>
-            <div class="container container--tablet-lg">
-                <ul class="cabinet-view__panel-list">
-                    <info-row class="cabinet-view__panel-item" name="Наименование ИП" :value="requisites.name" />
-                    <info-row class="cabinet-view__panel-item" name="ИНН" :value="requisites.inn" />
-                    <info-row class="cabinet-view__panel-item" name="Расчетный счет" :value="requisites.account" />
-                    <info-row class="cabinet-view__panel-item" name="БИК" :value="requisites.bik" />
-                    <info-row class="cabinet-view__panel-item" name="Банк" :value="requisites.bank" />
-                    <info-row
-                        class="cabinet-view__panel-item"
-                        name="Корреспондентский счет банка"
-                        :value="requisites.correspondentAccount"
-                    />
-                    <info-row class="cabinet-view__panel-item" name="Юридический адрес" :value="requisites.address" />
-                </ul>
-            </div>
-        </info-panel>
+        <cabinet-requisites-panel v-if="referralPartner" class="cabinet-view__panel" />
 
-        <info-panel class="cabinet-view__panel" header="Сертификаты">
-            <div class="container container--tablet-lg">
-                <ul class="cabinet-view__panel-list">
-                    <info-row
-                        class="text-sm cabinet-view__panel-item cabinet-view__panel-item--dropzone"
-                        :name="certificateRowName"
-                    >
-                        <v-filepond
-                            style="width: 400px;"
-                            name="file"
-                            label-file-loading="Загрузка..."
-                            label-file-processing="Сохранение..."
-                            label-file-processing-error="Ошибка при сохранении"
-                            label-file-processing-complete="Успешно"
-                            label-filer-remove-error="Ошибка при удалении"
-                            label-tap-to-cancel="Нажмите чтобы отменить"
-                            label-tap-to-undo="Нажмите чтобы удалить"
-                            label-button-remove-item="Удалить"
-                            label-button-abort-item="Удалить"
-                            label-button-abort-item-load="Отменить"
-                            label-button-abort-item-processing="Отменить"
-                            max-file-size="5MB"
-                            label-max-file-size="Максимальный размер файла {filesize}"
-                            label-max-file-size-exceeded="Файл слишком большой"
-                            label-file-type-not-allowed="Неверный формат файла"
-                            file-validate-type-label-expected-types="Типы {allTypes}"
-                            :file-validate-type-label-expected-types-map="expectedTypesMap"
-                            :label-idle="labelTemplate"
-                            :accepted-file-types="acceptedTypes"
-                            :file-validate-type-detect-type="fileValidateTypeDetectType"
-                            :files="files"
-                            :server="serverOptions"
-                            :chunk-uploads="false"
-                            :allow-paste="false"
-                            :allow-multiple="true"
-                        />
-                    </info-row>
-                </ul>
-            </div>
-        </info-panel>
-
-        <transition name="fade">
-            <personal-edit-modal v-if="$isServer || isPersonalEditOpen" />
-        </transition>
-        <transition name="fade">
-            <portfolio-edit-modal v-if="$isServer || isPortofioEditOpen" />
-        </transition>
-        <transition name="fade">
-            <activities-edit-modal v-if="$isServer || isActivitiesEditOpen" />
-        </transition>
-        <transition name="fade">
-            <email-edit-modal v-if="$isServer || isEmailEditOpen" />
-        </transition>
-        <transition name="fade">
-            <phone-edit-modal v-if="$isServer || isPhoneEditOpen" />
-        </transition>
         <transition name="fade">
             <password-edit-modal v-if="$isServer || (hasPhone && isPasswordEditOpen)" />
         </transition>
+
         <transition name="fade">
-            <details-modal v-if="$isServer || isDetailsOpen" />
-        </transition>
-        <transition name="fade">
-            <referral-code-edit-modal v-if="$isServer || isCodeEditOpen" />
+            <portfolio-edit-modal v-if="$isServer || isPortofioEditOpen" />
         </transition>
     </section>
 </template>
@@ -275,7 +110,7 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
-import VFilepond, { fileValidation } from '@controls/VFilepond/VFilepond.vue';
+import VButton from '@controls/VButton/VButton.vue';
 
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 
@@ -283,14 +118,12 @@ import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import ImagePicker from '@components/profile/ImagePicker/ImagePicker.vue';
 
-import PortfolioEditModal from '@components/profile/PortfolioEditModal/PortfolioEditModal.vue';
-import EmailEditModal from '@components/profile/EmailEditModal/EmailEditModal.vue';
-import ActivitiesEditModal from '@components/profile/ActivitiesEditModal/ActivitiesEditModal.vue';
-import PhoneEditModal from '@components/profile/PhoneEditModal/PhoneEditModal.vue';
-import PersonalEditModal from '@components/profile/PersonalEditModal/PersonalEditModal.vue';
+import CabinetInfoPanel from '@components/profile/CabinetInfoPanel/CabinetInfoPanel.vue';
+import CabinetReferralPanel from '@components/profile/CabinetReferralPanel/CabinetReferralPanel.vue';
+import CabinetRequisitesPanel from '@components/profile/CabinetRequisitesPanel/CabinetRequisitesPanel.vue';
+
 import PasswordEditModal from '@components/profile/PasswordEditModal/PasswordEditModal.vue';
-import DetailsModal from '@components/profile/DetailsModal/DetailsModal.vue';
-import ReferralCodeEditModal from '@components/profile/ReferralCodeEditModal/ReferralCodeEditModal.vue';
+import PortfolioEditModal from '@components/profile/PortfolioEditModal/PortfolioEditModal.vue';
 
 import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -306,23 +139,15 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import {
     NAME as CABINET_MODULE,
-    BIRTHDAY,
-    GENDER,
-    PHONE,
-    EMAIL,
-    PORTFOLIO,
-    ACTIVITIES,
-    REQUISITES,
     AVATAR,
     HAS_PASSWORD,
     SOCIAL,
     CERTIFICATES,
-    FIRST_NAME,
     LAST_NAME,
-    CAN_EDIT_REFERRAL_CODE,
-    REFERRAL_PERSONAL_DISCOUNT,
+    FIRST_NAME,
+    PHONE,
+    PORTFOLIO,
 } from '@store/modules/Profile/modules/Cabinet';
-import { FULL_NAME, PROFILES_STRING } from '@store/modules/Profile/modules/Cabinet/getters';
 import {
     SET_LOAD,
     FETCH_CABINET_DATA,
@@ -333,11 +158,10 @@ import {
     DELETE_CERTIFICATE,
     LOAD_CERTIFICATE,
 } from '@store/modules/Profile/modules/Cabinet/actions';
+import { FULL_NAME } from '@store/modules/Profile/modules/Cabinet/getters';
 
-import { socials, mimeType, httpCodes, modalName } from '@enums';
-import { cancelRoute, monthLongDateSettings } from '@settings';
-import { saveToClipboard } from '@util';
-import { generateReferralLink } from '@util/profile';
+import { socials, httpCodes, modalName, mimeType } from '@enums';
+import { cancelRoute } from '@settings';
 import '@images/sprites/edit.svg';
 import '@images/sprites/link.svg';
 import '@images/sprites/account-middle.svg';
@@ -350,14 +174,6 @@ const avatarAcceptedTypes = {
     [mimeType.image.PNG]: '.png',
 };
 
-const acceptedTypes = {
-    [mimeType.image.JPEG]: '.jpg',
-    [mimeType.image.PNG]: '.png',
-    [mimeType.application.PDF]: '.pdf',
-    [mimeType.application.DOC]: '.doc',
-    [mimeType.application.DOCX]: '.docx',
-};
-
 const panelScrollOffset = 24;
 
 export default {
@@ -366,7 +182,7 @@ export default {
     components: {
         VSvg,
         VLink,
-        VFilepond,
+        VButton,
 
         AttentionPanel,
 
@@ -374,14 +190,12 @@ export default {
         InfoPanel,
         ImagePicker,
 
-        DetailsModal,
-        PortfolioEditModal,
-        ActivitiesEditModal,
-        EmailEditModal,
-        PhoneEditModal,
-        PersonalEditModal,
+        CabinetInfoPanel,
+        CabinetReferralPanel,
+        CabinetRequisitesPanel,
+
         PasswordEditModal,
-        ReferralCodeEditModal,
+        PortfolioEditModal,
     },
 
     data() {
@@ -400,119 +214,23 @@ export default {
         }),
 
         ...mapState(MODAL_MODULE, {
-            isDetailsOpen: state =>
-                state[MODALS][modalName.profile.DETAILS] && state[MODALS][modalName.profile.DETAILS].open,
-            isPortofioEditOpen: state =>
-                state[MODALS][modalName.profile.PORTFOLIO_EDIT] && state[MODALS][modalName.profile.PORTFOLIO_EDIT].open,
-            isActivitiesEditOpen: state =>
-                state[MODALS][modalName.profile.ACTIVITIES_EDIT] &&
-                state[MODALS][modalName.profile.ACTIVITIES_EDIT].open,
-            isEmailEditOpen: state =>
-                state[MODALS][modalName.profile.EMAIL_EDIT] && state[MODALS][modalName.profile.EMAIL_EDIT].open,
-            isPhoneEditOpen: state =>
-                state[MODALS][modalName.profile.PHONE_EDIT] && state[MODALS][modalName.profile.PHONE_EDIT].open,
-            isPersonalEditOpen: state =>
-                state[MODALS][modalName.profile.PERSONAL_EDIT] && state[MODALS][modalName.profile.PERSONAL_EDIT].open,
             isPasswordEditOpen: state =>
                 state[MODALS][modalName.profile.PASSWORD_EDIT] && state[MODALS][modalName.profile.PASSWORD_EDIT].open,
-            isCodeEditOpen: state =>
-                state[MODALS][modalName.profile.REFERRAL_CODE_EDIT] &&
-                state[MODALS][modalName.profile.REFERRAL_CODE_EDIT].open,
+            isPortofioEditOpen: state =>
+                state[MODALS][modalName.profile.PORTFOLIO_EDIT] && state[MODALS][modalName.profile.PORTFOLIO_EDIT].open,
         }),
 
+        ...mapGetters(CABINET_MODULE_PATH, [FULL_NAME]),
         ...mapState(CABINET_MODULE_PATH, [
             AVATAR,
-            BIRTHDAY,
-            GENDER,
-            PHONE,
-            EMAIL,
-            PORTFOLIO,
-            ACTIVITIES,
-            REQUISITES,
             HAS_PASSWORD,
             SOCIAL,
-            CERTIFICATES,
             LAST_NAME,
             FIRST_NAME,
-            REFERRAL_PERSONAL_DISCOUNT,
-
-            CAN_EDIT_REFERRAL_CODE,
+            PHONE,
+            CERTIFICATES,
+            PORTFOLIO,
         ]),
-        ...mapGetters(CABINET_MODULE_PATH, [FULL_NAME, PROFILES_STRING]),
-
-        serverOptions() {
-            const that = this;
-
-            return {
-                process: async (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
-                    try {
-                        const formData = new FormData();
-                        formData.append(fieldName, file, file.name);
-                        const data = await that[UPLOAD_CERTIFICATE](formData);
-                        load(data.id);
-                    } catch (err) {
-                        error(err);
-                    }
-
-                    // Should expose an abort method so the request can be cancelled
-                    return {
-                        abort: () => {
-                            // This function is entered if the user has tapped the cancel button
-                            //request.abort();
-                            // Let FilePond know the request has been cancelled
-                            abort();
-                        },
-                    };
-                },
-
-                load: async (source, load, error, progress, abort, headers) => {
-                    try {
-                        const name = source.url.split('/').pop();
-                        const blob = await that[LOAD_CERTIFICATE](name);
-                        blob.name = source.name;
-                        load(blob);
-                    } catch (err) {
-                        error(err);
-                    }
-
-                    // Should expose an abort method so the request can be cancelled
-                    return {
-                        abort: () => {
-                            // User tapped cancel, abort our ongoing actions here
-                            // Let FilePond know the request has been cancelled
-                            abort();
-                        },
-                    };
-                },
-
-                revert: async (uniqueFileId, load, error) => {
-                    try {
-                        await that[DELETE_CERTIFICATE](Number(uniqueFileId));
-                        load();
-                    } catch (err) {
-                        error(err);
-                    }
-                },
-
-                remove: async (source, load, error) => {
-                    try {
-                        await that[DELETE_CERTIFICATE](Number(source.id));
-                        load();
-                    } catch (err) {
-                        error(err);
-                    }
-                },
-
-                fetch: null,
-            };
-        },
-
-        computedBirthday() {
-            const birthday = this[BIRTHDAY];
-            if (!birthday) return null;
-            const date = new Date(birthday);
-            return date.toLocaleDateString(this[LOCALE], monthLongDateSettings);
-        },
 
         avatarPlaceholder() {
             return `${(this[LAST_NAME] && this[LAST_NAME].slice(0, 1)) || ''}${(this[FIRST_NAME] &&
@@ -520,24 +238,12 @@ export default {
                 ''}`;
         },
 
-        labelTemplate() {
-            return "<span class='filepond--label-action'>Выберите файл</span> или перетащите его сюда";
-        },
-
         avatarAcceptedTypes() {
             return avatarAcceptedTypes;
         },
 
-        acceptedTypes() {
-            return Object.keys(this.expectedTypesMap);
-        },
-
         expectedTypesMap() {
             return acceptedTypes;
-        },
-
-        certificateRowName() {
-            return `Файлы формата ${Object.values(this.expectedTypesMap).join(', ')}, не более 5 МБ каждый.`;
         },
 
         socialMap() {
@@ -563,32 +269,12 @@ export default {
     methods: {
         ...mapActions(AUTH_MODULE, [GET_SOCIAL_LINK]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(CABINET_MODULE_PATH, [
-            FETCH_CABINET_DATA,
-            UPDATE_AVATAR,
-            DELETE_AVATAR,
-            DELETE_SOCIAL,
-            UPLOAD_CERTIFICATE,
-            DELETE_CERTIFICATE,
-            LOAD_CERTIFICATE,
-        ]),
-
-        fileValidateTypeDetectType(source, type) {
-            return fileValidation(source, type);
-        },
-
-        onCopyToClipboard(e) {
-            const link = generateReferralLink(this[REFERRAL_CODE]);
-            const result = saveToClipboard(link);
-            const message = result ? 'Успешно скопировано' : 'Не удается скопировать';
-            this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
-            e.target.focus();
-        },
+        ...mapActions(CABINET_MODULE_PATH, [FETCH_CABINET_DATA, UPDATE_AVATAR, DELETE_AVATAR, DELETE_SOCIAL]),
 
         onScrollToPrivate() {
-            const { panel } = this.$refs;
+            const { personal } = this.$refs;
             window.scrollTo({
-                top: panel.$el.offsetTop,
+                top: personal.$el.offsetTop,
                 behavior: 'smooth',
             });
         },
@@ -616,36 +302,12 @@ export default {
             }
         },
 
-        onOpenDetailsModal() {
-            this[CHANGE_MODAL_STATE]({ name: modalName.profile.DETAILS, open: true });
-        },
-
         onOpenPortfoliosModal() {
             this[CHANGE_MODAL_STATE]({ name: modalName.profile.PORTFOLIO_EDIT, open: true });
         },
 
-        onOpenActivitiesEditModal() {
-            this[CHANGE_MODAL_STATE]({ name: modalName.profile.ACTIVITIES_EDIT, open: true });
-        },
-
-        onOpenEmailModal() {
-            this[CHANGE_MODAL_STATE]({ name: modalName.profile.EMAIL_EDIT, open: true });
-        },
-
-        onOpenPhoneModal() {
-            this[CHANGE_MODAL_STATE]({ name: modalName.profile.PHONE_EDIT, open: true });
-        },
-
-        onOpenPersonalModal() {
-            this[CHANGE_MODAL_STATE]({ name: modalName.profile.PERSONAL_EDIT, open: true });
-        },
-
         onOpenPasswordModal() {
             this[CHANGE_MODAL_STATE]({ name: modalName.profile.PASSWORD_EDIT, open: true });
-        },
-
-        onOpenReferralCodeModal() {
-            this[CHANGE_MODAL_STATE]({ name: modalName.profile.REFERRAL_CODE_EDIT, open: true });
         },
     },
 
@@ -682,18 +344,6 @@ export default {
                 }
                 next();
             });
-    },
-
-    beforeMount() {
-        const certificates = this[CERTIFICATES];
-        this.files = certificates.map(c => {
-            return {
-                source: c,
-                options: {
-                    type: 'local',
-                },
-            };
-        });
     },
 };
 </script>
