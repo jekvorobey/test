@@ -7,6 +7,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const httpProxy = require('express-http-proxy');
+const request = require('superagent');
 const gracefulShutdown = require('http-graceful-shutdown');
 
 const favicon = require('serve-favicon');
@@ -21,16 +22,16 @@ const ServerLogger = require('./src/services/LogService/ServerLogger');
 
 const logger = new ServerLogger();
 
-const resolve = file => path.resolve(__dirname, file);
+const resolve = (file) => path.resolve(__dirname, file);
 
 const serve = (resourcePath, cache) =>
     express.static(resolve(resourcePath), {
         maxAge: cache ? 1000 * 60 * 60 * 24 * 365 : 0,
     });
 
-const proxy = hostname =>
+const proxy = (hostname) =>
     httpProxy(hostname, {
-        proxyReqPathResolver: req => req.originalUrl,
+        proxyReqPathResolver: (req) => req.originalUrl,
     });
 
 const app = express();
@@ -67,7 +68,7 @@ function render(req, res, env) {
         if (!matches || typeof matches[1] === 'undefined') throw new Error('Hostname is not matches by regex');
         app_root = path.resolve(sites_folder, `${matches[1]}_front.ibt-mas.greensight.ru`);
 
-        const handleError = err => {
+        const handleError = (err) => {
             if (err.url) {
                 logger.warn(`redirect: ${err.url}`);
                 res.redirect(err.code || 302, err.url);
@@ -199,17 +200,29 @@ for (let i = 0; i < cacheRoutes.length; i++) {
     const entry = cacheRoutes[i];
     app.use(
         entry.path,
-        routeCache.cacheSeconds(entry.time, req => req.originalUrl)
+        routeCache.cacheSeconds(entry.time, (req) => req.originalUrl)
     );
 }
 
 app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());
+app.use('/catalog/export', async (req, res, next) => {
+    try {
+        const baseURL = `${req.protocol}://${req.get('host')}`;
+        const {
+            body: { file_id, type },
+        } = await request.get(`${baseURL}/v1/catalog/export`).query({ ...req.query });
+        res.redirect(`${baseURL}/files/original/${file_id}`);
+    } catch (error) {
+        res.status(error.status).send(error.response && error.response.text);
+    }
+});
+
 app.get('*', (req, res) => render(req, res, env));
 app.listen(port, () => logger.success(`server started at port ${port}`));
 
 function onCleanup(signal) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         logger.info('called signal: ', signal);
         resolve();
     });

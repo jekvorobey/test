@@ -6,6 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const httpProxy = require('express-http-proxy');
+const request = require('superagent');
 const gracefulShutdown = require('http-graceful-shutdown');
 
 const LRUCache = require('lru-cache');
@@ -24,16 +25,16 @@ const ServerLogger = require('./src/services/LogService/ServerLogger');
 const logger = new ServerLogger();
 const setupDevServer = require('./build/setup-dev-server');
 
-const resolve = file => path.resolve(__dirname, file);
+const resolve = (file) => path.resolve(__dirname, file);
 
 const serve = (resourcePath, cache) =>
     express.static(resolve(resourcePath), {
         maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 365 : 0,
     });
 
-const proxy = hostname =>
+const proxy = (hostname) =>
     httpProxy(hostname, {
-        proxyReqPathResolver: req => req.originalUrl,
+        proxyReqPathResolver: (req) => req.originalUrl,
     });
 
 const app = express();
@@ -124,7 +125,7 @@ function render(req, res, env) {
 
     renderer
         .renderToString(context)
-        .then(html => {
+        .then((html) => {
             res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
             res.setHeader('Pragma', 'no-cache');
             res.setHeader('Expires', '0');
@@ -207,7 +208,7 @@ if (isProd) {
         const entry = cacheRoutes[i];
         app.use(
             entry.path,
-            routeCache.cacheSeconds(entry.time, req => req.originalUrl)
+            routeCache.cacheSeconds(entry.time, (req) => req.originalUrl)
         );
     }
 }
@@ -218,11 +219,26 @@ const renderFunction = isProd
 
 app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());
+app.use('/catalog/export', async (req, res, next) => {
+    try {
+        const baseURL = `${req.protocol}://${req.get('host')}`;
+        const {
+            body: { file_id, type },
+        } = await request.get(`${baseURL}/v1/catalog/export`).query({ ...req.query });
+        const fileRes = await request.get(`${baseURL}/files/original/${file_id}`);
+        res.setHeader('content-type', fileRes.get('content-type'));
+        res.setHeader('content-disposition', fileRes.get('content-disposition'));
+        res.send(fileRes.text);
+    } catch (error) {
+        res.status(error.status).send(error.response && error.response.text);
+    }
+});
+
 app.get('*', renderFunction);
 app.listen(port, host, () => logger.success(`server started at ${host}:${port}`));
 
 function onCleanup(signal) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         logger.info('called signal: ', signal);
         resolve();
     });

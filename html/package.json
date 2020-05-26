@@ -78,6 +78,7 @@
         "regenerator-runtime": "^0.13.5",
         "route-cache": "0.4.4",
         "serve-favicon": "^2.5.0",
+        "superagent": "^5.2.2",
         "v-tooltip": "^2.0.3",
         "vue": "^2.6.11",
         "vue-apexcharts": "^1.5.3",
