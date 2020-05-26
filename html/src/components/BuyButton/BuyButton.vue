@@ -12,7 +12,7 @@ import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY } from '@store/modules/Auth';
 
-import { modalName } from '@enums';
+import { modalName, authMode } from '@enums';
 
 export default {
     name: 'buy-button',
@@ -48,7 +48,7 @@ export default {
             const hasSession = this[HAS_SESSION];
             if (!hasSession) {
                 this[CHANGE_MODAL_STATE]({ name: modalName.general.AUTH, open: true, state: {
-                    activeTab: 'login',
+                    activeTab: authMode.LOGIN,
                 }});
                 return false;
             }

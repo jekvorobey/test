@@ -22,7 +22,7 @@ import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
-import { modalName } from '@enums';
+import { modalName, authMode } from '@enums';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/wishlist-full.svg';
 import '@images/sprites/wishlist-small.svg';
@@ -73,7 +73,7 @@ export default {
             const hasSession = this[HAS_SESSION];
             if (!hasSession) {
                 this[CHANGE_MODAL_STATE]({ name: modalName.general.AUTH, open: true, state: {
-                    activeTab: 'login',
+                    activeTab: authMode.LOGIN,
                 }});
                 return false;
             }

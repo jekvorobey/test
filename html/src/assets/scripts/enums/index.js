@@ -230,3 +230,8 @@ export const cookieNames = Object.freeze({
     REFERRAL: 'referral',
     IBT_GEOLOCATION: 'ibt_geoc',
 });
+
+export const authMode = Object.freeze({
+    LOGIN: 0,
+    REGISTRATION: 1,
+});

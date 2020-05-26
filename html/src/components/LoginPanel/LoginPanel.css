@@ -8,6 +8,11 @@
         margin-bottom: calc(var(--gs) * 3);
     }
 
+    &__no-account {
+        display: block;
+        margin: 0 auto;
+    }
+
     &__form {
         &-input {
             flex: 1;

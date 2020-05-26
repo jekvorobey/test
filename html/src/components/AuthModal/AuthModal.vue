@@ -1,13 +1,13 @@
 <template>
-    <general-modal type="" class="auth-modal" @close="onClose" :is-mobile="isTablet" :header="header">
+    <general-modal type="sm" class="auth-modal" @close="onClose" :is-mobile="isTablet" :header="header">
         <template v-slot:content>
             <v-tabs :items="items" key-field="id" :activeTab.sync="activeTab">
                 <template v-slot:header="{ item }">
                     {{ item.title }}
                 </template>
                 <template v-slot:panel="{ item }">
-                    <login-panel v-if="item.type === 'login'" @set-title="onSetTitle" @change-tab="onChangeTab" />
-                    <registration-panel v-else-if="item.type === 'registration'" @set-title="onSetTitle" @change-tab="onChangeTab" />
+                    <login-panel v-if="item.type === authMode.LOGIN" @set-title="onSetTitle" @change-tab="onChangeTab" />
+                    <registration-panel v-else-if="item.type === authMode.REGISTRATION" @set-title="onSetTitle" @change-tab="onChangeTab" />
                 </template>
             </v-tabs>
         </template>
@@ -26,7 +26,7 @@ import { mapState, mapActions } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { modalName } from '@enums';
+import { modalName, authMode } from '@enums';
 import './AuthModal.css';
 
 const NAME = modalName.general.AUTH;
@@ -49,12 +49,12 @@ export default {
                 {
                     id: 1,
                     title: 'Войти',
-                    type: 'login',
+                    type: authMode.LOGIN,
                 },
                 {
                     id: 2,
                     title: 'Регистрация',
-                    type: 'registration',
+                    type: authMode.REGISTRATION,
                 },
             ],
             title: null,
@@ -78,14 +78,6 @@ export default {
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
-        getTabCode(tab) {
-            switch(tab) {
-                case 'login': return 0;
-                case 'registration': return 1;
-                default: return 0;
-            }
-        },
-
         onClose() {
             this.$emit('close');
             this.CHANGE_MODAL_STATE({ name: NAME, open: false });
@@ -96,12 +88,16 @@ export default {
         },
 
         onChangeTab(tab) {
-            this.activeTab = this.getTabCode(tab);
+            this.activeTab = tab;
         },
     },
 
+    created() {
+        this.authMode = authMode;
+    },
+
     beforeMount() {
-        this.activeTab = this.getTabCode(this.modalState.activeTab);
+        this.activeTab = this.modalState.activeTab;
     },
 };
 </script>

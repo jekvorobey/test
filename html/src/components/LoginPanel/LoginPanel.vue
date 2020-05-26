@@ -182,7 +182,7 @@ import {
 import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
 import { rawPhone } from '@util';
 import { phoneMaskOptions } from '@settings';
-import { modalName } from '@enums';
+import { modalName, authMode } from '@enums';
 import { verificationCodeType } from '@enums/auth';
 import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
@@ -470,7 +470,7 @@ export default {
         },
 
         onRegister() {
-            this.$emit('change-tab', 'registration');
+            this.$emit('change-tab', authMode.REGISTRATION);
         },
 
         startCounter() {

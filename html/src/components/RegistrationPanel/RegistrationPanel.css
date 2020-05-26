@@ -12,6 +12,11 @@
         }
     }
 
+    &__has-account {
+        display: block;
+        margin: 0 auto;
+    }
+
     &__form {
         &-confirmation,
         &-phone {
