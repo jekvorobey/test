@@ -131,7 +131,7 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
 
 import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY, REFERRAL_PARTNER, REFERRAL_CODE } from '@store/modules/Auth';
-import { GET_SOCIAL_LINK, CHECK_SESSION } from '@store/modules/Auth/actions';
+import { GET_SOCIAL_LINK, CHECK_SESSION, FETCH_USER } from '@store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -267,7 +267,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(AUTH_MODULE, [GET_SOCIAL_LINK]),
+        ...mapActions(AUTH_MODULE, [GET_SOCIAL_LINK, FETCH_USER]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(CABINET_MODULE_PATH, [FETCH_CABINET_DATA, UPDATE_AVATAR, DELETE_AVATAR, DELETE_SOCIAL]),
 
@@ -281,10 +281,12 @@ export default {
 
         onImageChanged(data) {
             this[UPDATE_AVATAR](data);
+            this[FETCH_USER]();
         },
 
         onImageDelete() {
             this[DELETE_AVATAR]();
+            this[FETCH_USER]();
         },
 
         async onChangeSocial(driver) {

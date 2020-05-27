@@ -92,7 +92,7 @@ import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { FETCH_FAVORITES_ALL } from '@store/modules/Favorites/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
-import { CHECK_SESSION, FETCH_USER } from '@store/modules/Auth/actions';
+import { CHECK_SESSION, FETCH_USER, FETCH_UNREAD_MESSAGES } from '@store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -155,7 +155,7 @@ export default {
     methods: {
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN]),
         ...mapActions(GEO_MODULE, [SET_SELECTED_CITY_BY_IP]),
-        ...mapActions(AUTH_MODULE, [CHECK_SESSION, FETCH_USER]),
+        ...mapActions(AUTH_MODULE, [CHECK_SESSION, FETCH_USER, FETCH_UNREAD_MESSAGES]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
         ...mapActions(CHECKOUT_MODULE, [CLEAR_CHECKOUT_DATA]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
@@ -185,6 +185,15 @@ export default {
         stopSessionTimer() {
             clearInterval(this.sessionTimer);
         },
+
+        startUnreadCheckTimer() {
+            this.stopUnreadCheckTimer();
+            this.unreadCheckTimer = setInterval(this[FETCH_UNREAD_MESSAGES], interval.FIVE_MINUTES);
+        },
+
+        stopUnreadCheckTimer() {
+            clearInterval(this.unreadCheckTimer);
+        },
     },
 
     watch: {
@@ -193,9 +202,11 @@ export default {
                 await this[FETCH_USER]();
                 if (this[CAN_BUY]) this[FETCH_CART_DATA]();
                 await this[FETCH_FAVORITES_ALL]();
+                this.startUnreadCheckTimer();
             } else {
                 this[CLEAR_CART_DATA]();
                 this[CLEAR_CHECKOUT_DATA]();
+                this.stopUnreadCheckTimer();
             }
             this.startSessionTimer();
         },
@@ -216,6 +227,10 @@ export default {
 
     beforeMount() {
         this.startSessionTimer();
+        if (this[HAS_SESSION]) {
+            this[FETCH_UNREAD_MESSAGES]();
+            this.startUnreadCheckTimer();
+        }
     },
 
     mounted() {

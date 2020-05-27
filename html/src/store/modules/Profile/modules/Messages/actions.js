@@ -1,7 +1,7 @@
 import { storeErrorHandler } from '@util/store';
 import { getProfileChats, getProfileChatMessages, createProfileChat, createProfileChatMessage } from '@api';
 
-import { SET_CHATS, SET_CHAT_MESSAGES } from './mutations';
+import { SET_CHATS, SET_CHAT_MESSAGES, PUSH_NEW_MESSAGE } from './mutations';
 
 export const FETCH_CHATS = 'FETCH_CHATS';
 export const FETCH_CHAT_MESSAGES = 'FETCH_CHAT_MESSAGES';
@@ -33,9 +33,10 @@ export default {
         }
     },
 
-    async [CREATE_CHAT]({ state, commit }, formData = {}) {
+    async [CREATE_CHAT]({ state, commit, dispatch }, formData = {}) {
         try {
-            const data = await createProfileChat(formData);
+            const { chat } = await createProfileChat(formData);
+            dispatch(FETCH_CHATS);
             //commit(SET_CHAT, data);
         } catch (error) {
             storeErrorHandler(CREATE_CHAT, true)(error);
@@ -45,6 +46,7 @@ export default {
     async [CREATE_CHAT_MESSAGE]({ state, commit }, { chatId, message, files }) {
         try {
             const data = await createProfileChatMessage(chatId, message, files);
+            commit(PUSH_NEW_MESSAGE, data.message);
             //commit(SET_CHAT_MESSAGE, data);
         } catch (error) {
             storeErrorHandler(CREATE_CHAT_MESSAGE, true)(error);

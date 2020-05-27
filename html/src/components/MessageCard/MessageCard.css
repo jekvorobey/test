@@ -22,6 +22,7 @@
         line-height: 40px;
         letter-spacing: 0.05em;
         text-transform: uppercase;
+        overflow: hidden;
 
         @media (--tablet) {
             width: calc(var(--gs) * 6);

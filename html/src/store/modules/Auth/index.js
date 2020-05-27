@@ -9,6 +9,7 @@ export const USER = 'user';
 export const REFERRAL_CODE = 'referralCode';
 export const REFERRAL_PARTNER = 'referralPartner';
 export const CAN_BUY = 'canBuy';
+export const UNREAD_MESSAGES = 'unreadMessages';
 
 export default function createModule() {
     return {
@@ -17,6 +18,7 @@ export default function createModule() {
         state: {
             [HAS_SESSION]: false,
             [USER]: null,
+            [UNREAD_MESSAGES]: 0,
         },
         actions,
         mutations,

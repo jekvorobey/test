@@ -31,6 +31,10 @@ export function getUser() {
     return $http.get('/v1/auth/user');
 }
 
+export function getUserInfo() {
+    return $http.get('/v1/auth/user-name-avatar');
+}
+
 export function loginByPassword(payload) {
     return $http.post('/v1/auth/loginByPassword', payload);
 }
@@ -384,6 +388,8 @@ export function getPromocodeData(isArchive = 0) {
     });
 }
 
+// messages
+
 export function getProfileChats() {
     return $http.get('/v1/lk/messages/');
 }
@@ -396,8 +402,15 @@ export function getProfileChatMessages(chatId) {
     return $http.get(`/v1/lk/messages/${chatId}`);
 }
 
-export function createProfileChatMessage(chatId, formData) {
-    return $http.post(`/v1/lk/messages/${chatId}`, formData);
+export function createProfileChatMessage(chatId, message, files) {
+    return $http.post(`/v1/lk/messages/${chatId}`, {
+        message,
+        files
+    });
+}
+
+export function getUnreadMesagesCount() {
+    return $http.get('/v1/lk/messages/unread-count');
 }
 
 export function getBonusesData(pageNum, perPage) {

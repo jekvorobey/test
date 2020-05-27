@@ -15,8 +15,10 @@ import {
     resetPassword,
     getUser,
     setSessionReferralCode,
+    getUserInfo,
+    getUnreadMesagesCount,
 } from '@api';
-import { SET_HAS_SESSION, SET_USER } from './mutations';
+import { SET_HAS_SESSION, SET_USER, SET_UNREAD_MESSAGES } from './mutations';
 
 export const CHECK_SESSION = 'CHECK_SESSION';
 
@@ -31,6 +33,7 @@ export const CHECK_CODE = 'CHECK_CODE';
 
 export const RESET_PASSWORD = 'RESET_PASSWORD';
 export const FETCH_USER = 'FETCH_USER';
+export const FETCH_UNREAD_MESSAGES = 'FETCH_UNREAD_MESSAGES';
 
 export const SET_REFERRER_CODE = 'SET_REFERRER_CODE';
 export const SET_SESSION_REFERRAL_CODE = 'SET_SESSION_REFERRAL_CODE';
@@ -137,7 +140,8 @@ export default {
 
         try {
             const { can_buy: canBuy, referral_code: referralCode, referral_partner: referralPartner } = await getUser();
-            user = { canBuy, referralCode, referralPartner };
+            const { avatar, first_name: firstName, last_name: lastName } = await getUserInfo();
+            user = { canBuy, referralCode, referralPartner, avatar, firstName, lastName };
             commit(SET_USER, user);
             return user;
         } catch (error) {
@@ -148,4 +152,13 @@ export default {
             return user;
         }
     },
+
+    async [FETCH_UNREAD_MESSAGES]({ commit }) {
+        try {
+            const { count } = await getUnreadMesagesCount();
+            commit(SET_UNREAD_MESSAGES, count);
+        } catch(error) {
+            storeErrorHandler(FETCH_UNREAD_MESSAGES)(error);
+        }
+    }
 };
