@@ -21,11 +21,13 @@
             </image-picker>
         </div>
 
-        <attention-panel v-if="!referralPartner" class="cabinet-view__attention">
+        <attention-panel v-if="!canBuy" class="cabinet-view__attention">
             <div class="cabinet-view__attention-inner">
                 <div class="cabinet-view__attention-inner-info">
                     <strong>Профессиональный статус: не подтвержден</strong><br />
-                    <template v-if="!phone || (portfolio && portfolio.length === 0)">
+                    <template
+                        v-if="((portfolio && portfolio.length === 0) && (certificates && certificates.length === 0))"
+                    >
                         Укажи ссылку на свой аккаунт бьюти-профессионала в соцсетях или загрузи скан профильного диплома
                         либо другого подтверждающего документа.
                     </template>
@@ -34,7 +36,7 @@
                     </template>
                 </div>
                 <v-button
-                    v-if="!phone || (portfolio && portfolio.length === 0)"
+                    v-if="((portfolio && portfolio.length === 0) && (certificates && certificates.length === 0))"
                     class="btn--outline cabinet-view__attention-inner-btn"
                     @click="onOpenPortfoliosModal"
                 >
