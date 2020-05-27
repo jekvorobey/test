@@ -49,7 +49,11 @@
             </div>
 
             <div class="portfolio-edit-modal__submit">
-                <v-button class="portfolio-edit-modal__submit-btn" @click="onSubmit" :disabled="isDisabled">
+                <v-button
+                    class="portfolio-edit-modal__submit-btn"
+                    @click="onSubmit"
+                    :disabled="isDisabled || inProcess"
+                >
                     Отправить
                 </v-button>
             </div>
@@ -119,6 +123,7 @@ export default {
     data() {
         const index = 0;
         return {
+            inProcess: false,
             editablePortfolio: [],
             files: [],
             index,
@@ -174,9 +179,10 @@ export default {
 
         async onSubmit() {
             this.$v.$touch();
-            const { files, editablePortfolio } = this;
-
             if (this.$v.editablePortfolio.$invalid && this.$v.files.$invalid) return;
+
+            this.inProcess = true;
+            const { files, editablePortfolio } = this;
 
             if (!this.$v.editablePortfolio.$invalid) await this[UPDATE_PORTFOLIO](editablePortfolio);
             if (!this.$v.files.$invalid)
@@ -188,7 +194,9 @@ export default {
                     })
                 );
 
-            this[FETCH_CABINET_DATA](this.$isServer);
+            try {
+                this[FETCH_CABINET_DATA](this.$isServer);
+            } catch (error) {}
             this.onClose();
         },
 
