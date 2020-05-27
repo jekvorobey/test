@@ -40,7 +40,7 @@
                 </ul>
 
                 <v-button class="btn--outline portfolio-edit-modal__list-btn" @click="onAddPortfolio">
-                    Добавить поле
+                    Добавить ссылку
                 </v-button>
             </div>
             <div class="portfolio-edit-modal__section">
@@ -49,7 +49,11 @@
             </div>
 
             <div class="portfolio-edit-modal__submit">
-                <v-button class="portfolio-edit-modal__submit-btn" @click="onSubmit">
+                <v-button
+                    class="portfolio-edit-modal__submit-btn"
+                    @click="onSubmit"
+                    :disabled="isDisabled || inProcess"
+                >
                     Отправить
                 </v-button>
             </div>
@@ -98,6 +102,8 @@ export default {
 
     validations: {
         editablePortfolio: {
+            oneOrMore: value => value && value.length > 0,
+
             $each: {
                 name: {
                     required,
@@ -108,12 +114,17 @@ export default {
                 },
             },
         },
+
+        files: {
+            oneOrMore: value => value && value.length > 0,
+        },
     },
 
     data() {
         const index = 0;
         return {
-            editablePortfolio: [{ id: index, name: null, link: null }],
+            inProcess: false,
+            editablePortfolio: [],
             files: [],
             index,
         };
@@ -135,6 +146,10 @@ export default {
         computedItems() {
             return this.$v.editablePortfolio.$each.$iter;
         },
+
+        isDisabled() {
+            return this.$v.editablePortfolio.$invalid && this.$v.files.$invalid;
+        },
     },
 
     methods: {
@@ -142,11 +157,11 @@ export default {
         ...mapActions(CABINET_MODULE_PATH, [UPDATE_PORTFOLIO, UPLOAD_CERTIFICATE, FETCH_CABINET_DATA]),
 
         nameError(name) {
-            if (name.$dirty && !name.required) return 'Обязательное поле';
+            if (this.$v.files.$invalid && name.$dirty && !name.required) return 'Обязательное поле';
         },
 
         linkError(link) {
-            if (link.$dirty && !link.required) return 'Обязательное поле';
+            if (this.$v.files.$invalid && link.$dirty && !link.required) return 'Обязательное поле';
         },
 
         onAddPortfolio() {
@@ -164,9 +179,13 @@ export default {
 
         async onSubmit() {
             this.$v.$touch();
-            if (!this.$v.$invalid) {
-                const { files, editablePortfolio } = this;
-                await this[UPDATE_PORTFOLIO](editablePortfolio);
+            if (this.$v.editablePortfolio.$invalid && this.$v.files.$invalid) return;
+
+            this.inProcess = true;
+            const { files, editablePortfolio } = this;
+
+            if (!this.$v.editablePortfolio.$invalid) await this[UPDATE_PORTFOLIO](editablePortfolio);
+            if (!this.$v.files.$invalid)
                 await Promise.all(
                     files.map(file => {
                         const formData = new FormData();
@@ -174,9 +193,11 @@ export default {
                         return this[UPLOAD_CERTIFICATE](formData);
                     })
                 );
+
+            try {
                 this[FETCH_CABINET_DATA](this.$isServer);
-                this.onClose();
-            }
+            } catch (error) {}
+            this.onClose();
         },
 
         onClose() {
