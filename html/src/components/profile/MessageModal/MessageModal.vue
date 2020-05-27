@@ -102,7 +102,6 @@ export default {
             try {
                 const { form } = this.$refs;
                 const formData = new FormData(form);
-                debugger;
                 await this[CREATE_CHAT](formData);
                 this.$emit('created');
                 this.onClose();

@@ -2,6 +2,7 @@
     <li class="message-card" @click="onCardClick">
         <div class="message-card__icon">
             <v-svg v-if="isSystem" name="logo" width="30" height="30" />
+            <v-picture v-else-if="user.avatar" :image="avatar" />
             <span v-else>{{ iconText }}</span>
         </div>
         <div class="message-card__body">
@@ -25,8 +26,14 @@
 
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 import VClamp from 'vue-clamp';
 
+import { mapState } from 'vuex';
+
+import { NAME as AUTH_MODULE, USER } from '@store/modules/Auth';
+
+import { generateFileOriginalPath } from '@util/file';
 import '@images/sprites/logo.svg';
 import './MessageCard.css';
 
@@ -35,6 +42,7 @@ export default {
 
     components: {
         VSvg,
+        VPicture,
         VClamp,
     },
 
@@ -85,8 +93,14 @@ export default {
     },
 
     computed: {
+        ...mapState(AUTH_MODULE, [USER]),
+
         iconText() {
-            return `${this.name ? this.name.slice(0, 1) : ''}${this.lastName ? this.lastName.slice(0, 1) : ''}`;
+            return `${this[USER].firstName ? this[USER].firstName.slice(0, 1) : ''}${this[USER].lastName ? this[USER].lastName.slice(0, 1) : ''}`;
+        },
+
+        avatar() {
+            return generateFileOriginalPath(this[USER].avatar);
         },
     },
 

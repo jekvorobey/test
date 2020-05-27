@@ -15,7 +15,7 @@ export default {
             commit(SET_PRODUCT_PREVIEW, data);
         } catch (error) {
             commit(SET_PRODUCT_PREVIEW_STATUS, requestStatus.ERROR);
-            storeErrorHandler(FETCH_PRODUCT_PREVIEW)(error);
+            storeErrorHandler(FETCH_PRODUCT_PREVIEW, true)(error);
         }
     },
 };

@@ -12,11 +12,29 @@
         <link rel="apple-touch-icon" sizes="120x120" href="/assets/images/icons/logo-120.png" />
         <link rel="manifest" href="/assets/manifest.json" />
         {{{ renderResourceHints() }}} 
-        {{{ renderStyles() }}}
+		{{{ renderStyles() }}}
+
+        <script type="text/javascript">
+            var rrPartnerId = '5eaaa38e97a5251ce0bd43ba';
+            var rrApi = {};
+            var rrApiOnReady = rrApiOnReady || [];
+            rrApi.addToBasket = rrApi.order = rrApi.categoryView = rrApi.view = rrApi.recomMouseDown = rrApi.recomAddToCart = function () {};
+            (function (d) {
+                var ref = d.getElementsByTagName('script')[0];
+                var apiJs,
+                    apiJsId = 'rrApi-jssdk';
+                if (d.getElementById(apiJsId)) return;
+                apiJs = d.createElement('script');
+                apiJs.id = apiJsId;
+                apiJs.async = true;
+                apiJs.src = '//cdn.retailrocket.ru/content/javascript/tracking.js';
+                ref.parentNode.insertBefore(apiJs, ref);
+            })(document);
+        </script>
     </head>
     <body>
         <!--vue-ssr-outlet-->
         {{{ renderState() }}} 
-        {{{ renderScripts() }}}
+		{{{ renderScripts() }}}
     </body>
 </html>

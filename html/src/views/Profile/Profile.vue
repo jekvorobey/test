@@ -92,7 +92,7 @@ import profileModule, { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modul
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as AUTH_MODULE, HAS_SESSION, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, USER, REFERRAL_PARTNER, UNREAD_MESSAGES } from '@store/modules/Auth';
 
 import { cancelRoute } from '@settings';
 import { $store } from '@services';
@@ -118,7 +118,7 @@ export default {
 
     computed: {
         ...mapState(PROFILE_MODULE, [BREADCRUMBS]),
-        ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION, UNREAD_MESSAGES]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
@@ -139,7 +139,7 @@ export default {
                         { name: 'Addresses', exact: true },
                         { name: 'Payment', exact: true },
                         { name: 'Subscribes', exact: true },
-                        { name: 'Messages', displayName: this.$tc('profile.format.messages', 5) },
+                        { name: 'Messages', displayName: this.$tc('profile.format.messages', this[UNREAD_MESSAGES]) },
                         { name: 'Certificates', exact: true },
                         { name: 'Bonuses', exact: true },
                         { name: 'Orders' },

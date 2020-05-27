@@ -39,7 +39,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { FAVORITE_ITEMS_COUNT } from '@store/modules/Favorites/getters';
 
-import { modalName } from '@enums';
+import { modalName, authMode } from '@enums';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/wishlist-full.svg';
 import '@images/sprites/account-middle.svg';
@@ -77,7 +77,9 @@ export default {
 
         onRegister() {
             if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
-            else this[CHANGE_MODAL_STATE]({ name: modalName.general.LOGIN, open: true });
+            else this[CHANGE_MODAL_STATE]({ name: modalName.general.AUTH, open: true, state: {
+                activeTab: authMode.LOGIN,
+            }});
         },
     },
 };

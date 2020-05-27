@@ -47,4 +47,30 @@
             }
         }
     }
+
+    &__controls {
+        display: flex;
+        margin-top: calc(var(--gs) * 4);
+
+        @media (--tablet-lg) {
+            padding: 0 calc(var(--gs) * 3);
+        }
+
+        @media (--tablet) {
+            display: block;
+        }
+
+        &-input {
+            width: 100%;
+        }
+
+        &-btn {
+            height: 100%;
+            margin-left: calc(var(--gs) * 2);
+
+            @media (--tablet) {
+                margin-left: 0;
+            }
+        }
+    }
 }

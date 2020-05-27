@@ -17,16 +17,16 @@
                 :message="message.message"
                 :name="message.name"
                 :last-name="message.lastName"
-                :title="`${message.name || ''} ${message.lastName || ''}`"
+                :title="getTitle(message)"
                 :date="message.date"
                 :is-system="message.isSystem"
             />
         </ul>
 
-        <!-- <div class="message-details-view__controls">
-            <v-input tag="textarea"></v-input>
-            <v-button>Отправить</v-button>
-        </div> -->
+        <div class="message-details-view__controls">
+            <v-input tag="textarea" class="message-details-view__controls-input" placeholder="Написать ответ" v-model="message"></v-input>
+            <v-button class="message-details-view__controls-btn" @click="onSendMessage" :disabled="isBtnDisabled && !message.length">Отправить</v-button>
+        </div>
     </section>
 </template>
 
@@ -45,7 +45,9 @@ import { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
 import { NAME as MESSAGES_MODULE, MESSAGES } from '@store/modules/Profile/modules/Messages';
-import { FETCH_CHAT_MESSAGES } from '@store/modules/Profile/modules/Messages/actions';
+import { FETCH_CHAT_MESSAGES, CREATE_CHAT_MESSAGE } from '@store/modules/Profile/modules/Messages/actions';
+
+import { NAME as AUTH_MODULE, USER } from '@store/modules/Auth';
 
 import { $store, $progress } from '@services';
 
@@ -67,10 +69,14 @@ export default {
     },
 
     data() {
-        return {};
+        return {
+            message: '',
+            isBtnDisabled: false,
+        };
     },
 
     computed: {
+        ...mapState(AUTH_MODULE, [USER]),
         ...mapState([LOCALE]),
         ...mapState(MESSAGES_MODULE_PATH, [MESSAGES]),
         ...mapState('route', {
@@ -89,10 +95,28 @@ export default {
 
     methods: {
         ...mapActions(PROFILE_MODULE, [UPDATE_BREADCRUMB]),
+        ...mapActions(MESSAGES_MODULE_PATH, [CREATE_CHAT_MESSAGE]),
 
         formatDate(date) {
             const dateObj = new Date(date);
             return dateObj.toLocaleDateString(this[LOCALE]);
+        },
+
+        getTitle(message) {
+            if (message.isSystem) {
+                return 'Команда Бессовестно Талантливый';
+            }
+            return `${this[USER].firstName} ${this[USER].lastName}`;
+        },
+
+        async onSendMessage() {
+            this.isBtnDisabled = true;
+            await this[CREATE_CHAT_MESSAGE]({
+                chatId: this.chatId,
+                message: this.message
+            });
+            this.message = '';
+            this.isBtnDisabled = false;
         },
     },
 

@@ -23,7 +23,7 @@ import GeneralPopupPanel from '@components/GeneralPopupPanel/GeneralPopupPanel.v
 import NavigationPanel from '@components/profile/NavigationPanel/NavigationPanel.vue';
 
 import { mapActions, mapState, mapGetters } from 'vuex';
-import { NAME as AUTH_MODULE, HAS_SESSION, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, USER, REFERRAL_PARTNER, UNREAD_MESSAGES } from '@store/modules/Auth';
 
 import './ProfileNavigationPanel.css';
 
@@ -39,7 +39,7 @@ export default {
     },
 
     computed: {
-        ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION, UNREAD_MESSAGES]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
@@ -50,7 +50,7 @@ export default {
                     id: 1,
                     routes: [
                         { name: 'Cabinet', exact: true },
-                        { name: 'Messages', displayName: this.$tc('profile.format.messages', 5) },
+                        { name: 'Messages', displayName: this.$tc('profile.format.messages', this[UNREAD_MESSAGES]) },
                         { name: 'Orders' },
                     ],
                 },

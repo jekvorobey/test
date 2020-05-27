@@ -40,7 +40,7 @@
                         :disabled="!selectedCard || !amount"
                         @click="onClickCashOut"
                     >
-                        Оформить вывод
+                        Вывод
                     </v-button>
                 </div>
             </div>

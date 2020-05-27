@@ -6,6 +6,7 @@ export const modalName = Object.freeze({
         ADD_TO_CART: 'add-to-cart-modal',
         CITY_SELECTION: 'city-selection-modal',
         NOTIFICATION: 'notification-modal',
+        AUTH: 'auth-modal',
     },
 
     product: {
@@ -49,6 +50,7 @@ export const injectionType = Object.freeze({
     HTTP: 'http',
     CONFIG: 'config',
     DADATA: 'dadata',
+    RETAIL_ROCKET: 'retailRocket',
     APPLICATION_CONTEXT: 'applicationContext',
 });
 
@@ -228,4 +230,9 @@ export const localeDateOptions = Object.freeze({
 export const cookieNames = Object.freeze({
     REFERRAL: 'referral',
     IBT_GEOLOCATION: 'ibt_geoc',
+});
+
+export const authMode = Object.freeze({
+    LOGIN: 0,
+    REGISTRATION: 1,
 });

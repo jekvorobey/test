@@ -165,7 +165,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
 import { rawPhone } from '@util';
 import { phoneMaskOptions } from '@settings';
-import { modalName } from '@enums';
+import { modalName, authMode } from '@enums';
 import { verificationCodeType } from '@enums/auth';
 import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
@@ -322,7 +322,9 @@ export default {
 
         onLogin() {
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
-            this[CHANGE_MODAL_STATE]({ name: modalName.general.LOGIN, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.AUTH, open: true, state: {
+                activeTab: authMode.LOGIN,
+            }});
         },
 
         async onRegisterBySocial(driver) {

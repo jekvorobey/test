@@ -1,4 +1,4 @@
-import { httpCodes, injectionType, modalName } from '@enums';
+import { httpCodes, injectionType, modalName, authMode } from '@enums';
 import { breakMiddleware } from '@util/router';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
@@ -13,8 +13,11 @@ export default async function registration({ to, next, container, nextMiddleware
         if (registration) {
             const store = container.get(injectionType.STORE);
             store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
-                name: modalName.general.REGISTRATION,
+                name: modalName.general.AUTH,
                 open: true,
+                state: {
+                    activeTab: authMode.REGISTRATION,
+                }
             });
 
             return next({

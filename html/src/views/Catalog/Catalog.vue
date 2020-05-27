@@ -153,9 +153,9 @@
                             >
                                 Очистить
                             </v-button>
-                            <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal"
-                                >Показать</v-button
-                            >
+                            <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal">
+                                Показать
+                            </v-button>
                         </div>
                     </v-sticky>
                 </template>
@@ -206,7 +206,7 @@ import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { $store, $progress, $logger } from '@services';
+import { $store, $progress, $logger, $retailRocket } from '@services';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
@@ -364,6 +364,11 @@ export default {
     },
 
     watch: {
+        code(value) {
+            const category = this[ACTIVE_CATEGORY];
+            if (category) $retailRocket.addCategoryView(category.id);
+        },
+
         sortValue(value, oldValue) {
             if (value !== oldValue) {
                 this.$router.replace({
@@ -414,7 +419,7 @@ export default {
             this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
         },
 
-        async fetchCatalog(to, from, showMore) {
+        async fetchCatalog(to, from, next, showMore) {
             try {
                 const {
                     params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
@@ -446,6 +451,7 @@ export default {
 
                 this.setSortValue(orderField, orderDirection);
                 this.$progress.finish();
+                next();
 
                 if (!showMore && page !== fromPage)
                     window.scrollTo({
@@ -554,9 +560,8 @@ export default {
             return next();
 
         if (this.showMore) {
-            this.fetchCatalog(to, from, this.showMore);
-        } else this.debounce_fetchCatalog(to, from);
-        next();
+            this.fetchCatalog(to, from, next, this.showMore);
+        } else this.debounce_fetchCatalog(to, from, next);
     },
 
     beforeRouteLeave(to, from, next) {
@@ -566,6 +571,8 @@ export default {
     },
 
     beforeMount() {
+        const category = this[ACTIVE_CATEGORY] || null;
+        if (category) $retailRocket.addCategoryView(category.id);
         this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
     },
 };

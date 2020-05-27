@@ -92,7 +92,7 @@ export default {
     [BONUS_PAYMENT]: (state, getters) => {
         const { bonusSpent = 0 } = getters[SUMMARY];
         const bonusPerRub = getters[BONUS_PER_RUB];
-        return bonusSpent * bonusPerRub;
+        return bonusSpent / bonusPerRub;
     },
 
     [CHECKOUT_STATUS]: (state) => state[CHECKOUT_STATUS] || {},

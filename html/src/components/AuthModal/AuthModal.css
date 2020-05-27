@@ -1,0 +1,36 @@
+.auth-modal {
+    .popup {
+        width: calc(var(--gs) * 55);
+
+        &__close {
+            top: 16px;
+            right: 16px;
+        }
+    }
+
+    .modal-body {
+        padding: calc(var(--gs) * 3);
+        padding-bottom: var(--gs);
+
+        @media(--tablet-lg) {
+            padding: 0;
+        }
+    }
+
+    .v-tabs {
+        &__header {
+            margin-right: calc(var(--gs) * 4);
+            border-bottom: 1px solid var(--cl-global);
+
+            @media(--tablet-lg) {
+                display: none;
+            }
+        }
+
+        &__panel {
+            @media (--tablet-lg) {
+                padding: calc(var(--gs) * 2);
+            }
+        }
+    }
+}

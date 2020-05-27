@@ -37,7 +37,7 @@
 
         &:first-of-type {
             text-align: left;
-            width: 20%;
+            min-width: 20%;
             margin-right: calc(var(--gs) * 3);
             padding: calc(var(--gs) * 4);
 
@@ -118,7 +118,7 @@
             }
 
             &-btn {
-                width: 30%;
+                flex: 1;
                 padding: 6px calc(var(--gs) * 2);
 
                 @media (--desktop) {
