@@ -50,6 +50,7 @@ export const injectionType = Object.freeze({
     HTTP: 'http',
     CONFIG: 'config',
     DADATA: 'dadata',
+    RETAIL_ROCKET: 'retailRocket',
     APPLICATION_CONTEXT: 'applicationContext',
 });
 

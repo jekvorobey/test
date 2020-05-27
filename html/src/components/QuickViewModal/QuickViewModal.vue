@@ -74,6 +74,7 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
+import { $logger, $retailRocket } from '@services';
 import { requestStatus, fileExtension, modalName } from '@enums';
 import { cartItemTypes } from '@enums/product';
 import { generatePictureSourcePath } from '@util/file';
@@ -142,6 +143,11 @@ export default {
     watch: {
         [SELECTED_CITY](value) {
             this.onSelectedCityChanged(value);
+        },
+
+        [PRODUCT_PREVIEW](value) {
+            const product = value || {};
+            $retailRocket.addProductView([product.id]);
         },
     },
 

@@ -676,7 +676,7 @@ import MapModal, { NAME as MAP_MODAL_NAME } from '@components/MapModal/MapModal.
 import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { $store, $progress, $logger } from '@services';
+import { $store, $progress, $logger, $retailRocket } from '@services';
 import { SCROLL } from '@store';
 
 import { NAME as AUTH_MODULE } from '@store/modules/Auth';
@@ -1016,6 +1016,11 @@ export default {
     },
 
     watch: {
+        [PRODUCT](value) {
+            const product = this[PRODUCT] || {};
+            $retailRocket.addProductView([product.id]);
+        },
+
         [SELECTED_CITY](value) {
             this.onSelectedCityChanged(value);
         },
@@ -1221,6 +1226,8 @@ export default {
     },
 
     beforeMount() {
+        const product = this[PRODUCT] || {};
+        $retailRocket.addProductView([product.id]);
         this.debounce_fetchProduct = _debounce(this.fetchProduct, 500);
     },
 };

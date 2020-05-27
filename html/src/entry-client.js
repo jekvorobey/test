@@ -11,6 +11,7 @@ import HttpService from '@services/HttpService/MockServiceAdapter';
 import ProgressService from '@services/ProgressService';
 import DadataHttpService from '@services/HttpService/DadataHttpService';
 import ApplicationContext from '@services/ApplicationContext';
+import RetailRocketService from '@services/RetailRocketService';
 
 import createApp from './app/app';
 
@@ -21,6 +22,7 @@ injectableClass(ClientLogger);
 injectableClass(ClientCookie);
 injectableClass(HttpService);
 injectableClass(DadataHttpService);
+injectableClass(RetailRocketService);
 
 injectClass(injectionType.STORE, DadataHttpService, 0);
 injectClass(injectionType.APPLICATION_CONTEXT, HttpService, 0);
@@ -35,26 +37,12 @@ ServiceLocator.createInstance(new Container({ skipBaseClassChecks: true }));
 const { $container } = ServiceLocator;
 
 $container.bind(injectionType.APPLICATION_CONTEXT).toConstantValue(context);
-$container
-    .bind(injectionType.PROGRESS)
-    .to(ProgressService)
-    .inSingletonScope();
-$container
-    .bind(injectionType.LOGGER)
-    .to(ClientLogger)
-    .inSingletonScope();
-$container
-    .bind(injectionType.COOKIE)
-    .to(ClientCookie)
-    .inSingletonScope();
-$container
-    .bind(injectionType.HTTP)
-    .to(HttpService)
-    .inSingletonScope();
-$container
-    .bind(injectionType.DADATA)
-    .to(DadataHttpService)
-    .inSingletonScope();
+$container.bind(injectionType.PROGRESS).to(ProgressService).inSingletonScope();
+$container.bind(injectionType.LOGGER).to(ClientLogger).inSingletonScope();
+$container.bind(injectionType.COOKIE).to(ClientCookie).inSingletonScope();
+$container.bind(injectionType.HTTP).to(HttpService).inSingletonScope();
+$container.bind(injectionType.DADATA).to(DadataHttpService).inSingletonScope();
+$container.bind(injectionType.RETAIL_ROCKET).to(RetailRocketService).inSingletonScope();
 
 const { app, router, store } = createApp($container, window.__INITIAL_STATE__);
 

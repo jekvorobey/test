@@ -60,4 +60,8 @@ module.exports = class ServiceLocator {
     static get $locale() {
         return ServiceLocator.instance()._container.get(injectionType.LOCALIZATION);
     }
+
+    static get $retailRocket() {
+        return ServiceLocator.instance()._container.get(injectionType.RETAIL_ROCKET);
+    }
 };

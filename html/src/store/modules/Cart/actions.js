@@ -1,5 +1,5 @@
 import { cookieNames, requestStatus } from '@enums';
-import { $logger, $cookie } from '@services';
+import { $logger, $cookie, $retailRocket } from '@services';
 import {
     getProducts,
     getCartData,
@@ -77,6 +77,7 @@ export default {
         { offerId, storeId, count, referrerCode, cookieName = cookieNames.REFERRAL } = {}
     ) {
         try {
+            $retailRocket.addProductToBasket(offerId);
             const code = referrerCode || (cookieName && $cookie.get(cookieName));
             const data = await addCartItem(offerId, storeId, count, code);
             commit(SET_CART_DATA, data);
