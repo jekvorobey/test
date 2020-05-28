@@ -141,7 +141,7 @@ export default {
                         { name: 'Subscribes', exact: true },
                         { name: 'Messages', displayName: this.$tc('profile.format.messages', this[UNREAD_MESSAGES]) },
                         { name: 'Certificates', exact: true },
-                        { name: 'Bonuses', exact: true },
+                        { name: 'Bonuses', exact: true, hidden: this[REFERRAL_PARTNER] },
                         { name: 'Orders' },
                     ],
                 },

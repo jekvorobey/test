@@ -120,7 +120,7 @@
                                     Итого <price v-bind="activeTabItem.summary.total" />
                                 </p>
 
-                                <p class="text-grey text-sm cart-view__main-panel-line">
+                                <p v-if="!referralPartner" class="text-grey text-sm cart-view__main-panel-line">
                                     Будет начислено
                                     <span>
                                         {{
@@ -241,7 +241,7 @@ import {
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER } from '@store/modules/Auth';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
@@ -320,9 +320,12 @@ export default {
     },
 
     computed: {
-        ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(CART_MODULE, [FEATURED_PRODUCTS, CART_DATA]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS, PROMO_CODE]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+        }),
 
         isTabletLg() {
             return this.$mq.tabletLg;

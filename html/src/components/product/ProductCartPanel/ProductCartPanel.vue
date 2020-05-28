@@ -14,7 +14,9 @@
                     :currency="oldPrice.currency"
                 />
             </div>
-            <div class="text-grey product-cart-panel__info-bonus">+{{ $t('product.bonus', { n: bonus }) }}</div>
+            <div v-if="!referralPartner && bonus > 0" class="text-grey product-cart-panel__info-bonus">
+                +{{ $t('product.bonus', { n: bonus }) }}
+            </div>
         </div>
         <div class="product-cart-panel__controls">
             <buy-button class="product-cart-panel__controls-btn" @click="onAddToCart" :disabled="disabled">
@@ -41,6 +43,8 @@ import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 
 import { mapGetters, mapActions, mapState } from 'vuex';
+import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
+
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
@@ -91,6 +95,9 @@ export default {
 
     computed: {
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+        }),
 
         favoritesBtnText() {
             return this.inFavorites ? 'В избранном' : 'В избранноe';

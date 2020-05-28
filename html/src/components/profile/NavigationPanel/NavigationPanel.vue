@@ -4,7 +4,12 @@
             <p v-if="group.name" class="text-medium navigation-panel__group-hl">{{ group.name }}</p>
             <ul class="navigation-panel__group-list">
                 <li class="navigation-panel__group-item" v-for="route in group.routes" :key="route.name">
-                    <v-link class="navigation-panel__group-link" :to="{ name: route.name }" :exact="route.exact">
+                    <v-link
+                        v-show="!route.hidden"
+                        class="navigation-panel__group-link"
+                        :to="{ name: route.name }"
+                        :exact="route.exact"
+                    >
                         {{ route.displayName || $t(`profile.routes.${route.name}`) }}
                     </v-link>
                 </li>

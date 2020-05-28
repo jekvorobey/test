@@ -53,7 +53,7 @@
                                 <p class="text-bold checkout-view__main-panel-line">
                                     Итого <price v-bind="summary.total" />
                                 </p>
-                                <p class="text-grey text-sm checkout-view__main-panel-line">
+                                <p v-if="!referralPartner" class="text-grey text-sm checkout-view__main-panel-line">
                                     Будет начислено
                                     <span>
                                         {{
@@ -64,7 +64,10 @@
                                         &nbsp;бонусов
                                     </span>
                                 </p>
-                                <p v-if="isProduct" class="text-grey text-sm checkout-view__main-panel-line">
+                                <p
+                                    v-if="isProduct && summary.bonusSpent"
+                                    class="text-grey text-sm checkout-view__main-panel-line"
+                                >
                                     Будет списано
                                     <span>
                                         {{
@@ -136,7 +139,7 @@ import CheckoutMasterClassPanel from '@components/checkout/CheckoutMasterClassPa
 import { $store, $logger, $progress } from '@services';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER } from '@store/modules/Auth';
 
 import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
 import { CART_ITEMS_COUNT } from '@store/modules/Cart/getters';
@@ -182,9 +185,13 @@ export default {
     },
 
     computed: {
-        ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(CART_MODULE, [CART_DATA]),
         ...mapState(CHECKOUT_MODULE, [CHECKOUT_TYPE, CHECKOUT_DATA]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+        }),
+
         ...mapState('route', {
             checkoutType: state => state.params.type,
         }),
