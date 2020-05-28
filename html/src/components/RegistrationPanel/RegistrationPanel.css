@@ -90,6 +90,13 @@
                 }
             }
         }
+
+        &-password {
+            &-text {
+                display: block;
+                margin-bottom: calc(var(--gs) * 1.5);
+            }
+        }
     }
 
     &__form {

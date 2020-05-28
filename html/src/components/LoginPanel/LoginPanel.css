@@ -8,6 +8,14 @@
         margin-bottom: calc(var(--gs) * 3);
     }
 
+    &__attention {
+        margin: calc(var(--gs) * 3) 0;
+
+        &--short {
+            padding-right: calc(var(--gs) * 3);
+        }
+    }
+
     &__no-account {
         display: block;
         margin: 0 auto;

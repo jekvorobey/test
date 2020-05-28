@@ -1,6 +1,13 @@
 <template>
     <div class="v-tabs">
-        <div class="v-tabs__header" role="tablist" :aria-orientation="orientation" :aria-label="ariaLabel">
+        <div
+            class="v-tabs__header"
+            role="tablist"
+            :aria-orientation="orientation"
+            :aria-label="ariaLabel"
+            v-show="isVisibleHeader"
+            :class="isVisibleHeader ? '' : 'is-hidden'"
+        >
             <button
                 class="v-tabs__header-item"
                 type="button"
@@ -40,7 +47,7 @@
 </template>
 
 <script>
-import './VTabs.css';
+import './VTabs.css'
 
 const keys = {
     end: 35,
@@ -50,12 +57,12 @@ const keys = {
     right: 39,
     down: 40,
     delete: 46,
-};
+}
 
 const orientation = {
     horizontal: 'horizontal',
     vertical: 'vertical',
-};
+}
 
 export default {
     name: 'v-tabs',
@@ -86,167 +93,172 @@ export default {
         orientation: {
             type: String,
             default: orientation.horizontal,
-            validator(val) {
-                return Object.values(orientation).indexOf(val) !== -1;
+            validator (val) {
+                return Object.values(orientation).indexOf(val) !== -1
             },
+        },
+
+        isVisibleHeader: {
+            type: Boolean,
+            default: true,
         },
     },
 
-    data() {
+    data () {
         return {
             internal_active_tab: this.activeTab,
-        };
+        }
     },
 
     computed: {
-        selectedItem() {
-            if (this.items.length > 0 && !this.items[this.internal_active_tab]) this.activateTab(0, true);
-            return this.items[this.internal_active_tab];
+        selectedItem () {
+            if (this.items.length > 0 && !this.items[this.internal_active_tab]) this.activateTab(0, true)
+            return this.items[this.internal_active_tab]
         },
     },
 
     watch: {
-        activeTab(val) {
-            this.activateTab(val, false);
+        activeTab (val) {
+            this.activateTab(val, false)
         },
     },
 
     methods: {
-        getTab(item) {
-            return this.$refs[`v-tab-${item[this.keyField] || this.items.indexOf(item)}`][0];
+        getTab (item) {
+            return this.$refs[`v-tab-${item[this.keyField] || this.items.indexOf(item)}`][0]
         },
 
-        activateTab(index, focus) {
+        activateTab (index, focus) {
             if (this.internal_active_tab !== index) {
-                this.internal_active_tab = index;
-                this.$emit('update:activeTab', this.internal_active_tab);
+                this.internal_active_tab = index
+                this.$emit('update:activeTab', this.internal_active_tab)
             }
 
             // Set focus when required
             if (focus) {
-                const selectedTab = this.getTab(this.selectedItem);
-                if (selectedTab && selectedTab !== document.activeElement) selectedTab.focus();
+                const selectedTab = this.getTab(this.selectedItem)
+                if (selectedTab && selectedTab !== document.activeElement) selectedTab.focus()
             }
         },
 
-        onTabClick(index) {
-            this.activateTab(index, false);
+        onTabClick (index) {
+            this.activateTab(index, false)
         },
 
-        onTabFocus(e, index) {
-            const { target } = e;
-            const delay = 300;
-            if (target !== document.activeElement) setTimeout(this.checkTabFocus, delay, target, index);
+        onTabFocus (e, index) {
+            const { target } = e
+            const delay = 300
+            if (target !== document.activeElement) setTimeout(this.checkTabFocus, delay, target, index)
         },
 
         // Handle keydown on tabs
-        onTabKeyDown(e) {
-            const { keyCode } = e;
+        onTabKeyDown (e) {
+            const { keyCode } = e
 
             switch (keyCode) {
                 case keys.end:
-                    e.preventDefault();
+                    e.preventDefault()
                     // Activate last tab
-                    this.activateTab(this.items.length - 1);
-                    break;
+                    this.activateTab(this.items.length - 1)
+                    break
                 case keys.home:
-                    e.preventDefault();
+                    e.preventDefault()
                     // Activate first tab
-                    this.activateTab(0);
-                    break;
+                    this.activateTab(0)
+                    break
 
                 // Up and down are in keydown
                 // because we need to prevent page scroll >:)
                 case keys.up:
                 case keys.down:
-                    this.determineOrientation(e);
-                    break;
+                    this.determineOrientation(e)
+                    break
             }
         },
 
         // Handle keyup on tabs
-        onTabKeyUp(e) {
-            const { keyCode } = e;
+        onTabKeyUp (e) {
+            const { keyCode } = e
 
             switch (keyCode) {
                 case keys.left:
                 case keys.right:
-                    this.determineOrientation(e);
-                    break;
+                    this.determineOrientation(e)
+                    break
                 case keys.delete:
-                    this.determineDeletable(e);
-                    break;
+                    this.determineDeletable(e)
+                    break
             }
         },
 
         // When a tablistвЂ™s aria-orientation is set to vertical,
         // only up and down arrow should function.
         // In all other cases only left and right arrow function.
-        determineOrientation(e) {
-            const { keyCode } = e;
-            let proceed = false;
+        determineOrientation (e) {
+            const { keyCode } = e
+            let proceed = false
 
             if (this.orientation === orientation.vertical) {
                 switch (keyCode) {
                     case keys.up:
                     case keys.down:
-                        e.preventDefault();
-                        proceed = true;
-                        break;
+                        e.preventDefault()
+                        proceed = true
+                        break
                 }
             } else {
                 switch (keyCode) {
                     case keys.left:
                     case keys.right:
-                        proceed = true;
-                        break;
+                        proceed = true
+                        break
                 }
             }
 
-            if (proceed) this.switchTabOnArrowPress(e);
+            if (proceed) this.switchTabOnArrowPress(e)
         },
 
         // Either focus the next, previous, first, or last tab
         // depening on key pressed
-        switchTabOnArrowPress(e) {
-            const { keyCode } = e;
-            let nextItem = null;
+        switchTabOnArrowPress (e) {
+            const { keyCode } = e
+            let nextItem = null
             switch (keyCode) {
                 case keys.up:
                 case keys.left:
                     if (this.internal_active_tab > 0) {
                         for (let i = this.internal_active_tab; i >= 0; --i) {
-                            nextItem = this.items[i];
-                            if (nextItem.disabled) continue;
-                            else this.activateTab(i, true);
+                            nextItem = this.items[i]
+                            if (nextItem.disabled) continue
+                            else this.activateTab(i, true)
                         }
-                    } else this.focusFirstTab();
-                    break;
+                    } else this.focusFirstTab()
+                    break
                 case keys.down:
                 case keys.right:
                     if (this.internal_active_tab > this.items.length - 1) {
                         for (let i = this.internal_active_tab; i < this.items.length; ++i) {
-                            nextItem = this.items[i];
-                            if (nextItem.disabled) continue;
-                            else this.activateTab(i, true);
+                            nextItem = this.items[i]
+                            if (nextItem.disabled) continue
+                            else this.activateTab(i, true)
                         }
-                    } else this.focusLastTab();
-                    break;
+                    } else this.focusLastTab()
+                    break
             }
         },
 
         // Only activate tab on focus if it still has focus after the delay
-        checkTabFocus(target, index) {
-            if (target === document.activeElement) this.activateTab(index, false);
+        checkTabFocus (target, index) {
+            if (target === document.activeElement) this.activateTab(index, false)
         },
 
-        focusFirstTab() {
-            this.activateTab(0, true);
+        focusFirstTab () {
+            this.activateTab(0, true)
         },
 
-        focusLastTab() {
-            this.activateTab(this.items.length - 1, true);
+        focusLastTab () {
+            this.activateTab(this.items.length - 1, true)
         },
     },
-};
+}
 </script>

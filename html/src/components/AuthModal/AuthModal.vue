@@ -1,9 +1,9 @@
 <template>
-    <general-modal type="sm" class="auth-modal" @close="onClose" :is-mobile="isTablet" :header="header">
+    <general-modal type="sm" class="auth-modal" :class="isVisibleTabsHeader ? '' : 'hidden-tabs'" @close="onClose" :is-mobile="isTablet" :header="header">
         <template v-slot:content>
-            <v-tabs :items="items" key-field="id" :activeTab.sync="activeTab">
+            <v-tabs :items="items" key-field="id" :activeTab.sync="activeTab" :is-visible-header="isVisibleTabsHeader">
                 <template v-slot:header="{ item }">
-                    {{ item.title }}
+                    <span>{{ item.title }}</span>
                 </template>
                 <template v-slot:panel="{ item }">
                     <login-panel v-if="item.type === authMode.LOGIN" @set-title="onSetTitle" @change-tab="onChangeTab" />
@@ -58,6 +58,7 @@ export default {
                 },
             ],
             title: null,
+            showTabs: true,
         };
     },
 
@@ -73,6 +74,10 @@ export default {
         header() {
             return this.title;
         },
+
+        isVisibleTabsHeader() {
+            return this.showTabs;
+        }
     },
 
     methods: {
@@ -83,8 +88,11 @@ export default {
             this.CHANGE_MODAL_STATE({ name: NAME, open: false });
         },
 
-        onSetTitle(newTitle) {
-            this.title = newTitle;
+        onSetTitle({ title, payload })
+        {
+            console.log(payload);
+            this.title = title;
+            this.showTabs = payload;
         },
 
         onChangeTab(tab) {
