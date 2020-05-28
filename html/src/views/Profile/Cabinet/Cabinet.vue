@@ -77,7 +77,7 @@
             </div>
         </info-panel>
 
-        <info-panel class="cabinet-view__panel" header="Социальные сети">
+        <info-panel class="cabinet-view__panel" header="Социальные сети для авторизации">
             <div class="container container--tablet-lg">
                 <ul class="cabinet-view__panel-list">
                     <info-row

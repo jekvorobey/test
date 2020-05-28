@@ -16,6 +16,10 @@ export default {
             name: 'Bonuses',
             path: 'bonuses',
             component: BonusesAsync,
+
+            meta: {
+                skipScroll: true,
+            },
         },
     ],
 };
