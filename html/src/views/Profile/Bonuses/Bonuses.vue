@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="bonuses-view__panel-col">
-                <div class="text-bold bonuses-view__panel-amount">{{ info.bonus_per_rub }} бонус = 1 рубль</div>
+                <div class="text-bold bonuses-view__panel-amount">1 бонус = {{ info.bonus_per_rub }} рубль</div>
                 <div>
                     <router-link to="/">Подробнее о бонусной программе</router-link>
                 </div>
