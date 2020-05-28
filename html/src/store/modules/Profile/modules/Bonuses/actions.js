@@ -3,7 +3,7 @@ import { BONUSES_PAGE_SIZE } from '@constants/profile';
 import { storeErrorHandler } from '@util/store';
 
 import { getBonusesData } from '@api';
-import { SET_BONUSES_DATA, SET_ITEMS, SET_ITEMS_MORE } from './mutations';
+import { SET_BONUSES_DATA, SET_ITEMS, SET_ITEMS_MORE, SET_QUERY_PARAMS } from './mutations';
 
 export const FETCH_BONUSES_DATA = 'FETCH_BONUSES_DATA';
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
@@ -20,6 +20,7 @@ export default {
         try {
             const data = await getBonusesData(page, perPage);
             commit(SET_BONUSES_DATA, data);
+            commit(SET_QUERY_PARAMS, { page });
 
             const {
                 bonuses: { items, total: range },

@@ -37,7 +37,7 @@
                     />
                     <v-button
                         class="account-view__panel-bottom-btn"
-                        :disabled="!selectedCard || !amount"
+                        :disabled="!selectedCard || !amount || isDisabledBtn"
                         @click="onClickCashOut"
                     >
                         Вывод
@@ -217,6 +217,7 @@ export default {
         return {
             showMore: false,
             amount: null,
+            isDisabledBtn: false,
         };
     },
 
@@ -298,11 +299,20 @@ export default {
         async onClickCashOut() {
             try {
                 const { id } = this[SELECTED_CARD] || {};
+                const message = 'Ваш перевод оформлен, ждите поступления средств в срок до 10 календарных дней';
+
+                this.isDisabledBtn = true;
+
                 await this[POST_CASH_OUT]({ cardId: id, value: this.amount });
                 await this[FETCH_BILLING_DATA]({});
                 this.$router.replace({ path: this.$route.path });
+                this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
+                
+                this.amount = null;
+                this.isDisabledBtn = false;
             } catch (error) {
                 alert('Произошла ошибка при переводе денег');
+                this.isDisabledBtn = false;
             }
         },
 

@@ -12,9 +12,9 @@
                 @input="onStatusChanged"
                 v-if="items && items.length"
             />
-            <v-link tag="button" class="btn btn--outline" :to="{ name: 'Messages' }" v-else-if="!isTabletLg">
+            <button class="btn btn--outline" @click="onPromocodeRequest" v-else-if="!isTabletLg">
                 Запрос промокода
-            </v-link>
+            </button>
         </div>
 
         <template v-if="items && items.length">
@@ -251,10 +251,14 @@
                 Воспользуйтесь функцией «Запросить промо-код» для привлечения аудитории к определенным продуктам или
                 категориям товаров.
             </div>
-            <v-link tag="button" :to="{ name: 'Messages' }" class="btn btn--outline promocodes-view__attention-btn"
-                >Запрос промокода</v-link
-            >
+            <button @click="onPromocodeRequest" class="btn btn--outline promocodes-view__attention-btn">
+                Запрос промокода
+            </button>
         </div>
+
+        <transition name="fade">
+            <message-modal v-if="$isServer || isMessageOpen" />
+        </transition>
     </section>
 </template>
 
@@ -265,6 +269,8 @@ import VButton from '@controls/VButton/VButton.vue';
 
 import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+
+import MessageModal from '@components/profile/MessageModal/MessageModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
@@ -279,7 +285,7 @@ import { NAME as PROMOCODES_MODULE, ITEMS } from '@store/modules/Profile/modules
 import { PROMOCODES } from '@store/modules/Profile/modules/Promocodes/getters';
 import { FETCH_PROMOCODES_DATA, SET_LOAD_PATH } from '@store/modules/Profile/modules/Promocodes/actions';
 
-import { modalName } from '@enums';
+import { modalName, themeCodes } from '@enums';
 import { promocodeType } from '@enums/checkout';
 import { digit2DateSettings } from '@settings';
 import { saveToClipboard } from '@util';
@@ -301,6 +307,8 @@ export default {
 
         RadioSwitch,
         InfoRow,
+
+        MessageModal,
     },
 
     data() {
@@ -325,6 +333,11 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapGetters(PROMOCODES_MODULE_PATH, [PROMOCODES]),
+
+        ...mapState(MODAL_MODULE, {
+            isMessageOpen: state =>
+                state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
+        }),
 
         isTabletLg() {
             return this.$mq.tabletLg;
@@ -352,6 +365,12 @@ export default {
 
         onToggleIsOpen(item) {
             item.isOpen = !item.isOpen;
+        },
+        
+        onPromocodeRequest() {
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.MESSAGE, open: true, state: {
+                themeCode: themeCodes.PROMOCODE,
+            } });
         },
     },
 

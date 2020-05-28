@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="bonuses-view__panel-col">
-                <div class="text-bold bonuses-view__panel-amount">{{ info.bonus_per_rub }} бонус = 1 рубль</div>
+                <div class="text-bold bonuses-view__panel-amount">1 бонус = {{ info.bonus_per_rub }} рубль</div>
                 <div>
                     <router-link to="/">Подробнее о бонусной программе</router-link>
                 </div>
@@ -34,10 +34,11 @@
                 <h3 class="bonuses-view__section-hl">Бонусная программа</h3>
                 <table class="bonuses-view__table">
                     <colgroup v-if="!isTablet">
-                        <col width="35%" />
+                        <col width="25%" />
+                        <col width="20%" />
+                        <col width="20%" />
                         <col width="20%" />
                         <col width="15%" />
-                        <col width="30%" />
                     </colgroup>
                     <colgroup v-else>
                         <col width="33.33333333333333%" />
@@ -49,14 +50,20 @@
                             <th class="bonuses-view__table-th">Заказ / событие</th>
                             <th class="bonuses-view__table-th">Списано&nbsp;всего<br />{{ info.debit_all }}</th>
                             <th class="bonuses-view__table-th">Начислено&nbsp;всего<br />{{ info.received_all }}</th>
+                            <th class="bonuses-view__table-th">Статус</th>
                             <th class="bonuses-view__table-th">Дата</th>
                         </tr>
                     </thead>
                     <transition-group tag="tbody" name="fade-in" appear class="bonuses-view__table-body">
                         <tr class="bonuses-view__table-tr" v-for="item in bonuses" :key="item.id">
                             <td class="bonuses-view__table-td">{{ item.name }}</td>
-                            <td class="bonuses-view__table-td">{{ item.value }}</td>
-                            <td class="bonuses-view__table-td">{{ item.status }}</td>
+                            <td class="bonuses-view__table-td">
+                                {{ item.status === bonusStatus.TAKEN ? item.value : '' }}
+                            </td>
+                            <td class="bonuses-view__table-td">
+                                {{ item.status !== bonusStatus.TAKEN ? item.value : '' }}
+                            </td>
+                            <td class="bonuses-view__table-td">{{ item.statusString }}</td>
                             <td class="bonuses-view__table-td">{{ item.date }}</td>
                         </tr>
                     </transition-group>
@@ -73,7 +80,7 @@
                 >
                     Показать ещё
                 </show-more-button>
-                <v-pagination :value="activePage" :page-count="pagesCount" @change="onPageChanged" />
+                <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
             </div>
         </div>
     </section>
@@ -104,6 +111,7 @@ import { PAGES_COUNT } from '@store/modules/Profile/modules/Bonuses/getters';
 import { DEFAULT_PAGE } from '@constants';
 import { $store, $progress } from '@services';
 import { numericYearDateSettings } from '@settings';
+import { bonusStatus } from '@enums/profile';
 import './Bonuses.css';
 
 const BONUSES_MODULE_PATH = `${PROFILE_MODULE}/${BONUSES_MODULE}`;
@@ -144,7 +152,7 @@ export default {
 
                 return {
                     ...i,
-                    status: this.$t(`bonusStatus.${i.status}`),
+                    statusString: this.$t(`bonusStatus.${i.status}`),
                     date: dateObj.toLocaleDateString(this[LOCALE], numericYearDateSettings),
                 };
             });
@@ -221,6 +229,10 @@ export default {
         }
 
         this.showMore = false;
+    },
+
+    created() {
+        this.bonusStatus = bonusStatus;
     },
 };
 </script>
