@@ -10,7 +10,7 @@
         <template v-slot:content>
             <h4 class="message-modal__hl">Новое сообщение</h4>
             <form class="message-modal__form" ref="form" enctype="multipart/form-data" @submit.prevent="onSubmit">
-                <v-input class="message-modal__form-row" v-model="theme" name="theme" placeholder="Введите тему">
+                <v-input class="message-modal__form-row" v-model="theme" name="theme" placeholder="Введите тему" :readonly="readonlyTheme">
                     Тема
                 </v-input>
 
@@ -46,8 +46,8 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
-import { NAME as MESSAGES_MODULE } from '@store/modules/Profile/modules/Messages';
-import { CREATE_CHAT } from '@store/modules/Profile/modules/Messages/actions';
+import { NAME as MESSAGES_MODULE, THEMES } from '@store/modules/Profile/modules/Messages';
+import { CREATE_CHAT, FETCH_THEMES } from '@store/modules/Profile/modules/Messages/actions';
 
 import { modalName } from '@enums';
 import './MessageModal.css';
@@ -79,13 +79,16 @@ export default {
         return {
             theme: '',
             message: '',
+            readonlyTheme: false,
         };
     },
 
     computed: {
         ...mapState(MODAL_MODULE, {
             isOpen: state => state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
+        ...mapState(MESSAGES_MODULE_PATH, [THEMES]),
 
         isTablet() {
             return this.$mq.tablet;
@@ -94,7 +97,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(MESSAGES_MODULE_PATH, [CREATE_CHAT]),
+        ...mapActions(MESSAGES_MODULE_PATH, [CREATE_CHAT, FETCH_THEMES]),
 
         async onSubmit() {
             if (this.$v.$invalid) return;
@@ -114,6 +117,27 @@ export default {
             this.$emit('close');
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
         },
+
+        async getThemeByCode(code) {
+            this.readonlyTheme = true;
+            await this[FETCH_THEMES]();
+
+            const items = this.themes;
+            
+            for (let item of items) {
+                if (item.type === code) {
+                    this.theme = item.name;
+                    return;
+                }
+            }
+            this.readonlyTheme = false;
+        },
+    },
+
+    beforeMount() {
+        if (this.modalState.themeCode) {
+            this.getThemeByCode(this.modalState.themeCode);
+        }
     },
 };
 </script>
