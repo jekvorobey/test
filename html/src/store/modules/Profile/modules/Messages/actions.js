@@ -1,10 +1,11 @@
 import { storeErrorHandler } from '@util/store';
-import { getProfileChats, getProfileChatMessages, createProfileChat, createProfileChatMessage } from '@api';
+import { getProfileChats, getProfileChatMessages, createProfileChat, createProfileChatMessage, getMessageThemes } from '@api';
 
-import { SET_CHATS, SET_CHAT_MESSAGES, PUSH_NEW_MESSAGE } from './mutations';
+import { SET_CHATS, SET_CHAT_MESSAGES, PUSH_NEW_MESSAGE, SET_THEMES } from './mutations';
 
 export const FETCH_CHATS = 'FETCH_CHATS';
 export const FETCH_CHAT_MESSAGES = 'FETCH_CHAT_MESSAGES';
+export const FETCH_THEMES = 'FETCH_THEMES';
 
 export const CREATE_CHAT = 'CREATE_CHAT';
 export const CREATE_CHAT_MESSAGE = 'CREATE_CHAT_MESSAGE';
@@ -52,4 +53,13 @@ export default {
             storeErrorHandler(CREATE_CHAT_MESSAGE, true)(error);
         }
     },
+
+    async [FETCH_THEMES]({ commit }) {
+        try {
+            const { themes } = await getMessageThemes();
+            commit(SET_THEMES, themes);
+        } catch (error) {
+            storeErrorHandler(FETCH_THEMES)(error);
+        }
+    }
 };

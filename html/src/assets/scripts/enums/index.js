@@ -236,3 +236,7 @@ export const authMode = Object.freeze({
     LOGIN: 0,
     REGISTRATION: 1,
 });
+
+export const themeCodes = Object.freeze({
+    PROMOCODE: 1,
+})
