@@ -179,6 +179,7 @@
                 </ul>
 
                 <div
+                    v-if="(referralPartner && availableBonus > 0) || !referralPartner"
                     class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--bonus"
                 >
                     <div class="checkout-product-panel__item-header">
@@ -372,6 +373,9 @@ import AddressEditModal from '@components/profile/AddressEditModal/AddressEditMo
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
+
+import { NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER } from '@store/modules/Auth';
+
 import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '@store/modules/Checkout';
 import {
     SET_DATA_PROP,
@@ -541,6 +545,9 @@ export default {
 
     computed: {
         ...mapState([LOCALE]),
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+        }),
         ...mapState(MODAL_MODULE, {
             isPickupPointModalOpen: state =>
                 state[MODALS][CheckoutPickupPointModal.name] && state[MODALS][CheckoutPickupPointModal.name].open,

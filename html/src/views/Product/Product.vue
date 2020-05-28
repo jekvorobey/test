@@ -679,7 +679,7 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger, $retailRocket } from '@services';
 import { SCROLL } from '@store';
 
-import { NAME as AUTH_MODULE } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
 import { SET_SESSION_REFERRAL_CODE } from '@store/modules/Auth/actions';
 
 import {
@@ -866,18 +866,9 @@ export default {
 
     computed: {
         ...mapState([SCROLL]),
-        ...mapState('route', {
-            code: state => state.params.code,
-            categoryCode: state => state.params.categoryCode,
-            refCode: state => state.query.refCode,
-            modal: state => state.query.modal,
-        }),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
-        ...mapState(MODAL_MODULE, {
-            isGalleryOpen: state =>
-                state[MODALS][modalName.product.GALLERY] && state[MODALS][modalName.product.GALLERY].open,
-            isModalOpen: state => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
-        }),
+        ...mapGetters(CART_MODULE, [IS_IN_CART]),
+        ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
 
         ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION]),
         ...mapState(PRODUCT_MODULE, [
@@ -889,9 +880,18 @@ export default {
             INSTAGRAM_ITEMS,
         ]),
 
-        ...mapGetters(CART_MODULE, [IS_IN_CART]),
+        ...mapState(MODAL_MODULE, {
+            isGalleryOpen: state =>
+                state[MODALS][modalName.product.GALLERY] && state[MODALS][modalName.product.GALLERY].open,
+            isModalOpen: state => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
+        }),
 
-        ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+        ...mapState('route', {
+            code: state => state.params.code,
+            categoryCode: state => state.params.categoryCode,
+            refCode: state => state.query.refCode,
+            modal: state => state.query.modal,
+        }),
 
         inCart() {
             const { id } = this[PRODUCT];
