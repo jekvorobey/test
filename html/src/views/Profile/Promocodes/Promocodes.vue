@@ -447,6 +447,7 @@ export default {
     created() {
         this.promocodeType = promocodeType;
         this.items = this[PROMOCODES];
+        this.setFilterValue(this.$route.query.isArchive);
     },
 };
 </script>
