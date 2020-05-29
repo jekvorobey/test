@@ -18,11 +18,6 @@
         </transition>
 
         <transition name="fade-in">
-            <login-modal key="login" v-if="isLoginOpen" />
-            <registration-modal key="register" v-else-if="isRegistrationOpen" />
-        </transition>
-
-        <transition name="fade-in">
             <city-selection-modal v-if="isCitySelectionOpen" />
         </transition>
 
@@ -65,8 +60,6 @@ import TagItem from '@components/TagItem/TagItem.vue';
 import VHeader from '@components/VHeader/VHeader.vue';
 import VFooter from '@components/VFooter/VFooter.vue';
 
-import LoginModal from '@components/LoginModal/LoginModal.vue';
-import RegistrationModal from '@components/RegistrationModal/RegistrationModal.vue';
 import CitySelectionModal from '@components/CitySelectionModal/CitySelectionModal.vue';
 import QuickViewModal from '@components/QuickViewModal/QuickViewModal.vue';
 import AddToCartModal from '@components/AddToCartModal/AddToCartModal.vue';
@@ -110,9 +103,7 @@ export default {
     components: {
         VHeader,
         VFooter,
-
-        LoginModal,
-        RegistrationModal,
+        
         CitySelectionModal,
         QuickViewModal,
         AddToCartModal,
@@ -132,9 +123,6 @@ export default {
         }),
 
         ...mapState(MODAL_MODULE, {
-            isRegistrationOpen: state =>
-                state[MODALS][modalName.general.REGISTRATION] && state[MODALS][modalName.general.REGISTRATION].open,
-            isLoginOpen: state => state[MODALS][modalName.general.LOGIN] && state[MODALS][modalName.general.LOGIN].open,
             isCitySelectionOpen: state =>
                 state[MODALS][modalName.general.CITY_SELECTION] && state[MODALS][modalName.general.CITY_SELECTION].open,
             isQuickViewOpen: state =>
