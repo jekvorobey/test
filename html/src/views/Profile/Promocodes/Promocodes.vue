@@ -354,7 +354,7 @@ export default {
             this.$router.replace({ path: this.$route.path, query: { isArchive: value } });
         },
 
-        setFilterValue(value) {
+        setFilterValue(value = 0) {
             this.selectedStatus = Number(value);
         },
 
