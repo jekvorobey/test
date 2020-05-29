@@ -5,7 +5,9 @@
                 <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем
                 сообщениям
             </v-link>
-            <h2 class="message-details-view__hl">{{ chatId }} Доставка в Зеленоград</h2>
+            <h2 class="message-details-view__hl">
+                {{ chatId }}<span class="message-details-view__hl-title">{{ title }}</span>
+            </h2>
         </div>
 
         <ul class="message-details-view__list">
@@ -58,7 +60,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
-import { NAME as MESSAGES_MODULE, MESSAGES } from '@store/modules/Profile/modules/Messages';
+import { NAME as MESSAGES_MODULE, MESSAGES, TITLE } from '@store/modules/Profile/modules/Messages';
 import { FETCH_CHAT_MESSAGES, CREATE_CHAT_MESSAGE } from '@store/modules/Profile/modules/Messages/actions';
 
 import { NAME as AUTH_MODULE, USER } from '@store/modules/Auth';
@@ -92,7 +94,7 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, [USER]),
-        ...mapState(MESSAGES_MODULE_PATH, [MESSAGES]),
+        ...mapState(MESSAGES_MODULE_PATH, [TITLE, MESSAGES]),
         ...mapState('route', {
             chatId: state => state.params && state.params.chatId,
         }),
