@@ -48,10 +48,10 @@ import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 
+import EmptyPlaceholderPanel from '@components/EmptyPlaceholderPanel/EmptyPlaceholderPanel.vue';
+
 import MessageCard from '@components/MessageCard/MessageCard.vue';
 import MessageModal from '@components/profile/MessageModal/MessageModal.vue';
-
-import EmptyPlaceholderPanel from '@components/EmptyPlaceholderPanel/EmptyPlaceholderPanel.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
