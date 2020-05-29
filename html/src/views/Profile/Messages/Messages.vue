@@ -5,7 +5,7 @@
             <v-button class="messages-view__btn" @click="onCreateMessage">Новое сообщение</v-button>
         </div>
 
-        <ul class="messages-view__list">
+        <ul class="messages-view__list" v-if="chats && chats.length > 0">
             <message-card
                 tabindex="0"
                 class="messages-view__list-item"
@@ -24,6 +24,17 @@
                 @click.prevent="onOpenMessage(chat.id)"
             />
         </ul>
+        <empty-placeholder-panel
+            class="messages-view__attention"
+            v-else
+            :show-btn="!isTablet"
+            @btn-click="onCreateMessage"
+        >
+            У Вас пока нет ни одного сообщения.
+            <template v-slot:btn>
+                Написать сообщение
+            </template>
+        </empty-placeholder-panel>
 
         <transition name="fade">
             <message-modal v-if="$isServer || isMessageOpen" />
@@ -39,6 +50,8 @@ import VPagination from '@controls/VPagination/VPagination.vue';
 
 import MessageCard from '@components/MessageCard/MessageCard.vue';
 import MessageModal from '@components/profile/MessageModal/MessageModal.vue';
+
+import EmptyPlaceholderPanel from '@components/EmptyPlaceholderPanel/EmptyPlaceholderPanel.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
@@ -65,6 +78,8 @@ export default {
 
         MessageCard,
         MessageModal,
+
+        EmptyPlaceholderPanel,
     },
 
     computed: {
