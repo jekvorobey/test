@@ -5,7 +5,9 @@
                 <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем
                 сообщениям
             </v-link>
-            <h2 class="message-details-view__hl">{{ chatId }} Доставка в Зеленоград</h2>
+            <h2 class="message-details-view__hl">
+                {{ chatId }}<span class="message-details-view__hl-title">{{ title }}</span>
+            </h2>
         </div>
 
         <ul class="message-details-view__list">
@@ -24,8 +26,19 @@
         </ul>
 
         <div class="message-details-view__controls">
-            <v-input tag="textarea" class="message-details-view__controls-input" placeholder="Написать ответ" v-model="message"></v-input>
-            <v-button class="message-details-view__controls-btn" @click="onSendMessage" :disabled="isBtnDisabled && !message.length">Отправить</v-button>
+            <v-input
+                class="message-details-view__controls-input"
+                v-model="message"
+                tag="textarea"
+                placeholder="Написать ответ"
+            />
+            <v-button
+                class="message-details-view__controls-btn"
+                :disabled="isBtnDisabled && !message.length"
+                @click="onSendMessage"
+            >
+                Отправить
+            </v-button>
         </div>
     </section>
 </template>
@@ -41,16 +54,19 @@ import MessageCard from '@components/MessageCard/MessageCard.vue';
 import { mapState, mapActions } from 'vuex';
 import { LOCALE } from '@store';
 
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
 import { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
-import { NAME as MESSAGES_MODULE, MESSAGES } from '@store/modules/Profile/modules/Messages';
+import { NAME as MESSAGES_MODULE, MESSAGES, TITLE } from '@store/modules/Profile/modules/Messages';
 import { FETCH_CHAT_MESSAGES, CREATE_CHAT_MESSAGE } from '@store/modules/Profile/modules/Messages/actions';
 
 import { NAME as AUTH_MODULE, USER } from '@store/modules/Auth';
 
 import { $store, $progress } from '@services';
-
+import { modalName } from '@enums';
 import '@images/sprites/arrow-small.svg';
 import './MessageDetails.css';
 
@@ -76,9 +92,9 @@ export default {
     },
 
     computed: {
-        ...mapState(AUTH_MODULE, [USER]),
         ...mapState([LOCALE]),
-        ...mapState(MESSAGES_MODULE_PATH, [MESSAGES]),
+        ...mapState(AUTH_MODULE, [USER]),
+        ...mapState(MESSAGES_MODULE_PATH, [TITLE, MESSAGES]),
         ...mapState('route', {
             chatId: state => state.params && state.params.chatId,
         }),
@@ -103,19 +119,30 @@ export default {
         },
 
         getTitle(message) {
-            if (message.isSystem) {
-                return 'Команда Бессовестно Талантливый';
-            }
-            return `${this[USER].firstName} ${this[USER].lastName}`;
+            if (message.isSystem) return 'Команда Бессовестно Талантливый';
+            const { firstName, lastName } = this[USER] || {};
+            return `${firstName} ${lastName}`;
         },
 
         async onSendMessage() {
-            this.isBtnDisabled = true;
-            await this[CREATE_CHAT_MESSAGE]({
-                chatId: this.chatId,
-                message: this.message
-            });
-            this.message = '';
+            try {
+                this.isBtnDisabled = true;
+                await this[CREATE_CHAT_MESSAGE]({
+                    chatId: this.chatId,
+                    message: this.message,
+                });
+                this.message = '';
+            } catch (error) {
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.NOTIFICATION,
+                    open: true,
+                    state: {
+                        title: 'Ошибка',
+                        message: 'Не удалось отправить сообщение. Попробуйте ещё раз.',
+                    },
+                });
+            }
+
             this.isBtnDisabled = false;
         },
     },

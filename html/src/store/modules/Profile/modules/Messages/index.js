@@ -8,6 +8,7 @@ export const NAME = 'messages';
 export const LOAD_PATH = 'loadPath';
 
 export const CHAT_ID = 'chatId';
+export const TITLE = 'title';
 export const ITEMS = 'items';
 export const MESSAGES = 'messages';
 export const THEMES = 'themes';
@@ -20,6 +21,7 @@ export default function createModule() {
         state: {
             [LOAD_PATH]: '',
 
+            [TITLE]: '',
             [CHAT_ID]: null,
             [ITEMS]: [],
             [MESSAGES]: [],

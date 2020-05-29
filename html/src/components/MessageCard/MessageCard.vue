@@ -1,6 +1,6 @@
 <template>
     <li class="message-card" @click="onCardClick">
-        <div class="message-card__icon">
+        <div class="message-card__icon" :class="{ 'message-card__icon--empty': isSystem || !user.avatar }">
             <v-svg v-if="isSystem" name="logo" width="30" height="30" />
             <v-picture v-else-if="user.avatar" :image="avatar" />
             <span v-else>{{ iconText }}</span>
@@ -96,7 +96,9 @@ export default {
         ...mapState(AUTH_MODULE, [USER]),
 
         iconText() {
-            return `${this[USER].firstName ? this[USER].firstName.slice(0, 1) : ''}${this[USER].lastName ? this[USER].lastName.slice(0, 1) : ''}`;
+            return `${this[USER].firstName ? this[USER].firstName.slice(0, 1) : ''}${
+                this[USER].lastName ? this[USER].lastName.slice(0, 1) : ''
+            }`;
         },
 
         avatar() {

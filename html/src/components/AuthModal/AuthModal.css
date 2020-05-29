@@ -1,4 +1,11 @@
 .auth-modal {
+
+    &.hidden-tabs {
+        .modal-body {
+            padding-top: 0;
+        }
+    }
+
     .popup {
         width: calc(var(--gs) * 55);
 

@@ -14,7 +14,6 @@
         width: calc(var(--gs) * 8);
         height: calc(var(--gs) * 8);
         margin-right: calc(var(--gs) * 2);
-        background-color: var(--cl-global);
         color: var(--cl-white);
         fill: var(--cl-white);
         border-radius: 50%;
@@ -29,6 +28,10 @@
             height: calc(var(--gs) * 6);
             font-size: 18px;
             line-height: 40px;
+        }
+
+        &--empty {
+            background-color: var(--cl-global);
         }
 
         .icon {

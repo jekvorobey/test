@@ -11,6 +11,10 @@
         @media (--tablet-lg) {
             margin-bottom: var(--gs);
         }
+
+        &-title {
+            margin-left: calc(var(--gs) * 2);
+        }
     }
 
     &__back-link {

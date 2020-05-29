@@ -4,6 +4,53 @@
         align-items: baseline;
         margin-bottom: calc(var(--gs) * 3);
         justify-content: space-between;
+
+        @media (--tablet) {
+            flex-wrap: wrap;
+        }
+
+        &-controls {
+            display: flex;
+            align-items: center;
+
+            @media (--desktop) and (--tablet-lg-min) {
+                flex-direction: column;
+            }
+
+            @media (--tablet-lg) {
+                flex: 1;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            @media (--tablet) {
+                flex-direction: column;
+            }
+        }
+
+        &-switch {
+            width: 288px;
+
+            @media (--tablet) {
+                width: 100%;
+            }
+        }
+
+        &-btn {
+            @media (--desktop-min) {
+                margin-left: calc(var(--gs) * 4);
+            }
+
+            @media (--desktop) and (--tablet-lg-min) {
+                width: 100%;
+                margin-top: calc(var(--gs) * 2);
+            }
+
+            @media (--tablet) {
+                width: 100%;
+                margin-top: calc(var(--gs) * 2);
+            }
+        }
     }
 
     &__hl {
@@ -16,14 +63,6 @@
 
         @media (--tablet-lg) {
             display: none;
-        }
-    }
-
-    &__switch {
-        width: 288px;
-
-        @media (--tablet) {
-            width: 100%;
         }
     }
 
@@ -125,28 +164,8 @@
     }
 
     &__attention {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        @media (--tablet) {
-            padding: 0 calc(var(--gs) * 2);
-        }
-
-        &-text {
-            font-size: 20px;
-            line-height: 24px;
-            color: var(--cl-grey);
-            text-align: center;
-            max-width: calc(var(--gs) * 80);
-
-            @media (--tablet) {
-                font-size: 16px;
-            }
-        }
-
-        &-btn {
-            margin-top: calc(var(--gs) * 2);
+        @media (--tablet-min) {
+            padding: calc(var(--gs) * 5) 0;
         }
     }
 }

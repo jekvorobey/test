@@ -14,8 +14,9 @@ export default {
     },
 
     [SET_CHAT_MESSAGES](state, payload = {}) {
-        const { chatId = null, messages = [] } = payload;
+        const { chatId = null, title = '', messages = [] } = payload;
         state.chatId = chatId;
+        state.title = title;
         state.messages = messages;
     },
 
@@ -25,5 +26,5 @@ export default {
 
     [SET_THEMES](state, payload) {
         state.themes = payload;
-    }
+    },
 };

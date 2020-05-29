@@ -2,19 +2,22 @@
     <section class="section promocodes-view">
         <div class="container container--tablet-lg promocodes-view__header">
             <h2 class="promocodes-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
-            <radio-switch
-                class="promocodes-view__switch"
-                :value="selectedStatus"
-                :items="promocodeStatus"
-                id="promocode-switch"
-                key-field="value"
-                name="promocodeStatus"
-                @input="onStatusChanged"
-                v-if="items && items.length"
-            />
-            <button class="btn btn--outline" @click="onPromocodeRequest" v-else-if="!isTabletLg">
-                Запрос промокода
-            </button>
+
+            <div class="promocodes-view__header-controls">
+                <radio-switch
+                    class="promocodes-view__header-switch"
+                    :value="selectedStatus"
+                    :items="promocodeStatus"
+                    id="promocode-switch"
+                    key-field="value"
+                    name="promocodeStatus"
+                    @input="onStatusChanged"
+                />
+
+                <button class="btn btn--outline promocodes-view__header-btn" @click="onPromocodeRequest">
+                    Запрос промокода
+                </button>
+            </div>
         </div>
 
         <template v-if="items && items.length">
@@ -243,18 +246,25 @@
                 </li>
             </ul>
         </template>
-
-        <div class="promocodes-view__attention" v-else>
-            <v-svg name="info-middle" class="promocodes-view__attention-icon" width="24" height="24" />
-            <div class="promocodes-view__attention-text">
+        <empty-placeholder-panel
+            class="promocodes-view__attention"
+            v-else
+            :show-btn="!isTablet"
+            @btn-click="onPromocodeRequest"
+        >
+            <template v-if="$route.query.isArchive == 0">
                 У вас пока нет активных промо-кодов.<br />
                 Воспользуйтесь функцией «Запросить промо-код» для привлечения аудитории к определенным продуктам или
                 категориям товаров.
-            </div>
-            <button @click="onPromocodeRequest" class="btn btn--outline promocodes-view__attention-btn">
+            </template>
+            <template v-else>
+                Архив ваших промо-кодов пуст.
+            </template>
+
+            <template v-slot:btn>
                 Запрос промокода
-            </button>
-        </div>
+            </template>
+        </empty-placeholder-panel>
 
         <transition name="fade">
             <message-modal v-if="$isServer || isMessageOpen" />
@@ -269,6 +279,7 @@ import VButton from '@controls/VButton/VButton.vue';
 
 import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+import EmptyPlaceholderPanel from '@components/EmptyPlaceholderPanel/EmptyPlaceholderPanel.vue';
 
 import MessageModal from '@components/profile/MessageModal/MessageModal.vue';
 
@@ -307,6 +318,7 @@ export default {
 
         RadioSwitch,
         InfoRow,
+        EmptyPlaceholderPanel,
 
         MessageModal,
     },
@@ -342,6 +354,10 @@ export default {
         isTabletLg() {
             return this.$mq.tabletLg;
         },
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
     },
 
     methods: {
@@ -352,7 +368,7 @@ export default {
             this.$router.replace({ path: this.$route.path, query: { isArchive: value } });
         },
 
-        setFilterValue(value) {
+        setFilterValue(value = 0) {
             this.selectedStatus = Number(value);
         },
 
@@ -366,11 +382,15 @@ export default {
         onToggleIsOpen(item) {
             item.isOpen = !item.isOpen;
         },
-        
+
         onPromocodeRequest() {
-            this[CHANGE_MODAL_STATE]({ name: modalName.profile.MESSAGE, open: true, state: {
-                themeCode: themeCodes.PROMOCODE,
-            } });
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.profile.MESSAGE,
+                open: true,
+                state: {
+                    themeCode: themeCodes.PROMOCODE,
+                },
+            });
         },
     },
 
@@ -441,6 +461,7 @@ export default {
     created() {
         this.promocodeType = promocodeType;
         this.items = this[PROMOCODES];
+        this.setFilterValue(this.$route.query.isArchive);
     },
 };
 </script>
