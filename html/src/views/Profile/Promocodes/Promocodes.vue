@@ -246,17 +246,25 @@
                 </li>
             </ul>
         </template>
-        <div class="promocodes-view__attention" v-else>
-            <v-svg name="info-middle" class="promocodes-view__attention-icon" width="24" height="24" />
-            <div class="promocodes-view__attention-text">
+        <empty-placeholder-panel
+            class="promocodes-view__attention"
+            v-else
+            :show-btn="!isTablet"
+            @btn-click="onPromocodeRequest"
+        >
+            <template v-if="$route.query.isArchive == 0">
                 У вас пока нет активных промо-кодов.<br />
                 Воспользуйтесь функцией «Запросить промо-код» для привлечения аудитории к определенным продуктам или
                 категориям товаров.
-            </div>
-            <button @click="onPromocodeRequest" class="btn btn--outline promocodes-view__attention-btn">
+            </template>
+            <template v-else>
+                Архив ваших промо-кодов пуст.
+            </template>
+
+            <template v-slot:btn>
                 Запрос промокода
-            </button>
-        </div>
+            </template>
+        </empty-placeholder-panel>
 
         <transition name="fade">
             <message-modal v-if="$isServer || isMessageOpen" />
@@ -271,6 +279,7 @@ import VButton from '@controls/VButton/VButton.vue';
 
 import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+import EmptyPlaceholderPanel from '@components/EmptyPlaceholderPanel/EmptyPlaceholderPanel.vue';
 
 import MessageModal from '@components/profile/MessageModal/MessageModal.vue';
 
@@ -309,6 +318,7 @@ export default {
 
         RadioSwitch,
         InfoRow,
+        EmptyPlaceholderPanel,
 
         MessageModal,
     },
@@ -343,6 +353,10 @@ export default {
 
         isTabletLg() {
             return this.$mq.tabletLg;
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 

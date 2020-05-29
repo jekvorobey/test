@@ -164,32 +164,8 @@
     }
 
     &__attention {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        @media (--tablet) {
-            padding: 0 calc(var(--gs) * 2);
-        }
-
-        &-text {
-            font-size: 20px;
-            line-height: 24px;
-            color: var(--cl-grey);
-            text-align: center;
-            max-width: calc(var(--gs) * 80);
-
-            @media (--tablet) {
-                font-size: 16px;
-            }
-        }
-
-        &-btn {
-            margin-top: calc(var(--gs) * 2);
-
-            @media (--tablet) {
-                display: none;
-            }
+        @media (--tablet-min) {
+            padding: calc(var(--gs) * 5) 0;
         }
     }
 }

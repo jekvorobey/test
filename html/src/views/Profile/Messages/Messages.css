@@ -49,4 +49,14 @@
             }
         }
     }
+
+    &__attention {
+        @media (--tablet-min) {
+            padding: calc(var(--gs) * 5) 0;
+        }
+
+        @media (--tablet) {
+            padding: calc(var(--gs) * 3) 0;
+        }
+    }
 }
