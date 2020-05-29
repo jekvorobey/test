@@ -130,7 +130,6 @@ export default {
                     message: this.message,
                 });
                 this.message = '';
-                this.isBtnDisabled = false;
             } catch (error) {
                 this[CHANGE_MODAL_STATE]({
                     name: modalName.general.NOTIFICATION,
@@ -141,6 +140,8 @@ export default {
                     },
                 });
             }
+
+            this.isBtnDisabled = false;
         },
     },
 

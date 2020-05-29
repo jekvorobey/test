@@ -2,19 +2,22 @@
     <section class="section promocodes-view">
         <div class="container container--tablet-lg promocodes-view__header">
             <h2 class="promocodes-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
-            <radio-switch
-                class="promocodes-view__switch"
-                :value="selectedStatus"
-                :items="promocodeStatus"
-                id="promocode-switch"
-                key-field="value"
-                name="promocodeStatus"
-                @input="onStatusChanged"
-                v-if="items && items.length"
-            />
-            <button class="btn btn--outline" @click="onPromocodeRequest" v-else-if="!isTabletLg">
-                Запрос промокода
-            </button>
+
+            <div class="promocodes-view__header-controls">
+                <radio-switch
+                    class="promocodes-view__header-switch"
+                    :value="selectedStatus"
+                    :items="promocodeStatus"
+                    id="promocode-switch"
+                    key-field="value"
+                    name="promocodeStatus"
+                    @input="onStatusChanged"
+                />
+
+                <button class="btn btn--outline promocodes-view__header-btn" @click="onPromocodeRequest">
+                    Запрос промокода
+                </button>
+            </div>
         </div>
 
         <template v-if="items && items.length">
@@ -243,7 +246,6 @@
                 </li>
             </ul>
         </template>
-
         <div class="promocodes-view__attention" v-else>
             <v-svg name="info-middle" class="promocodes-view__attention-icon" width="24" height="24" />
             <div class="promocodes-view__attention-text">
@@ -366,11 +368,15 @@ export default {
         onToggleIsOpen(item) {
             item.isOpen = !item.isOpen;
         },
-        
+
         onPromocodeRequest() {
-            this[CHANGE_MODAL_STATE]({ name: modalName.profile.MESSAGE, open: true, state: {
-                themeCode: themeCodes.PROMOCODE,
-            } });
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.profile.MESSAGE,
+                open: true,
+                state: {
+                    themeCode: themeCodes.PROMOCODE,
+                },
+            });
         },
     },
 
