@@ -15,6 +15,7 @@ import { storeErrorHandler } from '@util/store';
 import { SET_CART_DATA, SET_FEATURED_PRODUCTS, SET_RELATIVE_PRODUCTS, SET_STATUS } from './mutations';
 import { PROMOCODE_STATUS } from './getters';
 
+export const SET_LOAD = 'SET_LOAD';
 export const CLEAR_CART_DATA = 'CLEAR_CART_DATA';
 export const FETCH_CART_DATA = 'FETCH_CART_DATA';
 
@@ -29,6 +30,14 @@ export const ADD_PROMOCODE = 'ADD_PROMOCODE';
 export const DELETE_PROMOCODE = 'DELETE_PROMOCODE';
 
 export default {
+    [SET_LOAD]({ commit }, payload) {
+        commit(SET_LOAD, payload);
+    },
+
+    [CLEAR_CART_DATA]({ commit }) {
+        commit(SET_CART_DATA, {});
+    },
+
     async [FETCH_FEATURED_PRODUCTS]({ commit }, payload = {}) {
         try {
             const data = await getProducts(payload);
@@ -50,25 +59,12 @@ export default {
         }
     },
 
-    [CLEAR_CART_DATA]({ commit }) {
-        commit(SET_CART_DATA, {});
-    },
-
     async [DELETE_ALL_ITEMS]({ commit }) {
         try {
             await deleteAllItems();
             commit(SET_CART_DATA, {});
         } catch (error) {
             storeErrorHandler(DELETE_ALL_ITEMS, error);
-        }
-    },
-
-    async [FETCH_CART_DATA]({ commit }) {
-        try {
-            const data = await getCartData();
-            commit(SET_CART_DATA, data);
-        } catch (error) {
-            storeErrorHandler(FETCH_CART_DATA, error);
         }
     },
 
@@ -96,28 +92,36 @@ export default {
     },
 
     async [ADD_PROMOCODE]({ commit, state }, payload) {
-        commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
-        return addCartPromocode({ promoCode: payload, data: state.cartData })
-            .then((data) => {
-                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
-                commit(SET_CART_DATA, data);
-            })
-            .catch((error) => {
-                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
-                storeErrorHandler(ADD_PROMOCODE, true)(error);
-            });
+        try {
+            commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
+            const data = await addCartPromocode({ promoCode: payload, data: state.cartData });
+            commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
+            commit(SET_CART_DATA, data);
+        } catch (error) {
+            commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(ADD_PROMOCODE, true)(error);
+        }
     },
 
-    [DELETE_PROMOCODE]({ commit, state }) {
-        commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
-        return deleteCartPromocode({ data: state.cartData })
-            .then((data) => {
-                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
-                commit(SET_CART_DATA, data);
-            })
-            .catch((error) => {
-                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
-                storeErrorHandler(DELETE_PROMOCODE, true)(error);
-            });
+    async [DELETE_PROMOCODE]({ commit, state }) {
+        try {
+            commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
+            const data = await deleteCartPromocode({ data: state.cartData });
+            commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
+            commit(SET_CART_DATA, data);
+        } catch (error) {
+            commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(DELETE_PROMOCODE, true)(error);
+        }
+    },
+
+    async [FETCH_CART_DATA]({ commit }, isServer) {
+        try {
+            const data = await getCartData();
+            commit(SET_LOAD, isServer);
+            commit(SET_CART_DATA, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_CART_DATA, error);
+        }
     },
 };

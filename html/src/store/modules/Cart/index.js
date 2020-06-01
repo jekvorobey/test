@@ -5,6 +5,7 @@ import mutations from './mutations';
 import getters, { PROMOCODE_STATUS } from './getters';
 
 export const NAME = 'cart';
+export const LOAD = 'load';
 export const CART_DATA = 'cartData';
 export const CART_STATUS = 'cartStatus';
 export const FEATURED_PRODUCTS = 'featuredProducts';
@@ -15,6 +16,7 @@ export default function createModule() {
         name: NAME,
         namespaced: true,
         state: {
+            [LOAD]: false,
             [CART_STATUS]: {
                 [PROMOCODE_STATUS]: requestStatus.SUCCESS,
             },
