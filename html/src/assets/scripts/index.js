@@ -1,3 +1,8 @@
+/**
+ * Basic polyfills and libs for application
+ * Полифилы и базовые либы приложения
+ */
+
 import 'core-js/stable/symbol';
 import 'core-js/stable/object';
 import 'core-js/stable/promise';

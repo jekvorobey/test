@@ -1,3 +1,5 @@
+import '@scripts';
+
 import Vue from 'vue';
 import { Container } from 'inversify';
 import { injectionType } from '@enums';

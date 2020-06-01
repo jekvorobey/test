@@ -1,3 +1,5 @@
+import '@scripts';
+
 import { Container } from 'inversify';
 import { injectClass, injectableClass } from '@util/container';
 import { injectionType } from '@enums';
