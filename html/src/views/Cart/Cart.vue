@@ -218,7 +218,7 @@ import VTabs from '@controls/VTabs/VTabs.vue';
 import { $store, $logger, $progress } from '@services';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import cartModule, { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '@store/modules/Cart';
+import { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '@store/modules/Cart';
 import {
     FETCH_FEATURED_PRODUCTS,
     DELETE_CART_ITEM,
@@ -227,6 +227,7 @@ import {
     ADD_PROMOCODE,
     DELETE_PROMOCODE,
     FETCH_CART_DATA,
+    SET_LOAD,
 } from '@store/modules/Cart/actions';
 import {
     PRODUCTS,
@@ -349,6 +350,7 @@ export default {
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(CART_MODULE, [
+            FETCH_CART_DATA,
             FETCH_FEATURED_PRODUCTS,
             DELETE_CART_ITEM,
             ADD_CART_ITEM,
@@ -429,13 +431,25 @@ export default {
         },
     },
 
-    async beforeRouteEnter(to, from, next) {
-        //регистрируем модуль, если такого нет
-        registerModuleIfNotExists($store, CART_MODULE, cartModule);
+    async serverPrefetch() {
+        try {
+            await this[FETCH_CART_DATA](this.$isServer);
+        } catch (error) {}
+    },
 
-        // Обновляем данные корзины, для корректной синхроназиации промокодов и данных корзины при перепрыгивании между страницами.
-        await $store.dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`);
-        return next();
+    beforeRouteEnter(to, from, next) {
+        const { load } = $store.state[CART_MODULE];
+
+        if (load) {
+            $store.dispatch(`${CART_MODULE}/${SET_LOAD}`, false);
+            return next();
+        }
+
+        $progress.start();
+        $store
+            .dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`)
+            .then(() => next(vm => $progress.finish()))
+            .catch(() => next(vm => $progress.fail()));
     },
 
     mounted() {
