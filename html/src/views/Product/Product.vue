@@ -271,6 +271,14 @@
             </div>
         </section>
 
+        <section class="product-view__section product-view__bundles" v-if="productBundles">
+            <div class="container product-view__bundles">
+
+                <product-bundle-panel v-for="bundle in productBundles" :key="bundle.key" :items="bundle.items" :price="bundle.price" :old-price="bundle.oldPrice" />
+
+            </div>
+        </section>
+
         <section
             v-if="product.description && (product.description.content || product.description.image)"
             class="section product-view__section product-view__info"
@@ -668,6 +676,7 @@ import ProductDeliveryPanel from '@components/product/ProductDeliveryPanel/Produ
 import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOptionPanel.vue';
 import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
 import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag.vue';
+import ProductBundlePanel from '@components/product/ProductBundlePanel/ProductBundlePanel.vue';
 
 import ProductPickupPointsMap from '@components/product/ProductPickupPointsMap/ProductPickupPointsMap.vue';
 import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPanel/ProductPickupPointsPanel.vue';
@@ -690,6 +699,7 @@ import {
     FEATURED_PRODUCTS,
     INSTAGRAM_ITEMS,
     PRODUCT_OPTIONS,
+    PRODUCT_BUNDLES
 } from '@store/modules/Product';
 import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Product/getters';
 import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS } from '@store/modules/Product/actions';
@@ -854,6 +864,8 @@ export default {
         ProductPickupPointsMap,
         ProductPickupPointsPanel,
 
+        ProductBundlePanel,
+
         MapModal,
         GalleryModal,
     },
@@ -878,6 +890,7 @@ export default {
             BANNERS,
             FEATURED_PRODUCTS,
             INSTAGRAM_ITEMS,
+            PRODUCT_BUNDLES,
         ]),
 
         ...mapState(MODAL_MODULE, {

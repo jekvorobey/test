@@ -33,6 +33,8 @@ export const SELECTED_INDEX = 'selectedIndex';
 export const PICKUP_POINT_TYPES = 'pickupPointTypes';
 export const SELECTED_PICKUP_POINT_TYPE = 'selectedPickupPointType';
 
+export const PRODUCT_BUNDLES = 'productBundles';
+
 export const NAME = 'product';
 
 export default function createModule() {
@@ -57,6 +59,8 @@ export default function createModule() {
 
             [PICKUP_POINT_TYPES]: pickupPointTypes,
             [SELECTED_PICKUP_POINT_TYPE]: pickupPointTypes[0],
+
+            [PRODUCT_BUNDLES]: [],
         },
         actions,
         mutations,
