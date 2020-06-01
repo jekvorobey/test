@@ -1,10 +1,3 @@
-/**
- * Basic polyfills and libs for application
- * Полифилы и базовые либы приложения
- */
-
-import '@scripts';
-
 import Vue from 'vue';
 import { sync } from 'vuex-router-sync';
 
@@ -61,7 +54,7 @@ export default function createApp(container, initialState = null) {
         store,
         mq,
         i18n,
-        render: h => h(App),
+        render: (h) => h(App),
     });
 
     // expose the app, the router and the store.
