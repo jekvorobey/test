@@ -1666,10 +1666,10 @@ anymatch@~3.1.1:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
-apexcharts@^3.19.0:
-  version "3.19.0"
-  resolved "https://registry.yarnpkg.com/apexcharts/-/apexcharts-3.19.0.tgz#388265227e230c342390c47979898d5a0d4d7640"
-  integrity sha512-fzupCGVDvOoU6kEzguLAfgRgrlHynHM5fnkkyCL85tYf9U8bw1hCijs4A+kWXurC/SNytJrArBc21kA/2wuHYg==
+apexcharts@^3.19.2:
+  version "3.19.2"
+  resolved "https://registry.yarnpkg.com/apexcharts/-/apexcharts-3.19.2.tgz#d46113bf253e79f15e67d00721e5bb12af73914e"
+  integrity sha512-hMFLRE2Lyx4WrN9pYfQLvBDcn+HOodZrqRwc+kucxM+hcUmI2NHY4z+GI14+VcSFmD4aKiMbS3z3Q2jiBxUrcg==
   dependencies:
     svg.draggable.js "^2.2.2"
     svg.easing.js "^2.0.0"
@@ -2712,10 +2712,10 @@ cleave.js@^1.4.7:
   resolved "https://registry.yarnpkg.com/cleave.js/-/cleave.js-1.5.3.tgz#1ef36e1375dea289bffeefe8ebb1e3ef2ee23240"
   integrity sha512-tLum0abk+NRUZtMxpqLQS0jE9k2KYzsUlnMAqfMd2LAf8bb5xTHLHXTtPyI+dCk6DThtmWER3EzKfUi4NHdR7A==
 
-cleave.js@^1.5.10:
-  version "1.5.10"
-  resolved "https://registry.yarnpkg.com/cleave.js/-/cleave.js-1.5.10.tgz#04444703713d89eb6e2f7f75240061fa29d72722"
-  integrity sha512-oxKQSQ53r4tgnHH9VhxokKoNcdGV0m+omhuQS8QdrQJWZvSMMjX+VIVk18LuGarOKIaFysKI9hu4Qz/UdKdBkg==
+cleave.js@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/cleave.js/-/cleave.js-1.6.0.tgz#0e4e011943bdd70c67c9dcf4ff800ce710529171"
+  integrity sha512-ivqesy3j5hQVG3gywPfwKPbi/7ZSftY/UNp5uphnqjr25yI2CP8FS2ODQPzuLXXnNLi29e2+PgPkkiKUXLs/Nw==
 
 cli-boxes@^1.0.0:
   version "1.0.0"
@@ -4631,15 +4631,15 @@ filepond-plugin-file-validate-type@^1.2.5:
   resolved "https://registry.yarnpkg.com/filepond-plugin-file-validate-type/-/filepond-plugin-file-validate-type-1.2.5.tgz#b3588088d2b0d5dbdf706d068c0ecdf28140a8e3"
   integrity sha512-SsdYD6N+PDnetrPrBHfl13ZC9jRv5BuGdai5cORfANhuE/N32OwU/IclCNQ4qlpIa88hzqBg9dj6IINkiW+4HA==
 
-filepond-plugin-image-preview@^4.6.2:
-  version "4.6.2"
-  resolved "https://registry.yarnpkg.com/filepond-plugin-image-preview/-/filepond-plugin-image-preview-4.6.2.tgz#452c31419d3f41c6476a34762ef5ff2e4170307a"
-  integrity sha512-4Tc9cWVM+3iEFDeol+moz/FuWzBxlUbA89snmEyPtFqp6CWf8uyVK0L+vIOf9+bT3DgCEmfDwvQBbjsyu8J7Tg==
+filepond-plugin-image-preview@^4.6.4:
+  version "4.6.4"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-image-preview/-/filepond-plugin-image-preview-4.6.4.tgz#19edade651559cf8c9fb97bcc8ce56af16ebae67"
+  integrity sha512-grlFJv1LH4E7IzsKTIFI52LuyLQa+lXMqmUnSm0cufDblRXHxdraRkjj/88bd9pyVJm206dBXQnlIVVyEaE5xg==
 
-filepond@^4.13.5:
-  version "4.13.5"
-  resolved "https://registry.yarnpkg.com/filepond/-/filepond-4.13.5.tgz#43b7b20fff2ccbb65611ff6fefe992225c549a97"
-  integrity sha512-WZi8kMGZNh6hH6qsUdvCQcQOF5uPaTV1PdPC4PiAZauRyepDxtAnkK4OHRW+UXIkA2CW2IdHFrqlKvDR4Dk24A==
+filepond@^4.14.0:
+  version "4.14.0"
+  resolved "https://registry.yarnpkg.com/filepond/-/filepond-4.14.0.tgz#cafc3baebbe3fbe5b77c6c20d5bb9781a03c8f9a"
+  integrity sha512-7JrgOXl01Oif2pjA9TQJj96noNDIUDBKHnpe+mPJ9x1QrLrwcfPcpbyHJayYstcSYxGwlPutEBnkoDnouQZV4A==
 
 filesize@^3.6.1:
   version "3.6.1"
