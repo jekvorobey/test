@@ -53,7 +53,6 @@ module.exports = {
                     path.resolve(__dirname, '../node_modules/resize-detector'),
                     path.resolve(__dirname, '../node_modules/body-scroll-lock'),
                     path.resolve(__dirname, '../node_modules/vue-clamp'),
-                    path.resolve(__dirname, '../node_modules/lru-cache'),
                 ],
             },
             {

@@ -82,22 +82,20 @@ module.exports = merge(base, {
     plugins: isProd
         ? [
               new webpack.HashedModuleIdsPlugin(),
-              new CopyWebpackPlugin({
-                  patterns: [
-                      {
-                          from: path.resolve(__dirname, '../src/assets/images/icons'),
-                          to: path.resolve(__dirname, '../../public/assets/images/icons'),
-                      },
-                      {
-                          from: path.resolve(__dirname, '../src/assets/favicon.ico'),
-                          to: path.resolve(__dirname, '../../public/assets/favicon.ico'),
-                      },
-                      {
-                          from: path.resolve(__dirname, '../manifest.json'),
-                          to: path.resolve(__dirname, '../../public/assets/manifest.json'),
-                      },
-                  ],
-              }),
+              new CopyWebpackPlugin([
+                  {
+                      from: path.resolve(__dirname, '../src/assets/images/icons'),
+                      to: path.resolve(__dirname, '../../public/assets/images/icons'),
+                  },
+                  {
+                      from: path.resolve(__dirname, '../src/assets/favicon.ico'),
+                      to: path.resolve(__dirname, '../../public/assets/favicon.ico'),
+                  },
+                  {
+                      from: path.resolve(__dirname, '../manifest.json'),
+                      to: path.resolve(__dirname, '../../public/assets/manifest.json'),
+                  },
+              ]),
               new MiniCssExtractPlugin({
                   filename: isProd ? '[name].[chunkhash].css' : '[name].css',
               }),
@@ -187,22 +185,20 @@ module.exports = merge(base, {
               ...presets,
           ]
         : [
-              new CopyWebpackPlugin({
-                  patterns: [
-                      {
-                          from: path.resolve(__dirname, '../src/assets/images/icons'),
-                          to: path.resolve(__dirname, '../../public/assets/images/icons'),
-                      },
-                      {
-                          from: path.resolve(__dirname, '../src/assets/favicon.ico'),
-                          to: path.resolve(__dirname, '../../public/assets/favicon.ico'),
-                      },
-                      {
-                          from: path.resolve(__dirname, '../manifest.json'),
-                          to: path.resolve(__dirname, '../../public/assets/manifest.json'),
-                      },
-                  ],
-              }),
+              new CopyWebpackPlugin([
+                  {
+                      from: path.resolve(__dirname, '../src/assets/images/icons'),
+                      to: path.resolve(__dirname, '../public/assets/images/icons'),
+                  },
+                  {
+                      from: path.resolve(__dirname, '../src/assets/favicon.ico'),
+                      to: path.resolve(__dirname, '../public/assets/favicon.ico'),
+                  },
+                  {
+                      from: path.resolve(__dirname, '../manifest.json'),
+                      to: path.resolve(__dirname, '../public/assets/manifest.json'),
+                  },
+              ]),
               new ImageminWebpPlugin({
                   config: [
                       {
