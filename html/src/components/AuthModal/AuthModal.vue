@@ -88,8 +88,7 @@ export default {
             this.CHANGE_MODAL_STATE({ name: NAME, open: false });
         },
 
-        onSetTitle({ title, payload })
-        {
+        onSetTitle({ title, payload }) {
             this.title = title;
             this.showTabs = payload;
         },
