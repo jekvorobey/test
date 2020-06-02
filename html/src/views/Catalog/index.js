@@ -1,10 +1,12 @@
 import { productGroupTypes } from '@enums/product';
+import registerModule from '@router/middleware/registerModule';
 
 /**
  * @Module
  */
 
 const CatalogAsync = () => import(/* webpackChunkName: "catalog-view" */ './Catalog.vue');
+const CatalogModuleAsync = () => import(/* webpackChunkName: "catalog-view" */ '@store/modules/Catalog');
 
 /**
  * Модуль компонента Catalog
@@ -18,6 +20,7 @@ export default {
             path: `/:type(${productGroupTypes.CATALOG}|${productGroupTypes.NEW})/:code?/filters/*`,
             component: CatalogAsync,
             meta: {
+                middleware: [registerModule(CatalogModuleAsync)],
                 skipScroll: true,
             },
         },
@@ -26,6 +29,7 @@ export default {
             path: `/:type(${productGroupTypes.CATALOG}|${productGroupTypes.NEW})/:code?`,
             component: CatalogAsync,
             meta: {
+                middleware: [registerModule(CatalogModuleAsync)],
                 skipScroll: true,
             },
         },
@@ -33,6 +37,7 @@ export default {
             path: `/:type(${productGroupTypes.BRANDS}|${productGroupTypes.PROMO}|${productGroupTypes.SETS})/:entityCode/:code?/filters/*`,
             component: CatalogAsync,
             meta: {
+                middleware: [registerModule(CatalogModuleAsync)],
                 skipScroll: true,
             },
         },
@@ -40,6 +45,7 @@ export default {
             path: `/:type(${productGroupTypes.BRANDS}|${productGroupTypes.PROMO}|${productGroupTypes.SETS})/:entityCode/:code?`,
             component: CatalogAsync,
             meta: {
+                middleware: [registerModule(CatalogModuleAsync)],
                 skipScroll: true,
             },
         },
