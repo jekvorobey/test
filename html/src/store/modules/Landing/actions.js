@@ -69,7 +69,7 @@ export default {
                         id: 2,
                         url: '/404',
                         text: 'Подписаться',
-                        location: 'bottom',
+                        location: 'bottom_left',
                         type: 'white',
                     },
                     desktopImage: middleDesktopImg,
