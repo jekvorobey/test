@@ -12,6 +12,8 @@ export const SET_INSTAGRAM_ITEMS = 'SET_INSTAGRAM_ITEMS';
 export const SET_SELECTED_PICKUP_POINT = 'SET_SELECTED_PICKUP_POINT';
 export const SET_SELECTED_PICKUP_POINT_TYPE = 'SET_SELECTED_PICKUP_POINT_TYPE';
 
+export const SET_PRODUCT_BUNDLES = 'SET_PRODUCT_BUNDLES';
+
 export default {
     [SET_PRODUCT](state, payload = {}) {
         state.productCode = payload.code;
@@ -54,4 +56,8 @@ export default {
     [SET_INSTAGRAM_ITEMS](state, payload = []) {
         state.instagramItems = payload;
     },
+
+    [SET_PRODUCT_BUNDLES](state, payload = [] ) {
+        state.productBundles = payload;
+    }
 };

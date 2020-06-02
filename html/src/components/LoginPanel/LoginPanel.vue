@@ -73,21 +73,21 @@
                 <span v-if="counter !== 0">
                     Получить новый код можно через <strong>{{ counter }} сек.</strong>
                 </span>
-                <v-link v-else class="registration-modal__form-repeat" tag="button" @click.stop="sendSms">
+                <v-link v-else class="login-panel__form-repeat" tag="button" @click.stop="sendSms">
                     Отправить новый код
                 </v-link>
             </div>
         </template>
 
         <template v-else>
+
+            <h2 class="login-panel__h2" v-if="!isTablet">Смена пароля</h2>
+
             <span class="login-panel__form-password-text">
-                Придумайте пароль для входа в Личный кабинет. Он должен состоять из латинских букв, содержать как
+                Придумайте пароль для входа в Личный кабинет.<br>
+                Он должен состоять из латинских букв, содержать как
                 минимум одну цифру, заглавную и строчную буквы.
             </span>
-
-            <p class="login-panel__attention">
-                Введите новый пароль
-            </p>
 
             <form class="login-panel__form" @submit.prevent="onSubmit">
                 <v-password class="login-panel__form-input" v-model="restorePassword" :error="restorePasswordError">

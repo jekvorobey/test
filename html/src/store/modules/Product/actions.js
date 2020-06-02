@@ -7,6 +7,7 @@ import {
     getMasterclasses,
     getProductOptions,
     getProductPickupPoints,
+    getProductBundles,
 } from '@api';
 import {
     SET_PRODUCT,
@@ -17,6 +18,7 @@ import {
     SET_PRODUCT_OPTIONS,
     SET_REFERRER_CODE,
     SET_PICKUP_POINTS,
+    SET_PRODUCT_BUNDLES,
 } from './mutations';
 
 export const FETCH_PRODUCT_DATA = 'FETCH_PRODUCT_DATA';
@@ -32,6 +34,8 @@ export const FETCH_MASTERCLASSES = 'FETCH_MASTERCLASSES';
 
 export const SET_SELECTED_PICKUP_POINT = 'SET_SELECTED_PICKUP_POINT';
 export const SET_SELECTED_PICKUP_POINT_TYPE = 'SET_SELECTED_PICKUP_POINT_TYPE';
+
+export const FETCH_PRODUCT_BUNDLES = 'FETCH_PRODUCT_BUNDLES';
 
 export default {
     [SET_SELECTED_PICKUP_POINT_TYPE]({ commit }, payload) {
@@ -100,9 +104,11 @@ export default {
         try {
             const data = await getProduct(code, referrerCode);
             const isSameGroup = state.product.variantGroup === data.variantGroup;
+            const { bundles } = await getProductBundles(code);
 
             commit(SET_PRODUCT, data);
             commit(SET_REFERRER_CODE, referrerCode);
+            commit(SET_PRODUCT_BUNDLES, bundles);
 
             if (!isSameGroup)
                 if (data.variantGroup) await dispatch(FETCH_PRODUCT_OPTIONS, data.variantGroup);
@@ -119,6 +125,16 @@ export default {
             dispatch(FETCH_FEATURED_PRODUCTS, payload),
             dispatch(FETCH_INSTAGRAM_ITEMS, payload),
             dispatch(FETCH_MASTERCLASSES, payload),
+            dispatch(FETCH_PRODUCT_BUNDLES, payload)
         ]);
     },
+
+    async [FETCH_PRODUCT_BUNDLES]({ commit }, { code }) {
+        try {
+            const { bundles } = await getProductBundles(code);
+            commit(SET_PRODUCT_BUNDLES, bundles);
+        } catch (error) {
+            storeErrorHandler(FETCH_PRODUCT_BUNDLES)(error);
+        }
+    }
 };

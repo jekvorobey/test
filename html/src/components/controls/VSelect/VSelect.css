@@ -180,7 +180,7 @@ fieldset[disabled] .multiselect {
 .multiselect__tags {
     min-height: calc(var(--gs) * 5);
     display: block;
-    padding: calc(var(--gs) - 1px) calc(var(--gs) * 5) calc(var(--gs) - 1px) calc(var(--gs) * 2);
+    padding: calc(var(--gs) - 5px) calc(var(--gs) * 5) calc(var(--gs) - 5px) calc(var(--gs) * 2);
     border: none;
     border-bottom: 1px solid var(--cl-grey);
     background: var(--cl-white);
@@ -449,7 +449,6 @@ fieldset[disabled] .multiselect {
 
     .multiselect__tags {
         border: 1px solid var(--cl-global);
-        padding: calc(var(--gs) * 0.75) calc(var(--gs) * 5) 0 calc(var(--gs) * 2);
     }
 
     .multiselect__single {

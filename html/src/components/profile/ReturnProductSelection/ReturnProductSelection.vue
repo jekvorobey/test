@@ -41,6 +41,7 @@ import VCheck from '@controls/VCheck/VCheck.vue';
 import VButton from '@controls/VButton/VButton.vue';
 
 import ReturnPanelProductCard from '@components/ReturnPanelProductCard/ReturnPanelProductCard.vue';
+import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
 
 import { mapState, mapActions } from 'vuex';
 
@@ -64,6 +65,7 @@ export default {
         VButton,
 
         ReturnPanelProductCard,
+        PackageProductCard,
     },
 
     data() {

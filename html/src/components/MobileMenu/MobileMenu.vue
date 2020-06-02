@@ -39,11 +39,6 @@
                                 <v-svg name="arrow-down" width="24" height="24" />
                             </v-link>
                         </li>
-                        <li class="container mobile-menu__menu-item mobile-menu__menu-item--separator">
-                            <v-link class="mobile-menu__menu-link" to="/ui-kit">
-                                ui-kit
-                            </v-link>
-                        </li>
                         <li class="container mobile-menu__menu-item">
                             <v-link tag="button" class="mobile-menu__menu-link" @click="onRegister">
                                 <v-svg

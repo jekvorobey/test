@@ -19,7 +19,7 @@
         padding: calc(var(--gs) * 3);
         padding-bottom: var(--gs);
 
-        @media(--tablet-lg) {
+        @media(--tablet) {
             padding: 0;
         }
     }
@@ -29,13 +29,13 @@
             margin-right: calc(var(--gs) * 4);
             border-bottom: 1px solid var(--cl-global);
 
-            @media(--tablet-lg) {
+            @media(--tablet) {
                 display: none;
             }
         }
 
         &__panel {
-            @media (--tablet-lg) {
+            @media (--tablet) {
                 padding: calc(var(--gs) * 2);
             }
         }

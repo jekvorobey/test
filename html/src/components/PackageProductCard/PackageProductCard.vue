@@ -17,7 +17,7 @@
         </router-link>
         <div class="package-product-card__body">
             <v-link class="package-product-card__body-name" :to="href">{{ name }}</v-link>
-            <div class="package-product-card__body-count">{{ quantity }} шт</div>
+            <div class="package-product-card__body-count" v-if="showCount">{{ quantity }} шт</div>
             <div class="package-product-card__body-prices">
                 <price class="text-bold package-product-card__body-price" v-bind="price" />
                 <price
@@ -77,6 +77,11 @@ export default {
         count: {
             type: [String, Number],
             default: 1,
+        },
+
+        showCount: {
+            type: Boolean,
+            default: true,
         },
     },
 

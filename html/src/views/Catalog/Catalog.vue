@@ -482,8 +482,6 @@ export default {
             },
         } = to;
 
-        // регистрируем модуль, если такого нет
-        registerModuleIfNotExists($store, CATALOG_MODULE, catalogModule);
         const { loadPath, categoryCode, entityCode, type } = $store.state[CATALOG_MODULE];
 
         // если все загружено, пропускаем
