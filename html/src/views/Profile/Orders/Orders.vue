@@ -197,7 +197,7 @@
                 <info-row class="orders-view__list-item-row" name="Сумма">
                     <price v-bind="order.price" />
                 </info-row>
-                <info-row class="orders-view__list-item-row" name="Дата заказа" :value="order.created_at" />
+                <info-row class="orders-view__list-item-row" name="Дата заказа" :value="formatDate(order.created_at)" />
                 <info-row class="orders-view__list-item-row" name="Дата доставки" :value="order.deliveryDate" />
 
                 <template v-if="order.payment_status === orderPaymentStatus.NOT_PAID && order.payments.length !== 0">

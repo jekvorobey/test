@@ -129,6 +129,30 @@
         }
     }
 
+    &__list {
+        &-item {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            border-bottom: 1px solid var(--cl-divider-grey);
+            padding: calc(var(--gs) * 3);
+            padding-bottom: 0;
+
+            @media (--tablet) {
+                padding: calc(var(--gs) * 2);
+                padding-bottom: 0;
+            }
+
+            &-row {
+                display: flex;
+                align-items: center;
+                width: 50%;
+                padding: 0;
+                margin-bottom: calc(var(--gs) * 2);
+            }
+        }
+    }
+
     &__controls {
         text-align: center;
 
