@@ -274,7 +274,15 @@
         <section class="product-view__section product-view__bundles" v-if="productBundles">
             <div class="container product-view__bundles">
 
-                <product-bundle-panel v-for="bundle in productBundles" :key="bundle.key" :items="bundle.items" :price="bundle.price" :old-price="bundle.oldPrice" />
+                <product-bundle-panel
+                    v-for="bundle in productBundles"
+                    :key="bundle.id"
+                    :bundle-id="bundle.id"
+                    :items="bundle.items"
+                    :price="bundle.price"
+                    :old-price="bundle.oldPrice"
+                    @add-bundle="onAddCartBundle"
+                />
 
             </div>
         </section>
@@ -706,7 +714,7 @@ import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS } from '@store/modules/
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { IS_IN_CART } from '@store/modules/Cart/getters';
-import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
+import { ADD_CART_ITEM, ADD_CART_BUNDLE } from '@store/modules/Cart/actions';
 
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
@@ -1046,7 +1054,7 @@ export default {
     methods: {
         ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE]),
         ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS]),
-        ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+        ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
@@ -1148,6 +1156,16 @@ export default {
                 open: true,
                 state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
+        },
+
+        onAddCartBundle(item) {
+            const { bundleId, count } = item;
+            const { referrerCode: referrerCode } = this;
+
+            if (referrerCode) this[ADD_CART_BUNDLE]({ bundleId, count, referrerCode });
+            else this[ADD_CART_BUNDLE]({ bundleId, count });
+            
+            alert('Комплект добавлен в корзину');
         },
 
         async onShowPickupPoints() {

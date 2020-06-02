@@ -54,9 +54,12 @@
                     </div>
                 </div>
                 <div class="product-bundle-panel__total-controls">
-                    <v-button class="product-bundle-panel__btn">
-                    Добавить в корзину
-                    </v-button>
+                    <buy-button
+                        class="product-bundle-panel__btn"
+                        @click.prevent="onAddBundle"
+                    >
+                        Добавить в корзину
+                    </buy-button>
                 </div>
             </div>
         </div>
@@ -65,7 +68,8 @@
 
 <script>
 import VButton from '@controls/VButton/VButton.vue';
-import Price from '@components/Price/Price.vue'
+import Price from '@components/Price/Price.vue';
+import BuyButton from '@components/BuyButton/BuyButton.vue';
 
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue'
 import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue'
@@ -77,6 +81,7 @@ export default {
     components: {
         VButton,
         Price,
+        BuyButton,
 
         CatalogProductCard,
         PackageProductCard,
@@ -102,6 +107,11 @@ export default {
             type: [Object, String],
             default: () => {},
         },
+
+        bundleId: {
+            type: Number,
+            required: true,
+        },
     },
 
     computed: {
@@ -116,5 +126,14 @@ export default {
             }
         },
     },
+
+    methods: {
+        onAddBundle() {
+            this.$emit('add-bundle', {
+                bundleId: this.bundleId,
+                count: 1,
+            });
+        },
+    }
 }
 </script>

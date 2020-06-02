@@ -1323,4 +1323,10 @@
             right: 12px;
         }
     }
+
+    &__bundles {
+        @media (--tablet) {
+            padding: 0;
+        }
+    }
 }

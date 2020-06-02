@@ -647,6 +647,14 @@ export function addCartItem(offerId, storeId, count, referrerCode) {
     });
 }
 
+export function addCartBundle(bundleId, count, referrerCode) {
+    return $http.post('/v1/cart/item-bundle', {
+        bundleId,
+        count,
+        referrerCode,
+    });
+}
+
 export function addCartPromocode(data) {
     return $http.post('/v1/cart/promo-code', data);
 }

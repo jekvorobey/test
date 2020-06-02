@@ -90,7 +90,6 @@ export default {
 
         onSetTitle({ title, payload })
         {
-            console.log(payload);
             this.title = title;
             this.showTabs = payload;
         },
