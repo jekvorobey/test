@@ -21,6 +21,7 @@
                         class="account-view__panel-bottom-select"
                         label="label"
                         track-by="id"
+                        placeholder="Выберите карту"
                         :value="selectedCard"
                         :options="cards"
                         :searchable="false"
@@ -29,11 +30,11 @@
                     />
                     <v-input
                         class="account-view__panel-bottom-input"
-                        type="number"
                         v-model="amount"
-                        min="0"
-                        :max="billingData.referral_bill.value"
+                        type="number"
+                        min="100"
                         placeholder="Введите сумму"
+                        :max="billingData.referral_bill.value"
                     />
                     <v-button
                         class="account-view__panel-bottom-btn"
@@ -71,7 +72,10 @@
                             <tr class="account-view__table-tr" v-for="operation in operations" :key="operation.id">
                                 <td class="account-view__table-td">{{ operation.action_id || '-' }}</td>
                                 <td class="account-view__table-td">{{ operation.date }}</td>
-                                <td class="account-view__table-td">{{ operation.type }}</td>
+                                <td class="account-view__table-td">
+                                    {{ operation.type }}<br />
+                                    <span class="status-color-error" v-if="operation.status === 3">Ошибка</span>
+                                </td>
                                 <td class="account-view__table-td">
                                     <price v-bind="operation.value" />
                                 </td>
@@ -89,7 +93,12 @@
                 >
                     <info-row class="account-view__list-item-row" name="Заказ/событие" :value="operation.action_id" />
                     <info-row class="account-view__list-item-row" name="Дата" :value="operation.date" />
-                    <info-row class="account-view__list-item-row" name="Операция" :value="operation.type" />
+                    <info-row class="account-view__list-item-row" name="Операция">
+                        {{ operation.type }}
+                        <template v-if="operation.status === 3">
+                            (<span class="status-color-error">Ошибка</span>)
+                        </template>
+                    </info-row>
                     <info-row class="account-view__list-item-row" name="Начислено/cписано">
                         <price v-bind="operation.value" />
                     </info-row>
@@ -307,7 +316,7 @@ export default {
                 await this[FETCH_BILLING_DATA]({});
                 this.$router.replace({ path: this.$route.path });
                 this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
-                
+
                 this.amount = null;
                 this.isDisabledBtn = false;
             } catch (error) {
