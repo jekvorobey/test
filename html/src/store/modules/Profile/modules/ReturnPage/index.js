@@ -7,6 +7,8 @@ import { returnFormSteps } from '@enums/profile';
 export const NAME = 'returnPage';
 
 export const PRODUCTS = 'products';
+export const SELECTED_PRODUCTS = 'selectedProducts';
+
 export const STEP = 'step';
 
 export default function createModule() {
@@ -67,6 +69,7 @@ export default function createModule() {
                     type: 'product',
                 },
             ],
+            [SELECTED_PRODUCTS]: [],
         },
 
         actions,
