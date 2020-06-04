@@ -208,6 +208,8 @@ import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger, $retailRocket } from '@services';
 
+import { SCROLL } from '@store';
+
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
@@ -285,6 +287,7 @@ export default {
     },
 
     computed: {
+        ...mapState([SCROLL]),
         ...mapGetters(CATALOG_MODULE, [
             ACTIVE_TAGS,
             ACTIVE_CATEGORY,
@@ -295,8 +298,8 @@ export default {
         ]),
         ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE]),
         ...mapState('route', {
-            code: state => state.params.code,
-            entityCode: state => state.params.entityCode,
+            code: (state) => state.params.code,
+            entityCode: (state) => state.params.entityCode,
         }),
 
         breadcrumbRootUrl() {
@@ -385,6 +388,10 @@ export default {
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
+        scrollTo(options) {
+            if (!this.$isServer) window.scrollTo(options);
+        },
+
         generateBreadcrumbUrl(categoryCode) {
             const { type, entityCode } = this;
             return { path: generateCategoryUrl(type, entityCode, categoryCode) };
@@ -392,7 +399,7 @@ export default {
 
         setSortValue(field, direction) {
             this.sortValue =
-                this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
+                this.sortOptions.find((o) => o.field === field && o.direction === direction) || this.sortOptions[0];
         },
 
         onClickDeleteTag(value) {
@@ -455,7 +462,7 @@ export default {
                 next();
 
                 if (!showMore && page !== fromPage)
-                    window.scrollTo({
+                    this.scrollTo({
                         top: MIN_SCROLL_VALUE + 1,
                         behavior: 'smooth',
                     });
@@ -487,7 +494,7 @@ export default {
 
         // если все загружено, пропускаем
         if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode)
-            next(vm => vm.setSortValue(orderField, orderDirection));
+            next((vm) => vm.setSortValue(orderField, orderDirection));
         else {
             const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
 
@@ -506,14 +513,20 @@ export default {
                     orderField,
                     orderDirection,
                 })
-                .then(data => {
+                .then((data) => {
                     $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
-                        vm.setSortValue(orderField, orderDirection);
+                    next((vm) => {
                         $progress.finish();
+                        vm.setSortValue(orderField, orderDirection);
+
+                        if (vm[SCROLL])
+                            vm.scrollTo({
+                                top: MIN_SCROLL_VALUE + 1,
+                                behavior: 'smooth',
+                            });
                     });
                 })
-                .catch(thrown => {
+                .catch((thrown) => {
                     if (thrown && thrown.isCancel === true) return next();
 
                     $progress.fail();
