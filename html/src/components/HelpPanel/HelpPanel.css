@@ -4,6 +4,7 @@
     .general-popup-panel__header {
         align-items: flex-start;
         margin-bottom: calc(var(--gs) * 3);
+        justify-content: space-between;
     }
 
     .general-popup-panel__body {
@@ -52,6 +53,23 @@
 
         &:hover {
             text-decoration: underline;
+        }
+    }
+
+    &__slot {
+        display: flex;
+        align-items: center;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    &__controls {
+        display: flex;
+
+        &:hover {
+            cursor: pointer;
         }
     }
 }

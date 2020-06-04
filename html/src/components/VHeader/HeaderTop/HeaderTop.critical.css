@@ -64,6 +64,12 @@
             padding-left: calc(var(--gs) * 2);
         }
 
+        &.open {
+            .help-panel__icon-arrow {
+                transform: rotate(180deg);
+            }
+        }
+
         .trigger {
             display: flex !important;
             align-items: center;
