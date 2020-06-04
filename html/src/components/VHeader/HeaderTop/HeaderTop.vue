@@ -19,7 +19,7 @@
             </div>
 
             <help-panel class="header-top__help">
-                {{ $t('header.top.help') }}<v-svg name="arrow-down" width="20" height="20" />
+                {{ $t('header.top.help') }}<v-svg name="arrow-down" class="help-panel__icon-arrow" width="20" height="20" />
             </help-panel>
         </div>
     </div>

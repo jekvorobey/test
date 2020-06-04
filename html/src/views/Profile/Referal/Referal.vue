@@ -40,7 +40,7 @@
                         <div class="referal-view__panel-item-counter">
                             <v-arc-counter
                                 v-bind="arcSettings"
-                                :text="formatArcSum(sumArcData.current)"
+                                :text="formatArcSum(sumArcData.value)"
                                 :active-count="sumArcData.currentPercent"
                             />
                             <div class="text-grey referal-view__panel-item-label">

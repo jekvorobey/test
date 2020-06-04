@@ -67,7 +67,7 @@ const main = {
 
     orderStatus: {
         [orderStatus.PRE_ORDER]: 'Предзаказ: ожидаем поступления товара',
-        [orderStatus.CREATED]: 'Создан',
+        [orderStatus.CREATED]: 'Оформлен',
         [orderStatus.AWAITING_CHECK]: 'В обработке',
         [orderStatus.CHECKING]: 'В обработке',
         [orderStatus.AWAITING_CONFIRMATION]: 'В обработке',

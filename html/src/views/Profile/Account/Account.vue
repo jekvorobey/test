@@ -17,31 +17,38 @@
                     </span>
                 </div>
                 <div class="account-view__panel-bottom">
-                    <v-select
-                        class="account-view__panel-bottom-select"
-                        label="label"
-                        track-by="id"
-                        :value="selectedCard"
-                        :options="cards"
-                        :searchable="false"
-                        :show-labels="false"
-                        @input="onChangeSelectedCard"
-                    />
-                    <v-input
-                        class="account-view__panel-bottom-input"
-                        type="number"
-                        v-model="amount"
-                        min="0"
-                        :max="billingData.referral_bill.value"
-                        placeholder="Введите сумму"
-                    />
-                    <v-button
-                        class="account-view__panel-bottom-btn"
-                        :disabled="!selectedCard || !amount || isDisabledBtn"
-                        @click="onClickCashOut"
-                    >
-                        Вывод
-                    </v-button>
+                    <template v-if="hasPaymentInfo">
+                        <v-select
+                            class="account-view__panel-bottom-select"
+                            label="label"
+                            track-by="id"
+                            placeholder="Выберите карту"
+                            :value="selectedCard"
+                            :options="cards"
+                            :searchable="false"
+                            :show-labels="false"
+                            @input="onChangeSelectedCard"
+                        />
+                        <v-input
+                            class="account-view__panel-bottom-input"
+                            v-model="amount"
+                            type="number"
+                            min="100"
+                            placeholder="Введите сумму"
+                            :max="billingData.referral_bill.value"
+                        />
+                        <v-button
+                            class="account-view__panel-bottom-btn"
+                            :disabled="!selectedCard || !amount || isDisabledBtn"
+                            @click="onClickCashOut"
+                        >
+                            Вывод
+                        </v-button>
+                    </template>
+                    <template v-else>
+                        <span>Для вывода средств заполните ваши реквизиты в&nbsp;</span>
+                        <router-link :to="{ name: 'Cabinet' }">личном кабинете</router-link>
+                    </template>
                 </div>
             </div>
         </div>
@@ -71,7 +78,10 @@
                             <tr class="account-view__table-tr" v-for="operation in operations" :key="operation.id">
                                 <td class="account-view__table-td">{{ operation.action_id || '-' }}</td>
                                 <td class="account-view__table-td">{{ operation.date }}</td>
-                                <td class="account-view__table-td">{{ operation.type }}</td>
+                                <td class="account-view__table-td">
+                                    {{ operation.type }}<br />
+                                    <span class="status-color-error" v-if="operation.status === 3">Ошибка</span>
+                                </td>
                                 <td class="account-view__table-td">
                                     <price v-bind="operation.value" />
                                 </td>
@@ -89,7 +99,12 @@
                 >
                     <info-row class="account-view__list-item-row" name="Заказ/событие" :value="operation.action_id" />
                     <info-row class="account-view__list-item-row" name="Дата" :value="operation.date" />
-                    <info-row class="account-view__list-item-row" name="Операция" :value="operation.type" />
+                    <info-row class="account-view__list-item-row" name="Операция">
+                        {{ operation.type }}
+                        <template v-if="operation.status === 3">
+                            (<span class="status-color-error">Ошибка</span>)
+                        </template>
+                    </info-row>
                     <info-row class="account-view__list-item-row" name="Начислено/cписано">
                         <price v-bind="operation.value" />
                     </info-row>
@@ -170,7 +185,7 @@ import {
     SELECTED_CARD,
     CARD_CREATION_STATUS,
 } from '@store/modules/Profile/modules/Billing';
-import { PAGES_COUNT } from '@store/modules/Profile/modules/Billing/getters';
+import { PAGES_COUNT, HAS_PAYMENT_INFO } from '@store/modules/Profile/modules/Billing/getters';
 import {
     FETCH_BILLING_DATA,
     SET_LOAD_PATH,
@@ -228,7 +243,7 @@ export default {
             [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
         }),
 
-        ...mapGetters(BILLING_MODULE_PATH, [PAGES_COUNT]),
+        ...mapGetters(BILLING_MODULE_PATH, [PAGES_COUNT, HAS_PAYMENT_INFO]),
 
         newCardOption() {
             const backUrl = generateYandexCardAuthBackUrl();
@@ -307,7 +322,7 @@ export default {
                 await this[FETCH_BILLING_DATA]({});
                 this.$router.replace({ path: this.$route.path });
                 this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
-                
+
                 this.amount = null;
                 this.isDisabledBtn = false;
             } catch (error) {

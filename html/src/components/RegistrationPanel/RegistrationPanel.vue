@@ -1,6 +1,6 @@
 <template>
     <div class="registration-panel__body">
-        <div class="registration-panel__desc">
+        <div class="registration-panel__desc" v-if="!sent && !accepted">
             <template v-if="!sent">
                 На указанный номер телефона будет выслан код по СМС, введите его для регистрации.
             </template>
@@ -64,8 +64,12 @@
             </template>
 
             <div v-else class="registration-panel__form-password">
+
+                <h2 class="registration-panel__h2" v-if="!isTablet">Создание пароля</h2>
+
                 <span class="registration-panel__form-password-text">
-                    Придумайте пароль для входа в Личный кабинет. Он должен состоять из латинских букв, содержать как
+                    Придумайте пароль для входа в Личный кабинет.<br>
+                    Он должен состоять из латинских букв, содержать как
                     минимум одну цифру, заглавную и строчную буквы.
                 </span>
                 <v-password class="registration-panel__form-input" v-model="password" :error="passwordError">

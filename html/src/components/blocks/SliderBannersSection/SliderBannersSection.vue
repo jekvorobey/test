@@ -2,18 +2,39 @@
     <section class="section">
         <div class="slider-banners-section" :style="{ 'background-color': backgroundColor }">
             <v-slider class="container slider-banners-section__slider" name="banners" :options="sliderOptions">
-                <template v-for="banner in banners">
+                <template v-for="banner in items">
                     <slot name="item" :item="banner">
-                        <landing-banner-card
+                        <catalog-banner-card
                             class="swiper-slide slider-banners-section__card"
                             :key="banner.id"
-                            :banner-id="banner.id"
-                            :image="banner.image"
-                            :upper-text="banner.upperText"
-                            :bottom-text="banner.bottomText"
-                            :title="banner.title"
-                            :btn-text="banner.btnText"
-                        />
+                            :item="banner"
+                        >
+                            <template v-if="banner.desktopImage">
+                                <source
+                                    :data-srcset="banner.desktopImage.webp"
+                                    type="image/webp"
+                                    media="(min-width: 1024px)"
+                                />
+                                <source :data-srcset="banner.desktopImage.orig" media="(min-width: 1024px)" />
+                            </template>
+                            <template v-if="banner.tabletImage">
+                                <source
+                                    :data-srcset="banner.tabletImage.webp"
+                                    type="image/webp"
+                                    media="(min-width: 768px)"
+                                />
+                                <source :data-srcset="banner.tabletImage.orig" media="(min-width: 768px)" />
+                            </template>
+                            <template v-if="banner.mobileImage">
+                                <source
+                                    :data-srcset="banner.mobileImage.webp"
+                                    type="image/webp"
+                                    media="(min-width: 320px)"
+                                />
+                                <source :data-srcset="banner.mobileImage.orig" media="(min-width: 320px)" />
+                            </template>
+                            <img class="blur-up lazyload v-picture__img" :data-src="banner.defaultImage" alt="" />
+                        </catalog-banner-card>
                     </slot>
                 </template>
             </v-slider>
@@ -24,8 +45,10 @@
 <script>
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
-import LandingBannerCard from '@components/LandingBannerCard/LandingBannerCard.vue';
+// import LandingBannerCard from '@components/LandingBannerCard/LandingBannerCard.vue';
+import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 
+import { generatePictureSourcePath } from '@util/file';
 import './SliderBannersSection.css';
 
 const sliderOptions = {
@@ -53,7 +76,7 @@ export default {
     components: {
         VPicture,
         VSlider,
-        LandingBannerCard,
+        CatalogBannerCard,
     },
 
     props: {
@@ -66,13 +89,77 @@ export default {
 
         backgroundColor: {
             type: String,
-            default: '#8CA9BE',
+            default: '#E6E6F0',
         },
     },
 
     computed: {
         sliderOptions() {
             return sliderOptions;
+        },
+
+        items() {
+            return this.banners.map((b) => ({
+                ...b,
+                mobileImage: this.mobileImage(b),
+                tabletImage: this.tabletImage(b),
+                desktopImage: this.desktopImage(b),
+                defaultImage: this.defaultImage(b),
+            }));
+        },
+    },
+
+    methods: {
+        mobileImage(banner) {
+            const image = banner.mobileImage || banner.tabletImage || banner.desktopImage;
+            if (typeof image === 'string')
+                return {
+                    webp: image,
+                    orig: image,
+                };
+
+            if (image)
+                return {
+                    webp: generatePictureSourcePath(320, 320, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(320, 320, image.id),
+                };
+        },
+
+        tabletImage(banner) {
+            const image = banner.tabletImage || banner.desktopImage;
+            if (typeof image === 'string')
+                return {
+                    webp: image,
+                    orig: image,
+                };
+
+            if (image)
+                return {
+                    webp: generatePictureSourcePath(472, 352, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(472, 352, image.id),
+                };
+        },
+
+        desktopImage(banner) {
+            const image = banner.desktopImage || banner.tabletImage;
+
+            if (typeof image === 'string')
+                return {
+                    webp: image,
+                    orig: image,
+                };
+
+            if (image)
+                return {
+                    webp: generatePictureSourcePath(600, 888, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(600, 888, image.id),
+                };
+        },
+
+        defaultImage(banner) {
+            const image = banner.desktopImage || banner.tabletImage || banner.mobileImage;
+            if (typeof image === 'string') return image;
+            if (image) return generatePictureSourcePath(600, 888, image.id);
         },
     },
 };

@@ -252,7 +252,7 @@
             :show-btn="!isTablet"
             @btn-click="onPromocodeRequest"
         >
-            <template v-if="$route.query.isArchive == 0">
+            <template v-if="!isArchive">
                 У вас пока нет активных промо-кодов.<br />
                 Воспользуйтесь функцией «Запросить промо-код» для привлечения аудитории к определенным продуктам или
                 категориям товаров.
@@ -267,7 +267,7 @@
         </empty-placeholder-panel>
 
         <transition name="fade">
-            <message-modal v-if="$isServer || isMessageOpen" />
+            <message-modal v-if="$isServer || isMessageOpen" @created="onChatCreated" />
         </transition>
     </section>
 </template>
@@ -351,6 +351,14 @@ export default {
                 state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
         }),
 
+        isArchive() {
+            const {
+                query: { isArchive = 0 },
+            } = this.$route;
+
+            return Number(isArchive) === 1;
+        },
+
         isTabletLg() {
             return this.$mq.tabletLg;
         },
@@ -381,6 +389,17 @@ export default {
 
         onToggleIsOpen(item) {
             item.isOpen = !item.isOpen;
+        },
+
+        onChatCreated() {
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state: {
+                    title: 'Уведомление',
+                    message: 'Запрос отправлен, администратор свяжется с вами в ближайшее время.',
+                },
+            });
         },
 
         onPromocodeRequest() {

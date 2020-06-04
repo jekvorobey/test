@@ -530,6 +530,14 @@ export function getFilters(categoryCode, excludedFilters) {
     });
 }
 
+export function getProductBundles(code) {
+    return $http.get('/v1/catalog/bundles', {
+        params: {
+            code
+        },
+    });
+}
+
 export function getCategories(node_code, max_depth) {
     return $http.get('/v1/categories', {
         params: {
@@ -636,6 +644,14 @@ export function addCartItem(offerId, storeId, count, referrerCode) {
         storeId,
         count,
         referrerCode: referrerCode ? String(referrerCode) : undefined,
+    });
+}
+
+export function addCartBundle(bundleId, count, referrerCode) {
+    return $http.post('/v1/cart/item-bundle', {
+        bundleId,
+        count,
+        referrerCode,
     });
 }
 

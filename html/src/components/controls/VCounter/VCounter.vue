@@ -5,7 +5,7 @@
             ref="decrement"
             type="button"
             @click="onBtnClick($event, 'decrement')"
-            :disabled="disabled"
+            :disabled="disabled || isMinDisabled"
         >
             <slot name="decrement">
                 <v-svg name="minus-small" width="16" height="16" />
@@ -28,7 +28,7 @@
             ref="increment"
             type="button"
             @click="onBtnClick($event, 'increment')"
-            :disabled="disabled"
+            :disabled="disabled || isMaxDisabled"
         >
             <slot name="increment">
                 <v-svg name="plus-small" width="16" height="16" />
@@ -102,6 +102,16 @@ export default {
             counter: 0,
             value_internal: Number(value),
         };
+    },
+
+    computed: {
+        isMinDisabled() {
+            return Number(this.value_internal) === Number(this.min);
+        },
+
+        isMaxDisabled() {
+            return Number(this.value_internal) === Number(this.max);
+        },
     },
 
     watch: {

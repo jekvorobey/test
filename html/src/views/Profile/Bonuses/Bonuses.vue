@@ -29,47 +29,60 @@
             </div>
         </div>
 
-        <section class="bonuses-view__section">
-            <div class="container container--tablet-lg">
-                <h3 class="bonuses-view__section-hl">Бонусная программа</h3>
-                <table class="bonuses-view__table">
-                    <colgroup v-if="!isTablet">
-                        <col width="25%" />
-                        <col width="20%" />
-                        <col width="20%" />
-                        <col width="20%" />
-                        <col width="15%" />
-                    </colgroup>
-                    <colgroup v-else>
-                        <col width="33.33333333333333%" />
-                        <col width="33.33333333333333%" />
-                        <col width="33.33333333333333%" />
-                    </colgroup>
-                    <thead class="bonuses-view__table-head">
-                        <tr class="bonuses-view__table-tr bonuses-view__table-tr--header">
-                            <th class="bonuses-view__table-th">Заказ / событие</th>
-                            <th class="bonuses-view__table-th">Списано&nbsp;всего<br />{{ info.debit_all }}</th>
-                            <th class="bonuses-view__table-th">Начислено&nbsp;всего<br />{{ info.received_all }}</th>
-                            <th class="bonuses-view__table-th">Статус</th>
-                            <th class="bonuses-view__table-th">Дата</th>
-                        </tr>
-                    </thead>
-                    <transition-group tag="tbody" name="fade-in" appear class="bonuses-view__table-body">
-                        <tr class="bonuses-view__table-tr" v-for="item in bonuses" :key="item.id">
-                            <td class="bonuses-view__table-td">{{ item.name }}</td>
-                            <td class="bonuses-view__table-td">
-                                {{ item.status === bonusStatus.TAKEN ? item.value : '' }}
-                            </td>
-                            <td class="bonuses-view__table-td">
-                                {{ item.status !== bonusStatus.TAKEN ? item.value : '' }}
-                            </td>
-                            <td class="bonuses-view__table-td">{{ item.statusString }}</td>
-                            <td class="bonuses-view__table-td">{{ item.date }}</td>
-                        </tr>
-                    </transition-group>
-                </table>
-            </div>
-        </section>
+        <div class="container container--tablet-lg" v-if="!isTablet">
+            <h3 class="bonuses-view__section-hl">Бонусная программа</h3>
+            <table class="bonuses-view__table">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="20%" />
+                    <col width="20%" />
+                    <col width="20%" />
+                    <col width="15%" />
+                </colgroup>
+                <thead class="bonuses-view__table-head">
+                    <tr class="bonuses-view__table-tr bonuses-view__table-tr--header">
+                        <th class="bonuses-view__table-th">Заказ / событие</th>
+                        <th class="bonuses-view__table-th">Списано&nbsp;всего<br />{{ info.debit_all }}</th>
+                        <th class="bonuses-view__table-th">Начислено&nbsp;всего<br />{{ info.received_all }}</th>
+                        <th class="bonuses-view__table-th">Статус</th>
+                        <th class="bonuses-view__table-th">Дата</th>
+                    </tr>
+                </thead>
+                <transition-group tag="tbody" name="fade-in" appear class="bonuses-view__table-body">
+                    <tr class="bonuses-view__table-tr" v-for="item in bonuses" :key="item.id">
+                        <td class="bonuses-view__table-td">{{ item.name }}</td>
+                        <td class="bonuses-view__table-td">
+                            {{ item.status === bonusStatus.TAKEN ? item.value : '' }}
+                        </td>
+                        <td class="bonuses-view__table-td">
+                            {{ item.status !== bonusStatus.TAKEN ? item.value : '' }}
+                        </td>
+                        <td class="bonuses-view__table-td">{{ item.statusString }}</td>
+                        <td class="bonuses-view__table-td">{{ item.date }}</td>
+                    </tr>
+                </transition-group>
+            </table>
+        </div>
+
+        <ul class="bonuses-view__list" v-else>
+            <li class="bonuses-view__list-item" tabindex="0" v-for="item in bonuses" :key="item.id">
+                <info-row class="bonuses-view__list-item-row" name="Заказ / событие" :value="item.name" />
+                <info-row
+                    class="bonuses-view__list-item-row"
+                    name="Списано"
+                    :value="item.status === bonusStatus.TAKEN ? item.value : 0"
+                >
+                </info-row>
+                <info-row
+                    class="bonuses-view__list-item-row"
+                    name="Начислено"
+                    :value="item.status !== bonusStatus.TAKEN ? item.value : 0"
+                >
+                </info-row>
+                <info-row class="bonuses-view__list-item-row" name="Статус" :value="item.statusString" />
+                <info-row class="bonuses-view__list-item-row" name="Дата" :value="item.date" />
+            </li>
+        </ul>
 
         <div class="bonuses-view__controls" v-if="pagesCount > 1">
             <div class="container container--tablet-lg">
@@ -92,6 +105,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 
+import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import { mapActions, mapGetters, mapState } from 'vuex';
@@ -125,6 +139,7 @@ export default {
         VInput,
         VPagination,
 
+        InfoRow,
         ShowMoreButton,
     },
 

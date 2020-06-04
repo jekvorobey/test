@@ -2,32 +2,51 @@
     <div class="return-product-selection" v-if="products && products.length">
         <div class="container container--tablet-lg">
             <h3 class="return-product-selection__title">Выберите продукты, которые хотите вернуть</h3>
-            <v-check id="select-all" v-model="selectAll" name="select-all" value="selectAll">
+            <v-check id="checkbox-all"
+                name="all"
+                value="all"
+                :checked="allChecked"
+                :indeterminate="indeterminate"
+                @change="onSelectAll"
+            >
                 Выбрать все продукты
             </v-check>
         </div>
         <ul class="return-product-selection__product-list">
-            <return-panel-product-card
+            <li
+                class="return-product-selection__product-item"
                 v-for="product in products"
                 :key="product.id"
-                :product-id="product.id"
-                :type="product.type"
-                :name="product.name"
-                :image="product.image"
-                :price="product.price"
-                :old-price="product.oldPrice"
-                :count="product.stock.qty"
-                :description="product.description"
-                :href="generateItemProductUrl(product)"
-            />
+            >
+                <v-check
+                    :id="`${product.id}`"
+                    :value="`${product.id}`"
+                    name="product-checkbox"
+                    v-model="checkboxes"
+                />
+                <return-panel-product-card
+                    :id="product.id"
+                    :type="product.type"
+                    :name="product.name"
+                    :image="product.image"
+                    :price="product.price"
+                    :old-price="product.oldPrice"
+                    :count="product.stock.qty"
+                    :description="product.description"
+                    :href="generateItemProductUrl(product)"
+                    ref="products"
+                />
+            </li>
         </ul>
         <div class="return-product-selection__bottom">
             <div class="return-product-selection__controls">
-                <v-button class="return-product-selection__next-btn" @click.prevent="onNextStep">Продолжить</v-button>
+                <v-button class="return-product-selection__next-btn" @click="onNextStep">Продолжить</v-button>
                 <v-button class="return-product-selection__back-btn btn--transparent">Назад</v-button>
             </div>
             <div class="return-product-selection__info">
-                Сумма к возрату: <span class="return-product-selection__info-sum">2 189 руб.</span>
+                Сумма к возрату: <span class="return-product-selection__info-sum">
+                    <price class="text-bold return-product-selection__price" v-bind="totalPrice" />
+                </span>
             </div>
         </div>
     </div>
@@ -40,7 +59,10 @@
 import VCheck from '@controls/VCheck/VCheck.vue';
 import VButton from '@controls/VButton/VButton.vue';
 
+import Price from '@components/Price/Price.vue'
+
 import ReturnPanelProductCard from '@components/ReturnPanelProductCard/ReturnPanelProductCard.vue';
+import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
 
 import { mapState, mapActions } from 'vuex';
 
@@ -63,21 +85,39 @@ export default {
         VCheck,
         VButton,
 
-        ReturnPanelProductCard,
-    },
+        Price,
 
-    data() {
-        return {
-            selectAll: null,
-        };
+        ReturnPanelProductCard,
+        PackageProductCard,
     },
 
     computed: {
         ...mapState(RETURN_PAGE_PATH, [PRODUCTS]),
+
+        allChecked() {
+            return this.checkboxes.length > 0 && this.checkboxes.length === this.products.length;
+        },
+
+        indeterminate() {
+            return this.checkboxes.length > 0 && this.checkboxes.length < this.products.length;
+        },
+
+        totalPrice() {
+            return {
+                value: 3300,
+                currency: 'RUB',
+            }
+        },
+    },
+
+    data() {
+        return {
+            checkboxes: [],
+        }
     },
 
     methods: {
-        ...mapActions(RETURN_PAGE_PATH, [SET_STEP]),
+        ...mapActions(RETURN_PAGE_PATH, [SET_STEP, SET_SELECTED_PRODUCTS]),
 
         generateItemProductUrl(product) {
             if (Array.isArray(product.categoryCodes)) {
@@ -87,8 +127,21 @@ export default {
         },
 
         onNextStep() {
+            const products = this.$refs.products.filter(item => this.isChecked(item.id));
+
+            console.log(products);
+
             this[SET_STEP](returnFormSteps.CHECK);
         },
+
+        onSelectAll() {
+            if (this.checkboxes.length > 0) this.checkboxes = [];
+            else this.checkboxes = [...Object.values(this.products.map(item => `${item.id}`))];
+        },
+
+        isChecked(id) {
+            return this.checkboxes.includes(`${id}`);
+        }
     },
 };
 </script>

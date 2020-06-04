@@ -52,18 +52,18 @@ export default {
     },
 
     [SUM_ARC_DATA](state, getters) {
-        const { current_level, next_level } = getters[LEVEL] || {
+        const { current_level, next_level, order_sum } = getters[LEVEL] || {
             current_level: {},
             next_level: {},
         };
 
+        const percent = current_level && next_level && Math.round((order_sum * 100) / next_level.order_referral_sum);
+
         return {
             current: current_level && current_level.order_referral_sum,
             next: next_level && next_level.order_referral_sum,
-            currentPercent:
-                current_level &&
-                next_level &&
-                Math.round((current_level.order_referral_sum * 100) / next_level.order_referral_sum),
+            value: order_sum || 0,
+            currentPercent: percent && percent > 100 ? 100 : percent,
         };
     },
 };

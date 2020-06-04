@@ -10,7 +10,13 @@
         <template v-slot:content>
             <h4 class="message-modal__hl">Новое сообщение</h4>
             <form class="message-modal__form" ref="form" enctype="multipart/form-data" @submit.prevent="onSubmit">
-                <v-input class="message-modal__form-row" v-model="theme" name="theme" placeholder="Введите тему" :readonly="readonlyTheme">
+                <v-input
+                    class="message-modal__form-row"
+                    v-model="theme"
+                    name="theme"
+                    placeholder="Введите тему"
+                    :readonly="readonlyTheme"
+                >
                     Тема
                 </v-input>
 
@@ -29,7 +35,7 @@
                 <!-- <input type="file" name="files[]" /> -->
 
                 <v-button class="message-modal__submit-btn" @click="onSubmit">
-                    Создать чат
+                    Отправить сообщение
                 </v-button>
             </form>
         </template>
@@ -86,7 +92,7 @@ export default {
     computed: {
         ...mapState(MODAL_MODULE, {
             isOpen: state => state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
-            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
         ...mapState(MESSAGES_MODULE_PATH, [THEMES]),
 
@@ -113,31 +119,28 @@ export default {
             }
         },
 
+        async getThemeByCode(code) {
+            this.readonlyTheme = true;
+
+            await this[FETCH_THEMES]();
+            const theme = this[THEMES].find(t => t.type === code);
+
+            if (theme) {
+                this.theme = theme.name;
+                return;
+            }
+
+            this.readonlyTheme = false;
+        },
+
         onClose() {
             this.$emit('close');
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
         },
-
-        async getThemeByCode(code) {
-            this.readonlyTheme = true;
-            await this[FETCH_THEMES]();
-
-            const items = this.themes;
-            
-            for (let item of items) {
-                if (item.type === code) {
-                    this.theme = item.name;
-                    return;
-                }
-            }
-            this.readonlyTheme = false;
-        },
     },
 
     beforeMount() {
-        if (this.modalState.themeCode) {
-            this.getThemeByCode(this.modalState.themeCode);
-        }
+        if (this.modalState.themeCode) this.getThemeByCode(this.modalState.themeCode);
     },
 };
 </script>

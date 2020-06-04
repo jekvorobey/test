@@ -10,6 +10,10 @@
         @media (--tablet) {
             margin-bottom: calc(var(--gs) * 2);
         }
+
+        @media (--tablet-lg-diff) {
+            margin-right: calc(var(--gs) * 4);
+        }
     }
 
     &__has-account {
@@ -92,6 +96,11 @@
         }
 
         &-password {
+
+            @media(--tablet-lg-min) {
+                margin-top: calc(var(--gs) * 3);
+            }
+
             &-text {
                 display: block;
                 margin-bottom: calc(var(--gs) * 1.5);
@@ -101,6 +110,12 @@
 
     &__form {
         min-height: calc(var(--gs) * 22);
+
+        &-password {
+            @media (--tablet-min) {
+                margin-top: calc(var(--gs) * 2);
+            }
+        }
     }
 
     &__socials {

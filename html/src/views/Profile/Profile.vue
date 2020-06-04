@@ -152,12 +152,12 @@ export default {
                     id: 2,
                     name: this.$t('profile.groups.business'),
                     routes: [
-                        { name: 'Referal', exact: true },
+                        { name: 'Referal' },
                         { name: 'ProPreferences', exact: true },
                         { name: 'Promopage', exact: true },
-                        { name: 'Seo', exact: true },
+                        { name: 'Seo' },
                         { name: 'Promocodes', exact: true },
-                        { name: 'Account', exact: true },
+                        { name: 'Account' },
                         { name: 'Documents', exact: true },
                     ],
                 });

@@ -3,6 +3,10 @@
     line-height: 20px;
 }
 
+.text-normal {
+    font-weight: normal;
+}
+
 .text-medium {
     font-weight: 500;
 }

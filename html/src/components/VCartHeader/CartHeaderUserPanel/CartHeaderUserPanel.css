@@ -12,6 +12,12 @@
         align-items: center;
         padding-left: calc(var(--gs) * 2);
 
+        &.open {
+            .help-panel__icon-arrow {
+                transform: rotate(180deg);
+            }
+        }
+
         .trigger {
             /* Переназначение style, important необходим */
             display: flex !important;

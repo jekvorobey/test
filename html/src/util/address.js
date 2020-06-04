@@ -13,9 +13,11 @@ export function toAddressString(address = {}) {
     let addressString = '';
     addressString = append(addressString, region);
     addressString = append(addressString, area);
-    addressString = append(addressString, city);
+    if (city !== region) addressString = append(addressString, city);
     addressString = append(addressString, street);
-    addressString = append(addressString, house, block);
+    // Избавляемся от случаев, когда block не указан, и нам не нужна
+    // запятая в конце номера дома
+    addressString = append(addressString, house, block ? block : false);
     addressString = append(addressString, block, false);
 
     return addressString;
