@@ -1,10 +1,15 @@
 <template>
-    <general-popup-panel popover-class="tooltip--white help-panel" trigger="hover" show-bottom>
-        <slot />
+    <general-popup-panel popover-class="tooltip--white help-panel" show-bottom :open="isOpen" @hide="onHide">
+        <div class="help-panel__slot" @click="onClick">
+            <slot />
+        </div>
         <template v-slot:header>
             <div class="help-panel__top">
                 <div class="text-grey">Каждый день с 9:00 до 21:00</div>
                 <div class="text-bold help-panel__phone">8 800 707-90-70</div>
+            </div>
+            <div class="help-panel__controls" @click="onHide">
+                <v-svg class="help-panel__close-btn" name="cross" width="25" height="25" />
             </div>
         </template>
         <template v-slot:body>
@@ -80,11 +85,22 @@ export default {
             telegram_hover: false,
             whatsup_hover: false,
             viber_hover: false,
+            isOpen: false,
         };
     },
 
     computed: {
         ...mapGetters([HELP_MENU]),
     },
+
+    methods: {
+        onClick() {
+            this.isOpen = !this.isOpen;
+        },
+
+        onHide() {
+            this.isOpen = false;
+        }
+    }
 };
 </script>
