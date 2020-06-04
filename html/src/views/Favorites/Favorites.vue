@@ -212,30 +212,35 @@ export default {
         } = to;
 
         const { loadPath } = $store.state[FAVORITES_MODULE];
-
-        if (loadPath === fullPath) next(vm => vm.setSortValue(orderField, orderDirection));
-        else {
-            $progress.start();
-            $store
-                .dispatch(`${FAVORITES_MODULE}/${FETCH_FAVORITES}`, {
-                    page,
-                    orderField,
-                    orderDirection,
-                })
-                .then(data => {
-                    $store.dispatch(`${FAVORITES_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
-                        vm.setSortValue(orderField, orderDirection);
-                        $progress.finish();
-                    });
-                })
-                .catch(thrown => {
-                    if (thrown && thrown.isCancel === true) return true;
-                    next(vm => {
-                        $progress.fail();
-                    });
+        // if (loadPath === fullPath) {
+        //     next(vm => vm.setSortValue(orderField, orderDirection));
+        //     $store.dispatch(`${FAVORITES_MODULE}/${FETCH_FAVORITES}`, {
+        //         page,
+        //         orderField,
+        //         orderDirection,
+        //     });
+        // } else {
+        $progress.start();
+        $store
+            .dispatch(`${FAVORITES_MODULE}/${FETCH_FAVORITES}`, {
+                page,
+                orderField,
+                orderDirection,
+            })
+            .then(data => {
+                $store.dispatch(`${FAVORITES_MODULE}/${SET_LOAD_PATH}`, fullPath);
+                next(vm => {
+                    vm.setSortValue(orderField, orderDirection);
+                    $progress.finish();
                 });
-        }
+            })
+            .catch(thrown => {
+                if (thrown && thrown.isCancel === true) return true;
+                next(vm => {
+                    $progress.fail();
+                });
+            });
+        
     },
 
     async beforeRouteUpdate(to, from, next) {
