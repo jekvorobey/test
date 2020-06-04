@@ -185,6 +185,9 @@
                     <div class="checkout-product-panel__item-header">
                         <h3 class="checkout-product-panel__item-header-hl">
                             <v-svg name="bonus" width="24" height="24" />&nbsp;Оплата бонусами&nbsp;
+                            <span v-if="!isTablet" class="text-sm text-normal text-grey">
+                                (1 бонус = {{ bonusPerRub }} рубль)
+                            </span>
                             <v-spinner width="24" height="24" :show="isBonusPending" />
                         </h3>
                     </div>
@@ -209,19 +212,22 @@
                         </template>
                         <span class="checkout-product-panel__item-controls-text">
                             На вашем счёте:&nbsp;
-                            <strong class="text-bold">{{ availableBonus }}&nbsp;бонусов</strong>
-                            <br v-show="isTablet" />
-                            <span class="text-grey">(1 бонус = {{ bonusPerRub }} рубль)</span>
+                            <strong class="text-bold">{{ availableBonus }}&nbsp;бонусов</strong><br />
+                            <span v-if="isTablet" class="text-sm text-normal text-grey">
+                                (1 бонус = {{ bonusPerRub }} рубль)
+                            </span>
                         </span>
                     </div>
-                    <div v-else class="checkout-product-panel__item-card">
-                        <span>
-                            Будет использовано {{ bonus }} бонусных баллов&nbsp;
-                            <span class="text-grey">(1 бонус = {{ bonusPerRub }} рубль)</span>
-                        </span>
-                        <v-link class="checkout-product-panel__item-card-link" tag="button" @click="DELETE_BONUS">
-                            Отменить
-                        </v-link>
+                    <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
+                        <span> Будет использовано {{ bonus }} бонусных баллов&nbsp; </span>
+                        <div class="checkout-product-panel__item-card-panel">
+                            <div v-if="isTablet" class="text-sm text-normal text-grey">
+                                (1 бонус = {{ bonusPerRub }} рубль)
+                            </div>
+                            <v-link class="checkout-product-panel__item-card-link" tag="button" @click="DELETE_BONUS">
+                                Отменить
+                            </v-link>
+                        </div>
                     </div>
                 </div>
 

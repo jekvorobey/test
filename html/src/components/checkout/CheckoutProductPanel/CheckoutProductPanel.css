@@ -302,6 +302,19 @@
             .text-medium {
                 font-size: 20px;
             }
+
+            &--bonus {
+                flex-wrap: wrap;
+            }
+
+            &-panel {
+                display: flex;
+
+                @media (--tablet) {
+                    width: 100%;
+                    justify-content: space-between;
+                }
+            }
         }
     }
 
