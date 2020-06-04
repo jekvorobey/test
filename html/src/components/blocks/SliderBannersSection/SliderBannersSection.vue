@@ -99,7 +99,7 @@ export default {
         },
 
         items() {
-            return this.banners.map(b => ({
+            return this.banners.map((b) => ({
                 ...b,
                 mobileImage: this.mobileImage(b),
                 tabletImage: this.tabletImage(b),
@@ -158,6 +158,7 @@ export default {
 
         defaultImage(banner) {
             const image = banner.desktopImage || banner.tabletImage || banner.mobileImage;
+            if (typeof image === 'string') return image;
             if (image) return generatePictureSourcePath(600, 888, image.id);
         },
     },

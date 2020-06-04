@@ -7,7 +7,7 @@
         padding: 0;
     }
 
-    @media (--desktop-lg) {
+    @media (--desktop-lg) and (--tablet-height) {
         height: 380px;
         margin-bottom: calc(var(--gs) * 2);
     }
@@ -17,6 +17,11 @@
     }
 
     @media (--tablet-lg) {
+        height: 400px;
+        margin-bottom: calc(var(--gs) * 4);
+    }
+
+    @media (--tablet) {
         height: 272px;
         margin-bottom: calc(var(--gs) * 4);
     }
@@ -26,7 +31,7 @@
         height: 100%;
 
         .catalog-banner-card__img {
-            .v-picture {
+            /* .v-picture {
                 &__img {
                     font-family: 'object-fit: fill;';
 
@@ -44,7 +49,7 @@
                     font-family: inherit;
                     object-fit: fill;
                 }
-            }
+            } */
         }
     }
 

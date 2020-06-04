@@ -40,7 +40,7 @@
                 </ul>
 
                 <v-button class="btn--outline portfolio-edit-modal__list-btn" @click="onAddPortfolio">
-                    Добавить ссылку
+                    Добавить поле
                 </v-button>
             </div>
             <div class="portfolio-edit-modal__section">
@@ -102,7 +102,7 @@ export default {
 
     validations: {
         editablePortfolio: {
-            oneOrMore: value => value && value.length > 0,
+            oneOrMore: (value) => value && value.length > 0,
 
             $each: {
                 name: {
@@ -116,7 +116,7 @@ export default {
         },
 
         files: {
-            oneOrMore: value => value && value.length > 0,
+            oneOrMore: (value) => value && value.length > 0,
         },
     },
 
@@ -124,7 +124,7 @@ export default {
         const index = 0;
         return {
             inProcess: false,
-            editablePortfolio: [],
+            editablePortfolio: [{ id: index, name: null, link: null }],
             files: [],
             index,
         };
@@ -132,7 +132,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         header() {
@@ -187,7 +187,7 @@ export default {
             if (!this.$v.editablePortfolio.$invalid) await this[UPDATE_PORTFOLIO](editablePortfolio);
             if (!this.$v.files.$invalid)
                 await Promise.all(
-                    files.map(file => {
+                    files.map((file) => {
                         const formData = new FormData();
                         formData.append('file', file, file.name);
                         return this[UPLOAD_CERTIFICATE](formData);
