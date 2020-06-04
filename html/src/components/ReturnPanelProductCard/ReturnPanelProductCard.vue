@@ -1,5 +1,5 @@
 <template>
-    <li class="return-panel-product-card" :class="className">
+    <div class="return-panel-product-card" :class="className">
         <router-link class="return-panel-product-card__img" :to="href">
             <v-picture v-if="image" :image="image" alt="">
                 <template v-slot:source="{ image }">
@@ -17,7 +17,8 @@
         </router-link>
         <div class="return-panel-product-card__body">
             <v-link class="return-panel-product-card__body-name" :to="href">{{ name }}</v-link>
-            <div class="return-panel-product-card__body-count" v-if="showCount">{{ quantity }} шт</div>
+            <div class="return-panel-product-card__body-count" v-if="count === 1">{{ quantity }} шт</div>
+            <v-counter v-else class="return-panel-product-card__counter" v-model="quantity" min="1" :max="count" />
             <div class="return-panel-product-card__body-prices">
                 <price class="text-bold return-panel-product-card__body-price" v-bind="price" />
                 <price
@@ -27,19 +28,19 @@
                 />
             </div>
         </div>
-    </li>
+    </div>
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue';
-import VLink from '@controls/VLink/VLink.vue';
-import VPicture from '@controls/VPicture/VPicture.vue';
-import VCheck from '@controls/VCheck/VCheck.vue';
+import VSvg from '@controls/VSvg/VSvg.vue'
+import VLink from '@controls/VLink/VLink.vue'
+import VPicture from '@controls/VPicture/VPicture.vue'
+import VCounter from '@controls/VCounter/VCounter.vue'
 
-import Price from '@components/Price/Price.vue';
+import Price from '@components/Price/Price.vue'
 
-import { generatePictureSourcePath } from '@util/file';
-import './ReturnPanelProductCard.css';
+import { generatePictureSourcePath } from '@util/file'
+import './ReturnPanelProductCard.css'
 
 export default {
     name: 'return-panel-product-card',
@@ -48,7 +49,7 @@ export default {
         VSvg,
         VLink,
         VPicture,
-        VCheck,
+        VCounter,
 
         Price,
     },
@@ -81,27 +82,31 @@ export default {
             default: 1,
         },
 
-        showCount: {
-            type: Boolean,
-            default: true,
-        },
-
         className: {
             type: String,
             default: '',
+        },
+
+        id: {
+            type: Number,
+            default: null,
         }
     },
 
-    computed: {
-        quantity() {
-            return Number(this.count);
-        },
+    data() {
+        return {
+            quantity: null,
+        };
     },
 
     methods: {
-        generateSourcePath(x, y, id, ext) {
+        generateSourcePath (x, y, id, ext) {
             return generatePictureSourcePath(x, y, id, ext);
         },
     },
-};
+
+    beforeMount() {
+        this.quantity = this.count;
+    }
+}
 </script>
