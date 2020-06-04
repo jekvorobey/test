@@ -267,7 +267,7 @@
         </empty-placeholder-panel>
 
         <transition name="fade">
-            <message-modal v-if="$isServer || isMessageOpen" />
+            <message-modal v-if="$isServer || isMessageOpen" @created="onChatCreated" />
         </transition>
     </section>
 </template>
@@ -389,6 +389,17 @@ export default {
 
         onToggleIsOpen(item) {
             item.isOpen = !item.isOpen;
+        },
+
+        onChatCreated() {
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state: {
+                    title: 'Уведомление',
+                    message: 'Запрос отправлен, администратор свяжется с вами в ближайшее время.',
+                },
+            });
         },
 
         onPromocodeRequest() {
