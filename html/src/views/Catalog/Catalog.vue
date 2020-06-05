@@ -237,10 +237,9 @@ import {
 import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { registerModuleIfNotExists } from '@util/store';
-import { createNotFoundRoute } from '@util/router';
 import { productGroupTypes } from '@enums/product';
 import { sortFields } from '@enums/catalog';
-import { sortDirections, fileExtension, httpCodes } from '@enums';
+import { sortDirections, fileExtension } from '@enums';
 import { MIN_SCROLL_VALUE } from '@constants';
 
 import '@images/sprites/cross-small.svg';
@@ -528,10 +527,8 @@ export default {
                 })
                 .catch((thrown) => {
                     if (thrown && thrown.isCancel === true) return next();
-
                     $progress.fail();
-                    if (thrown && thrown.status === httpCodes.NOT_FOUND) return next(createNotFoundRoute(to));
-                    else next();
+                    next();
                 });
         }
     },
