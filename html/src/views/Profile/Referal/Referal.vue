@@ -26,7 +26,7 @@
                         <div class="referal-view__panel-item-counter">
                             <v-arc-counter
                                 v-bind="arcSettings"
-                                :text="referralArcData.current"
+                                :text="referralArcData.value"
                                 :active-count="referralArcData.currentPercent"
                             />
                             <div class="text-grey referal-view__panel-item-label">

@@ -13,6 +13,7 @@
                         <v-input
                             class="portfolio-edit-modal__list-column"
                             v-model="v.name.$model"
+                            placeholder="Описание"
                             :show-error="false"
                             :error="nameError(v.name)"
                         >
@@ -22,6 +23,7 @@
                         <v-input
                             class="portfolio-edit-modal__list-column"
                             v-model="v.link.$model"
+                            placeholder="Добавить ссылку"
                             :show-error="false"
                             :error="linkError(v.link)"
                         >
@@ -102,7 +104,7 @@ export default {
 
     validations: {
         editablePortfolio: {
-            oneOrMore: (value) => value && value.length > 0,
+            oneOrMore: value => value && value.length > 0,
 
             $each: {
                 name: {
@@ -116,7 +118,7 @@ export default {
         },
 
         files: {
-            oneOrMore: (value) => value && value.length > 0,
+            oneOrMore: value => value && value.length > 0,
         },
     },
 
@@ -132,7 +134,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         header() {
@@ -187,7 +189,7 @@ export default {
             if (!this.$v.editablePortfolio.$invalid) await this[UPDATE_PORTFOLIO](editablePortfolio);
             if (!this.$v.files.$invalid)
                 await Promise.all(
-                    files.map((file) => {
+                    files.map(file => {
                         const formData = new FormData();
                         formData.append('file', file, file.name);
                         return this[UPLOAD_CERTIFICATE](formData);
