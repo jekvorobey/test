@@ -43,7 +43,7 @@ export default {
                 id: 1,
                 component: 'slider-banners-section',
                 data: {
-                    banners: state.banners.filter((b) => b.id === 'mainBanner'),
+                    banners: state.banners.slice(7, 8),
                 },
             },
             {
@@ -62,7 +62,6 @@ export default {
                 component: 'products-section',
                 data: {
                     titleText: 'Новинки',
-                    inverse: true,
                     ...state.newProducts,
                 },
             },
@@ -70,22 +69,25 @@ export default {
                 id: 5,
                 component: 'separator-section',
             },
-            {
-                id: 6,
-                component: 'single-banner-section',
-                data: {
-                    banner: state.banners.find((b) => b.id === 'middleBanner'),
-                },
-            },
-            {
-                id: 7,
-                component: 'separator-section',
-            },
+            // #58612
+            // {
+            //     id: 6,
+            //     component: 'single-banner-section',
+            //     data: {
+            //         banner: state.banners[10],
+            //     },
+            // },
+            // #59115
+            // {
+            //     id: 7,
+            //     component: 'separator-section',
+            // },
             {
                 id: 8,
                 component: 'products-section',
                 data: {
                     titleText: 'Бестселлеры',
+                    inverse: true,
                     ...state.bestsellerProducts,
                 },
             },
@@ -104,14 +106,14 @@ export default {
                 id: 11,
                 component: 'separator-section',
             },
-            // {
-            //     id: 12,
-            //     component: 'products-section',
-            //     data: {
-            //         titleText: 'Смотрят на сайте сейчас',
-            //         ...state.featuredProducts,
-            //     },
-            // },
+            {
+                id: 12,
+                component: 'products-section',
+                data: {
+                    titleText: 'Смотрят на сайте сейчас',
+                    ...state.featuredProducts,
+                },
+            },
             {
                 id: 13,
                 component: 'brands-section',

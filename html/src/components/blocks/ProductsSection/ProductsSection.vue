@@ -4,25 +4,31 @@
             <h2 class="products-section__hl">{{ titleText }}</h2>
 
             <div class="products-section__grid">
-                <catalog-product-card
-                    class="products-section__card"
-                    v-for="item in items"
-                    :key="item.id"
-                    :offer-id="item.id"
-                    :product-id="item.productId"
-                    :name="item.name"
-                    :type="item.type"
-                    :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                    :image="item.image"
-                    :price="item.price"
-                    :old-price="item.oldPrice"
-                    :tags="item.tags"
-                    :rating="item.rating"
-                    :show-buy-btn="item.stock.qty > 0"
-                    @add-item="onAddToCart(item)"
-                    @preview="onPreview(item.code)"
-                    @toggle-favorite-item="onToggleFavorite(item)"
-                />
+                <div class="products-section__cards">
+                    <catalog-product-card
+                        class="products-section__card"
+                        v-for="item in items"
+                        :key="item.id"
+                        :offer-id="item.id"
+                        :product-id="item.productId"
+                        :name="item.name"
+                        :type="item.type"
+                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                        :image="item.image"
+                        :price="item.price"
+                        :old-price="item.oldPrice"
+                        :tags="item.tags"
+                        :rating="item.rating"
+                        :show-buy-btn="item.stock.qty > 0"
+                        @add-item="onAddToCart(item)"
+                        @preview="onPreview(item.code)"
+                        @toggle-favorite-item="onToggleFavorite(item)"
+                    />
+                    <!-- #58322  -->
+                    <!-- <v-button class="btn--outline products-section__link" :to="btnLink">
+                        {{ btnText }}
+                    </v-button> -->
+                </div>
 
                 <catalog-banner-card class="products-section__banner" :item="banner">
                     <template v-if="desktopImage">
@@ -39,13 +45,6 @@
                     </template>
                     <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
                 </catalog-banner-card>
-
-                <!-- #58322  -->
-                <!-- <div class="products-section__cards">
-                    <v-button class="btn--outline products-section__link" :to="btnLink">
-                        {{ btnText }}
-                    </v-button> 
-                </div>-->
             </div>
         </div>
     </section>
@@ -116,12 +115,6 @@ export default {
     computed: {
         mobileImage() {
             const image = this.banner.mobileImage || this.banner.tabletImage || this.banner.desktopImage;
-            if (typeof image === 'string')
-                return {
-                    webp: image,
-                    orig: image,
-                };
-
             if (image)
                 return {
                     webp: generatePictureSourcePath(320, 320, image.id, fileExtension.image.WEBP),
@@ -131,12 +124,6 @@ export default {
 
         tabletImage() {
             const image = this.banner.tabletImage || this.banner.desktopImage;
-            if (typeof image === 'string')
-                return {
-                    webp: image,
-                    orig: image,
-                };
-
             if (image)
                 return {
                     webp: generatePictureSourcePath(472, 352, image.id, fileExtension.image.WEBP),
@@ -146,13 +133,6 @@ export default {
 
         desktopImage() {
             const image = this.banner.desktopImage || this.banner.tabletImage;
-
-            if (typeof image === 'string')
-                return {
-                    webp: image,
-                    orig: image,
-                };
-
             if (image)
                 return {
                     webp: generatePictureSourcePath(600, 888, image.id, fileExtension.image.WEBP),
