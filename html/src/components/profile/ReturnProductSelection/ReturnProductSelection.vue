@@ -25,14 +25,9 @@
                     v-model="checkboxes"
                 />
                 <return-panel-product-card
+                    :product="product"
                     :id="product.id"
                     :type="product.type"
-                    :name="product.name"
-                    :image="product.image"
-                    :price="product.price"
-                    :old-price="product.oldPrice"
-                    :count="product.stock.qty"
-                    :description="product.description"
                     :href="generateItemProductUrl(product)"
                     ref="products"
                 />
@@ -69,11 +64,10 @@ import { mapState, mapActions } from 'vuex';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 
 import { NAME as RETURN_MODULE, PRODUCTS } from '@store/modules/Profile/modules/ReturnPage';
-import { SET_STEP } from '@store/modules/Profile/modules/ReturnPage/actions';
+import { SET_STEP, SET_SELECTED_PRODUCTS } from '@store/modules/Profile/modules/ReturnPage/actions';
 
 import { generateProductUrl } from '@util/catalog';
 import { returnFormSteps } from '@enums/profile';
-
 import './ReturnProductSelection.css';
 
 const RETURN_PAGE_PATH = `${PROFILE_MODULE}/${RETURN_MODULE}`;
@@ -108,6 +102,15 @@ export default {
                 currency: 'RUB',
             }
         },
+
+        checkedProducts() {
+            return this.$refs.products.filter(el => this.isChecked(el.id)).map((el) => {
+                return {
+                    quantity: el.quantity,
+                    ...el.product,
+                };
+            });
+        },
     },
 
     data() {
@@ -126,11 +129,8 @@ export default {
             }
         },
 
-        onNextStep() {
-            const products = this.$refs.products.filter(item => this.isChecked(item.id));
-
-            console.log(products);
-
+        async onNextStep() {
+            await this[SET_SELECTED_PRODUCTS](this.checkedProducts);
             this[SET_STEP](returnFormSteps.CHECK);
         },
 
