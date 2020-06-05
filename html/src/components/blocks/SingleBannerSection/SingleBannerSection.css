@@ -12,7 +12,11 @@
     }
 
     &__banner {
-        height: 240px;
+        height: 340px;
+
+        @media (--tablet-lg) {
+            height: 240px;
+        }
 
         .catalog-banner-card__img {
             @media (--tablet-min) {
