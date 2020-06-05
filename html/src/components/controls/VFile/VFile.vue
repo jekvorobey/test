@@ -4,6 +4,7 @@
 
         <form
             class="v-file__item v-file__form"
+            :class="{ 'v-file__form--empty': isEmpty }"
             @dragenter.prevent
             @dragover.prevent
             @dragleave.prevent
@@ -11,7 +12,7 @@
         >
             <label class="v-file__form-label" for="fileInput">
                 <slot>
-                    <div class="text-medium v-file__form-label-title">Выберите файл</div>
+                    <div class="text-medium v-file__form-label-title">Выберите файл&nbsp;</div>
                     <div class="text-sm text-grey">или&nbsp;перетащите сюда</div>
                 </slot>
             </label>
@@ -67,6 +68,10 @@ export default {
 
         acceptedTypesString() {
             return this.acceptedTypes.join(',');
+        },
+
+        isEmpty() {
+            return !this.files || this.files.length === 0;
         },
     },
 
