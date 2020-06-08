@@ -27,7 +27,15 @@
                         @click="onSelectReason"
                     >Укажите причину возврата</a>
                 </template>
-                <template v-else>Причина выбрана</template>
+                <template v-else>
+                    <p class="return-product-card__reason">
+                        <a
+                            class="return-product-card__link-btn"
+                            @click="onSelectReason"
+                        >Причина возврата:</a>
+                        {{ reason }}
+                    </p>
+                </template>
             </div>
             <div class="return-product-card__body-count">{{ quantity }} шт</div>
             <div class="return-product-card__body-prices">

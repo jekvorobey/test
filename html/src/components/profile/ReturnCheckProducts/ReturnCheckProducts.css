@@ -9,4 +9,20 @@
             flex-wrap: nowrap;
             margin: calc(var(--gs) * 4) 0;
     }
+
+    &__info {
+        font-size: 20px;
+        line-height: 24px;
+    }
+
+    &__list {
+        padding-top: calc(var(--gs) * 2);
+        border-top: 1px solid var(--cl-divider-grey);
+
+        &-item {
+            & + & {
+                margin-top: calc(var(--gs) * 2);
+            }
+        }
+    }
 }

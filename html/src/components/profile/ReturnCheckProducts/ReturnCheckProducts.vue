@@ -43,7 +43,7 @@
         </div>
 
         <transition name="fade">
-            <return-select-reason-modal v-if="isModalOpen" />
+            <return-reason-modal v-if="isModalOpen" />
         </transition>
     </div>
 </template>
@@ -54,7 +54,7 @@ import Price from '@components/Price/Price.vue';
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 
 import ReturnProductCard from '@components/profile/ReturnProductCard/ReturnProductCard.vue';
-import ReturnSelectReasonModal from '@components/profile/ReturnSelectReasonModal/ReturnSelectReasonModal.vue';
+import ReturnReasonModal from '@components/profile/ReturnReasonModal/ReturnReasonModal.vue';
 
 import { mapState, mapActions } from 'vuex';
 
@@ -82,7 +82,7 @@ export default {
         Price,
 
         ReturnProductCard,
-        ReturnSelectReasonModal,
+        ReturnReasonModal,
     },
 
     computed: {
@@ -90,7 +90,7 @@ export default {
 
         ...mapState(MODAL_MODULE, {
             isModalOpen: state =>
-                state[MODALS][modalName.profile.RETURN_SELECT_REASON] && state[MODALS][modalName.profile.RETURN_SELECT_REASON].open,
+                state[MODALS][modalName.profile.RETURN_REASON] && state[MODALS][modalName.profile.RETURN_REASON].open,
         }),
 
         totalPrice () {
@@ -117,7 +117,9 @@ export default {
         },
 
         onSelectReason(id) {
-            this[CHANGE_MODAL_STATE]({ name: modalName.profile.RETURN_SELECT_REASON, open: true });
+            this[CHANGE_MODAL_STATE]({ name: modalName.profile.RETURN_REASON, open: true, state: {
+                productId: id,
+            } });
         },
     },
 }
