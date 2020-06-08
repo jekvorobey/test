@@ -18,7 +18,13 @@
         <div class="return-panel-product-card__body">
             <v-link class="return-panel-product-card__body-name" :to="href">{{ product.name }}</v-link>
             <div class="return-panel-product-card__body-count" v-if="product.stock.qty === 1">{{ quantity }} шт</div>
-            <v-counter v-else class="return-panel-product-card__counter" v-model="quantity" min="1" :max="product.stock.qty" />
+            <v-counter
+                v-else
+                class="return-panel-product-card__counter"
+                v-model="quantity"
+                min="1"
+                :max="product.stock.qty"
+            />
             <div class="return-panel-product-card__body-prices">
                 <price class="text-bold return-panel-product-card__body-price" v-bind="product.price" />
                 <price
@@ -77,23 +83,23 @@ export default {
         id: {
             type: Number,
             required: true,
-        }
+        },
     },
 
-    data() {
+    data () {
         return {
             quantity: null,
-        };
+        }
     },
 
     methods: {
         generateSourcePath (x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext);
+            return generatePictureSourcePath(x, y, id, ext)
         },
     },
 
-    beforeMount() {
-        this.quantity = this.product.stock.qty;
-    }
+    beforeMount () {
+        this.quantity = this.product.stock.qty
+    },
 }
 </script>

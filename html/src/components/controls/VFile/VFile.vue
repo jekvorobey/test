@@ -84,11 +84,11 @@ export default {
 
     methods: {
         isAccepted(file) {
-            const acceptedType = this.acceptedTypes && (this.acceptedTypes.length === 0 || this.acceptedTypes.includes(file.type));
+            const isAcceptedType = this.acceptedTypes && (this.acceptedTypes.length === 0 || this.acceptedTypes.includes(file.type));
 
-            const acceptedSize = this.maxFileSize && file.size < this.maxFileSize;
+            const isAcceptedSize = this.maxFileSize && file.size < this.maxFileSize;
 
-            return acceptedType && acceptedSize;
+            return isAcceptedType && isAcceptedSize;
         },
 
         deleteFile(file) {

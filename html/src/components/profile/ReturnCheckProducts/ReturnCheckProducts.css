@@ -1,0 +1,12 @@
+.return-check-products {
+    &__bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__attention-panel {
+            flex-wrap: nowrap;
+            margin: calc(var(--gs) * 4) 0;
+    }
+}
