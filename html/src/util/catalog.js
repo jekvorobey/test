@@ -16,14 +16,16 @@ export function generateProductUrl(categoryCode, code, refCode) {
     return `/${productGroupTypes.CATALOG}/${categoryCode}/${code}`;
 }
 
+export function generateMasterclassUrl(code, refCode) {
+    if (refCode) return `/masterclasses/${code}?refCode=${refCode}`;
+    return `/masterclasses/${code}`;
+}
+
 export function generateCategoryUrl(type, entityCode, categoryCode) {
     switch (type) {
         case productGroupTypes.CATALOG:
         case productGroupTypes.NEW:
             return categoryCode ? `/${type}/${categoryCode}` : `/${type}/`;
-
-        case productGroupTypes.MASTERCLASSES:
-            return entityCode ? `/${type}/${entityCode}` : `/${type}/`;
 
         case productGroupTypes.PROMO:
         case productGroupTypes.SETS:

@@ -4,7 +4,6 @@ export const cartItemTypes = Object.freeze({
 });
 
 export const productGroupTypes = Object.freeze({
-    MASTERCLASSES: 'masterclasses',
     CATALOG: 'catalog',
     NEW: 'new',
     PROMO: 'promo',

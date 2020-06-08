@@ -274,6 +274,10 @@ const main = {
             ReturnPage: 'Возврат',
         },
     },
+
+    masterclasses: {
+        title: 'Мастер-классы',
+    },
 };
 
 const LOCALE = 'ru';

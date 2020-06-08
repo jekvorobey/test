@@ -16,7 +16,7 @@ export default {
     routes: [
         {
             name: 'Masterclass',
-            path: `/${productGroupTypes.MASTERCLASSES}/:code`,
+            path: '/masterclasses/:code',
             component: MasterclassAsync,
         },
     ],
