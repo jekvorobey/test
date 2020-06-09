@@ -55,6 +55,7 @@
                     @change="onFilesChanged"
                     :accepted-types="fileAcceptedTypes"
                     :max-file-size="5242880"
+                    :filter="filter"
                 />
             </div>
 
@@ -83,7 +84,7 @@ import { SET_REASON } from '@store/modules/Profile/modules/ReturnPage/actions';
 
 import { modalName, mimeType, returnReasons } from '@enums';
 import './ReturnReasonModal.css';
-import { returnFormSteps } from '../../../assets/scripts/enums/profile';
+import { returnFormSteps } from '@enums/profile';
 
 const NAME = modalName.profile.RETURN_REASON;
 const RETURN_MODULE_PATH = `${PROFILE_MODULE}/${RETURN_MODULE}`;
@@ -122,9 +123,8 @@ export default {
             return [
                 mimeType.image.JPEG,
                 mimeType.image.PNG,
-                mimeType.application.PDF,
-                mimeType.application.DOC,
-                mimeType.application.DOCX,
+                mimeType.video.MOV,
+                mimeType.video.MP4,
             ];
         },
 
@@ -155,6 +155,15 @@ export default {
         onSubmit() {
             this[SET_REASON]({ productId: this.modalState.productId, reasonText: this.reason });
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
+        },
+
+        filter(file) {
+            if (file.type === mimeType.image.JPEG || file.type === mimeType.image.PNG) {
+                if (file.size <= 5242880) return true;
+            } else if (file.type === mimeType.video.MOV || file.type === mimeType.video.MP4) {
+                if (file.size <= 15728640) return true;
+            }
+            return false;
         },
     },
 

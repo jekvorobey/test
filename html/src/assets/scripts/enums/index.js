@@ -170,6 +170,11 @@ export const mimeType = Object.freeze({
         DOC: 'application/msword',
         DOCX: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     },
+
+    video: {
+        MOV: 'video/quicktime',
+        MP4: 'video/mp4',
+    }
 });
 
 export const sortDirections = Object.freeze({

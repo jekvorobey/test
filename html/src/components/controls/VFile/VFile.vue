@@ -56,7 +56,12 @@ export default {
 
         maxFileSize: {
             type: Number,
-        }
+        },
+
+        filter: {
+            type: Function,
+            default: null,
+        },
     },
 
     data() {
@@ -84,6 +89,11 @@ export default {
 
     methods: {
         isAccepted(file) {
+            
+            if (this.filter) {
+                return this.filter(file);
+            }
+
             const isAcceptedType = this.acceptedTypes && (this.acceptedTypes.length === 0 || this.acceptedTypes.includes(file.type));
 
             const isAcceptedSize = this.maxFileSize && file.size < this.maxFileSize;

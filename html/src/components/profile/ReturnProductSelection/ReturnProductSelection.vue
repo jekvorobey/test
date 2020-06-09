@@ -34,7 +34,11 @@
         </ul>
         <div class="return-product-selection__bottom">
             <div class="return-product-selection__controls">
-                <v-button class="return-product-selection__next-btn" @click="onNextStep" :disabled="isBtnDisabled">Продолжить</v-button>
+                <v-button
+                    class="return-product-selection__next-btn"
+                    @click="onNextStep"
+                    :disabled="isBtnDisabled"
+                >Продолжить</v-button>
                 <v-button class="return-product-selection__back-btn btn--transparent">Назад</v-button>
             </div>
             <div class="return-product-selection__info">
@@ -101,9 +105,16 @@ export default {
         },
 
         totalPrice () {
-            return {
-                value: 3300,
-                currency: 'RUB',
+            if (this.checkboxes.length) {
+                let summary = 0;
+                this.checkedProducts.map(item => {
+                    summary += item.quantity * item.price.value;
+                });
+
+                return {
+                    value: summary,
+                    currency: 'RUB',
+                }
             }
         },
 
@@ -115,7 +126,7 @@ export default {
                         quantity: el.quantity,
                         ...el.product,
                     }
-                })
+                });
         },
 
         isBtnDisabled() {
@@ -133,8 +144,8 @@ export default {
             }
         },
 
-        async onNextStep () {
-            await this[SET_SELECTED_PRODUCTS](this.checkedProducts)
+        onNextStep () {
+            this[SET_SELECTED_PRODUCTS](this.checkedProducts)
             this[SET_STEP](returnFormSteps.CHECK)
         },
 

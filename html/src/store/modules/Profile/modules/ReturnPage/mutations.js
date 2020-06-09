@@ -7,7 +7,8 @@ export default {
         state.step = payload;
     },
 
-    [SET_SELECTED_PRODUCTS](state, payload = null) {
+    [SET_SELECTED_PRODUCTS](state, payload = []) {
+        payload = payload.map(p => ({...p, reason: null}));
         state.selectedProducts = payload;
     },
 

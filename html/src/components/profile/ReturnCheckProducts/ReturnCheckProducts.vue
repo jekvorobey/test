@@ -22,13 +22,18 @@
             </li>
         </ul>
 
-        <attention-panel
-            class="return-check-products__attention-panel"
-        >После нажатия на кнопку «Продолжить», будет автоматически сформировано заявление на возврат. Вам нужно будет его распечатать и подписать, затем отсканировать подписанное заявление и прикрепить на следующем шаге.</attention-panel>
+        <attention-panel class="return-check-products__attention-panel">
+            <span
+                class="return-check-products__attention-panel-text"
+            >После нажатия на кнопку «Продолжить», будет автоматически сформировано заявление на возврат. Вам нужно будет его распечатать и подписать, затем отсканировать подписанное заявление и прикрепить на следующем шаге.</span>
+        </attention-panel>
 
         <div class="return-check-products__bottom">
             <div class="return-check-products__controls">
-                <v-button class="return-check-products__next-btn">Продолжить</v-button>
+                <v-button
+                    class="return-check-products__next-btn"
+                    :disabled="isBtnDisabled"
+                >Продолжить</v-button>
                 <v-button
                     class="return-check-products__back-btn btn--transparent"
                     @click="onClickBack"
@@ -94,11 +99,23 @@ export default {
         }),
 
         totalPrice () {
+            let summary = 0;
+
+            this.selectedProducts.map((item) => {
+                summary += item.quantity * item.price.value;
+            })
+
             return {
-                value: 3300,
+                value: summary,
                 currency: 'RUB',
             }
         },
+
+        isBtnDisabled() {
+            return !this.selectedProducts.every((item) => {
+                return !!item.reason;
+            });
+        }
     },
 
     methods: {
