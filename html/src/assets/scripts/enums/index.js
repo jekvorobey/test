@@ -34,7 +34,7 @@ export const modalName = Object.freeze({
         PROMO_ADD: 'promopage-add-modal',
         PROMO_EDIT: 'promopage-edit-modal',
 
-        RETURN_SELECT_REASON: 'return-select-reason-modal',
+        RETURN_REASON: 'return-reason-modal',
     },
 });
 
@@ -241,4 +241,15 @@ export const authMode = Object.freeze({
 
 export const themeCodes = Object.freeze({
     PROMOCODE: 1,
+})
+
+export const returnReasons = Object.freeze({
+    MARRIAGE: 'Брак',
+    WRONG: 'Не тот товар в заказе',
+    PACKAGE: 'Вскрыта оригинальная упаковка',
+    TIME: 'Истекает срок годности товара',
+    QUALITY: 'Товар ненадлежащего качества',
+    DESCRIPTION: 'Товар не соответствует описанию',
+    DECISION: 'Изменил решение о покупке',
+    OTHER: 'Другое',
 })
