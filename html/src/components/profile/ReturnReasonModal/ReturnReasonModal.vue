@@ -11,29 +11,91 @@
             <h3 class="return-reason-modal__title">Укажите причину возврата</h3>
             <ul class="return-reason-modal__list">
                 <li class="return-reason-modal__list-item">
-                    <v-check id="radio-1" v-model="reasonSelected" type="radio" name="radio-1" :value="returnReasons.MARRIAGE">Брак</v-check>
+                    <v-check
+                        id="radio-1"
+                        v-model="reasonSelected"
+                        type="radio"
+                        name="radio-1"
+                        :value="returnReasons.MARRIAGE"
+                        >Брак</v-check
+                    >
                 </li>
                 <li class="return-reason-modal__list-item">
-                    <v-check id="radio-2" v-model="reasonSelected" type="radio" name="radio-2" :value="returnReasons.WRONG">Не тот товар в заказе</v-check>
+                    <v-check
+                        id="radio-2"
+                        v-model="reasonSelected"
+                        type="radio"
+                        name="radio-2"
+                        :value="returnReasons.WRONG"
+                        >Не тот товар в заказе</v-check
+                    >
                 </li>
                 <li class="return-reason-modal__list-item">
-                    <v-check id="radio-3" v-model="reasonSelected" type="radio" name="radio-3" :value="returnReasons.PACKAGE">Вскрыта оригинальная упаковка</v-check>
+                    <v-check
+                        id="radio-3"
+                        v-model="reasonSelected"
+                        type="radio"
+                        name="radio-3"
+                        :value="returnReasons.PACKAGE"
+                        >Вскрыта оригинальная упаковка</v-check
+                    >
                 </li>
                 <li class="return-reason-modal__list-item">
-                    <v-check id="radio-4" v-model="reasonSelected" type="radio" name="radio-4" :value="returnReasons.TIME">Истекает срок годности товара</v-check>
+                    <v-check
+                        id="radio-4"
+                        v-model="reasonSelected"
+                        type="radio"
+                        name="radio-4"
+                        :value="returnReasons.TIME"
+                        >Истекает срок годности товара</v-check
+                    >
                 </li>
                 <li class="return-reason-modal__list-item">
-                    <v-check id="radio-5" v-model="reasonSelected" type="radio" name="radio-5" :value="returnReasons.QUALITY">Товар ненадлежащего качества</v-check>
+                    <v-check
+                        id="radio-5"
+                        v-model="reasonSelected"
+                        type="radio"
+                        name="radio-5"
+                        :value="returnReasons.QUALITY"
+                        >Товар ненадлежащего качества</v-check
+                    >
                 </li>
                 <li class="return-reason-modal__list-item">
-                    <v-check id="radio-6" v-model="reasonSelected" type="radio" name="radio-6" :value="returnReasons.DESCRIPTION">Товар не соответствует описанию</v-check>
+                    <v-check
+                        id="radio-6"
+                        v-model="reasonSelected"
+                        type="radio"
+                        name="radio-6"
+                        :value="returnReasons.DESCRIPTION"
+                        >Товар не соответствует описанию</v-check
+                    >
                 </li>
                 <li class="return-reason-modal__list-item">
-                    <v-check id="radio-7" v-model="reasonSelected" type="radio" name="radio-7" :value="returnReasons.DECISION">Изменил решение о покупке</v-check>
+                    <v-check
+                        id="radio-7"
+                        v-model="reasonSelected"
+                        type="radio"
+                        name="radio-7"
+                        :value="returnReasons.DECISION"
+                    >
+                        Изменил решение о покупке
+                    </v-check>
                 </li>
                 <li class="return-reason-modal__list-item">
-                    <v-check id="radio-8" v-model="reasonSelected" type="radio" name="radio-8" :value="returnReasons.OTHER">Другое</v-check>
-                    <v-input v-model="reasonDescription" :error="reasonDescriptionError" @focus="reasonSelected = returnReasons.OTHER" placeholder="Опишите проблему">
+                    <v-check
+                        id="radio-8"
+                        v-model="reasonSelected"
+                        type="radio"
+                        name="radio-8"
+                        :value="returnReasons.OTHER"
+                        >Другое</v-check
+                    >
+                    <v-input
+                        v-model="reasonDescription"
+                        :error="reasonDescriptionError"
+                        @focus="reasonSelected = returnReasons.OTHER"
+                        placeholder="Опишите проблему"
+                    >
                         <template v-slot:error="{ error }">
                             <transition name="slide-in-bottom" mode="out-in">
                                 <div :key="error" v-if="error">{{ error }}</div>
@@ -47,7 +109,7 @@
                     Фото и видео товара
                 </h4>
                 <div class="return-reason-modal__description">
-                    Не более 10 файлов, jpeg, png, mp4, mov.<br>
+                    Не более 10 файлов, jpeg, png, mp4, mov.<br />
                     Фото не более 5Mb, видео до 15Mb
                 </div>
                 <v-file
@@ -59,8 +121,9 @@
                 />
             </div>
 
-            <v-button class="return-reason-modal__submit" @click="onSubmit" :disabled="isDisabledSubmit">Подтвердить</v-button>
-
+            <v-button class="return-reason-modal__submit" @click="onSubmit" :disabled="isDisabledSubmit">
+                Подтвердить
+            </v-button>
         </template>
     </general-modal>
 </template>
@@ -106,12 +169,13 @@ export default {
             reasonSelected: null,
             reasonDescription: '',
             reasonDescriptionError: false,
-        }
+        };
     },
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][modalName.profile.RETURN_REASON] && state[MODALS][modalName.profile.RETURN_REASON].open,
+            isOpen: state =>
+                state[MODALS][modalName.profile.RETURN_REASON] && state[MODALS][modalName.profile.RETURN_REASON].open,
             modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
@@ -120,12 +184,7 @@ export default {
         },
 
         fileAcceptedTypes() {
-            return [
-                mimeType.image.JPEG,
-                mimeType.image.PNG,
-                mimeType.video.MOV,
-                mimeType.video.MP4,
-            ];
+            return [mimeType.image.JPEG, mimeType.image.PNG, mimeType.video.MOV, mimeType.video.MP4];
         },
 
         isDisabledSubmit() {
@@ -169,6 +228,6 @@ export default {
 
     beforeMount() {
         this.returnReasons = returnReasons;
-    }
+    },
 };
 </script>

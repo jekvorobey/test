@@ -1165,7 +1165,11 @@ export default {
             if (referrerCode) this[ADD_CART_BUNDLE]({ bundleId, count, referrerCode });
             else this[ADD_CART_BUNDLE]({ bundleId, count });
 
-            alert('Комплект добавлен в корзину');
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state: { message: 'Комлпект добавлен в корзину' },
+            });
         },
 
         async onShowPickupPoints() {

@@ -2,11 +2,7 @@
     <div class="return-check-products">
         <h3 class="return-check-products__title">Продукты</h3>
         <ul class="return-check-products__list" v-if="selectedProducts">
-            <li
-                class="return-check-products__list-item"
-                v-for="product in selectedProducts"
-                :key="product.id"
-            >
+            <li class="return-check-products__list-item" v-for="product in selectedProducts" :key="product.id">
                 <return-product-card
                     :href="generateItemProductUrl(product)"
                     :type="product.type"
@@ -23,21 +19,21 @@
         </ul>
 
         <attention-panel class="return-check-products__attention-panel">
-            <span
-                class="return-check-products__attention-panel-text"
-            >После нажатия на кнопку «Продолжить», будет автоматически сформировано заявление на возврат. Вам нужно будет его распечатать и подписать, затем отсканировать подписанное заявление и прикрепить на следующем шаге.</span>
+            <span class="return-check-products__attention-panel-text">
+                После нажатия на кнопку «Продолжить», будет автоматически сформировано заявление на возврат. Вам нужно
+                будет его распечатать и подписать, затем отсканировать подписанное заявление и прикрепить на следующем
+                шаге.
+            </span>
         </attention-panel>
 
         <div class="return-check-products__bottom">
             <div class="return-check-products__controls">
-                <v-button
-                    class="return-check-products__next-btn"
-                    :disabled="isBtnDisabled"
-                >Продолжить</v-button>
-                <v-button
-                    class="return-check-products__back-btn btn--transparent"
-                    @click="onClickBack"
-                >Назад</v-button>
+                <v-button class="return-check-products__next-btn" :disabled="isBtnDisabled">
+                    Продолжить
+                </v-button>
+                <v-button class="return-check-products__back-btn btn--transparent" @click="onClickBack">
+                    Назад
+                </v-button>
             </div>
             <div class="return-check-products__info">
                 Сумма к возрату:
@@ -76,7 +72,7 @@ import { modalName } from '@enums';
 import { returnFormSteps } from '@enums/profile';
 import './ReturnCheckProducts.css';
 
-const RETURN_PAGE_PATH = `${PROFILE_MODULE}/${RETURN_MODULE}`
+const RETURN_PAGE_PATH = `${PROFILE_MODULE}/${RETURN_MODULE}`;
 
 export default {
     name: 'return-check-products',
@@ -98,33 +94,33 @@ export default {
                 state[MODALS][modalName.profile.RETURN_REASON] && state[MODALS][modalName.profile.RETURN_REASON].open,
         }),
 
-        totalPrice () {
+        totalPrice() {
             let summary = 0;
 
-            this.selectedProducts.map((item) => {
+            this.selectedProducts.map(item => {
                 summary += item.quantity * item.price.value;
-            })
+            });
 
             return {
                 value: summary,
                 currency: 'RUB',
-            }
+            };
         },
 
         isBtnDisabled() {
-            return !this.selectedProducts.every((item) => {
+            return !this.selectedProducts.every(item => {
                 return !!item.reason;
             });
-        }
+        },
     },
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(RETURN_PAGE_PATH, [SET_STEP]),
 
-        generateItemProductUrl (product) {
+        generateItemProductUrl(product) {
             if (Array.isArray(product.categoryCodes)) {
-                const categoryCode = product.categoryCodes[product.categoryCodes.length - 1]
+                const categoryCode = product.categoryCodes[product.categoryCodes.length - 1];
                 return generateProductUrl(categoryCode, product.code);
             }
         },
@@ -134,10 +130,14 @@ export default {
         },
 
         onSelectReason(id) {
-            this[CHANGE_MODAL_STATE]({ name: modalName.profile.RETURN_REASON, open: true, state: {
-                productId: id,
-            } });
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.profile.RETURN_REASON,
+                open: true,
+                state: {
+                    productId: id,
+                },
+            });
         },
     },
-}
+};
 </script>
