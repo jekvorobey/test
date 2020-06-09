@@ -27,8 +27,9 @@
                         type="radio"
                         name="radio-2"
                         :value="returnReasons.WRONG"
-                        >Не тот товар в заказе</v-check
                     >
+                        Не тот товар в заказе
+                    </v-check>
                 </li>
                 <li class="return-reason-modal__list-item">
                     <v-check
@@ -37,8 +38,9 @@
                         type="radio"
                         name="radio-3"
                         :value="returnReasons.PACKAGE"
-                        >Вскрыта оригинальная упаковка</v-check
                     >
+                        Вскрыта оригинальная упаковка
+                    </v-check>
                 </li>
                 <li class="return-reason-modal__list-item">
                     <v-check
@@ -47,8 +49,9 @@
                         type="radio"
                         name="radio-4"
                         :value="returnReasons.TIME"
-                        >Истекает срок годности товара</v-check
                     >
+                        Истекает срок годности товара
+                    </v-check>
                 </li>
                 <li class="return-reason-modal__list-item">
                     <v-check
@@ -57,8 +60,9 @@
                         type="radio"
                         name="radio-5"
                         :value="returnReasons.QUALITY"
-                        >Товар ненадлежащего качества</v-check
                     >
+                        Товар ненадлежащего качества
+                    </v-check>
                 </li>
                 <li class="return-reason-modal__list-item">
                     <v-check
@@ -67,8 +71,9 @@
                         type="radio"
                         name="radio-6"
                         :value="returnReasons.DESCRIPTION"
-                        >Товар не соответствует описанию</v-check
                     >
+                        Товар не соответствует описанию
+                    </v-check>
                 </li>
                 <li class="return-reason-modal__list-item">
                     <v-check
@@ -88,8 +93,9 @@
                         type="radio"
                         name="radio-8"
                         :value="returnReasons.OTHER"
-                        >Другое</v-check
                     >
+                        Другое
+                    </v-check>
                     <v-input
                         v-model="reasonDescription"
                         :error="reasonDescriptionError"
