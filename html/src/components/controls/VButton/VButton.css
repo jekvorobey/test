@@ -15,7 +15,7 @@
     fill: var(--cl-white);
 
     &:hover {
-        background: var(--cl-white);
+        background-color: var(--cl-white);
         fill: var(--cl-global);
         color: var(--cl-global);
     }
