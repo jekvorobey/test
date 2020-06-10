@@ -16,6 +16,7 @@ import VLink from '@controls/VLink/VLink.vue';
 
 import ReturnProductSelection from '@components/profile/ReturnProductSelection/ReturnProductSelection.vue';
 import ReturnCheckProducts from '@components/profile/ReturnCheckProducts/ReturnCheckProducts.vue';
+import ReturnDocumentsPage from '@components/profile/ReturnDocumentsPage/ReturnDocumentsPage.vue';
 
 import { mapState, mapActions } from 'vuex';
 
@@ -51,6 +52,8 @@ export default {
                     return ReturnProductSelection;
                 case returnFormSteps.CHECK:
                     return ReturnCheckProducts;
+                case returnFormSteps.DOCUMENTS:
+                    return ReturnDocumentsPage;
                 default:
                     return ReturnProductSelection;
             }

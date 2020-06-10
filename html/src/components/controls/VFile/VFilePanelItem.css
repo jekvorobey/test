@@ -1,0 +1,24 @@
+.v-file-panel-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    height: calc(var(--gs) * 7);
+    align-items: center;
+    border: 1px solid var(--cl-divider-grey);
+    border-radius: 5px;
+    padding: 0 calc(var(--gs) * 2);
+
+    &__title {
+        font-weight: bold;
+        margin: 0 calc(var(--gs) * 2);
+    }
+
+    &__content {
+        display: flex;
+        align-items: flex-end;
+    }
+
+    &__controls {
+        cursor: pointer;
+    }
+}

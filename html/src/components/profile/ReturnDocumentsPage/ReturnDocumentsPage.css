@@ -1,0 +1,44 @@
+.return-documents-page {
+    &__title {
+        font-size: 16px;
+        text-transform: uppercase;
+    }
+
+    &__content {
+        padding-top: calc(var(--gs) * 2);
+        padding-bottom: calc(var(--gs) * 4);
+        border-top: 1px solid var(--cl-divider-grey);
+    }
+
+    &__attention-panel {
+        flex-wrap: nowrap;
+    }
+
+    &__files {
+        margin: 0;
+        margin-top: calc(var(--gs) * 3);
+        margin-bottom: var(--gs);
+
+        &-text {
+            text-transform: uppercase;
+            color: var(--cl-grey);
+            letter-spacing: 0.05em;
+
+            &.text-bold {
+                color: var(--cl-global);
+            }
+        }
+
+        &-description {
+            display: block;
+            font-size: 14px;
+            color: var(--cl-grey);
+            text-align: center;
+        }
+
+        .v-file__form {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+}
