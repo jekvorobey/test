@@ -55,13 +55,19 @@
 
         &--empty {
             width: 100%;
-            height: calc(var(--gs) * 6);
             margin-bottom: 0;
+
+            @media (--tablet-min) {
+                height: calc(var(--gs) * 6);
+            }
         }
 
         &--empty &-label {
             width: 100%;
-            flex-direction: row;
+
+            @media (--tablet-min) {
+                flex-direction: row;
+            }
         }
     }
 }

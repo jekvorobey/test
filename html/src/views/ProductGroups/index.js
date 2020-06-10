@@ -16,7 +16,7 @@ export default {
     routes: [
         {
             name: 'ProductGroups',
-            path: `/:type(${productGroupTypes.PROMO}|${productGroupTypes.SETS}|${productGroupTypes.BRANDS}|${productGroupTypes.MASTERCLASSES})`,
+            path: `/:type(${productGroupTypes.PROMO}|${productGroupTypes.SETS}|${productGroupTypes.BRANDS})`,
             component: ProductGroupsAsync,
             meta: {
                 skipScroll: true,

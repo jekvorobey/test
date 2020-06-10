@@ -142,7 +142,7 @@
 
                     <product-cart-panel
                         v-observe-visibility="onPriceVisibilityChanged"
-                        class="product-view__header-detail-section product-view__header-detail-panels"
+                        class="product-view__header-detail-section product-view__header-detail-cart product-view__header-detail-panels"
                         :product-id="product.productId"
                         :price="product.price"
                         :old-price="product.oldPrice"
@@ -273,7 +273,6 @@
 
         <section class="product-view__section product-view__bundles" v-if="productBundles">
             <div class="container product-view__bundles">
-
                 <product-bundle-panel
                     v-for="bundle in productBundles"
                     :key="bundle.id"
@@ -283,7 +282,6 @@
                     :old-price="bundle.oldPrice"
                     @add-bundle="onAddCartBundle"
                 />
-
             </div>
         </section>
 
@@ -689,6 +687,8 @@ import ProductBundlePanel from '@components/product/ProductBundlePanel/ProductBu
 import ProductPickupPointsMap from '@components/product/ProductPickupPointsMap/ProductPickupPointsMap.vue';
 import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPanel/ProductPickupPointsPanel.vue';
 
+import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
+
 import MapModal, { NAME as MAP_MODAL_NAME } from '@components/MapModal/MapModal.vue';
 import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 
@@ -707,7 +707,7 @@ import {
     FEATURED_PRODUCTS,
     INSTAGRAM_ITEMS,
     PRODUCT_OPTIONS,
-    PRODUCT_BUNDLES
+    PRODUCT_BUNDLES,
 } from '@store/modules/Product';
 import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Product/getters';
 import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS } from '@store/modules/Product/actions';
@@ -1164,8 +1164,12 @@ export default {
 
             if (referrerCode) this[ADD_CART_BUNDLE]({ bundleId, count, referrerCode });
             else this[ADD_CART_BUNDLE]({ bundleId, count });
-            
-            alert('Комплект добавлен в корзину');
+
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state: { message: 'Комлпект добавлен в корзину' },
+            });
         },
 
         async onShowPickupPoints() {

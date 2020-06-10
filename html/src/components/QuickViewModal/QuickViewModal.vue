@@ -109,7 +109,7 @@ export default {
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
 
         images() {
-            const { media } = this[PRODUCT_PREVIEW] || {};
+            const { media = [] } = this[PRODUCT_PREVIEW] || {};
             return media.slice(0, 4).map(i => {
                 return {
                     ...i,

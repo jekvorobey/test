@@ -33,6 +33,8 @@ export const modalName = Object.freeze({
         PROMO_ADD_BY_LINK: 'promopage-add-by-link-modal',
         PROMO_ADD: 'promopage-add-modal',
         PROMO_EDIT: 'promopage-edit-modal',
+
+        RETURN_REASON: 'return-reason-modal',
     },
 });
 
@@ -168,6 +170,11 @@ export const mimeType = Object.freeze({
         DOC: 'application/msword',
         DOCX: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     },
+
+    video: {
+        MOV: 'video/quicktime',
+        MP4: 'video/mp4',
+    }
 });
 
 export const sortDirections = Object.freeze({
@@ -239,4 +246,15 @@ export const authMode = Object.freeze({
 
 export const themeCodes = Object.freeze({
     PROMOCODE: 1,
+})
+
+export const returnReasons = Object.freeze({
+    MARRIAGE: 'Брак',
+    WRONG: 'Не тот товар в заказе',
+    PACKAGE: 'Вскрыта оригинальная упаковка',
+    TIME: 'Истекает срок годности товара',
+    QUALITY: 'Товар ненадлежащего качества',
+    DESCRIPTION: 'Товар не соответствует описанию',
+    DECISION: 'Изменил решение о покупке',
+    OTHER: 'Другое',
 })

@@ -5,7 +5,7 @@
                 <breadcrumb-item key="main" to="/">
                     Главная
                 </breadcrumb-item>
-                <breadcrumb-item key="root" :to="rootUrl">
+                <breadcrumb-item key="root" to="/masterclasses">
                     {{ rootTitle }}
                 </breadcrumb-item>
                 <breadcrumb-item :key="masterClass.code" :to="{ path: $route.path }">
@@ -368,7 +368,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '@util/store';
 import { generatePictureSourcePath } from '@util/file';
-import { generateCategoryUrl } from '@util/catalog';
+import { generateMasterclassUrl } from '@util/catalog';
 import { yaMapSettings } from '@settings';
 import { breakpoints } from '@enums';
 import { productGroupTypes } from '@enums/product';
@@ -499,12 +499,8 @@ export default {
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {}),
 
-        rootUrl() {
-            return generateCategoryUrl(productGroupTypes.MASTERCLASSES);
-        },
-
         rootTitle() {
-            return this.$t(`productGroups.title.${productGroupTypes.MASTERCLASSES}`);
+            return this.$t('masterclasses.title');
         },
 
         mapSettings() {
@@ -534,7 +530,7 @@ export default {
         },
 
         generateMasterclassUrl(code) {
-            return generateCategoryUrl(productGroupTypes.MASTERCLASSES, code);
+            return generateMasterclassUrl(code);
         },
 
         onAddToCart(id, count) {

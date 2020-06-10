@@ -272,6 +272,10 @@ const main = {
             QnA: 'Questions and Answers',
         },
     },
+
+    masterclasses: {
+        title: 'Master-classes',
+    },
 };
 
 const LOCALE = 'en';

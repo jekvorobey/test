@@ -48,6 +48,22 @@ export default {
         VFileItem,
     },
 
+    props: {
+        acceptedTypes: {
+            type: Array,
+            default: () => [],
+        },
+
+        maxFileSize: {
+            type: Number,
+        },
+
+        filter: {
+            type: Function,
+            default: null,
+        },
+    },
+
     data() {
         return {
             inputId: 0,
@@ -56,16 +72,6 @@ export default {
     },
 
     computed: {
-        acceptedTypes() {
-            return [
-                mimeType.image.JPEG,
-                mimeType.image.PNG,
-                mimeType.application.PDF,
-                mimeType.application.DOC,
-                mimeType.application.DOCX,
-            ];
-        },
-
         acceptedTypesString() {
             return this.acceptedTypes.join(',');
         },
@@ -83,7 +89,16 @@ export default {
 
     methods: {
         isAccepted(file) {
-            return this.acceptedTypes && (this.acceptedTypes.length === 0 || this.acceptedTypes.includes(file.type));
+            
+            if (this.filter) {
+                return this.filter(file);
+            }
+
+            const isAcceptedType = this.acceptedTypes && (this.acceptedTypes.length === 0 || this.acceptedTypes.includes(file.type));
+
+            const isAcceptedSize = this.maxFileSize && file.size < this.maxFileSize;
+
+            return isAcceptedType && isAcceptedSize;
         },
 
         deleteFile(file) {

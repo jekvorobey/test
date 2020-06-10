@@ -9,23 +9,6 @@
                     {{ $t(`productGroups.title.${type}`) }}
                 </breadcrumb-item>
             </breadcrumbs>
-
-            <section v-if="isMasterClass" class="section product-groups-view__banners">
-                <v-slider class="product-groups-view__banners-slider" name="masterClasses" :options="sliderOptions">
-                    <master-class-banner-card
-                        class="swiper-slide product-groups-view__banners-slider-item"
-                        v-for="item in masterclassBanners"
-                        :key="item.id"
-                        :name="item.name"
-                        :image="item.image"
-                        :price="item.price"
-                        :author="item.author"
-                        :description="item.date"
-                        :to="generateCategoryUrl(item.code)"
-                        show-btn
-                    />
-                </v-slider>
-            </section>
         </div>
 
         <template v-if="showList">
@@ -49,18 +32,7 @@
                     {{ $t(`productGroups.title.${type || 'catalog'}`) }}
                 </h1>
                 <div class="container product-groups-view__sets-container">
-                    <ul v-if="isMasterClass" class="product-groups-view__sets-list">
-                        <master-class-card
-                            class="product-groups-view__sets-list-item"
-                            v-for="item in masterclasses"
-                            :key="item.id"
-                            v-bind="item"
-                            :to="generateCategoryUrl(item.code)"
-                            is-small
-                        />
-                    </ul>
-
-                    <ul v-else class="product-groups-view__sets-list">
+                    <ul class="product-groups-view__sets-list">
                         <banner-card
                             class="product-groups-view__sets-list-item"
                             tag="li"
@@ -113,9 +85,6 @@ import VButton from '@controls/VButton/VButton.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
 
-import MasterClassCard from '@components/MasterClassCard/MasterClassCard.vue';
-import MasterClassBannerCard from '@components/MasterClassBannerCard/MasterClassBannerCard.vue';
-
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
@@ -146,11 +115,6 @@ import { generateCategoryUrl } from '@util/catalog';
 import _debounce from 'lodash/debounce';
 import './ProductGroups.css';
 
-import profileMasterClassImg1 from '@images/mock/profileMasterClass1.png';
-import profileMasterClassImg2 from '@images/mock/profileMasterClass2.png';
-import profileMasterClassImg3 from '@images/mock/profileMasterClass3.png';
-import profileMasterClassImg4 from '@images/mock/profileMasterClass4.png';
-
 const sliderOptions = {
     slidesPerView: 1,
     // grabCursor: true,
@@ -180,8 +144,6 @@ export default {
         VSlider,
 
         BannerCard,
-        MasterClassCard,
-        MasterClassBannerCard,
 
         Breadcrumbs,
         BreadcrumbItem,
@@ -195,108 +157,6 @@ export default {
     data() {
         return {
             showMore: false,
-            masterclassBanners: [
-                {
-                    id: 1,
-                    name: 'Свадебный стилист',
-                    date: '3 сентября (пт), 12:00',
-                    author: 'Владимир Перельман',
-                    image: profileMasterClassImg1,
-                    code: 'code1',
-                    price: {
-                        value: 5000,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 2,
-                    name: 'Модные косы',
-                    date: '4 сентября (пт), 12:00',
-                    author: 'Владимир Перельман',
-                    image: profileMasterClassImg2,
-                    code: 'code2',
-                    price: {
-                        value: 6000,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 3,
-                    name: 'Пучки и хвосты',
-                    date: '5 сентября (пт), 12:00',
-                    author: 'Владимир Перельман',
-                    image: profileMasterClassImg3,
-                    code: 'code3',
-
-                    price: {
-                        value: 2000,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 4,
-                    name: 'Цвет под ключ',
-                    date: '8 сентября (пт), 12:00',
-                    author: 'Владимир Перельман',
-                    image: profileMasterClassImg4,
-                    code: 'code4',
-                    price: {
-                        value: 4000,
-                        currency: 'RUB',
-                    },
-                },
-            ],
-
-            masterclasses: [
-                {
-                    id: 1,
-                    name: 'Свадебный стилист',
-                    date: '3 сентября (пт), 12:00',
-                    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
-                    image: profileMasterClassImg1,
-                    code: 'code1',
-                    price: {
-                        value: 5000,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 2,
-                    name: 'Модные косы',
-                    date: '4 сентября (пт), 12:00',
-                    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
-                    image: profileMasterClassImg2,
-                    code: 'code2',
-                    price: {
-                        value: 6000,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 3,
-                    name: 'Пучки и хвосты',
-                    date: '5 сентября (пт), 12:00',
-                    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
-                    image: profileMasterClassImg3,
-                    code: 'code3',
-                    price: {
-                        value: 2000,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 4,
-                    name: 'Цвет под ключ',
-                    date: '8 сентября (пт), 12:00',
-                    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
-                    image: profileMasterClassImg4,
-                    code: 'code4',
-                    price: {
-                        value: 4000,
-                        currency: 'RUB',
-                    },
-                },
-            ],
         };
     },
 
@@ -325,10 +185,6 @@ export default {
         isTabletLg() {
             return this.$mq.tabletLg;
         },
-
-        isMasterClass() {
-            return this[TYPE] === productGroupTypes.MASTERCLASSES;
-        },
     },
 
     methods: {
@@ -336,7 +192,7 @@ export default {
 
         generateCategoryUrl(code) {
             const { type } = this;
-            return generateCategoryUrl(type || productGroupTypes.MASTERCLASSES, code);
+            return generateCategoryUrl(type, code);
         },
 
         onShowMore() {

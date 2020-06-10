@@ -335,6 +335,22 @@
                 }
             }
 
+            &-cart {
+                .product-cart-panel__controls {
+                    &-btn,
+                    &-wishlist {
+                        @media (--desktop) {
+                            max-width: 100%;
+                            width: 100%;
+                        }
+
+                        @media (--tablet-lg) and (--tablet-min) {
+                            max-width: 50%;
+                        }
+                    }
+                }
+            }
+
             &-panels {
                 @media (--tablet) {
                     display: none;

@@ -1,5 +1,11 @@
 <template>
-    <general-modal v-if="isOpen" class="portfolio-edit-modal" :header="header" @close="onClose" :is-mobile="isTablet">
+    <general-modal
+        v-if="isOpen"
+        class="portfolio-edit-modal"
+        :header="header"
+        @close="onClose"
+        :is-mobile="isTablet"
+    >
         <template v-slot:content>
             <div class="containet container--tablet portfolio-edit-modal__section">
                 <h4 class="portfolio-edit-modal__hl">{{ header }}</h4>
@@ -8,17 +14,22 @@
                     либо другого подтверждающего документа.
                 </p>
 
-                <ul v-if="editablePortfolio && editablePortfolio.length > 0" class="portfolio-edit-modal__list">
-                    <li class="portfolio-edit-modal__list-row" v-for="(v, index) in computedItems" :key="index">
+                <ul
+                    v-if="editablePortfolio && editablePortfolio.length > 0"
+                    class="portfolio-edit-modal__list"
+                >
+                    <li
+                        class="portfolio-edit-modal__list-row"
+                        v-for="(v, index) in computedItems"
+                        :key="index"
+                    >
                         <v-input
                             class="portfolio-edit-modal__list-column"
                             v-model="v.name.$model"
                             placeholder="Описание"
                             :show-error="false"
                             :error="nameError(v.name)"
-                        >
-                            {{ index == 0 ? 'Название' : null }}
-                        </v-input>
+                        >{{ index == 0 ? 'Название' : null }}</v-input>
 
                         <v-input
                             class="portfolio-edit-modal__list-column"
@@ -41,13 +52,19 @@
                     </li>
                 </ul>
 
-                <v-button class="btn--outline portfolio-edit-modal__list-btn" @click="onAddPortfolio">
-                    Добавить поле
-                </v-button>
+                <v-button
+                    class="btn--outline portfolio-edit-modal__list-btn"
+                    @click="onAddPortfolio"
+                >Добавить поле</v-button>
             </div>
             <div class="portfolio-edit-modal__section">
                 <p class="text-grey">Файлы форматов jpeg, png, pdf, doc, docx, не более 5Mb каждый</p>
-                <v-file class="portfolio-edit-modal__files" @change="onFilesChanged" />
+                <v-file
+                    class="portfolio-edit-modal__files"
+                    @change="onFilesChanged"
+                    :accepted-types="fileAcceptedTypes"
+                    :max-file-size="5242880"
+                />
             </div>
 
             <div class="portfolio-edit-modal__submit">
@@ -55,9 +72,7 @@
                     class="portfolio-edit-modal__submit-btn"
                     @click="onSubmit"
                     :disabled="isDisabled || inProcess"
-                >
-                    Отправить
-                </v-button>
+                >Отправить</v-button>
             </div>
         </template>
     </general-modal>
@@ -83,7 +98,7 @@ import {
     FETCH_CABINET_DATA,
 } from '@store/modules/Profile/modules/Cabinet/actions';
 
-import { modalName } from '@enums';
+import { modalName, mimeType } from '@enums';
 import '@images/sprites/cross.svg';
 import './PortfolioEditModal.css';
 
@@ -151,6 +166,16 @@ export default {
 
         isDisabled() {
             return this.$v.editablePortfolio.$invalid && this.$v.files.$invalid;
+        },
+
+        fileAcceptedTypes() {
+            return [
+                mimeType.image.JPEG,
+                mimeType.image.PNG,
+                mimeType.application.PDF,
+                mimeType.application.DOC,
+                mimeType.application.DOCX,
+            ];
         },
     },
 
