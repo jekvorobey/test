@@ -35,6 +35,7 @@ export const returnFormSteps = Object.freeze({
     SELECT: 1,
     CHECK: 2,
     DOCUMENTS: 3,
+    FORM: 4,
 });
 
 export const referralSource = Object.freeze({

@@ -91,7 +91,9 @@ export default {
             this.files = files || [];
         },
 
-        onClickNext() {},
+        onClickNext() {
+            this[SET_STEP](returnFormSteps.FORM);
+        },
 
         onClickBack() {
             this[SET_STEP](returnFormSteps.CHECK);
