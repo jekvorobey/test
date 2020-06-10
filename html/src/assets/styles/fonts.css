@@ -25,3 +25,19 @@
         url('../fonts/FuturaPT/Futura PT_Demi.woff') format('woff'),
         url('../fonts/FuturaPT/Futura PT_Demi.ttf') format('ttf');
 }
+
+@font-face {
+    font-family: 'Futura PT-Medium';
+    font-display: swap;
+    src: url('../fonts/FuturaPT/Futura PT_Medium.woff2') format('woff2'),
+        url('../fonts/FuturaPT/Futura PT_Medium.woff') format('woff'),
+        url('../fonts/FuturaPT/Futura PT_Medium.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'Futura PT-Bold';
+    font-display: swap;
+    src: url('../fonts/FuturaPT/Futura PT_Demi.woff2') format('woff2'),
+        url('../fonts/FuturaPT/Futura PT_Demi.woff') format('woff'),
+        url('../fonts/FuturaPT/Futura PT_Demi.ttf') format('ttf');
+}

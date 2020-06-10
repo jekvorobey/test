@@ -284,6 +284,7 @@ const masterClassDetails = {
         description: 'Лицензированный консультант, мастер-коуч ICI',
         phone: '+7 (903) 233 77 11',
         email: 'info@insight-russia.ru',
+        site: 'insight-russia.ru',
     },
 
     gallery: [masterclassGalleryImg1, masterclassGalleryImg2, masterclassGalleryImg3],

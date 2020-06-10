@@ -49,9 +49,6 @@
                                 Спикеры
                             </p>
                             <v-expander :min-height="160">
-                                <template v-slot:btn="{ isExpanded }">
-                                    {{ isExpanded ? 'Скрыть' : 'Все спикеры' }}
-                                </template>
                                 <ul>
                                     <author-card
                                         class="master-class-view__panel-right-card"
@@ -60,21 +57,47 @@
                                         v-bind="author"
                                     />
                                 </ul>
+                                <template v-slot:btn="{ isExpanded }">
+                                    {{ isExpanded ? 'Скрыть' : 'Все спикеры' }}
+                                </template>
                             </v-expander>
                         </div>
                         <div class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">
                                 Дата и время
                             </p>
-                            <p>{{ masterClass.date }}</p>
+                            <ol class="list">
+                                <li>
+                                    <p>{{ masterClass.date }}</p>
+                                </li>
+                                <li>
+                                    <p>{{ masterClass.date }}</p>
+                                </li>
+                            </ol>
+
                             <p><a>Задать вопрос организатору</a></p>
                         </div>
                         <div class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">
                                 Место проведения
                             </p>
-                            <p>{{ masterClass.address.full }}</p>
+                            <ol class="list">
+                                <li>
+                                    <p>{{ masterClass.address.full }}</p>
+                                </li>
+                                <li>
+                                    <p>{{ masterClass.address.full }}</p>
+                                </li>
+                            </ol>
+
                             <p><a @click="onShowMap">Посмотреть на карте</a></p>
+                        </div>
+                        <div class="container container--tablet master-class-view__panel-right-section">
+                            <p class="text-bold master-class-view__panel-right-hl">
+                                Сертификат
+                            </p>
+                            Пример сертификата, который вы получите по окончании мастер-класса, можно посмотреть по
+                            <a>ссылке</a>.
                         </div>
                         <div
                             v-if="!isTablet"
@@ -197,7 +220,11 @@
                     Место проведения
                 </h2>
                 <p class="container container--tablet master-class-view__map-desc">
-                    {{ masterClass.address.full }}
+                    <div class="text-bold">{{ masterClass.address.full }}</div>
+                    От станции метро «Чкаловская» (выход на Садовое кольцо) двигайтесь по внешней стороне Садового
+                    кольца налево до поворота на Верхнюю Сыромятническую улицу. Сверните на нее и спускайтесь вниз до
+                    поворота на Большой Полуярославский переулок. Пройдя по туннелю под железнодорожными путями, на
+                    развилке возьмите правее на Нижнюю Сыромятническую улицу.
                 </p>
                 <yandex-map
                     v-if="showMap"
@@ -232,12 +259,27 @@
                         {{ masterClass.contacts.description }}
                     </p>
                     <div class="master-class-view__contacts-panel-bottom">
-                        <div class="master-class-view__contacts-panel-phone">
-                            Телефон: {{ masterClass.contacts.phone }}
-                        </div>
-                        <div class="master-class-view__contacts-panel-email">
-                            Email: {{ masterClass.contacts.email }}
-                        </div>
+                        <info-row
+                            class="master-class-view__contacts-panel-row"
+                            name="Телефон"
+                            :value="masterClass.contacts.phone"
+                        />
+                        <info-row
+                            class="master-class-view__contacts-panel-row"
+                            name="Email"
+                            :value="masterClass.contacts.email"
+                        />
+                        <info-row
+                            class="master-class-view__contacts-panel-row"
+                            name="WhatsApp, Viber, Telegram"
+                            :value="masterClass.contacts.phone"
+                        />
+                        <info-row
+                            class="master-class-view__contacts-panel-row"
+                            name="Сайт"
+                            :value="masterClass.contacts.site"
+                        />
+
                         <v-button class="master-class-view__contacts-panel-btn">
                             Написать
                         </v-button>
@@ -339,6 +381,7 @@ import BannerCard from '@components/BannerCard/BannerCard.vue';
 import InstagramCard from '@components/InstagramCard/InstagramCard.vue';
 import MasterClassBannerCard from '@components/MasterClassBannerCard/MasterClassBannerCard.vue';
 
+import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
@@ -385,6 +428,7 @@ import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/arrow-small.svg';
 import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/info-middle.svg';
 import pin from '@images/icons/pin-filled.svg';
 import './Masterclass.css';
 
@@ -447,6 +491,7 @@ export default {
         InstagramCard,
         MasterClassBannerCard,
         AttentionPanel,
+        InfoRow,
     },
 
     data() {

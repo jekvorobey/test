@@ -5,28 +5,34 @@
             <div class="text-medium author-card__img-empty" v-else>{{ iconText }}</div>
         </div>
         <div class="author-card__title">
-            <span class="text-bold">
-                <span v-if="firstName">{{ firstName }} </span>
-                <span v-if="lastName">{{ lastName }}</span>
-            </span>
-            <br />
-            <span class="text-grey">
+            <div class="text-bold author-card__title-name">
+                <template v-if="firstName">{{ firstName }}</template>
+                <template v-if="lastName">{{ lastName }}</template>
+                <button class="author-card__title-btn">
+                    <v-svg name="info-middle" width="16" height="16" />
+                </button>
+            </div>
+            <div class="text-grey">
                 <span v-if="profile">{{ profile }} </span>
                 <span v-if="nickName">{{ nickName }}</span>
-            </span>
+            </div>
         </div>
     </li>
 </template>
 
 <script>
+import VSvg from '../controls/VSvg/VSvg.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VButton from '@controls/VButton/VButton.vue';
+
+import '@images/sprites/info-middle.svg';
 import './AuthorCard.css';
 
 export default {
     name: 'banner-card',
 
     components: {
+        VSvg,
         VButton,
         VPicture,
     },
