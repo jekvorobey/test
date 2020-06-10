@@ -17,8 +17,9 @@
                         type="radio"
                         name="radio-1"
                         :value="returnReasons.MARRIAGE"
-                        >Брак</v-check
                     >
+                        Брак
+                    </v-check>
                 </li>
                 <li class="return-reason-modal__list-item">
                     <v-check
@@ -124,7 +125,9 @@
                     :accepted-types="fileAcceptedTypes"
                     :max-file-size="5242880"
                     :filter="filter"
-                />
+                >
+                    <span class="return-reason-modal__files-text">Выберите фото</span>
+                </v-file>
             </div>
 
             <v-button class="return-reason-modal__submit" @click="onSubmit" :disabled="isDisabledSubmit">

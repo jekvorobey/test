@@ -34,6 +34,7 @@ export const preferenceEntityTypes = Object.freeze({
 export const returnFormSteps = Object.freeze({
     SELECT: 1,
     CHECK: 2,
+    DOCUMENTS: 3,
 });
 
 export const referralSource = Object.freeze({
