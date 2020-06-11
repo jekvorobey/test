@@ -137,7 +137,7 @@ module.exports = merge(base, {
                   },
                   plugins: [
                       imageminMozJpeg({
-                          quality: 65,
+                          quality: 80,
                       }),
                   ],
               }),
