@@ -49,3 +49,9 @@ export const bonusStatus = Object.freeze({
     FINISHED: 3, // - завершен
     TAKEN: 4, // - списание
 });
+
+export const returnMethods = Object.freeze({
+    COURIER: 1,
+    OUTPOST: 2,
+    POST: 3,
+})

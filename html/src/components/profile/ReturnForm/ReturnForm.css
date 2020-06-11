@@ -1,0 +1,17 @@
+.return-form {
+    &__list {
+        display: flex;
+
+        &-item {
+            max-width: 33.33%;
+            
+            & + & {
+                margin-left: calc(var(--gs) * 3);
+            }
+        }
+    }
+
+    &__header {
+        margin-bottom: calc(var(--gs) * 6);
+    }
+}
