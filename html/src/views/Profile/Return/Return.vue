@@ -18,6 +18,7 @@ import ReturnProductSelection from '@components/profile/ReturnProductSelection/R
 import ReturnCheckProducts from '@components/profile/ReturnCheckProducts/ReturnCheckProducts.vue';
 import ReturnDocumentsPage from '@components/profile/ReturnDocumentsPage/ReturnDocumentsPage.vue';
 import ReturnForm from '@components/profile/ReturnForm/ReturnForm.vue';
+import ReturnResult from '@components/profile/ReturnForm/ReturnResult.vue';
 
 import { mapState, mapActions } from 'vuex';
 
@@ -57,6 +58,8 @@ export default {
                     return ReturnDocumentsPage;
                 case returnFormSteps.FORM:
                     return ReturnForm;
+                case returnFormSteps.RESULT:
+                    return ReturnResult;
                 default:
                     return ReturnProductSelection;
             }
