@@ -229,6 +229,20 @@
         }
     }
 
+    &__products {
+        &-list {
+            &-item {
+                & + & {
+                    margin-top: calc(var(--gs) * 3);
+
+                    @media (--tablet) {
+                        margin-top: var(--gs);
+                    }
+                }
+            }
+        }
+    }
+
     &__featured {
         &-container {
             @media (--tablet-lg) {

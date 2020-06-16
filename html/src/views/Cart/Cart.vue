@@ -29,7 +29,7 @@
                                     </div>
                                 </div>
                                 <transition-group
-                                    class="cart-view__main-products-list"
+                                    class="cart-view__main-products-list cart-view__products-list"
                                     tag="ul"
                                     name="cart-item"
                                     @before-enter="onBeforeEnterItems"
@@ -37,24 +37,42 @@
                                     @after-enter="onAfterEnterItems"
                                     @leave="onLeaveItems"
                                 >
-                                    <cart-product-card
-                                        class="cart-view__main-products-list-item"
+                                    <li
+                                        class="cart-view__products-list-item"
                                         v-for="({ p: product, count }, index) in type.items"
-                                        :data-index="index"
                                         :key="product.id"
-                                        :offer-id="product.id"
-                                        :product-id="product.productId"
-                                        :type="product.type"
-                                        :name="product.name"
-                                        :image="product.image"
-                                        :price="product.price"
-                                        :old-price="product.oldPrice"
-                                        :count="count"
-                                        :href="generateItemProductUrl(product)"
-                                        @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
-                                        @toggle-favorite-item="onToggleFavorite(product)"
-                                        @countChange="onAddCartItem(product.id, product.stock.storeId, $event.count)"
-                                    />
+                                    >
+                                        <cart-product-card
+                                            v-if="product.type === 'product'"
+                                            class="cart-view__main-products-list-item"
+                                            :data-index="index"
+                                            :offer-id="product.id"
+                                            :product-id="product.productId"
+                                            :type="product.type"
+                                            :name="product.name"
+                                            :image="product.image"
+                                            :price="product.price"
+                                            :old-price="product.oldPrice"
+                                            :count="count"
+                                            :href="generateItemProductUrl(product)"
+                                            @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
+                                            @toggle-favorite-item="onToggleFavorite(product)"
+                                            @countChange="
+                                                onAddCartItem(product.id, product.stock.storeId, $event.count)
+                                            "
+                                        />
+                                        <cart-bundle-product-card
+                                            v-else-if="(product.type = 'bundle_product')"
+                                            :id="id"
+                                            :name="product.name"
+                                            :price="product.price"
+                                            :bonus="product.bonus"
+                                            :old-price="product.oldPrice"
+                                            :items="product.items"
+                                            :count="count"
+                                            @deleteBundle="onDeleteBundle"
+                                        />
+                                    </li>
                                 </transition-group>
                             </div>
                             <div class="cart-view__main-masterclass" v-else-if="IS_MASTER_CLASS(type)">
@@ -213,6 +231,7 @@ import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
 import CartMasterClassCard from '@components/CartMasterClassCard/CartMasterClassCard.vue';
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
+import CartBundleProductCard from '@components/CartBundleProductCard/CartBundleProductCard.vue';
 import VTabs from '@controls/VTabs/VTabs.vue';
 
 import { $store, $logger, $progress } from '@services';
@@ -228,6 +247,7 @@ import {
     DELETE_PROMOCODE,
     FETCH_CART_DATA,
     SET_LOAD,
+    DELETE_CART_BUNDLE,
 } from '@store/modules/Cart/actions';
 import {
     PRODUCTS,
@@ -311,6 +331,7 @@ export default {
         CartProductCard,
         CartMasterClassCard,
         CatalogProductCard,
+        CartBundleProductCard,
     },
 
     data() {
@@ -357,6 +378,7 @@ export default {
             DELETE_ALL_ITEMS,
             ADD_PROMOCODE,
             DELETE_PROMOCODE,
+            DELETE_CART_BUNDLE,
         ]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
@@ -429,6 +451,10 @@ export default {
                 done();
             });
         },
+
+        onDeleteBundle(bundleId) {
+            this[DELETE_CART_BUNDLE](bundleId);
+        }
     },
 
     async serverPrefetch() {

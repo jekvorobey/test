@@ -655,6 +655,14 @@ export function addCartBundle(bundleId, count, referrerCode) {
     });
 }
 
+export function deleteCartBundle(bundleId) {
+    return $http.delete('/v1/cart/item-bundle', {
+        data: {
+            bundleId
+        }
+    });
+}
+
 export function addCartPromocode(data) {
     return $http.post('/v1/cart/promo-code', data);
 }
