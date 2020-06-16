@@ -34,6 +34,14 @@
             @media (--tablet) {
                 width: 100%;
             }
+
+            .radio-switch__radio {
+                width: auto;
+            }
+
+            .radio-switch__radio + .radio-switch__radio {
+                margin-left: calc(var(--gs) * 2);
+            }
         }
 
         &-btn {
