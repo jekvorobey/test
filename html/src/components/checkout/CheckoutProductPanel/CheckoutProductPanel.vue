@@ -12,6 +12,7 @@
                         v-for="(recipient, index) in recipients"
                         :key="recipient.id"
                         :selected="selectedRecipient && isEqualObject(recipient, selectedRecipient)"
+                        :show-check="recipients.length > 1"
                         @cardClick="onSetRecipient(recipient)"
                         @btnClick="onChangeRecipient(recipient, index)"
                     >
