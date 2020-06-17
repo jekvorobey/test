@@ -137,4 +137,10 @@
             }
         }
     }
+
+    &__controls {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: calc(var(--gs) * 2);
+    }
 }
