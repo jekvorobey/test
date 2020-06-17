@@ -188,7 +188,7 @@
             </div>
             <div class="container cart-view__main-container" v-else>
                 <div class="cart-view__empty-cart">
-                    <v-svg name="cart-empty" width="20" height="24" />
+                    <v-svg name="cart" width="20" height="24" />
                     <span class="cart-view__empty-cart-message">
                         Вы ещё ничего не добавили в вашу корзину, перейдите в каталог для покупок
                     </span>
@@ -232,8 +232,8 @@ import VButton from '@controls/VButton/VButton.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VInput from '@controls/VInput/VInput.vue';
 
-import VSticky from '@controls/VSticky/VSticky.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
 import Price from '@components/Price/Price.vue';
 import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
 
@@ -283,8 +283,8 @@ import { preparePrice } from '@util';
 import { generateProductUrl } from '@util/catalog';
 import { registerModuleIfNotExists } from '@util/store';
 
+import '@images/sprites/cart.svg';
 import '@images/sprites/alert.svg';
-import '@images/sprites/cart-empty.svg';
 import './Cart.css';
 
 const itemTypes = Object.values(cartItemTypes);
