@@ -35,7 +35,7 @@ const main = {
         },
 
         made_by: 'Made by Greensight',
-        rights: '© 2019 «Shamelessly Talented»',
+        rights: '© 2020 «Shamelessly Talented»',
         terms_of_use: 'Terms of use',
         offer: 'Public offer',
     },
