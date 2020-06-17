@@ -28,7 +28,7 @@
 
         <div class="return-check-products__bottom">
             <div class="return-check-products__controls">
-                <v-button class="return-check-products__next-btn" :disabled="isBtnDisabled">
+                <v-button class="return-check-products__next-btn" :disabled="isBtnDisabled" @click="onNextPage">
                     Продолжить
                 </v-button>
                 <v-button class="return-check-products__back-btn btn--transparent" @click="onClickBack">
@@ -138,6 +138,10 @@ export default {
                 },
             });
         },
+
+        onNextPage() {
+            this[SET_STEP](returnFormSteps.DOCUMENTS);
+        }
     },
 };
 </script>

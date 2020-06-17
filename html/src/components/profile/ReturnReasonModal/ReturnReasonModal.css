@@ -28,6 +28,15 @@
         line-height: 24px;
         margin-bottom: 8px;
     }
+
+    &__files {
+        &-text {
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 24px;
+        }
+    }
     
     .popup__body {
         padding: calc(var(--gs) * 3);

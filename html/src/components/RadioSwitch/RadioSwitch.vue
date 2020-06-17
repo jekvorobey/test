@@ -42,11 +42,6 @@ export default {
             required: true,
         },
 
-        keyField: {
-            type: String,
-            default: 'id',
-        },
-
         items: {
             type: Array,
             default() {

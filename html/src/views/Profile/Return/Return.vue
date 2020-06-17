@@ -16,6 +16,9 @@ import VLink from '@controls/VLink/VLink.vue';
 
 import ReturnProductSelection from '@components/profile/ReturnProductSelection/ReturnProductSelection.vue';
 import ReturnCheckProducts from '@components/profile/ReturnCheckProducts/ReturnCheckProducts.vue';
+import ReturnDocumentsPage from '@components/profile/ReturnDocumentsPage/ReturnDocumentsPage.vue';
+import ReturnForm from '@components/profile/ReturnForm/ReturnForm.vue';
+import ReturnResult from '@components/profile/ReturnForm/ReturnResult.vue';
 
 import { mapState, mapActions } from 'vuex';
 
@@ -42,7 +45,7 @@ export default {
         ...mapState(RETURN_PAGE_PATH, [STEP]),
 
         backUrl() {
-            return { name: '' };
+            return { name: 'Cabinet' };
         },
 
         currentStep() {
@@ -51,6 +54,12 @@ export default {
                     return ReturnProductSelection;
                 case returnFormSteps.CHECK:
                     return ReturnCheckProducts;
+                case returnFormSteps.DOCUMENTS:
+                    return ReturnDocumentsPage;
+                case returnFormSteps.FORM:
+                    return ReturnForm;
+                case returnFormSteps.RESULT:
+                    return ReturnResult;
                 default:
                     return ReturnProductSelection;
             }

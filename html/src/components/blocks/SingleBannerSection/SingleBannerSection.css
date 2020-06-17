@@ -12,49 +12,21 @@
     }
 
     &__banner {
-        height: 240px;
+        .catalog-banner-card__img {
+            &::after {
+                padding-bottom: 20%;
 
-        .catalog-banner-card__panel {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transform: none;
-
-            @media (--tablet-lg-min) {
-                height: 100%;
-                text-align: left;
-                top: 0;
-                left: 35%;
-                width: 65%;
-
-                &-title {
-                    margin-bottom: var(--gs);
-                    width: 80%;
+                @media (--tablet) {
+                    padding-bottom: 70%;
                 }
 
-                &-btn {
-                    width: max-content;
-                    max-width: 200px;
-                }
-            }
+                @supports (-moz-user-select: none) {
+                    margin-top: 20%;
+                    padding-bottom: 0;
 
-            @media (--tablet-lg) {
-                height: 100%;
-                text-align: center;
-                align-items: center;
-                top: 0;
-                left: 0;
-                width: 100%;
-                padding: calc(var(--gs) * 3);
-
-                &-title {
-                    margin-bottom: var(--gs);
-                    width: 100%;
-                }
-
-                &-btn {
-                    width: max-content;
-                    max-width: 200px;
+                    @media (--tablet) {
+                        margin-top: 70%;
+                    }
                 }
             }
         }

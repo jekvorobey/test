@@ -29,9 +29,28 @@
         </div>
 
         <section class="section masterclasses-view__section masterclasses-view__sets">
-            <h1 class="container masterclasses-view__section-hl">
-                {{ $t('masterclasses.title') }}
-            </h1>
+            <div class="container masterclasses-view__header">
+                <div class="masterclasses-view__header-top">
+                    <h1 class="masterclasses-view__section-hl masterclasses-view__header-hl">
+                        {{ $t('masterclasses.title') }}
+                    </h1>
+                    <div class="masterclasses-view__header-top-controls">
+                        <v-select class="masterclasses-view__header-select" :options="[]"></v-select>
+                        <v-select class="masterclasses-view__header-select" :options="[]"></v-select>
+                    </div>
+                </div>
+
+                <div class="masterclasses-view__header-bottom">
+                    <radio-switch
+                        class="masterclasses-view__header-switch"
+                        v-model="selectedStatus"
+                        name="status"
+                        id="status"
+                        :items="masterclassStatus"
+                    />
+                    <select-panel class="masterclasses-view__header-panel" name="topic" id="topic" :items="topics" />
+                </div>
+            </div>
             <div class="container masterclasses-view__sets-container">
                 <ul class="masterclasses-view__sets-list">
                     <master-class-card
@@ -82,7 +101,10 @@
 import VButton from '@controls/VButton/VButton.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
 
+import SelectPanel from '@components/SelectPanel/SelectPanel.vue';
+import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
 import MasterClassCard from '@components/MasterClassCard/MasterClassCard.vue';
 import MasterClassBannerCard from '@components/MasterClassBannerCard/MasterClassBannerCard.vue';
 
@@ -98,16 +120,7 @@ import { $store, $progress, $logger } from '@services';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { CATEGORIES, SCROLL } from '@store';
-import productGroupsModule, {
-    NAME as PRODUCT_GROUPS_MODULE,
-    ITEMS,
-    LOAD_PATH,
-    TYPE,
-} from '@store/modules/ProductGroups';
-import { BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT } from '@store/modules/ProductGroups/getters';
-import { FETCH_ITEMS, SET_LOAD_PATH, SET_TYPE } from '@store/modules/ProductGroups/actions';
 
-import { productGroupTypes } from '@enums/product';
 import { MIN_SCROLL_VALUE } from '@constants';
 import { registerModuleIfNotExists } from '@util/store';
 import { generateMasterclassUrl } from '@util/catalog';
@@ -138,6 +151,44 @@ const sliderOptions = {
     },
 };
 
+const masterclassStatus = [
+    {
+        value: 0,
+        title: 'Будущие события',
+    },
+    {
+        value: 1,
+        title: 'Прошедшие',
+    },
+];
+
+const topics = [
+    {
+        value: 0,
+        title: 'Все темы',
+    },
+    {
+        value: 1,
+        title: 'Парикмахерам',
+    },
+    {
+        value: 2,
+        title: 'Визажистам',
+    },
+    {
+        value: 3,
+        title: 'Нейл-мастерам',
+    },
+    {
+        value: 4,
+        title: 'Фотографам',
+    },
+    {
+        value: 5,
+        title: 'Стилистам',
+    },
+];
+
 export default {
     name: 'product-groups',
 
@@ -146,6 +197,11 @@ export default {
         VPagination,
         VExpander,
         VSlider,
+        VSelect,
+
+        RadioSwitch,
+        SelectPanel,
+        ShowMoreButton,
 
         MasterClassCard,
         MasterClassBannerCard,
@@ -155,12 +211,19 @@ export default {
 
         SeparatorSection,
         CategoriesSection,
-        ShowMoreButton,
     },
 
     data() {
         return {
             showMore: false,
+            activePage: 1,
+            pagesCount: 3,
+
+            masterclassStatus,
+            selectedStatus: masterclassStatus[0].value,
+
+            topics,
+            selectedTopic: topics[0].value,
             masterclassBanners: [
                 {
                     id: 1,
@@ -268,13 +331,8 @@ export default {
 
     computed: {
         ...mapState([CATEGORIES, SCROLL]),
-        ...mapState(PRODUCT_GROUPS_MODULE, [ITEMS, TYPE]),
-        ...mapGetters(PRODUCT_GROUPS_MODULE, [BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT]),
-
-        columns() {
-            if (this.isTablet) return 2;
-            return this.isTabletLg ? 3 : 6;
-        },
+        // ...mapState(MASTERCLASSES_MODULE, []),
+        // ...mapGetters(MASTERCLASSES_MODULE, []),
 
         sliderOptions() {
             return sliderOptions;
@@ -290,7 +348,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(PRODUCT_GROUPS_MODULE, [FETCH_ITEMS]),
+        // ...mapActions(MASTERCLASSES_MODULE, [FETCH_ITEMS]),
 
         generateMasterclassUrl(code) {
             return generateMasterclassUrl(code);
@@ -310,36 +368,32 @@ export default {
         },
 
         async fetchCatalog(to, from, showMore) {
-            try {
-                const {
-                    fullPath,
-                    params: { type: toType },
-                    query: { page = 1, orderField = 'name' },
-                } = to;
-
-                const {
-                    params: { type: fromType },
-                    query: { page: fromPage = 1 },
-                } = from;
-
-                // для брендов нам нужны сразу все страницы
-                const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
-                this.$progress.start();
-                await this[FETCH_ITEMS]({ type: toType, page: fetchPage, orderField, showMore });
-                this.$progress.finish();
-
-                if (!showMore && this[SCROLL] && (toType !== fromType || page !== fromPage))
-                    window.scrollTo({
-                        top: MIN_SCROLL_VALUE + 1,
-                        behavior: 'smooth',
-                    });
-
-                if (showMore) setTimeout(() => (this.showMore = false), 200);
-            } catch (error) {
-                $logger.error(error);
-                this.$progress.fail();
-                this.$progress.finish();
-            }
+            // try {
+            //     const {
+            //         fullPath,
+            //         params: { type: toType },
+            //         query: { page = 1, orderField = 'name' },
+            //     } = to;
+            //     const {
+            //         params: { type: fromType },
+            //         query: { page: fromPage = 1 },
+            //     } = from;
+            //     // для брендов нам нужны сразу все страницы
+            //     const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
+            //     this.$progress.start();
+            //     await this[FETCH_ITEMS]({ type: toType, page: fetchPage, orderField, showMore });
+            //     this.$progress.finish();
+            //     if (!showMore && this[SCROLL] && (toType !== fromType || page !== fromPage))
+            //         window.scrollTo({
+            //             top: MIN_SCROLL_VALUE + 1,
+            //             behavior: 'smooth',
+            //         });
+            //     if (showMore) setTimeout(() => (this.showMore = false), 200);
+            // } catch (error) {
+            //     $logger.error(error);
+            //     this.$progress.fail();
+            //     this.$progress.finish();
+            // }
         },
     },
 
@@ -348,49 +402,48 @@ export default {
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
 
-        const {
-            fullPath,
-            params: { type: toType },
-            query: { page = 1, orderField = 'name' },
-        } = to;
+        // const {
+        //     fullPath,
+        //     params: { type: toType },
+        //     query: { page = 1, orderField = 'name' },
+        // } = to;
 
-        // регистрируем модуль, если такого нет
-        registerModuleIfNotExists($store, PRODUCT_GROUPS_MODULE, productGroupsModule);
-        const { loadPath, type } = $store.state[PRODUCT_GROUPS_MODULE];
+        // const { loadPath, type } = $store.state[MASTERCLASSES_MODULE];
 
-        // если все загружено, пропускаем
-        if (loadPath === fullPath && type === toType)
-            next(vm => {
-                if (!vm.$isServer && vm[SCROLL]) {
-                    window.scrollTo({
-                        top: 0,
-                    });
-                }
-            });
-        else {
-            // для брендов нам нужны сразу все страницы
-            const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
-            $progress.start();
-            $store
-                .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, { type: toType, page: fetchPage, orderField })
-                .then(() => {
-                    $store.dispatch(`${PRODUCT_GROUPS_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
-                        $progress.finish();
-                        if (!vm.$isServer && vm[SCROLL]) {
-                            window.scrollTo({
-                                top: 0,
-                            });
-                        }
-                    });
-                })
-                .catch(error => {
-                    next(vm => {
-                        $progress.fail();
-                        $progress.finish();
-                    });
-                });
-        }
+        // // если все загружено, пропускаем
+        // if (loadPath === fullPath && type === toType)
+        //     next(vm => {
+        //         if (!vm.$isServer && vm[SCROLL]) {
+        //             window.scrollTo({
+        //                 top: 0,
+        //             });
+        //         }
+        //     });
+        // else {
+        //     // для брендов нам нужны сразу все страницы
+        //     const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
+        //     $progress.start();
+        //     $store
+        //         .dispatch(`${MASTERCLASSES_MODULE}/${FETCH_ITEMS}`, { type: toType, page: fetchPage, orderField })
+        //         .then(() => {
+        //             $store.dispatch(`${MASTERCLASSES_MODULE}/${SET_LOAD_PATH}`, fullPath);
+        //             next(vm => {
+        //                 $progress.finish();
+        //                 if (!vm.$isServer && vm[SCROLL]) {
+        //                     window.scrollTo({
+        //                         top: 0,
+        //                     });
+        //                 }
+        //             });
+        //         })
+        //         .catch(error => {
+        //             next(vm => {
+        //                 $progress.fail();
+        //                 $progress.finish();
+        //             });
+        //         });
+        // }
+        next();
     },
 
     beforeRouteUpdate(to, from, next) {
@@ -401,14 +454,14 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        if (this.showMore) {
-            this.fetchCatalog(to, from, this.showMore);
-        } else this.debounce_fetchCatalog(to, from);
+        // if (this.showMore) {
+        //     this.fetchCatalog(to, from, this.showMore);
+        // } else this.debounce_fetchCatalog(to, from);
         next();
     },
 
     beforeMount() {
-        this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
+        //this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
     },
 };
 </script>

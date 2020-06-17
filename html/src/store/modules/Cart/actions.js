@@ -9,6 +9,7 @@ import {
     addCartPromocode,
     deleteCartPromocode,
     addCartBundle,
+    deleteCartBundle,
 } from '@api';
 import { getRandomIntInclusive } from '@util';
 import { storeErrorHandler } from '@util/store';
@@ -28,6 +29,7 @@ export const DELETE_CART_ITEM = 'DELETE_CART_ITEM';
 export const ADD_CART_ITEM = 'ADD_CART_ITEM';
 
 export const ADD_CART_BUNDLE = 'ADD_CART_BUNDLE';
+export const DELETE_CART_BUNDLE = 'DELETE_CART_BUNDLE';
 
 export const ADD_PROMOCODE = 'ADD_PROMOCODE';
 export const DELETE_PROMOCODE = 'DELETE_PROMOCODE';
@@ -140,4 +142,13 @@ export default {
             storeErrorHandler(FETCH_CART_DATA, error);
         }
     },
+
+    async [DELETE_CART_BUNDLE]({ commit }, bundleId) {
+        try {
+            const data = await deleteCartBundle(bundleId);
+            commit(SET_CART_DATA, data);
+        } catch (error) {
+            storeErrorHandler(DELETE_CART_BUNDLE, error);
+        }
+    }
 };

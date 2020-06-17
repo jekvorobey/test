@@ -1,7 +1,10 @@
 <template>
     <div class="v-file" id="drop-area">
-        <v-file-item class="v-file__item" v-for="file in files" :key="file.name" :file="file" />
-
+        <template v-for="(file, index) in files">
+            <slot name="file" :file="file" :index="index">
+                <v-file-item class="v-file__item" :key="file.name" :file="file" />
+            </slot>
+        </template>
         <form
             class="v-file__item v-file__form"
             :class="{ 'v-file__form--empty': isEmpty }"
@@ -9,6 +12,7 @@
             @dragover.prevent
             @dragleave.prevent
             @drop.prevent="handleDrop"
+            v-if="files.length < maxFiles"
         >
             <label class="v-file__form-label" for="fileInput">
                 <slot>
@@ -62,6 +66,11 @@ export default {
             type: Function,
             default: null,
         },
+
+        maxFiles: {
+            type: Number,
+            default: 10,
+        },
     },
 
     data() {
@@ -89,12 +98,12 @@ export default {
 
     methods: {
         isAccepted(file) {
-            
             if (this.filter) {
                 return this.filter(file);
             }
 
-            const isAcceptedType = this.acceptedTypes && (this.acceptedTypes.length === 0 || this.acceptedTypes.includes(file.type));
+            const isAcceptedType =
+                this.acceptedTypes && (this.acceptedTypes.length === 0 || this.acceptedTypes.includes(file.type));
 
             const isAcceptedSize = this.maxFileSize && file.size < this.maxFileSize;
 
