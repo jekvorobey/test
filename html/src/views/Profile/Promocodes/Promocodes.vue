@@ -474,9 +474,5 @@ export default {
         this.items = this[PROMOCODES];
         this.setFilterValue(this.$route.query.isArchive);
     },
-
-    beforeMount() {
-        console.log(this);
-    },
 };
 </script>
