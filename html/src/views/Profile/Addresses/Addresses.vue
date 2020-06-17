@@ -8,7 +8,7 @@
                     <span>&nbsp;&nbsp;Добавить новый адрес</span>
                 </v-link>
             </template>
-            <div class="container container--tablet-lg">
+            <div class="container container--tablet-lg" v-if="addresses && addresses.length > 0">
                 <ul class="addresses-view__panel-list">
                     <checkout-option-card
                         class="addresses-view__panel-item"
@@ -43,6 +43,15 @@
                     </checkout-option-card>
                 </ul>
             </div>
+            <div class="container container--tablet-lg" v-else>
+                <div class="addresses-view__no-addresses">
+                    <v-svg class="addresses-view__no-addresses-icon" name="info-middle" width="24" height="24" />
+                    Вы ещё не добавили адресов
+                </div>
+                <v-button class="btn--outline addresses-view__no-addresses-btn" @click="onAddAddress">
+                    Добавить адрес
+                </v-button>
+            </div>
         </info-panel>
 
         <transition name="fade">
@@ -58,6 +67,8 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
@@ -83,6 +94,7 @@ import { modalName } from '@enums';
 import { $store, $progress, $logger } from '@services';
 import { getRandomIntInclusive } from '@util';
 import '@images/sprites/plus-small.svg';
+import '@images/sprites/info-middle.svg';
 import './Addresses.css';
 
 const ADDRESSES_MODULE_PATH = `${PROFILE_MODULE}/${ADDRESSES_MODULE}`;
@@ -93,6 +105,7 @@ export default {
     components: {
         VSvg,
         VLink,
+        VButton,
 
         InfoPanel,
         CheckoutOptionCard,
