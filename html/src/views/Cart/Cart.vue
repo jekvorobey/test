@@ -186,6 +186,15 @@
                     </template>
                 </v-sticky>
             </div>
+            <div class="container cart-view__main-container" v-else>
+                <div class="cart-view__empty-cart">
+                    <v-svg name="cart-empty" width="20" height="24" />
+                    <span class="cart-view__empty-cart-message">
+                        Вы ещё ничего не добавили в вашу корзину, перейдите в каталог для покупок
+                    </span>
+                    <a class="cart-view__empty-cart-btn btn btn--outline" href="/catalog">Перейти к покупкам</a>
+                </div>
+            </div>
         </section>
 
         <section class="section cart-view__section cart-view__featured">
@@ -275,6 +284,7 @@ import { generateProductUrl } from '@util/catalog';
 import { registerModuleIfNotExists } from '@util/store';
 
 import '@images/sprites/alert.svg';
+import '@images/sprites/cart-empty.svg';
 import './Cart.css';
 
 const itemTypes = Object.values(cartItemTypes);
