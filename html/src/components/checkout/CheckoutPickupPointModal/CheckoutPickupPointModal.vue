@@ -6,8 +6,41 @@
         :is-scroll-locked="false"
         :is-mobile="isTabletLg"
     >
+        <template v-slot:header>
+            <button
+                v-if="!selectedPickupPoint"
+                class="checkout-pickup-point-modal__header-btn checkout-pickup-point-modal__header-btn--close"
+                @click="onClose()"
+            >
+                <v-svg name="cross" width="24" height="24" />Выбор пункта выдачи
+            </button>
+            <template v-else class="container checkout-pickup-point-modal">
+                <button
+                    class="checkout-pickup-point-modal__header-btn checkout-pickup-point-modal__header-btn--arrow"
+                    @click.prevent="onBackClick"
+                >
+                    <v-svg name="arrow-small" width="24" height="24" />
+                    Назад к списку
+                </button>
+            </template>
+        </template>
+
         <template v-slot:content>
-            <div class="checkout-pickup-point-modal__map" v-if="!isTabletLg">
+            <div class="checkout-pickup-point-modal__tabs" v-if="isTabletLg">
+                <button
+                    class="checkout-pickup-point-modal__tabs-button"
+                    type="button"
+                    v-for="(tab, index) in tabs"
+                    :class="{ 'is-active': activeTab === index }"
+                    :key="index"
+                    @click="onTabClick(index)"
+                >
+                    <v-svg class="checkout-pickup-point-modal__tabs-icon" :name="tab.icon" width="24" height="24" />
+                    {{ tab.name }}
+                </button>
+            </div>
+
+            <div class="checkout-pickup-point-modal__map" v-if="!isTabletLg || activeTab === 0">
                 <yandex-map
                     v-if="showMap"
                     :zoom="11"
@@ -29,10 +62,15 @@
 
             <div
                 class="container container--tablet-lg checkout-pickup-point-modal__details"
-                v-if="selectedPickupPoint"
+                v-if="(!isTabletLg || activeTab === 1) && selectedPickupPoint"
                 v-scroll-lock="selectedPickupPoint"
             >
-                <v-link class="checkout-pickup-point-modal__details-back-link" tag="button" @click.stop="onBackClick">
+                <v-link
+                    class="checkout-pickup-point-modal__details-back-link"
+                    tag="button"
+                    v-if="!isTabletLg"
+                    @click.stop="onBackClick"
+                >
                     <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад к
                     списку
                 </v-link>
@@ -75,9 +113,14 @@
                 </v-button>
             </div>
 
-            <div class="checkout-pickup-point-modal__filter" v-else>
+            <div
+                class="checkout-pickup-point-modal__filter"
+                v-if="(!isTabletLg || activeTab === 1) && !selectedPickupPoint"
+            >
                 <div class="container checkout-pickup-point-modal__filter-header">
-                    <h3 class="checkout-pickup-point-modal__filter-header-hl">Выбор пункта выдачи</h3>
+                    <h3 class="checkout-pickup-point-modal__filter-header-hl" v-if="!isTabletLg">
+                        Выбор пункта выдачи
+                    </h3>
                     <div class="checkout-pickup-point-modal__filter-header-controls">
                         <!-- <v-select placeholder="Станция метро" :options="[]" /> -->
                         <v-select
@@ -166,18 +209,31 @@ export default {
                 size: [32, 32],
                 offset: [0, 0],
             },
+
+            tabs: [
+                {
+                    name: 'Карта',
+                    icon: 'map',
+                },
+                {
+                    name: 'Список',
+                    icon: 'list',
+                },
+            ],
+
+            activeTab: 0,
         };
     },
 
     computed: {
         ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, DELIVERY_METHODS, SELECTED_DELIVERY_METHOD_ID]),
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         filteredPickupPoints() {
             return this[PICKUP_POINTS].filter(
-                (p) => !this.selectedDeliveryMethod || p.methodID === this.selectedDeliveryMethod.id
+                p => !this.selectedDeliveryMethod || p.methodID === this.selectedDeliveryMethod.id
             );
         },
 
@@ -200,6 +256,7 @@ export default {
 
         onShowPoint(point) {
             this.selectedPickupPoint = point;
+            this.activeTab = 1;
         },
 
         onSelectPoint(point) {
@@ -215,6 +272,13 @@ export default {
         onClose() {
             this.selectedDeliveryMethod = null;
             this.CHANGE_MODAL_STATE({ name: NAME, open: false });
+        },
+
+        onTabClick(index) {
+            if (this.activeTab !== index) {
+                this.selectedPickupPoint = null;
+                this.activeTab = index;
+            }
         },
     },
 
