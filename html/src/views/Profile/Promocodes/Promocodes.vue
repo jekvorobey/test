@@ -35,7 +35,7 @@
                             <th class="promocodes-view__table-th">Промокод</th>
                             <th class="promocodes-view__table-th">Срок действия</th>
                             <th class="promocodes-view__table-th">Скидка</th>
-                            <th class="promocodes-view__table-th">Категория товаров</th>
+                            <th class="promocodes-view__table-th">Категория товаров/услуг</th>
                         </tr>
                     </thead>
 
@@ -43,7 +43,10 @@
                         <tr class="promocodes-view__table-tr" v-for="promocode in items" :key="promocode.code">
                             <td class="promocodes-view__table-td">
                                 {{ promocode.code }}&nbsp;&nbsp;
-                                <button class="promocodes-view__table-btn promocodes-view__copy-btn" @click="onCopyCode($event, promocode.code)">
+                                <button
+                                    class="promocodes-view__table-btn promocodes-view__copy-btn"
+                                    @click="onCopyCode($event, promocode.code)"
+                                >
                                     <v-svg name="copy" width="16" height="16" />
                                     <span v-if="!isTablet">Скопировать</span>
                                 </button>
@@ -51,13 +54,11 @@
                             <td class="promocodes-view__table-td">
                                 <template v-if="!promocode.endDate && promocode.startDate">c</template>
                                 {{ promocode.startDate }}
-                                <template
-                                    v-if="
-                                        (promocode.startDate && promocode.endDate) ||
-                                        (!promocode.startDate && !promocode.endDate)
-                                    "
-                                >
-                                    –
+                                <template v-if="promocode.startDate && promocode.endDate">
+                                    -
+                                </template>
+                                <template v-else-if="!promocode.startDate && !promocode.endDate">
+                                    Бессрочный
                                 </template>
                                 <template v-if="!promocode.startDate && promocode.endDate">по</template>
                                 {{ promocode.endDate }}
@@ -74,9 +75,11 @@
                                     class="promocodes-view__category-panel"
                                     v-else-if="promocode.brands && promocode.brands.items.length > 0"
                                 >
-                                    <button class="promocodes-view__category-panel-header-btn" @click="onToggleIsOpen(promocode.brands)">
-                                        Бренды:
-                                        &nbsp;<v-svg
+                                    <button
+                                        class="promocodes-view__category-panel-header-btn"
+                                        @click="onToggleIsOpen(promocode.brands)"
+                                    >
+                                        Бренды: &nbsp;<v-svg
                                             :class="{ 'icon--rotate-deg180': promocode.brands.isOpen }"
                                             name="arrow-down"
                                             width="16"
@@ -94,9 +97,11 @@
                                     class="promocodes-view__category-panel"
                                     v-else-if="promocode.categories && promocode.categories.items.length > 0"
                                 >
-                                    <button class="promocodes-view__category-panel-header-btn" @click="onToggleIsOpen(promocode.categories)">
-                                        Категории:
-                                        &nbsp;<v-svg name="arrow-down" width="16" height="16" />
+                                    <button
+                                        class="promocodes-view__category-panel-header-btn"
+                                        @click="onToggleIsOpen(promocode.categories)"
+                                    >
+                                        Категории: &nbsp;<v-svg name="arrow-down" width="16" height="16" />
                                     </button>
 
                                     <ul class="promocodes-view__category-panel-list" v-if="promocode.categories.isOpen">
@@ -111,9 +116,11 @@
                                     v-for="key in Object.keys(promocode.offers)"
                                     :key="key"
                                 >
-                                    <button class="promocodes-view__category-panel-header-btn" @click="onToggleIsOpen(promocode.offers[key])">
-                                        {{ key }}:
-                                        &nbsp;<v-svg
+                                    <button
+                                        class="promocodes-view__category-panel-header-btn"
+                                        @click="onToggleIsOpen(promocode.offers[key])"
+                                    >
+                                        {{ key }}: &nbsp;<v-svg
                                             :class="{ 'icon--rotate-deg180': promocode.offers[key].isOpen }"
                                             name="arrow-down"
                                             width="16"
@@ -144,7 +151,10 @@
                 >
                     <info-row class="promocodes-view__list-item-row" name="Промокод">
                         {{ promocode.code }}&nbsp;&nbsp;
-                        <button class="promocodes-view__table-btn promocodes-view__copy-btn" @click="onCopyCode($event, promocode.code)">
+                        <button
+                            class="promocodes-view__table-btn promocodes-view__copy-btn"
+                            @click="onCopyCode($event, promocode.code)"
+                        >
                             <v-svg name="copy" width="16" height="16" />
                             Скопировать
                         </button>
@@ -153,11 +163,12 @@
                         <template v-if="!promocode.endDate && promocode.startDate">c</template>
                         {{ promocode.startDate }}
                         <template v-if="promocode.startDate && promocode.endDate">–</template>
+                        <template v-else-if="!promocode.startDate && !promocode.endDate">бессрочный</template>
                         <template v-if="!promocode.startDate && promocode.endDate">по</template>
                         {{ promocode.endDate }}
                     </info-row>
                     <info-row class="promocodes-view__list-item-row" name="Скидка" :value="promocode.discount" />
-                    <info-row class="promocodes-view__list-item-row" name="Категория товаров">
+                    <info-row class="promocodes-view__list-item-row" name="Категория товаров/услуг">
                         <template v-if="promocode.type !== promocodeType.PRODUCT">Все товары</template>
                         <div
                             class="promocodes-view__category-panel"
@@ -186,9 +197,11 @@
                             class="promocodes-view__category-panel"
                             v-else-if="promocode.categories && promocode.categories.items.length > 0"
                         >
-                            <button class="promocodes-view__category-panel-header-btn" @click="onToggleIsOpen(promocode.categories)">
-                                Категории:
-                                &nbsp;<v-svg name="arrow-down" width="16" height="16" />
+                            <button
+                                class="promocodes-view__category-panel-header-btn"
+                                @click="onToggleIsOpen(promocode.categories)"
+                            >
+                                Категории: &nbsp;<v-svg name="arrow-down" width="16" height="16" />
                             </button>
 
                             <ul class="promocodes-view__category-panel-list" v-if="promocode.categories.isOpen">
@@ -203,9 +216,11 @@
                             v-for="key in Object.keys(promocode.offers)"
                             :key="key"
                         >
-                            <button class="promocodes-view__category-panel-header-btn" @click="onToggleIsOpen(promocode.offers[key])">
-                                {{ key }}:
-                                &nbsp;<v-svg
+                            <button
+                                class="promocodes-view__category-panel-header-btn"
+                                @click="onToggleIsOpen(promocode.offers[key])"
+                            >
+                                {{ key }}: &nbsp;<v-svg
                                     :class="{ 'icon--rotate-deg180': promocode.offers[key].isOpen }"
                                     name="arrow-down"
                                     width="16"
@@ -458,6 +473,10 @@ export default {
         this.promocodeType = promocodeType;
         this.items = this[PROMOCODES];
         this.setFilterValue(this.$route.query.isArchive);
+    },
+
+    beforeMount() {
+        console.log(this);
     },
 };
 </script>
