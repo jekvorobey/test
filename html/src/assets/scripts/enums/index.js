@@ -260,11 +260,11 @@ export const returnReasons = Object.freeze({
 });
 
 export const dayOfTheWeek = Object.freeze({
+    0: 'воскресенье',
     1: 'понедельник',
     2: 'вторник',
     3: 'среда',
     4: 'четверг',
     5: 'пятница',
     6: 'суббота',
-    7: 'воскресенье',
 });
