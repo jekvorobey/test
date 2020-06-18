@@ -302,7 +302,7 @@
                             name="agreement"
                             @change="onSetAgreement($event)"
                         >
-                            Я согласен с условиями <router-link to="/">заказа и доставки</router-link>
+                            Я согласен с <router-link to="/">условиями оферты</router-link> и <router-link to="/">политикой конфиденциальности</router-link>
                         </v-check>
                         <transition name="slide-in-bottom" mode="out-in">
                             <div class="status-color-error" :key="agreementError" v-if="agreementError">

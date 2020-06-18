@@ -96,7 +96,7 @@
                         name="agreement"
                         @change="SET_AGREEMENT(Number($event))"
                     >
-                        Я согласен с условиями <router-link to="/">заказа и доставки</router-link>
+                        Я согласен с <router-link to="/">условиями оферты</router-link> и <router-link to="/">политикой конфиденциальности</router-link>
                     </v-check>
                 </div>
                 <div class="checkout-master-class-panel__item-panel">
