@@ -8,7 +8,10 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.BRANDS)"
-                        :disabled="actualBrands.length === availableBrands.length || brandsSame"
+                        :disabled="
+                            actualBrands.length === availableBrands.length ||
+                            (brandsSame && prefType === preferenceType.PROFESSIONAL)
+                        "
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
@@ -17,7 +20,9 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onDeleteAll(preferenceEntityTypes.BRANDS)"
-                        :disabled="actualBrands.length === 0 || brandsSame"
+                        :disabled="
+                            actualBrands.length === 0 || (brandsSame && prefType === preferenceType.PROFESSIONAL)
+                        "
                     >
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Удалить все</span>
@@ -34,7 +39,7 @@
                     Профессиональные предпочтения совпадают с личными
                 </v-check>
 
-                <div v-if="brandsSame">
+                <div v-if="brandsSame && prefType === preferenceType.PROFESSIONAL">
                     <h3 class="preferences-view__panel-hl">
                         Выбранные бренды
                     </h3>
@@ -62,7 +67,10 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.CATEGORIES)"
-                        :disabled="actualCategories.length === availableCategories.length || categoriesSame"
+                        :disabled="
+                            actualCategories.length === availableCategories.length ||
+                            (categoriesSame && prefType === preferenceType.PROFESSIONAL)
+                        "
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
@@ -71,7 +79,10 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onDeleteAll(preferenceEntityTypes.CATEGORIES)"
-                        :disabled="actualCategories.length === 0 || categoriesSame"
+                        :disabled="
+                            actualCategories.length === 0 ||
+                            (categoriesSame && prefType === preferenceType.PROFESSIONAL)
+                        "
                     >
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Удалить все</span>
@@ -88,7 +99,7 @@
                     Профессиональные предпочтения совпадают с личными
                 </v-check>
 
-                <div v-if="categoriesSame">
+                <div v-if="categoriesSame && prefType === preferenceType.PROFESSIONAL">
                     <h3 class="preferences-view__panel-hl">
                         Выбранные категории
                     </h3>
@@ -216,7 +227,7 @@ export default {
         },
 
         categoryList() {
-            return this.actualCategories.length ? this.actualCategories.map(brand => brand.name).join(', ') : '';
+            return this.actualCategories.length ? this.actualCategories.map(category => category.name).join(', ') : '';
         },
     },
 
@@ -365,6 +376,8 @@ export default {
             .then(() => {
                 $store.dispatch(`${PREFERENCES_MODULE_PATH}/${SET_TYPE}`, prefType);
                 next(vm => {
+                    vm.brandsSame = false;
+                    vm.categoriesSame = false;
                     $progress.finish();
                 });
             })
