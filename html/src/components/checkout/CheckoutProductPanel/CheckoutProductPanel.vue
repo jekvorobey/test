@@ -445,7 +445,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import validationMixin, { required } from '@plugins/validation';
 import { formatPhoneNumber, getPosition } from '@util';
 import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '@enums/checkout';
-import { requestStatus, modalName } from '@enums';
+import { requestStatus, modalName, dayOfTheWeek } from '@enums';
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
 
 import _cloneDeep from 'lodash/cloneDeep';
@@ -731,7 +731,14 @@ export default {
         generateChunkNote(chunkItem) {
             const options = { month: 'long', day: 'numeric' };
             const date = new Date(chunkItem.selectedDate);
-            return date.toLocaleDateString(this[LOCALE], options);
+            const today = new Date().getDate();
+            let additionalText = ``;
+
+            if (today === date.getDate()) additionalText = `сегодня`;
+            else if (today + 1 === date.getDate()) additionalText = `завтра`;
+            else additionalText = dayOfTheWeek[date.getDay()];
+
+            return `${date.toLocaleDateString(this[LOCALE], options)}, ${additionalText}`;
         },
 
         generatePackageNote(deliveryType) {

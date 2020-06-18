@@ -246,7 +246,7 @@ export const authMode = Object.freeze({
 
 export const themeCodes = Object.freeze({
     PROMOCODE: 1,
-})
+});
 
 export const returnReasons = Object.freeze({
     MARRIAGE: 'Брак',
@@ -257,4 +257,14 @@ export const returnReasons = Object.freeze({
     DESCRIPTION: 'Товар не соответствует описанию',
     DECISION: 'Изменил решение о покупке',
     OTHER: 'Другое',
-})
+});
+
+export const dayOfTheWeek = Object.freeze({
+    1: 'понедельник',
+    2: 'вторник',
+    3: 'среда',
+    4: 'четверг',
+    5: 'пятница',
+    6: 'суббота',
+    7: 'воскресенье',
+});
