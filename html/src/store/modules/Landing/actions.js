@@ -86,6 +86,7 @@ export default {
                         text: 'Присоединиться',
                         location: 'bottom_right',
                         type: 'white',
+                        authLink: 'Cabinet',
                     },
                     desktopImage: mainDesktopImg,
                     tabletImage: mainTabletImg,
