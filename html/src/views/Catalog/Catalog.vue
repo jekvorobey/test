@@ -48,7 +48,12 @@
                         />
                     </ul>
                     <catalog-filter class="catalog-view__side-panel-filters" />
-                    <v-button class="btn--outline catalog-view__side-panel-clear-btn" :to="clearFilterUrl" replace>
+                    <v-button
+                        class="btn--outline catalog-view__side-panel-clear-btn"
+                        :class="!isFiltersPage && 'is-disabled'"
+                        :to="clearFilterUrl"
+                        replace
+                    >
                         Очистить фильтры
                     </v-button>
                 </div>
@@ -301,6 +306,10 @@ export default {
             code: (state) => state.params.code,
             entityCode: (state) => state.params.entityCode,
         }),
+
+        isFiltersPage() {
+            return this.$route.path.includes('filters');
+        },
 
         breadcrumbRootUrl() {
             const { type } = this;

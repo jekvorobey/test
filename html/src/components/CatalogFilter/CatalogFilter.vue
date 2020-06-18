@@ -4,8 +4,8 @@
             class="catalog-filter__filters"
             key-field="id"
             :items="accordionFilters"
-            :item-expanded="item => item.isExpanded"
-            :item-toggled="item => (item.isExpanded = !!!item.isExpanded)"
+            :item-expanded="(item) => item.isExpanded"
+            :item-toggled="(item) => (item.isExpanded = !!!item.isExpanded)"
         >
             <template v-slot:content="{ item: filter }">
                 <div class="catalog-filter__filters-range" v-if="filter.item.type === 'range'">
@@ -20,7 +20,7 @@
                 </div>
                 <div class="catalog-filter__filters-check" v-else-if="filter.item.type === 'check'">
                     <v-check
-                        v-for="option in filter.item.items"
+                        v-for="option in (filter.showMore ? filter.item.items.filter((i, key) => key < maxCountFilters) : filter.item.items)"
                         :id="`${filter.item.name}-${option.id}`"
                         :key="option.id"
                         :name="filter.item.name"
@@ -29,6 +29,13 @@
                     >
                         {{ option.name }}
                     </v-check>
+                    <button
+                        class="catalog-filter__filters-more"
+                        @click="() => onShowMoreClick(filter.item.id)"
+                        v-if="filter.showMore && filter.item.items.length >= maxCountFilters"
+                    >
+                        Показать все
+                    </button>
                 </div>
                 <div class="catalog-filter__filters-check" v-else-if="filter.item.type === 'radio'">
                     <v-check
@@ -53,6 +60,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VRange from '@controls/VRange/VRange.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 import VAccordion from '@controls/VAccordion/VAccordion.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
 import { NAME as CATALOG_MODULE, FILTERS } from '@store/modules/Catalog';
 import { FILTER_SEGMENTS, ROUTE_SEGMENTS } from '@store/modules/Catalog/getters';
@@ -65,7 +73,7 @@ import './CatalogFilter.css';
 export default {
     name: 'catalog-filter',
 
-    components: { VButton, VCheck, VRange, VAccordion },
+    components: { VButton, VCheck, VRange, VAccordion, VLink },
 
     data() {
         return {
@@ -80,6 +88,8 @@ export default {
                     return Number(value);
                 },
             },
+            maxCountFilters: 8,
+            showMore: [],
         };
     },
 
@@ -94,13 +104,28 @@ export default {
 
         accordionFilters() {
             return this.filters
-                ? this.filters.map(f => {
-                      return { id: f.id, item: f, title: f.title, isExpanded: true };
+                ? this.filters.map((f, key) => {
+                      return {
+                          id: f.id,
+                          item: f,
+                          title: f.title,
+                          isExpanded: true,
+                          showMore: this.showMore.find(({ id }) => id === f.id).state,
+                      };
                   })
                 : [];
         },
     },
-
+    created() {
+        this.showMore = [
+            ...this.filters.map(({ type, items, id }) => {
+                return {
+                    id,
+                    state: type === 'check' && items.length >= this.maxCountFilters ? true : false,
+                };
+            }),
+        ];
+    },
     methods: {
         onRadioChange(e, value) {
             const { type, entityCode, code, routeSegments } = this;
@@ -128,6 +153,15 @@ export default {
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
             this.$router.replace({ path });
+        },
+
+        onShowMoreClick(id) {
+            const moreIndex = this.showMore.findIndex(el => el.id === id);
+            const moreItem = this.showMore.find(el => el.id === id);
+            this.showMore.splice(moreIndex, 1, {
+                ...moreItem,
+                state: false,
+            });
         },
 
         onRangeChange(e, name) {
