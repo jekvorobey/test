@@ -81,7 +81,7 @@
                         <thead class="referal-view__table-head">
                             <tr class="referal-view__table-tr referal-view__table-tr--header">
                                 <th class="referal-view__table-th">Товар</th>
-                                <th class="referal-view__table-th">Кол-во</th>
+                                <th class="referal-view__table-th">Количество</th>
                                 <th class="referal-view__table-th">ID реферала</th>
                                 <th class="referal-view__table-th">Источник</th>
                                 <th class="referal-view__table-th">Дата заказа</th>
