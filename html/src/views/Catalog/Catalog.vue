@@ -61,7 +61,7 @@
                     <div class="catalog-view__main-header">
                         <div class="catalog-view__main-header-title">
                             <h1 class="catalog-view__main-header-hl">
-                                {{ activeCategory ? activeCategory.name : 'Все категории' }}
+                                {{ activeCategory ? activeCategory.name : 'Все категории' }} ({{ range }})
                             </h1>
                             <!-- todo Количество товаров -->
                             <!-- <p class="text-grey catalog-view__main-header-text">489 продуктов</p> -->
@@ -228,6 +228,7 @@ import catalogModule, {
     BANNER,
     CATEGORIES,
     PRODUCT_GROUP,
+    RANGE,
 } from '@store/modules/Catalog';
 import { SET_LOAD_PATH, FETCH_CATALOG_DATA } from '@store/modules/Catalog/actions';
 import {
@@ -301,7 +302,7 @@ export default {
             ROUTE_SEGMENTS,
             BREADCRUMBS,
         ]),
-        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE]),
+        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE, RANGE]),
         ...mapState('route', {
             code: (state) => state.params.code,
             entityCode: (state) => state.params.entityCode,
