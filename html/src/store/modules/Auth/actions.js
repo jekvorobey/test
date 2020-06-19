@@ -1,6 +1,6 @@
 import { $logger } from '@services';
 import { responseStatus } from '@enums';
-import { storeErrorHandler } from '@util/store';
+import store, { storeErrorHandler } from '@util/store';
 
 import {
     checkSession,
@@ -34,6 +34,7 @@ export const CHECK_CODE = 'CHECK_CODE';
 export const RESET_PASSWORD = 'RESET_PASSWORD';
 export const FETCH_USER = 'FETCH_USER';
 export const FETCH_UNREAD_MESSAGES = 'FETCH_UNREAD_MESSAGES';
+export const REDUCE_UNREAD_MESSAGES = 'REDUCE_UNREAD_MESSAGES';
 
 export const SET_REFERRER_CODE = 'SET_REFERRER_CODE';
 export const SET_SESSION_REFERRAL_CODE = 'SET_SESSION_REFERRAL_CODE';
@@ -154,11 +155,20 @@ export default {
     },
 
     async [FETCH_UNREAD_MESSAGES]({ commit }) {
+        const messages = await getUnreadMesagesCount();
         try {
             const { count } = await getUnreadMesagesCount();
             commit(SET_UNREAD_MESSAGES, count);
         } catch(error) {
             storeErrorHandler(FETCH_UNREAD_MESSAGES)(error);
+        }
+    },
+
+    [REDUCE_UNREAD_MESSAGES]({ commit, state }, count = 1) {
+        try {
+            commit(SET_UNREAD_MESSAGES, state.unreadMessages - count);
+        } catch (error) {
+            storeErrorHandler(REDUCE_UNREAD_MESSAGES)(error);
         }
     }
 };
