@@ -15,7 +15,7 @@
                         <template v-slot:panel="{ item: type }">
                             <div class="cart-view__main-products" v-if="IS_PRODUCT(type)">
                                 <div
-                                    v-if="type.alerts && type.alerts.length > 0"
+                                    v-if="deliveryInfo && deliveryInfo.length > 0"
                                     class="cart-view__main-products-alert"
                                 >
                                     <div class="cart-view__main-products-alert-icon">
@@ -23,8 +23,8 @@
                                     </div>
 
                                     <div class="cart-view__main-products-alert-text">
-                                        <div v-for="alert in type.alerts" :key="alert.id">
-                                            {{ alert.title }}
+                                        <div v-for="alert in deliveryInfo" :key="alert.id">
+                                            {{ alert.name }} {{ alert.description }}
                                         </div>
                                     </div>
                                 </div>
@@ -266,6 +266,7 @@ import {
     CART_ITEMS_COUNT,
     CART_TYPES,
     PROMO_CODE,
+    DELIVERY_INFO,
 } from '@store/modules/Cart/getters';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
@@ -353,7 +354,14 @@ export default {
 
     computed: {
         ...mapState(CART_MODULE, [FEATURED_PRODUCTS, CART_DATA]),
-        ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS, PROMO_CODE]),
+        ...mapGetters(CART_MODULE, [
+            CART_ITEMS_COUNT,
+            CART_TYPES,
+            IS_PRODUCT,
+            IS_MASTER_CLASS,
+            PROMO_CODE,
+            DELIVERY_INFO,
+        ]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
@@ -464,7 +472,7 @@ export default {
 
         onDeleteBundle(bundleId) {
             this[DELETE_CART_BUNDLE](bundleId);
-        }
+        },
     },
 
     async serverPrefetch() {
