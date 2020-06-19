@@ -4,7 +4,7 @@
             {{ type }}
         </div>
         <div class="document-card__name">
-            {{ name }}
+            {{ abbreviatedTitle }}
         </div>
         <div class="document-card__bottom">
             <a class="document-card__bottom-link" :href="href" download>Скачать</a>
@@ -47,6 +47,16 @@ export default {
 
     components: {
         VLink,
+    },
+
+    computed: {
+        abbreviatedTitle() {
+            let name = this.name;
+            if (name.length > 57) {
+                name = `${name.slice(0, 57)}...`;
+            }
+            return name;
+        },
     },
 };
 </script>

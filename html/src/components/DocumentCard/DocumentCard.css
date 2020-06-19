@@ -7,7 +7,7 @@
 
     &__name {
         margin-bottom: calc(var(--gs) * 2);
-        max-height: calc(var(--gs) * 12);
+        height: calc(var(--gs) * 6);
         overflow-y: hidden;
     }
 
