@@ -21,6 +21,10 @@
         margin-left: calc(var(--gs) * 3);
         border-bottom: none;
 
+        &-cart-controls {
+            cursor: pointer;
+        }
+
         @media (--desktop) {
             margin-left: calc(var(--gs) * 2);
         }
