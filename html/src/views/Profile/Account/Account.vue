@@ -50,6 +50,9 @@
                         <router-link :to="{ name: 'Cabinet' }">личном кабинете</router-link>
                     </template>
                 </div>
+                <div class="account-view__panel-attention">
+                    Нажимая кнопку «оформить вывод», я согласен с условиями <a href="https://money.yandex.ru/pay/page?id=526623">оферты Яндекс.Денег</a>
+                </div>
             </div>
         </div>
 
