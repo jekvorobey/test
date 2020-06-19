@@ -10,9 +10,9 @@ import middleDesktopImg from '@images/mock/middle/middleDesktop3.jpg';
 import middleTabletImg from '@images/mock/middle/middleTablet3.jpg';
 import middleMobileImg from '@images/mock/middle/middleMobile3.jpg';
 
-import mainDesktopImg from '@images/mock/main/mainDesktop3.jpg';
-import mainTabletImg from '@images/mock/main/mainTablet3.jpg';
-import mainMobileImg from '@images/mock/main/mainMobile3.jpg';
+import mainDesktopImg from '@images/mock/main/mainDesktop4.jpg';
+import mainTabletImg from '@images/mock/main/mainTablet4.jpg';
+import mainMobileImg from '@images/mock/main/mainMobile4.jpg';
 
 import { $logger } from '@services';
 import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode } from '@api';
