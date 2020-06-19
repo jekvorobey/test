@@ -5315,11 +5315,6 @@ hash.js@^1.0.0, hash.js@^1.0.3:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
 
-hc-sticky@^2.2.3:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/hc-sticky/-/hc-sticky-2.2.3.tgz#b82f5498d25d2505812661f5f43878778f5f5799"
-  integrity sha512-dsSYBhwFiYvqya4NXQMX1ODxei5kO6Th7IryVY7DYhUg7bBLsDrTH894JBRBsWUqCgJ+HOCtRiaWJGSGTIqRAQ==
-
 he@1.2.x, he@^1.1.0, he@^1.1.1, he@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
@@ -11661,11 +11656,6 @@ vue-social-sharing@^2.4.7:
   integrity sha512-X70bulEnjSHvakf8NaLhuKTuUS4yKzdhYjX/aJ4dPVIXWaoXH8w+QODuM3C6c3fPaiNqgR19VrDyWB7EUGUzPQ==
   dependencies:
     vue "^2.2.4"
-
-vue-sticky-directive@^0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/vue-sticky-directive/-/vue-sticky-directive-0.0.10.tgz#07cc87da8732d0c9fc25bc4a6bcbe8329b54efbc"
-  integrity sha512-hufUlr3ik0D9KkzG/6gy0SK4ESJyqvrEjv5+J1TrG6n+25n6GB6ngksw3FAp6H5mPQw44GYmHSf5+V8W/AhVig==
 
 vue-style-loader@^4.1.0:
   version "4.1.2"
