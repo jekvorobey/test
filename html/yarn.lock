@@ -1152,6 +1152,14 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
+"@renatodeleao/vue-sticky-directive@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@renatodeleao/vue-sticky-directive/-/vue-sticky-directive-0.3.0.tgz#da1b9496eb302a96409b8edb68ef3682e08d9bc0"
+  integrity sha512-aziLifdFuTOq/QgzqPYWc4O4FOa7ASSP3LW6GVaxHGBa4Y33jejmVNOp0t7S1P+FIkscyqy/cKF63B39gQcPYg==
+  dependencies:
+    resize-sensor "0.0.6"
+    sticky-sidebar "git+https://github.com/abouolia/sticky-sidebar.git#master"
+
 "@sindresorhus/is@^0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
@@ -5306,6 +5314,11 @@ hash.js@^1.0.0, hash.js@^1.0.3:
   dependencies:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
+
+hc-sticky@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/hc-sticky/-/hc-sticky-2.2.3.tgz#b82f5498d25d2505812661f5f43878778f5f5799"
+  integrity sha512-dsSYBhwFiYvqya4NXQMX1ODxei5kO6Th7IryVY7DYhUg7bBLsDrTH894JBRBsWUqCgJ+HOCtRiaWJGSGTIqRAQ==
 
 he@1.2.x, he@^1.1.0, he@^1.1.1, he@^1.2.0:
   version "1.2.0"
@@ -9585,6 +9598,11 @@ resize-detector@^0.1.10:
   resolved "https://registry.yarnpkg.com/resize-detector/-/resize-detector-0.1.10.tgz#1da3f961aa5f914ccbcfd3752d52fd45beeb692c"
   integrity sha512-iLcXC8A6Fb0DfA+TRiywrK/0A22bFqkhntjMJMEzXDA4XkcEkfwpNbv7W8iewUiD0xYIaeiXOfiEehTqGKsUFw==
 
+resize-sensor@0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/resize-sensor/-/resize-sensor-0.0.6.tgz#75147dcb273de6832760e461d2e28de6dcf88c45"
+  integrity sha512-e+3wwdki9elemYP6AnyG2BK9/Gd7ak46wZN+Z62WwmWfhn2La1XV2rPRRIcar+PhRhfiQDXi29TapGMTIbI3Pg==
+
 resolve-cwd@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/resolve-cwd/-/resolve-cwd-2.0.0.tgz#00a9f7387556e27038eae232caa372a6a59b665a"
@@ -10244,6 +10262,10 @@ static-extend@^0.1.1:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
   integrity sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
+
+"sticky-sidebar@git+https://github.com/abouolia/sticky-sidebar.git#master":
+  version "3.3.1"
+  resolved "git+https://github.com/abouolia/sticky-sidebar.git#bcd40bbf95e84b75916bc3535d7475447f9383f8"
 
 stream-browserify@^2.0.1:
   version "2.0.2"
@@ -11639,6 +11661,11 @@ vue-social-sharing@^2.4.7:
   integrity sha512-X70bulEnjSHvakf8NaLhuKTuUS4yKzdhYjX/aJ4dPVIXWaoXH8w+QODuM3C6c3fPaiNqgR19VrDyWB7EUGUzPQ==
   dependencies:
     vue "^2.2.4"
+
+vue-sticky-directive@^0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/vue-sticky-directive/-/vue-sticky-directive-0.0.10.tgz#07cc87da8732d0c9fc25bc4a6bcbe8329b54efbc"
+  integrity sha512-hufUlr3ik0D9KkzG/6gy0SK4ESJyqvrEjv5+J1TrG6n+25n6GB6ngksw3FAp6H5mPQw44GYmHSf5+V8W/AhVig==
 
 vue-style-loader@^4.1.0:
   version "4.1.2"

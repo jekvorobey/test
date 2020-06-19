@@ -5,7 +5,7 @@
             key-field="id"
             :items="accordionFilters"
             :item-expanded="(item) => item.isExpanded"
-            :item-toggled="(item) => (item.isExpanded = !!!item.isExpanded)"
+            :item-toggled="(item) => onIsExpandedClick(item.id)"
         >
             <template v-slot:content="{ item: filter }">
                 <div class="catalog-filter__filters-range" v-if="filter.item.type === 'range'">
@@ -18,7 +18,11 @@
                         @input="onRangeChange($event, filter.item.name)"
                     />
                 </div>
-                <div class="catalog-filter__filters-check" v-else-if="filter.item.type === 'check'">
+                <div
+                    class="catalog-filter__filters-check"
+                    v-else-if="filter.item.type === 'check'"
+                    :ref="'check' + filter.item.id"
+                >
                     <v-check
                         v-for="option in (filter.showMore ? filter.item.items.filter((i, key) => key < maxCountFilters) : filter.item.items)"
                         :id="`${filter.item.name}-${option.id}`"
@@ -32,9 +36,9 @@
                     <button
                         class="catalog-filter__filters-more"
                         @click="() => onShowMoreClick(filter.item.id)"
-                        v-if="filter.showMore && filter.item.items.length >= maxCountFilters"
+                        v-if="filter.moreMax"
                     >
-                        Показать все
+                        {{ filter.showMore ? 'Показать все' : 'Свернуть' }}
                     </button>
                 </div>
                 <div class="catalog-filter__filters-check" v-else-if="filter.item.type === 'radio'">
@@ -90,6 +94,7 @@ export default {
             },
             maxCountFilters: 8,
             showMore: [],
+            isExpanded: [],
         };
     },
 
@@ -97,9 +102,9 @@ export default {
         ...mapGetters(CATALOG_MODULE, [FILTER_SEGMENTS, ROUTE_SEGMENTS]),
         ...mapState(CATALOG_MODULE, [FILTERS]),
         ...mapState('route', {
-            type: state => state.params.type,
-            code: state => state.params.code,
-            entityCode: state => state.params.entityCode,
+            type: (state) => state.params.type,
+            code: (state) => state.params.code,
+            entityCode: (state) => state.params.entityCode,
         }),
 
         accordionFilters() {
@@ -109,32 +114,51 @@ export default {
                           id: f.id,
                           item: f,
                           title: f.title,
-                          isExpanded: true,
+                          isExpanded: this.isExpanded.find(({ id }) => id === f.id).state,
                           showMore: this.showMore.find(({ id }) => id === f.id).state,
+                          moreMax: f.items ? f.items.length >= this.maxCountFilters : false,
                       };
                   })
                 : [];
         },
     },
     created() {
-        this.showMore = [
-            ...this.filters.map(({ type, items, id }) => {
-                return {
-                    id,
-                    state: type === 'check' && items.length >= this.maxCountFilters ? true : false,
-                };
-            }),
-        ];
+        this.initFiltersOptions();
     },
     methods: {
         onRadioChange(e, value) {
             const { type, entityCode, code, routeSegments } = this;
 
             if (!routeSegments.includes(value)) routeSegments.push(value);
-            routeSegments = routeSegments.filter(s => s === value);
+            routeSegments = routeSegments.filter((s) => s === value);
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
             this.$router.replace({ path });
+        },
+
+        initFiltersOptions() {
+            this.showMore = [
+                ...this.filters.map(({ type, items, id }) => {
+                    return {
+                        id,
+                        state: type === 'check' && items.length >= this.maxCountFilters ? true : false,
+                    };
+                }),
+            ];
+            this.isExpanded = [
+                ...this.filters.map(({ id }) => {
+                    return {
+                        id,
+                        state: true,
+                    };
+                }),
+            ];
+            this.isExpanded.forEach(({ id }) => {
+                if (this.$refs['check' + id]) {
+                    const el = this.$refs['check' + id].parentNode;
+                    el.removeAttribute('style');
+                }
+            });
         },
 
         onCheckChange(e, value) {
@@ -156,12 +180,25 @@ export default {
         },
 
         onShowMoreClick(id) {
-            const moreIndex = this.showMore.findIndex(el => el.id === id);
-            const moreItem = this.showMore.find(el => el.id === id);
+            const moreIndex = this.showMore.findIndex((el) => el.id === id);
+            const moreItem = this.showMore.find((el) => el.id === id);
             this.showMore.splice(moreIndex, 1, {
                 ...moreItem,
-                state: false,
+                state: !moreItem.state,
             });
+            this.$emit('updateSticky');
+            const el = this.$refs['check' + id].parentNode;
+            el.removeAttribute('style');
+        },
+
+        onIsExpandedClick(id) {
+            const moreIndex = this.isExpanded.findIndex((el) => el.id === id);
+            const moreItem = this.isExpanded.find((el) => el.id === id);
+            this.isExpanded.splice(moreIndex, 1, {
+                ...moreItem,
+                state: !moreItem.state,
+            });
+            this.$emit('updateSticky');
         },
 
         onRangeChange(e, name) {
@@ -191,6 +228,20 @@ export default {
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
             this.$router.replace({ path });
         }, 500);
+    },
+    watch: {
+        filters() {
+            this.initFiltersOptions();
+        },
+
+        sortValue(value, oldValue) {
+            if (value !== oldValue) {
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: { orderField: value.field, orderDirection: value.direction },
+                });
+            }
+        },
     },
 };
 </script>
