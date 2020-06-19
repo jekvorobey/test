@@ -194,9 +194,9 @@
                         с товарами
                     </li>
                     <li class="referal-view__attention-list-item">
-                        <v-link class="referal-view__attention-link" tag="button" :to="{ name: 'Messages' }">
+                        <button class="referal-view__attention-link" @click="onPromocodeRequest">
                             запросить
-                        </v-link>
+                        </button>
                         промо-код
                     </li>
                     <li class="referal-view__attention-list-item">
@@ -220,6 +220,10 @@
             </show-more-button>
             <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
+
+        <transition name="fade">
+            <message-modal v-if="$isServer || isMessageOpen" @created="onChatCreated" />
+        </transition>
     </section>
 </template>
 
@@ -236,6 +240,8 @@ import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import FilterButton from '@components/FilterButton/FilterButton.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
+
+import MessageModal from '@components/profile/MessageModal/MessageModal.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
@@ -259,7 +265,7 @@ import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { fileExtension, sortDirections, modalName } from '@enums';
+import { fileExtension, sortDirections, modalName, themeCodes} from '@enums';
 import { referralOrderSortFields } from '@enums/profile';
 import { DEFAULT_PAGE } from '@constants';
 import { digit2DateSettings } from '@settings';
@@ -291,6 +297,7 @@ export default {
         FilterButton,
         ShowMoreButton,
         AttentionPanel,
+        MessageModal,
     },
 
     data() {
@@ -309,6 +316,10 @@ export default {
         ...mapState(REFERRAL_MODULE_PATH, [ITEMS, ACTIVE_PAGE, REFERRAL_DATA]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
+        }),
+        ...mapState(MODAL_MODULE, {
+            isMessageOpen: state =>
+                state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
         }),
 
         ...mapGetters(REFERRAL_MODULE_PATH, [
@@ -407,6 +418,27 @@ export default {
             const message = result ? 'Успешно скопировано' : 'Не удается скопировать';
             this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
             e.target.focus();
+        },
+
+        onPromocodeRequest() {
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.profile.MESSAGE,
+                open: true,
+                state: {
+                    themeCode: themeCodes.PROMOCODE,
+                },
+            });
+        },
+
+        onChatCreated() {
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state: {
+                    title: 'Уведомление',
+                    message: 'Запрос отправлен, администратор свяжется с вами в ближайшее время.',
+                },
+            });
         },
     },
 
