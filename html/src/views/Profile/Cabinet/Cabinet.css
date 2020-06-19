@@ -142,5 +142,9 @@
         display: flex;
         justify-content: flex-end;
         margin-top: calc(var(--gs) * 2);
+
+        @media (--tablet-lg) {
+            justify-content: center;
+        }
     }
 }
