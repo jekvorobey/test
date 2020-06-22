@@ -18,6 +18,8 @@ export default {
     },
 
     [SET_UNREAD_MESSAGES](state, payload = null) {
-        state.unreadMessages = payload;
+        if (payload >= 0) {
+            state.unreadMessages = payload;
+        }
     }
 };

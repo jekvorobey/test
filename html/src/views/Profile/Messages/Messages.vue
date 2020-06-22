@@ -62,7 +62,7 @@ import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as MESSAGES_MODULE, ITEMS } from '@store/modules/Profile/modules/Messages';
 
 import { NAME as AUTH_MODULE } from '@store/modules/Auth';
-import { REDUCE_UNREAD_MESSAGES } from '@store/modules/Auth/actions';
+import { FETCH_UNREAD_MESSAGES } from '@store/modules/Auth/actions';
 
 import { FETCH_CHATS } from '@store/modules/Profile/modules/Messages/actions';
 
@@ -110,7 +110,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(AUTH_MODULE, [REDUCE_UNREAD_MESSAGES]),
+        ...mapActions(AUTH_MODULE, [FETCH_UNREAD_MESSAGES]),
 
         formatDate(date) {
             const dateObj = new Date(date);
@@ -123,7 +123,7 @@ export default {
 
         onOpenMessage({id, isRead}) {
             if (!isRead) {
-                this[REDUCE_UNREAD_MESSAGES]();
+                this[FETCH_UNREAD_MESSAGES]();
             }
             this.$router.push({ name: 'MessageDetails', params: { chatId: id } });
         },
