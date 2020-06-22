@@ -4,8 +4,9 @@
             <div v-if="!isTabletLg" class="container profile-view__container--desktop">
                 <breadcrumbs>
                     <breadcrumb-item key="main" to="/">
-                        Главная
-                    </breadcrumb-item>
+                        <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                        <span v-else>Главная</span></breadcrumb-item
+                    >
                     <breadcrumb-item key="Cabinet" :to="{ name: 'Cabinet' }">
                         {{ $t('profile.routes.Cabinet') }}
                     </breadcrumb-item>
@@ -42,9 +43,9 @@
                 </template>
                 <breadcrumbs class="container">
                     <breadcrumb-item key="main" to="/">
-                        Главная
-                        <!-- <v-svg name="home" width="16" height="16" /> -->
-                    </breadcrumb-item>
+                        <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                        <span v-else>Главная</span></breadcrumb-item
+                    >
                     <breadcrumb-item key="Cabinet" :to="{ name: 'Cabinet' }">
                         {{ $t('profile.routes.Cabinet') }}
                     </breadcrumb-item>
@@ -120,11 +121,11 @@ export default {
         ...mapState(PROFILE_MODULE, [BREADCRUMBS]),
         ...mapState(AUTH_MODULE, [HAS_SESSION, UNREAD_MESSAGES]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isNavigationOpen: state =>
+            isNavigationOpen: (state) =>
                 state[MODALS][modalName.profile.NAVIGATION] && state[MODALS][modalName.profile.NAVIGATION].open,
         }),
 

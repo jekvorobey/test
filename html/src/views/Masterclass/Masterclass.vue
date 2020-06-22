@@ -3,8 +3,9 @@
         <div class="container master-class-view__header">
             <breadcrumbs class="container container--tablet-lg master-class-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
-                    Главная
-                </breadcrumb-item>
+                    <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                    <span v-else>Главная</span></breadcrumb-item
+                >
                 <breadcrumb-item key="root" to="/masterclasses">
                     {{ rootTitle }}
                 </breadcrumb-item>
@@ -429,6 +430,7 @@ import '@images/sprites/star-small.svg';
 import '@images/sprites/arrow-small.svg';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/info-middle.svg';
+import '@images/sprites/home.svg';
 import pin from '@images/icons/pin-filled.svg';
 import './Masterclass.css';
 

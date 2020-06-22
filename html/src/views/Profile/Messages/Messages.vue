@@ -21,7 +21,7 @@
                 :is-read="chat.isRead"
                 :use-header-clamp="!isTablet"
                 use-clamp
-                @click.prevent="onOpenMessage(chat.id)"
+                @click.prevent="onOpenMessage(chat)"
             />
         </ul>
         <empty-placeholder-panel
@@ -60,6 +60,10 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as MESSAGES_MODULE, ITEMS } from '@store/modules/Profile/modules/Messages';
+
+import { NAME as AUTH_MODULE } from '@store/modules/Auth';
+import { REDUCE_UNREAD_MESSAGES } from '@store/modules/Auth/actions';
+
 import { FETCH_CHATS } from '@store/modules/Profile/modules/Messages/actions';
 
 import { $store, $progress } from '@services';
@@ -106,6 +110,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(AUTH_MODULE, [REDUCE_UNREAD_MESSAGES]),
 
         formatDate(date) {
             const dateObj = new Date(date);
@@ -116,7 +121,10 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: modalName.profile.MESSAGE, open: true });
         },
 
-        onOpenMessage(id) {
+        onOpenMessage({id, isRead}) {
+            if (!isRead) {
+                this[REDUCE_UNREAD_MESSAGES]();
+            }
             this.$router.push({ name: 'MessageDetails', params: { chatId: id } });
         },
     },

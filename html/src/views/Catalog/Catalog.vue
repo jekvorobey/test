@@ -3,21 +3,22 @@
         <div class="container catalog-view__header">
             <breadcrumbs class="catalog-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
-                    Главная
-                </breadcrumb-item>
-                <breadcrumb-item :key="type" :to="breadcrumbRootUrl">
-                    {{ $t(`productGroups.title.${type}`) }}
-                </breadcrumb-item>
-                <breadcrumb-item v-if="entityCode" :key="entityCode" :to="generateBreadcrumbUrl(null)">
-                    {{ productGroup && productGroup.name }}
-                </breadcrumb-item>
+                    <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                    <span v-else>Главная</span></breadcrumb-item
+                >
+
+                <breadcrumb-item :key="type" :to="breadcrumbRootUrl">{{
+                    $t(`productGroups.title.${type}`)
+                }}</breadcrumb-item>
+                <breadcrumb-item v-if="entityCode" :key="entityCode" :to="generateBreadcrumbUrl(null)">{{
+                    productGroup && productGroup.name
+                }}</breadcrumb-item>
                 <breadcrumb-item
                     v-for="category in breadcrumbs"
                     :key="category.id"
                     :to="generateBreadcrumbUrl(category.code)"
+                    >{{ category.name }}</breadcrumb-item
                 >
-                    {{ category.name }}
-                </breadcrumb-item>
             </breadcrumbs>
 
             <catalog-banner-card class="catalog-view__banner" v-if="productGroup.banner" :item="productGroup.banner">
@@ -33,38 +34,44 @@
                     <source :data-srcset="mobileImg.webp" type="image/webp" media="(min-width: 320px)" />
                     <source :data-srcset="mobileImg.orig" media="(min-width: 320px)" />
                 </template>
-                <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
+                <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt />
             </catalog-banner-card>
         </div>
         <section class="section">
-            <div class="container catalog-view__grid">
-                <div class="catalog-view__side-panel" v-if="!isTabletLg && categories.length > 0">
-                    <ul class="catalog-view__side-panel-categories">
-                        <category-tree-item
-                            class="catalog-view__side-panel-categories-item"
-                            v-for="category in categories"
-                            :item="category"
-                            :key="category.id"
-                        />
-                    </ul>
-                    <catalog-filter class="catalog-view__side-panel-filters" />
-                    <v-button
-                        class="btn--outline catalog-view__side-panel-clear-btn"
-                        :class="!isFiltersPage && 'is-disabled'"
-                        :to="clearFilterUrl"
-                        replace
-                    >
-                        Очистить фильтры
-                    </v-button>
+            <div class="container catalog-view__grid" data-v-sticky-container>
+                <div
+                    class="catalog-view__side-panel"
+                    v-if="!isTabletLg && categories.length > 0"
+                    v-sticky="stickyOptions"
+                    ref="sticky"
+                >
+                    <div data-v-sticky-inner>
+                        <ul class="catalog-view__side-panel-categories">
+                            <category-tree-item
+                                class="catalog-view__side-panel-categories-item"
+                                v-for="category in categories"
+                                :item="category"
+                                :key="category.id"
+                            />
+                        </ul>
+
+                        <catalog-filter class="catalog-view__side-panel-filters" @updateSticky="updateSticky" />
+                        <v-button
+                            class="btn--outline catalog-view__side-panel-clear-btn"
+                            :class="!isFiltersPage && 'is-disabled'"
+                            :to="clearFilterUrl"
+                            replace
+                            >Очистить фильтры</v-button
+                        >
+                    </div>
                 </div>
                 <div class="catalog-view__main">
                     <div class="catalog-view__main-header">
                         <div class="catalog-view__main-header-title">
                             <h1 class="catalog-view__main-header-hl">
-                                {{ activeCategory ? activeCategory.name : 'Все категории' }} ({{ range }})
+                                {{ activeCategory ? activeCategory.name : 'Все категории' }}
                             </h1>
-                            <!-- todo Количество товаров -->
-                            <!-- <p class="text-grey catalog-view__main-header-text">489 продуктов</p> -->
+                            <p class="text-grey catalog-view__main-header-text">{{ range }} продуктов</p>
                         </div>
 
                         <v-select
@@ -108,9 +115,8 @@
                             btn-class="btn--outline catalog-view__main-controls-btn"
                             @click="onShowMore"
                             :show-preloader="showMore"
+                            >Показать ещё</show-more-button
                         >
-                            Показать ещё
-                        </show-more-button>
                         <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
                     </div>
                 </div>
@@ -155,12 +161,11 @@
                                 class="btn--outline catalog-view__modal-filter-clear-btn"
                                 :to="clearFilterUrl"
                                 replace
+                                >Очистить</v-button
                             >
-                                Очистить
-                            </v-button>
-                            <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal">
-                                Показать
-                            </v-button>
+                            <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal"
+                                >Показать</v-button
+                            >
                         </div>
                     </v-sticky>
                 </template>
@@ -177,10 +182,7 @@
                     этом. Мы заботимся о надёжных поставщиках, качестве товаров и безопасной оплате. А что делать вам?
                     Просто наслаждаться покупками. Для экономии не нужен повод, поэтому мы каждый день даём вам скидки
                     на популярные товары самых разных категорий.
-
-                    <template v-slot:btn="{ isExpanded }">
-                        {{ isExpanded ? 'Скрыть' : 'Показать больше' }}
-                    </template>
+                    <template v-slot:btn="{ isExpanded }">{{ isExpanded ? 'Скрыть' : 'Показать больше' }}</template>
                 </v-expander>
             </div>
         </section>
@@ -249,7 +251,9 @@ import { sortFields } from '@enums/catalog';
 import { sortDirections, fileExtension, httpCodes } from '@enums';
 import { MIN_SCROLL_VALUE } from '@constants';
 
+import '@plugins/sticky';
 import '@images/sprites/cross-small.svg';
+import '@images/sprites/home.svg';
 import './Catalog.css';
 
 export default {
@@ -289,6 +293,12 @@ export default {
             sortOptions,
             filterModal: false,
             showMore: false,
+            stickyOptions: {
+                topSpacing: 60,
+                bottomSpacing: 0,
+                containerSelector: '[data-v-sticky-container]',
+                innerWrapperSelector: '[data-v-sticky-inner]',
+            },
         };
     },
 
@@ -381,6 +391,7 @@ export default {
         code(value) {
             const category = this[ACTIVE_CATEGORY];
             if (category) $retailRocket.addCategoryView(category.id);
+            this.updateSticky();
         },
 
         sortValue(value, oldValue) {
@@ -400,6 +411,13 @@ export default {
 
         scrollTo(options) {
             if (!this.$isServer) window.scrollTo(options);
+        },
+
+        updateSticky() {
+            this.$refs.sticky._stickySidebar.updateSticky();
+            setTimeout(() => {
+                this.$refs.sticky._stickySidebar.updateSticky();
+            }, 500);
         },
 
         generateBreadcrumbUrl(categoryCode) {

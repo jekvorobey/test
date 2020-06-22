@@ -3,8 +3,9 @@
         <div class="container masterclasses-view__header">
             <breadcrumbs class="container container--tablet-lg masterclasses-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
-                    Главная
-                </breadcrumb-item>
+                    <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                    <span v-else>Главная</span></breadcrumb-item
+                >
                 <breadcrumb-item key="masterclasses" :to="{ path: $route.path }">
                     {{ $t('masterclasses.title') }}
                 </breadcrumb-item>
@@ -131,6 +132,7 @@ import profileMasterClassImg1 from '@images/mock/profileMasterClass1.png';
 import profileMasterClassImg2 from '@images/mock/profileMasterClass2.png';
 import profileMasterClassImg3 from '@images/mock/profileMasterClass3.png';
 import profileMasterClassImg4 from '@images/mock/profileMasterClass4.png';
+import '@images/sprites/home.svg';
 
 const sliderOptions = {
     slidesPerView: 1,

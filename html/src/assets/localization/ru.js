@@ -61,7 +61,7 @@ const main = {
         [billingOperationType.EARNING]: 'Начисление',
         [billingOperationType.PAYMENT]: 'Оплата',
         [billingOperationType.REFUND]: 'Возврат',
-        [billingOperationType.WITHDRAW]: 'Вывод стредств',
+        [billingOperationType.WITHDRAW]: 'Вывод средств',
         [billingOperationType.ADJUSTMENT]: 'Корректировка',
     },
 

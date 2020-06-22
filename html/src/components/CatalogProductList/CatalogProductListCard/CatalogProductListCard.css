@@ -15,10 +15,11 @@
 
     &:hover &__img {
         border-color: var(--cl-divider-grey);
-
-        img {
-            opacity: 0.2;
-            transition: all var(--time) ease-in;
+        @media (--tablet-min) {
+            img {
+                opacity: 0.2;
+                transition: all var(--time) ease-in;
+            }
         }
     }
 

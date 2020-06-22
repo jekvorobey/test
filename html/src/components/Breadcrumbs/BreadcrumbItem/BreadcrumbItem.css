@@ -1,17 +1,27 @@
 .breadcrumb-item {
     color: var(--cl-grey);
+    fill: currentColor;
     font-size: 11px;
     line-height: 24px;
+    flex-shrink: 0;
 
     @media (--tablet) {
         font-size: 9px;
         line-height: 16px;
+
+        &:last-child {
+            padding-right: calc(var(--gs) * 2);
+        }
     }
 
     &__link {
         border-bottom: none;
         text-transform: uppercase;
         line-height: 24px;
+    }
+
+    & .icon {
+        margin-bottom: -2px;
     }
 
     & + & {
