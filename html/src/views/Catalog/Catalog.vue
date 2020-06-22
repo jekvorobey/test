@@ -2,7 +2,11 @@
     <section class="section catalog-view">
         <div class="container catalog-view__header">
             <breadcrumbs class="catalog-view__breadcrumbs">
-                <breadcrumb-item key="main" to="/">Главная</breadcrumb-item>
+                <breadcrumb-item key="main" to="/">
+                    <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                    <span v-else>Главная</span></breadcrumb-item
+                >
+
                 <breadcrumb-item :key="type" :to="breadcrumbRootUrl">{{
                     $t(`productGroups.title.${type}`)
                 }}</breadcrumb-item>
@@ -250,6 +254,7 @@ import { MIN_SCROLL_VALUE } from '@constants';
 
 import '@plugins/sticky';
 import '@images/sprites/cross-small.svg';
+import '@images/sprites/home.svg';
 import './Catalog.css';
 
 export default {
