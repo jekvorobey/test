@@ -5,7 +5,14 @@
             :is-open="isMenuOpen"
             @isOpenChanged="SET_MENU_OPEN($event)"
         />
-        <v-link v-for="item in headerMenu.items" :key="item.name" class="header-navigation-panel__item" :to="item.url">
+        <v-link
+            v-for="item in headerMenu.items"
+            :key="item.name"
+            class="header-navigation-panel__item"
+            :to="item.url"
+            :tag="item.url === '/catalog' ? 'button' : 'a'"
+            @click.native="item.url === '/catalog' && SET_MENU_OPEN(!isMenuOpen)"
+        >
             {{ item.name }}
         </v-link>
     </nav>
