@@ -579,9 +579,14 @@
                     Добавь тег @bessovestnotalantlivy в Instagram и, возможно, мы опубликуем твою фотографию
                 </div>
                 <!-- #58437 -->
-                <!-- <v-button class="btn--outline product-view__section-link product-view__instagram-link">
+                <v-button
+                    tag="a"
+                    class="btn--outline product-view__section-link product-view__instagram-link"
+                    :href="btnLink"
+                    target="_blank"
+                >
                     {{ $t('landing.subscribe') }}
-                </v-button> -->
+                </v-button>
             </div>
         </section>
 
@@ -884,6 +889,7 @@ export default {
     data() {
         return {
             isPriceVisible: true,
+            btnLink: 'https://www.instagram.com/bessovestnotalantlivy/',
         };
     },
 

@@ -14,9 +14,9 @@
             </v-slider>
 
             <!-- #58322  -->
-            <!-- <v-button class="btn--outline instagram-section__link">
+            <v-button tag="a" class="btn--outline instagram-section__link" :href="btnLink" target="_blank">
                 {{ btnText }}
-            </v-button> -->
+            </v-button>
 
             <div v-if="!isTabletLg" class="instagram-section__grid instagram-section__grid--initialized">
                 <instagram-card
@@ -86,6 +86,10 @@ export default {
         },
 
         btnText: {
+            type: String,
+        },
+
+        btnLink: {
             type: String,
         },
     },
