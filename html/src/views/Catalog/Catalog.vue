@@ -69,10 +69,9 @@
                     <div class="catalog-view__main-header">
                         <div class="catalog-view__main-header-title">
                             <h1 class="catalog-view__main-header-hl">
-                                {{ activeCategory ? activeCategory.name : 'Все категории' }} ({{ range }})
+                                {{ activeCategory ? activeCategory.name : 'Все категории' }}
                             </h1>
-                            <!-- todo Количество товаров -->
-                            <!-- <p class="text-grey catalog-view__main-header-text">489 продуктов</p> -->
+                            <p class="text-grey catalog-view__main-header-text">{{ range }} продуктов</p>
                         </div>
 
                         <v-select
