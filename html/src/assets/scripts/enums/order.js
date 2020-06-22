@@ -95,3 +95,11 @@ export const deliveryStatus = Object.freeze({
     /** n/a */
     STATUS_NA: 92,
 });
+
+
+export const filterFields = Object.freeze({
+    ALL_TIME: 'all_time',
+    YEAR: 'year',
+    MONTH: 'month',
+    DAY: 'day',
+});

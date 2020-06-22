@@ -240,7 +240,6 @@ export default {
                     $progress.fail();
                 });
             });
-        
     },
 
     async beforeRouteUpdate(to, from, next) {

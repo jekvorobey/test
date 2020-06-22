@@ -40,13 +40,15 @@ export default {
         }
     },
 
-    async [FETCH_ORDERS]({ commit }, { page = DEFAULT_PAGE, orderField, orderDirection, showMore }) {
+    async [FETCH_ORDERS]({ commit }, { page = DEFAULT_PAGE, orderField, orderDirection, showMore, orderFilterField }) {
         try {
+            console.log(orderFilterField);
             const { orders: items, count: range } = await getReferralOrders(
                 page,
                 REFERRAL_ORDERS_PAGE_SIZE,
                 orderField,
-                orderDirection
+                orderDirection,
+                orderFilterField,
             );
 
             commit(SET_QUERY_PARAMS, {
@@ -54,6 +56,8 @@ export default {
                 orderField,
                 orderDirection,
             });
+
+
 
             if (showMore) commit(SET_ORDERS_MORE, { items, range });
             else commit(SET_ORDERS, { items, range });

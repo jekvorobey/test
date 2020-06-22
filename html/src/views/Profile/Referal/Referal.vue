@@ -66,7 +66,20 @@
 
             <div class="container container--tablet-lg">
                 <section class="referal-view__section">
-                    <h3 class="referal-view__section-hl">История заказов рефералов</h3>
+                    <div class="referal-view__section-header">
+                        <h3 class="referal-view__section-hl">История заказов рефералов</h3>
+                        <v-select
+                            class="referal-view__section-filter"
+                            v-if="!isTabletLg"
+                            label="title"
+                            track-by="id"
+                            v-model="filterValue"
+                            :options="filterOptions"
+                            :searchable="false"
+                            :allow-empty="false"
+                            :show-labels="false"
+                        />
+                    </div>
 
                     <table class="referal-view__table" v-if="!isTabletLg">
                         <colgroup>
@@ -133,10 +146,10 @@
                     </table>
                 </section>
 
-                <!-- <filter-button class="referal-view__filter-btn" @click="filterModal = !filterModal">
+                <filter-button class="referal-view__filter-btn" v-if="isTabletLg" @click="filterModal = !filterModal">
                     Фильтр и сортировка&nbsp;&nbsp;
                     <span class="text-grey">4</span>
-                </filter-button> -->
+                </filter-button>
             </div>
 
             <ul class="referal-view__list" v-if="isTabletLg">
@@ -234,6 +247,7 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VArcCounter from '@controls/VArcCounter/VArcCounter.vue';
 import VLink from '@controls/VLink/VLink.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
 
 import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
@@ -265,14 +279,16 @@ import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { fileExtension, sortDirections, modalName, themeCodes} from '@enums';
+import { fileExtension, sortDirections, modalName, themeCodes } from '@enums';
 import { referralOrderSortFields } from '@enums/profile';
+import { filterFields } from '@enums/order';
 import { DEFAULT_PAGE } from '@constants';
 import { digit2DateSettings } from '@settings';
 import { baseChartOptions } from '@settings/profile';
-import { preparePrice, shortNumberFormat, saveToClipboard } from '@util';
+import { preparePrice, shortNumberFormat, saveToClipboard, dateToString } from '@util';
 import { generatePictureSourcePath } from '@util/file';
 import { generateReferralLink } from '@util/profile';
+import { getOrderFilterDate } from '@util/order';
 import { $store, $progress, $logger } from '@services';
 import '@images/sprites/logo.svg';
 import './Referal.css';
@@ -289,6 +305,7 @@ export default {
         VPicture,
         VPagination,
         VLink,
+        VSelect,
         VArcCounter,
         VChart,
 
@@ -301,7 +318,15 @@ export default {
     },
 
     data() {
+        const filterOptions = [
+            { id: 1, title: 'Все время', field: filterFields.ALL_TIME },
+            { id: 2, title: 'За год', field: filterFields.YEAR },
+            { id: 3, title: 'За месяц', field: filterFields.MONTH },
+            { id: 4, title: 'За день', field: filterFields.DAY },
+        ];
         return {
+            filterValue: filterOptions[0],
+            filterOptions,
             isMounted: false,
             showMore: false,
 
@@ -383,6 +408,17 @@ export default {
         },
     },
 
+    watch: {
+        filterValue(value, oldValue) {
+            if (value !== oldValue) {
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: { filterField: value.field },
+                });
+            }
+        },
+    },
+
     methods: {
         ...mapActions(REFERRAL_MODULE_PATH, [FETCH_REFERRAL_DATA, FETCH_ORDERS, SET_LOAD_PATH]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
@@ -450,6 +486,7 @@ export default {
                     page = DEFAULT_PAGE,
                     orderField = referralOrderSortFields.NAME,
                     orderDirection = sortDirections.DESC,
+                    filterField,
                 },
             } = this.$route;
 
@@ -503,12 +540,20 @@ export default {
                 page = DEFAULT_PAGE,
                 orderField = referralOrderSortFields.NAME,
                 orderDirection = sortDirections.DESC,
+                filterField,
             },
         } = to;
 
+        const orderFilterField = new Date(getOrderFilterDate(this.filterValue.field)).toLocaleDateString(
+            this[LOCALE],
+            digit2DateSettings
+        );
+
+        console.log(orderFilterField);
+
         try {
             this.$progress.start();
-            await this[FETCH_ORDERS]({ page, orderField, orderDirection, showMore: this.showMore });
+            await this[FETCH_ORDERS]({ page, orderField, orderDirection, showMore: this.showMore, orderFilterField });
             this.$progress.finish();
             next();
         } catch (error) {
