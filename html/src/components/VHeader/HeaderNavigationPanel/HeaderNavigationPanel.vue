@@ -9,7 +9,7 @@
             v-for="item in headerMenu.items"
             :key="item.name"
             class="header-navigation-panel__item"
-            :to="item.url"
+            :to="item.url !== '/catalog' && item.url"
             :tag="item.url === '/catalog' ? 'button' : 'a'"
             @click.native="item.url === '/catalog' && SET_MENU_OPEN(!isMenuOpen)"
         >
