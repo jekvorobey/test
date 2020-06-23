@@ -70,7 +70,7 @@ export default {
         try {
             await Promise.all([
                 dispatch(FETCH_STATISTICS),
-                dispatch(FETCH_ORDERS, { page, orderField, orderDirection, }),
+                dispatch(FETCH_ORDERS, { page, orderField, orderDirection, orderFilterField, date }),
             ]);
         } catch (error) {
             storeErrorHandler(FETCH_REFERRAL_DATA, true)(error);

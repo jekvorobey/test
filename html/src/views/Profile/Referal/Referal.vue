@@ -493,7 +493,7 @@ export default {
                 },
             } = this.$route;
 
-            await this[FETCH_REFERRAL_DATA]({ page, orderField, orderDirection });
+            // await this[FETCH_REFERRAL_DATA]({ page, orderField, orderDirection });
             this[SET_LOAD_PATH](fullPath);
         } catch (error) {
             $logger.error(error);
@@ -513,7 +513,7 @@ export default {
 
         const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
 
-        const date = new Date(getOrderFilterDate(orderFilterField)).toLocaleDateString(numericYearDateSettings);
+        const date = getOrderFilterDate(orderFilterField);
 
         if (loadPath === fullPath) next();
         else {
@@ -557,7 +557,7 @@ export default {
             },
         } = to;
 
-        const date = new Date(getOrderFilterDate(orderFilterField)).toLocaleDateString(numericYearDateSettings);
+        const date = getOrderFilterDate(orderFilterField);
 
         try {
             this.$progress.start();
@@ -580,9 +580,8 @@ export default {
         this.showMore = false;
     },
 
-    beforeCreate() {
-        const date = new Date(getOrderFilterDate(this.orderFilterValue)).toLocaleDateString(numericYearDateSettings);
-        console.log(date);
+    beforeMount() {
+        const date = getOrderFilterDate(this.orderFilterValue);
         // this.sortFields = sortFields;
         // this.sortDirections = sortDirections;
         // this.orderPaymentStatus = orderPaymentStatus;
