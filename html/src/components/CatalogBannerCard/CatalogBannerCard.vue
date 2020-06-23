@@ -12,9 +12,12 @@
         </div>
 
         <div v-if="item.button" class="catalog-banner-card__panel" :class="panelClasses">
-            <v-button class="catalog-banner-card__panel-btn" :class="btnClasses"  @click="onBtnClick">
+            <v-button class="catalog-banner-card__panel-btn" :class="btnClasses"  @click="onBtnClick" v-if="item.button.url">
                 {{ item.button.text }}
             </v-button>
+            <a class="btn catalog-banner-card__panel-btn" :class="btnClasses" :href="item.button.externalUrl" v-else-if="item.button.externalUrl">
+                {{ item.button.text }}
+            </a>
         </div>
     </li>
 </template>
