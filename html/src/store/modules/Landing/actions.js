@@ -1,18 +1,30 @@
-import bestsellerDesktopImg from '@images/mock/bestsellers/bDesktop3.jpg';
-import bestsellerTabletImg from '@images/mock/bestsellers/bTablet3.jpg';
-import bestsellerMobileImg from '@images/mock/bestsellers/bMobile3.jpg';
+import bestsellerDesktopImg from '@images/mock/bestsellers/bDesktop5.jpg';
+import bestsellerTabletImg from '@images/mock/bestsellers/bTablet5.jpg';
+import bestsellerMobileImg from '@images/mock/bestsellers/bMobile5.jpg';
+import bestsellerDesktopImgRetina from '@images/mock/bestsellers/bDesktop5@2x.jpg';
+import bestsellerTabletImgRetina from '@images/mock/bestsellers/bTablet5@2x.jpg';
+import bestsellerMobileImgRetina from '@images/mock/bestsellers/bMobile5@2x.jpg';
 
-import newDesktopImg from '@images/mock/new/newDesktop3.jpg';
-import newTabletImg from '@images/mock/new/newTablet3.jpg';
-import newMobileImg from '@images/mock/new/newMobile3.jpg';
+import newDesktopImg from '@images/mock/new/newDesktop5.jpg';
+import newTabletImg from '@images/mock/new/newTablet5.jpg';
+import newMobileImg from '@images/mock/new/newMobile5.jpg';
+import newDesktopImgRetina from '@images/mock/new/newDesktop5@2x.jpg';
+import newTabletImgRetina from '@images/mock/new/newTablet5@2x.jpg';
+import newMobileImgRetina from '@images/mock/new/newMobile5@2x.jpg';
 
-import middleDesktopImg from '@images/mock/middle/middleDesktop3.jpg';
-import middleTabletImg from '@images/mock/middle/middleTablet3.jpg';
-import middleMobileImg from '@images/mock/middle/middleMobile3.jpg';
+import middleDesktopImg from '@images/mock/middle/middleDesktop5.jpg';
+import middleTabletImg from '@images/mock/middle/middleTablet5.jpg';
+import middleMobileImg from '@images/mock/middle/middleMobile5.jpg';
+import middleDesktopImgRetina from '@images/mock/middle/middleDesktop5@2x.jpg';
+import middleTabletImgRetina from '@images/mock/middle/middleTablet5@2x.jpg';
+import middleMobileImgRetina from '@images/mock/middle/middleMobile5@2x.jpg';
 
-import mainDesktopImg from '@images/mock/main/mainDesktop4.jpg';
-import mainTabletImg from '@images/mock/main/mainTablet4.jpg';
-import mainMobileImg from '@images/mock/main/mainMobile4.jpg';
+import mainDesktopImg from '@images/mock/main/mainDesktop5.jpg';
+import mainTabletImg from '@images/mock/main/mainTablet5.jpg';
+import mainMobileImg from '@images/mock/main/mainMobile5.jpg';
+import mainDesktopImgRetina from '@images/mock/main/mainDesktop5@2x.jpg';
+import mainTabletImgRetina from '@images/mock/main/mainTablet5@2x.jpg';
+import mainMobileImgRetina from '@images/mock/main/mainMobile5@2x.jpg';
 
 import { $logger } from '@services';
 import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode } from '@api';
@@ -73,8 +85,11 @@ export default {
                         type: 'white',
                     },
                     desktopImage: middleDesktopImg,
+                    desktopImageRetina: middleDesktopImgRetina,
                     tabletImage: middleTabletImg,
+                    tabletImageRetina: middleTabletImgRetina,
                     mobileImage: middleMobileImg,
+                    mobileImageRetina: middleMobileImgRetina,
                 },
                 {
                     id: 'mainBanner',
@@ -89,8 +104,11 @@ export default {
                         authLink: 'Cabinet',
                     },
                     desktopImage: mainDesktopImg,
+                    desktopImageRetina: mainDesktopImgRetina,
                     tabletImage: mainTabletImg,
+                    tabletImageRetina: mainTabletImgRetina,
                     mobileImage: mainMobileImg,
+                    mobileImageRetina: mainMobileImgRetina,
                 },
             ]);
         } catch (error) {
@@ -125,8 +143,11 @@ export default {
                             type: 'white',
                         },
                         desktopImage: middleDesktopImg,
+                        desktopImageRetina: middleDesktopImgRetina,
                         tabletImage: middleTabletImg,
+                        tabletImageRetina: middleTabletImgRetina,
                         mobileImage: middleMobileImg,
+                        mobileImageRetina: middleMobileImgRetina,
                     },
                 });
             })
@@ -165,8 +186,11 @@ export default {
                         type: 'white',
                     },
                     desktopImage: newDesktopImg,
+                    desktopImageRetina: newDesktopImgRetina,
                     tabletImage: newTabletImg,
+                    tabletImageRetina: newTabletImgRetina,
                     mobileImage: newMobileImg,
+                    mobileImageRetina: newMobileImgRetina,
                 },
             });
         } catch (error) {
@@ -192,8 +216,11 @@ export default {
                         type: 'white',
                     },
                     desktopImage: bestsellerDesktopImg,
+                    desktopImageRetina: bestsellerDesktopImgRetina,
                     tabletImage: bestsellerTabletImg,
+                    tabletImageRetina: bestsellerTabletImgRetina,
                     mobileImage: bestsellerMobileImg,
+                    mobileImageRetina: bestsellerMobileImgRetina,
                 },
             });
         } catch (error) {
