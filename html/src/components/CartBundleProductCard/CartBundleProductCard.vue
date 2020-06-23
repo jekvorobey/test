@@ -103,7 +103,7 @@ export default {
     },
 
     props: {
-        id: {
+        bundleId: {
             type: Number,
             required: true,
         },
@@ -149,7 +149,7 @@ export default {
         },
 
         inFavorites() {
-            return this[IS_IN_FAVORITES](this.id);
+            return this[IS_IN_FAVORITES](this.bundleId);
         },
 
         deleteBtnText() {
@@ -172,7 +172,7 @@ export default {
         },
 
         onDeleteClick() {
-            this.$emit('deleteBundle', this.id);
+            this.$emit('deleteBundle', this.bundleId);
         },
 
         onCountChange(value) {
