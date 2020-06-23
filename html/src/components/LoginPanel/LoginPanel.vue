@@ -412,6 +412,7 @@ export default {
                     phone: this.restorePhone,
                     password: this.restorePassword,
                 })
+                location.reload();
                 this.onClose()
             } catch (error) {
                 this.onClose()
