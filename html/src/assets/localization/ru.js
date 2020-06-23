@@ -230,7 +230,7 @@ const main = {
         },
 
         groups: {
-            profile: 'Личный кабинет',
+            profile: 'Мой профиль',
             business: 'Мой бизнес',
             training: 'Обучение',
         },
@@ -244,7 +244,7 @@ const main = {
         },
 
         routes: {
-            Cabinet: 'Личный кабинет',
+            Cabinet: 'Личные данные',
             Preferences: 'Мои предпочтения',
             Addresses: 'Адреса доставки',
             Payment: 'Способы оплаты',

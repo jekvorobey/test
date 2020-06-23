@@ -274,11 +274,15 @@
             color: var(--cl-grey);
 
             &:first-child {
-                text-align: left;
+                .referal-view__table-sort {
+                    justify-content: flex-start;
+                }
             }
 
             &:last-child {
-                text-align: right;
+                .referal-view__table-sort {
+                    justify-content: flex-end;
+                }
             }
 
             &.is-active {
@@ -293,6 +297,7 @@
             display: flex;
             align-items: center;
             fill: var(--cl-grey);
+            justify-content: center;
 
             .icon {
                 margin-top: calc(var(--gs) * .25);

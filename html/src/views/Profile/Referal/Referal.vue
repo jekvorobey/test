@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <template v-if="orders && orders.length">
+        <template v-if="(orders && orders.length) || !!sumArcData.value">
             <section class="referal-view__section referal-view__graph">
                 <h3 class="container container--tablet-lg referal-view__section-hl">Новые рефералы</h3>
                 <v-chart v-if="isMounted" type="line" :options="chartOptions" :series="series" height="350px" />
@@ -348,9 +348,9 @@ export default {
 
         return {
             orderFilterValue: orderFilterOptions[0],
+            orderFilterOptions,
             sortFields,
             sortValue: sortFields[0],
-            orderFilterOptions,
             isMounted: false,
             showMore: false,
 
@@ -523,6 +523,7 @@ export default {
         setSortValue(field) {
             console.log(field);
             this.sortValue = this.sortFields.find(o => o.field === field) || this.sortFields[0];
+            console.log(this.sortValue);
         },
     },
 
@@ -533,8 +534,8 @@ export default {
                 query: { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField },
             } = this.$route;
 
-            await this[FETCH_REFERRAL_DATA]({ page, orderField, orderDirection, orderFilterField });
-            this[SET_LOAD_PATH](fullPath);
+            // await this[FETCH_REFERRAL_DATA]({ page, orderField, orderDirection });
+            // this[SET_LOAD_PATH](fullPath);
         } catch (error) {
             $logger.error(error);
         }
@@ -548,7 +549,7 @@ export default {
 
         const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
 
-        const date = new Date(getOrderFilterDate(orderFilterField)).toLocaleDateString(numericYearDateSettings);
+        const date = getOrderFilterDate(orderFilterField);
 
         if (loadPath === fullPath) next();
         else {
@@ -564,7 +565,7 @@ export default {
                 .then(() => {
                     next(vm => {
                         vm.setOrderFilterValue(orderFilterField);
-                        vm.setSortValue(orderFilterField);
+                        vm.setSortValue(orderField);
                         $progress.finish();
                     });
                 })
@@ -588,7 +589,7 @@ export default {
             query: { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField },
         } = to;
 
-        const date = new Date(getOrderFilterDate(orderFilterField)).toLocaleDateString(numericYearDateSettings);
+        const date = getOrderFilterDate(orderFilterField);
 
         try {
             this.$progress.start();
@@ -601,6 +602,7 @@ export default {
                 date,
             });
             this.setOrderFilterValue(orderFilterField);
+            this.setSortValue(orderField);
             this.$progress.finish();
             next();
         } catch (error) {
@@ -611,7 +613,7 @@ export default {
         this.showMore = false;
     },
 
-    beforeCreate() {
+    beforeMount() {
         // this.sortFields = sortFields;
         // this.sortDirections = sortDirections;
         // this.orderPaymentStatus = orderPaymentStatus;
@@ -619,6 +621,7 @@ export default {
 
     mounted() {
         this.isMounted = true;
+        console.log(this.sortValue);
     },
 };
 </script>

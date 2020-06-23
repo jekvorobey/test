@@ -63,7 +63,7 @@
                                         />
                                         <cart-bundle-product-card
                                             v-else-if="(product.type = 'bundle_product')"
-                                            :id="id"
+                                            :bundle-id="product.id"
                                             :name="product.name"
                                             :price="product.price"
                                             :bonus="product.bonus"
