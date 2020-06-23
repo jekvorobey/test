@@ -230,7 +230,7 @@ const main = {
         },
 
         groups: {
-            profile: 'Личный кабинет',
+            profile: 'Мой профиль',
             business: 'Мой бизнес',
             training: 'Обучение',
         },
