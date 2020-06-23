@@ -140,8 +140,8 @@
 
     &__controls {
         display: flex;
-        justify-content: flex-end;
-        margin-top: calc(var(--gs) * 2);
+        justify-content: center;
+        margin-top: calc(var(--gs) * 4);
 
         @media (--tablet-lg) {
             justify-content: center;
