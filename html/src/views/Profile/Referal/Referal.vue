@@ -93,13 +93,18 @@
 
                         <thead class="referal-view__table-head">
                             <tr class="referal-view__table-tr referal-view__table-tr--header">
-                                <th class="referal-view__table-th">Товар</th>
-                                <th class="referal-view__table-th">Количество</th>
-                                <th class="referal-view__table-th">ID реферала</th>
-                                <th class="referal-view__table-th">Источник</th>
-                                <th class="referal-view__table-th">Дата заказа</th>
-                                <th class="referal-view__table-th">Сумма</th>
-                                <th class="referal-view__table-th">Сумма вознаграждения</th>
+                                <th
+                                    class="referal-view__table-th"
+                                    :class="{ 'is-active': sortValue.field === item.field }"
+                                    v-for="item in sortFields"
+                                    :key="item.id"
+                                    :id="`order-sort-item-${item.id}`"
+                                >
+                                    <div class="referal-view__table-sort" @click="setSortValue(item.field)">
+                                        {{ item.title }}
+                                        <v-svg name="arrow-down-small" width="24" height="24" />
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
 
@@ -291,6 +296,7 @@ import { generateReferralLink } from '@util/profile';
 import { getOrderFilterDate } from '@util/order';
 import { $store, $progress, $logger } from '@services';
 import '@images/sprites/logo.svg';
+import '@images/sprites/arrow-down-small.svg';
 import './Referal.css';
 
 const REFERRAL_MODULE_PATH = `${PROFILE_MODULE}/${REFERRAL_MODULE}`;
@@ -324,8 +330,26 @@ export default {
             { id: 3, title: 'За месяц', field: filterField.MONTH },
             { id: 4, title: 'За день', field: filterField.DAY },
         ];
+
+        const sortFields = [
+            { id: 1, title: 'Товар', field: referralOrderSortFields.NAME, direction: sortDirections.ASC },
+            { id: 2, title: 'Количество', field: referralOrderSortFields.QTY, direction: sortDirections.ASC },
+            { id: 3, title: 'ID реферала', field: referralOrderSortFields.CUSTOMER_ID, direction: sortDirections.ASC },
+            { id: 4, title: 'Источник', field: referralOrderSortFields.SOURCE, direction: sortDirections.ASC },
+            { id: 5, title: 'Дата заказа', field: referralOrderSortFields.ORDER_DATE, direction: sortDirections.ASC },
+            { id: 6, title: 'Сумма', field: referralOrderSortFields.PRICE_PRODUCT, direction: sortDirections.ASC },
+            {
+                id: 7,
+                title: 'Сумма вознаграждения',
+                field: referralOrderSortFields.PRICE_COMMISSION,
+                direction: sortDirections.DESC,
+            },
+        ];
+
         return {
             orderFilterValue: orderFilterOptions[0],
+            sortFields,
+            sortValue: sortFields[0],
             orderFilterOptions,
             isMounted: false,
             showMore: false,
@@ -413,7 +437,22 @@ export default {
             if (value !== oldValue) {
                 this.$router.replace({
                     path: this.$route.path,
-                    query: { orderFilterField: value.field },
+                    query: {
+                        orderFilterField: value.field,
+                        orderField: this.sortValue.field,
+                    },
+                });
+            }
+        },
+
+        sortValue(value, oldValue) {
+            if (value !== oldValue) {
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: {
+                        orderFilterField: this.orderFilterValue.field,
+                        orderField: value.field,
+                    },
                 });
             }
         },
@@ -480,20 +519,21 @@ export default {
         setOrderFilterValue(field) {
             this.orderFilterValue = this.orderFilterOptions.find(o => o.field === field) || this.orderFilterOptions[0];
         },
+
+        setSortValue(field) {
+            console.log(field);
+            this.sortValue = this.sortFields.find(o => o.field === field) || this.sortFields[0];
+        },
     },
 
     async serverPrefetch() {
         try {
             const {
                 fullPath,
-                query: {
-                    page = DEFAULT_PAGE,
-                    orderField = referralOrderSortFields.NAME,
-                    orderDirection = sortDirections.DESC,
-                },
+                query: { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField },
             } = this.$route;
 
-            await this[FETCH_REFERRAL_DATA]({ page, orderField, orderDirection });
+            await this[FETCH_REFERRAL_DATA]({ page, orderField, orderDirection, orderFilterField });
             this[SET_LOAD_PATH](fullPath);
         } catch (error) {
             $logger.error(error);
@@ -503,12 +543,7 @@ export default {
     beforeRouteEnter(to, from, next) {
         const {
             fullPath,
-            query: {
-                page = DEFAULT_PAGE,
-                orderField = referralOrderSortFields.NAME,
-                orderDirection = sortDirections.DESC,
-                orderFilterField,
-            },
+            query: { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField },
         } = to;
 
         const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
@@ -529,6 +564,7 @@ export default {
                 .then(() => {
                     next(vm => {
                         vm.setOrderFilterValue(orderFilterField);
+                        vm.setSortValue(orderFilterField);
                         $progress.finish();
                     });
                 })
@@ -549,12 +585,7 @@ export default {
 
         const {
             fullPath,
-            query: {
-                page = DEFAULT_PAGE,
-                orderField = referralOrderSortFields.NAME,
-                orderDirection = sortDirections.DESC,
-                orderFilterField,
-            },
+            query: { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField },
         } = to;
 
         const date = new Date(getOrderFilterDate(orderFilterField)).toLocaleDateString(numericYearDateSettings);
@@ -581,8 +612,6 @@ export default {
     },
 
     beforeCreate() {
-        const date = new Date(getOrderFilterDate(this.orderFilterValue)).toLocaleDateString(numericYearDateSettings);
-        console.log(date);
         // this.sortFields = sortFields;
         // this.sortDirections = sortDirections;
         // this.orderPaymentStatus = orderPaymentStatus;

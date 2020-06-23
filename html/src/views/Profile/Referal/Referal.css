@@ -280,6 +280,24 @@
             &:last-child {
                 text-align: right;
             }
+
+            &.is-active {
+                .referal-view__table-sort {
+                    fill: var(--cl-global);
+                    color: var(--cl-global);
+                }
+            }
+        }
+
+        &-sort {
+            display: flex;
+            align-items: center;
+            fill: var(--cl-grey);
+
+            .icon {
+                margin-top: calc(var(--gs) * .25);
+                vertical-align: middle;
+            }
         }
     }
 

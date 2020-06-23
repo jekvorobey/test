@@ -57,8 +57,6 @@ export default {
                 orderFilterField,
             });
 
-
-
             if (showMore) commit(SET_ORDERS_MORE, { items, range });
             else commit(SET_ORDERS, { items, range });
         } catch (error) {
@@ -70,7 +68,7 @@ export default {
         try {
             await Promise.all([
                 dispatch(FETCH_STATISTICS),
-                dispatch(FETCH_ORDERS, { page, orderField, orderDirection, }),
+                dispatch(FETCH_ORDERS, { page, orderField, orderDirection, orderFilterField }),
             ]);
         } catch (error) {
             storeErrorHandler(FETCH_REFERRAL_DATA, true)(error);

@@ -5,6 +5,12 @@ export const genderType = Object.freeze({
 
 export const referralOrderSortFields = Object.freeze({
     NAME: 'name',
+    QTY: 'qty',
+    SOURCE: 'source',
+    ORDER_DATE: 'order_date',
+    CUSTOMER_ID: 'customer_id',
+    PRICE_PRODUCT: 'price_product',
+    PRICE_COMMISSION: 'price_commission'
 });
 
 export const billingOperationType = Object.freeze({
