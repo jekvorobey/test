@@ -79,7 +79,7 @@ export default {
                     type: 'banner',
                     button: {
                         id: 2,
-                        url: '/404',
+                        externalUrl: 'https://www.instagram.com/bessovestnotalantlivy/',
                         text: 'Подписаться',
                         location: 'bottom_left',
                         type: 'white',
