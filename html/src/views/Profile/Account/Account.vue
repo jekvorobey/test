@@ -50,6 +50,9 @@
                         <router-link :to="{ name: 'Cabinet' }">личном кабинете</router-link>
                     </template>
                 </div>
+                <div class="account-view__panel-attention">
+                    Нажимая кнопку «оформить вывод», я согласен с условиями <a href="https://money.yandex.ru/pay/page?id=526623">оферты Яндекс.Денег</a>
+                </div>
             </div>
         </div>
 
@@ -133,9 +136,9 @@
                         с товарами
                     </li>
                     <li class="account-view__attention-list-item">
-                        <v-link class="account-view__attention-link" tag="button" :to="{ name: 'Messages' }">
+                        <button class="account-view__attention-link" @click="onPromocodeRequest">
                             запросить
-                        </v-link>
+                        </button>
                         промо-код
                     </li>
                     <li class="account-view__attention-list-item">
@@ -158,6 +161,10 @@
             </show-more-button>
             <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
+
+        <transition name="fade">
+            <message-modal v-if="$isServer || isMessageOpen" @created="onChatCreated" />
+        </transition>
     </section>
 </template>
 
@@ -172,6 +179,8 @@ import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
+
+import MessageModal from '@components/profile/MessageModal/MessageModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
@@ -203,7 +212,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { $store, $progress, $logger } from '@services';
 import { DEFAULT_PAGE } from '@constants';
 import { monthLongDateSettings } from '@settings';
-import { currencySymbol, modalName } from '@enums';
+import { currencySymbol, modalName, themeCodes } from '@enums';
 import { cardIdentificationStatus } from '@enums/profile';
 import { preparePrice, saveToClipboard } from '@util';
 import { generateYandexCardAuthUrl, generateYandexCardAuthBackUrl, generateReferralLink } from '@util/profile';
@@ -226,6 +235,7 @@ export default {
         InfoRow,
         ShowMoreButton,
         AttentionPanel,
+        MessageModal,
     },
 
     data() {
@@ -241,6 +251,10 @@ export default {
         ...mapState(BILLING_MODULE_PATH, [BILLING_DATA, ITEMS, ACTIVE_PAGE, SELECTED_CARD, CARD_CREATION_STATUS]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
+        }),
+        ...mapState(MODAL_MODULE, {
+            isMessageOpen: state =>
+                state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
         }),
 
         ...mapGetters(BILLING_MODULE_PATH, [PAGES_COUNT, HAS_PAYMENT_INFO]),
@@ -350,6 +364,27 @@ export default {
             const message = result ? 'Успешно скопировано' : 'Не удается скопировать';
             this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
             e.target.focus();
+        },
+
+        onPromocodeRequest() {
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.profile.MESSAGE,
+                open: true,
+                state: {
+                    themeCode: themeCodes.PROMOCODE,
+                },
+            });
+        },
+
+        onChatCreated() {
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state: {
+                    title: 'Уведомление',
+                    message: 'Запрос отправлен, администратор свяжется с вами в ближайшее время.',
+                },
+            });
         },
     },
 

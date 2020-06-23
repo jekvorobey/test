@@ -15,7 +15,7 @@
                                     type="image/webp"
                                     media="(min-width: 1024px)"
                                 />
-                                <source :data-srcset="banner.desktopImage.orig" media="(min-width: 1024px)" />
+                                <source :data-srcset="getWebpImageWithRetina(banner.desktopImage)" media="(min-width: 1024px)" />
                             </template>
                             <template v-if="banner.tabletImage">
                                 <source
@@ -23,7 +23,7 @@
                                     type="image/webp"
                                     media="(min-width: 768px)"
                                 />
-                                <source :data-srcset="banner.tabletImage.orig" media="(min-width: 768px)" />
+                                <source :data-srcset="getWebpImageWithRetina(banner.tabletImage)" media="(min-width: 768px)" />
                             </template>
                             <template v-if="banner.mobileImage">
                                 <source
@@ -31,7 +31,7 @@
                                     type="image/webp"
                                     media="(min-width: 320px)"
                                 />
-                                <source :data-srcset="banner.mobileImage.orig" media="(min-width: 320px)" />
+                                <source :data-srcset="getWebpImageWithRetina(banner.mobileImage)" media="(min-width: 320px)" />
                             </template>
                             <img class="blur-up lazyload v-picture__img" :data-src="banner.defaultImage" alt="" />
                         </catalog-banner-card>
@@ -112,10 +112,12 @@ export default {
     methods: {
         mobileImage(banner) {
             const image = banner.mobileImage || banner.tabletImage || banner.desktopImage;
+            const imageRetina = banner.mobileImageRetina || banner.tabletImageRetina 
             if (typeof image === 'string')
                 return {
                     webp: image,
                     orig: image,
+                    retina: typeof imageRetina === 'string' ? imageRetina : undefined,
                 };
 
             if (image)
@@ -127,10 +129,12 @@ export default {
 
         tabletImage(banner) {
             const image = banner.tabletImage || banner.desktopImage;
+            const imageRetina = banner.tabletImageRetina || banner.desktopImageRetina;
             if (typeof image === 'string')
                 return {
                     webp: image,
                     orig: image,
+                    retina: typeof imageRetina === 'string' ? imageRetina : undefined,
                 };
 
             if (image)
@@ -142,11 +146,13 @@ export default {
 
         desktopImage(banner) {
             const image = banner.desktopImage || banner.tabletImage;
+            const imageRetina = banner.desktopImageRetina || banner.tabletImageRetina;
 
             if (typeof image === 'string')
                 return {
                     webp: image,
                     orig: image,
+                    retina: typeof imageRetina === 'string' ? imageRetina : undefined,
                 };
 
             if (image)
@@ -161,6 +167,15 @@ export default {
             if (typeof image === 'string') return image;
             if (image) return generatePictureSourcePath(600, 888, image.id);
         },
+
+        getWebpImageWithRetina(image) {
+            let result = '';
+            result += `${image.orig} 1x`;
+            if (image.retina) {
+                result += `, ${image.retina} 2x`;
+            }
+            return result;
+        }
     },
 };
 </script>

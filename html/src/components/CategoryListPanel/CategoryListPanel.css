@@ -1,4 +1,8 @@
 .category-list-panel {
+    /* important необходим для переназначения стилей popover'а */
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
     &__list {
         width: 100%;
     }

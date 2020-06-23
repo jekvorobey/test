@@ -37,6 +37,7 @@
             display: flex;
             align-items: center;
             text-align: left;
+            flex-shrink: 0;
 
             &-container {
                 display: flex;
@@ -63,7 +64,7 @@
         &-btn {
             display: flex;
             height: 100%;
-            width: 44px;
+            width: 100%;
             justify-content: flex-end;
             align-items: center;
             text-align: left;

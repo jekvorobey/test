@@ -21,7 +21,7 @@
                     <div class="page-502__main-info">
                         <p>Если у вас возникли вопросы, обратитесь в службу поддержки:</p>
                         <p>
-                            <a class="text-bold" href="tel:88007301243">8 800 730-12-43</a>
+                            <a class="text-bold" href="tel:88007079070">8 800 707-90-70</a>
                             &nbsp;(звонок бесплатный)
                         </p>
                         Или напишите нам на почту <a href="mailto:support@ibt.studio">support@ibt.studio</a>

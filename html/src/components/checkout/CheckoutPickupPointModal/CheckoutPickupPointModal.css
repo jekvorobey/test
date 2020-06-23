@@ -21,6 +21,57 @@
         }
     }
 
+    &__header {
+        &-btn {
+            display: flex;
+            align-items: center;
+            fill: var(--cl-white);
+            color: var(--cl-white);
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 24px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+
+            &--close,
+            &--arrow {
+                .icon {
+                    margin-right: var(--gs);
+                    transform: rotate(90deg);
+                }
+            }
+        }
+    }
+
+    &__tabs {
+        display: flex;
+        padding: calc(var(--gs) * 1.75) calc(var(--gs) * 3);
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+
+        @media (--tablet) {
+            padding: calc(var(--gs) * 1.75) calc(var(--gs) * 2);
+        }
+
+        &-button {
+            display: flex;
+            align-items: center;
+            line-height: 24px;
+            font-weight: 500;
+            padding: 0 calc(var(--gs) * 2.75);
+            margin-right: calc(var(--gs) * 1.5);
+            letter-spacing: 0.02em;
+
+            &.is-active {
+                color: var(--cl-grey);
+                fill: var(--cl-grey);
+            }
+        }
+
+        &-icon {
+                margin: -3px var(--gs) 0 0;
+        }
+    }
+
     &__map {
         display: flex;
         flex: 1;
@@ -42,6 +93,7 @@
         width: 440px;
         height: 100%;
         overflow: hidden;
+        padding-top: calc(var(--gs) * 3);
 
         @media (--tablet-lg) {
             width: 100%;
@@ -51,10 +103,6 @@
     &__details {
         @media (--tablet-lg-min) {
             padding: calc(var(--gs) * 3);
-        }
-
-        @media (--tablet-lg) {
-            padding-top: calc(var(--gs) * 2);
         }
 
         &-back-link {
@@ -124,7 +172,10 @@
     }
 
     &__filter {
-        padding-top: calc(var(--gs) * 3);
+
+        @media (--tablet-lg) {
+            padding-top: calc(var(--gs) * 2);
+        }
 
         &-header {
             margin: 0;

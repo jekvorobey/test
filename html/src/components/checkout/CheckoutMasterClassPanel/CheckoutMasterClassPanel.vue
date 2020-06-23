@@ -69,6 +69,9 @@
                         <v-svg name="visa" width="40" height="24" />
                         <v-svg name="mastercard" width="40" height="24" />
                         <v-svg name="mir" width="40" height="24" />
+                        <v-svg name="apple" width="40" height="24" />
+                        <v-svg name="google" width="40" height="24" />
+                        <v-svg name="yandex" width="56" height="24" />
                     </div>
                 </checkout-option-card>
             </ul>
@@ -93,7 +96,7 @@
                         name="agreement"
                         @change="SET_AGREEMENT(Number($event))"
                     >
-                        Я согласен с условиями <router-link to="/">заказа и доставки</router-link>
+                        Я согласен с <router-link to="/">условиями оферты</router-link> и <router-link to="/">политикой конфиденциальности</router-link>
                     </v-check>
                 </div>
                 <div class="checkout-master-class-panel__item-panel">
@@ -166,6 +169,9 @@ import '@images/sprites/payment/bonus.svg';
 import '@images/sprites/payment/visa.svg';
 import '@images/sprites/payment/mastercard.svg';
 import '@images/sprites/payment/mir.svg';
+import '@images/sprites/payment/apple.svg';
+import '@images/sprites/payment/google.svg';
+import '@images/sprites/payment/yandex.svg';
 import '@images/sprites/plus.svg';
 import './CheckoutMasterClassPanel.css';
 

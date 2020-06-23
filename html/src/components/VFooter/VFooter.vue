@@ -29,7 +29,7 @@
                             v-for="link in socials.items"
                             :title="link.name"
                         >
-                            <a class="v-footer__link" :href="link.href">
+                            <a class="v-footer__link" :href="link.href" rel="nofollow">
                                 <v-svg :name="link.icon" width="24" height="24" />
                             </a>
                         </li>
@@ -120,26 +120,27 @@ export default {
                         id: 1,
                         icon: 'facebook-bw',
                         name: this.$t('socials.facebook'),
-                        href: '/',
+                        href: 'https://www.facebook.com/bessovestnotalantlivy',
                     },
                     {
                         id: 2,
                         icon: 'instagram-bw',
                         name: this.$t('socials.instagram'),
-                        href: '/',
+                        href: 'https://www.instagram.com/bessovestnotalantlivy/',
                     },
                     {
                         id: 3,
                         icon: 'vkontakte-bw',
                         name: this.$t('socials.vkontakte'),
-                        href: '/',
+                        href: 'https://vk.com/bessovestnotalantlivy',
                     },
-                    {
-                        id: 4,
-                        icon: 'youtube-bw',
-                        name: this.$t('socials.youtube'),
-                        href: '/',
-                    },
+                    // #60156
+                    // {
+                    //     id: 4,
+                    //     icon: 'youtube-bw',
+                    //     name: this.$t('socials.youtube'),
+                    //     href: '/',
+                    // },
                 ],
             };
         },

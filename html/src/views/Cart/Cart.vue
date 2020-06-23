@@ -15,7 +15,7 @@
                         <template v-slot:panel="{ item: type }">
                             <div class="cart-view__main-products" v-if="IS_PRODUCT(type)">
                                 <div
-                                    v-if="type.alerts && type.alerts.length > 0"
+                                    v-if="deliveryInfo && deliveryInfo.length > 0"
                                     class="cart-view__main-products-alert"
                                 >
                                     <div class="cart-view__main-products-alert-icon">
@@ -23,8 +23,8 @@
                                     </div>
 
                                     <div class="cart-view__main-products-alert-text">
-                                        <div v-for="alert in type.alerts" :key="alert.id">
-                                            {{ alert.title }}
+                                        <div v-for="alert in deliveryInfo" :key="alert.id">
+                                            {{ alert.name }} {{ alert.description }}
                                         </div>
                                     </div>
                                 </div>
@@ -63,7 +63,7 @@
                                         />
                                         <cart-bundle-product-card
                                             v-else-if="(product.type = 'bundle_product')"
-                                            :id="id"
+                                            :bundle-id="product.id"
                                             :name="product.name"
                                             :price="product.price"
                                             :bonus="product.bonus"
@@ -186,6 +186,15 @@
                     </template>
                 </v-sticky>
             </div>
+            <div class="container cart-view__main-container" v-else>
+                <div class="cart-view__empty-cart">
+                    <v-svg name="cart" width="20" height="24" />
+                    <span class="cart-view__empty-cart-message">
+                        Вы ещё ничего не добавили в вашу корзину, перейдите в каталог для покупок
+                    </span>
+                    <a class="cart-view__empty-cart-btn btn btn--outline" href="/catalog">Перейти к покупкам</a>
+                </div>
+            </div>
         </section>
 
         <section class="section cart-view__section cart-view__featured">
@@ -223,8 +232,8 @@ import VButton from '@controls/VButton/VButton.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VInput from '@controls/VInput/VInput.vue';
 
-import VSticky from '@controls/VSticky/VSticky.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
 import Price from '@components/Price/Price.vue';
 import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
 
@@ -257,6 +266,7 @@ import {
     CART_ITEMS_COUNT,
     CART_TYPES,
     PROMO_CODE,
+    DELIVERY_INFO,
 } from '@store/modules/Cart/getters';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
@@ -274,6 +284,7 @@ import { preparePrice } from '@util';
 import { generateProductUrl } from '@util/catalog';
 import { registerModuleIfNotExists } from '@util/store';
 
+import '@images/sprites/cart.svg';
 import '@images/sprites/alert.svg';
 import './Cart.css';
 
@@ -343,7 +354,14 @@ export default {
 
     computed: {
         ...mapState(CART_MODULE, [FEATURED_PRODUCTS, CART_DATA]),
-        ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS, PROMO_CODE]),
+        ...mapGetters(CART_MODULE, [
+            CART_ITEMS_COUNT,
+            CART_TYPES,
+            IS_PRODUCT,
+            IS_MASTER_CLASS,
+            PROMO_CODE,
+            DELIVERY_INFO,
+        ]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
@@ -454,7 +472,7 @@ export default {
 
         onDeleteBundle(bundleId) {
             this[DELETE_CART_BUNDLE](bundleId);
-        }
+        },
     },
 
     async serverPrefetch() {

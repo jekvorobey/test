@@ -30,7 +30,7 @@
 
                             <template v-if="isProduct">
                                 <p class="checkout-view__main-panel-line" v-if="summary.delivery">
-                                    Доставка <price v-if="summary.delivery.value" v-bind="summary.delivery" />
+                                    Доставка <price v-if="summary.delivery.value || summary.delivery.value === 0" v-bind="summary.delivery" />
                                     <span v-else>{{ summary.delivery }}</span>
                                 </p>
 

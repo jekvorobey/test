@@ -13,6 +13,7 @@ export const CART_TYPES = 'cartTypes';
 export const CART_ITEMS_COUNT = 'cartItemsCount';
 export const PRODUCT_ITEMS_SUM = 'productItemsSum';
 export const PROMO_CODE = 'promocode';
+export const DELIVERY_INFO = 'deliveryInfo';
 
 export const PROMOCODE_STATUS = 'promocodeStatus';
 export const CART_STATUS = 'cartStatus';
@@ -27,6 +28,8 @@ function isValidType(type) {
 
 export default {
     [PROMO_CODE]: (state) => state.cartData.product.input.promoCode,
+
+    [DELIVERY_INFO]: (state) => state.cartData.deliveryInfo,
 
     [CART_ITEMS_COUNT]: (state, getters) => {
         const itemsCount = getters[CART_TYPES].reduce((accum, current) => {

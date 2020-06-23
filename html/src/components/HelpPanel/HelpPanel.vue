@@ -1,5 +1,11 @@
 <template>
-    <general-popup-panel popover-class="tooltip--white help-panel" show-bottom :open="isOpen" @hide="onHide">
+    <general-popup-panel
+        popover-class="tooltip--white help-panel"
+        placement="bottom-end"
+        show-bottom
+        :open="isOpen"
+        @hide="onHide"
+    >
         <div class="help-panel__slot" @click="onClick">
             <slot />
         </div>
@@ -100,7 +106,7 @@ export default {
 
         onHide() {
             this.isOpen = false;
-        }
-    }
+        },
+    },
 };
 </script>

@@ -46,7 +46,7 @@ import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { modalName } from '@enums';
+import { modalName, dayOfTheWeek } from '@enums';
 import { receiveMethods } from '@enums/checkout';
 import '@images/sprites/arrow-down.svg';
 import './ProductDeliveryPanel.css';
@@ -90,7 +90,14 @@ export default {
         formatDate(date) {
             const dateObj = new Date(date);
             const options = { month: 'long', day: 'numeric' };
-            return dateObj.toLocaleDateString(this[LOCALE], options);
+            const today = new Date().getDate();
+            let additionalText = ``;
+
+            if (today === dateObj.getDate()) additionalText = `сегодня`;
+            else if (today + 1 === dateObj.getDate()) additionalText = `завтра`;
+            else additionalText = dayOfTheWeek[dateObj.getDay()];
+
+            return `${additionalText}, ${dateObj.toLocaleDateString(this[LOCALE], options)}`;
         },
 
         onOpenCitySelection() {

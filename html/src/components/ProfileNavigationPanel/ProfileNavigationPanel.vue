@@ -51,21 +51,24 @@ export default {
                     routes: [
                         { name: 'Cabinet', exact: true },
                         { name: 'Messages', displayName: this.$tc('profile.format.messages', this[UNREAD_MESSAGES]) },
+                        { name: 'Addresses' },
                         { name: 'Orders' },
                     ],
                 },
             ];
 
-            if (this[REFERRAL_PARTNER])
-                groups.push({
-                    id: 2,
-                    routes: [
-                        { name: 'Referal', exact: true },
-                        { name: 'Account', exact: true },
-                        { name: 'Documents', exact: true },
-                        // { name: 'Masterclasses', exact: true },
-                    ],
-                });
+            // #60151
+            // if (this[REFERRAL_PARTNER]) {
+            //     groups.push({
+            //         id: 2,
+            //         routes: [
+            //             { name: 'Referal', exact: true },
+            //             { name: 'Account', exact: true },
+            //             { name: 'Documents', exact: true },
+            //             // { name: 'Masterclasses', exact: true },
+            //         ],
+            //     });
+            // }
 
             return groups;
         },

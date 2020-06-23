@@ -66,7 +66,20 @@
 
             <div class="container container--tablet-lg">
                 <section class="referal-view__section">
-                    <h3 class="referal-view__section-hl">История заказов рефералов</h3>
+                    <div class="referal-view__section-header">
+                        <h3 class="referal-view__section-hl">История заказов рефералов</h3>
+                        <v-select
+                            class="referal-view__section-filter"
+                            v-if="!isTabletLg"
+                            label="title"
+                            track-by="id"
+                            v-model="orderFilterValue"
+                            :options="orderFilterOptions"
+                            :searchable="false"
+                            :allow-empty="false"
+                            :show-labels="false"
+                        />
+                    </div>
 
                     <table class="referal-view__table" v-if="!isTabletLg">
                         <colgroup>
@@ -81,7 +94,7 @@
                         <thead class="referal-view__table-head">
                             <tr class="referal-view__table-tr referal-view__table-tr--header">
                                 <th class="referal-view__table-th">Товар</th>
-                                <th class="referal-view__table-th">Кол-во</th>
+                                <th class="referal-view__table-th">Количество</th>
                                 <th class="referal-view__table-th">ID реферала</th>
                                 <th class="referal-view__table-th">Источник</th>
                                 <th class="referal-view__table-th">Дата заказа</th>
@@ -133,10 +146,10 @@
                     </table>
                 </section>
 
-                <!-- <filter-button class="referal-view__filter-btn" @click="filterModal = !filterModal">
+                <filter-button class="referal-view__filter-btn" v-if="isTabletLg" @click="filterModal = !filterModal">
                     Фильтр и сортировка&nbsp;&nbsp;
                     <span class="text-grey">4</span>
-                </filter-button> -->
+                </filter-button>
             </div>
 
             <ul class="referal-view__list" v-if="isTabletLg">
@@ -156,7 +169,7 @@
                             {{ order.name }}
                         </div>
                     </info-row>
-                    <info-row class="referal-view__list-item-row" name="Кол-во"> {{ order.qty }} шт. </info-row>
+                    <info-row class="referal-view__list-item-row" name="Количество"> {{ order.qty }} шт. </info-row>
                     <info-row class="referal-view__list-item-row" name="ID реферала">
                         <router-link :to="{ name: 'ReferalOrderDetails', params: { referalId: order.customer_id } }">
                             {{ order.customer_id }}
@@ -194,9 +207,9 @@
                         с товарами
                     </li>
                     <li class="referal-view__attention-list-item">
-                        <v-link class="referal-view__attention-link" tag="button" :to="{ name: 'Messages' }">
+                        <button class="referal-view__attention-link" @click="onPromocodeRequest">
                             запросить
-                        </v-link>
+                        </button>
                         промо-код
                     </li>
                     <li class="referal-view__attention-list-item">
@@ -220,6 +233,10 @@
             </show-more-button>
             <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
+
+        <transition name="fade">
+            <message-modal v-if="$isServer || isMessageOpen" @created="onChatCreated" />
+        </transition>
     </section>
 </template>
 
@@ -230,12 +247,15 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VArcCounter from '@controls/VArcCounter/VArcCounter.vue';
 import VLink from '@controls/VLink/VLink.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
 
 import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import FilterButton from '@components/FilterButton/FilterButton.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
+
+import MessageModal from '@components/profile/MessageModal/MessageModal.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
@@ -259,14 +279,16 @@ import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { fileExtension, sortDirections, modalName } from '@enums';
+import { fileExtension, sortDirections, modalName, themeCodes } from '@enums';
 import { referralOrderSortFields } from '@enums/profile';
+import { filterField } from '@enums/order';
 import { DEFAULT_PAGE } from '@constants';
-import { digit2DateSettings } from '@settings';
+import { digit2DateSettings, numericYearDateSettings } from '@settings';
 import { baseChartOptions } from '@settings/profile';
 import { preparePrice, shortNumberFormat, saveToClipboard } from '@util';
 import { generatePictureSourcePath } from '@util/file';
 import { generateReferralLink } from '@util/profile';
+import { getOrderFilterDate } from '@util/order';
 import { $store, $progress, $logger } from '@services';
 import '@images/sprites/logo.svg';
 import './Referal.css';
@@ -283,6 +305,7 @@ export default {
         VPicture,
         VPagination,
         VLink,
+        VSelect,
         VArcCounter,
         VChart,
 
@@ -291,10 +314,19 @@ export default {
         FilterButton,
         ShowMoreButton,
         AttentionPanel,
+        MessageModal,
     },
 
     data() {
+        const orderFilterOptions = [
+            { id: 1, title: 'Все время', field: filterField.ALL_TIME },
+            { id: 2, title: 'За год', field: filterField.YEAR },
+            { id: 3, title: 'За месяц', field: filterField.MONTH },
+            { id: 4, title: 'За день', field: filterField.DAY },
+        ];
         return {
+            orderFilterValue: orderFilterOptions[0],
+            orderFilterOptions,
             isMounted: false,
             showMore: false,
 
@@ -309,6 +341,10 @@ export default {
         ...mapState(REFERRAL_MODULE_PATH, [ITEMS, ACTIVE_PAGE, REFERRAL_DATA]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
+        }),
+        ...mapState(MODAL_MODULE, {
+            isMessageOpen: state =>
+                state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
         }),
 
         ...mapGetters(REFERRAL_MODULE_PATH, [
@@ -372,6 +408,17 @@ export default {
         },
     },
 
+    watch: {
+        orderFilterValue(value, oldValue) {
+            if (value !== oldValue) {
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: { orderFilterField: value.field },
+                });
+            }
+        },
+    },
+
     methods: {
         ...mapActions(REFERRAL_MODULE_PATH, [FETCH_REFERRAL_DATA, FETCH_ORDERS, SET_LOAD_PATH]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
@@ -408,6 +455,31 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
             e.target.focus();
         },
+
+        onPromocodeRequest() {
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.profile.MESSAGE,
+                open: true,
+                state: {
+                    themeCode: themeCodes.PROMOCODE,
+                },
+            });
+        },
+
+        onChatCreated() {
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state: {
+                    title: 'Уведомление',
+                    message: 'Запрос отправлен, администратор свяжется с вами в ближайшее время.',
+                },
+            });
+        },
+
+        setOrderFilterValue(field) {
+            this.orderFilterValue = this.orderFilterOptions.find(o => o.field === field) || this.orderFilterOptions[0];
+        },
     },
 
     async serverPrefetch() {
@@ -435,18 +507,28 @@ export default {
                 page = DEFAULT_PAGE,
                 orderField = referralOrderSortFields.NAME,
                 orderDirection = sortDirections.DESC,
+                orderFilterField,
             },
         } = to;
 
         const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
 
+        const date = new Date(getOrderFilterDate(orderFilterField)).toLocaleDateString(numericYearDateSettings);
+
         if (loadPath === fullPath) next();
         else {
             $progress.start();
             $store
-                .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`, { page, orderField, orderDirection })
+                .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`, {
+                    page,
+                    orderField,
+                    orderDirection,
+                    orderFilterField,
+                    date,
+                })
                 .then(() => {
                     next(vm => {
+                        vm.setOrderFilterValue(orderFilterField);
                         $progress.finish();
                     });
                 })
@@ -471,12 +553,23 @@ export default {
                 page = DEFAULT_PAGE,
                 orderField = referralOrderSortFields.NAME,
                 orderDirection = sortDirections.DESC,
+                orderFilterField,
             },
         } = to;
 
+        const date = new Date(getOrderFilterDate(orderFilterField)).toLocaleDateString(numericYearDateSettings);
+
         try {
             this.$progress.start();
-            await this[FETCH_ORDERS]({ page, orderField, orderDirection, showMore: this.showMore });
+            await this[FETCH_ORDERS]({
+                page,
+                orderField,
+                orderDirection,
+                showMore: this.showMore,
+                orderFilterField,
+                date,
+            });
+            this.setOrderFilterValue(orderFilterField);
             this.$progress.finish();
             next();
         } catch (error) {
@@ -488,6 +581,8 @@ export default {
     },
 
     beforeCreate() {
+        const date = new Date(getOrderFilterDate(this.orderFilterValue)).toLocaleDateString(numericYearDateSettings);
+        console.log(date);
         // this.sortFields = sortFields;
         // this.sortDirections = sortDirections;
         // this.orderPaymentStatus = orderPaymentStatus;

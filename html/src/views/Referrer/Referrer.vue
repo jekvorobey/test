@@ -3,8 +3,9 @@
         <div class="container">
             <breadcrumbs class="referrer-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
-                    Главная
-                </breadcrumb-item>
+                    <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                    <span v-else>Главная</span></breadcrumb-item
+                >
                 <breadcrumb-item key="Referrer" :to="$route.fullPath">
                     {{ $route.params.code }}
                 </breadcrumb-item>
@@ -93,6 +94,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { DEFAULT_PAGE } from '@constants';
 import { modalName, sortDirections } from '@enums';
 
+import '@images/sprites/home.svg';
 import './Referrer.css';
 
 export default {
@@ -121,8 +123,12 @@ export default {
         ...mapGetters(REFERRER_MODULE, [PAGES_COUNT]),
 
         ...mapState('route', {
-            code: state => state.params.code,
+            code: (state) => state.params.code,
         }),
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
     },
 
     methods: {
@@ -157,15 +163,15 @@ export default {
             $progress.start();
             $store
                 .dispatch(`${REFERRER_MODULE}/${FETCH_REFERRER_DATA}`, { code, page })
-                .then(data => {
+                .then((data) => {
                     $store.dispatch(`${REFERRER_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                     });
                 })
-                .catch(thrown => {
+                .catch((thrown) => {
                     if (thrown && thrown.isCancel === true) return true;
-                    next(vm => {
+                    next((vm) => {
                         $progress.fail();
                     });
                 });

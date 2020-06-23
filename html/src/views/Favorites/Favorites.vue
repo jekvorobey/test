@@ -3,8 +3,9 @@
         <div class="container">
             <breadcrumbs class="favorites-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
-                    Главная
-                </breadcrumb-item>
+                    <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                    <span v-else>Главная</span></breadcrumb-item
+                >
                 <breadcrumb-item key="Favorites" :to="$route.fullPath">
                     Избранное
                 </breadcrumb-item>
@@ -117,6 +118,7 @@ import { modalName, sortDirections } from '@enums';
 
 import { sortFields } from '@enums/favorites';
 
+import '@images/sprites/home.svg';
 import './Favorites.css';
 
 export default {
@@ -149,6 +151,10 @@ export default {
     computed: {
         ...mapState(FAVORITES_MODULE, [FAVORITES, FAVORITES_ALL, FAVORITES_DIRECTION, FAVORITES_FIELD, ACTIVE_PAGE]),
         ...mapGetters(FAVORITES_MODULE, [PAGES_COUNT]),
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
     },
 
     watch: {
@@ -201,7 +207,7 @@ export default {
 
         setSortValue(field, direction) {
             this.sortValue =
-                this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
+                this.sortOptions.find((o) => o.field === field && o.direction === direction) || this.sortOptions[0];
         },
     },
 
@@ -227,20 +233,19 @@ export default {
                 orderField,
                 orderDirection,
             })
-            .then(data => {
+            .then((data) => {
                 $store.dispatch(`${FAVORITES_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                next(vm => {
+                next((vm) => {
                     vm.setSortValue(orderField, orderDirection);
                     $progress.finish();
                 });
             })
-            .catch(thrown => {
+            .catch((thrown) => {
                 if (thrown && thrown.isCancel === true) return true;
-                next(vm => {
+                next((vm) => {
                     $progress.fail();
                 });
             });
-        
     },
 
     async beforeRouteUpdate(to, from, next) {

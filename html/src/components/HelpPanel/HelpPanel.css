@@ -15,6 +15,10 @@
         display: block;
     }
 
+    .tooltip-arrow {
+        display: none;
+    }
+
     &__phone {
         font-size: 24px;
         line-height: 32px;

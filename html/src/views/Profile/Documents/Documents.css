@@ -20,7 +20,7 @@
     }
 
     &__sort {
-        width: 30%;
+        width: calc(33.33333% - calc(var(--gs) * 2));
 
         @media (--tablet-lg) {
             width: 288px;

@@ -40,20 +40,24 @@ export default {
         }
     },
 
-    async [FETCH_ORDERS]({ commit }, { page = DEFAULT_PAGE, orderField, orderDirection, showMore }) {
+    async [FETCH_ORDERS]({ commit }, { page = DEFAULT_PAGE, orderField, orderDirection, showMore, orderFilterField, date }) {
         try {
             const { orders: items, count: range } = await getReferralOrders(
                 page,
                 REFERRAL_ORDERS_PAGE_SIZE,
                 orderField,
-                orderDirection
+                orderDirection,
+                date,
             );
 
             commit(SET_QUERY_PARAMS, {
                 page,
                 orderField,
                 orderDirection,
+                orderFilterField,
             });
+
+
 
             if (showMore) commit(SET_ORDERS_MORE, { items, range });
             else commit(SET_ORDERS, { items, range });
@@ -62,11 +66,11 @@ export default {
         }
     },
 
-    async [FETCH_REFERRAL_DATA]({ dispatch, commit }, { page = DEFAULT_PAGE, orderField, orderDirection }) {
+    async [FETCH_REFERRAL_DATA]({ dispatch, commit }, { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField, date }) {
         try {
             await Promise.all([
                 dispatch(FETCH_STATISTICS),
-                dispatch(FETCH_ORDERS, { page, orderField, orderDirection }),
+                dispatch(FETCH_ORDERS, { page, orderField, orderDirection, }),
             ]);
         } catch (error) {
             storeErrorHandler(FETCH_REFERRAL_DATA, true)(error);

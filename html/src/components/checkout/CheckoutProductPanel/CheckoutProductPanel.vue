@@ -12,6 +12,7 @@
                         v-for="(recipient, index) in recipients"
                         :key="recipient.id"
                         :selected="selectedRecipient && isEqualObject(recipient, selectedRecipient)"
+                        :show-check="recipients.length > 1"
                         @cardClick="onSetRecipient(recipient)"
                         @btnClick="onChangeRecipient(recipient, index)"
                     >
@@ -174,6 +175,9 @@
                             <v-svg name="visa" width="40" height="24" />
                             <v-svg name="mastercard" width="40" height="24" />
                             <v-svg name="mir" width="40" height="24" />
+                            <v-svg name="apple" width="40" height="24" />
+                            <v-svg name="google" width="40" height="24" />
+                            <v-svg name="yandex" width="56" height="24" />
                         </div>
                     </checkout-option-card>
                 </ul>
@@ -298,7 +302,7 @@
                             name="agreement"
                             @change="onSetAgreement($event)"
                         >
-                            Я согласен с условиями <router-link to="/">заказа и доставки</router-link>
+                            Я согласен с <router-link to="/">условиями оферты</router-link> и <router-link to="/">политикой конфиденциальности</router-link>
                         </v-check>
                         <transition name="slide-in-bottom" mode="out-in">
                             <div class="status-color-error" :key="agreementError" v-if="agreementError">
@@ -441,7 +445,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import validationMixin, { required } from '@plugins/validation';
 import { formatPhoneNumber, getPosition } from '@util';
 import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '@enums/checkout';
-import { requestStatus, modalName } from '@enums';
+import { requestStatus, modalName, dayOfTheWeek } from '@enums';
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
 
 import _cloneDeep from 'lodash/cloneDeep';
@@ -454,6 +458,9 @@ import '@images/sprites/payment/bonus.svg';
 import '@images/sprites/payment/visa.svg';
 import '@images/sprites/payment/mastercard.svg';
 import '@images/sprites/payment/mir.svg';
+import '@images/sprites/payment/apple.svg';
+import '@images/sprites/payment/google.svg';
+import '@images/sprites/payment/yandex.svg';
 import '@images/sprites/plus.svg';
 import '@images/sprites/edit.svg';
 import '@images/sprites/gift.svg';
@@ -724,7 +731,14 @@ export default {
         generateChunkNote(chunkItem) {
             const options = { month: 'long', day: 'numeric' };
             const date = new Date(chunkItem.selectedDate);
-            return date.toLocaleDateString(this[LOCALE], options);
+            const today = new Date().getDate();
+            let additionalText = ``;
+
+            if (today === date.getDate()) additionalText = `сегодня`;
+            else if (today + 1 === date.getDate()) additionalText = `завтра`;
+            else additionalText = dayOfTheWeek[date.getDay()];
+
+            return `${date.toLocaleDateString(this[LOCALE], options)}, ${additionalText}`;
         },
 
         generatePackageNote(deliveryType) {

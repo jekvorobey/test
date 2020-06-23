@@ -35,7 +35,7 @@ const main = {
         },
 
         made_by: 'Сделано в Гринсайте',
-        rights: '© 2019 «Бессовестно Талантливый»',
+        rights: '© 2020 «Бессовестно Талантливый»',
         terms_of_use: 'Пользовательское соглашение',
         offer: 'Оферта',
     },
@@ -61,7 +61,7 @@ const main = {
         [billingOperationType.EARNING]: 'Начисление',
         [billingOperationType.PAYMENT]: 'Оплата',
         [billingOperationType.REFUND]: 'Возврат',
-        [billingOperationType.WITHDRAW]: 'Вывод стредств',
+        [billingOperationType.WITHDRAW]: 'Вывод средств',
         [billingOperationType.ADJUSTMENT]: 'Корректировка',
     },
 
@@ -230,7 +230,7 @@ const main = {
         },
 
         groups: {
-            profile: 'Личный кабинет',
+            profile: 'Мой профиль',
             business: 'Мой бизнес',
             training: 'Обучение',
         },
@@ -244,7 +244,7 @@ const main = {
         },
 
         routes: {
-            Cabinet: 'Личный кабинет',
+            Cabinet: 'Личные данные',
             Preferences: 'Мои предпочтения',
             Addresses: 'Адреса доставки',
             Payment: 'Способы оплаты',

@@ -16,7 +16,7 @@
             <v-svg v-else id="catalog-product-list-card-empty" name="logo" width="48" height="48" />
             <div class="catalog-product-list-card__controls">
                 <buy-button
-                    v-if="showBuyBtn"
+                    v-if="showBuyBtn && !isTablet"
                     class="btn--outline catalog-product-list-card__controls-btn"
                     @click.prevent="onBuyButtonClick"
                 >
@@ -164,6 +164,10 @@ export default {
                 this.item.code,
                 this.referralCode
             );
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 

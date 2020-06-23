@@ -1,6 +1,6 @@
 import { $logger } from '@services';
 import { responseStatus } from '@enums';
-import { storeErrorHandler } from '@util/store';
+import store, { storeErrorHandler } from '@util/store';
 
 import {
     checkSession,
@@ -154,11 +154,12 @@ export default {
     },
 
     async [FETCH_UNREAD_MESSAGES]({ commit }) {
+        const messages = await getUnreadMesagesCount();
         try {
             const { count } = await getUnreadMesagesCount();
             commit(SET_UNREAD_MESSAGES, count);
         } catch(error) {
             storeErrorHandler(FETCH_UNREAD_MESSAGES)(error);
         }
-    }
+    },
 };

@@ -15,6 +15,7 @@ export const REFERRAL_DATA = 'referralData';
 export const REFERRER_ID = 'referrerId';
 export const REFERRAL_ORDER_DETAILS = 'referralOrderDetails';
 export const ORDER_DIRECTION = 'orderDirection';
+export const ORDER_FILTER_FIELD = 'orderFilterField';
 export const ORDER_FIELD = 'orderField';
 export const ACTIVE_PAGE = 'activePage';
 
@@ -34,6 +35,7 @@ export default function createModule() {
             [REFERRAL_ORDER_DETAILS]: {},
 
             [ORDER_DIRECTION]: sortDirections.DESC,
+            [ORDER_FILTER_FIELD]: null,
             [ORDER_FIELD]: referralOrderSortFields.NAME,
             [ACTIVE_PAGE]: DEFAULT_PAGE,
         },

@@ -3,8 +3,9 @@
         <div class="container product-groups-view__header">
             <breadcrumbs class="container container--tablet-lg product-groups-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
-                    Главная
-                </breadcrumb-item>
+                    <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                    <span v-else>Главная</span></breadcrumb-item
+                >
                 <breadcrumb-item key="sets" :to="{ path: $route.path }">
                     {{ $t(`productGroups.title.${type}`) }}
                 </breadcrumb-item>
@@ -84,6 +85,7 @@
 import VButton from '@controls/VButton/VButton.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
@@ -113,6 +115,9 @@ import { MIN_SCROLL_VALUE } from '@constants';
 import { registerModuleIfNotExists } from '@util/store';
 import { generateCategoryUrl } from '@util/catalog';
 import _debounce from 'lodash/debounce';
+
+import '@images/sprites/home.svg';
+
 import './ProductGroups.css';
 
 const sliderOptions = {
@@ -259,7 +264,7 @@ export default {
 
         // если все загружено, пропускаем
         if (loadPath === fullPath && type === toType)
-            next(vm => {
+            next((vm) => {
                 if (!vm.$isServer && vm[SCROLL]) {
                     window.scrollTo({
                         top: 0,
@@ -274,7 +279,7 @@ export default {
                 .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, { type: toType, page: fetchPage, orderField })
                 .then(() => {
                     $store.dispatch(`${PRODUCT_GROUPS_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                         if (!vm.$isServer && vm[SCROLL]) {
                             window.scrollTo({
@@ -283,8 +288,8 @@ export default {
                         }
                     });
                 })
-                .catch(error => {
-                    next(vm => {
+                .catch((error) => {
+                    next((vm) => {
                         $progress.fail();
                         $progress.finish();
                     });

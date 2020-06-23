@@ -8,7 +8,10 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.BRANDS)"
-                        :disabled="actualBrands.length === availableBrands.length"
+                        :disabled="
+                            actualBrands.length === availableBrands.length ||
+                            (brandsSame && prefType === preferenceType.PROFESSIONAL)
+                        "
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
@@ -17,7 +20,9 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onDeleteAll(preferenceEntityTypes.BRANDS)"
-                        :disabled="actualBrands.length === 0"
+                        :disabled="
+                            actualBrands.length === 0 || (brandsSame && prefType === preferenceType.PROFESSIONAL)
+                        "
                     >
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Удалить все</span>
@@ -34,7 +39,16 @@
                     Профессиональные предпочтения совпадают с личными
                 </v-check>
 
-                <transition-group tag="ul" class="preferences-view__panel-tags" name="tag-item">
+                <div v-if="brandsSame && prefType === preferenceType.PROFESSIONAL">
+                    <h3 class="preferences-view__panel-hl">
+                        Выбранные бренды
+                    </h3>
+                    <p class="preferences-view__panel-list">
+                        {{ brandList }}
+                    </p>
+                </div>
+
+                <transition-group tag="ul" class="preferences-view__panel-tags" name="tag-item" v-else>
                     <tag-item
                         class="preferences-view__panel-tags-item"
                         v-for="(item, index) in actualBrands"
@@ -53,7 +67,10 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.CATEGORIES)"
-                        :disabled="actualCategories.length === availableCategories.length"
+                        :disabled="
+                            actualCategories.length === availableCategories.length ||
+                            (categoriesSame && prefType === preferenceType.PROFESSIONAL)
+                        "
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
@@ -62,7 +79,10 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onDeleteAll(preferenceEntityTypes.CATEGORIES)"
-                        :disabled="actualCategories.length === 0"
+                        :disabled="
+                            actualCategories.length === 0 ||
+                            (categoriesSame && prefType === preferenceType.PROFESSIONAL)
+                        "
                     >
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Удалить все</span>
@@ -79,7 +99,16 @@
                     Профессиональные предпочтения совпадают с личными
                 </v-check>
 
-                <transition-group tag="ul" class="preferences-view__panel-tags" name="tag-item">
+                <div v-if="categoriesSame && prefType === preferenceType.PROFESSIONAL">
+                    <h3 class="preferences-view__panel-hl">
+                        Выбранные категории
+                    </h3>
+                    <p class="preferences-view__panel-list">
+                        {{ categoryList }}
+                    </p>
+                </div>
+
+                <transition-group tag="ul" class="preferences-view__panel-tags" name="tag-item" v-else>
                     <tag-item
                         class="preferences-view__panel-tags-item"
                         v-for="(item, index) in actualCategories"
@@ -191,6 +220,14 @@ export default {
 
         iconSize() {
             return this.$mq.tablet ? 24 : 16;
+        },
+
+        brandList() {
+            return this.actualBrands.length ? this.actualBrands.map(brand => brand.name).join(', ') : '';
+        },
+
+        categoryList() {
+            return this.actualCategories.length ? this.actualCategories.map(category => category.name).join(', ') : '';
         },
     },
 
@@ -339,6 +376,8 @@ export default {
             .then(() => {
                 $store.dispatch(`${PREFERENCES_MODULE_PATH}/${SET_TYPE}`, prefType);
                 next(vm => {
+                    vm.brandsSame = false;
+                    vm.categoriesSame = false;
                     $progress.finish();
                 });
             })
