@@ -73,8 +73,8 @@
                             v-if="!isTabletLg"
                             label="title"
                             track-by="id"
-                            v-model="filterValue"
-                            :options="filterOptions"
+                            v-model="orderFilterValue"
+                            :options="orderFilterOptions"
                             :searchable="false"
                             :allow-empty="false"
                             :show-labels="false"
@@ -281,11 +281,11 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { fileExtension, sortDirections, modalName, themeCodes } from '@enums';
 import { referralOrderSortFields } from '@enums/profile';
-import { filterFields } from '@enums/order';
+import { filterField } from '@enums/order';
 import { DEFAULT_PAGE } from '@constants';
-import { digit2DateSettings } from '@settings';
+import { digit2DateSettings, numericYearDateSettings } from '@settings';
 import { baseChartOptions } from '@settings/profile';
-import { preparePrice, shortNumberFormat, saveToClipboard, dateToString } from '@util';
+import { preparePrice, shortNumberFormat, saveToClipboard } from '@util';
 import { generatePictureSourcePath } from '@util/file';
 import { generateReferralLink } from '@util/profile';
 import { getOrderFilterDate } from '@util/order';
@@ -318,15 +318,15 @@ export default {
     },
 
     data() {
-        const filterOptions = [
-            { id: 1, title: 'Все время', field: filterFields.ALL_TIME },
-            { id: 2, title: 'За год', field: filterFields.YEAR },
-            { id: 3, title: 'За месяц', field: filterFields.MONTH },
-            { id: 4, title: 'За день', field: filterFields.DAY },
+        const orderFilterOptions = [
+            { id: 1, title: 'Все время', field: filterField.ALL_TIME },
+            { id: 2, title: 'За год', field: filterField.YEAR },
+            { id: 3, title: 'За месяц', field: filterField.MONTH },
+            { id: 4, title: 'За день', field: filterField.DAY },
         ];
         return {
-            filterValue: filterOptions[0],
-            filterOptions,
+            orderFilterValue: orderFilterOptions[0],
+            orderFilterOptions,
             isMounted: false,
             showMore: false,
 
@@ -409,11 +409,11 @@ export default {
     },
 
     watch: {
-        filterValue(value, oldValue) {
+        orderFilterValue(value, oldValue) {
             if (value !== oldValue) {
                 this.$router.replace({
                     path: this.$route.path,
-                    query: { filterField: value.field },
+                    query: { orderFilterField: value.field },
                 });
             }
         },
@@ -476,6 +476,10 @@ export default {
                 },
             });
         },
+
+        setOrderFilterValue(field) {
+            this.orderFilterValue = this.orderFilterOptions.find(o => o.field === field) || this.orderFilterOptions[0];
+        },
     },
 
     async serverPrefetch() {
@@ -486,7 +490,6 @@ export default {
                     page = DEFAULT_PAGE,
                     orderField = referralOrderSortFields.NAME,
                     orderDirection = sortDirections.DESC,
-                    filterField,
                 },
             } = this.$route;
 
@@ -504,18 +507,28 @@ export default {
                 page = DEFAULT_PAGE,
                 orderField = referralOrderSortFields.NAME,
                 orderDirection = sortDirections.DESC,
+                orderFilterField,
             },
         } = to;
 
         const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
 
+        const date = new Date(getOrderFilterDate(orderFilterField)).toLocaleDateString(numericYearDateSettings);
+
         if (loadPath === fullPath) next();
         else {
             $progress.start();
             $store
-                .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`, { page, orderField, orderDirection })
+                .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`, {
+                    page,
+                    orderField,
+                    orderDirection,
+                    orderFilterField,
+                    date,
+                })
                 .then(() => {
                     next(vm => {
+                        vm.setOrderFilterValue(orderFilterField);
                         $progress.finish();
                     });
                 })
@@ -540,20 +553,23 @@ export default {
                 page = DEFAULT_PAGE,
                 orderField = referralOrderSortFields.NAME,
                 orderDirection = sortDirections.DESC,
-                filterField,
+                orderFilterField,
             },
         } = to;
 
-        const orderFilterField = new Date(getOrderFilterDate(this.filterValue.field)).toLocaleDateString(
-            this[LOCALE],
-            digit2DateSettings
-        );
-
-        console.log(orderFilterField);
+        const date = new Date(getOrderFilterDate(orderFilterField)).toLocaleDateString(numericYearDateSettings);
 
         try {
             this.$progress.start();
-            await this[FETCH_ORDERS]({ page, orderField, orderDirection, showMore: this.showMore, orderFilterField });
+            await this[FETCH_ORDERS]({
+                page,
+                orderField,
+                orderDirection,
+                showMore: this.showMore,
+                orderFilterField,
+                date,
+            });
+            this.setOrderFilterValue(orderFilterField);
             this.$progress.finish();
             next();
         } catch (error) {
@@ -565,6 +581,8 @@ export default {
     },
 
     beforeCreate() {
+        const date = new Date(getOrderFilterDate(this.orderFilterValue)).toLocaleDateString(numericYearDateSettings);
+        console.log(date);
         // this.sortFields = sortFields;
         // this.sortDirections = sortDirections;
         // this.orderPaymentStatus = orderPaymentStatus;

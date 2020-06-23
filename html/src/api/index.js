@@ -339,7 +339,6 @@ export function getReferralData() {
 }
 
 export function getReferralOrders(pageNum, perPage, sortKey = 'name', sortDirection = 'desc', filterOrderDate) {
-    console.log(filterOrderDate)
     return $http.get('/v1/lk/order-referral/orders', {
         params: {
             pageNum,

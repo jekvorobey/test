@@ -12,10 +12,11 @@ export default {
         state.loadPath = payload;
     },
 
-    [SET_QUERY_PARAMS](state, { page = 1, orderField, orderDirection }) {
+    [SET_QUERY_PARAMS](state, { page = 1, orderField, orderDirection, orderFilterField }) {
         state.activePage = Number(page);
         state.orderField = orderField;
         state.orderDirection = orderDirection;
+        state.orderFilterField = orderFilterField;
     },
 
     [SET_REFERRAL_ORDER_DETAILS](state, payload = {}) {

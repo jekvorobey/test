@@ -97,7 +97,7 @@ export const deliveryStatus = Object.freeze({
 });
 
 
-export const filterFields = Object.freeze({
+export const filterField = Object.freeze({
     ALL_TIME: 'all_time',
     YEAR: 'year',
     MONTH: 'month',

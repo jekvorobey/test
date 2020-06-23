@@ -1,4 +1,4 @@
-import { orderStatus, deliveryStatus, filterFields } from '@enums/order';
+import { orderStatus, deliveryStatus, filterField } from '@enums/order';
 
 export function getDeliveryStatusColorClass(status) {
     if (status === deliveryStatus.STATUS_DONE) return 'status-color-success';
@@ -19,15 +19,15 @@ export function getOrderFilterDate(field) {
     let date = new Date();
 
     switch (field) {
-        case filterFields.ALL_TIME:
-            return;
-        case filterFields.YEAR:
+        case filterField.ALL_TIME:
+            return null;
+        case filterField.YEAR:
             return date.setFullYear(date.getFullYear() - 1);
-        case filterFields.MONTH:
+        case filterField.MONTH:
             return date.setMonth(date.getMonth() - 1);
-        case filterFields.DAY:
+        case filterField.DAY:
             return date.setDate(date.getDate() - 1);
         default:
-            return
+            return null
     }
 }
