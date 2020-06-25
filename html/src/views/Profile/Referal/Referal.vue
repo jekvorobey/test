@@ -81,7 +81,7 @@
                         />
                     </div>
 
-                    <table class="referal-view__table" v-if="!isTabletLg">
+                    <table class="referal-view__table" v-if="!isTabletLg && orders && orders.length">
                         <colgroup>
                             <col width="40%" />
                             <col width="12%" />
@@ -95,7 +95,10 @@
                             <tr class="referal-view__table-tr referal-view__table-tr--header">
                                 <th
                                     class="referal-view__table-th"
-                                    :class="{ 'is-active': sortValue.field === item.field }"
+                                    :class="[
+                                        { 'is-active': item.field === sortValue.field },
+                                        { 'is-rotate': item.field === sortValue.field && sortDirection === 'desc' },
+                                    ]"
                                     v-for="item in sortFields"
                                     :key="item.id"
                                     :id="`order-sort-item-${item.id}`"
@@ -153,7 +156,7 @@
 
                 <filter-button class="referal-view__filter-btn" v-if="isTabletLg" @click="filterModal = !filterModal">
                     Фильтр и сортировка&nbsp;&nbsp;
-                    <span class="text-grey">4</span>
+                    <!-- <span class="text-grey">4</span> -->
                 </filter-button>
             </div>
 
@@ -227,6 +230,10 @@
             </div>
         </attention-panel>
 
+        <div v-if="!(orders && orders.length)" class="referal-view__orders-null container container--tablet-lg">
+            Заказов в этот перод времени не было
+        </div>
+
         <div class="container container--tablet-lg referal-view__controls" v-if="pagesCount > 1">
             <show-more-button
                 v-if="activePage < pagesCount"
@@ -238,6 +245,56 @@
             </show-more-button>
             <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
+
+        <transition name="fade">
+            <general-modal
+                class=""
+                type="fullscreen"
+                :is-mobile="isTabletLg"
+                header="Фильтр и сортировка"
+                v-if="filterModal && isTabletLg"
+                @close="filterModal = false"
+            >
+                <template v-slot:content>
+                    <transition name="fade-in" mode="out-in">
+                        <div class="referal-view__modal-filter-sort">
+                            <div class="referal-view__modal-filter-sort-title">Сортировка</div>
+                            <ul class="referal-view__modal-filter-sort-list">
+                                <li
+                                    class="referal-view__modal-filter-sort-item"
+                                    :class="{
+                                        'referal-view__modal-filter-sort-item--active': item === orderFilterValue,
+                                    }"
+                                    v-for="item in orderFilterOptions"
+                                    :key="item.title"
+                                >
+                                    <button
+                                        class="referal-view__modal-filter-sort-btn"
+                                        @click="setOrderFilterValue(item.field)"
+                                    >
+                                        {{ item.title }}
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="referal-view__modal-filter-controls">
+                                <v-button
+                                    class="btn--outline referal-view__modal-filter-clear-btn"
+                                    @click="clearFilterUrl"
+                                    replace
+                                    >Очистить</v-button
+                                >
+                                <v-button
+                                    class="referal-view__modal-filter-close-btn"
+                                    @click="filterModal = !filterModal"
+                                    >Показать</v-button
+                                >
+                            </div>
+                        </div>
+                    </transition>
+                </template>
+            </general-modal>
+        </transition>
 
         <transition name="fade">
             <message-modal v-if="$isServer || isMessageOpen" @created="onChatCreated" />
@@ -253,6 +310,7 @@ import VPagination from '@controls/VPagination/VPagination.vue';
 import VArcCounter from '@controls/VArcCounter/VArcCounter.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
@@ -314,6 +372,7 @@ export default {
         VSelect,
         VArcCounter,
         VChart,
+        GeneralModal,
 
         Price,
         InfoRow,
@@ -332,17 +391,16 @@ export default {
         ];
 
         const sortFields = [
-            { id: 1, title: 'Товар', field: referralOrderSortFields.NAME, direction: sortDirections.ASC },
-            { id: 2, title: 'Количество', field: referralOrderSortFields.QTY, direction: sortDirections.ASC },
-            { id: 3, title: 'ID реферала', field: referralOrderSortFields.CUSTOMER_ID, direction: sortDirections.ASC },
-            { id: 4, title: 'Источник', field: referralOrderSortFields.SOURCE, direction: sortDirections.ASC },
-            { id: 5, title: 'Дата заказа', field: referralOrderSortFields.ORDER_DATE, direction: sortDirections.ASC },
-            { id: 6, title: 'Сумма', field: referralOrderSortFields.PRICE_PRODUCT, direction: sortDirections.ASC },
+            { id: 1, title: 'Товар', field: referralOrderSortFields.NAME },
+            { id: 2, title: 'Количество', field: referralOrderSortFields.QTY },
+            { id: 3, title: 'ID реферала', field: referralOrderSortFields.CUSTOMER_ID },
+            { id: 4, title: 'Источник', field: referralOrderSortFields.SOURCE },
+            { id: 5, title: 'Дата заказа', field: referralOrderSortFields.ORDER_DATE },
+            { id: 6, title: 'Сумма', field: referralOrderSortFields.PRICE_PRODUCT },
             {
                 id: 7,
                 title: 'Сумма вознаграждения',
                 field: referralOrderSortFields.PRICE_COMMISSION,
-                direction: sortDirections.DESC,
             },
         ];
 
@@ -351,8 +409,10 @@ export default {
             orderFilterOptions,
             sortFields,
             sortValue: sortFields[0],
+            sortDirection: sortDirections.ASC,
             isMounted: false,
             showMore: false,
+            filterModal: false,
 
             chartOptions: {
                 ...baseChartOptions,
@@ -438,8 +498,8 @@ export default {
                 this.$router.replace({
                     path: this.$route.path,
                     query: {
+                        ...this.$route.query,
                         orderFilterField: value.field,
-                        orderField: this.sortValue.field,
                     },
                 });
             }
@@ -450,8 +510,20 @@ export default {
                 this.$router.replace({
                     path: this.$route.path,
                     query: {
-                        orderFilterField: this.orderFilterValue.field,
+                        ...this.$route.query,
                         orderField: value.field,
+                    },
+                });
+            }
+        },
+
+        sortDirection(value, oldValue) {
+            if (value !== oldValue) {
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: {
+                        ...this.$route.query,
+                        orderDirection: value,
                     },
                 });
             }
@@ -521,9 +593,23 @@ export default {
         },
 
         setSortValue(field) {
-            console.log(field);
-            this.sortValue = this.sortFields.find(o => o.field === field) || this.sortFields[0];
-            console.log(this.sortValue);
+            if (field === undefined) return;
+            if (this.sortValue.field !== field) {
+                this.sortValue = this.sortFields.find(o => o.field === field);
+                this.sortDirection = sortDirections.ASC;
+            } else this.setSortDirection();
+        },
+
+        setSortDirection() {
+            this.sortDirection === sortDirections.ASC
+                ? (this.sortDirection = sortDirections.DESC)
+                : (this.sortDirection = sortDirections.ASC);
+        },
+
+        clearFilterUrl() {
+            this.$router.replace({
+                path: this.$route.path,
+            });
         },
     },
 
@@ -564,9 +650,9 @@ export default {
                 })
                 .then(() => {
                     next(vm => {
+                        $progress.finish();
                         vm.setOrderFilterValue(orderFilterField);
                         vm.setSortValue(orderField);
-                        $progress.finish();
                     });
                 })
                 .catch(thrown => {
@@ -601,8 +687,8 @@ export default {
                 orderFilterField,
                 date,
             });
-            this.setOrderFilterValue(orderFilterField);
-            this.setSortValue(orderField);
+            // this.setOrderFilterValue(orderFilterField);
+            // this.setSortValue(orderField);
             this.$progress.finish();
             next();
         } catch (error) {
@@ -614,6 +700,10 @@ export default {
     },
 
     beforeMount() {
+        const { orderFilterField, orderField, orderDirection } = this.$route.query;
+        this.setOrderFilterValue(orderFilterField);
+        this.setSortValue(orderField);
+        if (orderDirection === 'desc') this.sortDirection = orderDirection;
         // this.sortFields = sortFields;
         // this.sortDirections = sortDirections;
         // this.orderPaymentStatus = orderPaymentStatus;
@@ -621,7 +711,6 @@ export default {
 
     mounted() {
         this.isMounted = true;
-        console.log(this.sortValue);
     },
 };
 </script>

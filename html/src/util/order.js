@@ -1,5 +1,6 @@
 import { orderStatus, deliveryStatus, filterField } from '@enums/order';
 import { numericYearDateSettings } from '@settings';
+import { dateToString } from '@util/index'
 
 export function getDeliveryStatusColorClass(status) {
     if (status === deliveryStatus.STATUS_DONE) return 'status-color-success';
@@ -33,5 +34,5 @@ export function getOrderFilterDate(field) {
         }
     };
 
-    return getDate(field) ? getDate(field).toLocaleDateString(numericYearDateSettings) : null;
+    return getDate(field) ? dateToString(getDate(field)) : null;
 }
