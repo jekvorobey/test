@@ -24,14 +24,6 @@
                     >
                         <v-input
                             class="portfolio-edit-modal__list-column"
-                            v-model="v.name.$model"
-                            placeholder="Описание"
-                            :show-error="false"
-                            :error="nameError(v.name)"
-                        >{{ index == 0 ? 'Название' : null }}</v-input>
-
-                        <v-input
-                            class="portfolio-edit-modal__list-column"
                             v-model="v.link.$model"
                             placeholder="Добавить ссылку"
                             :show-error="false"
@@ -48,6 +40,14 @@
                                 </button>
                             </template>
                         </v-input>
+
+                        <v-input
+                            class="portfolio-edit-modal__list-column"
+                            v-model="v.name.$model"
+                            placeholder="Введиие описание"
+                            :show-error="false"
+                            :error="nameError(v.name)"
+                        >{{ index == 0 ? 'Описание ссылки' : null }}</v-input>
                     </li>
                 </ul>
 
