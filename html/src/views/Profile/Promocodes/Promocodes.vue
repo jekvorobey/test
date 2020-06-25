@@ -12,6 +12,7 @@
                     key-field="value"
                     name="promocodeStatus"
                     @input="onStatusChanged"
+                    v-if="items && items.length"
                 />
 
                 <button class="btn btn--outline promocodes-view__header-btn" @click="onPromocodeRequest">
