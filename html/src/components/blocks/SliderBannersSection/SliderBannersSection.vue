@@ -10,28 +10,28 @@
                             :item="banner"
                         >
                             <template v-if="banner.desktopImage">
+                                <source :data-srcset="getWebpImageWithRetina(banner.desktopImage)" media="(min-width: 1024px)" />
                                 <source
                                     :data-srcset="banner.desktopImage.webp"
                                     type="image/webp"
                                     media="(min-width: 1024px)"
                                 />
-                                <source :data-srcset="getWebpImageWithRetina(banner.desktopImage)" media="(min-width: 1024px)" />
                             </template>
                             <template v-if="banner.tabletImage">
+                                <source :data-srcset="getWebpImageWithRetina(banner.tabletImage)" media="(min-width: 768px)" />
                                 <source
                                     :data-srcset="banner.tabletImage.webp"
                                     type="image/webp"
                                     media="(min-width: 768px)"
                                 />
-                                <source :data-srcset="getWebpImageWithRetina(banner.tabletImage)" media="(min-width: 768px)" />
                             </template>
                             <template v-if="banner.mobileImage">
+                                <source :data-srcset="getWebpImageWithRetina(banner.mobileImage)" media="(min-width: 320px)" />
                                 <source
                                     :data-srcset="banner.mobileImage.webp"
                                     type="image/webp"
                                     media="(min-width: 320px)"
                                 />
-                                <source :data-srcset="getWebpImageWithRetina(banner.mobileImage)" media="(min-width: 320px)" />
                             </template>
                             <img class="blur-up lazyload v-picture__img" :data-src="banner.defaultImage" alt="" />
                         </catalog-banner-card>
