@@ -1017,7 +1017,7 @@ export default {
 
         buyBtnText() {
             if (!this.canBuy) return 'Нет в наличии';
-            return this.inCart ? 'В корзине' : 'Добавить в корзину';
+            return this.inCart ? 'В корзине' : 'Купить';
         },
 
         productGalleryOptions() {
