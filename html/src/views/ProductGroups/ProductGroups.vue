@@ -61,6 +61,7 @@
             </section>
         </template>
 
+        <!-- #62050
         <section class="section product-groups-view__section product-groups-view__seo">
             <div class="container product-groups-view__seo-container">
                 <h2 class="product-groups-view__section-hl product-groups-view__seo-hl">Блок SEO текста</h2>
@@ -77,7 +78,7 @@
                     </template>
                 </v-expander>
             </div>
-        </section>
+        </section> -->
     </section>
 </template>
 

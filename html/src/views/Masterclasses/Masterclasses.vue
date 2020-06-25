@@ -78,6 +78,7 @@
             </div>
         </section>
 
+        <!-- #62050
         <section class="section masterclasses-view__section masterclasses-view__seo">
             <div class="container masterclasses-view__seo-container">
                 <h2 class="masterclasses-view__section-hl masterclasses-view__seo-hl">Блок SEO текста</h2>
@@ -94,7 +95,7 @@
                     </template>
                 </v-expander>
             </div>
-        </section>
+        </section> -->
     </section>
 </template>
 

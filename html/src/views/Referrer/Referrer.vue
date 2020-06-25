@@ -46,6 +46,7 @@
             </div>
         </section>
 
+        <!-- #62050
         <section class="section referrer-view__section referrer-view__seo">
             <div class="container referrer-view__seo-container">
                 <h2 class="referrer-view__section-hl referrer-view__seo-hl">Блок SEO текста</h2>
@@ -62,7 +63,7 @@
                     </template>
                 </v-expander>
             </div>
-        </section>
+        </section> -->
     </section>
 </template>
 

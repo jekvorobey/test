@@ -172,6 +172,7 @@
             </modal>
         </transition>
 
+        <!-- 62050
         <section class="section catalog-view__section catalog-view__seo">
             <div class="container catalog-view__seo-container">
                 <h2 class="catalog-view__section-hl catalog-view__seo-hl">Блок SEO текста</h2>
@@ -185,7 +186,7 @@
                     <template v-slot:btn="{ isExpanded }">{{ isExpanded ? 'Скрыть' : 'Показать больше' }}</template>
                 </v-expander>
             </div>
-        </section>
+        </section> -->
     </section>
 </template>
 
