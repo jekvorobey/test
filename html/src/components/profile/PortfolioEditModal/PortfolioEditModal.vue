@@ -44,7 +44,7 @@
                         <v-input
                             class="portfolio-edit-modal__list-column"
                             v-model="v.name.$model"
-                            placeholder="Введиие описание"
+                            placeholder="Введите описание"
                             :show-error="false"
                             :error="nameError(v.name)"
                         >{{ index == 0 ? 'Описание ссылки' : null }}</v-input>
