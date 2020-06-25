@@ -23,13 +23,14 @@
                         :disabled="
                             actualBrands.length === 0 || (brandsSame && prefType === preferenceType.PROFESSIONAL)
                         "
+                        v-if="actualBrands.length"
                     >
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Удалить все</span>
                     </v-link>
                 </div>
             </template>
-            <div class="container container--tablet-lg">
+            <div class="container container--tablet-lg" v-if="actualBrands.length">
                 <v-check
                     v-if="prefType === preferenceType.PROFESSIONAL"
                     v-model="brandsSame"
@@ -58,6 +59,13 @@
                     />
                 </transition-group>
             </div>
+            <div class="container container--tablet-lg preferences-view__empty-container" v-else>
+                <v-svg name="info-middle" width="24" height="24" />
+                <span class="preferences-view__empty-text">
+                    Вы ещё не добавляли предпочтения по брендам
+                </span>
+                <v-button class="btn--outline" @click="onAddEntities(preferenceEntityTypes.BRANDS)">Добавить</v-button>
+            </div>
         </info-panel>
 
         <info-panel class="preferences-view__panel" header="Категории">
@@ -83,13 +91,14 @@
                             actualCategories.length === 0 ||
                             (categoriesSame && prefType === preferenceType.PROFESSIONAL)
                         "
+                        v-if="actualCategories.length"
                     >
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Удалить все</span>
                     </v-link>
                 </div>
             </template>
-            <div class="container container--tablet-lg">
+            <div class="container container--tablet-lg" v-if="actualCategories.length">
                 <v-check
                     v-if="prefType === preferenceType.PROFESSIONAL"
                     v-model="categoriesSame"
@@ -118,6 +127,13 @@
                     />
                 </transition-group>
             </div>
+            <div class="container container--tablet-lg preferences-view__empty-container" v-else>
+                <v-svg name="info-middle" width="24" height="24" />
+                <span class="preferences-view__empty-text">
+                    Вы ещё не добавляли предпочтения по категориям продуктов
+                </span>
+                <v-button class="btn--outline" @click="onAddEntities(preferenceEntityTypes.CATEGORIES)">Добавить</v-button>
+            </div>
         </info-panel>
 
         <transition name="fade">
@@ -130,6 +146,8 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
+import VButton from '@controls/VButton/VButton.vue';
+
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import TagItem from '@components/TagItem/TagItem.vue';
 
@@ -164,6 +182,7 @@ import { preferenceEntityTypes, preferenceType } from '@enums/profile';
 import { modalName } from '@enums';
 import '@images/sprites/cross.svg';
 import '@images/sprites/plus-small.svg';
+import '@images/sprites/info-middle.svg';
 import './Preferences.css';
 
 const PREFERENCES_MODULE_PATH = `${PROFILE_MODULE}/${PREFERENCES_MODULE}`;
@@ -184,6 +203,7 @@ export default {
         VSvg,
         VLink,
         VCheck,
+        VButton,
 
         InfoPanel,
         TagItem,
