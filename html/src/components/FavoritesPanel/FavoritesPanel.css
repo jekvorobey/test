@@ -1,0 +1,42 @@
+.favorites-panel {
+    min-width: 544px;
+
+    .general-popup-panel__header {
+        align-items: flex-start;
+        margin-bottom: calc(var(--gs) * 3);
+        justify-content: space-between;
+    }
+
+    .general-popup-panel__body {
+        display: block;
+    }
+
+    .general-popup-panel__bottom {
+        display: block;
+    }
+
+    .tooltip-arrow {
+        display: none;
+    }
+
+    &__preloader {
+        display: flex;
+        margin: 0 auto;
+    }
+
+    &__list {
+        padding-right: calc(var(--gs) * 2);
+        width: 100%;
+        max-height: 624px;
+        overflow: auto;
+
+        &-item {
+            padding: calc(var(--gs) * 2) 0;
+            border-bottom: 1px solid var(--cl-divider-grey);
+
+            &:last-of-type {
+                border-bottom: none;
+            }
+        }
+    }
+}

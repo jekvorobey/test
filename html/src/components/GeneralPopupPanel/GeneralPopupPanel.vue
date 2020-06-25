@@ -6,6 +6,8 @@
         :placement="placement"
         :open="open"
         :disabled="disabled"
+        @apply-show="applyShow"
+        @apply-hide="applyHide"
         @hide="onHide"
     >
         <slot />
@@ -95,6 +97,14 @@ export default {
     methods: {
         onHide() {
             this.$emit('hide');
+        },
+
+        applyShow() {
+            this.$emit('applyShow');
+        },
+
+        applyHide() {
+            this.$emit('applyHide');
         },
 
         onClose() {

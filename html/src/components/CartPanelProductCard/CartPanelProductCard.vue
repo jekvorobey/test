@@ -1,5 +1,5 @@
 <template>
-    <li class="cart-panel-product-card">
+    <li class="cart-panel-product-card" :class="isFavorite && 'cart-panel-product-card--favorites'">
         <router-link v-if="href" class="cart-panel-product-card__img" :to="href">
             <v-picture :key="image.id" v-if="image && image.id">
                 <source :data-srcset="desktopImage" type="image/webp" />
@@ -26,6 +26,14 @@
                 />
             </div>
         </div>
+        <buy-button
+            v-if="isFavorite"
+            class="btn--outline product-bundle-panel__btn"
+            @click.prevent="onBuyButtonClick"
+            :disabled="insideBasket"
+        >
+            {{ insideBasket ? 'В корзине' : 'В корзину' }}
+        </buy-button>
     </li>
 </template>
 
@@ -35,6 +43,7 @@ import VLink from '@controls/VLink/VLink.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import Price from '@components/Price/Price.vue';
+import BuyButton from '@components/BuyButton/BuyButton.vue';
 
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
@@ -52,6 +61,7 @@ export default {
         VPicture,
 
         Price,
+        BuyButton,
     },
 
     props: {
@@ -82,8 +92,20 @@ export default {
             type: [Object, String],
         },
 
+        stock: {
+            type: [Object, String],
+        },
+
         oldPrice: {
             type: [Object, String],
+        },
+
+        isFavorite: {
+            type: Boolean,
+        },
+
+        insideBasket: {
+            type: Boolean,
         },
     },
 
@@ -94,12 +116,17 @@ export default {
         },
 
         defaultImage() {
-            if (this.image && this.image.id)
-                return generatePictureSourcePath(300, 300, this.image.id);
+            if (this.image && this.image.id) return generatePictureSourcePath(300, 300, this.image.id);
         },
 
         isTablet() {
             return this.$mq.tablet;
+        },
+    },
+
+    methods: {
+        onBuyButtonClick() {
+            this.$emit('add-item', { id: this.offerId, storeId: this.stock.storeId, type: this.type });
         },
     },
 };
