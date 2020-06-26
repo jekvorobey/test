@@ -49,14 +49,16 @@
                     :cluster-options="clusterOptions"
                     showAllMarkers
                 >
-                    <ymap-marker
-                        v-for="point in filteredPickupPoints"
-                        :key="`${point.id}-${point.methodID}`"
-                        :marker-id="`marker-${point.id}`"
-                        :coords="point.map.coords"
-                        :icon="markerIcon"
-                        cluster-name="default-cluster"
-                    />
+                    <template v-if="filteredPickupPoints.length">
+                        <ymap-marker
+                            v-for="point in filteredPickupPoints"
+                            :key="`${point.id}-${point.methodID}`"
+                            :marker-id="`marker-${point.id}`"
+                            :coords="point.map.coords"
+                            :icon="markerIcon"
+                            cluster-name="default-cluster"
+                        />
+                    </template>
                 </yandex-map>
             </div>
 
@@ -113,41 +115,50 @@
                 </v-button>
             </div>
 
-            <div
-                class="checkout-pickup-point-modal__filter"
-                v-if="(!isTabletLg || activeTab === 1) && !selectedPickupPoint"
-            >
-                <div class="container checkout-pickup-point-modal__filter-header">
-                    <h3 class="checkout-pickup-point-modal__filter-header-hl" v-if="!isTabletLg">
-                        Выбор пункта выдачи
-                    </h3>
-                    <div class="checkout-pickup-point-modal__filter-header-controls">
-                        <!-- <v-select placeholder="Станция метро" :options="[]" /> -->
-                        <v-select
-                            v-model="selectedDeliveryMethod"
-                            placeholder="Тип пункта выдачи"
-                            track-by="id"
-                            label="title"
-                            :options="deliveryMethods"
-                            :searchable="false"
-                        />
+            <template v-if="filteredPickupPoints.length">
+                <div
+                    class="checkout-pickup-point-modal__filter"
+                    v-if="(!isTabletLg || activeTab === 1) && !selectedPickupPoint"
+                >
+                    <div class="container checkout-pickup-point-modal__filter-header">
+                        <h3 class="checkout-pickup-point-modal__filter-header-hl" v-if="!isTabletLg">
+                            Выбор пункта выдачи
+                        </h3>
+                        <div class="checkout-pickup-point-modal__filter-header-controls">
+                            <!-- <v-select placeholder="Станция метро" :options="[]" /> -->
+                            <v-select
+                                v-model="selectedDeliveryMethod"
+                                placeholder="Тип пункта выдачи"
+                                track-by="id"
+                                label="title"
+                                :options="deliveryMethods"
+                                :searchable="false"
+                            />
+                        </div>
                     </div>
-                </div>
 
-                <ul class="checkout-pickup-point-modal__filter-list" v-scroll-lock="isOpen">
-                    <checkout-option-card
-                        class="checkout-pickup-point-modal__filter-list-item"
-                        v-for="point in filteredPickupPoints"
-                        :key="point.id"
-                        readonly
-                        @cardClick="onShowPoint(point)"
-                    >
-                        <p class="text-bold">{{ point.title }}</p>
-                        <p>{{ point.name }}</p>
-                        <p class="text-grey text-sm">{{ point.startDate }}</p>
-                    </checkout-option-card>
-                </ul>
-            </div>
+                    <ul class="checkout-pickup-point-modal__filter-list" v-scroll-lock="isOpen">
+                        <checkout-option-card
+                            class="checkout-pickup-point-modal__filter-list-item"
+                            v-for="point in filteredPickupPoints"
+                            :key="point.id"
+                            readonly
+                            @cardClick="onShowPoint(point)"
+                        >
+                            <p class="text-bold">{{ point.title }}</p>
+                            <p>{{ point.name }}</p>
+                            <p class="text-grey text-sm">{{ point.startDate }}</p>
+                        </checkout-option-card>
+                    </ul>
+                </div>
+            </template>
+            <template v-else>
+                <div class="checkout-pickup-point-modal__filter">
+                    <span class="checkout-pickup-point-modal__filter-empty-text">
+                        Не найдено ни одного пункта самовывоза.
+                    </span>
+                </div>
+            </template>
         </template>
     </general-modal>
 </template>

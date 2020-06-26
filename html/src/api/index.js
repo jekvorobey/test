@@ -117,10 +117,11 @@ export function getSocialLink({ backUrl, driver, redirectUrl }) {
     });
 }
 
-export function setCity({ name, fias_id }) {
+export function setCity({ name, fias_id, region_fias_id }) {
     return $http.put('/v1/auth/city', {
         name,
         fias_id,
+        region_fias_id,
     });
 }
 
