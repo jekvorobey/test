@@ -71,7 +71,7 @@
                             <h1 class="catalog-view__main-header-hl">
                                 {{ activeCategory ? activeCategory.name : 'Все категории' }}
                             </h1>
-                            <p class="text-grey catalog-view__main-header-text">{{ range }} продуктов</p>
+                            <p class="text-grey catalog-view__main-header-text">{{ range }} {{ productName }}</p>
                         </div>
 
                         <v-select
@@ -243,6 +243,7 @@ import {
     BREADCRUMBS,
 } from '@store/modules/Catalog/getters';
 
+import { pluralize } from '@util';
 import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { registerModuleIfNotExists } from '@util/store';
@@ -250,7 +251,7 @@ import { createNotFoundRoute } from '@util/router';
 import { productGroupTypes } from '@enums/product';
 import { sortFields } from '@enums/catalog';
 import { sortDirections, fileExtension, httpCodes } from '@enums';
-import { MIN_SCROLL_VALUE } from '@constants';
+import { MIN_SCROLL_VALUE, SCROLL_CATALOG_VALUE } from '@constants';
 
 import '@plugins/sticky';
 import '@images/sprites/cross-small.svg';
@@ -315,8 +316,8 @@ export default {
         ]),
         ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE, RANGE]),
         ...mapState('route', {
-            code: (state) => state.params.code,
-            entityCode: (state) => state.params.entityCode,
+            code: state => state.params.code,
+            entityCode: state => state.params.entityCode,
         }),
 
         isFiltersPage() {
@@ -386,6 +387,10 @@ export default {
             const { type, entityCode, code } = this;
             return generateCategoryUrl(type, entityCode, code);
         },
+
+        productName() {
+            return pluralize(this.range, ['продукт', 'продукта', 'продуктов']);
+        },
     },
 
     watch: {
@@ -428,7 +433,7 @@ export default {
 
         setSortValue(field, direction) {
             this.sortValue =
-                this.sortOptions.find((o) => o.field === field && o.direction === direction) || this.sortOptions[0];
+                this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
         },
 
         onClickDeleteTag(value) {
@@ -492,10 +497,10 @@ export default {
 
                 if (!showMore && page !== fromPage)
                     this.scrollTo({
-                        top: MIN_SCROLL_VALUE + 1,
+                        top: SCROLL_CATALOG_VALUE + 1,
                         behavior: 'smooth',
                     });
-
+                console.log(SCROLL_CATALOG_VALUE);
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
             } catch (thrown) {
                 if (thrown && thrown.isCancel === true) return;
@@ -523,7 +528,7 @@ export default {
 
         // если все загружено, пропускаем
         if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode)
-            next((vm) => vm.setSortValue(orderField, orderDirection));
+            next(vm => vm.setSortValue(orderField, orderDirection));
         else {
             const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
 
@@ -542,9 +547,9 @@ export default {
                     orderField,
                     orderDirection,
                 })
-                .then((data) => {
+                .then(data => {
                     $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
+                    next(vm => {
                         $progress.finish();
                         vm.setSortValue(orderField, orderDirection);
 
@@ -555,7 +560,7 @@ export default {
                             });
                     });
                 })
-                .catch((thrown) => {
+                .catch(thrown => {
                     if (thrown && thrown.isCancel === true) return next();
 
                     $progress.fail();

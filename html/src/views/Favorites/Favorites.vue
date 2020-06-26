@@ -17,7 +17,8 @@
                 <h1 class="favorites-view__header-hl">
                     Избранное
                     <span class="favorites-view__header-counter" v-if="favoritesAll.length > 0">
-                        {{ favoritesAll.length }} продуктов
+                        {{ favoritesAll.length }}
+                        {{ productName }}
                     </span>
                 </h1>
                 <div class="favorites-view__filters" v-if="favorites.length > 0">
@@ -113,6 +114,8 @@ import {
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { pluralize } from '@util';
+
 import { DEFAULT_PAGE } from '@constants';
 import { modalName, sortDirections } from '@enums';
 
@@ -154,6 +157,10 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        productName() {
+            return pluralize(this.favoritesAll.length, ['продукт', 'продукта', 'продуктов']);
         },
     },
 
@@ -207,7 +214,7 @@ export default {
 
         setSortValue(field, direction) {
             this.sortValue =
-                this.sortOptions.find((o) => o.field === field && o.direction === direction) || this.sortOptions[0];
+                this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
         },
     },
 
@@ -233,16 +240,16 @@ export default {
                 orderField,
                 orderDirection,
             })
-            .then((data) => {
+            .then(data => {
                 $store.dispatch(`${FAVORITES_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                next((vm) => {
+                next(vm => {
                     vm.setSortValue(orderField, orderDirection);
                     $progress.finish();
                 });
             })
-            .catch((thrown) => {
+            .catch(thrown => {
                 if (thrown && thrown.isCancel === true) return true;
-                next((vm) => {
+                next(vm => {
                     $progress.fail();
                 });
             });

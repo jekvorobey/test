@@ -38,6 +38,36 @@ export function rawPhone(str) {
 }
 
 /**
+ * Склонение слов в заисимости от числа
+ *
+ * @param  {string} number Исходное число по которому склоняют
+ * @param  {Array} words Варианты склонения пример ['товар','товара','товаров']
+ * @return {string} Str.
+ */
+
+export function pluralize(number, words) {
+    const word = (number) => {
+        number = Math.abs(number) % 100;
+        const numberTwo = number % 10;
+        switch (numberTwo) {
+            case 2:
+            case 3:
+            case 4:
+                return words[1];
+                break;
+            case 1:
+                return words[0];
+                break;
+            default:
+                return words[2];
+        }
+    };
+
+    return word(number)
+}
+
+
+/**
  * Скролит контейнер на определенное значение с анимацией.
  *
  * @param {*} element DOM Элемент.
@@ -269,4 +299,5 @@ export default {
     getRandomInt,
     getRandomIntInclusive,
     getPosition,
+    pluralize
 };
