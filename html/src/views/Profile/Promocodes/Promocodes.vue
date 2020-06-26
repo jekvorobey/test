@@ -71,7 +71,8 @@
                                 <template v-else> – </template>
                             </td>
                             <td class="promocodes-view__table-td">
-                                <template v-if="promocode.type !== promocodeType.PRODUCT">Все товары</template>
+                                <template v-if="promocode.type === promocodeType.DELIVERY">Бесплатная доставка</template>
+                                <template v-else-if="promocode.type !== promocodeType.PRODUCT">Все товары</template>
                                 <div
                                     class="promocodes-view__category-panel"
                                     v-else-if="promocode.brands && promocode.brands.items.length > 0"
