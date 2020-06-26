@@ -248,7 +248,7 @@
 
         <transition name="fade">
             <general-modal
-                class=""
+                class="referal-view__modal-filter"
                 type="fullscreen"
                 :is-mobile="isTabletLg"
                 header="Фильтр и сортировка"
@@ -687,8 +687,6 @@ export default {
                 orderFilterField,
                 date,
             });
-            // this.setOrderFilterValue(orderFilterField);
-            // this.setSortValue(orderField);
             this.$progress.finish();
             next();
         } catch (error) {
