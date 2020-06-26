@@ -3,7 +3,7 @@
         <div class="container">
             <div class="nav-panel__main">
                 <group-list class="nav-panel__main-list" :items="categoriesCatalog" />
-                <catalog-banner-card class="nav-panel__main-banner" :item="banner" />
+                <!-- <catalog-banner-card class="nav-panel__main-banner" :item="banner" /> -->
             </div>
         </div>
     </div>
