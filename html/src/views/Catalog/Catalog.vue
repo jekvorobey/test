@@ -21,7 +21,7 @@
                 >
             </breadcrumbs>
 
-            <catalog-banner-card class="catalog-view__banner" v-if="productGroup.banner" :item="productGroup.banner">
+            <!-- <catalog-banner-card class="catalog-view__banner" v-if="productGroup.banner" :item="productGroup.banner">
                 <template v-if="desktopImg">
                     <source :data-srcset="desktopImg.webp" type="image/webp" media="(min-width: 1024px)" />
                     <source :data-srcset="desktopImg.orig" media="(min-width: 1024px)" />
@@ -35,7 +35,7 @@
                     <source :data-srcset="mobileImg.orig" media="(min-width: 320px)" />
                 </template>
                 <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt />
-            </catalog-banner-card>
+            </catalog-banner-card> -->
         </div>
         <section class="section">
             <div class="container catalog-view__grid" data-v-sticky-container>
