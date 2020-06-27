@@ -126,14 +126,17 @@
                                     </h3>
 
                                     <v-link
-                                        v-if="chunkItem.availableDates && chunkItem.availableDates.length > 1"
+                                        v-if="
+                                            chunkItem.availableDateTimes &&
+                                            Object.keys(chunkItem.availableDateTimes).length > 1
+                                        "
                                         class="checkout-product-panel__item-header-link"
                                         tag="button"
                                         @click="onChangeDate(chunkItem.id)"
                                     >
                                         <v-svg name="edit" width="16" height="16" />
                                         <template v-if="!isTablet">
-                                            &nbsp;&nbsp;Изменить дату
+                                            &nbsp;&nbsp;Изменить дату и время
                                         </template>
                                     </v-link>
                                 </div>
@@ -302,7 +305,8 @@
                             name="agreement"
                             @change="onSetAgreement($event)"
                         >
-                            Я согласен с <router-link to="/">условиями оферты</router-link> и <router-link to="/">политикой конфиденциальности</router-link>
+                            Я согласен с <router-link to="/">условиями оферты</router-link> и
+                            <router-link to="/">политикой конфиденциальности</router-link>
                         </v-check>
                         <transition name="slide-in-bottom" mode="out-in">
                             <div class="status-color-error" :key="agreementError" v-if="agreementError">
@@ -467,10 +471,27 @@ import '@images/sprites/gift.svg';
 import './CheckoutProductPanel.css';
 
 function prepareChunkItem(chunkItem) {
+    const selectedDate = chunkItem.selectedDate ? new Date(chunkItem.selectedDate) : null;
+    const selectedTime = !chunkItem.deliveryTimeStart
+        ? chunkItem.availableDateTimes &&
+          chunkItem.selectedDate &&
+          chunkItem.availableDateTimes[chunkItem.selectedDate] &&
+          chunkItem.availableDateTimes[chunkItem.selectedDate][0]
+        : null;
+    let time = {};
+
+    if (selectedTime) {
+        time = {
+            deliveryTimeStart: selectedTime.from,
+            deliveryTimeEnd: selectedTime.to,
+            deliveryTimeCode: selectedTime.code,
+        };
+    }
+
     return {
         ...chunkItem,
-        selectedDate: new Date(chunkItem.selectedDate),
-        availableDates: chunkItem.availableDates.map(d => new Date(d)),
+        ...time,
+        selectedDate,
     };
 }
 
@@ -516,7 +537,7 @@ export default {
             case receiveMethods.PICKUP:
                 return {
                     [AGREEMENT]: {
-                        valid: value => value === true,
+                        valid: (value) => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -533,7 +554,7 @@ export default {
             default:
                 return {
                     [AGREEMENT]: {
-                        valid: value => value === true,
+                        valid: (value) => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -559,16 +580,16 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
         ...mapState(MODAL_MODULE, {
-            isPickupPointModalOpen: state =>
+            isPickupPointModalOpen: (state) =>
                 state[MODALS][CheckoutPickupPointModal.name] && state[MODALS][CheckoutPickupPointModal.name].open,
-            isDateModalOpen: state =>
+            isDateModalOpen: (state) =>
                 state[MODALS][CheckoutDateModal.name] && state[MODALS][CheckoutDateModal.name].open,
-            isAddressModalOpen: state =>
+            isAddressModalOpen: (state) =>
                 state[MODALS][modalName.profile.ADDRESS_EDIT] && state[MODALS][modalName.profile.ADDRESS_EDIT].open,
-            isRecipientModalOpen: state =>
+            isRecipientModalOpen: (state) =>
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT] &&
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT].open,
         }),
@@ -733,12 +754,17 @@ export default {
             const date = new Date(chunkItem.selectedDate);
             const today = new Date().getDate();
             let additionalText = ``;
-
-            if (today === date.getDate()) additionalText = `сегодня`;
-            else if (today + 1 === date.getDate()) additionalText = `завтра`;
-            else additionalText = dayOfTheWeek[date.getDay()];
-
-            return `${date.toLocaleDateString(this[LOCALE], options)}, ${additionalText}`;
+            if (chunkItem.selectedDate) {
+                if (today === date.getDate()) additionalText = `сегодня`;
+                else if (today + 1 === date.getDate()) additionalText = `завтра`;
+                else additionalText = dayOfTheWeek[date.getDay()];
+                const timeString =
+                    chunkItem.deliveryTimeStart && chunkItem.deliveryTimeEnd
+                        ? `, с ${chunkItem.deliveryTimeStart}:00 до ${chunkItem.deliveryTimeEnd}:00`
+                        : '';
+                return `${date.toLocaleDateString(this[LOCALE], options)}, ${additionalText}${timeString}`;
+            }
+            return 'Для данного адреса сейчас нет доступных дат доставки';
         },
 
         generatePackageNote(deliveryType) {
@@ -750,7 +776,7 @@ export default {
             }
 
             const note = 'Доставим';
-            const uniqueDates = Array.from(new Set(deliveryType.items.map(i => i.selectedDate)));
+            const uniqueDates = Array.from(new Set(deliveryType.items.map((i) => i.selectedDate)));
             return uniqueDates.reduce(
                 (accum, current, index) =>
                     accum + `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(this[LOCALE], options)}`,
@@ -771,22 +797,31 @@ export default {
         },
 
         onSetDeliveryType(id) {
-            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find(t => t.id === id);
+            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find((t) => t.id === id);
             this[SET_DELIVERY_TYPE](selectedType);
         },
 
         onDateChanged(state) {
-            this[CHANGE_CHUNK_DATE]({ id: state.id, selectedDate: state.selectedDate[0] });
+            this[CHANGE_CHUNK_DATE]({
+                id: state.id,
+                selectedDate: state.selectedDate[0],
+                deliveryTimeStart: state.deliveryTimeStart,
+                deliveryTimeEnd: state.deliveryTimeEnd,
+                deliveryTimeCode: state.deliveryTimeCode,
+            });
         },
 
         onChangeDate(chunkItemId) {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
-            const chunkItem = deliveryType.items.find(i => i.id === chunkItemId);
+            const chunkItem = deliveryType.items.find((i) => i.id === chunkItemId);
 
             const state = {
                 id: chunkItem.id,
                 selectedDate: [chunkItem.selectedDate],
-                availableDates: [...chunkItem.availableDates],
+                deliveryTimeStart: chunkItem.deliveryTimeStart,
+                deliveryTimeEnd: chunkItem.deliveryTimeEnd,
+                deliveryTimeCode: chunkItem.deliveryTimeCode,
+                availableDateTimes: { ...chunkItem.availableDateTimes },
             };
 
             this[CHANGE_MODAL_STATE]({
@@ -868,6 +903,26 @@ export default {
 
     mounted() {
         this.debounce_scrollToError = _debounce(this.scrollToError, SCROLL_DEBOUNCE_TIME);
+    },
+
+    watch: {
+        computedDeliveryTypes(value) {
+            const deliveryType = this[SELECTED_DELIVERY_TYPE];
+            if (value) {
+                value.forEach((el) => {
+                    if (el) {
+                        if (el.items)
+                            el.items.forEach((delivery) => {
+                                if (deliveryType) {
+                                    this[CHANGE_CHUNK_DATE]({
+                                        ...delivery,
+                                    });
+                                }
+                            });
+                    }
+                });
+            }
+        },
     },
 };
 </script>

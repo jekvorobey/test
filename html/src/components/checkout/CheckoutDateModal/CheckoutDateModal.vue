@@ -3,11 +3,11 @@
         v-if="isOpen"
         class="checkout-date-modal"
         @close="onClose"
-        header="Дата доставки"
+        header="Дата и время доставки"
         :is-mobile="isTablet"
     >
         <template v-slot:content>
-            <h3 class="checkout-date-modal__hl">Дата доставки</h3>
+            <h3 class="checkout-date-modal__hl">Дата и время доставки</h3>
             <div class="container checkout-date-modal__datepicker">
                 <v-datepicker
                     mode="single"
@@ -20,7 +20,19 @@
                     inline
                 />
             </div>
-
+            <div class="container checkout-date-modal__select" v-if="timeSlots.length">
+                <p class="checkout-date-modal__select-title">Время доставки</p>
+                <v-select
+                    v-model="slotTime"
+                    :searchable="false"
+                    placeholder="Выберите время"
+                    label="name"
+                    track-by="value"
+                    deselectLabel=""
+                    :allow-empty="false"
+                    :options="timeSlots"
+                ></v-select>
+            </div>
             <div class="checkout-date-modal__submit">
                 <v-button class="checkout-date-modal__submit-btn" @click="onChanged">Подтвердить доставку</v-button>
             </div>
@@ -30,6 +42,7 @@
 <script>
 import VButton from '@controls/VButton/VButton.vue';
 import VDatepicker from '@controls/VDatepicker/VDatepicker.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
@@ -52,12 +65,16 @@ export default {
         VButton,
         VDatepicker,
         GeneralModal,
+        VSelect,
     },
 
     data() {
         return {
             selectedDate: null,
-            availableDates: [],
+            availableDateTimes: {},
+            slotTime: {
+                result: {},
+            },
         };
     },
 
@@ -71,6 +88,10 @@ export default {
             state: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
+        availableDates() {
+            return Object.keys(this.availableDateTimes);
+        },
+
         maxDate() {
             return this.availableDates.length > 0 ? this.availableDates[this.availableDates.length - 1] : null;
         },
@@ -82,6 +103,22 @@ export default {
         isTablet() {
             return this.$mq.tablet;
         },
+
+        timeSlots() {
+            const slotDate = this.selectedDate && this.selectedDate[0];
+            const times = slotDate && this.availableDateTimes && this.availableDateTimes[slotDate];
+
+            if (slotDate && times) {
+                return times.map(({ from, to, code }, key) => {
+                    return {
+                        name: `С ${from}:00 до ${to}:00`,
+                        value: code,
+                        result: { deliveryTimeStart: from, deliveryTimeEnd: to, deliveryTimeCode: code },
+                    };
+                });
+            }
+            return [];
+        },
     },
 
     methods: {
@@ -92,7 +129,11 @@ export default {
         },
 
         onChanged() {
-            this.$emit('changed', { ...this.state, selectedDate: this.selectedDate });
+            this.$emit('changed', {
+                ...this.state,
+                ...this.slotTime.result,
+                selectedDate: this.selectedDate,
+            });
             this.onClose();
         },
 
@@ -104,14 +145,27 @@ export default {
 
     watch: {
         state(value) {
-            this.availableDates = this.state.availableDates;
+            this.availableDateTimes = this.state.availableDateTimes;
             this.selectedDate = this.state.selectedDate;
+        },
+        timeSlots(value) {
+            if (value && value[0]) this.slotTime = value[0];
         },
     },
 
     created() {
-        this.availableDates = this.state.availableDates || [];
+        const options = { month: 'numeric', day: 'numeric', year: 'numeric' };
+
+        this.availableDateTimes = this.state.availableDateTimes || {};
         this.selectedDate = this.state.selectedDate || [];
+
+        if (this.selectedDate.length && this.selectedDate[0].getMonth) {
+            this.selectedDate[0] = this.selectedDate[0]
+                .toLocaleDateString(this[LOCALE], options)
+                .split('.')
+                .reverse()
+                .join('-');
+        }
     },
 };
 </script>
