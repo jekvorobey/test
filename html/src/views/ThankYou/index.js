@@ -15,7 +15,7 @@ export default {
      */
     routes: [
         {
-            path: '/thank-you',
+            path: '/thank-you/:type',
             component: ThankYouAsync,
         },
     ],

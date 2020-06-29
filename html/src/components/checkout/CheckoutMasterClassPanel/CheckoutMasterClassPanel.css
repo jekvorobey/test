@@ -5,6 +5,7 @@
         margin-bottom: calc(var(--gs) * 7);
 
         @media (--tablet) {
+            flex-wrap: nowrap;
             margin-bottom: calc(var(--gs) * 4);
         }
     }
@@ -179,6 +180,23 @@
             .text-bold,
             .text-medium {
                 font-size: 20px;
+            }
+        }
+
+        &-masterclass {
+            padding-top: calc(var(--gs) * 3);
+
+            .master-class-card__img {
+                @media (--tablet-min) {
+                    width: 20%;
+                    max-height: calc(var(--gs) * 12);
+                }
+            }
+
+            .master-class-card__body {
+                @media (--tablet-min) {
+                    padding: var(--gs) 0 0;
+                }
             }
         }
     }

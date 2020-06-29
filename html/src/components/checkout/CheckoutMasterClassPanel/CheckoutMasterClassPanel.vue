@@ -34,6 +34,12 @@
                 </h2>
             </div>
 
+            <master-class-card
+                class="checkout-master-class-panel__item-masterclass"
+                v-bind="masterclass"
+                :is-small="isTablet"
+            />
+
             <ul class="checkout-master-class-panel__item-list">
                 <checkout-option-card
                     class="checkout-master-class-panel__item-card"
@@ -138,6 +144,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
+import MasterClassCard from '@components/MasterClassCard/MasterClassCard.vue';
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
@@ -186,6 +193,8 @@ import '@images/sprites/payment/yandex.svg';
 import '@images/sprites/plus.svg';
 import './CheckoutMasterClassPanel.css';
 
+import profileMasterClassImg1 from '@images/mock/profileMasterClass1.png';
+
 export default {
     name: 'checkout-master-class-panel',
     components: {
@@ -196,12 +205,24 @@ export default {
         VCheck,
         VSpinner,
 
+        MasterClassCard,
         CheckoutOptionCard,
         AttentionPanel,
     },
 
     data() {
         return {
+            masterclass: {
+                name: 'Свадебный стилист',
+                date: '3 сентября (пт), 12:00',
+                address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
+                image: profileMasterClassImg1,
+                price: {
+                    value: 5000,
+                    currency: 'RUB',
+                },
+            },
+
             tickets: [
                 {
                     id: 1,

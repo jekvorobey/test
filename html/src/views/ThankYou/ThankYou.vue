@@ -36,7 +36,7 @@
                             </ul>
                         </info-row>
                     </ul>
-                    <v-button class="thank-you-view__panel-btn" to="/">На главную страницу</v-button>
+                    <v-button class="btn--outline thank-you-view__panel-btn" to="/">На главную страницу</v-button>
                 </div>
             </info-panel>
 
@@ -54,8 +54,17 @@
                             v-bind="item"
                         />
                     </ul>
+                    <ul v-else class="thank-you-view__panel-list">
+                        <package-product-card
+                            class="thank-you-view__panel-card"
+                            v-for="item in items"
+                            v-bind="item"
+                            :key="item.id"
+                            :show-count="false"
+                        />
+                    </ul>
 
-                    <v-button class="thank-you-view__panel-btn">Оформить заказ</v-button>
+                    <v-button class="thank-you-view__panel-btn">Перейти в оформлению</v-button>
                 </div>
             </info-panel>
         </div>
@@ -67,9 +76,10 @@ import VButton from '@controls/VButton/VButton.vue';
 
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
-
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 import MasterClassCard from '@components/MasterClassCard/MasterClassCard.vue';
+import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
+
 import profileMasterClassImg1 from '@images/mock/profileMasterClass1.png';
 import profileMasterClassImg2 from '@images/mock/profileMasterClass2.png';
 import profileMasterClassImg3 from '@images/mock/profileMasterClass3.png';
@@ -91,6 +101,7 @@ export default {
 
         AttentionPanel,
 
+        PackageProductCard,
         MasterClassCard,
     },
 
@@ -115,6 +126,26 @@ export default {
                     ],
                 },
             },
+
+            products: [
+                {
+                    id: 196,
+                    name: 'Щетка круглая тон 13 73 мм',
+                    code: 'shchetka-kruglaya-ton-13-73-mm',
+                    categoryCodes: ['dlya_volos', 'instrumenty', 'nozhnicy'],
+                    type: 'product',
+                    rating: 3,
+                    tags: [],
+                    isNew: false,
+                    bonus: 0,
+                    bundleId: 0,
+                    active: true,
+                    stock: { qty: 5, storeId: 4 },
+                    price: { value: 9641, currency: 'RUB' },
+                    image: { id: 3, sourceExt: 'jpg' },
+                    productId: 200,
+                },
+            ],
 
             masterClasses: [
                 {
@@ -145,7 +176,7 @@ export default {
 
     computed: {
         ...mapState('route', {
-            type: state => state.params.type,
+            type: (state) => state.params.type,
         }),
 
         items() {

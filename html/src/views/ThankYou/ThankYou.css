@@ -54,11 +54,19 @@
                 margin-top: calc(var(--gs) * 2);
             }
 
-            .master-class-card__img {
-                width: 144px;
+            .package-product-card__img {
+                padding: calc(var(--gs) * 2);
+                width: calc(var(--gs) * 12);
+                max-width: calc(var(--gs) * 12);
                 max-height: calc(var(--gs) * 12);
             }
 
+            .master-class-card__img {
+                width: calc(var(--gs) * 18);
+                max-height: calc(var(--gs) * 12);
+            }
+
+            .package-product-card__body,
             .master-class-card__body {
                 justify-content: space-between;
                 padding: 0;
@@ -66,7 +74,7 @@
         }
 
         &-btn {
-            margin-top: calc(var(--gs) * 4);
+            margin-top: calc(var(--gs) * 3);
         }
     }
 }
