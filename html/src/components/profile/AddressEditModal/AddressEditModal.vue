@@ -2,6 +2,7 @@
     <general-modal
         class="address-edit-modal"
         :type="isTabletLg ? 'fullscreen' : 'wide'"
+        header="Выбор пункта выдачи"
         @close="onClose"
         :is-mobile="isTabletLg"
     >
@@ -94,16 +95,14 @@
                     </v-suggestion>
                     <v-input
                         v-model="address.flat"
-                        class="address-edit-modal__form-column address-edit-modal__form-column--30"
+                        class="address-edit-modal__form-column address-edit-modal__form-column--30 address-edit-modal__form-column--50"
                     >
                         Квартира/офис
                     </v-input>
-                </div>
 
-                <div class="address-edit-modal__form-row">
                     <v-input
                         v-model="address.floor"
-                        class="address-edit-modal__form-column address-edit-modal__form-column--30"
+                        class="address-edit-modal__form-column address-edit-modal__form-column--30 address-edit-modal__form-column--50"
                         type="number"
                         min="1"
                     >
@@ -112,7 +111,7 @@
 
                     <v-input
                         v-model="address.porch"
-                        class="address-edit-modal__form-column address-edit-modal__form-column--30"
+                        class="address-edit-modal__form-column address-edit-modal__form-column--30 address-edit-modal__form-column--50"
                         type="number"
                         min="1"
                     >
@@ -121,7 +120,7 @@
 
                     <v-input
                         v-model="address.intercom"
-                        class="address-edit-modal__form-column address-edit-modal__form-column--30"
+                        class="address-edit-modal__form-column address-edit-modal__form-column--30 address-edit-modal__form-column--50"
                         min="1"
                     >
                         Домофон
@@ -132,9 +131,9 @@
                     Комментарий курьеру
                 </v-input>
 
-                <div>
-                    <v-button class="address-edit-modal__form-submit" @click.prevent="onSubmit">
-                        Сохранить
+                <div class="address-edit-modal__form-submit">
+                    <v-button class="address-edit-modal__form-submit-btn" @click.prevent="onSubmit">
+                        Привезти сюда
                     </v-button>
                 </div>
             </div>
@@ -254,7 +253,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
         ...mapGetters(GEO_MODULE, [SELECTED_CITY_COORDS]),
 
@@ -388,14 +387,15 @@ export default {
                 radius_meters: 1000,
             });
 
-            const selected = suggestions.find((s) => s.data.house);
+            const selected = suggestions.find(s => s.data.house);
             this.onApplyAddress(selected);
         },
 
         formatAddress(item) {
-            return `${
-                item.data.street_with_type || item.data.city_district_with_type || item.data.settlement_with_type || ''
-            } ${item.data.house_type} ${item.data.house} ${
+            return `${item.data.street_with_type ||
+                item.data.city_district_with_type ||
+                item.data.settlement_with_type ||
+                ''} ${item.data.house_type} ${item.data.house} ${
                 item.data.block ? `${item.data.block_type} ${item.data.block}` : ''
             }`;
         },
