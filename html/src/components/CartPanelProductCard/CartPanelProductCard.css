@@ -67,4 +67,18 @@
             }
         }
     }
+
+    &__btn {
+        margin-left: calc(var(--gs) * 4);
+        &--loader {
+            &::before {
+                content: svg-load('preloader.svg');
+                position: absolute;
+                left: -40px;
+                top: 10%;
+                width: 30px;
+                height: 30px;
+            }
+        }
+    }
 }

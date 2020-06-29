@@ -23,6 +23,7 @@
                     :old-price="product.oldPrice"
                     :href="generateItemProductUrl(product)"
                     :insideBasket="product.insideBasket"
+                    :isLoadButton="product.isLoadButton"
                     @add-item="onAddToCart(product)"
                     isFavorite
                 />
@@ -78,6 +79,7 @@ export default {
             page: 1,
             listener: null,
             debounce_favorites: null,
+            favoritesBtns: [],
         };
     },
 
@@ -98,11 +100,14 @@ export default {
         favoritesList() {
             if (this.cartTypes && this.cartTypes[0]) {
                 const cartItems = this.cartTypes[0].items;
-                return this.allFavorites.map(fav => {
+                return this.allFavorites.map((fav) => {
                     const basketInclude = cartItems.find(({ p }) => fav.id === (p && p.id));
+                    const btnLoader = this.favoritesBtns.find(({ id }) => id === fav.id);
+
                     return {
                         ...fav,
                         insideBasket: !!basketInclude,
+                        isLoadButton: (btnLoader && btnLoader.isLoadButton) || false,
                     };
                 });
             }
@@ -122,14 +127,24 @@ export default {
             setTimeout(() => {
                 const listElm = this.$refs.favorites_panel;
                 if (listElm && this.isLoadMore) {
-                    this.listener = e => {
+                    this.listener = (e) => {
                         if (listElm.scrollTop + listElm.clientHeight >= listElm.scrollHeight - 150) {
                             this.debounce_favorites();
                         }
                     };
                     listElm.addEventListener('scroll', this.listener);
+                    this.genShowBtns();
                 }
             }, 700);
+        },
+
+        genShowBtns() {
+            this.favoritesBtns = this.favoritesList.map((fav) => {
+                return {
+                    id: fav.id,
+                    isLoadButton: false,
+                };
+            });
         },
 
         applyHide() {
@@ -139,8 +154,19 @@ export default {
             }
         },
 
-        onAddToCart({ id, stock, type }) {
-            this[ADD_CART_ITEM]({ offerId: id, storeId: stock.storeId });
+        async onAddToCart({ id, stock, type }) {
+            const btnLoaderIndex = this.favoritesBtns.findIndex((fav) => id === fav.id);
+            this.favoritesBtns.splice(btnLoaderIndex, 1, {
+                ...this.favoritesBtns[btnLoaderIndex],
+                isLoadButton: true,
+            });
+
+            await this[ADD_CART_ITEM]({ offerId: id, storeId: stock.storeId });
+
+            this.favoritesBtns.splice(btnLoaderIndex, 1, {
+                ...this.favoritesBtns[btnLoaderIndex],
+                isLoadButton: false,
+            });
         },
 
         generateItemProductUrl(product) {
