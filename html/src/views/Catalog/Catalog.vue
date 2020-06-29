@@ -1,6 +1,6 @@
 <template>
     <section class="section catalog-view">
-        <div class="container catalog-view__header">
+        <div ref="catalogHeader" class="container catalog-view__header">
             <breadcrumbs class="catalog-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
@@ -251,7 +251,7 @@ import { createNotFoundRoute } from '@util/router';
 import { productGroupTypes } from '@enums/product';
 import { sortFields } from '@enums/catalog';
 import { sortDirections, fileExtension, httpCodes } from '@enums';
-import { MIN_SCROLL_VALUE, SCROLL_CATALOG_VALUE } from '@constants';
+import { MIN_SCROLL_VALUE } from '@constants';
 
 import '@plugins/sticky';
 import '@images/sprites/cross-small.svg';
@@ -497,10 +497,9 @@ export default {
 
                 if (!showMore && page !== fromPage)
                     this.scrollTo({
-                        top: SCROLL_CATALOG_VALUE + 1,
+                        top: this.$refs.catalogHeader.offsetHeight,
                         behavior: 'smooth',
                     });
-                console.log(SCROLL_CATALOG_VALUE);
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
             } catch (thrown) {
                 if (thrown && thrown.isCancel === true) return;
