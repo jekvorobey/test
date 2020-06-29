@@ -117,10 +117,11 @@ export function getSocialLink({ backUrl, driver, redirectUrl }) {
     });
 }
 
-export function setCity({ name, fias_id }) {
+export function setCity({ name, fias_id, region_fias_id }) {
     return $http.put('/v1/auth/city', {
         name,
         fias_id,
+        region_fias_id,
     });
 }
 
@@ -338,13 +339,14 @@ export function getReferralData() {
     return $http.get('/v1/lk/order-referral');
 }
 
-export function getReferralOrders(pageNum, perPage, sortKey = 'name', sortDirection = 'desc') {
+export function getReferralOrders(pageNum, perPage, sortKey = 'name', sortDirection = 'desc', filterOrderDate) {
     return $http.get('/v1/lk/order-referral/orders', {
         params: {
             pageNum,
             perPage,
             sortKey,
             sortDirection,
+            filterOrderDate,
         },
     });
 }
@@ -652,6 +654,14 @@ export function addCartBundle(bundleId, count, referrerCode) {
         bundleId,
         count,
         referrerCode,
+    });
+}
+
+export function deleteCartBundle(bundleId) {
+    return $http.delete('/v1/cart/item-bundle', {
+        data: {
+            bundleId
+        }
     });
 }
 

@@ -3,8 +3,9 @@
         <div class="container">
             <breadcrumbs class="referrer-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
-                    Главная
-                </breadcrumb-item>
+                    <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                    <span v-else>Главная</span></breadcrumb-item
+                >
                 <breadcrumb-item key="Referrer" :to="$route.fullPath">
                     {{ $route.params.code }}
                 </breadcrumb-item>
@@ -45,6 +46,7 @@
             </div>
         </section>
 
+        <!-- #62050
         <section class="section referrer-view__section referrer-view__seo">
             <div class="container referrer-view__seo-container">
                 <h2 class="referrer-view__section-hl referrer-view__seo-hl">Блок SEO текста</h2>
@@ -61,7 +63,7 @@
                     </template>
                 </v-expander>
             </div>
-        </section>
+        </section> -->
     </section>
 </template>
 
@@ -93,6 +95,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { DEFAULT_PAGE } from '@constants';
 import { modalName, sortDirections } from '@enums';
 
+import '@images/sprites/home.svg';
 import './Referrer.css';
 
 export default {
@@ -121,8 +124,12 @@ export default {
         ...mapGetters(REFERRER_MODULE, [PAGES_COUNT]),
 
         ...mapState('route', {
-            code: state => state.params.code,
+            code: (state) => state.params.code,
         }),
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
     },
 
     methods: {
@@ -157,15 +164,15 @@ export default {
             $progress.start();
             $store
                 .dispatch(`${REFERRER_MODULE}/${FETCH_REFERRER_DATA}`, { code, page })
-                .then(data => {
+                .then((data) => {
                     $store.dispatch(`${REFERRER_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                     });
                 })
-                .catch(thrown => {
+                .catch((thrown) => {
                     if (thrown && thrown.isCancel === true) return true;
-                    next(vm => {
+                    next((vm) => {
                         $progress.fail();
                     });
                 });

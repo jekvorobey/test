@@ -3,24 +3,25 @@
         <div class="container catalog-view__header">
             <breadcrumbs class="catalog-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
-                    Главная
-                </breadcrumb-item>
-                <breadcrumb-item :key="type" :to="breadcrumbRootUrl">
-                    {{ $t(`productGroups.title.${type}`) }}
-                </breadcrumb-item>
-                <breadcrumb-item v-if="entityCode" :key="entityCode" :to="generateBreadcrumbUrl(null)">
-                    {{ productGroup && productGroup.name }}
-                </breadcrumb-item>
+                    <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                    <span v-else>Главная</span></breadcrumb-item
+                >
+
+                <breadcrumb-item :key="type" :to="breadcrumbRootUrl">{{
+                    $t(`productGroups.title.${type}`)
+                }}</breadcrumb-item>
+                <breadcrumb-item v-if="entityCode" :key="entityCode" :to="generateBreadcrumbUrl(null)">{{
+                    productGroup && productGroup.name
+                }}</breadcrumb-item>
                 <breadcrumb-item
                     v-for="category in breadcrumbs"
                     :key="category.id"
                     :to="generateBreadcrumbUrl(category.code)"
+                    >{{ category.name }}</breadcrumb-item
                 >
-                    {{ category.name }}
-                </breadcrumb-item>
             </breadcrumbs>
 
-            <catalog-banner-card class="catalog-view__banner" v-if="productGroup.banner" :item="productGroup.banner">
+            <!-- <catalog-banner-card class="catalog-view__banner" v-if="productGroup.banner" :item="productGroup.banner">
                 <template v-if="desktopImg">
                     <source :data-srcset="desktopImg.webp" type="image/webp" media="(min-width: 1024px)" />
                     <source :data-srcset="desktopImg.orig" media="(min-width: 1024px)" />
@@ -33,24 +34,36 @@
                     <source :data-srcset="mobileImg.webp" type="image/webp" media="(min-width: 320px)" />
                     <source :data-srcset="mobileImg.orig" media="(min-width: 320px)" />
                 </template>
-                <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
-            </catalog-banner-card>
+                <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt />
+            </catalog-banner-card> -->
         </div>
         <section class="section">
-            <div class="container catalog-view__grid">
-                <div class="catalog-view__side-panel" v-if="!isTabletLg && categories.length > 0">
-                    <ul class="catalog-view__side-panel-categories">
-                        <category-tree-item
-                            class="catalog-view__side-panel-categories-item"
-                            v-for="category in categories"
-                            :item="category"
-                            :key="category.id"
-                        />
-                    </ul>
-                    <catalog-filter class="catalog-view__side-panel-filters" />
-                    <v-button class="btn--outline catalog-view__side-panel-clear-btn" :to="clearFilterUrl" replace>
-                        Очистить фильтры
-                    </v-button>
+            <div class="container catalog-view__grid" data-v-sticky-container>
+                <div
+                    class="catalog-view__side-panel"
+                    v-if="!isTabletLg && categories.length > 0"
+                    v-sticky="stickyOptions"
+                    ref="sticky"
+                >
+                    <div data-v-sticky-inner>
+                        <ul class="catalog-view__side-panel-categories">
+                            <category-tree-item
+                                class="catalog-view__side-panel-categories-item"
+                                v-for="category in categories"
+                                :item="category"
+                                :key="category.id"
+                            />
+                        </ul>
+
+                        <catalog-filter class="catalog-view__side-panel-filters" @updateSticky="updateSticky" />
+                        <v-button
+                            class="btn--outline catalog-view__side-panel-clear-btn"
+                            :class="!isFiltersPage && 'is-disabled'"
+                            :to="clearFilterUrl"
+                            replace
+                            >Очистить фильтры</v-button
+                        >
+                    </div>
                 </div>
                 <div class="catalog-view__main">
                     <div class="catalog-view__main-header">
@@ -58,8 +71,7 @@
                             <h1 class="catalog-view__main-header-hl">
                                 {{ activeCategory ? activeCategory.name : 'Все категории' }}
                             </h1>
-                            <!-- todo Количество товаров -->
-                            <!-- <p class="text-grey catalog-view__main-header-text">489 продуктов</p> -->
+                            <p class="text-grey catalog-view__main-header-text">{{ range }} {{ productName }}</p>
                         </div>
 
                         <v-select
@@ -103,9 +115,8 @@
                             btn-class="btn--outline catalog-view__main-controls-btn"
                             @click="onShowMore"
                             :show-preloader="showMore"
+                            >Показать ещё</show-more-button
                         >
-                            Показать ещё
-                        </show-more-button>
                         <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
                     </div>
                 </div>
@@ -150,18 +161,18 @@
                                 class="btn--outline catalog-view__modal-filter-clear-btn"
                                 :to="clearFilterUrl"
                                 replace
+                                >Очистить</v-button
                             >
-                                Очистить
-                            </v-button>
-                            <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal">
-                                Показать
-                            </v-button>
+                            <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal"
+                                >Показать</v-button
+                            >
                         </div>
                     </v-sticky>
                 </template>
             </modal>
         </transition>
 
+        <!-- 62050
         <section class="section catalog-view__section catalog-view__seo">
             <div class="container catalog-view__seo-container">
                 <h2 class="catalog-view__section-hl catalog-view__seo-hl">Блок SEO текста</h2>
@@ -172,13 +183,10 @@
                     этом. Мы заботимся о надёжных поставщиках, качестве товаров и безопасной оплате. А что делать вам?
                     Просто наслаждаться покупками. Для экономии не нужен повод, поэтому мы каждый день даём вам скидки
                     на популярные товары самых разных категорий.
-
-                    <template v-slot:btn="{ isExpanded }">
-                        {{ isExpanded ? 'Скрыть' : 'Показать больше' }}
-                    </template>
+                    <template v-slot:btn="{ isExpanded }">{{ isExpanded ? 'Скрыть' : 'Показать больше' }}</template>
                 </v-expander>
             </div>
-        </section>
+        </section> -->
     </section>
 </template>
 
@@ -223,6 +231,7 @@ import catalogModule, {
     BANNER,
     CATEGORIES,
     PRODUCT_GROUP,
+    RANGE,
 } from '@store/modules/Catalog';
 import { SET_LOAD_PATH, FETCH_CATALOG_DATA } from '@store/modules/Catalog/actions';
 import {
@@ -234,6 +243,7 @@ import {
     BREADCRUMBS,
 } from '@store/modules/Catalog/getters';
 
+import { pluralize } from '@util';
 import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { registerModuleIfNotExists } from '@util/store';
@@ -241,9 +251,11 @@ import { createNotFoundRoute } from '@util/router';
 import { productGroupTypes } from '@enums/product';
 import { sortFields } from '@enums/catalog';
 import { sortDirections, fileExtension, httpCodes } from '@enums';
-import { MIN_SCROLL_VALUE } from '@constants';
+import { MIN_SCROLL_VALUE, SCROLL_CATALOG_VALUE } from '@constants';
 
+import '@plugins/sticky';
 import '@images/sprites/cross-small.svg';
+import '@images/sprites/home.svg';
 import './Catalog.css';
 
 export default {
@@ -283,6 +295,12 @@ export default {
             sortOptions,
             filterModal: false,
             showMore: false,
+            stickyOptions: {
+                topSpacing: 60,
+                bottomSpacing: 0,
+                containerSelector: '[data-v-sticky-container]',
+                innerWrapperSelector: '[data-v-sticky-inner]',
+            },
         };
     },
 
@@ -296,11 +314,15 @@ export default {
             ROUTE_SEGMENTS,
             BREADCRUMBS,
         ]),
-        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE]),
+        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE, RANGE]),
         ...mapState('route', {
-            code: (state) => state.params.code,
-            entityCode: (state) => state.params.entityCode,
+            code: state => state.params.code,
+            entityCode: state => state.params.entityCode,
         }),
+
+        isFiltersPage() {
+            return this.$route.path.includes('filters');
+        },
 
         breadcrumbRootUrl() {
             const { type } = this;
@@ -365,12 +387,17 @@ export default {
             const { type, entityCode, code } = this;
             return generateCategoryUrl(type, entityCode, code);
         },
+
+        productName() {
+            return pluralize(this.range, ['продукт', 'продукта', 'продуктов']);
+        },
     },
 
     watch: {
         code(value) {
             const category = this[ACTIVE_CATEGORY];
             if (category) $retailRocket.addCategoryView(category.id);
+            this.updateSticky();
         },
 
         sortValue(value, oldValue) {
@@ -392,6 +419,13 @@ export default {
             if (!this.$isServer) window.scrollTo(options);
         },
 
+        updateSticky() {
+            this.$refs.sticky._stickySidebar.updateSticky();
+            setTimeout(() => {
+                this.$refs.sticky._stickySidebar.updateSticky();
+            }, 500);
+        },
+
         generateBreadcrumbUrl(categoryCode) {
             const { type, entityCode } = this;
             return { path: generateCategoryUrl(type, entityCode, categoryCode) };
@@ -399,7 +433,7 @@ export default {
 
         setSortValue(field, direction) {
             this.sortValue =
-                this.sortOptions.find((o) => o.field === field && o.direction === direction) || this.sortOptions[0];
+                this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
         },
 
         onClickDeleteTag(value) {
@@ -463,10 +497,10 @@ export default {
 
                 if (!showMore && page !== fromPage)
                     this.scrollTo({
-                        top: MIN_SCROLL_VALUE + 1,
+                        top: SCROLL_CATALOG_VALUE + 1,
                         behavior: 'smooth',
                     });
-
+                console.log(SCROLL_CATALOG_VALUE);
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
             } catch (thrown) {
                 if (thrown && thrown.isCancel === true) return;
@@ -494,7 +528,7 @@ export default {
 
         // если все загружено, пропускаем
         if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode)
-            next((vm) => vm.setSortValue(orderField, orderDirection));
+            next(vm => vm.setSortValue(orderField, orderDirection));
         else {
             const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
 
@@ -513,9 +547,9 @@ export default {
                     orderField,
                     orderDirection,
                 })
-                .then((data) => {
+                .then(data => {
                     $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
+                    next(vm => {
                         $progress.finish();
                         vm.setSortValue(orderField, orderDirection);
 
@@ -526,7 +560,7 @@ export default {
                             });
                     });
                 })
-                .catch((thrown) => {
+                .catch(thrown => {
                     if (thrown && thrown.isCancel === true) return next();
 
                     $progress.fail();

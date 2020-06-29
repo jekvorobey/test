@@ -45,10 +45,13 @@ export default {
         state.checkoutData.input.confirmationTypeID = payload;
     },
 
-    [CHANGE_CHUNK_DATE](state, { id, selectedDate }) {
+    [CHANGE_CHUNK_DATE](state, { id, selectedDate, deliveryTimeEnd, deliveryTimeStart, deliveryTimeCode }) {
         const chunkItem = state.checkoutData.input.deliveryType.items.find((i) => i.id === id);
         if (!chunkItem) return;
         chunkItem.selectedDate = selectedDate;
+        chunkItem.deliveryTimeStart = deliveryTimeStart;
+        chunkItem.deliveryTimeEnd = deliveryTimeEnd;
+        chunkItem.deliveryTimeCode = deliveryTimeCode;
     },
 
     [ADD_ADDRESS](state, payload) {

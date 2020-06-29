@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <template v-if="orders && orders.length">
+        <template v-if="(orders && orders.length) || !!sumArcData.value">
             <section class="referal-view__section referal-view__graph">
                 <h3 class="container container--tablet-lg referal-view__section-hl">Новые рефералы</h3>
                 <v-chart v-if="isMounted" type="line" :options="chartOptions" :series="series" height="350px" />
@@ -66,9 +66,22 @@
 
             <div class="container container--tablet-lg">
                 <section class="referal-view__section">
-                    <h3 class="referal-view__section-hl">История заказов рефералов</h3>
+                    <div class="referal-view__section-header">
+                        <h3 class="referal-view__section-hl">История заказов рефералов</h3>
+                        <v-select
+                            class="referal-view__section-filter"
+                            v-if="!isTabletLg"
+                            label="title"
+                            track-by="id"
+                            v-model="orderFilterValue"
+                            :options="orderFilterOptions"
+                            :searchable="false"
+                            :allow-empty="false"
+                            :show-labels="false"
+                        />
+                    </div>
 
-                    <table class="referal-view__table" v-if="!isTabletLg">
+                    <table class="referal-view__table" v-if="!isTabletLg && orders && orders.length">
                         <colgroup>
                             <col width="40%" />
                             <col width="12%" />
@@ -80,13 +93,21 @@
 
                         <thead class="referal-view__table-head">
                             <tr class="referal-view__table-tr referal-view__table-tr--header">
-                                <th class="referal-view__table-th">Товар</th>
-                                <th class="referal-view__table-th">Кол-во</th>
-                                <th class="referal-view__table-th">ID реферала</th>
-                                <th class="referal-view__table-th">Источник</th>
-                                <th class="referal-view__table-th">Дата заказа</th>
-                                <th class="referal-view__table-th">Сумма</th>
-                                <th class="referal-view__table-th">Сумма вознаграждения</th>
+                                <th
+                                    class="referal-view__table-th"
+                                    :class="[
+                                        { 'is-active': item.field === sortValue.field },
+                                        { 'is-rotate': item.field === sortValue.field && sortDirection === 'desc' },
+                                    ]"
+                                    v-for="item in sortFields"
+                                    :key="item.id"
+                                    :id="`order-sort-item-${item.id}`"
+                                >
+                                    <div class="referal-view__table-sort" @click="setSortValue(item.field)">
+                                        {{ item.title }}
+                                        <v-svg name="arrow-down-small" width="24" height="24" />
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
 
@@ -133,10 +154,10 @@
                     </table>
                 </section>
 
-                <!-- <filter-button class="referal-view__filter-btn" @click="filterModal = !filterModal">
+                <filter-button class="referal-view__filter-btn" v-if="isTabletLg" @click="filterModal = !filterModal">
                     Фильтр и сортировка&nbsp;&nbsp;
-                    <span class="text-grey">4</span>
-                </filter-button> -->
+                    <!-- <span class="text-grey">4</span> -->
+                </filter-button>
             </div>
 
             <ul class="referal-view__list" v-if="isTabletLg">
@@ -156,7 +177,7 @@
                             {{ order.name }}
                         </div>
                     </info-row>
-                    <info-row class="referal-view__list-item-row" name="Кол-во"> {{ order.qty }} шт. </info-row>
+                    <info-row class="referal-view__list-item-row" name="Количество"> {{ order.qty }} шт. </info-row>
                     <info-row class="referal-view__list-item-row" name="ID реферала">
                         <router-link :to="{ name: 'ReferalOrderDetails', params: { referalId: order.customer_id } }">
                             {{ order.customer_id }}
@@ -194,9 +215,9 @@
                         с товарами
                     </li>
                     <li class="referal-view__attention-list-item">
-                        <v-link class="referal-view__attention-link" tag="button" :to="{ name: 'Messages' }">
+                        <button class="referal-view__attention-link" @click="onPromocodeRequest">
                             запросить
-                        </v-link>
+                        </button>
                         промо-код
                     </li>
                     <li class="referal-view__attention-list-item">
@@ -209,6 +230,10 @@
             </div>
         </attention-panel>
 
+        <div v-if="!(orders && orders.length)" class="referal-view__orders-null container container--tablet-lg">
+            Заказов в этот перод времени не было
+        </div>
+
         <div class="container container--tablet-lg referal-view__controls" v-if="pagesCount > 1">
             <show-more-button
                 v-if="activePage < pagesCount"
@@ -220,6 +245,60 @@
             </show-more-button>
             <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
         </div>
+
+        <transition name="fade">
+            <general-modal
+                class="referal-view__modal-filter"
+                type="fullscreen"
+                :is-mobile="isTabletLg"
+                header="Фильтр и сортировка"
+                v-if="filterModal && isTabletLg"
+                @close="filterModal = false"
+            >
+                <template v-slot:content>
+                    <transition name="fade-in" mode="out-in">
+                        <div class="referal-view__modal-filter-sort">
+                            <div class="referal-view__modal-filter-sort-title">Сортировка</div>
+                            <ul class="referal-view__modal-filter-sort-list">
+                                <li
+                                    class="referal-view__modal-filter-sort-item"
+                                    :class="{
+                                        'referal-view__modal-filter-sort-item--active': item === orderFilterValue,
+                                    }"
+                                    v-for="item in orderFilterOptions"
+                                    :key="item.title"
+                                >
+                                    <button
+                                        class="referal-view__modal-filter-sort-btn"
+                                        @click="setOrderFilterValue(item.field)"
+                                    >
+                                        {{ item.title }}
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="referal-view__modal-filter-controls">
+                                <v-button
+                                    class="btn--outline referal-view__modal-filter-clear-btn"
+                                    @click="clearFilterUrl"
+                                    replace
+                                    >Очистить</v-button
+                                >
+                                <v-button
+                                    class="referal-view__modal-filter-close-btn"
+                                    @click="filterModal = !filterModal"
+                                    >Показать</v-button
+                                >
+                            </div>
+                        </div>
+                    </transition>
+                </template>
+            </general-modal>
+        </transition>
+
+        <transition name="fade">
+            <message-modal v-if="$isServer || isMessageOpen" @created="onChatCreated" />
+        </transition>
     </section>
 </template>
 
@@ -230,12 +309,16 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VArcCounter from '@controls/VArcCounter/VArcCounter.vue';
 import VLink from '@controls/VLink/VLink.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import FilterButton from '@components/FilterButton/FilterButton.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
+
+import MessageModal from '@components/profile/MessageModal/MessageModal.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
@@ -259,16 +342,19 @@ import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { fileExtension, sortDirections, modalName } from '@enums';
+import { fileExtension, sortDirections, modalName, themeCodes } from '@enums';
 import { referralOrderSortFields } from '@enums/profile';
+import { filterField } from '@enums/order';
 import { DEFAULT_PAGE } from '@constants';
-import { digit2DateSettings } from '@settings';
+import { digit2DateSettings, numericYearDateSettings } from '@settings';
 import { baseChartOptions } from '@settings/profile';
 import { preparePrice, shortNumberFormat, saveToClipboard } from '@util';
 import { generatePictureSourcePath } from '@util/file';
 import { generateReferralLink } from '@util/profile';
+import { getOrderFilterDate } from '@util/order';
 import { $store, $progress, $logger } from '@services';
 import '@images/sprites/logo.svg';
+import '@images/sprites/arrow-down-small.svg';
 import './Referal.css';
 
 const REFERRAL_MODULE_PATH = `${PROFILE_MODULE}/${REFERRAL_MODULE}`;
@@ -283,20 +369,50 @@ export default {
         VPicture,
         VPagination,
         VLink,
+        VSelect,
         VArcCounter,
         VChart,
+        GeneralModal,
 
         Price,
         InfoRow,
         FilterButton,
         ShowMoreButton,
         AttentionPanel,
+        MessageModal,
     },
 
     data() {
+        const orderFilterOptions = [
+            { id: 1, title: 'Все время', field: filterField.ALL_TIME },
+            { id: 2, title: 'За год', field: filterField.YEAR },
+            { id: 3, title: 'За месяц', field: filterField.MONTH },
+            { id: 4, title: 'За день', field: filterField.DAY },
+        ];
+
+        const sortFields = [
+            { id: 1, title: 'Товар', field: referralOrderSortFields.NAME },
+            { id: 2, title: 'Количество', field: referralOrderSortFields.QTY },
+            { id: 3, title: 'ID реферала', field: referralOrderSortFields.CUSTOMER_ID },
+            { id: 4, title: 'Источник', field: referralOrderSortFields.SOURCE },
+            { id: 5, title: 'Дата заказа', field: referralOrderSortFields.ORDER_DATE },
+            { id: 6, title: 'Сумма', field: referralOrderSortFields.PRICE_PRODUCT },
+            {
+                id: 7,
+                title: 'Сумма вознаграждения',
+                field: referralOrderSortFields.PRICE_COMMISSION,
+            },
+        ];
+
         return {
+            orderFilterValue: orderFilterOptions[0],
+            orderFilterOptions,
+            sortFields,
+            sortValue: sortFields[0],
+            sortDirection: sortDirections.ASC,
             isMounted: false,
             showMore: false,
+            filterModal: false,
 
             chartOptions: {
                 ...baseChartOptions,
@@ -309,6 +425,10 @@ export default {
         ...mapState(REFERRAL_MODULE_PATH, [ITEMS, ACTIVE_PAGE, REFERRAL_DATA]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
+        }),
+        ...mapState(MODAL_MODULE, {
+            isMessageOpen: state =>
+                state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
         }),
 
         ...mapGetters(REFERRAL_MODULE_PATH, [
@@ -372,6 +492,44 @@ export default {
         },
     },
 
+    watch: {
+        orderFilterValue(value, oldValue) {
+            if (value !== oldValue) {
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: {
+                        ...this.$route.query,
+                        orderFilterField: value.field,
+                    },
+                });
+            }
+        },
+
+        sortValue(value, oldValue) {
+            if (value !== oldValue) {
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: {
+                        ...this.$route.query,
+                        orderField: value.field,
+                    },
+                });
+            }
+        },
+
+        sortDirection(value, oldValue) {
+            if (value !== oldValue) {
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: {
+                        ...this.$route.query,
+                        orderDirection: value,
+                    },
+                });
+            }
+        },
+    },
+
     methods: {
         ...mapActions(REFERRAL_MODULE_PATH, [FETCH_REFERRAL_DATA, FETCH_ORDERS, SET_LOAD_PATH]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
@@ -408,21 +566,62 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
             e.target.focus();
         },
+
+        onPromocodeRequest() {
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.profile.MESSAGE,
+                open: true,
+                state: {
+                    themeCode: themeCodes.PROMOCODE,
+                },
+            });
+        },
+
+        onChatCreated() {
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state: {
+                    title: 'Уведомление',
+                    message: 'Запрос отправлен, администратор свяжется с вами в ближайшее время.',
+                },
+            });
+        },
+
+        setOrderFilterValue(field) {
+            this.orderFilterValue = this.orderFilterOptions.find(o => o.field === field) || this.orderFilterOptions[0];
+        },
+
+        setSortValue(field) {
+            if (field === undefined) return;
+            if (this.sortValue.field !== field) {
+                this.sortValue = this.sortFields.find(o => o.field === field);
+                this.sortDirection = sortDirections.ASC;
+            } else this.setSortDirection();
+        },
+
+        setSortDirection() {
+            this.sortDirection === sortDirections.ASC
+                ? (this.sortDirection = sortDirections.DESC)
+                : (this.sortDirection = sortDirections.ASC);
+        },
+
+        clearFilterUrl() {
+            this.$router.replace({
+                path: this.$route.path,
+            });
+        },
     },
 
     async serverPrefetch() {
         try {
             const {
                 fullPath,
-                query: {
-                    page = DEFAULT_PAGE,
-                    orderField = referralOrderSortFields.NAME,
-                    orderDirection = sortDirections.DESC,
-                },
+                query: { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField },
             } = this.$route;
 
-            await this[FETCH_REFERRAL_DATA]({ page, orderField, orderDirection });
-            this[SET_LOAD_PATH](fullPath);
+            // await this[FETCH_REFERRAL_DATA]({ page, orderField, orderDirection });
+            // this[SET_LOAD_PATH](fullPath);
         } catch (error) {
             $logger.error(error);
         }
@@ -431,23 +630,29 @@ export default {
     beforeRouteEnter(to, from, next) {
         const {
             fullPath,
-            query: {
-                page = DEFAULT_PAGE,
-                orderField = referralOrderSortFields.NAME,
-                orderDirection = sortDirections.DESC,
-            },
+            query: { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField },
         } = to;
 
         const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
+
+        const date = getOrderFilterDate(orderFilterField);
 
         if (loadPath === fullPath) next();
         else {
             $progress.start();
             $store
-                .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`, { page, orderField, orderDirection })
+                .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`, {
+                    page,
+                    orderField,
+                    orderDirection,
+                    orderFilterField,
+                    date,
+                })
                 .then(() => {
                     next(vm => {
                         $progress.finish();
+                        vm.setOrderFilterValue(orderFilterField);
+                        vm.setSortValue(orderField);
                     });
                 })
                 .catch(thrown => {
@@ -467,16 +672,21 @@ export default {
 
         const {
             fullPath,
-            query: {
-                page = DEFAULT_PAGE,
-                orderField = referralOrderSortFields.NAME,
-                orderDirection = sortDirections.DESC,
-            },
+            query: { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField },
         } = to;
+
+        const date = getOrderFilterDate(orderFilterField);
 
         try {
             this.$progress.start();
-            await this[FETCH_ORDERS]({ page, orderField, orderDirection, showMore: this.showMore });
+            await this[FETCH_ORDERS]({
+                page,
+                orderField,
+                orderDirection,
+                showMore: this.showMore,
+                orderFilterField,
+                date,
+            });
             this.$progress.finish();
             next();
         } catch (error) {
@@ -487,7 +697,11 @@ export default {
         this.showMore = false;
     },
 
-    beforeCreate() {
+    beforeMount() {
+        const { orderFilterField, orderField, orderDirection } = this.$route.query;
+        this.setOrderFilterValue(orderFilterField);
+        this.setSortValue(orderField);
+        if (orderDirection === 'desc') this.sortDirection = orderDirection;
         // this.sortFields = sortFields;
         // this.sortDirections = sortDirections;
         // this.orderPaymentStatus = orderPaymentStatus;

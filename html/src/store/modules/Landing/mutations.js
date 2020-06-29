@@ -129,6 +129,7 @@ export default {
                     titleText: 'Instabeauty',
                     items: state.instagramItems,
                     btnText: 'Подписаться на нас',
+                    btnLink: 'https://www.instagram.com/bessovestnotalantlivy/',
                 },
             },
         ];

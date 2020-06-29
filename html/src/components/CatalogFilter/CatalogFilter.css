@@ -10,6 +10,14 @@
             padding-top: calc(var(--gs) * 2);
         }
 
+        &-more {
+            font-weight: normal;
+            font-size: 16px;
+            border-bottom: 1px solid #141116;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
         &-range {
             padding: 0 var(--gs) calc(var(--gs) * 2);
         }
@@ -30,6 +38,12 @@
         .v-accordion__item {
             padding-top: calc(var(--gs) * 4);
             border-top: 1px solid var(--cl-divider-grey);
+
+            &:hover {
+                .v-accordion__item-btn {
+                    color: currentColor;
+                }
+            }
         }
     }
 }

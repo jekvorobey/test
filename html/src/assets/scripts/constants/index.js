@@ -4,6 +4,11 @@
 export const MIN_SCROLL_VALUE = 1;
 
 /**
+ * Скролл к началу каталога
+ */
+export const SCROLL_CATALOG_VALUE = 280;
+
+/**
  * Интервал дебаунса на обновление скролла
  */
 export const SCROLL_DEBOUNCE_TIME = 20;

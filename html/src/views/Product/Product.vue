@@ -3,8 +3,9 @@
         <div class="container">
             <breadcrumbs class="product-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
-                    Главная
-                </breadcrumb-item>
+                    <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                    <span v-else>Главная</span></breadcrumb-item
+                >
                 <breadcrumb-item key="Catalog" :to="{ name: 'Catalog' }">
                     Каталог
                 </breadcrumb-item>
@@ -578,9 +579,14 @@
                     Добавь тег @bessovestnotalantlivy в Instagram и, возможно, мы опубликуем твою фотографию
                 </div>
                 <!-- #58437 -->
-                <!-- <v-button class="btn--outline product-view__section-link product-view__instagram-link">
+                <v-button
+                    tag="a"
+                    class="btn--outline product-view__section-link product-view__instagram-link"
+                    :href="btnLink"
+                    target="_blank"
+                >
                     {{ $t('landing.subscribe') }}
-                </v-button> -->
+                </v-button>
             </div>
         </section>
 
@@ -746,6 +752,8 @@ import '@images/sprites/star-small.svg';
 import '@images/sprites/arrow-small.svg';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/logo.svg';
+import '@images/sprites/home.svg';
+
 import './Product.css';
 
 const productGalleryOptions = {
@@ -881,6 +889,7 @@ export default {
     data() {
         return {
             isPriceVisible: true,
+            btnLink: 'https://www.instagram.com/bessovestnotalantlivy/',
         };
     },
 
@@ -902,16 +911,16 @@ export default {
         ]),
 
         ...mapState(MODAL_MODULE, {
-            isGalleryOpen: state =>
+            isGalleryOpen: (state) =>
                 state[MODALS][modalName.product.GALLERY] && state[MODALS][modalName.product.GALLERY].open,
-            isModalOpen: state => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
+            isModalOpen: (state) => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
         }),
 
         ...mapState('route', {
-            code: state => state.params.code,
-            categoryCode: state => state.params.categoryCode,
-            refCode: state => state.query.refCode,
-            modal: state => state.query.modal,
+            code: (state) => state.params.code,
+            categoryCode: (state) => state.params.categoryCode,
+            refCode: (state) => state.query.refCode,
+            modal: (state) => state.query.modal,
         }),
 
         inCart() {
@@ -992,8 +1001,8 @@ export default {
                 const gallerySize = 744;
                 const tabletSize = 200;
 
-                imageMap.media = media.map(image => prepareProductImage(image, desktopSize, tabletSize));
-                imageMap.gallery = media.map(image => prepareProductImage(image, gallerySize));
+                imageMap.media = media.map((image) => prepareProductImage(image, desktopSize, tabletSize));
+                imageMap.gallery = media.map((image) => prepareProductImage(image, gallerySize));
             } else {
                 imageMap.media = [];
                 imageMap.gallery = [];
@@ -1008,7 +1017,7 @@ export default {
 
         buyBtnText() {
             if (!this.canBuy) return 'Нет в наличии';
-            return this.inCart ? 'В корзине' : 'Добавить в корзину';
+            return this.inCart ? 'В корзине' : 'Купить';
         },
 
         productGalleryOptions() {
@@ -1212,18 +1221,18 @@ export default {
         const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
         // если все загружено, пропускаем
-        if (productCode === code && referrerCode === refCode) next(vm => vm.handleModalQuery(modal));
+        if (productCode === code && referrerCode === refCode) next((vm) => vm.handleModalQuery(modal));
         else {
             $progress.start();
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
                 .then(() =>
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                         vm.handleModalQuery(modal);
                     })
                 )
-                .catch(error => {
+                .catch((error) => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
                     else next(new Error(error.message));

@@ -38,6 +38,36 @@ export function rawPhone(str) {
 }
 
 /**
+ * Склонение слов в заисимости от числа
+ *
+ * @param  {string} number Исходное число по которому склоняют
+ * @param  {Array} words Варианты склонения пример ['товар','товара','товаров']
+ * @return {string} Str.
+ */
+
+export function pluralize(number, words) {
+    const word = (number) => {
+        number = Math.abs(number) % 100;
+        const numberTwo = number % 10;
+        switch (numberTwo) {
+            case 2:
+            case 3:
+            case 4:
+                return words[1];
+                break;
+            case 1:
+                return words[0];
+                break;
+            default:
+                return words[2];
+        }
+    };
+
+    return word(number)
+}
+
+
+/**
  * Скролит контейнер на определенное значение с анимацией.
  *
  * @param {*} element DOM Элемент.
@@ -58,11 +88,11 @@ export function scrollTo(element, to, duration = 1000) {
         duration === 0
             ? () => to
             : (t, b, c, d) => {
-                  t /= d / 2;
-                  if (t < 1) return (c / 2) * t * t + b;
-                  t -= 1;
-                  return (-c / 2) * (t * (t - 2) - 1) + b;
-              };
+                t /= d / 2;
+                if (t < 1) return (c / 2) * t * t + b;
+                t -= 1;
+                return (-c / 2) * (t * (t - 2) - 1) + b;
+            };
 
     let interval;
     const animateScroll = () => {
@@ -135,10 +165,10 @@ export function preparePrice(number, decimals, dec_point, thousands_sep) {
     const kd =
         decimals && Math.abs(number - i) > 0
             ? dec_point +
-              Math.abs(number - i)
-                  .toFixed(decimals)
-                  .replace(/-/, 0)
-                  .slice(2)
+            Math.abs(number - i)
+                .toFixed(decimals)
+                .replace(/-/, 0)
+                .slice(2)
             : '';
 
     return minus + km + kw + kd;
@@ -269,4 +299,5 @@ export default {
     getRandomInt,
     getRandomIntInclusive,
     getPosition,
+    pluralize
 };

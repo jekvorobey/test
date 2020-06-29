@@ -12,7 +12,7 @@
 
             <div class="catalog-product-card__controls">
                 <buy-button
-                    v-if="showBuyBtn"
+                    v-if="showBuyBtn && !isTablet"
                     class="btn--outline catalog-product-card__controls-btn"
                     @click.prevent="onBuyButtonClick"
                 >
@@ -191,6 +191,10 @@ export default {
 
         inFavorites() {
             return this[IS_IN_FAVORITES](this.productId);
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 

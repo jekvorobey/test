@@ -137,4 +137,14 @@
             }
         }
     }
+
+    &__controls {
+        display: flex;
+        justify-content: center;
+        margin-top: calc(var(--gs) * 4);
+
+        @media (--tablet-lg) {
+            justify-content: center;
+        }
+    }
 }

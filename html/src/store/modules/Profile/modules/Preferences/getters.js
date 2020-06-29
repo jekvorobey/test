@@ -1,4 +1,5 @@
 import { preferenceType } from '@enums/profile';
+import { SAME_BRANDS, SAME_CATEGORIES } from './index';
 
 const TYPE = 'type';
 const PREFERENCES_DATA = 'preferencesData';
@@ -28,7 +29,7 @@ export default {
     },
 
     [BRANDS_MAP](state) {
-        const type = state[TYPE] || preferenceType.PROFESSIONAL;
+        const type = state[SAME_BRANDS] ? preferenceType.PERSONAL : state[TYPE]
         const brands = state[PREFERENCES_DATA][type][CUSTOMER][BRANDS] || [];
         const map = {};
         for (const brandId of brands) map[brandId] = brandId;
@@ -36,7 +37,7 @@ export default {
     },
 
     [CATEGORIES_MAP](state) {
-        const type = state[TYPE] || preferenceType.PROFESSIONAL;
+        const type = state[SAME_CATEGORIES] ? preferenceType.PERSONAL : state[TYPE]
         const categories = state[PREFERENCES_DATA][type][CUSTOMER][CATEGORIES] || [];
         const map = {};
         for (const categoryId of categories) map[categoryId] = categoryId;

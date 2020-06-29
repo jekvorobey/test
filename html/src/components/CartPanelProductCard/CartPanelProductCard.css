@@ -38,6 +38,10 @@
         justify-content: space-between;
         flex: 1;
 
+        .cart-panel-product-card--favorites & {
+            flex-direction: column;
+        }
+
         &-name {
             text-transform: none;
             text-align: left;
@@ -47,8 +51,9 @@
         &-prices {
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
-            text-align: right;
+            .cart-panel-product-card--favorites & {
+                justify-content: start;
+            }
         }
 
         &-price {

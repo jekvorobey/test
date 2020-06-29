@@ -1,0 +1,22 @@
+.return-result-card {
+    display: flex;
+
+    &__img {
+        padding: var(--gs);
+        margin-right: calc(var(--gs) * 2);
+        height: 100%;
+        max-width: calc(var(--gs) * 7);
+        background: var(--cl-divider-grey);
+        border-bottom: 0;
+    }
+
+    &__body {
+        &-name {
+            display: block;
+            text-transform: none;
+            font-size: 16px;
+            line-height: 24px;
+            max-width: calc(var(--gs) * 50);
+        }
+    }
+}

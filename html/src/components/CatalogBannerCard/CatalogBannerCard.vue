@@ -12,9 +12,12 @@
         </div>
 
         <div v-if="item.button" class="catalog-banner-card__panel" :class="panelClasses">
-            <v-button class="catalog-banner-card__panel-btn" :class="btnClasses" :to="item.button.url || '/'">
+            <v-button class="catalog-banner-card__panel-btn" :class="btnClasses"  @click="onBtnClick" v-if="item.button.url">
                 {{ item.button.text }}
             </v-button>
+            <a class="btn catalog-banner-card__panel-btn" :class="btnClasses" :href="item.button.externalUrl" v-else-if="item.button.externalUrl">
+                {{ item.button.text }}
+            </a>
         </div>
     </li>
 </template>
@@ -22,6 +25,10 @@
 <script>
 import VButton from '@controls/VButton/VButton.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
+
+import { mapState, mapActions } from 'vuex';
+
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
 import { generatePictureSourcePath } from '@util/file';
 import { fileExtension } from '@enums';
@@ -66,6 +73,8 @@ export default {
     },
 
     computed: {
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
+
         mobileImg() {
             const image = this.item.mobileImage || this.item.tabletImage || this.item.desktopImage;
             if (image) return generatePictureSourcePath(360, 400, image.id, fileExtension.image.WEBP);
@@ -140,5 +149,15 @@ export default {
             return classes;
         },
     },
+
+    methods: {
+        onBtnClick() {
+            if (!this.item.button.authLink || !this.hasSession) {
+                this.$router.push(this.item.button.url || '/');
+            } else {
+                this.$router.push({name: this.item.button.authLink});
+            }
+        }
+    }
 };
 </script>

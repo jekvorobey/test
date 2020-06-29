@@ -10,8 +10,7 @@
             <div class="containet container--tablet portfolio-edit-modal__section">
                 <h4 class="portfolio-edit-modal__hl">{{ header }}</h4>
                 <p class="portfolio-edit-modal__info">
-                    Укажи ссылку на свой аккаунт бьюти-профессионала в соцсетях или загрузи скан профильного диплома,
-                    либо другого подтверждающего документа.
+                    Укажи ссылку на свой аккаунт бьюти-профессионала в соцсетях или загрузи скан профильного диплома, либо другого подтверждающего документа.
                 </p>
 
                 <ul
@@ -23,14 +22,6 @@
                         v-for="(v, index) in computedItems"
                         :key="index"
                     >
-                        <v-input
-                            class="portfolio-edit-modal__list-column"
-                            v-model="v.name.$model"
-                            placeholder="Описание"
-                            :show-error="false"
-                            :error="nameError(v.name)"
-                        >{{ index == 0 ? 'Название' : null }}</v-input>
-
                         <v-input
                             class="portfolio-edit-modal__list-column"
                             v-model="v.link.$model"
@@ -49,6 +40,14 @@
                                 </button>
                             </template>
                         </v-input>
+
+                        <v-input
+                            class="portfolio-edit-modal__list-column"
+                            v-model="v.name.$model"
+                            placeholder="Введите описание"
+                            :show-error="false"
+                            :error="nameError(v.name)"
+                        >{{ index == 0 ? 'Описание ссылки' : null }}</v-input>
                     </li>
                 </ul>
 

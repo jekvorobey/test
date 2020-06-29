@@ -6,8 +6,9 @@
     }
 
     .modal-container {
+        width: 648px;
+
         @media (--tablet-lg) {
-            width: 648px;
             min-height: 200px;
         }
     }
@@ -82,6 +83,9 @@
 
         &-info {
             margin-right: auto;
+            font-size: 14px;
+            color: var(--cl-grey);
+            line-height: 1.4;
 
             @media (--tablet) {
                 display: none;

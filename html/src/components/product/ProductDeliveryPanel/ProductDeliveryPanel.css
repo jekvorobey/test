@@ -11,5 +11,6 @@
 
     &__price {
         vertical-align: inherit;
+        word-spacing: -2px;
     }
 }

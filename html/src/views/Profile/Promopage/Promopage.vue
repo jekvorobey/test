@@ -47,7 +47,12 @@
 
             <ul class="promopage-view__panel-list" v-if="items && items.length">
                 <li class="promopage-view__panel-item" v-for="item in products" :key="item.id">
-                    <catalog-product-card class="promopage-view__panel-card" v-bind="item" :offer-id="item.id" />
+                    <catalog-product-card
+                        class="promopage-view__panel-card"
+                        v-bind="item"
+                        :offer-id="item.id"
+                        @preview="onPreview(item.code)"
+                    />
                     <button class="promopage-view__panel-item-btn" @click.prevent="onDeleteProduct(item.productId)">
                         <v-svg name="cross" width="24" height="24" />
                     </button>
@@ -166,22 +171,22 @@ export default {
         ...mapGetters(PROMOPAGE_MODULE_PATH, [PAGES_COUNT]),
 
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || null,
+            [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || null,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isNameEditOpen: state =>
+            isNameEditOpen: (state) =>
                 state[MODALS][modalName.profile.PROMO_EDIT] && state[MODALS][modalName.profile.PROMO_EDIT].open,
-            isProductAddOpen: state =>
+            isProductAddOpen: (state) =>
                 state[MODALS][modalName.profile.PROMO_ADD] && state[MODALS][modalName.profile.PROMO_ADD].open,
-            isProductAddByLinkOpen: state =>
+            isProductAddByLinkOpen: (state) =>
                 state[MODALS][modalName.profile.PROMO_ADD_BY_LINK] &&
                 state[MODALS][modalName.profile.PROMO_ADD_BY_LINK].open,
         }),
 
         products() {
             const items = this[ITEMS] || [];
-            return items.map(item => {
+            return items.map((item) => {
                 return {
                     ...item,
                     href: generateProductUrl(item.categoryCodes[item.categoryCodes.length - 1], item.code),
@@ -216,6 +221,10 @@ export default {
             const message = result ? 'Успешно скопировано' : 'Не удается скопировать';
             this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
             e.target.focus();
+        },
+
+        onPreview(code) {
+            this[CHANGE_MODAL_STATE]({ name: 'quick-view-modal', open: true, state: { code } });
         },
 
         onDeleteProduct(id) {
@@ -264,10 +273,10 @@ export default {
                 .dispatch(`${PROMOPAGE_MODULE_PATH}/${FETCH_PROMOPAGE}`, { page })
                 .then(() => {
                     $store.dispatch(`${PROMOPAGE_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => $progress.finish());
+                    next((vm) => $progress.finish());
                 })
-                .catch(error => {
-                    next(vm => $progress.fail());
+                .catch((error) => {
+                    next((vm) => $progress.fail());
                 });
         }
     },

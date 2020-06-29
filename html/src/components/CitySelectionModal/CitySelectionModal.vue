@@ -44,6 +44,8 @@ import _debounce from 'lodash/debounce';
 import { mapState, mapActions } from 'vuex';
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { FETCH_CART_DATA } from '@store/modules/Cart/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -89,6 +91,7 @@ export default {
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(GEO_MODULE, [SET_SELECTED_CITY]),
+        ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
 
         async onCityInputChange(query = '') {
             try {
@@ -97,7 +100,7 @@ export default {
                 const { suggestions } = await this.findAddress(suggestionTypes.CITY, suggestQuery, 20);
                 this.suggestions = suggestions;
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 return null;
             }
         },
@@ -140,17 +143,20 @@ export default {
                         settlement_fias_id,
                         geo_lat,
                         geo_lon,
+                        region_fias_id
                     } = selectedCitySuggestion.data;
 
-                    this[SET_SELECTED_CITY]({
+                    await this[SET_SELECTED_CITY]({
                         city: {
                             name: settlement || city,
                             fias_id: settlement_fias_id || city_fias_id,
                             geo_lat: geo_lat,
                             geo_lon: geo_lon,
+                            region_fias_id,
                         },
                         setCookie: true,
                     });
+                    await this[FETCH_CART_DATA]();
                 }
             } catch (error) {
                 $logger.log(error);

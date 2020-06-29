@@ -48,7 +48,7 @@
             }
 
             & + & {
-                margin-top: var(--gs);
+                margin-top: calc(var(--gs) * 2);
             }
 
             &-btn {
@@ -59,6 +59,10 @@
                 height: 24px;
                 width: 24px;
                 z-index: 1;
+            }
+
+            .v-input__label {
+                margin-bottom: 0;
             }
         }
 

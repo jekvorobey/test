@@ -25,10 +25,20 @@
             display: flex;
         }
 
+        &-hl {
+            font-size: 16px;
+            margin-bottom: var(--gs);
+        }
+
+        &-list {
+
+        }
+
         &-tags {
             &-item {
                 margin-right: calc(var(--gs) * 2);
                 margin-bottom: calc(var(--gs) * 2);
+
                 @media (--tablet) {
                     width: 100%;
                 }
@@ -60,6 +70,22 @@
             &--delete {
                 color: var(--cl-grey);
             }
+        }
+    }
+
+    &__empty {
+        &-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--cl-grey);
+            fill: var(--cl-grey);
+        }
+
+        &-text {
+            display: block;
+            margin-bottom: calc(var(--gs) * 3);
+            margin-top: var(--gs);
         }
     }
 }

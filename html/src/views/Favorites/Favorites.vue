@@ -3,8 +3,9 @@
         <div class="container">
             <breadcrumbs class="favorites-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
-                    Главная
-                </breadcrumb-item>
+                    <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                    <span v-else>Главная</span></breadcrumb-item
+                >
                 <breadcrumb-item key="Favorites" :to="$route.fullPath">
                     Избранное
                 </breadcrumb-item>
@@ -16,7 +17,8 @@
                 <h1 class="favorites-view__header-hl">
                     Избранное
                     <span class="favorites-view__header-counter" v-if="favoritesAll.length > 0">
-                        {{ favoritesAll.length }} продуктов
+                        {{ favoritesAll.length }}
+                        {{ productName }}
                     </span>
                 </h1>
                 <div class="favorites-view__filters" v-if="favorites.length > 0">
@@ -112,11 +114,14 @@ import {
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { pluralize } from '@util';
+
 import { DEFAULT_PAGE } from '@constants';
 import { modalName, sortDirections } from '@enums';
 
 import { sortFields } from '@enums/favorites';
 
+import '@images/sprites/home.svg';
 import './Favorites.css';
 
 export default {
@@ -149,6 +154,14 @@ export default {
     computed: {
         ...mapState(FAVORITES_MODULE, [FAVORITES, FAVORITES_ALL, FAVORITES_DIRECTION, FAVORITES_FIELD, ACTIVE_PAGE]),
         ...mapGetters(FAVORITES_MODULE, [PAGES_COUNT]),
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
+
+        productName() {
+            return pluralize(this.favoritesAll.length, ['продукт', 'продукта', 'продуктов']);
+        },
     },
 
     watch: {
@@ -240,7 +253,6 @@ export default {
                     $progress.fail();
                 });
             });
-        
     },
 
     async beforeRouteUpdate(to, from, next) {

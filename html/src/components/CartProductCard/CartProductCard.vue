@@ -1,5 +1,5 @@
 <template>
-    <li class="cart-product-card" :class="{ 'cart-product-card--small': isSmall }">
+    <div class="cart-product-card" :class="{ 'cart-product-card--small': isSmall }">
         <router-link class="cart-product-card__img" :to="href">
             <v-picture v-if="image && image.id" :image="image" alt="">
                 <template v-slot:source="{ image }">
@@ -62,7 +62,7 @@
                 </v-link>
             </div>
         </div>
-    </li>
+    </div>
 </template>
 
 <script>

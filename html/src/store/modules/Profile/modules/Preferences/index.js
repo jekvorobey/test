@@ -9,6 +9,8 @@ export const TYPE = 'type';
 export const PREFERENCES_DATA = 'preferencesData';
 export const AVAILABLE_BRANDS = 'availableBrands';
 export const AVAILABLE_CATEGORIES = 'availableCategories';
+export const SAME_BRANDS = 'sameBrands';
+export const SAME_CATEGORIES = 'sameCategories';
 export const LOAD = 'load';
 
 export const CUSTOMER = 'customer';
@@ -40,6 +42,9 @@ export default function createModule() {
 
             [AVAILABLE_BRANDS]: [],
             [AVAILABLE_CATEGORIES]: [],
+
+            [SAME_BRANDS]: true,
+            [SAME_CATEGORIES]: true,
         },
 
         actions,
