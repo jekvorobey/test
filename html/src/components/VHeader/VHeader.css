@@ -7,6 +7,11 @@
 
     &__city-confirm {
         height: 0;
+        transform: translateX(calc(var(--gs) * 20));
+
+        .v-popover {
+            height: 0;
+        }
     }
 
     &__middle {

@@ -12,23 +12,25 @@
                         <v-svg name="search-middle" width="24" height="24" />
                     </template>
                 </v-input>
-                <ul class="city-selection-modal__list">
-                    <li
-                        class="city-selection-modal__list-item"
-                        v-for="suggestion in suggestions"
-                        :key="suggestion.value"
-                    >
-                        <button class="city-selection-modal__list-btn" @click="onSubmit(suggestion)">
-                            <template v-if="suggestion.data.settlement_with_type">
-                                {{ suggestion.data.settlement_with_type }},
-                            </template>
+                <div class="city-selection-modal__wrapper">
+                    <ul class="city-selection-modal__list">
+                        <li
+                            class="city-selection-modal__list-item"
+                            v-for="suggestion in suggestions"
+                            :key="suggestion.value"
+                        >
+                            <button class="city-selection-modal__list-btn" @click="onSubmit(suggestion)">
+                                <template v-if="suggestion.data.settlement_with_type">
+                                    {{ suggestion.data.settlement_with_type }},
+                                </template>
 
-                            <template v-if="suggestion.data.city_with_type">
-                                {{ suggestion.data.city_with_type }}
-                            </template>
-                        </button>
-                    </li>
-                </ul>
+                                <template v-if="suggestion.data.city_with_type">
+                                    {{ suggestion.data.city_with_type }}
+                                </template>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </template>
     </general-modal>
@@ -143,7 +145,7 @@ export default {
                         settlement_fias_id,
                         geo_lat,
                         geo_lon,
-                        region_fias_id
+                        region_fias_id,
                     } = selectedCitySuggestion.data;
 
                     await this[SET_SELECTED_CITY]({

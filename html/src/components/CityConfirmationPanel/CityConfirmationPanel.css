@@ -31,4 +31,12 @@
             }
         }
     }
+
+    .tooltip-arrow {
+        display: none;
+    }
+
+    &.tooltip[x-placement^='bottom'] {
+        padding-top: calc(var(--gs) * 1.75);
+    }
 }

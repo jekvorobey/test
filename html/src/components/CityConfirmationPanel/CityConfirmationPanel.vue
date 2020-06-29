@@ -1,8 +1,10 @@
 <template>
     <general-popup-panel
         v-if="selectedCity"
+        popover-class="tooltip--white city-confirmation-panel"
         :header="header"
         :open="isCityConfirmationOpen"
+        showCloseBtn
         @close="onClose"
         @hide="onClose"
     >
