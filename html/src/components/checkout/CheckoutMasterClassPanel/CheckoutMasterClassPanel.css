@@ -1,6 +1,14 @@
 .checkout-master-class-panel {
     counter-reset: item;
 
+    &__attention {
+        margin-bottom: calc(var(--gs) * 7);
+
+        @media (--tablet) {
+            margin-bottom: calc(var(--gs) * 4);
+        }
+    }
+
     &__item {
         position: relative;
         margin-bottom: calc(var(--gs) * 2);
@@ -79,6 +87,10 @@
             .icon + .icon {
                 margin-left: calc(var(--gs) * 2);
             }
+        }
+
+        &--recepient &-list {
+            margin-bottom: calc(var(--gs) * 3);
         }
 
         &--payment &-list {

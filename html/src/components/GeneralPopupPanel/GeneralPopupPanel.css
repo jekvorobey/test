@@ -1,4 +1,12 @@
 .general-popup-panel {
+    .tooltip {
+        display: none;
+
+        &--mounted {
+            display: block !important;
+        }
+    }
+
     &__header,
     &__bottom,
     &__body {

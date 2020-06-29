@@ -1,6 +1,6 @@
 <template>
     <div class="checkout-master-class-panel">
-        <div class="checkout-master-class-panel__item">
+        <div class="checkout-master-class-panel__item checkout-master-class-panel__item--recepient">
             <div class="checkout-master-class-panel__item-header">
                 <h2 class="checkout-master-class-panel__item-header-hl">Получатель</h2>
             </div>
@@ -18,7 +18,7 @@
                 </checkout-option-card>
             </ul>
 
-            <attention-panel class="checkout-product-panel__attention">
+            <attention-panel class="checkout-master-class-panel__attention">
                 На указанный адрес электронной почты мы вышлем вам копии билетов
             </attention-panel>
 
@@ -27,16 +27,16 @@
             </v-link>
         </div>
 
-        <div class="checkout-product-panel__item">
-            <div class="checkout-product-panel__item-header">
-                <h2 class="checkout-product-panel__item-header-hl">
+        <div class="checkout-master-class-panel__item">
+            <div class="checkout-master-class-panel__item-header">
+                <h2 class="checkout-master-class-panel__item-header-hl">
                     Участники&nbsp;<v-spinner width="24" height="24" :show="false" />
                 </h2>
             </div>
 
-            <ul class="checkout-product-panel__item-list">
+            <ul class="checkout-master-class-panel__item-list">
                 <checkout-option-card
-                    class="checkout-product-panel__item-card"
+                    class="checkout-master-class-panel__item-card"
                     v-for="(ticket, index) in tickets"
                     :key="ticket.id"
                     :readonly="!ticket.info"
@@ -104,7 +104,8 @@
                         name="agreement"
                         @change="SET_AGREEMENT(Number($event))"
                     >
-                        Я согласен с <router-link to="/">условиями оферты</router-link> и <router-link to="/">политикой конфиденциальности</router-link>
+                        Я согласен с <router-link to="/">условиями оферты</router-link> и
+                        <router-link to="/">политикой конфиденциальности</router-link>
                     </v-check>
                 </div>
 

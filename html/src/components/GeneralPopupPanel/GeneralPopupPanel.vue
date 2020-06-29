@@ -1,7 +1,7 @@
 <template>
     <v-popover
         popoverWrapperClass="general-popup-panel"
-        :popover-class="[popoverClass, { 'tooltip--mounted': mounted }]"
+        :popover-class="[popoverClass, { 'tooltip--unmounted': !mounted }, { 'tooltip--mounted': mounted }]"
         :trigger="trigger"
         :placement="placement"
         :open="open"
