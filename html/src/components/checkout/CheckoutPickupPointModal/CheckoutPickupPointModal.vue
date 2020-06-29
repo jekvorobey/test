@@ -86,7 +86,9 @@
                         <div>{{ selectedPickupPoint.phone }}</div>
                     </div>
                     <div class="checkout-pickup-point-modal__details-info-schedule">
-                        {{ selectedPickupPoint.startDate }}
+                        <template v-if="selectedPickupPoint.startDate">
+                            {{ selectedPickupPoint.startDate }}
+                        </template>
                         <ul class="checkout-pickup-point-modal__details-info-schedule-list">
                             <li
                                 class="checkout-pickup-point-modal__details-info-schedule-item"
@@ -99,7 +101,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="checkout-pickup-point-modal__details-desc">
+                <div class="checkout-pickup-point-modal__details-desc" v-if="selectedPickupPoint.description">
                     <div class="text-bold">
                         Как добраться
                     </div>
@@ -148,7 +150,7 @@
                         >
                             <p class="text-bold">{{ point.title }}</p>
                             <p>{{ point.name }}</p>
-                            <p class="text-grey text-sm">{{ point.startDate }}</p>
+                            <p class="text-grey text-sm" v-if="point.startDate">{{ point.startDate }}</p>
                         </checkout-option-card>
                     </ul>
                 </div>
@@ -268,6 +270,7 @@ export default {
 
         onShowPoint(point) {
             this.selectedPickupPoint = point;
+            console.log(this.selectedPickupPoint);
             this.activeTab = 1;
         },
 

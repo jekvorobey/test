@@ -14,7 +14,9 @@
                     <div>{{ selectedPickupPoint.phone }}</div>
                 </div>
                 <div class="checkout-pickup-point-panel__address-info-schedule">
-                    {{ selectedPickupPoint.startDate }}
+                    <template v-if="selectedPickupPoint.startDate">
+                        {{ selectedPickupPoint.startDate }}
+                    </template>
                     <ul class="checkout-pickup-point-panel__address-info-schedule-list">
                         <li
                             class="checkout-pickup-point-panel__address-info-schedule-item"
@@ -27,7 +29,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="checkout-pickup-point-panel__address-desc">
+            <div class="checkout-pickup-point-panel__address-desc" v-if="selectedPickupPoint.description">
                 <div class="text-bold">
                     Как добраться
                 </div>
