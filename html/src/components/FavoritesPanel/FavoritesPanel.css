@@ -1,5 +1,5 @@
 .favorites-panel {
-    min-width: 544px;
+    width: 544px;
 
     .general-popup-panel__header {
         align-items: flex-start;

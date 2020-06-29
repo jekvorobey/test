@@ -28,7 +28,8 @@
         </div>
         <buy-button
             v-if="isFavorite"
-            class="btn--outline product-bundle-panel__btn"
+            class="btn--outline cart-panel-product-card__btn"
+            :class="{ 'cart-panel-product-card__btn--loader': isLoadButton }"
             @click.prevent="onBuyButtonClick"
             :disabled="insideBasket"
         >
@@ -101,6 +102,10 @@ export default {
         },
 
         isFavorite: {
+            type: Boolean,
+        },
+
+        isLoadButton: {
             type: Boolean,
         },
 

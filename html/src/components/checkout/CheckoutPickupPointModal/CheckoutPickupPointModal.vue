@@ -48,6 +48,7 @@
                     :controls="[]"
                     :cluster-options="clusterOptions"
                     showAllMarkers
+                    @map-was-initialized="initHandler"
                 >
                     <template v-if="filteredPickupPoints.length">
                         <ymap-marker
@@ -85,7 +86,9 @@
                         <div>{{ selectedPickupPoint.phone }}</div>
                     </div>
                     <div class="checkout-pickup-point-modal__details-info-schedule">
-                        {{ selectedPickupPoint.startDate }}
+                        <template v-if="selectedPickupPoint.startDate">
+                            {{ selectedPickupPoint.startDate }}
+                        </template>
                         <ul class="checkout-pickup-point-modal__details-info-schedule-list">
                             <li
                                 class="checkout-pickup-point-modal__details-info-schedule-item"
@@ -98,7 +101,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="checkout-pickup-point-modal__details-desc">
+                <div class="checkout-pickup-point-modal__details-desc" v-if="selectedPickupPoint.description">
                     <div class="text-bold">
                         Как добраться
                     </div>
@@ -147,7 +150,7 @@
                         >
                             <p class="text-bold">{{ point.title }}</p>
                             <p>{{ point.name }}</p>
-                            <p class="text-grey text-sm">{{ point.startDate }}</p>
+                            <p class="text-grey text-sm" v-if="point.startDate">{{ point.startDate }}</p>
                         </checkout-option-card>
                     </ul>
                 </div>
@@ -267,6 +270,7 @@ export default {
 
         onShowPoint(point) {
             this.selectedPickupPoint = point;
+            console.log(this.selectedPickupPoint);
             this.activeTab = 1;
         },
 
@@ -290,6 +294,19 @@ export default {
                 this.selectedPickupPoint = null;
                 this.activeTab = index;
             }
+        },
+
+        initHandler(e) {
+            const vm = this;
+            e.geoObjects.events.add('click', (e) => {
+                // marker-4238 => 4238
+                // defaultPrevented === true if group of markers
+                if (!e._defaultPrevented) {
+                    const id = +e.get('target').properties._data.markerId.split('-')[1];
+                    const point = this.filteredPickupPoints.find((item) => item.id === id);
+                    this.onShowPoint(point);
+                }
+            });
         },
     },
 
