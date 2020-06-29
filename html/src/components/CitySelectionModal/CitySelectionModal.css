@@ -87,7 +87,7 @@
         &-item {
             padding: 1px;
             & + & {
-                margin-top: var(--gs);
+                margin-top: calc(var(--gs) * .5);
             }
         }
 
