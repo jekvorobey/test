@@ -28,7 +28,8 @@
                     <template
                         v-if="((portfolio && portfolio.length === 0) && (certificates && certificates.length === 0))"
                     >
-                        В данный момент наши эксперты изучают Ваше портфолио. Как только мы подтвердим Ваш статус Профессионала, Вы получите от нас SMS-оповещение и сразу сможете совершать покупки.
+                        В данный момент наши эксперты изучают Ваше портфолио. Как только мы подтвердим Ваш статус
+                        Профессионала, Вы получите от нас SMS-оповещение и сразу сможете совершать покупки.
                     </template>
                     <template v-else>
                         В данный момент наши эксперты изучают Ваше портфолио
@@ -80,7 +81,7 @@
             <div class="container container--tablet-lg">
                 <ul class="cabinet-view__panel-list">
                     <info-row
-                        class="cabinet-view__panel-item"
+                        class="cabinet-view__panel-item cabinet-view__panel-item--inline"
                         v-for="driver in socialDrivers"
                         :name="$t(`profile.socials.${driver}`)"
                         :value="socialMap[driver] && socialMap[driver].name"
@@ -319,14 +320,14 @@ export default {
 
         onSave() {
             this[CHANGE_MODAL_STATE]({
-                    name: modalName.general.NOTIFICATION,
-                    open: true,
-                    state: {
-                        title: 'Уведомление',
-                        message: 'Все данные сохранены',
-                    },
-                });
-        }
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state: {
+                    title: 'Уведомление',
+                    message: 'Все данные сохранены',
+                },
+            });
+        },
     },
 
     async serverPrefetch() {
