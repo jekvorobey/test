@@ -204,7 +204,7 @@ export default {
 
         canDeliver() {
             const receiveMethods = this[RECEIVE_METHODS];
-            return this.isProduct && receiveMethods && receiveMethods.length > 0;
+            return !this.isProduct || (this.isProduct && receiveMethods && receiveMethods.length > 0);
         },
 
         checkoutPanel() {

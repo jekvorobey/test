@@ -4,6 +4,7 @@
             <div class="checkout-master-class-panel__item-header">
                 <h2 class="checkout-master-class-panel__item-header-hl">Получатель</h2>
             </div>
+
             <ul class="checkout-master-class-panel__item-list">
                 <checkout-option-card
                     class="checkout-master-class-panel__item-card"
@@ -16,6 +17,11 @@
                     <p>{{ recipient.phone }}</p>
                 </checkout-option-card>
             </ul>
+
+            <attention-panel class="checkout-product-panel__attention">
+                На указанный адрес электронной почты мы вышлем вам копии билетов
+            </attention-panel>
+
             <v-link class="checkout-master-class-panel__item-header-link" tag="button" @click="onAddRecipient">
                 <v-svg name="plus" width="24" height="24" />&nbsp;Добавить нового получателя
             </v-link>
@@ -27,6 +33,7 @@
                     Участники&nbsp;<v-spinner width="24" height="24" :show="false" />
                 </h2>
             </div>
+
             <ul class="checkout-product-panel__item-list">
                 <checkout-option-card
                     class="checkout-product-panel__item-card"
@@ -55,6 +62,7 @@
             <div class="checkout-master-class-panel__item-header">
                 <h2 class="checkout-master-class-panel__item-header-hl">Способ оплаты</h2>
             </div>
+
             <ul class="checkout-master-class-panel__item-list">
                 <checkout-option-card
                     class="checkout-master-class-panel__item-card"
@@ -96,6 +104,7 @@
                         Я согласен с условиями <router-link to="/">заказа и доставки</router-link>
                     </v-check>
                 </div>
+
                 <div class="checkout-master-class-panel__item-panel">
                     <v-check
                         class="checkout-master-class-panel__item-panel-check"
@@ -125,6 +134,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
+import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -180,6 +190,7 @@ export default {
         VSpinner,
 
         CheckoutOptionCard,
+        AttentionPanel,
     },
 
     data() {
