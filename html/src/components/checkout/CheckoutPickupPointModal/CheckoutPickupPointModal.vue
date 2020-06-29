@@ -48,6 +48,7 @@
                     :controls="[]"
                     :cluster-options="clusterOptions"
                     showAllMarkers
+                    @map-was-initialized="initHandler"
                 >
                     <template v-if="filteredPickupPoints.length">
                         <ymap-marker
@@ -290,6 +291,19 @@ export default {
                 this.selectedPickupPoint = null;
                 this.activeTab = index;
             }
+        },
+
+        initHandler(e) {
+            const vm = this;
+            e.geoObjects.events.add('click', (e) => {
+                // marker-4238 => 4238
+                // defaultPrevented === true if group of markers
+                if (!e._defaultPrevented) {
+                    const id = +e.get('target').properties._data.markerId.split('-')[1];
+                    const point = this.filteredPickupPoints.find((item) => item.id === id);
+                    this.onShowPoint(point);
+                }
+            });
         },
     },
 
