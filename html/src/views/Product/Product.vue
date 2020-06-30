@@ -41,7 +41,7 @@
                                 <v-svg name="logo" width="56" height="56" />
                             </div>
                             <div
-                                class="product-view__header-gallery-item"
+                                class="product-view__header-gallery-item product-view__header-gallery-item--alone"
                                 v-for="image in productImages.media"
                                 :key="image.id"
                             >
@@ -58,7 +58,7 @@
                                         media="(max-width: 479px)"
                                     />
                                     <source :data-srcset="image.tablet.orig" media="(max-width: 479px)" />
-                                    <img class="blur-up lazyload v-picture__img" :data-src="image.tablet.orig" alt="" />
+                                    <img class="blur-up lazyload v-picture__img" :data-src="image.desktop.orig" alt="" />
                                 </v-picture>
                             </div>
                         </div>
@@ -997,7 +997,7 @@ export default {
             }
 
             if (Array.isArray(media) && media.length > 0) {
-                const desktopSize = media.length === 1 ? 504 : 400;
+                const desktopSize = 504;
                 const gallerySize = 744;
                 const tabletSize = 400;
                 const mobileSize = 200;

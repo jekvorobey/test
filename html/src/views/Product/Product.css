@@ -207,6 +207,17 @@
                     }
                 }
 
+                &--alone {
+                    /* !important важен для переопределения last-child'ов */
+                    @media (--tablet-lg) {
+                        padding: calc(var(--gs) * 11) !important;
+                    }
+
+                    @media (--desktop-diff) {
+                        padding: calc(var(--gs) * 16.5) !important;
+                    }
+                }
+
                 &:nth-child(1) {
                     @media (--tablet-lg-min) {
                         &:nth-last-child(3) {
