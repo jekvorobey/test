@@ -4,10 +4,10 @@
         :class="[{ 'v-header--scroll': scroll }, { 'v-header--masked': showMask }, { 'v-header--search': search }]"
     >
         <div class="v-header__desktop">
-            <header-top v-if="!scroll" />
             <div class="container v-header__city-confirm">
                 <city-confirmation-panel v-if="!isTabletLg" />
             </div>
+            <header-top v-if="!scroll" />
             <header-bottom />
         </div>
 

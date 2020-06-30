@@ -54,13 +54,40 @@
         }
     }
 
+    &__wrapper {
+        position: relative;
+        overflow: auto;
+
+        &:after,
+        &:before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: calc(var(--gs) * 1.25);
+            position: absolute;
+            left: 0;
+            z-index: 10;
+        }
+
+        &:after {
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent, var(--cl-white));
+        }
+
+        &:before {
+            top: 0;
+            background: linear-gradient(to top, transparent, var(--cl-white));
+        }
+    }
+
     &__list {
         overflow: auto;
+        height: 100%;
 
         &-item {
             padding: 1px;
             & + & {
-                margin-top: var(--gs);
+                margin-top: calc(var(--gs) * .5);
             }
         }
 

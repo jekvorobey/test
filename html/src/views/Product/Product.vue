@@ -42,6 +42,7 @@
                             </div>
                             <div
                                 class="product-view__header-gallery-item"
+                                :class="productImages.media.length == 1 ? 'product-view__header-gallery-item--alone' : ''"
                                 v-for="image in productImages.media"
                                 :key="image.id"
                             >
@@ -58,7 +59,7 @@
                                         media="(max-width: 479px)"
                                     />
                                     <source :data-srcset="image.tablet.orig" media="(max-width: 479px)" />
-                                    <img class="blur-up lazyload v-picture__img" :data-src="image.default" alt="" />
+                                    <img class="blur-up lazyload v-picture__img" :data-src="image.desktop.orig" alt="" />
                                 </v-picture>
                             </div>
                         </div>
@@ -78,6 +79,7 @@
                                 class="swiper-slide product-view__header-gallery-item"
                                 v-for="image in productImages.media"
                                 :key="image.id"
+                                :class="productImages.media.length == 1 ? 'product-view__header-gallery-item--alone' : ''"
                             >
                                 <v-picture>
                                     <source
@@ -997,11 +999,12 @@ export default {
             }
 
             if (Array.isArray(media) && media.length > 0) {
-                const desktopSize = media.length === 1 ? 504 : 328;
+                const desktopSize = 504;
                 const gallerySize = 744;
-                const tabletSize = 200;
+                const tabletSize = 400;
+                const mobileSize = 200;
 
-                imageMap.media = media.map((image) => prepareProductImage(image, desktopSize, tabletSize));
+                imageMap.media = media.map((image) => prepareProductImage(image, desktopSize, tabletSize, mobileSize));
                 imageMap.gallery = media.map((image) => prepareProductImage(image, gallerySize));
             } else {
                 imageMap.media = [];

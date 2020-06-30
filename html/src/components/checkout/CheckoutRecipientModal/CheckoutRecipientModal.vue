@@ -17,7 +17,7 @@
                         placeholder="Введите имя и фамилию"
                         :error="nameError"
                     >
-                        Имя и Фамилия<span>*</span>
+                        Имя и Фамилия
                         <template v-slot:error="{ error }">
                             <transition name="slide-in-bottom" mode="out-in">
                                 <div :key="error" v-if="error">{{ error }}</div>
@@ -32,7 +32,7 @@
                         :options="maskOptions"
                         :error="phoneError"
                     >
-                        Телефон<span>*</span>
+                        Телефон
                         <template v-slot:error="{ error }">
                             <transition name="slide-in-bottom" mode="out-in">
                                 <div :key="error" v-if="error">{{ error }}</div>
@@ -56,7 +56,7 @@
 
             <div class="checkout-recipient-modal__submit">
                 <v-button class="checkout-recipient-modal__submit-btn" @click="onSubmit">
-                    Сохранить
+                    Добавить получателя
                 </v-button>
             </div>
         </template>
@@ -129,8 +129,8 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
-            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         isTablet() {

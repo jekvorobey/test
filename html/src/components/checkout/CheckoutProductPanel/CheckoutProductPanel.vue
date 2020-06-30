@@ -218,11 +218,8 @@
                             </v-button>
                         </template>
                         <span class="checkout-product-panel__item-controls-text">
-                            На вашем счёте:&nbsp;
-                            <strong class="text-bold">{{ availableBonus }}&nbsp;бонусов</strong><br />
-                            <span v-if="isTablet" class="text-sm text-normal text-grey">
-                                (1 бонус = {{ bonusPerRub }} рубль)
-                            </span>
+                            Доступно для оплаты:&nbsp;
+                            <strong class="text-bold">{{ maxAmountBonus }}</strong>&nbsp;из&nbsp;{{ availableBonus }} бонусов
                         </span>
                     </div>
                     <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
@@ -436,6 +433,7 @@ import {
     SELECTED_CONFIRMATION_TYPE_ID,
     BONUS_PER_RUB,
     AVAILABLE_BONUS,
+    MAX_BONUS,
     ADDRESS_STATUS,
     BONUS_STATUS,
     CERTIFICATE_STATUS,
@@ -597,6 +595,7 @@ export default {
         ...mapGetters(CHECKOUT_MODULE, [
             BONUS_PER_RUB,
             AVAILABLE_BONUS,
+            MAX_BONUS,
             RECIPIENTS,
             SELECTED_RECIPIENT,
 
@@ -707,6 +706,10 @@ export default {
                     }
                     break;
             }
+        },
+
+        maxAmountBonus() {
+            return this[MAX_BONUS] < this[AVAILABLE_BONUS] ? this[MAX_BONUS] : this[AVAILABLE_BONUS];
         },
     },
 

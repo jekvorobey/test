@@ -190,6 +190,10 @@
                     margin-bottom: 0;
                 }
 
+                @media (--mobile-min) and (--tablet-lg) {
+                    padding: calc(var(--gs) * 11);
+                }
+
                 &--video {
                     padding: 0;
                 }
@@ -200,6 +204,17 @@
 
                     .icon {
                         opacity: 0.1;
+                    }
+                }
+
+                &--alone {
+                    /* !important важен для переопределения last-child'ов */
+                    @media (--tablet-lg) {
+                        padding: calc(var(--gs) * 11) !important;
+                    }
+
+                    @media (--desktop-diff) {
+                        padding: calc(var(--gs) * 16.5) !important;
                     }
                 }
 
@@ -763,6 +778,7 @@
             display: flex;
             line-height: 24px;
             overflow: hidden;
+            margin: calc(var(--gs) / 2) 0;
 
             @media (--tablet-lg) {
                 width: 100%;

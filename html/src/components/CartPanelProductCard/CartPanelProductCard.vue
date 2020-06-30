@@ -18,12 +18,12 @@
         <div class="cart-panel-product-card__body">
             <v-link class="cart-panel-product-card__body-name" :to="href">{{ name }}</v-link>
             <div class="cart-panel-product-card__body-prices">
-                <price class="text-bold cart-panel-product-card__body-price" v-bind="price" />
                 <price
                     class="text-grey text-strike cart-panel-product-card__body-price cart-panel-product-card__body-price--old"
                     v-if="oldPrice"
                     v-bind="oldPrice"
                 />
+                <price class="text-bold cart-panel-product-card__body-price" v-bind="price" />
             </div>
         </div>
         <buy-button

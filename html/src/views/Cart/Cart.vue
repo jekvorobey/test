@@ -179,9 +179,12 @@
                                     </v-link>
                                 </div>
                             </div>
-                            <v-button class="cart-view__main-panel-submit" :to="`/checkout/${activeTabItem.type}`">
+                            <v-button class="cart-view__main-panel-submit" v-if="!isLoad" @click="loadCheckout">
                                 Оформить заказ
                             </v-button>
+                            <div class="cart-view__main-panel-preloader" v-else>
+                                <img key="preloader" :src="preloader" width="30" height="30" />
+                            </div>
                         </div>
                     </template>
                 </v-sticky>
@@ -284,6 +287,7 @@ import { preparePrice } from '@util';
 import { generateProductUrl } from '@util/catalog';
 import { registerModuleIfNotExists } from '@util/store';
 
+import preloader from '@images/icons/preloader.svg';
 import '@images/sprites/cart.svg';
 import '@images/sprites/alert.svg';
 import './Cart.css';
@@ -349,6 +353,8 @@ export default {
         return {
             activeTab: 0,
             inputPromocode: null,
+            preloader,
+            isLoad: false,
         };
     },
 
@@ -473,6 +479,16 @@ export default {
         onDeleteBundle(bundleId) {
             this[DELETE_CART_BUNDLE](bundleId);
         },
+
+        loadCheckout() {
+            try {
+                this.isLoad = true;
+                this.$router.push(`/checkout/${this.activeTabItem.type}`);
+            } catch(error) {
+                this.isLoad = false;
+                console.error('Ошибка в loadCheckout');
+            }
+        }
     },
 
     async serverPrefetch() {

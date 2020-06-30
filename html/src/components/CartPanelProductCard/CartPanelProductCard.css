@@ -51,6 +51,12 @@
         &-prices {
             display: flex;
             flex-direction: column;
+            justify-content: center;
+
+            .price {
+                text-align: right;
+            }
+
             .cart-panel-product-card--favorites & {
                 justify-content: start;
             }
