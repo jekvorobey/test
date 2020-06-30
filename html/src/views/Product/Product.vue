@@ -41,7 +41,8 @@
                                 <v-svg name="logo" width="56" height="56" />
                             </div>
                             <div
-                                class="product-view__header-gallery-item product-view__header-gallery-item--alone"
+                                class="product-view__header-gallery-item"
+                                :class="image.length === 1 ? 'product-view__header-gallery-item--alone' : ''"
                                 v-for="image in productImages.media"
                                 :key="image.id"
                             >
