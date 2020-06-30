@@ -13,7 +13,6 @@
         position: relative;
         display: flex;
         width: calc(100% / 3);
-        max-height: 184px;
         background: var(--cl-elem-grey);
         margin-right: calc(var(--gs) * 3);
         border-bottom: none;
@@ -21,7 +20,6 @@
         @media (--tablet) {
             width: 100%;
             margin-right: 0;
-            margin-bottom: calc(var(--gs) * 2);
         }
 
         .v-picture {
@@ -50,7 +48,26 @@
     &--small &__img {
         width: 100%;
         margin-right: 0;
-        margin-bottom: calc(var(--gs) * 2);
+
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 61%;
+
+            @media (--tablet) {
+                padding-bottom: 75%;
+            }
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 61%;
+                padding-bottom: 0;
+
+                @media (--tablet) {
+                    margin-top: 75%;
+                }
+            }
+        }
     }
 
     &__body {
@@ -85,7 +102,10 @@
 
         &-name {
             flex: 1;
-            font-weight: bold;
+            font-weight: Bold;
+            font-size: 24px;
+            line-height: 32px;
+            letter-spacing: 0.02em;
 
             @media (--tablet) {
                 width: 100%;
@@ -136,26 +156,30 @@
 
         &-top {
             flex-direction: column;
-            margin-bottom: 0;
+            margin-bottom: calc(var(--gs) * 2);
         }
 
         &-bottom {
             order: 1;
-            margin-bottom: var(--gs);
+            margin-top: auto;
+            margin-bottom: 0;
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
         }
 
         &-name {
             width: 100%;
             margin-bottom: var(--gs);
-            font-size: 16px;
+            font-weight: 500;
+            font-size: 20px;
             line-height: 24px;
-            font-weight: normal;
+            text-transform: none;
         }
 
         &-prices {
             width: 100%;
             padding-left: 0;
-            margin-bottom: var(--gs);
             text-align: center;
         }
 

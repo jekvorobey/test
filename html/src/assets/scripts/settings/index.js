@@ -18,6 +18,16 @@ export const monthLongDateSettings = Object.freeze({
     year: localeDateOptions.year.NUMERIC,
 });
 
+export const dayMonthLongDateSettings = Object.freeze({
+    day: localeDateOptions.day.NUMERIC,
+    month: localeDateOptions.month.LONG,
+});
+
+export const hourMinuteTimeSettings = Object.freeze({
+    hour: localeDateOptions.hour.DIGIT2,
+    minute: localeDateOptions.month.DIGIT2,
+});
+
 export const cancelRoute = Object.freeze({
     path: '/',
     replace: true,

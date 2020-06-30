@@ -407,7 +407,7 @@ export function getProfileChatMessages(chatId) {
 export function createProfileChatMessage(chatId, message, files) {
     return $http.post(`/v1/lk/messages/${chatId}`, {
         message,
-        files
+        files,
     });
 }
 
@@ -535,7 +535,7 @@ export function getFilters(categoryCode, excludedFilters) {
 export function getProductBundles(code) {
     return $http.get('/v1/catalog/bundles', {
         params: {
-            code
+            code,
         },
     });
 }
@@ -660,8 +660,8 @@ export function addCartBundle(bundleId, count, referrerCode) {
 export function deleteCartBundle(bundleId) {
     return $http.delete('/v1/cart/item-bundle', {
         data: {
-            bundleId
-        }
+            bundleId,
+        },
     });
 }
 
@@ -769,4 +769,25 @@ export function getDocuments({ type, status }) {
 
 export function getDocumentsFilters() {
     return $http.get('/v1/lk/documents/filters');
+}
+
+// Masterclasses
+
+export function getCatalogMasterclasses(page, orderField, orderDirection, filter) {
+    return $http.get('/v1/public-events', {
+        params: {
+            page,
+            orderField,
+            orderDirection,
+            filter,
+        },
+    });
+}
+
+export function getMasterclassFilters(excludedFilters) {
+    return $http.get('/v1/public-events/filters', {
+        params: {
+            excludedFilters,
+        },
+    });
 }

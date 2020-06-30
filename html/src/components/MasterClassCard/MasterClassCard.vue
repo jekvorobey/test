@@ -1,20 +1,29 @@
 <template>
     <li class="master-class-card" :class="{ 'master-class-card--small': isSmall }">
         <router-link class="master-class-card__img" :to="to">
-            <v-picture v-if="image" :image="image" />
+            <v-picture v-if="image">
+                <slot />
+            </v-picture>
             <v-svg v-else id="master-class-card-empty" name="logo" width="48" height="48" />
         </router-link>
         <div class="master-class-card__body">
             <div class="master-class-card__body-top">
                 <v-link class="master-class-card__body-name" :to="to">{{ name }}</v-link>
                 <div class="master-class-card__body-prices">
-                    <price class="text-bold master-class-card__body-price" v-bind="price" />
+                    <price class="master-class-card__body-price" v-bind="price" :class="{ 'text-bold': !isSmall }" />
                 </div>
             </div>
 
             <div class="text-grey text-sm master-class-card__body-bottom">
-                <div>{{ date }}</div>
-                <div>{{ address }}</div>
+                <template v-if="isSmall">
+                    <span>{{ date }}</span>
+                    <span>•</span>
+                    <span>{{ address }}</span>
+                </template>
+                <template v-else>
+                    <div>{{ date }}</div>
+                    <div>{{ address }}</div>
+                </template>
             </div>
         </div>
     </li>

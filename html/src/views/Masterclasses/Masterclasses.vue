@@ -4,14 +4,14 @@
             <breadcrumbs class="container container--tablet-lg masterclasses-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
-                    <span v-else>Главная</span></breadcrumb-item
-                >
+                    <span v-else>Главная</span>
+                </breadcrumb-item>
                 <breadcrumb-item key="masterclasses" :to="{ path: $route.path }">
                     {{ $t('masterclasses.title') }}
                 </breadcrumb-item>
             </breadcrumbs>
 
-            <section class="section masterclasses-view__banners">
+            <!-- <section class="section masterclasses-view__banners">
                 <v-slider class="masterclasses-view__banners-slider" name="masterClasses" :options="sliderOptions">
                     <master-class-banner-card
                         class="swiper-slide masterclasses-view__banners-slider-item"
@@ -26,7 +26,7 @@
                         show-btn
                     />
                 </v-slider>
-            </section>
+            </section> -->
         </div>
 
         <section class="section masterclasses-view__section masterclasses-view__sets">
@@ -58,10 +58,33 @@
                         class="masterclasses-view__sets-list-item"
                         v-for="item in masterclasses"
                         :key="item.id"
-                        v-bind="item"
-                        :to="generateMasterclassUrl(item.code)"
+                        :name="item.name"
+                        :date="item.dateTime"
+                        :price="item.priceFrom"
+                        :address="item.nearestPlaceName"
+                        :image="item.image"
+                        :to="item.url"
                         is-small
-                    />
+                    >
+                        <template v-if="item.desktopImg">
+                            <source :data-srcset="item.desktopImg.webp" type="image/webp" media="(min-width: 1024px)" />
+                            <source :data-srcset="item.desktopImg.orig" media="(min-width: 1024px)" />
+                        </template>
+                        <template v-if="item.tabletImg">
+                            <source :data-srcset="item.tabletImg.webp" type="image/webp" media="(min-width: 768px)" />
+                            <source :data-srcset="item.tabletImg.orig" media="(min-width: 768px)" />
+                        </template>
+                        <template v-if="item.mobileImg">
+                            <source :data-srcset="item.mobileImg.webp" type="image/webp" media="(min-width: 320px)" />
+                            <source :data-srcset="item.mobileImg.orig" media="(min-width: 320px)" />
+                        </template>
+                        <img
+                            v-if="item.defaultImg"
+                            class="blur-up lazyload v-picture__img"
+                            :data-src="item.defaultImg"
+                            alt
+                        />
+                    </master-class-card>
                 </ul>
 
                 <div class="masterclasses-view__sets-controls" v-if="pagesCount > 1">
@@ -115,15 +138,21 @@ import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbIte
 
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
-import CategoriesSection from '@components/blocks/CategoriesSection/CategoriesSection.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import { $store, $progress, $logger } from '@services';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { CATEGORIES, SCROLL } from '@store';
+import { LOCALE } from '@store';
+
+import { NAME as MASTERCLASSES_MODULE, ITEMS, ACTIVE_PAGE } from '@store/modules/Masterclass';
+import { PAGES_COUNT } from '@store/modules/Masterclass/getters';
+import { FETCH_MASTERCLASS_CATALOG_DATA, FETCH_MASTERCLASS_ITEMS } from '@store/modules/Masterclass/actions';
 
 import { MIN_SCROLL_VALUE } from '@constants';
+import { fileExtension } from '@enums';
+import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
+import { generatePictureSourcePath } from '@util/file';
 import { registerModuleIfNotExists } from '@util/store';
 import { generateMasterclassUrl } from '@util/catalog';
 import _debounce from 'lodash/debounce';
@@ -193,7 +222,7 @@ const topics = [
 ];
 
 export default {
-    name: 'product-groups',
+    name: 'masterclasses',
 
     components: {
         VButton,
@@ -213,14 +242,11 @@ export default {
         BreadcrumbItem,
 
         SeparatorSection,
-        CategoriesSection,
     },
 
     data() {
         return {
             showMore: false,
-            activePage: 1,
-            pagesCount: 3,
 
             masterclassStatus,
             selectedStatus: masterclassStatus[0].value,
@@ -278,64 +304,38 @@ export default {
                     },
                 },
             ],
-
-            masterclasses: [
-                {
-                    id: 1,
-                    name: 'Свадебный стилист',
-                    date: '3 сентября (пт), 12:00',
-                    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
-                    image: profileMasterClassImg1,
-                    code: 'code1',
-                    price: {
-                        value: 5000,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 2,
-                    name: 'Модные косы',
-                    date: '4 сентября (пт), 12:00',
-                    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
-                    image: profileMasterClassImg2,
-                    code: 'code2',
-                    price: {
-                        value: 6000,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 3,
-                    name: 'Пучки и хвосты',
-                    date: '5 сентября (пт), 12:00',
-                    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
-                    image: profileMasterClassImg3,
-                    code: 'code3',
-                    price: {
-                        value: 2000,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 4,
-                    name: 'Цвет под ключ',
-                    date: '8 сентября (пт), 12:00',
-                    address: 'Artplay, г. Москва, Нижняя Сыромятническая ул., 10, этаж 1',
-                    image: profileMasterClassImg4,
-                    code: 'code4',
-                    price: {
-                        value: 4000,
-                        currency: 'RUB',
-                    },
-                },
-            ],
         };
     },
 
     computed: {
-        ...mapState([CATEGORIES, SCROLL]),
-        // ...mapState(MASTERCLASSES_MODULE, []),
-        // ...mapGetters(MASTERCLASSES_MODULE, []),
+        ...mapState([LOCALE]),
+        ...mapState(MASTERCLASSES_MODULE, [ITEMS, ACTIVE_PAGE]),
+        ...mapGetters(MASTERCLASSES_MODULE, [PAGES_COUNT]),
+
+        masterclasses() {
+            const items = this[ITEMS] || [];
+
+            return items.map(i => {
+                const dateObj = new Date(`${i.nearestDate} ${i.nearestTimeFrom}`);
+                const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
+                const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
+                const dateTime = `${date}, ${time}`;
+                const url = generateMasterclassUrl(i.code);
+
+                const defaultImg = i.image && generatePictureSourcePath(400, 240, i.image.id);
+                const desktopImg = i.image && {
+                    webp: generatePictureSourcePath(400, 240, i.image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(400, 240, i.image.id),
+                };
+
+                const mobileImg = i.image && {
+                    webp: generatePictureSourcePath(425, 320, i.image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(425, 320, i.image.id),
+                };
+
+                return { ...i, url, dateTime, desktopImg, mobileImg, defaultImg };
+            });
+        },
 
         sliderOptions() {
             return sliderOptions;
@@ -351,7 +351,7 @@ export default {
     },
 
     methods: {
-        // ...mapActions(MASTERCLASSES_MODULE, [FETCH_ITEMS]),
+        ...mapActions(MASTERCLASSES_MODULE, [FETCH_MASTERCLASS_ITEMS]),
 
         generateMasterclassUrl(code) {
             return generateMasterclassUrl(code);
@@ -405,48 +405,35 @@ export default {
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
 
-        // const {
-        //     fullPath,
-        //     params: { type: toType },
-        //     query: { page = 1, orderField = 'name' },
-        // } = to;
+        const {
+            fullPath,
+            params: { type: toType },
+            query: { page = 1, orderField, orderDirection },
+        } = to;
 
-        // const { loadPath, type } = $store.state[MASTERCLASSES_MODULE];
+        const { loadPath, type } = $store.state[MASTERCLASSES_MODULE];
 
-        // // если все загружено, пропускаем
-        // if (loadPath === fullPath && type === toType)
-        //     next(vm => {
-        //         if (!vm.$isServer && vm[SCROLL]) {
-        //             window.scrollTo({
-        //                 top: 0,
-        //             });
-        //         }
-        //     });
-        // else {
-        //     // для брендов нам нужны сразу все страницы
-        //     const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
-        //     $progress.start();
-        //     $store
-        //         .dispatch(`${MASTERCLASSES_MODULE}/${FETCH_ITEMS}`, { type: toType, page: fetchPage, orderField })
-        //         .then(() => {
-        //             $store.dispatch(`${MASTERCLASSES_MODULE}/${SET_LOAD_PATH}`, fullPath);
-        //             next(vm => {
-        //                 $progress.finish();
-        //                 if (!vm.$isServer && vm[SCROLL]) {
-        //                     window.scrollTo({
-        //                         top: 0,
-        //                     });
-        //                 }
-        //             });
-        //         })
-        //         .catch(error => {
-        //             next(vm => {
-        //                 $progress.fail();
-        //                 $progress.finish();
-        //             });
-        //         });
-        // }
-        next();
+        // если все загружено, пропускаем
+        if (loadPath === fullPath) next();
+        else {
+            $progress.start();
+            $store
+                .dispatch(`${MASTERCLASSES_MODULE}/${FETCH_MASTERCLASS_CATALOG_DATA}`, {
+                    page,
+                    orderDirection,
+                    orderField,
+                })
+                .then(() => {
+                    $store.dispatch(`${MASTERCLASSES_MODULE}/${SET_LOAD_PATH}`, fullPath);
+                    next(vm => $progress.finish());
+                })
+                .catch(error => {
+                    next(vm => {
+                        $progress.fail();
+                        $progress.finish();
+                    });
+                });
+        }
     },
 
     beforeRouteUpdate(to, from, next) {

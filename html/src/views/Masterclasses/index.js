@@ -1,10 +1,12 @@
 import { productGroupTypes } from '@enums/product';
+import registerModule from '@router/middleware/registerModule';
 
 /**
  * @Module
  */
 
 const MasterclassesAsync = () => import(/* webpackChunkName: "masterclasses-view" */ './Masterclasses.vue');
+const MasterclassModuleAsync = () => import(/* webpackChunkName: "masterclasses-view" */ '@store/modules/Masterclass');
 
 /**
  * Модуль компонента Masterclasses
@@ -18,7 +20,9 @@ export default {
             name: 'CatalogMasterclasses',
             path: '/masterclasses',
             component: MasterclassesAsync,
+
             meta: {
+                middleware: [registerModule(MasterclassModuleAsync)],
                 skipScroll: true,
             },
         },

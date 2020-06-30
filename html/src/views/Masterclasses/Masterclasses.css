@@ -106,10 +106,6 @@
                 margin: 0 calc(var(--gs) * 3 / 2);
                 margin-bottom: calc(var(--gs) * 3);
 
-                .master-class-card__img {
-                    max-height: 240px;
-                }
-
                 &:last-child {
                     @media (--tablet) {
                         margin-bottom: 0;
