@@ -79,6 +79,7 @@
                                 class="swiper-slide product-view__header-gallery-item"
                                 v-for="image in productImages.media"
                                 :key="image.id"
+                                :class="productImages.media.length == 1 ? 'product-view__header-gallery-item--alone' : ''"
                             >
                                 <v-picture>
                                     <source
