@@ -104,7 +104,6 @@ export default {
                 // return the matching countries as an array
                 const { suggestions } = await this.findAddress(suggestionTypes.CITY, suggestQuery, 20);
                 this.suggestions = suggestions;
-                console.log(this.suggestions);
             } catch (error) {
                 console.error(error);
                 return null;
