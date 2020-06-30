@@ -21,11 +21,14 @@
                         >
                             <button class="city-selection-modal__list-btn" @click="onSubmit(suggestion)">
                                 <template v-if="suggestion.data.settlement_with_type">
-                                    {{ suggestion.data.settlement_with_type }},
+                                    {{ suggestion.data.settlement_with_type }}, {{ suggestion.data.region_with_type }}
                                 </template>
 
                                 <template v-if="suggestion.data.city">
-                                    {{ suggestion.data.city }}
+                                    {{ suggestion.data.city
+                                    }}<span v-if="suggestion.data.city_with_type !== suggestion.data.region_with_type"
+                                        >, {{ suggestion.data.region_with_type }}</span
+                                    >
                                 </template>
                             </button>
                         </li>
@@ -101,6 +104,7 @@ export default {
                 // return the matching countries as an array
                 const { suggestions } = await this.findAddress(suggestionTypes.CITY, suggestQuery, 20);
                 this.suggestions = suggestions;
+                console.log(this.suggestions);
             } catch (error) {
                 console.error(error);
                 return null;
