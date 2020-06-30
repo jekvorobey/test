@@ -15,14 +15,14 @@
                 :autocomplete="autocomplete"
                 :aria-describedby="`${inputId}-alert`"
             />
-            <v-button
+            <button
                 v-if="!$attrs.disabled"
-                class="btn--transparent v-password__btn-show"
+                class="v-password__btn-show"
                 @mousedown.prevent
                 @click.prevent="changePasswordState"
             >
                 <v-svg :name="showPassword ? 'eye-crossed' : 'eye'" width="16" height="16" />
-            </v-button>
+            </button>
         </div>
 
         <div v-if="showError" :id="`${inputId}-alert`" class="error-message v-password__error" role="alert">
