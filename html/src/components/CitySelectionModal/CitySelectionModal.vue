@@ -24,8 +24,8 @@
                                     {{ suggestion.data.settlement_with_type }},
                                 </template>
 
-                                <template v-if="suggestion.data.city_with_type">
-                                    {{ suggestion.data.city_with_type }}
+                                <template v-if="suggestion.data.city">
+                                    {{ suggestion.data.city }}
                                 </template>
                             </button>
                         </li>
@@ -97,7 +97,7 @@ export default {
 
         async onCityInputChange(query = '') {
             try {
-                const suggestQuery = query || (this[SELECTED_CITY] && this[SELECTED_CITY].name);
+                const suggestQuery = query || suggestionTypes.CITY;
                 // return the matching countries as an array
                 const { suggestions } = await this.findAddress(suggestionTypes.CITY, suggestQuery, 20);
                 this.suggestions = suggestions;
