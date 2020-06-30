@@ -130,14 +130,13 @@ import VSelect from '@controls/VSelect/VSelect.vue';
 
 import SelectPanel from '@components/SelectPanel/SelectPanel.vue';
 import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
 import MasterClassCard from '@components/MasterClassCard/MasterClassCard.vue';
 import MasterClassBannerCard from '@components/MasterClassBannerCard/MasterClassBannerCard.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
-
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
-import VSlider from '@controls/VSlider/VSlider.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import { $store, $progress, $logger } from '@services';

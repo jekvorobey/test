@@ -120,10 +120,10 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import VHtml from '@controls/VHtml/VHtml.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 
+import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
-import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';

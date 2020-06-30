@@ -42,7 +42,9 @@
                             </div>
                             <div
                                 class="product-view__header-gallery-item"
-                                :class="productImages.media.length == 1 ? 'product-view__header-gallery-item--alone' : ''"
+                                :class="
+                                    productImages.media.length == 1 ? 'product-view__header-gallery-item--alone' : ''
+                                "
                                 v-for="image in productImages.media"
                                 :key="image.id"
                             >
@@ -59,7 +61,11 @@
                                         media="(max-width: 479px)"
                                     />
                                     <source :data-srcset="image.tablet.orig" media="(max-width: 479px)" />
-                                    <img class="blur-up lazyload v-picture__img" :data-src="image.desktop.orig" alt="" />
+                                    <img
+                                        class="blur-up lazyload v-picture__img"
+                                        :data-src="image.desktop.orig"
+                                        alt=""
+                                    />
                                 </v-picture>
                             </div>
                         </div>
@@ -79,7 +85,9 @@
                                 class="swiper-slide product-view__header-gallery-item"
                                 v-for="image in productImages.media"
                                 :key="image.id"
-                                :class="productImages.media.length == 1 ? 'product-view__header-gallery-item--alone' : ''"
+                                :class="
+                                    productImages.media.length == 1 ? 'product-view__header-gallery-item--alone' : ''
+                                "
                             >
                                 <v-picture>
                                     <source
@@ -663,8 +671,9 @@ import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
 import VHtml from '@controls/VHtml/VHtml.vue';
-import VSlider from '@controls/VSlider/VSlider.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
+import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
+import VSlider from '@controls/VSlider/VSlider.vue';
 
 import Price from '@components/Price/Price.vue';
 import BannerCard from '@components/BannerCard/BannerCard.vue';
@@ -698,7 +707,6 @@ import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPan
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
 import MapModal, { NAME as MAP_MODAL_NAME } from '@components/MapModal/MapModal.vue';
-import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger, $retailRocket } from '@services';
@@ -913,16 +921,16 @@ export default {
         ]),
 
         ...mapState(MODAL_MODULE, {
-            isGalleryOpen: (state) =>
+            isGalleryOpen: state =>
                 state[MODALS][modalName.product.GALLERY] && state[MODALS][modalName.product.GALLERY].open,
-            isModalOpen: (state) => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
+            isModalOpen: state => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
         }),
 
         ...mapState('route', {
-            code: (state) => state.params.code,
-            categoryCode: (state) => state.params.categoryCode,
-            refCode: (state) => state.query.refCode,
-            modal: (state) => state.query.modal,
+            code: state => state.params.code,
+            categoryCode: state => state.params.categoryCode,
+            refCode: state => state.query.refCode,
+            modal: state => state.query.modal,
         }),
 
         inCart() {
@@ -1004,8 +1012,8 @@ export default {
                 const tabletSize = 400;
                 const mobileSize = 200;
 
-                imageMap.media = media.map((image) => prepareProductImage(image, desktopSize, tabletSize, mobileSize));
-                imageMap.gallery = media.map((image) => prepareProductImage(image, gallerySize));
+                imageMap.media = media.map(image => prepareProductImage(image, desktopSize, tabletSize, mobileSize));
+                imageMap.gallery = media.map(image => prepareProductImage(image, gallerySize));
             } else {
                 imageMap.media = [];
                 imageMap.gallery = [];
@@ -1224,18 +1232,18 @@ export default {
         const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
         // если все загружено, пропускаем
-        if (productCode === code && referrerCode === refCode) next((vm) => vm.handleModalQuery(modal));
+        if (productCode === code && referrerCode === refCode) next(vm => vm.handleModalQuery(modal));
         else {
             $progress.start();
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
                 .then(() =>
-                    next((vm) => {
+                    next(vm => {
                         $progress.finish();
                         vm.handleModalQuery(modal);
                     })
                 )
-                .catch((error) => {
+                .catch(error => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
                     else next(new Error(error.message));
