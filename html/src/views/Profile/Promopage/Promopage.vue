@@ -1,10 +1,24 @@
 <template>
     <section class="section promopage-view">
         <div class="promopage-view__header">
-            <h2 class="promopage-view__hl">
-                {{ $t(`profile.routes.${$route.name}`) }}
-            </h2>
-            <span v-if="items && items.length" class="text-grey text-sm">{{ items && items.length }} продуктов</span>
+            <div class="promopage-view__header-title">
+                <h2 class="promopage-view__hl">
+                    {{ $t(`profile.routes.${$route.name}`) }}
+                </h2>
+                <span v-if="items && items.length" class="text-grey text-sm"
+                    >{{ items && items.length }} продуктов</span
+                >
+            </div>
+            <div class="promopage-view__panel-controls promopage-view__panel-controls--right">
+                <v-link class="promopage-view__panel-link" tag="button" @click="onCopyReferralLink">
+                    <v-svg name="link" :width="iconSize" :height="iconSize" />
+                    &nbsp;&nbsp;{{ !isTablet ? 'Скопировать ссылку' : 'Скопировать' }}
+                </v-link>
+
+                <v-button class="btn--outline promopage-view__panel-btn" @click="loadPreview">
+                    Предпросмотр
+                </v-button>
+            </div>
         </div>
 
         <info-panel class="promopage-view__panel" :header="title">
@@ -22,11 +36,6 @@
                     <v-link class="promopage-view__panel-link" tag="button" @click="onAddProductByLink">
                         <v-svg name="link-add" :width="iconSize" :height="iconSize" />
                         &nbsp;&nbsp;Добавить по ссылке
-                    </v-link>
-
-                    <v-link class="promopage-view__panel-link" tag="button" @click="onCopyReferralLink">
-                        <v-svg name="link" :width="iconSize" :height="iconSize" />
-                        &nbsp;&nbsp;Скопировать ссылку
                     </v-link>
                 </div>
             </template>
@@ -171,22 +180,22 @@ export default {
         ...mapGetters(PROMOPAGE_MODULE_PATH, [PAGES_COUNT]),
 
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || null,
+            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || null,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isNameEditOpen: (state) =>
+            isNameEditOpen: state =>
                 state[MODALS][modalName.profile.PROMO_EDIT] && state[MODALS][modalName.profile.PROMO_EDIT].open,
-            isProductAddOpen: (state) =>
+            isProductAddOpen: state =>
                 state[MODALS][modalName.profile.PROMO_ADD] && state[MODALS][modalName.profile.PROMO_ADD].open,
-            isProductAddByLinkOpen: (state) =>
+            isProductAddByLinkOpen: state =>
                 state[MODALS][modalName.profile.PROMO_ADD_BY_LINK] &&
                 state[MODALS][modalName.profile.PROMO_ADD_BY_LINK].open,
         }),
 
         products() {
             const items = this[ITEMS] || [];
-            return items.map((item) => {
+            return items.map(item => {
                 return {
                     ...item,
                     href: generateProductUrl(item.categoryCodes[item.categoryCodes.length - 1], item.code),
@@ -255,6 +264,14 @@ export default {
             this.showMore = false;
             this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
         },
+
+        loadPreview() {
+            try {
+                this.$router.push(`/referrer/${this[REFERRAL_CODE]}`);
+            } catch {
+                console.error('Ошибка в loadPreview');
+            }
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -273,10 +290,10 @@ export default {
                 .dispatch(`${PROMOPAGE_MODULE_PATH}/${FETCH_PROMOPAGE}`, { page })
                 .then(() => {
                     $store.dispatch(`${PROMOPAGE_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => $progress.finish());
+                    next(vm => $progress.finish());
                 })
-                .catch((error) => {
-                    next((vm) => $progress.fail());
+                .catch(error => {
+                    next(vm => $progress.fail());
                 });
         }
     },
