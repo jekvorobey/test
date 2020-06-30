@@ -121,7 +121,7 @@ export function computeFilterData(pathMatch, code = null) {
     return { filter, routeSegments, filterSegments };
 }
 
-export function prepareProductImage(image, desktopSize, tabletSize) {
+export function prepareProductImage(image, desktopSize, tabletSize, mobileSize) {
     return {
         ...image,
         desktop: {
@@ -131,6 +131,10 @@ export function prepareProductImage(image, desktopSize, tabletSize) {
         tablet: tabletSize && {
             webp: generatePictureSourcePath(tabletSize, tabletSize, image.id, fileExtension.image.WEBP),
             orig: generatePictureSourcePath(tabletSize, tabletSize, image.id),
+        },
+        mobile: mobileSize && {
+            webp: generatePictureSourcePath(mobileSize, mobileSize, image.id, fileExtension.image.WEBP),
+            orig: generatePictureSourcePath(mobileSize, mobileSize, image.id),
         },
         default: generatePictureSourcePath(desktopSize, desktopSize, image.id),
     };

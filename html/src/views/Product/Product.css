@@ -190,6 +190,10 @@
                     margin-bottom: 0;
                 }
 
+                @media (--mobile-min) and (--tablet-lg) {
+                    padding: calc(var(--gs) * 11);
+                }
+
                 &--video {
                     padding: 0;
                 }
