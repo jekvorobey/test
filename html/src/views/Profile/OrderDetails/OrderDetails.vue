@@ -167,6 +167,7 @@
                 </template>
 
                 <info-row
+                    v-if="!!delivery.package_count"
                     class="order-details-view__panel-row"
                     name="Количество коробок"
                     :value="formatPackageCount(delivery.package_count)"
