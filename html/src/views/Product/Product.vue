@@ -42,7 +42,7 @@
                             </div>
                             <div
                                 class="product-view__header-gallery-item"
-                                :class="image.length === 1 ? 'product-view__header-gallery-item--alone' : ''"
+                                :class="productImages.media.length == 1 ? 'product-view__header-gallery-item--alone' : ''"
                                 v-for="image in productImages.media"
                                 :key="image.id"
                             >
