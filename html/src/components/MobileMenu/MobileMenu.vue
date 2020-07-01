@@ -27,7 +27,12 @@
                             v-for="(item, index) in headerMenu.items"
                             :key="item.name"
                         >
-                            <v-link class="mobile-menu__menu-link" :to="item.url">
+                            <v-link
+                                class="mobile-menu__menu-link"
+                                :to="index !== 0 ? item.url : null"
+                                :tag="index !== 0 ? 'a' : 'button'"
+                                @click.prevent="index === 0 ? (showCategories = true) : null"
+                            >
                                 {{ item.name }}
                             </v-link>
                             <v-link
@@ -247,9 +252,14 @@ export default {
 
         onRegister() {
             if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
-            else this[CHANGE_MODAL_STATE]({ name: modalName.general.AUTH, open: true, state: {
-                activeTab: authMode.LOGIN,
-            }});
+            else
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.AUTH,
+                    open: true,
+                    state: {
+                        activeTab: authMode.LOGIN,
+                    },
+                });
         },
     },
 };
