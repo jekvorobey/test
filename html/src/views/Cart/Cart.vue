@@ -107,7 +107,7 @@
                             </div>
                         </template>
                     </v-tabs>
-                    <v-link class="cart-view__main-clear" tag="button" @click="onClearCart">
+                    <v-link class="cart-view__main-clear" tag="button" @click="openOnClearCart">
                         <v-svg name="cross-small" width="13" height="13" />
                         &nbsp;&nbsp;Очистить корзину
                     </v-link>
@@ -226,6 +226,10 @@
                 </v-slider>
             </div>
         </section>
+
+        <transition name="fade">
+            <clear-cart-modal v-if="isModalOpen" />
+        </transition>
     </section>
 </template>
 
@@ -244,6 +248,7 @@ import CartMasterClassCard from '@components/CartMasterClassCard/CartMasterClass
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
 import CartBundleProductCard from '@components/CartBundleProductCard/CartBundleProductCard.vue';
+import ClearCartModal from '@components/ClearCartModal/ClearCartModal.vue';
 import VTabs from '@controls/VTabs/VTabs.vue';
 
 import { $store, $logger, $progress } from '@services';
@@ -272,7 +277,7 @@ import {
     DELIVERY_INFO,
 } from '@store/modules/Cart/getters';
 
-import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER } from '@store/modules/Auth';
@@ -347,6 +352,7 @@ export default {
         CartMasterClassCard,
         CatalogProductCard,
         CartBundleProductCard,
+        ClearCartModal,
     },
 
     data() {
@@ -371,6 +377,10 @@ export default {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+        }),
+        ...mapState(MODAL_MODULE, {
+            isModalOpen: state =>
+                state[MODALS][modalName.cart.CLEAR_CART] && state[MODALS][modalName.cart.CLEAR_CART].open,
         }),
 
         isTabletLg() {
@@ -421,8 +431,8 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
         },
 
-        onClearCart() {
-            this[DELETE_ALL_ITEMS]();
+        openOnClearCart() {
+            this[CHANGE_MODAL_STATE]({ name: modalName.cart.CLEAR_CART, open: true });
         },
 
         onAddCartItem(offerId, storeId, count) {
@@ -484,11 +494,11 @@ export default {
             try {
                 this.isLoad = true;
                 this.$router.push(`/checkout/${this.activeTabItem.type}`);
-            } catch(error) {
+            } catch (error) {
                 this.isLoad = false;
                 console.error('Ошибка в loadCheckout');
             }
-        }
+        },
     },
 
     async serverPrefetch() {

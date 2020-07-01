@@ -36,6 +36,10 @@ export const modalName = Object.freeze({
 
         RETURN_REASON: 'return-reason-modal',
     },
+
+    cart: {
+        CLEAR_CART: 'clear-cart-modal',
+    },
 });
 
 /**
@@ -174,7 +178,7 @@ export const mimeType = Object.freeze({
     video: {
         MOV: 'video/quicktime',
         MP4: 'video/mp4',
-    }
+    },
 });
 
 export const sortDirections = Object.freeze({
