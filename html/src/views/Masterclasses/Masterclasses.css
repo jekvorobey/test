@@ -28,36 +28,7 @@
         margin-bottom: calc(var(--gs) * 5);
 
         @media (--tablet-lg) {
-            margin-bottom: calc(var(--gs) * 3);
             padding: 0;
-        }
-
-        &-hl {
-            margin-bottom: 0;
-        }
-
-        &-select {
-            width: 236px;
-            & + & {
-                margin-left: calc(var(--gs) * 3);
-            }
-        }
-
-        &-switch {
-            white-space: nowrap;
-        }
-
-        &-top,
-        &-bottom {
-            display: flex;
-            justify-content: space-between;
-
-            &-controls {
-                display: flex;
-            }
-        }
-
-        &-top {
             margin-bottom: calc(var(--gs) * 3);
         }
     }
@@ -81,6 +52,96 @@
         @media (--tablet) {
             padding-bottom: calc(var(--gs) * 3);
             margin-bottom: calc(var(--gs) * 3);
+        }
+
+        &-header {
+            display: flex;
+            flex-direction: column;
+
+            @media (--tablet-lg) {
+                margin-bottom: calc(var(--gs) * 3);
+            }
+
+            @media (--tablet) {
+                margin-bottom: calc(var(--gs) * 3);
+                padding: 0;
+            }
+
+            &-hl {
+                margin-bottom: 0;
+                white-space: nowrap;
+            }
+
+            &-select {
+                width: 236px;
+                margin: 0 var(--gs);
+
+                @media (--desktop) {
+                    width: 196px;
+                }
+
+                @media (--tablet) {
+                    width: 136px;
+                }
+            }
+
+            &-switch {
+                align-self: flex-start;
+                white-space: nowrap;
+                margin-right: calc(var(--gs) * 5);
+
+                @media (--tablet-lg) {
+                    display: none;
+                }
+            }
+
+            &-panel {
+                flex: 1;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+
+                @media (--tablet-lg) {
+                    display: none;
+                }
+            }
+
+            &-top,
+            &-bottom {
+                display: flex;
+                justify-content: space-between;
+
+                &-controls {
+                    display: flex;
+                    flex-wrap: wrap;
+                }
+            }
+
+            &-bottom {
+                margin-bottom: calc(var(--gs) * 3);
+
+                &-controls {
+                    @media (--tablet) {
+                        display: none;
+                    }
+                }
+            }
+
+            &-top {
+                margin-bottom: calc(var(--gs) * 3);
+
+                @media (--tablet-lg) {
+                    flex-direction: column;
+                }
+
+                &-controls {
+                    justify-content: flex-end;
+
+                    @media (--tablet-lg) {
+                        justify-content: flex-start;
+                        flex-wrap: nowrap;
+                    }
+                }
+            }
         }
 
         &-container {

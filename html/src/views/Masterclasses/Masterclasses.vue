@@ -11,7 +11,7 @@
                 </breadcrumb-item>
             </breadcrumbs>
 
-            <!-- <section class="section masterclasses-view__banners">
+            <section class="section masterclasses-view__banners">
                 <v-slider class="masterclasses-view__banners-slider" name="masterClasses" :options="sliderOptions">
                     <master-class-banner-card
                         class="swiper-slide masterclasses-view__banners-slider-item"
@@ -26,30 +26,71 @@
                         show-btn
                     />
                 </v-slider>
-            </section> -->
+            </section>
         </div>
 
         <section class="section masterclasses-view__section masterclasses-view__sets">
-            <div class="container masterclasses-view__header">
-                <div class="masterclasses-view__header-top">
-                    <h1 class="masterclasses-view__section-hl masterclasses-view__header-hl">
+            <div class="container masterclasses-view__sets-header">
+                <div class="masterclasses-view__sets-header-top">
+                    <h1
+                        class="container container--tablet masterclasses-view__section-hl masterclasses-view__sets-header-hl"
+                    >
                         {{ $t('masterclasses.title') }}
                     </h1>
-                    <div class="masterclasses-view__header-top-controls">
-                        <v-select class="masterclasses-view__header-select" :options="[]"></v-select>
-                        <v-select class="masterclasses-view__header-select" :options="[]"></v-select>
+                    <div>
+                        <div class="masterclasses-view__sets-header-top-controls">
+                            <v-select
+                                class="masterclasses-view__sets-header-select"
+                                v-for="filter in filters"
+                                track-by="id"
+                                label="name"
+                                :value="selectedValueMap[filter.name] || filter.items[0]"
+                                :key="filter.id"
+                                :options="filter.items"
+                                :placeholder="filter.title"
+                                :searchable="false"
+                                :allow-empty="false"
+                                :show-labels="false"
+                                @input="
+                                    onChangeFilter(
+                                        filter,
+                                        $event && $event.code,
+                                        selectedValueMap[filter.name] && selectedValueMap[filter.name].code
+                                    )
+                                "
+                            >
+                            </v-select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="masterclasses-view__header-bottom">
+                <div class="masterclasses-view__sets-header-bottom">
                     <radio-switch
-                        class="masterclasses-view__header-switch"
+                        class="masterclasses-view__sets-header-switch"
                         v-model="selectedStatus"
                         name="status"
                         id="status"
                         :items="masterclassStatus"
                     />
-                    <select-panel class="masterclasses-view__header-panel" name="topic" id="topic" :items="topics" />
+
+                    <select-panel
+                        class="masterclasses-view__sets-header-panel"
+                        name="topic"
+                        id="topic"
+                        :value="(selectedValueMap[professions.name] && selectedValueMap[professions.name].code) || null"
+                        :items="professions.items"
+                        @input="
+                            onChangeFilter(
+                                professions,
+                                $event,
+                                selectedValueMap[professions.name] && selectedValueMap[professions.name].code
+                            )
+                        "
+                    >
+                        <template v-slot:content="{ item }">
+                            {{ item.name }}
+                        </template>
+                    </select-panel>
                 </div>
             </div>
             <div class="container masterclasses-view__sets-container">
@@ -123,6 +164,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
@@ -142,18 +184,22 @@ import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import { $store, $progress, $logger } from '@services';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { LOCALE } from '@store';
+import { LOCALE, SCROLL } from '@store';
 
 import { NAME as MASTERCLASSES_MODULE, ITEMS, ACTIVE_PAGE } from '@store/modules/Masterclass';
-import { PAGES_COUNT } from '@store/modules/Masterclass/getters';
-import { FETCH_MASTERCLASS_CATALOG_DATA, FETCH_MASTERCLASS_ITEMS } from '@store/modules/Masterclass/actions';
+import { PAGES_COUNT, ROUTE_SEGMENTS, FILTER_SEGMENTS, NULLABLE_FILTERS } from '@store/modules/Masterclass/getters';
+import {
+    FETCH_MASTERCLASS_CATALOG_DATA,
+    FETCH_MASTERCLASS_ITEMS,
+    SET_LOAD_PATH,
+} from '@store/modules/Masterclass/actions';
 
 import { MIN_SCROLL_VALUE } from '@constants';
 import { fileExtension } from '@enums';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { generatePictureSourcePath } from '@util/file';
 import { registerModuleIfNotExists } from '@util/store';
-import { generateMasterclassUrl } from '@util/catalog';
+import { generateMasterclassUrl, concatMasterclassesRoutePath, computeFilterMasterclassData } from '@util/catalog';
 import _debounce from 'lodash/debounce';
 import './Masterclasses.css';
 
@@ -250,8 +296,8 @@ export default {
             masterclassStatus,
             selectedStatus: masterclassStatus[0].value,
 
-            topics,
-            selectedTopic: topics[0].value,
+            selectedFiltersMap: {},
+
             masterclassBanners: [
                 {
                     id: 1,
@@ -307,9 +353,31 @@ export default {
     },
 
     computed: {
-        ...mapState([LOCALE]),
+        ...mapState([LOCALE, SCROLL]),
         ...mapState(MASTERCLASSES_MODULE, [ITEMS, ACTIVE_PAGE]),
-        ...mapGetters(MASTERCLASSES_MODULE, [PAGES_COUNT]),
+        ...mapGetters(MASTERCLASSES_MODULE, [PAGES_COUNT, ROUTE_SEGMENTS, FILTER_SEGMENTS, NULLABLE_FILTERS]),
+
+        selectedValueMap() {
+            const { filterSegments } = this;
+            const map = {};
+
+            for (const key in filterSegments) {
+                const filter = this[NULLABLE_FILTERS].find(f => f.name === key);
+                const keys = Object.keys(filterSegments[key]);
+                map[key] = filter.items.find(i => i.code === filterSegments[key][keys[0]]) || filter.items[0];
+            }
+            return map;
+        },
+
+        professions() {
+            const filters = this[NULLABLE_FILTERS] || [];
+            return filters.find(f => f.name === 'profession');
+        },
+
+        filters() {
+            const filters = this[NULLABLE_FILTERS] || [];
+            return filters.filter(f => f.name !== 'profession');
+        },
 
         masterclasses() {
             const items = this[ITEMS] || [];
@@ -352,6 +420,25 @@ export default {
     methods: {
         ...mapActions(MASTERCLASSES_MODULE, [FETCH_MASTERCLASS_ITEMS]),
 
+        onChangeFilter(filter, value, oldValue) {
+            const { routeSegments } = this;
+
+            const oldSegment = `${filter.name}-${oldValue}`;
+            const newSegment = `${filter.name}-${value}`;
+
+            if (oldValue && routeSegments.includes(oldSegment)) {
+                const index = routeSegments.indexOf(oldSegment);
+                routeSegments.splice(index, 1);
+            }
+
+            if (value && !routeSegments.includes(newSegment)) {
+                routeSegments.push(newSegment);
+            }
+
+            const path = concatMasterclassesRoutePath(routeSegments);
+            this.$router.replace({ path });
+        },
+
         generateMasterclassUrl(code) {
             return generateMasterclassUrl(code);
         },
@@ -370,32 +457,34 @@ export default {
         },
 
         async fetchCatalog(to, from, showMore) {
-            // try {
-            //     const {
-            //         fullPath,
-            //         params: { type: toType },
-            //         query: { page = 1, orderField = 'name' },
-            //     } = to;
-            //     const {
-            //         params: { type: fromType },
-            //         query: { page: fromPage = 1 },
-            //     } = from;
-            //     // для брендов нам нужны сразу все страницы
-            //     const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
-            //     this.$progress.start();
-            //     await this[FETCH_ITEMS]({ type: toType, page: fetchPage, orderField, showMore });
-            //     this.$progress.finish();
-            //     if (!showMore && this[SCROLL] && (toType !== fromType || page !== fromPage))
-            //         window.scrollTo({
-            //             top: MIN_SCROLL_VALUE + 1,
-            //             behavior: 'smooth',
-            //         });
-            //     if (showMore) setTimeout(() => (this.showMore = false), 200);
-            // } catch (error) {
-            //     $logger.error(error);
-            //     this.$progress.fail();
-            //     this.$progress.finish();
-            // }
+            try {
+                const {
+                    fullPath,
+                    params: { pathMatch },
+                    query: { page = 1 },
+                } = to;
+
+                const {
+                    query: { page: fromPage = 1 },
+                } = from;
+
+                const { filter, routeSegments, filterSegments } = computeFilterMasterclassData(pathMatch);
+
+                this.$progress.start();
+                await this[FETCH_MASTERCLASS_ITEMS]({ page, filter, showMore });
+                this.$progress.finish();
+
+                if (!showMore && this[SCROLL] && page !== fromPage)
+                    window.scrollTo({
+                        top: MIN_SCROLL_VALUE + 1,
+                        behavior: 'smooth',
+                    });
+                if (showMore) setTimeout(() => (this.showMore = false), 200);
+            } catch (error) {
+                $logger.error(error);
+                this.$progress.fail();
+                this.$progress.finish();
+            }
         },
     },
 
@@ -406,21 +495,22 @@ export default {
 
         const {
             fullPath,
-            params: { type: toType },
+            params: { pathMatch },
             query: { page = 1, orderField, orderDirection },
         } = to;
 
-        const { loadPath, type } = $store.state[MASTERCLASSES_MODULE];
+        const { loadPath } = $store.state[MASTERCLASSES_MODULE];
 
         // если все загружено, пропускаем
         if (loadPath === fullPath) next();
         else {
+            const { filter, routeSegments, filterSegments } = computeFilterMasterclassData(pathMatch);
+
             $progress.start();
             $store
                 .dispatch(`${MASTERCLASSES_MODULE}/${FETCH_MASTERCLASS_CATALOG_DATA}`, {
                     page,
-                    orderDirection,
-                    orderField,
+                    filter,
                 })
                 .then(() => {
                     $store.dispatch(`${MASTERCLASSES_MODULE}/${SET_LOAD_PATH}`, fullPath);
@@ -443,14 +533,13 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        // if (this.showMore) {
-        //     this.fetchCatalog(to, from, this.showMore);
-        // } else this.debounce_fetchCatalog(to, from);
+        if (this.showMore) this.fetchCatalog(to, from, this.showMore);
+        else this.debounce_fetchCatalog(to, from);
         next();
     },
 
     beforeMount() {
-        //this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
+        this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
     },
 };
 </script>

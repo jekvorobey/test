@@ -57,6 +57,12 @@ export function concatCatalogRoutePath(type, entityCode, categoryCode, segments)
     return basePath.concat(...segments.map((s) => `/${s}`));
 }
 
+export function concatMasterclassesRoutePath(segments) {
+    let baseRoute = '/masterclasses/';
+    const basePath = segments.length > 0 ? `${baseRoute}filters` : baseRoute;
+    return basePath.concat(...segments.map((s) => `/${s}`));
+}
+
 export function mapFilterSegments(urlSegments) {
     const segments = {};
     for (let i = 0; i < urlSegments.length; i++) {
@@ -107,6 +113,22 @@ export function getActiveCategories(code, item, activeItems = []) {
 
 export function computeFilterData(pathMatch, code = null) {
     const filter = { category: code };
+    const routeSegments = pathMatch ? pathMatch.split('/') : [];
+    const filterSegments = mapFilterSegments(routeSegments);
+    const filterNames = Object.keys(filterSegments);
+
+    for (let i = 0; i < filterNames.length; i++) {
+        const filterName = filterNames[i];
+        const segment = filterSegments[filterName];
+
+        if (Array.isArray(segment)) filter[filterName] = segment;
+        else filter[filterName] = Object.keys(segment);
+    }
+    return { filter, routeSegments, filterSegments };
+}
+
+export function computeFilterMasterclassData(pathMatch) {
+    const filter = {};
     const routeSegments = pathMatch ? pathMatch.split('/') : [];
     const filterSegments = mapFilterSegments(routeSegments);
     const filterNames = Object.keys(filterSegments);

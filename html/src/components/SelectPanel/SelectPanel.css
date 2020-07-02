@@ -1,6 +1,7 @@
 .select-panel {
     display: flex;
     flex-wrap: wrap;
+    margin: 0 calc(var(--gs) * -3 / 2);
 
     &__radio {
         display: flex;
@@ -12,10 +13,7 @@
         line-height: 24px;
         font-family: 'Futura PT-Medium';
         user-select: none;
-
-        & + & {
-            margin-left: calc(var(--gs) * 3);
-        }
+        margin: var(--gs) calc(var(--gs) * 3 / 2);
 
         input[type='radio'] {
             & + label {

@@ -26,5 +26,15 @@ export default {
                 skipScroll: true,
             },
         },
+
+        {
+            path: '/masterclasses/filters/*',
+            component: MasterclassesAsync,
+
+            meta: {
+                middleware: [registerModule(MasterclassModuleAsync)],
+                skipScroll: true,
+            },
+        },
     ],
 };

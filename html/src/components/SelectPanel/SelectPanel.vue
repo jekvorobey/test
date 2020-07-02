@@ -6,8 +6,8 @@
             v-for="(item, index) in items"
             v-model="internalValue"
             :id="`select-panel-${id}-${index}`"
-            :key="item.value"
-            :value="item.value"
+            :key="item.code"
+            :value="item.code"
             :name="name"
         >
             <slot name="content" :item="item" :index="index">

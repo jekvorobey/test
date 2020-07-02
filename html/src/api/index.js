@@ -776,10 +776,15 @@ export function getDocumentsFilters() {
 export function getCatalogMasterclasses(page, orderField, orderDirection, filter) {
     return $http.get('/v1/public-events', {
         params: {
+            filter,
             page,
             orderField,
             orderDirection,
-            filter,
+        },
+        paramsSerializer(params) {
+            return qs.stringify(params, {
+                encode: false,
+            });
         },
     });
 }
