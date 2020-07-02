@@ -50,7 +50,12 @@ export default {
                     id: 1,
                     routes: [
                         { name: 'Cabinet', exact: true },
-                        { name: 'Messages', displayName: this.$tc('profile.format.messages', this[UNREAD_MESSAGES]) },
+                        {
+                            name: 'Messages',
+                            displayName:
+                                `${this.$tc('profile.format.messages')}` +
+                                (this[UNREAD_MESSAGES] ? ` (${this[UNREAD_MESSAGES]})` : ''),
+                        },
                         { name: 'Addresses' },
                         { name: 'Orders' },
                     ],

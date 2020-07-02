@@ -1361,4 +1361,29 @@
             padding: 0;
         }
     }
+
+    .frisbuy-button-link {
+        border-bottom: none;
+        cursor: pointer;
+    }
+
+    .frisbuy-button {
+        &:hover {
+            background: var(--cl-global);
+            color: var(--cl-global-invert);
+        }
+    }
+
+    .frisbuy-title {
+        @media (--tablet) {
+            flex-direction: column;
+        }
+    }
+
+    .frisbuy-widget {
+        @media (--tablet-lg-diff) {
+            padding: 0 calc(var(--gs) * 3);
+        }
+    }
+
 }

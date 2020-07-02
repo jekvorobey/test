@@ -187,18 +187,20 @@
                     </div>
                     <div v-if="product.brand" class="product-view__header-detail-section">
                         <div class="product-view__header-detail-brand">
-                            <v-picture
-                                v-if="productImages.brand"
-                                :key="productImages.brand.id"
-                                class="product-view__header-detail-brand-img"
-                            >
-                                <source :data-src="productImages.brand.desktop" type="image/webp" />
-                                <img
-                                    class="blur-up lazyload v-picture__img"
-                                    :data-src="productImages.brand.default"
-                                    :alt="productImages.brand.alt"
-                                />
-                            </v-picture>
+                            <router-link :to="brandUrl || null" class="link">
+                                <v-picture
+                                    v-if="productImages.brand"
+                                    :key="productImages.brand.id"
+                                    class="product-view__header-detail-brand-img"
+                                >
+                                    <source :data-src="productImages.brand.desktop" type="image/webp" />
+                                    <img
+                                        class="blur-up lazyload v-picture__img"
+                                        :data-src="productImages.brand.default"
+                                        :alt="productImages.brand.alt"
+                                    />
+                                </v-picture>
+                            </router-link>
 
                             <router-link
                                 v-if="product.brand.hasDetail"
@@ -559,44 +561,12 @@
 
         <section class="section product-view__section product-view__instagram">
             <div class="container product-view__instagram-container">
-                <h2 class="product-view__section-hl product-view__instagram-hl">{{ $t('product.title.instagram') }}</h2>
-
-                <v-slider
-                    v-if="isTabletLg"
-                    class="product-view__instagram-slider"
-                    name="instagram"
-                    :options="instagramOptions"
-                >
-                    <instagram-card
-                        class="swiper-slide product-view__instagram-card"
-                        v-for="item in instagramItems"
-                        :key="item.id"
-                        :instagram-card-id="item.id"
-                        :image="item.image"
-                    />
-                </v-slider>
-
-                <div v-if="!isTabletLg" class="product-view__instagram-grid product-view__instagram-grid--initialized">
-                    <instagram-card
-                        class="product-view__instagram-card"
-                        v-for="item in instagramItems"
-                        :key="item.id"
-                        :instagram-card-id="item.id"
-                        :image="item.image"
-                    />
-                </div>
+                    
+                <div id="frisbuy-widget2"></div>
+                
                 <div class="text-grey product-view__instagram-note">
                     Добавь тег @bessovestnotalantlivy в Instagram и, возможно, мы опубликуем твою фотографию
                 </div>
-                <!-- #58437 -->
-                <v-button
-                    tag="a"
-                    class="btn--outline product-view__section-link product-view__instagram-link"
-                    :href="btnLink"
-                    target="_blank"
-                >
-                    {{ $t('landing.subscribe') }}
-                </v-button>
             </div>
         </section>
 

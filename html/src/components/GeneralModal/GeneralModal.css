@@ -1,6 +1,11 @@
 .general-modal {
     overflow-y: auto;
+    padding: calc(var(--gs) * 2) 0;
     -webkit-overflow-scrolling: touch;
+
+    @media (--tablet) {
+        padding: 0;
+    }
 
     .modal-body {
         position: relative;

@@ -42,5 +42,9 @@
             padding: calc(var(--gs) * 2) 0;
             width: calc(var(--gs) * 30);
         }
+
+        .popover-inner {
+            margin: calc(var(--gs) * 2.5) 0;
+        }
     }
 }
