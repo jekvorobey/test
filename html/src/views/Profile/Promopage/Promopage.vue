@@ -9,7 +9,10 @@
                     >{{ items && items.length }} продуктов</span
                 >
             </div>
-            <div class="promopage-view__panel-controls promopage-view__panel-controls--right">
+            <div
+                v-if="items && items.length"
+                class="promopage-view__panel-controls promopage-view__panel-controls--right"
+            >
                 <v-link class="promopage-view__panel-link" tag="button" @click="onCopyReferralLink">
                     <v-svg name="link" :width="iconSize" :height="iconSize" />
                     &nbsp;&nbsp;{{ !isTablet ? 'Скопировать ссылку' : 'Скопировать' }}
