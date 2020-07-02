@@ -281,6 +281,22 @@
         }
     }
 
+    &__empty {
+        &-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--cl-grey);
+            fill: var(--cl-grey);
+        }
+
+        &-text {
+            display: block;
+            margin-bottom: calc(var(--gs) * 3);
+            margin-top: var(--gs);
+        }
+    }
+
     &__controls {
         text-align: center;
 

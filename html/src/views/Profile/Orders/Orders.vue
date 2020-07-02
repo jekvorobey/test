@@ -65,7 +65,7 @@
                 <span class="text-grey">4</span>
             </filter-button> -->
 
-            <table class="orders-view__table" v-if="!isTabletLg">
+            <table class="orders-view__table" v-if="!isTabletLg && orders.length">
                 <colgroup>
                     <col width="15%" />
                     <col width="20%" />
@@ -183,6 +183,13 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="container container--tablet-lg orders-view__empty-container" v-else>
+                <v-svg name="info-middle" width="24" height="24" />
+                <span class="orders-view__empty-text">
+                    У вас еще нет заказов
+                </span>
+                <v-button class="btn--outline" tag="a" to="/">перейти к покупкам</v-button>
+            </div>
         </div>
 
         <ul class="orders-view__list" v-if="isTabletLg">
@@ -303,6 +310,7 @@ import { DEFAULT_PAGE } from '@constants';
 
 import '@images/sprites/arrow-updown.svg';
 import '@images/sprites/arrow-down.svg';
+import '@images/sprites/info-middle.svg';
 import './Orders.css';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
