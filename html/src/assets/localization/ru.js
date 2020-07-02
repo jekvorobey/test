@@ -224,7 +224,7 @@ const main = {
     profile: {
         format: {
             order: 'Заказ №{id}',
-            messages: 'Сообщения ({n})',
+            messages: 'Сообщения',
             referal: 'Реферал №{id}',
             packageCount: '{n} шт.',
         },
