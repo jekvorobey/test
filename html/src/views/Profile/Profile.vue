@@ -141,7 +141,7 @@ export default {
                         // { name: 'Payment', exact: true },
                         // { name: 'Subscribes', exact: true },
                         {
-                            name: 'Mess1ages',
+                            name: 'Messages',
                             displayName:
                                 `${this.$tc('profile.format.messages')}` +
                                 (this[UNREAD_MESSAGES] ? ` (${this[UNREAD_MESSAGES]})` : ''),
