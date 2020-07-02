@@ -187,18 +187,20 @@
                     </div>
                     <div v-if="product.brand" class="product-view__header-detail-section">
                         <div class="product-view__header-detail-brand">
-                            <v-picture
-                                v-if="productImages.brand"
-                                :key="productImages.brand.id"
-                                class="product-view__header-detail-brand-img"
-                            >
-                                <source :data-src="productImages.brand.desktop" type="image/webp" />
-                                <img
-                                    class="blur-up lazyload v-picture__img"
-                                    :data-src="productImages.brand.default"
-                                    :alt="productImages.brand.alt"
-                                />
-                            </v-picture>
+                            <router-link :to="brandUrl || null" class="link">
+                                <v-picture
+                                    v-if="productImages.brand"
+                                    :key="productImages.brand.id"
+                                    class="product-view__header-detail-brand-img"
+                                >
+                                    <source :data-src="productImages.brand.desktop" type="image/webp" />
+                                    <img
+                                        class="blur-up lazyload v-picture__img"
+                                        :data-src="productImages.brand.default"
+                                        :alt="productImages.brand.alt"
+                                    />
+                                </v-picture>
+                            </router-link>
 
                             <router-link
                                 v-if="product.brand.hasDetail"
