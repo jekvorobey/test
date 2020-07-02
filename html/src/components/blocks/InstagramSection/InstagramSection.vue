@@ -1,32 +1,7 @@
 <template>
     <section class="section">
         <div class="container instagram-section">
-            <h2 class="instagram-section__hl">{{ titleText }}</h2>
-
-            <v-slider v-if="isTabletLg" class="instagram-section__slider" name="instagram" :options="sliderOptions">
-                <instagram-card
-                    class="swiper-slide instagram-section__card"
-                    v-for="item in items"
-                    :key="item.id"
-                    :instagram-card-id="item.id"
-                    :image="item.image"
-                />
-            </v-slider>
-
-            <!-- #58322  -->
-            <v-button tag="a" class="btn--outline instagram-section__link" :href="btnLink" target="_blank">
-                {{ btnText }}
-            </v-button>
-
-            <div v-if="!isTabletLg" class="instagram-section__grid instagram-section__grid--initialized">
-                <instagram-card
-                    class="instagram-section__card"
-                    v-for="item in items"
-                    :key="item.id"
-                    :instagram-card-id="item.id"
-                    :image="item.image"
-                />
-            </div>
+            <div id="frisbuy-widget2" />
         </div>
     </section>
 </template>
