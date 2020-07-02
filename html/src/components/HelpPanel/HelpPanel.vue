@@ -23,8 +23,12 @@
             <div class="help-panel__socials">
                 <v-link
                     class="help-panel__socials-icon"
+                    :href="links.telegram.href"
+                    :title="links.telegram.title"
                     @mouseover="telegram_hover = true"
                     @mouseleave="telegram_hover = false"
+                    target="_blank"
+                    rel="nofollow"
                 >
                     <v-svg v-if="!telegram_hover" name="telegram" width="40" height="40" />
                     <v-svg v-else name="telegram-hover" width="40" height="40" />
@@ -32,17 +36,25 @@
 
                 <v-link
                     class="help-panel__socials-icon"
+                    :href="links.whatsapp.href"
+                    :title="links.whatsapp.title"
                     @mouseover="whatsup_hover = true"
                     @mouseleave="whatsup_hover = false"
+                    target="_blank"
+                    rel="nofollow"
                 >
-                    <v-svg v-if="!whatsup_hover" name="whatsup" width="40" height="40" />
+                    <v-svg v-if="!whatsup_hover" name="whatsup-bw" width="40" height="40" />
                     <v-svg v-else name="whatsup-hover" width="40" height="40" />
                 </v-link>
 
                 <v-link
                     class="help-panel__socials-icon"
+                    :href="links.viber.href"
+                    :title="links.viber.title"
                     @mouseover="viber_hover = true"
                     @mouseleave="viber_hover = false"
+                    target="_blank"
+                    rel="nofollow"
                 >
                     <v-svg v-if="!viber_hover" name="viber" width="40" height="40" />
                     <v-svg v-else name="viber-hover" width="40" height="40" />
@@ -70,7 +82,7 @@ import { HELP_MENU } from '@store/getters';
 
 import '@images/sprites/socials/telegram.svg';
 import '@images/sprites/socials/telegram-hover.svg';
-import '@images/sprites/socials/whatsup.svg';
+import '@images/sprites/socials/whatsup-bw.svg';
 import '@images/sprites/socials/whatsup-hover.svg';
 import '@images/sprites/socials/viber.svg';
 import '@images/sprites/socials/viber-hover.svg';
@@ -92,6 +104,20 @@ export default {
             whatsup_hover: false,
             viber_hover: false,
             isOpen: false,
+            links: {
+                telegram: {
+                    href: 'tg://resolve?domain=79162001869',
+                    title: 'Связаться с нами в Telegram',
+                },
+                whatsapp: {
+                    href: 'https://api.whatsapp.com/send?phone=79162001869',
+                    title: 'Связаться с нами в WhatsApp',
+                },
+                viber: {
+                    href: 'viber://chat?number=79162001869',
+                    title: 'Связаться с нами в Viber',
+                },
+            },
         };
     },
 
