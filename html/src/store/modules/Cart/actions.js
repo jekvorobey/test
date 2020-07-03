@@ -96,10 +96,7 @@ export default {
         }
     },
 
-    async [ADD_CART_BUNDLE](
-        { commit },
-        { bundleId, count = 1, referrerCode, cookieName = cookieNames.REFERRAL } = {}
-    ) {
+    async [ADD_CART_BUNDLE]({ commit }, { bundleId, count = 1, referrerCode, cookieName = cookieNames.REFERRAL } = {}) {
         try {
             const code = referrerCode || (cookieName && $cookie.get(cookieName));
             const data = await addCartBundle(bundleId, count, code);
@@ -150,5 +147,5 @@ export default {
         } catch (error) {
             storeErrorHandler(DELETE_CART_BUNDLE, error);
         }
-    }
+    },
 };

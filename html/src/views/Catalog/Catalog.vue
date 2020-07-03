@@ -58,11 +58,12 @@
                         <catalog-filter class="catalog-view__side-panel-filters" @updateSticky="updateSticky" />
                         <v-button
                             class="btn--outline catalog-view__side-panel-clear-btn"
-                            :class="!isFiltersPage && 'is-disabled'"
                             :to="clearFilterUrl"
+                            :class="!isFiltersPage && 'is-disabled'"
                             replace
-                            >Очистить фильтры</v-button
                         >
+                            Очистить фильтры
+                        </v-button>
                     </div>
                 </div>
                 <div class="catalog-view__main">
@@ -115,10 +116,18 @@
                             btn-class="btn--outline catalog-view__main-controls-btn"
                             @click="onShowMore"
                             :show-preloader="showMore"
-                            >Показать ещё</show-more-button
                         >
+                            Показать ещё
+                        </show-more-button>
                         <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
                     </div>
+
+                    <div
+                        v-if="isBrandPage"
+                        data-retailrocket-markup-block="5efda10697a52833a0d006df"
+                        :data-category-id="activeCategory && activeCategory.id"
+                    ></div>
+                    <div v-else data-retailrocket-markup-block="5efdc55a97a52833a0d00baa" data-vendor="vendor"></div>
                 </div>
             </div>
         </section>
@@ -161,11 +170,12 @@
                                 class="btn--outline catalog-view__modal-filter-clear-btn"
                                 :to="clearFilterUrl"
                                 replace
-                                >Очистить</v-button
                             >
-                            <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal"
-                                >Показать</v-button
-                            >
+                                Очистить
+                            </v-button>
+                            <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal">
+                                Показать
+                            </v-button>
                         </div>
                     </v-sticky>
                 </template>
@@ -319,6 +329,11 @@ export default {
             code: state => state.params.code,
             entityCode: state => state.params.entityCode,
         }),
+
+        isBrandPage() {
+            const { type } = this;
+            return type === productGroupTypes.BRANDS;
+        },
 
         isFiltersPage() {
             return this.$route.path.includes('filters');

@@ -18,6 +18,12 @@
             </div>
         </div>
 
+        <section class="section">
+            <div class="container">
+                <div data-retailrocket-markup-block="5efda11c97a52833a0d006e7"></div>
+            </div>
+        </section>
+
         <section class="section not-found-view__featured" v-if="featuredProducts && featuredProducts.length > 0">
             <div class="container not-found-view__featured-container">
                 <h2 class="not-found-view__section-hl not-found-view__featured-hl">{{ $t('cart.title.like') }}</h2>
