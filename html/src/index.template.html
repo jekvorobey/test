@@ -16,48 +16,40 @@
         <link rel="mask-icon" href="/assets/images/icons/safari-pinned-tab.svg" color="#141116" />
         <meta name="msapplication-TileColor" content="#141116" />
         <meta name="theme-color" content="#141116" />
-        {{{ renderResourceHints() }}} {{{ renderStyles() }}}
-        <script type="text/javascript">
-            !(function () {
-                ;(window.frisbuy = window.frisbuy || {}),
-                    (window.frisbuy.log = function (t, e, i) {
-                        var o = localStorage.getItem('frb.log.heap')
-                        ;(o = (o && JSON.parse(o)) || []),
-                            o.push({
-                                msg: t,
-                                name: e,
-                                severity: i,
-                                time: Date.now(),
-                            }),
-                            localStorage.setItem('frb.log.heap', JSON.stringify(o))
-                    }),
-                    (window.frisbuy.loadScript = function (t, e, i) {
-                        var o = 0,
-                            r = function (n) {
-                                var a = document.createElement('script')
-                                n &&
-                                    frisbuy.log(
-                                        {
-                                            url: t,
-                                            attemptLimit: o,
-                                        },
-                                        'load.widget',
-                                        'high'
-                                    ),
-                                    o >= e ||
-                                        (i && (a.onload = i),
-                                        (a.onerror = r),
-                                        (a.src = t),
-                                        setTimeout(function () {
-                                            document.head.appendChild(a)
-                                        }, 15 * Math.pow(10, o) * o),
-                                        o++)
-                            }
-                        ;(e = e || 3), r()
-                    }),
-                    frisbuy.loadScript('https://www.frisbuy.ru/fb/widget?embed_id=ee1f1d2e-9f30-11ea-ba01-0242ac150002')
-            })()
-        </script>
+        {{{ renderResourceHints() }}} 
+		{{{ renderStyles() }}}
+		
+		<script type="text/javascript">
+		(function() {
+			window.frisbuy = window.frisbuy || {};
+			window.frisbuy.log = function(t, e, i) {
+				var o = localStorage.getItem('frb.log.heap');
+				(o = (o && JSON.parse(o)) || []),
+					o.push({ msg: t, name: e, severity: i, time: Date.now() }),
+					localStorage.setItem('frb.log.heap', JSON.stringify(o));
+			};
+
+			window.frisbuy.loadScript = function(t, e, i) {
+				var o = 0,
+					r = function(n) {
+						var a = document.createElement('script');
+						n && frisbuy.log({ url: t, attemptLimit: o }, 'load.widget', 'high'),
+							o >= e ||
+								(i && (a.onload = i),
+								(a.onerror = r),
+								(a.src = t),
+								setTimeout(function() {
+									document.head.appendChild(a);
+								}, 15 * Math.pow(10, o) * o),
+								o++);
+						return a;
+					};
+				e = e || 3;
+				return r();
+			};
+		})();
+		</script>
+		
         <script type="text/javascript">
             var rrPartnerId = '5eaaa38e97a5251ce0bd43ba'
             var rrApi = {}
@@ -78,7 +70,8 @@
     </head>
     <body>
         <!--vue-ssr-outlet-->
-        {{{ renderState() }}} {{{ renderScripts() }}}
+        {{{ renderState() }}} 
+		{{{ renderScripts() }}}
 
         <!-- {literal} -->
         <script type="text/javascript">

@@ -561,12 +561,11 @@
 
         <section class="section product-view__section product-view__instagram">
             <div class="container product-view__instagram-container">
-                    
-                <div id="frisbuy-widget2"></div>
-                
-                <div class="text-grey product-view__instagram-note">
+                <frisbuy-product-container v-if="product && product.id" :key="product.id" :offer-id="product.id" />
+
+                <!-- <div class="text-grey product-view__instagram-note">
                     Добавь тег @bessovestnotalantlivy в Instagram и, возможно, мы опубликуем твою фотографию
-                </div>
+                </div> -->
             </div>
         </section>
 
@@ -655,6 +654,8 @@ import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
+
+import FrisbuyProductContainer from '@components/FrisbuyProductContainer/FrisbuyProductContainer.vue';
 
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
@@ -864,6 +865,8 @@ export default {
 
         MapModal,
         GalleryModal,
+
+        FrisbuyProductContainer,
     },
 
     data() {
