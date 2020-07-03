@@ -237,6 +237,15 @@
             </div>
         </section>
 
+        <section class="section product-view__section">
+            <div class="container">
+                <div
+                    data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
+                    :data-product-id="featuredProducts && featuredProducts.items.map((i) => i.id).join(',')"
+                ></div>
+            </div>
+        </section>
+
         <section v-if="product.profitable" class="section product-view__section">
             <div class="container product-view__profitable">
                 <h2 class="product-view__section-hl product-view__profitable-hl">
@@ -531,6 +540,15 @@
                 </div>
             </div>
         </section> -->
+
+        <section class="section product-view__section">
+            <div class="container">
+                <div
+                    data-retailrocket-markup-block="5efda11697a52833a0d006e6"
+                    :data-product-id="featuredProducts && featuredProducts.items.map((i) => i.id).join(',')"
+                ></div>
+            </div>
+        </section>
 
         <section class="section product-view__section product-view__like">
             <div class="container product-view__like-container">

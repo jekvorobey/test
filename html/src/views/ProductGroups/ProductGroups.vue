@@ -61,6 +61,12 @@
             </section>
         </template>
 
+        <section class="section product-groups-view__section">
+            <div class="container">
+                <div data-retailrocket-markup-block="5efdc56097a52833a0d00bab"></div>
+            </div>
+        </section>
+
         <!-- #62050
         <section class="section product-groups-view__section product-groups-view__seo">
             <div class="container product-groups-view__seo-container">
@@ -265,7 +271,7 @@ export default {
 
         // если все загружено, пропускаем
         if (loadPath === fullPath && type === toType)
-            next((vm) => {
+            next(vm => {
                 if (!vm.$isServer && vm[SCROLL]) {
                     window.scrollTo({
                         top: 0,
@@ -280,7 +286,7 @@ export default {
                 .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, { type: toType, page: fetchPage, orderField })
                 .then(() => {
                     $store.dispatch(`${PRODUCT_GROUPS_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
+                    next(vm => {
                         $progress.finish();
                         if (!vm.$isServer && vm[SCROLL]) {
                             window.scrollTo({
@@ -289,8 +295,8 @@ export default {
                         }
                     });
                 })
-                .catch((error) => {
-                    next((vm) => {
+                .catch(error => {
+                    next(vm => {
                         $progress.fail();
                         $progress.finish();
                     });

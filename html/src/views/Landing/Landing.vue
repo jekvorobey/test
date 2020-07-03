@@ -22,6 +22,9 @@ import CategoriesSection from '@components/blocks/CategoriesSection/CategoriesSe
 import ProductsSection from '@components/blocks/ProductsSection/ProductsSection.vue';
 import BrandsSection from '@components/blocks/BrandsSection/BrandsSection.vue';
 
+import RetailRocketHitsSection from '@components/blocks/RetailRocketHitsSection/RetailRocketHitsSection.vue';
+import RetailRocketRecomSection from '@components/blocks/RetailRocketRecomSection/RetailRocketRecomSection.vue';
+
 import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions } from 'vuex';
 
@@ -42,6 +45,9 @@ export default {
         CategoriesSection,
         ProductsSection,
         InstagramSection,
+
+        RetailRocketRecomSection,
+        RetailRocketHitsSection,
     },
 
     // head: {

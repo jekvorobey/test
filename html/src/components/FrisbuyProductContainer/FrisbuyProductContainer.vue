@@ -23,8 +23,8 @@ export default {
         this.init(this.offerId);
     },
 
-    beforeDestroy() {
-        this.script.remove();
-    },
+    // beforeDestroy() {
+    //     this.script.remove();
+    // },
 };
 </script>

@@ -59,6 +59,14 @@ export default {
             },
             {
                 id: 4,
+                component: 'retail-rocket-recom-section',
+            },
+            {
+                id: 5,
+                component: 'retail-rocket-hits-section',
+            },
+            {
+                id: 6,
                 component: 'products-section',
                 data: {
                     titleText: 'Новинки',
@@ -67,26 +75,14 @@ export default {
                 },
             },
             {
-                id: 5,
-                component: 'separator-section',
-            },
-            {
-                id: 6,
-                component: 'single-banner-section',
-                data: {
-                    banner: state.banners.find((b) => b.id === 'middleBanner'),
-                },
-            },
-            {
                 id: 7,
                 component: 'separator-section',
             },
             {
                 id: 8,
-                component: 'products-section',
+                component: 'single-banner-section',
                 data: {
-                    titleText: 'Бестселлеры',
-                    ...state.bestsellerProducts,
+                    banner: state.banners.find((b) => b.id === 'middleBanner'),
                 },
             },
             {
@@ -95,17 +91,29 @@ export default {
             },
             {
                 id: 10,
-                component: 'list-banners-section',
+                component: 'products-section',
                 data: {
-                    banners: state.banners.slice(3, 6),
+                    titleText: 'Бестселлеры',
+                    ...state.bestsellerProducts,
                 },
             },
             {
                 id: 11,
                 component: 'separator-section',
             },
+            {
+                id: 12,
+                component: 'list-banners-section',
+                data: {
+                    banners: state.banners.slice(3, 6),
+                },
+            },
+            {
+                id: 13,
+                component: 'separator-section',
+            },
             // {
-            //     id: 12,
+            //     id: 14,
             //     component: 'products-section',
             //     data: {
             //         titleText: 'Смотрят на сайте сейчас',
@@ -113,7 +121,7 @@ export default {
             //     },
             // },
             {
-                id: 13,
+                id: 15,
                 component: 'brands-section',
                 data: {
                     titleText: 'Популярные бренды',
@@ -123,7 +131,7 @@ export default {
                 },
             },
             {
-                id: 14,
+                id: 16,
                 component: 'instagram-section',
                 data: {
                     titleText: 'Instabeauty',

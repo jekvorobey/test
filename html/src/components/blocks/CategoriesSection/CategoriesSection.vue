@@ -2,11 +2,7 @@
     <section class="section categories-section">
         <div class="container categories-section__container">
             <ul class="categories-section__list">
-                <li
-                    v-for="category in categories"
-                    :key="category.id"
-                    class="categories-section__item"
-                >
+                <li v-for="category in categories" :key="category.id" class="categories-section__item">
                     <category-list-panel :items="category.items">
                         <category-card
                             class="categories-section__item"
@@ -18,6 +14,7 @@
                 </li>
             </ul>
         </div>
+        <div data-retailrocket-markup-block="5efda0f797a5253518ebbf18"></div>
     </section>
 </template>
 
