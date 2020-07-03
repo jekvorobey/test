@@ -944,6 +944,10 @@
     }
 
     &__reviews {
+        &--empty {
+            margin: calc(var(--gs) * 10) 0;
+        }
+
         &-inner {
             position: relative;
             border-top: 1px solid var(--cl-divider-grey);
@@ -1022,7 +1026,7 @@
 
                 &-count {
                     margin-left: var(--gs);
-                    margin-right: calc(var(--gs) * 2);
+                    margin-right: calc(var(--gs) * 3);
 
                     @media (--tablet) {
                         margin-left: 0;
@@ -1034,7 +1038,7 @@
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
-                margin-right: calc(var(--gs) * 30);
+                margin-right: calc(var(--gs) * 25);
                 margin-left: auto;
 
                 @media (--tablet-lg) {
@@ -1061,7 +1065,8 @@
 
         &-list {
             &-item {
-                padding: calc(var(--gs) * 3) 0;
+                padding: calc(var(--gs) * 4) 0;
+                padding-bottom: calc(var(--gs) * 3);
                 border-bottom: 1px solid var(--cl-divider-grey);
                 flex-wrap: wrap;
 

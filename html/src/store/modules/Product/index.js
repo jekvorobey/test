@@ -35,6 +35,8 @@ export const SELECTED_PICKUP_POINT_TYPE = 'selectedPickupPointType';
 
 export const PRODUCT_BUNDLES = 'productBundles';
 
+export const REVIEWS_DATA = 'reviewsData';
+
 export const NAME = 'product';
 
 export default function createModule() {
@@ -61,6 +63,7 @@ export default function createModule() {
             [SELECTED_PICKUP_POINT_TYPE]: pickupPointTypes[0],
 
             [PRODUCT_BUNDLES]: [],
+            [REVIEWS_DATA]: {},
         },
         actions,
         mutations,

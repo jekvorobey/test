@@ -8,6 +8,8 @@ import {
     getProductOptions,
     getProductPickupPoints,
     getProductBundles,
+    getReviews,
+    addReview,
 } from '@api';
 import {
     SET_PRODUCT,
@@ -19,6 +21,7 @@ import {
     SET_REFERRER_CODE,
     SET_PICKUP_POINTS,
     SET_PRODUCT_BUNDLES,
+    SET_REVIEWS_DATA,
 } from './mutations';
 
 export const FETCH_PRODUCT_DATA = 'FETCH_PRODUCT_DATA';
@@ -36,6 +39,9 @@ export const SET_SELECTED_PICKUP_POINT = 'SET_SELECTED_PICKUP_POINT';
 export const SET_SELECTED_PICKUP_POINT_TYPE = 'SET_SELECTED_PICKUP_POINT_TYPE';
 
 export const FETCH_PRODUCT_BUNDLES = 'FETCH_PRODUCT_BUNDLES';
+
+export const FETCH_REVIEWS_DATA = 'FETCH_REVIEWS_DATA';
+export const ADD_REVIEW = 'ADD_REVIEW';
 
 export default {
     [SET_SELECTED_PICKUP_POINT_TYPE]({ commit }, payload) {
@@ -136,5 +142,25 @@ export default {
         } catch (error) {
             storeErrorHandler(FETCH_PRODUCT_BUNDLES)(error);
         }
-    }
+    },
+
+    async [FETCH_REVIEWS_DATA]({ commit }, { productCode, sortField, sortDirection, page, perPage }) {
+        try {
+            const data = await getReviews(productCode, sortField, sortDirection, page, perPage);
+            commit(SET_REVIEWS_DATA, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_REVIEWS_DATA)(error);
+        }
+    },
+
+    async [ADD_REVIEW]({ dispatch }, data) {
+        try {
+            const { productCode, rating, body, pros, cons, files } = data;
+
+            await addReview(productCode, rating, body, pros, cons, files);
+            dispatch(FETCH_REVIEWS_DATA, {productCode});
+        } catch (error) {
+            storeErrorHandler(ADD_REVIEW)(error);
+        }
+    },
 };
