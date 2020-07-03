@@ -188,7 +188,7 @@
                 <span class="orders-view__empty-text">
                     У вас еще нет заказов
                 </span>
-                <v-button class="btn--outline" tag="a" to="/">перейти к покупкам</v-button>
+                <v-button class="btn--outline" tag="a" to="/catalog">перейти к покупкам</v-button>
             </div>
         </div>
 
@@ -349,7 +349,7 @@ export default {
         ...mapState(ORDERS_MODULE_PATH, [ORDERS, ORDER_DIRECTION, ORDER_FIELD, ACTIVE_PAGE, REFERRAL_DATA]),
         ...mapGetters(ORDERS_MODULE_PATH, [PAGES_COUNT, REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, LEVEL]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
         arcSettings() {
@@ -460,7 +460,7 @@ export default {
         const { loadPath } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
 
         // если все загружено, пропускаем
-        if (loadPath === fullPath) next(vm => updateBreadcrumbs(vm));
+        if (loadPath === fullPath) next((vm) => updateBreadcrumbs(vm));
         else {
             $progress.start();
             $store
@@ -469,16 +469,16 @@ export default {
                     orderField,
                     orderDirection,
                 })
-                .then(data => {
+                .then((data) => {
                     $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                         updateBreadcrumbs(vm);
                     });
                 })
-                .catch(thrown => {
-                    if (thrown && thrown.isCancel === true) return next(vm => updateBreadcrumbs(vm));
-                    next(vm => {
+                .catch((thrown) => {
+                    if (thrown && thrown.isCancel === true) return next((vm) => updateBreadcrumbs(vm));
+                    next((vm) => {
                         $progress.fail();
                         updateBreadcrumbs(vm);
                     });
