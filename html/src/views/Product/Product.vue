@@ -473,54 +473,67 @@
         </section> -->
 
         <!-- #58437 -->
-        <!-- <section class="section product-view__section">
+        <section class="section product-view__section">
             <div class="container product-view__reviews">
-                <div class="product-view__reviews-inner">
+                <div class="product-view__reviews-inner" v-if="!isAddingReview">
                     <div class="product-view__reviews-header">
                         <h2 class="product-view__section-hl product-view__reviews-header-hl">
                             {{ $t('product.title.reviews') }}
-                            <span class="text-grey product-view__reviews-header-hl-count">12</span>
-                            <v-button class="btn--outline product-view__section-link product-view__reviews-link">
+                            <span class="text-grey product-view__reviews-header-hl-count">{{
+                                reviewsData.reviews ? reviewsData.reviews.length : 0
+                            }}</span>
+                            <buy-button
+                                class="btn--outline product-view__section-link product-view__reviews-link"
+                                @click="onCreateReview"
+                            >
                                 {{ $t('product.reviews.makeReview') }}
-                            </v-button>
+                            </buy-button>
                         </h2>
-                        <div class="product-view__reviews-header-rating">
-                            <span class="product-view__reviews-header-rating-count">
-                                {{ $t('product.reviews.averageRating') }}&nbsp;
-                                {{ product.reviews.middleRating }}
-                            </span>
-                            <v-rating :value="product.reviews.middleRating" readonly>
-                                <template v-slot:activeLabel>
-                                    <v-svg name="star-small" width="16" height="16" />
-                                </template>
-                                <template v-slot:inactiveLabel>
-                                    <v-svg name="star-empty-small" width="16" height="16" />
-                                </template>
-                            </v-rating>
-                        </div>
-                        <div class="product-view__reviews-header-sort">
-                            <span class="product-view__reviews-header-sort-text">Сначала новые</span>
-                            <v-svg name="arrow-down" width="16" height="16" />
-                        </div>
+                        <template v-if="reviewsData.reviews.length">
+                            <div class="product-view__reviews-header-rating">
+                                <span class="product-view__reviews-header-rating-count">
+                                    {{ $t('product.reviews.averageRating') }}&nbsp;
+                                    {{ reviewsData.rating }}
+                                </span>
+                                <v-rating :value="reviewsData.rating" readonly>
+                                    <template v-slot:activeLabel>
+                                        <v-svg name="star-small" width="16" height="16" />
+                                    </template>
+                                    <template v-slot:inactiveLabel>
+                                        <v-svg name="star-empty-small" width="16" height="16" />
+                                    </template>
+                                </v-rating>
+                            </div>
+                            <div class="product-view__reviews-header-sort">
+                                <span class="product-view__reviews-header-sort-text">Сначала новые</span>
+                                <v-svg name="arrow-down" width="16" height="16" />
+                            </div>
+                        </template>
                     </div>
 
-                    <ul class="product-view__reviews-list">
-                        <product-review-card
-                            class="product-view__reviews-list-item"
-                            tag="li"
-                            v-for="item in product.reviews.items"
-                            :key="item.id"
-                            v-bind="item"
-                        />
-                    </ul>
-                    <div class="product-view__reviews-show-more">
-                        <v-button class="btn--outline product-view__reviews-show-more-btn">
-                            {{ $t('product.reviews.showAll') }}
-                        </v-button>
+                    <template v-if="reviewsData.reviews.length">
+                        <ul class="product-view__reviews-list">
+                            <product-review-card
+                                class="product-view__reviews-list-item"
+                                tag="li"
+                                v-for="item in reviewsData.reviews"
+                                :key="item.id"
+                                v-bind="item"
+                            />
+                        </ul>
+                        <div class="product-view__reviews-show-more">
+                            <v-button class="btn--outline product-view__reviews-show-more-btn">
+                                {{ $t('product.reviews.showAll') }}
+                            </v-button>
+                        </div>
+                    </template>
+                    <div class="product-view__reviews--empty" v-else>
+                        Нет отзывов
                     </div>
                 </div>
+                <add-review v-else @add-review="onAddReview" />
             </div>
-        </section> -->
+        </section>
 
         <!-- #58437 -->
         <!-- <section class="section product-view__section product-view__banners">
@@ -672,6 +685,7 @@ import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
+import BuyButton from '@components/BuyButton/BuyButton.vue';
 
 import FrisbuyProductContainer from '@components/FrisbuyProductContainer/FrisbuyProductContainer.vue';
 
@@ -689,6 +703,8 @@ import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOp
 import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
 import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag.vue';
 import ProductBundlePanel from '@components/product/ProductBundlePanel/ProductBundlePanel.vue';
+
+import AddReview from '@components//AddReview/AddReview.vue';
 
 import ProductPickupPointsMap from '@components/product/ProductPickupPointsMap/ProductPickupPointsMap.vue';
 import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPanel/ProductPickupPointsPanel.vue';
@@ -713,9 +729,10 @@ import {
     INSTAGRAM_ITEMS,
     PRODUCT_OPTIONS,
     PRODUCT_BUNDLES,
+    REVIEWS_DATA,
 } from '@store/modules/Product';
 import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Product/getters';
-import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS } from '@store/modules/Product/actions';
+import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS, FETCH_REVIEWS_DATA, ADD_REVIEW } from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { IS_IN_CART } from '@store/modules/Cart/getters';
@@ -885,12 +902,15 @@ export default {
         GalleryModal,
 
         FrisbuyProductContainer,
+        AddReview,
+        BuyButton,
     },
 
     data() {
         return {
             isPriceVisible: true,
             btnLink: 'https://www.instagram.com/bessovestnotalantlivy/',
+            isAddingReview: false,
         };
     },
 
@@ -909,6 +929,7 @@ export default {
             FEATURED_PRODUCTS,
             INSTAGRAM_ITEMS,
             PRODUCT_BUNDLES,
+            REVIEWS_DATA,
         ]),
 
         ...mapState(MODAL_MODULE, {
@@ -1064,7 +1085,7 @@ export default {
 
     methods: {
         ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE]),
-        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS]),
+        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS, ADD_REVIEW]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
@@ -1206,6 +1227,18 @@ export default {
         onPriceVisibilityChanged(isVisible) {
             this.isPriceVisible = isVisible;
         },
+
+        onCreateReview() {
+            this.isAddingReview = true;
+        },
+
+        async onAddReview(reviewData) {
+            this[ADD_REVIEW]({
+                productCode: this.product.code,
+                ...reviewData,
+            });
+            this.isAddingReview = false;
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -1228,12 +1261,13 @@ export default {
             $progress.start();
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
-                .then(() =>
+                .then(() => {
+                    $store.dispatch(`${PRODUCT_MODULE}/${FETCH_REVIEWS_DATA}`, { productCode: code });
                     next(vm => {
                         $progress.finish();
                         vm.handleModalQuery(modal);
-                    })
-                )
+                    });
+                })
                 .catch(error => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));

@@ -796,3 +796,26 @@ export function getMasterclassFilters(excludedFilters) {
         },
     });
 }
+
+export function getReviews(product_code, sort_field = 'created_at', sort_direction = 'desc', page = 1, per_page = 5) {
+    return $http.get('/v1/reviews', {
+        params: {
+            product_code,
+            sort_field,
+            sort_direction,
+            page,
+            per_page,
+        },
+    });
+}
+
+export function addReview(product_code, rating, body, pros, cons, files) {
+    return $http.post('/v1/reviews/', {
+        product_code,
+        rating,
+        body,
+        pros,
+        cons,
+        files
+    });
+}

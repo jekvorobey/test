@@ -14,6 +14,8 @@ export const SET_SELECTED_PICKUP_POINT_TYPE = 'SET_SELECTED_PICKUP_POINT_TYPE';
 
 export const SET_PRODUCT_BUNDLES = 'SET_PRODUCT_BUNDLES';
 
+export const SET_REVIEWS_DATA = 'SET_REVIEWS_DATA';
+
 export default {
     [SET_PRODUCT](state, payload = {}) {
         state.productCode = payload.code;
@@ -59,5 +61,9 @@ export default {
 
     [SET_PRODUCT_BUNDLES](state, payload = [] ) {
         state.productBundles = payload;
+    },
+
+    [SET_REVIEWS_DATA](state, payload = {}) {
+        state.reviewsData = payload;
     }
 };

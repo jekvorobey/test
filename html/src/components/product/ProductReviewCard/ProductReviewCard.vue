@@ -25,6 +25,10 @@
                 <div class="text-bold product-review-card__body-item-title">Недостатки</div>
                 <div class="product-review-card__body-item-value">{{ disadvantage }}</div>
             </div>
+            <div class="product-review-card__body-item">
+                <div class="text-bold product-review-card__body-item-title">Комментарий</div>
+                <div class="product-review-card__body-item-value">{{ comment }}</div>
+            </div>
             <!-- <div v-if="images && images.length > 0" class="product-review-card__body-item">
                 <div class="text-bold product-review-card__body-item-title">Фото</div>
                 <div class="product-review-card__body-item-value">
