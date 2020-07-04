@@ -607,8 +607,8 @@ export function getProductOptions(groupId) {
     });
 }
 
-export function getMasterclass({ code }) {
-    return $http.get('/v1/catalog/masterclass-detail', {
+export function getMasterclass(code) {
+    return $http.get('/v1/public-events/detail', {
         params: {
             code,
         },
@@ -816,6 +816,6 @@ export function addReview(product_code, rating, body, pros, cons, files) {
         body,
         pros,
         cons,
-        files
+        files,
     });
 }

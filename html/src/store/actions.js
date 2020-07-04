@@ -64,7 +64,7 @@ export default {
 
     async [FETCH_CATEGORIES]({ commit }) {
         try {
-            const data = await getCategories(undefined, 1);
+            const data = await getCategories(undefined, 2);
             commit(SET_CATEGORIES, data);
         } catch (error) {
             storeErrorHandler(FETCH_CATEGORIES)(error);

@@ -48,9 +48,9 @@ export default {
         }
     },
 
-    async [FETCH_MASTERCLASS]({ commit }, payload) {
+    async [FETCH_MASTERCLASS]({ commit }, { code }) {
         try {
-            const data = await getMasterclass(payload);
+            const data = await getMasterclass(code);
             commit(SET_MASTERCLASS, data);
         } catch (error) {
             storeErrorHandler(FETCH_MASTERCLASS, true)(error);

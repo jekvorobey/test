@@ -11,7 +11,7 @@
                 </breadcrumb-item>
             </breadcrumbs>
 
-            <section class="section masterclasses-view__banners">
+            <!-- <section class="section masterclasses-view__banners">
                 <v-slider class="masterclasses-view__banners-slider" name="masterClasses" :options="sliderOptions">
                     <master-class-banner-card
                         class="swiper-slide masterclasses-view__banners-slider-item"
@@ -26,7 +26,7 @@
                         show-btn
                     />
                 </v-slider>
-            </section>
+            </section> -->
         </div>
 
         <section class="section masterclasses-view__section masterclasses-view__sets">

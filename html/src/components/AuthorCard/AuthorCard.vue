@@ -6,9 +6,9 @@
         </div>
         <div class="author-card__title">
             <div class="text-bold author-card__title-name">
-                <template v-if="firstName">{{ firstName }}</template>
-                <template v-if="lastName">{{ lastName }}</template>
-                <button class="author-card__title-btn">
+                {{ firstName }}
+                {{ lastName }}
+                <button v-if="mounted" class="author-card__title-btn">
                     <v-svg name="info-middle" width="16" height="16" />
                 </button>
             </div>
@@ -21,9 +21,8 @@
 </template>
 
 <script>
-import VSvg from '../controls/VSvg/VSvg.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
-import VButton from '@controls/VButton/VButton.vue';
 
 import '@images/sprites/info-middle.svg';
 import './AuthorCard.css';
@@ -33,7 +32,6 @@ export default {
 
     components: {
         VSvg,
-        VButton,
         VPicture,
     },
 
@@ -61,12 +59,22 @@ export default {
         },
     },
 
+    data() {
+        return {
+            mounted: false,
+        };
+    },
+
     computed: {
         iconText() {
             return `${this.firstName ? this.firstName.slice(0, 1) : ''}${
                 this.lastName ? this.lastName.slice(0, 1) : ''
             }`;
         },
+    },
+
+    mounted() {
+        this.mounted = true;
     },
 };
 </script>

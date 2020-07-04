@@ -1,6 +1,8 @@
 <template>
     <li v-if="showBtn" class="master-class-banner-card">
-        <v-picture class="master-class-banner-card__img" :image="image" />
+        <v-picture class="master-class-banner-card__img" v-if="image">
+            <slot />
+        </v-picture>
         <div class="master-class-banner-card__panel">
             <div class="text-bold master-class-banner-card__info">
                 <div class="text-bold master-class-banner-card__name">

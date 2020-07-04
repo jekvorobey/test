@@ -51,6 +51,11 @@
         line-height: 24px;
     }
 
+    &__prices {
+        display: flex;
+        flex-direction: column;
+    }
+
     &__count {
         .v-counter__input[type='number'] {
             min-width: 38px;

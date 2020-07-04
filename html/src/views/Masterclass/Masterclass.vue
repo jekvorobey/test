@@ -4,25 +4,31 @@
             <breadcrumbs class="container container--tablet-lg master-class-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
-                    <span v-else>Главная</span></breadcrumb-item
-                >
+                    <span v-else>Главная</span>
+                </breadcrumb-item>
                 <breadcrumb-item key="root" to="/masterclasses">
                     {{ rootTitle }}
                 </breadcrumb-item>
                 <breadcrumb-item :key="masterClass.code" :to="{ path: $route.path }">
-                    {{ masterClass.name }}
+                    {{ masterClass.title }}
                 </breadcrumb-item>
             </breadcrumbs>
 
             <master-class-banner-card
                 class="master-class-view__banner"
-                :image="masterClass.image"
-                :name="masterClass.name"
-                :price="masterClass.price"
+                :image="bannerImage"
+                :name="masterClass.title"
+                :price="price"
                 btn-text="Купить билет"
                 show-btn
                 @btnClick="onBuyBtnClick"
-            />
+            >
+                <source :data-srcset="bannerImage.desktopImg.webp" type="image/webp" media="(min-width: 768px)" />
+                <source :data-srcset="bannerImage.desktopImg.orig" media="(min-width: 768px)" />
+                <source :data-srcset="bannerImage.mobileImg.webp" type="image/webp" media="(min-width: 320px)" />
+                <source :data-srcset="bannerImage.mobileImg.orig" media="(min-width: 320px)" />
+                <img class="blur-up lazyload v-picture__img" :data-src="bannerImage.defaultImg" alt="" />
+            </master-class-banner-card>
         </div>
 
         <section class="section master-class-view__section master-class-view__panel">
@@ -40,58 +46,78 @@
                         <p class="container container--tablet text-bold master-class-view__section-hl">
                             Описание
                         </p>
-                        <v-html class="container container--tablet" v-html="masterClass.topText" />
-                        <img :src="masterClass.detailImage" />
-                        <v-html class="container container--tablet" v-html="masterClass.bottomText" />
+
+                        <v-html
+                            class="container container--tablet master-class-view__panel-middle-desc"
+                            v-html="masterClass.description.content"
+                        />
+
+                        <div v-for="image in descriptionGallery" :key="image.value.id">
+                            <v-picture>
+                                <source :data-srcset="image.desktopImg.webp" type="image/webp" />
+                                <source :data-srcset="image.desktopImg.orig" />
+                                <img class="blur-up lazyload v-picture__img" :data-src="image.defaultImg" alt="" />
+                            </v-picture>
+                        </div>
                     </div>
                     <div class="master-class-view__panel-right">
                         <div class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">
                                 Спикеры
                             </p>
-                            <v-expander :min-height="160">
+
+                            <v-expander v-if="speakers && speakers.length > 2" :min-height="160">
                                 <ul>
                                     <author-card
                                         class="master-class-view__panel-right-card"
-                                        v-for="author in masterClass.authors"
-                                        :key="author.id"
-                                        v-bind="author"
+                                        v-for="speaker in speakers"
+                                        :key="speaker.id"
+                                        :first-name="speaker.firstName"
+                                        :last-name="speaker.lastName"
+                                        :nick-name="speaker.profession"
+                                        :image="speaker.avatar.defaultImg"
                                     />
                                 </ul>
+
                                 <template v-slot:btn="{ isExpanded }">
                                     {{ isExpanded ? 'Скрыть' : 'Все спикеры' }}
                                 </template>
                             </v-expander>
+                            <ul v-else>
+                                <author-card
+                                    class="master-class-view__panel-right-card"
+                                    v-for="speaker in speakers"
+                                    :key="speaker.id"
+                                    :first-name="speaker.firstName"
+                                    :last-name="speaker.lastName"
+                                    :nick-name="speaker.profession"
+                                    :image="speaker.avatar.defaultImg"
+                                />
+                            </ul>
                         </div>
                         <div class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">
                                 Дата и время
                             </p>
                             <ol class="list">
-                                <li>
-                                    <p>{{ masterClass.date }}</p>
-                                </li>
-                                <li>
-                                    <p>{{ masterClass.date }}</p>
+                                <li v-for="date in dates" :key="date">
+                                    <p>{{ date }}</p>
                                 </li>
                             </ol>
 
-                            <p><a>Задать вопрос организатору</a></p>
+                            <a>Задать вопрос организатору</a>
                         </div>
                         <div class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">
                                 Место проведения
                             </p>
                             <ol class="list">
-                                <li>
-                                    <p>{{ masterClass.address.full }}</p>
-                                </li>
-                                <li>
-                                    <p>{{ masterClass.address.full }}</p>
+                                <li v-for="place in places" :key="place.id">
+                                    <p>{{ place.name }}, {{ place.address }}</p>
                                 </li>
                             </ol>
 
-                            <p><a @click="onShowMap">Посмотреть на карте</a></p>
+                            <a @click="onShowMap">Посмотреть на карте</a>
                         </div>
                         <div class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">
@@ -119,14 +145,79 @@
             </div>
         </section>
 
+        <section class="section master-class-view__section">
+            <div class="container master-class-view__panel-container">
+                <div class="master-class-view__panel">
+                    <div class="master-class-view__panel-body master-class-view__panel-body--accordion">
+                        <div class="master-class-view__panel-left"></div>
+                        <div class="master-class-view__panel-middle master-class-view__panel-middle--no-padding">
+                            <p class="container container--tablet text-bold master-class-view__section-hl">
+                                Программа
+                            </p>
+                            <v-accordion class="master-class-view__accordion" :items="stages" key-field="id">
+                                <template v-slot:header="{ item, index }">
+                                    <div class="master-class-view__accordion-header">
+                                        <div class="master-class-view__accordion-header-info">
+                                            <h4 class="master-class-view__accordion-header-name">
+                                                {{ item.name }}
+                                            </h4>
+                                            <div class="text-sm text-grey">{{ dates[index] }}</div>
+                                        </div>
+
+                                        <ul class="master-class-view__accordion-header-speakers">
+                                            <author-card
+                                                class="master-class-view__panel-right-card"
+                                                v-for="speaker in item.stageSpeakers"
+                                                :key="speaker.id"
+                                                :first-name="speaker.firstName"
+                                                :last-name="speaker.lastName"
+                                                :nick-name="speaker.profession"
+                                                :image="speaker.avatar.defaultImg"
+                                            />
+                                        </ul>
+                                    </div>
+                                </template>
+
+                                <template v-slot:content="{ item }">
+                                    <div class="master-class-view__accordion-content">
+                                        <div class="master-class-view__panel">
+                                            <div
+                                                class="container container--tablet master-class-view__panel-body master-class-view__panel-body--accordion"
+                                            >
+                                                <v-html
+                                                    class="master-class-view__panel-middle"
+                                                    :style="{ order: 0 }"
+                                                    v-html="item.description"
+                                                />
+                                                <div class="master-class-view__panel-right" :style="{ order: 1 }">
+                                                    <p class="text-bold master-class-view__panel-right-hl">
+                                                        Что взять с собой
+                                                    </p>
+                                                    <v-html v-html="item.raider" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </v-accordion>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section
             class="section master-class-view__section master-class-view__gallery"
-            v-if="masterClass.gallery || masterClass.gallery.length > 0"
+            v-if="gallery && gallery.length > 0"
         >
             <div class="container" v-if="!isTablet">
                 <ul class="master-class-view__gallery-list">
-                    <li class="master-class-view__gallery-item" v-for="image in masterClass.gallery" :key="image">
-                        <v-picture :image="image" />
+                    <li class="master-class-view__gallery-item" v-for="image in gallery" :key="image.value.id">
+                        <v-picture>
+                            <source :data-srcset="image.desktopImg.webp" type="image/webp" />
+                            <source :data-srcset="image.desktopImg.orig" />
+                            <img class="blur-up lazyload v-picture__img" :data-src="image.defaultImg" alt="" />
+                        </v-picture>
                     </li>
                 </ul>
             </div>
@@ -139,49 +230,32 @@
             >
                 <div
                     class="swiper-slide master-class-view__gallery-item"
-                    v-for="image in masterClass.gallery"
-                    :key="image"
+                    v-for="image in gallery"
+                    :key="image.value.id"
                 >
-                    <v-picture :image="image" />
+                    <v-picture>
+                        <source :data-srcset="image.desktopImg.webp" type="image/webp" />
+                        <source :data-srcset="image.desktopImg.orig" />
+                        <img class="blur-up lazyload v-picture__img" :data-src="image.defaultImg" alt="" />
+                    </v-picture>
                 </div>
             </v-slider>
         </section>
 
-        <section class="section master-class-view__section master-class-view__panel">
-            <div class="container master-class-view__panel-container">
-                <div class="master-class-view__panel-body">
-                    <div class="container container--tablet master-class-view__panel-left" />
-                    <div class="master-class-view__panel-middle">
-                        <p class="container container--tablet text-bold master-class-view__section-hl">
-                            Программа
-                        </p>
-                        <v-html class="container container--tablet" v-html="masterClass.program" />
-                    </div>
-                    <div class="master-class-view__panel-right">
-                        <div class="container container--tablet master-class-view__panel-right-section">
-                            <p class="text-bold master-class-view__panel-right-hl">
-                                Что взять с собой
-                            </p>
-                            <v-html v-html="masterClass.requirements" />
-                        </div>
-                        <div
-                            v-if="isTablet"
-                            class="container container--tablet master-class-view__panel-right-section master-class-view__panel-right-social"
-                        >
-                            <p class="text-bold master-class-view__panel-right-hl">
-                                Поделиться
-                            </p>
-                            <v-svg name="facebook-bw" width="24" height="24" />
-                            <v-svg name="vkontakte-bw" width="24" height="24" />
-                            <v-svg name="ok-bw" width="24" height="24" />
-                            <v-svg name="twitter-bw" width="24" height="24" />
-                            <v-svg name="telegram-bw" width="24" height="24" />
-                            <v-svg name="link" width="24" height="24" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div
+            v-if="isTablet"
+            class="container container--tablet master-class-view__panel-right-section master-class-view__panel-right-social"
+        >
+            <p class="text-bold master-class-view__panel-right-hl">
+                Поделиться
+            </p>
+            <v-svg name="facebook-bw" width="24" height="24" />
+            <v-svg name="vkontakte-bw" width="24" height="24" />
+            <v-svg name="ok-bw" width="24" height="24" />
+            <v-svg name="twitter-bw" width="24" height="24" />
+            <v-svg name="telegram-bw" width="24" height="24" />
+            <v-svg name="link" width="24" height="24" />
+        </div>
 
         <section
             class="section master-class-view__section master-class-view__tickets"
@@ -195,12 +269,13 @@
                 <ul class="master-class-view__tickets-list">
                     <ticket-card
                         class="master-class-view__tickets-item"
-                        v-for="ticket in masterClass.tickets"
+                        v-for="ticket in masterClass.ticketTypes"
                         :key="ticket.id"
                         :name="ticket.name"
                         :description="ticket.description"
-                        :max="ticket.remain"
+                        :max="ticket.qty"
                         :price="ticket.price"
+                        :old-price="ticket.oldPrice"
                         :disabled="isInCart(ticket.id)"
                         @btnClick="onAddToCart(ticket.id, $event)"
                     >
@@ -220,31 +295,49 @@
                 <h2 class="container container--tablet master-class-view__section-hl">
                     Место проведения
                 </h2>
-                <p class="container container--tablet master-class-view__map-desc">
-                    <div class="text-bold">{{ masterClass.address.full }}</div>
-                    От станции метро «Чкаловская» (выход на Садовое кольцо) двигайтесь по внешней стороне Садового
-                    кольца налево до поворота на Верхнюю Сыромятническую улицу. Сверните на нее и спускайтесь вниз до
-                    поворота на Большой Полуярославский переулок. Пройдя по туннелю под железнодорожными путями, на
-                    развилке возьмите правее на Нижнюю Сыромятническую улицу.
-                </p>
+                <div
+                    class="container container--tablet master-class-view__map-info"
+                    v-for="(place, index) in places"
+                    :key="place.id"
+                >
+                    <p class="master-class-view__map-desc">
+                        <span class="text-bold">{{ index + 1 }}. {{ place.name }}, {{ place.address }}</span>
+                    </p>
+                    <ul class="master-class-view__map-gallery">
+                        <li
+                            class="master-class-view__map-gallery-item"
+                            v-for="image in place.gallery"
+                            :key="image.value.id"
+                        >
+                            <v-picture>
+                                <source :data-srcset="image.desktopImg.webp" type="image/webp" />
+                                <source :data-srcset="image.desktopImg.orig" />
+                                <img class="blur-up lazyload v-picture__img" :data-src="image.defaultImg" alt="" />
+                            </v-picture>
+                        </li>
+                    </ul>
+                </div>
+
                 <yandex-map
-                    v-if="showMap"
-                    :coords="masterClass.address.coords"
+                    v-if="showMap && mapCoords"
+                    :coords="mapCoords"
                     :controls="[]"
                     :options="{ yandexMapDisablePoiInteractivity: true }"
                     :settings="mapSettings"
+                    :show-all-markers="places && places.length > 1"
                 >
                     <ymap-marker
-                        :key="`masterclass-point-${masterClass.address.id}`"
-                        :marker-id="`masterclass-point-${masterClass.address.id}`"
-                        :coords="masterClass.address.coords"
+                        v-for="place in places"
+                        :key="`masterclass-point-${place.id}`"
+                        :marker-id="`masterclass-point-${place.id}`"
+                        :coords="place.coords"
                         :icon="markerIcon"
                     />
                 </yandex-map>
             </div>
         </section>
 
-        <section v-if="masterClass.contacts" class="section master-class-view__section master-class-view__contacts">
+        <section v-if="masterClass.organizer" class="section master-class-view__section master-class-view__contacts">
             <div class="container master-class-view__contacts-container">
                 <h2 class="container container--tablet master-class-view__section-hl">
                     Контакты организатора
@@ -254,31 +347,31 @@
                         По всем вопросам и предложениям обращаться к организатору
                     </p>
                     <p class="text-bold master-class-view__contacts-panel-name">
-                        {{ masterClass.contacts.name }}
+                        {{ masterClass.organizer.name }}
                     </p>
                     <p class="text-grey master-class-view__contacts-panel-desc">
-                        {{ masterClass.contacts.description }}
+                        {{ masterClass.organizer.description }}
                     </p>
                     <div class="master-class-view__contacts-panel-bottom">
                         <info-row
                             class="master-class-view__contacts-panel-row"
                             name="Телефон"
-                            :value="masterClass.contacts.phone"
+                            :value="masterClass.organizer.phone"
                         />
                         <info-row
                             class="master-class-view__contacts-panel-row"
                             name="Email"
-                            :value="masterClass.contacts.email"
+                            :value="masterClass.organizer.email"
                         />
                         <info-row
                             class="master-class-view__contacts-panel-row"
                             name="WhatsApp, Viber, Telegram"
-                            :value="masterClass.contacts.phone"
+                            :value="masterClass.organizer.phone"
                         />
                         <info-row
                             class="master-class-view__contacts-panel-row"
                             name="Сайт"
-                            :value="masterClass.contacts.site"
+                            :value="masterClass.organizer.site"
                         />
 
                         <v-button class="master-class-view__contacts-panel-btn">
@@ -289,7 +382,7 @@
             </div>
         </section>
 
-        <section
+        <!-- <section
             v-if="masterclassBanners && masterclassBanners.length > 0"
             class="section master-class-view__masterclass"
         >
@@ -314,9 +407,9 @@
                     {{ $t('product.showAll') }}
                 </v-button>
             </div>
-        </section>
+        </section> -->
 
-        <section class="section master-class-view__section master-class-view__instagram">
+        <!-- <section class="section master-class-view__section master-class-view__instagram">
             <div class="container master-class-view__instagram-container">
                 <h2 class="master-class-view__section-hl master-class-view__instagram-hl">
                     INSTABEAUTY Владимира Соколова
@@ -350,7 +443,7 @@
                     />
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <transition name="slide-bottom" appear>
             <div class="master-class-view__price-panel" v-if="isPanelVisible && isTablet">
@@ -374,6 +467,7 @@ import VHtml from '@controls/VHtml/VHtml.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
+import VAccordion from '@controls/VAccordion/VAccordion.vue';
 
 import Price from '@components/Price/Price.vue';
 import TicketCard from '@components/TicketCard/TicketCard.vue';
@@ -391,7 +485,7 @@ import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbIte
 import { $store, $progress, $logger } from '@services';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { SCROLL } from '@store';
+import { SCROLL, LOCALE } from '@store';
 
 import masterClassModule, {
     NAME as MASTERCLASS_MODULE,
@@ -413,8 +507,8 @@ import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '@util/store';
 import { generatePictureSourcePath } from '@util/file';
 import { generateMasterclassUrl } from '@util/catalog';
-import { yaMapSettings } from '@settings';
-import { breakpoints } from '@enums';
+import { yaMapSettings, dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
+import { breakpoints, fileExtension } from '@enums';
 import { productGroupTypes } from '@enums/product';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
@@ -482,6 +576,7 @@ export default {
         VSlider,
         VPicture,
         VExpander,
+        VAccordion,
 
         Breadcrumbs,
         BreadcrumbItem,
@@ -540,11 +635,134 @@ export default {
     },
 
     computed: {
-        ...mapState([SCROLL]),
+        ...mapState([SCROLL, LOCALE]),
         ...mapState('route', { code: state => state.params.code }),
         ...mapState(MASTERCLASS_MODULE, [MASTERCLASS, FEATURED_MASTERCLASSES, INSTAGRAM_ITEMS]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {}),
+
+        mapCoords() {
+            const { places } = this;
+            return places.length > 1 ? [0, 0] : (places[0] && places[0].coords) || null;
+        },
+
+        price() {
+            const { priceFrom, priceTo } = this[MASTERCLASS] || {};
+
+            if (priceTo) return { value: { from: priceFrom.value, to: priceTo.value, currency: priceFrom.currency } };
+            return priceFrom;
+        },
+
+        bannerImage() {
+            const { detailImage } = this[MASTERCLASS] || {};
+
+            if (detailImage)
+                return {
+                    desktopImg: {
+                        webp: generatePictureSourcePath(1224, 360, detailImage.id, fileExtension.image.WEBP),
+                        orig: generatePictureSourcePath(1224, 360, detailImage.id),
+                    },
+
+                    mobileImg: {
+                        webp: generatePictureSourcePath(320, 240, detailImage.id, fileExtension.image.WEBP),
+                        orig: generatePictureSourcePath(320, 240, detailImage.id),
+                    },
+
+                    defaultImg: generatePictureSourcePath(1224, 360, detailImage.id),
+                };
+        },
+
+        descriptionGallery() {
+            const {
+                description: { gallery = [] },
+            } = this[MASTERCLASS] || { description: {} };
+
+            return gallery.map(i => {
+                const desktopImg = {
+                    webp: generatePictureSourcePath(600, 320, i.value.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(600, 320, i.value.id),
+                };
+                const defaultImg = generatePictureSourcePath(600, 320, i.value.id);
+
+                return {
+                    ...i,
+                    desktopImg,
+                    defaultImg,
+                };
+            });
+        },
+
+        stages() {
+            const { stages = [] } = this[MASTERCLASS] || {};
+            const { speakers = [] } = this;
+
+            return stages.map(s => {
+                const stageSpeakers = speakers.filter(sp => s.speakerIds && s.speakerIds.includes(sp.id));
+                return { ...s, stageSpeakers };
+            });
+        },
+
+        dates() {
+            const { stages = [] } = this[MASTERCLASS] || {};
+
+            return stages.map(s => {
+                const dateObj = new Date(s.date);
+                const dateFrom = new Date(`${s.date} ${s.timeFrom}`);
+                const dateTo = new Date(`${s.date} ${s.timeTo}`);
+
+                return `${dateObj.toLocaleDateString(
+                    this[LOCALE],
+                    dayMonthLongDateSettings
+                )}, ${dateFrom.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)} - ${dateTo.toLocaleTimeString(
+                    this[LOCALE],
+                    hourMinuteTimeSettings
+                )}`;
+            });
+        },
+
+        gallery() {
+            const { gallery = [] } = this[MASTERCLASS] || {};
+
+            return gallery.map(i => {
+                const desktopImg = {
+                    webp: generatePictureSourcePath(500, 500, i.value.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(500, 500, i.value.id),
+                };
+                const defaultImg = generatePictureSourcePath(500, 500, i.value.id);
+
+                return {
+                    ...i,
+                    desktopImg,
+                    defaultImg,
+                };
+            });
+        },
+
+        speakers() {
+            const { speakers = [] } = this[MASTERCLASS] || {};
+
+            return speakers.map(s => {
+                if (s.avatar) s.avatar.defaultImg = generatePictureSourcePath(null, null, s.avatar.id);
+                return s;
+            });
+        },
+
+        places() {
+            const { places = [] } = this[MASTERCLASS] || {};
+
+            return places.map(p => ({
+                ...p,
+                coords: [Number(p.latitude), Number(p.longitude)],
+                gallery: p.gallery.map(i => {
+                    const desktopImg = {
+                        webp: generatePictureSourcePath(200, 140, i.value.id, fileExtension.image.WEBP),
+                        orig: generatePictureSourcePath(200, 140, i.value.id),
+                    };
+                    const defaultImg = generatePictureSourcePath(200, 140, i.value.id);
+                    return { ...i, desktopImg, defaultImg };
+                }),
+            }));
+        },
 
         rootTitle() {
             return this.$t('masterclasses.title');

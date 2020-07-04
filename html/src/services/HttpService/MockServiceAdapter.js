@@ -17,8 +17,6 @@ export default class MockServiceAdapter extends HttpServiceBase {
      * @returns {Promise<Object>}
      */
     get(path, config) {
-        if (path.includes('/v1/catalog/masterclass-detail')) return this.mockServiceInstance.get(path, config);
-
         switch (path) {
             case '/v1/banners':
             case '/v1/instagram':

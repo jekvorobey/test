@@ -9,7 +9,16 @@
             <div class="ticket-card__count">
                 <v-counter v-model="count" min="1" :max="max" :disabled="disabled" />
             </div>
-            <price class="text-bold ticket-card__price" :value="computedPriceValue" :currency="price.currency" />
+            <div class="ticket-card__prices">
+                <price class="text-bold ticket-card__price" :value="computedPriceValue" :currency="price.currency" />
+                <price
+                    v-if="oldPrice"
+                    class="text-grey text-sm text-strike"
+                    :value="computedOldPriceValue"
+                    :currency="price.currency"
+                />
+            </div>
+
             <v-button class="ticket-card__btn" @click="onBtnClick">
                 <slot>Добавить</slot>
             </v-button>
@@ -65,6 +74,10 @@ export default {
             type: Object,
         },
 
+        oldPrice: {
+            type: Object,
+        },
+
         disabled: {
             type: Boolean,
             default: false,
@@ -74,6 +87,10 @@ export default {
     computed: {
         computedPriceValue() {
             return this.count * this.price.value;
+        },
+
+        computedOldPriceValue() {
+            return this.count * this.oldPrice.value;
         },
     },
 
