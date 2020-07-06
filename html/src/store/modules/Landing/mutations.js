@@ -134,10 +134,8 @@ export default {
                 id: 16,
                 component: 'instagram-section',
                 data: {
-                    titleText: 'Instabeauty',
-                    items: state.instagramItems,
-                    btnText: 'Подписаться на нас',
-                    btnLink: 'https://www.instagram.com/bessovestnotalantlivy/',
+                    id: 'frisbuy-widget2',
+                    script: 'https://www.frisbuy.ru/fb/widget?embed_id=ee1f1d2e-9f30-11ea-ba01-0242ac150002',
                 },
             },
         ];

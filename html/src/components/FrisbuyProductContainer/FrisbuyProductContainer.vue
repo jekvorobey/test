@@ -1,26 +1,23 @@
 <template>
-    <div id="frisbuy-widget"></div>
+    <div :id="id"></div>
 </template>
 <script>
 export default {
     name: 'frisbuy-product-container',
 
     props: {
-        offerId: {
-            type: Number,
+        id: {
+            type: String,
+            default: 'frisbuy-widget',
         },
-    },
 
-    methods: {
-        init(offerId) {
-            window.frisbuy.loadScript(
-                `https://www.frisbuy.ru/fb/widget?embed_id=e9575241-9f3d-11ea-ba01-0242ac150002&sku=${offerId}`
-            );
+        script: {
+            type: String,
         },
     },
 
     mounted() {
-        this.init(this.offerId);
+        if (this.script) window.frisbuy.loadScript(this.script);
     },
 };
 </script>

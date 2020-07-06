@@ -50,7 +50,7 @@ export default {
 
     async [FETCH_ITEMS]({ commit, state }, payload) {
         try {
-            return await getProducts(payload);
+            return await getCatalogItems(payload);
         } catch (error) {
             storeErrorHandler(FETCH_ITEMS)(error);
             return [];
