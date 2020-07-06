@@ -27,7 +27,7 @@ import mainTabletImgRetina from '@images/mock/main/mainTablet5@2x.jpg';
 import mainMobileImgRetina from '@images/mock/main/mainMobile5@2x.jpg';
 
 import { $logger } from '@services';
-import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode } from '@api';
+import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode, getProductGroups } from '@api';
 import {
     SET_BESTSELLER_PRODUCTS,
     SET_NEW_PRODUCTS,
@@ -37,6 +37,7 @@ import {
     SET_BRANDS,
     SET_INSTAGRAM,
     SET_LOAD,
+    SET_BRANDS_SET,
 } from './mutations';
 import { storeErrorHandler } from '@util/store';
 
@@ -48,6 +49,7 @@ export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 export const FETCH_BANNERS = 'FETCH_BANNERS';
 export const FETCH_BRANDS = 'FETCH_BRANDS';
 export const FETCH_INSTAGRAM = 'FETCH_INSTAGRAM';
+export const FETCH_BANNERS_SET = 'FETCH_BANNERS_SET';
 
 export default {
     [FETCH_INSTAGRAM]({ commit }) {
@@ -199,6 +201,21 @@ export default {
         }
     },
 
+    async [FETCH_BANNERS_SET]({ commit }) {
+        try {
+
+            const type = 'sets';
+            const page = 1;
+            const orderField = 'name';
+    
+            const { items } = await getProductGroups(type, page, orderField);
+            const data = items ? items : [];
+            commit(SET_BRANDS_SET, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_BANNERS_SET)(error);
+        }
+    },
+
     async [FETCH_BESTSELLER_PRODUCTS]({ commit }, payload = {}) {
         try {
             const data = await getProducts(payload);
@@ -249,6 +266,7 @@ export default {
             dispatch(FETCH_BANNERS),
             dispatch(FETCH_BRANDS),
             dispatch(FETCH_INSTAGRAM),
+            dispatch(FETCH_BANNERS_SET),
         ]).then(() => commit(SET_LOAD, true));
     },
 };
