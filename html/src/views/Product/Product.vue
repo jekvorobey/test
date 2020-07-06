@@ -1088,6 +1088,10 @@ export default {
             const { reviews = [] } = this[REVIEWS_DATA] || {};
             return reviews;
         },
+
+        canWriteReview() {
+            return this.product.canWriteReview;
+        }
     },
 
     watch: {
@@ -1228,7 +1232,7 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: modalName.general.NOTIFICATION,
                 open: true,
-                state: { message: 'Комлпект добавлен в корзину' },
+                state: { message: 'Комплект добавлен в корзину' },
             });
         },
 
@@ -1257,7 +1261,15 @@ export default {
         },
 
         onCreateReview() {
-            this.isAddingReview = true;
+            if (this.canWriteReview) {
+                this.isAddingReview = true;
+            } else {
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.NOTIFICATION,
+                    open: true,
+                    state: { message: 'Вы не можете написать отзыв на этот товар' },
+                });
+            }
         },
 
         async onAddReview(reviewData) {
