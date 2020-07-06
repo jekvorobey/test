@@ -816,7 +816,7 @@ export function getMasterclassFilters(excludedFilters) {
     });
 }
 
-export function getReviews(product_code, sort_field = 'created_at', sort_direction = 'desc', page = 1, per_page = 5) {
+export function getReviews(product_code, sort_field = 'created_at', sort_direction = 'desc', page = 1, per_page) {
     return $http.get('/v1/reviews', {
         params: {
             product_code,

@@ -28,3 +28,9 @@ export const DEFAULT_PAGE = 1;
  * Дефолтный размер страницы каталога
  */
 export const DEFAULT_CATALOG_PAGE_SIZE = 12;
+
+/**
+ * Дефолтный размер страницы отзывов
+ */
+
+export const DEFAULT_REVIEWS_PAGE_SIZE = 5;
