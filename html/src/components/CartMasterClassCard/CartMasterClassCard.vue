@@ -1,7 +1,9 @@
 <template>
     <li class="cart-master-class-card" :class="{ 'cart-master-class-card--small': isSmall }">
         <router-link class="cart-master-class-card__img" :to="href">
-            <v-picture v-if="image" :image="image" />
+            <v-picture v-if="image">
+                <slot />
+            </v-picture>
             <v-svg v-else id="cart-master-class-card-empty" name="logo" width="48" height="48" />
         </router-link>
         <div class="cart-master-class-card__body">
@@ -10,13 +12,12 @@
                 <v-counter :value="count" min="0" @input="debounce_countChange" />
             </div>
             <div class="cart-master-class-card__body-prices">
-                <div class="text-bold cart-master-class-card__body-price">{{ price }}</div>
-                <div
-                    v-show="oldPrice"
+                <price class="text-bold cart-master-class-card__body-price" v-bind="price" />
+                <price
                     class="text-grey text-strike cart-master-class-card__body-price cart-master-class-card__body-price--old"
-                >
-                    {{ oldPrice }}
-                </div>
+                    v-show="oldPrice"
+                    v-bind="oldPrice"
+                />
             </div>
             <div class="text-grey text-sm cart-master-class-card__body-info">
                 <div>{{ date }}</div>
@@ -43,6 +44,8 @@ import VLink from '@controls/VLink/VLink.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VCounter from '@controls/VCounter/VCounter.vue';
 
+import Price from '@components/Price/Price.vue';
+
 import _debounce from 'lodash/debounce';
 import '@images/sprites/cross-small.svg';
 import '@images/sprites/wishlist-middle.svg';
@@ -57,6 +60,8 @@ export default {
         VLink,
         VPicture,
         VCounter,
+
+        Price,
     },
 
     props: {
@@ -92,13 +97,11 @@ export default {
         },
 
         price: {
-            type: [String, Number],
-            default: null,
+            type: Object,
         },
 
         oldPrice: {
-            type: [String, Number],
-            default: null,
+            type: Object,
         },
 
         count: {

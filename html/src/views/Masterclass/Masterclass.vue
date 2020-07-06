@@ -276,8 +276,8 @@
                         :max="ticket.qty"
                         :price="ticket.price"
                         :old-price="ticket.oldPrice"
-                        :disabled="isInCart(ticket.id)"
-                        @btnClick="onAddToCart(ticket.id, $event)"
+                        :disabled="isInCart(ticket.offerId)"
+                        @btnClick="onAddToCart(ticket.offerId, $event)"
                     >
                         <template v-if="!isTablet">
                             {{ isInCart(ticket.id) ? 'Перейти в корзину' : 'Добавить в корзину' }}
@@ -496,7 +496,7 @@ import masterClassModule, {
 import { FETCH_MASTERCLASS_DATA } from '@store/modules/Masterclass/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
-import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
+import { ADD_MASTERCLASS_ITEM } from '@store/modules/Cart/actions';
 
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
@@ -787,7 +787,7 @@ export default {
 
     methods: {
         ...mapActions(MASTERCLASS_MODULE, [FETCH_MASTERCLASS_DATA]),
-        ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+        ...mapActions(CART_MODULE, [ADD_MASTERCLASS_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         generateSourcePath(x, y, id, ext) {
@@ -799,7 +799,7 @@ export default {
         },
 
         onAddToCart(id, count) {
-            if (!this.inCart.some(i => i.id === id)) this.inCart.push({ id, count });
+            this[ADD_MASTERCLASS_ITEM]({ offerId: id, count });
         },
 
         isInCart(id) {

@@ -87,11 +87,10 @@
                                 >
                                     <cart-master-class-card
                                         class="cart-view__main-products-list-item"
-                                        v-for="({ mc: product, count }, index) in type.items"
+                                        v-for="({ p: product, count }, index) in type.items"
                                         :data-index="index"
                                         :key="product.id"
                                         :product-id="product.id"
-                                        :type="product.type"
                                         :name="product.name"
                                         :image="product.image"
                                         :price="product.price"
@@ -99,10 +98,18 @@
                                         :date="product.date"
                                         :author="product.author"
                                         :count="count"
-                                        @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
-                                        @countChange="onAddCartItem(product.id, product.stock.storeId, $event.count)"
+                                        type="masterclass"
+                                        @deleteItem="onDeleteMasterclassItem(product.id, product.stock.storeId)"
+                                        @countChange="onAddMasterclassItem(product.id, $event.count)"
                                         href="/catalog"
-                                    />
+                                    >
+                                        <img
+                                            v-if="product.image"
+                                            class="blur-up lazyload v-picture__img"
+                                            :data-src="generatePictureSourcePath(null, null, product.image.id)"
+                                            alt
+                                        />
+                                    </cart-master-class-card>
                                 </transition-group>
                             </div>
                         </template>
@@ -291,6 +298,7 @@ import { cartItemTypes } from '@enums/product';
 import { preparePrice } from '@util';
 import { generateProductUrl } from '@util/catalog';
 import { registerModuleIfNotExists } from '@util/store';
+import { generatePictureSourcePath } from '@util/file';
 
 import preloader from '@images/icons/preloader.svg';
 import '@images/sprites/cart.svg';
@@ -415,6 +423,10 @@ export default {
             DELETE_CART_BUNDLE,
         ]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
+
+        generatePictureSourcePath(x, y, id, ext) {
+            return generatePictureSourcePath(x, y, id, ext);
+        },
 
         generateItemProductUrl(product) {
             if (Array.isArray(product.categoryCodes)) {

@@ -5,6 +5,7 @@ import {
     getCartData,
     deleteCartItem,
     addCartItem,
+    addMasterclassItem,
     deleteAllItems,
     addCartPromocode,
     deleteCartPromocode,
@@ -33,6 +34,8 @@ export const DELETE_CART_BUNDLE = 'DELETE_CART_BUNDLE';
 
 export const ADD_PROMOCODE = 'ADD_PROMOCODE';
 export const DELETE_PROMOCODE = 'DELETE_PROMOCODE';
+
+export const ADD_MASTERCLASS_ITEM = 'ADD_MASTERCLASS_ITEM';
 
 export default {
     [SET_LOAD]({ commit }, payload) {
@@ -84,6 +87,15 @@ export default {
             commit(SET_CART_DATA, data);
         } catch (error) {
             storeErrorHandler(ADD_CART_ITEM, error);
+        }
+    },
+
+    async [ADD_MASTERCLASS_ITEM]({ commit }, { offerId, count } = {}) {
+        try {
+            const data = await addMasterclassItem(offerId, count);
+            commit(SET_CART_DATA, data);
+        } catch (error) {
+            storeErrorHandler(ADD_MASTERCLASS_ITEM, error);
         }
     },
 

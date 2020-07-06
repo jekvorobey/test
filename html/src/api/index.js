@@ -631,6 +631,13 @@ export function deleteAllItems() {
     return $http.delete('/v1/cart/all');
 }
 
+export function addMasterclassItem(offerId, count) {
+    return $http.post('/v1/cart/item-public-event', {
+        offerId,
+        count,
+    });
+}
+
 export function deleteCartItem(offerId, storeId) {
     return $http.delete('/v1/cart/item', {
         data: {
