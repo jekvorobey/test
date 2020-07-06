@@ -22,6 +22,7 @@ import {
     SET_PICKUP_POINTS,
     SET_PRODUCT_BUNDLES,
     SET_REVIEWS_DATA,
+    ADD_REVIEWS_DATA
 } from './mutations';
 
 export const FETCH_PRODUCT_DATA = 'FETCH_PRODUCT_DATA';
@@ -42,6 +43,7 @@ export const FETCH_PRODUCT_BUNDLES = 'FETCH_PRODUCT_BUNDLES';
 
 export const FETCH_REVIEWS_DATA = 'FETCH_REVIEWS_DATA';
 export const ADD_REVIEW = 'ADD_REVIEW';
+export const SHOW_MORE_REVIEWS = 'SHOW_MORE_REVIEWS';
 
 export default {
     [SET_SELECTED_PICKUP_POINT_TYPE]({ commit }, payload) {
@@ -150,6 +152,15 @@ export default {
             commit(SET_REVIEWS_DATA, data);
         } catch (error) {
             storeErrorHandler(FETCH_REVIEWS_DATA)(error);
+        }
+    },
+
+    async [SHOW_MORE_REVIEWS]({ commit }, { productCode, sortField, sortDirection, page, perPage = 5 }) {
+        try {
+            const { reviews } = await getReviews(productCode, sortField, sortDirection, page, perPage);
+            commit(ADD_REVIEWS_DATA, reviews);
+        } catch(error) {
+            storeErrorHandler(SHOW_MORE_REVIEWS, true)(error);
         }
     },
 

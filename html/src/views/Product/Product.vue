@@ -480,7 +480,7 @@
                         <h2 class="product-view__section-hl product-view__reviews-header-hl">
                             {{ $t('product.title.reviews') }}
                             <span class="text-grey product-view__reviews-header-hl-count">
-                                {{ reviewsData ? reviewsData.reviews.length : 0 }}
+                                {{ reviewsData ? reviewsData.reviewsCount : 0 }}
                             </span>
                             <buy-button
                                 class="btn--outline product-view__section-link product-view__reviews-link"
@@ -489,7 +489,7 @@
                                 {{ $t('product.reviews.makeReview') }}
                             </buy-button>
                         </h2>
-                        <template v-if="reviewsData && reviewsData.reviews.length > 0">
+                        <template v-if="reviewsData && reviews.length > 0">
                             <div class="product-view__reviews-header-rating">
                                 <span class="product-view__reviews-header-rating-count">
                                     {{ $t('product.reviews.averageRating') }}&nbsp;
@@ -511,18 +511,18 @@
                         </template>
                     </div>
 
-                    <template v-if="reviewsData && reviewsData.reviews.length > 0">
+                    <template v-if="reviewsData && reviews.length > 0">
                         <ul class="product-view__reviews-list">
                             <product-review-card
                                 class="product-view__reviews-list-item"
                                 tag="li"
-                                v-for="item in reviewsData.reviews"
+                                v-for="item in reviews"
                                 :key="item.id"
                                 v-bind="item"
                             />
                         </ul>
-                        <div class="product-view__reviews-show-more">
-                            <v-button class="btn--outline product-view__reviews-show-more-btn">
+                        <div class="product-view__reviews-show-more" v-if="reviewsData && reviewsData.reviewsCount > reviews.length">
+                            <v-button class="btn--outline product-view__reviews-show-more-btn" @click="onShowMoreReviews" :disabled="isLoadingMoreReviews">
                                 {{ $t('product.reviews.showAll') }}
                             </v-button>
                         </div>
@@ -733,6 +733,7 @@ import {
     FETCH_PRODUCT_PICKUP_POINTS,
     FETCH_REVIEWS_DATA,
     ADD_REVIEW,
+    SHOW_MORE_REVIEWS,
 } from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
@@ -758,6 +759,7 @@ import { createNotFoundRoute } from '@util/router';
 import { breakpoints, fileExtension, httpCodes, modalName } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
 import { generateCategoryUrl, generateProductUrl, prepareProductImage } from '@util/catalog';
+import { DEFAULT_REVIEWS_PAGE_SIZE } from '@constants';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/facebook-bw.svg';
@@ -912,6 +914,8 @@ export default {
             isPriceVisible: true,
             btnLink: 'https://www.instagram.com/bessovestnotalantlivy/',
             isAddingReview: false,
+            isLoadingMoreReviews: false,
+            currentReviewPage: 1,
         };
     },
 
@@ -1067,6 +1071,10 @@ export default {
         isTablet() {
             return this.$mq.tablet;
         },
+
+        reviews() {
+            return this[REVIEWS_DATA].reviews;
+        }
     },
 
     watch: {
@@ -1086,7 +1094,7 @@ export default {
 
     methods: {
         ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE]),
-        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS, ADD_REVIEW]),
+        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS, ADD_REVIEW, FETCH_REVIEWS_DATA, SHOW_MORE_REVIEWS]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
@@ -1240,6 +1248,26 @@ export default {
             });
             this.isAddingReview = false;
         },
+
+        async onShowMoreReviews() {
+            try {
+
+            const count = this.reviewsData.reviewsCount;
+            const page = this.currentReviewPage;
+            const productCode = this.product.code;
+
+            this.isLoadingMoreReviews = true;
+
+            if (page < Math.ceil(count / (DEFAULT_REVIEWS_PAGE_SIZE * page))) {
+                    await this[SHOW_MORE_REVIEWS]({ productCode, page: page + 1 })
+                }
+            }
+            catch (error) {
+                console.error('Возникла ошибка', error);
+            }
+            this.currentReviewPage++;
+            this.isLoadingMoreReviews = false;
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -1263,7 +1291,7 @@ export default {
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
                 .then(() => {
-                    $store.dispatch(`${PRODUCT_MODULE}/${FETCH_REVIEWS_DATA}`, { productCode: code });
+                    $store.dispatch(`${PRODUCT_MODULE}/${FETCH_REVIEWS_DATA}`, { productCode: code, perPage: DEFAULT_REVIEWS_PAGE_SIZE });
                     next(vm => {
                         $progress.finish();
                         vm.handleModalQuery(modal);
