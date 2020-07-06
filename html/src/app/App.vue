@@ -103,7 +103,7 @@ export default {
     components: {
         VHeader,
         VFooter,
-        
+
         CitySelectionModal,
         QuickViewModal,
         AddToCartModal,
@@ -131,8 +131,7 @@ export default {
                 state[MODALS][modalName.general.ADD_TO_CART] && state[MODALS][modalName.general.ADD_TO_CART].open,
             isNotificationOpen: state =>
                 state[MODALS][modalName.general.NOTIFICATION] && state[MODALS][modalName.general.NOTIFICATION].open,
-            isAuthOpen: state =>
-                state[MODALS][modalName.general.AUTH] && state[MODALS][modalName.general.AUTH].open,
+            isAuthOpen: state => state[MODALS][modalName.general.AUTH] && state[MODALS][modalName.general.AUTH].open,
         }),
 
         isTabletLg() {

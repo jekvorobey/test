@@ -13,18 +13,14 @@ export default {
 
     methods: {
         init(offerId) {
-            this.script = window.frisbuy.loadScript(
+            window.frisbuy.loadScript(
                 `https://www.frisbuy.ru/fb/widget?embed_id=e9575241-9f3d-11ea-ba01-0242ac150002&sku=${offerId}`
             );
         },
     },
 
-    beforeMount() {
+    mounted() {
         this.init(this.offerId);
     },
-
-    // beforeDestroy() {
-    //     this.script.remove();
-    // },
 };
 </script>

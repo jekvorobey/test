@@ -479,9 +479,9 @@
                     <div class="product-view__reviews-header">
                         <h2 class="product-view__section-hl product-view__reviews-header-hl">
                             {{ $t('product.title.reviews') }}
-                            <span class="text-grey product-view__reviews-header-hl-count">{{
-                                reviewsData.reviews ? reviewsData.reviews.length : 0
-                            }}</span>
+                            <span class="text-grey product-view__reviews-header-hl-count">
+                                {{ reviewsData ? reviewsData.reviews.length : 0 }}
+                            </span>
                             <buy-button
                                 class="btn--outline product-view__section-link product-view__reviews-link"
                                 @click="onCreateReview"
@@ -489,7 +489,7 @@
                                 {{ $t('product.reviews.makeReview') }}
                             </buy-button>
                         </h2>
-                        <template v-if="reviewsData.reviews.length">
+                        <template v-if="reviewsData && reviewsData.reviews.length > 0">
                             <div class="product-view__reviews-header-rating">
                                 <span class="product-view__reviews-header-rating-count">
                                     {{ $t('product.reviews.averageRating') }}&nbsp;
@@ -511,7 +511,7 @@
                         </template>
                     </div>
 
-                    <template v-if="reviewsData.reviews.length">
+                    <template v-if="reviewsData && reviewsData.reviews.length > 0">
                         <ul class="product-view__reviews-list">
                             <product-review-card
                                 class="product-view__reviews-list-item"
@@ -593,10 +593,6 @@
         <section class="section product-view__section product-view__instagram">
             <div class="container product-view__instagram-container">
                 <frisbuy-product-container v-if="product && product.id" :key="product.id" :offer-id="product.id" />
-
-                <!-- <div class="text-grey product-view__instagram-note">
-                    Добавь тег @bessovestnotalantlivy в Instagram и, возможно, мы опубликуем твою фотографию
-                </div> -->
             </div>
         </section>
 
@@ -732,7 +728,12 @@ import {
     REVIEWS_DATA,
 } from '@store/modules/Product';
 import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Product/getters';
-import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS, FETCH_REVIEWS_DATA, ADD_REVIEW } from '@store/modules/Product/actions';
+import {
+    FETCH_PRODUCT_DATA,
+    FETCH_PRODUCT_PICKUP_POINTS,
+    FETCH_REVIEWS_DATA,
+    ADD_REVIEW,
+} from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { IS_IN_CART } from '@store/modules/Cart/getters';

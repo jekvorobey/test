@@ -1,6 +1,7 @@
 import { injectionType } from '@enums';
 import { Container, injectable, inject } from 'inversify';
 import { injectableClass } from '@util/container';
+import { isSelectorValid } from '@util/router';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -73,7 +74,7 @@ export default function createRouter(container) {
         // eslint-disable-next-line no-unused-vars
         scrollBehavior(to, from, savedPosition) {
             if (!savedPosition && to.meta.skipScroll) return null;
-            if (to.hash) return { selector: to.hash };
+            if (to.hash && isSelectorValid(to.hash)) return { selector: to.hash };
             if (savedPosition) return savedPosition;
 
             return { x: 0, y: 0 };

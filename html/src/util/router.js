@@ -16,3 +16,12 @@ export function createNotFoundRoute(route) {
         hash: route.hash,
     };
 }
+
+export function isSelectorValid(selector) {
+    try {
+        document.querySelector(selector);
+        return true;
+    } catch {
+        return false;
+    }
+}
