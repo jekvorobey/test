@@ -223,7 +223,7 @@
                         </span>
                     </div>
                     <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
-                        <span> Будет использовано {{ bonus }} бонусных баллов&nbsp; </span>
+                        <span> Будет использовано <strong class="text-bold">{{ bonus }}</strong>&nbsp;из&nbsp;{{ availableBonus }} бонусных баллов&nbsp; </span>
                         <div class="checkout-product-panel__item-card-panel">
                             <div v-if="isTablet" class="text-sm text-normal text-grey">
                                 (1 бонус = {{ bonusPerRub }} рубль)
