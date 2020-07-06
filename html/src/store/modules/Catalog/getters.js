@@ -25,7 +25,7 @@ export default {
     },
 
     [ROOT_CATEGORY]({ baseCategoryCode }, { activeCategories }) {
-        return activeCategories.find(c => c.code === baseCategoryCode);
+        return activeCategories.find((c) => c.code === baseCategoryCode);
     },
 
     [BREADCRUMBS](state, { rootCategory, activeCategories }) {
@@ -64,15 +64,16 @@ export default {
 
     [ACTIVE_TAGS](state, getters) {
         const activeTags = [];
-        const filters = state.filters.filter(f => f.type !== 'range');
+        const filters = state.filters.filter((f) => f.type !== 'range');
         const { filterSegments } = getters;
         for (let i = 0; i < filters.length; i++) {
             const filter = filters[i];
-            for (let j = 0; j < filter.items.length; j++) {
-                const item = filter.items[j];
-                if (filterSegments[filter.name] && filterSegments[filter.name][item.code])
-                    activeTags.push({ ...item, segment: `${filter.name}-${item.code}` });
-            }
+            if (filter.items)
+                for (let j = 0; j < filter.items.length; j++) {
+                    const item = filter.items[j];
+                    if (filterSegments[filter.name] && filterSegments[filter.name][item.code])
+                        activeTags.push({ ...item, segment: `${filter.name}-${item.code}` });
+                }
         }
         return activeTags;
     },

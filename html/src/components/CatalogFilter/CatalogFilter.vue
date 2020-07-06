@@ -141,7 +141,7 @@ export default {
                 ...this.filters.map(({ type, items, id }) => {
                     return {
                         id,
-                        state: type === 'check' && items.length >= this.maxCountFilters ? true : false,
+                        state: type === 'check' && items && items.length >= this.maxCountFilters ? true : false,
                     };
                 }),
             ];
