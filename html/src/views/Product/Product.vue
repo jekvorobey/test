@@ -521,8 +521,15 @@
                                 v-bind="item"
                             />
                         </ul>
-                        <div class="product-view__reviews-show-more" v-if="reviewsData && reviewsData.reviewsCount > reviews.length">
-                            <v-button class="btn--outline product-view__reviews-show-more-btn" @click="onShowMoreReviews" :disabled="isLoadingMoreReviews">
+                        <div
+                            class="product-view__reviews-show-more"
+                            v-if="reviewsData && reviewsData.reviewsCount > reviews.length"
+                        >
+                            <v-button
+                                class="btn--outline product-view__reviews-show-more-btn"
+                                @click="onShowMoreReviews"
+                                :disabled="isLoadingMoreReviews"
+                            >
                                 {{ $t('product.reviews.showAll') }}
                             </v-button>
                         </div>
@@ -592,7 +599,7 @@
 
         <section class="section product-view__section product-view__instagram">
             <div class="container product-view__instagram-container">
-                <frisbuy-product-container v-if="product && product.id" :key="product.id" :offer-id="product.id" />
+                <frisbuy-product-container v-if="product && product.id" :key="product.id" :script="frisbuyUrl" />
             </div>
         </section>
 
@@ -969,6 +976,11 @@ export default {
             return generateCategoryUrl(productGroupTypes.BRANDS, brand.code);
         },
 
+        frisbuyUrl() {
+            const { id } = this[PRODUCT];
+            return `https://www.frisbuy.ru/fb/widget?embed_id=e9575241-9f3d-11ea-ba01-0242ac150002&sku=${id}`;
+        },
+
         productVideos() {
             const videoMap = {};
             const { howto, description } = this.product;
@@ -1073,7 +1085,8 @@ export default {
         },
 
         reviews() {
-            return this[REVIEWS_DATA].reviews;
+            const { reviews = [] } = this[REVIEWS_DATA] || {};
+            return reviews;
         },
 
         canWriteReview() {
@@ -1098,7 +1111,13 @@ export default {
 
     methods: {
         ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE]),
-        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS, ADD_REVIEW, FETCH_REVIEWS_DATA, SHOW_MORE_REVIEWS]),
+        ...mapActions(PRODUCT_MODULE, [
+            FETCH_PRODUCT_DATA,
+            FETCH_PRODUCT_PICKUP_POINTS,
+            ADD_REVIEW,
+            FETCH_REVIEWS_DATA,
+            SHOW_MORE_REVIEWS,
+        ]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
@@ -1263,18 +1282,16 @@ export default {
 
         async onShowMoreReviews() {
             try {
+                const count = this.reviewsData.reviewsCount;
+                const page = this.currentReviewPage;
+                const productCode = this.product.code;
 
-            const count = this.reviewsData.reviewsCount;
-            const page = this.currentReviewPage;
-            const productCode = this.product.code;
+                this.isLoadingMoreReviews = true;
 
-            this.isLoadingMoreReviews = true;
-
-            if (page < Math.ceil(count / (DEFAULT_REVIEWS_PAGE_SIZE * page))) {
-                    await this[SHOW_MORE_REVIEWS]({ productCode, page: page + 1 })
+                if (page < Math.ceil(count / (DEFAULT_REVIEWS_PAGE_SIZE * page))) {
+                    await this[SHOW_MORE_REVIEWS]({ productCode, page: page + 1 });
                 }
-            }
-            catch (error) {
+            } catch (error) {
                 console.error('Возникла ошибка', error);
             }
             this.currentReviewPage++;
@@ -1303,7 +1320,10 @@ export default {
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
                 .then(() => {
-                    $store.dispatch(`${PRODUCT_MODULE}/${FETCH_REVIEWS_DATA}`, { productCode: code, perPage: DEFAULT_REVIEWS_PAGE_SIZE });
+                    $store.dispatch(`${PRODUCT_MODULE}/${FETCH_REVIEWS_DATA}`, {
+                        productCode: code,
+                        perPage: DEFAULT_REVIEWS_PAGE_SIZE,
+                    });
                     next(vm => {
                         $progress.finish();
                         vm.handleModalQuery(modal);

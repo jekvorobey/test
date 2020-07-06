@@ -481,14 +481,7 @@ export function getProductGroup(type, code) {
 }
 
 export function getProducts({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
-    if (catalogItemsCancelSource) {
-        catalogItemsCancelSource.cancel(REQUEST_CANCEL_MESSAGE);
-        catalogItemsCancelSource = axios.CancelToken.source();
-    } else catalogItemsCancelSource = axios.CancelToken.source();
-
     return $http.get('/v1/catalog/products', {
-        cancelToken: catalogItemsCancelSource.token,
-
         params: {
             filter,
             page,
@@ -509,7 +502,8 @@ export function getCatalogItems({ filter, orderField = 'price', orderDirection =
         catalogItemsCancelSource = axios.CancelToken.source();
     } else catalogItemsCancelSource = axios.CancelToken.source();
 
-    return $http.get('/v1/catalog/items', {
+    // return $http.get('/v1/catalog/items', {
+    return $http.get('/v1/catalog/products', {
         cancelToken: catalogItemsCancelSource.token,
         params: {
             filter,

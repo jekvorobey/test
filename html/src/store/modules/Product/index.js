@@ -63,7 +63,7 @@ export default function createModule() {
             [SELECTED_PICKUP_POINT_TYPE]: pickupPointTypes[0],
 
             [PRODUCT_BUNDLES]: [],
-            [REVIEWS_DATA]: {},
+            [REVIEWS_DATA]: { reviews: [] },
         },
         actions,
         mutations,
