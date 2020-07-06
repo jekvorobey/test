@@ -12,6 +12,7 @@ export const FETCH_FAVORITES = 'FETCH_FAVORITES';
 export const FETCH_FAVORITES_ALL = 'FETCH_FAVORITES_ALL';
 export const TOGGLE_FAVORITES_ITEM = 'TOGGLE_FAVORITES_ITEM';
 export const ADD_FAVORITES_ITEM = 'ADD_FAVORITES_ITEM';
+export const ADD_FAVORITES_ITEM_BY_OFFER = 'ADD_FAVORITES_ITEM_BY_OFFER';
 export const DELETE_FAVORITES_ITEM = 'DELETE_FAVORITES_ITEM';
 export const DELETE_FAVORITES_ALL = 'DELETE_FAVORITES_ALL';
 
@@ -50,10 +51,19 @@ export default {
         else await dispatch(ADD_FAVORITES_ITEM, productId);
     },
 
+    async [ADD_FAVORITES_ITEM_BY_OFFER]({ commit }, offerId) {
+        try {
+            const { id } = await addFavoritesItem(offerId, true);
+            commit(ADD_FAVORITES_ITEM, id);
+        } catch (error) {
+            storeErrorHandler(ADD_FAVORITES_ITEM_BY_OFFER, error);
+        }
+    },
+
     async [ADD_FAVORITES_ITEM]({ commit }, productId) {
         try {
-            await addFavoritesItem(productId);
-            commit(ADD_FAVORITES_ITEM, productId);
+            const { id } = await addFavoritesItem(productId);
+            commit(ADD_FAVORITES_ITEM, id);
         } catch (error) {
             storeErrorHandler(ADD_FAVORITES_ITEM, error);
         }

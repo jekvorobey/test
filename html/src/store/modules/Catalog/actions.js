@@ -3,7 +3,7 @@ import { productGroupTypes, productGroupBase } from '@enums/product';
 import { storeErrorHandler } from '@util/store';
 import { getAllActiveCategories } from '@util/catalog';
 
-import { getCatalogItems, getCategories, getBanners, getBrand, getFilters, getProductGroup } from '@api';
+import { getCatalogItems, getCategories, getBanners, getBrand, getFilters, getProductGroup, getProducts } from '@api';
 import { SET_LOAD_PATH as M_SET_LOAD_PATH, APPLY_DATA } from './mutations';
 
 const FETCH_FILTERS = 'FETCH_FILTERS';
@@ -50,7 +50,7 @@ export default {
 
     async [FETCH_ITEMS]({ commit, state }, payload) {
         try {
-            return await getCatalogItems(payload);
+            return await getProducts(payload);
         } catch (error) {
             storeErrorHandler(FETCH_ITEMS)(error);
             return [];
@@ -170,7 +170,7 @@ export default {
             },
         });
 
-        const fetchData = await Promise.all(fetchList.map(method => dispatch(method.action, method.payload)));
+        const fetchData = await Promise.all(fetchList.map((method) => dispatch(method.action, method.payload)));
 
         for (let i = 0; i < fetchList.length; i++) {
             const method = fetchList[i];

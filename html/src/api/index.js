@@ -481,7 +481,14 @@ export function getProductGroup(type, code) {
 }
 
 export function getProducts({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
+    if (catalogItemsCancelSource) {
+        catalogItemsCancelSource.cancel(REQUEST_CANCEL_MESSAGE);
+        catalogItemsCancelSource = axios.CancelToken.source();
+    } else catalogItemsCancelSource = axios.CancelToken.source();
+
     return $http.get('/v1/catalog/products', {
+        cancelToken: catalogItemsCancelSource.token,
+
         params: {
             filter,
             page,
@@ -582,10 +589,11 @@ export function getInstagram(data) {
     return $http.get('/v1/instagram', data);
 }
 
-export function getProduct(code, referrerCode) {
+export function getProduct(code, offer_id, referrerCode) {
     return $http.get('/v1/catalog/product-detail', {
         params: {
             code,
+            offer_id,
             referrerCode,
         },
     });
@@ -747,8 +755,12 @@ export function getFavorites(pageNum, perPage, orderField, orderDirection) {
     });
 }
 
-export function addFavoritesItem(product_id) {
-    return $http.post(`/v1/lk/favorites/${product_id}`);
+export function addFavoritesItem(id, byOffer = false) {
+    return $http.post(`/v1/lk/favorites/${id}`, null, {
+        params: {
+            byOffer: byOffer || undefined,
+        },
+    });
 }
 
 export function deleteFavoritesItem(product_id) {
