@@ -7,10 +7,12 @@ import { storeErrorHandler } from '@util/store';
 export const FETCH_PRODUCT_PREVIEW = 'FETCH_PRODUCT_PREVIEW';
 
 export default {
-    async [FETCH_PRODUCT_PREVIEW]({ commit }, { code }) {
+    async [FETCH_PRODUCT_PREVIEW]({ commit }, { offerId, code }) {
         try {
             commit(SET_PRODUCT_PREVIEW_STATUS, requestStatus.PENDING);
-            const data = await getProduct(code);
+            let data = null;
+            if (code) data = await getProduct(code);
+            else data = await getProduct(undefined, offerId);
             commit(SET_PRODUCT_PREVIEW_STATUS, requestStatus.SUCCESS);
             commit(SET_PRODUCT_PREVIEW, data);
         } catch (error) {

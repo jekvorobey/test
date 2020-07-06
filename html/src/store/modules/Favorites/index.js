@@ -1,9 +1,11 @@
-import actions from './actions';
-import mutations from './mutations';
-import getters from './getters';
 import { sortDirections } from '@enums';
 import { sortFields } from '@enums/favorites';
 import { DEFAULT_PAGE } from '@constants';
+import { $store } from '@services';
+
+import actions, { ADD_FAVORITES_ITEM_BY_OFFER } from './actions';
+import mutations from './mutations';
+import getters from './getters';
 
 export const NAME = 'favorites';
 export const LOAD_PATH = 'loadPath';
@@ -15,6 +17,14 @@ export const FAVORITES_DIRECTION = 'orderDirection';
 export const FAVORITES_FIELD = 'orderField';
 export const ACTIVE_PAGE = 'activePage';
 export const RANGE = 'range';
+
+if (process.env.VUE_ENV === 'client') {
+    function rrAddToFavourite(offerId) {
+        $store.dispatch(`${NAME}/${ADD_FAVORITES_ITEM_BY_OFFER}`, offerId);
+    }
+
+    window.rrAddToFavourite = rrAddToFavourite;
+}
 
 export default function createModule() {
     return {

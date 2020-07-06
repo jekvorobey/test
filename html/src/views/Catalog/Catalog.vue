@@ -124,10 +124,14 @@
 
                     <div
                         v-if="isBrandPage"
+                        data-retailrocket-markup-block="5efdc55a97a52833a0d00baa"
+                        :data-vendor="entityCode"
+                    />
+                    <div
+                        v-else
                         data-retailrocket-markup-block="5efda10697a52833a0d006df"
                         :data-category-id="activeCategory && activeCategory.id"
-                    ></div>
-                    <div v-else data-retailrocket-markup-block="5efdc55a97a52833a0d00baa" data-vendor="vendor"></div>
+                    />
                 </div>
             </div>
         </section>
