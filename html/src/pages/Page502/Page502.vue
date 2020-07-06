@@ -24,7 +24,7 @@
                             <a class="text-bold" href="tel:88007079070">8 800 707-90-70</a>
                             &nbsp;(звонок бесплатный)
                         </p>
-                        Или напишите нам на почту <a href="mailto:support@ibt.studio">support@ibt.studio</a>
+                        Или напишите нам на почту <a href="mailto:support@ibt.ru">support@ibt.ru</a>
                     </div>
                 </div>
             </div>

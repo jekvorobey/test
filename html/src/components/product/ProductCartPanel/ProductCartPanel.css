@@ -29,6 +29,13 @@
         }
     }
 
+    &__info-current {
+        > span {
+            position: relative;
+            left: calc(var(--gs) * -1);
+        }
+    }
+
     &__controls {
         display: flex;
         flex-wrap: wrap;
