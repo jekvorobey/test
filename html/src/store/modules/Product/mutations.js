@@ -16,6 +16,7 @@ export const SET_PRODUCT_BUNDLES = 'SET_PRODUCT_BUNDLES';
 
 export const SET_REVIEWS_DATA = 'SET_REVIEWS_DATA';
 export const ADD_REVIEWS_DATA = 'ADD_REVIEWS_DATA';
+export const SET_REVIEWS_PAGE = 'SET_REVIEWS_PAGE';
 
 export default {
     [SET_PRODUCT](state, payload = {}) {
@@ -65,10 +66,17 @@ export default {
     },
 
     [SET_REVIEWS_DATA](state, payload = {}) {
-        state.reviewsData = payload;
+        state.reviewsData = {
+            ...payload,
+            activePage: 1,
+        };
     },
 
     [ADD_REVIEWS_DATA](state, payload = []) {
         state.reviewsData.reviews.push(...payload);
-    }
+    },
+
+    [SET_REVIEWS_PAGE](state, payload) {
+        state.reviewsData.activePage = payload;
+    },
 };

@@ -523,7 +523,7 @@
                         </ul>
                         <div
                             class="product-view__reviews-show-more"
-                            v-if="reviewsData && reviewsData.reviewsCount > reviews.length"
+                            v-if="isReviewsPagesLeft"
                         >
                             <v-button
                                 class="btn--outline product-view__reviews-show-more-btn"
@@ -734,7 +734,7 @@ import {
     PRODUCT_BUNDLES,
     REVIEWS_DATA,
 } from '@store/modules/Product';
-import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Product/getters';
+import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION, REVIEWS_PAGES_COUNT } from '@store/modules/Product/getters';
 import {
     FETCH_PRODUCT_DATA,
     FETCH_PRODUCT_PICKUP_POINTS,
@@ -922,7 +922,6 @@ export default {
             btnLink: 'https://www.instagram.com/bessovestnotalantlivy/',
             isAddingReview: false,
             isLoadingMoreReviews: false,
-            currentReviewPage: 1,
         };
     },
 
@@ -932,7 +931,7 @@ export default {
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
 
-        ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION]),
+        ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION, REVIEWS_PAGES_COUNT]),
         ...mapState(PRODUCT_MODULE, [
             PRODUCT,
             PRODUCT_OPTIONS,
@@ -1091,7 +1090,11 @@ export default {
 
         canWriteReview() {
             return this.product.canWriteReview;
-        }
+        },
+
+        isReviewsPagesLeft() {
+            return this.reviewsData.activePage <= this[REVIEWS_PAGES_COUNT] && this[REVIEWS_PAGES_COUNT] !== 1;  
+        },
     },
 
     watch: {
@@ -1282,20 +1285,15 @@ export default {
 
         async onShowMoreReviews() {
             try {
-                const count = this.reviewsData.reviewsCount;
-                const page = this.currentReviewPage;
-                const productCode = this.product.code;
+                const { activePage } = this[REVIEWS_DATA];
+                const { code } = this.product;
 
                 this.isLoadingMoreReviews = true;
-
-                if (page < Math.ceil(count / (DEFAULT_REVIEWS_PAGE_SIZE * page))) {
-                    await this[SHOW_MORE_REVIEWS]({ productCode, page: page + 1 });
-                }
+                await this[SHOW_MORE_REVIEWS]({ productCode: code, page: activePage + 1 });
+                this.isLoadingMoreReviews = false;
             } catch (error) {
-                console.error('Возникла ошибка', error);
+                this.isLoadingMoreReviews = false;
             }
-            this.currentReviewPage++;
-            this.isLoadingMoreReviews = false;
         },
     },
 
@@ -1320,10 +1318,6 @@ export default {
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
                 .then(() => {
-                    $store.dispatch(`${PRODUCT_MODULE}/${FETCH_REVIEWS_DATA}`, {
-                        productCode: code,
-                        perPage: DEFAULT_REVIEWS_PAGE_SIZE,
-                    });
                     next(vm => {
                         $progress.finish();
                         vm.handleModalQuery(modal);
@@ -1355,6 +1349,8 @@ export default {
             params: { code: fromCode },
             query: { refCode: fromRefCode },
         } = from;
+        
+        this[FETCH_REVIEWS_DATA]({ productCode: code, perPage: DEFAULT_REVIEWS_PAGE_SIZE });
 
         if (code === fromCode && refCode === fromRefCode) next();
         else this.debounce_fetchProduct(to, from, next);
@@ -1370,6 +1366,12 @@ export default {
         const product = this[PRODUCT] || {};
         $retailRocket.addProductView([product.id]);
         this.debounce_fetchProduct = _debounce(this.fetchProduct, 500);
+    },
+
+    mounted() {
+        const { code } = this.product;
+
+        this[FETCH_REVIEWS_DATA]({ productCode: code, perPage: DEFAULT_REVIEWS_PAGE_SIZE });
     },
 };
 </script>

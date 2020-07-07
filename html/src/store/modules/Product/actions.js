@@ -22,7 +22,8 @@ import {
     SET_PICKUP_POINTS,
     SET_PRODUCT_BUNDLES,
     SET_REVIEWS_DATA,
-    ADD_REVIEWS_DATA
+    ADD_REVIEWS_DATA,
+    SET_REVIEWS_PAGE
 } from './mutations';
 
 export const FETCH_PRODUCT_DATA = 'FETCH_PRODUCT_DATA';
@@ -155,10 +156,11 @@ export default {
         }
     },
 
-    async [SHOW_MORE_REVIEWS]({ commit }, { productCode, sortField, sortDirection, page, perPage = 5 }) {
+    async [SHOW_MORE_REVIEWS]({ state, commit }, { productCode, sortField, sortDirection, perPage = 5, page }) {
         try {
             const { reviews } = await getReviews(productCode, sortField, sortDirection, page, perPage);
             commit(ADD_REVIEWS_DATA, reviews);
+            commit(SET_REVIEWS_PAGE, state.reviewsData.activePage + 1);
         } catch(error) {
             storeErrorHandler(SHOW_MORE_REVIEWS, true)(error);
         }

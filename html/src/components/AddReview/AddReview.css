@@ -34,6 +34,7 @@
 
         &-input {
             min-height: calc(var(--gs) * 11);
+            margin-bottom: calc(var(--gs) * 2);
         }
 
         &-cell {

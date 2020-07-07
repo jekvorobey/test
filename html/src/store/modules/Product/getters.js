@@ -8,10 +8,14 @@ export const GET_NEXT_COMBINATION = 'GET_NEXT_COMBINATION';
 export const IS_SELECTED = 'IS_SELECTED';
 export const IS_DISABLED = 'IS_DISABLED';
 
+export const REVIEWS_PAGES_COUNT = 'REVIEWS_PAGES_COUNT';
+
 export const FILTERED_PICKUP_POINTS = 'filteredPickupPoints';
 
 const PICKUP_POINTS = 'pickupPoints';
 const SELECTED_PICKUP_POINT_TYPE = 'selectedPickupPointType';
+
+import { DEFAULT_REVIEWS_PAGE_SIZE } from '@constants';
 
 export default {
     [FILTERED_PICKUP_POINTS](state) {
@@ -72,4 +76,8 @@ export default {
         const getCombination = getters[GET_NEXT_COMBINATION];
         return !getCombination(code, value);
     },
+
+    [REVIEWS_PAGES_COUNT]: (state) => {
+        return Math.ceil(state.reviewsData.reviewsCount / (DEFAULT_REVIEWS_PAGE_SIZE * state.reviewsData.activePage))
+    }
 };
