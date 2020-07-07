@@ -1,3 +1,5 @@
+import { agreementTypes } from '@enums';
+
 /**
  * @Module
  */
@@ -14,8 +16,8 @@ export default {
     routes: [
         {
             name: 'Agreements',
-            path: '/agreements',
+            path: `/agreements/:type(${agreementTypes.PERSONAL_POLICY}|${agreementTypes.PUBLIC_OFFER})`,
             component: Agreements,
-        }
+        },
     ],
 };

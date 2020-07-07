@@ -274,6 +274,6 @@ export const dayOfTheWeek = Object.freeze({
 });
 
 export const agreementTypes = Object.freeze({
-    PUBLIC_OFFER: 'publicOffer',
-    PERSONAL_POLICY: 'personalPolicy',
+    PUBLIC_OFFER: 'public-offer',
+    PERSONAL_POLICY: 'personal-policy',
 });

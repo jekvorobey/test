@@ -302,8 +302,8 @@
                             name="agreement"
                             @change="onSetAgreement($event)"
                         >
-                            Я согласен с <router-link :to="{name: 'Agreements', query: {type: 'publicOffer'}}">условиями оферты</router-link> и
-                            <router-link :to="{name: 'Agreements', query: {type: 'personalPolicy'}}">политикой конфиденциальности</router-link>
+                            Я согласен с <router-link :to="{name: 'Agreements', params: {type: 'public-offer'}}" target="_blank">условиями оферты</router-link> и
+                            <router-link :to="{name: 'Agreements', params: {type: 'personal-policy'}}" target="_blank">политикой конфиденциальности</router-link>
                         </v-check>
                         <transition name="slide-in-bottom" mode="out-in">
                             <div class="status-color-error" :key="agreementError" v-if="agreementError">
