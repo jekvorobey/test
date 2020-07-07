@@ -277,3 +277,10 @@ export const agreementTypes = Object.freeze({
     PUBLIC_OFFER: 'public-offer',
     PERSONAL_POLICY: 'personal-policy',
 });
+
+export const infoPages = Object.freeze({
+    VACANCIES: 'vacancies',
+    DELIVERY_AND_PAYMENT: 'delivery-and-payment',
+    PURCHASE_RETURNS: 'purchase-returns',
+    FEEDBACK: 'feedback',
+})

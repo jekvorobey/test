@@ -13,12 +13,6 @@ import './Agreements.css';
 export default {
     name: 'agreements',
 
-    data() {
-        return {
-            selected: null,
-        };
-    },
-
     computed: {
         ...mapState('route', {
             type: state => state.params.type,
