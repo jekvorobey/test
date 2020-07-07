@@ -160,7 +160,7 @@ export default {
         try {
             const { reviews } = await getReviews(productCode, sortField, sortDirection, page, perPage);
             commit(ADD_REVIEWS_DATA, reviews);
-            commit(SET_REVIEWS_PAGE, state.reviewsData.activePage + 1);
+            commit(SET_REVIEWS_PAGE, page);
         } catch(error) {
             storeErrorHandler(SHOW_MORE_REVIEWS, true)(error);
         }
