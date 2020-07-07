@@ -148,7 +148,7 @@ export default {
         }
     },
 
-    async [FETCH_REVIEWS_DATA]({ commit }, { productCode, sortField, sortDirection, page, perPage }) {
+    async [FETCH_REVIEWS_DATA]({ commit }, { productCode, sortField, sortDirection, page, perPage = DEFAULT_REVIEWS_PAGE_SIZE }) {
         try {
             const data = await getReviews(productCode, sortField, sortDirection, page, perPage);
             commit(SET_REVIEWS_DATA, data);
