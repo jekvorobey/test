@@ -383,7 +383,7 @@ export default {
 
         filters() {
             const filters = this[NULLABLE_FILTERS] || [];
-            return filters.filter(f => f.name !== 'profession');
+            return filters.filter(f => this.isTabletLg || f.name !== 'profession');
         },
 
         masterclasses() {
