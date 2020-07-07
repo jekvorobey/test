@@ -170,7 +170,7 @@ const main = {
         },
 
         reviews: {
-            showAll: 'Показать ещё',
+            showAll: 'Показать ещё отзывы',
             averageRating: 'Средняя оценка',
             makeReview: 'Написать отзыв',
         },

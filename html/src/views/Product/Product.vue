@@ -493,7 +493,9 @@
                             <div class="product-view__reviews-header-rating">
                                 <span class="product-view__reviews-header-rating-count">
                                     {{ $t('product.reviews.averageRating') }}&nbsp;
-                                    {{ reviewsData.rating }}
+                                    <span class="text-bold">{{
+                                        reviewsData.rating && reviewsData.rating.toLocaleString()
+                                    }}</span>
                                 </span>
                                 <v-rating :value="reviewsData.rating" readonly>
                                     <template v-slot:activeLabel>
@@ -538,7 +540,7 @@
                         Нет отзывов
                     </div>
                 </div>
-                <add-review v-else @add-review="onAddReview" />
+                <add-review v-else :product-code="product.code" @add-review="onAddReview" />
             </div>
         </section>
 
@@ -1085,13 +1087,13 @@ export default {
         },
 
         reviews() {
-            const { reviews = [] } = this[REVIEWS_DATA] || {};
-            return reviews;
+            const { reviews } = this[REVIEWS_DATA] || {};
+            return reviews || [];
         },
 
         canWriteReview() {
             return this.product.canWriteReview;
-        }
+        },
     },
 
     watch: {
@@ -1272,11 +1274,8 @@ export default {
             }
         },
 
-        async onAddReview(reviewData) {
-            this[ADD_REVIEW]({
-                productCode: this.product.code,
-                ...reviewData,
-            });
+        async onAddReview(formData) {
+            this[ADD_REVIEW]({ productCode: this.product.code, formData });
             this.isAddingReview = false;
         },
 
