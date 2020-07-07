@@ -99,7 +99,7 @@
                                         :author="product.author"
                                         :count="count"
                                         type="masterclass"
-                                        @deleteItem="onDeleteMasterclassItem(product.id, product.stock.storeId)"
+                                        @deleteItem="onDeleteMasterclassItem(product.id)"
                                         @countChange="onAddMasterclassItem(product.id, $event.count)"
                                         href="/catalog"
                                     >
@@ -272,6 +272,8 @@ import {
     FETCH_CART_DATA,
     SET_LOAD,
     DELETE_CART_BUNDLE,
+    ADD_MASTERCLASS_ITEM,
+    DELETE_MASTERCLASS_ITEM,
 } from '@store/modules/Cart/actions';
 import {
     PRODUCTS,
@@ -421,6 +423,9 @@ export default {
             ADD_PROMOCODE,
             DELETE_PROMOCODE,
             DELETE_CART_BUNDLE,
+
+            ADD_MASTERCLASS_ITEM,
+            DELETE_MASTERCLASS_ITEM,
         ]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
@@ -453,6 +458,14 @@ export default {
 
         onDeleteCartItem(offerId, storeId) {
             this[DELETE_CART_ITEM]({ offerId, storeId });
+        },
+
+        onAddMasterclassItem(offerId, count) {
+            this[ADD_MASTERCLASS_ITEM]({ offerId, count });
+        },
+
+        onDeleteMasterclassItem(offerId) {
+            this[DELETE_MASTERCLASS_ITEM]({ offerId });
         },
 
         prepareBonus(value) {

@@ -35,32 +35,33 @@
                     <h1
                         class="container container--tablet masterclasses-view__section-hl masterclasses-view__sets-header-hl"
                     >
-                        {{ $t('masterclasses.title') }}
+                        <span>{{ $t('masterclasses.title') }}</span>
+                        <span class="text-grey masterclasses-view__sets-header-hl-count">
+                            {{ range }} {{ eventsLabel }}
+                        </span>
                     </h1>
-                    <div>
-                        <div class="masterclasses-view__sets-header-top-controls">
-                            <v-select
-                                class="masterclasses-view__sets-header-select"
-                                v-for="filter in filters"
-                                track-by="id"
-                                label="name"
-                                :value="selectedValueMap[filter.name] || filter.items[0]"
-                                :key="filter.id"
-                                :options="filter.items"
-                                :placeholder="filter.title"
-                                :searchable="false"
-                                :allow-empty="false"
-                                :show-labels="false"
-                                @input="
-                                    onChangeFilter(
-                                        filter,
-                                        $event && $event.code,
-                                        selectedValueMap[filter.name] && selectedValueMap[filter.name].code
-                                    )
-                                "
-                            >
-                            </v-select>
-                        </div>
+                    <div class="container container--tablet masterclasses-view__sets-header-top-controls">
+                        <v-select
+                            class="masterclasses-view__sets-header-select"
+                            v-for="filter in filters"
+                            track-by="id"
+                            label="name"
+                            :value="selectedValueMap[filter.name] || filter.items[0]"
+                            :key="filter.id"
+                            :options="filter.items"
+                            :placeholder="filter.title"
+                            :searchable="false"
+                            :allow-empty="false"
+                            :show-labels="false"
+                            @input="
+                                onChangeFilter(
+                                    filter,
+                                    $event && $event.code,
+                                    selectedValueMap[filter.name] && selectedValueMap[filter.name].code
+                                )
+                            "
+                        >
+                        </v-select>
                     </div>
                 </div>
 
@@ -186,7 +187,7 @@ import { $store, $progress, $logger } from '@services';
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { LOCALE, SCROLL } from '@store';
 
-import { NAME as MASTERCLASSES_MODULE, ITEMS, ACTIVE_PAGE } from '@store/modules/Masterclass';
+import { NAME as MASTERCLASSES_MODULE, ITEMS, ACTIVE_PAGE, RANGE } from '@store/modules/Masterclass';
 import { PAGES_COUNT, ROUTE_SEGMENTS, FILTER_SEGMENTS, NULLABLE_FILTERS } from '@store/modules/Masterclass/getters';
 import {
     FETCH_MASTERCLASS_CATALOG_DATA,
@@ -197,6 +198,7 @@ import {
 import { MIN_SCROLL_VALUE } from '@constants';
 import { fileExtension } from '@enums';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
+import { pluralize } from '@util';
 import { generatePictureSourcePath } from '@util/file';
 import { registerModuleIfNotExists } from '@util/store';
 import { generateMasterclassUrl, concatMasterclassesRoutePath, computeFilterMasterclassData } from '@util/catalog';
@@ -354,8 +356,13 @@ export default {
 
     computed: {
         ...mapState([LOCALE, SCROLL]),
-        ...mapState(MASTERCLASSES_MODULE, [ITEMS, ACTIVE_PAGE]),
+        ...mapState(MASTERCLASSES_MODULE, [ITEMS, ACTIVE_PAGE, RANGE]),
         ...mapGetters(MASTERCLASSES_MODULE, [PAGES_COUNT, ROUTE_SEGMENTS, FILTER_SEGMENTS, NULLABLE_FILTERS]),
+
+        eventsLabel() {
+            const range = this[RANGE];
+            return range > 0 ? pluralize(range, ['событие', 'события', 'событий']) : 'событий';
+        },
 
         selectedValueMap() {
             const { filterSegments } = this;

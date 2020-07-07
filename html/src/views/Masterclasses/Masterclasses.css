@@ -29,7 +29,7 @@
 
         @media (--tablet-lg) {
             padding: 0;
-            margin-bottom: calc(var(--gs) * 3);
+            margin-bottom: 0;
         }
     }
 
@@ -70,6 +70,29 @@
             &-hl {
                 margin-bottom: 0;
                 white-space: nowrap;
+
+                @media (--tablet-lg) {
+                    margin-bottom: calc(var(--gs) * 2);
+                }
+
+                @media (--tablet) {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    margin-bottom: calc(var(--gs) * 3);
+                }
+
+                &-count {
+                    font-size: 14px;
+                    line-height: 24px;
+                    font-weight: normal;
+                    text-transform: none;
+                    margin-left: var(--gs);
+
+                    @media (--tablet) {
+                        margin-left: 0;
+                    }
+                }
             }
 
             &-select {
@@ -77,11 +100,22 @@
                 margin: 0 var(--gs);
 
                 @media (--desktop) {
-                    width: 196px;
+                    width: 190px;
+                }
+
+                @media (--desktop) and (--tablet-lg-min) {
+                    margin: 0 calc(var(--gs) / 2);
                 }
 
                 @media (--tablet) {
-                    width: 136px;
+                    width: 100%;
+                    margin: 0;
+                }
+
+                & + & {
+                    @media (--tablet) {
+                        margin-top: var(--gs);
+                    }
                 }
             }
 
@@ -119,6 +153,10 @@
             &-bottom {
                 margin-bottom: calc(var(--gs) * 3);
 
+                @media (--tablet-lg) {
+                    display: none;
+                }
+
                 &-controls {
                     @media (--tablet) {
                         display: none;
@@ -131,6 +169,7 @@
 
                 @media (--tablet-lg) {
                     flex-direction: column;
+                    margin-bottom: 0;
                 }
 
                 &-controls {
@@ -139,6 +178,12 @@
                     @media (--tablet-lg) {
                         justify-content: flex-start;
                         flex-wrap: nowrap;
+                        margin: 0 calc(var(--gs) * -1);
+                    }
+
+                    @media (--tablet) {
+                        flex-wrap: wrap;
+                        margin: 0;
                     }
                 }
             }

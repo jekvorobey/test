@@ -27,6 +27,14 @@
     text-transform: uppercase;
 }
 
+.text-lowercase {
+    text-transform: lowercase;
+}
+
+.visibility-hidden {
+    visibility: hidden;
+}
+
 .status {
     &-color {
         &-success {

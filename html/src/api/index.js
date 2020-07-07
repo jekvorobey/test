@@ -640,6 +640,14 @@ export function addMasterclassItem(offerId, count) {
     });
 }
 
+export function deleteMasterclassItem(offerId) {
+    return $http.delete('/v1/cart/item-public-event', {
+        data: {
+            offerId,
+        },
+    });
+}
+
 export function deleteCartItem(offerId, storeId) {
     return $http.delete('/v1/cart/item', {
         data: {
