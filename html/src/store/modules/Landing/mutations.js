@@ -6,6 +6,7 @@ export const SET_BANNERS = 'SET_BANNERS';
 export const SET_BRANDS = 'SET_BRANDS';
 export const SET_INSTAGRAM = 'SET_INSTAGRAM';
 export const SET_LOAD = 'SET_LOAD';
+export const SET_BRANDS_SET = 'SET_BRANDS_SET';
 
 export default {
     [SET_INSTAGRAM](state, payload) {
@@ -140,4 +141,7 @@ export default {
             },
         ];
     },
+    [SET_BRANDS_SET](state, payload) {
+        state.bannersSet = payload;
+    }
 };

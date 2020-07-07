@@ -272,3 +272,8 @@ export const dayOfTheWeek = Object.freeze({
     5: 'пятница',
     6: 'суббота',
 });
+
+export const agreementTypes = Object.freeze({
+    PUBLIC_OFFER: 'publicOffer',
+    PERSONAL_POLICY: 'personalPolicy',
+});

@@ -41,7 +41,7 @@ const main = {
     },
 
     socials: {
-        socials: 'Подпишись на нас в соц. сетях',
+        socials: 'Подпишись на нас в соцсетях',
         facebook: 'Facebook',
         vkontakte: 'ВКонтакте',
         twitter: 'Twitter',
