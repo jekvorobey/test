@@ -1095,7 +1095,7 @@ export default {
         },
 
         isReviewsPagesLeft() {
-            return this.reviewsData.activePage <= this[REVIEWS_PAGES_COUNT] && this[REVIEWS_PAGES_COUNT] !== 1;  
+            return this.reviewsData.activePage < this[REVIEWS_PAGES_COUNT] && this[REVIEWS_PAGES_COUNT] !== 1;  
         },
     },
 

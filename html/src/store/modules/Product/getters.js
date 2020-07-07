@@ -78,6 +78,6 @@ export default {
     },
 
     [REVIEWS_PAGES_COUNT]: (state) => {
-        return Math.ceil(state.reviewsData.reviewsCount / (DEFAULT_REVIEWS_PAGE_SIZE * state.reviewsData.activePage))
+        return Math.ceil(state.reviewsData.reviewsCount / (DEFAULT_REVIEWS_PAGE_SIZE));
     }
 };
