@@ -768,7 +768,6 @@ import { createNotFoundRoute } from '@util/router';
 import { breakpoints, fileExtension, httpCodes, modalName } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
 import { generateCategoryUrl, generateProductUrl, prepareProductImage } from '@util/catalog';
-import { DEFAULT_REVIEWS_PAGE_SIZE } from '@constants';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/facebook-bw.svg';
@@ -1137,6 +1136,7 @@ export default {
             try {
                 this.$progress.start();
                 await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
+                await this[FETCH_REVIEWS_DATA]({ productCode: code });
                 this.$progress.finish();
                 next();
             } catch (error) {
@@ -1349,7 +1349,6 @@ export default {
             query: { refCode: fromRefCode },
         } = from;goi
         
-        this[FETCH_REVIEWS_DATA]({ productCode: code, perPage: DEFAULT_REVIEWS_PAGE_SIZE });
 
         if (code === fromCode && refCode === fromRefCode) next();
         else this.debounce_fetchProduct(to, from, next);
@@ -1370,7 +1369,7 @@ export default {
     mounted() {
         const { code } = this.product;
 
-        this[FETCH_REVIEWS_DATA]({ productCode: code, perPage: DEFAULT_REVIEWS_PAGE_SIZE });
+        this[FETCH_REVIEWS_DATA]({ productCode: code });
     },
 };
 </script>
