@@ -39,8 +39,8 @@
             <hr />
             <div class="v-footer__row v-footer__bottom-links">
                 <p class="v-footer__rights" v-html="$t('footer.rights')" />
-                <v-link class="v-footer__link">{{ $t('footer.terms_of_use') }}</v-link>
-                <v-link class="v-footer__link">{{ $t('footer.offer') }}</v-link>
+                <router-link class="v-footer__link" :to="{name: 'Agreements', query: {type: 'publicOffer'}}">{{ $t('footer.terms_of_use') }}</router-link>
+                <router-link class="v-footer__link" :to="{name: 'Agreements', query: {type: 'personalPolicy'}}">{{ $t('footer.offer') }}</router-link>
             </div>
         </div>
 
@@ -76,8 +76,8 @@
         </div>
 
         <div class="v-footer__container v-footer__container--mobile v-footer__col v-footer__mobile-links">
-            <v-link class="v-footer__link">{{ $t('footer.terms_of_use') }}</v-link>
-            <v-link class="v-footer__link">{{ $t('footer.offer') }}</v-link>
+            <router-link class="v-footer__link" :to="{name: 'Agreements', query: {type: 'publicOffer'}}">{{ $t('footer.terms_of_use') }}</router-link>
+            <router-link class="v-footer__link" :to="{name: 'Agreements', query: {type: 'personalPolicy'}}">{{ $t('footer.offer') }}</router-link>
             <p class="v-footer__rights" v-html="$t('footer.rights')" />
         </div>
     </footer>
