@@ -134,7 +134,7 @@ export default {
             dispatch(FETCH_FEATURED_PRODUCTS, payload),
             dispatch(FETCH_INSTAGRAM_ITEMS, payload),
             dispatch(FETCH_MASTERCLASSES, payload),
-            dispatch(FETCH_PRODUCT_BUNDLES, payload)
+            dispatch(FETCH_PRODUCT_BUNDLES, payload),
         ]);
     },
 
@@ -166,12 +166,10 @@ export default {
         }
     },
 
-    async [ADD_REVIEW]({ dispatch }, data) {
+    async [ADD_REVIEW]({ dispatch }, { productCode, formData }) {
         try {
-            const { productCode, rating, body, pros, cons, files } = data;
-
-            await addReview(productCode, rating, body, pros, cons, files);
-            dispatch(FETCH_REVIEWS_DATA, {productCode});
+            await addReview(formData);
+            dispatch(FETCH_REVIEWS_DATA, { productCode });
         } catch (error) {
             storeErrorHandler(ADD_REVIEW)(error);
         }

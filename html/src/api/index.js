@@ -830,13 +830,6 @@ export function getReviews(product_code, sort_field = 'created_at', sort_directi
     });
 }
 
-export function addReview(product_code, rating, body, pros, cons, files) {
-    return $http.post('/v1/reviews/', {
-        product_code,
-        rating,
-        body,
-        pros,
-        cons,
-        files,
-    });
+export function addReview(formData) {
+    return $http.post('/v1/reviews/', formData);
 }

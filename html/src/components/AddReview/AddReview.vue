@@ -3,14 +3,21 @@
         <h2 class="add-review__title">
             Отзывы
         </h2>
-        <form @submit.prevent="onSubmit" class="add-review__form">
+        <form class="add-review__form" enctype="multipart/form-data" @submit.prevent="onSubmit">
+            <input type="hidden" :value="productCode" name="product_code" />
 
             <div class="add-review__form-review">
                 <div class="add-review__form-rating">
                     <span class="add-review__form-rating-text">
                         Ваша оценка
                     </span>
-                    <v-rating class="add-review__form-rating-input" :value="rating" @input="onRatingUpdate">
+
+                    <v-rating
+                        class="add-review__form-rating-input"
+                        :value="rating"
+                        @input="onRatingUpdate"
+                        name="rating"
+                    >
                         <template v-slot:activeLabel>
                             <v-svg name="star-small" width="20" height="20" />
                         </template>
@@ -19,36 +26,46 @@
                         </template>
                     </v-rating>
                 </div>
+
                 <div class="add-review__form-description">
                     Дополните свой отзыв — так вы поможете другим покупателям определиться с выбором
                 </div>
             </div>
+
             <div class="add-review__form-content">
                 <div class="add-review__form-cell">
                     <h3 class="add-review__form-title">
                         Достоинства
                     </h3>
-                    <v-input class="add-review__form-input" tag="textarea" v-model="pros" />
+
+                    <v-input class="add-review__form-input" tag="textarea" v-model="pros" name="pros" />
                 </div>
+
                 <div class="add-review__form-cell">
                     <h3 class="add-review__form-title">
                         Комментарий
                     </h3>
-                    <v-input class="add-review__form-input" tag="textarea" v-model="body" />
+
+                    <v-input class="add-review__form-input" tag="textarea" v-model="body" name="body" />
                 </div>
+
                 <div class="add-review__form-cell">
                     <h3 class="add-review__form-title">
                         Недостатки
                     </h3>
-                    <v-input class="add-review__form-input" tag="textarea" v-model="cons" />
+
+                    <v-input class="add-review__form-input" tag="textarea" v-model="cons" name="cons" />
                 </div>
+
                 <div class="add-review__form-cell">
                     <h3 class="add-review__form-title">
                         Фото и видео товара
                     </h3>
+
                     <span class="add-review__form-subtitle">
                         Не более 10 файлов, jpeg, png, mp4, mov
                     </span>
+
                     <v-file
                         class="add-review__form-files"
                         @change="onFilesChanged"
@@ -60,7 +77,9 @@
                         </span>
                     </v-file>
                 </div>
-                <v-button class="add-review__form-submit" type="submit" :disabled="isDisabled">Отправить отзыв</v-button>
+                <v-button class="add-review__form-submit" type="submit" :disabled="isDisabled">
+                    Отправить отзыв
+                </v-button>
             </div>
         </form>
     </div>
@@ -88,41 +107,40 @@ export default {
         VRating,
     },
 
+    props: {
+        productCode: {
+            type: String,
+            required: true,
+        },
+    },
+
     data() {
         return {
             rating: 0,
-            files: null,
-            body: '',
-            pros: '',
-            cons: '',
+            files: [],
+            body: null,
+            pros: null,
+            cons: null,
         };
     },
 
     computed: {
         fileAcceptedTypes() {
-            return [
-                mimeType.image.JPEG,
-                mimeType.image.PNG,
-                mimeType.video.MP4,
-                mimeType.video.MOV,
-            ];
+            return [mimeType.image.JPEG, mimeType.image.PNG, mimeType.video.MP4, mimeType.video.MOV];
         },
 
         isDisabled() {
             return !this.rating || !this.body || !this.pros || !this.cons;
-        }
+        },
     },
 
     methods: {
-        onSubmit() {
-            this.$emit('add-review', {
-                rating: this.rating,
-                body: this.body,
-                pros: this.pros,
-                cons: this.cons,
-                files: this.files,
-            });
+        onSubmit(e) {
+            const formData = new FormData(e.target);
+            for (const file of this.files) formData.append('files[]', file, file.name);
+            this.$emit('add-review', formData);
         },
+
         onRatingUpdate(value) {
             this.rating = value;
         },
@@ -130,6 +148,6 @@ export default {
         onFilesChanged(files) {
             this.files = files || [];
         },
-    }
-}
+    },
+};
 </script>
