@@ -302,8 +302,8 @@
                             name="agreement"
                             @change="onSetAgreement($event)"
                         >
-                            Я согласен с <router-link :to="{name: 'Agreements', params: {type: 'public-offer'}}" target="_blank">условиями оферты</router-link> и
-                            <router-link :to="{name: 'Agreements', params: {type: 'personal-policy'}}" target="_blank">политикой конфиденциальности</router-link>
+                            Я согласен с <router-link :to="{name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER }}" target="_blank">условиями оферты</router-link> и
+                            <router-link :to="{name: 'Agreements', params: {type: agreementTypes.PERSONAL_POLICY }}" target="_blank">политикой конфиденциальности</router-link>
                         </v-check>
                         <transition name="slide-in-bottom" mode="out-in">
                             <div class="status-color-error" :key="agreementError" v-if="agreementError">
@@ -447,7 +447,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import validationMixin, { required } from '@plugins/validation';
 import { formatPhoneNumber, getPosition } from '@util';
 import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '@enums/checkout';
-import { requestStatus, modalName, dayOfTheWeek } from '@enums';
+import { requestStatus, modalName, dayOfTheWeek, agreementTypes } from '@enums';
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
 
 import _cloneDeep from 'lodash/cloneDeep';
@@ -902,6 +902,10 @@ export default {
                 return generateProductUrl(categoryCode, product.code);
             }
         },
+    },
+
+    created() {
+        this.agreementTypes = agreementTypes;
     },
 
     mounted() {

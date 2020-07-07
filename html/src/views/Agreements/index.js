@@ -19,5 +19,9 @@ export default {
             path: `/agreements/:type(${agreementTypes.PERSONAL_POLICY}|${agreementTypes.PUBLIC_OFFER})`,
             component: Agreements,
         },
+        {
+            path: '/agreements',
+            redirect: `/agreements/${agreementTypes.PERSONAL_POLICY}`,
+        },
     ],
 };

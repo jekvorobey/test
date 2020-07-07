@@ -110,8 +110,8 @@
                         name="agreement"
                         @change="SET_AGREEMENT(Number($event))"
                     >
-                        Я согласен с <router-link :to="{name: 'Agreements', params: {type: 'public-offer'}}" target="_blank">условиями оферты</router-link> и
-                        <router-link :to="{name: 'Agreements', params: {type: 'personal-policy'}}" target="_blank">политикой конфиденциальности</router-link>
+                        Я согласен с <router-link :to="{name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER }}" target="_blank">условиями оферты</router-link> и
+                        <router-link :to="{name: 'Agreements', params: {type: agreementTypes.PERSONAL_POLICY }}" target="_blank">политикой конфиденциальности</router-link>
                     </v-check>
                 </div>
 
@@ -181,7 +181,7 @@ import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 import { orderBy as _orderBy } from 'lodash/collection';
 
-import { requestStatus } from '@enums';
+import { requestStatus, agreementTypes } from '@enums';
 
 import '@images/sprites/payment/bonus.svg';
 import '@images/sprites/payment/visa.svg';
@@ -297,5 +297,9 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: 'checkout-recipient-modal', open: true });
         },
     },
+
+    created() {
+        this.agreementTypes = agreementTypes;
+    }
 };
 </script>

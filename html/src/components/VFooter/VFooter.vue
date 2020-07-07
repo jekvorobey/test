@@ -39,8 +39,8 @@
             <hr />
             <div class="v-footer__row v-footer__bottom-links">
                 <p class="v-footer__rights" v-html="$t('footer.rights')" />
-                <router-link class="v-footer__link" :to="{name: 'Agreements', params: {type: 'public-offer'}}">{{ $t('footer.terms_of_use') }}</router-link>
-                <router-link class="v-footer__link" :to="{name: 'Agreements', params: {type: 'personal-policy'}}">{{ $t('footer.offer') }}</router-link>
+                <router-link class="v-footer__link" :to="{name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER }}">{{ $t('footer.terms_of_use') }}</router-link>
+                <router-link class="v-footer__link" :to="{name: 'Agreements', params: {type: agreementTypes.PERSONAL_POLICY }}">{{ $t('footer.offer') }}</router-link>
             </div>
         </div>
 
@@ -99,6 +99,8 @@ import '@images/sprites/logo-default.svg';
 import './VFooter.css';
 import { mapGetters } from 'vuex';
 import { FOOTER_MENU } from '@store/getters';
+
+import { agreementTypes } from '@enums';
 
 export default {
     name: 'v-footer',
@@ -163,5 +165,9 @@ export default {
             });
         },
     },
+
+    created() {
+        this.agreementTypes = agreementTypes;
+    }
 };
 </script>
