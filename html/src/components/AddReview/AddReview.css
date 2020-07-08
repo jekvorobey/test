@@ -16,6 +16,7 @@
             display: flex;
             align-items: center;
             margin-bottom: calc(var(--gs) * 3);
+            white-space: nowrap;
 
             &-text {
                 font-weight: bold;
@@ -43,7 +44,7 @@
             @media (--tablet) {
                 width: 100%;
             }
-            
+
             &:nth-child(odd) {
                 margin-right: calc(var(--gs) * 3);
 
@@ -64,8 +65,7 @@
         &-title {
             font-size: 16px;
             line-height: 24px;
-            margin-top: var(--gs);
-            margin-bottom: var(--gs);
+            margin: 0;
         }
 
         &-subtitle {
@@ -73,6 +73,7 @@
             line-height: 24px;
             color: var(--cl-grey);
             display: block;
+            margin-bottom: var(--gs);
         }
 
         &-submit {
@@ -88,6 +89,10 @@
 
         .v-file__item {
             height: calc(var(--gs) * 8);
+        }
+
+        .v-file__form-label {
+            text-transform: uppercase;
         }
     }
 }

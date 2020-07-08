@@ -34,27 +34,21 @@
 
             <div class="add-review__form-content">
                 <div class="add-review__form-cell">
-                    <h3 class="add-review__form-title">
+                    <v-input class="add-review__form-input" tag="textarea" v-model="pros" name="pros">
                         Достоинства
-                    </h3>
-
-                    <v-input class="add-review__form-input" tag="textarea" v-model="pros" name="pros" />
+                    </v-input>
                 </div>
 
                 <div class="add-review__form-cell">
-                    <h3 class="add-review__form-title">
+                    <v-input class="add-review__form-input" tag="textarea" v-model="body" name="body">
                         Комментарий
-                    </h3>
-
-                    <v-input class="add-review__form-input" tag="textarea" v-model="body" name="body" />
+                    </v-input>
                 </div>
 
                 <div class="add-review__form-cell">
-                    <h3 class="add-review__form-title">
+                    <v-input class="add-review__form-input" tag="textarea" v-model="cons" name="cons">
                         Недостатки
-                    </h3>
-
-                    <v-input class="add-review__form-input" tag="textarea" v-model="cons" name="cons" />
+                    </v-input>
                 </div>
 
                 <div class="add-review__form-cell">
