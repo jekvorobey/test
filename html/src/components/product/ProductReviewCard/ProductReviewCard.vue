@@ -29,14 +29,19 @@
                 <div class="text-bold product-review-card__body-item-title">Комментарий</div>
                 <div class="product-review-card__body-item-value">{{ comment }}</div>
             </div>
-            <!-- <div v-if="images && images.length > 0" class="product-review-card__body-item">
+            <div v-if="images && images.length > 0" class="product-review-card__body-item">
                 <div class="text-bold product-review-card__body-item-title">Фото</div>
                 <div class="product-review-card__body-item-value">
                     <div class="product-review-card__body-item-img" v-for="item in images" :key="item.id">
-                        <img class="blur-up lazyload" :data-src="item.image" alt="" />
+                        <v-picture>
+                            <img
+                                class="blur-up lazyload v-picture__img"
+                                :data-src="generateSourcePath(item)"
+                            />
+                        </v-picture>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
         <div class="product-review-card__controls">
             <button class="product-review-card__controls-btn">
@@ -55,6 +60,9 @@
 import VLink from '@controls/VLink/VLink.vue';
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VRating from '@controls/VRating/VRating.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
+
+import { generatePictureSourcePath } from '@util/file';
 
 import { monthLongDateSettings } from '@settings';
 import '@images/sprites/star-empty-small.svg';
@@ -70,6 +78,7 @@ export default {
         VSvg,
         VLink,
         VRating,
+        VPicture,
     },
 
     props: {
@@ -93,6 +102,12 @@ export default {
             return date.toLocaleString(this.locale, monthLongDateSettings);
         },
     },
+
+    methods: {
+        generateSourcePath(x, y, id, ext) {
+            return generatePictureSourcePath(x, y, id, ext);
+        }
+    }
 };
 </script>
 

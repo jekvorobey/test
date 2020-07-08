@@ -281,4 +281,4 @@ const main = {
 };
 
 const LOCALE = 'ru';
-export default { main, flatpickrLocale, LOCALE };
+export default { main, flatpickrLocale, LOCALE };   
