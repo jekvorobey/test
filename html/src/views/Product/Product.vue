@@ -523,10 +523,7 @@
                                 v-bind="item"
                             />
                         </ul>
-                        <div
-                            class="product-view__reviews-show-more"
-                            v-if="isReviewsPagesLeft"
-                        >
+                        <div class="product-view__reviews-show-more" v-if="isReviewsPagesLeft">
                             <v-button
                                 class="btn--outline product-view__reviews-show-more-btn"
                                 @click="onShowMoreReviews"
@@ -736,7 +733,12 @@ import {
     PRODUCT_BUNDLES,
     REVIEWS_DATA,
 } from '@store/modules/Product';
-import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION, REVIEWS_PAGES_COUNT } from '@store/modules/Product/getters';
+import {
+    COMBINATIONS,
+    CHARACTERISTICS,
+    GET_NEXT_COMBINATION,
+    REVIEWS_PAGES_COUNT,
+} from '@store/modules/Product/getters';
 import {
     FETCH_PRODUCT_DATA,
     FETCH_PRODUCT_PICKUP_POINTS,
@@ -1094,7 +1096,7 @@ export default {
         },
 
         isReviewsPagesLeft() {
-            return this.reviewsData.activePage < this[REVIEWS_PAGES_COUNT] && this[REVIEWS_PAGES_COUNT] !== 1;  
+            return this.reviewsData.activePage < this[REVIEWS_PAGES_COUNT] && this[REVIEWS_PAGES_COUNT] !== 1;
         },
     },
 
@@ -1266,19 +1268,20 @@ export default {
         },
 
         onCreateReview() {
-            if (this.canWriteReview) {
-                this.isAddingReview = true;
-            } else {
+            if (this.canWriteReview) this.isAddingReview = true;
+            else
                 this[CHANGE_MODAL_STATE]({
                     name: modalName.general.NOTIFICATION,
                     open: true,
-                    state: { message: 'Вы не можете написать отзыв на этот товар' },
+                    state: {
+                        message:
+                            'К сожалению, Вы не можете оставить отзыв на данный товар. Допускается оставлять отзывы только на купленные товары.',
+                    },
                 });
-            }
         },
 
         async onAddReview(formData) {
-            this[ADD_REVIEW]({ productCode: this.product.code, formData });
+            this[ADD_REVIEW]({ productCode: this.product && this.product.code, formData });
             this.isAddingReview = false;
         },
 
@@ -1347,8 +1350,7 @@ export default {
         const {
             params: { code: fromCode },
             query: { refCode: fromRefCode },
-        } = from;goi
-        
+        } = from;
 
         if (code === fromCode && refCode === fromRefCode) next();
         else this.debounce_fetchProduct(to, from, next);
