@@ -25,6 +25,7 @@ import {
     ADD_REVIEWS_DATA,
     SET_REVIEWS_PAGE
 } from './mutations';
+import { DEFAULT_REVIEWS_PAGE_SIZE } from '@constants';
 
 export const FETCH_PRODUCT_DATA = 'FETCH_PRODUCT_DATA';
 export const FETCH_INSTAGRAM_ITEMS = 'FETCH_INSTAGRAM_ITEMS';
@@ -147,7 +148,7 @@ export default {
         }
     },
 
-    async [FETCH_REVIEWS_DATA]({ commit }, { productCode, sortField, sortDirection, page, perPage }) {
+    async [FETCH_REVIEWS_DATA]({ commit }, { productCode, sortField, sortDirection, page, perPage = DEFAULT_REVIEWS_PAGE_SIZE }) {
         try {
             const data = await getReviews(productCode, sortField, sortDirection, page, perPage);
             commit(SET_REVIEWS_DATA, data);
@@ -156,11 +157,11 @@ export default {
         }
     },
 
-    async [SHOW_MORE_REVIEWS]({ state, commit }, { productCode, sortField, sortDirection, perPage = 5, page }) {
+    async [SHOW_MORE_REVIEWS]({ state, commit }, { productCode, sortField, sortDirection, perPage = DEFAULT_REVIEWS_PAGE_SIZE, page }) {
         try {
             const { reviews } = await getReviews(productCode, sortField, sortDirection, page, perPage);
             commit(ADD_REVIEWS_DATA, reviews);
-            commit(SET_REVIEWS_PAGE, state.reviewsData.activePage + 1);
+            commit(SET_REVIEWS_PAGE, page);
         } catch(error) {
             storeErrorHandler(SHOW_MORE_REVIEWS, true)(error);
         }
