@@ -996,7 +996,8 @@
             }
 
             &-hl {
-                height: 40px;
+                display: flex;
+                align-items: center;
                 line-height: 40px;
                 width: 25%;
                 margin-bottom: 0;
@@ -1008,7 +1009,7 @@
 
                 &-count {
                     font-size: 20px;
-                    margin-left: var(--gs);
+                    margin-left: calc(var(--gs) * 2);
                 }
             }
 
@@ -1025,7 +1026,6 @@
                 }
 
                 &-count {
-                    margin-left: var(--gs);
                     margin-right: calc(var(--gs) * 3);
 
                     @media (--tablet) {
@@ -1050,7 +1050,7 @@
                     position: absolute;
                     right: 0;
                     padding-top: 0;
-                    top: 12px;
+                    top: var(--gs);
                 }
 
                 &-text {
@@ -1390,5 +1390,4 @@
             padding: 0 calc(var(--gs) * 3);
         }
     }
-
 }
