@@ -14,7 +14,6 @@
                 </li>
             </ul>
         </div>
-        <div data-retailrocket-markup-block="5efda0f797a5253518ebbf18"></div>
     </section>
 </template>
 
