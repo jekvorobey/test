@@ -84,7 +84,6 @@ export default {
         dislikes: { type: Number },
         advantage: { type: String },
         disadvantage: { type: String },
-        locale: { type: String },
         comment: { type: String, default: 'ru' },
         images: { type: Array },
         options: { type: Array },

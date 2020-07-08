@@ -59,10 +59,6 @@ export default {
                 component: 'separator-section',
             },
             {
-                id: 4,
-                component: 'retail-rocket-recom-section',
-            },
-            {
                 id: 5,
                 component: 'retail-rocket-hits-section',
             },
@@ -143,5 +139,5 @@ export default {
     },
     [SET_BRANDS_SET](state, payload) {
         state.bannersSet = payload;
-    }
+    },
 };
