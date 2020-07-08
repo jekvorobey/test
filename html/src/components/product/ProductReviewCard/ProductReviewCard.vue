@@ -12,9 +12,10 @@
                     <v-svg name="star-empty-small" width="16" height="16" />
                 </template>
             </v-rating>
-            <div class="product-review-card__header-options">
+            <!-- #62705 -->
+            <!-- <div class="product-review-card__header-options">
                 {{ options && `${options[0].title}: ${options[0].value}` }}
-            </div>
+            </div> -->
         </div>
         <div class="product-review-card__body">
             <div class="product-review-card__body-item">
@@ -31,13 +32,10 @@
             </div>
             <div v-if="images && images.length > 0" class="product-review-card__body-item">
                 <div class="text-bold product-review-card__body-item-title">Фото</div>
-                <div class="product-review-card__body-item-value">
-                    <div class="product-review-card__body-item-img" v-for="item in images" :key="item.id">
+                <div class="product-review-card__body-item-value product-review-card__body-item-value--media">
+                    <div class="product-review-card__body-item-img" v-for="item in reviewImages" :key="item.id">
                         <v-picture>
-                            <img
-                                class="blur-up lazyload v-picture__img"
-                                :data-src="generateSourcePath(null, null, item)"
-                            />
+                            <img class="blur-up lazyload v-picture__img" :data-src="item.defaultImg" />
                         </v-picture>
                     </div>
                 </div>
@@ -63,8 +61,8 @@ import VRating from '@controls/VRating/VRating.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import { generatePictureSourcePath } from '@util/file';
-
 import { monthLongDateSettings } from '@settings';
+
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/like.svg';
@@ -82,18 +80,61 @@ export default {
     },
 
     props: {
-        tag: { type: String, default: 'div' },
-        name: { type: String },
-        date: { type: String },
-        rating: { type: Number },
-        likes: { type: Number },
-        dislikes: { type: Number },
-        advantage: { type: String },
-        disadvantage: { type: String },
-        locale: { type: String },
-        comment: { type: String, default: 'ru' },
-        images: { type: Array },
-        options: { type: Array },
+        tag: {
+            type: String,
+            default: 'div',
+        },
+
+        name: {
+            type: String,
+        },
+
+        date: {
+            type: String,
+        },
+
+        rating: {
+            type: Number,
+        },
+
+        likes: {
+            type: Number,
+        },
+
+        dislikes: {
+            type: Number,
+        },
+
+        advantage: {
+            type: String,
+        },
+
+        disadvantage: {
+            type: String,
+        },
+
+        locale: {
+            type: String,
+        },
+
+        comment: {
+            type: String,
+            default: 'ru',
+        },
+
+        options: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
+
+        images: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
     },
 
     computed: {
@@ -101,13 +142,15 @@ export default {
             const date = new Date(this.date);
             return date.toLocaleString(this.locale, monthLongDateSettings);
         },
-    },
 
-    methods: {
-        generateSourcePath(x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext);
-        }
-    }
+        reviewImages() {
+            const images = this.images || [];
+            return images.map(i => ({
+                id: i,
+                defaultImg: generatePictureSourcePath(null, null, i),
+            }));
+        },
+    },
 };
 </script>
 

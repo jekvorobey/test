@@ -98,9 +98,7 @@ export default {
 
     methods: {
         isAccepted(file) {
-            if (this.filter) {
-                return this.filter(file);
-            }
+            if (this.filter) return this.filter(file);
 
             const isAcceptedType =
                 this.acceptedTypes && (this.acceptedTypes.length === 0 || this.acceptedTypes.includes(file.type));
@@ -115,7 +113,9 @@ export default {
         },
 
         handleFiles(fs) {
-            const buffer = [...fs].filter(f => !this.files.some(fl => fl.name === f.name) && this.isAccepted(f));
+            const buffer = [...fs]
+                .slice(0, this.maxFiles)
+                .filter(f => !this.files.some(fl => fl.name === f.name) && this.isAccepted(f));
             this.files.push(...buffer);
             this.inputId += 1;
         },
