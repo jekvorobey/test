@@ -533,9 +533,6 @@
                             </v-button>
                         </div>
                     </template>
-                    <div class="product-view__reviews--empty" v-else>
-                        Нет отзывов
-                    </div>
                 </div>
                 <add-review v-else :product-code="product.code" @add-review="onAddReview" />
             </div>
