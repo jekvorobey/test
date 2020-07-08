@@ -64,6 +64,9 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 
 import { generatePictureSourcePath } from '@util/file';
 
+import { mapState } from 'vuex';
+import { LOCALE } from '@store';
+
 import { monthLongDateSettings } from '@settings';
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
@@ -90,16 +93,17 @@ export default {
         dislikes: { type: Number },
         advantage: { type: String },
         disadvantage: { type: String },
-        locale: { type: String },
         comment: { type: String, default: 'ru' },
         images: { type: Array },
         options: { type: Array },
     },
 
     computed: {
+        ...mapState([LOCALE]),
+
         computedDate() {
             const date = new Date(this.date);
-            return date.toLocaleString(this.locale, monthLongDateSettings);
+            return date.toLocaleString(this[LOCALE], monthLongDateSettings);
         },
     },
 

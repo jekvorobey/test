@@ -143,5 +143,5 @@ export default {
     },
     [SET_BRANDS_SET](state, payload) {
         state.bannersSet = payload;
-    }
+    },
 };
