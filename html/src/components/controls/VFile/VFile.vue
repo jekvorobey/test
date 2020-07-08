@@ -114,7 +114,7 @@ export default {
 
         handleFiles(fs) {
             const buffer = [...fs]
-                .slice(0, this.maxFiles)
+                .slice(0, this.maxFiles - this.files.length)
                 .filter(f => !this.files.some(fl => fl.name === f.name) && this.isAccepted(f));
             this.files.push(...buffer);
             this.inputId += 1;
