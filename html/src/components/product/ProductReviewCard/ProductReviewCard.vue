@@ -56,6 +56,9 @@ import VLink from '@controls/VLink/VLink.vue';
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VRating from '@controls/VRating/VRating.vue';
 
+import { mapState } from 'vuex';
+import { LOCALE } from '@store';
+
 import { monthLongDateSettings } from '@settings';
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
@@ -88,9 +91,11 @@ export default {
     },
 
     computed: {
+        ...mapState([LOCALE]),
+
         computedDate() {
             const date = new Date(this.date);
-            return date.toLocaleString(this.locale, monthLongDateSettings);
+            return date.toLocaleString(this[LOCALE], monthLongDateSettings);
         },
     },
 };
