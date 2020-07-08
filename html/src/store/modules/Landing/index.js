@@ -16,6 +16,7 @@ export default function createModule() {
             middleBanners: [],
             brands: [],
             categories: [],
+            frequentCategories: [],
             newProducts: {
                 banner: {},
                 items: [],

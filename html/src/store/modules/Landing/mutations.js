@@ -7,6 +7,7 @@ export const SET_BRANDS = 'SET_BRANDS';
 export const SET_INSTAGRAM = 'SET_INSTAGRAM';
 export const SET_LOAD = 'SET_LOAD';
 export const SET_BRANDS_SET = 'SET_BRANDS_SET';
+export const SET_FREQUENT_CATEGORIES= 'SET_FREQUENT_CATEGORIES';
 
 export default {
     [SET_INSTAGRAM](state, payload) {
@@ -37,6 +38,10 @@ export default {
         state.categories = payload;
     },
 
+    [SET_FREQUENT_CATEGORIES](state, payload) {
+        state.frequentCategories = payload;
+    },
+
     [SET_LOAD](state, payload) {
         state.load = payload;
         state.renderData = [
@@ -51,7 +56,7 @@ export default {
                 id: 2,
                 component: 'categories-section',
                 data: {
-                    categories: state.categories,
+                    categories: state.frequentCategories,
                 },
             },
             {

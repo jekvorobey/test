@@ -13,7 +13,7 @@
         </div>
 
         <template v-if="showList">
-            <categories-section class="product-groups-view__categories" :categories="categories" />
+            <categories-section class="product-groups-view__categories" :categories="frequentCategories" />
 
             <separator-section class="product-groups-view__separator" />
 
@@ -107,7 +107,7 @@ import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import { $store, $progress, $logger } from '@services';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { CATEGORIES, SCROLL } from '@store';
+import { CATEGORIES, SCROLL, FREQUENT_CATEGORIES } from '@store';
 import productGroupsModule, {
     NAME as PRODUCT_GROUPS_MODULE,
     ITEMS,
@@ -173,7 +173,7 @@ export default {
     },
 
     computed: {
-        ...mapState([CATEGORIES, SCROLL]),
+        ...mapState([CATEGORIES, FREQUENT_CATEGORIES, SCROLL]),
         ...mapState(PRODUCT_GROUPS_MODULE, [ITEMS, TYPE]),
         ...mapGetters(PRODUCT_GROUPS_MODULE, [BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT]),
 

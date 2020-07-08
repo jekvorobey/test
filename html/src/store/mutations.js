@@ -6,6 +6,7 @@ export const SET_CITY_CONFIRMATION_OPEN = 'SET_CITY_CONFIRMATION_OPEN';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_BANNER = 'SET_BANNER';
 export const SET_MENU = 'SET_MENU';
+export const SET_FREQUENT_CATEGOIRES = 'SET_FREQUENT_CATEGOIRES';
 
 export default {
     [SET_LOCALE](state, payload) {
@@ -30,6 +31,10 @@ export default {
 
     [SET_CATEGORIES](state, payload) {
         state.categories = payload;
+    },
+
+    [SET_FREQUENT_CATEGOIRES](state, payload) {
+        state.frequentCategories = payload;
     },
 
     [SET_BANNER](state, payload) {

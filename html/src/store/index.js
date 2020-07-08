@@ -33,6 +33,7 @@ export const IS_CITY_CONFIRMATION_OPEN = 'isCityConfirmationOpen';
 export const SCROLL = 'scroll';
 
 export const CATEGORIES = 'categories';
+export const FREQUENT_CATEGORIES = 'frequentCategories';
 export const BANNER = 'banner';
 export const SELECTED_CITY = 'selectedCity';
 
@@ -63,6 +64,7 @@ export default function createStore(container) {
             [CATEGORIES]: [],
             [BANNER]: {},
             [ENV]: context.env,
+            [FREQUENT_CATEGORIES]: [],
         },
 
         getters,

@@ -550,6 +550,15 @@ export function getCategories(node_code, max_depth) {
     });
 }
 
+export function getFrequentCategories(node_code, max_depth) {
+    return $http.get('/v1/categories/frequent', {
+        params: {
+            node_code: node_code || undefined,
+            max_depth: max_depth || undefined,
+        },
+    });
+}
+
 export function getBannersByCode(typeCode, random = false) {
     return $http.get('/v1/content/banners', {
         params: {

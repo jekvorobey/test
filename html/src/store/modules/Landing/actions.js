@@ -27,7 +27,7 @@ import mainTabletImgRetina from '@images/mock/main/mainTablet5@2x.jpg';
 import mainMobileImgRetina from '@images/mock/main/mainMobile5@2x.jpg';
 
 import { $logger } from '@services';
-import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode, getProductGroups } from '@api';
+import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode, getProductGroups, getFrequentCategories } from '@api';
 import {
     SET_BESTSELLER_PRODUCTS,
     SET_NEW_PRODUCTS,
@@ -38,6 +38,7 @@ import {
     SET_INSTAGRAM,
     SET_LOAD,
     SET_BRANDS_SET,
+    SET_FREQUENT_CATEGORIES,
 } from './mutations';
 import { storeErrorHandler } from '@util/store';
 
@@ -50,6 +51,7 @@ export const FETCH_BANNERS = 'FETCH_BANNERS';
 export const FETCH_BRANDS = 'FETCH_BRANDS';
 export const FETCH_INSTAGRAM = 'FETCH_INSTAGRAM';
 export const FETCH_BANNERS_SET = 'FETCH_BANNERS_SET';
+export const FETCH_FREQUENT_CATEGOIRES = 'FETCH_FREQUENT_CATEGOIRES';
 
 export default {
     [FETCH_INSTAGRAM]({ commit }) {
@@ -260,6 +262,15 @@ export default {
         //     });
     },
 
+    [FETCH_FREQUENT_CATEGOIRES]({ commit }) {
+        return getFrequentCategories()
+            .then((data) => commit(SET_FREQUENT_CATEGORIES, data))
+            .catch((error) => {
+                $logger.error(`FETCH_FREQUENT_CATEGORIES error: ${error}`);
+                return [];
+            });
+    },
+
     [FETCH_LANDING_DATA]({ dispatch, commit }) {
         return Promise.all([
             dispatch(FETCH_NEW_PRODUCTS),
@@ -270,6 +281,7 @@ export default {
             dispatch(FETCH_BRANDS),
             dispatch(FETCH_INSTAGRAM),
             dispatch(FETCH_BANNERS_SET),
+            dispatch(FETCH_FREQUENT_CATEGOIRES),
         ]).then(() => commit(SET_LOAD, true));
     },
 };
