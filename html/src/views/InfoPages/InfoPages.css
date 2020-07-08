@@ -1,3 +1,7 @@
 .info-pages-block {
     margin: calc(var(--gs) * 7) auto;
+
+    &__table {
+        margin: calc(var(--gs) * 4) 0;
+    }
 }
