@@ -175,7 +175,7 @@ export default {
         try {
             const data = await getProducts(payload);
             commit(SET_NEW_PRODUCTS, {
-                items: data ? data.items.slice(4, 8) : [],
+                items: data ? data.items.slice(0, 4) : [],
                 banner: {
                     id: 'newBanner',
                     name: '',
@@ -194,6 +194,8 @@ export default {
                     mobileImage: newMobileImg,
                     mobileImageRetina: newMobileImgRetina,
                 },
+                btnText: 'Смотреть все',
+                btnLink: '/new',
             });
         } catch (error) {
             storeErrorHandler(FETCH_NEW_PRODUCTS)(error);
@@ -225,13 +227,14 @@ export default {
                     id: 'newBanner',
                     name: '',
                     type: 'banner',
-                    button: {
-                        id: 2,
-                        url: '/sets/hair_best/',
-                        text: 'Посмотреть',
-                        location: 'bottom',
-                        type: 'white',
-                    },
+                    // #62487
+                    // button: {
+                    //     id: 2,
+                    //     url: '/sets/hair_best/',
+                    //     text: 'Посмотреть',
+                    //     location: 'bottom',
+                    //     type: 'white',
+                    // },
                     desktopImage: bestsellerDesktopImg,
                     desktopImageRetina: bestsellerDesktopImgRetina,
                     tabletImage: bestsellerTabletImg,

@@ -40,12 +40,11 @@
                     <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
                 </catalog-banner-card>
 
-                <!-- #58322  -->
-                <!-- <div class="products-section__cards">
+                <div class="products-section__cards" v-if="btnLink !== '/'">
                     <v-button class="btn--outline products-section__link" :to="btnLink">
                         {{ btnText }}
                     </v-button> 
-                </div>-->
+                </div>
             </div>
         </div>
     </section>
