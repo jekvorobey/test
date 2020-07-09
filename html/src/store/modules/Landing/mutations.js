@@ -8,6 +8,7 @@ export const SET_INSTAGRAM = 'SET_INSTAGRAM';
 export const SET_LOAD = 'SET_LOAD';
 export const SET_BRANDS_SET = 'SET_BRANDS_SET';
 export const SET_FREQUENT_CATEGORIES= 'SET_FREQUENT_CATEGORIES';
+export const SET_CATALOG_LATEST_SETS = 'SET_CATALOG_LATEST_SETS';
 
 export default {
     [SET_INSTAGRAM](state, payload) {
@@ -111,7 +112,7 @@ export default {
                 id: 12,
                 component: 'list-banners-section',
                 data: {
-                    banners: state.banners.slice(3, 6),
+                    banners: state.catalogLatestSets,
                 },
             },
             {
@@ -148,5 +149,8 @@ export default {
     },
     [SET_BRANDS_SET](state, payload) {
         state.bannersSet = payload;
+    },
+    [SET_CATALOG_LATEST_SETS](state, payload) {
+        state.catalogLatestSets = payload;
     },
 };

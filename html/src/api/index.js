@@ -632,6 +632,12 @@ export function getBrand(data) {
     return $http.get('/v1/brand', data);
 }
 
+// Last 3 sets for landing page
+
+export function getCatalogLatestSets() {
+    return $http.get('/v1/catalog/latest-sets');
+};
+
 // cart
 
 export function getCartData() {

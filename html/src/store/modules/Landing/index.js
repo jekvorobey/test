@@ -30,6 +30,7 @@ export default function createModule() {
                 items: [],
             },
             instagramItems: [],
+            catalogLatestSets: [],
         },
         actions,
         mutations,

@@ -27,7 +27,10 @@ import mainTabletImgRetina from '@images/mock/main/mainTablet5@2x.jpg';
 import mainMobileImgRetina from '@images/mock/main/mainMobile5@2x.jpg';
 
 import { $logger } from '@services';
-import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode, getProductGroups, getFrequentCategories } from '@api';
+import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode, getProductGroups, getFrequentCategories, getCatalogLatestSets } from '@api';
+
+import {generatePictureSourcePath} from '@util/file';
+
 import {
     SET_BESTSELLER_PRODUCTS,
     SET_NEW_PRODUCTS,
@@ -39,6 +42,7 @@ import {
     SET_LOAD,
     SET_BRANDS_SET,
     SET_FREQUENT_CATEGORIES,
+    SET_CATALOG_LATEST_SETS,
 } from './mutations';
 import { storeErrorHandler } from '@util/store';
 
@@ -52,6 +56,7 @@ export const FETCH_BRANDS = 'FETCH_BRANDS';
 export const FETCH_INSTAGRAM = 'FETCH_INSTAGRAM';
 export const FETCH_BANNERS_SET = 'FETCH_BANNERS_SET';
 export const FETCH_FREQUENT_CATEGOIRES = 'FETCH_FREQUENT_CATEGOIRES';
+export const FETCH_CATALOG_LATEST_SETS = 'FETCH_CATALOG_LATEST_SETS';
 
 export default {
     [FETCH_INSTAGRAM]({ commit }) {
@@ -271,6 +276,14 @@ export default {
             });
     },
 
+    async [FETCH_CATALOG_LATEST_SETS]({ commit }) {
+        const { items }= await getCatalogLatestSets();
+        commit(SET_CATALOG_LATEST_SETS, items.map((item) => ({
+            ...item,
+            image: generatePictureSourcePath(null, null, item.image),
+        })));
+    },
+
     [FETCH_LANDING_DATA]({ dispatch, commit }) {
         return Promise.all([
             dispatch(FETCH_NEW_PRODUCTS),
@@ -282,6 +295,7 @@ export default {
             dispatch(FETCH_INSTAGRAM),
             dispatch(FETCH_BANNERS_SET),
             dispatch(FETCH_FREQUENT_CATEGOIRES),
+            dispatch(FETCH_CATALOG_LATEST_SETS),
         ]).then(() => commit(SET_LOAD, true));
     },
 };
