@@ -35,12 +35,14 @@
             <div class="container master-class-view__panel-container">
                 <div class="master-class-view__panel-body">
                     <div class="container container--tablet master-class-view__panel-left">
-                        <attention-panel>
+                        <!-- #62754 -->
+
+                        <!-- <attention-panel>
                             <span>
                                 <strong>Внимание!</strong> Событие проходит в другом городе<br />
                                 (г. Москва)
                             </span>
-                        </attention-panel>
+                        </attention-panel> -->
                     </div>
                     <div class="master-class-view__panel-middle">
                         <p class="container container--tablet text-bold master-class-view__section-hl">
