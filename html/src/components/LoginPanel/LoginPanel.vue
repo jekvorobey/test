@@ -8,7 +8,7 @@
             <v-input-mask v-model="phone" :options="maskOptions" :error="phoneError">
                 Номер телефона
             </v-input-mask>
-            <v-password v-model="password" :error="passwordError">
+            <v-password v-model="password" :error="passwordError" class="login-panel__form-password-input">
                 Пароль
             </v-password>
             <div class="login-panel__form-submit">
