@@ -89,7 +89,7 @@
                     >
                         <template v-slot:link>
                             <v-link class="cabinet-view__panel-item-link" tag="button" @click="onChangeSocial(driver)">
-                                {{ socialMap[driver] ? 'Подключить' : 'Отключить' }}
+                                {{ socialMap[driver] ? 'Отключить' : 'Подключить' }}
                             </v-link>
                         </template>
                     </info-row>
