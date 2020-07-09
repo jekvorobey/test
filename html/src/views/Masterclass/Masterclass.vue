@@ -101,7 +101,7 @@
                             </p>
                             <ol class="list">
                                 <li v-for="date in dates" :key="date">
-                                    <p>{{ date }}</p>
+                                    <span>{{ date }}</span>
                                 </li>
                             </ol>
 
@@ -113,7 +113,7 @@
                             </p>
                             <ol class="list">
                                 <li v-for="place in places" :key="place.id">
-                                    <p>{{ place.name }}, {{ place.address }}</p>
+                                    <span>{{ place.name }}, {{ place.address }}</span>
                                 </li>
                             </ol>
 
@@ -487,7 +487,7 @@ import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, LOCALE } from '@store';
 
-import masterClassModule, {
+import {
     NAME as MASTERCLASS_MODULE,
     MASTERCLASS,
     FEATURED_MASTERCLASSES,
@@ -830,8 +830,6 @@ export default {
             params: { code },
         } = to;
 
-        // регистрируем модуль, если такого нет
-        registerModuleIfNotExists($store, MASTERCLASS_MODULE, masterClassModule);
         const { masterClassCode } = $store.state[MASTERCLASS_MODULE];
 
         // если все загружено, пропускаем

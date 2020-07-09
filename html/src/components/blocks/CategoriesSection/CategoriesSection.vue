@@ -4,12 +4,7 @@
             <ul class="categories-section__list">
                 <li v-for="category in categories" :key="category.id" class="categories-section__item">
                     <category-list-panel :items="category.items">
-                        <category-card
-                            class="categories-section__item"
-                            :name="category.name"
-                            :image="category.image"
-                            :code="category.code"
-                        />
+                        <category-card :name="category.name" :image="category.image" :code="category.code" />
                     </category-list-panel>
                 </li>
             </ul>
