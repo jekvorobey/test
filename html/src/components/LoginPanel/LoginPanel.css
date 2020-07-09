@@ -68,6 +68,12 @@
             }
         }
 
+        &-password-input {
+            input::-webkit-credentials-auto-fill-button {
+                background-color: var(--cl-global-invert);
+            }
+        }
+
         &-submit {
             &-btn {
                 min-width: 120px;

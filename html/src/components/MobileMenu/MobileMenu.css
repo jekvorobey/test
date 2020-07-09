@@ -39,6 +39,10 @@
             text-align: left;
             flex-shrink: 0;
 
+            &--final {
+                width: 100%;
+            }
+
             &-container {
                 display: flex;
                 flex: none;

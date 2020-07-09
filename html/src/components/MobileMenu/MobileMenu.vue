@@ -117,7 +117,7 @@
                         v-for="category in currentCategories"
                         :key="category.id"
                     >
-                        <v-link class="mobile-menu__menu-link" :to="`/catalog/${category.code}`">
+                        <v-link class="mobile-menu__menu-link" :to="`/catalog/${category.code}`" :class="{'mobile-menu__menu-link--final': !(category.items && category.items.length)}">
                             {{ category.name }}
                         </v-link>
                         <v-link
