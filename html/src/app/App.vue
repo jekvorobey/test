@@ -51,6 +51,7 @@ import VInput from '@controls/VInput/VInput.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
 
 import ProgressBar from '@components/ProgressBar/ProgressBar.vue';
 import FilterButton from '@components/FilterButton/FilterButton.vue';

@@ -507,8 +507,21 @@
                                 </v-rating>
                             </div>
                             <div class="product-view__reviews-header-sort">
-                                <span class="product-view__reviews-header-sort-text">Сначала новые</span>
-                                <v-svg name="arrow-down" width="16" height="16" />
+                                <v-select
+                                    class="product-view__reviews-header-sort-select"
+                                    label="title"
+                                    track-by="id"
+                                    :searchable="false"
+                                    :allow-empty="false"
+                                    :show-labels="false"
+                                    v-model="selectedSortDirection"
+                                    :options="reviewsSortDirections"
+                                >
+                                    <template v-slot:singleLabel="{ option }">
+                                        <template v-if="isTablet">{{ option.tabletTitle }}</template>
+                                        <template v-else>{{ option.title }}</template>
+                                    </template>
+                                </v-select>
                             </div>
                         </template>
                     </div>
@@ -673,6 +686,7 @@ import VHtml from '@controls/VHtml/VHtml.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
 
 import Price from '@components/Price/Price.vue';
 import BannerCard from '@components/BannerCard/BannerCard.vue';
@@ -703,7 +717,7 @@ import ProductOptionTag from '@components/product/ProductOptionTag/ProductOption
 import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag.vue';
 import ProductBundlePanel from '@components/product/ProductBundlePanel/ProductBundlePanel.vue';
 
-import AddReview from '@components//AddReview/AddReview.vue';
+import AddReview from '@components/AddReview/AddReview.vue';
 
 import ProductPickupPointsMap from '@components/product/ProductPickupPointsMap/ProductPickupPointsMap.vue';
 import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPanel/ProductPickupPointsPanel.vue';
@@ -764,7 +778,7 @@ import {
     generateYoutubeVideoSourcePath,
 } from '@util/file';
 import { createNotFoundRoute } from '@util/router';
-import { breakpoints, fileExtension, httpCodes, modalName } from '@enums';
+import { breakpoints, fileExtension, httpCodes, modalName, sortDirections } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
 import { generateCategoryUrl, generateProductUrl, prepareProductImage } from '@util/catalog';
 
@@ -781,6 +795,7 @@ import '@images/sprites/logo.svg';
 import '@images/sprites/home.svg';
 
 import './Product.css';
+import { FETCH_REFERRER_DATA } from '../../store/modules/Referrer/actions';
 
 const productGalleryOptions = {
     spaceBetween: 8,
@@ -879,6 +894,7 @@ export default {
         VHtml,
         VSlider,
         VPicture,
+        VSelect,
 
         Breadcrumbs,
         BreadcrumbItem,
@@ -917,11 +933,29 @@ export default {
     },
 
     data() {
+        const reviewsSortDirections = [
+            {
+                id: 1,
+                title: 'Cначала новые',
+                tabletTitle: 'Новые',
+                value: sortDirections.DESC,
+            },
+            {
+                id: 2,
+                title: 'Cначала старые',
+                tabletTitle: 'Cтарые',
+                value: sortDirections.ASC,
+            },
+        ];
+
         return {
             isPriceVisible: true,
             btnLink: 'https://www.instagram.com/bessovestnotalantlivy/',
             isAddingReview: false,
             isLoadingMoreReviews: false,
+
+            selectedSortDirection: reviewsSortDirections[0],
+            reviewsSortDirections,
         };
     },
 
@@ -1109,6 +1143,11 @@ export default {
 
         modal(value) {
             this.handleModalQuery(value);
+        },
+
+        selectedSortDirection(newValue) {
+            const { product } = this;
+            this[FETCH_REVIEWS_DATA]({ productCode: product.code, sortDirection: newValue.value });
         },
     },
 
