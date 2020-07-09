@@ -62,6 +62,7 @@
         display: flex;
         overflow: hidden;
         padding-bottom: calc(var(--gs) * 7);
+        margin-bottom: calc(var(--gs) * 10);
 
         @media (--tablet) {
             padding: 0;
