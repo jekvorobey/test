@@ -61,6 +61,7 @@
                             :to="clearFilterUrl"
                             :class="!isFiltersPage && 'is-disabled'"
                             replace
+                            v-show="isFiltersPage"
                         >
                             Очистить фильтры
                         </v-button>
