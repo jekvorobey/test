@@ -1,6 +1,8 @@
 import { DEFAULT_PAGE } from '@constants';
 import { sortDirections } from '@enums';
+import { masterclassTimeCode, masterclassFilterName } from '@enums/catalog';
 import { storeErrorHandler } from '@util/store';
+
 import { getInstagram, getMasterclasses, getMasterclass, getCatalogMasterclasses, getMasterclassFilters } from '@api';
 import {
     SET_MASTERCLASS,
@@ -30,7 +32,15 @@ export default {
 
     async [FETCH_MASTERCLASS_ITEMS]({ commit }, { page = DEFAULT_PAGE, sortDirection, sortField, filter, showMore }) {
         try {
-            const data = await getCatalogMasterclasses(page, sortDirection, sortField, filter);
+            // если фильтр по времени не выбран, фильтруем всегда по будущим событиям
+            const mergedFilter = {
+                ...filter,
+                [masterclassFilterName.TIME]:
+                    (filter[masterclassFilterName.TIME] && filter[masterclassFilterName.TIME][0]) ||
+                    masterclassTimeCode.FUTURE,
+            };
+
+            const data = await getCatalogMasterclasses(page, sortDirection, sortField, mergedFilter);
             commit(SET_QUERY_PARAMS, { page });
             if (showMore) commit(SET_ITEMS_MORE, data);
             else commit(SET_ITEMS, data);
