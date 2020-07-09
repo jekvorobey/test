@@ -1053,8 +1053,34 @@
                     top: var(--gs);
                 }
 
-                &-text {
-                    border-bottom: 1px solid var(--cl-global);
+                &-select {
+                    min-height: calc(var(--gs) * 3);
+
+                    .multiselect__container {
+                        margin-top: var(--gs);
+
+                        @media (--tablet) {
+                            right: 0;
+                        }
+                    }
+
+                    .multiselect__tags {
+                        min-height: calc(var(--gs) * 3);
+                        border: none;
+                        padding: 0 calc(var(--gs) * 4) 0 0;
+                    }
+
+                    .multiselect__single {
+                        font-size: 16px;
+                        line-height: calc(var(--gs) * 3);
+                        border-bottom: 1px solid var(--cl-global);
+                        cursor: pointer;
+                    }
+
+                    .multiselect__select {
+                        height: calc(var(--gs) * 3);
+                        width: calc(var(--gs) * 3);
+                    }
                 }
 
                 .icon {
