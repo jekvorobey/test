@@ -164,7 +164,7 @@
                             <div v-if="!promocode" class="cart-view__main-panel-promo">
                                 <v-input
                                     class="cart-view__main-panel-promo-input"
-                                    placeholder="Введите промокод"
+                                    placeholder="Ваш промокод"
                                     v-model="inputPromocode"
                                 />
 

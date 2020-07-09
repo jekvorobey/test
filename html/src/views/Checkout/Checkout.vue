@@ -30,7 +30,11 @@
 
                             <template v-if="isProduct">
                                 <p class="checkout-view__main-panel-line" v-if="summary.delivery">
-                                    Доставка <price v-if="summary.delivery.value || summary.delivery.value === 0" v-bind="summary.delivery" />
+                                    Доставка
+                                    <price
+                                        v-if="summary.delivery.value || summary.delivery.value === 0"
+                                        v-bind="summary.delivery"
+                                    />
                                     <span v-else>{{ summary.delivery }}</span>
                                 </p>
 
@@ -84,7 +88,7 @@
                                 <v-input
                                     v-model="inputPromocode"
                                     class="checkout-view__main-panel-promo-input"
-                                    placeholder="Введите промокод"
+                                    placeholder="Ваш промокод"
                                 />
                                 <v-button
                                     class="btn--outline checkout-view__main-panel-promo-btn"
