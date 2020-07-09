@@ -111,6 +111,26 @@
             & + & {
                 margin-left: calc(var(--gs) * 2);
             }
+
+            &--like {
+                color: var(--cl-green);
+                fill: var(--cl-green);
+
+                &:hover {
+                    color: var(--cl-green);
+                    fill: var(--cl-green);
+                }
+            }
+
+            &--dislike {
+                color: var(--cl-red);
+                fill: var(--cl-red);
+
+                &:hover {
+                    color: var(--cl-red);
+                    fill: var(--cl-red);
+                }
+            }
         }
     }
 }

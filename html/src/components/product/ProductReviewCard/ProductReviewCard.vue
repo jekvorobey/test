@@ -42,13 +42,21 @@
             </div>
         </div>
         <div class="product-review-card__controls">
-            <button class="product-review-card__controls-btn">
+            <button
+                class="product-review-card__controls-btn"
+                :class="{ 'product-review-card__controls-btn--like': vote === reviewOpinion.LIKE }"
+                @click="onChangeVote(reviewOpinion.LIKE)"
+            >
                 <v-svg id="product-review-card-like" name="like" width="22" height="21" />
-                &nbsp;{{ likes }}
+                &nbsp;{{ computedLikes }}
             </button>
-            <button class="product-review-card__controls-btn">
+            <button
+                class="product-review-card__controls-btn"
+                :class="{ 'product-review-card__controls-btn--dislike': vote === reviewOpinion.DISLIKE }"
+                @click="onChangeVote(reviewOpinion.DISLIKE)"
+            >
                 <v-svg id="product-review-card-dislike" name="dislike" width="22" height="21" />
-                &nbsp;{{ dislikes }}
+                &nbsp;{{ computedDislikes }}
             </button>
         </div>
     </component>
@@ -60,6 +68,11 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import VRating from '@controls/VRating/VRating.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
+import { mapActions } from 'vuex';
+import { NAME as PRODUCT_MODULE } from '@store/modules/Product';
+import { CHANGE_REVIEW_VOTE } from '@store/modules/Product/actions';
+
+import { reviewOpinion } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 import { monthLongDateSettings } from '@settings';
 
@@ -80,6 +93,10 @@ export default {
     },
 
     props: {
+        id: {
+            type: String,
+        },
+
         tag: {
             type: String,
             default: 'div',
@@ -137,6 +154,13 @@ export default {
         },
     },
 
+    data() {
+        return {
+            disableVote: false,
+            vote: null,
+        };
+    },
+
     computed: {
         computedDate() {
             const date = new Date(this.date);
@@ -150,6 +174,46 @@ export default {
                 defaultImg: generatePictureSourcePath(null, null, i),
             }));
         },
+
+        computedLikes() {
+            switch (this.vote) {
+                case reviewOpinion.LIKE:
+                    return this.likes + 1;
+                default:
+                    return this.likes;
+            }
+        },
+
+        computedDislikes() {
+            switch (this.vote) {
+                case reviewOpinion.DISLIKE:
+                    return this.dislikes + 1;
+                default:
+                    return this.dislikes;
+            }
+        },
+    },
+
+    methods: {
+        ...mapActions(PRODUCT_MODULE, [CHANGE_REVIEW_VOTE]),
+
+        async onChangeVote(opinion) {
+            if (this.vote || this.disableVote) return;
+
+            try {
+                const { id } = this;
+                this.disableVote = true;
+                await this[CHANGE_REVIEW_VOTE]({ id, opinion });
+                this.vote = opinion;
+                this.disableVote = false;
+            } catch (error) {
+                this.disableVote = false;
+            }
+        },
+    },
+
+    created() {
+        this.reviewOpinion = reviewOpinion;
     },
 };
 </script>

@@ -283,4 +283,9 @@ export const infoPages = Object.freeze({
     DELIVERY_AND_PAYMENT: 'delivery-and-payment',
     PURCHASE_RETURNS: 'purchase-returns',
     FEEDBACK: 'feedback',
-})
+});
+
+export const reviewOpinion = Object.freeze({
+    LIKE: 'like',
+    DISLIKE: 'dislike',
+});

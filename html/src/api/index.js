@@ -842,3 +842,10 @@ export function getReviews(product_code, sort_field = 'created_at', sort_directi
 export function addReview(formData) {
     return $http.post('/v1/reviews/', formData);
 }
+
+export function changeReviewVote(review_id, opinion) {
+    return $http.post('/v1/reviews/vote', {
+        review_id,
+        opinion,
+    });
+}
