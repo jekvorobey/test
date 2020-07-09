@@ -219,11 +219,15 @@
                         </template>
                         <span class="checkout-product-panel__item-controls-text">
                             Доступно для оплаты:&nbsp;
-                            <strong class="text-bold">{{ maxAmountBonus }}</strong>&nbsp;из&nbsp;{{ availableBonus }} бонусов
+                            <strong class="text-bold">{{ maxAmountBonus }}</strong
+                            >&nbsp;из&nbsp;{{ availableBonus }} бонусов
                         </span>
                     </div>
                     <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
-                        <span> Будет использовано <strong class="text-bold">{{ bonus }}</strong>&nbsp;из&nbsp;{{ availableBonus }} бонусных баллов&nbsp; </span>
+                        <span>
+                            Будет использовано <strong class="text-bold">{{ bonus }}</strong
+                            >&nbsp;из&nbsp;{{ availableBonus }} бонусных баллов&nbsp;
+                        </span>
                         <div class="checkout-product-panel__item-card-panel">
                             <div v-if="isTablet" class="text-sm text-normal text-grey">
                                 (1 бонус = {{ bonusPerRub }} рубль)
@@ -235,7 +239,7 @@
                     </div>
                 </div>
 
-                <div
+                <!-- <div
                     class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--sertificate"
                 >
                     <div class="checkout-product-panel__item-header">
@@ -279,7 +283,7 @@
                             Активировать
                         </v-button>
                     </div>
-                </div>
+                </div> -->
 
                 <div
                     class="checkout-product-panel__item checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--settings"
@@ -302,8 +306,18 @@
                             name="agreement"
                             @change="onSetAgreement($event)"
                         >
-                            Я согласен с <router-link :to="{name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER }}" target="_blank">условиями оферты</router-link> и
-                            <router-link :to="{name: 'Agreements', params: {type: agreementTypes.PERSONAL_POLICY }}" target="_blank">политикой конфиденциальности</router-link>
+                            Я согласен с
+                            <router-link
+                                :to="{ name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER } }"
+                                target="_blank"
+                                >условиями оферты</router-link
+                            >
+                            и
+                            <router-link
+                                :to="{ name: 'Agreements', params: { type: agreementTypes.PERSONAL_POLICY } }"
+                                target="_blank"
+                                >политикой конфиденциальности</router-link
+                            >
                         </v-check>
                         <transition name="slide-in-bottom" mode="out-in">
                             <div class="status-color-error" :key="agreementError" v-if="agreementError">
@@ -535,7 +549,7 @@ export default {
             case receiveMethods.PICKUP:
                 return {
                     [AGREEMENT]: {
-                        valid: (value) => value === true,
+                        valid: value => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -552,7 +566,7 @@ export default {
             default:
                 return {
                     [AGREEMENT]: {
-                        valid: (value) => value === true,
+                        valid: value => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -578,16 +592,16 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
         ...mapState(MODAL_MODULE, {
-            isPickupPointModalOpen: (state) =>
+            isPickupPointModalOpen: state =>
                 state[MODALS][CheckoutPickupPointModal.name] && state[MODALS][CheckoutPickupPointModal.name].open,
-            isDateModalOpen: (state) =>
+            isDateModalOpen: state =>
                 state[MODALS][CheckoutDateModal.name] && state[MODALS][CheckoutDateModal.name].open,
-            isAddressModalOpen: (state) =>
+            isAddressModalOpen: state =>
                 state[MODALS][modalName.profile.ADDRESS_EDIT] && state[MODALS][modalName.profile.ADDRESS_EDIT].open,
-            isRecipientModalOpen: (state) =>
+            isRecipientModalOpen: state =>
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT] &&
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT].open,
         }),
@@ -779,7 +793,7 @@ export default {
             }
 
             const note = 'Доставим';
-            const uniqueDates = Array.from(new Set(deliveryType.items.map((i) => i.selectedDate)));
+            const uniqueDates = Array.from(new Set(deliveryType.items.map(i => i.selectedDate)));
             return uniqueDates.reduce(
                 (accum, current, index) =>
                     accum + `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(this[LOCALE], options)}`,
@@ -800,7 +814,7 @@ export default {
         },
 
         onSetDeliveryType(id) {
-            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find((t) => t.id === id);
+            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find(t => t.id === id);
             this[SET_DELIVERY_TYPE](selectedType);
         },
 
@@ -816,7 +830,7 @@ export default {
 
         onChangeDate(chunkItemId) {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
-            const chunkItem = deliveryType.items.find((i) => i.id === chunkItemId);
+            const chunkItem = deliveryType.items.find(i => i.id === chunkItemId);
 
             const state = {
                 id: chunkItem.id,
@@ -916,10 +930,10 @@ export default {
         computedDeliveryTypes(value) {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
             if (value) {
-                value.forEach((el) => {
+                value.forEach(el => {
                     if (el) {
                         if (el.items)
-                            el.items.forEach((delivery) => {
+                            el.items.forEach(delivery => {
                                 if (deliveryType) {
                                     this[CHANGE_CHUNK_DATE]({
                                         ...delivery,
