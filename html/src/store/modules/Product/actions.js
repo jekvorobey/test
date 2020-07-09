@@ -188,7 +188,7 @@ export default {
         try {
             await changeReviewVote(id, opinion);
         } catch (error) {
-            storeErrorHandler(CHANGE_REVIEW_VOTE)(error);
+            storeErrorHandler(CHANGE_REVIEW_VOTE, true)(error);
         }
     },
 };
