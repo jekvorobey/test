@@ -68,11 +68,25 @@
                 <div class="masterclasses-view__sets-header-bottom">
                     <radio-switch
                         class="masterclasses-view__sets-header-switch"
-                        v-model="selectedStatus"
+                        :value="
+                            (selectedValueMap[times.name] && selectedValueMap[times.name].code) || times.items[0].code
+                        "
                         name="status"
                         id="status"
-                        :items="masterclassStatus"
-                    />
+                        key-field="code"
+                        :items="times.items"
+                        @input="
+                            onChangeFilter(
+                                times,
+                                $event,
+                                selectedValueMap[times.name] && selectedValueMap[times.name].code
+                            )
+                        "
+                    >
+                        <template v-slot:content="{ item }">
+                            {{ item.name }}
+                        </template>
+                    </radio-switch>
 
                     <select-panel
                         class="masterclasses-view__sets-header-panel"
@@ -381,9 +395,14 @@ export default {
             return filters.find(f => f.name === 'profession');
         },
 
+        times() {
+            const filters = this[NULLABLE_FILTERS] || [];
+            return filters.find(f => f.name === 'time');
+        },
+
         filters() {
             const filters = this[NULLABLE_FILTERS] || [];
-            return filters.filter(f => this.isTabletLg || f.name !== 'profession');
+            return filters.filter(f => this.isTabletLg || (f.name !== 'profession' && f.name !== 'time'));
         },
 
         masterclasses() {
