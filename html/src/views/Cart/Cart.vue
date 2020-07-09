@@ -12,6 +12,7 @@
                             {{ $t(`cart.title.${type.type}`) }}
                             &nbsp;&nbsp;<span class="text-grey">{{ type.items.length }}</span>
                         </template>
+
                         <template v-slot:panel="{ item: type }">
                             <div class="cart-view__main-products" v-if="IS_PRODUCT(type)">
                                 <div
@@ -75,6 +76,7 @@
                                     </li>
                                 </transition-group>
                             </div>
+
                             <div class="cart-view__main-masterclass" v-else-if="IS_MASTER_CLASS(type)">
                                 <transition-group
                                     class="cart-view__main-products-list"
@@ -114,11 +116,13 @@
                             </div>
                         </template>
                     </v-tabs>
+
                     <v-link class="cart-view__main-clear" tag="button" @click="openOnClearCart">
                         <v-svg name="cross-small" width="13" height="13" />
                         &nbsp;&nbsp;Очистить корзину
                     </v-link>
                 </div>
+
                 <v-sticky class="cart-view__main-sticky">
                     <template v-slot:sticky>
                         <div class="cart-view__main-panel">
@@ -163,6 +167,7 @@
                                     placeholder="Введите промокод"
                                     v-model="inputPromocode"
                                 />
+
                                 <v-button
                                     class="btn--outline cart-view__main-panel-promo-btn"
                                     @click="ADD_PROMOCODE(inputPromocode)"
@@ -175,6 +180,7 @@
                                 <div class="cart-view__main-panel-promo-icon">
                                     <v-svg name="check-small" width="16" height="16" />
                                 </div>
+
                                 <div>
                                     Промокод&nbsp;{{ promocode }}&nbsp;применён
                                     <v-link
@@ -186,9 +192,11 @@
                                     </v-link>
                                 </div>
                             </div>
+
                             <v-button class="cart-view__main-panel-submit" v-if="!isLoad" @click="loadCheckout">
                                 Оформить заказ
                             </v-button>
+
                             <div class="cart-view__main-panel-preloader" v-else>
                                 <img key="preloader" :src="preloader" width="30" height="30" />
                             </div>

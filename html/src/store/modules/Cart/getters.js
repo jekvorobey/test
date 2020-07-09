@@ -50,7 +50,8 @@ export default {
         const types = itemTypes.reduce((accum, current) => {
             const type = state.cartData[current];
 
-            if (type) accum.push(type);
+            // скрыл мастерклассы, когда будем делать в корзине, надо будет вернуть
+            if (type && current !== cartItemTypes.MASTERCLASS) accum.push(type);
             return accum;
         }, []);
         return types;
