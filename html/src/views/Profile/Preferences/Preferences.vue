@@ -30,7 +30,7 @@
                     </v-link>
                 </div>
             </template>
-            <div class="container container--tablet-lg" v-if="actualBrands.length">
+            <div class="container container--tablet-lg" v-if="actualBrands.length || prefType === preferenceType.PROFESSIONAL">
                 <v-check
                     v-if="prefType === preferenceType.PROFESSIONAL"
                     :checked="sameBrands"
@@ -65,7 +65,7 @@
                 <span class="preferences-view__empty-text">
                     Вы ещё не добавляли предпочтения по брендам
                 </span>
-                <v-button class="btn--outline" @click="onAddEntities(preferenceEntityTypes.BRANDS)">Добавить</v-button>
+                <v-button class="btn--outline" @click="onAddEntities(preferenceEntityTypes.BRANDS)" :disabled="availableBrands.length">Добавить</v-button>
             </div>
         </info-panel>
 
@@ -99,7 +99,7 @@
                     </v-link>
                 </div>
             </template>
-            <div class="container container--tablet-lg" v-if="actualCategories.length">
+            <div class="container container--tablet-lg" v-if="actualCategories.length || prefType === preferenceType.PROFESSIONAL">
                 <v-check
                     v-if="prefType === preferenceType.PROFESSIONAL"
                     :checked="sameCategories"
@@ -134,7 +134,7 @@
                 <span class="preferences-view__empty-text">
                     Вы ещё не добавляли предпочтения по категориям продуктов
                 </span>
-                <v-button class="btn--outline" @click="onAddEntities(preferenceEntityTypes.CATEGORIES)"
+                <v-button class="btn--outline" @click="onAddEntities(preferenceEntityTypes.CATEGORIES)" :disabled="availableCategories.length"
                     >Добавить</v-button
                 >
             </div>
@@ -336,6 +336,12 @@ export default {
                     entities = this.actualCategories;
                     break;
             }
+
+            console.log({
+                    type,
+                    prefType,
+                    availableEntities,
+                    entities});
 
             this[CHANGE_MODAL_STATE]({
                 name: modalName.profile.PREFERENCE_EDIT,

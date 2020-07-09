@@ -33,6 +33,7 @@ export default {
     async [FETCH_PREFERENCES]({ commit }, prefType) {
         try {
             const data = await getProfilePreferences(prefType);
+            console.log(data);
             commit(SET_PREFERENCES_DATA, { prefType, data });
         } catch (error) {
             storeErrorHandler(FETCH_PREFERENCES)(error);
