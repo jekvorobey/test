@@ -88,7 +88,12 @@
                         :key="driver"
                     >
                         <template v-slot:link>
-                            <v-link class="cabinet-view__panel-item-link" tag="button" @click="onChangeSocial(driver)">
+                            <v-link
+                                class="cabinet-view__panel-item-link"
+                                :class="{ 'text-grey': socialMap[driver] }"
+                                tag="button"
+                                @click="onChangeSocial(driver)"
+                            >
                                 {{ socialMap[driver] ? 'Отключить' : 'Подключить' }}
                             </v-link>
                         </template>
