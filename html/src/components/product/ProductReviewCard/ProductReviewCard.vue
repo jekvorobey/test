@@ -42,22 +42,24 @@
             </div>
         </div>
         <div class="product-review-card__controls">
-            <button
-                class="product-review-card__controls-btn"
+            <session-check-button
+                component="button"
+                class="btn--transparent product-review-card__controls-btn"
                 :class="{ 'product-review-card__controls-btn--like': vote === reviewOpinion.LIKE }"
                 @click="onChangeVote(reviewOpinion.LIKE)"
             >
                 <v-svg id="product-review-card-like" name="like" width="22" height="21" />
                 &nbsp;{{ computedLikes }}
-            </button>
-            <button
-                class="product-review-card__controls-btn"
+            </session-check-button>
+            <session-check-button
+                component="button"
+                class="btn--transparent product-review-card__controls-btn"
                 :class="{ 'product-review-card__controls-btn--dislike': vote === reviewOpinion.DISLIKE }"
                 @click="onChangeVote(reviewOpinion.DISLIKE)"
             >
                 <v-svg id="product-review-card-dislike" name="dislike" width="22" height="21" />
                 &nbsp;{{ computedDislikes }}
-            </button>
+            </session-check-button>
         </div>
     </component>
 </template>
@@ -67,6 +69,8 @@ import VLink from '@controls/VLink/VLink.vue';
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VRating from '@controls/VRating/VRating.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
+
+import SessionCheckButton from '@components/SessionCheckButton/SessionCheckButton.vue';
 
 import { mapActions } from 'vuex';
 import { NAME as PRODUCT_MODULE } from '@store/modules/Product';
@@ -90,6 +94,8 @@ export default {
         VLink,
         VRating,
         VPicture,
+
+        SessionCheckButton,
     },
 
     props: {
