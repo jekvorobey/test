@@ -14,8 +14,10 @@
         position: relative;
         display: flex;
         width: 40%;
-        max-width: 64px;
+        max-width: calc(var(--gs) * 8);
         height: 100%;
+        max-height: calc(var(--gs) * 8);
+        min-width: calc(var(--gs) * 8);
         padding: var(--gs);
         margin-right: calc(var(--gs) * 2);
         border-bottom: none;
