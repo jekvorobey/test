@@ -16,6 +16,11 @@
         }
     }
 
+    &__cart-btn {
+        position: relative;
+        top: -2px;
+    }
+
     &__item {
         position: relative;
         margin-left: calc(var(--gs) * 3);

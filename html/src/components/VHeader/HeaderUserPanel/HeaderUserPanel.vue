@@ -20,7 +20,7 @@
                 <cart-header-panel class="header-user-panel__item-cart">
                     <price class="text-medium header-user-panel__item-sum" v-bind="productItemsSum" />
                     &nbsp;&nbsp;
-                    <button>
+                    <button class="header-user-panel__cart-btn">
                         <v-svg name="cart-middle" width="24" height="24" />
                         <span class="text-bold header-user-panel__item-count">{{ cartItemsCount }}</span>
                     </button>
