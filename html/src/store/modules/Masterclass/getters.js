@@ -9,8 +9,7 @@ export const FILTER_SEGMENTS = 'filterSegments';
 export const NULLABLE_FILTERS = 'nullableFilters';
 
 function getNullItem(filter) {
-    let name = '';
-    const item = { id: 'all', code: null };
+    let name = null;
 
     switch (filter.name) {
         case 'profession':
@@ -25,18 +24,16 @@ function getNullItem(filter) {
         case 'type':
             name = 'Все типы событий';
             break;
-        default:
-            name = 'Все';
-            break;
     }
 
-    item.name = name;
-    return item;
+    if (name) return { id: 'all', code: null, name };
 }
 
 function prepareFilter(filter) {
     const items = filter.items;
-    const f = { ...filter, items: [getNullItem(filter), ...filter.items] };
+    const nullItem = getNullItem(filter);
+    const preparedItems = nullItem ? [nullItem, ...filter.items] : filter.items;
+    const f = { ...filter, items: preparedItems };
     return f;
 }
 

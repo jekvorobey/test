@@ -6,8 +6,8 @@
             v-for="(item, index) in items"
             v-model="internalValue"
             :id="`radio-switch-${id}-${index}`"
-            :key="item.value"
-            :value="item.value"
+            :key="item[keyField]"
+            :value="item[keyField]"
             :name="name"
         >
             <slot name="content" :item="item" :index="index">
@@ -30,6 +30,11 @@ export default {
     props: {
         id: {
             type: [String, Number],
+        },
+
+        keyField: {
+            type: String,
+            default: 'value',
         },
 
         value: {
