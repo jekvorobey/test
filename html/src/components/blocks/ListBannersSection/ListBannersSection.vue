@@ -9,6 +9,7 @@
                     :image="banner.image"
                     :title="banner.title"
                     :button-text="banner.btnText"
+                    :to="banner.href || '/'"
                 />
             </div>
         </div>

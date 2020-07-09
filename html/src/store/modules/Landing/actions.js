@@ -29,8 +29,6 @@ import mainMobileImgRetina from '@images/mock/main/mainMobile5@2x.jpg';
 import { $logger } from '@services';
 import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode, getProductGroups, getFrequentCategories, getCatalogLatestSets } from '@api';
 
-import {generatePictureSourcePath} from '@util/file';
-
 import {
     SET_BESTSELLER_PRODUCTS,
     SET_NEW_PRODUCTS,
@@ -45,6 +43,9 @@ import {
     SET_CATALOG_LATEST_SETS,
 } from './mutations';
 import { storeErrorHandler } from '@util/store';
+import { generatePictureSourcePath } from '@util/file';
+import { generateCategoryUrl } from '@util/catalog';
+import { productGroupTypes } from '@enums/product';
 
 export const FETCH_LANDING_DATA = 'FETCH_LANDING_DATA';
 export const FETCH_NEW_PRODUCTS = 'FETCH_NEW_PRODUCTS';
@@ -213,7 +214,7 @@ export default {
     async [FETCH_BANNERS_SET]({ commit }) {
         try {
 
-            const type = 'sets';
+            const type = productGroupTypes.SETS;
             const page = 1;
             const orderField = 'name';
     
@@ -281,6 +282,7 @@ export default {
         commit(SET_CATALOG_LATEST_SETS, items.map((item) => ({
             ...item,
             image: generatePictureSourcePath(null, null, item.image),
+            href: generateCategoryUrl(productGroupTypes.SETS, item.code),
         })));
     },
 
