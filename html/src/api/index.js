@@ -215,7 +215,6 @@ export function getProfilePreferences(type) {
 }
 
 export function changeProfilePreferences(type, entityType, items) {
-    console.log(type, entityType, items);
     return $http.put(`/v1/lk/preferences/${type}/${entityType}`, {
         [entityType]: items,
     });

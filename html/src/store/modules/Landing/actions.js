@@ -69,7 +69,8 @@ export default {
             });
     },
 
-    [FETCH_BRANDS]({ commit }) {
+    async [FETCH_BRANDS]({ commit }) {
+        const s = await getBrands();
         return getBrands()
             .then((data) => commit(SET_BRANDS, data))
             .catch((error) => {

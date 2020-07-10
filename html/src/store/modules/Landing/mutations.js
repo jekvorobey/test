@@ -10,13 +10,21 @@ export const SET_BRANDS_SET = 'SET_BRANDS_SET';
 export const SET_FREQUENT_CATEGORIES= 'SET_FREQUENT_CATEGORIES';
 export const SET_CATALOG_LATEST_SETS = 'SET_CATALOG_LATEST_SETS';
 
+import { generateCategoryUrl } from '@util/catalog';
+import { productGroupTypes } from '@enums/product';
+
 export default {
     [SET_INSTAGRAM](state, payload) {
         state.instagramItems = payload;
     },
 
     [SET_BRANDS](state, payload) {
-        state.brands = payload;
+        const brands = payload.map((item) => ({
+            ...item,
+            href: generateCategoryUrl(productGroupTypes.BRANDS, item.code),
+        }));
+        console.log(brands);
+        state.brands = brands;
     },
 
     [SET_BANNERS](state, payload) {

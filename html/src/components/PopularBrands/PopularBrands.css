@@ -21,6 +21,8 @@
 
         &-img {
             position: relative;
+            border-bottom: none;
+            text-decoration: none;
 
             &::before {
                 content: '';

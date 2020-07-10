@@ -1,13 +1,14 @@
 <template>
     <div class="popular-brands">
         <div class="popular-brands__most-popular">
-            <div
+            <a
                 class="popular-brands__most-popular-img"
                 v-for="(brand, index) in mostPopularBrands"
                 :key="brand.id || index"
+                :href="brand.href ? brand.href : '/'"
             >
                 <v-picture :image="brand.image" />
-            </div>
+            </a>
         </div>
         <ul class="popular-brands__list">
             <li class="popular-brands__list-item" v-for="(brand, index) in restBrands" :key="brand.id || index">
@@ -22,6 +23,8 @@
 
 <script>
 import VPicture from '@controls/VPicture/VPicture.vue';
+import VLink from '@controls/VLink/VLink.vue';
+
 import './PopularBrands.css';
 
 export default {
@@ -29,6 +32,7 @@ export default {
 
     components: {
         VPicture,
+        VLink,
     },
 
     props: {
