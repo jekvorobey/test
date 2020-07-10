@@ -7,6 +7,7 @@ import getters from './getters';
 export const NAME = 'preferences';
 export const TYPE = 'type';
 export const PREFERENCES_DATA = 'preferencesData';
+export const ALL_PREFERENCES = 'allPreferences';
 export const AVAILABLE_BRANDS = 'availableBrands';
 export const AVAILABLE_CATEGORIES = 'availableCategories';
 export const SAME_BRANDS = 'sameBrands';
@@ -39,6 +40,7 @@ export default function createModule() {
                     },
                 },
             },
+            [ALL_PREFERENCES]: {},
 
             [AVAILABLE_BRANDS]: [],
             [AVAILABLE_CATEGORIES]: [],

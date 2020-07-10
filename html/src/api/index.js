@@ -206,11 +206,16 @@ export function changeProfilePersonal({ firstName, lastName, middleName, birthda
     });
 }
 
+export function getAllPreferences() {
+    return $http.get('/v1/lk/preferences/catalog');
+}
+
 export function getProfilePreferences(type) {
     return $http.get(`/v1/lk/preferences/${type}`);
 }
 
 export function changeProfilePreferences(type, entityType, items) {
+    console.log(type, entityType, items);
     return $http.put(`/v1/lk/preferences/${type}/${entityType}`, {
         [entityType]: items,
     });

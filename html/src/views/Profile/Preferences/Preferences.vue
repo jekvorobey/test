@@ -9,8 +9,7 @@
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.BRANDS)"
                         :disabled="
-                            actualBrands.length === availableBrands.length ||
-                            (sameBrands && prefType === preferenceType.PROFESSIONAL)
+                            allPreferences.brands && allPreferences.brands.length
                         "
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
@@ -65,7 +64,7 @@
                 <span class="preferences-view__empty-text">
                     Вы ещё не добавляли предпочтения по брендам
                 </span>
-                <v-button class="btn--outline" @click="onAddEntities(preferenceEntityTypes.BRANDS)" :disabled="availableBrands.length">Добавить</v-button>
+                <v-button class="btn--outline" @click="onAddEntities(preferenceEntityTypes.BRANDS)" :disabled="allPreferences.categoires && allPreferences.categoires.length">Добавить</v-button>
             </div>
         </info-panel>
 
@@ -77,8 +76,7 @@
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.CATEGORIES)"
                         :disabled="
-                            actualCategories.length === availableCategories.length ||
-                            (sameCategories && prefType === preferenceType.PROFESSIONAL)
+                            allPreferences.categories && allPreferences.categories.length
                         "
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
@@ -134,7 +132,7 @@
                 <span class="preferences-view__empty-text">
                     Вы ещё не добавляли предпочтения по категориям продуктов
                 </span>
-                <v-button class="btn--outline" @click="onAddEntities(preferenceEntityTypes.CATEGORIES)" :disabled="availableCategories.length"
+                <v-button class="btn--outline" @click="onAddEntities(preferenceEntityTypes.CATEGORIES)" :disabled="allPreferences.categoires && allPreferences.categoires.length"
                     >Добавить</v-button
                 >
             </div>
@@ -171,6 +169,7 @@ import {
     TYPE,
     SAME_BRANDS,
     SAME_CATEGORIES,
+    ALL_PREFERENCES,
 } from '@store/modules/Profile/modules/Preferences';
 import { BRANDS, CATEGORIES, GET_CUSTOMER_BY_TYPE } from '@store/modules/Profile/modules/Preferences/getters';
 import {
@@ -181,6 +180,7 @@ import {
     UPDATE_ENTITIES,
     SET_TYPE,
     UPDATE_SAME_SELECT,
+    FETCH_ALL_PREFERENCES_DATA,
 } from '@store/modules/Profile/modules/Preferences/actions';
 
 import _debounce from 'lodash/debounce';
@@ -241,6 +241,7 @@ export default {
             TYPE,
             SAME_BRANDS,
             SAME_CATEGORIES,
+            ALL_PREFERENCES,
         ]),
         ...mapGetters(PREFERENCES_MODULE_PATH, [BRANDS, CATEGORIES, GET_CUSTOMER_BY_TYPE]),
 
@@ -281,7 +282,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(PREFERENCES_MODULE_PATH, [FETCH_PREFERENCES_DATA, UPDATE_ENTITIES, SET_TYPE, UPDATE_SAME_SELECT]),
+        ...mapActions(PREFERENCES_MODULE_PATH, [FETCH_PREFERENCES_DATA, UPDATE_ENTITIES, SET_TYPE, UPDATE_SAME_SELECT, FETCH_ALL_PREFERENCES_DATA]),
 
         onDeleteEntity(type, i) {
             switch (type) {
@@ -327,12 +328,12 @@ export default {
 
             switch (type) {
                 case preferenceEntityTypes.BRANDS:
-                    availableEntities = this[AVAILABLE_BRANDS];
+                    availableEntities = this[ALL_PREFERENCES].brands;
                     entities = this.actualBrands;
                     break;
 
                 case preferenceEntityTypes.CATEGORIES:
-                    availableEntities = this[AVAILABLE_CATEGORIES];
+                    availableEntities = this[ALL_PREFERENCES].categories;
                     entities = this.actualCategories;
                     break;
             }
@@ -419,6 +420,7 @@ export default {
             .dispatch(`${PREFERENCES_MODULE_PATH}/${FETCH_PREFERENCES_DATA}`, { prefType, isServer: $context.isServer })
             .then(() => {
                 $store.dispatch(`${PREFERENCES_MODULE_PATH}/${SET_TYPE}`, prefType);
+                $store.dispatch(`${PREFERENCES_MODULE_PATH}/${FETCH_ALL_PREFERENCES_DATA}`);
                 next(vm => {
                     $progress.finish();
                 });
@@ -439,6 +441,7 @@ export default {
     beforeMount() {
         this.initHandlers();
         this.initCollections();
+        console.log(this);
     },
 };
 </script>
