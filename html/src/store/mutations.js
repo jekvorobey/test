@@ -7,6 +7,7 @@ export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_BANNER = 'SET_BANNER';
 export const SET_MENU = 'SET_MENU';
 export const SET_FREQUENT_CATEGOIRES = 'SET_FREQUENT_CATEGOIRES';
+export const SET_BADGES = 'SET_BADGES';
 
 export default {
     [SET_LOCALE](state, payload) {
@@ -43,5 +44,9 @@ export default {
 
     [SET_MENU](state, payload) {
         state.menu = payload;
+    },
+
+    [SET_BADGES](state, payload = []) {
+        state.badges = payload;
     },
 };

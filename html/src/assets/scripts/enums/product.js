@@ -9,6 +9,7 @@ export const productGroupTypes = Object.freeze({
     PROMO: 'promo',
     SETS: 'sets',
     BRANDS: 'brands',
+    BESTSELLERS: 'bestsellers',
 });
 
 export const catalogItemTypes = Object.freeze({
@@ -20,3 +21,8 @@ export const productGroupBase = {
     FILTERS: 'filters',
     PRODUCTS: 'products',
 };
+
+export const productBadges = Object.freeze({
+    NEW: 1,
+    BESTSELLERS: 2,
+});

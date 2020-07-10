@@ -263,7 +263,7 @@ import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, compute
 import { generatePictureSourcePath } from '@util/file';
 import { registerModuleIfNotExists } from '@util/store';
 import { createNotFoundRoute } from '@util/router';
-import { productGroupTypes } from '@enums/product';
+import { productGroupTypes, productBadges } from '@enums/product';
 import { sortFields } from '@enums/catalog';
 import { sortDirections, fileExtension, httpCodes } from '@enums';
 import { MIN_SCROLL_VALUE } from '@constants';
@@ -351,6 +351,7 @@ export default {
             switch (type) {
                 case productGroupTypes.CATALOG:
                 case productGroupTypes.NEW:
+                case productGroupTypes.BESTSELLERS:
                     name = 'Catalog';
                     break;
                 default:
@@ -495,6 +496,13 @@ export default {
                 const { query: { page: fromPage = 1 } = { page: 1 } } = from;
                 const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
 
+                switch (toType) {
+                    case productGroupTypes.NEW:
+                    case productGroupTypes.BESTSELLERS:
+                        filter.badges = [productBadges[toType.toUpperCase()]];
+                        break;
+                }
+
                 this.$progress.start();
                 await this[FETCH_CATALOG_DATA]({
                     type: toType,
@@ -550,6 +558,13 @@ export default {
             next(vm => vm.setSortValue(orderField, orderDirection));
         else {
             const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
+
+            switch (toType) {
+                case productGroupTypes.NEW:
+                case productGroupTypes.BESTSELLERS:
+                    filter.badges = [productBadges[toType.toUpperCase()]];
+                    break;
+            }
 
             $progress.start();
             $store

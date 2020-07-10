@@ -27,7 +27,18 @@ import mainTabletImgRetina from '@images/mock/main/mainTablet5@2x.jpg';
 import mainMobileImgRetina from '@images/mock/main/mainMobile5@2x.jpg';
 
 import { $logger } from '@services';
-import { getProducts, getCategories, getBanners, getBrands, getInstagram, getBannersByCode, getProductGroups, getFrequentCategories, getCatalogLatestSets } from '@api';
+import {
+    getProducts,
+    getProductsHot,
+    getCategories,
+    getBanners,
+    getBrands,
+    getInstagram,
+    getBannersByCode,
+    getProductGroups,
+    getFrequentCategories,
+    getCatalogLatestSets,
+} from '@api';
 
 import {
     SET_BESTSELLER_PRODUCTS,
@@ -45,7 +56,7 @@ import {
 import { storeErrorHandler } from '@util/store';
 import { generatePictureSourcePath } from '@util/file';
 import { generateCategoryUrl } from '@util/catalog';
-import { productGroupTypes } from '@enums/product';
+import { productGroupTypes, productBadges } from '@enums/product';
 
 export const FETCH_LANDING_DATA = 'FETCH_LANDING_DATA';
 export const FETCH_NEW_PRODUCTS = 'FETCH_NEW_PRODUCTS';
@@ -136,6 +147,20 @@ export default {
             });
     },
 
+    async [FETCH_BANNERS_SET]({ commit }) {
+        try {
+            const type = productGroupTypes.SETS;
+            const page = 1;
+            const orderField = 'name';
+
+            const { items } = await getProductGroups(type, page, orderField);
+            const data = items ? items : [];
+            commit(SET_BRANDS_SET, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_BANNERS_SET)(error);
+        }
+    },
+
     [FETCH_FEATURED_PRODUCTS]({ commit }, payload = {}) {
         return Promise.all([getProducts(payload), getBannersByCode('header', true)])
             .then((data) => {
@@ -179,11 +204,12 @@ export default {
         //     });
     },
 
-    async [FETCH_NEW_PRODUCTS]({ commit }, payload = {}) {
+    async [FETCH_NEW_PRODUCTS]({ commit }) {
         try {
-            const data = await getProducts(payload);
+            const { items } = await getProductsHot(productBadges.NEW, 4);
+
             commit(SET_NEW_PRODUCTS, {
-                items: data ? data.items.slice(0, 4) : [],
+                items,
                 banner: {
                     id: 'newBanner',
                     name: '',
@@ -211,26 +237,12 @@ export default {
         }
     },
 
-    async [FETCH_BANNERS_SET]({ commit }) {
-        try {
-
-            const type = productGroupTypes.SETS;
-            const page = 1;
-            const orderField = 'name';
-    
-            const { items } = await getProductGroups(type, page, orderField);
-            const data = items ? items : [];
-            commit(SET_BRANDS_SET, data);
-        } catch (error) {
-            storeErrorHandler(FETCH_BANNERS_SET)(error);
-        }
-    },
-
     async [FETCH_BESTSELLER_PRODUCTS]({ commit }, payload = {}) {
         try {
-            const data = await getProducts(payload);
+            const { items } = await getProductsHot(productBadges.BESTSELLERS, 4);
+
             commit(SET_BESTSELLER_PRODUCTS, {
-                items: data ? data.items.slice(4, 8) : [],
+                items,
                 banner: {
                     id: 'newBanner',
                     name: '',
@@ -268,22 +280,30 @@ export default {
         //     });
     },
 
-    [FETCH_FREQUENT_CATEGOIRES]({ commit }) {
-        return getFrequentCategories()
-            .then((data) => commit(SET_FREQUENT_CATEGORIES, data))
-            .catch((error) => {
-                $logger.error(`FETCH_FREQUENT_CATEGORIES error: ${error}`);
-                return [];
-            });
+    async [FETCH_FREQUENT_CATEGOIRES]({ commit }) {
+        try {
+            const data = await getFrequentCategories();
+            commit(SET_FREQUENT_CATEGORIES, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_FREQUENT_CATEGOIRES)(error);
+            return [];
+        }
     },
 
     async [FETCH_CATALOG_LATEST_SETS]({ commit }) {
-        const { items }= await getCatalogLatestSets();
-        commit(SET_CATALOG_LATEST_SETS, items.map((item) => ({
-            ...item,
-            image: generatePictureSourcePath(null, null, item.image),
-            href: generateCategoryUrl(productGroupTypes.SETS, item.code),
-        })));
+        try {
+            const { items } = await getCatalogLatestSets();
+            commit(
+                SET_CATALOG_LATEST_SETS,
+                items.map((item) => ({
+                    ...item,
+                    image: generatePictureSourcePath(null, null, item.image),
+                    href: generateCategoryUrl(productGroupTypes.SETS, item.code),
+                }))
+            );
+        } catch (error) {
+            storeErrorHandler(FETCH_CATALOG_LATEST_SETS)(error);
+        }
     },
 
     [FETCH_LANDING_DATA]({ dispatch, commit }) {

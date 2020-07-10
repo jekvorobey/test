@@ -180,6 +180,7 @@ const main = {
         title: {
             catalog: 'Каталог',
             new: 'Новинки',
+            bestsellers: 'Бестселлеры',
             promo: 'Акции',
             sets: 'Подборки товаров',
             brands: 'Бренды',
@@ -189,6 +190,7 @@ const main = {
         links: {
             catalog: 'Каталог',
             new: 'Новинки',
+            bestsellers: 'Бестселлеры',
             promo: 'Акции',
             sets: 'Подборки',
             brands: 'Бренды',
@@ -281,4 +283,4 @@ const main = {
 };
 
 const LOCALE = 'ru';
-export default { main, flatpickrLocale, LOCALE };   
+export default { main, flatpickrLocale, LOCALE };

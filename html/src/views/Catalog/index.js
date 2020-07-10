@@ -17,7 +17,7 @@ export default {
      */
     routes: [
         {
-            path: `/:type(${productGroupTypes.CATALOG}|${productGroupTypes.NEW})/:code?/filters/*`,
+            path: `/:type(${productGroupTypes.CATALOG}|${productGroupTypes.NEW}|${productGroupTypes.BESTSELLERS})/:code?/filters/*`,
             component: CatalogAsync,
             meta: {
                 middleware: [registerModule(CatalogModuleAsync)],
@@ -26,7 +26,7 @@ export default {
         },
         {
             name: 'Catalog',
-            path: `/:type(${productGroupTypes.CATALOG}|${productGroupTypes.NEW})/:code?`,
+            path: `/:type(${productGroupTypes.CATALOG}|${productGroupTypes.NEW}|${productGroupTypes.BESTSELLERS})/:code?`,
             component: CatalogAsync,
             meta: {
                 middleware: [registerModule(CatalogModuleAsync)],

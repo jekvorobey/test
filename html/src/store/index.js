@@ -32,6 +32,7 @@ export const IS_MENU_OPEN = 'isMenuOpen';
 export const IS_CITY_CONFIRMATION_OPEN = 'isCityConfirmationOpen';
 export const SCROLL = 'scroll';
 
+export const BADGES = 'badges';
 export const CATEGORIES = 'categories';
 export const FREQUENT_CATEGORIES = 'frequentCategories';
 export const BANNER = 'banner';
@@ -65,6 +66,7 @@ export default function createStore(container) {
             [BANNER]: {},
             [ENV]: context.env,
             [FREQUENT_CATEGORIES]: [],
+            [BADGES]: [],
         },
 
         getters,

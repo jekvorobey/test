@@ -7,36 +7,46 @@ function prepareCategory({ id, name, code, items = [] }) {
         id,
         name,
         to: generateCategoryUrl(productGroupTypes.CATALOG, null, code),
-        items: items.map(i => prepareCategory(i)),
+        items: items.map((i) => prepareCategory(i)),
     };
 }
 
 const CATEGORIES = 'categories';
 const MENU = 'menu';
+const BADGES = 'badges';
 
 export const CATEGORIES_CATALOG = 'categoriesCatalog';
 export const HEADER_MENU = 'headerMenu';
 export const HELP_MENU = 'helpMenu';
 export const FOOTER_MENU = 'footerMenu';
+export const BADGES_MAP = 'badgesMap';
 
 export default {
     [CATEGORIES_CATALOG](state) {
         const categories = state[CATEGORIES] || [];
-        return categories.map(c => prepareCategory(c));
+        return categories.map((c) => prepareCategory(c));
     },
 
     [HEADER_MENU](state) {
         const menu = state[MENU];
-        return menu.find(m => m.code === menuCode.HEADER) || {};
+        return menu.find((m) => m.code === menuCode.HEADER) || {};
     },
 
     [HELP_MENU](state) {
         const menu = state[MENU];
-        return menu.find(m => m.code === menuCode.HELP) || {};
+        return menu.find((m) => m.code === menuCode.HELP) || {};
     },
 
     [FOOTER_MENU](state) {
         const menu = state[MENU];
-        return menu.find(m => m.code === menuCode.FOOTER) || {};
+        return menu.find((m) => m.code === menuCode.FOOTER) || {};
+    },
+
+    [BADGES_MAP](state) {
+        const badges = state[BADGES];
+        const map = {};
+
+        for (const badge of badges) map[badge.id] = badge;
+        return map;
     },
 };
