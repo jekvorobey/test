@@ -40,10 +40,10 @@
                     <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
                 </catalog-banner-card>
 
-                <div class="products-section__cards" v-if="btnLink !== '/'">
+                <div class="container container--tablet products-section__controls" v-if="btnLink !== '/'">
                     <v-button class="btn--outline products-section__link" :to="btnLink">
                         {{ btnText }}
-                    </v-button> 
+                    </v-button>
                 </div>
             </div>
         </div>
