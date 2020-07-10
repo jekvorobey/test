@@ -19,8 +19,8 @@ export default {
         const { prefType = null, data = {} } = payload;
         if (prefType) {
             state.preferencesData[prefType].customer = data.customer || {};
-            state.availableBrands = data.brands || [];
-            state.availableCategories = data.categories || [];
+            // state.availableBrands = data.brands || [];
+            // state.availableCategories = data.categories || [];
         }
     },
 

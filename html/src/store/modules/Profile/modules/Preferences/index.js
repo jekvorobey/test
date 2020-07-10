@@ -14,6 +14,9 @@ export const SAME_BRANDS = 'sameBrands';
 export const SAME_CATEGORIES = 'sameCategories';
 export const LOAD = 'load';
 
+const BRANDS = 'brands';
+const CATEGORIES = 'categories';
+
 export const CUSTOMER = 'customer';
 
 export default function createModule() {
@@ -40,7 +43,10 @@ export default function createModule() {
                     },
                 },
             },
-            [ALL_PREFERENCES]: {},
+            [ALL_PREFERENCES]: {
+                [BRANDS]: [],
+                [CATEGORIES]: [],
+            },
 
             [AVAILABLE_BRANDS]: [],
             [AVAILABLE_CATEGORIES]: [],

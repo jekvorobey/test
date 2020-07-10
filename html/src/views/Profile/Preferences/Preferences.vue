@@ -441,7 +441,6 @@ export default {
     beforeMount() {
         this.initHandlers();
         this.initCollections();
-        console.log(this);
     },
 };
 </script>

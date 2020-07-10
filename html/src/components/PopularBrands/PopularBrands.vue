@@ -7,7 +7,7 @@
                 :key="brand.id || index"
                 :href="brand.href ? brand.href : '/'"
             >
-                <v-picture :image="brand.image" />
+                <v-picture :image="generatePicturePath(brand.image)" />
             </a>
         </div>
         <ul class="popular-brands__list">
@@ -24,6 +24,8 @@
 <script>
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VLink from '@controls/VLink/VLink.vue';
+
+import { generatePictureSourcePath } from '@util/file';
 
 import './PopularBrands.css';
 
@@ -83,6 +85,10 @@ export default {
     methods: {
         onShowAll() {
             this.showAll = !this.showAll;
+        },
+
+        generatePicturePath(image) {
+            return generatePictureSourcePath(null, null, image.id);
         },
     },
 };

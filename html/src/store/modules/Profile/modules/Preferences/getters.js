@@ -6,6 +6,7 @@ const PREFERENCES_DATA = 'preferencesData';
 const CUSTOMER = 'customer';
 const AVAILABLE_BRANDS = 'availableBrands';
 const AVAILABLE_CATEGORIES = 'availableCategories';
+const ALL_PREFERENCES = 'allPreferences';
 
 const BRANDS_MAP = 'brandsMap';
 const CATEGORIES_MAP = 'categoriesMap';
