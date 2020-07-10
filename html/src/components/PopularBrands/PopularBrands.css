@@ -21,6 +21,7 @@
 
         &-img {
             position: relative;
+            border-bottom: none;
 
             &::before {
                 content: '';
@@ -61,5 +62,9 @@
             line-height: inherit;
             font-weight: inherit;
         }
+    }
+
+    &__link {
+        border-bottom: none;
     }
 }

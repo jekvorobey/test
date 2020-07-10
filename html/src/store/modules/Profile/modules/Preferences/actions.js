@@ -1,9 +1,10 @@
 import { preferenceType } from '@enums/profile';
 import { storeErrorHandler } from '@util/store';
-import { getProfilePreferences, changeProfilePreferences } from '@api';
-import { SET_PREFERENCES_DATA, SET_ENTITIES, SET_SAME_SELECT } from './mutations';
+import { getProfilePreferences, changeProfilePreferences, getAllPreferences } from '@api';
+import { SET_PREFERENCES_DATA, SET_ENTITIES, SET_SAME_SELECT, SET_ALL_PREFERENCES_DATA } from './mutations';
 
 export const FETCH_PREFERENCES_DATA = 'FETCH_PREFERENCES_DATA';
+export const FETCH_ALL_PREFERENCES_DATA = 'FETCH_ALL_PREFERENCES_DATA';
 export const FETCH_PREFERENCES = 'FETCH_PREFERENCES';
 export const FETCH_SAME_SELECT = 'FETCH_SAME_SELECT';
 export const SET_LOAD = 'SET_LOAD';
@@ -36,6 +37,15 @@ export default {
             commit(SET_PREFERENCES_DATA, { prefType, data });
         } catch (error) {
             storeErrorHandler(FETCH_PREFERENCES)(error);
+        }
+    },
+
+    async [FETCH_ALL_PREFERENCES_DATA]({ commit }) {
+        try {
+            const data = await getAllPreferences();
+            commit(SET_ALL_PREFERENCES_DATA, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_ALL_PREFERENCES_DATA)(error);
         }
     },
 

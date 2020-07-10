@@ -207,6 +207,10 @@ export function changeProfilePersonal({ firstName, lastName, middleName, birthda
     });
 }
 
+export function getAllPreferences() {
+    return $http.get('/v1/lk/preferences/catalog');
+}
+
 export function getProfilePreferences(type) {
     return $http.get(`/v1/lk/preferences/${type}`);
 }
