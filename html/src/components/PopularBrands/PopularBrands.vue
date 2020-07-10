@@ -12,7 +12,7 @@
         </div>
         <ul class="popular-brands__list">
             <li class="popular-brands__list-item" v-for="(brand, index) in restBrands" :key="brand.id || index">
-                {{ brand.name }}
+                <a :href="brand.href ? brand.href : '/'" class="popular-brands__link">{{ brand.name }}</a>
             </li>
             <li v-if="canShowAll" class="popular-brands__list-item">
                 <button class="popular-brands__list-btn" @click="onShowAll">{{ btnText }}</button>

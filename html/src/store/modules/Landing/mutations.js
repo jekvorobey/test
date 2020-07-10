@@ -23,7 +23,6 @@ export default {
             ...item,
             href: generateCategoryUrl(productGroupTypes.BRANDS, item.code),
         }));
-        console.log(brands);
         state.brands = brands;
     },
 
