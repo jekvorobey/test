@@ -49,7 +49,12 @@
         </div>
 
         <div class="catalog-product-card__tags">
-            <tag class="catalog-product-card__tags-item" v-for="tag in tags" :key="tag.id" :text="tag.name" />
+            <tag
+                class="catalog-product-card__tags-item"
+                v-for="badge in computedBadges"
+                :key="badge.id"
+                :text="badge.text"
+            />
         </div>
 
         <favorites-button
@@ -74,6 +79,7 @@ import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 
 import { mapGetters, mapActions, mapState } from 'vuex';
+import { BADGES_MAP } from '@store/getters';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
@@ -130,6 +136,13 @@ export default {
             required: true,
         },
 
+        badges: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
+
         href: {
             type: [Object, String],
             default: '/',
@@ -169,6 +182,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters([BADGES_MAP]),
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
 
         bigImg() {
@@ -195,6 +209,15 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        computedBadges() {
+            const { badges = [], badgesMap } = this;
+
+            const productBadges = badges.map(id => badgesMap[id]);
+            return productBadges.sort((a, b) => {
+                return a.order_num - b.order_num;
+            });
         },
     },
 

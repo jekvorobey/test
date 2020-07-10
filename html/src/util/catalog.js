@@ -25,6 +25,7 @@ export function generateCategoryUrl(type, entityCode, categoryCode) {
     switch (type) {
         case productGroupTypes.CATALOG:
         case productGroupTypes.NEW:
+        case productGroupTypes.BESTSELLERS:
             return categoryCode ? `/${type}/${categoryCode}` : `/${type}/`;
 
         case productGroupTypes.PROMO:
@@ -42,6 +43,7 @@ export function concatCatalogRoutePath(type, entityCode, categoryCode, segments)
     switch (type) {
         case productGroupTypes.CATALOG:
         case productGroupTypes.NEW:
+        case productGroupTypes.BESTSELLERS:
             baseRoute = categoryCode ? `/${type}/${categoryCode}/` : `/${type}/`;
             break;
         case productGroupTypes.PROMO:

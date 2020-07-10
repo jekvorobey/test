@@ -1,14 +1,15 @@
 import axios from 'axios';
-import { getMenu, getCategories, getBanners, getBannersByCode, getFrequentCategories } from '@api';
+import { getMenu, getCategories, getBanners, getBannersByCode, getFrequentCategories, getBadges } from '@api';
 import { $logger, $locale } from '@services';
 import { storeErrorHandler } from '@util/store';
 
-import { SET_CATEGORIES, SET_MENU, SET_BANNER, SET_FREQUENT_CATEGOIRES } from './mutations';
+import { SET_CATEGORIES, SET_MENU, SET_BANNER, SET_FREQUENT_CATEGOIRES, SET_BADGES } from './mutations';
 
 const FETCH_BANNER = 'FETCH_BANNER';
 const FETCH_MENU = 'FETCH_MENU';
 const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 const FETCH_FREQUENT_CATEGORIES = 'FETCH_FREQUENT_CATEGOIRES';
+const FETCH_BADGES = 'FETCH_BADGES';
 
 export const FETCH_COMMON_DATA = 'FETCH_COMMON_DATA';
 
@@ -54,6 +55,15 @@ export default {
         commit(SET_MENU_OPEN, payload);
     },
 
+    async [FETCH_BADGES]({ commit }) {
+        try {
+            const { badges } = await getBadges();
+            commit(SET_BADGES, badges);
+        } catch (error) {
+            storeErrorHandler(FETCH_BADGES)(error);
+        }
+    },
+
     async [FETCH_BANNER]({ commit }) {
         try {
             const data = await getBannersByCode('header', true);
@@ -92,7 +102,13 @@ export default {
 
     async [FETCH_COMMON_DATA]({ dispatch }, payload) {
         try {
-            await Promise.all([dispatch(FETCH_MENU), dispatch(FETCH_CATEGORIES), dispatch(FETCH_BANNER)], dispatch(FETCH_FREQUENT_CATEGORIES));
+            await Promise.all([
+                dispatch(FETCH_MENU),
+                dispatch(FETCH_CATEGORIES),
+                dispatch(FETCH_BANNER),
+                dispatch(FETCH_FREQUENT_CATEGORIES),
+                dispatch(FETCH_BADGES),
+            ]);
         } catch (error) {
             storeErrorHandler(FETCH_COMMON_DATA)(error);
         }

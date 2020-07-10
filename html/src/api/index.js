@@ -6,6 +6,7 @@ import { $http, $logger } from '@services';
 import { REQUEST_CANCEL_MESSAGE } from '@constants';
 import { interval } from '@enums';
 import { verificationCodeType } from '@enums/auth';
+import { productGroupTypes } from '@enums/product';
 
 let catalogItemsCancelSource = null;
 const sessionCheckCache = new Cache({
@@ -471,6 +472,20 @@ export function getProductGroups(type, page, orderField = 'name') {
 }
 
 export function getProductGroup(type, code) {
+    if (type === productGroupTypes.BESTSELLERS)
+        return {
+            banner: null,
+            based: 'filters',
+            code: null,
+            excluded_filters: ['is_new'],
+            filters: {},
+            name: null,
+            preview_photo: null,
+            type: {
+                code: 'bestsellers',
+            },
+        };
+
     return $http.get('/v1/catalog/product-group', {
         params: {
             type_code: type,
@@ -480,6 +495,15 @@ export function getProductGroup(type, code) {
             return qs.stringify(params, {
                 encode: false,
             });
+        },
+    });
+}
+
+export function getProductsHot(badge_id, limit) {
+    return $http.get('/v1/catalog/products/hot', {
+        params: {
+            badge_id,
+            limit,
         },
     });
 }
@@ -563,6 +587,10 @@ export function getFrequentCategories(node_code, max_depth) {
     });
 }
 
+export function getBadges() {
+    return $http.get('/v1/content/badges');
+}
+
 export function getBannersByCode(typeCode, random = false) {
     return $http.get('/v1/content/banners', {
         params: {
@@ -640,7 +668,7 @@ export function getBrand(data) {
 
 export function getCatalogLatestSets() {
     return $http.get('/v1/catalog/latest-sets');
-};
+}
 
 // cart
 

@@ -180,6 +180,7 @@ const main = {
         title: {
             catalog: 'Catalog',
             new: 'New',
+            bestsellers: 'Bestsellers',
             promo: 'Stocks',
             sets: 'Product Sets',
             brands: 'Brands',
@@ -189,6 +190,7 @@ const main = {
         links: {
             catalog: 'Catalog',
             new: 'New',
+            bestsellers: 'Bestsellers',
             promo: 'Promo',
             sets: 'Sets',
             brands: 'Brands',
