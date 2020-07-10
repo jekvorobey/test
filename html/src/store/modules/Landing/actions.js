@@ -245,17 +245,16 @@ export default {
             commit(SET_BESTSELLER_PRODUCTS, {
                 items,
                 banner: {
-                    id: 'newBanner',
+                    id: 'bestsellersBanner',
                     name: '',
                     type: 'banner',
-                    // #62487
-                    // button: {
-                    //     id: 2,
-                    //     url: '/sets/hair_best/',
-                    //     text: 'Посмотреть',
-                    //     location: 'bottom',
-                    //     type: 'white',
-                    // },
+                    button: {
+                        id: 2,
+                        url: '/bestsellers',
+                        text: 'Посмотреть',
+                        location: 'bottom',
+                        type: 'white',
+                    },
                     desktopImage: bestsellerDesktopImg,
                     desktopImageRetina: bestsellerDesktopImgRetina,
                     tabletImage: bestsellerTabletImg,
@@ -263,6 +262,8 @@ export default {
                     mobileImage: bestsellerMobileImg,
                     mobileImageRetina: bestsellerMobileImgRetina,
                 },
+                btnText: 'Смотреть все',
+                btnLink: '/bestsellers',
             });
         } catch (error) {
             storeErrorHandler(FETCH_BESTSELLER_PRODUCTS)(error);
