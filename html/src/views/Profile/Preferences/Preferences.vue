@@ -8,9 +8,7 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.BRANDS)"
-                        :disabled="
-                            allPreferences.brands && allPreferences.brands.length
-                        "
+                        :disabled="(sameBrands && prefType === preferenceType.PROFESSIONAL) || !(availableBrands.length - brands.length)"
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
@@ -19,17 +17,14 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onDeleteAll(preferenceEntityTypes.BRANDS)"
-                        :disabled="
-                            actualBrands.length === 0 || (sameBrands && prefType === preferenceType.PROFESSIONAL)
-                        "
-                        v-if="actualBrands.length"
+                        :disabled="(sameBrands && prefType === preferenceType.PROFESSIONAL) || !brands.length"
                     >
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Удалить все</span>
                     </v-link>
                 </div>
             </template>
-            <div class="container container--tablet-lg" v-if="actualBrands.length || prefType === preferenceType.PROFESSIONAL">
+            <div class="container container--tablet-lg" v-if="brands.length || actualBrands.length">
                 <v-check
                     v-if="prefType === preferenceType.PROFESSIONAL"
                     :checked="sameBrands"
@@ -64,7 +59,12 @@
                 <span class="preferences-view__empty-text">
                     Вы ещё не добавляли предпочтения по брендам
                 </span>
-                <v-button class="btn--outline" @click="onAddEntities(preferenceEntityTypes.BRANDS)" :disabled="allPreferences.categoires && allPreferences.categoires.length">Добавить</v-button>
+                <v-button
+                    class="btn--outline"
+                    @click="onAddEntities(preferenceEntityTypes.BRANDS)"
+                    :disabled="(sameBrands && prefType === preferenceType.PROFESSIONAL) || !availableBrands.length"
+                    >Добавить</v-button
+                >
             </div>
         </info-panel>
 
@@ -75,9 +75,7 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.CATEGORIES)"
-                        :disabled="
-                            allPreferences.categories && allPreferences.categories.length
-                        "
+                        :disabled="(sameCategories && prefType === preferenceType.PROFESSIONAL) || !availableCategories.length"
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
@@ -86,18 +84,14 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onDeleteAll(preferenceEntityTypes.CATEGORIES)"
-                        :disabled="
-                            actualCategories.length === 0 ||
-                            (sameCategories && prefType === preferenceType.PROFESSIONAL)
-                        "
-                        v-if="actualCategories.length"
+                        :disabled="(sameCategories && prefType === preferenceType.PROFESSIONAL) || !categories.length"
                     >
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Удалить все</span>
                     </v-link>
                 </div>
             </template>
-            <div class="container container--tablet-lg" v-if="actualCategories.length || prefType === preferenceType.PROFESSIONAL">
+            <div class="container container--tablet-lg" v-if="categories.length || actualCategories.length">
                 <v-check
                     v-if="prefType === preferenceType.PROFESSIONAL"
                     :checked="sameCategories"
@@ -132,7 +126,10 @@
                 <span class="preferences-view__empty-text">
                     Вы ещё не добавляли предпочтения по категориям продуктов
                 </span>
-                <v-button class="btn--outline" @click="onAddEntities(preferenceEntityTypes.CATEGORIES)" :disabled="allPreferences.categoires && allPreferences.categoires.length"
+                <v-button
+                    class="btn--outline"
+                    @click="onAddEntities(preferenceEntityTypes.CATEGORIES)"
+                    :disabled="(sameCategories && prefType === preferenceType.PROFESSIONAL) || !(availableCategories.length - categories.length)"
                     >Добавить</v-button
                 >
             </div>
@@ -282,7 +279,13 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(PREFERENCES_MODULE_PATH, [FETCH_PREFERENCES_DATA, UPDATE_ENTITIES, SET_TYPE, UPDATE_SAME_SELECT, FETCH_ALL_PREFERENCES_DATA]),
+        ...mapActions(PREFERENCES_MODULE_PATH, [
+            FETCH_PREFERENCES_DATA,
+            UPDATE_ENTITIES,
+            SET_TYPE,
+            UPDATE_SAME_SELECT,
+            FETCH_ALL_PREFERENCES_DATA,
+        ]),
 
         onDeleteEntity(type, i) {
             switch (type) {
@@ -328,21 +331,15 @@ export default {
 
             switch (type) {
                 case preferenceEntityTypes.BRANDS:
-                    availableEntities = this[ALL_PREFERENCES].brands;
+                    availableEntities = this[AVAILABLE_BRANDS];
                     entities = this.actualBrands;
                     break;
 
                 case preferenceEntityTypes.CATEGORIES:
-                    availableEntities = this[ALL_PREFERENCES].categories;
+                    availableEntities = this[AVAILABLE_CATEGORIES];
                     entities = this.actualCategories;
                     break;
             }
-
-            console.log({
-                    type,
-                    prefType,
-                    availableEntities,
-                    entities});
 
             this[CHANGE_MODAL_STATE]({
                 name: modalName.profile.PREFERENCE_EDIT,

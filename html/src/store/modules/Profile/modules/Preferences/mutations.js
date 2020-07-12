@@ -26,6 +26,8 @@ export default {
 
     [SET_ALL_PREFERENCES_DATA](state, payload = {}) {
         state.allPreferences = payload;
+        state.availableBrands = payload.brands || [];
+        state.availableCategories = payload.categories || [];
     },
 
     [SET_ENTITIES](state, { prefType, type, items }) {
