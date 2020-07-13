@@ -56,4 +56,11 @@
             max-width: calc(var(--gs) * 22);
         }
     }
+
+    &__btn {
+        @media(--desktop-lg-diff) {
+            max-width: 50%;
+            min-width: 50%;
+        }
+    }
 }
