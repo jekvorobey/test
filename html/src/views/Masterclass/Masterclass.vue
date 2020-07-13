@@ -411,41 +411,11 @@
             </div>
         </section> -->
 
-        <!-- <section class="section master-class-view__section master-class-view__instagram">
+        <section class="section master-class-view__section master-class-view__instagram">
             <div class="container master-class-view__instagram-container">
-                <h2 class="master-class-view__section-hl master-class-view__instagram-hl">
-                    INSTABEAUTY Владимира Соколова
-                </h2>
-
-                <v-slider
-                    v-if="isTabletLg"
-                    class="master-class-view__instagram-slider"
-                    name="instagram"
-                    :options="sliderOptions"
-                >
-                    <instagram-card
-                        class="swiper-slide master-class-view__instagram-card"
-                        v-for="item in instagramItems"
-                        :key="item.id"
-                        :instagram-card-id="item.id"
-                        :image="item.image"
-                    />
-                </v-slider>
-
-                <div
-                    v-if="!isTabletLg"
-                    class="master-class-view__instagram-grid master-class-view__instagram-grid--initialized"
-                >
-                    <instagram-card
-                        class="master-class-view__instagram-card"
-                        v-for="item in instagramItems"
-                        :key="item.id"
-                        :instagram-card-id="item.id"
-                        :image="item.image"
-                    />
-                </div>
+                <frisbuy-product-container />
             </div>
-        </section> -->
+        </section>
 
         <transition name="slide-bottom" appear>
             <div class="master-class-view__price-panel" v-if="isPanelVisible && isTablet">
@@ -470,6 +440,8 @@ import VSlider from '@controls/VSlider/VSlider.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
 import VAccordion from '@controls/VAccordion/VAccordion.vue';
+
+import FrisbuyProductContainer from '@components/FrisbuyProductContainer/FrisbuyProductContainer.vue';
 
 import Price from '@components/Price/Price.vue';
 import TicketCard from '@components/TicketCard/TicketCard.vue';
@@ -591,6 +563,8 @@ export default {
         MasterClassBannerCard,
         AttentionPanel,
         InfoRow,
+
+        FrisbuyProductContainer,
     },
 
     data() {

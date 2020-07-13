@@ -67,6 +67,7 @@
 
                 <div class="masterclasses-view__sets-header-bottom">
                     <radio-switch
+                        v-if="times"
                         class="masterclasses-view__sets-header-switch"
                         :value="
                             (selectedValueMap[times.name] && selectedValueMap[times.name].code) || times.items[0].code
@@ -89,6 +90,7 @@
                     </radio-switch>
 
                     <select-panel
+                        v-if="professions"
                         class="masterclasses-view__sets-header-panel"
                         name="topic"
                         id="topic"
