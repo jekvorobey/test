@@ -10,6 +10,7 @@
             :key="item[keyField] || index"
         >
             <button
+                v-if="showHeader(item)"
                 class="v-accordion__item-btn"
                 :id="`v-accordion-header${index}`"
                 :aria-controls="`v-accordion-panel${index}`"
@@ -69,31 +70,43 @@ export default {
     },
     props: {
         keyField: String,
+
         isSingle: {
             type: Boolean,
             default: true,
         },
+
         items: {
             type: Array,
             default() {
                 return [];
             },
         },
+
+        itemShowHeader: {
+            type: Function,
+            default: null,
+        },
+
         itemDisabled: {
             type: Function,
             default: null,
         },
+
         itemExpanded: {
             type: Function,
             default: null,
         },
+
         itemToggled: {
             type: Function,
             default: null,
         },
+
         name: {
             type: String,
         },
+
         appear: {
             type: Boolean,
             default: false,
@@ -134,6 +147,10 @@ export default {
 
         isDisabled(item) {
             return this.itemDisabled ? this.itemDisabled(item) : false;
+        },
+
+        showHeader(item) {
+            return this.itemShowHeader ? this.itemShowHeader(item) : true;
         },
 
         headerKeyDown(e) {

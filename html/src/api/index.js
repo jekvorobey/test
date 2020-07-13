@@ -547,10 +547,10 @@ export function getCatalogItems({ filter, orderField = 'price', orderDirection =
     });
 }
 
-export function getFilters(categoryCode, excludedFilters) {
+export function getFilters(appliedFilters, excludedFilters) {
     return $http.get('/v1/catalog/filter', {
         params: {
-            categoryCode,
+            appliedFilters,
             excludedFilters,
         },
         paramsSerializer(params) {

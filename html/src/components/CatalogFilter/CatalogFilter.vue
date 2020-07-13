@@ -4,19 +4,20 @@
             class="catalog-filter__filters"
             key-field="id"
             :items="accordionFilters"
+            :item-show-header="(item) => !!item.title"
             :item-expanded="(item) => item.isExpanded"
             :item-toggled="(item) => onIsExpandedClick(item.id)"
         >
             <template v-slot:content="{ item: filter }">
                 <div class="catalog-filter__filters-range" v-if="filter.item.type === 'range'">
-                    <v-range
+                    <!-- <v-range
                         :initialValue="[filter.item.min, filter.item.max]"
                         :value="filterSegments[filter.item.name] || [filter.item.min, filter.item.max]"
                         :max="filter.item.max"
                         :min="filter.item.min"
                         :format="format"
                         @input="onRangeChange($event, filter.item.name)"
-                    />
+                    /> -->
                 </div>
                 <div
                     class="catalog-filter__filters-check"
@@ -29,6 +30,7 @@
                         :key="option.id"
                         :name="filter.item.name"
                         :checked="filterSegments[filter.item.name] && filterSegments[filter.item.name][option.code]"
+                        :disabled="!!option.disabled"
                         @change="onCheckChange($event, `${filter.item.name}-${option.code}`)"
                     >
                         {{ option.name }}
@@ -102,9 +104,9 @@ export default {
         ...mapGetters(CATALOG_MODULE, [FILTER_SEGMENTS, ROUTE_SEGMENTS]),
         ...mapState(CATALOG_MODULE, [FILTERS]),
         ...mapState('route', {
-            type: (state) => state.params.type,
-            code: (state) => state.params.code,
-            entityCode: (state) => state.params.entityCode,
+            type: state => state.params.type,
+            code: state => state.params.code,
+            entityCode: state => state.params.entityCode,
         }),
 
         accordionFilters() {
@@ -130,7 +132,7 @@ export default {
             const { type, entityCode, code, routeSegments } = this;
 
             if (!routeSegments.includes(value)) routeSegments.push(value);
-            routeSegments = routeSegments.filter((s) => s === value);
+            routeSegments = routeSegments.filter(s => s === value);
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
             this.$router.replace({ path });
@@ -180,8 +182,8 @@ export default {
         },
 
         onShowMoreClick(id) {
-            const moreIndex = this.showMore.findIndex((el) => el.id === id);
-            const moreItem = this.showMore.find((el) => el.id === id);
+            const moreIndex = this.showMore.findIndex(el => el.id === id);
+            const moreItem = this.showMore.find(el => el.id === id);
             this.showMore.splice(moreIndex, 1, {
                 ...moreItem,
                 state: !moreItem.state,
@@ -192,8 +194,8 @@ export default {
         },
 
         onIsExpandedClick(id) {
-            const moreIndex = this.isExpanded.findIndex((el) => el.id === id);
-            const moreItem = this.isExpanded.find((el) => el.id === id);
+            const moreIndex = this.isExpanded.findIndex(el => el.id === id);
+            const moreItem = this.isExpanded.find(el => el.id === id);
             this.isExpanded.splice(moreIndex, 1, {
                 ...moreItem,
                 state: !moreItem.state,

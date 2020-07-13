@@ -1,10 +1,17 @@
+import _mergeWith from 'lodash/mergeWith';
+
 import { $logger } from '@services';
-import { productGroupTypes, productGroupBase } from '@enums/product';
+import { productGroupTypes, productBadges, productGroupBase } from '@enums/product';
 import { storeErrorHandler } from '@util/store';
 import { getAllActiveCategories } from '@util/catalog';
 
 import { getCatalogItems, getCategories, getBanners, getBrand, getFilters, getProductGroup, getProducts } from '@api';
 import { SET_LOAD_PATH as M_SET_LOAD_PATH, APPLY_DATA } from './mutations';
+
+function mergeFunction(objValue, srcValue) {
+    if (Array.isArray(objValue)) return objValue.concat(srcValue);
+    return srcValue;
+}
 
 const FETCH_FILTERS = 'FETCH_FILTERS';
 const FETCH_ITEMS = 'FETCH_ITEMS';
@@ -39,9 +46,9 @@ export default {
         }
     },
 
-    async [FETCH_FILTERS]({ commit }, { categoryCode, excludedFilters }) {
+    async [FETCH_FILTERS]({ commit }, { appliedFilters, excludedFilters }) {
         try {
-            return await getFilters(categoryCode || undefined, excludedFilters || undefined);
+            return await getFilters(appliedFilters, excludedFilters);
         } catch (error) {
             storeErrorHandler(FETCH_FILTERS)(error);
             return [];
@@ -59,7 +66,17 @@ export default {
 
     async [FETCH_PRODUCT_GROUP]({ commit }, { type, entityCode }) {
         try {
-            return await getProductGroup(type, entityCode || undefined);
+            const data = await getProductGroup(type, entityCode || undefined);
+
+            // временный костль для новинок и бестселлеров
+            switch (type) {
+                case productGroupTypes.NEW:
+                case productGroupTypes.BESTSELLERS:
+                    data.filters.badge = [productBadges[type.toUpperCase()]];
+                    break;
+            }
+
+            return data;
         } catch (error) {
             storeErrorHandler(FETCH_PRODUCT_GROUP, true)(error);
         }
@@ -75,8 +92,8 @@ export default {
 
     async [FETCH_CATALOG_DATA]({ state, dispatch, commit }, payload) {
         const {
-            type,
-            entityCode,
+            type = null,
+            entityCode = null,
 
             filter,
             routeSegments,
@@ -129,31 +146,25 @@ export default {
         }
 
         mergedfilter = {
-            ...filter,
-            ...productGroupFilter,
-            category: filter.category || productGroupFilter.category || null,
+            ..._mergeWith(filter, productGroupFilter, mergeFunction),
+            category: filter.category || productGroupFilter.category || undefined,
         };
 
-        if (state.baseCategoryCode !== productGroupFilter.category || state.categoryCode !== filter.category) {
-            if (based === productGroupBase.FILTERS) {
-                data.baseCategoryCode = productGroupFilter.category;
-                data.categoryCode = filter.category;
+        if (based === productGroupBase.FILTERS) {
+            data.baseCategoryCode = productGroupFilter.category;
+            data.categoryCode = filter.category;
 
-                fetchList.push({
-                    action: FETCH_FILTERS,
-                    payload: {
-                        categoryCode: mergedfilter.category,
-                        excludedFilters,
-                    },
-                });
-            } else {
-                data.baseCategoryCode = null;
-                data.categoryCode = null;
-                data.filters = [];
-            }
+            fetchList.push({
+                action: FETCH_FILTERS,
+                payload: {
+                    appliedFilters: mergedfilter,
+                    excludedFilters,
+                },
+            });
         } else {
-            data.categoryCode = state.categoryCode;
-            data.baseCategoryCode = state.baseCategoryCode;
+            data.baseCategoryCode = null;
+            data.categoryCode = null;
+            data.filters = [];
         }
 
         data.routeSegments = routeSegments;
@@ -163,7 +174,7 @@ export default {
         fetchList.push({
             action: FETCH_ITEMS,
             payload: {
-                filter: { ...mergedfilter, category: mergedfilter.category || undefined },
+                filter: mergedfilter,
                 page,
                 orderField,
                 orderDirection,
