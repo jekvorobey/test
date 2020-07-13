@@ -81,13 +81,12 @@ export default {
     },
 
     async [FETCH_BRANDS]({ commit }) {
-        const s = await getBrands();
-        return getBrands()
-            .then((data) => commit(SET_BRANDS, data))
-            .catch((error) => {
-                $logger.error(`FETCH_BRANDS error: ${error}`);
-                return [];
-            });
+        try {
+            const data = await getBrands();
+            commit(SET_BRANDS, data);
+        } catch(error) {
+            storeErrorHandler(SET_BRANDS);
+        }
     },
 
     async [FETCH_BANNERS]({ commit }) {

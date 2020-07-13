@@ -14,12 +14,6 @@ import instagram6 from '@images/mock/insta6.png';
 import instagram7 from '@images/mock/insta7.png';
 import instagram8 from '@images/mock/insta8.png';
 
-import brand1 from '@images/mock/brand1.png';
-import brand2 from '@images/mock/brand2.png';
-import brand3 from '@images/mock/brand3.png';
-import brand4 from '@images/mock/brand4.png';
-import brand5 from '@images/mock/brand5.png';
-
 import banner1 from '@images/mock/banner1.png';
 import banner2 from '@images/mock/banner2.png';
 import banner3 from '@images/mock/banner3.png';
@@ -232,23 +226,6 @@ const banners = [
     },
 ];
 
-const brands = [
-    { id: 1, name: 'Alterna', code: 'alterna', image: brand1 },
-    { id: 2, name: 'Aveda', code: 'aveda', image: brand2 },
-    { id: 3, name: 'Bungeetape', code: 'bungeetape', image: brand3 },
-    { id: 4, name: 'Christina Fitzgerald', code: 'christina_fitzgerald', image: brand4 },
-    { id: 5, name: 'Cloud Nine', code: 'cloud_nine', image: brand5 },
-    { id: 6, name: 'Dajuja', code: 'dajuja', image: brand1 },
-    { id: 7, name: 'Dyson', code: 'dyson' },
-    { id: 8, name: 'IKOO', code: 'ikoo' },
-    { id: 9, name: 'Kevin.Murphy', code: 'kevin_murphy' },
-    { id: 10, name: 'Kure Bazaar', code: 'kure_bazaar' },
-    { id: 11, name: 'La Ric', code: 'la_ric' },
-    { id: 12, name: 'Olaplex', code: 'olaplex' },
-    { id: 13, name: 'Oribe', code: 'oribe' },
-    { id: 14, name: 'R+Co', code: 'r_co' },
-];
-
 const masterClasses = [
     {
         id: 1,
@@ -434,10 +411,6 @@ export default class MockHttpService extends HttpServiceBase {
                     setTimeout(() => resolve(instagrams), 300);
                     break;
                     brandsCatalog;
-
-                case '/v1/brands':
-                    setTimeout(() => resolve(brands), 300);
-                    break;
 
                 case '/v1/masterclasses':
                     setTimeout(() => resolve(masterClasses), 300);
