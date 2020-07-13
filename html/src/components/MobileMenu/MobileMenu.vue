@@ -99,13 +99,19 @@
                         <p class="text-grey">Всегда отвечаем на ваши сообщения</p>
                         <ul class="mobile-menu__menu-socials-links">
                             <li class="mobile-menu__menu-socials-link">
-                                <v-svg name="telegram-bw" width="40" height="40" />
+                                <v-link href="tg://resolve?domain=79162001869" target="_blank" rel="nofollow">
+                                    <v-svg name="telegram-bw" width="40" height="40" />
+                                </v-link>
                             </li>
                             <li class="mobile-menu__menu-socials-link">
-                                <v-svg name="whatsup-bw" width="40" height="40" />
+                                <v-link href="https://api.whatsapp.com/send?phone=79162001869" target="_blank" rel="nofollow">
+                                    <v-svg name="whatsup-bw" width="40" height="40" />
+                                </v-link>
                             </li>
                             <li class="mobile-menu__menu-socials-link">
-                                <v-svg name="viber-bw" width="40" height="40" />
+                                <v-link href="viber://chat?number=79162001869" target="_blank" rel="nofollow">
+                                    <v-svg name="viber-bw" width="40" height="40" />
+                                </v-link>
                             </li>
                         </ul>
                     </div>
@@ -117,7 +123,11 @@
                         v-for="category in currentCategories"
                         :key="category.id"
                     >
-                        <v-link class="mobile-menu__menu-link" :to="`/catalog/${category.code}`" :class="{'mobile-menu__menu-link--final': !(category.items && category.items.length)}">
+                        <v-link
+                            class="mobile-menu__menu-link"
+                            :to="`/catalog/${category.code}`"
+                            :class="{ 'mobile-menu__menu-link--final': !(category.items && category.items.length) }"
+                        >
                             {{ category.name }}
                         </v-link>
                         <v-link
