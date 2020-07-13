@@ -413,7 +413,7 @@
 
         <section class="section master-class-view__section master-class-view__instagram">
             <div class="container master-class-view__instagram-container">
-                <frisbuy-product-container />
+                <frisbuy-product-container :script="frisbuyScript" />
             </div>
         </section>
 
@@ -480,6 +480,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '@util/store';
 import { generatePictureSourcePath } from '@util/file';
+import { getInstagramUserNameFromUrl } from '@util/socials';
 import { generateMasterclassUrl } from '@util/catalog';
 import { yaMapSettings, dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { breakpoints, fileExtension } from '@enums';
@@ -616,6 +617,18 @@ export default {
         ...mapState(MASTERCLASS_MODULE, [MASTERCLASS, FEATURED_MASTERCLASSES, INSTAGRAM_ITEMS]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {}),
+
+        frisbuyScript() {
+            const { speakers = [] } = this[MASTERCLASS] || {};
+            const instagramSpeaker = speakers.find(s => !!s.instagram);
+
+            return (
+                instagramSpeaker &&
+                `https://www.frisbuy.ru/fb/widget?embed_id=aebd8bf5-9f42-11ea-ba01-0242ac150002&author=${getInstagramUserNameFromUrl(
+                    instagramSpeaker.instagram
+                )}`
+            );
+        },
 
         mapCoords() {
             const { places } = this;
