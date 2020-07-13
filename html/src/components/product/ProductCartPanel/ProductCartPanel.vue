@@ -19,12 +19,12 @@
             </div>
         </div>
         <div class="product-cart-panel__controls">
-            <buy-button class="product-cart-panel__controls-btn" @click="onAddToCart" :disabled="disabled">
+            <buy-button class="product-cart-panel__btn product-cart-panel__controls-btn" @click="onAddToCart" :disabled="disabled">
                 <slot />
             </buy-button>
 
             <favorites-button
-                class="product-cart-panel__controls-wishlist"
+                class="product-cart-panel__btn product-cart-panel__controls-wishlist"
                 @click="onAddToWishlist"
                 :isActive="inFavorites"
             >
