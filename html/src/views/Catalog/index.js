@@ -49,5 +49,27 @@ export default {
                 skipScroll: true,
             },
         },
+        {
+            path: `/:type(${productGroupTypes.SEARCH})/:code?/filters/*`,
+            component: CatalogAsync,
+            meta: {
+                middleware: [registerModule(CatalogModuleAsync)],
+                skipScroll: true,
+            },
+            props: {
+                search: true,
+            },
+        },
+        {
+            path: `/:type(${productGroupTypes.SEARCH})/:code?`,
+            component: CatalogAsync,
+            meta: {
+                middleware: [registerModule(CatalogModuleAsync)],
+                skipScroll: true,
+            },
+            props: {
+                search: true,
+            },
+        },
     ],
 };

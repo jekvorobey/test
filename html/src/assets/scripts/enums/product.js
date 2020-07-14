@@ -10,6 +10,7 @@ export const productGroupTypes = Object.freeze({
     SETS: 'sets',
     BRANDS: 'brands',
     BESTSELLERS: 'bestsellers',
+    SEARCH: 'search',
 });
 
 export const catalogItemTypes = Object.freeze({
