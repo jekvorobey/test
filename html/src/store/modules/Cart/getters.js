@@ -49,9 +49,7 @@ export default {
     [CART_TYPES]: (state) => {
         const types = itemTypes.reduce((accum, current) => {
             const type = state.cartData[current];
-
-            // скрыл мастерклассы, когда будем делать в корзине, надо будет вернуть
-            if (type && current !== cartItemTypes.MASTERCLASS) accum.push(type);
+            accum.push(type);
             return accum;
         }, []);
         return types;

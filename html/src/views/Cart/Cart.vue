@@ -14,106 +14,8 @@
                         </template>
 
                         <template v-slot:panel="{ item: type }">
-                            <div class="cart-view__main-products" v-if="IS_PRODUCT(type)">
-                                <div
-                                    v-if="deliveryInfo && deliveryInfo.length > 0"
-                                    class="cart-view__main-products-alert"
-                                >
-                                    <div class="cart-view__main-products-alert-icon">
-                                        <v-svg name="alert" width="24" height="24" />
-                                    </div>
-
-                                    <div class="cart-view__main-products-alert-text">
-                                        <div v-for="alert in deliveryInfo" :key="alert.id">
-                                            {{ alert.name }} {{ alert.description }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <transition-group
-                                    class="cart-view__main-products-list cart-view__products-list"
-                                    tag="ul"
-                                    name="cart-item"
-                                    @before-enter="onBeforeEnterItems"
-                                    @enter="onEnterItems"
-                                    @after-enter="onAfterEnterItems"
-                                    @leave="onLeaveItems"
-                                >
-                                    <li
-                                        class="cart-view__products-list-item"
-                                        v-for="({ p: product, count }, index) in type.items"
-                                        :key="product.id"
-                                    >
-                                        <cart-product-card
-                                            v-if="product.type === 'product'"
-                                            class="cart-view__main-products-list-item"
-                                            :data-index="index"
-                                            :offer-id="product.id"
-                                            :product-id="product.productId"
-                                            :type="product.type"
-                                            :name="product.name"
-                                            :image="product.image"
-                                            :price="product.price"
-                                            :old-price="product.oldPrice"
-                                            :count="count"
-                                            :href="generateItemProductUrl(product)"
-                                            @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
-                                            @toggle-favorite-item="onToggleFavorite(product)"
-                                            @countChange="
-                                                onAddCartItem(product.id, product.stock.storeId, $event.count)
-                                            "
-                                        />
-                                        <cart-bundle-product-card
-                                            v-else-if="(product.type = 'bundle_product')"
-                                            :bundle-id="product.id"
-                                            :name="product.name"
-                                            :price="product.price"
-                                            :bonus="product.bonus"
-                                            :old-price="product.oldPrice"
-                                            :items="product.items"
-                                            :count="count"
-                                            @deleteBundle="onDeleteBundle"
-                                        />
-                                    </li>
-                                </transition-group>
-                            </div>
-
-                            <div class="cart-view__main-masterclass" v-else-if="IS_MASTER_CLASS(type)">
-                                <transition-group
-                                    class="cart-view__main-products-list"
-                                    tag="ul"
-                                    name="cart-item"
-                                    @before-enter="onBeforeEnterItems"
-                                    @enter="onEnterItems"
-                                    @after-enter="onAfterEnterItems"
-                                    @leave="onLeaveItems"
-                                >
-                                    <cart-master-class-card
-                                        class="cart-view__main-products-list-item"
-                                        v-for="({ p: product, count }, index) in type.items"
-                                        :data-index="index"
-                                        :key="product.id"
-                                        :product-id="product.id"
-                                        :name="product.name"
-                                        :image="product.image"
-                                        :price="product.price"
-                                        :old-price="product.oldPrice"
-                                        :date="product.date"
-                                        :author="product.author"
-                                        :count="count"
-                                        type="masterclass"
-                                        @deleteItem="onDeleteMasterclassItem(product.id)"
-                                        @countChange="onAddMasterclassItem(product.id, $event.count)"
-                                        href="/catalog"
-                                    >
-                                        <img
-                                            v-if="product.image"
-                                            class="blur-up lazyload v-picture__img"
-                                            :data-src="generatePictureSourcePath(null, null, product.image.id)"
-                                            alt
-                                        />
-                                    </cart-master-class-card>
-                                </transition-group>
-                            </div>
+                            <cart-product-panel :items="type.items" v-if="IS_PRODUCT(type)" />
+                            <cart-masterclass-panel :items="type.items" v-else-if="IS_MASTER_CLASS(type)" />
                         </template>
                     </v-tabs>
 
@@ -259,9 +161,10 @@ import VSticky from '@controls/VSticky/VSticky.vue';
 import Price from '@components/Price/Price.vue';
 import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
 
-import CartMasterClassCard from '@components/CartMasterClassCard/CartMasterClassCard.vue';
+import CartProductPanel from '@components/cart/CartProductPanel/CartProductPanel.vue';
+import CartMasterclassPanel from '@components/cart/CartMasterclassPanel/CartMasterclassPanel.vue';
+
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
-import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
 import CartBundleProductCard from '@components/CartBundleProductCard/CartBundleProductCard.vue';
 import ClearCartModal from '@components/ClearCartModal/ClearCartModal.vue';
 import VTabs from '@controls/VTabs/VTabs.vue';
@@ -272,16 +175,11 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '@store/modules/Cart';
 import {
     FETCH_FEATURED_PRODUCTS,
-    DELETE_CART_ITEM,
-    ADD_CART_ITEM,
     DELETE_ALL_ITEMS,
     ADD_PROMOCODE,
     DELETE_PROMOCODE,
     FETCH_CART_DATA,
     SET_LOAD,
-    DELETE_CART_BUNDLE,
-    ADD_MASTERCLASS_ITEM,
-    DELETE_MASTERCLASS_ITEM,
 } from '@store/modules/Cart/actions';
 import {
     PRODUCTS,
@@ -291,7 +189,6 @@ import {
     CART_ITEMS_COUNT,
     CART_TYPES,
     PROMO_CODE,
-    DELIVERY_INFO,
 } from '@store/modules/Cart/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -304,20 +201,13 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { cancelRoute } from '@settings';
 import { breakpoints, modalName } from '@enums';
-import { cartItemTypes } from '@enums/product';
 import { preparePrice } from '@util';
 import { generateProductUrl } from '@util/catalog';
 import { registerModuleIfNotExists } from '@util/store';
-import { generatePictureSourcePath } from '@util/file';
 
 import preloader from '@images/icons/preloader.svg';
 import '@images/sprites/cart.svg';
-import '@images/sprites/alert.svg';
 import './Cart.css';
-
-const itemTypes = Object.values(cartItemTypes);
-const itemAnimationDelayDelta = 100;
-let counter = 0;
 
 const sliderOptions = {
     spaceBetween: 24,
@@ -366,11 +256,11 @@ export default {
 
         Price,
 
-        CartProductCard,
-        CartMasterClassCard,
         CatalogProductCard,
-        CartBundleProductCard,
         ClearCartModal,
+
+        CartProductPanel,
+        CartMasterclassPanel,
     },
 
     data() {
@@ -384,14 +274,7 @@ export default {
 
     computed: {
         ...mapState(CART_MODULE, [FEATURED_PRODUCTS, CART_DATA]),
-        ...mapGetters(CART_MODULE, [
-            CART_ITEMS_COUNT,
-            CART_TYPES,
-            IS_PRODUCT,
-            IS_MASTER_CLASS,
-            PROMO_CODE,
-            DELIVERY_INFO,
-        ]),
+        ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS, PROMO_CODE]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
@@ -425,28 +308,11 @@ export default {
         ...mapActions(CART_MODULE, [
             FETCH_CART_DATA,
             FETCH_FEATURED_PRODUCTS,
-            DELETE_CART_ITEM,
-            ADD_CART_ITEM,
             DELETE_ALL_ITEMS,
             ADD_PROMOCODE,
             DELETE_PROMOCODE,
-            DELETE_CART_BUNDLE,
-
-            ADD_MASTERCLASS_ITEM,
-            DELETE_MASTERCLASS_ITEM,
         ]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
-
-        generatePictureSourcePath(x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext);
-        },
-
-        generateItemProductUrl(product) {
-            if (Array.isArray(product.categoryCodes)) {
-                const categoryCode = product.categoryCodes[product.categoryCodes.length - 1];
-                return generateProductUrl(categoryCode, product.code);
-            }
-        },
 
         onToggleFavorite({ productId }) {
             this[TOGGLE_FAVORITES_ITEM](productId);
@@ -460,67 +326,8 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: modalName.cart.CLEAR_CART, open: true });
         },
 
-        onAddCartItem(offerId, storeId, count) {
-            this[ADD_CART_ITEM]({ offerId, storeId, count });
-        },
-
-        onDeleteCartItem(offerId, storeId) {
-            this[DELETE_CART_ITEM]({ offerId, storeId });
-        },
-
-        onAddMasterclassItem(offerId, count) {
-            this[ADD_MASTERCLASS_ITEM]({ offerId, count });
-        },
-
-        onDeleteMasterclassItem(offerId) {
-            this[DELETE_MASTERCLASS_ITEM]({ offerId });
-        },
-
         prepareBonus(value) {
             return preparePrice(value);
-        },
-
-        onBeforeEnterItems(el) {
-            el.dataset.index = counter;
-            counter += 1;
-            el.style.opacity = 0;
-        },
-
-        itemAnimation(el, delay) {
-            return new Promise((resolve, reject) => {
-                try {
-                    setTimeout(() => {
-                        requestAnimationFrame(() => {
-                            el.style.opacity = 1;
-                            resolve();
-                        });
-                    }, delay);
-                } catch (error) {
-                    reject(error);
-                }
-            });
-        },
-
-        async onEnterItems(el, done) {
-            const delay = el.dataset.index * itemAnimationDelayDelta;
-            await this.itemAnimation(el, delay);
-            done();
-        },
-
-        onAfterEnterItems(el) {
-            delete el.dataset.index;
-            counter = 0;
-        },
-
-        onLeaveItems(el, done) {
-            requestAnimationFrame(() => {
-                el.style.opacity = 0;
-                done();
-            });
-        },
-
-        onDeleteBundle(bundleId) {
-            this[DELETE_CART_BUNDLE](bundleId);
         },
 
         loadCheckout() {

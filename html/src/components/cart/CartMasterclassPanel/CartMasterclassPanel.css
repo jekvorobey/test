@@ -1,0 +1,18 @@
+.cart-masterclass-panel {
+    &__list {
+        &-item {
+            transition: all 0.5s;
+            margin-bottom: calc(var(--gs) * 3);
+
+            @media (--tablet) {
+                margin-bottom: calc(var(--gs) * 2);
+                padding-bottom: var(--gs);
+                border-bottom: 1px solid var(--cl-divider-grey);
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}

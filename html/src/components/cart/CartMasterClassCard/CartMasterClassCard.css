@@ -1,36 +1,45 @@
 .cart-master-class-card {
     display: flex;
 
+    @media (--tablet) {
+        align-items: flex-start;
+    }
+
     &__img {
         position: relative;
         display: flex;
-        width: 36%;
-        max-height: 184px;
+        width: 35%;
         background: var(--cl-elem-grey);
         margin-right: calc(var(--gs) * 3);
         border-bottom: none;
 
         @media (--tablet) {
-            max-width: 104px;
-            max-height: 72px;
+            width: 33%;
             margin-right: var(--gs);
-        }
-
-        .v-picture {
-            width: 100%;
-            height: 100%;
         }
 
         &::after {
             content: '';
             display: block;
-            padding-bottom: 100%;
+            padding-bottom: 64%;
+
+            @media (--tablet) {
+                padding-bottom: 69%;
+            }
 
             /* чинит padding-bottom: 100% в FireFox для распорки */
             @supports (-moz-user-select: none) {
-                margin-top: 100%;
+                margin-top: 64%;
                 padding-bottom: 0;
+
+                @media (--tablet) {
+                    margin-top: 69%;
+                }
             }
+        }
+
+        .v-picture {
+            width: 100%;
         }
 
         .icon {
@@ -44,6 +53,10 @@
         flex-wrap: wrap;
         flex: 1;
 
+        @media (--tablet-min) {
+            padding: calc(var(--gs) * 2) 0 var(--gs);
+        }
+
         @media (--tablet) {
             padding-right: calc(var(--gs) * 2);
         }
@@ -56,7 +69,6 @@
 
             @media (--tablet) {
                 width: 100%;
-                margin-bottom: var(--gs);
                 font-size: 16px;
                 line-height: 24px;
                 font-weight: normal;
@@ -139,6 +151,7 @@
             width: 100%;
 
             @media (--tablet) {
+                line-height: 24px;
                 order: 1;
                 margin-bottom: var(--gs);
             }
@@ -147,6 +160,10 @@
         &-controls {
             order: 4;
             display: flex;
+
+            @media (--tablet-min) {
+                align-items: flex-end;
+            }
 
             @media (--tablet) {
                 justify-content: flex-end;

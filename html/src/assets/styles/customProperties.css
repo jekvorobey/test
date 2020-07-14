@@ -30,14 +30,6 @@
     --cl-status-warning: var(--cl-gold);
     --cl-status-success: var(--cl-green);
 
-    /* Основные размеры для элементов */
-    --field-height: 40px;
-
-    /* Базовый путь к папке с картинками
-     * Использование: background-image: url('--img_path/svg/load.svg')
-     */
-    --img_path: ../images;
-
     /* Время для основных анимаций (изменение цвета, фона и пр.) */
     --time: 200ms;
 
