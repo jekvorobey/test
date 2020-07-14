@@ -46,7 +46,7 @@ export default {
         const badges = state[BADGES];
         const map = {};
 
-        for (const badge of badges) map[badge.id] = badge;
+        for (const badge of badges) map[badge.code] = badge;
         return map;
     },
 };

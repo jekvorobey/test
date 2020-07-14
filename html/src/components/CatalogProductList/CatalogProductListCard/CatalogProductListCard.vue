@@ -145,7 +145,7 @@ export default {
             const { item = {}, badgesMap } = this;
             const { badges = [] } = item;
 
-            const productBadges = badges.map(id => badgesMap[id]);
+            const productBadges = badges.map(code => badgesMap[code]);
             return productBadges.sort((a, b) => {
                 return a.order_num - b.order_num;
             });
