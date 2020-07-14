@@ -10,14 +10,15 @@
         >
             <template v-slot:content="{ item: filter }">
                 <div class="catalog-filter__filters-range" v-if="filter.item.type === 'range'">
-                    <!-- <v-range
+                    <v-range
+                        :key="`${filter.item.min}-${filter.item.max}`"
                         :initialValue="[filter.item.min, filter.item.max]"
                         :value="filterSegments[filter.item.name] || [filter.item.min, filter.item.max]"
                         :max="filter.item.max"
                         :min="filter.item.min"
                         :format="format"
                         @input="onRangeChange($event, filter.item.name)"
-                    /> -->
+                    />
                 </div>
                 <div
                     class="catalog-filter__filters-check"
