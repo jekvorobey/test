@@ -6,7 +6,7 @@ import { $http, $logger } from '@services';
 import { REQUEST_CANCEL_MESSAGE } from '@constants';
 import { interval } from '@enums';
 import { verificationCodeType } from '@enums/auth';
-import { productGroupTypes } from '@enums/product';
+import { cartItemTypes } from '@enums/product';
 
 let catalogItemsCancelSource = null;
 const sessionCheckCache = new Cache({
@@ -472,20 +472,6 @@ export function getProductGroups(type, page, orderField = 'name') {
 }
 
 export function getProductGroup(type, code) {
-    if (type === productGroupTypes.BESTSELLERS)
-        return {
-            banner: null,
-            based: 'filters',
-            code: null,
-            excluded_filters: ['is_new'],
-            filters: {},
-            name: null,
-            preview_photo: null,
-            type: {
-                code: 'bestsellers',
-            },
-        };
-
     return $http.get('/v1/catalog/product-group', {
         params: {
             type_code: type,
@@ -739,12 +725,34 @@ export function deleteCartPromocode(data) {
 
 // checkout
 
-export function getCheckoutData(data) {
-    return $http.get('/v1/checkout/data', data);
+export function getCheckoutData(type) {
+    switch (type) {
+        case cartItemTypes.MASTERCLASS:
+            return $http.get('/v1/checkout-public-events/data');
+        case cartItemTypes.PRODUCT:
+            return $http.get('/v1/checkout/data');
+        default:
+            return Promise.reject('Wrong cart type');
+    }
 }
 
-export function commitCheckoutData(data) {
-    return $http.post('/v1/checkout/commit', data);
+export function commitCheckoutData(type, data) {
+    switch (type) {
+        case cartItemTypes.MASTERCLASS:
+            return $http.post('/v1/checkout-public-events/commit', data);
+        case cartItemTypes.PRODUCT:
+            return $http.post('/v1/checkout/commit', data);
+        default:
+            return Promise.reject('Wrong cart type');
+    }
+}
+
+export function changeCheckoutMasterclassTickets(data) {
+    return $http.post('/v1/checkout-public-events/tickets', data);
+}
+
+export function changeCheckoutMasterclassPromocode(data) {
+    return $http.post('/v1/checkout-public-events/promo-code', data);
 }
 
 export function changeCity(data) {
