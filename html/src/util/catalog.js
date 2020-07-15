@@ -2,6 +2,7 @@ import { $context } from '@services';
 import { productGroupTypes } from '@enums/product';
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
+import { search } from 'superagent';
 
 const rangeRegx = /from_\d*_to_\d*/;
 const numberRegx = /\d+/g;
@@ -26,6 +27,7 @@ export function generateCategoryUrl(type, entityCode, categoryCode) {
         case productGroupTypes.CATALOG:
         case productGroupTypes.NEW:
         case productGroupTypes.BESTSELLERS:
+        case productGroupTypes.SEARCH:
             return categoryCode ? `/${type}/${categoryCode}` : `/${type}/`;
 
         case productGroupTypes.PROMO:
@@ -113,7 +115,7 @@ export function getActiveCategories(code, item, activeItems = []) {
     return false;
 }
 
-export function computeFilterData(pathMatch, code = null) {
+export function computeFilterData(pathMatch, code = null, searchString = null) {
     const filter = { category: code };
     const routeSegments = pathMatch ? pathMatch.split('/') : [];
     const filterSegments = mapFilterSegments(routeSegments);
@@ -126,6 +128,11 @@ export function computeFilterData(pathMatch, code = null) {
         if (Array.isArray(segment)) filter[filterName] = segment;
         else filter[filterName] = Object.keys(segment);
     }
+
+    if (searchString) {
+        filter.search_string = searchString;
+    }
+    
     return { filter, routeSegments, filterSegments };
 }
 

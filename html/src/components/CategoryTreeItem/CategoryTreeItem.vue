@@ -105,7 +105,7 @@ export default {
                 rootCategory,
             } = this;
 
-            return { path: generateCategoryUrl(type, entityCode, rootCategory ? !isRoot && code : code) };
+            return { path: generateCategoryUrl(type, entityCode, rootCategory ? !isRoot && code : code), query: { ...this.additionalQuery } };
         },
 
         hasChildren() {
@@ -123,5 +123,9 @@ export default {
             this.isHover = value;
         },
     },
+
+    beforeMount() {
+        this.additionalQuery = this.$route.query;
+    }
 };
 </script>

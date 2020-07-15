@@ -5,7 +5,6 @@
                 <search-filter
                     class="header-bottom__main-search"
                     input-id="upper-filter"
-                    :style="{ visibility: 'hidden' }"
                 />
                 <header-logo-panel v-show="!search">
                     {{ $t('header.middle.professionals') }}

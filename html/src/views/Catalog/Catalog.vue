@@ -6,7 +6,6 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span></breadcrumb-item
                 >
-
                 <breadcrumb-item :key="type" :to="breadcrumbRootUrl">{{
                     $t(`productGroups.title.${type}`)
                 }}</breadcrumb-item>
@@ -70,10 +69,23 @@
                 <div class="catalog-view__main">
                     <div class="catalog-view__main-header">
                         <div class="catalog-view__main-header-title">
-                            <h1 class="catalog-view__main-header-hl">
-                                {{ activeCategory ? activeCategory.name : 'Все категории' }}
-                            </h1>
-                            <p class="text-grey catalog-view__main-header-text">{{ range }} {{ productName }}</p>
+                            <template v-if="!search">
+                                <h1 class="catalog-view__main-header-hl">
+                                    {{ activeCategory ? activeCategory.name : 'Все категории' }}
+                                </h1>
+                                <p class="text-grey catalog-view__main-header-text">{{ range }} {{ productName }}</p>
+                            </template>
+                            <template v-else>
+                                <h1 class="catalog-view__main-header-hl" v-if="range && searchQuery">
+                                    По запросу «{{ searchQuery }}» найдено {{ range }} продуктов
+                                </h1>
+                                <h1 class="catalog-view__main-header-hl" v-else-if="range && !searchQuery">
+                                    По запросу найдено {{ range }} продуктов
+                                </h1>
+                                <h1 class="catalog-view__main-header-hl" v-else>
+                                    По запросу «{{ searchQuery }}» ничего не найдено
+                                </h1>
+                            </template>
                         </div>
 
                         <v-select
@@ -296,6 +308,13 @@ export default {
         ShowMoreButton,
     },
 
+    props: {
+        search: {
+            type: Boolean,
+            default: false,
+        }
+    },
+
     data() {
         const sortOptions = [
             { id: 1, title: 'Сначала подороже', field: sortFields.PRICE, direction: sortDirections.DESC },
@@ -316,6 +335,7 @@ export default {
                 containerSelector: '[data-v-sticky-container]',
                 innerWrapperSelector: '[data-v-sticky-inner]',
             },
+            searchQuery: null,
         };
     },
 
@@ -352,6 +372,7 @@ export default {
                 case productGroupTypes.CATALOG:
                 case productGroupTypes.NEW:
                 case productGroupTypes.BESTSELLERS:
+                case productGroupTypes.SEARCH:
                     name = 'Catalog';
                     break;
                 default:
@@ -425,7 +446,7 @@ export default {
             if (value !== oldValue) {
                 this.$router.replace({
                     path: this.$route.path,
-                    query: { orderField: value.field, orderDirection: value.direction },
+                    query: { ...this.$route.query, orderField: value.field, orderDirection: value.direction },
                 });
             }
         },
@@ -486,15 +507,17 @@ export default {
             try {
                 const {
                     params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
-                    query: { page = 1, orderField = sortFields.PRICE, orderDirection = sortDirections.DESC },
+                    query: { page = 1, orderField = sortFields.PRICE, orderDirection = sortDirections.DESC, search_string = null },
                 } = to;
+
+                const decodeSearchString = search_string && toType == productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
 
                 const {
                     params: { code: fromCode, entityCode: fromEntityCode, type: fromType },
                 } = from;
 
                 const { query: { page: fromPage = 1 } = { page: 1 } } = from;
-                const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
+                const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode, decodeSearchString);
 
                 this.$progress.start();
                 await this[FETCH_CATALOG_DATA]({
@@ -537,12 +560,15 @@ export default {
         const {
             fullPath,
             params: { code: toCode = null, entityCode: toEntityCode = null, type: toType, pathMatch },
-            query: { page = 1, orderField = sortFields.PRICE, orderDirection = sortDirections.DESC } = {
+            query: { page = 1, orderField = sortFields.PRICE, orderDirection = sortDirections.DESC, search_string } = {
                 page: 1,
                 orderField: sortFields.PRICE,
                 orderDirection: sortDirections.DESC,
             },
         } = to;
+
+        // Если у нас нет поисковой строки, либо продуктовая группа !== search, ничего искать не нужно
+        const decodeSearchString = search_string && toType == productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
 
         const { loadPath, categoryCode, entityCode, type } = $store.state[CATALOG_MODULE];
 
@@ -550,12 +576,12 @@ export default {
         if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode)
             next(vm => vm.setSortValue(orderField, orderDirection));
         else {
-            const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
+            const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode, decodeSearchString);
 
             $progress.start();
             $store
                 .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, {
-                    type: toType,
+                    type: productGroupTypes.SEARCH,
                     entityCode: toEntityCode,
                     code: toCode,
 
@@ -642,6 +668,7 @@ export default {
         const category = this[ACTIVE_CATEGORY] || null;
         if (category) $retailRocket.addCategoryView(category.id);
         this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
+        this.searchQuery = this.$route.query.search_string;
     },
 };
 </script>
