@@ -26,7 +26,7 @@
                                 :name="item.name"
                                 :type="item.type"
                                 href="/"
-                                :image="item.image"
+                                :image="generateImageObject(item.image)"
                                 :price="item.price"
                                 :old-price="item.oldPrice"
                                 :tags="item.tags"
@@ -80,6 +80,17 @@ export default {
     methods: {
         ...mapActions(SEARCH_MODULE, [GET_POPULAR_PRODUCTS]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+
+        generateImageObject(image) {
+            if (image.id) {
+                return {
+                    id: image.id,
+                }
+            }
+            return {
+                id: image,
+            }
+        },
     },
 
     created() {
