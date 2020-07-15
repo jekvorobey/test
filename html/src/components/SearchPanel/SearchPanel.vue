@@ -36,6 +36,9 @@
                         </li>
                     </transition-group>
                 </div>
+                <v-button class="btn--outline search-panel__btn" v-if="products.length && this.searchString !== ''" @click="toSearchClick">
+                    Показать ещё
+                </v-button>
             </div>
         </div>
     </div>
@@ -43,6 +46,8 @@
 
 <script>
 import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
@@ -52,6 +57,8 @@ import { GET_POPULAR_PRODUCTS } from '@store/modules/Search/actions';
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
+import { productGroupTypes } from '@enums/product';
+
 import './SearchPanel.css';
 
 export default {
@@ -59,6 +66,8 @@ export default {
 
     components: {
         VLink,
+        VButton,
+
         CatalogProductCard,
     },
 
@@ -90,6 +99,12 @@ export default {
             return {
                 id: image,
             }
+        },
+
+        toSearchClick() {
+            this.$router.push({
+                path: `/${productGroupTypes.SEARCH}/?search_string=${this.searchString}`
+            });
         },
     },
 

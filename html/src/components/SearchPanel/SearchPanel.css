@@ -80,6 +80,11 @@
         }
     }
 
+    &__btn {
+        display: block;
+        margin: 0 auto;
+    }
+
     .item-move,
     .item-enter-active,
     .item-leave-active {
