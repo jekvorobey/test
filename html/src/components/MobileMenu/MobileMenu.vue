@@ -99,7 +99,7 @@
                         <p class="text-grey">Всегда отвечаем на ваши сообщения</p>
                         <ul class="mobile-menu__menu-socials-links">
                             <li class="mobile-menu__menu-socials-link">
-                                <v-link href="tg://resolve?domain=79162001869" target="_blank" rel="nofollow">
+                                <v-link href="tg://resolve?domain=Bessovestnyj_bot" target="_blank" rel="nofollow">
                                     <v-svg name="telegram-bw" width="40" height="40" />
                                 </v-link>
                             </li>
