@@ -521,7 +521,7 @@ export default {
 
                 this.$progress.start();
                 await this[FETCH_CATALOG_DATA]({
-                    type: (toType == productGroupTypes.SEARCH ? productGroupTypes.CATALOG : toType),
+                    type: toType,
                     entityCode: toEntityCode,
                     code: toCode,
 
@@ -581,7 +581,7 @@ export default {
             $progress.start();
             $store
                 .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, {
-                    type: (toType == productGroupTypes.SEARCH ? productGroupTypes.CATALOG : toType),
+                    type: productGroupTypes.SEARCH,
                     entityCode: toEntityCode,
                     code: toCode,
 
