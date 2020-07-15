@@ -291,14 +291,14 @@
                     <div class="checkout-product-panel__item-panel" ref="agreement">
                         <!-- #58436 -->
                         <!-- <v-check
-                        id="check-promo"
-                        :checked="subscribe"
-                        class="checkout-product-panel__item-panel-check"
-                        name="promo"
-                        @change="SET_SUBSCRIBE(Number($event))"
-                    >
-                        Сообщать мне об акциях, скидках и специальных предложениях
-                    </v-check> -->
+                            id="check-promo"
+                            :checked="subscribe"
+                            class="checkout-product-panel__item-panel-check"
+                            name="promo"
+                            @change="SET_SUBSCRIBE(Number($event))"
+                            >
+                            Сообщать мне об акциях, скидках и специальных предложениях
+                        </v-check> -->
                         <v-check
                             id="check-agreement"
                             :checked="agreement"
@@ -310,14 +310,16 @@
                             <router-link
                                 :to="{ name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER } }"
                                 target="_blank"
-                                >условиями оферты</router-link
                             >
+                                условиями оферты
+                            </router-link>
                             и
                             <router-link
                                 :to="{ name: 'Agreements', params: { type: agreementTypes.PERSONAL_POLICY } }"
                                 target="_blank"
-                                >политикой конфиденциальности</router-link
                             >
+                                политикой конфиденциальности
+                            </router-link>
                         </v-check>
                         <transition name="slide-in-bottom" mode="out-in">
                             <div class="status-color-error" :key="agreementError" v-if="agreementError">
@@ -395,7 +397,6 @@ import CheckoutAddressPanel from '@components/checkout/CheckoutAddressPanel/Chec
 import CheckoutRecipientModal from '@components/checkout/CheckoutRecipientModal/CheckoutRecipientModal.vue';
 import AddressEditModal from '@components/profile/AddressEditModal/AddressEditModal.vue';
 
-import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
 
@@ -466,6 +467,7 @@ import { SCROLL_DEBOUNCE_TIME } from '@constants';
 
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
+import _debounce from 'lodash/debounce';
 import { orderBy as _orderBy } from 'lodash/collection';
 
 import { generateProductUrl } from '@util/catalog';

@@ -6,7 +6,7 @@
 
         @media (--tablet) {
             flex-wrap: nowrap;
-            margin-bottom: calc(var(--gs) * 4);
+            margin-bottom: 0;
         }
     }
 
@@ -85,9 +85,7 @@
         }
 
         &--payment &-card {
-            .icon + .icon {
-                margin-left: calc(var(--gs) * 2);
-            }
+            min-height: auto;
         }
 
         &--recepient &-list {
@@ -177,9 +175,56 @@
                 margin-top: calc(var(--gs) * 2);
             }
 
+            &-link {
+                text-transform: none;
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 24px;
+                transition: all var(--time) ease-in;
+            }
+
             .text-bold,
             .text-medium {
                 font-size: 20px;
+            }
+
+            &--invalid {
+                color: var(--cl-red);
+                border-color: var(--cl-red);
+            }
+        }
+
+        &-payment {
+            display: flex;
+            align-content: center;
+            min-height: auto;
+
+            @media (--tablet) {
+                flex-wrap: wrap;
+            }
+
+            &-title {
+                flex: 1;
+
+                @media (--tablet) {
+                    margin-bottom: calc(var(--gs) * 2);
+                }
+            }
+
+            &-list {
+                flex-wrap: wrap;
+                display: flex;
+                margin: 0 calc(var(--gs) * 3 / -2);
+
+                .icon {
+                    width: calc(calc(100% / 8) - calc(var(--gs) * 3 / 2));
+                    margin: 0 calc(var(--gs) * 3 / 2);
+
+                    @media (--tablet) {
+                        width: calc(calc(100% / 4) - calc(var(--gs) * 3 / 2));
+                        margin-bottom: calc(var(--gs) * 1.5);
+                    }
+                }
             }
         }
 

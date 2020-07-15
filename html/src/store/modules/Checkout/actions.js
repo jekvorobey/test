@@ -18,6 +18,8 @@ import {
     CHANGE_ADDRESS as M_CHANGE_ADDRESS,
     ADD_RECIPIENT as M_ADD_RECIPIENT,
     CHANGE_RECIPIENT as M_CHANGE_RECIPIENT,
+    ADD_TICKET as M_ADD_TICKET,
+    CHANGE_TICKET as M_CHANGE_TICKET,
 } from './mutations';
 
 import {
@@ -63,6 +65,9 @@ export const CHANGE_ADDRESS = 'CHANGE_ADDRESS';
 export const FETCH_CHECKOUT_DATA = 'FETCH_CHECKOUT_DATA';
 export const CLEAR_CHECKOUT_DATA = 'CLEAR_CHECKOUT_DATA';
 export const CHANGE_CHUNK_DATE = 'CHANGE_CHUNK_DATE';
+
+export const ADD_TICKET = 'ADD_TICKET';
+export const CHANGE_TICKET = 'CHANGE_TICKET';
 
 export const COMMIT_DATA = 'COMMIT_DATA';
 
@@ -209,9 +214,9 @@ export default {
     },
 
     [CHANGE_RECIPIENT]({ dispatch, commit }, payload = {}) {
-        const { index, address } = payload;
+        const { recipient } = payload;
         commit(M_CHANGE_RECIPIENT, payload);
-        return dispatch(SET_RECIPIENT, address);
+        return dispatch(SET_RECIPIENT, recipient);
     },
 
     [ADD_RECIPIENT]({ dispatch, commit }, recipient) {
@@ -220,6 +225,14 @@ export default {
 
     [SET_RECIPIENT]({ commit }, payload) {
         commit(M_SET_RECIPIENT, payload);
+    },
+
+    [CHANGE_TICKET]({ commit }, payload = {}) {
+        commit(M_CHANGE_TICKET, payload);
+    },
+
+    [ADD_TICKET]({ commit }, payload = {}) {
+        commit(M_ADD_TICKET, payload);
     },
 
     [SET_CONFIRMATION_TYPE]({ commit }, payload) {
@@ -242,24 +255,23 @@ export default {
         commit(M_CHANGE_CHUNK_DATE, payload);
     },
 
-    [COMMIT_DATA]({ state }) {
-        return commitCheckoutData({ data: state.checkoutData })
-            .then((data) => data)
-            .catch((error) => storeErrorHandler(COMMIT_DATA, true)(error));
+    [CLEAR_CHECKOUT_DATA]({ commit }) {
+        commit(SET_DATA);
     },
 
-    [CLEAR_CHECKOUT_DATA]({ commit }) {
+    async [COMMIT_DATA]({ state }) {
         try {
-            commit(SET_DATA);
+            const { checkoutType, checkoutData } = state;
+            await commitCheckoutData(checkoutType, checkoutData);
         } catch (error) {
-            storeErrorHandler(CLEAR_CHECKOUT_DATA)(error);
+            storeErrorHandler(COMMIT_DATA, true)(error);
         }
     },
 
-    async [FETCH_CHECKOUT_DATA]({ commit }, payload) {
+    async [FETCH_CHECKOUT_DATA]({ commit }, type) {
         try {
-            const data = await getCheckoutData(payload);
-            commit(SET_TYPE, payload);
+            const data = await getCheckoutData(type);
+            commit(SET_TYPE, type);
             commit(SET_DATA, data);
         } catch (error) {
             storeErrorHandler(FETCH_CHECKOUT_DATA)(error);

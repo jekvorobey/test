@@ -15,6 +15,7 @@ export const modalName = Object.freeze({
 
     checkout: {
         RECIPIENT_EDIT: 'checkout-recipient-modal',
+        TICKET_EDIT: 'checkout-ticket-modal',
         DATE_EDIT: 'checkout-date-modal',
         PICKUP_POINT: 'checkout-pickup-point-modal',
     },

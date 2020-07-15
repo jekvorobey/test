@@ -6,10 +6,10 @@
         <div class="checkout-option-card__right">
             <v-svg
                 class="checkout-option-card__right-selected"
+                :class="{ 'visibility-hidden': !showCheck }"
                 name="check-small"
                 width="24"
                 height="24"
-                v-if="showCheck"
             />
             <slot name="controls">
                 <v-link class="checkout-option-card__right-link" v-if="!readonly" tag="button" @click.stop="onBtnClick">

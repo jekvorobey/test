@@ -16,6 +16,9 @@ export const SET_RECIPIENT = 'SET_RECIPIENT';
 export const ADD_RECIPIENT = 'ADD_RECIPIENT';
 export const CHANGE_RECIPIENT = 'CHANGE_RECIPIENT';
 
+export const ADD_TICKET = 'ADD_TICKET';
+export const CHANGE_TICKET = 'CHANGE_TICKET';
+
 export default {
     [SET_STATUS](state, payload = {}) {
         state.checkoutStatus[payload.name] = payload.value;
@@ -76,5 +79,23 @@ export default {
         const existRecipient = state.checkoutData.recipients[index];
         if (existRecipient) Object.assign(existRecipient, recipient);
         state.checkoutData.input.recipient = existRecipient;
+    },
+
+    [ADD_TICKET](state, payload = {}) {
+        const { ticket, id } = payload;
+        const { publicEvents = [] } = state.checkoutData;
+        const event = publicEvents.find((e) => e.id === id);
+        if (event) event.tickets.push(ticket);
+    },
+
+    [CHANGE_TICKET](state, payload = {}) {
+        const { ticket, index, id } = payload;
+        const { publicEvents = [] } = state.checkoutData;
+        const event = publicEvents.find((e) => e.id === id);
+
+        if (event) {
+            const existTicket = event.tickets[index];
+            Object.assign(existTicket, ticket);
+        }
     },
 };

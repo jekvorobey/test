@@ -14,14 +14,14 @@
     &__banner {
         .catalog-banner-card__img {
             &::after {
-                padding-bottom: 20%;
+                padding-bottom: 19%;
 
                 @media (--tablet) {
                     padding-bottom: 70%;
                 }
 
                 @supports (-moz-user-select: none) {
-                    margin-top: 20%;
+                    margin-top: 19%;
                     padding-bottom: 0;
 
                     @media (--tablet) {

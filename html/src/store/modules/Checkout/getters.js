@@ -17,6 +17,7 @@ export const MAX_BONUS = 'maxBonus';
 export const RECIPIENTS = 'recipients';
 export const ADDRESSES = 'addresses';
 export const PICKUP_POINTS = 'pickupPoints';
+export const PUBLIC_EVENTS = 'publicEvents';
 
 export const RECEIVE_METHODS = 'receiveMethods';
 export const PAYMENT_METHODS = 'paymentMethods';
@@ -56,6 +57,7 @@ export default {
     [RECIPIENTS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][RECIPIENTS]) || [],
     [ADDRESSES]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][ADDRESSES]) || [],
     [PICKUP_POINTS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][PICKUP_POINTS]) || [],
+    [PUBLIC_EVENTS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][PUBLIC_EVENTS]) || [],
 
     [RECEIVE_METHODS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][RECEIVE_METHODS]) || [],
     [PAYMENT_METHODS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][PAYMENT_METHODS]) || [],
