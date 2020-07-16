@@ -764,10 +764,6 @@ export function changeCheckoutMasterclassTickets(publicEvent, data) {
     });
 }
 
-export function changeCheckoutMasterclassPromocode(data) {
-    return $http.post('/v1/checkout-public-events/promo-code', data);
-}
-
 export function changeCity(data) {
     return $http.post('/v1/checkout/city', data);
 }
@@ -800,12 +796,26 @@ export function deleteBonus(data) {
     return $http.post('/v1/checkout/bonus', data);
 }
 
-export function addPromocode(data) {
-    return $http.post('/v1/checkout/promo-code', data);
+export function addPromocode(type, data) {
+    switch (type) {
+        case cartItemTypes.MASTERCLASS:
+            return $http.post('/v1/checkout-public-events/promo-code', data);
+        case cartItemTypes.PRODUCT:
+            return $http.post('/v1/checkout/promo-code', data);
+        default:
+            return Promise.reject('Wrong cart type');
+    }
 }
 
-export function deletePromocode(data) {
-    return $http.post('/v1/checkout/promo-code', data);
+export function deletePromocode(type, data) {
+    switch (type) {
+        case cartItemTypes.MASTERCLASS:
+            return $http.post('/v1/checkout-public-events/promo-code', data);
+        case cartItemTypes.PRODUCT:
+            return $http.post('/v1/checkout/promo-code', data);
+        default:
+            return Promise.reject('Wrong cart type');
+    }
 }
 
 export function changeReceiveMethod(data) {
@@ -907,4 +917,10 @@ export function changeReviewVote(review_id, opinion) {
         review_id,
         opinion,
     });
+}
+
+// directories
+
+export function getProfessions() {
+    return $http.get('/v1/directories/professions');
 }

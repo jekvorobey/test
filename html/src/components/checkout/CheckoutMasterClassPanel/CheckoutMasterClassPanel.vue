@@ -33,11 +33,11 @@
         <div class="checkout-master-class-panel__item">
             <div class="checkout-master-class-panel__item-header" ref="events">
                 <h2 class="checkout-master-class-panel__item-header-hl">
-                    Участники&nbsp;<v-spinner width="24" height="24" :show="false" />
+                    Участники&nbsp;<v-spinner width="24" height="24" :show="isTicketPending" />
                 </h2>
             </div>
 
-            <div v-for="({ cartItem: { p: product, count }, tickets, id }, index) in masterClasses" :key="id">
+            <div v-for="({ cartItem: { p: product, count }, tickets, offerId }, index) in masterClasses" :key="offerId">
                 <checkout-masterclass-card
                     class="checkout-master-class-panel__item-masterclass"
                     type="masterclass"
@@ -67,7 +67,7 @@
                         :key="ticket.id"
                         :show-check="false"
                         selected
-                        @btnClick="onChangeTicket(ticket, id, index)"
+                        @btnClick="onChangeTicket(ticket, offerId, index)"
                     >
                         <p class="text-bold">Билет {{ index + 1 }}</p>
                         <p>{{ ticket.firstName }} {{ ticket.lastName }}</p>
@@ -94,7 +94,7 @@
                                 'status-color-error':
                                     $v.publicEvents.$anyDirty && !$v.publicEvents.$each.$iter[index].isFull,
                             }"
-                            @click="onAddTicket(id)"
+                            @click="onAddTicket(offerId)"
                         >
                             Добавить данные участника
                         </button>
@@ -258,6 +258,7 @@ import {
     PROMO_CODE,
     PROMOCODE_STATUS,
     PUBLIC_EVENTS,
+    TICKET_STATUS,
 } from '@store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -383,6 +384,7 @@ export default {
             PROMO_CODE,
 
             PROMOCODE_STATUS,
+            TICKET_STATUS,
         ]),
 
         masterClasses() {
@@ -436,6 +438,10 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        isTicketPending() {
+            return this[TICKET_STATUS] === requestStatus.PENDING;
         },
     },
 
@@ -493,8 +499,9 @@ export default {
         },
 
         onSaveTicket({ ticket, id }) {
-            if (this.ticketIndexToChange !== null) this[CHANGE_TICKET]({ index: this.ticketIndexToChange, ticket, id });
-            else this[ADD_TICKET]({ ticket, id });
+            if (this.ticketIndexToChange !== null)
+                this[CHANGE_TICKET]({ index: this.ticketIndexToChange, ticket, offerId: id });
+            else this[ADD_TICKET]({ ticket, offerId: id });
         },
 
         onChangeTicket(ticket, id, index) {

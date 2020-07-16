@@ -5,7 +5,6 @@
             'multiselect--active': isOpen,
             'multiselect--disabled': disabled,
             'multiselect--above': isAbove,
-            'multiselect--float': !isPlaceholderVisible,
             'multiselect--invalid': error,
         }"
         @focus="activate()"
@@ -18,7 +17,7 @@
         role="combobox"
         :aria-owns="'listbox-' + id"
     >
-        <label class="multiselect__label">
+        <label v-if="$slots.default" class="multiselect__label">
             <slot />
         </label>
         <slot name="caret" :toggle="toggle">

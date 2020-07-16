@@ -43,6 +43,7 @@ export const ADDRESS_STATUS = 'addressStatus';
 export const BONUS_STATUS = 'bonusStatus';
 export const CERTIFICATE_STATUS = 'certificateStatus';
 export const PROMOCODE_STATUS = 'promocodeStatus';
+export const TICKET_STATUS = 'ticketStatus';
 
 export const SUMMARY = 'summary';
 
@@ -105,4 +106,5 @@ export default {
     [BONUS_STATUS]: (state) => state[CHECKOUT_STATUS][BONUS_STATUS] || requestStatus.SUCCESS,
     [CERTIFICATE_STATUS]: (state) => state[CHECKOUT_STATUS][CERTIFICATE_STATUS] || requestStatus.SUCCESS,
     [PROMOCODE_STATUS]: (state) => state[CHECKOUT_STATUS][PROMOCODE_STATUS] || requestStatus.SUCCESS,
+    [TICKET_STATUS]: (state) => state[CHECKOUT_STATUS][TICKET_STATUS] || requestStatus.SUCCESS,
 };

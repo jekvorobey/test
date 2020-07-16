@@ -2,11 +2,19 @@ import { $logger } from '@services';
 import { requestStatus } from '@enums';
 import { storeErrorHandler } from '@util/store';
 
-import { RECEIVE_METHOD_STATUS, ADDRESS_STATUS, BONUS_STATUS, CERTIFICATE_STATUS, PROMOCODE_STATUS } from './getters';
+import {
+    RECEIVE_METHOD_STATUS,
+    ADDRESS_STATUS,
+    BONUS_STATUS,
+    CERTIFICATE_STATUS,
+    PROMOCODE_STATUS,
+    TICKET_STATUS,
+} from './getters';
 
 import {
     SET_DATA,
     SET_TYPE,
+    SET_PROFESSIONS,
     SET_STATUS,
     SET_AGREEMENT as M_SET_AGREEMENT,
     SET_SUBSCRIBE as M_SET_SUBSCRIBE,
@@ -18,8 +26,6 @@ import {
     CHANGE_ADDRESS as M_CHANGE_ADDRESS,
     ADD_RECIPIENT as M_ADD_RECIPIENT,
     CHANGE_RECIPIENT as M_CHANGE_RECIPIENT,
-    ADD_TICKET as M_ADD_TICKET,
-    CHANGE_TICKET as M_CHANGE_TICKET,
 } from './mutations';
 
 import {
@@ -36,7 +42,10 @@ import {
     commitCheckoutData,
     changeCity,
     changeCheckoutMasterclassTickets,
+    getProfessions,
 } from '@api';
+
+export const FETCH_PROFESSIONS = 'FETCH_PROFESSIONS';
 
 export const SET_RECEIVE_METHOD = 'SET_RECEIVE_METHOD';
 export const SET_DELIVERY_TYPE = 'SET_DELIVERY_TYPE';
@@ -73,6 +82,15 @@ export const CHANGE_TICKET = 'CHANGE_TICKET';
 export const COMMIT_DATA = 'COMMIT_DATA';
 
 export default {
+    async [FETCH_PROFESSIONS]({ commit }, payload) {
+        try {
+            const { items } = await getProfessions();
+            commit(SET_PROFESSIONS, items);
+        } catch (error) {
+            storeErrorHandler(FETCH_PROFESSIONS)(error);
+        }
+    },
+
     [CHANGE_CITY]({ commit, state }, payload) {
         commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.PENDING });
         return changeCity({ city: payload, data: state.checkoutData })
@@ -177,30 +195,30 @@ export default {
             });
     },
 
-    [ADD_PROMOCODE]({ commit, state }, payload) {
-        commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
-        return addPromocode({ promoCode: payload, data: state.checkoutData })
-            .then((data) => {
-                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
-                commit(SET_DATA, data);
-            })
-            .catch((error) => {
-                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
-                storeErrorHandler(ADD_PROMOCODE, true)(error);
-            });
+    async [ADD_PROMOCODE]({ commit, state }, payload) {
+        try {
+            const { checkoutType } = state;
+            commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
+            const data = await addPromocode(checkoutType, { promoCode: payload, data: state.checkoutData });
+            commit(SET_DATA, data);
+            commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
+        } catch (error) {
+            commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(ADD_PROMOCODE, true)(error);
+        }
     },
 
-    [DELETE_PROMOCODE]({ commit, state }) {
-        commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
-        return deletePromocode({ data: state.checkoutData })
-            .then((data) => {
-                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
-                commit(SET_DATA, data);
-            })
-            .catch((error) => {
-                commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
-                storeErrorHandler(DELETE_PROMOCODE, true)(error);
-            });
+    async [DELETE_PROMOCODE]({ commit, state }) {
+        try {
+            const { checkoutType } = state;
+            commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.PENDING });
+            const data = await deletePromocode(checkoutType, { data: state.checkoutData });
+            commit(SET_DATA, data);
+            commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.SUCCESS });
+        } catch (error) {
+            commit(SET_STATUS, { name: PROMOCODE_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(DELETE_PROMOCODE, true)(error);
+        }
     },
 
     [CHANGE_ADDRESS]({ dispatch, commit }, payload = {}) {
@@ -228,20 +246,45 @@ export default {
         commit(M_SET_RECIPIENT, payload);
     },
 
-    [CHANGE_TICKET]({ commit }, payload = {}) {
-        commit(M_CHANGE_TICKET, payload);
+    async [CHANGE_TICKET]({ state, commit }, payload = {}) {
+        try {
+            commit(SET_STATUS, { name: TICKET_STATUS, value: requestStatus.PENDING });
+            const { ticket, index, offerId } = payload;
+            const { publicEvents = [] } = state.checkoutData;
+            const event = publicEvents.find((e) => e.offerId === offerId);
+
+            if (event) {
+                const existTicket = event.tickets[index];
+                Object.assign(existTicket, ticket);
+                const data = await changeCheckoutMasterclassTickets(
+                    { offerId: event.offerId, tickets: event.tickets },
+                    state.checkoutData
+                );
+                commit(SET_DATA, data);
+            }
+            commit(SET_STATUS, { name: TICKET_STATUS, value: requestStatus.SUCCESS });
+        } catch (error) {
+            commit(SET_STATUS, { name: TICKET_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(CHANGE_TICKET)(error);
+        }
     },
 
     async [ADD_TICKET]({ state, commit }, payload = {}) {
         try {
-            const { ticket, id } = payload;
+            commit(SET_STATUS, { name: TICKET_STATUS, value: requestStatus.PENDING });
+            const { ticket, offerId } = payload;
             const { publicEvents = [] } = state.checkoutData;
-            const event = publicEvents.find((e) => e.id === id);
+            const event = publicEvents.find((e) => e.offerId === offerId);
             if (event) {
-                const data = await changeCheckoutMasterclassTickets(payload, data);
+                const data = await changeCheckoutMasterclassTickets(
+                    { offerId: event.offerId, tickets: [...event.tickets, ticket] },
+                    state.checkoutData
+                );
                 commit(SET_DATA, data);
             }
+            commit(SET_STATUS, { name: TICKET_STATUS, value: requestStatus.SUCCESS });
         } catch (error) {
+            commit(SET_STATUS, { name: TICKET_STATUS, value: requestStatus.ERROR });
             storeErrorHandler(ADD_TICKET, true)(error);
         }
     },

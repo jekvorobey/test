@@ -42,16 +42,16 @@
                                     Оплата бонусами
                                     <span> -<price :value="bonusPayment" currency="RUB" /> </span>
                                 </p>
-
-                                <p
-                                    class="checkout-view__main-panel-line"
-                                    v-for="discount in summary.discounts"
-                                    :key="discount.type"
-                                >
-                                    {{ $t(`cart.summary.discount.${discount.type}`) }}
-                                    <span>-<price v-bind="discount.value" /></span>
-                                </p>
                             </template>
+
+                            <p
+                                class="checkout-view__main-panel-line"
+                                v-for="discount in summary.discounts"
+                                :key="discount.type"
+                            >
+                                {{ $t(`cart.summary.discount.${discount.type}`) }}
+                                <span>-<price v-bind="discount.value" /></span>
+                            </p>
 
                             <div class="checkout-view__main-panel-total">
                                 <p class="text-bold checkout-view__main-panel-line">
@@ -155,6 +155,7 @@ import {
     DELETE_PROMOCODE,
     COMMIT_DATA,
     CLEAR_CHECKOUT_DATA,
+    FETCH_PROFESSIONS,
 } from '@store/modules/Checkout/actions';
 import { CHECKOUT, PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT } from '@store/modules/Checkout/getters';
 
@@ -271,8 +272,10 @@ export default {
         if (checkoutData) next();
         else {
             $progress.start();
-            $store
-                .dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type)
+            Promise.all([
+                $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type),
+                $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_PROFESSIONS}`),
+            ])
                 .then(() => next(vm => $progress.finish()))
                 .catch(() => next(vm => $progress.fail()));
         }

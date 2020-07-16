@@ -6,6 +6,7 @@ import getters, {
     CERTIFICATE_STATUS,
     PROMOCODE_STATUS,
     ADDRESS_STATUS,
+    TICKET_STATUS,
 } from './getters';
 
 import actions from './actions';
@@ -15,6 +16,8 @@ export const NAME = 'checkout';
 export const CHECKOUT_DATA = 'checkoutData';
 export const CHECKOUT_TYPE = 'checkoutType';
 export const CHECKOUT_STATUS = 'checkoutStatus';
+
+export const PROFESSIONS = 'professions';
 
 export default function createModule() {
     return {
@@ -27,9 +30,11 @@ export default function createModule() {
                 [CERTIFICATE_STATUS]: requestStatus.SUCCESS,
                 [PROMOCODE_STATUS]: requestStatus.SUCCESS,
                 [ADDRESS_STATUS]: requestStatus.SUCCESS,
+                [TICKET_STATUS]: requestStatus.SUCCESS,
             },
             [CHECKOUT_DATA]: null,
             [CHECKOUT_TYPE]: null,
+            [PROFESSIONS]: [],
         },
         actions,
         mutations,
