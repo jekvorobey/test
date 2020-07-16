@@ -185,7 +185,7 @@
                                 Очистить
                             </v-button>
                             <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal">
-                                Показать
+                                Показать {{ range }}
                             </v-button>
                         </div>
                     </v-sticky>
