@@ -13,7 +13,7 @@
                 {{ item.name }}
             </span>
         </div>
-        <transition name="slide-right">
+        <transition name="slide-right-catalog">
             <ul class="category-tree-item__list" v-if="hasChildren && (isHover || isActive)">
                 <category-tree-item
                     class="category-tree-item__item"
