@@ -185,7 +185,7 @@ const main = {
             sets: 'Подборки товаров',
             brands: 'Бренды',
             masterclasses: 'Мастер-классы',
-            search: 'Поиск',
+            search: 'Результаты поиска',
         },
 
         links: {

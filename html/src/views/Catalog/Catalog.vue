@@ -360,10 +360,9 @@ export default {
                 case productGroupTypes.NEW:
                 case productGroupTypes.BESTSELLERS:
                 case productGroupTypes.SEARCH:
-                    name = 'Catalog';
-                    break;
+                    return { name: 'Catalog', params: { type }, query: { ...this.$route.query } };
                 default:
-                    name = 'ProductGroups';
+                    return { name: 'ProductGroups', parmas: { type } };
             }
             return { name, params: { type } };
         },
@@ -414,7 +413,7 @@ export default {
 
         clearFilterUrl() {
             const { type, entityCode, code } = this;
-            return generateCategoryUrl(type, entityCode, code);
+            return { path: generateCategoryUrl(type, entityCode, code), query: { ...this.$route.query } };
         },
 
         productName() {
@@ -430,7 +429,7 @@ export default {
             } else {
                 return `По запросу «${searchQuery}» ничего не найдено`;
             }
-        }
+        },
     },
 
     watch: {
@@ -505,17 +504,27 @@ export default {
             try {
                 const {
                     params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
-                    query: { page = 1, orderField = sortFields.PRICE, orderDirection = sortDirections.DESC, search_string = null },
+                    query: {
+                        page = 1,
+                        orderField = sortFields.PRICE,
+                        orderDirection = sortDirections.DESC,
+                        search_string = null,
+                    },
                 } = to;
 
-                const encodeSearchString = search_string && toType === productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
+                const encodeSearchString =
+                    search_string && toType === productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
 
                 const {
                     params: { code: fromCode, entityCode: fromEntityCode, type: fromType },
                 } = from;
 
                 const { query: { page: fromPage = 1 } = { page: 1 } } = from;
-                const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode, encodeSearchString);
+                const { filter, routeSegments, filterSegments } = computeFilterData(
+                    pathMatch,
+                    toCode,
+                    encodeSearchString
+                );
 
                 this.$progress.start();
                 await this[FETCH_CATALOG_DATA]({
@@ -566,7 +575,8 @@ export default {
         } = to;
 
         // Если у нас нет поисковой строки, либо продуктовая группа !== search, ничего искать не нужно
-        const encodeSearchString = search_string && toType === productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
+        const encodeSearchString =
+            search_string && toType === productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
 
         const { loadPath, categoryCode, entityCode, type } = $store.state[CATALOG_MODULE];
 
@@ -666,7 +676,10 @@ export default {
         const category = this[ACTIVE_CATEGORY] || null;
         if (category) $retailRocket.addCategoryView(category.id);
         this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
-        this.productGroupTypes = productGroupTypes;
     },
+
+    created() {
+        this.productGroupTypes = productGroupTypes;
+    }
 };
 </script>
