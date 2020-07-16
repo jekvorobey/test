@@ -455,7 +455,7 @@ export function search(data) {
         params: {
             filter: {
                 search_string: data,
-            }
+            },
         },
         paramsSerializer(params) {
             return qs.stringify(params, {
@@ -759,8 +759,11 @@ export function commitCheckoutData(type, data) {
     }
 }
 
-export function changeCheckoutMasterclassTickets(data) {
-    return $http.post('/v1/checkout-public-events/tickets', data);
+export function changeCheckoutMasterclassTickets(publicEvent, data) {
+    return $http.post('/v1/checkout-public-events/tickets', {
+        publicEvent,
+        data,
+    });
 }
 
 export function changeCheckoutMasterclassPromocode(data) {

@@ -35,6 +35,7 @@ import {
     deletePromocode,
     commitCheckoutData,
     changeCity,
+    changeCheckoutMasterclassTickets,
 } from '@api';
 
 export const SET_RECEIVE_METHOD = 'SET_RECEIVE_METHOD';
@@ -231,8 +232,18 @@ export default {
         commit(M_CHANGE_TICKET, payload);
     },
 
-    [ADD_TICKET]({ commit }, payload = {}) {
-        commit(M_ADD_TICKET, payload);
+    async [ADD_TICKET]({ state, commit }, payload = {}) {
+        try {
+            const { ticket, id } = payload;
+            const { publicEvents = [] } = state.checkoutData;
+            const event = publicEvents.find((e) => e.id === id);
+            if (event) {
+                const data = await changeCheckoutMasterclassTickets(payload, data);
+                commit(SET_DATA, data);
+            }
+        } catch (error) {
+            storeErrorHandler(ADD_TICKET, true)(error);
+        }
     },
 
     [SET_CONFIRMATION_TYPE]({ commit }, payload) {
