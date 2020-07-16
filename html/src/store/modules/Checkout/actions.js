@@ -316,7 +316,7 @@ export default {
     async [COMMIT_DATA]({ state }) {
         try {
             const { checkoutType, checkoutData } = state;
-            await commitCheckoutData(checkoutType, checkoutData);
+            return await commitCheckoutData(checkoutType, { data: checkoutData });
         } catch (error) {
             storeErrorHandler(COMMIT_DATA, true)(error);
         }
