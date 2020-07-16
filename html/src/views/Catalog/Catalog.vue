@@ -69,21 +69,15 @@
                 <div class="catalog-view__main">
                     <div class="catalog-view__main-header">
                         <div class="catalog-view__main-header-title">
-                            <template v-if="!search">
+                            <template v-if="type !== 'search'">
                                 <h1 class="catalog-view__main-header-hl">
                                     {{ activeCategory ? activeCategory.name : 'Все категории' }}
                                 </h1>
                                 <p class="text-grey catalog-view__main-header-text">{{ range }} {{ productName }}</p>
                             </template>
                             <template v-else>
-                                <h1 class="catalog-view__main-header-hl" v-if="range && searchQuery">
-                                    По запросу «{{ searchQuery }}» найдено {{ range }} продуктов
-                                </h1>
-                                <h1 class="catalog-view__main-header-hl" v-else-if="range && !searchQuery">
-                                    По запросу найдено {{ range }} продуктов
-                                </h1>
-                                <h1 class="catalog-view__main-header-hl" v-else>
-                                    По запросу «{{ searchQuery }}» ничего не найдено
+                                <h1 class="catalog-view__main-header-hl">
+                                    {{ searchTitle }}
                                 </h1>
                             </template>
                         </div>
@@ -308,13 +302,6 @@ export default {
         ShowMoreButton,
     },
 
-    props: {
-        search: {
-            type: Boolean,
-            default: false,
-        }
-    },
-
     data() {
         const sortOptions = [
             { id: 1, title: 'Сначала подороже', field: sortFields.PRICE, direction: sortDirections.DESC },
@@ -335,7 +322,6 @@ export default {
                 containerSelector: '[data-v-sticky-container]',
                 innerWrapperSelector: '[data-v-sticky-inner]',
             },
-            searchQuery: null,
         };
     },
 
@@ -353,6 +339,7 @@ export default {
         ...mapState('route', {
             code: state => state.params.code,
             entityCode: state => state.params.entityCode,
+            searchQuery: state => state.query.search_string,
         }),
 
         isBrandPage() {
@@ -433,6 +420,16 @@ export default {
         productName() {
             return pluralize(this.range, ['продукт', 'продукта', 'продуктов']);
         },
+
+        searchTitle() {
+            if (this.range && this.searchQuery) {
+                return `По запросу «${this.searchQuery}» найдено ${range} продуктов`;
+            } else if (this.range && !this.searchQuery) {
+                return `По запросу найдено ${this.range} продуктов`;
+            } else {
+                return `По запросу «${this.searchQuery}» ничего не найдено`;
+            }
+        }
     },
 
     watch: {
@@ -510,14 +507,14 @@ export default {
                     query: { page = 1, orderField = sortFields.PRICE, orderDirection = sortDirections.DESC, search_string = null },
                 } = to;
 
-                const decodeSearchString = search_string && toType == productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
+                const encodeSearchString = search_string && toType === productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
 
                 const {
                     params: { code: fromCode, entityCode: fromEntityCode, type: fromType },
                 } = from;
 
                 const { query: { page: fromPage = 1 } = { page: 1 } } = from;
-                const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode, decodeSearchString);
+                const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode, encodeSearchString);
 
                 this.$progress.start();
                 await this[FETCH_CATALOG_DATA]({
@@ -568,7 +565,7 @@ export default {
         } = to;
 
         // Если у нас нет поисковой строки, либо продуктовая группа !== search, ничего искать не нужно
-        const decodeSearchString = search_string && toType == productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
+        const encodeSearchString = search_string && toType === productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
 
         const { loadPath, categoryCode, entityCode, type } = $store.state[CATALOG_MODULE];
 
@@ -576,7 +573,7 @@ export default {
         if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode)
             next(vm => vm.setSortValue(orderField, orderDirection));
         else {
-            const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode, decodeSearchString);
+            const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode, encodeSearchString);
 
             $progress.start();
             $store
@@ -668,7 +665,6 @@ export default {
         const category = this[ACTIVE_CATEGORY] || null;
         if (category) $retailRocket.addCategoryView(category.id);
         this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
-        this.searchQuery = this.$route.query.search_string;
     },
 };
 </script>

@@ -17,7 +17,7 @@ export default {
      */
     routes: [
         {
-            path: `/:type(${productGroupTypes.CATALOG}|${productGroupTypes.NEW}|${productGroupTypes.BESTSELLERS})/:code?/filters/*`,
+            path: `/:type(${productGroupTypes.CATALOG}|${productGroupTypes.NEW}|${productGroupTypes.BESTSELLERS}|${productGroupTypes.SEARCH})/:code?/filters/*`,
             component: CatalogAsync,
             meta: {
                 middleware: [registerModule(CatalogModuleAsync)],
@@ -26,7 +26,7 @@ export default {
         },
         {
             name: 'Catalog',
-            path: `/:type(${productGroupTypes.CATALOG}|${productGroupTypes.NEW}|${productGroupTypes.BESTSELLERS})/:code?`,
+            path: `/:type(${productGroupTypes.CATALOG}|${productGroupTypes.NEW}|${productGroupTypes.BESTSELLERS}|${productGroupTypes.SEARCH})/:code?`,
             component: CatalogAsync,
             meta: {
                 middleware: [registerModule(CatalogModuleAsync)],
@@ -47,28 +47,6 @@ export default {
             meta: {
                 middleware: [registerModule(CatalogModuleAsync)],
                 skipScroll: true,
-            },
-        },
-        {
-            path: `/:type(${productGroupTypes.SEARCH})/:code?/filters/*`,
-            component: CatalogAsync,
-            meta: {
-                middleware: [registerModule(CatalogModuleAsync)],
-                skipScroll: true,
-            },
-            props: {
-                search: true,
-            },
-        },
-        {
-            path: `/:type(${productGroupTypes.SEARCH})/:code?`,
-            component: CatalogAsync,
-            meta: {
-                middleware: [registerModule(CatalogModuleAsync)],
-                skipScroll: true,
-            },
-            props: {
-                search: true,
             },
         },
     ],
