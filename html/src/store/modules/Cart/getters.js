@@ -49,7 +49,7 @@ export default {
     [CART_TYPES]: (state) => {
         const types = itemTypes.reduce((accum, current) => {
             const type = state.cartData[current];
-            accum.push(type);
+            if (type) accum.push(type);
             return accum;
         }, []);
         return types;
