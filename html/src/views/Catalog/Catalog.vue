@@ -69,7 +69,7 @@
                 <div class="catalog-view__main">
                     <div class="catalog-view__main-header">
                         <div class="catalog-view__main-header-title">
-                            <template v-if="type !== 'search'">
+                            <template v-if="type !== productGroupTypes.SEARCH">
                                 <h1 class="catalog-view__main-header-hl">
                                     {{ activeCategory ? activeCategory.name : 'Все категории' }}
                                 </h1>
@@ -666,6 +666,7 @@ export default {
         const category = this[ACTIVE_CATEGORY] || null;
         if (category) $retailRocket.addCategoryView(category.id);
         this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
+        this.productGroupTypes = productGroupTypes;
     },
 };
 </script>
