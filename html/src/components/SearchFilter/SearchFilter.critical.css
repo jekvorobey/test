@@ -26,6 +26,11 @@
             text-transform: uppercase;
             color: var(--cl-global);
             opacity: 1;
+            letter-spacing: 0.02em;
+        }
+
+        &:focus {
+            outline: none;
         }
     }
 
@@ -33,6 +38,7 @@
         width: 100%;
 
         &::placeholder {
+            font-weight: normal;
             opacity: 0.6;
         }
     }
