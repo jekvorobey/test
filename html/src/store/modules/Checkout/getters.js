@@ -1,6 +1,10 @@
 import { requestStatus } from '@enums';
 
-export const DELIVERY_TYPES_MAP = 'deliveryTypesMap';
+const PROFESSIONS = 'professions';
+const CHECKOUT_DATA = 'checkoutData';
+const INPUT = 'input';
+
+export const PROFESSIONS_MAP = 'professionsMap';
 
 export const CERTIFICATES = 'certificates';
 export const BONUS = 'bonus';
@@ -47,10 +51,15 @@ export const TICKET_STATUS = 'ticketStatus';
 
 export const SUMMARY = 'summary';
 
-const CHECKOUT_DATA = 'checkoutData';
-const INPUT = 'input';
-
 export default {
+    [PROFESSIONS_MAP]: (state) => {
+        const professions = state[PROFESSIONS] || [];
+        const map = {};
+
+        for (const prof of professions) map[prof.id] = prof;
+        return map;
+    },
+
     [BONUS_PER_RUB]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][BONUS_PER_RUB]) || 0,
     [AVAILABLE_BONUS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][AVAILABLE_BONUS]) || 0,
     [MAX_BONUS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][MAX_BONUS]) || 0,

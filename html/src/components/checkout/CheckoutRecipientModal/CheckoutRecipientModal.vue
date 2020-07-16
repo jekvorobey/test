@@ -27,10 +27,10 @@
                     <v-input-mask
                         class="checkout-recipient-modal__form-row"
                         v-model="form.phone"
-                        :raw="false"
                         placeholder="+7 ___ ___-__-__"
                         :options="maskOptions"
                         :error="phoneError"
+                        raw
                     >
                         Телефон
                         <template v-slot:error="{ error }">

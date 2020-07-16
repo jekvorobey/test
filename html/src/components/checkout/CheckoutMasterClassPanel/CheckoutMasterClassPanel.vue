@@ -16,8 +16,8 @@
                     @btnClick="onChangeRecipient(recipient, index)"
                 >
                     <p>{{ recipient.name }}</p>
+                    <p>{{ formatPhoneNumber(recipient.phone) }}</p>
                     <p>{{ recipient.email }}</p>
-                    <p>{{ recipient.phone }}</p>
                 </checkout-option-card>
             </ul>
 
@@ -70,8 +70,13 @@
                         @btnClick="onChangeTicket(ticket, offerId, index)"
                     >
                         <p class="text-bold">Билет {{ index + 1 }}</p>
-                        <p>{{ ticket.firstName }} {{ ticket.lastName }}</p>
-                        <p>{{ ticket.phone }}</p>
+                        <p>
+                            <span>{{ ticket.lastName }} {{ ticket.firstName }} {{ ticket.middleName }},</span>
+                            <span v-if="professionsMap[ticket.professionId]">
+                                {{ professionsMap[ticket.professionId].name }}
+                            </span>
+                        </p>
+                        <p>{{ formatPhoneNumber(ticket.phone) }}</p>
                         <p>{{ ticket.email }}</p>
                     </checkout-option-card>
                     <checkout-option-card
@@ -259,6 +264,7 @@ import {
     PROMOCODE_STATUS,
     PUBLIC_EVENTS,
     TICKET_STATUS,
+    PROFESSIONS_MAP,
 } from '@store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -269,7 +275,7 @@ import _debounce from 'lodash/debounce';
 
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
 import { requestStatus, agreementTypes, fileExtension, modalName } from '@enums';
-import { getPosition } from '@util';
+import { getPosition, formatPhoneNumber } from '@util';
 import { generateMasterclassUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
@@ -368,6 +374,8 @@ export default {
         }),
 
         ...mapGetters(CHECKOUT_MODULE, [
+            PROFESSIONS_MAP,
+
             RECIPIENTS,
             SELECTED_RECIPIENT,
 
@@ -462,6 +470,10 @@ export default {
             ADD_PROMOCODE,
             DELETE_PROMOCODE,
         ]),
+
+        formatPhoneNumber(phone) {
+            return formatPhoneNumber(phone);
+        },
 
         isEqualObject(obj1, obj2) {
             return _isEqual(obj1, obj2);
