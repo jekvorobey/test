@@ -66,6 +66,7 @@ export default {
         ...mapState('route', {
             type: state => state.params.type,
             entityCode: state => state.params.entityCode,
+            additionalQuery: state => state.query,
         }),
         ...mapGetters(CATALOG_MODULE, [ROOT_CATEGORY, ACTIVE_CATEGORIES]),
 
@@ -123,9 +124,5 @@ export default {
             this.isHover = value;
         },
     },
-
-    beforeMount() {
-        this.additionalQuery = this.$route.query;
-    }
 };
 </script>

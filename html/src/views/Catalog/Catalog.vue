@@ -422,12 +422,13 @@ export default {
         },
 
         searchTitle() {
-            if (this.range && this.searchQuery) {
-                return `По запросу «${this.searchQuery}» найдено ${range} продуктов`;
-            } else if (this.range && !this.searchQuery) {
-                return `По запросу найдено ${this.range} продуктов`;
+            const { range, searchQuery } = this;
+            if (range && searchQuery) {
+                return `По запросу «${searchQuery}» найдено ${range} продуктов`;
+            } else if (range && !searchQuery) {
+                return `По запросу найдено ${range} продуктов`;
             } else {
-                return `По запросу «${this.searchQuery}» ничего не найдено`;
+                return `По запросу «${searchQuery}» ничего не найдено`;
             }
         }
     },
