@@ -106,7 +106,7 @@ export default {
             isOpen: false,
             links: {
                 telegram: {
-                    href: 'tg://resolve?domain=79162001869',
+                    href: 'tg://resolve?domain=Bessovestnyj_bot',
                     title: 'Связаться с нами в Telegram',
                 },
                 whatsapp: {

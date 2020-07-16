@@ -581,7 +581,7 @@ export default {
             $progress.start();
             $store
                 .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, {
-                    type: productGroupTypes.SEARCH,
+                    type: toType,
                     entityCode: toEntityCode,
                     code: toCode,
 

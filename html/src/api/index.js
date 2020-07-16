@@ -451,11 +451,10 @@ export function getReferrerProducts(id, pageNum, perPage) {
 // search
 
 export function search(data) {
-    return $http.get('/v1/catalog/products', {
+    if (!data) return {};
+    return $http.get('/v1/search', {
         params: {
-            filter: {
-                search_string: data,
-            },
+            query: data,
         },
         paramsSerializer(params) {
             return qs.stringify(params, {
@@ -506,7 +505,6 @@ export function getProductsHot(badge_id, limit) {
 }
 
 export function getProducts({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
-    console.log(filter);
     return $http.get('/v1/catalog/products', {
         params: {
             filter,
