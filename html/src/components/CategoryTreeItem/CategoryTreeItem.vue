@@ -66,7 +66,6 @@ export default {
         ...mapState('route', {
             type: state => state.params.type,
             entityCode: state => state.params.entityCode,
-            additionalQuery: state => state.query,
         }),
         ...mapGetters(CATALOG_MODULE, [ROOT_CATEGORY, ACTIVE_CATEGORIES]),
 
@@ -106,7 +105,7 @@ export default {
                 rootCategory,
             } = this;
 
-            return { path: generateCategoryUrl(type, entityCode, rootCategory ? !isRoot && code : code), query: { ...this.additionalQuery } };
+            return { path: generateCategoryUrl(type, entityCode, rootCategory ? !isRoot && code : code), query: { ...this.$route.query } };
         },
 
         hasChildren() {
