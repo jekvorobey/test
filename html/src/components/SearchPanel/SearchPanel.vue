@@ -35,7 +35,7 @@
                     </transition-group>
                 </div>
                 <v-button class="btn--outline search-panel__btn" v-if="products && products.length && this.searchString !== ''" @click="toSearchClick">
-                    Показать ещё {{ range }}
+                    Показать ещё {{ range }} товаров
                 </v-button>
             </div>
         </div>
