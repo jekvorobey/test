@@ -136,7 +136,7 @@ export default {
             routeSegments = routeSegments.filter(s => s === value);
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path });
+            this.$router.replace({ path, query: {search_string: this.$route.query.search_string} });
         },
 
         initFiltersOptions() {
@@ -179,7 +179,7 @@ export default {
             }
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path });
+            this.$router.replace({ path, query: { search_string: this.$route.query.search_string }});
         },
 
         onShowMoreClick(id) {
@@ -229,9 +229,12 @@ export default {
             } else routeSegments.push(segment);
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path });
+            this.$router.replace({ path, query: {
+                search_string: this.$route.query.search_string,
+            } });
         }, 500);
     },
+
     watch: {
         filters() {
             this.initFiltersOptions();
@@ -241,7 +244,7 @@ export default {
             if (value !== oldValue) {
                 this.$router.replace({
                     path: this.$route.path,
-                    query: { orderField: value.field, orderDirection: value.direction },
+                    query: { orderField: value.field, orderDirection: value.direction, search_string: this.$route.query.search_string },
                 });
             }
         },

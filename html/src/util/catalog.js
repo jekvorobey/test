@@ -46,6 +46,7 @@ export function concatCatalogRoutePath(type, entityCode, categoryCode, segments)
         case productGroupTypes.CATALOG:
         case productGroupTypes.NEW:
         case productGroupTypes.BESTSELLERS:
+        case productGroupTypes.SEARCH:
             baseRoute = categoryCode ? `/${type}/${categoryCode}/` : `/${type}/`;
             break;
         case productGroupTypes.PROMO:
