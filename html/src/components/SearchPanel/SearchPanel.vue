@@ -15,7 +15,7 @@
                 </transition-group>
 
                 <div v-if="!isTabletLg && products && products.length > 0" class="search-panel__products">
-                    <p class="text-bold search-panel__hl" v-if="searchString === ''">Популярные продукты</p>
+                    <p class="text-bold search-panel__hl" v-if="searchString === ''">Популярные товары</p>
                     <transition-group tag="ul" name="item" class="search-panel__products-list" appear>
                         <li class="search-panel__products-card" v-for="item in products" :key="item.id">
                             <catalog-product-card
