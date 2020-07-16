@@ -638,8 +638,15 @@ export default {
                 page: toPage = 1,
                 orderField: toOrderField = sortFields.PRICE,
                 orderDirection: toOrderDirection = sortDirections.DESC,
+                search_string: to_search_string,
             },
         } = to;
+
+        // Если у нас нет поисковой строки, либо продуктовая группа !== search, ничего искать не нужно
+        const encodeSearchString =
+            to_search_string && toType === productGroupTypes.SEARCH ? encodeURI(to_search_string) : undefined;
+
+        const { filter, routeSegments, filterSegments } = computeFilterData(toPathMatch, toCode, encodeSearchString);
 
         const {
             params: { code: fromCode, entityCode: fromEntityCode, type: fromType, pathMatch: fromPathMatch },
@@ -647,6 +654,7 @@ export default {
                 page: fromPage = 1,
                 orderField: fromOrderField = sortFields.PRICE,
                 orderDirection: fromOrderDirection = sortDirections.DESC,
+                search_string: from_search_string,
             },
         } = from;
 
@@ -657,9 +665,24 @@ export default {
             toPathMatch === fromPathMatch &&
             toPage === fromPage &&
             toOrderField === fromOrderField &&
-            toOrderDirection === fromOrderDirection
+            toOrderDirection === fromOrderDirection &&
+            to_search_string === from_search_string
         )
             return next();
+
+        this[FETCH_CATALOG_DATA]({
+            type: toType,
+            entityCode: toEntityCode,
+            code: toCode,
+
+            filter,
+            routeSegments,
+            filterSegments,
+
+            toPage: filter.search_string ? undefined : toPage,
+            toOrderField,
+            toOrderDirection,
+        });
 
         if (this.showMore) {
             this.fetchCatalog(to, from, next, this.showMore);
@@ -680,6 +703,6 @@ export default {
 
     created() {
         this.productGroupTypes = productGroupTypes;
-    }
+    },
 };
 </script>

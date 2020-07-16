@@ -2,8 +2,6 @@
     <div class="search-panel">
         <div class="search-panel__container" v-scroll-lock="search">
             <div class="container">
-                <p v-if="isTabletLg" class="text-medium text-grey search-panel__hl">Популярные запросы</p>
-
                 <transition-group
                     v-if="categories && categories.length > 0"
                     tag="ul"
@@ -11,13 +9,13 @@
                     class="search-panel__categories-list"
                     appear
                 >
-                    <li class="search-panel__categories-item" :key="category.id" v-for="category in categories">
-                        <v-link class="search-panel__categories-link" href="#">{{ category.name }}</v-link>
+                    <li class="search-panel__categories-item" :key="category" v-for="category in categories">
+                        <v-link class="search-panel__categories-link" :to="getLink(category)">{{ category }}</v-link>
                     </li>
                 </transition-group>
 
                 <div v-if="!isTabletLg && products && products.length > 0" class="search-panel__products">
-                    <p class="text-bold search-panel__hl" v-if="searchString === ''">Популярные продукты</p>
+                    <p class="text-bold search-panel__hl" v-if="searchString === ''">Популярные товары</p>
                     <transition-group tag="ul" name="item" class="search-panel__products-list" appear>
                         <li class="search-panel__products-card" v-for="item in products" :key="item.id">
                             <catalog-product-card
@@ -36,8 +34,8 @@
                         </li>
                     </transition-group>
                 </div>
-                <v-button class="btn--outline search-panel__btn" v-if="products.length && this.searchString !== ''" @click="toSearchClick">
-                    Показать ещё
+                <v-button class="btn--outline search-panel__btn" v-if="products && products.length && this.searchString !== ''" @click="toSearchClick">
+                    Показать ещё {{ range }}
                 </v-button>
             </div>
         </div>
@@ -84,6 +82,14 @@ export default {
         isTabletLg() {
             return this.$mq.tabletLg;
         },
+
+        categories() {
+            return this.suggestions.suggestions;
+        },
+
+        range() {
+            return this.suggestions.range;
+        }
     },
 
     methods: {
@@ -102,9 +108,15 @@ export default {
         },
 
         toSearchClick() {
-            this.$router.push({
-                path: `/${productGroupTypes.SEARCH}/?search_string=${this.searchString}`
+            this.$router.replace({
+                path: `/${productGroupTypes.SEARCH}/?search_string=${this.searchString}`,
             });
+        },
+
+        getLink(category) {
+            return {
+                path: `/${productGroupTypes.SEARCH}/?search_string=${category}`,
+            };
         },
     },
 

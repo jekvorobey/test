@@ -10,6 +10,9 @@
             :id="inputId"
             :placeholder="searchPlaceholder"
             @focus.self="SET_SEARCH(true)"
+            @focus="isFocus = true"
+            @focusout="isFocus = false"
+            @keyup.enter="onSearch"
         />
         <button class="search-filter__clear" @click="onClearClick">
             <v-svg name="cross" width="20" height="20" />
@@ -19,6 +22,9 @@
 
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
+
+import { productGroupTypes } from '@enums/product';
+
 import '@images/sprites/search-middle.svg';
 import '@images/sprites/cross.svg';
 
@@ -42,6 +48,7 @@ export default {
     data() {
         return {
             searchString: '',
+            isFocus: false,
         };
     },
 
@@ -49,6 +56,9 @@ export default {
         ...mapState('search', ['search']),
 
         searchPlaceholder() {
+            if (this.isFocus) {
+                return 'Что вы ищете?';
+            }
             return this.$t('header.middle.search');
         },
     },
@@ -65,6 +75,16 @@ export default {
         onClearClick() {
             this.searchString = '';
             this.SET_SEARCH(false);
+        },
+
+        onSearch() {
+            if (!this.searchString) return;
+            this.$router.push({
+                path: `/${productGroupTypes.SEARCH}`,
+                query: {
+                    search_string: this.searchString,
+                },
+            });
         },
     },
 };
