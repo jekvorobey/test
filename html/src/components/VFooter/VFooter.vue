@@ -29,7 +29,7 @@
                             v-for="link in socials.items"
                             :title="link.name"
                         >
-                            <a class="v-footer__link" :href="link.href" rel="nofollow">
+                            <a class="v-footer__link" :href="link.href" rel="nofollow" target="_blank">
                                 <v-svg :name="link.icon" width="24" height="24" />
                             </a>
                         </li>
