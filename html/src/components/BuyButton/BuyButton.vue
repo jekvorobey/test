@@ -83,9 +83,5 @@ export default {
             return hasSession && canBuy;
         },
     },
-
-    beforeMount() {
-        console.log(this);
-    }
 };
 </script>
