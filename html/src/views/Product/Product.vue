@@ -616,23 +616,7 @@
             <div class="container product-view__history-container">
                 <h2 class="product-view__section-hl">{{ $t('product.title.history') }}</h2>
                 <div class="product-view__history-grid">
-                    <catalog-product-card
-                        class="product-view__history-card"
-                        v-for="item in featuredProducts.items.slice(0, 6)"
-                        :key="item.id"
-                        :offer-id="item.id"
-                        :product-id="item.productId"
-                        :type="item.type"
-                        :name="item.name"
-                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                        :image="item.image"
-                        :tags="item.tags"
-                        :rating="item.rating"
-                        :show-buy-btn="item.stock.qty > 0"
-                        @add-item="onAddToCart(item)"
-                        @preview="onPreview(item.code)"
-                        @toggle-favorite-item="onToggleFavorite(item.productId)"
-                    />
+                    <recently-viewed-product-card v-for="item in featuredProducts.items.slice(0, 6)" :key="item.id" :offer-id="item.id" :product-id="item.productId" :name="item.name" :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`" :image="item.image" />
                 </div>
             </div>
         </section>
@@ -721,6 +705,8 @@ import AddReview from '@components/AddReview/AddReview.vue';
 
 import ProductPickupPointsMap from '@components/product/ProductPickupPointsMap/ProductPickupPointsMap.vue';
 import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPanel/ProductPickupPointsPanel.vue';
+
+import RecentlyViewedProductCard from '@components/RecentlyViewedProductCard/RecentlyViewedProductCard.vue';
 
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
@@ -930,6 +916,8 @@ export default {
         FrisbuyProductContainer,
         AddReview,
         BuyButton,
+
+        RecentlyViewedProductCard,
     },
 
     data() {

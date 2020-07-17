@@ -1,0 +1,80 @@
+.recently-viewed-product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+
+    &:hover &__body {
+        background-color: var(--cl-elem-grey);
+    }
+
+    &:hover &__img {
+        border-color: var(--cl-divider-grey);
+
+        @media (--tablet-min) {
+            img {
+                opacity: 0.2;
+                transition: all var(--time) ease-in;
+            }
+        }
+    }
+
+    &__img {
+        display: flex;
+        position: relative;
+        width: 100%;
+        padding: calc(var(--gs) * 4);
+        border-bottom: 0.5px solid transparent;
+        flex: none;
+
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 100%;
+                padding-bottom: 0;
+            }
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            display: block;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--cl-global);
+            opacity: 0.03;
+        }
+
+        @media (--tablet) {
+            padding: var(--gs) 0;
+        }
+
+        .v-picture {
+            width: 100%;
+            height: 100%;
+        }
+
+        .icon {
+            margin: auto;
+            opacity: 0.1;
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        padding: calc(var(--gs) * 2);
+        flex-grow: 1;
+
+        @media (--tablet) {
+            padding: var(--gs);
+        }
+    }
+}
