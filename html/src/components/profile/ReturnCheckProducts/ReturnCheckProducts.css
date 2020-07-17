@@ -8,6 +8,7 @@
     &__attention-panel {
             flex-wrap: nowrap;
             margin: calc(var(--gs) * 4) 0;
+            fill: var(--cl-grey);
     }
 
     &__info {

@@ -3,6 +3,7 @@
 
     &__attention {
         margin-bottom: calc(var(--gs) * 7);
+        fill: var(--cl-grey);
 
         @media (--tablet) {
             flex-wrap: nowrap;

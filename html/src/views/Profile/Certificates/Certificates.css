@@ -47,6 +47,8 @@
 
     &__attention {
         margin-bottom: calc(var(--gs) * 4);
+        padding-top: calc(var(--gs) * 4);
+        fill: var(--cl-grey);
 
         &-link {
             text-transform: none;

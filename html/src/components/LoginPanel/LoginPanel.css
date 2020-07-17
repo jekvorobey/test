@@ -10,6 +10,7 @@
 
     &__attention {
         margin: calc(var(--gs) * 3) 0;
+        fill: var(--cl-grey);
 
         &--short {
             padding-right: calc(var(--gs) * 3);

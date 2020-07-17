@@ -42,7 +42,9 @@
 
     &__attention {
         margin-bottom: calc(var(--gs) * 3);
+        padding-top: calc(var(--gs) * 4);
         flex-wrap: nowrap;
+        fill: var(--cl-grey);
 
         & + & {
             margin-top: calc(var(--gs) * 2);

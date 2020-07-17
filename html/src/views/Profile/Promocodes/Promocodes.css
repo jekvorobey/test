@@ -197,6 +197,9 @@
     }
 
     &__attention {
+        fill: var(--cl-grey);
+        padding-top: calc(var(--gs) * 4);
+
         @media (--tablet-min) {
             padding: calc(var(--gs) * 5) 0;
         }

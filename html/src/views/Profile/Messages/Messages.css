@@ -51,6 +51,9 @@
     }
 
     &__attention {
+        padding-top: calc(var(--gs) * 4);
+        fill: var(--cl-grey);
+
         @media (--tablet-min) {
             padding: calc(var(--gs) * 5) 0;
         }

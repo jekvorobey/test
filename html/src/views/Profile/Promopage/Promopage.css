@@ -164,6 +164,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        fill: var(--cl-grey);
+        padding-top: calc(var(--gs) * 4);
 
         @media (--tablet) {
             margin-top: calc(var(--gs) * 5);

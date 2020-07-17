@@ -12,6 +12,7 @@
 
     &__attention-panel {
         flex-wrap: nowrap;
+        fill: var(--cl-grey);
     }
 
     &__files {
