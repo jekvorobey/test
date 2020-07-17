@@ -68,7 +68,7 @@
             <p class="v-footer__col-title">{{ socials.name }}</p>
             <ul class="v-footer__socials">
                 <li class="v-footer__socials-item" :key="link.id" v-for="link in socials.items" :title="link.name">
-                    <a class="v-footer__link" :href="link.href">
+                    <a class="v-footer__link" :href="link.href" target="_blank">
                         <v-svg :name="link.icon" width="24" height="24" />
                     </a>
                 </li>
