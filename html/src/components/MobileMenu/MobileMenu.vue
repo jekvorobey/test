@@ -31,6 +31,7 @@
                                 class="mobile-menu__menu-link"
                                 :to="index !== 0 ? item.url : null"
                                 :tag="index !== 0 ? 'a' : 'button'"
+                                :class="{'mobile-menu__menu-link--full' : index !== 0}"
                                 @click.prevent="index === 0 ? (showCategories = true) : null"
                             >
                                 {{ item.name }}
@@ -45,7 +46,7 @@
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item">
-                            <v-link tag="button" class="mobile-menu__menu-link" @click="onRegister">
+                            <v-link tag="button" class="mobile-menu__menu-link mobile-menu__menu-link--full" @click="onRegister">
                                 <v-svg
                                     class="mobile-menu__menu-link-container"
                                     name="account-middle"
@@ -55,7 +56,7 @@
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item" v-if="hasSession">
-                            <v-link class="mobile-menu__menu-link" to="/favorites">
+                            <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" to="/favorites">
                                 <span class="mobile-menu__menu-link-container">
                                     <v-svg :name="favoriteItemsIcon" width="24" height="24" />
                                     <span class="mobile-menu__menu-link-count" v-if="hasFavoriteItems">
@@ -67,7 +68,7 @@
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item mobile-menu__menu-item--separator">
-                            <v-link tag="button" class="mobile-menu__menu-link" @click.prevent="onOpenCitySelection">
+                            <v-link tag="button" class="mobile-menu__menu-link mobile-menu__menu-link--full" @click.prevent="onOpenCitySelection">
                                 <v-svg class="mobile-menu__menu-link-container" name="pin" width="24" height="24" />
                                 <v-clamp :max-lines="2" autoresize>{{ city }}</v-clamp>
                             </v-link>
@@ -76,17 +77,17 @@
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/">
+                            <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" to="/">
                                 Доставка и оплата
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link" to="/">
+                            <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" to="/">
                                 Возврат товара
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item mobile-menu__menu-item--separator">
-                            <v-link class="mobile-menu__menu-link" to="/">
+                            <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" to="/">
                                 Гарантии
                             </v-link>
                         </li>
