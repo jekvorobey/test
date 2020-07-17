@@ -6,7 +6,7 @@
 
     &__container {
         background-color: var(--cl-white);
-        padding-top: calc(var(--gs) * 4);
+        padding-top: calc(var(--gs) * 2);
         padding-bottom: calc(var(--gs) * 5);
         min-height: 400px;
         overflow: auto;
@@ -37,7 +37,7 @@
             flex-wrap: wrap;
             line-height: 32px;
             overflow: hidden;
-            margin-bottom: calc(var(--gs) * 5);
+            margin-bottom: calc(var(--gs) * 2);
         }
 
         &-link {
@@ -48,8 +48,8 @@
         }
 
         &-item {
-            & + & {
-                margin-left: calc(var(--gs) * 4.5);
+            &:not(:last-child) {
+                margin-right: calc(var(--gs) * 4.5);
             }
 
             @media (--tablet-lg) {
