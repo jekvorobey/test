@@ -68,7 +68,7 @@
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item mobile-menu__menu-item--separator">
-                            <v-link tag="button" class="mobile-menu__menu-link mobile-menu__menu-link--full" @click.prevent="onOpenCitySelection">
+                            <v-link tag="button" class="mobile-menu__menu-link" @click.prevent="onOpenCitySelection">
                                 <v-svg class="mobile-menu__menu-link-container" name="pin" width="24" height="24" />
                                 <v-clamp :max-lines="2" autoresize>{{ city }}</v-clamp>
                             </v-link>

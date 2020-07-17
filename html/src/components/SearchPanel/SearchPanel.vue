@@ -2,21 +2,22 @@
     <div class="search-panel">
         <div class="search-panel__container" v-scroll-lock="search">
             <div class="container">
-                <transition-group
-                    v-if="categories && categories.length > 0"
-                    tag="ul"
-                    name="item"
-                    class="search-panel__categories-list"
-                    appear
-                >
-                    <li class="search-panel__categories-item" :key="category" v-for="category in categories">
-                        <v-link class="search-panel__categories-link" :to="getLink(category)">{{ category }}</v-link>
-                    </li>
-                </transition-group>
+                <ul class="search-panel__categories-list">
+                    <template v-if="searchString !== '' && categories && categories.length > 0">
+                        <li class="search-panel__categories-item" :key="category" v-for="category in categories">
+                            <v-link class="search-panel__categories-link" :to="getLink(category)">{{ category }}</v-link>
+                        </li>
+                    </template>
+                    <template v-else>
+                        <li class="search-panel__categories-item" :key="request" v-for="request in popularRequests">
+                            <v-link class="search-panel__categories-link" :to="getLink(request)">{{ request }}</v-link>
+                        </li>
+                    </template>
+                </ul>
 
                 <div v-if="!isTabletLg && products && products.length > 0" class="search-panel__products">
                     <p class="text-bold search-panel__hl" v-if="searchString === ''">Популярные товары</p>
-                    <transition-group tag="ul" name="item" class="search-panel__products-list" appear>
+                    <ul class="search-panel__products-list">
                         <li class="search-panel__products-card" v-for="item in products" :key="item.id">
                             <catalog-product-card
                                 :offer-id="item.id"
@@ -32,7 +33,7 @@
                                 :show-buy-btn="item.stock.qty > 0"
                             />
                         </li>
-                    </transition-group>
+                    </ul>
                 </div>
                 <v-button class="btn--outline search-panel__btn" v-if="products && products.length && this.searchString !== ''" @click="toSearchClick">
                     Показать ещё {{ range }} товаров
@@ -49,8 +50,8 @@ import VButton from '@controls/VButton/VButton.vue';
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { NAME as SEARCH_MODULE, SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS } from '@store/modules/Search';
-import { GET_POPULAR_PRODUCTS } from '@store/modules/Search/actions';
+import { NAME as SEARCH_MODULE, SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS, POPULAR_REQUESTS } from '@store/modules/Search';
+import { GET_POPULAR_PRODUCTS, GET_POPULAR_REQUESTS } from '@store/modules/Search/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
@@ -70,7 +71,7 @@ export default {
     },
 
     computed: {
-        ...mapState(SEARCH_MODULE, [SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS]),
+        ...mapState(SEARCH_MODULE, [SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS, POPULAR_REQUESTS]),
         ...mapState(SEARCH_MODULE, {
             categories: (state) => state[SUGGESTIONS].categories,
         }),
@@ -93,7 +94,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(SEARCH_MODULE, [GET_POPULAR_PRODUCTS]),
+        ...mapActions(SEARCH_MODULE, [GET_POPULAR_PRODUCTS, GET_POPULAR_REQUESTS]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
 
         generateImageObject(image) {
@@ -121,7 +122,7 @@ export default {
     },
 
     created() {
-        this[GET_POPULAR_PRODUCTS]();
+        Promise.all([this[GET_POPULAR_PRODUCTS](), this[GET_POPULAR_REQUESTS]()]);
     },
 };
 </script>

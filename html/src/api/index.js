@@ -464,6 +464,14 @@ export function search(data) {
     });
 }
 
+export function getSearchPopularRequest(limit) {
+    return $http.get('/v1/search/popular-requests', {
+        params: {
+            limit,
+        },
+    });
+}
+
 // catalog
 
 export function getProductGroups(type, page, orderField = 'name') {
