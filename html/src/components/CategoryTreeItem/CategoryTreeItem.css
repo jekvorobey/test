@@ -42,4 +42,24 @@
         padding-bottom: 0;
         padding-left: calc(var(--gs) * 1.5);
     }
+
+    .slide-right {
+        &-enter {
+            transform: translateX(30px);
+
+            &-to {
+                transform: translateX(0);
+                transition: all calc(var(--animation-time) * 1.5) ease;
+            }
+        }
+
+        &-leave {
+            transform: translateX(0);
+
+            &-to {
+                transform: translateX(30px);
+                transition: all calc(var(--animation-time) * 1.5) ease;
+            }
+        }
+    }
 }

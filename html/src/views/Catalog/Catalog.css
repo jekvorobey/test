@@ -84,24 +84,6 @@
             &-item {
                 text-transform: uppercase;
             }
-
-            .slide-right {
-                &-enter {
-                    transform: translateX(30px);
-
-                    &-to {
-                        transform: translateX(0);
-                    }
-                }
-
-                &-leave {
-                    transform: translateX(0);
-
-                    &-to {
-                        transform: translateX(30px);
-                    }
-                }
-            }
         }
 
         &-clear-btn {

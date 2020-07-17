@@ -13,7 +13,7 @@
                 {{ item.name }}
             </span>
         </div>
-        <transition name="slide-right-catalog">
+        <transition name="slide-right">
             <ul class="category-tree-item__list" v-if="hasChildren && (isHover || isActive)">
                 <category-tree-item
                     class="category-tree-item__item"
@@ -105,7 +105,10 @@ export default {
                 rootCategory,
             } = this;
 
-            return { path: generateCategoryUrl(type, entityCode, rootCategory ? !isRoot && code : code), query: { ...this.$route.query } };
+            return {
+                path: generateCategoryUrl(type, entityCode, rootCategory ? !isRoot && code : code),
+                query: { ...this.$route.query },
+            };
         },
 
         hasChildren() {
