@@ -31,6 +31,11 @@ import './RecentlyViewedProductCard.css';
 
 export default {
     name: 'recently-viewed-product-card',
+    components: {
+        VSvg,
+        VLink,
+        VPicture,
+    },
 
     props: {
         offerId: {
