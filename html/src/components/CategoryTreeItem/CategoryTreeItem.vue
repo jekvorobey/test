@@ -59,6 +59,7 @@ export default {
     data() {
         return {
             isHover: false,
+            timer: null,
         };
     },
 
@@ -122,8 +123,19 @@ export default {
     },
 
     methods: {
-        onMouseOver(value) {
-            this.isHover = value;
+        onMouseOver(value, oldValue) {
+            if (value !== oldValue) {
+                if (value) {
+                    clearTimeout(this.timer);
+                    this.timer = setTimeout(() => {
+                        this.isHover = true;
+                    }, 1000);
+                } else {
+                    clearTimeout(this.timer);
+                    this.timer = null;
+                    this.isHover = false;
+                }
+            }
         },
     },
 };
