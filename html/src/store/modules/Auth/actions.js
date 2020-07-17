@@ -139,9 +139,9 @@ export default {
         let user = null;
 
         try {
-            const { can_buy: canBuy, referral_code: referralCode, referral_partner: referralPartner } = await getUser();
+            const { can_buy: canBuy, referral_code: referralCode, referral_partner: referralPartner, status } = await getUser();
             const { avatar, first_name: firstName, last_name: lastName } = await getUserInfo();
-            user = { canBuy, referralCode, referralPartner, avatar, firstName, lastName };
+            user = { canBuy, referralCode, referralPartner, avatar, firstName, lastName, status };
             commit(SET_USER, user);
             return user;
         } catch (error) {

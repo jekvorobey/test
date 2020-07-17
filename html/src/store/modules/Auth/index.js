@@ -10,6 +10,7 @@ export const REFERRAL_CODE = 'referralCode';
 export const REFERRAL_PARTNER = 'referralPartner';
 export const CAN_BUY = 'canBuy';
 export const UNREAD_MESSAGES = 'unreadMessages';
+export const STATUS = 'status';
 
 export default function createModule() {
     return {

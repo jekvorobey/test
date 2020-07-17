@@ -12,6 +12,7 @@
 
 <script>
 import VButton from '@controls/VButton/VButton.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
@@ -53,12 +54,19 @@ export default {
         btnText() {
             return this.modalState.btnMessage || 'Закрыть';
         },
+
+        href() {
+            return this.modalState.href;
+        },
     },
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onClose() {
+            if (this.href) {
+                this.$router.push(this.href);
+            }
             this.$emit('close');
             this.CHANGE_MODAL_STATE({ name: NAME, open: false });
         },

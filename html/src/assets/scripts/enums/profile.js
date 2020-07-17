@@ -62,3 +62,15 @@ export const returnMethods = Object.freeze({
     OUTPOST: 2,
     POST: 3,
 })
+
+export const userStatus = Object.freeze({
+    CREATED: 1, // Создан
+    NEW: 2, // Новый (заполнен телефон и портфолио)
+    CONSIDERATION: 3, // На проверке
+    REJECTED: 4, // Отклонен
+    ACTIVE: 5, // Активный
+    PROBLEM: 6, // Проблемный
+    BLOCK: 7, // Заблокирован
+    POTENTIAL_RP: 8, // Потенциальный реф. партнер
+    TEMPORARILY_SUSPENDED: 9, // Временно приостановлен
+})
