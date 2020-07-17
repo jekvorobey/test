@@ -34,7 +34,7 @@
                                 <v-link
                                     class="checkout-option-card__right-link"
                                     tag="button"
-                                    @click.stop="onDeleteAddress(address)"
+                                    @click.stop="onConfirmationModalOpen(address)"
                                 >
                                     <v-svg name="cross" width="16" height="16" />
                                 </v-link>
@@ -61,6 +61,14 @@
                 @save="onSaveAddress"
             />
         </transition>
+
+        <transition name="fade">
+            <confirmation-modal
+                v-show="isConfirmationModalOpen"
+                v-if="$isServer || isConfirmationModalOpen"
+                @submit="onDeleteAddress"
+            />
+        </transition>
     </section>
 </template>
 
@@ -73,6 +81,7 @@ import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 import AddressEditModal from '@components/profile/AddressEditModal/AddressEditModal.vue';
+import ConfirmationModal from '@components/ConfirmationModal/ConfirmationModal.vue';
 
 import { mapActions, mapState } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -93,8 +102,10 @@ import _isEqual from 'lodash/isEqual';
 import { modalName } from '@enums';
 import { $store, $progress, $logger } from '@services';
 import { getRandomIntInclusive } from '@util';
+
 import '@images/sprites/plus-small.svg';
 import '@images/sprites/info-middle.svg';
+import '@images/sprites/edit.svg';
 import './Addresses.css';
 
 const ADDRESSES_MODULE_PATH = `${PROFILE_MODULE}/${ADDRESSES_MODULE}`;
@@ -111,6 +122,7 @@ export default {
         CheckoutOptionCard,
 
         AddressEditModal,
+        ConfirmationModal,
     },
 
     computed: {
@@ -118,6 +130,8 @@ export default {
         ...mapState(MODAL_MODULE, {
             isAddressEditOpen: state =>
                 state[MODALS][modalName.profile.ADDRESS_EDIT] && state[MODALS][modalName.profile.ADDRESS_EDIT].open,
+            isConfirmationModalOpen: state =>
+                state[MODALS][modalName.profile.CONFIRMATION] && state[MODALS][modalName.profile.CONFIRMATION].open,
         }),
 
         isTablet() {
@@ -168,6 +182,19 @@ export default {
                 name: modalName.profile.ADDRESS_EDIT,
                 open: true,
                 state: { address: { ...address } },
+            });
+        },
+
+        onConfirmationModalOpen(address) {
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.profile.CONFIRMATION,
+                open: true,
+                state: {
+                    title: 'Удалить адрес',
+                    message: 'Адрес доставки будет удалён',
+                    btnSubmitText: 'Удалить',
+                    additionalArgs: address,
+                }
             });
         },
     },

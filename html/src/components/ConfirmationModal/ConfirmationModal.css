@@ -1,0 +1,27 @@
+.confirmation-modal {
+    &__h1 {
+        margin-bottom: calc(var(--gs) * 3);
+    }
+
+    &__message {
+        margin-bottom: calc(var(--gs) * 3);
+    }
+
+    &__btn {
+        &-text {
+            border-bottom: 2px solid var(--cl-global);
+        }
+    }
+
+    &__body {
+        @media (--tablet-lg) {
+            padding: calc(var(--gs) * 3)
+        }
+    }
+
+    .popup__body {
+        @media (--tablet-lg-min) {
+            padding: calc(var(--gs) * 3);
+        }
+    }
+}

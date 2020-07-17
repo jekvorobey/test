@@ -34,6 +34,7 @@ export const modalName = Object.freeze({
         PROMO_ADD_BY_LINK: 'promopage-add-by-link-modal',
         PROMO_ADD: 'promopage-add-modal',
         PROMO_EDIT: 'promopage-edit-modal',
+        CONFIRMATION: 'confirmation-modal',
 
         RETURN_REASON: 'return-reason-modal',
     },
