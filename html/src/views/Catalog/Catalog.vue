@@ -337,9 +337,9 @@ export default {
         ]),
         ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE, RANGE]),
         ...mapState('route', {
-            code: state => state.params.code,
-            entityCode: state => state.params.entityCode,
-            searchQuery: state => state.query.search_string,
+            code: (state) => state.params.code,
+            entityCode: (state) => state.params.entityCode,
+            searchQuery: (state) => state.query.search_string,
         }),
 
         isBrandPage() {
@@ -359,8 +359,13 @@ export default {
                 case productGroupTypes.CATALOG:
                 case productGroupTypes.NEW:
                 case productGroupTypes.BESTSELLERS:
+                    return { name: 'Catalog', params: { type } };
                 case productGroupTypes.SEARCH:
-                    return { name: 'Catalog', params: { type }, query: { ...this.$route.query } };
+                    return {
+                        name: 'Catalog',
+                        params: { type },
+                        query: { search_string: this.$route.query.search_string },
+                    };
                 default:
                     return { name: 'ProductGroups', parmas: { type } };
             }
@@ -422,13 +427,9 @@ export default {
 
         searchTitle() {
             const { range, searchQuery } = this;
-            if (range && searchQuery) {
-                return `По запросу «${searchQuery}» найдено ${range} продуктов`;
-            } else if (range && !searchQuery) {
-                return `По запросу найдено ${range} продуктов`;
-            } else {
-                return `По запросу «${searchQuery}» ничего не найдено`;
-            }
+            if (range && searchQuery) return `По запросу «${searchQuery}» найдено ${range} продуктов`;
+            else if (range && !searchQuery) return `По запросу найдено ${range} продуктов`;
+            else return `По запросу «${searchQuery}» ничего не найдено`;
         },
     },
 
@@ -472,7 +473,7 @@ export default {
 
         setSortValue(field, direction) {
             this.sortValue =
-                this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
+                this.sortOptions.find((o) => o.field === field && o.direction === direction) || this.sortOptions[0];
         },
 
         onClickDeleteTag(value) {
@@ -582,7 +583,7 @@ export default {
 
         // если все загружено, пропускаем
         if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode)
-            next(vm => vm.setSortValue(orderField, orderDirection));
+            next((vm) => vm.setSortValue(orderField, orderDirection));
         else {
             const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode, encodeSearchString);
 
@@ -601,9 +602,9 @@ export default {
                     orderField,
                     orderDirection,
                 })
-                .then(data => {
+                .then((data) => {
                     $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                         vm.setSortValue(orderField, orderDirection);
 
@@ -614,7 +615,7 @@ export default {
                             });
                     });
                 })
-                .catch(thrown => {
+                .catch((thrown) => {
                     if (thrown && thrown.isCancel === true) return next();
 
                     $progress.fail();
@@ -669,20 +670,6 @@ export default {
             to_search_string === from_search_string
         )
             return next();
-
-        this[FETCH_CATALOG_DATA]({
-            type: toType,
-            entityCode: toEntityCode,
-            code: toCode,
-
-            filter,
-            routeSegments,
-            filterSegments,
-
-            toPage: filter.search_string ? undefined : toPage,
-            toOrderField,
-            toOrderDirection,
-        });
 
         if (this.showMore) {
             this.fetchCatalog(to, from, next, this.showMore);
