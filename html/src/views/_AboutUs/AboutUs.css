@@ -49,17 +49,14 @@
         &-content {
             flex: 1 0 50%;
             padding: 0 calc(var(--gs) * 13) 0 calc(var(--gs) * 15);
-            @media (--tablet) {
-                flex: 1 0 100%;
-                padding: calc(var(--gs) * 3) calc(var(--gs) * 2) 0;
-            }
-            @media (--tablet-lg) {
-                flex: 1 0 100%;
-                padding: calc(var(--gs) * 3) calc(var(--gs) * 2) 0;
-            }
             @media(--desktop) {
                 padding: calc(var(--gs) * 7) calc(var(--gs) * 4);
             }
+            @media (--tablet-lg) {
+                flex: 1 0 100%;
+                padding: calc(var(--gs) * 3) calc(var(--gs) * 2);
+            }
+
         }
     }
 
