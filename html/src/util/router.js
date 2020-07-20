@@ -1,4 +1,5 @@
 import { cancelRoute } from '@settings';
+import { externalUrl } from '@regex';
 
 export function breakMiddleware(appContext, next, redirect, code) {
     if (appContext.isServer) {
@@ -24,4 +25,8 @@ export function isSelectorValid(selector) {
     } catch {
         return false;
     }
+}
+
+export function isExternalUrl(str) {
+    return externalUrl.test(str);
 }

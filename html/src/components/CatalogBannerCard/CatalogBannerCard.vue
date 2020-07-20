@@ -1,5 +1,5 @@
 <template>
-    <li class="catalog-banner-card">
+    <component :is="bannerComponent" class="catalog-banner-card" v-bind="bannerProps">
         <div class="catalog-banner-card__img">
             <v-picture :key="item.id">
                 <slot>
@@ -11,15 +11,17 @@
             </v-picture>
         </div>
 
-        <div v-if="item.button" class="catalog-banner-card__panel" :class="panelClasses">
-            <v-button class="catalog-banner-card__panel-btn" :class="btnClasses"  @click="onBtnClick" v-if="item.button.url">
+        <div v-if="isMounted && item.button" class="catalog-banner-card__panel" :class="panelClasses">
+            <component
+                :is="buttonComponent"
+                class="btn catalog-banner-card__panel-btn"
+                :class="btnClasses"
+                v-bind="buttonProps"
+            >
                 {{ item.button.text }}
-            </v-button>
-            <a class="btn catalog-banner-card__panel-btn" :class="btnClasses" :href="item.button.externalUrl" v-else-if="item.button.externalUrl">
-                {{ item.button.text }}
-            </a>
+            </component>
         </div>
-    </li>
+    </component>
 </template>
 
 <script>
@@ -30,6 +32,7 @@ import { mapState, mapActions } from 'vuex';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
+import { isExternalUrl } from '@util/router';
 import { generatePictureSourcePath } from '@util/file';
 import { fileExtension } from '@enums';
 import './CatalogBannerCard.css';
@@ -72,8 +75,62 @@ export default {
         },
     },
 
+    data() {
+        return {
+            isMounted: false,
+        };
+    },
+
     computed: {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
+
+        isExternal() {
+            const { url } = this.item;
+            return isExternalUrl(url);
+        },
+
+        isButtonExternal() {
+            const { button } = this.item;
+            return button && isExternalUrl(button.url);
+        },
+
+        bannerComponent() {
+            const { isExternal } = this;
+            return isExternal ? 'a' : 'router-link';
+        },
+
+        buttonComponent() {
+            const { isButtonExternal } = this;
+            return isButtonExternal ? 'a' : 'router-link';
+        },
+
+        bannerProps() {
+            const { isExternal } = this;
+            const { url } = this.item;
+
+            if (isExternal)
+                return {
+                    href: url,
+                    target: '_blank',
+                    rel: 'noopener noreferrer',
+                };
+
+            return {
+                tag: 'li',
+                to: url || this.$route.fullPath,
+            };
+        },
+
+        buttonProps() {
+            const { isButtonExternal } = this;
+            const { button } = this.item;
+
+            if (isButtonExternal) return {};
+
+            return {
+                to: (button && button.url) || this.$route.fullPath,
+            };
+        },
 
         mobileImg() {
             const image = this.item.mobileImage || this.item.tabletImage || this.item.desktopImage;
@@ -150,14 +207,8 @@ export default {
         },
     },
 
-    methods: {
-        onBtnClick() {
-            if (!this.item.button.authLink || !this.hasSession) {
-                this.$router.push(this.item.button.url || '/');
-            } else {
-                this.$router.push({name: this.item.button.authLink});
-            }
-        }
-    }
+    mounted() {
+        this.isMounted = true;
+    },
 };
 </script>

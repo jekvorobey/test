@@ -84,7 +84,7 @@ export default {
         try {
             const data = await getBrands();
             commit(SET_BRANDS, data);
-        } catch(error) {
+        } catch (error) {
             storeErrorHandler(SET_BRANDS);
         }
     },
@@ -98,9 +98,10 @@ export default {
                     id: 'middleBanner',
                     name: '',
                     type: 'banner',
+                    url: 'https://www.instagram.com/bessovestnotalantlivy/',
                     button: {
                         id: 2,
-                        externalUrl: 'https://www.instagram.com/bessovestnotalantlivy/',
+                        url: 'https://www.instagram.com/bessovestnotalantlivy/',
                         text: 'Подписаться',
                         location: 'bottom_left',
                         type: 'white',
@@ -116,13 +117,13 @@ export default {
                     id: 'mainBanner',
                     name: '',
                     type: 'banner',
+                    url: '/?registration=true',
                     button: {
                         id: 2,
                         url: '/?registration=true',
                         text: 'Присоединиться',
                         location: 'bottom_right',
                         type: 'white',
-                        authLink: 'Cabinet',
                     },
                     desktopImage: mainDesktopImg,
                     desktopImageRetina: mainDesktopImgRetina,
@@ -214,6 +215,8 @@ export default {
                     id: 'newBanner',
                     name: '',
                     type: 'banner',
+                    url: '/sets/hair_20/',
+
                     button: {
                         id: 2,
                         url: '/sets/hair_20/',
@@ -221,6 +224,7 @@ export default {
                         location: 'bottom',
                         type: 'white',
                     },
+
                     desktopImage: newDesktopImg,
                     desktopImageRetina: newDesktopImgRetina,
                     tabletImage: newTabletImg,
@@ -247,6 +251,8 @@ export default {
                     id: 'bestsellersBanner',
                     name: '',
                     type: 'banner',
+                    url: '/bestsellers',
+
                     button: {
                         id: 2,
                         url: '/bestsellers',
@@ -254,6 +260,7 @@ export default {
                         location: 'bottom',
                         type: 'white',
                     },
+
                     desktopImage: bestsellerDesktopImg,
                     desktopImageRetina: bestsellerDesktopImgRetina,
                     tabletImage: bestsellerTabletImg,

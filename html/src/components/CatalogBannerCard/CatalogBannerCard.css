@@ -1,6 +1,8 @@
 .catalog-banner-card {
     display: flex;
     position: relative;
+    cursor: pointer;
+    border-bottom: none;
 
     &__img {
         display: flex;
