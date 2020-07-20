@@ -105,9 +105,9 @@ export default {
         ...mapGetters(CATALOG_MODULE, [FILTER_SEGMENTS, ROUTE_SEGMENTS]),
         ...mapState(CATALOG_MODULE, [FILTERS]),
         ...mapState('route', {
-            type: state => state.params.type,
-            code: state => state.params.code,
-            entityCode: state => state.params.entityCode,
+            type: (state) => state.params.type,
+            code: (state) => state.params.code,
+            entityCode: (state) => state.params.entityCode,
         }),
 
         accordionFilters() {
@@ -133,10 +133,10 @@ export default {
             const { type, entityCode, code, routeSegments } = this;
 
             if (!routeSegments.includes(value)) routeSegments.push(value);
-            routeSegments = routeSegments.filter(s => s === value);
+            routeSegments = routeSegments.filter((s) => s === value);
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path, query: {search_string: this.$route.query.search_string} });
+            this.$router.replace({ path, query: { search_string: this.$route.query.search_string } });
         },
 
         initFiltersOptions() {
@@ -179,29 +179,28 @@ export default {
             }
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path, query: { search_string: this.$route.query.search_string }});
+            this.$router.replace({ path, query: { search_string: this.$route.query.search_string } });
         },
 
         onShowMoreClick(id) {
-            const moreIndex = this.showMore.findIndex(el => el.id === id);
-            const moreItem = this.showMore.find(el => el.id === id);
+            const moreIndex = this.showMore.findIndex((el) => el.id === id);
+            const moreItem = this.showMore.find((el) => el.id === id);
             this.showMore.splice(moreIndex, 1, {
                 ...moreItem,
                 state: !moreItem.state,
             });
-            this.$emit('updateSticky');
+
             const el = this.$refs['check' + id].parentNode;
             el.removeAttribute('style');
         },
 
         onIsExpandedClick(id) {
-            const moreIndex = this.isExpanded.findIndex(el => el.id === id);
-            const moreItem = this.isExpanded.find(el => el.id === id);
+            const moreIndex = this.isExpanded.findIndex((el) => el.id === id);
+            const moreItem = this.isExpanded.find((el) => el.id === id);
             this.isExpanded.splice(moreIndex, 1, {
                 ...moreItem,
                 state: !moreItem.state,
             });
-            this.$emit('updateSticky');
         },
 
         onRangeChange(e, name) {
@@ -229,9 +228,12 @@ export default {
             } else routeSegments.push(segment);
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path, query: {
-                search_string: this.$route.query.search_string,
-            } });
+            this.$router.replace({
+                path,
+                query: {
+                    search_string: this.$route.query.search_string,
+                },
+            });
         }, 500);
     },
 
@@ -244,7 +246,11 @@ export default {
             if (value !== oldValue) {
                 this.$router.replace({
                     path: this.$route.path,
-                    query: { orderField: value.field, orderDirection: value.direction, search_string: this.$route.query.search_string },
+                    query: {
+                        orderField: value.field,
+                        orderDirection: value.direction,
+                        search_string: this.$route.query.search_string,
+                    },
                 });
             }
         },

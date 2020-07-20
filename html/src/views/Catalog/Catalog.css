@@ -34,7 +34,13 @@
 
         &--grid {
             padding-bottom: calc(var(--gs) * 7);
-            margin-bottom: calc(var(--gs) * 10);
+            margin-bottom: calc(var(--gs) * 7);
+            border-bottom: 1px solid var(--cl-divider-grey);
+
+            @media (--tablet) {
+                padding-bottom: calc(var(--gs) * 4);
+                margin-bottom: calc(var(--gs) * 3);
+            }
         }
     }
 
@@ -218,6 +224,10 @@
 
             @media (--tablet-lg) {
                 grid-row: 3;
+            }
+
+            &-pagination {
+                margin-bottom: 0;
             }
 
             &-btn {

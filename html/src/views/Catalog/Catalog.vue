@@ -129,7 +129,13 @@
                         >
                             Показать ещё
                         </show-more-button>
-                        <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
+
+                        <v-pagination
+                            class="containet--tablet catalog-view__main-controls-pagination"
+                            :value="activePage"
+                            :page-count="pagesCount"
+                            @input="onPageChanged"
+                        />
                     </div>
 
                     <div
@@ -179,6 +185,7 @@
                         </div>
 
                         <catalog-filter class="catalog-view__modal-filter-panel" />
+
                         <div class="catalog-view__modal-filter-controls">
                             <v-button
                                 class="btn--outline catalog-view__modal-filter-clear-btn"
@@ -455,13 +462,6 @@ export default {
 
         scrollTo(options) {
             if (!this.$isServer) window.scrollTo(options);
-        },
-
-        updateSticky() {
-            this.$refs.sticky._stickySidebar.updateSticky();
-            setTimeout(() => {
-                this.$refs.sticky._stickySidebar.updateSticky();
-            }, 500);
         },
 
         generateBreadcrumbUrl(categoryCode) {
