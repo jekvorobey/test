@@ -6,11 +6,12 @@
                     <search-filter
                         class="header-bottom__main-search"
                         input-id="upper-filter"
+                        v-show="!isTabletLg || (search && isTabletLg)"
                     />
-                    <header-logo-panel v-show="!search">
+                    <header-logo-panel v-show="!search && !isTabletLg">
                         {{ $t('header.middle.professionals') }}
                     </header-logo-panel>
-                    <header-user-panel class="header-bottom__main-user" v-show="!search" />
+                    <header-user-panel class="header-bottom__main-user" v-show="!search && !isTabletLg" />
                 </div>
             </div>
         </transition>
@@ -31,7 +32,6 @@
 
                 <template v-if="scroll || isTabletLg">
                     <search-filter
-                        :style="{ visibility: 'hidden' }"
                         class="header-bottom__bottom-search"
                         input-id="bottom-filter"
                     />

@@ -1,6 +1,6 @@
 <template>
     <div class="search-filter" :class="{ 'search-filter--active': search }">
-        <label class="search-filter__label" :for="inputId">
+        <label class="search-filter__label" :for="inputId" @click="onSearchOpen">
             <v-svg name="search-middle" width="24" height="24" />
         </label>
         <input
@@ -86,6 +86,10 @@ export default {
                 },
             });
         },
+
+        onSearchOpen() {
+            this.SET_SEARCH(true);
+        }
     },
 };
 </script>

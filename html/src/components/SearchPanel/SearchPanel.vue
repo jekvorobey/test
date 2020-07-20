@@ -36,7 +36,7 @@
                     </ul>
                 </div>
                 <v-button class="btn--outline search-panel__btn" v-if="products && products.length && this.searchString !== ''" @click="toSearchClick">
-                    Показать ещё {{ range }} товаров
+                    {{ getSearchBtnText }}
                 </v-button>
             </div>
         </div>
@@ -90,7 +90,14 @@ export default {
 
         range() {
             return this.suggestions.range;
-        }
+        },
+
+        getSearchBtnText() {
+            if (!this.isTabletLg) {
+                return `Показать ещё ${this.range} товаров`;
+            }
+            return `Найдено ${this.range} товаров`;
+        },
     },
 
     methods: {

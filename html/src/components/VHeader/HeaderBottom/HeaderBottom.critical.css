@@ -16,7 +16,7 @@
         padding: calc(var(--gs) * 2) 0;
 
         @media (--tablet-lg) {
-            display: none;
+            padding: 0;
         }
 
         &-search {
