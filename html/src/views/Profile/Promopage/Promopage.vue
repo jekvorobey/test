@@ -72,7 +72,7 @@
             </ul>
 
             <div class="promopage-view__attention" v-else>
-                <v-svg name="info-middle" class="promopage-view__attention-icon" width="24" height="24" />
+                <v-svg name="alert" class="promopage-view__attention-icon" width="24" height="24" />
                 <p class="promopage-view__attention-text">
                     Вы еще не добавляли товары на персональную промо-страницу.<br />
                     Добавьте ваши любимые продукты, чтобы рекомендовать их своей аудитории.

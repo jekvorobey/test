@@ -1,7 +1,7 @@
 <template>
     <div class="attention-panel">
         <div class="attention-panel__icon">
-            <v-svg name="alert-new" width="24" height="24" />
+            <v-svg name="alert" width="24" height="24" />
         </div>
         <slot />
     </div>
@@ -10,7 +10,7 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 
-import '@images/sprites/alert-new.svg';
+import '@images/sprites/alert.svg';
 import './AttentionPanel.css';
 
 export default {
