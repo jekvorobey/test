@@ -1,6 +1,4 @@
 .catalog-view {
-    overflow-x: hidden;
-
     &__header {
         display: flex;
         flex-direction: column;
@@ -33,6 +31,11 @@
                 letter-spacing: 0.02em;
             }
         }
+
+        &--grid {
+            padding-bottom: calc(var(--gs) * 7);
+            margin-bottom: calc(var(--gs) * 10);
+        }
     }
 
     &__breadcrumbs {
@@ -60,9 +63,6 @@
 
     &__grid {
         display: flex;
-        overflow: hidden;
-        padding-bottom: calc(var(--gs) * 7);
-        margin-bottom: calc(var(--gs) * 10);
 
         @media (--tablet) {
             padding: 0;
@@ -72,7 +72,6 @@
     &__side-panel {
         width: 248px;
         margin-right: calc(var(--gs) * 8);
-        height: 100%;
 
         @media (--tablet-lg) {
             display: none;
@@ -87,7 +86,7 @@
         }
 
         &-clear-btn {
-            margin-bottom: calc(var(--gs) * 4);
+            margin-top: calc(var(--gs) * 4);
             width: 100%;
         }
     }

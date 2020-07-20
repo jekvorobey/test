@@ -36,15 +36,16 @@
                 <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt />
             </catalog-banner-card> -->
         </div>
-        <section class="section">
+        <section class="section catalog-view__section--grid">
             <div class="container catalog-view__grid" data-v-sticky-container>
-                <div
+                <v-sidebar
                     class="catalog-view__side-panel"
                     v-if="!isTabletLg && categories.length > 0"
-                    v-sticky="stickyOptions"
-                    ref="sticky"
+                    container-selector=".catalog-view__grid"
+                    top="64"
+                    bottom="0"
                 >
-                    <div data-v-sticky-inner>
+                    <template v-slot:sticky>
                         <ul class="catalog-view__side-panel-categories">
                             <category-tree-item
                                 class="catalog-view__side-panel-categories-item"
@@ -54,7 +55,8 @@
                             />
                         </ul>
 
-                        <catalog-filter class="catalog-view__side-panel-filters" @updateSticky="updateSticky" />
+                        <catalog-filter class="catalog-view__side-panel-filters" />
+
                         <v-button
                             class="btn--outline catalog-view__side-panel-clear-btn"
                             :to="clearFilterUrl"
@@ -64,8 +66,9 @@
                         >
                             Очистить фильтры
                         </v-button>
-                    </div>
-                </div>
+                    </template>
+                </v-sidebar>
+
                 <div class="catalog-view__main">
                     <div class="catalog-view__main-header">
                         <div class="catalog-view__main-header-title">
@@ -117,7 +120,7 @@
                         :fullscreen="categories && categories.length === 0"
                     />
 
-                    <div class="catalog-view__main-controls" v-if="pagesCount > 1">
+                    <div class="container containet--tablet catalog-view__main-controls" v-if="pagesCount > 1">
                         <show-more-button
                             v-if="activePage < pagesCount"
                             btn-class="btn--outline catalog-view__main-controls-btn"
@@ -220,6 +223,7 @@ import VRange from '@controls/VRange/VRange.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
+import VSidebar from '@controls/VSidebar/VSidebar.vue';
 import Modal from '@controls/modal/modal.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
@@ -288,6 +292,7 @@ export default {
         VSelect,
         VPagination,
         VSticky,
+        VSidebar,
         VExpander,
         Modal,
 
@@ -316,12 +321,6 @@ export default {
             sortOptions,
             filterModal: false,
             showMore: false,
-            stickyOptions: {
-                topSpacing: 60,
-                bottomSpacing: 0,
-                containerSelector: '[data-v-sticky-container]',
-                innerWrapperSelector: '[data-v-sticky-inner]',
-            },
         };
     },
 
@@ -437,7 +436,6 @@ export default {
         code(value) {
             const category = this[ACTIVE_CATEGORY];
             if (category) $retailRocket.addCategoryView(category.id);
-            this.updateSticky();
         },
 
         sortValue(value, oldValue) {
@@ -527,6 +525,12 @@ export default {
                     encodeSearchString
                 );
 
+                if (!showMore && page !== fromPage)
+                    this.scrollTo({
+                        top: this.$refs.catalogHeader.offsetHeight,
+                        behavior: 'smooth',
+                    });
+
                 this.$progress.start();
                 await this[FETCH_CATALOG_DATA]({
                     type: toType,
@@ -547,11 +551,6 @@ export default {
                 this.$progress.finish();
                 next();
 
-                if (!showMore && page !== fromPage)
-                    this.scrollTo({
-                        top: this.$refs.catalogHeader.offsetHeight,
-                        behavior: 'smooth',
-                    });
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
             } catch (thrown) {
                 if (thrown && thrown.isCancel === true) return;

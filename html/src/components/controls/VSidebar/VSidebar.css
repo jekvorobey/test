@@ -1,0 +1,14 @@
+.v-sidebar {
+    will-change: min-height;
+
+    &__inner {
+        transform: translate(0, 0); /* For browsers don't support translate3d. */
+        transform: translate3d(0, 0, 0);
+        will-change: position, transform;
+
+        &.fill {
+            transform: translate3d(0, 0, 0) !important;
+            transition: all var(--time) ease-in;
+        }
+    }
+}

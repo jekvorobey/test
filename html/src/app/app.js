@@ -11,6 +11,7 @@ import mq from '@plugins/media';
 import '@plugins/meta';
 import '@plugins/scroll-lock';
 import '@plugins/observer';
+import '@plugins/sticky';
 
 import '@util';
 import '@util/catalog';

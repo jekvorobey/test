@@ -17,6 +17,7 @@ import 'reflect-metadata';
 import '@polyfills/insertAdjacentElement';
 import '@polyfills/classlist-polyfill';
 import '@polyfills/linq-es6';
+import '@polyfills/resizeSensor';
 import 'custom-event-polyfill';
 import 'intersection-observer';
 import 'focus-visible';
