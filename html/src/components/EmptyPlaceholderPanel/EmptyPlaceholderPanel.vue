@@ -1,6 +1,6 @@
 <template>
     <div class="empty-placeholder-panel">
-        <v-svg name="info-middle" class="empty-placeholder-panel__icon" width="24" height="24" />
+        <v-svg name="alert-new" class="empty-placeholder-panel__icon" width="24" height="24" />
         <div class="empty-placeholder-panel__content">
             <slot />
         </div>
@@ -14,7 +14,7 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VButton from '@controls/VButton/VButton.vue';
 
-import '@images/sprites/info-middle.svg';
+import '@images/sprites/alert-new.svg';
 import './EmptyPlaceholderPanel.css';
 
 export default {
