@@ -51,7 +51,8 @@ export default {
 
     async [FETCH_MASTERCLASS_FILTERS]({ commit }, {}) {
         try {
-            const { items } = await getMasterclassFilters();
+            const excludedFilters = ['place_name']; // фильтр 'Места' пока скрыт
+            const { items } = await getMasterclassFilters(excludedFilters);
             commit(SET_FILTERS, items);
         } catch (error) {
             storeErrorHandler(FETCH_MASTERCLASS_FILTERS)(error);
