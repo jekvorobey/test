@@ -904,10 +904,18 @@ export function getMasterclassFilters(excludedFilters) {
     });
 }
 
-export function getReviews(product_code, sort_field = 'created_at', sort_direction = 'desc', page = 1, per_page) {
+export function getReviews(
+    object_type,
+    object_code,
+    sort_field = 'created_at',
+    sort_direction = 'desc',
+    page = 1,
+    per_page
+) {
     return $http.get('/v1/reviews', {
         params: {
-            product_code,
+            object_type,
+            object_code,
             sort_field,
             sort_direction,
             page,
@@ -917,7 +925,7 @@ export function getReviews(product_code, sort_field = 'created_at', sort_directi
 }
 
 export function addReview(formData) {
-    return $http.post('/v1/reviews/', formData);
+    return $http.post('/v1/reviews', formData);
 }
 
 export function changeReviewVote(review_id, opinion) {

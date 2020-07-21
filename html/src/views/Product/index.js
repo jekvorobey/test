@@ -7,6 +7,7 @@ import registerModule from '@router/middleware/registerModule';
 
 const ProductAsync = () => import(/* webpackChunkName: "product-view" */ './Product.vue');
 const ProductModuleAsync = () => import(/* webpackChunkName: "product-view" */ '@store/modules/Product');
+const ReviewsModuleAsync = () => import(/* webpackChunkName: "product-view" */ '@store/modules/Reviews');
 
 /**
  * Модуль компонента Product
@@ -22,7 +23,7 @@ export default {
             component: ProductAsync,
 
             meta: {
-                middleware: [registerModule(ProductModuleAsync)],
+                middleware: [registerModule(ProductModuleAsync), registerModule(ReviewsModuleAsync)],
             },
         },
     ],

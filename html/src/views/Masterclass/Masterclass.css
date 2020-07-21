@@ -1,4 +1,6 @@
 .master-class-view {
+    padding-bottom: calc(var(--gs) * 10);
+
     &__header {
         display: flex;
         flex-direction: column;

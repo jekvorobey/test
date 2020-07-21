@@ -417,6 +417,12 @@
             </div>
         </section>
 
+        <section class="section product-view__section">
+            <div class="container">
+                <reviews-panel :code="masterClass.code" :type="productType" :can-add="masterClass.canWriteReview" />
+            </div>
+        </section>
+
         <transition name="slide-bottom" appear>
             <div class="master-class-view__price-panel" v-if="isPanelVisible && isTablet">
                 <div class="container">
@@ -439,6 +445,7 @@ import VHtml from '@controls/VHtml/VHtml.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
+import VRating from '@controls/VRating/VRating.vue';
 import VAccordion from '@controls/VAccordion/VAccordion.vue';
 
 import FrisbuyProductContainer from '@components/FrisbuyProductContainer/FrisbuyProductContainer.vue';
@@ -455,6 +462,8 @@ import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+
+import ReviewsPanel from '@components/reviews/ReviewsPanel/ReviewsPanel.vue';
 
 import { $store, $progress, $logger } from '@services';
 
@@ -484,7 +493,7 @@ import { getInstagramUserNameFromUrl } from '@util/socials';
 import { generateMasterclassUrl } from '@util/catalog';
 import { yaMapSettings, dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { breakpoints, fileExtension } from '@enums';
-import { productGroupTypes } from '@enums/product';
+import { productGroupTypes, cartItemTypes } from '@enums/product';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/facebook-bw.svg';
@@ -557,13 +566,16 @@ export default {
         BreadcrumbItem,
 
         Price,
+
+        InfoRow,
+        AttentionPanel,
+        ReviewsPanel,
+
         TicketCard,
         BannerCard,
         AuthorCard,
         InstagramCard,
         MasterClassBannerCard,
-        AttentionPanel,
-        InfoRow,
 
         FrisbuyProductContainer,
     },
@@ -751,6 +763,10 @@ export default {
                     return { ...i, desktopImg, defaultImg };
                 }),
             }));
+        },
+
+        productType() {
+            return cartItemTypes.MASTERCLASS;
         },
 
         rootTitle() {

@@ -44,11 +44,6 @@ export const SET_SELECTED_PICKUP_POINT_TYPE = 'SET_SELECTED_PICKUP_POINT_TYPE';
 
 export const FETCH_PRODUCT_BUNDLES = 'FETCH_PRODUCT_BUNDLES';
 
-export const FETCH_REVIEWS_DATA = 'FETCH_REVIEWS_DATA';
-export const ADD_REVIEW = 'ADD_REVIEW';
-export const SHOW_MORE_REVIEWS = 'SHOW_MORE_REVIEWS';
-export const CHANGE_REVIEW_VOTE = 'CHANGE_REVIEW_VOTE';
-
 export default {
     [SET_SELECTED_PICKUP_POINT_TYPE]({ commit }, payload) {
         commit(SET_SELECTED_PICKUP_POINT_TYPE, payload);
@@ -147,48 +142,6 @@ export default {
             commit(SET_PRODUCT_BUNDLES, bundles);
         } catch (error) {
             storeErrorHandler(FETCH_PRODUCT_BUNDLES)(error);
-        }
-    },
-
-    async [FETCH_REVIEWS_DATA](
-        { commit },
-        { productCode, sortField, sortDirection, page, perPage = DEFAULT_REVIEWS_PAGE_SIZE }
-    ) {
-        try {
-            const data = await getReviews(productCode, sortField, sortDirection, page, perPage);
-            commit(SET_REVIEWS_DATA, data);
-        } catch (error) {
-            storeErrorHandler(FETCH_REVIEWS_DATA)(error);
-        }
-    },
-
-    async [SHOW_MORE_REVIEWS](
-        { state, commit },
-        { productCode, sortField, sortDirection, perPage = DEFAULT_REVIEWS_PAGE_SIZE, page }
-    ) {
-        try {
-            const { reviews } = await getReviews(productCode, sortField, sortDirection, page, perPage);
-            commit(ADD_REVIEWS_DATA, reviews);
-            commit(SET_REVIEWS_PAGE, page);
-        } catch (error) {
-            storeErrorHandler(SHOW_MORE_REVIEWS, true)(error);
-        }
-    },
-
-    async [ADD_REVIEW]({ dispatch }, { productCode, formData }) {
-        try {
-            await addReview(formData);
-            dispatch(FETCH_REVIEWS_DATA, { productCode });
-        } catch (error) {
-            storeErrorHandler(ADD_REVIEW)(error);
-        }
-    },
-
-    async [CHANGE_REVIEW_VOTE]({ dispatch }, { id, opinion }) {
-        try {
-            await changeReviewVote(id, opinion);
-        } catch (error) {
-            storeErrorHandler(CHANGE_REVIEW_VOTE, true)(error);
         }
     },
 };

@@ -2,12 +2,14 @@
     <v-button :class="btnClass" v-if="!showPreloader" v-on="handlers">
         <slot />
     </v-button>
-    <img :src="preloaderIcon" class="preloader" :class="preloaderClass" width="30" height="30" v-else />
+    <div v-else :class="preloaderClass">
+        <v-spinner class="preloader" width="30" height="30" show />
+    </div>
 </template>
 
 <script>
 import VButton from '@controls/VButton/VButton.vue';
-import preloader from '@images/icons/preloader.svg';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 import './ShowMoreButton.css';
 
 export default {
@@ -15,6 +17,7 @@ export default {
 
     components: {
         VButton,
+        VSpinner,
     },
 
     props: {
@@ -22,10 +25,12 @@ export default {
             type: Boolean,
             default: false,
         },
+
         btnClass: {
             type: String,
             default: '',
         },
+
         preloaderClass: {
             type: String,
             default: '',
@@ -39,10 +44,6 @@ export default {
             keys.forEach(k => (handlers[k] = e => this.$emit(k, e)));
             handlers.click = this.onBtnClick;
             return handlers;
-        },
-
-        preloaderIcon() {
-            return preloader;
         },
     },
 

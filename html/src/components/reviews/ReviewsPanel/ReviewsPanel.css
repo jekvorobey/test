@@ -1,0 +1,173 @@
+.reviews-panel {
+    &--empty {
+        margin: calc(var(--gs) * 10) 0;
+    }
+
+    &__inner {
+        position: relative;
+        border-top: 1px solid var(--cl-divider-grey);
+        border-bottom: 1px solid var(--cl-divider-grey);
+        padding-top: calc(var(--gs) * 3);
+
+        @media (--tablet) {
+            border-top: none;
+            padding-top: 0;
+        }
+    }
+
+    &__link {
+        right: 0;
+        position: absolute;
+
+        @media (--tablet-lg) {
+            right: calc(var(--gs) * 3);
+        }
+
+        @media (--tablet) {
+            width: 100%;
+            bottom: 16px;
+            right: 0;
+            left: 0;
+        }
+    }
+
+    &__show-more {
+        display: flex;
+        padding: calc(var(--gs) * 7) 0;
+        border-top: 1px solid var(--cl-divider-grey);
+
+        &-btn {
+            margin: 0 auto;
+            width: 50%;
+
+            @media (--tablet-lg) {
+                width: 100%;
+            }
+        }
+    }
+
+    &__header {
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding-bottom: calc(var(--gs) * 3);
+        border-bottom: 1px solid var(--cl-divider-grey);
+        flex-wrap: wrap;
+
+        @media (--tablet) {
+            padding-bottom: calc(var(--gs) * 10);
+        }
+
+        &-hl {
+            display: flex;
+            align-items: center;
+            line-height: 40px;
+            width: 25%;
+            margin-bottom: 0;
+
+            @media (--tablet) {
+                margin-bottom: calc(var(--gs) * 2);
+                width: 100%;
+            }
+
+            &-count {
+                display: flex;
+                align-items: center;
+                font-size: 20px;
+                margin-left: calc(var(--gs) * 2);
+
+                .v-spinner {
+                    margin-left: var(--gs);
+                }
+            }
+        }
+
+        &-rating {
+            display: flex;
+            align-items: center;
+
+            @media (--tablet-lg) {
+                width: 75%;
+            }
+
+            @media (--tablet) {
+                width: 100%;
+            }
+
+            &-count {
+                margin-right: calc(var(--gs) * 3);
+
+                @media (--tablet) {
+                    margin-left: 0;
+                }
+            }
+        }
+
+        &-sort {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-right: calc(var(--gs) * 25);
+            margin-left: auto;
+
+            @media (--tablet-lg) {
+                padding-top: var(--gs);
+                margin-right: 0;
+            }
+
+            @media (--tablet) {
+                position: absolute;
+                right: 0;
+                padding-top: 0;
+                top: var(--gs);
+            }
+
+            &-select {
+                min-height: calc(var(--gs) * 3);
+
+                .multiselect__container {
+                    margin-top: var(--gs);
+
+                    @media (--tablet) {
+                        right: 0;
+                    }
+                }
+
+                .multiselect__tags {
+                    min-height: calc(var(--gs) * 3);
+                    border: none;
+                    padding: 0 calc(var(--gs) * 4) 0 0;
+                }
+
+                .multiselect__single {
+                    font-size: 16px;
+                    line-height: calc(var(--gs) * 3);
+                    border-bottom: 1px solid var(--cl-global);
+                    cursor: pointer;
+                }
+
+                .multiselect__select {
+                    height: calc(var(--gs) * 3);
+                    width: calc(var(--gs) * 3);
+                }
+            }
+
+            .icon {
+                margin-left: var(--gs);
+            }
+        }
+    }
+
+    &__list {
+        &-item {
+            padding: calc(var(--gs) * 4) 0;
+            padding-bottom: calc(var(--gs) * 3);
+            border-bottom: 1px solid var(--cl-divider-grey);
+            flex-wrap: wrap;
+
+            &:last-child {
+                border-bottom-color: transparent;
+            }
+        }
+    }
+}
