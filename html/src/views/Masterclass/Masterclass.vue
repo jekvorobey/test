@@ -419,7 +419,12 @@
 
         <section class="section product-view__section">
             <div class="container">
-                <reviews-panel :code="masterClass.code" :type="productType" :can-add="masterClass.canWriteReview" />
+                <reviews-panel
+                    :key="masterClass.code"
+                    :code="masterClass.code"
+                    :type="productType"
+                    :can-add="masterClass.canWriteReview"
+                />
             </div>
         </section>
 
