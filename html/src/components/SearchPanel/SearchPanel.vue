@@ -24,7 +24,7 @@
                                 :product-id="item.productId"
                                 :name="item.name"
                                 :type="item.type"
-                                href="/"
+                                :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
                                 :image="generateImageObject(item.image)"
                                 :price="item.price"
                                 :old-price="item.oldPrice"
@@ -33,6 +33,7 @@
                                 :show-buy-btn="item.stock.qty > 0"
                                 @add-item="onAddToCart(item)"
                                 @preview="onPreview(item.code)"
+                                @toggle-favorite-item="onToggleFavorite(item)"
                             />
                         </li>
                     </ul>
@@ -61,6 +62,9 @@ import { GET_POPULAR_PRODUCTS, GET_POPULAR_REQUESTS } from '@store/modules/Searc
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
+
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { productGroupTypes } from '@enums/product';
 import { modalName } from '@enums';
@@ -114,6 +118,11 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(SEARCH_MODULE, [GET_POPULAR_PRODUCTS, GET_POPULAR_REQUESTS]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
+
+        onToggleFavorite({ productId }) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
+        },
 
         generateImageObject(image) {
             if (image.id) {
