@@ -129,7 +129,7 @@ export default {
                     clearTimeout(this.timer);
                     this.timer = setTimeout(() => {
                         this.isHover = true;
-                    }, 1000);
+                    }, 600);
                 } else {
                     clearTimeout(this.timer);
                     this.timer = null;
