@@ -15,7 +15,7 @@
                     </template>
                 </ul>
 
-                <div v-if="!isTabletLg && products && products.length > 0" class="search-panel__products">
+                <div v-if="!isTablet && products && products.length > 0" class="search-panel__products">
                     <p class="text-bold search-panel__hl" v-if="searchString === ''">Популярные товары</p>
                     <ul class="search-panel__products-list" :class="{ 'has-preloader' : preloader}">
                         <li class="search-panel__products-card" v-for="item in products" :key="item.id">
@@ -88,6 +88,10 @@ export default {
 
         products() {
             return this.searchString && this[SUGGESTIONS].products ? this[SUGGESTIONS].products : this[POPULAR_PRODUCTS];
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
 
         isTabletLg() {
