@@ -8,6 +8,7 @@ export const SEARCH_STRING = 'searchString';
 export const POPULAR_PRODUCTS = 'popularProducts';
 export const SUGGESTIONS = 'suggestions';
 export const POPULAR_REQUESTS = 'popularRequests';
+export const PRELOADER = 'preloader';
 
 export default function createModule() {
     return {
@@ -22,6 +23,7 @@ export default function createModule() {
             },
             [POPULAR_PRODUCTS]: [],
             [POPULAR_REQUESTS]: [],
+            [PRELOADER]: false,
         },
         actions,
         mutations,
