@@ -1,19 +1,20 @@
 <template>
-    <div class="add-review">
-        <h2 class="add-review__title">
+    <div class="create-review-panel">
+        <h2 class="create-review-panel__title">
             Отзывы
         </h2>
-        <form class="add-review__form" enctype="multipart/form-data" @submit.prevent="onSubmit">
-            <input type="hidden" :value="productCode" name="product_code" />
+        <form class="create-review-panel__form" enctype="multipart/form-data" @submit.prevent="onSubmit">
+            <input type="hidden" :value="code" name="object_code" />
+            <input type="hidden" :value="type" name="object_type" />
 
-            <div class="add-review__form-review">
-                <div class="add-review__form-rating">
-                    <span class="add-review__form-rating-text">
+            <div class="create-review-panel__form-review">
+                <div class="create-review-panel__form-rating">
+                    <span class="create-review-panel__form-rating-text">
                         Ваша оценка
                     </span>
 
                     <v-rating
-                        class="add-review__form-rating-input"
+                        class="create-review-panel__form-rating-input"
                         :value="rating"
                         @input="onRatingUpdate"
                         name="rating"
@@ -27,51 +28,51 @@
                     </v-rating>
                 </div>
 
-                <div class="add-review__form-description">
+                <div class="create-review-panel__form-description">
                     Дополните свой отзыв — так вы поможете другим покупателям определиться с выбором
                 </div>
             </div>
 
-            <div class="add-review__form-content">
-                <div class="add-review__form-cell">
-                    <v-input class="add-review__form-input" tag="textarea" v-model="pros" name="pros">
+            <div class="create-review-panel__form-content">
+                <div class="create-review-panel__form-cell">
+                    <v-input class="create-review-panel__form-input" tag="textarea" v-model="pros" name="pros">
                         Достоинства
                     </v-input>
                 </div>
 
-                <div class="add-review__form-cell">
-                    <v-input class="add-review__form-input" tag="textarea" v-model="body" name="body">
+                <div class="create-review-panel__form-cell">
+                    <v-input class="create-review-panel__form-input" tag="textarea" v-model="body" name="body">
                         Комментарий
                     </v-input>
                 </div>
 
-                <div class="add-review__form-cell">
-                    <v-input class="add-review__form-input" tag="textarea" v-model="cons" name="cons">
+                <div class="create-review-panel__form-cell">
+                    <v-input class="create-review-panel__form-input" tag="textarea" v-model="cons" name="cons">
                         Недостатки
                     </v-input>
                 </div>
 
-                <div class="add-review__form-cell">
-                    <h3 class="add-review__form-title">
+                <div class="create-review-panel__form-cell">
+                    <h3 class="create-review-panel__form-title">
                         Фото и видео товара
                     </h3>
 
-                    <span class="add-review__form-subtitle">
+                    <span class="create-review-panel__form-subtitle">
                         Не более 10 файлов, jpeg, png, mp4, mov
                     </span>
 
                     <v-file
-                        class="add-review__form-files"
+                        class="create-review-panel__form-files"
                         @change="onFilesChanged"
                         :accepted-types="fileAcceptedTypes"
                         :max-file-size="5242880"
                     >
-                        <span class="add-review__form-files-desc">
+                        <span class="create-review-panel__form-files-desc">
                             Выберите фото
                         </span>
                     </v-file>
                 </div>
-                <v-button class="add-review__form-submit" type="submit" :disabled="isDisabled">
+                <v-button class="create-review-panel__form-submit" type="submit" :disabled="isDisabled">
                     Отправить отзыв
                 </v-button>
             </div>
@@ -89,10 +90,10 @@ import { mimeType } from '@enums';
 
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
-import './AddReview.css';
+import './CreateReviewPanel.css';
 
 export default {
-    name: 'add-review',
+    name: 'create-review-panel',
 
     components: {
         VInput,
@@ -102,7 +103,12 @@ export default {
     },
 
     props: {
-        productCode: {
+        code: {
+            type: String,
+            required: true,
+        },
+
+        type: {
             type: String,
             required: true,
         },
@@ -132,7 +138,7 @@ export default {
         onSubmit(e) {
             const formData = new FormData(e.target);
             for (const file of this.files) formData.append('files[]', file, file.name);
-            this.$emit('add-review', formData);
+            this.$emit('create-review', formData);
         },
 
         onRatingUpdate(value) {

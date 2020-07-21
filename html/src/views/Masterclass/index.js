@@ -7,6 +7,7 @@ import registerModule from '@router/middleware/registerModule';
 
 const MasterclassAsync = () => import(/* webpackChunkName: "masterclass-view" */ './Masterclass.vue');
 const MasterclassModuleAsync = () => import(/* webpackChunkName: "masterclasses-view" */ '@store/modules/Masterclass');
+const ReviewsModuleAsync = () => import(/* webpackChunkName: "product-view" */ '@store/modules/Reviews');
 
 /**
  * Модуль компонента Masterclass
@@ -22,7 +23,7 @@ export default {
             component: MasterclassAsync,
 
             meta: {
-                middleware: [registerModule(MasterclassModuleAsync)],
+                middleware: [registerModule(MasterclassModuleAsync), registerModule(ReviewsModuleAsync)],
             },
         },
     ],

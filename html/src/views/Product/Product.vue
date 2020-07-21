@@ -473,81 +473,15 @@
         </section> -->
 
         <!-- #58437 -->
-        <section class="section product-view__section">
-            <div class="container product-view__reviews">
-                <div class="product-view__reviews-inner" v-if="!isAddingReview">
-                    <div class="product-view__reviews-header">
-                        <h2 class="product-view__section-hl product-view__reviews-header-hl">
-                            {{ $t('product.title.reviews') }}
-                            <span class="text-grey product-view__reviews-header-hl-count">
-                                {{ reviewsData ? reviewsData.reviewsCount : 0 }}
-                            </span>
-                            <buy-button
-                                class="btn--outline product-view__section-link product-view__reviews-link"
-                                @click="onCreateReview"
-                            >
-                                {{ $t('product.reviews.makeReview') }}
-                            </buy-button>
-                        </h2>
-                        <template v-if="reviewsData && reviews.length > 0">
-                            <div class="product-view__reviews-header-rating">
-                                <span class="product-view__reviews-header-rating-count">
-                                    {{ $t('product.reviews.averageRating') }}&nbsp;
-                                    <span class="text-bold">{{
-                                        reviewsData.rating && reviewsData.rating.toLocaleString()
-                                    }}</span>
-                                </span>
-                                <v-rating :value="reviewsData.rating" readonly>
-                                    <template v-slot:activeLabel>
-                                        <v-svg name="star-small" width="16" height="16" />
-                                    </template>
-                                    <template v-slot:inactiveLabel>
-                                        <v-svg name="star-empty-small" width="16" height="16" />
-                                    </template>
-                                </v-rating>
-                            </div>
-                            <div class="product-view__reviews-header-sort">
-                                <v-select
-                                    class="product-view__reviews-header-sort-select"
-                                    label="title"
-                                    track-by="id"
-                                    :searchable="false"
-                                    :allow-empty="false"
-                                    :show-labels="false"
-                                    v-model="selectedSortDirection"
-                                    :options="reviewsSortDirections"
-                                >
-                                    <template v-slot:singleLabel="{ option }">
-                                        <template v-if="isTablet">{{ option.tabletTitle }}</template>
-                                        <template v-else>{{ option.title }}</template>
-                                    </template>
-                                </v-select>
-                            </div>
-                        </template>
-                    </div>
-
-                    <template v-if="reviewsData && reviews.length > 0">
-                        <ul class="product-view__reviews-list">
-                            <product-review-card
-                                class="product-view__reviews-list-item"
-                                tag="li"
-                                v-for="item in reviews"
-                                :key="item.id"
-                                v-bind="item"
-                            />
-                        </ul>
-                        <div class="product-view__reviews-show-more" v-if="isReviewsPagesLeft">
-                            <v-button
-                                class="btn--outline product-view__reviews-show-more-btn"
-                                @click="onShowMoreReviews"
-                                :disabled="isLoadingMoreReviews"
-                            >
-                                {{ $t('product.reviews.showAll') }}
-                            </v-button>
-                        </div>
-                    </template>
-                </div>
-                <add-review v-else :product-code="product.code" @add-review="onAddReview" />
+        <section class="section product-view__section product-view__reviews">
+            <div class="container">
+                <reviews-panel
+                    class="product-view__reviews-panel"
+                    :key="product.code"
+                    :code="product.code"
+                    :type="productType"
+                    :can-add="product.canWriteReview"
+                />
             </div>
         </section>
 
@@ -616,7 +550,15 @@
             <div class="container product-view__history-container">
                 <h2 class="product-view__section-hl">{{ $t('product.title.history') }}</h2>
                 <div class="product-view__history-grid">
-                    <recently-viewed-product-card v-for="item in featuredProducts.items.slice(0, 6)" :key="item.id" :offer-id="item.id" :product-id="item.productId" :name="item.name" :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`" :image="item.image" />
+                    <recently-viewed-product-card
+                        v-for="item in featuredProducts.items.slice(0, 6)"
+                        :key="item.id"
+                        :offer-id="item.id"
+                        :product-id="item.productId"
+                        :name="item.name"
+                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                        :image="item.image"
+                    />
                 </div>
             </div>
         </section>
@@ -682,8 +624,6 @@ import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
-import BuyButton from '@components/BuyButton/BuyButton.vue';
-
 import FrisbuyProductContainer from '@components/FrisbuyProductContainer/FrisbuyProductContainer.vue';
 
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
@@ -692,7 +632,6 @@ import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.v
 import ProductTipCard from '@components/product/ProductTipCard/ProductTipCard.vue';
 import ProductFileCard from '@components/product/ProductFileCard/ProductFileCard.vue';
 import ProductCartPanel from '@components/product/ProductCartPanel/ProductCartPanel.vue';
-import ProductReviewCard from '@components/product/ProductReviewCard/ProductReviewCard.vue';
 import ProductPricePanel from '@components/product/ProductPricePanel/ProductPricePanel.vue';
 import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDetailPanel.vue';
 import ProductDeliveryPanel from '@components/product/ProductDeliveryPanel/ProductDeliveryPanel.vue';
@@ -701,14 +640,13 @@ import ProductOptionTag from '@components/product/ProductOptionTag/ProductOption
 import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag.vue';
 import ProductBundlePanel from '@components/product/ProductBundlePanel/ProductBundlePanel.vue';
 
-import AddReview from '@components/AddReview/AddReview.vue';
-
 import ProductPickupPointsMap from '@components/product/ProductPickupPointsMap/ProductPickupPointsMap.vue';
 import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPanel/ProductPickupPointsPanel.vue';
 
 import RecentlyViewedProductCard from '@components/RecentlyViewedProductCard/RecentlyViewedProductCard.vue';
-
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
+
+import ReviewsPanel from '@components/reviews/ReviewsPanel/ReviewsPanel.vue';
 
 import MapModal, { NAME as MAP_MODAL_NAME } from '@components/MapModal/MapModal.vue';
 
@@ -728,21 +666,9 @@ import {
     INSTAGRAM_ITEMS,
     PRODUCT_OPTIONS,
     PRODUCT_BUNDLES,
-    REVIEWS_DATA,
 } from '@store/modules/Product';
-import {
-    COMBINATIONS,
-    CHARACTERISTICS,
-    GET_NEXT_COMBINATION,
-    REVIEWS_PAGES_COUNT,
-} from '@store/modules/Product/getters';
-import {
-    FETCH_PRODUCT_DATA,
-    FETCH_PRODUCT_PICKUP_POINTS,
-    FETCH_REVIEWS_DATA,
-    ADD_REVIEW,
-    SHOW_MORE_REVIEWS,
-} from '@store/modules/Product/actions';
+import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Product/getters';
+import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS } from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { IS_IN_CART } from '@store/modules/Cart/getters';
@@ -781,7 +707,6 @@ import '@images/sprites/logo.svg';
 import '@images/sprites/home.svg';
 
 import './Product.css';
-import { FETCH_REFERRER_DATA } from '../../store/modules/Referrer/actions';
 
 const productGalleryOptions = {
     spaceBetween: 8,
@@ -894,7 +819,6 @@ export default {
 
         ProductTipCard,
         ProductFileCard,
-        ProductReviewCard,
 
         ProductCartPanel,
         ProductPricePanel,
@@ -914,36 +838,15 @@ export default {
         GalleryModal,
 
         FrisbuyProductContainer,
-        AddReview,
-        BuyButton,
+        ReviewsPanel,
 
         RecentlyViewedProductCard,
     },
 
     data() {
-        const reviewsSortDirections = [
-            {
-                id: 1,
-                title: 'Cначала новые',
-                tabletTitle: 'Новые',
-                value: sortDirections.DESC,
-            },
-            {
-                id: 2,
-                title: 'Cначала старые',
-                tabletTitle: 'Cтарые',
-                value: sortDirections.ASC,
-            },
-        ];
-
         return {
             isPriceVisible: true,
             btnLink: 'https://www.instagram.com/bessovestnotalantlivy/',
-            isAddingReview: false,
-            isLoadingMoreReviews: false,
-
-            selectedSortDirection: reviewsSortDirections[0],
-            reviewsSortDirections,
         };
     },
 
@@ -953,7 +856,7 @@ export default {
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
 
-        ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION, REVIEWS_PAGES_COUNT]),
+        ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION]),
         ...mapState(PRODUCT_MODULE, [
             PRODUCT,
             PRODUCT_OPTIONS,
@@ -962,7 +865,6 @@ export default {
             FEATURED_PRODUCTS,
             INSTAGRAM_ITEMS,
             PRODUCT_BUNDLES,
-            REVIEWS_DATA,
         ]),
 
         ...mapState(MODAL_MODULE, {
@@ -1105,17 +1007,12 @@ export default {
             return this.$mq.tablet;
         },
 
-        reviews() {
-            const { reviews } = this[REVIEWS_DATA] || {};
-            return reviews || [];
+        productType() {
+            return cartItemTypes.PRODUCT;
         },
 
         canWriteReview() {
-            return this.product.canWriteReview;
-        },
-
-        isReviewsPagesLeft() {
-            return this.reviewsData.activePage < this[REVIEWS_PAGES_COUNT] && this[REVIEWS_PAGES_COUNT] !== 1;
+            return this[PRODUCT] && this[PRODUCT].canWriteReview;
         },
     },
 
@@ -1132,22 +1029,11 @@ export default {
         modal(value) {
             this.handleModalQuery(value);
         },
-
-        selectedSortDirection(newValue) {
-            const { product } = this;
-            this[FETCH_REVIEWS_DATA]({ productCode: product.code, sortDirection: newValue.value });
-        },
     },
 
     methods: {
         ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE]),
-        ...mapActions(PRODUCT_MODULE, [
-            FETCH_PRODUCT_DATA,
-            FETCH_PRODUCT_PICKUP_POINTS,
-            ADD_REVIEW,
-            FETCH_REVIEWS_DATA,
-            SHOW_MORE_REVIEWS,
-        ]),
+        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
@@ -1162,7 +1048,6 @@ export default {
             try {
                 this.$progress.start();
                 await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
-                await this[FETCH_REVIEWS_DATA]({ productCode: code });
                 this.$progress.finish();
                 next();
             } catch (error) {
@@ -1290,37 +1175,6 @@ export default {
         onPriceVisibilityChanged(isVisible) {
             this.isPriceVisible = isVisible;
         },
-
-        onCreateReview() {
-            if (this.canWriteReview) this.isAddingReview = true;
-            else
-                this[CHANGE_MODAL_STATE]({
-                    name: modalName.general.NOTIFICATION,
-                    open: true,
-                    state: {
-                        message:
-                            'К сожалению, Вы не можете оставить отзыв на данный товар. Допускается оставлять отзывы только на купленные товары.',
-                    },
-                });
-        },
-
-        async onAddReview(formData) {
-            this[ADD_REVIEW]({ productCode: this.product && this.product.code, formData });
-            this.isAddingReview = false;
-        },
-
-        async onShowMoreReviews() {
-            try {
-                const { activePage } = this[REVIEWS_DATA];
-                const { code } = this.product;
-
-                this.isLoadingMoreReviews = true;
-                await this[SHOW_MORE_REVIEWS]({ productCode: code, page: activePage + 1 });
-                this.isLoadingMoreReviews = false;
-            } catch (error) {
-                this.isLoadingMoreReviews = false;
-            }
-        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -1390,12 +1244,6 @@ export default {
         const product = this[PRODUCT] || {};
         $retailRocket.addProductView([product.id]);
         this.debounce_fetchProduct = _debounce(this.fetchProduct, 500);
-    },
-
-    mounted() {
-        const { code } = this.product;
-
-        this[FETCH_REVIEWS_DATA]({ productCode: code });
     },
 };
 </script>

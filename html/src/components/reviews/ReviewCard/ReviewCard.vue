@@ -1,10 +1,10 @@
 <template>
-    <component :is="tag" class="product-review-card">
-        <div class="product-review-card__header">
-            <h4 class="product-review-card__header-name">
-                {{ name }} <span class="text-grey text-sm product-review-card__header-date">{{ computedDate }}</span>
+    <component :is="tag" class="review-card">
+        <div class="review-card__header">
+            <h4 class="review-card__header-name">
+                {{ name }} <span class="text-grey text-sm review-card__header-date">{{ computedDate }}</span>
             </h4>
-            <v-rating class="product-review-card__header-rating" :value="rating" readonly>
+            <v-rating class="review-card__header-rating" :value="rating" readonly>
                 <template v-slot:activeLabel>
                     <v-svg name="star-small" width="16" height="16" />
                 </template>
@@ -13,27 +13,27 @@
                 </template>
             </v-rating>
             <!-- #62705 -->
-            <!-- <div class="product-review-card__header-options">
+            <!-- <div class="review-card__header-options">
                 {{ options && `${options[0].title}: ${options[0].value}` }}
             </div> -->
         </div>
-        <div class="product-review-card__body">
-            <div class="product-review-card__body-item">
-                <div class="text-bold product-review-card__body-item-title">Достоинства</div>
-                <div class="product-review-card__body-item-value">{{ advantage }}</div>
+        <div class="review-card__body">
+            <div class="review-card__body-item">
+                <div class="text-bold review-card__body-item-title">Достоинства</div>
+                <div class="review-card__body-item-value">{{ advantage }}</div>
             </div>
-            <div class="product-review-card__body-item">
-                <div class="text-bold product-review-card__body-item-title">Недостатки</div>
-                <div class="product-review-card__body-item-value">{{ disadvantage }}</div>
+            <div class="review-card__body-item">
+                <div class="text-bold review-card__body-item-title">Недостатки</div>
+                <div class="review-card__body-item-value">{{ disadvantage }}</div>
             </div>
-            <div class="product-review-card__body-item">
-                <div class="text-bold product-review-card__body-item-title">Комментарий</div>
-                <div class="product-review-card__body-item-value">{{ comment }}</div>
+            <div class="review-card__body-item">
+                <div class="text-bold review-card__body-item-title">Комментарий</div>
+                <div class="review-card__body-item-value">{{ comment }}</div>
             </div>
-            <div v-if="images && images.length > 0" class="product-review-card__body-item">
-                <div class="text-bold product-review-card__body-item-title">Фото</div>
-                <div class="product-review-card__body-item-value product-review-card__body-item-value--media">
-                    <div class="product-review-card__body-item-img" v-for="item in reviewImages" :key="item.id">
+            <div v-if="images && images.length > 0" class="review-card__body-item">
+                <div class="text-bold review-card__body-item-title">Фото</div>
+                <div class="review-card__body-item-value review-card__body-item-value--media">
+                    <div class="review-card__body-item-img" v-for="item in reviewImages" :key="item.id">
                         <v-picture>
                             <img class="blur-up lazyload v-picture__img" :data-src="item.defaultImg" />
                         </v-picture>
@@ -41,23 +41,23 @@
                 </div>
             </div>
         </div>
-        <div class="product-review-card__controls">
+        <div class="review-card__controls">
             <session-check-button
                 component="button"
-                class="btn--transparent product-review-card__controls-btn"
-                :class="{ 'product-review-card__controls-btn--like': vote === reviewOpinion.LIKE }"
+                class="btn--transparent review-card__controls-btn"
+                :class="{ 'review-card__controls-btn--like': vote === reviewOpinion.LIKE }"
                 @click="onChangeVote(reviewOpinion.LIKE)"
             >
-                <v-svg id="product-review-card-like" name="like" width="22" height="21" />
+                <v-svg id="review-card-like" name="like" width="22" height="21" />
                 &nbsp;{{ computedLikes }}
             </session-check-button>
             <session-check-button
                 component="button"
-                class="btn--transparent product-review-card__controls-btn"
-                :class="{ 'product-review-card__controls-btn--dislike': vote === reviewOpinion.DISLIKE }"
+                class="btn--transparent review-card__controls-btn"
+                :class="{ 'review-card__controls-btn--dislike': vote === reviewOpinion.DISLIKE }"
                 @click="onChangeVote(reviewOpinion.DISLIKE)"
             >
-                <v-svg id="product-review-card-dislike" name="dislike" width="22" height="21" />
+                <v-svg id="review-card-dislike" name="dislike" width="22" height="21" />
                 &nbsp;{{ computedDislikes }}
             </session-check-button>
         </div>
@@ -73,8 +73,8 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import SessionCheckButton from '@components/SessionCheckButton/SessionCheckButton.vue';
 
 import { mapActions } from 'vuex';
-import { NAME as PRODUCT_MODULE } from '@store/modules/Product';
-import { CHANGE_REVIEW_VOTE } from '@store/modules/Product/actions';
+import { NAME as REVIEWS_MODULE } from '@store/modules/Reviews';
+import { CHANGE_REVIEW_VOTE } from '@store/modules/Reviews/actions';
 
 import { reviewOpinion } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
@@ -84,10 +84,10 @@ import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/like.svg';
 import '@images/sprites/dislike.svg';
-import './ProductReviewCard.css';
+import './ReviewCard.css';
 
 export default {
-    name: 'product-review-card',
+    name: 'review-card',
 
     components: {
         VSvg,
@@ -201,7 +201,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(PRODUCT_MODULE, [CHANGE_REVIEW_VOTE]),
+        ...mapActions(REVIEWS_MODULE, [CHANGE_REVIEW_VOTE]),
 
         async onChangeVote(opinion) {
             if (this.vote || this.disableVote) return;
