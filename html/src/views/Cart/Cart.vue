@@ -63,56 +63,64 @@
                                     </span>
                                 </p>
                             </div>
-                            <div v-if="!promocode" class="cart-view__main-panel-promo">
-                                <v-input
-                                    class="cart-view__main-panel-promo-input"
-                                    placeholder="Ваш промокод"
-                                    v-model="inputPromocode"
-                                />
 
-                                <v-button
-                                    class="btn--outline cart-view__main-panel-promo-btn"
-                                    @click="ADD_PROMOCODE(inputPromocode)"
-                                    :disabled="!inputPromocode"
-                                >
-                                    Применить
-                                </v-button>
-                            </div>
-                            <div v-else class="cart-view__main-panel-promo cart-view__main-panel-promo--success">
-                                <div class="cart-view__main-panel-promo-icon">
-                                    <v-svg name="check-small" width="16" height="16" />
-                                </div>
+                            <template v-if="IS_PRODUCT(activeTabItem.type)">
+                                <div v-if="!promocode" class="cart-view__main-panel-promo">
+                                    <v-input
+                                        class="cart-view__main-panel-promo-input"
+                                        placeholder="Ваш промокод"
+                                        v-model="inputPromocode"
+                                    />
 
-                                <div>
-                                    Промокод&nbsp;{{ promocode }}&nbsp;применён
-                                    <v-link
-                                        tag="button"
-                                        class="cart-view__main-panel-promo-link"
-                                        @click="DELETE_PROMOCODE(promocode)"
+                                    <v-button
+                                        class="btn--outline cart-view__main-panel-promo-btn"
+                                        @click="ADD_PROMOCODE(inputPromocode)"
+                                        :disabled="!inputPromocode"
                                     >
-                                        Отменить
-                                    </v-link>
+                                        Применить
+                                    </v-button>
                                 </div>
-                            </div>
+
+                                <div v-else class="cart-view__main-panel-promo cart-view__main-panel-promo--success">
+                                    <div class="cart-view__main-panel-promo-icon">
+                                        <v-svg name="check-small" width="16" height="16" />
+                                    </div>
+
+                                    <div>
+                                        Промокод&nbsp;{{ promocode }}&nbsp;применён
+                                        <v-link
+                                            tag="button"
+                                            class="cart-view__main-panel-promo-link"
+                                            @click="DELETE_PROMOCODE(promocode)"
+                                        >
+                                            Отменить
+                                        </v-link>
+                                    </div>
+                                </div>
+                            </template>
 
                             <v-button class="cart-view__main-panel-submit" v-if="!isLoad" @click="loadCheckout">
                                 Оформить заказ
                             </v-button>
-
                             <div class="cart-view__main-panel-preloader" v-else>
-                                <img key="preloader" :src="preloader" width="30" height="30" />
+                                <v-spinner height="30" width="30" show />
                             </div>
                         </div>
                     </template>
                 </v-sticky>
             </div>
+
             <div class="container cart-view__main-container" v-else>
                 <div class="cart-view__empty-cart">
                     <v-svg name="cart" width="20" height="24" />
+
                     <span class="cart-view__empty-cart-message">
                         Вы ещё ничего не добавили в вашу корзину, перейдите в каталог для покупок
                     </span>
-                    <a class="cart-view__empty-cart-btn btn btn--outline" href="/catalog">Перейти к покупкам</a>
+
+                    <v-button class="btn--outline cart-view__empty-cart-btn" to="/catalog">
+                        Перейти к покупкам
+                    </v-button>
                 </div>
             </div>
         </section>
@@ -155,6 +163,7 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VInput from '@controls/VInput/VInput.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
 import VSlider from '@controls/VSlider/VSlider.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
@@ -205,7 +214,6 @@ import { preparePrice } from '@util';
 import { generateProductUrl } from '@util/catalog';
 import { registerModuleIfNotExists } from '@util/store';
 
-import preloader from '@images/icons/preloader.svg';
 import '@images/sprites/cart.svg';
 import './Cart.css';
 
@@ -252,6 +260,7 @@ export default {
         VTabs,
         VSticky,
         VSlider,
+        VSpinner,
         VCartHeader,
 
         Price,
@@ -267,7 +276,6 @@ export default {
         return {
             activeTab: 0,
             inputPromocode: null,
-            preloader,
             isLoad: false,
         };
     },

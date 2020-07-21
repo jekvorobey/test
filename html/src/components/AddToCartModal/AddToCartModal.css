@@ -155,14 +155,6 @@
             flex-wrap: wrap;
             margin: 0 calc(var(--gs) * -3 / 2);
 
-            @media (--desktop) {
-                margin: 0 calc(var(--gs) * -3 / 3);
-            }
-
-            @media (--tablet-lg) {
-                margin: 0 calc(var(--gs) * -3 / 2);
-            }
-
             @media (--tablet) {
                 margin: 0 calc(var(--gs) * -1.5 / 2);
             }
@@ -174,11 +166,6 @@
             margin: 0 calc(var(--gs) * 3 / 2);
 
             @media (--desktop) {
-                width: calc(calc(100% / 4) - calc(var(--gs) * 3));
-                margin: 0 calc(var(--gs) * 3 / 3);
-            }
-
-            @media (--tablet-lg) {
                 width: calc(calc(100% / 3) - calc(var(--gs) * 3));
                 margin: 0 calc(var(--gs) * 3 / 2);
             }

@@ -20,14 +20,8 @@ export const CART_STATUS = 'cartStatus';
 
 const itemTypes = Object.values(cartItemTypes);
 
-function isValidType(type) {
-    const isValid = itemTypes.some((t) => t === type);
-    if (!isValid) $logger.warn(`Unknown cart item type ${type}`);
-    return isValid;
-}
-
 export default {
-    [PROMO_CODE]: (state) => state.cartData.product.input.promoCode,
+    [PROMO_CODE]: (state) => state.cartData.product && state.cartData.product.input.promoCode,
 
     [DELIVERY_INFO]: (state) => state.cartData.deliveryInfo,
 
@@ -66,9 +60,9 @@ export default {
         return data && data.items.some((i) => i.p.id === id);
     },
 
-    [IS_PRODUCT]: () => (item = {}) => isValidType(item.type) && item.type === cartItemTypes.PRODUCT,
+    [IS_PRODUCT]: () => (item = {}) => item.type === cartItemTypes.PRODUCT,
 
-    [IS_MASTER_CLASS]: () => (item = {}) => isValidType(item.type) && item.type === cartItemTypes.MASTERCLASS,
+    [IS_MASTER_CLASS]: () => (item = {}) => item.type === cartItemTypes.MASTERCLASS,
 
     [PROMOCODE_STATUS]: (state) => state[CART_STATUS][PROMOCODE_STATUS] || requestStatus.SUCCESS,
 };

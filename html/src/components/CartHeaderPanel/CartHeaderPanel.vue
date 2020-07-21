@@ -11,10 +11,10 @@
             <ul class="cart-header-panel__list" v-if="cartTypes[0]">
                 <cart-panel-product-card
                     class="cart-header-panel__list-item"
-                    v-for="{ p: product } in cartTypes[0].items"
+                    v-for="{ p: product, type } in cartTypes[0].items"
                     :key="product.id"
                     :product-id="product.id"
-                    :type="product.type"
+                    :type="type"
                     :name="product.name"
                     :image="product.image"
                     :price="product.price"
