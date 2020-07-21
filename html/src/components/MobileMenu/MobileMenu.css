@@ -30,11 +30,6 @@
     &__menu {
         padding-top: var(--gs);
 
-        &-icon {
-            display: block;
-            height: 100%;
-        }
-
         &-link {
             font-weight: bold;
             font-size: 14px;
@@ -104,6 +99,11 @@
             padding-top: calc(var(--gs) * 3);
             padding-bottom: calc(var(--gs) * 4);
             text-align: center;
+            
+            &-icon {
+                display: block;
+                height: 100%;
+            }
 
             &-phone {
                 display: block;
