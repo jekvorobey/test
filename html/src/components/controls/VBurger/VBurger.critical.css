@@ -62,4 +62,16 @@
             transform: translate(-50%, -50%) rotate(-45deg);
         }
     }
+
+    &__btn-text {
+        display: none;
+
+        @media (--tablet-lg-diff) {
+            display: inline-block;
+            margin-left: calc(var(--gs) * 4);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: bold;
+        }
+    }
 }

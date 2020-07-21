@@ -1,7 +1,7 @@
 <template>
     <div class="header-user-panel">
         <div class="header-user-panel__item header-user-panel__account">
-            <profile-navigation-panel v-if="!isTabletLg">
+            <profile-navigation-panel v-if="!isTablet">
                 <button @click.prevent="onRegister">
                     <v-svg name="account-middle" width="24" height="24" />
                 </button>
@@ -80,7 +80,7 @@ export default {
         }),
 
         favoriteItemsIcon() {
-            return this.hasFavoriteItems ? 'wishlist-full' : 'wishlist-middle';
+            return this.hasFavoriteItems && !this.isTabletLg ? 'wishlist-full' : 'wishlist-middle';
         },
 
         hasFavoriteItems() {
