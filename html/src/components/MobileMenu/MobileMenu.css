@@ -30,6 +30,11 @@
     &__menu {
         padding-top: var(--gs);
 
+        &-icon {
+            display: block;
+            height: 100%;
+        }
+
         &-link {
             font-weight: bold;
             font-size: 14px;
