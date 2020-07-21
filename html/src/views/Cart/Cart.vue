@@ -64,7 +64,7 @@
                                 </p>
                             </div>
 
-                            <template v-if="IS_PRODUCT(activeTabItem.type)">
+                            <template v-if="isProduct">
                                 <div v-if="!promocode" class="cart-view__main-panel-promo">
                                     <v-input
                                         class="cart-view__main-panel-promo-input"
@@ -291,6 +291,11 @@ export default {
             isModalOpen: state =>
                 state[MODALS][modalName.cart.CLEAR_CART] && state[MODALS][modalName.cart.CLEAR_CART].open,
         }),
+
+        isProduct() {
+            const { activeTabItem } = this;
+            return this[IS_PRODUCT](activeTabItem);
+        },
 
         isTabletLg() {
             return this.$mq.tabletLg;
