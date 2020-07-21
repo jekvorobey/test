@@ -3,8 +3,9 @@
         <v-burger
             class="header-navigation-panel__burger"
             :is-open="isMenuOpen"
+            btn-text="Меню"
             @isOpenChanged="SET_MENU_OPEN($event)"
-        />
+        ></v-burger>
         <v-link
             v-for="item in headerMenu.items"
             :key="item.name"
@@ -52,6 +53,10 @@ export default {
         isTabletLg() {
             return this.$mq.isTabletLg;
         },
+
+        isTablet() {
+            return this.$mq.isTablet;
+        }
     },
 
     methods: {

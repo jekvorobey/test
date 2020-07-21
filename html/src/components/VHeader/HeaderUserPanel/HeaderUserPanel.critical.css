@@ -81,7 +81,7 @@
         &--wishlist {
             color: var(--cl-white);
 
-            @media (--tablet-lg) {
+            @media (--tablet) {
                 display: none;
             }
         }

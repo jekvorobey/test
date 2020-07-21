@@ -1,6 +1,7 @@
 <template>
     <button class="v-burger" :class="{ 'is-open': isOpen }" @click="onClick">
         <div class="v-burger__line" />
+        <span v-if="btnText" class="v-burger__btn-text">{{ btnText }}</span>
     </button>
 </template>
 
@@ -12,6 +13,10 @@ export default {
     props: {
         isOpen: {
             type: Boolean,
+        },
+
+        btnText: {
+            type: String,
         },
     },
     methods: {
