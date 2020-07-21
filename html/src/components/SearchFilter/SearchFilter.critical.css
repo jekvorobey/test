@@ -5,6 +5,10 @@
 
     &--active {
         width: 100% !important;
+
+        @media(--tablet-lg-min) {
+            margin-top: calc(var(--gs) * 5);
+        }
     }
 
     &__label {

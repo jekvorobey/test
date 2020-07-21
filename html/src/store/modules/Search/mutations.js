@@ -3,6 +3,7 @@ export const SET_SEARCH = 'SET_SEARCH';
 export const SET_POPULAR_PRODUCTS = 'SET_POPULAR_PRODUCTS';
 export const SET_SEARCH_STRING = 'SET_SEARCH_STRING';
 export const SET_POPULAR_REQUESTS = 'SET_POPULAR_REQUESTS';
+export const SET_PRELOADER = 'SET_PRELOADER';
 
 export default {
     [SET_SEARCH_STRING](state, payload) {
@@ -23,5 +24,9 @@ export default {
 
     [SET_POPULAR_REQUESTS](state, payload) {
         state.popularRequests = payload;
+    },
+
+    [SET_PRELOADER](state, payload) {
+        state.preloader = payload;
     }
 };

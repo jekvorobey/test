@@ -17,7 +17,7 @@
 
                 <div v-if="!isTabletLg && products && products.length > 0" class="search-panel__products">
                     <p class="text-bold search-panel__hl" v-if="searchString === ''">Популярные товары</p>
-                    <ul class="search-panel__products-list">
+                    <ul class="search-panel__products-list" :class="{ 'has-preloader' : preloader}">
                         <li class="search-panel__products-card" v-for="item in products" :key="item.id">
                             <catalog-product-card
                                 :offer-id="item.id"
@@ -31,11 +31,13 @@
                                 :tags="item.tags"
                                 :rating="item.rating"
                                 :show-buy-btn="item.stock.qty > 0"
+                                @add-item="onAddToCart(item)"
+                                @preview="onPreview(item.code)"
                             />
                         </li>
                     </ul>
                 </div>
-                <v-button class="btn--outline search-panel__btn" v-if="products && products.length && this.searchString !== ''" @click="toSearchClick">
+                <v-button class="btn--outline search-panel__btn" v-if="showSubmitBtn" @click="toSearchClick">
                     {{ getSearchBtnText }}
                 </v-button>
             </div>
@@ -50,14 +52,18 @@ import VButton from '@controls/VButton/VButton.vue';
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { NAME as SEARCH_MODULE, SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS, POPULAR_REQUESTS } from '@store/modules/Search';
+
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
+import { NAME as SEARCH_MODULE, SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS, POPULAR_REQUESTS, PRELOADER } from '@store/modules/Search';
 import { GET_POPULAR_PRODUCTS, GET_POPULAR_REQUESTS } from '@store/modules/Search/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
 import { productGroupTypes } from '@enums/product';
-
+import { modalName } from '@enums';
 import './SearchPanel.css';
 
 export default {
@@ -71,13 +77,13 @@ export default {
     },
 
     computed: {
-        ...mapState(SEARCH_MODULE, [SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS, POPULAR_REQUESTS]),
+        ...mapState(SEARCH_MODULE, [SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS, POPULAR_REQUESTS, PRELOADER]),
         ...mapState(SEARCH_MODULE, {
             categories: (state) => state[SUGGESTIONS].categories,
         }),
 
         products() {
-            return this.searchString !== '' ? this[SUGGESTIONS].products : this[POPULAR_PRODUCTS];
+            return this.searchString && this[SUGGESTIONS].products ? this[SUGGESTIONS].products : this[POPULAR_PRODUCTS];
         },
 
         isTabletLg() {
@@ -98,9 +104,14 @@ export default {
             }
             return `Найдено ${this.range} товаров`;
         },
+
+        showSubmitBtn() {
+            return this.products && this.products.length && this.searchString !== '' && this[SUGGESTIONS].products;
+        },
     },
 
     methods: {
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(SEARCH_MODULE, [GET_POPULAR_PRODUCTS, GET_POPULAR_REQUESTS]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
 
@@ -125,6 +136,18 @@ export default {
             return {
                 path: `/${productGroupTypes.SEARCH}/?search_string=${category}`,
             };
+        },
+
+        onPreview(code) {
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
+        },
+
+        onAddToCart(item) {
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.ADD_TO_CART,
+                open: true,
+                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
+            });
         },
     },
 
