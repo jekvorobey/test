@@ -21,6 +21,7 @@
             <div class="address-edit-modal__map" v-show="!isTabletLg || isMap">
                 <yandex-map
                     v-if="showMap"
+                    :zoom="zoom"
                     :settings="mapSettings"
                     :coords="computedCoords"
                     :controls="[]"
@@ -228,6 +229,7 @@ export default {
                 geo_lon: '',
             },
 
+            zoom: null,
             coords: null,
 
             cities: [],
@@ -453,8 +455,11 @@ export default {
 
         init() {
             if (this.modalState.address) {
-                if (this.modalState.address.geo_lat && this.modalState.address.geo_lon)
+                if (this.modalState.address.geo_lat && this.modalState.address.geo_lon) {
+                    this.zoom = 17;
                     this.coords = [Number(this.modalState.address.geo_lat), Number(this.modalState.address.geo_lon)];
+                } else this.zoom = 11;
+
                 this.address = { ...this.modalState.address };
             }
         },
