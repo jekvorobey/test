@@ -33,9 +33,9 @@
                             class="account-view__panel-bottom-input"
                             v-model="amount"
                             type="number"
-                            min="100"
-                            placeholder="Введите сумму"
-                            :max="billingData.referral_bill.value"
+                            :min="billingData.limits.min"
+                            :placeholder="sumInputPlaceholder"
+                            :max="maxBillingValue"
                         />
                         <v-button
                             class="account-view__panel-bottom-btn"
@@ -303,6 +303,14 @@ export default {
         isTabletLg() {
             return this.$mq.tabletLg;
         },
+
+        sumInputPlaceholder() {
+            return `Сумма от ${this.billingData.limits.min.toLocaleString()} ₽`;
+        },
+
+        maxBillingValue() {
+            return this.billingData.referral_bill.value > this.billingData.limits.max ? this.billingData.limits.max : this.billingData.referral_bill.value;
+        }
     },
 
     watch: {
