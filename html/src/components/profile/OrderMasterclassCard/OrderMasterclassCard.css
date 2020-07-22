@@ -1,0 +1,197 @@
+.order-masterclass-card {
+    display: flex;
+
+    @media (--tablet) {
+        align-items: flex-start;
+    }
+
+    &__img {
+        position: relative;
+        display: flex;
+        width: 36%;
+        max-width: 144px;
+        background: var(--cl-elem-grey);
+        margin-right: calc(var(--gs) * 3);
+        border-bottom: none;
+
+        @media (--tablet) {
+            margin-right: var(--gs);
+        }
+
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 67%;
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 67%;
+                padding-bottom: 0;
+            }
+        }
+
+        .v-picture {
+            width: 100%;
+        }
+
+        .icon {
+            margin: auto;
+            opacity: 0.1;
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex-wrap: wrap;
+        flex: 1;
+
+        @media (--tablet-min) {
+            padding: var(--gs) 0 0;
+        }
+
+        @media (--tablet) {
+            padding-right: calc(var(--gs) * 2);
+        }
+
+        &-name {
+            order: 0;
+            width: 50%;
+            text-transform: none;
+            font-weight: bold;
+
+            @media (--tablet) {
+                width: 100%;
+                font-size: 16px;
+                line-height: 24px;
+                font-weight: normal;
+            }
+        }
+
+        &-count {
+            order: 1;
+            width: 25%;
+            text-align: center;
+
+            @media (--tablet) {
+                display: none;
+            }
+
+            .v-counter {
+                padding-bottom: calc(var(--gs) * 2);
+
+                @media (--desktop) {
+                    height: 32px;
+                    padding-bottom: var(--gs);
+                }
+
+                @media (--tablet) {
+                    padding-bottom: 0;
+                }
+
+                &__btn {
+                    @media (--desktop) {
+                        padding: 0;
+                    }
+                }
+
+                input[type='number'] {
+                    width: 32px;
+                }
+            }
+        }
+
+        &-prices {
+            order: 2;
+            width: 25%;
+            text-align: right;
+            padding-left: calc(var(--gs) * 2);
+
+            @media (--tablet) {
+                width: 100%;
+                padding-left: 0;
+                margin-bottom: var(--gs);
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        &-price {
+            font-size: 20px;
+            line-height: 24px;
+
+            @media (--tablet) {
+                font-size: 16px;
+                line-height: 24px;
+                margin-right: var(--gs);
+            }
+
+            &--old {
+                font-size: 14px;
+                line-height: 24px;
+
+                @media (--tablet) {
+                    font-size: 12px;
+                    line-height: 16px;
+                }
+            }
+        }
+
+        &-info {
+            order: 3;
+            width: 100%;
+
+            @media (--tablet) {
+                line-height: 24px;
+                order: 1;
+                margin-bottom: var(--gs);
+            }
+        }
+
+        &-controls {
+            order: 4;
+            display: flex;
+
+            @media (--tablet-min) {
+                align-items: flex-end;
+            }
+
+            @media (--tablet) {
+                justify-content: flex-end;
+                width: 50%;
+            }
+
+            &-link {
+                display: flex;
+                align-items: center;
+                color: var(--cl-grey);
+                fill: var(--cl-grey);
+                text-transform: none;
+                font-size: 14px;
+                line-height: 24px;
+                font-weight: normal;
+                transition: none;
+
+                @media (--tablet) {
+                    justify-content: flex-end;
+                    width: calc(var(--gs) * 4);
+                }
+
+                & + & {
+                    margin-left: calc(var(--gs) * 2);
+
+                    @media (--tablet) {
+                        margin-left: 0;
+                    }
+                }
+
+                .icon {
+                    margin-right: var(--gs);
+
+                    @media (--tablet) {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+    }
+}

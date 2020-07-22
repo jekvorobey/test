@@ -351,7 +351,10 @@ export default {
         async onAddressSelected(selected) {
             try {
                 const { suggestions } = await this.findAddress(suggestionTypes.HOUSE, selected.unrestricted_value, 1);
-                this.onApplyAddress(suggestions[0]);
+                this.zoom = 17;
+                setTimeout(() => {
+                    this.onApplyAddress(suggestions[0]);
+                }, 0);
             } catch (error) {
                 console.log(error);
             }

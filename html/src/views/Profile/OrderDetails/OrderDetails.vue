@@ -187,6 +187,32 @@
                 </ul>
             </div>
         </info-panel>
+
+        <!-- <info-panel class="order-details-view__panel" header="Билеты">
+            <div class="container container--tablet-lg">
+                <ul class="order-details-view__panel-list">
+                    <order-masterclass-card
+                        class="order-details-view__panel-item"
+                        v-for="{ p: mc, count } in masterClasses"
+                        type="masterclass"
+                        :key="mc.id"
+                        :name="mc.name"
+                        :image="mc.image"
+                        :price="mc.price"
+                        :old-price="mc.oldPrice"
+                        :date="mc.dateTime"
+                        :author="mc.author"
+                        :count="count"
+                        :href="mc.url"
+                        :is-small="isTablet"
+                    >
+                        <source :data-srcset="mc.desktopImg.webp" type="image/webp" />
+                        <source :data-srcset="mc.desktopImg.orig" />
+                        <img class="blur-up lazyload v-picture__img" :data-src="mc.defaultImg" alt="" />
+                    </order-masterclass-card>
+                </ul>
+            </div>
+        </info-panel> -->
     </section>
 </template>
 
@@ -201,6 +227,7 @@ import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 
 import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
+import OrderMasterclassCard from '@components/profile/OrderMasterclassCard/OrderMasterclassCard.vue';
 
 import { $store, $progress, $logger } from '@services';
 import { mapActions, mapState } from 'vuex';
@@ -229,11 +256,6 @@ import { receiveMethods } from '@enums/checkout';
 import '@images/sprites/arrow-small.svg';
 import './OrderDetails.css';
 
-import mockProduct1 from '@images/mock/orderPackageProduct1.png';
-import mockProduct2 from '@images/mock/orderPackageProduct2.png';
-import mockProduct3 from '@images/mock/orderPackageProduct3.png';
-import mockProduct4 from '@images/mock/orderPackageProduct4.png';
-
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
 
 function updateBreadcrumbs(vm, name, params, number) {
@@ -257,11 +279,224 @@ export default {
         InfoRow,
 
         PackageProductCard,
+        OrderMasterclassCard,
     },
 
     data() {
         return {
             isDisabled: false,
+            masterClasses: [
+                {
+                    id: 1781,
+                    type: 'masterclass',
+                    count: 1,
+                    p: {
+                        id: 1632,
+                        name: 'Лакшери воркшоп про шампуни',
+                        ticketTypeName: 'VIP',
+                        speakers: [
+                            {
+                                id: 20,
+                                firstName: 'Болеслав',
+                                middleName: 'Андреевич',
+                                lastName: 'Ковалёв',
+                                phone: '+78783722504',
+                                email: 'evgenij.soloveva@semenova.ru',
+                                profession: 'Штурман',
+                                avatar: { id: 10725, sourceExt: 'jpg' },
+                                instagram: 'https://www.instagram.com/evgenij.soloveva',
+                                facebook: null,
+                                linkedin: null,
+                            },
+                            {
+                                id: 21,
+                                firstName: 'Святослав',
+                                middleName: 'Львович',
+                                lastName: 'Зыков',
+                                phone: '+77658644460',
+                                email: 'wsavina@rambler.ru',
+                                profession: 'Штурман',
+                                avatar: { id: 10726, sourceExt: 'jpg' },
+                                instagram: 'https://www.instagram.com/wsavina',
+                                facebook: null,
+                                linkedin: null,
+                            },
+                            {
+                                id: 24,
+                                firstName: 'Даниил',
+                                middleName: 'Максимович',
+                                lastName: 'Юдин',
+                                phone: '+74889544611',
+                                email: 'maria48@inbox.ru',
+                                profession: 'Бестиарий (гладиатор)',
+                                avatar: { id: 10729, sourceExt: 'jpg' },
+                                instagram: 'https://www.instagram.com/maria48',
+                                facebook: null,
+                                linkedin: null,
+                            },
+                        ],
+                        code: 'laksheri_vorkshop_pro_shampuni_2',
+                        image: { id: 10730, sourceExt: 'jpg' },
+                        price: { value: 14829, currency: 'RUB' },
+                        oldPrice: { value: 15057, currency: 'RUB' },
+                        bonus: 0,
+                        nearestDate: '2020-07-23',
+                        nearestTimeFrom: '12:00:00',
+                        nearestPlaceName: 'Сухонский двор',
+                        qty: 14,
+                        qtyOccupied: 9,
+                        active: true,
+                        url: '/masterclasses/laksheri_vorkshop_pro_shampuni_2',
+                        author: 'Болеслав Ковалёв, Штурман',
+                        dateTime: '23 июля, 12:00',
+                        desktopImg: {
+                            webp: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10730/144/96/webp',
+                            orig: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10730/144/96/orig',
+                        },
+                        defaultImg: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10730/144/96/orig',
+                    },
+                },
+                {
+                    id: 1821,
+                    type: 'masterclass',
+                    count: 1,
+                    p: {
+                        id: 1672,
+                        name: 'Бьюти лекция о стрижке',
+                        ticketTypeName: 'Pro',
+                        speakers: [
+                            {
+                                id: 20,
+                                firstName: 'Болеслав',
+                                middleName: 'Андреевич',
+                                lastName: 'Ковалёв',
+                                phone: '+78783722504',
+                                email: 'evgenij.soloveva@semenova.ru',
+                                profession: 'Штурман',
+                                avatar: { id: 10725, sourceExt: 'jpg' },
+                                instagram: 'https://www.instagram.com/evgenij.soloveva',
+                                facebook: null,
+                                linkedin: null,
+                            },
+                            {
+                                id: 21,
+                                firstName: 'Святослав',
+                                middleName: 'Львович',
+                                lastName: 'Зыков',
+                                phone: '+77658644460',
+                                email: 'wsavina@rambler.ru',
+                                profession: 'Штурман',
+                                avatar: { id: 10726, sourceExt: 'jpg' },
+                                instagram: 'https://www.instagram.com/wsavina',
+                                facebook: null,
+                                linkedin: null,
+                            },
+                            {
+                                id: 23,
+                                firstName: 'Радислав',
+                                middleName: 'Романович',
+                                lastName: 'Миронов',
+                                phone: '+70115872600',
+                                email: 'cpetrova@odincova.ru',
+                                profession: 'Фотограф',
+                                avatar: { id: 10728, sourceExt: 'jpg' },
+                                instagram: 'https://www.instagram.com/cpetrova',
+                                facebook: null,
+                                linkedin: null,
+                            },
+                        ],
+                        code: 'byuti_lekciya_o_strizhke_1',
+                        image: { id: 10752, sourceExt: 'jpg' },
+                        price: { value: 16894, currency: 'RUB' },
+                        oldPrice: { value: 17122, currency: 'RUB' },
+                        bonus: 0,
+                        nearestDate: '2020-07-20',
+                        nearestTimeFrom: '16:00:00',
+                        nearestPlaceName: 'Подвал достоевского',
+                        qty: 17,
+                        qtyOccupied: 17,
+                        active: true,
+                        url: '/masterclasses/byuti_lekciya_o_strizhke_1',
+                        author: 'Болеслав Ковалёв, Штурман',
+                        dateTime: '20 июля, 16:00',
+                        desktopImg: {
+                            webp: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10752/144/96/webp',
+                            orig: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10752/144/96/orig',
+                        },
+                        defaultImg: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10752/144/96/orig',
+                    },
+                },
+                {
+                    id: 1822,
+                    type: 'masterclass',
+                    count: 1,
+                    p: {
+                        id: 1674,
+                        name: 'Бьюти лекция о стрижке',
+                        ticketTypeName: 'VIP+',
+                        speakers: [
+                            {
+                                id: 20,
+                                firstName: 'Болеслав',
+                                middleName: 'Андреевич',
+                                lastName: 'Ковалёв',
+                                phone: '+78783722504',
+                                email: 'evgenij.soloveva@semenova.ru',
+                                profession: 'Штурман',
+                                avatar: { id: 10725, sourceExt: 'jpg' },
+                                instagram: 'https://www.instagram.com/evgenij.soloveva',
+                                facebook: null,
+                                linkedin: null,
+                            },
+                            {
+                                id: 21,
+                                firstName: 'Святослав',
+                                middleName: 'Львович',
+                                lastName: 'Зыков',
+                                phone: '+77658644460',
+                                email: 'wsavina@rambler.ru',
+                                profession: 'Штурман',
+                                avatar: { id: 10726, sourceExt: 'jpg' },
+                                instagram: 'https://www.instagram.com/wsavina',
+                                facebook: null,
+                                linkedin: null,
+                            },
+                            {
+                                id: 23,
+                                firstName: 'Радислав',
+                                middleName: 'Романович',
+                                lastName: 'Миронов',
+                                phone: '+70115872600',
+                                email: 'cpetrova@odincova.ru',
+                                profession: 'Фотограф',
+                                avatar: { id: 10728, sourceExt: 'jpg' },
+                                instagram: 'https://www.instagram.com/cpetrova',
+                                facebook: null,
+                                linkedin: null,
+                            },
+                        ],
+                        code: 'byuti_lekciya_o_strizhke_1',
+                        image: { id: 10752, sourceExt: 'jpg' },
+                        price: { value: 34016, currency: 'RUB' },
+                        oldPrice: { value: 34244, currency: 'RUB' },
+                        bonus: 0,
+                        nearestDate: '2020-07-20',
+                        nearestTimeFrom: '16:00:00',
+                        nearestPlaceName: 'Подвал достоевского',
+                        qty: 10,
+                        qtyOccupied: 2,
+                        active: true,
+                        url: '/masterclasses/byuti_lekciya_o_strizhke_1',
+                        author: 'Болеслав Ковалёв, Штурман',
+                        dateTime: '20 июля, 16:00',
+                        desktopImg: {
+                            webp: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10752/144/96/webp',
+                            orig: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10752/144/96/orig',
+                        },
+                        defaultImg: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10752/144/96/orig',
+                    },
+                },
+            ],
         };
     },
 
@@ -322,6 +557,10 @@ export default {
 
         backUrl() {
             return { name: 'Orders' };
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 

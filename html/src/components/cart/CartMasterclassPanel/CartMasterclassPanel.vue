@@ -53,6 +53,9 @@ import { generateMasterclassUrl } from '@util/catalog';
 
 import './CartMasterclassPanel.css';
 
+const itemAnimationDelayDelta = 100;
+let counter = 0;
+
 export default {
     name: 'cart-masterclass-panel',
 
