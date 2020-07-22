@@ -158,9 +158,18 @@
         text-transform: none;
         text-align: center;
         font-size: 16px;
-        line-height: 24px;
+        line-height: 25px;
         flex-grow: 1;
         margin-bottom: var(--gs);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        transform: translateZ(0);
+        @media (--tablet) {
+            -webkit-line-clamp: 3;
+        }
     }
 
     &__prices {
