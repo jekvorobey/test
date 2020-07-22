@@ -186,7 +186,7 @@
                 </ul>
 
                 <div
-                    v-if="(referralPartner && availableBonus > 0) || !referralPartner"
+                    v-if="(referralPartner && availableBonus > 0) || !referralPartner && maxAmountBonus"
                     class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--bonus"
                 >
                     <div class="checkout-product-panel__item-header">
