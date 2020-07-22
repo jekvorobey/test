@@ -2,21 +2,26 @@
     <li class="cart-panel-product-card" :class="isFavorite && 'cart-panel-product-card--favorites'">
         <router-link v-if="href" class="cart-panel-product-card__img" :to="href">
             <v-picture :key="image.id" v-if="image && image.id">
-                <source :data-srcset="desktopImage" type="image/webp" />
+                <source :data-srcset="desktopImage.webp" type="image/webp" />
+                <source :data-srcset="desktopImage.orig" />
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
             </v-picture>
             <v-svg v-else id="cart-panel-product-card-empty" name="logo" width="48" height="48" />
         </router-link>
         <div class="cart-panel-product-card__img" v-else>
             <v-picture :key="image.id" v-if="image && image.id">
-                <source :data-srcset="desktopImage" type="image/webp" />
+                <source :data-srcset="desktopImage.webp" type="image/webp" />
+                <source :data-srcset="desktopImage.orig" />
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
             </v-picture>
             <v-svg v-else id="cart-panel-product-card-empty" name="logo" width="48" height="48" />
         </div>
 
         <div class="cart-panel-product-card__body">
-            <v-link class="cart-panel-product-card__body-name" :to="href">{{ name }}</v-link>
+            <v-link class="cart-panel-product-card__body-name" :to="href">
+                <div>{{ name }}</div>
+                <div v-if="note">({{ note }})</div>
+            </v-link>
             <div class="cart-panel-product-card__body-prices">
                 <price
                     class="text-grey text-strike cart-panel-product-card__body-price cart-panel-product-card__body-price--old"
@@ -46,9 +51,9 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 
+import _debounce from 'lodash/debounce';
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
-import _debounce from 'lodash/debounce';
 import '@images/sprites/cross-small.svg';
 import '@images/sprites/logo.svg';
 import './CartPanelProductCard.css';
@@ -66,11 +71,6 @@ export default {
     },
 
     props: {
-        productId: {
-            type: [String, Number],
-            required: true,
-        },
-
         name: {
             type: String,
             required: true,
@@ -79,6 +79,10 @@ export default {
         type: {
             type: String,
             required: true,
+        },
+
+        note: {
+            type: String,
         },
 
         href: {
@@ -117,7 +121,10 @@ export default {
     computed: {
         desktopImage() {
             if (this.image && this.image.id)
-                return generatePictureSourcePath(300, 300, this.image.id, fileExtension.image.WEBP);
+                return {
+                    webp: generatePictureSourcePath(300, 300, this.image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(300, 300, this.image.id),
+                };
         },
 
         defaultImage() {

@@ -1,6 +1,7 @@
 import { $logger } from '@services';
 import { cartItemTypes } from '@enums/product';
-import { requestStatus } from '@enums';
+import { requestStatus, currencySymbol } from '@enums';
+import { generateProductUrl, generateMasterclassUrl } from '@util/catalog';
 
 export const GET_ITEMS_BY_TYPE = 'GET_ITEMS_BY_TYPE';
 export const IS_PRODUCT = 'IS_PRODUCT';
@@ -10,6 +11,7 @@ export const IS_IN_CART = 'IS_IN_CART';
 export const PRODUCTS = 'products';
 export const MASTER_CLASSES = 'masterClasses';
 export const CART_TYPES = 'cartTypes';
+export const CART_ITEMS = 'cartItems';
 export const CART_ITEMS_COUNT = 'cartItemsCount';
 export const PRODUCT_ITEMS_SUM = 'productItemsSum';
 export const PROMO_CODE = 'promocode';
@@ -19,6 +21,26 @@ export const PROMOCODE_STATUS = 'promocodeStatus';
 export const CART_STATUS = 'cartStatus';
 
 const itemTypes = Object.values(cartItemTypes);
+
+function prepareItem(item) {
+    const { p } = item;
+
+    switch (item.type) {
+        case cartItemTypes.PRODUCT: {
+            const categoryCode = Array.isArray(p.categoryCodes) && p.categoryCodes[p.categoryCodes.length - 1];
+            const url = generateProductUrl(categoryCode, p.code);
+            return { ...item, p: { ...p, url } };
+        }
+
+        case cartItemTypes.MASTERCLASS: {
+            const url = generateMasterclassUrl(p.code);
+            const note = `Входной билет ${p.ticketTypeName}`;
+            return { ...item, p: { ...p, url, note } };
+        }
+        default:
+            return item;
+    }
+}
 
 export default {
     [PROMO_CODE]: (state) => state.cartData.product && state.cartData.product.input.promoCode,
@@ -37,6 +59,7 @@ export default {
             }
             return accum;
         }, 0);
+
         return itemsCount;
     },
 
@@ -49,10 +72,25 @@ export default {
         return types;
     },
 
-    [PRODUCT_ITEMS_SUM]: (state) => {
-        const productData = state.cartData[cartItemTypes.PRODUCT];
-        if (productData) return productData.summary.total;
-        return '';
+    [CART_ITEMS]: (state, getters) => {
+        const cartTypes = getters[CART_TYPES] || [];
+        const items = [];
+        for (const type of cartTypes) items.push(...type.items);
+        return items.map(prepareItem);
+    },
+
+    [PRODUCT_ITEMS_SUM]: (state, getters) => {
+        const cartTypes = getters[CART_TYPES] || [];
+
+        const sum = cartTypes.reduce(
+            (accum, current) => {
+                accum.value += current.summary.total.value;
+                accum.currency = current.summary.total.currency;
+                return accum;
+            },
+            { value: 0, currency: 'RUB' }
+        );
+        return sum;
     },
 
     [IS_IN_CART]: (state, getters) => (type, id) => {

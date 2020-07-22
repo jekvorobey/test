@@ -2,6 +2,7 @@
     width: calc(var(--gs) * 52.5);
 
     &__list {
+        display: block;
         width: 100%;
         max-height: calc(var(--gs) * 37.5);
         overflow: auto;

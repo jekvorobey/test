@@ -17,6 +17,7 @@
                 :key="product.id"
                 :product-id="product.id"
                 :name="product.name"
+                :note="product.note"
                 :image="product.image"
                 :price="product.price"
                 :old-price="product.oldPrice"
@@ -77,7 +78,7 @@ export default {
 
         masterclasses() {
             return this.items.map(i => {
-                const p = i.p;
+                const { p } = i;
                 const dateObj = new Date(`${p.nearestDate} ${p.nearestTimeFrom}`);
                 const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
@@ -85,6 +86,7 @@ export default {
                 const url = generateMasterclassUrl(p.code);
                 const speaker = p.speakers && p.speakers[0];
                 const author = speaker && `${speaker.firstName} ${speaker.lastName}, ${speaker.profession}`;
+                const note = `Входной билет ${p.ticketTypeName}`;
 
                 const defaultImg = p.image && generatePictureSourcePath(288, 184, p.image.id);
                 const desktopImg = p.image && {
@@ -101,6 +103,7 @@ export default {
                     ...i,
                     p: {
                         ...p,
+                        note,
                         url,
                         author,
                         dateTime,

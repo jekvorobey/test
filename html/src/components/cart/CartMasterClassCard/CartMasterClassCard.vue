@@ -7,7 +7,10 @@
             <v-svg v-else id="cart-master-class-card-empty" name="logo" width="48" height="48" />
         </router-link>
         <div class="cart-master-class-card__body">
-            <v-link class="cart-master-class-card__body-name" :to="href">{{ name }}</v-link>
+            <v-link class="cart-master-class-card__body-name" :to="href">
+                <div>{{ name }}</div>
+                <div v-if="note">({{ note }})</div>
+            </v-link>
             <div class="cart-master-class-card__body-count">
                 <v-counter :value="count" min="0" @input="debounce_countChange" />
             </div>
@@ -70,18 +73,22 @@ export default {
             required: true,
         },
 
+        type: {
+            type: String,
+            required: true,
+        },
+
         name: {
             type: String,
             required: true,
         },
 
-        href: {
+        note: {
             type: String,
         },
 
-        type: {
+        href: {
             type: String,
-            required: true,
         },
 
         image: {
