@@ -8,20 +8,22 @@
     >
         <slot />
         <template v-slot:body>
-            <ul class="cart-header-panel__list">
-                <cart-panel-product-card
-                    class="cart-header-panel__list-item"
-                    v-for="{ p: product, type } in cartItems"
-                    :key="product.id"
-                    :type="type"
-                    :name="product.name"
-                    :note="product.note"
-                    :image="product.image"
-                    :price="product.price"
-                    :old-price="product.oldPrice"
-                    :href="product.url"
-                />
-            </ul>
+            <v-scroll class="cart-header-panel__scroll">
+                <ul class="cart-header-panel__list">
+                    <cart-panel-product-card
+                        class="cart-header-panel__list-item"
+                        v-for="{ p: product, type } in cartItems"
+                        :key="product.id"
+                        :type="type"
+                        :name="product.name"
+                        :note="product.note"
+                        :image="product.image"
+                        :price="product.price"
+                        :old-price="product.oldPrice"
+                        :href="product.url"
+                    />
+                </ul>
+            </v-scroll>
         </template>
         <template v-slot:bottom>
             <v-button class="btn--outline cart-header-panel__controls-btn" @click="onToCart">
@@ -41,6 +43,7 @@
 <script>
 import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
+import VScroll from '@controls/VScroll/VScroll.vue';
 
 import Price from '@components/Price/Price.vue';
 
@@ -64,6 +67,7 @@ export default {
     components: {
         VLink,
         VButton,
+        VScroll,
 
         Price,
 

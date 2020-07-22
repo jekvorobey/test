@@ -1,10 +1,18 @@
 .v-scroll {
     .__bar {
         &-is-vertical {
+            opacity: 1 !important;
             width: 4px !important;
             background: var(--cl-global) !important;
         }
     }
+
+    .__rail {
+        &-is-vertical {
+            background: var(--cl-divider-grey) !important;
+        }
+    }
+
     .__view {
         padding-right: var(--gs);
     }
