@@ -16,6 +16,10 @@ export default {
             name: 'Orders',
             path: 'orders',
             component: OrdersAsync,
+
+            meta: {
+                skipScroll: true,
+            },
         },
     ],
 };

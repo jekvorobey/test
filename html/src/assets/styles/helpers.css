@@ -31,6 +31,10 @@
     text-transform: lowercase;
 }
 
+.text-underline {
+    text-decoration: underline;
+}
+
 .visibility-hidden {
     visibility: hidden;
 }

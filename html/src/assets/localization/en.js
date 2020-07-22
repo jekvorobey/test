@@ -3,6 +3,7 @@ import { receiveMethods, discountType } from '@enums/checkout';
 import { genderType, billingOperationType, referralSource, bonusStatus } from '@enums/profile';
 import { socials } from '@enums';
 import { orderStatus, deliveryStatus } from '@enums/order';
+import { cartItemTypes } from '@enums/product';
 
 const flatpickrLocale = flatPickrEn;
 const main = {
@@ -245,6 +246,11 @@ const main = {
             [socials.INSTAGRAM]: 'Instagram',
             [socials.FACEBOOK]: 'Facebook',
             [socials.GOOGLE]: 'Google',
+        },
+
+        productType: {
+            [cartItemTypes.PRODUCT]: 'Products',
+            [cartItemTypes.MASTERCLASS]: 'Master-classes',
         },
 
         routes: {

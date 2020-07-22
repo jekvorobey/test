@@ -188,7 +188,7 @@
             </div>
         </info-panel>
 
-        <!-- <info-panel class="order-details-view__panel" header="Билеты">
+        <info-panel class="order-details-view__panel" header="Билеты">
             <div class="container container--tablet-lg">
                 <ul class="order-details-view__panel-list">
                     <order-masterclass-card
@@ -212,7 +212,7 @@
                     </order-masterclass-card>
                 </ul>
             </div>
-        </info-panel> -->
+        </info-panel>
     </section>
 </template>
 

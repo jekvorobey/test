@@ -101,6 +101,8 @@
         }
 
         &-prices {
+            display: flex;
+            flex-direction: column;
             order: 2;
             width: 25%;
             text-align: right;
@@ -110,8 +112,7 @@
                 width: 100%;
                 padding-left: 0;
                 margin-bottom: var(--gs);
-                display: flex;
-                align-items: center;
+                align-items: flex-end;
             }
         }
 

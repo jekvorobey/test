@@ -59,13 +59,15 @@
             </div>
         </div>
 
-        <div class="container container--tablet-lg">
-            <!-- <filter-button class="orders-view__filter-btn" @click="filterModal = !filterModal">
+        <div ref="hook" />
+
+        <!-- <filter-button class="orders-view__filter-btn" @click="filterModal = !filterModal">
                 Фильтр и сортировка&nbsp;&nbsp;
                 <span class="text-grey">4</span>
             </filter-button> -->
 
-            <table class="orders-view__table" v-if="!isTabletLg && orders.length">
+        <template v-if="orders.length > 0">
+            <table class="container container--tablet-lg orders-view__table" v-if="!isTabletLg">
                 <colgroup>
                     <col width="15%" />
                     <col width="20%" />
@@ -135,7 +137,10 @@
                         :key="order.id"
                         @click="onOpenOrder(order.id)"
                     >
-                        <td class="orders-view__table-td">{{ order.number }}</td>
+                        <td class="orders-view__table-td">
+                            <div class="text-underline">{{ order.number }}</div>
+                            <div>{{ $t(`profile.productType.${order.type}`) }}</div>
+                        </td>
                         <td class="orders-view__table-td">{{ formatDate(order.created_at) }}</td>
                         <td class="orders-view__table-td">
                             <price v-bind="order.price" />
@@ -183,72 +188,90 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="container container--tablet-lg orders-view__empty-container" v-else>
-                <v-svg name="info-middle" width="24" height="24" />
-                <span class="orders-view__empty-text">
-                    У вас еще нет заказов
-                </span>
-                <v-button class="btn--outline" tag="a" to="/catalog">перейти к покупкам</v-button>
+            <ul class="orders-view__list" v-else>
+                <li
+                    class="orders-view__list-item"
+                    tabindex="0"
+                    v-for="order in orders"
+                    :key="order.id"
+                    @click="onOpenOrder(order.id)"
+                >
+                    <info-row class="orders-view__list-item-row" name="Номер заказа">
+                        <div class="text-underline">{{ order.number }}</div>
+                        <div>{{ $t(`profile.productType.${order.type}`) }}</div>
+                    </info-row>
+
+                    <info-row class="orders-view__list-item-row" name="Сумма">
+                        <price v-bind="order.price" />
+                    </info-row>
+
+                    <info-row
+                        class="orders-view__list-item-row"
+                        name="Дата заказа"
+                        :value="formatDate(order.created_at)"
+                    />
+
+                    <info-row class="orders-view__list-item-row" name="Дата доставки" :value="order.deliveryDate" />
+
+                    <template
+                        v-if="order.payment_status === orderPaymentStatus.NOT_PAID && order.payments.length !== 0"
+                    >
+                        <info-row class="orders-view__list-item-row">
+                            <v-button
+                                class="btn--outline"
+                                v-for="payment in order.payments"
+                                :key="payment.id"
+                                @click.stop="onContinuePayment(order.id, payment.id)"
+                                :disabled="isDisabled"
+                            >
+                                Оплатить
+                            </v-button>
+                        </info-row>
+
+                        <!-- 
+                        <info-row class="orders-view__list-item-row">
+                            <v-link tag="button" @click.stop>
+                                    Отменить
+                            </v-link>
+                        </info-row> 
+                        -->
+                    </template>
+
+                    <template v-else>
+                        <info-row class="orders-view__list-item-row" name="Cтатус">
+                            {{ $t(`orderStatus.${order.status}`) }}
+                        </info-row>
+
+                        <info-row class="orders-view__list-item-row">
+                            <v-link tag="button" @click.stop="onRepeatOrder(order)" :disabled="isDisabled">
+                                Повторить
+                            </v-link>
+                        </info-row>
+                    </template>
+                </li>
+            </ul>
+
+            <div class="container container--tablet-lg orders-view__controls" v-if="pagesCount > 1">
+                <show-more-button
+                    v-if="activePage < pagesCount"
+                    btn-class="btn--outline orders-view__controls-btn"
+                    @click.prevent="onShowMore"
+                    :show-preloader="showMore"
+                >
+                    Показать ещё
+                </show-more-button>
+
+                <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
             </div>
-        </div>
+        </template>
+        <div class="container container--tablet-lg orders-view__empty-container" v-else>
+            <v-svg name="alert" width="24" height="24" />
 
-        <ul class="orders-view__list" v-if="isTabletLg">
-            <li
-                class="orders-view__list-item"
-                tabindex="0"
-                v-for="order in orders"
-                :key="order.id"
-                @click="onOpenOrder(order.id)"
-            >
-                <info-row class="orders-view__list-item-row" name="Номер заказа" :value="order.number" />
-                <info-row class="orders-view__list-item-row" name="Сумма">
-                    <price v-bind="order.price" />
-                </info-row>
-                <info-row class="orders-view__list-item-row" name="Дата заказа" :value="formatDate(order.created_at)" />
-                <info-row class="orders-view__list-item-row" name="Дата доставки" :value="order.deliveryDate" />
+            <span class="orders-view__empty-text">
+                У вас еще нет заказов
+            </span>
 
-                <template v-if="order.payment_status === orderPaymentStatus.NOT_PAID && order.payments.length !== 0">
-                    <info-row class="orders-view__list-item-row">
-                        <v-button
-                            class="btn--outline"
-                            v-for="payment in order.payments"
-                            :key="payment.id"
-                            @click.stop="onContinuePayment(order.id, payment.id)"
-                            :disabled="isDisabled"
-                        >
-                            Оплатить
-                        </v-button>
-                    </info-row>
-                    <!-- <info-row class="orders-view__list-item-row">
-                        <v-link tag="button" @click.stop>
-                            Отменить
-                        </v-link>
-                    </info-row> -->
-                </template>
-
-                <template v-else>
-                    <info-row class="orders-view__list-item-row" name="Cтатус">
-                        {{ $t(`orderStatus.${order.status}`) }}
-                    </info-row>
-                    <info-row class="orders-view__list-item-row">
-                        <v-link tag="button" @click.stop="onRepeatOrder(order)" :disabled="isDisabled">
-                            Повторить
-                        </v-link>
-                    </info-row>
-                </template>
-            </li>
-        </ul>
-
-        <div class="container container--tablet-lg orders-view__controls" v-if="pagesCount > 1">
-            <show-more-button
-                v-if="activePage < pagesCount"
-                btn-class="btn--outline orders-view__controls-btn"
-                @click.prevent="onShowMore"
-                :show-preloader="showMore"
-            >
-                Показать ещё
-            </show-more-button>
-            <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
+            <v-button class="btn--outline" to="/catalog">перейти к покупкам</v-button>
         </div>
     </section>
 </template>
@@ -310,7 +333,7 @@ import { DEFAULT_PAGE } from '@constants';
 
 import '@images/sprites/arrow-updown.svg';
 import '@images/sprites/arrow-down.svg';
-import '@images/sprites/info-middle.svg';
+import '@images/sprites/alert.svg';
 import './Orders.css';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
@@ -349,7 +372,7 @@ export default {
         ...mapState(ORDERS_MODULE_PATH, [ORDERS, ORDER_DIRECTION, ORDER_FIELD, ACTIVE_PAGE, REFERRAL_DATA]),
         ...mapGetters(ORDERS_MODULE_PATH, [PAGES_COUNT, REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, LEVEL]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
         arcSettings() {
@@ -415,6 +438,10 @@ export default {
             this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
         },
 
+        scrollTo(options) {
+            if (!this.$isServer) window.scrollTo(options);
+        },
+
         onChangeSort(name) {
             let orderField = name;
             let orderDirection = null;
@@ -460,7 +487,7 @@ export default {
         const { loadPath } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
 
         // если все загружено, пропускаем
-        if (loadPath === fullPath) next((vm) => updateBreadcrumbs(vm));
+        if (loadPath === fullPath) next(vm => updateBreadcrumbs(vm));
         else {
             $progress.start();
             $store
@@ -469,16 +496,16 @@ export default {
                     orderField,
                     orderDirection,
                 })
-                .then((data) => {
+                .then(data => {
                     $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
+                    next(vm => {
                         $progress.finish();
                         updateBreadcrumbs(vm);
                     });
                 })
-                .catch((thrown) => {
-                    if (thrown && thrown.isCancel === true) return next((vm) => updateBreadcrumbs(vm));
-                    next((vm) => {
+                .catch(thrown => {
+                    if (thrown && thrown.isCancel === true) return next(vm => updateBreadcrumbs(vm));
+                    next(vm => {
                         $progress.fail();
                         updateBreadcrumbs(vm);
                     });
@@ -498,7 +525,17 @@ export default {
             query: { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC },
         } = to;
 
+        const {
+            query: { page: fromPage },
+        } = from;
+
         try {
+            if (!this.showMore && page !== fromPage)
+                this.scrollTo({
+                    top: this.$refs.hook.offsetTop,
+                    behavior: 'smooth',
+                });
+
             this.$progress.start();
             await this[FETCH_ORDERS]({ page, orderField, orderDirection, showMore: this.showMore });
             this.$progress.finish();
