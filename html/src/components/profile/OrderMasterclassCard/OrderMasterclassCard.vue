@@ -1,25 +1,25 @@
 <template>
-    <li class="checkout-masterclass-card" :class="{ 'checkout-masterclass-card--small': isSmall }">
-        <router-link class="checkout-masterclass-card__img" :to="href">
+    <li class="order-masterclass-card" :class="{ 'order-masterclass-card--small': isSmall }">
+        <router-link class="order-masterclass-card__img" :to="href">
             <v-picture v-if="image">
                 <slot />
             </v-picture>
-            <v-svg v-else id="checkout-masterclass-card-empty" name="logo" width="48" height="48" />
+            <v-svg v-else id="order-masterclass-card-empty" name="logo" width="48" height="48" />
         </router-link>
-        <div class="checkout-masterclass-card__body">
-            <v-link class="checkout-masterclass-card__body-name" :to="href">{{ name }}</v-link>
-            <div class="checkout-masterclass-card__body-count">
+        <div class="order-masterclass-card__body">
+            <v-link class="order-masterclass-card__body-name" :to="href">{{ name }}</v-link>
+            <div class="order-masterclass-card__body-count">
                 {{ count }}
             </div>
-            <div class="checkout-masterclass-card__body-prices">
-                <price class="text-bold checkout-masterclass-card__body-price" v-bind="price" />
+            <div class="order-masterclass-card__body-prices">
+                <price class="text-bold order-masterclass-card__body-price" v-bind="price" />
                 <price
-                    class="text-grey text-strike checkout-masterclass-card__body-price checkout-masterclass-card__body-price--old"
+                    class="text-grey text-strike order-masterclass-card__body-price order-masterclass-card__body-price--old"
                     v-show="oldPrice"
                     v-bind="oldPrice"
                 />
             </div>
-            <div class="text-grey text-sm checkout-masterclass-card__body-info">
+            <div class="text-grey text-sm order-masterclass-card__body-info">
                 <div>{{ date }}</div>
                 <div>{{ author }}</div>
             </div>
@@ -35,10 +35,10 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import Price from '@components/Price/Price.vue';
 
 import '@images/sprites/logo.svg';
-import './CheckoutMasterClassCard.css';
+import './OrderMasterclassCard.css';
 
 export default {
-    name: 'checkout-masterclass-card',
+    name: 'order-masterclass-card',
 
     components: {
         VSvg,
@@ -49,11 +49,6 @@ export default {
     },
 
     props: {
-        productId: {
-            type: [String, Number],
-            required: true,
-        },
-
         name: {
             type: String,
             required: true,
