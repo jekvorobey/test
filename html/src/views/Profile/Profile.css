@@ -27,9 +27,7 @@
         }
 
         & > .v-sticky__container {
-            @media (--tablet-lg) {
-                top: 64px;
-            }
+            top: 64px;
 
             @media (--tablet) {
                 top: 48px;
@@ -61,6 +59,7 @@
     &__main {
         position: relative;
         margin-top: calc(var(--gs) * 3);
+        overflow: hidden;
 
         &-view {
             width: 100%;
@@ -72,7 +71,6 @@
         grid-template-columns: 248px 1fr;
         grid-template-rows: 1fr;
         grid-gap: calc(var(--gs) * 8);
-        overflow: hidden;
 
         @media (--desktop-lg) {
             grid-template-columns: 248px 1fr;
