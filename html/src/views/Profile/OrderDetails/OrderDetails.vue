@@ -71,6 +71,13 @@
                         name="Адрес доставки"
                         :value="deliveryAddress"
                     />
+
+                    <info-row
+                        v-if="receiverEmail"
+                        class="order-details-view__details-row"
+                        name="Email"
+                        :value="receiverEmail"
+                    />
                 </div>
                 <div class="order-details-view__details-controls">
                     <template v-if="canPay">
@@ -89,8 +96,9 @@
                         class="btn--outline order-details-view__details-controls-btn"
                         @click.stop="onRepeatOrder(order.id)"
                         :disabled="isDisabled"
-                        >Повторить заказ</v-button
                     >
+                        Повторить заказ
+                    </v-button>
                     <!-- <v-link class="order-details-view__details-controls-link">Оформить возврат</v-link> -->
                 </div>
             </div>
@@ -188,27 +196,29 @@
             </div>
         </info-panel>
 
-        <info-panel class="order-details-view__panel" header="Билеты">
+        <info-panel v-if="items && items.length > 0" class="order-details-view__panel" header="Билеты">
             <div class="container container--tablet-lg">
                 <ul class="order-details-view__panel-list">
                     <order-masterclass-card
                         class="order-details-view__panel-item"
-                        v-for="{ p: mc, count } in masterClasses"
                         type="masterclass"
-                        :key="mc.id"
-                        :name="mc.name"
-                        :image="mc.image"
-                        :price="mc.price"
-                        :old-price="mc.oldPrice"
-                        :date="mc.dateTime"
-                        :author="mc.author"
-                        :count="count"
-                        :href="mc.url"
+                        v-for="item in items"
+                        :key="item.id"
+                        :name="item.name"
+                        :note="item.note"
+                        :image="item.image"
+                        :price="item.price"
+                        :old-price="item.oldPrice"
+                        :date="item.dateTime"
+                        :author="item.author"
+                        :additions="item.additions"
+                        :count="item.qty"
+                        :href="item.url"
                         :is-small="isTablet"
                     >
-                        <source :data-srcset="mc.desktopImg.webp" type="image/webp" />
-                        <source :data-srcset="mc.desktopImg.orig" />
-                        <img class="blur-up lazyload v-picture__img" :data-src="mc.defaultImg" alt="" />
+                        <source :data-srcset="item.desktopImg.webp" type="image/webp" />
+                        <source :data-srcset="item.desktopImg.orig" />
+                        <img class="blur-up lazyload v-picture__img" :data-src="item.defaultImg" alt="" />
                     </order-masterclass-card>
                 </ul>
             </div>
@@ -237,7 +247,13 @@ import { LOCALE } from '@store';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
-import { NAME as ORDERS_MODULE, ORDER_DETAILS, ORDER, DELIVERIES } from '@store/modules/Profile/modules/Orders';
+import {
+    NAME as ORDERS_MODULE,
+    ORDER_DETAILS,
+    ORDER,
+    DELIVERIES,
+    TICKETS,
+} from '@store/modules/Profile/modules/Orders';
 import {
     FETCH_ORDER_DETAILS,
     SET_LOAD_PATH,
@@ -248,11 +264,16 @@ import {
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { FETCH_CART_DATA } from '@store/modules/Cart/actions';
 
-import { toAddressString } from '@util/address';
-import { getOrderStatusColorClass, getDeliveryStatusColorClass } from '@util/order';
-import { orderPaymentStatus, orderStatus, deliveryStatus } from '@enums/order';
-import { orderDateLocaleOptions } from '@settings/profile';
+import { fileExtension } from '@enums';
 import { receiveMethods } from '@enums/checkout';
+import { orderPaymentStatus, orderStatus, deliveryStatus } from '@enums/order';
+import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
+import { orderDateLocaleOptions } from '@settings/profile';
+import { toAddressString } from '@util/address';
+import { generateMasterclassUrl } from '@util/catalog';
+import { generatePictureSourcePath } from '@util/file';
+import { getOrderStatusColorClass, getDeliveryStatusColorClass } from '@util/order';
+
 import '@images/sprites/arrow-small.svg';
 import './OrderDetails.css';
 
@@ -285,227 +306,53 @@ export default {
     data() {
         return {
             isDisabled: false,
-            masterClasses: [
-                {
-                    id: 1781,
-                    type: 'masterclass',
-                    count: 1,
-                    p: {
-                        id: 1632,
-                        name: 'Лакшери воркшоп про шампуни',
-                        ticketTypeName: 'VIP',
-                        speakers: [
-                            {
-                                id: 20,
-                                firstName: 'Болеслав',
-                                middleName: 'Андреевич',
-                                lastName: 'Ковалёв',
-                                phone: '+78783722504',
-                                email: 'evgenij.soloveva@semenova.ru',
-                                profession: 'Штурман',
-                                avatar: { id: 10725, sourceExt: 'jpg' },
-                                instagram: 'https://www.instagram.com/evgenij.soloveva',
-                                facebook: null,
-                                linkedin: null,
-                            },
-                            {
-                                id: 21,
-                                firstName: 'Святослав',
-                                middleName: 'Львович',
-                                lastName: 'Зыков',
-                                phone: '+77658644460',
-                                email: 'wsavina@rambler.ru',
-                                profession: 'Штурман',
-                                avatar: { id: 10726, sourceExt: 'jpg' },
-                                instagram: 'https://www.instagram.com/wsavina',
-                                facebook: null,
-                                linkedin: null,
-                            },
-                            {
-                                id: 24,
-                                firstName: 'Даниил',
-                                middleName: 'Максимович',
-                                lastName: 'Юдин',
-                                phone: '+74889544611',
-                                email: 'maria48@inbox.ru',
-                                profession: 'Бестиарий (гладиатор)',
-                                avatar: { id: 10729, sourceExt: 'jpg' },
-                                instagram: 'https://www.instagram.com/maria48',
-                                facebook: null,
-                                linkedin: null,
-                            },
-                        ],
-                        code: 'laksheri_vorkshop_pro_shampuni_2',
-                        image: { id: 10730, sourceExt: 'jpg' },
-                        price: { value: 14829, currency: 'RUB' },
-                        oldPrice: { value: 15057, currency: 'RUB' },
-                        bonus: 0,
-                        nearestDate: '2020-07-23',
-                        nearestTimeFrom: '12:00:00',
-                        nearestPlaceName: 'Сухонский двор',
-                        qty: 14,
-                        qtyOccupied: 9,
-                        active: true,
-                        url: '/masterclasses/laksheri_vorkshop_pro_shampuni_2',
-                        author: 'Болеслав Ковалёв, Штурман',
-                        dateTime: '23 июля, 12:00',
-                        desktopImg: {
-                            webp: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10730/144/96/webp',
-                            orig: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10730/144/96/orig',
-                        },
-                        defaultImg: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10730/144/96/orig',
-                    },
-                },
-                {
-                    id: 1821,
-                    type: 'masterclass',
-                    count: 1,
-                    p: {
-                        id: 1672,
-                        name: 'Бьюти лекция о стрижке',
-                        ticketTypeName: 'Pro',
-                        speakers: [
-                            {
-                                id: 20,
-                                firstName: 'Болеслав',
-                                middleName: 'Андреевич',
-                                lastName: 'Ковалёв',
-                                phone: '+78783722504',
-                                email: 'evgenij.soloveva@semenova.ru',
-                                profession: 'Штурман',
-                                avatar: { id: 10725, sourceExt: 'jpg' },
-                                instagram: 'https://www.instagram.com/evgenij.soloveva',
-                                facebook: null,
-                                linkedin: null,
-                            },
-                            {
-                                id: 21,
-                                firstName: 'Святослав',
-                                middleName: 'Львович',
-                                lastName: 'Зыков',
-                                phone: '+77658644460',
-                                email: 'wsavina@rambler.ru',
-                                profession: 'Штурман',
-                                avatar: { id: 10726, sourceExt: 'jpg' },
-                                instagram: 'https://www.instagram.com/wsavina',
-                                facebook: null,
-                                linkedin: null,
-                            },
-                            {
-                                id: 23,
-                                firstName: 'Радислав',
-                                middleName: 'Романович',
-                                lastName: 'Миронов',
-                                phone: '+70115872600',
-                                email: 'cpetrova@odincova.ru',
-                                profession: 'Фотограф',
-                                avatar: { id: 10728, sourceExt: 'jpg' },
-                                instagram: 'https://www.instagram.com/cpetrova',
-                                facebook: null,
-                                linkedin: null,
-                            },
-                        ],
-                        code: 'byuti_lekciya_o_strizhke_1',
-                        image: { id: 10752, sourceExt: 'jpg' },
-                        price: { value: 16894, currency: 'RUB' },
-                        oldPrice: { value: 17122, currency: 'RUB' },
-                        bonus: 0,
-                        nearestDate: '2020-07-20',
-                        nearestTimeFrom: '16:00:00',
-                        nearestPlaceName: 'Подвал достоевского',
-                        qty: 17,
-                        qtyOccupied: 17,
-                        active: true,
-                        url: '/masterclasses/byuti_lekciya_o_strizhke_1',
-                        author: 'Болеслав Ковалёв, Штурман',
-                        dateTime: '20 июля, 16:00',
-                        desktopImg: {
-                            webp: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10752/144/96/webp',
-                            orig: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10752/144/96/orig',
-                        },
-                        defaultImg: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10752/144/96/orig',
-                    },
-                },
-                {
-                    id: 1822,
-                    type: 'masterclass',
-                    count: 1,
-                    p: {
-                        id: 1674,
-                        name: 'Бьюти лекция о стрижке',
-                        ticketTypeName: 'VIP+',
-                        speakers: [
-                            {
-                                id: 20,
-                                firstName: 'Болеслав',
-                                middleName: 'Андреевич',
-                                lastName: 'Ковалёв',
-                                phone: '+78783722504',
-                                email: 'evgenij.soloveva@semenova.ru',
-                                profession: 'Штурман',
-                                avatar: { id: 10725, sourceExt: 'jpg' },
-                                instagram: 'https://www.instagram.com/evgenij.soloveva',
-                                facebook: null,
-                                linkedin: null,
-                            },
-                            {
-                                id: 21,
-                                firstName: 'Святослав',
-                                middleName: 'Львович',
-                                lastName: 'Зыков',
-                                phone: '+77658644460',
-                                email: 'wsavina@rambler.ru',
-                                profession: 'Штурман',
-                                avatar: { id: 10726, sourceExt: 'jpg' },
-                                instagram: 'https://www.instagram.com/wsavina',
-                                facebook: null,
-                                linkedin: null,
-                            },
-                            {
-                                id: 23,
-                                firstName: 'Радислав',
-                                middleName: 'Романович',
-                                lastName: 'Миронов',
-                                phone: '+70115872600',
-                                email: 'cpetrova@odincova.ru',
-                                profession: 'Фотограф',
-                                avatar: { id: 10728, sourceExt: 'jpg' },
-                                instagram: 'https://www.instagram.com/cpetrova',
-                                facebook: null,
-                                linkedin: null,
-                            },
-                        ],
-                        code: 'byuti_lekciya_o_strizhke_1',
-                        image: { id: 10752, sourceExt: 'jpg' },
-                        price: { value: 34016, currency: 'RUB' },
-                        oldPrice: { value: 34244, currency: 'RUB' },
-                        bonus: 0,
-                        nearestDate: '2020-07-20',
-                        nearestTimeFrom: '16:00:00',
-                        nearestPlaceName: 'Подвал достоевского',
-                        qty: 10,
-                        qtyOccupied: 2,
-                        active: true,
-                        url: '/masterclasses/byuti_lekciya_o_strizhke_1',
-                        author: 'Болеслав Ковалёв, Штурман',
-                        dateTime: '20 июля, 16:00',
-                        desktopImg: {
-                            webp: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10752/144/96/webp',
-                            orig: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10752/144/96/orig',
-                        },
-                        defaultImg: 'http://local.ibt-mas.greensight.ru:8080/files/compressed/10752/144/96/orig',
-                    },
-                },
-            ],
         };
     },
 
     computed: {
         ...mapState([LOCALE]),
         ...mapState(ORDERS_MODULE_PATH, {
-            [ORDER]: state => state[ORDER_DETAILS][ORDER] || {},
-            [DELIVERIES]: state => state[ORDER_DETAILS][DELIVERIES] || [],
+            [ORDER]: state => (state[ORDER_DETAILS] && state[ORDER_DETAILS][ORDER]) || {},
+            [DELIVERIES]: state => (state[ORDER_DETAILS] && state[ORDER_DETAILS][DELIVERIES]) || [],
+            [TICKETS]: state => (state[ORDER_DETAILS] && state[ORDER_DETAILS][TICKETS]) || [],
         }),
+
+        receiverEmail() {
+            const order = this[ORDER] || {};
+            return order.receiver_email;
+        },
+
+        items() {
+            const tickets = this[TICKETS] || [];
+
+            return tickets.map(i => {
+                const dateObj = new Date(`${i.nearestDate} ${i.nearestTimeFrom}`);
+                const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
+                const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
+                const dateTime = `${date}, ${time}`;
+                const url = generateMasterclassUrl(i.code);
+                const note = `Входной билет ${i.ticketTypeName}`;
+
+                const speaker = i.speakers && i.speakers[0];
+                const author = speaker && `${speaker.firstName} ${speaker.lastName}, ${speaker.profession}`;
+
+                const participants = i.participants || [];
+                const additions = `Участники: ${participants.map(p => `${p.firstName} ${p.lastName}`).join(', ')}`;
+
+                const defaultImg = i.image && generatePictureSourcePath(400, 240, i.image.id);
+                const desktopImg = i.image && {
+                    webp: generatePictureSourcePath(400, 240, i.image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(400, 240, i.image.id),
+                };
+
+                const mobileImg = i.image && {
+                    webp: generatePictureSourcePath(425, 320, i.image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(425, 320, i.image.id),
+                };
+
+                return { ...i, note, author, additions, url, dateTime, desktopImg, mobileImg, defaultImg };
+            });
+        },
 
         canPay() {
             const { payment_status = 3, payments = [] } = this[ORDER];

@@ -10,6 +10,7 @@
         display: flex;
         width: 36%;
         max-width: 144px;
+        max-height: 96px;
         background: var(--cl-elem-grey);
         margin-right: calc(var(--gs) * 3);
         border-bottom: none;
@@ -45,10 +46,6 @@
         flex-wrap: wrap;
         flex: 1;
 
-        @media (--tablet-min) {
-            padding: var(--gs) 0 0;
-        }
-
         @media (--tablet) {
             padding-right: calc(var(--gs) * 2);
         }
@@ -58,6 +55,7 @@
             width: 50%;
             text-transform: none;
             font-weight: bold;
+            margin-bottom: calc(var(--gs) * 2);
 
             @media (--tablet) {
                 width: 100%;
@@ -139,9 +137,10 @@
 
         &-info {
             order: 3;
-            width: 100%;
+            width: 50%;
 
             @media (--tablet) {
+                width: 100%;
                 line-height: 24px;
                 order: 1;
                 margin-bottom: var(--gs);

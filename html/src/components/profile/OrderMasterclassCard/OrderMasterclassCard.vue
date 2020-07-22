@@ -6,11 +6,15 @@
             </v-picture>
             <v-svg v-else id="order-masterclass-card-empty" name="logo" width="48" height="48" />
         </router-link>
+
         <div class="order-masterclass-card__body">
-            <v-link class="order-masterclass-card__body-name" :to="href">{{ name }}</v-link>
-            <div class="order-masterclass-card__body-count">
-                {{ count }}
-            </div>
+            <v-link class="order-masterclass-card__body-name" :to="href">
+                <div>{{ name }}</div>
+                <div v-if="note">({{ note }})</div>
+            </v-link>
+
+            <div class="order-masterclass-card__body-count">{{ count }} шт.</div>
+
             <div class="order-masterclass-card__body-prices">
                 <price class="text-bold order-masterclass-card__body-price" v-bind="price" />
                 <price
@@ -19,9 +23,10 @@
                     v-bind="oldPrice"
                 />
             </div>
+
             <div class="text-grey text-sm order-masterclass-card__body-info">
-                <div>{{ date }}</div>
-                <div>{{ author }}</div>
+                <div>{{ additions }}</div>
+                <div>{{ date }}, {{ author }}</div>
             </div>
         </div>
     </li>
@@ -54,13 +59,17 @@ export default {
             required: true,
         },
 
-        href: {
-            type: String,
-        },
-
         type: {
             type: String,
             required: true,
+        },
+
+        note: {
+            type: String,
+        },
+
+        href: {
+            type: String,
         },
 
         image: {
@@ -72,6 +81,10 @@ export default {
         },
 
         author: {
+            type: String,
+        },
+
+        additions: {
             type: String,
         },
 

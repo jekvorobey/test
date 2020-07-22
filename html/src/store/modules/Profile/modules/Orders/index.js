@@ -16,6 +16,7 @@ export const ORDER_DETAILS = 'orderDetails';
 
 export const ORDER = 'order';
 export const DELIVERIES = 'deliveries';
+export const TICKETS = 'tickets';
 
 export const ORDER_DIRECTION = 'orderDirection';
 export const ORDER_FIELD = 'orderField';
@@ -33,7 +34,11 @@ export default function createModule() {
             [REFERRAL_DATA]: {},
             [ORDERS]: [],
             [RANGE]: 0,
-            [ORDER_DETAILS]: { [ORDER]: {}, [DELIVERIES]: [] },
+            [ORDER_DETAILS]: {
+                [ORDER]: {},
+                [DELIVERIES]: [],
+                [TICKETS]: [],
+            },
 
             [ORDER_DIRECTION]: sortDirections.DESC,
             [ORDER_FIELD]: sortFields.NUMBER,
