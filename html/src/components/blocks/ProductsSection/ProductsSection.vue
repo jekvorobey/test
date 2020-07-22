@@ -26,15 +26,15 @@
 
                 <catalog-banner-card class="products-section__banner" :item="banner">
                     <template v-if="desktopImage">
-                        <source :data-srcset="desktopImage.webp" type="image/webp" media="(min-width: 1024px)" />
+                        <source :data-srcset="getWebpImageWithRetina(desktopImage)" type="image/webp" media="(min-width: 1024px)" />
                         <source :data-srcset="desktopImage.orig" media="(min-width: 1024px)" />
                     </template>
                     <template v-if="tabletImage">
-                        <source :data-srcset="tabletImage.webp" type="image/webp" media="(min-width: 768px)" />
+                        <source :data-srcset="getWebpImageWithRetina(tabletImage)" type="image/webp" media="(min-width: 768px)" />
                         <source :data-srcset="tabletImage.orig" media="(min-width: 768px)" />
                     </template>
                     <template v-if="mobileImage">
-                        <source :data-srcset="mobileImage.webp" type="image/webp" media="(min-width: 320px)" />
+                        <source :data-srcset="getWebpImageWithRetina(mobileImage)" type="image/webp" media="(min-width: 320px)" />
                         <source :data-srcset="mobileImage.orig" media="(min-width: 320px)" />
                     </template>
                     <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
@@ -115,10 +115,13 @@ export default {
     computed: {
         mobileImage() {
             const image = this.banner.mobileImage || this.banner.tabletImage || this.banner.desktopImage;
+            const imageRetina  = this.banner.mobileImageRetina || this.banner.tabletImage;
+
             if (typeof image === 'string')
                 return {
                     webp: image,
                     orig: image,
+                    retina: imageRetina,
                 };
 
             if (image)
@@ -130,10 +133,13 @@ export default {
 
         tabletImage() {
             const image = this.banner.tabletImage || this.banner.desktopImage;
+            const imageRetina  = this.banner.tabletImageRetina || this.banner.tabletImage;
+
             if (typeof image === 'string')
                 return {
                     webp: image,
                     orig: image,
+                    retina: imageRetina,
                 };
 
             if (image)
@@ -145,11 +151,13 @@ export default {
 
         desktopImage() {
             const image = this.banner.desktopImage || this.banner.tabletImage;
+            const imageRetina  = this.banner.desktopImageRetina || this.banner.tabletImage;
 
             if (typeof image === 'string')
                 return {
                     webp: image,
                     orig: image,
+                    retina: imageRetina,
                 };
 
             if (image)
@@ -185,6 +193,15 @@ export default {
         onToggleFavorite({ productId }) {
             this[TOGGLE_FAVORITES_ITEM](productId);
         },
+
+        getWebpImageWithRetina(image) {
+            let result = '';
+            result += `${image.webp} 1x`;
+            if (image.retina) {
+                result += `, ${image.retina} 2x`;
+            }
+            return result;
+        }
     },
 };
 </script>
