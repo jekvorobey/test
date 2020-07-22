@@ -58,7 +58,7 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as SEARCH_MODULE, SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS, POPULAR_REQUESTS, PRELOADER } from '@store/modules/Search';
-import { GET_POPULAR_PRODUCTS, GET_POPULAR_REQUESTS } from '@store/modules/Search/actions';
+import { GET_POPULAR_PRODUCTS, GET_POPULAR_REQUESTS, SET_SEARCH } from '@store/modules/Search/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
@@ -120,7 +120,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(SEARCH_MODULE, [GET_POPULAR_PRODUCTS, GET_POPULAR_REQUESTS]),
+        ...mapActions(SEARCH_MODULE, [GET_POPULAR_PRODUCTS, GET_POPULAR_REQUESTS, SET_SEARCH]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
@@ -143,6 +143,7 @@ export default {
             this.$router.replace({
                 path: `/${productGroupTypes.SEARCH}/?search_string=${this.searchString}`,
             });
+            this[SET_SEARCH](false);
         },
 
         getLink(category) {
