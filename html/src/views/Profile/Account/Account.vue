@@ -2,7 +2,7 @@
     <section class="section account-view">
         <h2 class="account-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
 
-        <div class="account-view__panels">
+        <div class="account-view__panels" v-if="billingData">
             <div class="account-view__panel">
                 <div class="text-grey">На вашем счете</div>
                 <div class="account-view__panel-count">
@@ -16,6 +16,7 @@
                         Вывод денежных средств осуществляется в срок до 10 календарных дней
                     </span>
                 </div>
+
                 <div class="account-view__panel-bottom">
                     <template v-if="hasPaymentInfo">
                         <v-select
@@ -29,6 +30,7 @@
                             :show-labels="false"
                             @input="onChangeSelectedCard"
                         />
+
                         <v-input
                             class="account-view__panel-bottom-input"
                             v-model="amount"
@@ -37,6 +39,7 @@
                             :placeholder="sumInputPlaceholder"
                             :max="maxBillingValue"
                         />
+
                         <v-button
                             class="account-view__panel-bottom-btn"
                             :disabled="!selectedCard || !amount || isDisabledBtn"
@@ -50,8 +53,10 @@
                         <router-link :to="{ name: 'Cabinet' }">личном кабинете</router-link>
                     </template>
                 </div>
+
                 <div class="account-view__panel-attention">
-                    Нажимая кнопку «оформить вывод», я согласен с условиями <a href="https://money.yandex.ru/pay/page?id=526623">оферты Яндекс.Денег</a>
+                    Нажимая кнопку «оформить вывод», я согласен с условиями
+                    <a href="https://money.yandex.ru/pay/page?id=526623">оферты Яндекс.Денег</a>
                 </div>
             </div>
         </div>
@@ -121,6 +126,7 @@
                     Вам еще не начислялись вознаграждения за покупки рефералов. Воспользуйтесь одним из маркетинговых
                     инструменов для привлечения аудитории:
                 </p>
+
                 <ul class="list list--dashed account-view__attention-list">
                     <li class="account-view__attention-list-item">
                         <v-link class="account-view__attention-link" tag="button" @click="onCopyToClipboard($event)">
@@ -305,12 +311,15 @@ export default {
         },
 
         sumInputPlaceholder() {
-            return `Сумма от ${this.billingData.limits.min.toLocaleString()} ₽`;
+            const { limits } = this.billingData;
+            return limits.min !== null ? `Сумма от ${limits.min && limits.min.toLocaleString()} ₽` : '';
         },
 
         maxBillingValue() {
-            return this.billingData.referral_bill.value > this.billingData.limits.max ? this.billingData.limits.max : this.billingData.referral_bill.value;
-        }
+            return this.billingData.referral_bill.value > this.billingData.limits.max
+                ? this.billingData.limits.max
+                : this.billingData.referral_bill.value;
+        },
     },
 
     watch: {
