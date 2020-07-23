@@ -959,12 +959,11 @@ export default {
             }
 
             if (Array.isArray(media) && media.length > 0) {
-                const desktopSize = 504;
-                const gallerySize = 744;
+                const gallerySize = 800;
+                const desktopSize = 600;
                 const tabletSize = 400;
-                const mobileSize = 200;
 
-                imageMap.media = media.map(image => prepareProductImage(image, desktopSize, tabletSize, mobileSize));
+                imageMap.media = media.map(image => prepareProductImage(image, desktopSize, tabletSize));
                 imageMap.gallery = media.map(image => prepareProductImage(image, gallerySize));
             } else {
                 imageMap.media = [];

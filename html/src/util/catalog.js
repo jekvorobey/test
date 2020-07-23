@@ -160,17 +160,31 @@ export function computeFilterMasterclassData(pathMatch) {
 export function prepareProductImage(image, desktopSize, tabletSize, mobileSize) {
     return {
         ...image,
-        desktop: {
-            webp: generatePictureSourcePath(desktopSize, desktopSize, image.id, fileExtension.image.WEBP),
-            orig: generatePictureSourcePath(desktopSize, desktopSize, image.id),
+        desktop: desktopSize && {
+            webp: `${generatePictureSourcePath(
+                desktopSize,
+                desktopSize,
+                image.id,
+                fileExtension.image.WEBP
+            )}, ${generatePictureSourcePath(desktopSize * 2, desktopSize * 2, image.id, fileExtension.image.WEBP)} 2x`,
+            orig: `${generatePictureSourcePath(desktopSize, desktopSize, image.id)}, ${generatePictureSourcePath(
+                desktopSize * 2,
+                desktopSize * 2,
+                image.id
+            )} 2x`,
         },
         tablet: tabletSize && {
-            webp: generatePictureSourcePath(tabletSize, tabletSize, image.id, fileExtension.image.WEBP),
-            orig: generatePictureSourcePath(tabletSize, tabletSize, image.id),
-        },
-        mobile: mobileSize && {
-            webp: generatePictureSourcePath(mobileSize, mobileSize, image.id, fileExtension.image.WEBP),
-            orig: generatePictureSourcePath(mobileSize, mobileSize, image.id),
+            webp: `${generatePictureSourcePath(
+                tabletSize,
+                tabletSize,
+                image.id,
+                fileExtension.image.WEBP
+            )}, ${generatePictureSourcePath(tabletSize * 2, tabletSize * 2, image.id, fileExtension.image.WEBP)} 2x`,
+            orig: `${generatePictureSourcePath(tabletSize, tabletSize, image.id)}, ${generatePictureSourcePath(
+                tabletSize * 2,
+                tabletSize * 2,
+                image.id
+            )} 2x`,
         },
         default: generatePictureSourcePath(desktopSize, desktopSize, image.id),
     };
