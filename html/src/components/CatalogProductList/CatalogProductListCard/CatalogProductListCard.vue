@@ -7,9 +7,9 @@
     >
         <div class="catalog-product-list-card__img" v-once>
             <v-picture v-if="item.image && item.image.id">
-                <source :data-srcset="bigImg.webp" type="image/webp" media="(min-width: 480px)" />
+                <source :data-srcset="bigImg.webp" media="(min-width: 480px)" type="image/webp"  />
                 <source :data-srcset="bigImg.orig" media="(min-width: 480px)" />
-                <source :data-srcset="smallImg.webp" type="image/webp" media="(max-width: 479px)" />
+                <source :data-srcset="smallImg.webp" media="(max-width: 479px)" type="image/webp"  />
                 <source :data-srcset="smallImg.orig" media="(max-width: 479px)" />
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
             </v-picture>
@@ -159,22 +159,34 @@ export default {
         bigImg() {
             const { image } = this.item;
             return {
-                webp: generatePictureSourcePath(300, 300, image.id, fileExtension.image.WEBP),
-                orig: generatePictureSourcePath(300, 300, image.id),
+                webp: `${generatePictureSourcePath(
+                    380,
+                    380,
+                    image.id,
+                    fileExtension.image.WEBP
+                )}, ${generatePictureSourcePath(760, 760, image.id, fileExtension.image.WEBP)} 2x`,
+                orig: `${generatePictureSourcePath(380, 380, image.id)},
+                ${generatePictureSourcePath(760, 760, image.id)} 2x`,
             };
         },
 
         smallImg() {
             const { image } = this.item;
             return {
-                webp: generatePictureSourcePath(200, 200, image.id, fileExtension.image.WEBP),
-                orig: generatePictureSourcePath(200, 200, image.id),
+                webp: `${generatePictureSourcePath(
+                    230,
+                    230,
+                    image.id,
+                    fileExtension.image.WEBP
+                )}, ${generatePictureSourcePath(460, 460, image.id, fileExtension.image.WEBP)} 2x`,
+                orig: `${generatePictureSourcePath(230, 230, image.id)},
+                ${generatePictureSourcePath(460, 460, image.id)} 2x`,
             };
         },
 
         defaultImg() {
             const { image } = this.item;
-            return generatePictureSourcePath(200, 200, image.id);
+            return generatePictureSourcePath(760, 760, image.id);
         },
 
         href() {

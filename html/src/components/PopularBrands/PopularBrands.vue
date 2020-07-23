@@ -1,21 +1,25 @@
 <template>
     <div class="popular-brands">
         <div class="popular-brands__most-popular">
-            <a
+            <router-link
                 class="popular-brands__most-popular-img"
-                v-for="(brand, index) in mostPopularBrands"
-                :key="brand.id || index"
-                :href="brand.href ? brand.href : '/'"
+                v-for="brand in mostPopularBrands"
+                :key="brand.id"
+                :to="brand.href ? brand.href : '/'"
             >
-                <v-picture :image="generatePicturePath(brand.image)" />
-            </a>
+                <v-picture v-if="brand.image">
+                    <img class="blur-up lazyload v-picture__img" :data-src="generatePicturePath(brand.image)" alt="" />
+                </v-picture>
+            </router-link>
         </div>
         <ul class="popular-brands__list">
-            <li class="popular-brands__list-item" v-for="(brand, index) in restBrands" :key="brand.id || index">
-                <a :href="brand.href ? brand.href : '/'" class="popular-brands__link">{{ brand.name }}</a>
+            <li class="popular-brands__list-item" v-for="brand in restBrands.slice(0, count)" :key="brand.id">
+                <router-link :to="brand.href ? brand.href : '/'" class="popular-brands__link">
+                    {{ brand.name }}
+                </router-link>
             </li>
-            <li v-if="canShowAll || items.length < restBrands.length + mostPopularBrands.length" class="popular-brands__list-item">
-                <button class="popular-brands__list-btn" @click="onShowAll">{{ btnText }}</button>
+            <li v-if="canShowAll" class="popular-brands__list-item">
+                <button class="popular-brands__list-btn" @click="onShowAll">Показать все</button>
             </li>
         </ul>
     </div>
@@ -26,7 +30,6 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import VLink from '@controls/VLink/VLink.vue';
 
 import { generatePictureSourcePath } from '@util/file';
-
 import './PopularBrands.css';
 
 export default {
@@ -44,51 +47,40 @@ export default {
                 return [];
             },
         },
-
-        popularCount: {
-            type: Number,
-            default: 6,
-        },
-
-        restCount: {
-            type: Number,
-            default: 18,
-        },
-
-        btnText: {
-            type: String,
-            default: 'Показать все',
-        },
     },
 
     data() {
         return {
-            showAll: false,
+            count: 7,
         };
     },
 
     computed: {
         mostPopularBrands() {
-            return this.items.slice(0, this.popularCount);
+            return this.items.filter(i => !!i.image);
         },
 
         restBrands() {
-            if (this.showAll) return this.items.slice(this.popularCount, this.items.length);
-            return this.items.slice(this.popularCount, this.restCount);
+            return this.items.filter(i => !i.image);
+        },
+
+        restCount() {
+            return this.restBrands.length;
         },
 
         canShowAll() {
-            return this.items.length <= this.popularCount + this.restCount && !this.showAll;
+            const rest = this.restCount - this.count;
+            return rest > 0;
         },
     },
 
     methods: {
         onShowAll() {
-            this.showAll = !this.showAll;
+            this.count = this.restCount;
         },
 
         generatePicturePath(image) {
-            return generatePictureSourcePath(null, null, image.id);
+            return image && generatePictureSourcePath(null, null, image.id);
         },
     },
 };

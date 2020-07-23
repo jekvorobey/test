@@ -3,7 +3,7 @@
         width: 100%;
         display: grid;
         grid-template-columns: repeat(6, 1fr);
-        grid-template-rows: 1fr;
+        grid-template-rows: calc(var(--gs) * 8);
         grid-gap: calc(var(--gs) * 6);
         margin-bottom: calc(var(--gs) * 10);
 
@@ -22,6 +22,8 @@
         &-img {
             position: relative;
             border-bottom: none;
+            max-width: 144px;
+            background-color: var(--cl-white);
 
             @media (--tablet-lg) {
                 margin: 0 5% 10%;
@@ -38,6 +40,20 @@
                 height: 100%;
                 background-color: var(--cl-global);
                 opacity: 0.03;
+            }
+
+            .v-picture {
+                height: 100%;
+
+                &__img {
+                    height: auto;
+                    font-family: 'object-fit: contain;';
+
+                    @supports (object-fit: contain) {
+                        font-family: inherit;
+                        object-fit: contain;
+                    }
+                }
             }
         }
     }

@@ -4,13 +4,7 @@
             <h2 class="brands-section__hl">
                 {{ titleText }}
             </h2>
-            <popular-brands
-                class="brands-section__list"
-                :items="items"
-                :popular-count="popularCount"
-                :rest-count="restCount"
-                :btn-text="btnText"
-            />
+            <popular-brands class="brands-section__list" :items="items" />
         </div>
     </section>
 </template>
@@ -42,10 +36,6 @@ export default {
 
         restCount: {
             type: Number,
-        },
-
-        btnText: {
-            type: String,
         },
     },
 };

@@ -343,9 +343,9 @@ export default {
         ]),
         ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE, RANGE]),
         ...mapState('route', {
-            code: (state) => state.params.code,
-            entityCode: (state) => state.params.entityCode,
-            searchQuery: (state) => state.query.search_string,
+            code: state => state.params.code,
+            entityCode: state => state.params.entityCode,
+            searchQuery: state => state.query.search_string,
         }),
 
         isBrandPage() {
@@ -471,7 +471,7 @@ export default {
 
         setSortValue(field, direction) {
             this.sortValue =
-                this.sortOptions.find((o) => o.field === field && o.direction === direction) || this.sortOptions[0];
+                this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
         },
 
         onClickDeleteTag(value) {
@@ -582,7 +582,7 @@ export default {
 
         // если все загружено, пропускаем
         if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode)
-            next((vm) => vm.setSortValue(orderField, orderDirection));
+            next(vm => vm.setSortValue(orderField, orderDirection));
         else {
             const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode, encodeSearchString);
 
@@ -601,9 +601,9 @@ export default {
                     orderField,
                     orderDirection,
                 })
-                .then((data) => {
+                .then(data => {
                     $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
+                    next(vm => {
                         $progress.finish();
                         vm.setSortValue(orderField, orderDirection);
 
@@ -614,7 +614,7 @@ export default {
                             });
                     });
                 })
-                .catch((thrown) => {
+                .catch(thrown => {
                     if (thrown && thrown.isCancel === true) return next();
 
                     $progress.fail();

@@ -187,20 +187,38 @@ export default {
 
         bigImg() {
             return {
-                webp: generatePictureSourcePath(300, 300, this.image.id, fileExtension.image.WEBP),
-                orig: generatePictureSourcePath(300, 300, this.image.id),
+                webp: `${generatePictureSourcePath(
+                    380,
+                    380,
+                    this.image.id,
+                    fileExtension.image.WEBP
+                )}, ${generatePictureSourcePath(760, 760, this.image.id, fileExtension.image.WEBP)} 2x`,
+                orig: `${generatePictureSourcePath(380, 380, this.image.id)}, ${generatePictureSourcePath(
+                    760,
+                    760,
+                    this.image.id
+                )} 2x`,
             };
         },
 
         smallImg() {
             return {
-                webp: generatePictureSourcePath(200, 200, this.image.id, fileExtension.image.WEBP),
-                orig: generatePictureSourcePath(200, 200, this.image.id),
+                webp: `${generatePictureSourcePath(
+                    230,
+                    230,
+                    this.image.id,
+                    fileExtension.image.WEBP
+                )} 1x, ${generatePictureSourcePath(460, 460, this.image.id, fileExtension.image.WEBP)} 2x`,
+                orig: `${generatePictureSourcePath(230, 230, this.image.id)}, ${generatePictureSourcePath(
+                    460,
+                    460,
+                    this.image.id
+                )} 2x`,
             };
         },
 
         defaultImg() {
-            return generatePictureSourcePath(200, 200, this.image.id);
+            return generatePictureSourcePath(760, 760, this.image.id);
         },
 
         inFavorites() {
