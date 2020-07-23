@@ -3,21 +3,7 @@
     display: flex;
     flex-direction: column;
     cursor: pointer;
-
-    &:hover &__body {
-        background-color: var(--cl-elem-grey);
-    }
-
-    &:hover &__img {
-        border-color: var(--cl-divider-grey);
-
-        @media (--tablet-min) {
-            img {
-                opacity: 0.2;
-                transition: all var(--time) ease-in;
-            }
-        }
-    }
+    border-bottom: none;
 
     &__img {
         display: flex;

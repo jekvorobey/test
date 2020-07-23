@@ -1,7 +1,7 @@
 .products-section {
     @media (--tablet) {
         padding: 0;
-        margin-bottom: calc(var(--gs) * 4);
+        margin-bottom: calc(var(--gs) * 2);
     }
 
     &__hl {
@@ -119,7 +119,7 @@
         @media (--tablet) {
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr auto;
-            grid-gap: var(--gs);
+            grid-gap: calc(var(--gs) * 2) var(--gs);
         }
     }
 
