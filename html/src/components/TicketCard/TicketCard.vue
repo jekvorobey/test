@@ -19,8 +19,9 @@
                 />
             </div>
 
-            <v-button class="ticket-card__btn" @click="onBtnClick">
-                <slot>Добавить</slot>
+            <v-button class="ticket-card__btn" :class="{ 'btn--transparent': inProcess }" @click="onBtnClick">
+                <v-spinner v-if="inProcess" width="24" height="24" show />
+                <slot v-else>Добавить</slot>
             </v-button>
         </div>
     </li>
@@ -28,6 +29,7 @@
 
 <script>
 import VButton from '@controls/VButton/VButton.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 import VCounter from '@controls/VCounter/VCounter.vue';
 
 import Price from '@components/Price/Price.vue';
@@ -40,6 +42,7 @@ export default {
     components: {
         VButton,
         VCounter,
+        VSpinner,
 
         Price,
     },
@@ -76,6 +79,11 @@ export default {
 
         oldPrice: {
             type: Object,
+        },
+
+        inProcess: {
+            type: Boolean,
+            default: false,
         },
 
         disabled: {

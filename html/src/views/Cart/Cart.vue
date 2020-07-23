@@ -7,7 +7,7 @@
         <section class="section cart-view__main">
             <div v-if="cartItemsCount > 0" class="container cart-view__main-container">
                 <div class="cart-view__main-tabs">
-                    <v-tabs :items="cartTypes" key-field="id" :activeTab.sync="activeTab">
+                    <v-tabs :items="cartTypes" key-field="type" :activeTab.sync="activeTab">
                         <template v-slot:header="{ item: type }">
                             {{ $t(`cart.title.${type.type}`) }}
                             &nbsp;&nbsp;<span class="text-grey">{{ type.items.length }}</span>

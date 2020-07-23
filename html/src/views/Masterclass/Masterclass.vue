@@ -278,14 +278,15 @@
                         :max="ticket.qty"
                         :price="ticket.price"
                         :old-price="ticket.oldPrice"
-                        :disabled="isInCart(ticket.offerId)"
+                        :disabled="isInCart(ticket.offerId) || inProcess[ticket.offerId]"
+                        :in-process="!!inProcess[ticket.offerId]"
                         @btnClick="onAddToCart(ticket.offerId, $event)"
                     >
                         <template v-if="!isTablet">
-                            {{ isInCart(ticket.id) ? 'Перейти в корзину' : 'Добавить в корзину' }}
+                            {{ isInCart(ticket.offerId) ? 'Перейти в корзину' : 'Добавить в корзину' }}
                         </template>
                         <template v-else>
-                            {{ isInCart(ticket.id) ? 'В корзину' : 'Добавить' }}
+                            {{ isInCart(ticket.offerId) ? 'В корзину' : 'Добавить' }}
                         </template>
                     </ticket-card>
                 </ul>
@@ -488,6 +489,7 @@ import {
 import { FETCH_MASTERCLASS_DATA } from '@store/modules/Masterclass/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { IS_IN_CART } from '@store/modules/Cart/getters';
 import { ADD_MASTERCLASS_ITEM } from '@store/modules/Cart/actions';
 
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
@@ -594,6 +596,7 @@ export default {
         return {
             showMap: false,
             isPanelVisible: false,
+            inProcess: {},
 
             markerIcon: {
                 layout: 'default#image',
@@ -628,8 +631,6 @@ export default {
                     },
                 },
             ],
-
-            inCart: [], // мок корзина
         };
     },
 
@@ -638,6 +639,7 @@ export default {
         ...mapState('route', { code: state => state.params.code }),
         ...mapState(MASTERCLASS_MODULE, [MASTERCLASS, FEATURED_MASTERCLASSES, INSTAGRAM_ITEMS]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
+        ...mapGetters(CART_MODULE, [IS_IN_CART]),
         ...mapState(MODAL_MODULE, {}),
 
         pricePanelAnimation() {
@@ -821,12 +823,18 @@ export default {
             return generateMasterclassUrl(code);
         },
 
-        onAddToCart(id, count) {
-            this[ADD_MASTERCLASS_ITEM]({ offerId: id, count });
+        async onAddToCart(id, count) {
+            const inCart = this.isInCart(id);
+            if (inCart) this.$router.push({ name: 'Cart' });
+            else {
+                this.inProcess = { ...this.inProcess, [id]: true };
+                await this[ADD_MASTERCLASS_ITEM]({ offerId: id, count });
+                this.inProcess[id] = false;
+            }
         },
 
         isInCart(id) {
-            return this.inCart.some(i => i.id === id);
+            return this[IS_IN_CART](cartItemTypes.MASTERCLASS, id);
         },
 
         onPanelVisibilityChanged(isVisible) {

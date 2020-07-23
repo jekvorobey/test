@@ -84,6 +84,9 @@
     }
 
     &__btn {
+        display: flex;
+        justify-content: center;
+
         @media (--tablet-min) {
             min-width: 200px;
         }
