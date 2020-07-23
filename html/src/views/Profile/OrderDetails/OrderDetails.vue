@@ -212,8 +212,11 @@
                         :date="item.dateTime"
                         :author="item.author"
                         :additions="item.additions"
-                        :count="item.qty"
-                        :href="item.url"
+                        :qty="item.qty"
+                        :qty-returned="item.qtyReturned"
+                        :is-complete="item.isComplete"
+                        :url="item.url"
+                        :download-url="item.downloadUrl"
                         :is-small="isTablet"
                     >
                         <source :data-srcset="item.desktopImg.webp" type="image/webp" />
@@ -270,7 +273,7 @@ import { orderPaymentStatus, orderStatus, deliveryStatus } from '@enums/order';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { orderDateLocaleOptions } from '@settings/profile';
 import { toAddressString } from '@util/address';
-import { generateMasterclassUrl } from '@util/catalog';
+import { generateMasterclassUrl, generateTicketDownloadUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { getOrderStatusColorClass, getDeliveryStatusColorClass } from '@util/order';
 
@@ -323,6 +326,7 @@ export default {
         },
 
         items() {
+            const { id, payment_status } = this[ORDER] || {};
             const tickets = this[TICKETS] || [];
 
             return tickets.map(i => {
@@ -331,6 +335,8 @@ export default {
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
                 const dateTime = `${date}, ${time}`;
                 const url = generateMasterclassUrl(i.code);
+                const downloadUrl =
+                    payment_status === orderPaymentStatus.PAID ? generateTicketDownloadUrl(id, i.basketItemId) : null;
                 const note = `Входной билет ${i.ticketTypeName}`;
 
                 const speaker = i.speakers && i.speakers[0];
@@ -350,7 +356,7 @@ export default {
                     orig: generatePictureSourcePath(425, 320, i.image.id),
                 };
 
-                return { ...i, note, author, additions, url, dateTime, desktopImg, mobileImg, defaultImg };
+                return { ...i, note, author, additions, url, downloadUrl, dateTime, desktopImg, mobileImg, defaultImg };
             });
         },
 

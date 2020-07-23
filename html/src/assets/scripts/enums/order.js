@@ -37,10 +37,12 @@ export const orderStatus = Object.freeze({
 });
 
 export const orderPaymentStatus = Object.freeze({
-    /* Оплачен */
-    NOT_PAID: 1,
     /* Не оплачен */
+    NOT_PAID: 1,
+
+    /* Оплачен */
     PAID: 2,
+
     /* Просрочен */
     TIMEOUT: 3,
 });
@@ -95,7 +97,6 @@ export const deliveryStatus = Object.freeze({
     /** n/a */
     STATUS_NA: 92,
 });
-
 
 export const filterField = Object.freeze({
     ALL_TIME: 'all_time',

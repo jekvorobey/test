@@ -1,6 +1,12 @@
 <template>
-    <li class="order-masterclass-card" :class="{ 'order-masterclass-card--small': isSmall }">
-        <router-link class="order-masterclass-card__img" :to="href">
+    <li
+        class="order-masterclass-card"
+        :class="[
+            { 'order-masterclass-card--small': isSmall },
+            { 'order-masterclass-card--returned': qty === qtyReturned },
+        ]"
+    >
+        <router-link class="order-masterclass-card__img" :to="url">
             <v-picture v-if="image">
                 <slot />
             </v-picture>
@@ -8,12 +14,34 @@
         </router-link>
 
         <div class="order-masterclass-card__body">
-            <v-link class="order-masterclass-card__body-name" :to="href">
+            <v-link class="order-masterclass-card__body-name" :to="url">
                 <div>{{ name }}</div>
                 <div v-if="note">({{ note }})</div>
             </v-link>
 
-            <div class="order-masterclass-card__body-count">{{ count }} шт.</div>
+            <div class="order-masterclass-card__body-download">
+                <v-link
+                    class="order-masterclass-card__body-download-link"
+                    v-if="!isComplete && qtyReturned !== qty && downloadUrl"
+                    :href="downloadUrl"
+                    download
+                >
+                    <v-svg name="ticket" width="16" height="16" />&nbsp;
+                    <span>Скачать</span>
+                </v-link>
+
+                <div v-if="isComplete">
+                    Завершен
+                </div>
+                <div v-else-if="qtyReturned > 0">
+                    <template v-if="qtyReturned < qty"> Оформлен возврат {{ qtyReturned }} шт. </template>
+                    <template v-else>
+                        Оформлен возврат
+                    </template>
+                </div>
+            </div>
+
+            <div class="order-masterclass-card__body-count">{{ qty }} шт.</div>
 
             <div class="order-masterclass-card__body-prices">
                 <price class="text-bold order-masterclass-card__body-price" v-bind="price" />
@@ -39,6 +67,7 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 
 import Price from '@components/Price/Price.vue';
 
+import '@images/sprites/ticket.svg';
 import '@images/sprites/logo.svg';
 import './OrderMasterclassCard.css';
 
@@ -68,7 +97,11 @@ export default {
             type: String,
         },
 
-        href: {
+        url: {
+            type: String,
+        },
+
+        downloadUrl: {
             type: String,
         },
 
@@ -96,9 +129,19 @@ export default {
             type: Object,
         },
 
-        count: {
+        qty: {
             type: Number,
             default: 1,
+        },
+
+        qtyReturned: {
+            type: Number,
+            default: 0,
+        },
+
+        isComplete: {
+            type: Boolean,
+            default: false,
         },
 
         isSmall: {

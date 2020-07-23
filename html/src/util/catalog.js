@@ -22,6 +22,10 @@ export function generateMasterclassUrl(code, refCode) {
     return `/masterclasses/${code}`;
 }
 
+export function generateTicketDownloadUrl(orderId, basketItemId) {
+    return orderId && basketItemId && `/v1/lk/order/${orderId}/tickets?basket_item_id=${basketItemId}`;
+}
+
 export function generateCategoryUrl(type, entityCode, categoryCode) {
     switch (type) {
         case productGroupTypes.CATALOG:
@@ -133,7 +137,7 @@ export function computeFilterData(pathMatch, code = null, searchString = null) {
     if (searchString) {
         filter.search_string = searchString;
     }
-    
+
     return { filter, routeSegments, filterSegments };
 }
 
