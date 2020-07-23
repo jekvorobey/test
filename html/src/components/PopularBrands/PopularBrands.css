@@ -22,7 +22,10 @@
         &-img {
             position: relative;
             border-bottom: none;
-            margin: 0 5% 10%;
+
+            @media (--tablet-lg) {
+                margin: 0 5% 10%;
+            }
 
             &::before {
                 content: '';
