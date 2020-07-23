@@ -140,8 +140,8 @@ export default {
                 data: {
                     titleText: 'Популярные бренды',
                     items: state.brands,
-                    restCount: 10,
-                    btnText: 'Показать',
+                    restCount: 16,
+                    btnText: `Показать все ${state.brands.length} брендов`,
                 },
             },
             {
