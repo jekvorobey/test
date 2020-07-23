@@ -4,7 +4,7 @@
             <div class="reviews-panel__header">
                 <h2 class="reviews-panel__header-hl">
                     {{ $t('product.title.reviews') }}
-                    <span class="text-grey reviews-panel__header-hl-count">
+                    <span class="text-grey reviews-panel__header-hl-count" v-if="range">
                         {{ range }}&nbsp;<v-spinner width="24" height="24" :show="!mounted" />
                     </span>
 
