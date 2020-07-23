@@ -28,10 +28,16 @@
                 @deleteItem="onDeleteMasterclassItem(product.id)"
                 @countChange="onAddMasterclassItem(product.id, $event.count)"
             >
-                <source :data-srcset="product.desktopImg.webp" type="image/webp" media="(min-width: 426px)" />
-                <source :data-srcset="product.desktopImg.orig" media="(min-width: 426px)" />
-                <source :data-srcset="product.mobileImg.webp" type="image/webp" media="(max-width: 425px)" />
-                <source :data-srcset="product.mobileImg.orig" media="(max-width: 425px)" />
+                <template v-if="product.desktopImg">
+                    <source :data-srcset="product.desktopImg.webp" type="image/webp" media="(min-width: 426px)" />
+                    <source :data-srcset="product.desktopImg.orig" media="(min-width: 426px)" />
+                </template>
+
+                <template v-if="product.mobileImg">
+                    <source :data-srcset="product.mobileImg.webp" type="image/webp" media="(max-width: 425px)" />
+                    <source :data-srcset="product.mobileImg.orig" media="(max-width: 425px)" />
+                </template>
+
                 <img class="blur-up lazyload v-picture__img" :data-src="product.defaultImg" alt="" />
             </cart-master-class-card>
         </transition-group>
