@@ -11,7 +11,7 @@
 
     @media (--tablet-lg-min) {
         @supports (grid-template-columns: auto) {
-            transition: padding-top var(--animation-time) ease-in;
+            transition: padding-top var(--time) ease-in;
         }
     }
 

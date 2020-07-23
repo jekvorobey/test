@@ -14,7 +14,7 @@
 
     &__main {
         overflow: hidden;
-        transition: height var(--animation-time) ease-in;
+        transition: height var(--time) ease-in;
 
         @media (--tablet-lg) {
             padding: 0;

@@ -8,7 +8,7 @@
     line-height: 24px;
     font-weight: normal;
     text-transform: none;
-    transition: height var(--animation-time) ease-in;
+    transition: height var(--time) ease-in;
 
     @media (--tablet-lg) {
         display: none;

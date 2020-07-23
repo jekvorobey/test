@@ -134,7 +134,7 @@ export default {
         },
 
         async onEnter(el, done) {
-            await this.itemAnimation(el, el.scrollHeight, 800);
+            await this.itemAnimation(el, el.scrollHeight, 400);
             done();
         },
 
@@ -147,7 +147,7 @@ export default {
         },
 
         async onLeave(el, done) {
-            await this.itemAnimation(el, 0, 800);
+            await this.itemAnimation(el, 0, 400);
             done();
         },
     },
