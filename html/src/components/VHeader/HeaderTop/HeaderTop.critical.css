@@ -1,5 +1,4 @@
 .header-top {
-    padding: calc(var(--gs) / 2) 0;
     overflow: hidden;
     background-color: var(--cl-white);
     border-bottom: 1px solid var(--cl-divider-grey);
@@ -9,6 +8,7 @@
     line-height: 24px;
     font-weight: normal;
     text-transform: none;
+    transition: height var(--animation-time) ease-in;
 
     @media (--tablet-lg) {
         display: none;
@@ -77,6 +77,8 @@
     }
 
     &__container {
+        padding-top: calc(var(--gs) / 2);
+        padding-bottom: calc(var(--gs) / 2);
         justify-content: space-between;
     }
 

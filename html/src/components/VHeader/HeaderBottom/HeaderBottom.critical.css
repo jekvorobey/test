@@ -13,10 +13,17 @@
     }
 
     &__main {
-        padding: calc(var(--gs) * 2) 0;
+        overflow: hidden;
+        transition: height var(--animation-time) ease-in;
 
         @media (--tablet-lg) {
             padding: 0;
+            display: none;
+        }
+
+        &-container {
+            padding-top: calc(var(--gs) * 2);
+            padding-bottom: calc(var(--gs) * 2);
         }
 
         &-search {

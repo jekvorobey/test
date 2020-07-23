@@ -7,7 +7,15 @@
             <div class="container v-header__city-confirm">
                 <city-confirmation-panel v-if="!isTabletLg" />
             </div>
-            <header-top v-if="!scroll" />
+            <transition
+                @before-enter="onBeforeEnter"
+                @enter="onEnter"
+                @after-enter="onAfterEnter"
+                @before-leave="onBeforeLeave"
+                @leave="onLeave"
+            >
+                <header-top v-if="!scroll" />
+            </transition>
             <header-bottom />
         </div>
 
@@ -81,6 +89,43 @@ export default {
 
         onCloseMenu() {
             this[SET_MENU_OPEN](false);
+        },
+
+        onBeforeEnter(el) {
+            el.style.height = 0;
+        },
+
+        itemAnimation(el, value, delay) {
+            return new Promise((resolve, reject) => {
+                try {
+                    requestAnimationFrame(() => {
+                        el.style.height = value + 'px';
+                        setTimeout(() => {
+                            resolve();
+                        }, delay);
+                    });
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        },
+
+        async onEnter(el, done) {
+            await this.itemAnimation(el, el.scrollHeight, 400);
+            done();
+        },
+
+        onAfterEnter(el) {
+            el.style.height = 'auto';
+        },
+
+        onBeforeLeave(el) {
+            el.style.height = el.scrollHeight + 'px';
+        },
+
+        async onLeave(el, done) {
+            await this.itemAnimation(el, 0, 400);
+            done();
         },
     },
 

@@ -1,8 +1,14 @@
 <template>
     <div class="header-bottom" :class="{ 'header-bottom--scroll': scroll && !isTabletLg }">
-        <transition :duration="400">
-            <div class="header-bottom__main" v-show="!scroll">
-                <div class="container header-bottom__container">
+        <transition
+            @before-enter="onBeforeEnter"
+            @enter="onEnter"
+            @after-enter="onAfterEnter"
+            @before-leave="onBeforeLeave"
+            @leave="onLeave"
+        >
+            <div key="bottom-main" class="header-bottom__main" v-show="!scroll">
+                <div class="container header-bottom__container header-bottom__main-container">
                     <search-filter
                         class="header-bottom__main-search"
                         input-id="upper-filter"
@@ -31,10 +37,7 @@
                 </router-link>
 
                 <template v-if="scroll || isTabletLg">
-                    <search-filter
-                        class="header-bottom__bottom-search"
-                        input-id="bottom-filter"
-                    />
+                    <search-filter class="header-bottom__bottom-search" input-id="bottom-filter" />
                     <header-user-panel class="header-bottom__bottom-user" />
                 </template>
             </div>
@@ -110,6 +113,43 @@ export default {
         ...mapActions([SET_MENU_OPEN]),
         ...mapActions(SEARCH_MODULE, [SET_SEARCH]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        onBeforeEnter(el) {
+            el.style.height = 0;
+        },
+
+        itemAnimation(el, value, delay) {
+            return new Promise((resolve, reject) => {
+                try {
+                    requestAnimationFrame(() => {
+                        el.style.height = value + 'px';
+                        setTimeout(() => {
+                            resolve();
+                        }, delay);
+                    });
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        },
+
+        async onEnter(el, done) {
+            await this.itemAnimation(el, el.scrollHeight, 800);
+            done();
+        },
+
+        onAfterEnter(el) {
+            el.style.height = 'auto';
+        },
+
+        onBeforeLeave(el) {
+            el.style.height = el.scrollHeight + 'px';
+        },
+
+        async onLeave(el, done) {
+            await this.itemAnimation(el, 0, 800);
+            done();
+        },
     },
 
     watch: {
