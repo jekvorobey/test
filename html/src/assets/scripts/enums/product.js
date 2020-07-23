@@ -1,6 +1,7 @@
 export const cartItemTypes = Object.freeze({
     PRODUCT: 'product',
     MASTERCLASS: 'masterclass',
+    BUNDLE_PRODUCT: 'bundle_product',
 });
 
 export const productGroupTypes = Object.freeze({

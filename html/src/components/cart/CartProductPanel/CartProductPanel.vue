@@ -20,11 +20,11 @@
         >
             <li
                 class="cart-product-panel__list-item"
-                v-for="({ p: product, count }, index) in products"
+                v-for="({ p: product, count, type }, index) in products"
                 :key="product.id"
             >
                 <cart-product-card
-                    v-if="product.type === 'product'"
+                    v-if="type === cartItemTypes.PRODUCT"
                     :data-index="index"
                     :offer-id="product.id"
                     :product-id="product.productId"
@@ -40,7 +40,7 @@
                     @countChange="onAddCartItem(product.id, product.stock.storeId, $event.count)"
                 />
                 <cart-bundle-product-card
-                    v-else-if="product.type === 'bundle_product'"
+                    v-else-if="type === cartItemTypes.BUNDLE_PRODUCT"
                     :bundle-id="product.id"
                     :name="product.name"
                     :price="product.price"
@@ -67,6 +67,7 @@ import { DELIVERY_INFO } from '@store/modules/Cart/getters';
 import { ADD_CART_ITEM, DELETE_CART_ITEM, DELETE_CART_BUNDLE } from '@store/modules/Cart/actions';
 
 import { fileExtension } from '@enums';
+import { cartItemTypes } from '@enums/product';
 import { generatePictureSourcePath } from '@util/file';
 import { generateProductUrl } from '@util/catalog';
 
@@ -120,7 +121,7 @@ export default {
             this[DELETE_CART_ITEM]({ offerId, storeId });
         },
 
-        onDeleteBundleonDeleteBundle(bundleId) {
+        onDeleteBundle(bundleId) {
             this[DELETE_CART_BUNDLE](bundleId);
         },
 
@@ -162,6 +163,10 @@ export default {
                 done();
             });
         },
+    },
+
+    created() {
+        this.cartItemTypes = cartItemTypes;
     },
 };
 </script>
