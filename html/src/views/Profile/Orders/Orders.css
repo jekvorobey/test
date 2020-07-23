@@ -210,7 +210,7 @@
                 line-height: 24px;
 
                 &:first-child {
-                    @media (--desktop-diff) {
+                    @media (--desktop-lg) {
                         text-align: left;
                     }
                 }
