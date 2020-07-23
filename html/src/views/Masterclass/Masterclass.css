@@ -673,17 +673,25 @@
         }
     }
 
-    &__price-panel {
-        position: fixed;
-        width: 100%;
-        background-color: var(--cl-white);
-        z-index: 100;
-        padding: var(--gs) 0;
-        box-shadow: 0 5px 40px rgba(0, 0, 0, 0.1);
-        bottom: 0;
+    &__top-panel {
+        @media (--tablet-lg-min) {
+            top: calc(var(--gs) * 6);
+        }
 
-        &-btn {
-            width: 100%;
+        @media (--tablet-lg) and (--tablet-min) {
+            top: calc(var(--gs) * 8);
+        }
+
+        @media (--tablet) {
+            bottom: 0;
+
+            .masterclass-price-panel__container {
+                justify-content: space-between;
+            }
+
+            .masterclass-price-panel__name {
+                display: none;
+            }
         }
     }
 

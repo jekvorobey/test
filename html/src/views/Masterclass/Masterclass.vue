@@ -428,14 +428,17 @@
             </div>
         </section>
 
-        <transition name="slide-bottom" appear>
-            <div class="master-class-view__price-panel" v-if="isPanelVisible && isTablet">
-                <div class="container">
-                    <v-button class="master-class-view__price-panel-btn" @click.prevent="onBuyBtnClick">
-                        Купить билет
-                    </v-button>
-                </div>
-            </div>
+        <transition :name="pricePanelAnimation" appear>
+            <masterclass-price-panel
+                class="master-class-view__top-panel"
+                v-if="(scroll && !isPanelVisible) || isTablet"
+                :name="masterClass.title"
+                :price-to="masterClass.priceTo"
+                :price-from="masterClass.priceFrom"
+                @add-item="onBuyBtnClick"
+            >
+                {{ buyBtnText }}
+            </masterclass-price-panel>
         </transition>
     </section>
 </template>
@@ -469,6 +472,7 @@ import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
 import ReviewsPanel from '@components/reviews/ReviewsPanel/ReviewsPanel.vue';
+import MasterclassPricePanel from '@components/MasterclassPricePanel/MasterclassPricePanel.vue';
 
 import { $store, $progress, $logger } from '@services';
 
@@ -575,6 +579,7 @@ export default {
         InfoRow,
         AttentionPanel,
         ReviewsPanel,
+        MasterclassPricePanel,
 
         TicketCard,
         BannerCard,
@@ -634,6 +639,14 @@ export default {
         ...mapState(MASTERCLASS_MODULE, [MASTERCLASS, FEATURED_MASTERCLASSES, INSTAGRAM_ITEMS]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {}),
+
+        pricePanelAnimation() {
+            return this.isTablet ? 'slide-bottom' : 'slide-top';
+        },
+
+        buyBtnText() {
+            return this.isTablet ? 'Купить билет' : 'Купить';
+        },
 
         frisbuyScript() {
             const { speakers = [] } = this[MASTERCLASS] || {};
@@ -817,7 +830,7 @@ export default {
         },
 
         onPanelVisibilityChanged(isVisible) {
-            this.isPanelVisible = !isVisible;
+            this.isPanelVisible = isVisible;
         },
 
         onBuyBtnClick() {

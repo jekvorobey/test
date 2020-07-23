@@ -3,7 +3,7 @@
     padding: calc(var(--gs) * 2) 0;
     -webkit-overflow-scrolling: touch;
 
-    @media (--tablet) {
+    @media (--tablet-lg) {
         padding: 0;
     }
 
