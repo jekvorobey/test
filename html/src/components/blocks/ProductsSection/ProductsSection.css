@@ -128,6 +128,7 @@
 
         @media (--tablet) {
             position: relative;
+            width: 100%;
             grid-column: 1/3;
             grid-row: 3;
             padding-bottom: calc(var(--gs) * 2);
