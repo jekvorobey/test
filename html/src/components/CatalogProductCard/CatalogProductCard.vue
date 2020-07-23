@@ -1,5 +1,5 @@
 <template>
-    <router-link tag="div" class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }" :to="href">
+    <router-link tag="a" class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }" :to="href">
         <div class="catalog-product-card__img">
             <v-picture :key="image.id" v-if="image && image.id">
                 <source :data-srcset="bigImg.webp" type="image/webp" media="(min-width: 480px)" />

@@ -1,6 +1,6 @@
 <template>
     <router-link
-        tag="li"
+        tag="a"
         class="catalog-product-list-card"
         :class="{ 'catalog-product-list-card--small': isSmall }"
         :to="href"

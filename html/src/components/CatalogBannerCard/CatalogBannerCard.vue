@@ -116,7 +116,7 @@ export default {
                 };
 
             return {
-                tag: 'li',
+                tag: 'a',
                 to: url || this.$route.fullPath,
             };
         },
