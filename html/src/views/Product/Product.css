@@ -278,8 +278,8 @@
                 align-items: center;
 
                 &-img {
-                    max-width: 100%;
-                    margin-right: calc(var(--gs) * 2);
+                    max-width: 135px;
+                    margin-right: var(--gs);
                 }
             }
 
