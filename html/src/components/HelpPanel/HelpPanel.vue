@@ -114,7 +114,7 @@ export default {
                     title: 'Связаться с нами в WhatsApp',
                 },
                 viber: {
-                    href: 'viber://chat?number=79162001869',
+                    href: 'viber://pa/?chatURI=ibtru',
                     title: 'Связаться с нами в Viber',
                 },
             },

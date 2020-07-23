@@ -110,7 +110,7 @@
                                 </v-link>
                             </li>
                             <li class="mobile-menu__menu-socials-link">
-                                <v-link href="viber://chat?number=79162001869" target="_blank" rel="nofollow" class="mobile-menu__menu-socials-icon">
+                                <v-link href="viber://pa/?chatURI=ibtru" target="_blank" rel="nofollow" class="mobile-menu__menu-socials-icon">
                                     <v-svg name="viber-bw" width="40" height="40" />
                                 </v-link>
                             </li>
