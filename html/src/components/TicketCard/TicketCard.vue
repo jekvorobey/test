@@ -104,7 +104,7 @@ export default {
 
     methods: {
         onBtnClick() {
-            this.$emit('btnClick', this.count);
+            if (!this.inProcess) this.$emit('btnClick', this.count);
         },
     },
 };
