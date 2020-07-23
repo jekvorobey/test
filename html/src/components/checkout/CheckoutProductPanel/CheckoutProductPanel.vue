@@ -233,7 +233,7 @@
                                 (1 бонус = {{ bonusPerRub }} рубль)
                             </div>
                             <v-link class="checkout-product-panel__item-card-link" tag="button" @click="DELETE_BONUS">
-                                Отменить
+                                Изменить
                             </v-link>
                         </div>
                     </div>
@@ -947,5 +947,9 @@ export default {
             }
         },
     },
+
+    beforeMount() {
+        this[ADD_BONUS](this.maxAmountBonus);
+    }
 };
 </script>
