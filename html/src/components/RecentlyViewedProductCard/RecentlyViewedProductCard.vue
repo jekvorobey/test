@@ -1,5 +1,5 @@
 <template>
-   <router-link tag="div" class="recently-viewed-product-card" :to="href">
+   <router-link tag="a" class="recently-viewed-product-card" :to="href">
        <div class="recently-viewed-product-card__img">
             <v-picture :key="image.id" v-if="image && image.id">
                 <source :data-srcset="bigImg.webp" type="image/webp" media="(min-width: 480px)" />
