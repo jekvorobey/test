@@ -5,6 +5,7 @@
         @media (--tablet) {
             padding: 0 var(--gs);
             margin-bottom: calc(var(--gs) * 3);
+            border-bottom: 1px solid var(--cl-divider-grey);
         }
     }
 

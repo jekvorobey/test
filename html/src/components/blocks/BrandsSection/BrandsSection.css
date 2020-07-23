@@ -12,6 +12,10 @@
         margin-bottom: 32px;
     }
 
+    @media (--tablet) {
+        margin-top: 0;
+    }
+
     &__hl {
         font-size: 28px;
         line-height: 40px;
