@@ -700,6 +700,10 @@
     &__info {
         margin-bottom: calc(var(--gs) * 4);
 
+        @media (--tablet) {
+            margin-bottom: 0;
+        }
+
         &-container {
             display: flex;
 

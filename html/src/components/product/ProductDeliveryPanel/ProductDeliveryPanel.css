@@ -7,6 +7,10 @@
         font-weight: normal;
         text-transform: none;
         border-bottom: 1px solid var(--cl-global);
+
+        &--no-border {
+            border-bottom: none;
+        }
     }
 
     &__price {
