@@ -32,6 +32,10 @@
         line-height: 40px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+
+        @media (--desktop) {
+            margin-right: 0;
+        }
     }
 
     &__panel {
