@@ -63,4 +63,18 @@
             padding: var(--gs);
         }
     }
+
+    &__title {
+        text-transform: none;
+        text-align: center;
+        font-size: 16px;
+        line-height: 25px;
+        flex-grow: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        transform: translateZ(0);
+    }
 }

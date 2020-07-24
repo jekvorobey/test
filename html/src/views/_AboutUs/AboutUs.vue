@@ -147,47 +147,7 @@
         </section>
         <section class="section">
             <div class="container about-us-view__insta">
-                <div class="about-us-view__insta-title">
-                    <h1 class="about-us-view__insta-title-h1">INSTABEAUTY</h1>
-                </div>
-                <div class="about-us-view__insta-content" v-if="!isTabletLg">
-                    <div class="about-us-view__insta-content-item" v-for="item in instagrams" :key="item.id">
-                        <picture class="about-us-view__insta-content--img">
-                            <source media="(max-width: 479px)" :srcset="AboutManLg" />
-                            <source media="(min-width: 480px)" :srcset="AboutManLg" />
-                            <img class="about-us-view__insta-content--img" :src="AboutManLg" alt="Men" />
-                        </picture>
-                    </div>
-                </div>
-                <v-slider
-                    v-else
-                    class="about-us-view__insta-content--gallery"
-                    name="gallery"
-                    :options="aboutGalleryOptions"
-                >
-                    <div
-                        v-if="!instagrams || !instagrams.length"
-                        class="swiper-slide about-us-view__insta-content--gallery-item"
-                    >
-                        <v-svg name="logo" width="56" height="56" />
-                    </div>
-                    <div
-                        class="swiper-slide about-us-view__insta-content--gallery-item"
-                        v-for="item in instagrams"
-                        :key="item.id"
-                        :class="instagrams.length == 1 ? 'about-us-view__insta-content--gallery-item--alone' : ''"
-                    >
-                        <v-picture class="about-us-view__insta-content--gallery-item-img">
-                            <source media="(max-width: 479px)" :srcset="AboutManLg" />
-                            <source media="(min-width: 480px)" :srcset="AboutManLg" />
-                            <img class="about-us-view__insta-content--gallery-item-img" :src="AboutManLg" alt="Men" />
-                        </v-picture>
-                    </div>
-                </v-slider>
-                <div class="about-us-view__insta-text" v-if="isTabletLg">
-                    Добавь тег @bessovestnotalantlivy в Instagram и, возможно, мы опубликуем твою фотографию
-                </div>
-                <v-button class="about-us-view__insta-btn btn--outline">Подписаться на нас</v-button>
+                <frisbuy-product-container :script="instagramFrisbuy" id="frisbuy-widget" />
             </div>
         </section>
     </section>
@@ -199,8 +159,9 @@ import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
-import InstagramSection from '@components/blocks/InstagramSection/InstagramSection.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
+
+import FrisbuyProductContainer from '@components/FrisbuyProductContainer/FrisbuyProductContainer.vue';
 
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VInput from '@controls/VInput/VInput.vue';
@@ -237,8 +198,9 @@ export default {
         Breadcrumbs,
         BreadcrumbItem,
         SeparatorSection,
-        InstagramSection,
+        FrisbuyProductContainer,
     },
+
     data: () => ({
         AboutManLg,
         AboutManMd,
@@ -318,7 +280,9 @@ export default {
                 },
             },
         },
+        instagramFrisbuy: `https://www.frisbuy.ru/fb/widget?embed_id=9b48d527-a4dc-11ea-ba01-0242ac150002`,
     }),
+
     computed: {
         isTablet() {
             return this.$mq.tablet;
