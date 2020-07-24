@@ -6,7 +6,7 @@
                     {{ $t(`profile.routes.${$route.name}`) }}
                 </h2>
                 <span v-if="items && items.length" class="text-grey text-sm"
-                    >{{ items && items.length }} {{ !isDesktop ? 'продуктов' : ''}}</span
+                    >{{ items && items.length }} {{ !isDesktopLg ? 'продуктов' : ''}}</span
                 >
             </div>
             <div
@@ -15,7 +15,7 @@
             >
                 <v-link class="promopage-view__panel-link" tag="button" @click="onCopyReferralLink">
                     <v-svg name="link" :width="iconSize" :height="iconSize" />
-                    &nbsp;&nbsp;{{ !isDesktop ? 'Скопировать ссылку' : 'Скопировать' }}
+                    &nbsp;&nbsp;{{ !isDesktopLg ? 'Скопировать ссылку' : 'Скопировать' }}
                 </v-link>
 
                 <v-button class="btn--outline promopage-view__panel-btn" @click="loadPreview">
@@ -216,8 +216,8 @@ export default {
             return this.$mq.tabletLg;
         },
 
-        isDesktop() {
-            return this.$mq.desktop;
+        isDesktopLg() {
+            return this.$mq.desktopLg;
         },
 
         iconSize() {
