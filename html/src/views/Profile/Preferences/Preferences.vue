@@ -8,7 +8,7 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.BRANDS)"
-                        :disabled="sameBrands || !(availableBrands.length - brands.length)"
+                        :disabled="(prefType === preferenceType.PROFESSIONAL && sameBrands) || !(availableBrands.length - brands.length)"
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
@@ -62,7 +62,7 @@
                 <v-button
                     class="btn--outline"
                     @click="onAddEntities(preferenceEntityTypes.BRANDS)"
-                    :disabled="sameBrands || !availableBrands.length"
+                    :disabled="(prefType === preferenceType.PROFESSIONAL && sameBrands) || !availableBrands.length"
                     >Добавить</v-button
                 >
             </div>
@@ -75,7 +75,7 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.CATEGORIES)"
-                        :disabled="sameCategories || !availableCategories.length"
+                        :disabled="(prefType === preferenceType.PROFESSIONAL && sameCategories) || !availableCategories.length"
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
@@ -129,7 +129,7 @@
                 <v-button
                     class="btn--outline"
                     @click="onAddEntities(preferenceEntityTypes.CATEGORIES)"
-                    :disabled="sameCategories || !(availableCategories.length - categories.length)"
+                    :disabled="(prefType === preferenceType.PROFESSIONAL && sameCategories) || !(availableCategories.length - categories.length)"
                     >Добавить</v-button
                 >
             </div>
