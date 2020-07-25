@@ -18,6 +18,10 @@
         display: block;
     }
 
+    .popover-arrow {
+        display: none;
+    }
+
     &__navigation {
         .navigation-panel__group::before {
             margin: calc(var(--gs) * 3) 0;

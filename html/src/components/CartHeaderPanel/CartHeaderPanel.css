@@ -1,6 +1,10 @@
 .cart-header-panel {
     width: calc(var(--gs) * 52.5);
 
+    .popover-arrow {
+        display: none;
+    }
+
     &__list {
         width: 100%;
         max-height: calc(var(--gs) * 37.5);
