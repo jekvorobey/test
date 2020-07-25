@@ -2,7 +2,7 @@
     <general-modal v-if="isOpen" type="wide" class="gallery-modal" @close="onClose">
         <template v-slot:content>
             <div class="gallery-modal__gallery">
-                <v-slider name="modal-gallery-slider" class="gallery-modal__gallery-slider" :options="galleryOptions">
+                <v-slider name="modal-gallery-slider" class="gallery-modal__gallery-slider" :options="galleryOptions" :controls="images.length > 1">
                     <div class="swiper-slide gallery-modal__gallery-item" v-for="image in images" :key="image.id">
                         <v-picture :key="image.id" v-if="image && image.id">
                             <slot name="image" :image="image">

@@ -4,7 +4,7 @@
             <slot />
         </div>
 
-        <div class="v-slider__controls">
+        <div class="v-slider__controls" v-if="controls">
             <button class="swiper-button-prev">
                 <v-svg name="arrow-small" width="24" height="24" />
             </button>
@@ -56,6 +56,11 @@ export default {
             type: Boolean,
             default: true,
         },
+
+        controls: {
+            type: Boolean,
+            default: true,
+        }
     },
 
     watch: {
