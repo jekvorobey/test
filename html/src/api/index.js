@@ -251,13 +251,14 @@ export function getProfileOrdersInfo() {
     return $http.get('/v1/lk/order/info');
 }
 
-export function getProfileOrders(sortDirection, sortKey, pageNum, perPage) {
+export function getProfileOrders(sortDirection, sortKey, pageNum, perPage, filter) {
     return $http.get('/v1/lk/order', {
         params: {
             sortDirection,
             sortKey,
             pageNum,
             perPage,
+            // filter,
         },
     });
 }

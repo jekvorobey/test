@@ -36,13 +36,14 @@ export default {
         }
     },
 
-    async [FETCH_ORDERS]({ state, commit }, { page, orderField, orderDirection, showMore = false }) {
+    async [FETCH_ORDERS]({ state, commit }, { page, orderField, orderDirection, showMore = false, filter }) {
         try {
             const { orders: items, ordersCount: range } = await getProfileOrders(
                 orderDirection,
                 orderField,
                 page,
-                ORDERS_PAGE_SIZE
+                ORDERS_PAGE_SIZE,
+                { filter: filter },
             );
 
             commit(SET_QUERY_PARAMS, { page, orderField, orderDirection });
@@ -67,12 +68,12 @@ export default {
 
     async [FETCH_ORDERS_DATA](
         { dispatch, commit, rootState },
-        { page = DEFAULT_PAGE, orderField, orderDirection, showMore = false }
+        { page = DEFAULT_PAGE, orderField, orderDirection, showMore = false, filter }
     ) {
         try {
             await Promise.all([
                 dispatch(FETCH_STATISTICS),
-                dispatch(FETCH_ORDERS, { page, orderField, orderDirection, showMore }),
+                dispatch(FETCH_ORDERS, { page, orderField, orderDirection, showMore, filter }),
             ]);
         } catch (error) {
             storeErrorHandler(FETCH_ORDERS_DATA, true)(error);

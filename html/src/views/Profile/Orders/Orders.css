@@ -1,4 +1,9 @@
 .orders-view {
+    &__header {
+        display: flex;
+        justify-content: space-between;
+    }
+
     &__hl {
         margin-bottom: calc(var(--gs) * 3);
         font-weight: 700;
@@ -313,5 +318,9 @@
         &-btn {
             width: 100%;
         }
+    }
+
+    &__filters-sort {
+        max-width: calc(var(--gs) * 36);
     }
 }

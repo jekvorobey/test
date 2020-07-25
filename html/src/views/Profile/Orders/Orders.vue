@@ -1,6 +1,18 @@
 <template>
     <section class="section orders-view">
-        <h2 class="container container--tablet-lg orders-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+        <div class="orders-view__header">
+            <h2 class="container container--tablet-lg orders-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+            <v-select
+                class="orders-view__filters-sort"
+                label="title"
+                track-by="id"
+                v-model="filterValue"
+                :options="filterOptions"
+                :searchable="false"
+                :allow-empty="false"
+                :show-labels="false"
+            />
+        </div>
 
         <div class="orders-view__panels" v-if="referralPartner && referralData && level">
             <div class="orders-view__panel">
@@ -281,6 +293,7 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
+import VSelect from '@controls/VSelect/VSelect.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VArcCounter from '@controls/VArcCounter/VArcCounter.vue';
 
@@ -326,7 +339,7 @@ import {
 
 import { preparePrice, shortNumberFormat } from '@util';
 import { getOrderStatusColorClass } from '@util/order';
-import { orderStatus, orderPaymentStatus, sortFields } from '@enums/order';
+import { orderStatus, orderPaymentStatus, sortFields, filterField } from '@enums/order';
 import { orderDateLocaleOptions } from '@settings/profile';
 import { sortDirections } from '@enums';
 import { DEFAULT_PAGE } from '@constants';
@@ -350,6 +363,7 @@ export default {
         VLink,
         VButton,
         VInput,
+        VSelect,
         VPagination,
         VArcCounter,
 
@@ -360,10 +374,26 @@ export default {
     },
 
     data() {
+        const filterOptions = [
+            {
+                id: filterField.ALL_TIME, title: 'Всё время', field: filterField.ALL_TIME
+            },
+            {
+                id: filterField.YEAR, title: 'Год', field: filterField.YEAR
+            },
+            {
+                id: filterField.MONTH, title: 'Месяц', field: filterField.MONTH
+            },
+            {
+                id: filterField.DAY, title: 'День', field: filterField.DAY
+            }
+        ]
         return {
             showMore: false,
             filterModal: false,
             isDisabled: false,
+            filterOptions,
+            filterValue: filterOptions[0],
         };
     },
 
@@ -393,6 +423,19 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+    },
+
+    watch: {
+        filterValue(value, oldValue) {
+            if (value !== oldValue) {
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: {
+                        ...this.$route.query, time: value.field,
+                    }
+                })
+            }
         },
     },
 
@@ -453,7 +496,7 @@ export default {
 
             this.$router.replace({
                 name: 'Orders',
-                query: { orderField, orderDirection, page: DEFAULT_PAGE },
+                query: { ...this.$route.query, orderField, orderDirection, page: DEFAULT_PAGE },
             });
         },
 
@@ -472,6 +515,11 @@ export default {
                 this.isDisabled = false;
             }
         },
+
+        setFilterValue(field) {
+            this.filterValue =
+                this.filterOptions.find(o => o.field === field) || this.filterOptions[0];
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -481,13 +529,16 @@ export default {
 
         const {
             fullPath,
-            query: { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC },
+            query: { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC, time = filterField.ALL_TIME },
         } = to;
 
         const { loadPath } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
 
         // если все загружено, пропускаем
-        if (loadPath === fullPath) next(vm => updateBreadcrumbs(vm));
+        if (loadPath === fullPath) next(vm => {
+            vm.setFilterValue(time);
+            updateBreadcrumbs(vm)
+        });
         else {
             $progress.start();
             $store
@@ -495,11 +546,13 @@ export default {
                     page,
                     orderField,
                     orderDirection,
+                    filter: { time: time }
                 })
                 .then(data => {
                     $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
                         $progress.finish();
+                        vm.setFilterValue(time);
                         updateBreadcrumbs(vm);
                     });
                 })
@@ -522,7 +575,7 @@ export default {
         // Также имеется доступ в `this` к экземпляру компонента.
 
         const {
-            query: { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC },
+            query: { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC, time = filterField.ALL_TIME },
         } = to;
 
         const {
@@ -537,7 +590,8 @@ export default {
                 });
 
             this.$progress.start();
-            await this[FETCH_ORDERS]({ page, orderField, orderDirection, showMore: this.showMore });
+            await this[FETCH_ORDERS]({ page, orderField, orderDirection, showMore: this.showMore, filter: { time: time }});
+            this.setFilterValue(time);
             this.$progress.finish();
             next();
         } catch (error) {
