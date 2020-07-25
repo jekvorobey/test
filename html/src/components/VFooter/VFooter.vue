@@ -136,13 +136,12 @@ export default {
                         name: this.$t('socials.vkontakte'),
                         href: 'https://vk.com/bessovestnotalantlivy',
                     },
-                    // #60156
-                    // {
-                    //     id: 4,
-                    //     icon: 'youtube-bw',
-                    //     name: this.$t('socials.youtube'),
-                    //     href: '/',
-                    // },
+                    {
+                        id: 4,
+                        icon: 'youtube-bw',
+                        name: this.$t('socials.youtube'),
+                        href: 'https://www.youtube.com/channel/UCKFuumlKX2ucuyVojNFuSIw/',
+                    },
                 ],
             };
         },
