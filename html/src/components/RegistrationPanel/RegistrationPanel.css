@@ -50,6 +50,13 @@
             }
         }
 
+        &-info {
+            &-link {
+                text-decoration: underline;
+                text-transform: none;
+            }
+        }
+
         &-input {
             flex: 1;
 
