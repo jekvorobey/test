@@ -20,6 +20,7 @@
                     :raw="false"
                     :options="maskOptions"
                     :error="phoneError"
+                    :autofocus="true"
                 >
                     Номер телефона
                     <template v-slot:after>

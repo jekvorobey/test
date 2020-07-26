@@ -88,6 +88,10 @@ export default {
             type: [String, Boolean],
             default: null,
         },
+        autofocus: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
@@ -180,6 +184,13 @@ export default {
         this.engine = new Cleave(this.$refs.input, this.getOptions(this.options));
         this.engine.setRawValue(this.value);
         this.isInitialized = true;
+
+        // setTimeout необходим для предовращения ситуаций, когда автофокус перебивает каким-нибудь tabindex в модальном окне
+        if (this.autofocus) {
+            setTimeout(() => {
+                this.$refs.input.focus();
+            }, 400);
+        }
     },
 
     /**
