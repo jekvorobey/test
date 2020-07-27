@@ -387,7 +387,11 @@
             <div class="container product-view__info-container">
                 <div class="product-view__info-header">
                     <h2 class="product-view__section-hl">{{ $t('product.title.method') }}</h2>
-                    <v-html class="product-view__info-text" v-html="product.howto.content" />
+                    <ol class="list">
+                        <li v-for="(item, index) in howToList" :key="index">
+                            {{ item }}
+                        </li>
+                    </ol>
                 </div>
                 <div class="product-view__info-media">
                     <v-picture
@@ -888,6 +892,11 @@ export default {
         inFavorites() {
             const { productId } = this[PRODUCT];
             return this[IS_IN_FAVORITES](productId);
+        },
+
+        howToList() {
+            const { howto } = this[PRODUCT] || {};
+            return howto && howto.content && howto.content.split('|');
         },
 
         canBuy() {
