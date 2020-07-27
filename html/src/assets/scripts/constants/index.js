@@ -3,7 +3,6 @@
  */
 export const MIN_SCROLL_VALUE = 1;
 
-
 /**
  * Интервал дебаунса на обновление скролла
  */
@@ -15,9 +14,9 @@ export const SCROLL_DEBOUNCE_TIME = 20;
 export const REQUEST_CANCEL_MESSAGE = 'Request has been canceled';
 
 /**
- * Дефолтный таймаут при Http реквестах (20 сек)
+ * Дефолтный таймаут при Http реквестах (30 сек)
  */
-export const HTTP_REQUEST_TIMEOUT = 20000;
+export const HTTP_REQUEST_TIMEOUT = 30000;
 
 /**
  * Дефолтная страница в списках
