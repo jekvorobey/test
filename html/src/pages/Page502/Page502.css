@@ -54,6 +54,10 @@
 
         &-info {
             padding-bottom: calc(var(--gs) * 4);
+
+            &-tel {
+                border-bottom: none;
+            }
         }
     }
 }

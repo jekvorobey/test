@@ -5,7 +5,7 @@
         </p>
 
         <form v-if="!restore" class="login-panel__form" @submit.prevent="onSubmit">
-            <v-input-mask v-model="phone" :options="maskOptions" :error="phoneError">
+            <v-input-mask v-model="phone" :options="maskOptions" :error="phoneError" :autofocus="true">
                 Номер телефона
             </v-input-mask>
             <v-password v-model="password" :error="passwordError" class="login-panel__form-password-input">

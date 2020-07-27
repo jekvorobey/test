@@ -76,4 +76,8 @@
             cursor: pointer;
         }
     }
+
+    &__phone-link {
+        border-bottom: none;
+    }
 }

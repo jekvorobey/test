@@ -20,6 +20,7 @@
                     :raw="false"
                     :options="maskOptions"
                     :error="phoneError"
+                    :autofocus="true"
                 >
                     Номер телефона
                     <template v-slot:after>
@@ -58,8 +59,8 @@
                     </v-link>
                 </div>
                 <span class="text-grey registration-panel__form-info">
-                    Нажимая кнопку «Регистрация», вы соглашаетесь с условиями <a>оферты</a> и
-                    <a>политикой конфиденциальности</a>
+                    Нажимая кнопку «Регистрация», вы соглашаетесь с условиями <v-link to="/agreements/public-offer" class="registration-panel__form-info-link">оферты</v-link> и
+                    <v-link to="/agreements/personal-policy" class="registration-panel__form-info-link">политикой конфиденциальности</v-link>
                 </span>
             </template>
 

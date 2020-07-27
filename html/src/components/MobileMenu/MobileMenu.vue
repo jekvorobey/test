@@ -95,7 +95,7 @@
                     <div class="container mobile-menu__menu-socials">
                         <p class="text-grey">Каждый день с 9:00 до 21:00</p>
                         <v-link class="mobile-menu__menu-socials-phone" href="/">
-                            8 800 707-90-70
+                            <a href="tel:88007079070">88007079070</a>
                         </v-link>
                         <p class="text-grey">Всегда отвечаем на ваши сообщения</p>
                         <ul class="mobile-menu__menu-socials-links">

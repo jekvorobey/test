@@ -8,7 +8,7 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.BRANDS)"
-                        :disabled="(sameBrands && prefType === preferenceType.PROFESSIONAL) || !(availableBrands.length - brands.length)"
+                        :disabled="(prefType === preferenceType.PROFESSIONAL && sameBrands) || !(availableBrands.length - brands.length)"
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
@@ -17,14 +17,14 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onDeleteAll(preferenceEntityTypes.BRANDS)"
-                        :disabled="(sameBrands && prefType === preferenceType.PROFESSIONAL) || !brands.length"
+                        :disabled="(sameBrands) || !brands.length"
                     >
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Удалить все</span>
                     </v-link>
                 </div>
             </template>
-            <div class="container container--tablet-lg" v-if="brands.length || actualBrands.length">
+            <div class="container container--tablet-lg" v-if="brands.length || actualBrands.length || prefType === preferenceType.PROFESSIONAL">
                 <v-check
                     v-if="prefType === preferenceType.PROFESSIONAL"
                     :checked="sameBrands"
@@ -62,7 +62,7 @@
                 <v-button
                     class="btn--outline"
                     @click="onAddEntities(preferenceEntityTypes.BRANDS)"
-                    :disabled="(sameBrands && prefType === preferenceType.PROFESSIONAL) || !availableBrands.length"
+                    :disabled="(prefType === preferenceType.PROFESSIONAL && sameBrands) || !availableBrands.length"
                     >Добавить</v-button
                 >
             </div>
@@ -75,7 +75,7 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.CATEGORIES)"
-                        :disabled="(sameCategories && prefType === preferenceType.PROFESSIONAL) || !availableCategories.length"
+                        :disabled="(prefType === preferenceType.PROFESSIONAL && sameCategories) || !availableCategories.length"
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
@@ -84,14 +84,14 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onDeleteAll(preferenceEntityTypes.CATEGORIES)"
-                        :disabled="(sameCategories && prefType === preferenceType.PROFESSIONAL) || !categories.length"
+                        :disabled="sameCategories || !categories.length"
                     >
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Удалить все</span>
                     </v-link>
                 </div>
             </template>
-            <div class="container container--tablet-lg" v-if="categories.length || actualCategories.length">
+            <div class="container container--tablet-lg" v-if="categories.length || actualCategories.length || prefType === preferenceType.PROFESSIONAL">
                 <v-check
                     v-if="prefType === preferenceType.PROFESSIONAL"
                     :checked="sameCategories"
@@ -129,7 +129,7 @@
                 <v-button
                     class="btn--outline"
                     @click="onAddEntities(preferenceEntityTypes.CATEGORIES)"
-                    :disabled="(sameCategories && prefType === preferenceType.PROFESSIONAL) || !(availableCategories.length - categories.length)"
+                    :disabled="(prefType === preferenceType.PROFESSIONAL && sameCategories) || !(availableCategories.length - categories.length)"
                     >Добавить</v-button
                 >
             </div>
