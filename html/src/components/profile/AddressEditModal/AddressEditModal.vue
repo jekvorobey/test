@@ -18,6 +18,7 @@
                     <v-svg :name="item.value" width="24" height="24" />&nbsp;&nbsp;{{ item.title }}
                 </template>
             </radio-switch>
+
             <div class="address-edit-modal__map" v-show="!isTabletLg || isMap">
                 <yandex-map
                     v-if="showMap"
@@ -31,14 +32,16 @@
                     <ymap-marker v-if="coords" marker-id="marker-id" :coords="computedCoords" :icon="markerIcon" />
                 </yandex-map>
             </div>
+
             <div class="address-edit-modal__form" v-show="!isTabletLg || !isMap">
                 <div class="address-edit-modal__form-header">
                     <h3 class="address-edit-modal__form-header-hl">Адрес доставки</h3>
                     <span class="text-grey text-sm">Укажите на карте или введите вручную</span>
                 </div>
+
                 <div class="address-edit-modal__form-row">
                     <v-suggestion
-                        class="address-edit-modal__form-column"
+                        class="address-edit-modal__form-column address-edit-modal__form-column--60"
                         :value="address.city"
                         :options="options"
                         :items="cities"
@@ -50,6 +53,7 @@
                         <template v-slot:item="{ item }">
                             {{ item.value }}
                         </template>
+
                         <template v-slot:error="{ error }">
                             <transition name="slide-in-bottom" mode="out-in">
                                 <div :key="error" v-if="error">{{ error }}</div>
@@ -77,33 +81,78 @@
                 <div class="address-edit-modal__form-row">
                     <v-suggestion
                         class="address-edit-modal__form-column"
-                        :value="selectedFormatAddress"
+                        :value="address.street"
                         :options="options"
-                        :items="addresses"
-                        @input="onAddressInputChange"
-                        @selected="onAddressSelected"
-                        :error="houseError"
+                        :items="streets"
+                        @input="onStreetInputChange"
+                        @selected="onStreetSelected"
+                        :disabled="!address.city"
                     >
-                        Улица, дом, корпус
+                        Улица
+
                         <template v-slot:item="{ item }">
-                            {{ formatAddress(item) }}
+                            {{ item.data.street_with_type || item.data.street_with_type }}
                         </template>
+
                         <template v-slot:error="{ error }">
                             <transition name="slide-in-bottom" mode="out-in">
                                 <div :key="error" v-if="error">{{ error }}</div>
                             </transition>
                         </template>
                     </v-suggestion>
-                    <v-input
-                        v-model="address.flat"
-                        class="address-edit-modal__form-column address-edit-modal__form-column--30 address-edit-modal__form-column--50"
+                </div>
+
+                <div class="address-edit-modal__form-row">
+                    <v-suggestion
+                        class="address-edit-modal__form-column address-edit-modal__form-column--30"
+                        :value="address.house"
+                        :options="options"
+                        :items="houses"
+                        :disabled="!address.city"
+                        :error="houseError"
+                        @input="onHouseInputChange"
+                        @selected="onHouseSelected"
                     >
-                        Квартира/офис
+                        Дом/корпус
+
+                        <template v-slot:item="{ item }">
+                            <span v-if="!address.street">
+                                {{ item.data.street_with_type }}
+                            </span>
+                            <span>{{ item.data.house_type }}</span
+                            >&nbsp;{{ item.data.house }}
+                            <template v-if="item.data.block"
+                                >, <span>{{ item.data.block_type }}</span
+                                >&nbsp;{{ item.data.block }}
+                            </template>
+                        </template>
+
+                        <template v-slot:error="{ error }">
+                            <transition name="slide-in-bottom" mode="out-in">
+                                <div :key="error" v-if="error">{{ error }}</div>
+                            </transition>
+                        </template>
+                    </v-suggestion>
+
+                    <v-input
+                        v-model="address.block"
+                        class="address-edit-modal__form-column address-edit-modal__form-column--30"
+                    >
+                        Строение
                     </v-input>
 
                     <v-input
+                        v-model="address.flat"
+                        class="address-edit-modal__form-column address-edit-modal__form-column--30"
+                    >
+                        Квартира/офис
+                    </v-input>
+                </div>
+
+                <div class="address-edit-modal__form-row">
+                    <v-input
                         v-model="address.floor"
-                        class="address-edit-modal__form-column address-edit-modal__form-column--30 address-edit-modal__form-column--50"
+                        class="address-edit-modal__form-column address-edit-modal__form-column--30"
                         type="number"
                         min="1"
                     >
@@ -112,7 +161,7 @@
 
                     <v-input
                         v-model="address.porch"
-                        class="address-edit-modal__form-column address-edit-modal__form-column--30 address-edit-modal__form-column--50"
+                        class="address-edit-modal__form-column address-edit-modal__form-column--30"
                         type="number"
                         min="1"
                     >
@@ -121,8 +170,7 @@
 
                     <v-input
                         v-model="address.intercom"
-                        class="address-edit-modal__form-column address-edit-modal__form-column--30 address-edit-modal__form-column--50"
-                        min="1"
+                        class="address-edit-modal__form-column address-edit-modal__form-column--30"
                     >
                         Домофон
                     </v-input>
@@ -233,7 +281,8 @@ export default {
             coords: null,
 
             cities: [],
-            addresses: [],
+            streets: [],
+            houses: [],
 
             options: { debounce: 500 },
             showMap: false,
@@ -261,14 +310,6 @@ export default {
 
         computedCoords() {
             return this.coords || this[SELECTED_CITY_COORDS];
-        },
-
-        selectedFormatAddress() {
-            let address = '';
-            if (this.address.street) address += this.address.street + ' ';
-            if (this.address.house) address += this.address.house + ' ';
-            if (this.address.block) address += this.address.block;
-            return address;
         },
 
         mapSettings() {
@@ -308,7 +349,7 @@ export default {
                     to_bound = { value: suggestionTypes.AREA };
                     break;
                 case suggestionTypes.CITY:
-                    to_bound = { value: suggestionTypes.SETTLEMENT };
+                    to_bound = { value: suggestionTypes.CITY };
                     break;
                 case suggestionTypes.STREET:
                     to_bound = { value: suggestionTypes.STREET };
@@ -328,18 +369,6 @@ export default {
             });
         },
 
-        async onCitySelected(selected) {
-            try {
-                const { suggestions } = await this.findAddress(suggestionTypes.CITY, selected.unrestricted_value, 1);
-                this.zoom = 11;
-                setTimeout(() => {
-                    this.onApplyAddress(suggestions[0]);
-                }, 0);
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
         async onCityInputChange(query) {
             try {
                 // return the matching countries as an array
@@ -351,19 +380,7 @@ export default {
             }
         },
 
-        async onAddressSelected(selected) {
-            try {
-                const { suggestions } = await this.findAddress(suggestionTypes.HOUSE, selected.unrestricted_value, 1);
-                this.zoom = 17;
-                setTimeout(() => {
-                    this.onApplyAddress(suggestions[0]);
-                }, 0);
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        async onAddressInputChange(query = '') {
+        async onStreetInputChange(query = '') {
             try {
                 let filter = [];
                 // return the matching countries as an array
@@ -373,16 +390,75 @@ export default {
                         city_fias_id: this.address.city_guid,
                     });
 
-                const { suggestions } = await this.findAddress(
-                    suggestionTypes.HOUSE,
-                    `${this.address.city || ''} ${query}`,
-                    20,
-                    filter
-                );
-                this.addresses = suggestions;
+                if (this.address && this.address.city) query = `${this.address.city} ${query}`;
+
+                const { suggestions } = await this.findAddress(suggestionTypes.STREET, query, 20, filter);
+                this.streets = suggestions;
             } catch (error) {
                 console.log(error);
                 return null;
+            }
+        },
+
+        async onHouseInputChange(query = '') {
+            try {
+                let filter = [];
+                // return the matching countries as an array
+
+                if (this.address && this.address.city_guid)
+                    filter.push({
+                        city_fias_id: this.address.city_guid,
+                    });
+
+                if (this.address && this.address.street_guid)
+                    filter.push({
+                        street_fias_id: this.address.street_guid,
+                    });
+
+                if (this.address && this.address.city) query = `${this.address.city} ${query}`;
+                if (this.address && this.address.street) query = `${this.address.street} ${query}`;
+
+                const { suggestions = [] } = await this.findAddress(suggestionTypes.HOUSE, query, 20, filter);
+                this.houses = suggestions.filter(h => !h.data.settlement);
+            } catch (error) {
+                console.log(error);
+                return null;
+            }
+        },
+
+        async onCitySelected(selected) {
+            try {
+                const { suggestions } = await this.findAddress(suggestionTypes.CITY, selected.unrestricted_value, 1);
+                this.zoom = 11;
+                setTimeout(() => {
+                    this.applyAddress(suggestionTypes.CITY, suggestions[0]);
+                }, 0);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async onStreetSelected(selected) {
+            try {
+                const { suggestions } = await this.findAddress(suggestionTypes.STREET, selected.value, 1);
+                this.zoom = 15;
+                setTimeout(() => {
+                    this.applyAddress(suggestionTypes.STREET, suggestions[0]);
+                }, 0);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async onHouseSelected(selected) {
+            try {
+                const { suggestions } = await this.findAddress(suggestionTypes.HOUSE, selected.value, 1);
+                this.zoom = 17;
+                setTimeout(() => {
+                    this.applyAddress(suggestionTypes.HOUSE, suggestions[0]);
+                }, 0);
+            } catch (error) {
+                console.log(error);
             }
         },
 
@@ -396,47 +472,95 @@ export default {
             });
 
             const selected = suggestions.find(s => s.data.house);
-            this.onApplyAddress(selected);
+            this.applyAddress(null, selected);
         },
 
-        formatAddress(item) {
-            return `${item.data.street_with_type ||
-                item.data.city_district_with_type ||
-                item.data.settlement_with_type ||
-                ''} ${item.data.house_type} ${item.data.house} ${
-                item.data.block ? `${item.data.block_type} ${item.data.block}` : ''
-            }`;
-        },
-
-        onApplyAddress(value) {
+        applyAddress(type, value) {
             const address = { ...this.address };
+
+            switch (type) {
+                case suggestionTypes.CITY:
+                    this.applyCity(value, address);
+                    this.applyStreet(null, address);
+                    this.applyHouse(null, address);
+                    break;
+
+                case suggestionTypes.STREET:
+                    this.applyStreet(value, address);
+                    this.applyHouse(null, address);
+                    break;
+
+                case suggestionTypes.HOUSE:
+                    this.applyStreet(value, address);
+                    this.applyHouse(value, address);
+                    break;
+
+                default:
+                    this.applyCity(value, address);
+                    this.applyStreet(value, address);
+                    this.applyHouse(value, address);
+                    break;
+            }
+
+            if (value.data.postal_code) address.post_index = value.data.postal_code;
+            this.applyCoordinates(value, address);
+            this.address = address;
+        },
+
+        applyCity(value, address) {
             if (value) {
                 address.country_code = value.data.country_iso_code;
-                if (value.data.postal_code) address.post_index = value.data.postal_code;
+
                 address.region = value.data.region_with_type || value.data.region;
                 address.region_guid = value.data.region_fias_id;
+
                 address.area = value.data.area_with_type || value.data.area;
                 address.area_guid = value.data.area_fias_id;
+
                 address.city =
                     value.data.city_with_type ||
                     value.data.city ||
                     value.data.settlement_with_type ||
                     value.data.settlement;
                 address.city_guid = value.data.city_fias_id || value.data.settlement_fias_id;
+            }
+        },
+
+        applyStreet(value, address) {
+            if (value) {
                 address.street = value.data.street_with_type || value.data.street;
+                address.street_guid = value.data.street_fias_id;
+            } else {
+                address.street = null;
+                address.street_guid = null;
+            }
+        },
+
+        applyHouse(value, address) {
+            if (value) {
+                address.street = value.data.street_with_type || value.data.street;
+                address.street_guid = value.data.street_fias_id;
+
                 address.house = value.data.house_type
                     ? `${value.data.house_type} ${value.data.house}`
                     : value.data.house;
+
                 address.block = value.data.block_type
                     ? `${value.data.block_type} ${value.data.block}`
                     : value.data.block;
+            } else {
+                address.house = null;
+                address.block = null;
+            }
+        },
 
+        applyCoordinates(value, address) {
+            if (value) {
                 if (value.data.geo_lat && value.data.geo_lon) {
                     address.geo_lat = value.data.geo_lat;
                     address.geo_lon = value.data.geo_lon;
                 }
                 this.coords = [Number(value.data.geo_lat), Number(value.data.geo_lon)] || this[SELECTED_CITY_COORDS];
-                this.address = address;
             }
         },
 
@@ -445,9 +569,9 @@ export default {
             if (this.$v.$invalid) return;
             const address = {
                 ...this.address,
-                porch: String(this.address.porch),
-                floor: String(this.address.floor),
-                flat: String(this.address.flat),
+                porch: String(this.address.porch || ''),
+                floor: String(this.address.floor || ''),
+                flat: String(this.address.flat || ''),
                 post_index: String(this.address.post_index),
             };
             this.$emit('save', address);

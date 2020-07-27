@@ -1,5 +1,5 @@
 <template>
-    <div class="v-suggestions" :class="{ 'v-suggestions--invalid': error }">
+    <div class="v-suggestions" :class="{ 'v-suggestions--invalid': error, 'v-suggestions--disabled': disabled }">
         <label class="v-suggestions__label">
             <slot />
         </label>
@@ -12,6 +12,7 @@
             class="v-suggestions__input"
             :class="extendedOptions.inputClass"
             :placeholder="extendedOptions.placeholder"
+            :disabled="disabled"
             @keydown="onKeyDown"
             @blur="hideItems"
             @focus="showItems = true"
@@ -73,6 +74,11 @@ export default {
 
         keyField: {
             type: String,
+        },
+
+        disabled: {
+            type: Boolean,
+            default: false,
         },
 
         error: String,
