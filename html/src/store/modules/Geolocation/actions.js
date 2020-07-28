@@ -23,7 +23,10 @@ export default {
             await setCity(city);
             commit(MUTATE_SELECTED_CITY, city);
             if (setCookie)
-                $cookie.set(cookieNames.IBT_GEOLOCATION, JSON.stringify(city), { maxAge: interval.WEEK, path: '/' });
+                $cookie.set(cookieNames.IBT_GEOLOCATION, JSON.stringify(city), {
+                    maxAge: interval.WEEK / interval.SECOND,
+                    path: '/',
+                });
         } catch (error) {
             storeErrorHandler(SET_SELECTED_CITY)(error);
         }

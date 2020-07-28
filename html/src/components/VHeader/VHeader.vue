@@ -4,9 +4,6 @@
         :class="[{ 'v-header--scroll': scroll }, { 'v-header--masked': showMask }, { 'v-header--search': search }]"
     >
         <div class="v-header__desktop">
-            <div class="container v-header__city-confirm">
-                <city-confirmation-panel v-if="!isTabletLg" />
-            </div>
             <transition
                 @before-enter="onBeforeEnter"
                 @enter="onEnter"
@@ -35,6 +32,10 @@
         <transition name="fade">
             <mobile-menu class="v-header__modal-menu" v-if="isMenuOpen && isTabletLg" />
         </transition>
+
+        <transition name="fade" appear>
+            <city-confirmation-panel v-if="!isTabletLg && isCityConfirmationOpen" />
+        </transition>
     </header>
 </template>
 
@@ -48,10 +49,13 @@ import SearchPanel from '@components/SearchPanel/SearchPanel.vue';
 import CityConfirmationPanel from '@components/CityConfirmationPanel/CityConfirmationPanel.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
+
 import { SCROLL, IS_MENU_OPEN, IS_CITY_CONFIRMATION_OPEN } from '@store';
 import { SET_MENU_OPEN } from '@store/actions';
+
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
 import { NAME as SEARCH_MODULE, SEARCH } from '@store/modules/Search';
 
 import './VHeader.critical.css';

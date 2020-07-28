@@ -49,6 +49,9 @@ import _debounce from 'lodash/debounce';
 import { mapState, mapActions } from 'vuex';
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
+
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { FETCH_CART_DATA } from '@store/modules/Cart/actions';
 
@@ -79,6 +82,7 @@ export default {
     },
 
     computed: {
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
@@ -161,7 +165,9 @@ export default {
                         },
                         setCookie: true,
                     });
-                    await this[FETCH_CART_DATA]();
+
+                    // перезагружаем, если находимся в сессии
+                    if (this[HAS_SESSION]) await this[FETCH_CART_DATA]();
                 }
             } catch (error) {
                 $logger.log(error);
