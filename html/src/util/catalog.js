@@ -44,6 +44,10 @@ export function generateCategoryUrl(type, entityCode, categoryCode) {
     }
 }
 
+export function concatCatalogSegments(segments) {
+    return ''.concat(...segments.map((s, index) => (index > 0 ? `/${s}` : s)));
+}
+
 export function concatCatalogRoutePath(type, entityCode, categoryCode, segments) {
     let baseRoute = '';
     switch (type) {
@@ -62,8 +66,8 @@ export function concatCatalogRoutePath(type, entityCode, categoryCode, segments)
             return '/';
     }
 
-    const basePath = segments.length > 0 ? `${baseRoute}filters` : baseRoute;
-    return basePath.concat(...segments.map((s) => `/${s}`));
+    const segmentsPath = concatCatalogSegments(segments);
+    return segmentsPath ? `${baseRoute}filters/${segmentsPath}` : baseRoute;
 }
 
 export function concatMasterclassesRoutePath(segments) {

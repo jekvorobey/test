@@ -73,17 +73,36 @@ import { NAME as CATALOG_MODULE, FILTERS } from '@store/modules/Catalog';
 import { FILTER_SEGMENTS, ROUTE_SEGMENTS } from '@store/modules/Catalog/getters';
 
 import _debounce from 'lodash/debounce';
-import { concatCatalogRoutePath, generateCategoryUrl } from '@util/catalog';
+import { generateCategoryUrl, mapFilterSegments, concatCatalogSegments } from '@util/catalog';
 import { mapState, mapGetters } from 'vuex';
 import './CatalogFilter.css';
+import { sortFields } from '../../assets/scripts/enums/catalog';
+import { sortDirections } from '../../assets/scripts/enums';
 
 export default {
-    name: 'catalog-filter',
+    name: 'catalog-filter-mobile',
 
-    components: { VButton, VCheck, VRange, VAccordion, VLink },
+    components: {
+        VButton,
+        VCheck,
+        VRange,
+        VAccordion,
+        VLink,
+    },
+
+    props: {
+        value: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
+    },
 
     data() {
         return {
+            routeString: null,
+
             format: {
                 // 'to' the formatted value. Receives a number.
                 to(value) {
@@ -102,13 +121,20 @@ export default {
     },
 
     computed: {
-        ...mapGetters(CATALOG_MODULE, [FILTER_SEGMENTS, ROUTE_SEGMENTS]),
         ...mapState(CATALOG_MODULE, [FILTERS]),
         ...mapState('route', {
-            type: state => state.params.type,
-            code: state => state.params.code,
-            entityCode: state => state.params.entityCode,
+            pathMatch: state => state.params.pathMatch,
         }),
+
+        routeSegments() {
+            const { routeString } = this;
+            return routeString ? routeString.split('/') : [];
+        },
+
+        filterSegments() {
+            const { routeSegments } = this;
+            return mapFilterSegments(routeSegments);
+        },
 
         accordionFilters() {
             const filters = this[FILTERS] || [];
@@ -124,6 +150,14 @@ export default {
     },
 
     watch: {
+        pathMatch(value) {
+            this.routeString = value;
+        },
+
+        routeSegments(value) {
+            this.$emit('input', value);
+        },
+
         filters() {
             this.initFiltersOptions();
         },
@@ -143,16 +177,6 @@ export default {
     },
 
     methods: {
-        onRadioChange(e, value) {
-            const { type, entityCode, code, routeSegments } = this;
-
-            if (!routeSegments.includes(value)) routeSegments.push(value);
-            routeSegments = routeSegments.filter(s => s === value);
-
-            const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path, query: { search_string: this.$route.query.search_string } });
-        },
-
         initFiltersOptions() {
             this.showMore = [
                 ...this.filters.map(({ type, items, id }) => {
@@ -178,6 +202,15 @@ export default {
             });
         },
 
+        onRadioChange(e, value) {
+            const { type, entityCode, code, routeSegments } = this;
+
+            if (!routeSegments.includes(value)) routeSegments.push(value);
+            routeSegments = routeSegments.filter(s => s === value);
+
+            this.routeString = concatCatalogSegments(routeSegments);
+        },
+
         onCheckChange(e, value) {
             const { type, entityCode, code, routeSegments } = this;
 
@@ -192,8 +225,7 @@ export default {
                 }
             }
 
-            const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path, query: { search_string: this.$route.query.search_string } });
+            this.routeString = concatCatalogSegments(routeSegments);
         },
 
         onShowMoreClick(id) {
@@ -223,6 +255,7 @@ export default {
     },
 
     created() {
+        this.routeString = this.pathMatch;
         this.initFiltersOptions();
     },
 
@@ -245,13 +278,7 @@ export default {
                 routeSegments.splice(currentIndex, 1, segment);
             } else routeSegments.push(segment);
 
-            const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({
-                path,
-                query: {
-                    search_string: this.$route.query.search_string,
-                },
-            });
+            this.routeString = concatCatalogSegments(routeSegments);
         }, 500);
     },
 };
