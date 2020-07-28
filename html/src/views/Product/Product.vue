@@ -423,23 +423,32 @@
         </section>
 
         <section
-            v-if="product.characteristics && product.characteristics.length > 0"
+            v-if="product.characteristics || product.ingredients"
             class="section product-view__section product-view__characteristics"
         >
             <div class="container">
-                <h2 class="product-view__section-hl">{{ $t('product.title.characteristics') }}</h2>
-                <ul class="product-view__characteristics-list">
-                    <li
-                        class="product-view__characteristics-item"
-                        v-for="item in product.characteristics"
-                        :key="item.id"
-                    >
-                        <div class="product-view__characteristics-item-title">{{ item.title }}</div>
-                        <div class="product-view__characteristics-item-value">
-                            {{ Array.isArray(item.value) ? item.value.join(', ') : item.value }}
-                        </div>
-                    </li>
-                </ul>
+                <template v-if="product.characteristics && product.characteristics.length > 0">
+                    <h2 class="product-view__section-hl">{{ $t('product.title.characteristics') }}</h2>
+                    <ul class="product-view__characteristics-list">
+                        <li
+                            class="product-view__characteristics-item"
+                            v-for="item in product.characteristics"
+                            :key="item.id"
+                        >
+                            <div class="product-view__characteristics-item-title">{{ item.title }}</div>
+                            <div class="product-view__characteristics-item-value">
+                                {{ Array.isArray(item.value) ? item.value.join(', ') : item.value }}
+                            </div>
+                        </li>
+                    </ul>
+                </template>
+
+                <template v-if="product.ingredients && product.ingredients.length > 0">
+                    <h2 class="product-view__section-hl">{{ $t('product.title.ingredients') }}</h2>
+                    <div class="product-view__characteristics-list">
+                        {{ product.ingredients.join(', ') }}
+                    </div>
+                </template>
             </div>
         </section>
 

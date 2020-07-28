@@ -160,6 +160,7 @@ const main = {
         title: {
             masterClasses: 'Master Classes with this product',
             characteristics: 'Characteristics',
+            ingredients: 'Composition',
             reviews: 'Reviews',
             method: 'Method for the use thereof',
             description: 'Description',

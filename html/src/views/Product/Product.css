@@ -772,12 +772,21 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
+
             padding-bottom: calc(var(--gs) * 7);
-            border-bottom: 1px solid var(--cl-divider-grey);
 
             @media (--tablet) {
                 padding-bottom: 0;
-                border-bottom: none;
+            }
+
+            &:last-child {
+                padding-bottom: 0;
+                /* скрыто пока нет мастерклассов */
+                /* border-bottom: 1px solid var(--cl-divider-grey);
+
+                @media (--tablet) {
+                    border-bottom: none;
+                } */
             }
         }
 

@@ -160,6 +160,7 @@ const main = {
         title: {
             masterClasses: 'Мастер-классы с этим продуктом',
             characteristics: 'Характеристики',
+            ingredients: 'Состав',
             reviews: 'Отзывы',
             method: 'Способ применения',
             description: 'Описание',
