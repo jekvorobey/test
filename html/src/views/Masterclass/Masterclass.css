@@ -284,9 +284,12 @@
             }
 
             &-section {
-                border-bottom: 1px solid var(--cl-divider-grey);
                 padding-bottom: calc(var(--gs) * 3);
                 margin-bottom: calc(var(--gs) * 3);
+
+                @media (--tablet-lg) {
+                    border-bottom: 1px solid var(--cl-divider-grey);
+                }
 
                 &:last-child {
                     @media (--tablet-lg-min) {
