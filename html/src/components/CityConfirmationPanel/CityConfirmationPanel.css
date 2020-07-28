@@ -5,6 +5,7 @@
     z-index: 9999;
     width: 100%;
     transition: top var(--time) ease-in;
+    pointer-events: none;
 
     &--scroll {
         top: 48px;
@@ -15,6 +16,7 @@
         padding: calc(var(--gs) * 3);
         background-color: var(--cl-white);
         box-shadow: 0px 5px 40px rgba(0, 0, 0, 0.1);
+        pointer-events: all;
     }
 
     &__header,

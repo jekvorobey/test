@@ -6,7 +6,8 @@
                     <h4 class="city-confirmation-panel__header-hl">
                         {{ header }}
                     </h4>
-                    <v-link class="city-confirmation-panel__header-close" @click="onAccept">
+
+                    <v-link class="city-confirmation-panel__header-close" tag="button" @click="onAccept">
                         <v-svg name="cross" width="24" height="24" />
                     </v-link>
                 </div>
