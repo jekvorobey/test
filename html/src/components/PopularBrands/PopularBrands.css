@@ -1,32 +1,30 @@
 .popular-brands {
     &__most-popular {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        grid-template-rows: calc(var(--gs) * 8);
-        grid-gap: calc(var(--gs) * 6);
-        margin-bottom: calc(var(--gs) * 10);
-
-        @media (--tablet-lg) {
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            margin-bottom: calc(var(--gs) * 3);
-        }
+        flex-wrap: wrap;
+        display: flex;
+        margin: 0 calc(var(--gs) * -3);
 
         @media (--tablet) {
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            grid-gap: calc(var(--gs) * 2);
+            justify-content: space-between;
+            margin: 0;
         }
 
         &-img {
             position: relative;
             border-bottom: none;
-            max-width: 144px;
             background-color: var(--cl-white);
 
+            width: calc(calc(100% / 6) - calc(var(--gs) * 6));
+            margin: 0 calc(var(--gs) * 3) calc(var(--gs) * 4);
+
             @media (--tablet-lg) {
-                margin: 0 5% 10%;
+                width: calc(calc(100% / 3) - calc(var(--gs) * 13.5));
+                margin: 0 calc(var(--gs) * 6.75) calc(var(--gs) * 4);
+            }
+
+            @media (--tablet) {
+                width: calc(calc(100% / 2) - var(--gs));
+                margin: 0 0 calc(var(--gs) * 2);
             }
 
             &::before {
@@ -63,6 +61,11 @@
         flex-wrap: wrap;
         justify-content: center;
         width: 100%;
+        padding-top: calc(var(--gs) * 6);
+
+        @media (--tablet) {
+            padding-top: var(--gs);
+        }
 
         &-item {
             font-size: 18px;
