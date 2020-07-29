@@ -128,6 +128,10 @@
             @media (--tablet) {
                 padding: calc(var(--gs) * 2);
             }
+
+            &[aria-expanded='true'] {
+                border: none;
+            }
         }
 
         .v-accordion__item-panel {
