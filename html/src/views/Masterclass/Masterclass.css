@@ -118,6 +118,8 @@
         }
 
         .v-accordion__item + .v-accordion__item {
+            margin-top: 0;
+
             .v-accordion__item-btn {
                 border-top: none;
             }
@@ -224,6 +226,10 @@
 
             &--accordion {
                 border-bottom: none;
+
+                .master-class-view__section-hl {
+                    margin-bottom: calc(var(--gs) * 3);
+                }
             }
         }
 
