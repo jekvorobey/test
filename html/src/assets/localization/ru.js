@@ -1,5 +1,5 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
-import { socials } from '@enums';
+import { socials, weekDays } from '@enums';
 import { receiveMethods, discountType } from '@enums/checkout';
 import { genderType, billingOperationType, referralSource, bonusStatus } from '@enums/profile';
 import { orderStatus, deliveryStatus } from '@enums/order';
@@ -7,6 +7,28 @@ import { cartItemTypes } from '@enums/product';
 
 const flatpickrLocale = flatPickrRu.ru;
 const main = {
+    weekdays: {
+        long: {
+            [weekDays.SUNDAY]: 'воскресенье',
+            [weekDays.MONDAY]: 'понедельник',
+            [weekDays.TUESDAY]: 'вторник',
+            [weekDays.WEDNESDAY]: 'среда',
+            [weekDays.THURSDAY]: 'четверг',
+            [weekDays.FRIDAY]: 'пятница',
+            [weekDays.SATURDAY]: 'суббота',
+        },
+
+        short: {
+            [weekDays.SUNDAY]: 'ВС',
+            [weekDays.MONDAY]: 'ПН',
+            [weekDays.TUESDAY]: 'ВТ',
+            [weekDays.WEDNESDAY]: 'СР',
+            [weekDays.THURSDAY]: 'ЧТ',
+            [weekDays.FRIDAY]: 'ПТ',
+            [weekDays.SATURDAY]: 'СБ',
+        },
+    },
+
     header: {
         top: {
             delivery: 'Доставка по всей России',

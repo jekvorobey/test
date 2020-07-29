@@ -269,14 +269,14 @@ export const returnReasons = Object.freeze({
     OTHER: 'Другое',
 });
 
-export const dayOfTheWeek = Object.freeze({
-    0: 'воскресенье',
-    1: 'понедельник',
-    2: 'вторник',
-    3: 'среда',
-    4: 'четверг',
-    5: 'пятница',
-    6: 'суббота',
+export const weekDays = Object.freeze({
+    SUNDAY: 0,
+    MONDAY: 1,
+    TUESDAY: 2,
+    WEDNESDAY: 3,
+    THURSDAY: 4,
+    FRIDAY: 5,
+    SATURDAY: 6,
 });
 
 export const agreementTypes = Object.freeze({

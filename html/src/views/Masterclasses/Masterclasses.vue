@@ -414,7 +414,7 @@ export default {
                 const dateObj = new Date(`${i.nearestDate} ${i.nearestTimeFrom}`);
                 const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
-                const dateTime = `${date}, ${time}`;
+                const dateTime = `${date} (${this.$t(`weekdays.short.${dateObj.getDay()}`)}), ${time}`;
                 const url = generateMasterclassUrl(i.code);
 
                 const defaultImg = i.image && generatePictureSourcePath(400, 240, i.image.id);

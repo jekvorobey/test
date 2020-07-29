@@ -186,7 +186,7 @@
                 </ul>
 
                 <div
-                    v-if="(referralPartner && availableBonus > 0) || !referralPartner && maxAmountBonus"
+                    v-if="(referralPartner && availableBonus > 0) || (!referralPartner && maxAmountBonus)"
                     class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--bonus"
                 >
                     <div class="checkout-product-panel__item-header">
@@ -462,7 +462,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import validationMixin, { required } from '@plugins/validation';
 import { formatPhoneNumber, getPosition } from '@util';
 import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '@enums/checkout';
-import { requestStatus, modalName, dayOfTheWeek, agreementTypes } from '@enums';
+import { requestStatus, modalName, weekDays, agreementTypes } from '@enums';
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
 
 import _cloneDeep from 'lodash/cloneDeep';
@@ -776,7 +776,7 @@ export default {
             if (chunkItem.selectedDate) {
                 if (today === date.getDate()) additionalText = `сегодня`;
                 else if (today + 1 === date.getDate()) additionalText = `завтра`;
-                else additionalText = dayOfTheWeek[date.getDay()];
+                else additionalText = this.$t(`weekdays.long.${date.getDay()}`);
                 const timeString =
                     chunkItem.deliveryTimeStart && chunkItem.deliveryTimeEnd
                         ? `, с ${chunkItem.deliveryTimeStart}:00 до ${chunkItem.deliveryTimeEnd}:00`
@@ -950,6 +950,6 @@ export default {
 
     beforeMount() {
         this[ADD_BONUS](this.maxAmountBonus);
-    }
+    },
 };
 </script>
