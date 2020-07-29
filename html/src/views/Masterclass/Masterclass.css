@@ -111,8 +111,22 @@
     }
 
     &__accordion {
+        .v-accordion__item--expanded:last-of-type {
+            .v-accordion__item-panel {
+                border-bottom: 1px solid var(--cl-divider-grey);
+            }
+        }
+
         .v-accordion__item + .v-accordion__item {
-            margin-top: 0;
+            .v-accordion__item-btn {
+                border-top: none;
+            }
+        }
+
+        .v-accordion__item.v-accordion__item--expanded + .v-accordion__item {
+            .v-accordion__item-btn {
+                border-top: 1px solid var(--cl-divider-grey);
+            }
         }
 
         .v-accordion__item-btn {
@@ -136,7 +150,6 @@
 
         .v-accordion__item-panel {
             border: none;
-            border-bottom: 1px solid var(--cl-divider-grey);
         }
 
         &-header {
