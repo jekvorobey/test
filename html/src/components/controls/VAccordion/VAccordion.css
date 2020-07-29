@@ -30,12 +30,6 @@
             border-top: none;
         }
 
-        &:hover &-btn {
-            fill: var(--cl-dark-blue);
-            border-color: var(--cl-dark-blue);
-            color: var(--cl-dark-blue);
-        }
-
         &--disabled &-btn {
             fill: var(--cl-grey) !important;
             border-color: var(--cl-grey) !important;

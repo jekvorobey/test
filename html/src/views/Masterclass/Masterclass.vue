@@ -78,6 +78,7 @@
                                         :last-name="speaker.lastName"
                                         :nick-name="speaker.profession"
                                         :image="speaker.avatar.defaultImg"
+                                        description="description"
                                     />
                                 </ul>
 
@@ -94,6 +95,7 @@
                                     :last-name="speaker.lastName"
                                     :nick-name="speaker.profession"
                                     :image="speaker.avatar.defaultImg"
+                                    description="description"
                                 />
                             </ul>
                         </div>

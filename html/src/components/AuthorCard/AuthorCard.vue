@@ -8,7 +8,7 @@
             <div class="text-bold author-card__title-name">
                 {{ firstName }}
                 {{ lastName }}
-                <button v-if="mounted" class="author-card__title-btn">
+                <button v-if="description && mounted" class="author-card__title-btn">
                     <v-svg name="info-middle" width="16" height="16" />
                 </button>
             </div>
@@ -28,7 +28,7 @@ import '@images/sprites/info-middle.svg';
 import './AuthorCard.css';
 
 export default {
-    name: 'banner-card',
+    name: 'author-card',
 
     components: {
         VSvg,
@@ -56,6 +56,10 @@ export default {
 
         image: {
             type: [Object, String],
+        },
+
+        description: {
+            type: String,
         },
     },
 
