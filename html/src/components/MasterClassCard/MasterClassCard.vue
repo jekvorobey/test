@@ -20,7 +20,7 @@
             <div class="text-grey text-sm master-class-card__body-bottom">
                 <template v-if="isSmall">
                     <span>{{ date }}</span>
-                    <span>•</span>
+                    <span>&nbsp; • &nbsp;</span>
                     <span>{{ address }}</span>
                 </template>
                 <template v-else>
