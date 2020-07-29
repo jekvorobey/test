@@ -1,7 +1,7 @@
 <template>
     <component :is="tag" class="price">
-        {{ computedValue }}
-        &nbsp;<span v-html="currencySymbol" />
+        <span>{{ computedValue }}</span
+        >&nbsp;<span v-html="currencySymbol" />
     </component>
 </template>
 
