@@ -95,7 +95,7 @@
                                 class="orders-view__table-th-link"
                                 @click="onChangeSort(sortFields.NUMBER)"
                             >
-                                Номер заказа&nbsp;
+                                Номер&nbsp;заказа&nbsp;
                                 <v-svg
                                     v-if="orderField !== sortFields.NUMBER"
                                     name="arrow-updown"
@@ -376,18 +376,26 @@ export default {
     data() {
         const filterOptions = [
             {
-                id: filterField.ALL_TIME, title: 'Всё время', field: filterField.ALL_TIME
+                id: filterField.ALL_TIME,
+                title: 'Всё время',
+                field: filterField.ALL_TIME,
             },
             {
-                id: filterField.YEAR, title: 'Год', field: filterField.YEAR
+                id: filterField.YEAR,
+                title: 'Год',
+                field: filterField.YEAR,
             },
             {
-                id: filterField.MONTH, title: 'Месяц', field: filterField.MONTH
+                id: filterField.MONTH,
+                title: 'Месяц',
+                field: filterField.MONTH,
             },
             {
-                id: filterField.DAY, title: 'День', field: filterField.DAY
-            }
-        ]
+                id: filterField.DAY,
+                title: 'День',
+                field: filterField.DAY,
+            },
+        ];
         return {
             showMore: false,
             filterModal: false,
@@ -432,9 +440,10 @@ export default {
                 this.$router.replace({
                     path: this.$route.path,
                     query: {
-                        ...this.$route.query, time: value.field,
-                    }
-                })
+                        ...this.$route.query,
+                        time: value.field,
+                    },
+                });
             }
         },
     },
@@ -517,8 +526,7 @@ export default {
         },
 
         setFilterValue(field) {
-            this.filterValue =
-                this.filterOptions.find(o => o.field === field) || this.filterOptions[0];
+            this.filterValue = this.filterOptions.find(o => o.field === field) || this.filterOptions[0];
         },
     },
 
@@ -529,16 +537,22 @@ export default {
 
         const {
             fullPath,
-            query: { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC, time = filterField.ALL_TIME },
+            query: {
+                page = DEFAULT_PAGE,
+                orderField = sortFields.NUMBER,
+                orderDirection = sortDirections.DESC,
+                time = filterField.ALL_TIME,
+            },
         } = to;
 
         const { loadPath } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
 
         // если все загружено, пропускаем
-        if (loadPath === fullPath) next(vm => {
-            vm.setFilterValue(time);
-            updateBreadcrumbs(vm)
-        });
+        if (loadPath === fullPath)
+            next(vm => {
+                vm.setFilterValue(time);
+                updateBreadcrumbs(vm);
+            });
         else {
             $progress.start();
             $store
@@ -546,7 +560,7 @@ export default {
                     page,
                     orderField,
                     orderDirection,
-                    filter: { time: time }
+                    filter: { time: time },
                 })
                 .then(data => {
                     $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
@@ -575,7 +589,12 @@ export default {
         // Также имеется доступ в `this` к экземпляру компонента.
 
         const {
-            query: { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC, time = filterField.ALL_TIME },
+            query: {
+                page = DEFAULT_PAGE,
+                orderField = sortFields.NUMBER,
+                orderDirection = sortDirections.DESC,
+                time = filterField.ALL_TIME,
+            },
         } = to;
 
         const {
@@ -590,7 +609,13 @@ export default {
                 });
 
             this.$progress.start();
-            await this[FETCH_ORDERS]({ page, orderField, orderDirection, showMore: this.showMore, filter: { time: time }});
+            await this[FETCH_ORDERS]({
+                page,
+                orderField,
+                orderDirection,
+                showMore: this.showMore,
+                filter: { time: time },
+            });
             this.setFilterValue(time);
             this.$progress.finish();
             next();
