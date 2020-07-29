@@ -117,6 +117,7 @@
                         v-for="item in masterclasses"
                         :key="item.id"
                         :name="item.name"
+                        :speaker="item.speaker"
                         :date="item.dateTime"
                         :price="item.priceFrom"
                         :address="item.nearestPlaceName"
@@ -217,7 +218,12 @@ import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { pluralize } from '@util';
 import { generatePictureSourcePath } from '@util/file';
 import { registerModuleIfNotExists } from '@util/store';
-import { generateMasterclassUrl, concatMasterclassesRoutePath, computeFilterMasterclassData } from '@util/catalog';
+import {
+    generateMasterclassUrl,
+    concatMasterclassesRoutePath,
+    computeFilterMasterclassData,
+    prepareMasterclassSpeakers,
+} from '@util/catalog';
 import _debounce from 'lodash/debounce';
 import './Masterclasses.css';
 
@@ -416,6 +422,7 @@ export default {
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
                 const dateTime = `${date} (${this.$t(`weekdays.short.${dateObj.getDay()}`)}), ${time}`;
                 const url = generateMasterclassUrl(i.code);
+                const speaker = prepareMasterclassSpeakers(i.speakers);
 
                 const defaultImg = i.image && generatePictureSourcePath(400, 240, i.image.id);
                 const desktopImg = i.image && {
@@ -428,7 +435,7 @@ export default {
                     orig: generatePictureSourcePath(425, 320, i.image.id),
                 };
 
-                return { ...i, url, dateTime, desktopImg, mobileImg, defaultImg };
+                return { ...i, url, speaker, dateTime, desktopImg, mobileImg, defaultImg };
             });
         },
 

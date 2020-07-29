@@ -7,6 +7,11 @@ import { search } from 'superagent';
 const rangeRegx = /from_\d*_to_\d*/;
 const numberRegx = /\d+/g;
 
+function getSpeakerString(speaker, withProfession = false) {
+    const fullName = `${speaker.firstName} ${speaker.lastName}`;
+    return withProfession ? `${fullName}, ${speaker.profession}` : fullName;
+}
+
 export function generateAbsoluteProductUrl(categoryCode, code, refCode) {
     if (refCode) return `${$context.baseURL}/${productGroupTypes.CATALOG}/${categoryCode}/${code}?refCode=${refCode}`;
     return `${$context.baseURL}/${productGroupTypes.CATALOG}/${categoryCode}/${code}`;
@@ -192,6 +197,11 @@ export function prepareProductImage(image, desktopSize, tabletSize, mobileSize) 
         },
         default: generatePictureSourcePath(desktopSize, desktopSize, image.id),
     };
+}
+
+export function prepareMasterclassSpeakers(speakers = []) {
+    if (speakers.length > 0 && speakers.length <= 2) return getSpeakerString(speakers[0], true);
+    else if (speakers.length > 2) return `${getSpeakerString(speakers[0])}, ${getSpeakerString(speakers[1])} и др.`;
 }
 
 export default {

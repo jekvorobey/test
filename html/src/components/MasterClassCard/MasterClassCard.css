@@ -100,7 +100,7 @@
             }
         }
 
-        &-name {
+        &-link {
             flex: 1;
             font-weight: Bold;
             font-size: 24px;
@@ -113,6 +113,17 @@
                 font-size: 16px;
                 line-height: 24px;
                 font-weight: normal;
+            }
+
+            &-name {
+                flex-grow: 1;
+                overflow: hidden;
+
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                transform: translateZ(0);
             }
         }
 
@@ -168,7 +179,7 @@
             text-transform: uppercase;
         }
 
-        &-name {
+        &-link {
             width: 100%;
             margin-bottom: var(--gs);
             font-weight: 500;

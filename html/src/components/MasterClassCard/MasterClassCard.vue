@@ -8,7 +8,10 @@
         </router-link>
         <div class="master-class-card__body">
             <div class="master-class-card__body-top">
-                <v-link class="master-class-card__body-name" :to="to">{{ name }}</v-link>
+                <v-link class="master-class-card__body-link" :to="to">
+                    <div class="master-class-card__body-link-name">{{ name }}</div>
+                    <div class="master-class-card__body-link-speaker">{{ speaker }}</div>
+                </v-link>
                 <div class="master-class-card__body-prices">
                     <price class="master-class-card__body-price" v-bind="price" :class="{ 'text-bold': !isSmall }" />
                 </div>
@@ -54,6 +57,10 @@ export default {
         name: {
             type: String,
             required: true,
+        },
+
+        speaker: {
+            type: String,
         },
 
         image: {
