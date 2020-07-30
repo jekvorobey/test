@@ -44,6 +44,7 @@
                             </span>
                         </attention-panel> -->
                     </div>
+
                     <div class="master-class-view__panel-middle">
                         <p class="container container--tablet text-bold master-class-view__section-hl">
                             Описание
@@ -62,6 +63,7 @@
                             </v-picture>
                         </div>
                     </div>
+
                     <div class="master-class-view__panel-right">
                         <div class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">
@@ -99,15 +101,17 @@
                                 />
                             </ul>
                         </div>
+
                         <div class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">
                                 Дата и время
                             </p>
-                            <ol class="list">
+
+                            <ul>
                                 <li v-for="date in dates" :key="date">
                                     <span>{{ date }}</span>
                                 </li>
-                            </ol>
+                            </ul>
 
                             <v-link
                                 class="master-class-view__panel-right-link"
@@ -117,11 +121,13 @@
                                 Задать вопрос организатору
                             </v-link>
                         </div>
+
                         <div class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">
                                 Место проведения
                             </p>
-                            <ol class="list">
+
+                            <ol :class="{ list: places.length > 1 }">
                                 <li v-for="place in places" :key="place.id">
                                     <span>{{ place.name }}, {{ place.address }}</span>
                                 </li>
@@ -135,6 +141,7 @@
                                 Посмотреть на карте
                             </v-link>
                         </div>
+
                         <div
                             class="container container--tablet master-class-view__panel-right-section"
                             v-for="document in documents"
@@ -145,6 +152,7 @@
                             </p>
                             <div>{{ document.description }} (<a :href="document.file.url" download>ссылка</a>)</div>
                         </div>
+
                         <div
                             v-if="!isTablet"
                             class="container container--tablet master-class-view__panel-right-section master-class-view__panel-right-social"
@@ -173,6 +181,7 @@
                             <p class="container container--tablet text-bold master-class-view__section-hl">
                                 Программа
                             </p>
+
                             <v-accordion class="master-class-view__accordion" :items="stages" key-field="id">
                                 <template v-slot:header="{ item }">
                                     <div class="master-class-view__accordion-header">
@@ -209,6 +218,7 @@
                                                     :style="{ order: 0 }"
                                                     v-html="item.description"
                                                 />
+
                                                 <div class="master-class-view__panel-right" :style="{ order: 1 }">
                                                     <p class="text-bold master-class-view__panel-right-hl">
                                                         Что взять с собой
