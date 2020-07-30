@@ -123,12 +123,15 @@
 
                             <a @click="onShowMap">Посмотреть на карте</a>
                         </div>
-                        <div class="container container--tablet master-class-view__panel-right-section">
+                        <div
+                            class="container container--tablet master-class-view__panel-right-section"
+                            v-for="document in documents"
+                            :key="document.id"
+                        >
                             <p class="text-bold master-class-view__panel-right-hl">
-                                Сертификат
+                                {{ document.name }}
                             </p>
-                            Пример сертификата, который вы получите по окончании мастер-класса, можно посмотреть по
-                            <a>ссылке</a>.
+                            <div>{{ document.description }} (<a :href="document.file.url">ссылка</a>)</div>
                         </div>
                         <div
                             v-if="!isTablet"
@@ -501,7 +504,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
 import { registerModuleIfNotExists } from '@util/store';
-import { generatePictureSourcePath } from '@util/file';
+import { generatePictureSourcePath, generateFileOriginalPath } from '@util/file';
 import { getInstagramUserNameFromUrl } from '@util/socials';
 import { generateMasterclassUrl } from '@util/catalog';
 import { yaMapSettings, dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
@@ -643,6 +646,17 @@ export default {
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
         ...mapState(MODAL_MODULE, {}),
+
+        documents() {
+            const { documents = [] } = this[MASTERCLASS] || {};
+            return documents.map(d => ({
+                ...d,
+                file: {
+                    ...d.file,
+                    url: generateFileOriginalPath(d.file.id),
+                },
+            }));
+        },
 
         pricePanelAnimation() {
             return this.isTablet ? 'slide-bottom' : 'slide-top';
