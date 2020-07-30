@@ -26,6 +26,10 @@
             @media (--tablet-lg-min) and (--desktop) {
                 max-width: 258px;
             }
+
+            @media (--tablet) {
+                max-width: 100%;
+            }
         }
 
         &-btn {
