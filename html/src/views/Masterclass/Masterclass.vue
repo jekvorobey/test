@@ -21,7 +21,7 @@
                 :price="price"
                 btn-text="Купить билет"
                 show-btn
-                @btnClick="onBuyBtnClick"
+                @btnClick="onScrollTo($refs.panel)"
             >
                 <source :data-srcset="bannerImage.desktopImg.webp" type="image/webp" media="(min-width: 768px)" />
                 <source :data-srcset="bannerImage.desktopImg.orig" media="(min-width: 768px)" />
@@ -109,7 +109,13 @@
                                 </li>
                             </ol>
 
-                            <a>Задать вопрос организатору</a>
+                            <v-link
+                                class="master-class-view__panel-right-link"
+                                tag="button"
+                                @click="onScrollTo($refs.contacts)"
+                            >
+                                Задать вопрос организатору
+                            </v-link>
                         </div>
                         <div class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">
@@ -121,7 +127,13 @@
                                 </li>
                             </ol>
 
-                            <a @click="onShowMap">Посмотреть на карте</a>
+                            <v-link
+                                class="master-class-view__panel-right-link"
+                                tag="button"
+                                @click="onScrollTo($refs.map)"
+                            >
+                                Посмотреть на карте
+                            </v-link>
                         </div>
                         <div
                             class="container container--tablet master-class-view__panel-right-section"
@@ -345,7 +357,11 @@
             </div>
         </section>
 
-        <section v-if="masterClass.organizer" class="section master-class-view__section master-class-view__contacts">
+        <section
+            class="section master-class-view__section master-class-view__contacts"
+            ref="contacts"
+            v-if="masterClass.organizer"
+        >
             <div class="container master-class-view__contacts-container">
                 <h2 class="container container--tablet master-class-view__section-hl">
                     Контакты организатора
@@ -382,7 +398,10 @@
                             :value="masterClass.organizer.site"
                         />
 
-                        <v-button class="master-class-view__contacts-panel-btn">
+                        <v-button
+                            class="master-class-view__contacts-panel-btn"
+                            :href="`mailto:${masterClass.organizer.email}`"
+                        >
                             Написать
                         </v-button>
                     </div>
@@ -441,7 +460,7 @@
                 :name="masterClass.title"
                 :price-to="masterClass.priceTo"
                 :price-from="masterClass.priceFrom"
-                @add-item="onBuyBtnClick"
+                @add-item="onScrollTo($refs.panel)"
             >
                 {{ buyBtnText }}
             </masterclass-price-panel>
@@ -839,6 +858,10 @@ export default {
             return generateMasterclassUrl(code);
         },
 
+        isInCart(id) {
+            return this[IS_IN_CART](cartItemTypes.MASTERCLASS, id);
+        },
+
         async onAddToCart(id, count) {
             const inCart = this.isInCart(id);
             if (inCart) this.$router.push({ name: 'Cart' });
@@ -849,22 +872,12 @@ export default {
             }
         },
 
-        isInCart(id) {
-            return this[IS_IN_CART](cartItemTypes.MASTERCLASS, id);
-        },
-
         onPanelVisibilityChanged(isVisible) {
             this.isPanelVisible = isVisible;
         },
 
-        onBuyBtnClick() {
-            const { panel } = this.$refs;
-            window.scrollTo({ top: panel.offsetTop - panelScrollOffset, behavior: 'smooth' });
-        },
-
-        onShowMap() {
-            const { map } = this.$refs;
-            window.scrollTo({ top: map.offsetTop - panelScrollOffset, behavior: 'smooth' });
+        onScrollTo(ref) {
+            window.scrollTo({ top: ref.offsetTop - panelScrollOffset, behavior: 'smooth' });
         },
     },
 

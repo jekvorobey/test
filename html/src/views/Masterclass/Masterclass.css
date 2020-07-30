@@ -352,6 +352,13 @@
                     margin-bottom: var(--gs);
                 }
             }
+
+            &-link {
+                font-weight: normal;
+                text-transform: none;
+                border-bottom: 1px solid var(--cl-global);
+                margin-top: var(--gs);
+            }
         }
     }
 
