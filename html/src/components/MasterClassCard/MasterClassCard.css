@@ -172,7 +172,6 @@
 
         &-bottom {
             order: 1;
-            margin-top: auto;
             margin-bottom: 0;
             font-size: 12px;
             letter-spacing: 0.04em;
