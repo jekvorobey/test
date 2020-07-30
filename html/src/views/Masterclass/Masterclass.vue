@@ -131,7 +131,7 @@
                             <p class="text-bold master-class-view__panel-right-hl">
                                 {{ document.name }}
                             </p>
-                            <div>{{ document.description }} (<a :href="document.file.url">ссылка</a>)</div>
+                            <div>{{ document.description }} (<a :href="document.file.url" download>ссылка</a>)</div>
                         </div>
                         <div
                             v-if="!isTablet"
