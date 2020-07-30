@@ -31,7 +31,7 @@
                                 class="mobile-menu__menu-link"
                                 :to="index !== 0 ? item.url : null"
                                 :tag="index !== 0 ? 'a' : 'button'"
-                                :class="{'mobile-menu__menu-link--full' : index !== 0}"
+                                :class="{ 'mobile-menu__menu-link--full': index !== 0 }"
                                 @click.prevent="index === 0 ? (showCategories = true) : null"
                             >
                                 {{ item.name }}
@@ -46,7 +46,11 @@
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item">
-                            <v-link tag="button" class="mobile-menu__menu-link mobile-menu__menu-link--full" @click="onRegister">
+                            <v-link
+                                tag="button"
+                                class="mobile-menu__menu-link mobile-menu__menu-link--full"
+                                @click="onRegister"
+                            >
                                 <v-svg
                                     class="mobile-menu__menu-link-container"
                                     name="account-middle"
@@ -94,23 +98,38 @@
                     </ul>
                     <div class="container mobile-menu__menu-socials">
                         <p class="text-grey">Каждый день с 9:00 до 21:00</p>
-                        <v-link class="mobile-menu__menu-socials-phone" href="/">
-                            <a href="tel:88007079070">88007079070</a>
+                        <v-link class="mobile-menu__menu-socials-phone" href="tel:88007079070">
+                            8 800 707-90-70
                         </v-link>
                         <p class="text-grey">Всегда отвечаем на ваши сообщения</p>
                         <ul class="mobile-menu__menu-socials-links">
                             <li class="mobile-menu__menu-socials-link">
-                                <v-link href="tg://resolve?domain=Bessovestnyj_bot" target="_blank" rel="nofollow" class="mobile-menu__menu-socials-icon">
+                                <v-link
+                                    href="tg://resolve?domain=Bessovestnyj_bot"
+                                    target="_blank"
+                                    rel="nofollow"
+                                    class="mobile-menu__menu-socials-icon"
+                                >
                                     <v-svg name="telegram-bw" width="40" height="40" />
                                 </v-link>
                             </li>
                             <li class="mobile-menu__menu-socials-link">
-                                <v-link href="https://api.whatsapp.com/send?phone=79162001869" target="_blank" rel="nofollow" class="mobile-menu__menu-socials-icon">
+                                <v-link
+                                    href="https://api.whatsapp.com/send?phone=79162001869"
+                                    target="_blank"
+                                    rel="nofollow"
+                                    class="mobile-menu__menu-socials-icon"
+                                >
                                     <v-svg name="whatsup-bw" width="40" height="40" />
                                 </v-link>
                             </li>
                             <li class="mobile-menu__menu-socials-link">
-                                <v-link href="viber://pa/?chatURI=ibtru" target="_blank" rel="nofollow" class="mobile-menu__menu-socials-icon">
+                                <v-link
+                                    href="viber://pa/?chatURI=ibtru"
+                                    target="_blank"
+                                    rel="nofollow"
+                                    class="mobile-menu__menu-socials-icon"
+                                >
                                     <v-svg name="viber-bw" width="40" height="40" />
                                 </v-link>
                             </li>
