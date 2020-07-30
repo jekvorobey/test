@@ -320,22 +320,29 @@
                     v-for="(place, index) in places"
                     :key="place.id"
                 >
-                    <p class="master-class-view__map-desc">
-                        <span class="text-bold">{{ index + 1 }}. {{ place.name }}, {{ place.address }}</span>
-                    </p>
-                    <ul class="master-class-view__map-gallery">
-                        <li
-                            class="master-class-view__map-gallery-item"
-                            v-for="image in place.gallery"
-                            :key="image.value.id"
-                        >
-                            <v-picture>
-                                <source :data-srcset="image.desktopImg.webp" type="image/webp" />
-                                <source :data-srcset="image.desktopImg.orig" />
-                                <img class="blur-up lazyload v-picture__img" :data-src="image.defaultImg" alt="" />
-                            </v-picture>
-                        </li>
-                    </ul>
+                    <div v-if="isTabletLg" class="master-class-view__map-desc">
+                        <div>{{ index + 1 }}. {{ place.name }}, {{ place.address }}</div>
+                    </div>
+                    <template v-else>
+                        <div class="master-class-view__map-desc">
+                            <div class="text-bold">{{ index + 1 }}. {{ place.name }}, {{ place.address }}</div>
+                            <div>{{ place.description }}</div>
+                        </div>
+
+                        <ul class="master-class-view__map-gallery">
+                            <li
+                                class="master-class-view__map-gallery-item"
+                                v-for="image in place.gallery"
+                                :key="image.value.id"
+                            >
+                                <v-picture>
+                                    <source :data-srcset="image.desktopImg.webp" type="image/webp" />
+                                    <source :data-srcset="image.desktopImg.orig" />
+                                    <img class="blur-up lazyload v-picture__img" :data-src="image.defaultImg" alt="" />
+                                </v-picture>
+                            </li>
+                        </ul>
+                    </template>
                 </div>
 
                 <yandex-map
