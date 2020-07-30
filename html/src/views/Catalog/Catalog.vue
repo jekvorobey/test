@@ -96,7 +96,7 @@
                             :show-labels="false"
                         />
 
-                        <filter-button class="catalog-view__main-header-btn" @click="onOpenFilterModal">
+                        <filter-button class="catalog-view__main-header-btn" @click="filterModal = !filterModal">
                             Фильтр и сортировка&nbsp;&nbsp;
                             <span class="text-grey">{{ activeTags.length }}</span>
                         </filter-button>
@@ -151,9 +151,56 @@
                 </div>
             </div>
         </section>
-
         <transition name="fade-in">
-            <catalog-filter-modal v-if="$isServer || (isCatalogFilterOpen && isTabletLg)" :sortOptions="sortOptions" />
+            <modal
+                class="catalog-view__modal-filter"
+                v-if="filterModal && isTabletLg"
+                :show-close-btn="false"
+                type="fullscreen"
+            >
+                <template v-slot:body>
+                    <v-sticky class="catalog-view__modal-filter-sticky">
+                        <template v-slot:sticky>
+                            <div class="catalog-view__modal-filter-header">
+                                <button class="catalog-view__modal-filter-header-btn" @click="filterModal = false">
+                                    <v-svg name="cross-small" width="14" height="14" />Фильтр
+                                </button>
+                            </div>
+                        </template>
+
+                        <div class="catalog-view__modal-filter-sort">
+                            <div class="catalog-view__modal-filter-sort-title">Сортировка</div>
+                            <ul class="catalog-view__modal-filter-sort-list">
+                                <li
+                                    class="catalog-view__modal-filter-sort-item"
+                                    :class="{ 'catalog-view__modal-filter-sort-item--active': item === sortValue }"
+                                    v-for="item in sortOptions"
+                                    :key="item.title"
+                                >
+                                    <button class="catalog-view__modal-filter-sort-btn" @click="sortValue = item">
+                                        {{ item.title }}
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <catalog-filter class="catalog-view__modal-filter-panel" />
+
+                        <div class="catalog-view__modal-filter-controls">
+                            <v-button
+                                class="btn--outline catalog-view__modal-filter-clear-btn"
+                                :to="clearFilterUrl"
+                                replace
+                            >
+                                Очистить
+                            </v-button>
+                            <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal">
+                                Показать {{ range }}
+                            </v-button>
+                        </div>
+                    </v-sticky>
+                </template>
+            </modal>
         </transition>
 
         <!-- 62050
@@ -181,6 +228,7 @@ import VCheck from '@controls/VCheck/VCheck.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VRange from '@controls/VRange/VRange.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
 import VSidebar from '@controls/VSidebar/VSidebar.vue';
 import Modal from '@controls/modal/modal.vue';
@@ -195,8 +243,6 @@ import CatalogFilter from '@components/CatalogFilter/CatalogFilter.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
-
-import CatalogFilterModal from '@components/CatalogFilterModal/CatalogFilterModal.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -236,7 +282,7 @@ import { registerModuleIfNotExists } from '@util/store';
 import { createNotFoundRoute } from '@util/router';
 import { productGroupTypes } from '@enums/product';
 import { sortFields } from '@enums/catalog';
-import { sortDirections, fileExtension, httpCodes, modalName } from '@enums';
+import { sortDirections, fileExtension, httpCodes } from '@enums';
 import { MIN_SCROLL_VALUE } from '@constants';
 
 import '@plugins/sticky';
@@ -252,8 +298,10 @@ export default {
         VButton,
         VSelect,
         VPagination,
+        VSticky,
         VSidebar,
         VExpander,
+        Modal,
 
         Breadcrumbs,
         BreadcrumbItem,
@@ -264,8 +312,6 @@ export default {
         CatalogProductList,
         CatalogBannerCard,
         ShowMoreButton,
-
-        CatalogFilterModal,
     },
 
     data() {
@@ -280,6 +326,7 @@ export default {
         return {
             sortValue: sortOptions[0],
             sortOptions,
+            filterModal: false,
             showMore: false,
         };
     },
@@ -295,10 +342,6 @@ export default {
             BREADCRUMBS,
         ]),
         ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE, RANGE]),
-        ...mapState(MODAL_MODULE, {
-            isCatalogFilterOpen: state =>
-                state[MODALS][modalName.catalog.FILTER] && state[MODALS][modalName.catalog.FILTER].open,
-        }),
         ...mapState('route', {
             code: state => state.params.code,
             entityCode: state => state.params.entityCode,
@@ -429,10 +472,6 @@ export default {
         setSortValue(field, direction) {
             this.sortValue =
                 this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
-        },
-
-        onOpenFilterModal() {
-            this[CHANGE_MODAL_STATE]({ name: modalName.catalog.FILTER, open: true });
         },
 
         onClickDeleteTag(value) {
