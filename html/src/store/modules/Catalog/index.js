@@ -22,6 +22,8 @@ export const PRODUCT_GROUP = 'productGroup';
 export const ROUTE_SEGMENTS = 'routeSegments';
 export const FILTER_SEGMENTS = 'filterSegments';
 
+export const FILTERS_STATE_MAP = 'filtersStateMap';
+
 export default function createModule() {
     return {
         name: NAME,
@@ -43,6 +45,7 @@ export default function createModule() {
 
             [CATEGORIES]: [],
             [FILTERS]: [],
+            [FILTERS_STATE_MAP]: {},
 
             [ITEMS]: [],
             [RANGE]: 0,

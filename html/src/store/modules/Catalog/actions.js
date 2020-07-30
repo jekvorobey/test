@@ -21,10 +21,15 @@ const FETCH_PRODUCT_GROUP = 'FETCH_PRODUCT_GROUP';
 
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 export const FETCH_CATALOG_DATA = 'FETCH_CATALOG_DATA';
+export const CHANGE_FILTER_STATE = 'CHANGE_FILTER_STATE';
 
 export default {
     [SET_LOAD_PATH]({ commit }, payload) {
         commit(M_SET_LOAD_PATH, payload);
+    },
+
+    [CHANGE_FILTER_STATE]({ commit }, payload) {
+        commit(CHANGE_FILTER_STATE, payload);
     },
 
     async [FETCH_BANNER]({ commit }, payload) {
@@ -173,6 +178,13 @@ export default {
                     break;
                 case FETCH_FILTERS:
                     data.filters = fetchItem;
+                    data.filtersStateMap = {};
+                    for (const filter of data.filters)
+                        data.filtersStateMap[filter.name] = state.filtersStateMap[filter.name] || {
+                            isExpanded: true,
+                            showMore: false,
+                        };
+
                     break;
                 case FETCH_ITEMS:
                     const { items = [], range = 0 } = fetchItem;

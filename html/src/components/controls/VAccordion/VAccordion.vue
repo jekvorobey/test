@@ -123,8 +123,12 @@ export default {
         },
 
         enter(el, done) {
-            el.style.height = el.scrollHeight + 'px';
-            setTimeout(done, 250);
+            el.style.height = `${el.scrollHeight}px`;
+
+            setTimeout(() => {
+                el.style.height = 'auto';
+                done();
+            }, 250);
         },
 
         leave(el, done) {
