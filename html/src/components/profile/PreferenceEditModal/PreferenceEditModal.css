@@ -1,7 +1,10 @@
 .preference-edit-modal {
     .popup--sm {
         width: 440px;
-        height: 500px;
+
+        @media (--tablet-min) {
+            height: 500px;
+        }
     }
 
     .modal-body {
