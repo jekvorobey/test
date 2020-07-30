@@ -227,16 +227,16 @@ const main = {
     cart: {
         title: {
             like: 'You may also like',
-            product: 'Products',
-            masterclass: 'Master-classes',
+            [cartItemTypes.PRODUCT]: 'Products',
+            [cartItemTypes.MASTERCLASS]: 'Master-classes',
         },
 
         items: '0 products | {n} product | {n} products',
 
         summary: {
             type: {
-                product: 'Products',
-                masterclass: 'Master-classes',
+                [cartItemTypes.PRODUCT]: 'Products',
+                [cartItemTypes.MASTERCLASS]: 'Master-classes',
             },
 
             discount: {

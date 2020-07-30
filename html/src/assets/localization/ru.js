@@ -227,16 +227,16 @@ const main = {
     cart: {
         title: {
             like: 'Вам также могут понравиться',
-            product: 'Продукты',
-            masterclass: 'Мастер-классы',
+            [cartItemTypes.PRODUCT]: 'Продукты',
+            [cartItemTypes.MASTERCLASS]: 'Мастер-классы',
         },
 
         items: '0 товаров | {n} товар | {n} товаров',
 
         summary: {
             type: {
-                product: 'Продукты',
-                masterclass: 'Мастер-классы',
+                [cartItemTypes.PRODUCT]: 'Продукты',
+                [cartItemTypes.MASTERCLASS]: 'Мастер-классы',
             },
 
             discount: {

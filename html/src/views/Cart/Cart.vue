@@ -1,9 +1,11 @@
 <template>
     <section class="section cart-view">
         <v-cart-header />
+
         <div class="container">
             <h1 class="cart-view__section-hl">Моя корзина</h1>
         </div>
+
         <section class="section cart-view__main">
             <div v-if="cartItemsCount > 0" class="container cart-view__main-container">
                 <div class="cart-view__main-tabs">
@@ -19,7 +21,7 @@
                         </template>
                     </v-tabs>
 
-                    <v-link class="cart-view__main-clear" tag="button" @click="openOnClearCart">
+                    <v-link class="cart-view__main-clear" tag="button" @click="openOnClearCart(activeTabItem.type)">
                         <v-svg name="cross-small" width="13" height="13" />
                         &nbsp;&nbsp;Очистить корзину
                     </v-link>
@@ -189,6 +191,7 @@ import {
     DELETE_PROMOCODE,
     FETCH_CART_DATA,
     SET_LOAD,
+    ADD_CART_ITEM,
 } from '@store/modules/Cart/actions';
 import {
     PRODUCTS,
@@ -318,25 +321,30 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
         ...mapActions(CART_MODULE, [
             FETCH_CART_DATA,
             FETCH_FEATURED_PRODUCTS,
             DELETE_ALL_ITEMS,
             ADD_PROMOCODE,
             DELETE_PROMOCODE,
+            ADD_CART_ITEM,
         ]),
-        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         onToggleFavorite({ productId }) {
             this[TOGGLE_FAVORITES_ITEM](productId);
+        },
+
+        onAddCartItem(offerId, storeId) {
+            this[ADD_CART_ITEM]({ offerId, storeId });
         },
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
         },
 
-        openOnClearCart() {
-            this[CHANGE_MODAL_STATE]({ name: modalName.cart.CLEAR_CART, open: true });
+        openOnClearCart(type) {
+            this[CHANGE_MODAL_STATE]({ name: modalName.cart.CLEAR_CART, open: true, state: { type } });
         },
 
         prepareBonus(value) {

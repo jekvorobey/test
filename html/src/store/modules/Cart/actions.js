@@ -69,10 +69,11 @@ export default {
         }
     },
 
-    async [DELETE_ALL_ITEMS]({ commit }) {
+    async [DELETE_ALL_ITEMS]({ state, commit }, type) {
         try {
-            await deleteAllItems();
-            commit(SET_CART_DATA, {});
+            await deleteAllItems(type);
+            const data = { ...state.cartData, [type]: undefined };
+            commit(SET_CART_DATA, data);
         } catch (error) {
             storeErrorHandler(DELETE_ALL_ITEMS, error);
         }

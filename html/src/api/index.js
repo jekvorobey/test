@@ -681,8 +681,15 @@ export function getCartData() {
     return $http.get('/v1/cart/data');
 }
 
-export function deleteAllItems() {
-    return $http.delete('/v1/cart/all');
+export function deleteAllItems(type) {
+    switch (type) {
+        case cartItemTypes.MASTERCLASS:
+            return $http.delete('/v1/cart/all-public-events');
+        case cartItemTypes.PRODUCT:
+            return $http.delete('/v1/cart/all');
+        default:
+            return Promise.reject('Wrong cart type');
+    }
 }
 
 export function addMasterclassItem(offerId, count) {
