@@ -66,6 +66,9 @@ import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { DELIVERY_INFO } from '@store/modules/Cart/getters';
 import { ADD_CART_ITEM, DELETE_CART_ITEM, DELETE_CART_BUNDLE } from '@store/modules/Cart/actions';
 
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
+
 import { fileExtension } from '@enums';
 import { cartItemTypes } from '@enums/product';
 import { generatePictureSourcePath } from '@util/file';
@@ -105,12 +108,17 @@ export default {
 
     methods: {
         ...mapActions(CART_MODULE, [ADD_CART_ITEM, DELETE_CART_ITEM, DELETE_CART_BUNDLE]),
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         generateItemProductUrl(product) {
             if (Array.isArray(product.categoryCodes)) {
                 const categoryCode = product.categoryCodes[product.categoryCodes.length - 1];
                 return generateProductUrl(categoryCode, product.code);
             }
+        },
+
+        onToggleFavorite({ productId }) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
         },
 
         onAddCartItem(offerId, storeId, count) {
