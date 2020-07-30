@@ -174,13 +174,14 @@
                                 Программа
                             </p>
                             <v-accordion class="master-class-view__accordion" :items="stages" key-field="id">
-                                <template v-slot:header="{ item, index }">
+                                <template v-slot:header="{ item }">
                                     <div class="master-class-view__accordion-header">
                                         <div class="master-class-view__accordion-header-info">
                                             <h4 class="master-class-view__accordion-header-name">
                                                 {{ item.name }}
                                             </h4>
-                                            <div class="text-sm text-grey">{{ dates[index] }}</div>
+                                            <div class="text-sm text-grey">{{ item.date }}</div>
+                                            <div>{{ item.address }}</div>
                                         </div>
 
                                         <ul class="master-class-view__accordion-header-speakers">
@@ -757,11 +758,13 @@ export default {
 
         stages() {
             const { stages = [] } = this[MASTERCLASS] || {};
-            const { speakers = [] } = this;
+            const { speakers = [], places = [], dates = [] } = this;
 
-            return stages.map(s => {
+            return stages.map((s, index) => {
                 const stageSpeakers = speakers.filter(sp => s.speakerIds && s.speakerIds.includes(sp.id));
-                return { ...s, stageSpeakers };
+                const place = places.find(p => p.id === s.placeId);
+                const date = dates[index];
+                return { ...s, stageSpeakers, date, address: place && place.address };
             });
         },
 

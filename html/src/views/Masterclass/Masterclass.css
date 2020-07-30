@@ -172,6 +172,10 @@
                 @media (--tablet) {
                     margin-bottom: calc(var(--gs) * 2);
                 }
+
+                .text-sm {
+                    line-height: 24px;
+                }
             }
 
             &-speakers {
