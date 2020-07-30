@@ -60,8 +60,6 @@
                 >
                     <li class="seo-view__panel-item" v-for="file in item.files" :key="file.id">
                         <v-picture>
-                            <source :data-srcset="file.desktop.webp" type="image/webp" />
-                            <source :data-srcset="file.desktop.orig" />
                             <img class="blur-up lazyload v-picture__img" :data-src="file.default" alt="" />
                         </v-picture>
                     </li>
@@ -103,8 +101,6 @@
         <transition name="fade-in">
             <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" :images="galleryImages">
                 <template v-slot:image="{ image }">
-                    <source :data-srcset="image.desktop.webp" type="image/webp" />
-                    <source :data-srcset="image.desktop.orig" />
                     <img class="blur-up lazyload v-picture__img" :data-src="image.default" alt="" />
                 </template>
             </gallery-modal>
