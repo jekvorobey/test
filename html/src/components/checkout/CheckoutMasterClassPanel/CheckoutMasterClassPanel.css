@@ -221,7 +221,8 @@
                 display: flex;
                 margin: 0 calc(var(--gs) * 3 / -2);
 
-                .icon {
+                &-item {
+                    display: flex;
                     width: calc(calc(100% / 8) - calc(var(--gs) * 3 / 2));
                     margin: 0 calc(var(--gs) * 3 / 2);
 

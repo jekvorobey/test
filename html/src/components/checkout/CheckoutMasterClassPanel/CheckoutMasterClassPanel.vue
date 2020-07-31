@@ -127,13 +127,26 @@
                         <div class="text-bold checkout-master-class-panel__item-payment-title">
                             {{ method.title }}
                         </div>
+
                         <div class="checkout-master-class-panel__item-payment-list">
-                            <v-svg name="visa" width="40" height="24" />
-                            <v-svg name="mastercard" width="40" height="24" />
-                            <v-svg name="mir" width="40" height="24" />
-                            <v-svg name="apple" width="40" height="24" />
-                            <v-svg name="google" width="40" height="24" />
-                            <v-svg name="yandex" width="56" height="24" />
+                            <div class="checkout-master-class-panel__item-payment-list-item">
+                                <v-svg name="visa" width="40" height="24" />
+                            </div>
+                            <div class="checkout-master-class-panel__item-payment-list-item">
+                                <v-svg name="mastercard" width="40" height="24" />
+                            </div>
+                            <div class="checkout-master-class-panel__item-payment-list-item">
+                                <v-svg name="mir" width="40" height="24" />
+                            </div>
+                            <div class="checkout-master-class-panel__item-payment-list-item">
+                                <v-svg name="apple" width="40" height="24" />
+                            </div>
+                            <div class="checkout-master-class-panel__item-payment-list-item">
+                                <v-svg name="google" width="40" height="24" />
+                            </div>
+                            <div class="checkout-master-class-panel__item-payment-list-item">
+                                <v-svg name="yandex" width="56" height="24" />
+                            </div>
                         </div>
                     </div>
                     <p class="text-bold" v-else>{{ method.title }}</p>

@@ -134,9 +134,7 @@
         }
 
         &--payment &-card {
-            .icon + .icon {
-                margin-left: calc(var(--gs) * 2);
-            }
+            min-height: auto;
 
             .checkout-option-card__right {
                 display: none;
@@ -345,7 +343,8 @@
                 display: flex;
                 margin: 0 calc(var(--gs) * 3 / -2);
 
-                .icon {
+                &-item {
+                    display: flex;
                     width: calc(calc(100% / 8) - calc(var(--gs) * 3 / 2));
                     margin: 0 calc(var(--gs) * 3 / 2);
 
