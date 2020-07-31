@@ -67,7 +67,7 @@
                         предложения от официальных представителей брендов для бьюти-профессионалов и персонализированные
                         рекомендации, отзывы профессионального сообщества и систему бонусов, удобную оплату и логистику.
                     </p>
-                    <router-link class="about-us-view__brands-content-link" to="/">
+                    <router-link class="about-us-view__brands-content-link" to="/catalog">
                         Перейти в каталог
                     </router-link>
                 </div>
@@ -99,7 +99,7 @@
                         Делайте свой выбор, изучив полную информацию о событии: описание и фото, видео и
                         пользовательский контент, включая публикации из Инстаграм и отзывы покупателей на iBT.ru.
                     </p>
-                    <router-link class="about-us-view__mclass-content-link" to="/">
+                    <router-link class="about-us-view__mclass-content-link" to="/masterclasses">
                         Перейти к мастер-классам
                     </router-link>
                 </div>
@@ -147,14 +147,17 @@
         </section>
         <section class="section">
             <div class="container about-us-view__insta">
-                <frisbuy-product-container :script="instagramFrisbuy" id="frisbuy-widget" />
+                <frisbuy-product-container :script="frisbuyScript" />
             </div>
         </section>
     </section>
 </template>
 
 <script>
-import './AboutUs.css';
+import VPicture from '@controls/VPicture/VPicture.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VButton from '@controls/VButton/VButton.vue';
+
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
@@ -163,11 +166,7 @@ import VSlider from '@controls/VSlider/VSlider.vue';
 
 import FrisbuyProductContainer from '@components/FrisbuyProductContainer/FrisbuyProductContainer.vue';
 
-import VPicture from '@controls/VPicture/VPicture.vue';
-import VInput from '@controls/VInput/VInput.vue';
-import VButton from '@controls/VButton/VButton.vue';
 import { breakpoints } from '@enums';
-
 import '@images/sprites/home.svg';
 import '@images/sprites/About1.svg';
 import '@images/sprites/About2.svg';
@@ -186,8 +185,7 @@ import AboutMk2 from '@images/mock/AboutMk2.png';
 import AboutMk3 from '@images/mock/AboutMk3.png';
 import AboutMk4 from '@images/mock/AboutMk4.png';
 
-
-
+import './AboutUs.css';
 export default {
     name: 'about-us',
     components: {
@@ -201,92 +199,101 @@ export default {
         FrisbuyProductContainer,
     },
 
-    data: () => ({
-        AboutManLg,
-        AboutManMd,
-        edges: [
-            {
-                img: 'About2',
-                subTitle: 'Коллекция культовых брендов и экспертная подборка профильных событий',
-                link: '#',
-                linkTitle: 'Перейти к покупкам',
-            },
-            {
-                img: 'About1',
-                subTitle: 'Специальные цены для профессионалов от официальных поставщиков',
-                link: '#',
-                linkTitle: 'Смотреть акции',
-            },
-            {
-                img: 'About3',
-                subTitle: 'Доставка заказов по всей России. Более 16 000 населенных пунктов',
-                link: '#',
-                linkTitle: 'Подробнее о доставке',
-            },
-            {
-                img: 'About4',
-                subTitle: 'Система накопления бонусов',
-                link: '#',
-                linkTitle: 'Подробнее о бонусах',
-            },
-        ],
-        brands: [
-            {
-                img: 'AboutBrand1',
-            },
-            {
-                img: 'AboutBrand2',
-            },
-            {
-                img: 'AboutBrand3',
-            },
-            {
-                img: 'AboutBrand4',
-            },
-        ],
-        mentors: [
-            {
-                img: AboutMk1,
-            },
-            {
-                img: AboutMk2,
-            },
-            {
-                img: AboutMk3,
-            },
-            {
-                img: AboutMk4,
-            },
-        ],
-        instagrams: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }],
-        aboutGalleryOptions: {
-            spaceBetween: 8,
-            slidesPerView: 1,
-            grabCursor: true,
+    data() {
+        return {
+            AboutManLg,
+            AboutManMd,
 
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
+            edges: [
+                {
+                    img: 'About2',
+                    subTitle: 'Коллекция культовых брендов и экспертная подборка профильных событий',
+                    link: '/catalog',
+                    linkTitle: 'Перейти к покупкам',
+                },
+                {
+                    img: 'About1',
+                    subTitle: 'Специальные цены для профессионалов от официальных поставщиков',
+                    link: '/promo',
+                    linkTitle: 'Смотреть акции',
+                },
+                {
+                    img: 'About3',
+                    subTitle: 'Доставка заказов по всей России. Более 16 000 населенных пунктов',
+                    link: '/info-pages/delivery-and-payment',
+                    linkTitle: 'Подробнее о доставке',
+                },
+                {
+                    img: 'About4',
+                    subTitle: 'Система накопления бонусов',
+                    link: '/404',
+                    linkTitle: 'Подробнее о бонусах',
+                },
+            ],
 
-            breakpoints: {
-                [breakpoints.tablet - 1]: {
-                    slidesPerView: 'auto',
-                    spaceBetween: 0,
-                    pagination: {
-                        el: '.swiper-pagination',
-                        type: 'bullets',
+            brands: [
+                {
+                    img: 'AboutBrand1',
+                },
+                {
+                    img: 'AboutBrand2',
+                },
+                {
+                    img: 'AboutBrand3',
+                },
+                {
+                    img: 'AboutBrand4',
+                },
+            ],
+
+            mentors: [
+                {
+                    img: AboutMk1,
+                },
+                {
+                    img: AboutMk2,
+                },
+                {
+                    img: AboutMk3,
+                },
+                {
+                    img: AboutMk4,
+                },
+            ],
+
+            instagrams: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }],
+
+            aboutGalleryOptions: {
+                spaceBetween: 8,
+                slidesPerView: 1,
+                grabCursor: true,
+
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+
+                breakpoints: {
+                    [breakpoints.tablet - 1]: {
+                        slidesPerView: 'auto',
+                        spaceBetween: 0,
+                        pagination: {
+                            el: '.swiper-pagination',
+                            type: 'bullets',
+                        },
                     },
                 },
             },
-        },
-        instagramFrisbuy: `https://www.frisbuy.ru/fb/widget?embed_id=9b48d527-a4dc-11ea-ba01-0242ac150002`,
-    }),
+
+            frisbuyScript: `https://www.frisbuy.ru/fb/widget?embed_id=9b48d527-a4dc-11ea-ba01-0242ac150002`,
+        };
+    },
 
     computed: {
         isTablet() {
             return this.$mq.tablet;
         },
+
         isTabletLg() {
             return this.$mq.tabletLg;
         },
