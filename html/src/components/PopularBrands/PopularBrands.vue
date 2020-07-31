@@ -8,13 +8,16 @@
                 :to="brand.href ? brand.href : '/'"
             >
                 <v-picture v-if="brand.image">
-                    <img class="blur-up lazyload v-picture__img" :data-src="generatePicturePath(brand.image)" alt="" />
+                    <source :data-srcset="brand.image.webp" type="image/webp" />
+                    <source :data-srcset="brand.image.orig" />
+                    <img class="blur-up lazyload v-picture__img" :data-src="brand.image.default" alt="" />
                 </v-picture>
             </router-link>
         </div>
+
         <ul class="popular-brands__list">
             <li class="popular-brands__list-item" v-for="brand in restBrands.slice(0, count)" :key="brand.id">
-                <router-link :to="brand.href ? brand.href : '/'" class="popular-brands__link">
+                <router-link class="popular-brands__link" :to="brand.href ? brand.href : '/'">
                     {{ brand.name }}
                 </router-link>
             </li>
@@ -29,6 +32,7 @@
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VLink from '@controls/VLink/VLink.vue';
 
+import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 import './PopularBrands.css';
 
@@ -57,7 +61,19 @@ export default {
 
     computed: {
         mostPopularBrands() {
-            return this.items.filter(i => !!i.image);
+            const brands = this.items.filter(i => !!i.image);
+            return brands.map(b => {
+                const image = {
+                    webp: generatePictureSourcePath(200, 80, b.image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(200, 80, b.image.id),
+                    default: generatePictureSourcePath(200, 80, b.image.id),
+                };
+
+                return {
+                    ...b,
+                    image,
+                };
+            });
         },
 
         restBrands() {
