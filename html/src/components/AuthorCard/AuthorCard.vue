@@ -8,9 +8,9 @@
             <div class="text-bold author-card__title-name">
                 {{ firstName }}
                 {{ lastName }}
-                <button v-if="description && mounted" class="author-card__title-btn">
+                <!-- <button v-if="description && mounted" class="author-card__title-btn">
                     <v-svg name="info-middle" width="16" height="16" />
-                </button>
+                </button> -->
             </div>
             <div class="text-grey">
                 <span v-if="profile">{{ profile }} </span>
