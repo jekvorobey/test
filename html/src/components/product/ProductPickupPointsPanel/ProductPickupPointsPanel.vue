@@ -29,15 +29,21 @@
                     'product-pickup-points-panel__list-item--selected':
                         selectedPickupPoint && selectedPickupPoint.id === point.id,
                 }"
-                v-for="(point, index) in filteredPickupPoints"
+                v-for="(point, index) in points"
                 :key="point.id"
                 ref="options"
                 readonly
                 @cardClick="onPointClick(point, index)"
             >
                 <p class="text-bold">{{ point.name }}</p>
+                <p>{{ point.title }}</p>
+                <p>{{ point.phone }}</p>
+                <p>{{ point.payment }}</p>
+                <p class="text-grey text-sm" v-if="point.startDate">
+                    Можно забрать с {{ point.startDate }}, {{ point.startDateDay }}
+                </p>
+                <br />
                 <p>{{ point.description }}</p>
-                <p class="text-grey text-sm">{{ point.startDate }}</p>
             </checkout-option-card>
         </ul>
     </div>
@@ -47,6 +53,7 @@ import VSelect from '@controls/VSelect/VSelect.vue';
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
+import { LOCALE } from '@store';
 
 import {
     NAME as PRODUCT_MODULE,
@@ -59,6 +66,8 @@ import {
 import { FILTERED_PICKUP_POINTS } from '@store/modules/Product/getters';
 import { SET_SELECTED_PICKUP_POINT, SET_SELECTED_PICKUP_POINT_TYPE } from '@store/modules/Product/actions';
 
+import { formatPhoneNumber } from '@util';
+import { dayMonthLongDateSettings } from '@settings';
 import { deliveryMethods } from '@enums/checkout';
 import './ProductPickupPointsPanel.css';
 
@@ -78,6 +87,7 @@ export default {
     },
 
     computed: {
+        ...mapState([LOCALE]),
         ...mapGetters(PRODUCT_MODULE, [FILTERED_PICKUP_POINTS]),
         ...mapState(PRODUCT_MODULE, [
             PICKUP_POINT_TYPES,
@@ -85,6 +95,25 @@ export default {
             SELECTED_PICKUP_POINT,
             SELECTED_PICKUP_POINT_TYPE,
         ]),
+
+        points() {
+            const points = this[FILTERED_PICKUP_POINTS] || [];
+
+            return points.map(p => {
+                const dateObj = new Date(p.startDate);
+                const startDate = p.startDate && dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings);
+                const startDateDay = p.startDate && dateObj.getDay();
+                const phones = p.phone && p.phone.split(', ');
+                const phone = phones && phones.map(p => formatPhoneNumber(p)).join(', ');
+
+                return {
+                    ...p,
+                    phone,
+                    startDate,
+                    startDateDay: this.$t(`weekdays.long.${startDateDay}`),
+                };
+            });
+        },
     },
 
     watch: {

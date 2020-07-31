@@ -10,6 +10,8 @@
 
     &__header {
         margin: 0;
+        margin-bottom: calc(var(--gs) * 3);
+
         @media (--tablet-min) {
             padding: 0 calc(var(--gs) * 3);
         }
@@ -55,6 +57,7 @@
             border: none;
             border-bottom: 1px solid var(--cl-divider-grey);
             width: 100%;
+            min-height: auto;
 
             @media (--tablet-lg) {
                 padding: calc(var(--gs) * 2) calc(var(--gs) * 3);
@@ -62,6 +65,14 @@
 
             @media (--tablet) {
                 padding: calc(var(--gs) * 2);
+            }
+
+            &-payment {
+                margin-bottom: var(--gs);
+            }
+
+            &:first-child {
+                padding-top: 0;
             }
         }
 

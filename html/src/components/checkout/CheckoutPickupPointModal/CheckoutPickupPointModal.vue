@@ -47,19 +47,17 @@
                     :coords="coords"
                     :controls="[]"
                     :cluster-options="clusterOptions"
-                    showAllMarkers
+                    :show-all-markers="filteredPickupPoints.length > 1"
                     @map-was-initialized="initHandler"
                 >
-                    <template v-if="filteredPickupPoints.length">
-                        <ymap-marker
-                            v-for="point in filteredPickupPoints"
-                            :key="`${point.id}-${point.methodID}`"
-                            :marker-id="`marker-${point.id}`"
-                            :coords="point.map.coords"
-                            :icon="markerIcon"
-                            cluster-name="default-cluster"
-                        />
-                    </template>
+                    <ymap-marker
+                        v-for="point in filteredPickupPoints"
+                        :key="`${point.id}-${point.methodID}`"
+                        :marker-id="`marker-${point.id}`"
+                        :coords="point.map.coords"
+                        :icon="markerIcon"
+                        cluster-name="default-cluster"
+                    />
                 </yandex-map>
             </div>
 
@@ -77,6 +75,7 @@
                     <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад к
                     списку
                 </v-link>
+
                 <div class="checkout-pickup-point-modal__details-info">
                     <div class="checkout-pickup-point-modal__details-info-main">
                         <h3 class="checkout-pickup-point-modal__details-info-main-hl">
@@ -85,10 +84,12 @@
                         <div>{{ selectedPickupPoint.name }}</div>
                         <div>{{ selectedPickupPoint.phone }}</div>
                     </div>
+
                     <div class="checkout-pickup-point-modal__details-info-schedule">
                         <template v-if="selectedPickupPoint.startDate">
-                            {{ selectedPickupPoint.startDate }}
+                            Можно забрать с {{ selectedPickupPoint.startDate }}, {{ selectedPickupPoint.startDateDay }}
                         </template>
+
                         <ul class="checkout-pickup-point-modal__details-info-schedule-list">
                             <li
                                 class="checkout-pickup-point-modal__details-info-schedule-item"
@@ -101,70 +102,77 @@
                         </ul>
                     </div>
                 </div>
+
                 <div class="checkout-pickup-point-modal__details-desc" v-if="selectedPickupPoint.description">
                     <div class="text-bold">
                         Как добраться
                     </div>
                     {{ selectedPickupPoint.description }}
                 </div>
+
                 <div class="checkout-pickup-point-modal__details-payment">
                     <div class="text-bold">
                         Принимаются к оплате
                     </div>
                     {{ selectedPickupPoint.payment }}
                 </div>
+
                 <v-button class="checkout-pickup-point-modal__details-accept" @click.stop="onSelectPoint">
                     Выбрать
                 </v-button>
             </div>
 
-            <template v-if="filteredPickupPoints.length">
-                <div
-                    class="checkout-pickup-point-modal__filter"
-                    v-if="(!isTabletLg || activeTab === 1) && !selectedPickupPoint"
-                >
-                    <div class="container checkout-pickup-point-modal__filter-header">
-                        <h3 class="checkout-pickup-point-modal__filter-header-hl" v-if="!isTabletLg">
-                            Выбор пункта выдачи
-                        </h3>
-                        <div class="checkout-pickup-point-modal__filter-header-controls">
-                            <!-- <v-select placeholder="Станция метро" :options="[]" /> -->
-                            <v-select
-                                v-model="selectedDeliveryMethod"
-                                placeholder="Тип пункта выдачи"
-                                track-by="id"
-                                label="title"
-                                :options="deliveryMethods"
-                                :searchable="false"
-                            />
-                        </div>
-                    </div>
+            <div
+                class="checkout-pickup-point-modal__filter"
+                v-if="(!isTabletLg || activeTab === 1) && !selectedPickupPoint"
+            >
+                <div class="container checkout-pickup-point-modal__filter-header">
+                    <h3 class="checkout-pickup-point-modal__filter-header-hl" v-if="!isTabletLg">
+                        Выбор пункта выдачи
+                    </h3>
 
-                    <ul class="checkout-pickup-point-modal__filter-list" v-scroll-lock="isOpen">
-                        <checkout-option-card
-                            class="checkout-pickup-point-modal__filter-list-item"
-                            v-for="point in filteredPickupPoints"
-                            :key="point.id"
-                            readonly
-                            @cardClick="onShowPoint(point)"
-                        >
-                            <p class="text-bold">{{ point.title }}</p>
-                            <p>{{ point.name }}</p>
-                            <p class="text-grey text-sm" v-if="point.startDate">{{ point.startDate }}</p>
-                        </checkout-option-card>
-                    </ul>
+                    <div class="checkout-pickup-point-modal__filter-header-controls">
+                        <!-- <v-select placeholder="Станция метро" :options="[]" /> -->
+                        <v-select
+                            v-model="selectedDeliveryMethod"
+                            placeholder="Тип пункта выдачи"
+                            track-by="id"
+                            label="title"
+                            :options="deliveryMethods"
+                            :searchable="false"
+                        />
+                    </div>
                 </div>
-            </template>
-            <template v-else>
-                <div class="checkout-pickup-point-modal__filter">
+
+                <ul
+                    class="checkout-pickup-point-modal__filter-list"
+                    v-if="filteredPickupPoints.length"
+                    v-scroll-lock="isOpen"
+                >
+                    <checkout-option-card
+                        class="checkout-pickup-point-modal__filter-list-item"
+                        v-for="point in filteredPickupPoints"
+                        :key="point.id"
+                        readonly
+                        @cardClick="onShowPoint(point)"
+                    >
+                        <div class="text-bold">{{ point.title }}</div>
+                        <div class="checkout-pickup-point-modal__filter-list-item-name">{{ point.name }}</div>
+                        <div class="text-grey text-sm" v-if="point.startDate">
+                            Можно забрать с {{ point.startDate }}, {{ point.startDateDay }}
+                        </div>
+                    </checkout-option-card>
+                </ul>
+                <div class="checkout-pickup-point-modal__filter" v-else>
                     <span class="checkout-pickup-point-modal__filter-empty-text">
                         Не найдено ни одного пункта самовывоза.
                     </span>
                 </div>
-            </template>
+            </div>
         </template>
     </general-modal>
 </template>
+
 <script>
 import '@plugins/ya-maps';
 
@@ -177,6 +185,10 @@ import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
 import { mapGetters, mapState, mapActions } from 'vuex';
+import { LOCALE } from '@store';
+import { NAME as GEO_MODULE } from '@store/modules/Geolocation';
+import { SELECTED_CITY_COORDS } from '@store/modules/Geolocation/getters';
+
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import { SET_PICKUP_POINT } from '@store/modules/Checkout/actions';
 import { PICKUP_POINTS, SELECTED_DELIVERY_METHOD_ID, DELIVERY_METHODS } from '@store/modules/Checkout/getters';
@@ -184,7 +196,9 @@ import { PICKUP_POINTS, SELECTED_DELIVERY_METHOD_ID, DELIVERY_METHODS } from '@s
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { formatPhoneNumber } from '@util';
 import { receiveTypes, modalName } from '@enums';
+import { dayMonthLongDateSettings } from '@settings';
 import pin from '@images/icons/pin-filled.svg';
 import '@images/sprites/arrow-small.svg';
 import './CheckoutPickupPointModal.css';
@@ -209,7 +223,7 @@ export default {
             selectedPickupPoint: null,
             selectedDeliveryMethod: null,
             showMap: false,
-            coords: [55.755814, 37.617635],
+            // coords: [55.755814, 37.617635],
 
             markerIcon: {
                 layout: 'default#image',
@@ -240,15 +254,40 @@ export default {
     },
 
     computed: {
+        ...mapState([LOCALE]),
+        ...mapGetters(GEO_MODULE, [SELECTED_CITY_COORDS]),
         ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, DELIVERY_METHODS, SELECTED_DELIVERY_METHOD_ID]),
         ...mapState(MODAL_MODULE, {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
+        coords() {
+            if (this.filteredPickupPoints.length === 0 || this.filteredPickupPoints.length > 1)
+                return this[SELECTED_CITY_COORDS];
+            const point = this.filteredPickupPoints[0];
+            return point.map.coords;
+        },
+
         filteredPickupPoints() {
-            return this[PICKUP_POINTS].filter(
+            const points = this[PICKUP_POINTS] || [];
+            const filteredPoints = points.filter(
                 p => !this.selectedDeliveryMethod || p.methodID === this.selectedDeliveryMethod.id
             );
+
+            return filteredPoints.map(p => {
+                const dateObj = new Date(p.startDate);
+                const startDate = p.startDate && dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings);
+                const startDateDay = p.startDate && dateObj.getDay();
+                const phones = p.phone && p.phone.split(', ');
+                const phone = phones && phones.map(p => formatPhoneNumber(p)).join(', ');
+
+                return {
+                    ...p,
+                    phone,
+                    startDate,
+                    startDateDay: this.$t(`weekdays.long.${startDateDay}`),
+                };
+            });
         },
 
         clusterOptions() {
@@ -270,7 +309,6 @@ export default {
 
         onShowPoint(point) {
             this.selectedPickupPoint = point;
-            console.log(this.selectedPickupPoint);
             this.activeTab = 1;
         },
 
@@ -298,12 +336,12 @@ export default {
 
         initHandler(e) {
             const vm = this;
-            e.geoObjects.events.add('click', (e) => {
+            e.geoObjects.events.add('click', e => {
                 // marker-4238 => 4238
                 // defaultPrevented === true if group of markers
                 if (!e._defaultPrevented) {
                     const id = +e.get('target').properties._data.markerId.split('-')[1];
-                    const point = this.filteredPickupPoints.find((item) => item.id === id);
+                    const point = this.filteredPickupPoints.find(item => item.id === id);
                     this.onShowPoint(point);
                 }
             });
