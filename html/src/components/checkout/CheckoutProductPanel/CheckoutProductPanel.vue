@@ -172,16 +172,20 @@
                         :selected="method.id === selectedPaymentMethodID"
                         readonly
                     >
-                        <p class="text-bold">{{ method.title }}</p>
-                        <br />
                         <div class="checkout-product-panel__item-payment" v-if="method.type === 'card'">
-                            <v-svg name="visa" width="40" height="24" />
-                            <v-svg name="mastercard" width="40" height="24" />
-                            <v-svg name="mir" width="40" height="24" />
-                            <v-svg name="apple" width="40" height="24" />
-                            <v-svg name="google" width="40" height="24" />
-                            <v-svg name="yandex" width="56" height="24" />
+                            <div class="text-bold checkout-product-panel__item-payment-title">
+                                {{ method.title }}
+                            </div>
+                            <div class="checkout-product-panel__item-payment-list">
+                                <v-svg name="visa" width="40" height="24" />
+                                <v-svg name="mastercard" width="40" height="24" />
+                                <v-svg name="mir" width="40" height="24" />
+                                <v-svg name="apple" width="40" height="24" />
+                                <v-svg name="google" width="40" height="24" />
+                                <v-svg name="yandex" width="56" height="24" />
+                            </div>
                         </div>
+                        <p class="text-bold" v-else>{{ method.title }}</p>
                     </checkout-option-card>
                 </ul>
 

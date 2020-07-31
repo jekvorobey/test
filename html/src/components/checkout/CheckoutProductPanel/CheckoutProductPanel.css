@@ -137,6 +137,10 @@
             .icon + .icon {
                 margin-left: calc(var(--gs) * 2);
             }
+
+            .checkout-option-card__right {
+                display: none;
+            }
         }
 
         &--payment &-list {
@@ -315,6 +319,40 @@
                 @media (--tablet) {
                     width: 100%;
                     justify-content: space-between;
+                }
+            }
+        }
+
+        &-payment {
+            display: flex;
+            align-content: center;
+            min-height: auto;
+
+            @media (--tablet) {
+                flex-wrap: wrap;
+            }
+
+            &-title {
+                flex: 1;
+
+                @media (--tablet) {
+                    margin-bottom: calc(var(--gs) * 2);
+                }
+            }
+
+            &-list {
+                flex-wrap: wrap;
+                display: flex;
+                margin: 0 calc(var(--gs) * 3 / -2);
+
+                .icon {
+                    width: calc(calc(100% / 8) - calc(var(--gs) * 3 / 2));
+                    margin: 0 calc(var(--gs) * 3 / 2);
+
+                    @media (--tablet) {
+                        width: calc(calc(100% / 4) - calc(var(--gs) * 3 / 2));
+                        margin-bottom: calc(var(--gs) * 1.5);
+                    }
                 }
             }
         }

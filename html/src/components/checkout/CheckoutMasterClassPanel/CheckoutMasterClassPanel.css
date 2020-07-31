@@ -87,6 +87,10 @@
 
         &--payment &-card {
             min-height: auto;
+
+            .checkout-option-card__right {
+                display: none;
+            }
         }
 
         &--recepient &-list {
