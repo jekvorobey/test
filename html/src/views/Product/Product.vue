@@ -659,7 +659,6 @@ import ProductPickupPointsMap from '@components/product/ProductPickupPointsMap/P
 import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPanel/ProductPickupPointsPanel.vue';
 
 import RecentlyViewedProductCard from '@components/RecentlyViewedProductCard/RecentlyViewedProductCard.vue';
-import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
 import ReviewsPanel from '@components/reviews/ReviewsPanel/ReviewsPanel.vue';
 

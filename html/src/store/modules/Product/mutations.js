@@ -1,3 +1,24 @@
+import { pointType } from '@enums/checkout';
+
+const pickupPointTypes = [
+    {
+        id: pointType.TYPE_PICKUP_POINT,
+        title: 'Пункт выдачи заказа',
+    },
+    {
+        id: pointType.TYPE_POSTOMAT,
+        title: 'Постомат',
+    },
+    {
+        id: pointType.TYPE_RU_POST_OFFICE,
+        title: 'Отделение почты России',
+    },
+    {
+        id: pointType.SERVICE_TERMINAL,
+        title: 'Терминал',
+    },
+];
+
 export const SET_REFERRER_CODE = 'SET_REFERRER_CODE';
 
 export const SET_PRODUCT = 'SET_PRODUCT';
@@ -26,6 +47,8 @@ export default {
 
     [SET_PICKUP_POINTS](state, payload) {
         state.pickupPoints = payload || [];
+        state.pickupPointTypes = pickupPointTypes.filter((t) => state.pickupPoints.some((p) => p.methodID === t.id));
+        state.selectedPickupPointType = state.pickupPointTypes[0];
     },
 
     [SET_SELECTED_PICKUP_POINT](state, { point, index }) {
@@ -61,7 +84,7 @@ export default {
         state.instagramItems = payload;
     },
 
-    [SET_PRODUCT_BUNDLES](state, payload = [] ) {
+    [SET_PRODUCT_BUNDLES](state, payload = []) {
         state.productBundles = payload;
     },
 

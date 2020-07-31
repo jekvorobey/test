@@ -9,6 +9,7 @@
                     label="title"
                     :options="pickupPointTypes"
                     :searchable="false"
+                    :show-labels="false"
                     :value="selectedPickupPointType"
                     @input="onSetPickupPointType"
                 />
@@ -35,15 +36,17 @@
                 readonly
                 @cardClick="onPointClick(point, index)"
             >
-                <p class="text-bold">{{ point.name }}</p>
-                <p>{{ point.title }}</p>
+                <p class="text-bold">{{ point.title }}</p>
+                <p>{{ point.name }}</p>
                 <p>{{ point.phone }}</p>
                 <p>{{ point.payment }}</p>
                 <p class="text-grey text-sm" v-if="point.startDate">
                     Можно забрать с {{ point.startDate }}, {{ point.startDateDay }}
                 </p>
-                <br />
-                <p>{{ point.description }}</p>
+                <!-- <template v-if="point.description">
+                    <br />
+                    <p>{{ point.description }}</p>
+                </template> -->
             </checkout-option-card>
         </ul>
     </div>
@@ -68,7 +71,6 @@ import { SET_SELECTED_PICKUP_POINT, SET_SELECTED_PICKUP_POINT_TYPE } from '@stor
 
 import { formatPhoneNumber } from '@util';
 import { dayMonthLongDateSettings } from '@settings';
-import { deliveryMethods } from '@enums/checkout';
 import './ProductPickupPointsPanel.css';
 
 export default {
@@ -110,7 +112,7 @@ export default {
                     ...p,
                     phone,
                     startDate,
-                    startDateDay: this.$t(`weekdays.long.${startDateDay}`),
+                    startDateDay: p.startDate && this.$t(`weekdays.long.${startDateDay}`),
                 };
             });
         },

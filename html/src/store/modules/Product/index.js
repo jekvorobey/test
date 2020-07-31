@@ -1,19 +1,8 @@
-import { deliveryMethods } from '@enums/checkout';
+import { pointType } from '@enums/checkout';
 
 import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
-
-const pickupPointTypes = [
-    {
-        id: deliveryMethods.OUTPOST_PICKUP,
-        title: 'Outpost',
-    },
-    {
-        id: deliveryMethods.POSTOMAT_PICKUP,
-        title: 'Postomat',
-    },
-];
 
 export const PRODUCT = 'product';
 export const PRODUCT_CODE = 'productCode';
@@ -59,8 +48,8 @@ export default function createModule() {
             [SELECTED_INDEX]: -1,
             [SELECTED_PICKUP_POINT]: null,
 
-            [PICKUP_POINT_TYPES]: pickupPointTypes,
-            [SELECTED_PICKUP_POINT_TYPE]: pickupPointTypes[0],
+            [PICKUP_POINT_TYPES]: [],
+            [SELECTED_PICKUP_POINT_TYPE]: null,
 
             [PRODUCT_BUNDLES]: [],
             [REVIEWS_DATA]: { reviews: [] },

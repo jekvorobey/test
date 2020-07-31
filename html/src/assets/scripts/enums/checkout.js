@@ -30,3 +30,25 @@ export const deliveryTypes = Object.freeze({
     SPLIT: 1,
     CONSOLIDATION: 2,
 });
+
+export const pointType = Object.freeze({
+    /**
+     * Пункт выдачи заказа
+     */
+    TYPE_PICKUP_POINT: 1,
+
+    /**
+     * Постомат
+     */
+    TYPE_POSTOMAT: 2,
+
+    /**
+     * Отделение почты России
+     */
+    TYPE_RU_POST_OFFICE: 3,
+
+    /**
+     * Терминал
+     */
+    SERVICE_TERMINAL: 4,
+});

@@ -1,4 +1,24 @@
 import { requestStatus } from '@enums';
+import { pointType } from '@enums/checkout';
+
+const pickupPointTypes = [
+    {
+        id: pointType.TYPE_PICKUP_POINT,
+        title: 'Пункт выдачи заказа',
+    },
+    {
+        id: pointType.TYPE_POSTOMAT,
+        title: 'Постомат',
+    },
+    {
+        id: pointType.TYPE_RU_POST_OFFICE,
+        title: 'Отделение почты России',
+    },
+    {
+        id: pointType.SERVICE_TERMINAL,
+        title: 'Терминал',
+    },
+];
 
 const PROFESSIONS = 'professions';
 const CHECKOUT_DATA = 'checkoutData';
@@ -29,6 +49,7 @@ export const DELIVERY_METHODS = 'deliveryMethods';
 
 export const CONFIRMATION_TYPES = 'confirmationTypes';
 export const DELIVERY_TYPES = 'deliveryTypes';
+export const PICKUP_POINT_TYPES = 'pickupPointTypes';
 
 export const CHECKOUT_INPUT = 'checkoutInput';
 export const SELECTED_RECIPIENT = 'selectedRecipient';
@@ -58,6 +79,12 @@ export default {
 
         for (const prof of professions) map[prof.id] = prof;
         return map;
+    },
+
+    [PICKUP_POINT_TYPES]: (state, getters) => {
+        const pickupPoints = getters[PICKUP_POINTS] || [];
+        const types = pickupPointTypes.filter((t) => pickupPoints.some((p) => p.methodID === t.id));
+        return types;
     },
 
     [BONUS_PER_RUB]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][BONUS_PER_RUB]) || 0,

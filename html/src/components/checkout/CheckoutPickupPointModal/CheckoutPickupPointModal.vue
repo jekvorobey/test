@@ -134,11 +134,11 @@
                     <div class="checkout-pickup-point-modal__filter-header-controls">
                         <!-- <v-select placeholder="Станция метро" :options="[]" /> -->
                         <v-select
-                            v-model="selectedDeliveryMethod"
+                            v-model="selectedType"
                             placeholder="Тип пункта выдачи"
                             track-by="id"
                             label="title"
-                            :options="deliveryMethods"
+                            :options="pickupPointTypes"
                             :searchable="false"
                         />
                     </div>
@@ -191,7 +191,7 @@ import { SELECTED_CITY_COORDS } from '@store/modules/Geolocation/getters';
 
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import { SET_PICKUP_POINT } from '@store/modules/Checkout/actions';
-import { PICKUP_POINTS, SELECTED_DELIVERY_METHOD_ID, DELIVERY_METHODS } from '@store/modules/Checkout/getters';
+import { PICKUP_POINTS, PICKUP_POINT_TYPES } from '@store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -220,8 +220,8 @@ export default {
 
     data() {
         return {
+            selectedType: null,
             selectedPickupPoint: null,
-            selectedDeliveryMethod: null,
             showMap: false,
             // coords: [55.755814, 37.617635],
 
@@ -256,7 +256,7 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapGetters(GEO_MODULE, [SELECTED_CITY_COORDS]),
-        ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, DELIVERY_METHODS, SELECTED_DELIVERY_METHOD_ID]),
+        ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, PICKUP_POINT_TYPES]),
         ...mapState(MODAL_MODULE, {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
@@ -270,9 +270,7 @@ export default {
 
         filteredPickupPoints() {
             const points = this[PICKUP_POINTS] || [];
-            const filteredPoints = points.filter(
-                p => !this.selectedDeliveryMethod || p.methodID === this.selectedDeliveryMethod.id
-            );
+            const filteredPoints = points.filter(p => !this.selectedType || p.methodID === this.selectedType.id);
 
             return filteredPoints.map(p => {
                 const dateObj = new Date(p.startDate);
@@ -323,7 +321,6 @@ export default {
         },
 
         onClose() {
-            this.selectedDeliveryMethod = null;
             this.CHANGE_MODAL_STATE({ name: NAME, open: false });
         },
 
@@ -346,6 +343,10 @@ export default {
                 }
             });
         },
+    },
+
+    created() {
+        this.selectedType = this[PICKUP_POINT_TYPES][0];
     },
 
     mounted() {

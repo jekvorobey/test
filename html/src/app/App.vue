@@ -57,6 +57,7 @@ import ProgressBar from '@components/ProgressBar/ProgressBar.vue';
 import FilterButton from '@components/FilterButton/FilterButton.vue';
 import Price from '@components/Price/Price.vue';
 import TagItem from '@components/TagItem/TagItem.vue';
+import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
 import VHeader from '@components/VHeader/VHeader.vue';
 import VFooter from '@components/VFooter/VFooter.vue';
