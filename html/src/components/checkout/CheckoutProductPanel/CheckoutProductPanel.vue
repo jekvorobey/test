@@ -745,6 +745,26 @@ export default {
         },
     },
 
+    watch: {
+        computedDeliveryTypes(value) {
+            const deliveryType = this[SELECTED_DELIVERY_TYPE];
+            if (value) {
+                value.forEach(el => {
+                    if (el) {
+                        if (el.items)
+                            el.items.forEach(delivery => {
+                                if (deliveryType) {
+                                    this[CHANGE_CHUNK_DATE]({
+                                        ...delivery,
+                                    });
+                                }
+                            });
+                    }
+                });
+            }
+        },
+    },
+
     methods: {
         ...mapActions(CHECKOUT_MODULE, [
             CHANGE_CHUNK_DATE,
@@ -942,30 +962,6 @@ export default {
 
     mounted() {
         this.debounce_scrollToError = _debounce(this.scrollToError, SCROLL_DEBOUNCE_TIME);
-    },
-
-    watch: {
-        computedDeliveryTypes(value) {
-            const deliveryType = this[SELECTED_DELIVERY_TYPE];
-            if (value) {
-                value.forEach(el => {
-                    if (el) {
-                        if (el.items)
-                            el.items.forEach(delivery => {
-                                if (deliveryType) {
-                                    this[CHANGE_CHUNK_DATE]({
-                                        ...delivery,
-                                    });
-                                }
-                            });
-                    }
-                });
-            }
-        },
-    },
-
-    beforeMount() {
-        this[ADD_BONUS](this.maxAmountBonus);
     },
 };
 </script>

@@ -29,10 +29,6 @@ export default {
 
     [SET_DATA](state, payload = null) {
         state.checkoutData = payload;
-
-        if (state.checkoutData.input && !state.checkoutData.input.agreement) {
-            state.checkoutData.input.agreement = true;
-        }
     },
 
     [SET_PROFESSIONS](state, payload) {
