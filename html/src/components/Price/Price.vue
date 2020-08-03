@@ -12,6 +12,7 @@ import './Price.css';
 
 export default {
     name: 'price',
+
     props: {
         tag: {
             type: String,
@@ -31,6 +32,11 @@ export default {
         type: {
             type: String,
         },
+
+        hasArticles: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
@@ -43,8 +49,13 @@ export default {
         },
 
         computedValue() {
-            if (this.isObject) return `${preparePrice(this.value.from)} - ${preparePrice(this.value.to)}`;
-            return preparePrice(this.value);
+            const { isObject, hasArticles, value } = this;
+            if (!isObject) return preparePrice(value);
+
+            let stringValue = '';
+            if (value.from) stringValue += hasArticles ? `от ${preparePrice(value.from)}` : preparePrice(value.from);
+            if (value.to) stringValue += hasArticles ? ` до ${preparePrice(value.to)}` : ` - ${preparePrice(value.to)}`;
+            return stringValue;
         },
     },
 };

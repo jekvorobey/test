@@ -119,10 +119,12 @@
                         :name="item.name"
                         :speaker="item.speaker"
                         :date="item.dateTime"
-                        :price="item.priceFrom"
+                        :price="item.price"
+                        :old-price="item.oldPrice"
                         :address="item.nearestPlaceName"
                         :image="item.image"
                         :to="item.url"
+                        has-articles
                         is-small
                     >
                         <template v-if="item.desktopImg">

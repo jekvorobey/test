@@ -13,7 +13,12 @@
                     <div class="master-class-card__body-link-speaker">{{ speaker }}</div>
                 </v-link>
                 <div class="master-class-card__body-prices">
-                    <price class="master-class-card__body-price" v-bind="price" :class="{ 'text-bold': !isSmall }" />
+                    <price
+                        class="master-class-card__body-price"
+                        v-bind="price"
+                        :class="{ 'text-bold': !isSmall }"
+                        :has-articles="hasArticles"
+                    />
                 </div>
             </div>
 
@@ -79,9 +84,18 @@ export default {
             type: Object,
         },
 
+        oldPrice: {
+            type: Object,
+        },
+
         to: {
             type: [String, Object],
             default: '/',
+        },
+
+        hasArticles: {
+            type: Boolean,
+            default: false,
         },
 
         isSmall: {
