@@ -89,7 +89,7 @@ export default {
         },
 
         exists: {
-            valid: (value) => value === false,
+            valid: value => value === false,
         },
     },
 
@@ -110,7 +110,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         header() {
@@ -122,7 +122,7 @@ export default {
         },
 
         codeError() {
-            if (this.$v.code.$dirty && !this.$v.code.required) return 'Обязательное поле';
+            if (this.$v.code.$dirty && !this.$v.code.required) return this.$t('validation.errors.required');
             if (this.$v.code.$dirty && !this.$v.code.minLength) return 'Неправильный код';
             if (this.$v.exists.$dirty && !this.$v.exists.valid) return 'Такой Email уже существует';
         },

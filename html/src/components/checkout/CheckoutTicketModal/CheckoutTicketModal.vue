@@ -183,14 +183,14 @@ export default {
 
         emailError() {
             if (this.$v.form.email.$dirty) {
-                if (!this.$v.form.email.required) return 'Обязательное поле';
-                if (!this.$v.form.email.email) return 'Неправильный формат';
+                if (!this.$v.form.email.required) return this.$t('validation.errors.required');
+                if (!this.$v.form.email.email) return this.$t('validation.errors.email');
             }
         },
 
         nameError() {
             if (this.$v.name.$dirty) {
-                if (!this.$v.name.required) return 'Обязательное поле';
+                if (!this.$v.name.required) return this.$t('validation.errors.required');
                 if (
                     !this.$v.form.lastName.required ||
                     !this.$v.form.firstName.required ||
@@ -202,7 +202,7 @@ export default {
 
         phoneError() {
             if (this.$v.form.phone.$dirty) {
-                if (!this.$v.form.phone.required) return 'Обязательное поле';
+                if (!this.$v.form.phone.required) return this.$t('validation.errors.required');
                 if (!this.$v.form.phone.minLength) return 'Неверно введен номер';
             }
         },

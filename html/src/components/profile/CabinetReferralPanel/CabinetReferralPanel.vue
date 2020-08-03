@@ -110,7 +110,7 @@ export default {
 
         codeError() {
             if (this.$v.code.$dirty) {
-                if (!this.$v.code.required) return 'Обязательное поле';
+                if (!this.$v.code.required) return this.$t('validation.errors.required');
                 if (!this.$v.code.minLength) return 'Минимальная длина 2 символа';
                 if (!this.$v.code.referrerCode) return 'Допустимы латинские буквы, цифры, тире и нижние подчеркивания';
             }

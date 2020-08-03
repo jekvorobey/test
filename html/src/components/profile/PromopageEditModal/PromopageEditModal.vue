@@ -79,7 +79,7 @@ export default {
         },
 
         newTitleError() {
-            if (this.$v.newTitle.$dirty && this.$v.newTitle.$invalid) return 'Обязательное поле';
+            if (this.$v.newTitle.$dirty && this.$v.newTitle.$invalid) return this.$t('validation.errors.required');
         },
     },
 

@@ -59,19 +59,20 @@
                     </v-link>
                 </div>
                 <span class="text-grey registration-panel__form-info">
-                    Нажимая кнопку «Регистрация», вы соглашаетесь с условиями <v-link to="/agreements/public-offer" class="registration-panel__form-info-link">оферты</v-link> и
-                    <v-link to="/agreements/personal-policy" class="registration-panel__form-info-link">политикой конфиденциальности</v-link>
+                    Нажимая кнопку «Регистрация», вы соглашаетесь с условиями
+                    <v-link to="/agreements/public-offer" class="registration-panel__form-info-link">оферты</v-link> и
+                    <v-link to="/agreements/personal-policy" class="registration-panel__form-info-link"
+                        >политикой конфиденциальности</v-link
+                    >
                 </span>
             </template>
 
             <div v-else class="registration-panel__form-password">
-
                 <h2 class="registration-panel__h2" v-if="!isTablet">Создание пароля</h2>
 
                 <span class="registration-panel__form-password-text">
-                    Придумайте пароль для входа в Личный кабинет.<br>
-                    Он должен состоять из латинских букв, содержать как
-                    минимум одну цифру, заглавную и строчную буквы.
+                    Придумайте пароль для входа в Личный кабинет.<br />
+                    Он должен состоять из латинских букв, содержать как минимум одну цифру, заглавную и строчную буквы.
                 </span>
                 <v-password class="registration-panel__form-input" v-model="password" :error="passwordError">
                     Пароль
@@ -130,32 +131,32 @@
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue'
-import VLink from '@controls/VLink/VLink.vue'
-import VButton from '@controls/VButton/VButton.vue'
-import VPassword from '@controls/VPassword/VPassword.vue'
-import VInput from '@controls/VInput/VInput.vue'
-import VInputMask from '@controls/VInput/VInputMask.vue'
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VPassword from '@controls/VPassword/VPassword.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VInputMask from '@controls/VInput/VInputMask.vue';
 
-import GeneralModal from '@components/GeneralModal/GeneralModal.vue'
+import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
-import _cloneDeep from 'lodash/cloneDeep'
-import { mapState, mapActions } from 'vuex'
-import { NAME as AUTH_MODULE } from '@store/modules/Auth'
-import { SEND_SMS, CHECK_CODE, REGISTER_BY_PASSWORD, GET_SOCIAL_LINK } from '@store/modules/Auth/actions'
+import _cloneDeep from 'lodash/cloneDeep';
+import { mapState, mapActions } from 'vuex';
+import { NAME as AUTH_MODULE } from '@store/modules/Auth';
+import { SEND_SMS, CHECK_CODE, REGISTER_BY_PASSWORD, GET_SOCIAL_LINK } from '@store/modules/Auth/actions';
 
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal'
-import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions'
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation'
-import { rawPhone } from '@util'
-import { phoneMaskOptions } from '@settings'
-import { modalName, authMode } from '@enums'
-import { verificationCodeType } from '@enums/auth'
-import '@images/sprites/socials/facebook-bw.svg'
-import '@images/sprites/socials/vkontakte-bw.svg'
-import '@images/sprites/socials/google-bw.svg'
-import './RegistrationPanel.css'
+import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
+import { rawPhone } from '@util';
+import { phoneMaskOptions } from '@settings';
+import { modalName, authMode } from '@enums';
+import { verificationCodeType } from '@enums/auth';
+import '@images/sprites/socials/facebook-bw.svg';
+import '@images/sprites/socials/vkontakte-bw.svg';
+import '@images/sprites/socials/google-bw.svg';
+import './RegistrationPanel.css';
 
 export default {
     name: 'registration-panel',
@@ -202,7 +203,7 @@ export default {
         },
     },
 
-    data () {
+    data() {
         return {
             mounted: false,
 
@@ -224,7 +225,7 @@ export default {
             maskOptions: {
                 ...phoneMaskOptions,
             },
-        }
+        };
     },
 
     computed: {
@@ -232,59 +233,59 @@ export default {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
-        phone () {
-            return rawPhone(this.rawPhone)
+        phone() {
+            return rawPhone(this.rawPhone);
         },
 
-        header () {
-            return this.accepted ? 'Создание пароля' : 'Регистрация'
+        header() {
+            return this.accepted ? 'Создание пароля' : 'Регистрация';
         },
 
-        isTablet () {
-            return this.$mq.tablet
+        isTablet() {
+            return this.$mq.tablet;
         },
 
-        codeError () {
-            if (this.$v.code.$dirty && !this.$v.code.required) return 'Обязательное поле'
-            if (this.$v.accepted.$dirty && !this.$v.accepted.valid) return 'Неверный код'
+        codeError() {
+            if (this.$v.code.$dirty && !this.$v.code.required) return this.$t('validation.errors.required');
+            if (this.$v.accepted.$dirty && !this.$v.accepted.valid) return 'Неверный код';
         },
 
-        phoneError () {
+        phoneError() {
             if (this.$v.phone.$dirty) {
-                if (!this.$v.phone.required) return 'Обязательное поле'
-                if (!this.$v.phone.minLength) return 'Неверно введен номер'
+                if (!this.$v.phone.required) return this.$t('validation.errors.required');
+                if (!this.$v.phone.minLength) return 'Неверно введен номер';
             }
 
-            if (this.$v.phoneExists.$dirty && !this.$v.phoneExists.exists) return 'Такой номер уже зарегистрирован'
+            if (this.$v.phoneExists.$dirty && !this.$v.phoneExists.exists) return 'Такой номер уже зарегистрирован';
         },
 
-        passwordError () {
+        passwordError() {
             if (this.$v.password.$dirty) {
-                if (!this.$v.password.required) return 'Обязательное поле'
-                if (!this.$v.password.password) return 'Как минимум 1 заглавная и строчная латинские буквы и 1 цифра'
-                if (!this.$v.password.minLength) return 'Не менее 8 символов'
+                if (!this.$v.password.required) return this.$t('validation.errors.required');
+                if (!this.$v.password.password) return 'Как минимум 1 заглавная и строчная латинские буквы и 1 цифра';
+                if (!this.$v.password.minLength) return 'Не менее 8 символов';
             }
         },
 
-        passwordRepeatError () {
+        passwordRepeatError() {
             if (this.$v.password.$dirty && this.$v.passwordRepeat.$dirty && !this.$v.passwordRepeat.sameAs)
-                return 'Пароль не совпадает'
+                return 'Пароль не совпадает';
         },
 
-        isVisibleTabs () {
-            return !this.accepted
+        isVisibleTabs() {
+            return !this.accepted;
         },
     },
 
     watch: {
-        phone () {
-            if (this.$v.phoneExists.$dirty) this.$v.phoneExists.$reset()
-            if (this.$v.phone.$dirty) this.$v.phone.$reset()
+        phone() {
+            if (this.$v.phoneExists.$dirty) this.$v.phoneExists.$reset();
+            if (this.$v.phone.$dirty) this.$v.phone.$reset();
         },
 
-        code () {
-            if (this.$v.code.$dirty) this.$v.code.$reset()
-            if (this.$v.accepted.$dirty) this.$v.accepted.$reset()
+        code() {
+            if (this.$v.code.$dirty) this.$v.code.$reset();
+            if (this.$v.accepted.$dirty) this.$v.accepted.$reset();
         },
     },
 
@@ -292,114 +293,114 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(AUTH_MODULE, [SEND_SMS, REGISTER_BY_PASSWORD, CHECK_CODE, GET_SOCIAL_LINK]),
 
-        startCounter () {
-            this.stopCounter()
-            this.counter = 59
+        startCounter() {
+            this.stopCounter();
+            this.counter = 59;
 
             this.timer = setInterval(() => {
-                this.counter -= 1
-                if (this.counter === 0) this.stopCounter()
-            }, 1000)
+                this.counter -= 1;
+                if (this.counter === 0) this.stopCounter();
+            }, 1000);
         },
 
-        stopCounter () {
-            clearInterval(this.timer)
-            this.timer = null
+        stopCounter() {
+            clearInterval(this.timer);
+            this.timer = null;
         },
 
-        onLogin () {
-            this.$emit('change-tab', authMode.LOGIN)
+        onLogin() {
+            this.$emit('change-tab', authMode.LOGIN);
         },
 
-        async onRegisterBySocial (driver) {
+        async onRegisterBySocial(driver) {
             try {
-                const backUrl = '/profile'
-                const redirectUrl = `${document.location.origin}/social-login`
-                const socialUrl = await this[GET_SOCIAL_LINK]({ backUrl, driver, redirectUrl })
-                document.location.href = socialUrl
+                const backUrl = '/profile';
+                const redirectUrl = `${document.location.origin}/social-login`;
+                const socialUrl = await this[GET_SOCIAL_LINK]({ backUrl, driver, redirectUrl });
+                document.location.href = socialUrl;
             } catch (error) {
-                return
+                return;
             }
         },
 
-        async finishRegistration () {
+        async finishRegistration() {
             try {
-                await this[REGISTER_BY_PASSWORD](this.password)
-                this.onClose()
-                this.$router.push({ name: 'Cabinet' })
+                await this[REGISTER_BY_PASSWORD](this.password);
+                this.onClose();
+                this.$router.push({ name: 'Cabinet' });
             } catch (error) {
-                return
+                return;
             }
         },
 
-        async sendSms () {
+        async sendSms() {
             try {
-                this.isDisabledGetCodeBtn = true
+                this.isDisabledGetCodeBtn = true;
                 await this[SEND_SMS]({
                     phone: this.phone,
                     type: verificationCodeType.REGISTRATION,
-                })
-                this.isDisabledGetCodeBtn = false
-                this.startCounter()
-                this.phoneExists = false
-                this.sent = true
+                });
+                this.isDisabledGetCodeBtn = false;
+                this.startCounter();
+                this.phoneExists = false;
+                this.sent = true;
             } catch (error) {
-                this.phoneExists = true
-                this.$v.phoneExists.$touch()
+                this.phoneExists = true;
+                this.$v.phoneExists.$touch();
 
-                this.stopCounter()
-                this.sent = false
-                this.isDisabledGetCodeBtn = false
+                this.stopCounter();
+                this.sent = false;
+                this.isDisabledGetCodeBtn = false;
             }
         },
 
-        async checkCode () {
+        async checkCode() {
             try {
                 await this[CHECK_CODE]({
                     code: this.code,
                     type: verificationCodeType.REGISTRATION,
-                })
-                this.accepted = true
+                });
+                this.accepted = true;
             } catch (error) {
-                this.accepted = false
-                this.$v.accepted.$touch()
+                this.accepted = false;
+                this.$v.accepted.$touch();
             }
         },
 
-        async onSubmit () {
+        async onSubmit() {
             if (this.sent && this.accepted) {
-                this.$v.password.$touch()
-                this.$v.passwordRepeat.$touch()
-                if (!this.$v.password.$invalid && !this.$v.passwordRepeat.$invalid) this.finishRegistration()
+                this.$v.password.$touch();
+                this.$v.passwordRepeat.$touch();
+                if (!this.$v.password.$invalid && !this.$v.passwordRepeat.$invalid) this.finishRegistration();
             } else if (this.sent) {
-                this.$v.code.$touch()
-                if (!this.$v.code.$invalid) this.checkCode()
+                this.$v.code.$touch();
+                if (!this.$v.code.$invalid) this.checkCode();
             } else {
-                this.$v.phone.$touch()
-                if (!this.$v.phone.$invalid) this.sendSms()
+                this.$v.phone.$touch();
+                if (!this.$v.phone.$invalid) this.sendSms();
             }
         },
 
-        onChangeNumber () {
-            this.stopCounter()
-            this.sent = false
+        onChangeNumber() {
+            this.stopCounter();
+            this.sent = false;
         },
 
-        onClose () {
-            this.$emit('close')
-            this[CHANGE_MODAL_STATE]({ name: modalName.general.AUTH, open: false })
+        onClose() {
+            this.$emit('close');
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.AUTH, open: false });
         },
     },
 
-    beforeUpdate () {
+    beforeUpdate() {
         this.$emit('set-title', {
             title: this.header,
             payload: this.isVisibleTabs,
-        })
+        });
     },
 
-    beforeDestroy () {
-        this.stopCounter()
+    beforeDestroy() {
+        this.stopCounter();
     },
-}
+};
 </script>

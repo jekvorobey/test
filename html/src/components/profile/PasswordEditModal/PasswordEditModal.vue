@@ -114,7 +114,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
         ...mapState(CABINET_MODULE_PATH, [PHONE, HAS_PASSWORD]),
 
@@ -128,7 +128,7 @@ export default {
 
         newPasswordError() {
             if (this.$v.newPassword.$dirty) {
-                if (!this.$v.newPassword.required) return 'Обязательное поле';
+                if (!this.$v.newPassword.required) return this.$t('validation.errors.required');
                 if (!this.$v.newPassword.password)
                     return 'Как минимум 1 заглавная и строчная латинские буквы и 1 цифра';
                 if (!this.$v.newPassword.minLength) return 'Не менее 8 символов';
@@ -137,7 +137,7 @@ export default {
 
         oldPasswordError() {
             if (this.$v.oldPassword.$dirty) {
-                if (!this.$v.oldPassword.required) return 'Обязательное поле';
+                if (!this.$v.oldPassword.required) return this.$t('validation.errors.required');
                 if (!this.$v.oldPassword.password)
                     return 'Как минимум 1 заглавная и строчная латинские буквы и 1 цифра';
                 if (!this.$v.oldPassword.minLength) return 'Не менее 8 символов';

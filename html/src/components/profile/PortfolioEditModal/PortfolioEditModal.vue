@@ -1,27 +1,15 @@
 <template>
-    <general-modal
-        v-if="isOpen"
-        class="portfolio-edit-modal"
-        :header="header"
-        @close="onClose"
-        :is-mobile="isTablet"
-    >
+    <general-modal v-if="isOpen" class="portfolio-edit-modal" :header="header" @close="onClose" :is-mobile="isTablet">
         <template v-slot:content>
             <div class="containet container--tablet portfolio-edit-modal__section">
                 <h4 class="portfolio-edit-modal__hl">{{ header }}</h4>
                 <p class="portfolio-edit-modal__info">
-                    Укажи ссылку на свой аккаунт бьюти-профессионала в соцсетях или загрузи скан профильного диплома, либо другого подтверждающего документа.
+                    Укажи ссылку на свой аккаунт бьюти-профессионала в соцсетях или загрузи скан профильного диплома,
+                    либо другого подтверждающего документа.
                 </p>
 
-                <ul
-                    v-if="editablePortfolio && editablePortfolio.length > 0"
-                    class="portfolio-edit-modal__list"
-                >
-                    <li
-                        class="portfolio-edit-modal__list-row"
-                        v-for="(v, index) in computedItems"
-                        :key="index"
-                    >
+                <ul v-if="editablePortfolio && editablePortfolio.length > 0" class="portfolio-edit-modal__list">
+                    <li class="portfolio-edit-modal__list-row" v-for="(v, index) in computedItems" :key="index">
                         <v-input
                             class="portfolio-edit-modal__list-column"
                             v-model="v.link.$model"
@@ -47,14 +35,14 @@
                             placeholder="Введите описание"
                             :show-error="false"
                             :error="nameError(v.name)"
-                        >{{ index == 0 ? 'Описание ссылки' : null }}</v-input>
+                            >{{ index == 0 ? 'Описание ссылки' : null }}</v-input
+                        >
                     </li>
                 </ul>
 
-                <v-button
-                    class="btn--outline portfolio-edit-modal__list-btn"
-                    @click="onAddPortfolio"
-                >Добавить поле</v-button>
+                <v-button class="btn--outline portfolio-edit-modal__list-btn" @click="onAddPortfolio"
+                    >Добавить поле</v-button
+                >
             </div>
             <div class="portfolio-edit-modal__section">
                 <p class="text-grey">Файлы форматов jpeg, png, pdf, doc, docx, не более 5Mb каждый</p>
@@ -67,11 +55,9 @@
             </div>
 
             <div class="portfolio-edit-modal__submit">
-                <v-button
-                    class="portfolio-edit-modal__submit-btn"
-                    @click="onSubmit"
-                    :disabled="isDisabled || inProcess"
-                >Отправить</v-button>
+                <v-button class="portfolio-edit-modal__submit-btn" @click="onSubmit" :disabled="isDisabled || inProcess"
+                    >Отправить</v-button
+                >
             </div>
         </template>
     </general-modal>
@@ -183,11 +169,11 @@ export default {
         ...mapActions(CABINET_MODULE_PATH, [UPDATE_PORTFOLIO, UPLOAD_CERTIFICATE, FETCH_CABINET_DATA]),
 
         nameError(name) {
-            if (this.$v.files.$invalid && name.$dirty && !name.required) return 'Обязательное поле';
+            if (this.$v.files.$invalid && name.$dirty && !name.required) return this.$t('validation.errors.required');
         },
 
         linkError(link) {
-            if (this.$v.files.$invalid && link.$dirty && !link.required) return 'Обязательное поле';
+            if (this.$v.files.$invalid && link.$dirty && !link.required) return this.$t('validation.errors.required');
         },
 
         onAddPortfolio() {

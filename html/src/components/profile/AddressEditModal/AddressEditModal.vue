@@ -317,15 +317,18 @@ export default {
         },
 
         cityError() {
-            if (this.$v.address.city.$dirty && !this.$v.address.city.required) return 'Обязательное поле';
+            if (this.$v.address.city.$dirty && !this.$v.address.city.required)
+                return this.$t('validation.errors.required');
         },
 
         houseError() {
-            if (this.$v.address.house.$dirty && !this.$v.address.house.required) return 'Обязательное поле';
+            if (this.$v.address.house.$dirty && !this.$v.address.house.required)
+                return this.$t('validation.errors.required');
         },
 
         indexError() {
-            if (this.$v.address.post_index.$dirty && !this.$v.address.post_index.required) return 'Обязательное поле';
+            if (this.$v.address.post_index.$dirty && !this.$v.address.post_index.required)
+                return this.$t('validation.errors.required');
         },
 
         isTabletLg() {

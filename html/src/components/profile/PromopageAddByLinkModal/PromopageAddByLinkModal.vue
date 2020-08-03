@@ -103,7 +103,7 @@ export default {
         ...mapActions(PROMOPAGE_MODULE_PATH, [ADD_PRODUCTS]),
 
         refError(ref) {
-            if (ref.$dirty && !ref.required) return 'Обязательное поле';
+            if (ref.$dirty && !ref.required) return this.$t('validation.errors.required');
         },
 
         onAddLink() {
