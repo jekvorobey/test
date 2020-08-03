@@ -14,6 +14,7 @@ import {
     tel as telRegx,
     email as emailRegx,
     referrerCode as referrerCodeRegx,
+    nameRu as nameRuRegx,
 } from '@regex/validation';
 import { countCheckdigit } from '@util';
 
@@ -68,6 +69,7 @@ function bikValidation(bik) {
     return bik.length === 9 && !/[^0-9]/.test(bik);
 }
 
+export const nameRu = helpers.regex('nameRu', nameRuRegx);
 export const referrerCode = helpers.regex('referrerCode', referrerCodeRegx);
 export const password = helpers.regex('password', passwordRegx);
 export const tel = helpers.regex('tel', telRegx);

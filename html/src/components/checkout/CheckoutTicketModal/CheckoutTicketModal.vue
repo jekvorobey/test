@@ -91,7 +91,7 @@ import { FETCH_PROFESSIONS } from '@store/modules/Checkout/actions';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import validationMixin, { required, minLength, email } from '@plugins/validation';
+import validationMixin, { required, minLength, email, nameRu } from '@plugins/validation';
 import { getRandomIntInclusive } from '@util';
 import { modalName } from '@enums';
 import { phoneMaskOptions } from '@settings';
@@ -116,6 +116,7 @@ export default {
     validations: {
         name: {
             required,
+            nameRu,
         },
 
         form: {
@@ -191,6 +192,7 @@ export default {
         nameError() {
             if (this.$v.name.$dirty) {
                 if (!this.$v.name.required) return this.$t('validation.errors.required');
+                if (!this.$v.name.nameRu) return 'Только русские буквы, тире и пробелы';
                 if (
                     !this.$v.form.lastName.required ||
                     !this.$v.form.firstName.required ||
@@ -210,8 +212,9 @@ export default {
 
     watch: {
         name(value) {
-            const fullName = value || '';
+            const fullName = (value && value.trim().replace(/\s\s+/g, ' ')) || '';
             const parts = fullName.split(' ', 3);
+            parts.forEach(p => p && p.trim());
             this.form.lastName = parts[0] || null;
             this.form.firstName = parts[1] || null;
             this.form.middleName = parts[2] || null;
