@@ -239,7 +239,7 @@
 
         &-left {
             order: 0;
-            width: 17%;
+            min-width: 184px;
             max-width: 208px;
             padding-right: calc(var(--gs) * 3);
 

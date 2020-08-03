@@ -35,14 +35,12 @@
             <div class="container master-class-view__panel-container">
                 <div class="master-class-view__panel-body">
                     <div class="container container--tablet master-class-view__panel-left">
-                        <!-- #62754 -->
-
-                        <!-- <attention-panel>
+                        <attention-panel v-if="anotherCities && anotherCities.length > 0">
                             <span>
                                 <strong>Внимание!</strong> Событие проходит в другом городе<br />
-                                (г. Москва)
+                                ({{ anotherCities.join(', ') }})
                             </span>
-                        </attention-panel> -->
+                        </attention-panel>
                     </div>
 
                     <div class="master-class-view__panel-middle">
@@ -890,6 +888,13 @@ export default {
                     return { ...i, desktopImg, defaultImg };
                 }),
             }));
+        },
+
+        anotherCities() {
+            const selectedCity = this[SELECTED_CITY] || {};
+            const { places = [] } = this[MASTERCLASS] || {};
+            const cities = places.filter(p => p.fiasId !== selectedCity.fias_id).map(p => p.cityName);
+            return [...new Set(cities)];
         },
 
         productType() {
