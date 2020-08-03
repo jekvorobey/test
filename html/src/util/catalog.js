@@ -17,6 +17,11 @@ export function generateAbsoluteProductUrl(categoryCode, code, refCode) {
     return `${$context.baseURL}/${productGroupTypes.CATALOG}/${categoryCode}/${code}`;
 }
 
+export function generateAbsoluteMasterclassUrl(code, refCode) {
+    if (refCode) return `${$context.baseURL}/masterclasses/${code}?refCode=${refCode}`;
+    return `${$context.baseURL}/masterclasses/${code}`;
+}
+
 export function generateProductUrl(categoryCode, code, refCode) {
     if (refCode) return `/${productGroupTypes.CATALOG}/${categoryCode}/${code}?refCode=${refCode}`;
     return `/${productGroupTypes.CATALOG}/${categoryCode}/${code}`;

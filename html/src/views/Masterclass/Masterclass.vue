@@ -160,12 +160,30 @@
                             <p class="text-bold master-class-view__panel-right-hl">
                                 Поделиться
                             </p>
-                            <v-svg name="facebook-bw" width="24" height="24" />
+
+                            <div class="master-class-view__panel-right-social-container">
+                                <social-sharing v-bind="socialSharing" inline-template>
+                                    <div :style="{ display: 'flex' }">
+                                        <network class="network" network="vk">
+                                            <v-svg name="vkontakte-bw" width="24" height="24" />
+                                        </network>
+                                        <network class="network" network="facebook">
+                                            <v-svg name="facebook-bw" width="24" height="24" />
+                                        </network>
+                                    </div>
+                                </social-sharing>
+
+                                <button class="network" @click="onCopyToClipboard">
+                                    <v-svg name="link" width="24" height="24" />
+                                </button>
+                            </div>
+
+                            <!-- <v-svg name="facebook-bw" width="24" height="24" />
                             <v-svg name="vkontakte-bw" width="24" height="24" />
                             <v-svg name="ok-bw" width="24" height="24" />
                             <v-svg name="twitter-bw" width="24" height="24" />
                             <v-svg name="telegram-bw" width="24" height="24" />
-                            <v-svg name="link" width="24" height="24" />
+                            <v-svg name="link" width="24" height="24" /> -->
                         </div>
                     </div>
                 </div>
@@ -279,12 +297,29 @@
             <p class="text-bold master-class-view__panel-right-hl">
                 Поделиться
             </p>
-            <v-svg name="facebook-bw" width="24" height="24" />
+
+            <div class="master-class-view__panel-right-social-container">
+                <social-sharing v-bind="socialSharing" inline-template>
+                    <div :style="{ display: 'flex' }">
+                        <network class="network" network="vk">
+                            <v-svg name="vkontakte-bw" width="24" height="24" />
+                        </network>
+                        <network class="network" network="facebook">
+                            <v-svg name="facebook-bw" width="24" height="24" />
+                        </network>
+                    </div>
+                </social-sharing>
+
+                <button class="network" @click="onCopyToClipboard">
+                    <v-svg name="link" width="24" height="24" />
+                </button>
+            </div>
+            <!-- <v-svg name="facebook-bw" width="24" height="24" />
             <v-svg name="vkontakte-bw" width="24" height="24" />
             <v-svg name="ok-bw" width="24" height="24" />
             <v-svg name="twitter-bw" width="24" height="24" />
             <v-svg name="telegram-bw" width="24" height="24" />
-            <v-svg name="link" width="24" height="24" />
+            <v-svg name="link" width="24" height="24" /> -->
         </div>
 
         <section
@@ -540,12 +575,13 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
+import { saveToClipboard } from '@util';
 import { registerModuleIfNotExists } from '@util/store';
 import { generatePictureSourcePath, generateFileOriginalPath } from '@util/file';
 import { getInstagramUserNameFromUrl } from '@util/socials';
-import { generateMasterclassUrl } from '@util/catalog';
+import { generateAbsoluteMasterclassUrl } from '@util/catalog';
 import { yaMapSettings, dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
-import { breakpoints, fileExtension } from '@enums';
+import { breakpoints, fileExtension, modalName } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
@@ -683,6 +719,22 @@ export default {
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
         ...mapState(MODAL_MODULE, {}),
+
+        absoluteUrl() {
+            const { code } = this;
+            return code && generateAbsoluteMasterclassUrl(code);
+        },
+
+        socialSharing() {
+            const { absoluteUrl, masterClass = {} } = this;
+            const { description = {} } = masterClass;
+
+            return {
+                url: absoluteUrl,
+                title: masterClass.title,
+                description: description.content,
+            };
+        },
 
         documents() {
             const { documents = [] } = this[MASTERCLASS] || {};
@@ -870,12 +922,16 @@ export default {
         ...mapActions(CART_MODULE, [ADD_MASTERCLASS_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
-        generateSourcePath(x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext);
-        },
-
         generateMasterclassUrl(code) {
             return generateMasterclassUrl(code);
+        },
+
+        onCopyToClipboard(e) {
+            const { absoluteUrl } = this;
+            const result = saveToClipboard(absoluteUrl);
+            const message = result ? 'Успешно скопировано' : 'Не удается скопировать';
+            this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
+            e.target.focus();
         },
 
         isInCart(id) {
