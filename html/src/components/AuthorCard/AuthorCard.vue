@@ -8,9 +8,9 @@
             <div class="text-bold author-card__title-name">
                 {{ firstName }}
                 {{ lastName }}
-                <!-- <button v-if="description && mounted" class="author-card__title-btn">
+                <button class="author-card__title-btn" v-if="description && mounted" @click="onShow">
                     <v-svg name="info-middle" width="16" height="16" />
-                </button> -->
+                </button>
             </div>
             <div class="text-grey">
                 <span v-if="profile">{{ profile }} </span>
@@ -74,6 +74,12 @@ export default {
             return `${this.firstName ? this.firstName.slice(0, 1) : ''}${
                 this.lastName ? this.lastName.slice(0, 1) : ''
             }`;
+        },
+    },
+
+    methods: {
+        onShow() {
+            this.$emit('show');
         },
     },
 

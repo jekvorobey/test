@@ -78,7 +78,8 @@
                                         :last-name="speaker.lastName"
                                         :nick-name="speaker.profession"
                                         :image="speaker.avatar.defaultImg"
-                                        description="description"
+                                        :description="speaker.description"
+                                        @show="onShowSpeaker(speaker)"
                                     />
                                 </ul>
 
@@ -95,7 +96,8 @@
                                     :last-name="speaker.lastName"
                                     :nick-name="speaker.profession"
                                     :image="speaker.avatar.defaultImg"
-                                    description="description"
+                                    :description="speaker.description"
+                                    @show="onShowSpeaker(speaker)"
                                 />
                             </ul>
                         </div>
@@ -516,6 +518,10 @@
                 {{ buyBtnText }}
             </masterclass-price-panel>
         </transition>
+
+        <transition name="fade-in">
+            <author-modal v-if="$isServer || isAuthorOpen" />
+        </transition>
     </section>
 </template>
 
@@ -549,6 +555,8 @@ import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbIte
 
 import ReviewsPanel from '@components/reviews/ReviewsPanel/ReviewsPanel.vue';
 import MasterclassPricePanel from '@components/MasterclassPricePanel/MasterclassPricePanel.vue';
+
+import AuthorModal from '@components/AuthorModal/AuthorModal.vue';
 
 import { $store, $progress, $logger } from '@services';
 
@@ -651,13 +659,13 @@ export default {
 
         Breadcrumbs,
         BreadcrumbItem,
-
         Price,
 
         InfoRow,
         AttentionPanel,
         ReviewsPanel,
         MasterclassPricePanel,
+        AuthorModal,
 
         TicketCard,
         BannerCard,
@@ -716,7 +724,10 @@ export default {
         ...mapState(MASTERCLASS_MODULE, [MASTERCLASS, FEATURED_MASTERCLASSES, INSTAGRAM_ITEMS]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
-        ...mapState(MODAL_MODULE, {}),
+        ...mapState(MODAL_MODULE, {
+            isAuthorOpen: state =>
+                state[MODALS][modalName.masterclass.AUTHOR] && state[MODALS][modalName.masterclass.AUTHOR].open,
+        }),
 
         absoluteUrl() {
             const { code } = this;
@@ -959,6 +970,10 @@ export default {
 
         onScrollTo(ref) {
             window.scrollTo({ top: ref.offsetTop - panelScrollOffset, behavior: 'smooth' });
+        },
+
+        onShowSpeaker(speaker) {
+            this[CHANGE_MODAL_STATE]({ name: modalName.masterclass.AUTHOR, open: true, state: { author: speaker } });
         },
     },
 

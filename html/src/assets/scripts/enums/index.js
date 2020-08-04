@@ -13,6 +13,10 @@ export const modalName = Object.freeze({
         GALLERY: 'gallery-modal',
     },
 
+    masterclass: {
+        AUTHOR: 'author-modal',
+    },
+
     checkout: {
         RECIPIENT_EDIT: 'checkout-recipient-modal',
         TICKET_EDIT: 'checkout-ticket-modal',

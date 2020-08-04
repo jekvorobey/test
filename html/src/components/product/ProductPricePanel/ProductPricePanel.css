@@ -2,7 +2,7 @@
     position: fixed;
     width: 100%;
     background-color: var(--cl-white);
-    z-index: 100;
+    z-index: 901;
     padding: calc(var(--gs) / 2) 0;
     box-shadow: 0 5px 40px rgba(0, 0, 0, 0.1);
 
