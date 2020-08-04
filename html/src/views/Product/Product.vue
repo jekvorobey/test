@@ -310,42 +310,106 @@
         </section>
 
         <section
-            v-if="product.description && (product.description.content || product.description.image)"
             class="section product-view__section product-view__info"
+            v-if="
+                (product.description && (product.description.content || product.description.image)) ||
+                (product.howto && (product.howto.content || product.howto.image))
+            "
         >
             <div class="container product-view__info-container">
                 <div id="description" class="hook" />
-                <div class="product-view__info-header">
-                    <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
-                    <p class="product-view__info-text">{{ product.description.content }}</p>
+                <div
+                    v-if="product.description && (product.description.content || product.description.image)"
+                    class="product-view__info-part"
+                    :class="{
+                        'product-view__info-part--50':
+                            product.howto &&
+                            (product.howto.content || product.howto.image) &&
+                            !productImages.description &&
+                            !productVideos.description,
+                    }"
+                >
+                    <div class="product-view__info-header">
+                        <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
+                        <p class="product-view__info-text">{{ product.description.content }}</p>
+                    </div>
+                    <div class="product-view__info-media" v-if="productImages.description || productVideos.description">
+                        <v-picture
+                            class="product-view__info-media-item product-view__info-media-item--img"
+                            :key="productImages.description.id"
+                            v-if="productImages.description"
+                        >
+                            <source
+                                :data-srcset="productImages.description.tablet"
+                                type="image/webp"
+                                media="(max-width: 479px)"
+                            />
+                            <source :data-srcset="productImages.description.desktop" type="image/webp" />
+                            <img
+                                class="blur-up lazyload v-picture__img"
+                                :data-src="productImages.description.default"
+                                alt=""
+                            />
+                        </v-picture>
+                        <iframe
+                            v-if="productVideos.description"
+                            class="lazyload product-view__info-media-item product-view__info-media-item--video"
+                            :data-src="productVideos.description.videoUrl"
+                            :key="productVideos.description.id"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
+                            allowfullscreen="false"
+                        />
+                    </div>
                 </div>
-                <div class="product-view__info-media">
-                    <v-picture
-                        class="product-view__info-media-item product-view__info-media-item--img"
-                        :key="productImages.description.id"
-                        v-if="productImages.description"
-                    >
-                        <source
-                            :data-srcset="productImages.description.tablet"
-                            type="image/webp"
-                            media="(max-width: 479px)"
+
+                <div
+                    v-if="product.howto && (product.howto.content || product.howto.image)"
+                    class="product-view__info-part"
+                    :class="{
+                        'product-view__info-part--50':
+                            product.description &&
+                            product.description.content &&
+                            !productImages.description &&
+                            !productVideos.description,
+                    }"
+                >
+                    <div class="product-view__info-header">
+                        <h2 class="product-view__section-hl">{{ $t('product.title.method') }}</h2>
+                        <ol class="list">
+                            <li v-for="(item, index) in howToList" :key="index">
+                                {{ item }}
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="product-view__info-media" v-if="productImages.howto || productVideos.howto">
+                        <v-picture
+                            class="product-view__info-media-item product-view__info-media-item--img"
+                            :key="productImages.howto.id"
+                            v-if="productImages.howto"
+                        >
+                            <source
+                                :data-srcset="productImages.howto.tablet"
+                                type="image/webp"
+                                media="(max-width: 479px)"
+                            />
+                            <source :data-srcset="productImages.howto.desktop" type="image/webp" />
+                            <img
+                                class="blur-up lazyload v-picture__img"
+                                :data-src="productImages.howto.default"
+                                alt=""
+                            />
+                        </v-picture>
+                        <iframe
+                            v-if="productVideos.howto"
+                            class="lazyload product-view__info-media-item product-view__info-media-item--video"
+                            :data-src="productVideos.howto.videoUrl"
+                            :key="productVideos.howto.id"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
+                            allowfullscreen="false"
                         />
-                        <source :data-srcset="productImages.description.desktop" type="image/webp" />
-                        <img
-                            class="blur-up lazyload v-picture__img"
-                            :data-src="productImages.description.default"
-                            alt=""
-                        />
-                    </v-picture>
-                    <iframe
-                        v-if="productVideos.description"
-                        class="lazyload product-view__info-media-item product-view__info-media-item--video"
-                        :data-src="productVideos.description.videoUrl"
-                        :key="productVideos.description.id"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
-                        allowfullscreen="false"
-                    />
+                    </div>
                 </div>
             </div>
         </section>
@@ -379,46 +443,6 @@
                         :text="tip.text"
                     />
                 </ul>
-            </div>
-        </section>
-
-        <section
-            v-if="product.howto && (product.howto.content || product.howto.image)"
-            class="section product-view__info"
-        >
-            <div class="container product-view__info-container">
-                <div class="product-view__info-header">
-                    <h2 class="product-view__section-hl">{{ $t('product.title.method') }}</h2>
-                    <ol class="list">
-                        <li v-for="(item, index) in howToList" :key="index">
-                            {{ item }}
-                        </li>
-                    </ol>
-                </div>
-                <div class="product-view__info-media">
-                    <v-picture
-                        class="product-view__info-media-item product-view__info-media-item--img"
-                        :key="productImages.howto.id"
-                        v-if="productImages.howto"
-                    >
-                        <source
-                            :data-srcset="productImages.howto.tablet"
-                            type="image/webp"
-                            media="(max-width: 479px)"
-                        />
-                        <source :data-srcset="productImages.howto.desktop" type="image/webp" />
-                        <img class="blur-up lazyload v-picture__img" :data-src="productImages.howto.default" alt="" />
-                    </v-picture>
-                    <iframe
-                        v-if="productVideos.howto"
-                        class="lazyload product-view__info-media-item product-view__info-media-item--video"
-                        :data-src="productVideos.howto.videoUrl"
-                        :key="productVideos.howto.id"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
-                        allowfullscreen="false"
-                    />
-                </div>
             </div>
         </section>
 
