@@ -5,7 +5,9 @@
             <div class="text-grey text-sm ticket-card__desc">{{ description }}</div>
         </div>
         <div class="ticket-card__body">
-            <div class="ticket-card__remain">Осталось {{ max }} мест</div>
+            <div class="ticket-card__remain">
+                <template v-if="showCount"> Осталось {{ max }} мест </template>
+            </div>
             <div class="ticket-card__count">
                 <v-counter v-model="count" min="1" :max="max" :disabled="disabled" />
             </div>
@@ -79,6 +81,11 @@ export default {
 
         oldPrice: {
             type: Object,
+        },
+
+        showCount: {
+            type: Boolean,
+            default: true,
         },
 
         inProcess: {
