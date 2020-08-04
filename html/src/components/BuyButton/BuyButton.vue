@@ -25,14 +25,14 @@ export default {
     computed: {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
-            [STATUS]: (state) => (state[USER] && state[USER][STATUS]) || false, 
+            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
+            [STATUS]: state => (state[USER] && state[USER][STATUS]) || false,
         }),
 
         handlers() {
             const keys = Object.keys(this.$listeners);
             const handlers = {};
-            keys.forEach((k) => (handlers[k] = (e) => this.$emit(k, e)));
+            keys.forEach(k => (handlers[k] = e => this.$emit(k, e)));
             handlers.click = this.onBtnClick;
             return handlers;
         },
@@ -42,6 +42,7 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onBtnClick(e) {
+            e.preventDefault();
             e.stopPropagation();
             if (this.checkPermissions()) this.$emit('click', e);
         },
@@ -49,9 +50,13 @@ export default {
         checkPermissions() {
             const hasSession = this[HAS_SESSION];
             if (!hasSession) {
-                this[CHANGE_MODAL_STATE]({ name: modalName.general.AUTH, open: true, state: {
-                    activeTab: authMode.LOGIN,
-                }});
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.AUTH,
+                    open: true,
+                    state: {
+                        activeTab: authMode.LOGIN,
+                    },
+                });
                 return false;
             }
 
@@ -63,7 +68,8 @@ export default {
                         open: true,
                         state: {
                             title: 'Уведомление',
-                            message: 'Ваш профессиональный статус не подтвержден. Заполните недостающую информацию в Личном кабинете.',
+                            message:
+                                'Ваш профессиональный статус не подтвержден. Заполните недостающую информацию в Личном кабинете.',
                             btnMessage: 'Заполнить',
                             href: '/profile',
                         },
