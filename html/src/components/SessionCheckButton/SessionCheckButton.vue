@@ -46,6 +46,7 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onBtnClick(e) {
+            e.preventDefault();
             e.stopPropagation();
             if (this.checkPermissions()) this.$emit('click', e);
         },
