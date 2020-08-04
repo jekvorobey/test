@@ -41,6 +41,7 @@
 
                 <div class="address-edit-modal__form-row">
                     <v-suggestion
+                        ref="citySuggestion"
                         class="address-edit-modal__form-column address-edit-modal__form-column--60"
                         :value="address.city"
                         :options="options"
@@ -113,7 +114,7 @@
                         @input="onHouseInputChange"
                         @selected="onHouseSelected"
                     >
-                        Дом/корпус
+                        {{ !isDesktop || isTabletLg ? 'Дом/корпус' : 'Дом/корп.' }}
 
                         <template v-slot:item="{ item }">
                             <span v-if="!address.street">
@@ -145,7 +146,7 @@
                         v-model="address.flat"
                         class="address-edit-modal__form-column address-edit-modal__form-column--30"
                     >
-                        Квартира/офис
+                        {{ !isDesktop || isTabletLg ? 'Квартира/офис' : 'Кв./офис' }}
                     </v-input>
                 </div>
 
@@ -329,6 +330,10 @@ export default {
         indexError() {
             if (this.$v.address.post_index.$dirty && !this.$v.address.post_index.required)
                 return this.$t('validation.errors.required');
+        },
+
+        isDesktop() {
+            return this.$mq.desktop;
         },
 
         isTabletLg() {
@@ -603,7 +608,12 @@ export default {
     },
 
     mounted() {
-        setTimeout(() => (this.showMap = true), 300);
+        setTimeout(() => {
+            const { citySuggestion } = this.$refs;
+            const input = citySuggestion.$refs.input;
+            input && input.focus();
+            this.showMap = true;
+        }, 300);
     },
 };
 </script>

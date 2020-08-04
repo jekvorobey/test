@@ -129,11 +129,21 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
+
+            .v-suggestions {
+                .suggestions {
+                    top: calc(100% - calc(var(--gs) * 3) - 1px);
+                }
+            }
         }
 
         &-column {
             &--60 {
                 width: calc(calc(100% / 3 * 2) - var(--gs));
+
+                @media (--tablet) {
+                    width: 100%;
+                }
             }
 
             &--30 {
