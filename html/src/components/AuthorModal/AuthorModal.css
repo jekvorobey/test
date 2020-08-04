@@ -8,10 +8,6 @@
     .modal-body {
         padding: calc(var(--gs) * 3);
 
-        @media (--tablet-min) {
-            max-height: 520px;
-        }
-
         @media (--tablet) {
             flex: 1;
             padding: 0;
@@ -37,6 +33,11 @@
 
     &__desc {
         margin-bottom: calc(var(--gs) * 4);
+
+        @media (--tablet-min) {
+            max-height: 260px;
+            overflow: auto;
+        }
     }
 
     &__submit {
