@@ -21,6 +21,8 @@
     }
 
     &__body {
+        width: 100%;
+
         @media (--tablet) {
             height: 100%;
             padding-top: calc(var(--gs) * 3);
@@ -41,6 +43,7 @@
     }
 
     &__submit {
+        width: 100%;
         text-align: center;
 
         @media (--tablet) {

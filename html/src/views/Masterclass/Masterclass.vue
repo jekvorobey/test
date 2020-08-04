@@ -338,7 +338,7 @@
                         :key="ticket.id"
                         :name="ticket.name"
                         :description="ticket.description"
-                        :max="ticket.qty"
+                        :max="ticket.qty - ticket.qtyOccupied"
                         :price="ticket.price"
                         :old-price="ticket.oldPrice"
                         :disabled="isInCart(ticket.offerId) || inProcess[ticket.offerId]"

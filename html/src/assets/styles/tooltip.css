@@ -1,5 +1,5 @@
 .tooltip {
-    z-index: 900;
+    z-index: 10000;
 
     &--unmounted {
         display: none;
