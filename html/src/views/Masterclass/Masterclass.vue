@@ -368,11 +368,17 @@
                     :key="place.id"
                 >
                     <div v-if="isTabletLg" class="master-class-view__map-desc">
-                        <div>{{ index + 1 }}. {{ place.name }}, {{ place.address }}</div>
+                        <div>
+                            <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
+                            {{ place.address }}
+                        </div>
                     </div>
                     <template v-else>
                         <div class="master-class-view__map-desc">
-                            <div class="text-bold">{{ index + 1 }}. {{ place.name }}, {{ place.address }}</div>
+                            <div class="text-bold">
+                                <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
+                                {{ place.address }}
+                            </div>
                             <div>{{ place.description }}</div>
                         </div>
 
