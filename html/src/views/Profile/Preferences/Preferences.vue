@@ -8,7 +8,11 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.BRANDS)"
-                        :disabled="(prefType === preferenceType.PROFESSIONAL && sameBrands) || !(availableBrands.length - brands.length)"
+                        :disabled="
+                            (prefType === preferenceType.PROFESSIONAL &&
+                                equalPreferencesMap[preferenceEntityTypes.BRANDS]) ||
+                            !(availableBrands.length - brands.length)
+                        "
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
@@ -17,18 +21,21 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onDeleteAll(preferenceEntityTypes.BRANDS)"
-                        :disabled="(sameBrands) || !brands.length"
+                        :disabled="sameBrands || !brands.length"
                     >
                         <v-svg name="cross" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Удалить все</span>
                     </v-link>
                 </div>
             </template>
-            <div class="container container--tablet-lg" v-if="brands.length || actualBrands.length || prefType === preferenceType.PROFESSIONAL">
+            <div
+                class="container container--tablet-lg"
+                v-if="brands.length || actualBrands.length || prefType === preferenceType.PROFESSIONAL"
+            >
                 <v-check
                     v-if="prefType === preferenceType.PROFESSIONAL"
-                    :checked="sameBrands"
-                    @change="setBrands($event)"
+                    v-model="actualEqual"
+                    :value="preferenceEntityTypes.BRANDS"
                     id="pro-preferences-brands"
                     name="pro-preferences-brands"
                 >
@@ -63,8 +70,9 @@
                     class="btn--outline"
                     @click="onAddEntities(preferenceEntityTypes.BRANDS)"
                     :disabled="(prefType === preferenceType.PROFESSIONAL && sameBrands) || !availableBrands.length"
-                    >Добавить</v-button
                 >
+                    Добавить
+                </v-button>
             </div>
         </info-panel>
 
@@ -75,7 +83,9 @@
                         class="preferences-view__panel-link"
                         tag="button"
                         @click="onAddEntities(preferenceEntityTypes.CATEGORIES)"
-                        :disabled="(prefType === preferenceType.PROFESSIONAL && sameCategories) || !availableCategories.length"
+                        :disabled="
+                            (prefType === preferenceType.PROFESSIONAL && sameCategories) || !availableCategories.length
+                        "
                     >
                         <v-svg name="plus-small" :width="iconSize" :height="iconSize" />
                         <span>&nbsp;&nbsp;Добавить</span>
@@ -91,11 +101,14 @@
                     </v-link>
                 </div>
             </template>
-            <div class="container container--tablet-lg" v-if="categories.length || actualCategories.length || prefType === preferenceType.PROFESSIONAL">
+            <div
+                class="container container--tablet-lg"
+                v-if="categories.length || actualCategories.length || prefType === preferenceType.PROFESSIONAL"
+            >
                 <v-check
                     v-if="prefType === preferenceType.PROFESSIONAL"
-                    :checked="sameCategories"
-                    @change="setCategories($event)"
+                    v-model="actualEqual"
+                    :value="preferenceEntityTypes.CATEGORIES"
                     id="pro-preferences-categories"
                     name="pro-preferences-categories"
                 >
@@ -129,7 +142,10 @@
                 <v-button
                     class="btn--outline"
                     @click="onAddEntities(preferenceEntityTypes.CATEGORIES)"
-                    :disabled="(prefType === preferenceType.PROFESSIONAL && sameCategories) || !(availableCategories.length - categories.length)"
+                    :disabled="
+                        (prefType === preferenceType.PROFESSIONAL && sameCategories) ||
+                        !(availableCategories.length - categories.length)
+                    "
                     >Добавить</v-button
                 >
             </div>
@@ -164,11 +180,10 @@ import {
     AVAILABLE_CATEGORIES,
     CUSTOMER,
     TYPE,
-    SAME_BRANDS,
-    SAME_CATEGORIES,
+    EQUAL_PREFERENCES,
     ALL_PREFERENCES,
 } from '@store/modules/Profile/modules/Preferences';
-import { BRANDS, CATEGORIES, GET_CUSTOMER_BY_TYPE } from '@store/modules/Profile/modules/Preferences/getters';
+import { BRANDS, CATEGORIES, GET_CUSTOMER_BY_TYPE, EQUAL_PREFERENCES_MAP } from '@store/modules/Profile/modules/Preferences/getters';
 import {
     DELETE_ENTITY,
     DELETE_ALL_ENTITIES,
@@ -176,7 +191,7 @@ import {
     SET_LOAD,
     UPDATE_ENTITIES,
     SET_TYPE,
-    UPDATE_SAME_SELECT,
+    UPDATE_EQUAL_PREFERENCES,
     FETCH_ALL_PREFERENCES_DATA,
 } from '@store/modules/Profile/modules/Preferences/actions';
 
@@ -219,9 +234,7 @@ export default {
         return {
             actualBrands: [],
             actualCategories: [],
-
-            // sameBrands: this.sameBrands,
-            // sameCategories: this.sameCategories,
+            actualEqual: [],
         };
     },
 
@@ -236,11 +249,10 @@ export default {
             AVAILABLE_CATEGORIES,
             CUSTOMER,
             TYPE,
-            SAME_BRANDS,
-            SAME_CATEGORIES,
+            EQUAL_PREFERENCES,
             ALL_PREFERENCES,
         ]),
-        ...mapGetters(PREFERENCES_MODULE_PATH, [BRANDS, CATEGORIES, GET_CUSTOMER_BY_TYPE]),
+        ...mapGetters(PREFERENCES_MODULE_PATH, [BRANDS, CATEGORIES, GET_CUSTOMER_BY_TYPE, EQUAL_PREFERENCES_MAP]),
 
         prefType() {
             return this[TYPE];
@@ -283,7 +295,7 @@ export default {
             FETCH_PREFERENCES_DATA,
             UPDATE_ENTITIES,
             SET_TYPE,
-            UPDATE_SAME_SELECT,
+            UPDATE_EQUAL_PREFERENCES,
             FETCH_ALL_PREFERENCES_DATA,
         ]),
 
@@ -369,34 +381,6 @@ export default {
                 items => this[UPDATE_ENTITIES]({ prefType, type: preferenceEntityTypes.CATEGORIES, items }),
                 1000
             );
-        },
-
-        setBrands(e) {
-            const { sameBrands, sameCategories } = $store.state[PROFILE_MODULE][PREFERENCES_MODULE];
-            this[UPDATE_SAME_SELECT]({ sameBrands: e, sameCategories });
-            if (e) {
-                const customer = this[GET_CUSTOMER_BY_TYPE](preferenceType.PERSONAL) || {};
-                const brands = customer[preferenceEntityTypes.BRANDS] || [];
-                this[UPDATE_ENTITIES]({
-                    prefType: preferenceType.PROFESSIONAL,
-                    type: preferenceEntityTypes.BRANDS,
-                    items: [...brands],
-                });
-            }
-        },
-
-        setCategories(e) {
-            const { sameBrands, sameCategories } = $store.state[PROFILE_MODULE][PREFERENCES_MODULE];
-            this[UPDATE_SAME_SELECT]({ sameBrands, sameCategories: e });
-            if (e) {
-                const customer = this[GET_CUSTOMER_BY_TYPE](preferenceType.PERSONAL) || {};
-                const categories = customer[preferenceEntityTypes.CATEGORIES] || [];
-                this[UPDATE_ENTITIES]({
-                    prefType: preferenceType.PROFESSIONAL,
-                    type: preferenceEntityTypes.CATEGORIES,
-                    items: [...categories],
-                });
-            }
         },
     },
 

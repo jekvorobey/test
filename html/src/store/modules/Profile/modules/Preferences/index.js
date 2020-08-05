@@ -10,8 +10,7 @@ export const PREFERENCES_DATA = 'preferencesData';
 export const ALL_PREFERENCES = 'allPreferences';
 export const AVAILABLE_BRANDS = 'availableBrands';
 export const AVAILABLE_CATEGORIES = 'availableCategories';
-export const SAME_BRANDS = 'sameBrands';
-export const SAME_CATEGORIES = 'sameCategories';
+export const EQUAL_PREFERENCES = 'equalPreferences';
 export const LOAD = 'load';
 
 const BRANDS = 'brands';
@@ -43,6 +42,7 @@ export default function createModule() {
                     },
                 },
             },
+
             [ALL_PREFERENCES]: {
                 [BRANDS]: [],
                 [CATEGORIES]: [],
@@ -51,8 +51,7 @@ export default function createModule() {
             [AVAILABLE_BRANDS]: [],
             [AVAILABLE_CATEGORIES]: [],
 
-            [SAME_BRANDS]: true,
-            [SAME_CATEGORIES]: true,
+            [EQUAL_PREFERENCES]: [],
         },
 
         actions,

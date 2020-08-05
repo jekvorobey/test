@@ -1,7 +1,12 @@
 import { preferenceType } from '@enums/profile';
 import { storeErrorHandler } from '@util/store';
-import { getProfilePreferences, changeProfilePreferences, getAllPreferences } from '@api';
-import { SET_PREFERENCES_DATA, SET_ENTITIES, SET_SAME_SELECT, SET_ALL_PREFERENCES_DATA } from './mutations';
+import {
+    getProfilePreferences,
+    changeProfilePreferences,
+    getAllPreferences,
+    changeProfileEqualPreferences,
+} from '@api';
+import { SET_PREFERENCES_DATA, SET_ENTITIES, SET_EQUAL_PREFERENCES, SET_ALL_PREFERENCES_DATA } from './mutations';
 
 export const FETCH_PREFERENCES_DATA = 'FETCH_PREFERENCES_DATA';
 export const FETCH_ALL_PREFERENCES_DATA = 'FETCH_ALL_PREFERENCES_DATA';
@@ -11,7 +16,7 @@ export const SET_LOAD = 'SET_LOAD';
 export const SET_TYPE = 'SET_TYPE';
 
 export const UPDATE_ENTITIES = 'UPDATE_ENTITIES';
-export const UPDATE_SAME_SELECT = 'UPDATE_SAME_SELECT';
+export const UPDATE_EQUAL_PREFERENCES = 'UPDATE_EQUAL_PREFERENCES';
 
 export default {
     [SET_LOAD]({ commit }, payload) {
@@ -49,21 +54,12 @@ export default {
         }
     },
 
-    async [FETCH_SAME_SELECT]({ commit }) {
+    async [UPDATE_EQUAL_PREFERENCES]({ commit }, payload) {
         try {
-            // const data = await getSameSelect();
-            commit(SET_SAME_SELECT, { data });
+            await changeProfileEqualPreferences(payload || []);
+            commit(SET_EQUAL_PREFERENCES, payload);
         } catch (error) {
-            storeErrorHandler(FETCH_SAME_SELECT)(error);
-        }
-    },
-
-    async [UPDATE_SAME_SELECT]({ commit }, { sameBrands, sameCategories }) {
-        try {
-            // await setSameSelect(sameBrands, sameCategories)
-            commit(SET_SAME_SELECT, { sameBrands, sameCategories });
-        } catch (error) {
-            storeErrorHandler(FETCH_SAME_SELECT)(error);
+            storeErrorHandler(UPDATE_EQUAL_PREFERENCES)(error);
         }
     },
 

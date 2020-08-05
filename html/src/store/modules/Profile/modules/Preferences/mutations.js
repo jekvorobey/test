@@ -1,7 +1,7 @@
 export const SET_PREFERENCES_DATA = 'SET_PREFERENCES_DATA';
 export const SET_LOAD = 'SET_LOAD';
 export const SET_TYPE = 'SET_TYPE';
-export const SET_SAME_SELECT = 'SET_SAME_SELECT';
+export const SET_EQUAL_PREFERENCES = 'SET_EQUAL_PREFERENCES';
 export const SET_ALL_PREFERENCES_DATA = 'SET_ALL_PREFERENCES_DATA';
 
 export const SET_ENTITIES = 'SET_ENTITIES';
@@ -34,8 +34,7 @@ export default {
         state.preferencesData[prefType].customer[type] = items;
     },
 
-    [SET_SAME_SELECT](state, { sameBrands, sameCategories }) {
-        state.sameBrands = sameBrands;
-        state.sameCategories = sameCategories;
-    }
+    [SET_EQUAL_PREFERENCES](state, payload) {
+        state.equalPreferences = payload || [];
+    },
 };

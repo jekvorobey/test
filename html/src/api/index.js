@@ -221,6 +221,12 @@ export function changeProfilePreferences(type, entityType, items) {
     });
 }
 
+export function changeProfileEqualPreferences(equal_preferences) {
+    return $http.put(`/v1/lk/preferences/merge`, {
+        equal_preferences,
+    });
+}
+
 export function deleteProfileSocial(driver) {
     return $http.delete(`/v1/lk/profile/social/${driver}`);
 }
