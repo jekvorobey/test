@@ -6,7 +6,7 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="masterclasses" :to="{ path: $route.path }">
+                <breadcrumb-item key="masterclasses" :to="{ name: 'CatalogMasterclasses' }">
                     {{ $t('masterclasses.title') }}
                 </breadcrumb-item>
             </breadcrumbs>
@@ -110,7 +110,8 @@
                     </select-panel>
                 </div>
             </div>
-            <div class="container masterclasses-view__sets-container">
+
+            <div class="container masterclasses-view__sets-container" v-if="pagesCount > 0">
                 <ul class="masterclasses-view__sets-list">
                     <master-class-card
                         class="masterclasses-view__sets-list-item"
@@ -160,6 +161,10 @@
                     <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
                 </div>
             </div>
+            <empty-placeholder-panel class="masterclasses-view__sets-placeholder" :show-btn="false" v-else>
+                К сожалению, список мероприятий пуст. <br />
+                Измените настройки фильтра.
+            </empty-placeholder-panel>
         </section>
 
         <!-- #62050
@@ -200,6 +205,7 @@ import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
+import EmptyPlaceholderPanel from '@components/EmptyPlaceholderPanel/EmptyPlaceholderPanel.vue';
 
 import { $store, $progress, $logger } from '@services';
 
@@ -234,6 +240,7 @@ import profileMasterClassImg2 from '@images/mock/profileMasterClass2.png';
 import profileMasterClassImg3 from '@images/mock/profileMasterClass3.png';
 import profileMasterClassImg4 from '@images/mock/profileMasterClass4.png';
 import '@images/sprites/home.svg';
+
 
 const sliderOptions = {
     slidesPerView: 1,
@@ -313,6 +320,7 @@ export default {
         BreadcrumbItem,
 
         SeparatorSection,
+        EmptyPlaceholderPanel,
     },
 
     data() {

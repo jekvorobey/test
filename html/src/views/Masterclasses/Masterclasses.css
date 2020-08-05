@@ -200,6 +200,10 @@
             }
         }
 
+        &-placeholder {
+            padding: calc(var(--gs) * 4) 0;
+        }
+
         &-list {
             display: flex;
             flex-wrap: wrap;
