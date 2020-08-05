@@ -582,7 +582,7 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
-import { saveToClipboard } from '@util';
+import { saveToClipboard, getDate } from '@util';
 import { registerModuleIfNotExists } from '@util/store';
 import { generatePictureSourcePath, generateFileOriginalPath } from '@util/file';
 import { getInstagramUserNameFromUrl } from '@util/socials';
@@ -844,9 +844,9 @@ export default {
             const { stages = [] } = this[MASTERCLASS] || {};
 
             return stages.map(s => {
-                const dateObj = new Date(s.date);
-                const dateFrom = new Date(`${s.date} ${s.timeFrom}`);
-                const dateTo = new Date(`${s.date} ${s.timeTo}`);
+                const dateObj = getDate(s.date);
+                const dateFrom = getDate(`${s.date} ${s.timeFrom}`);
+                const dateTo = getDate(`${s.date} ${s.timeTo}`);
 
                 return `${dateObj.toLocaleDateString(
                     this[LOCALE],

@@ -217,7 +217,7 @@ import {
 import { MIN_SCROLL_VALUE } from '@constants';
 import { fileExtension } from '@enums';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
-import { pluralize } from '@util';
+import { pluralize, getDate } from '@util';
 import { generatePictureSourcePath } from '@util/file';
 import { registerModuleIfNotExists } from '@util/store';
 import {
@@ -419,7 +419,7 @@ export default {
             const items = this[ITEMS] || [];
 
             return items.map(i => {
-                const dateObj = new Date(`${i.nearestDate.replace(/-/g, '/')} ${i.nearestTimeFrom}`);
+                const dateObj = getDate(`${i.nearestDate} ${i.nearestTimeFrom}`);
                 const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
                 const dateTime = `${date} (${this.$t(`weekdays.short.${dateObj.getDay()}`)}), ${time}`;

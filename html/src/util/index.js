@@ -63,9 +63,8 @@ export function pluralize(number, words) {
         }
     };
 
-    return word(number)
+    return word(number);
 }
-
 
 /**
  * Скролит контейнер на определенное значение с анимацией.
@@ -88,11 +87,11 @@ export function scrollTo(element, to, duration = 1000) {
         duration === 0
             ? () => to
             : (t, b, c, d) => {
-                t /= d / 2;
-                if (t < 1) return (c / 2) * t * t + b;
-                t -= 1;
-                return (-c / 2) * (t * (t - 2) - 1) + b;
-            };
+                  t /= d / 2;
+                  if (t < 1) return (c / 2) * t * t + b;
+                  t -= 1;
+                  return (-c / 2) * (t * (t - 2) - 1) + b;
+              };
 
     let interval;
     const animateScroll = () => {
@@ -165,10 +164,10 @@ export function preparePrice(number, decimals, dec_point, thousands_sep) {
     const kd =
         decimals && Math.abs(number - i) > 0
             ? dec_point +
-            Math.abs(number - i)
-                .toFixed(decimals)
-                .replace(/-/, 0)
-                .slice(2)
+              Math.abs(number - i)
+                  .toFixed(decimals)
+                  .replace(/-/, 0)
+                  .slice(2)
             : '';
 
     return minus + km + kw + kd;
@@ -289,6 +288,14 @@ export function getPosition(el) {
     return { x: parseInt(x, 10), y: parseInt(y, 10) };
 }
 
+/**
+ * Parse date from string
+ */
+export function getDate(string) {
+    // Safari не умеет парсить даты вида yyyy-mm-dd, так что заменяем "-" на "/"
+    return new Date(string.replace(/-/g, '/'));
+}
+
 export default {
     countCheckdigit,
     preparePrice,
@@ -299,5 +306,6 @@ export default {
     getRandomInt,
     getRandomIntInclusive,
     getPosition,
-    pluralize
+    getDate,
+    pluralize,
 };
