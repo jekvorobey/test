@@ -343,7 +343,7 @@
                         :old-price="ticket.oldPrice"
                         :disabled="isInCart(ticket.offerId) || inProcess[ticket.offerId]"
                         :in-process="!!inProcess[ticket.offerId]"
-                        :show-count="masterClass.hideTicketTypesQtyFree"
+                        :show-count="!masterClass.hideTicketTypesQtyFree"
                         @btnClick="onAddToCart(ticket.offerId, $event)"
                     >
                         <template v-if="!isTablet">
