@@ -47,7 +47,7 @@ import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { getDate } from '@util';
-import { monthLongDateSettings } from '@settings';
+import { dayMonthLongDateSettings } from '@settings';
 import { modalName, weekDays } from '@enums';
 import { receiveMethods } from '@enums/checkout';
 import '@images/sprites/arrow-down.svg';
@@ -98,7 +98,7 @@ export default {
             else if (today + 1 === dateObj.getDate()) additionalText = `завтра`;
             else additionalText = dateObj && this.$t(`weekdays.short.${dateObj.getDay()}`);
 
-            return `c ${dateObj && dateObj.toLocaleDateString(this[LOCALE], monthLongDateSettings)} (${additionalText})`;
+            return `c ${dateObj && dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)} (${additionalText})`;
         },
 
         onOpenCitySelection() {

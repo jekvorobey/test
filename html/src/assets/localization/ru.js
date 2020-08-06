@@ -19,13 +19,13 @@ const main = {
         },
 
         short: {
-            [weekDays.SUNDAY]: 'ВС',
-            [weekDays.MONDAY]: 'ПН',
-            [weekDays.TUESDAY]: 'ВТ',
-            [weekDays.WEDNESDAY]: 'СР',
-            [weekDays.THURSDAY]: 'ЧТ',
-            [weekDays.FRIDAY]: 'ПТ',
-            [weekDays.SATURDAY]: 'СБ',
+            [weekDays.SUNDAY]: 'вс',
+            [weekDays.MONDAY]: 'пн',
+            [weekDays.TUESDAY]: 'вт',
+            [weekDays.WEDNESDAY]: 'ср',
+            [weekDays.THURSDAY]: 'чт',
+            [weekDays.FRIDAY]: 'пт',
+            [weekDays.SATURDAY]: 'сб',
         },
     },
 
