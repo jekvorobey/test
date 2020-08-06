@@ -66,6 +66,7 @@ import { FETCH_CHAT_MESSAGES, CREATE_CHAT_MESSAGE } from '@store/modules/Profile
 import { NAME as AUTH_MODULE, USER } from '@store/modules/Auth';
 
 import { $store, $progress } from '@services';
+import { getDate } from '@util';
 import { modalName } from '@enums';
 import '@images/sprites/arrow-small.svg';
 import './MessageDetails.css';
@@ -114,8 +115,7 @@ export default {
         ...mapActions(MESSAGES_MODULE_PATH, [CREATE_CHAT_MESSAGE]),
 
         formatDate(date) {
-            const dateObj = new Date(date);
-            return dateObj.toLocaleDateString(this[LOCALE]);
+            return date && getDate(date).toLocaleDateString(this[LOCALE]);
         },
 
         getTitle(message) {

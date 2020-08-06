@@ -67,6 +67,7 @@ import { FETCH_UNREAD_MESSAGES } from '@store/modules/Auth/actions';
 import { FETCH_CHATS } from '@store/modules/Profile/modules/Messages/actions';
 
 import { $store, $progress } from '@services';
+import { getDate } from '@util';
 import { modalName } from '@enums';
 import { numericYearDateSettings } from '@settings';
 import './Messages.css';
@@ -113,8 +114,7 @@ export default {
         ...mapActions(AUTH_MODULE, [FETCH_UNREAD_MESSAGES]),
 
         formatDate(date) {
-            const dateObj = new Date(date);
-            return dateObj.toLocaleDateString(this[LOCALE], numericYearDateSettings);
+            return date && getDate(date).toLocaleDateString(this[LOCALE], numericYearDateSettings);
         },
 
         onCreateMessage() {

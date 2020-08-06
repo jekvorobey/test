@@ -220,7 +220,7 @@ import { DEFAULT_PAGE } from '@constants';
 import { monthLongDateSettings } from '@settings';
 import { currencySymbol, modalName, themeCodes } from '@enums';
 import { cardIdentificationStatus } from '@enums/profile';
-import { preparePrice, saveToClipboard } from '@util';
+import { preparePrice, saveToClipboard, getDate } from '@util';
 import { generateYandexCardAuthUrl, generateYandexCardAuthBackUrl, generateReferralLink } from '@util/profile';
 
 import './Account.css';
@@ -294,8 +294,7 @@ export default {
         operations() {
             const items = this[ITEMS] || [];
             return items.map(i => {
-                const dateObj = i.created_at && new Date(i.created_at);
-                const date = dateObj.toLocaleDateString(this[LOCALE], monthLongDateSettings);
+                const date = i.created_at && getDate(i.created_at).toLocaleDateString(this[LOCALE], monthLongDateSettings);
                 const type = this.$t(`billingOperationType.${i.type}`);
 
                 return {

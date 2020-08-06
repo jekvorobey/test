@@ -342,17 +342,17 @@ import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { $store, $progress, $logger } from '@services';
 import { fileExtension, sortDirections, modalName, themeCodes } from '@enums';
 import { referralOrderSortFields } from '@enums/profile';
 import { filterField } from '@enums/order';
 import { DEFAULT_PAGE } from '@constants';
 import { digit2DateSettings, numericYearDateSettings } from '@settings';
 import { baseChartOptions } from '@settings/profile';
-import { preparePrice, shortNumberFormat, saveToClipboard } from '@util';
+import { preparePrice, shortNumberFormat, saveToClipboard, getDate } from '@util';
 import { generatePictureSourcePath } from '@util/file';
 import { generateReferralLink } from '@util/profile';
 import { getOrderFilterDate } from '@util/order';
-import { $store, $progress, $logger } from '@services';
 import '@images/sprites/logo.svg';
 import '@images/sprites/arrow-down-small.svg';
 import './Referal.css';
@@ -469,7 +469,7 @@ export default {
                 const desktopImage = i.image && generatePictureSourcePath(40, 40, i.image.id, fileExtension.image.WEBP);
                 const defaultImage = i.image && generatePictureSourcePath(40, 40, i.image.id);
                 const date =
-                    i.order_date && new Date(i.order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
+                    i.order_date && getDate(i.order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
                 const sourceString = this.$t(`referralSource.${i.source}`);
 
                 return {

@@ -165,12 +165,13 @@ import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 import { NAME as REFERRAL_MODULE, REFERRAL_ORDER_DETAILS } from '@store/modules/Profile/modules/Referral';
 import { FETCH_REFERRER_ORDER_DETAILS } from '@store/modules/Profile/modules/Referral/actions';
 
+import { $store, $progress, $logger } from '@services';
 import { fileExtension, sortDirections } from '@enums';
 import { referralSource } from '@enums/profile';
 import { DEFAULT_PAGE } from '@constants';
 import { digit2DateSettings, monthLongDateSettings } from '@settings';
+import { getDate } from '@util';
 import { generatePictureSourcePath } from '@util/file';
-import { $store, $progress, $logger } from '@services';
 
 import '@images/sprites/logo.svg';
 import '@images/sprites/arrow-small.svg';
@@ -215,7 +216,7 @@ export default {
                 const desktopImage = i.image && generatePictureSourcePath(40, 40, i.image.id, fileExtension.image.WEBP);
                 const defaultImage = i.image && generatePictureSourcePath(40, 40, i.image.id);
                 const date =
-                    i.order_date && new Date(i.order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
+                    i.order_date && getDate(i.order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
                 const sourceString = this.$t(`referralSource.${i.source}`);
 
                 return {
