@@ -122,8 +122,9 @@ import {
 import { SET_LOAD_PATH, FETCH_BONUSES_DATA } from '@store/modules/Profile/modules/Bonuses/actions';
 import { PAGES_COUNT } from '@store/modules/Profile/modules/Bonuses/getters';
 
-import { DEFAULT_PAGE } from '@constants';
 import { $store, $progress } from '@services';
+import { getDate } from '@util';
+import { DEFAULT_PAGE } from '@constants';
 import { numericYearDateSettings } from '@settings';
 import { bonusStatus } from '@enums/profile';
 import './Bonuses.css';
@@ -156,19 +157,19 @@ export default {
 
         nextDebDate() {
             const { next_debit_date } = this[INFO] || {};
-            const dateObj = new Date(next_debit_date);
-            return dateObj.toLocaleDateString(this[LOCALE], numericYearDateSettings);
+            return next_debit_date && getDate(next_debit_date).toLocaleDateString(this[LOCALE], numericYearDateSettings);
         },
 
         bonuses() {
             const items = this[ITEMS] || [];
             return items.map(i => {
-                const dateObj = new Date(i.created_at);
-
+                const date = i.created_at && getDate(i.created_at).toLocaleDateString(this[LOCALE], numericYearDateSettings);
+                const statusString = this.$t(`bonusStatus.${i.status}`);
+                
                 return {
                     ...i,
-                    statusString: this.$t(`bonusStatus.${i.status}`),
-                    date: dateObj.toLocaleDateString(this[LOCALE], numericYearDateSettings),
+                    statusString,
+                    date,
                 };
             });
         },
