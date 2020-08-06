@@ -1,7 +1,7 @@
 import flatPickrRu from 'flatpickr/dist/l10n/ru';
 import { socials, weekDays } from '@enums';
 import { receiveMethods, discountType } from '@enums/checkout';
-import { genderType, billingOperationType, referralSource, bonusStatus } from '@enums/profile';
+import { genderType, billingOperationType, referralSource, bonusStatus, preferenceEntityTypes } from '@enums/profile';
 import { orderStatus, deliveryStatus } from '@enums/order';
 import { cartItemTypes } from '@enums/product';
 
@@ -305,6 +305,20 @@ const main = {
             QnA: 'Вопросы и ответы',
 
             ReturnPage: 'Возврат',
+        },
+
+        preferences: {
+            [preferenceEntityTypes.BRANDS]: {
+                title: 'Бренды',
+                choosen: 'Выбранные бренды',
+                notChoosen: 'Вы ещё не добавляли предпочтения по брендам',
+            },
+
+            [preferenceEntityTypes.CATEGORIES]: {
+                title: 'Категории',
+                choosen: 'Выбранные категории',
+                notChoosen: 'Вы ещё не добавляли предпочтения по категориям',
+            },
         },
     },
 

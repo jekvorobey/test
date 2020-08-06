@@ -11,7 +11,6 @@ import { SET_PREFERENCES_DATA, SET_ENTITIES, SET_EQUAL_PREFERENCES, SET_ALL_PREF
 export const FETCH_PREFERENCES_DATA = 'FETCH_PREFERENCES_DATA';
 export const FETCH_ALL_PREFERENCES_DATA = 'FETCH_ALL_PREFERENCES_DATA';
 export const FETCH_PREFERENCES = 'FETCH_PREFERENCES';
-export const FETCH_SAME_SELECT = 'FETCH_SAME_SELECT';
 export const SET_LOAD = 'SET_LOAD';
 export const SET_TYPE = 'SET_TYPE';
 
@@ -54,10 +53,10 @@ export default {
         }
     },
 
-    async [UPDATE_EQUAL_PREFERENCES]({ commit }, payload) {
+    async [UPDATE_EQUAL_PREFERENCES]({ dispatch }, payload) {
         try {
             await changeProfileEqualPreferences(payload || []);
-            commit(SET_EQUAL_PREFERENCES, payload);
+            dispatch(FETCH_PREFERENCES, preferenceType.PROFESSIONAL);
         } catch (error) {
             storeErrorHandler(UPDATE_EQUAL_PREFERENCES)(error);
         }
@@ -73,7 +72,6 @@ export default {
                     Promise.all([
                         dispatch(FETCH_PREFERENCES, preferenceType.PERSONAL),
                         dispatch(FETCH_PREFERENCES, preferenceType.PROFESSIONAL),
-                        // dispatch(FETCH_SAME_SELECT)
                     ]);
                     break;
             }

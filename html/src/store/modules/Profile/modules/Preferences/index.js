@@ -7,9 +7,7 @@ import getters from './getters';
 export const NAME = 'preferences';
 export const TYPE = 'type';
 export const PREFERENCES_DATA = 'preferencesData';
-export const ALL_PREFERENCES = 'allPreferences';
-export const AVAILABLE_BRANDS = 'availableBrands';
-export const AVAILABLE_CATEGORIES = 'availableCategories';
+export const AVAILABLE = 'available';
 export const EQUAL_PREFERENCES = 'equalPreferences';
 export const LOAD = 'load';
 
@@ -33,6 +31,7 @@ export default function createModule() {
                         [preferenceEntityTypes.BRANDS]: [],
                         [preferenceEntityTypes.CATEGORIES]: [],
                     },
+                    [EQUAL_PREFERENCES]: [],
                 },
 
                 [preferenceType.PROFESSIONAL]: {
@@ -40,18 +39,14 @@ export default function createModule() {
                         [preferenceEntityTypes.BRANDS]: [],
                         [preferenceEntityTypes.CATEGORIES]: [],
                     },
+                    [EQUAL_PREFERENCES]: [],
                 },
             },
 
-            [ALL_PREFERENCES]: {
-                [BRANDS]: [],
-                [CATEGORIES]: [],
+            [AVAILABLE]: {
+                [preferenceEntityTypes.BRANDS]: [],
+                [preferenceEntityTypes.CATEGORIES]: [],
             },
-
-            [AVAILABLE_BRANDS]: [],
-            [AVAILABLE_CATEGORIES]: [],
-
-            [EQUAL_PREFERENCES]: [],
         },
 
         actions,

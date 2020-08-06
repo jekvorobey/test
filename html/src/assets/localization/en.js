@@ -1,6 +1,6 @@
 import flatPickrEn from 'flatpickr/dist/l10n/default';
 import { receiveMethods, discountType } from '@enums/checkout';
-import { genderType, billingOperationType, referralSource, bonusStatus } from '@enums/profile';
+import { genderType, billingOperationType, referralSource, bonusStatus, preferenceEntityTypes } from '@enums/profile';
 import { socials, weekDays } from '@enums';
 import { orderStatus, deliveryStatus } from '@enums/order';
 import { cartItemTypes } from '@enums/product';
@@ -303,6 +303,20 @@ const main = {
             GuideDetails: 'Product Guide',
             Masterclasses: 'My Masterclasses',
             QnA: 'Questions and Answers',
+        },
+
+        preferences: {
+            [preferenceEntityTypes.BRANDS]: {
+                title: 'Brands',
+                choosen: 'Choosen Brands',
+                notChoosen: 'You did not add any brands yet',
+            },
+
+            [preferenceEntityTypes.CATEGORIES]: {
+                title: 'Categories',
+                choosen: 'Choosen Categories',
+                notChoosen: 'You did not add any categories yet',
+            },
         },
     },
 

@@ -1,3 +1,5 @@
+import { preferenceType } from '@enums/profile';
+
 export const SET_PREFERENCES_DATA = 'SET_PREFERENCES_DATA';
 export const SET_LOAD = 'SET_LOAD';
 export const SET_TYPE = 'SET_TYPE';
@@ -16,25 +18,27 @@ export default {
     },
 
     [SET_PREFERENCES_DATA](state, payload = {}) {
-        const { prefType = null, data = {} } = payload;
-        if (prefType) {
-            state.preferencesData[prefType].customer = data.customer || {};
-            // state.availableBrands = data.brands || [];
-            // state.availableCategories = data.categories || [];
-        }
+        const { prefType, data = {} } = payload;
+        state.preferencesData[prefType] = data;
     },
 
     [SET_ALL_PREFERENCES_DATA](state, payload = {}) {
-        state.allPreferences = payload;
-        state.availableBrands = payload.brands || [];
-        state.availableCategories = payload.categories || [];
+        state.available = payload;
     },
 
     [SET_ENTITIES](state, { prefType, type, items }) {
-        state.preferencesData[prefType].customer[type] = items;
+        const data = state.preferencesData[prefType];
+        if (data) {
+            const { customer } = data;
+            customer[type] = items;
+        }
     },
 
     [SET_EQUAL_PREFERENCES](state, payload) {
-        state.equalPreferences = payload || [];
+        const data = state.preferencesData[preferenceType.PROFESSIONAL];
+        if (data) {
+            const { customer } = data;
+            customer.equal_preferences = payload || [];
+        }
     },
 };
