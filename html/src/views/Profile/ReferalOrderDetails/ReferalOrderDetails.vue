@@ -237,9 +237,7 @@ export default {
 
         registerDate() {
             const { register_date } = this[REFERRAL_ORDER_DETAILS] || {};
-            if (!register_date) return null;
-            const date = new Date(register_date);
-            return date.toLocaleDateString(this[LOCALE], monthLongDateSettings);
+            return register_date && getDate(register_date).toLocaleDateString(this[LOCALE], monthLongDateSettings);
         },
 
         backUrl() {
