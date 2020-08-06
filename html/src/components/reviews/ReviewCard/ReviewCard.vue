@@ -72,19 +72,21 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 
 import SessionCheckButton from '@components/SessionCheckButton/SessionCheckButton.vue';
 
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
+import { LOCALE } from '@store';
 import { NAME as REVIEWS_MODULE } from '@store/modules/Reviews';
 import { CHANGE_REVIEW_VOTE } from '@store/modules/Reviews/actions';
 
+import { getDate } from '@util';
 import { reviewOpinion } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 import { monthLongDateSettings } from '@settings';
-
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/like.svg';
 import '@images/sprites/dislike.svg';
 import './ReviewCard.css';
+
 
 export default {
     name: 'review-card',
@@ -168,9 +170,11 @@ export default {
     },
 
     computed: {
+        ...mapState([LOCALE]),
+
         computedDate() {
-            const date = new Date(this.date);
-            return date.toLocaleString(this.locale, monthLongDateSettings);
+            const { date } = this;
+            return date && getDate(date).toLocaleString(this[LOCALE], monthLongDateSettings);
         },
 
         reviewImages() {
