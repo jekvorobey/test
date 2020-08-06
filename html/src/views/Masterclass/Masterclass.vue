@@ -18,7 +18,7 @@
                 class="master-class-view__banner"
                 :image="bannerImage"
                 :name="masterClass.title"
-                :price="price"
+                :price="masterClass.price"
                 btn-text="Купить билет"
                 show-btn
                 @btnClick="onScrollTo($refs.panel)"
@@ -786,13 +786,6 @@ export default {
         mapCoords() {
             const { places } = this;
             return places.length > 1 ? [0, 0] : (places[0] && places[0].coords) || null;
-        },
-
-        price() {
-            const { priceFrom, priceTo } = this[MASTERCLASS] || {};
-
-            if (priceTo) return { value: { from: priceFrom.value, to: priceTo.value, currency: priceFrom.currency } };
-            return priceFrom;
         },
 
         bannerImage() {
