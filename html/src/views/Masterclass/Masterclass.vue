@@ -375,7 +375,11 @@
                     </div>
                     <template v-else>
                         <div class="master-class-view__map-desc">
-                            <div class="text-bold">
+                            <div
+                                :class="{
+                                    'text-bold': places.length > 1 || (!!place.address && place.gallery.length > 0),
+                                }"
+                            >
                                 <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
                                 {{ place.address }}
                             </div>
