@@ -46,6 +46,8 @@ import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { getDate } from '@util';
+import { monthLongDateSettings } from '@settings';
 import { modalName, weekDays } from '@enums';
 import { receiveMethods } from '@enums/checkout';
 import '@images/sprites/arrow-down.svg';
@@ -88,16 +90,15 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         formatDate(date) {
-            const dateObj = new Date(date);
-            const options = { month: 'long', day: 'numeric' };
+            const dateObj = date && getDate(date);
             const today = new Date().getDate();
             let additionalText = ``;
 
             if (today === dateObj.getDate()) additionalText = `сегодня`;
             else if (today + 1 === dateObj.getDate()) additionalText = `завтра`;
-            else additionalText = this.$t(`weekdays.long.${dateObj.getDay()}`);
+            else additionalText = dateObj && this.$t(`weekdays.short.${dateObj.getDay()}`);
 
-            return `${additionalText}, ${dateObj.toLocaleDateString(this[LOCALE], options)}`;
+            return `c ${dateObj && dateObj.toLocaleDateString(this[LOCALE], monthLongDateSettings)} (${additionalText})`;
         },
 
         onOpenCitySelection() {
