@@ -14,6 +14,7 @@
 
         &-rating {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             margin-bottom: calc(var(--gs) * 3);
             white-space: nowrap;
@@ -21,6 +22,12 @@
             &-text {
                 font-weight: bold;
                 margin-right: calc(var(--gs) * 2);
+                transition: color var(--time) ease-in;
+                border-bottom: 1px solid transparent;
+
+                &--error {
+                    border-bottom-color: var(--cl-red);
+                }
             }
         }
 

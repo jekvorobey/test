@@ -9,7 +9,10 @@
 
             <div class="create-review-panel__form-review">
                 <div class="create-review-panel__form-rating">
-                    <span class="create-review-panel__form-rating-text">
+                    <span
+                        class="create-review-panel__form-rating-text"
+                        :class="{ 'create-review-panel__form-rating-text--error': ratingError }"
+                    >
                         Ваша оценка
                     </span>
 
@@ -22,6 +25,7 @@
                         <template v-slot:activeLabel>
                             <v-svg name="star-small" width="20" height="20" />
                         </template>
+
                         <template v-slot:inactiveLabel>
                             <v-svg name="star-empty-small" width="20" height="20" />
                         </template>
@@ -41,7 +45,13 @@
                 </div>
 
                 <div class="create-review-panel__form-cell">
-                    <v-input class="create-review-panel__form-input" tag="textarea" v-model="body" name="body">
+                    <v-input
+                        class="create-review-panel__form-input"
+                        tag="textarea"
+                        v-model="body"
+                        name="body"
+                        :error="bodyError"
+                    >
                         Комментарий
                     </v-input>
                 </div>
@@ -72,6 +82,7 @@
                         </span>
                     </v-file>
                 </div>
+
                 <v-button class="create-review-panel__form-submit" type="submit" :disabled="isDisabled">
                     Отправить отзыв
                 </v-button>
@@ -87,19 +98,30 @@ import VFile from '@controls/VFile/VFile.vue';
 import VRating from '@controls/VRating/VRating.vue';
 
 import { mimeType } from '@enums';
-
+import validationMixin, { required } from '@plugins/validation';
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import './CreateReviewPanel.css';
 
 export default {
     name: 'create-review-panel',
+    mixins: [validationMixin],
 
     components: {
         VInput,
         VButton,
         VFile,
         VRating,
+    },
+
+    validations: {
+        rating: {
+            valid: value => value > 0,
+        },
+
+        body: {
+            required,
+        },
     },
 
     props: {
@@ -129,13 +151,24 @@ export default {
             return [mimeType.image.JPEG, mimeType.image.PNG, mimeType.video.MP4, mimeType.video.MOV];
         },
 
+        bodyError() {
+            if (this.$v.body.$dirty) return !this.$v.body.required && this.$t('validation.errors.required');
+        },
+
+        ratingError() {
+            if (this.$v.rating.$dirty) return !this.$v.rating.valid && 'Выберите оценку';
+        },
+
         isDisabled() {
-            return !this.rating || !this.body || !this.pros || !this.cons;
+            return this.$v.$dirty && this.$v.$invalid;
         },
     },
 
     methods: {
         onSubmit(e) {
+            this.$v.$touch();
+            if (this.$v.$invalid) return;
+
             const formData = new FormData(e.target);
             for (const file of this.files) formData.append('files[]', file, file.name);
             this.$emit('create-review', formData);
