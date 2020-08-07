@@ -14,12 +14,22 @@ export default {
             type: String,
             required: true,
         },
+
+        autoplay: {
+            type: Boolean,
+            default: false,
+        },
+
+        loop: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
         src() {
-            const { code } = this;
-            return generateYoutubeVideoSourcePath(code);
+            const { code, autoplay, loop } = this;
+            return generateYoutubeVideoSourcePath(code, autoplay, loop);
         },
     },
 };

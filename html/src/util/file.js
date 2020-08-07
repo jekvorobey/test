@@ -8,8 +8,10 @@ export function generatePictureSourcePath(x = '', y = '', id, ext) {
     return `${$http.baseURL}/files/compressed/${id}${x ? `/${x}` : ''}${y ? `/${y}` : ''}/${ext || 'orig'}`;
 }
 
-export function generateYoutubeVideoSourcePath(videoId) {
-    return `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}`;
+export function generateYoutubeVideoSourcePath(videoId, autoplay = true, loop = true) {
+    return `https://www.youtube.com/embed/${videoId}?autoplay=${Number(autoplay)}}&loop=${Number(
+        loop
+    )}&playlist=${videoId}`;
 }
 
 export function generateYoutubeImagePlaceholderPath(videoId) {
