@@ -72,6 +72,12 @@ export const injectionType = Object.freeze({
 export const eventName = Object.freeze({
     SCROLL: 'scroll',
     RESIZE: 'resize',
+    CLICK: 'click',
+
+    video: {
+        PAUSE: 'pause',
+        PLAY: 'play',
+    },
 });
 
 /**
