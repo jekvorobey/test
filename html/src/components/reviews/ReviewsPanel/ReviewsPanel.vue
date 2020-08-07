@@ -201,8 +201,23 @@ export default {
 
         async onCreateReview(formData) {
             const { code, type } = this;
-            this[CREATE_REVIEW]({ code, type, formData });
-            this.isAddingReview = false;
+            let message = null;
+
+            try {
+                this.isAddingReview = false;
+                await this[CREATE_REVIEW]({ code, type, formData });
+                message = 'Спасибо за ваш отзыв!';
+            } catch (error) {
+                message = 'Не удалось отправить отзыв.';
+            }
+
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state: {
+                    message,
+                },
+            });
         },
 
         onShowPanel() {

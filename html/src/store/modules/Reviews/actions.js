@@ -1,7 +1,7 @@
 import { storeErrorHandler } from '@util/store';
 import { getReviews, addReview, changeReviewVote } from '@api';
-import { SET_REVIEWS_DATA, SET_REVIEWS_MORE } from './mutations';
 import { DEFAULT_REVIEWS_PAGE_SIZE, DEFAULT_PAGE } from '@constants';
+import { SET_REVIEWS_DATA, SET_REVIEWS_MORE } from './mutations';
 
 export const FETCH_REVIEWS_DATA = 'FETCH_REVIEWS_DATA';
 export const CREATE_REVIEW = 'CREATE_REVIEW';
@@ -42,11 +42,11 @@ export default {
             await addReview(formData);
             dispatch(FETCH_REVIEWS_DATA, { type, code });
         } catch (error) {
-            storeErrorHandler(CREATE_REVIEW)(error);
+            storeErrorHandler(CREATE_REVIEW, true)(error);
         }
     },
 
-    async [CHANGE_REVIEW_VOTE]({ dispatch }, { id, opinion }) {
+    async [CHANGE_REVIEW_VOTE](context, { id, opinion }) {
         try {
             await changeReviewVote(id, opinion);
         } catch (error) {
