@@ -30,6 +30,14 @@
         }
     }
 
+    &__desc {
+        padding-right: calc(var(--gs) * 3);
+
+        @media (--tablet-lg) {
+            padding-right: 0;
+        }
+    }
+
     &__remain,
     &__count,
     &__price {
