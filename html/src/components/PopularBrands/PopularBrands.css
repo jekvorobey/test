@@ -25,6 +25,11 @@
             @media (--tablet) {
                 width: calc(calc(100% / 2) - var(--gs));
                 margin: 0 0 calc(var(--gs) * 2);
+                padding: 0 5%;
+            }
+
+            @media (--mobile-sm) {
+                padding: 0;
             }
 
             &::before {
