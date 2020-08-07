@@ -260,16 +260,23 @@
         >
             <div class="container" v-if="!isTablet">
                 <ul class="master-class-view__gallery-list">
-                    <li class="master-class-view__gallery-item" v-for="image in gallery" :key="image.value.id">
-                        <v-picture>
-                            <source :data-srcset="image.desktopImg.webp" type="image/webp" />
-                            <source :data-srcset="image.desktopImg.orig" />
-                            <img class="blur-up lazyload v-picture__img" :data-src="image.defaultImg" alt="" />
+                    <li
+                        class="master-class-view__gallery-item"
+                        v-for="media in gallery"
+                        :key="media.value.id || media.id"
+                    >
+                        <v-picture v-if="media.type === mediaType.IMAGE">
+                            <source :data-srcset="media.desktopImg.webp" type="image/webp" />
+                            <source :data-srcset="media.desktopImg.orig" />
+                            <img class="blur-up lazyload v-picture__img" :data-src="media.defaultImg" alt="" />
                         </v-picture>
+                        <v-youtube :code="media.value" v-else-if="media.type === mediaType.YOUTUBE" />
+                        <v-video controls v-else-if="media.type === mediaType.VIDEO">
+                            <source :src="media.src" :type="media.mimeType" />
+                        </v-video>
                     </li>
                 </ul>
             </div>
-
             <v-slider
                 name="masterclass-gallery-slider"
                 class="master-class-view__gallery-slider"
@@ -278,14 +285,18 @@
             >
                 <div
                     class="swiper-slide master-class-view__gallery-item"
-                    v-for="image in gallery"
-                    :key="image.value.id"
+                    v-for="media in gallery"
+                    :key="media.value.id || media.id"
                 >
-                    <v-picture>
-                        <source :data-srcset="image.desktopImg.webp" type="image/webp" />
-                        <source :data-srcset="image.desktopImg.orig" />
-                        <img class="blur-up lazyload v-picture__img" :data-src="image.defaultImg" alt="" />
+                    <v-picture v-if="media.type === 'image'">
+                        <source :data-srcset="media.desktopImg.webp" type="image/webp" />
+                        <source :data-srcset="media.desktopImg.orig" />
+                        <img class="blur-up lazyload v-picture__img" :data-src="media.defaultImg" alt="" />
                     </v-picture>
+                    <v-youtube :code="media.value" v-else-if="media.type === 'youtube'" />
+                    <v-video controls v-else-if="media.type === 'video'">
+                        <source :src="media.src" :type="media.mimeType" />
+                    </v-video>
                 </div>
             </v-slider>
         </section>
@@ -548,6 +559,8 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
 import VRating from '@controls/VRating/VRating.vue';
 import VAccordion from '@controls/VAccordion/VAccordion.vue';
+import VVideo from '@controls/VVideo/VVideo.vue';
+import VYoutube from '@controls/VYoutube/VYoutube.vue';
 
 import FrisbuyProductContainer from '@components/FrisbuyProductContainer/FrisbuyProductContainer.vue';
 
@@ -598,7 +611,7 @@ import { generatePictureSourcePath, generateFileOriginalPath } from '@util/file'
 import { getInstagramUserNameFromUrl } from '@util/socials';
 import { generateAbsoluteMasterclassUrl } from '@util/catalog';
 import { yaMapSettings, dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
-import { breakpoints, fileExtension, modalName } from '@enums';
+import { breakpoints, fileExtension, modalName, mediaType } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
@@ -638,6 +651,7 @@ const sliderOptions = {
     pagination: {
         el: '.swiper-pagination',
         type: 'bullets',
+        clickable: true,
     },
 
     breakpoints: {
@@ -667,6 +681,8 @@ export default {
         VPicture,
         VExpander,
         VAccordion,
+        VVideo,
+        VYoutube,
 
         Breadcrumbs,
         BreadcrumbItem,
@@ -865,17 +881,35 @@ export default {
             const { gallery = [] } = this[MASTERCLASS] || {};
 
             return gallery.map(i => {
-                const desktopImg = {
-                    webp: generatePictureSourcePath(500, 500, i.value.id, fileExtension.image.WEBP),
-                    orig: generatePictureSourcePath(500, 500, i.value.id),
-                };
-                const defaultImg = generatePictureSourcePath(500, 500, i.value.id);
+                switch (i.type) {
+                    case mediaType.IMAGE: {
+                        const desktopImg = {
+                            webp: generatePictureSourcePath(500, 500, i.value.id, fileExtension.image.WEBP),
+                            orig: generatePictureSourcePath(500, 500, i.value.id),
+                        };
+                        const defaultImg = generatePictureSourcePath(500, 500, i.value.id);
 
-                return {
-                    ...i,
-                    desktopImg,
-                    defaultImg,
-                };
+                        return {
+                            ...i,
+                            desktopImg,
+                            defaultImg,
+                        };
+                    }
+                    case mediaType.VIDEO: {
+                        return {
+                            ...i,
+                            src: generateFileOriginalPath(i.value.id),
+                            mimeType: `video/${i.value.sourceExt}`,
+                        };
+                    }
+                    case mediaType.YOUTUBE:
+                        return {
+                            ...i,
+                            id: i.value,
+                        };
+                    default:
+                        return i;
+                }
             });
         },
 
@@ -1022,6 +1056,10 @@ export default {
 
         this.debounce_fetchProduct(code);
         next();
+    },
+
+    created() {
+        this.mediaType = mediaType;
     },
 
     beforeMount() {

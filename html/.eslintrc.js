@@ -20,11 +20,13 @@ module.exports = {
     },
     plugins: ['optimize-regex'],
     rules: {
-        'func-names': 'off'
+        'func-names': 'off',
         /* Отключаем требование в использовании this, чтобы иметь возможность прописывать пустые методы в родительских компонентах. */
         'class-methods-use-this': 'off',
         /* Отключён по той же причине, что и import/no-dynamic-require. */
         'global-require': 'off',
+        /* Отключёно */
+        'import/no-unresolved': 'off',
         /* Динамический require бывает полезен в редких случаях, когда нужно рассчитать имя модуля динамически или задать условия подключения, но при этом не нужно отделение кода в отдельный бандл. */
         'import/no-dynamic-require': 'off',
         /* Делает модули из devDependencies корректными для подключения. */

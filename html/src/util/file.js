@@ -17,19 +17,19 @@ export function generateYoutubeImagePlaceholderPath(videoId) {
 }
 
 export function formatFileSize(size, si = true) {
-    var thresh = si ? 1000 : 1024;
+    const thresh = si ? 1000 : 1024;
     if (Math.abs(size) < thresh) {
-        return size + ' B';
+        return `${size} B`;
     }
-    var units = si
+    const units = si
         ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
         : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
-    var u = -1;
+    let u = -1;
     do {
         size /= thresh;
-        ++u;
+        u += 1;
     } while (Math.abs(size) >= thresh && u < units.length - 1);
-    return size.toFixed(1) + ' ' + units[u];
+    return `${size.toFixed(1)} ${units[u]}`;
 }
 
 export default {

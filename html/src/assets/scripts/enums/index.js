@@ -187,6 +187,12 @@ export const mimeType = Object.freeze({
     },
 });
 
+export const mediaType = Object.freeze({
+    IMAGE: 'image',
+    VIDEO: 'video',
+    YOUTUBE: 'youtube',
+});
+
 export const sortDirections = Object.freeze({
     DESC: 'desc',
     ASC: 'asc',
