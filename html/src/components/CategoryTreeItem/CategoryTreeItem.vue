@@ -108,7 +108,7 @@ export default {
 
             return {
                 path: generateCategoryUrl(type, entityCode, rootCategory ? !isRoot && code : code),
-                query: { ...this.$route.query },
+                query: { search_string: this.$route.query.search_string },
             };
         },
 
