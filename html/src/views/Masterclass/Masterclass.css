@@ -287,6 +287,37 @@
                 white-space: pre-line;
             }
 
+            &-gallery {
+                display: flex;
+                position: relative;
+                margin: calc(var(--gs) * 7) 0;
+                max-height: calc(var(--gs) * 40);
+
+                @media (--mobile-sm) {
+                    max-height: calc(var(--gs) * 30);
+                }
+
+                &::after {
+                    content: '';
+                    display: block;
+                    padding-bottom: 52%;
+
+                    @media (--tablet) {
+                        padding-bottom: 75%;
+                    }
+
+                    /* чинит padding-bottom: 100% в FireFox для распорки */
+                    @supports (-moz-user-select: none) {
+                        margin-top: 52%;
+                        padding-bottom: 0;
+
+                        @media (--tablet) {
+                            margin-top: 75%;
+                        }
+                    }
+                }
+            }
+
             &--no-padding {
                 padding-right: 0;
             }
@@ -412,6 +443,82 @@
                 bottom: calc(var(--gs) * 3);
                 left: 50%;
                 transform: translateX(-50%);
+            }
+        }
+    }
+
+    &__history {
+        &-item {
+            display: flex;
+
+            &::after {
+                content: '';
+                display: block;
+                padding-bottom: 100%;
+
+                /* чинит padding-bottom: 100% в FireFox для распорки */
+                @supports (-moz-user-select: none) {
+                    margin-top: 100%;
+                    padding-bottom: 0;
+                }
+            }
+        }
+
+        &-container {
+            @media (--tablet-lg) {
+                padding: 0;
+            }
+        }
+
+        &-hl {
+            @media (--tablet-lg) {
+                padding: 0 calc(var(--gs) * 3);
+            }
+
+            @media (--tablet) {
+                text-align: center;
+            }
+        }
+
+        &-slider.swiper-container {
+            @media (--tablet-min) {
+                position: static;
+
+                @supports (position: initial) {
+                    position: initial;
+                }
+            }
+
+            .v-slider__controls {
+                position: absolute;
+                top: 20px;
+                right: 108px;
+                bottom: auto;
+
+                @media (--desktop) {
+                    right: calc(var(--gs) * 5);
+                }
+
+                @media (--tablet) {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    display: flex;
+                    justify-content: center;
+                }
+
+                .swiper-pagination {
+                    display: none;
+
+                    @media (--tablet) {
+                        display: block;
+                    }
+                }
+            }
+
+            @media (--tablet) {
+                padding: 0;
+                position: relative;
             }
         }
     }

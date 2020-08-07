@@ -44,20 +44,6 @@ export default {
             this.play = true;
             this.$nextTick(() => video && video.play());
         },
-
-        onStop() {
-            this.play = false;
-        },
-    },
-
-    mounted() {
-        const { video } = this.$refs;
-        video && video.addEventListener(eventName.video.PAUSE, this.onStop);
-    },
-
-    beforeDestroy() {
-        const { video } = this.$refs;
-        video && video.removeEventListener(eventName.video.PAUSE, this.onStop);
     },
 };
 </script>

@@ -53,12 +53,23 @@
                             v-html="masterClass.description.content"
                         />
 
-                        <div v-for="image in descriptionGallery" :key="image.value.id">
-                            <v-picture>
-                                <source :data-srcset="image.desktopImg.webp" type="image/webp" />
-                                <source :data-srcset="image.desktopImg.orig" />
-                                <img class="blur-up lazyload v-picture__img" :data-src="image.defaultImg" alt="" />
+                        <div class="master-class-view__panel-middle-gallery" v-if="descriptionGallery">
+                            <v-picture v-if="descriptionGallery.type === mediaType.IMAGE">
+                                <source :data-srcset="descriptionGallery.desktopImg.webp" type="image/webp" />
+                                <source :data-srcset="descriptionGallery.desktopImg.orig" />
+                                <img
+                                    class="blur-up lazyload v-picture__img"
+                                    :data-src="descriptionGallery.defaultImg"
+                                    alt=""
+                                />
                             </v-picture>
+                            <v-youtube
+                                :code="descriptionGallery.value"
+                                v-else-if="descriptionGallery.type === mediaType.YOUTUBE"
+                            />
+                            <v-video controls v-else-if="descriptionGallery.type === mediaType.VIDEO">
+                                <source :src="descriptionGallery.src" :type="descriptionGallery.mimeType" />
+                            </v-video>
                         </div>
                     </div>
 
@@ -280,7 +291,7 @@
             <v-slider
                 name="masterclass-gallery-slider"
                 class="master-class-view__gallery-slider"
-                :options="sliderOptions"
+                :options="sliderOptions.gallery"
                 v-else
             >
                 <div
@@ -373,6 +384,7 @@
                 <h2 class="container container--tablet master-class-view__section-hl">
                     Место проведения
                 </h2>
+
                 <div
                     class="container container--tablet master-class-view__map-info"
                     v-for="(place, index) in places"
@@ -429,6 +441,39 @@
                         :icon="markerIcon"
                     />
                 </yandex-map>
+            </div>
+        </section>
+
+        <section
+            class="section master-class-view__section master-class-view__history"
+            v-if="historyGallery && historyGallery.length > 0"
+        >
+            <div :class="[{ container: !isTabletLg }, 'master-class-view__history-container']">
+                <h2 class="master-class-view__section-hl master-class-view__history-hl">
+                    Как это было
+                </h2>
+
+                <v-slider
+                    name="masterclass-history-slider"
+                    class="master-class-view__history-slider"
+                    :options="sliderOptions.history"
+                >
+                    <div
+                        class="swiper-slide master-class-view__history-item"
+                        v-for="media in historyGallery"
+                        :key="media.value.id || media.id"
+                    >
+                        <v-picture v-if="media.type === 'image'">
+                            <source :data-srcset="media.desktopImg.webp" type="image/webp" />
+                            <source :data-srcset="media.desktopImg.orig" />
+                            <img class="blur-up lazyload v-picture__img" :data-src="media.defaultImg" alt="" />
+                        </v-picture>
+                        <v-youtube :code="media.value" v-else-if="media.type === 'youtube'" />
+                        <v-video controls v-else-if="media.type === 'video'">
+                            <source :src="media.src" :type="media.mimeType" />
+                        </v-video>
+                    </div>
+                </v-slider>
             </div>
         </section>
 
@@ -664,6 +709,34 @@ const sliderOptions = {
     },
 };
 
+const historySliderOptions = {
+    spaceBetween: 24,
+    slidesPerView: 4,
+    grabCursor: true,
+
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+
+    breakpoints: {
+        [breakpoints.tablet - 1]: {
+            slidesOffsetBefore: 24,
+            slidesOffsetAfter: 24,
+            slidesPerView: 1.2,
+            spaceBetween: 16,
+            slidesOffsetBefore: 16,
+            slidesOffsetAfter: 16,
+
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'bullets',
+                clickable: true,
+            },
+        },
+    },
+};
+
 const panelScrollOffset = 24;
 
 export default {
@@ -829,22 +902,42 @@ export default {
 
         descriptionGallery() {
             const {
-                description: { gallery = [] },
+                description: { gallery },
             } = this[MASTERCLASS] || { description: {} };
 
-            return gallery.map(i => {
-                const desktopImg = {
-                    webp: generatePictureSourcePath(600, 320, i.value.id, fileExtension.image.WEBP),
-                    orig: generatePictureSourcePath(600, 320, i.value.id),
-                };
-                const defaultImg = generatePictureSourcePath(600, 320, i.value.id);
+            switch (gallery && gallery.type) {
+                case mediaType.IMAGE: {
+                    const desktopImg = {
+                        webp: generatePictureSourcePath(600, 320, gallery.value.id, fileExtension.image.WEBP),
+                        orig: generatePictureSourcePath(600, 320, gallery.value.id),
+                    };
+                    const mobileImg = {
+                        webp: generatePictureSourcePath(600, 320, gallery.value.id, fileExtension.image.WEBP),
+                        orig: generatePictureSourcePath(600, 320, gallery.value.id),
+                    };
+                    const defaultImg = generatePictureSourcePath(600, 320, gallery.value.id);
 
-                return {
-                    ...i,
-                    desktopImg,
-                    defaultImg,
-                };
-            });
+                    return {
+                        ...gallery,
+                        desktopImg,
+                        defaultImg,
+                    };
+                }
+                case mediaType.VIDEO: {
+                    return {
+                        ...gallery,
+                        src: generateFileOriginalPath(gallery.value.id),
+                        mimeType: `video/${gallery.value.sourceExt}`,
+                    };
+                }
+                case mediaType.YOUTUBE:
+                    return {
+                        ...gallery,
+                        id: gallery.value,
+                    };
+                default:
+                    return gallery;
+            }
         },
 
         stages() {
@@ -881,6 +974,42 @@ export default {
             const { gallery = [] } = this[MASTERCLASS] || {};
 
             return gallery.map(i => {
+                switch (i.type) {
+                    case mediaType.IMAGE: {
+                        const desktopImg = {
+                            webp: generatePictureSourcePath(500, 500, i.value.id, fileExtension.image.WEBP),
+                            orig: generatePictureSourcePath(500, 500, i.value.id),
+                        };
+                        const defaultImg = generatePictureSourcePath(500, 500, i.value.id);
+
+                        return {
+                            ...i,
+                            desktopImg,
+                            defaultImg,
+                        };
+                    }
+                    case mediaType.VIDEO: {
+                        return {
+                            ...i,
+                            src: generateFileOriginalPath(i.value.id),
+                            mimeType: `video/${i.value.sourceExt}`,
+                        };
+                    }
+                    case mediaType.YOUTUBE:
+                        return {
+                            ...i,
+                            id: i.value,
+                        };
+                    default:
+                        return i;
+                }
+            });
+        },
+
+        historyGallery() {
+            const { historyGallery = [] } = this[MASTERCLASS] || {};
+
+            return historyGallery.map(i => {
                 switch (i.type) {
                     case mediaType.IMAGE: {
                         const desktopImg = {
@@ -959,7 +1088,10 @@ export default {
         },
 
         sliderOptions() {
-            return sliderOptions;
+            return {
+                gallery: sliderOptions,
+                history: historySliderOptions,
+            };
         },
 
         isTabletLg() {
