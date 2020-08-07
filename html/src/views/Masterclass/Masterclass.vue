@@ -719,6 +719,12 @@ const historySliderOptions = {
         prevEl: '.swiper-button-prev',
     },
 
+    pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
+        clickable: true,
+    },
+
     breakpoints: {
         [breakpoints.tablet - 1]: {
             slidesOffsetBefore: 24,
@@ -727,12 +733,6 @@ const historySliderOptions = {
             spaceBetween: 16,
             slidesOffsetBefore: 16,
             slidesOffsetAfter: 16,
-
-            pagination: {
-                el: '.swiper-pagination',
-                type: 'bullets',
-                clickable: true,
-            },
         },
     },
 };
