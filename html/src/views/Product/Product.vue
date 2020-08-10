@@ -68,6 +68,15 @@
                                     />
                                 </v-picture>
                             </div>
+
+                            <div class="product-view__header-detail-tags">
+                                <tag
+                                    class="product-view__header-detail-tags-item"
+                                    v-for="badge in computedBadges"
+                                    :key="badge.id"
+                                    :text="badge.text"
+                                />
+                            </div>
                         </div>
                         <v-slider
                             v-else
@@ -107,6 +116,15 @@
                             </div>
                         </v-slider>
                     </template>
+
+                    <div class="product-view__header-detail-tags">
+                        <tag
+                            class="product-view__header-detail-tags-item"
+                            v-for="badge in computedBadges"
+                            :key="badge.id"
+                            :text="badge.text"
+                        />
+                    </div>
                 </v-sticky>
 
                 <v-sticky class="product-view__header-detail">
@@ -689,8 +707,8 @@ import ReviewsPanel from '@components/reviews/ReviewsPanel/ReviewsPanel.vue';
 import MapModal, { NAME as MAP_MODAL_NAME } from '@components/MapModal/MapModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { $store, $progress, $logger, $retailRocket } from '@services';
 import { SCROLL } from '@store';
+import { BADGES_MAP } from '@store/getters';
 
 import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
 import { SET_SESSION_REFERRAL_CODE } from '@store/modules/Auth/actions';
@@ -722,6 +740,7 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
 import _debounce from 'lodash/debounce';
+import { $store, $progress, $logger, $retailRocket } from '@services';
 import {
     generatePictureSourcePath,
     generateYoutubeImagePlaceholderPath,
@@ -848,6 +867,7 @@ export default {
         Breadcrumbs,
         BreadcrumbItem,
 
+        Tag,
         Price,
         CatalogProductCard,
         BannerCard,
@@ -890,6 +910,8 @@ export default {
 
     computed: {
         ...mapState([SCROLL]),
+        ...mapGetters([BADGES_MAP]),
+
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
@@ -917,6 +939,16 @@ export default {
             refCode: state => state.query.refCode,
             modal: state => state.query.modal,
         }),
+
+        computedBadges() {
+            const { product, badgesMap } = this;
+            const { badges = [] } = product || {};
+
+            const productBadges = badges.filter(code => !!badgesMap[code]).map(code => badgesMap[code]);
+            return productBadges.sort((a, b) => {
+                return a.order_num - b.order_num;
+            });
+        },
 
         inCart() {
             const { id } = this[PRODUCT];

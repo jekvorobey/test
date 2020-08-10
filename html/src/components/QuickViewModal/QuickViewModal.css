@@ -30,6 +30,13 @@
         &-header {
             padding-right: calc(var(--gs) * 3);
         }
+
+        &-tags {
+            position: absolute;
+            top: 46px;
+            left: 46px;
+            z-index: 51;
+        }
     }
 
     &__gallery {

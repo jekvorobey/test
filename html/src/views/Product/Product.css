@@ -428,6 +428,31 @@
             &-brand {
                 flex-wrap: wrap;
             }
+
+            &-tags {
+                position: absolute;
+                top: 24px;
+                left: 24px;
+                z-index: 51;
+
+                @media (--tablet-lg) {
+                    top: 24px;
+                    left: 46px;
+                }
+
+                @media (--tablet) {
+                    top: 16px;
+                    left: 16px;
+                }
+
+                &-item {
+                    @media (--tablet) {
+                        font-size: 13px;
+                        line-height: 16px;
+                        margin-bottom: var(--gs);
+                    }
+                }
+            }
         }
 
         &-mobile {
@@ -1253,12 +1278,10 @@
     &__wishlist-btn {
         position: absolute;
         z-index: 2;
-        top: 20px;
-        right: 20px;
 
         @media (--tablet) {
-            top: 8px;
-            right: 12px;
+            top: 16px;
+            right: 16px;
         }
     }
 

@@ -29,13 +29,6 @@
         }
     }
 
-    &__info-current {
-        > span {
-            position: relative;
-            left: calc(var(--gs) * -1);
-        }
-    }
-
     &__controls {
         display: flex;
         flex-wrap: wrap;
@@ -58,7 +51,7 @@
     }
 
     &__btn {
-        @media(--desktop-lg-diff) {
+        @media (--desktop-lg-diff) {
             max-width: 50%;
             min-width: 50%;
         }

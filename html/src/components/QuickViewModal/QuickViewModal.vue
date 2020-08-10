@@ -42,6 +42,15 @@
                         @pickup-points="onPickupPoints"
                     />
                 </div>
+
+                <div class="quick-view-modal__detail-tags">
+                    <tag
+                        class="quick-view-modal__detail-tags-item"
+                        v-for="badge in computedBadges"
+                        :key="badge.id"
+                        :text="badge.text"
+                    />
+                </div>
             </div>
             <v-spinner class="quick-view-modal__spinner" :show="isPending" />
         </template>
@@ -57,8 +66,10 @@ import ProductCartPanel from '@components/product/ProductCartPanel/ProductCartPa
 import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDetailPanel.vue';
 import ProductDeliveryPanel from '@components/product/ProductDeliveryPanel/ProductDeliveryPanel.vue';
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
+import Tag from '@components/Tag/Tag.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
+import { BADGES_MAP } from '@store/getters';
 import { NAME as PREVIEW_MODULE, PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS } from '@store/modules/Preview';
 import { FETCH_PRODUCT_PREVIEW } from '@store/modules/Preview/actions';
 
@@ -92,6 +103,7 @@ export default {
         VPicture,
         VSpinner,
 
+        Tag,
         GeneralModal,
         ProductCartPanel,
         ProductDetailPanel,
@@ -99,6 +111,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters([BADGES_MAP]),
         ...mapState(MODAL_MODULE, {
             isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
             modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
@@ -107,6 +120,16 @@ export default {
         ...mapState(PREVIEW_MODULE, [PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
+
+        computedBadges() {
+            const { productPreview, badgesMap } = this;
+            const { badges = [] } = productPreview || {};
+
+            const productBadges = badges.filter(code => !!badgesMap[code]).map(code => badgesMap[code]);
+            return productBadges.sort((a, b) => {
+                return a.order_num - b.order_num;
+            });
+        },
 
         images() {
             const { media = [] } = this[PRODUCT_PREVIEW] || {};
