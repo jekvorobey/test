@@ -138,8 +138,20 @@
                         />
                     </div>
 
+                    <template v-if="isSearchPage">
+                        <div
+                            v-if="range > 0"
+                            data-retailrocket-markup-block="5f21668797a5282edc07d7c8"
+                            :data-search-phrase="$route.query.search_string"
+                        />
+                        <div
+                            v-else
+                            data-retailrocket-markup-block="5f21669197a5282edc07d7c9"
+                            :data-search-phrase="$route.query.search_string"
+                        />
+                    </template>
                     <div
-                        v-if="isBrandPage"
+                        v-else-if="isBrandPage"
                         data-retailrocket-markup-block="5efdc55a97a52833a0d00baa"
                         :data-vendor="entityCode"
                     />
@@ -151,6 +163,7 @@
                 </div>
             </div>
         </section>
+
         <transition name="fade-in">
             <modal
                 class="catalog-view__modal-filter"
@@ -351,6 +364,11 @@ export default {
         isBrandPage() {
             const { type } = this;
             return type === productGroupTypes.BRANDS;
+        },
+
+        isSearchPage() {
+            const { type } = this;
+            return type === productGroupTypes.SEARCH;
         },
 
         isFiltersPage() {

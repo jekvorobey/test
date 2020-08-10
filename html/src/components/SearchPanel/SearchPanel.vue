@@ -5,7 +5,9 @@
                 <ul class="search-panel__categories-list">
                     <template v-if="searchString !== '' && categories && categories.length > 0">
                         <li class="search-panel__categories-item" :key="category" v-for="category in categories">
-                            <v-link class="search-panel__categories-link" :to="getLink(category)">{{ category }}</v-link>
+                            <v-link class="search-panel__categories-link" :to="getLink(category)">{{
+                                category
+                            }}</v-link>
                         </li>
                     </template>
                     <template v-else>
@@ -15,9 +17,14 @@
                     </template>
                 </ul>
 
+                <div data-retailrocket-markup-block="5f21670297a5282edc07d7cc" />
+                <script>
+                    retailrocket.markup.render();
+                </script>
+
                 <div v-if="!isTablet && products && products.length > 0" class="search-panel__products">
                     <p class="text-bold search-panel__hl" v-if="searchString === ''">Популярные товары</p>
-                    <ul class="search-panel__products-list" :class="{ 'has-preloader' : preloader}">
+                    <ul class="search-panel__products-list" :class="{ 'has-preloader': preloader }">
                         <li class="search-panel__products-card" v-for="item in products" :key="item.id">
                             <catalog-product-card
                                 :offer-id="item.id"
@@ -57,7 +64,15 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as SEARCH_MODULE, SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS, POPULAR_REQUESTS, PRELOADER } from '@store/modules/Search';
+import {
+    NAME as SEARCH_MODULE,
+    SEARCH,
+    SEARCH_STRING,
+    POPULAR_PRODUCTS,
+    SUGGESTIONS,
+    POPULAR_REQUESTS,
+    PRELOADER,
+} from '@store/modules/Search';
 import { GET_POPULAR_PRODUCTS, GET_POPULAR_REQUESTS, SET_SEARCH } from '@store/modules/Search/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
@@ -83,11 +98,13 @@ export default {
     computed: {
         ...mapState(SEARCH_MODULE, [SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS, POPULAR_REQUESTS, PRELOADER]),
         ...mapState(SEARCH_MODULE, {
-            categories: (state) => state[SUGGESTIONS].categories,
+            categories: state => state[SUGGESTIONS].categories,
         }),
 
         products() {
-            return this.searchString && this[SUGGESTIONS].products ? this[SUGGESTIONS].products : this[POPULAR_PRODUCTS];
+            return this.searchString && this[SUGGESTIONS].products
+                ? this[SUGGESTIONS].products
+                : this[POPULAR_PRODUCTS];
         },
 
         isTablet() {
@@ -132,11 +149,11 @@ export default {
             if (image.id) {
                 return {
                     id: image.id,
-                }
+                };
             }
             return {
                 id: image,
-            }
+            };
         },
 
         toSearchClick() {

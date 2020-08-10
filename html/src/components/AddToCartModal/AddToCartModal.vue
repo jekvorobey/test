@@ -34,6 +34,13 @@
                 <v-spinner class="add-to-cart-modal__spinner" :show="!product" />
             </div>
 
+            <template v-if="product">
+                <div data-retailrocket-markup-block="5f21672797a5282edc07d7cf" :data-product-id="product.id" />
+                <script>
+                    retailrocket.markup.render();
+                </script>
+            </template>
+
             <div class="add-to-cart-modal__relative">
                 <h3 class="add-to-cart-modal__relative-hl">С этим продуктом покупают</h3>
                 <transition name="fade-in">
@@ -129,7 +136,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
         ...mapState(CART_MODULE, [CART_DATA, RELATIVE_PRODUCTS]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
@@ -154,7 +161,7 @@ export default {
     watch: {
         [CART_DATA]() {
             const data = this[CART_DATA][this.modalState.type];
-            this.cartItem = data ? data.items.find((i) => i.p.id === this.modalState.offerId) : null;
+            this.cartItem = data ? data.items.find(i => i.p.id === this.modalState.offerId) : null;
         },
 
         modalState() {
@@ -202,7 +209,7 @@ export default {
             const { offerId, storeId, referralCode, type, cookieName } = this.modalState;
             const data = this[CART_DATA][type];
 
-            this.cartItem = data ? data.items.find((i) => i.p.id === offerId) : null;
+            this.cartItem = data ? data.items.find(i => i.p.id === offerId) : null;
             if (!this.cartItem) this[ADD_CART_ITEM]({ offerId, storeId, referrerCode: referralCode, cookieName });
             this[FETCH_RELATIVE_PRODUCTS]({ page: getRandomIntInclusive(1, 4) });
         },

@@ -127,6 +127,17 @@
             </div>
         </section>
 
+        <section class="section">
+            <div class="container">
+                <div
+                    v-if="cartItemsCount > 0"
+                    data-retailrocket-markup-block="5f21670e97a5282edc07d7cd"
+                    :data-products="activeItemIds"
+                />
+                <div v-else data-retailrocket-markup-block="5f21671697a5282edc07d7ce" />
+            </div>
+        </section>
+
         <section class="section cart-view__section cart-view__featured">
             <div class="container cart-view__featured-container">
                 <h2 class="cart-view__section-hl cart-view__featured-hl">{{ $t('cart.title.like') }}</h2>
@@ -310,6 +321,12 @@ export default {
 
         activeTabItem() {
             return this.cartTypes[this.activeTab];
+        },
+
+        activeItemIds() {
+            const { activeTabItem = {} } = this;
+            const { items = [] } = activeTabItem;
+            return items.map(i => i.id).join(',');
         },
     },
 
