@@ -32,7 +32,7 @@ export default {
         }
     },
 
-    async [GET_SELECTED_CITY_BY_IP]({ dispatc, state }, ip) {
+    async [GET_SELECTED_CITY_BY_IP](context, ip) {
         try {
             const { location } = await $dadata.get('/iplocate/address', {
                 headers: { 'X-Forwarded-For': `${ip}` },
@@ -55,7 +55,7 @@ export default {
         }
     },
 
-    async [SET_SELECTED_CITY_BY_IP]({ dispatch, state }) {
+    async [SET_SELECTED_CITY_BY_IP]({ dispatch }) {
         try {
             let city = $cookie.get(cookieNames.IBT_GEOLOCATION);
             if (!city) city = await dispatch(GET_SELECTED_CITY_BY_IP, $context.req.ip);

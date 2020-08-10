@@ -74,9 +74,6 @@ import { mapState, mapActions } from 'vuex';
 import { SCROLL, CATEGORIES } from '@store';
 import { SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN } from '@store/actions';
 
-import { NAME as GEO_MODULE } from '@store/modules/Geolocation';
-import { SET_SELECTED_CITY_BY_IP } from '@store/modules/Geolocation/actions';
-
 import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
 import { FETCH_CART_DATA, CLEAR_CART_DATA } from '@store/modules/Cart/actions';
 
@@ -143,7 +140,6 @@ export default {
 
     methods: {
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN]),
-        ...mapActions(GEO_MODULE, [SET_SELECTED_CITY_BY_IP]),
         ...mapActions(AUTH_MODULE, [CHECK_SESSION, FETCH_USER, FETCH_UNREAD_MESSAGES]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
         ...mapActions(CHECKOUT_MODULE, [CLEAR_CHECKOUT_DATA]),
