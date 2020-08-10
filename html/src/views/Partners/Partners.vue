@@ -4,46 +4,61 @@
             <breadcrumbs class="partners-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
-                    <span v-else>Главная</span></breadcrumb-item
-                >
-                <breadcrumb-item key="no-main" to="/partners">Партнерам</breadcrumb-item>
+                    <span v-else>Главная</span>
+                </breadcrumb-item>
+                <breadcrumb-item key="no-main" to="/partners">
+                    Партнерам
+                </breadcrumb-item>
             </breadcrumbs>
         </div>
+
         <section class="section">
             <div class="container partners-view__top-container">
                 <div class="partners-view__top">
-                    <picture class="partners-view__top-img">
-                        <source media="(max-width: 479px)" :srcset="ParghnerTop" />
-                        <source media="(min-width: 480px)" :srcset="ParghnerTop" />
-                        <img class="partners-view__top-content--img" :src="ParghnerTop" alt="Girl" />
-                    </picture>
-                    <div class="partners-view__top-content">
-                        <h1 class="partners-view__top-content--h1">ХОТИТЕ СТАТЬ ПРОДАВЦОМ?</h1>
-                        <p class="partners-view__top-content--text">
+                    <v-picture>
+                        <source media="(max-width: 479px)" :data-srcset="ParghnerTop" />
+                        <source media="(min-width: 480px)" :data-srcset="ParghnerTop" />
+                        <img class="v-picture__img lazyload blur-up" :data-src="ParghnerTop" alt="Girl" />
+                    </v-picture>
+
+                    <div class="container container--tablet partners-view__top-content">
+                        <h1 class="partners-view__top-content-h1">
+                            Хотите стать продавцом?
+                        </h1>
+
+                        <p class="partners-view__top-content-text">
                             Мы формируем  уникальную для российского рынка коллекцию бьюти-брендов и афишу мероприятий
                             на платформе первого в России маркетплейса только для профессионалов.
                         </p>
-                        <p class="partners-view__top-content--text">
+
+                        <p v-if="!isDesktop || isTabletLg" class="partners-view__top-content-text">
                             Если у вас есть, что предложить индустрии, присоединяйтесь к проекту.
                         </p>
-                        <div class="partners-view__top-content--action">
-                            <v-button class="partners-view__top-content--action-btn">Стать продавцом</v-button>
+
+                        <div class="partners-view__top-content-action">
+                            <v-button class="partners-view__top-content-action-btn" @click="onScrollTo($refs.feedback)">
+                                Стать продавцом
+                            </v-button>
+
                             <v-button
-                                class="partners-view__top-content--action-btn btn--transparent"
-                                iconName="download"
-                                iconModifier="partners-view__top-content--action-btn--icon"
+                                class="partners-view__top-content-action-btn btn--transparent"
+                                icon-name="download"
+                                icon-modifier="partners-view__top-content-action-btn--icon"
+                                :href="pdfFile"
+                                download
                             >
-                                <span>Скачать презентацию</span></v-button
-                            >
+                                <span>Скачать презентацию</span>
+                            </v-button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
         <section class="section">
             <div class="container partners-view__category">
                 <h2 v-if="!isTabletLg" class="partners-view__category-h2">
-                    КАКИЕ КАТЕГОРИИ ТОВАРОВ МОЖНО ПРОДАВАТЬ?
+                    Какие категории товаров можно продавать?
                 </h2>
                 <div class="partners-view__category-list">
                     <div class="partners-view__category-list--item" v-for="category in categories" :key="category.img">
@@ -62,7 +77,9 @@
                 </div>
             </div>
         </section>
+
         <separator-section class="partners-view__separator" />
+
         <section class="section">
             <div class="container partners-view__cooperation">
                 <div class="partners-view__cooperation-content">
@@ -94,7 +111,9 @@
                 </div>
             </div>
         </section>
+
         <separator-section class="partners-view__separator" />
+
         <section class="section">
             <div class="container partners-view__work">
                 <h2 class="partners-view__work-h2">
@@ -117,7 +136,9 @@
                 </div>
             </div>
         </section>
+
         <separator-section class="partners-view__separator" />
+
         <section class="section">
             <div class="container partners-view__sales">
                 <h2 class="partners-view__sales-h2">
@@ -140,7 +161,8 @@
                 </div>
             </div>
         </section>
-        <section class="section partners-view__feedback-section">
+
+        <section ref="feedback" class="section partners-view__feedback-section">
             <div class="container partners-view__feedback">
                 <div class="partners-view__feedback-content">
                     <h1 class="partners-view__feedback-content-h1">
@@ -151,37 +173,39 @@
                     </p>
                     <v-button
                         class="partners-view__feedback-content--action-btn btn--transparent"
-                        iconName="download"
-                        iconModifier="partners-view__feedback-content--action-btn--icon"
+                        icon-name="download"
+                        icon-modifier="partners-view__feedback-content--action-btn--icon"
+                        :href="pdfFile"
+                        download
                     >
-                        <span>Скачать презентацию</span></v-button
-                    >
+                        <span>Скачать презентацию</span>
+                    </v-button>
                 </div>
 
-                <form class="partners-view__feedback-form" enctype="multipart/form-data" @submit.prevent="onSubmit">
-                    <v-input class="partners-view__feedback-form-name" placeholder="Вашe имя" tag="input" name="name">
+                <form class="partners-view__feedback-form" @submit.prevent="onSubmit">
+                    <v-input v-model="form.name" placeholder="Вашe имя" :error="nameError">
                         Имя и фамилия
                     </v-input>
-                    <v-input-mask :options="maskOptions" >
+
+                    <v-input-mask v-model="form.phone" :options="maskOptions" :raw="false" :error="phoneError">
                         Номер телефона
                     </v-input-mask>
-                    <v-input
-                        class="partners-view__feedback-form-email"
-                        placeholder="Ваш email"
-                        tag="input"
-                        name="email"
-                    >
+
+                    <v-input v-model="form.email" placeholder="Ваш email" :error="emailError">
                         Email
                     </v-input>
+
                     <v-input
                         class="partners-view__feedback-form-message"
                         tag="textarea"
                         placeholder="Укажите информацию о вашей компании и предложении (бренде, мастер-классе и т.д.)"
-                        name="message"
+                        v-model="form.body"
+                        :error="bodyError"
                     >
                         Сообщение
                     </v-input>
-                    <v-button class="partners-view__feedback-form-submit-btn">
+
+                    <v-button class="partners-view__feedback-form-submit-btn" :href="mailTo" @click="onSubmit">
                         Заполнить заявку
                     </v-button>
                 </form>
@@ -191,16 +215,19 @@
 </template>
 
 <script>
-import './Partners.css';
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VButton from '@controls/VButton/VButton.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VInputMask from '@controls/VInput/VInputMask.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
+
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
-import VButton from '@controls/VButton/VButton.vue';
-import VInput from '@controls/VInput/VInput.vue';
-import VInputMask from '@controls/VInput/VInputMask.vue'
-
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
-import { phoneMaskOptions } from '@settings'
+
+import { phoneMaskOptions } from '@settings';
+import validationMixin, { required, email, minLength } from '@plugins/validation';
 
 import ParghnerTop from '@images/mock/ParghnerTop.png';
 import ParthnerСooperationMd from '@images/mock/ParthnerСooperationMd.png';
@@ -209,6 +236,8 @@ import ParthnerСooperationLg from '@images/mock/ParthnerСooperationLg.png';
 import ParthnerSales1 from '@images/mock/ParthnerSales1.png';
 import ParthnerSales2 from '@images/mock/ParthnerSales2.png';
 import ParthnerSales3 from '@images/mock/ParthnerSales3.png';
+
+import pdfFile from '@files/Marketplace_iBT.pdf';
 
 import '@images/sprites/download.svg';
 import '@images/sprites/home.svg';
@@ -225,18 +254,48 @@ import '@images/sprites/ParthenerWork2.svg';
 import '@images/sprites/ParthenerWork3.svg';
 import '@images/sprites/ParthenerWork4.svg';
 import '@images/sprites/ParthenerWork5.svg';
+import './Partners.css';
 
 export default {
     name: 'partners',
+    mixins: [validationMixin],
+
     components: {
+        VSvg,
         VButton,
         VInput,
         VInputMask,
+        VPicture,
+
         Breadcrumbs,
         BreadcrumbItem,
         SeparatorSection,
     },
+
+    validations: {
+        form: {
+            name: {
+                required,
+            },
+
+            phone: {
+                required,
+                minLength: minLength(16),
+            },
+
+            email: {
+                required,
+                email,
+            },
+
+            body: {
+                required,
+            },
+        },
+    },
+
     data: () => ({
+        pdfFile,
         ParghnerTop,
         ParthnerСooperationMd,
         ParthnerСooperationLg,
@@ -320,15 +379,71 @@ export default {
                     'Мы работаем с индивидуальными предпринимателями, обществами с ограниченной ответственностью и бизнесом других форм',
             },
         ],
-        maskOptions: { ...phoneMaskOptions },
 
+        form: {
+            name: '',
+            email: '',
+            phone: '',
+            body: '',
+        },
+
+        maskOptions: { ...phoneMaskOptions },
     }),
+
     computed: {
+        mailTo() {
+            const { form } = this;
+            const subject = `${form.name}, ${form.phone}, ${form.email}`;
+            return `mailto:merchant@ibt.ru?subject=${subject}&body=${form.body}`;
+        },
+
+        nameError() {
+            if (this.$v.form.name.$dirty && !this.$v.form.name.required) {
+                return this.$t('validation.errors.required');
+            }
+        },
+
+        phoneError() {
+            if (this.$v.form.phone.$dirty) {
+                if (!this.$v.form.phone.required) return this.$t('validation.errors.required');
+                if (!this.$v.form.phone.minLength) return this.$t('validation.errors.required');
+            }
+        },
+
+        emailError() {
+            if (this.$v.form.email.$dirty) {
+                if (!this.$v.form.email.required) return this.$t('validation.errors.required');
+                if (!this.$v.form.email.email) return this.$t('validation.errors.email');
+            }
+        },
+
+        bodyError() {
+            if (this.$v.form.body.$dirty && !this.$v.form.body.required) {
+                return this.$t('validation.errors.required');
+            }
+        },
+
+        isDesktop() {
+            return this.$mq.desktop;
+        },
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
+
         isTablet() {
             return this.$mq.tablet;
         },
-        isTabletLg() {
-            return this.$mq.tabletLg;
+    },
+
+    methods: {
+        onScrollTo(ref) {
+            window.scrollTo({ top: ref.offsetTop, behavior: 'smooth' });
+        },
+
+        onSubmit(e) {
+            this.$v.$touch();
+            if (this.$v.$invalid) e.preventDefault();
         },
     },
 };

@@ -4,32 +4,36 @@
             <breadcrumbs class="university-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
-                    <span v-else>Главная</span></breadcrumb-item
-                >
+                    <span v-else>Главная</span>
+                </breadcrumb-item>
                 <breadcrumb-item key="no-main" to="/university">Универститет</breadcrumb-item>
             </breadcrumbs>
         </div>
+
         <section class="section">
             <div class="container university-view__top">
-                <picture class="university-view__top-img">
+                <v-picture class="university-view__top-img">
                     <source media="(max-width: 479px)" :srcset="UniverMainMd" />
                     <source media="(min-width: 480px)" :srcset="UniverMain" />
                     <img class="university-view__top-img" :src="UniverMain" alt="UniverMain" />
-                </picture>
+                </v-picture>
             </div>
         </section>
+
         <section class="section">
             <div class="container university-view__main">
                 <h2 class="university-view__main-h2">
                     Профессиональный образовательный проект с инновационным <br />
                     подходом для мастеров бьюти-индустрии
                 </h2>
+
                 <div class="university-view__main-row">
-                    <picture class="university-view__main-row--img">
+                    <v-picture class="university-view__main-row--img">
                         <source media="(max-width: 479px)" :srcset="Univer1" />
                         <source media="(min-width: 480px)" :srcset="Univer1" />
                         <img class="university-view__main-img" :src="Univer1" alt="Men" />
-                    </picture>
+                    </v-picture>
+
                     <div class="university-view__main-row--content">
                         <h1 class="university-view__main-row--content-h1">Университет Бессовестно Талантливый</h1>
                         <p class="university-view__main-content-row--text">
@@ -43,7 +47,9 @@
                 </div>
             </div>
         </section>
+
         <separator-section class="partners-view__separator" />
+
         <section class="section">
             <div class="container university-view__main">
                 <div class="university-view__main-row university-view__main-row--reverse">
@@ -57,23 +63,27 @@
                             Шиничи Такахаши.
                         </p>
                     </div>
-                    <picture class="university-view__main-row--img">
+
+                    <v-picture class="university-view__main-row--img">
                         <source media="(max-width: 479px)" :srcset="Univer2" />
                         <source media="(min-width: 480px)" :srcset="Univer2" />
                         <img class="university-view__main-img" :src="Univer2" alt="Men" />
-                    </picture>
+                    </v-picture>
                 </div>
             </div>
         </section>
+
         <separator-section class="partners-view__separator" />
+
         <section class="section">
             <div class="container university-view__main">
                 <div class="university-view__main-row">
-                    <picture class="university-view__main-row--img">
+                    <v-picture class="university-view__main-row--img">
                         <source media="(max-width: 479px)" :srcset="Univer3" />
                         <source media="(min-width: 480px)" :srcset="Univer3" />
                         <img class="university-view__main-img" :src="Univer3" alt="Men" />
-                    </picture>
+                    </v-picture>
+
                     <div class="university-view__main-row--content">
                         <p class="university-view__main-content-row--text">
                             Кампус Университета — это 8 профессионально оснащенных студий в Москве общей площадью 800 м2
@@ -85,12 +95,15 @@
                 </div>
             </div>
         </section>
+
         <separator-section class="partners-view__separator" />
+
         <section class="section">
             <div class="container university-view__slider">
                 <div class="university-view__slider-title">
                     <h1 class="university-view__slider-title-h1">Галлерея</h1>
                 </div>
+
                 <v-slider class="university-view__slider-gallery" name="gallery" :options="univerSliderOptions">
                     <div
                         v-if="!univerSlider || !univerSlider.length"
@@ -98,6 +111,7 @@
                     >
                         <v-svg name="logo" width="56" height="56" />
                     </div>
+
                     <div
                         class="swiper-slide university-view__slider-gallery-item"
                         v-for="item in univerSlider"
@@ -112,56 +126,47 @@
                 </v-slider>
             </div>
         </section>
+
         <section class="section university-view__feedback-section">
             <div class="container university-view__feedback">
                 <div class="university-view__feedback-content">
                     <h1 class="university-view__feedback-content-h1">
-                        Хотите провести у нас мероприятие?
+                        Хотите провести у нас мероприятие?
                     </h1>
+
                     <p class="university-view__feedback-content-text">
                         Заполните форму ниже — и мы с вами свяжемся asap.
                     </p>
-                    <v-button
-                        class="university-view__feedback-content--action-btn btn--transparent"
-                        iconName="download"
-                        iconModifier="university-view__feedback-content--action-btn--icon"
-                    >
-                        <span>Скачать презентацию</span></v-button
-                    >
                 </div>
 
                 <form class="university-view__feedback-form" enctype="multipart/form-data" @submit.prevent="onSubmit">
-                    <v-input class="university-view__feedback-form-name" placeholder="Вашe имя" tag="input" name="name">
+                    <v-input v-model="form.name" placeholder="Вашe имя" :error="nameError">
                         Имя и фамилия
                     </v-input>
-                    <v-input
-                        class="university-view__feedback-form-city"
-                        placeholder="Ваш город"
-                        tag="input"
-                        name="city"
-                    >
+
+                    <v-input v-model="form.city" placeholder="Вашe город" :error="cityError">
                         Город
                     </v-input>
-                    <v-input
-                        class="university-view__feedback-form-email"
-                        placeholder="Ваш email"
-                        tag="input"
-                        name="email"
-                    >
+
+                    <v-input v-model="form.email" placeholder="Ваш email" :error="emailError">
                         Email
                     </v-input>
-                    <v-input-mask :options="maskOptions">
+
+                    <v-input-mask v-model="form.phone" :options="maskOptions" :raw="false" :error="phoneError">
                         Номер телефона
                     </v-input-mask>
+
                     <v-input
                         class="university-view__feedback-form-message"
                         tag="textarea"
                         placeholder="Введите сообщение..."
-                        name="message"
+                        v-model="form.body"
+                        :error="bodyError"
                     >
-                        Ваш вопрос
+                        Сообщение
                     </v-input>
-                    <v-button class="university-view__feedback-form-submit-btn">
+
+                    <v-button class="partners-view__feedback-form-submit-btn" :href="mailTo" @click="onSubmit">
                         Заполнить заявку
                     </v-button>
                 </form>
@@ -171,39 +176,73 @@
 </template>
 
 <script>
-import './University.css';
-
-import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
-import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VInputMask from '@controls/VInput/VInputMask.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
-import '@images/sprites/home.svg';
-import { breakpoints } from '@enums';
-import { phoneMaskOptions } from '@settings'
+import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
+import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
 import UniverMain from '@images/mock/UniverMain.png';
 import UniverMainMd from '@images/mock/UniverMainMd.png';
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 
+import { breakpoints } from '@enums';
+import { phoneMaskOptions } from '@settings';
+import validationMixin, { required, email, minLength } from '@plugins/validation';
+
 import Univer1 from '@images/mock/Univer1.png';
 import Univer2 from '@images/mock/Univer2.png';
 import Univer3 from '@images/mock/Univer3.png';
 import UniverSlide from '@images/mock/UniverSlide.png';
 
+import '@images/sprites/home.svg';
+import './University.css';
+
 export default {
     name: 'university',
+    mixins: [validationMixin],
+
     components: {
-        Breadcrumbs,
-        BreadcrumbItem,
-        SeparatorSection,
-        VSlider,
         VButton,
         VInput,
         VInputMask,
+        VSlider,
+        VPicture,
+
+        Breadcrumbs,
+        BreadcrumbItem,
+        SeparatorSection,
     },
+
+    validations: {
+        form: {
+            name: {
+                required,
+            },
+
+            city: {
+                required,
+            },
+
+            phone: {
+                required,
+                minLength: minLength(16),
+            },
+
+            email: {
+                required,
+                email,
+            },
+
+            body: {
+                required,
+            },
+        },
+    },
+
     data: () => ({
         UniverMain,
         UniverMainMd,
@@ -233,14 +272,70 @@ export default {
                 },
             },
         },
-         maskOptions: { ...phoneMaskOptions },
+
+        form: {
+            name: '',
+            city: '',
+            email: '',
+            phone: '',
+            body: '',
+        },
+
+        maskOptions: { ...phoneMaskOptions },
     }),
+
     computed: {
         isTablet() {
             return this.$mq.tablet;
         },
+
         isTabletLg() {
             return this.$mq.tabletLg;
+        },
+
+        mailTo() {
+            const { form } = this;
+            const subject = `${form.name}, ${form.city}, ${form.phone}, ${form.email}`;
+            return `mailto:education@ibt.ru?subject=${subject}&body=${form.body}`;
+        },
+
+        nameError() {
+            if (this.$v.form.name.$dirty && !this.$v.form.name.required) {
+                return this.$t('validation.errors.required');
+            }
+        },
+
+        cityError() {
+            if (this.$v.form.city.$dirty && !this.$v.form.city.required) {
+                return this.$t('validation.errors.required');
+            }
+        },
+
+        phoneError() {
+            if (this.$v.form.phone.$dirty) {
+                if (!this.$v.form.phone.required) return this.$t('validation.errors.required');
+                if (!this.$v.form.phone.minLength) return this.$t('validation.errors.required');
+            }
+        },
+
+        emailError() {
+            if (this.$v.form.email.$dirty) {
+                if (!this.$v.form.email.required) return this.$t('validation.errors.required');
+                if (!this.$v.form.email.email) return this.$t('validation.errors.email');
+            }
+        },
+
+        bodyError() {
+            if (this.$v.form.body.$dirty && !this.$v.form.body.required) {
+                return this.$t('validation.errors.required');
+            }
+        },
+    },
+
+    methods: {
+        onSubmit(e) {
+            this.$v.$touch();
+            if (this.$v.$invalid) e.preventDefault();
         },
     },
 };
