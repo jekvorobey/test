@@ -4,18 +4,17 @@
             {{ title }}
         </component>
         <div class="product-detail-panel__info">
-            <!-- #58437 -->
-            <!-- <v-rating class="product-detail-panel__info-rating" :value="rating" readonly>
+            <v-rating class="product-detail-panel__info-rating" :value="rating || 0" readonly>
                 <template v-slot:activeLabel>
                     <v-svg name="star-small" width="16" height="16" />
                 </template>
                 <template v-slot:inactiveLabel>
                     <v-svg name="star-empty-small" width="16" height="16" />
                 </template>
-            </v-rating> 
+            </v-rating>
             <div class="text-grey product-detail-panel__info-review">
-                {{ $t('product.review', { n: reviewsCount }) }}
-            </div> -->
+                {{ $t('product.review', { n: reviewsCount || 0 }) }}
+            </div>
             <div class="text-grey product-detail-panel__info-code">
                 {{ $t('product.vendorCode', { code: vendorCode }) }}
             </div>
