@@ -2,11 +2,12 @@ import qs from 'qs';
 import axios from 'axios';
 import { Cache } from 'axios-extensions';
 
-import { $http, $logger } from '@services';
+import { $http } from '@services';
 import { REQUEST_CANCEL_MESSAGE } from '@constants';
-import { interval } from '@enums';
+import { interval, sortDirections } from '@enums';
 import { verificationCodeType } from '@enums/auth';
 import { cartItemTypes } from '@enums/product';
+import { sortFields } from '@enums/catalog';
 
 let catalogItemsCancelSource = null;
 const sessionCheckCache = new Cache({
@@ -202,8 +203,8 @@ export function changeProfilePersonal({ firstName, lastName, middleName, birthda
         first_name: firstName,
         last_name: lastName,
         middle_name: middleName,
-        birthday: birthday,
-        gender: gender,
+        birthday,
+        gender,
     });
 }
 
@@ -231,7 +232,7 @@ export function deleteProfileSocial(driver) {
     return $http.delete(`/v1/lk/profile/social/${driver}`);
 }
 
-export function deleteProfileAvatar(data) {
+export function deleteProfileAvatar() {
     return $http.delete('/v1/lk/profile/avatar');
 }
 
@@ -519,7 +520,12 @@ export function getProductsHot(badge_id, limit) {
     });
 }
 
-export function getProducts({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
+export function getProducts({
+    filter,
+    orderField = sortFields.POPULARITY,
+    orderDirection = sortDirections.DESC,
+    page = 1,
+}) {
     return $http.get('/v1/catalog/products', {
         params: {
             filter,
@@ -535,12 +541,18 @@ export function getProducts({ filter, orderField = 'price', orderDirection = 'de
     });
 }
 
-export function getCatalogItems({ filter, orderField = 'price', orderDirection = 'desc', page = 1 }) {
+export function getCatalogItems({
+    filter,
+    orderField = sortFields.POPULARITY,
+    orderDirection = sortDirections.DESC,
+    page = 1,
+}) {
     if (catalogItemsCancelSource) {
         catalogItemsCancelSource.cancel(REQUEST_CANCEL_MESSAGE);
         catalogItemsCancelSource = axios.CancelToken.source();
     } else catalogItemsCancelSource = axios.CancelToken.source();
 
+    // пока скрыли баннеры /catalog/items - выдача с баннерами
     // return $http.get('/v1/catalog/items', {
     return $http.get('/v1/catalog/products', {
         cancelToken: catalogItemsCancelSource.token,
@@ -667,12 +679,6 @@ export function getMasterclass(code) {
             code,
         },
     });
-}
-
-//brand
-
-export function getBrand(data) {
-    return $http.get('/v1/brand', data);
 }
 
 // Last 3 sets for landing page

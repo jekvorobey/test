@@ -329,12 +329,11 @@ export default {
 
     data() {
         const sortOptions = [
-            { id: 1, title: 'Сначала подороже', field: sortFields.PRICE, direction: sortDirections.DESC },
-            { id: 2, title: 'Сначала подешевле', field: sortFields.PRICE, direction: sortDirections.ASC },
-            // { id: 3, title: 'Популярное', field: 'price', direction: 'desc' },
-            // { id: 4, title: 'Новинки', field: '', direction: '' },
-            // { id: 5, title: 'По размеру скидки', field: '', direction: '' },
-            // { id: 6, title: 'С высоким рейтингом', field: '', direction: '' },
+            { id: 1, title: 'Популярное', field: sortFields.POPULARITY, direction: sortDirections.DESC },
+            { id: 2, title: 'Сначала подороже', field: sortFields.PRICE, direction: sortDirections.DESC },
+            { id: 3, title: 'Сначала подешевле', field: sortFields.PRICE, direction: sortDirections.ASC },
+            { id: 4, title: 'Новинки', field: sortFields.NEW, direction: sortDirections.DESC },
+            { id: 5, title: 'Скидки', field: sortFields.DISCOUNT, direction: sortDirections.DESC },
         ];
         return {
             sortValue: sortOptions[0],
@@ -523,7 +522,7 @@ export default {
                     params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
                     query: {
                         page = 1,
-                        orderField = sortFields.PRICE,
+                        orderField = sortFields.POPULARITY,
                         orderDirection = sortDirections.DESC,
                         search_string = null,
                     },
@@ -585,9 +584,14 @@ export default {
         const {
             fullPath,
             params: { code: toCode = null, entityCode: toEntityCode = null, type: toType, pathMatch },
-            query: { page = 1, orderField = sortFields.PRICE, orderDirection = sortDirections.DESC, search_string } = {
+            query: {
+                page = 1,
+                orderField = sortFields.POPULARITY,
+                orderDirection = sortDirections.DESC,
+                search_string,
+            } = {
                 page: 1,
-                orderField: sortFields.PRICE,
+                orderField: sortFields.POPULARITY,
                 orderDirection: sortDirections.DESC,
             },
         } = to;
@@ -654,7 +658,7 @@ export default {
             params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },
             query: {
                 page: toPage = 1,
-                orderField: toOrderField = sortFields.PRICE,
+                orderField: toOrderField = sortFields.POPULARITY,
                 orderDirection: toOrderDirection = sortDirections.DESC,
                 search_string: to_search_string,
             },
@@ -670,7 +674,7 @@ export default {
             params: { code: fromCode, entityCode: fromEntityCode, type: fromType, pathMatch: fromPathMatch },
             query: {
                 page: fromPage = 1,
-                orderField: fromOrderField = sortFields.PRICE,
+                orderField: fromOrderField = sortFields.POPULARITY,
                 orderDirection: fromOrderDirection = sortDirections.DESC,
                 search_string: from_search_string,
             },

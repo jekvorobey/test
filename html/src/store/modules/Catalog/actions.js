@@ -1,11 +1,9 @@
 import _mergeWith from 'lodash/mergeWith';
 
-import { $logger } from '@services';
 import { productGroupBase } from '@enums/product';
 import { storeErrorHandler } from '@util/store';
-import { getAllActiveCategories } from '@util/catalog';
 
-import { getCatalogItems, getCategories, getBanners, getBrand, getFilters, getProductGroup, getProducts } from '@api';
+import { getCatalogItems, getCategories, getBanners, getFilters, getProductGroup } from '@api';
 import { SET_LOAD_PATH as M_SET_LOAD_PATH, APPLY_DATA } from './mutations';
 
 function mergeFunction(objValue, srcValue) {
@@ -32,7 +30,8 @@ export default {
         commit(CHANGE_FILTER_STATE, payload);
     },
 
-    async [FETCH_BANNER]({ commit }, payload) {
+    // eslint-disable-next-line no-unused-vars
+    async [FETCH_BANNER](context, payload) {
         try {
             const data = await getBanners();
             return data[6];
@@ -41,7 +40,7 @@ export default {
         }
     },
 
-    async [FETCH_CATEGORIES]({ commit }, { code } = {}) {
+    async [FETCH_CATEGORIES](context, { code } = {}) {
         try {
             return await getCategories(code);
         } catch (error) {
@@ -50,7 +49,7 @@ export default {
         }
     },
 
-    async [FETCH_FILTERS]({ commit }, { appliedFilters, excludedFilters }) {
+    async [FETCH_FILTERS](context, { appliedFilters, excludedFilters }) {
         try {
             return await getFilters(appliedFilters, excludedFilters);
         } catch (error) {
@@ -59,7 +58,7 @@ export default {
         }
     },
 
-    async [FETCH_ITEMS]({ commit, state }, payload) {
+    async [FETCH_ITEMS](context, payload) {
         try {
             return await getCatalogItems(payload);
         } catch (error) {
@@ -68,7 +67,7 @@ export default {
         }
     },
 
-    async [FETCH_PRODUCT_GROUP]({ commit }, { type, entityCode }) {
+    async [FETCH_PRODUCT_GROUP](context, { type, entityCode }) {
         try {
             const data = await getProductGroup(type, entityCode || undefined);
             return data;
@@ -111,6 +110,7 @@ export default {
             data.entityCode = entityCode;
             data.type = type;
 
+            // eslint-disable-next-line prefer-destructuring
             based = data.productGroup.based;
             excludedFilters = data.productGroup.excluded_filters;
             productGroupFilter = data.productGroup.filters;
@@ -125,6 +125,7 @@ export default {
             data.productGroup = state.productGroup;
             data.categories = state.categories;
 
+            // eslint-disable-next-line prefer-destructuring
             based = state.productGroup.based;
             excludedFilters = state.productGroup.excluded_filters;
             productGroupFilter = state.productGroup.filters;
@@ -171,6 +172,7 @@ export default {
         for (let i = 0; i < fetchList.length; i++) {
             const method = fetchList[i];
             const fetchItem = fetchData[i];
+            const { items = [], range = 0 } = fetchItem;
 
             switch (method.action) {
                 case FETCH_CATEGORIES:
@@ -179,15 +181,14 @@ export default {
                 case FETCH_FILTERS:
                     data.filters = fetchItem;
                     data.filtersStateMap = {};
-                    for (const filter of data.filters)
-                        data.filtersStateMap[filter.name] = state.filtersStateMap[filter.name] || {
+                    // eslint-disable-next-line no-restricted-syntax
+                    for (const datafilter of data.filters)
+                        data.filtersStateMap[datafilter.name] = state.filtersStateMap[datafilter.name] || {
                             isExpanded: true,
                             showMore: false,
                         };
-
                     break;
                 case FETCH_ITEMS:
-                    const { items = [], range = 0 } = fetchItem;
                     if (showMore) data.items = [...state.items, ...items];
                     else data.items = items;
                     data.range = range;
