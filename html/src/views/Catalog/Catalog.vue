@@ -329,11 +329,11 @@ export default {
 
     data() {
         const sortOptions = [
-            { id: 1, title: 'Популярное', field: sortFields.POPULARITY, direction: sortDirections.DESC },
+            //{ id: 1, title: 'Популярное', field: sortFields.POPULARITY, direction: sortDirections.DESC },
             { id: 2, title: 'Сначала подороже', field: sortFields.PRICE, direction: sortDirections.DESC },
             { id: 3, title: 'Сначала подешевле', field: sortFields.PRICE, direction: sortDirections.ASC },
-            { id: 4, title: 'Новинки', field: sortFields.NEW, direction: sortDirections.DESC },
-            { id: 5, title: 'Скидки', field: sortFields.DISCOUNT, direction: sortDirections.DESC },
+            // { id: 4, title: 'Новинки', field: sortFields.NEW, direction: sortDirections.DESC },
+            // { id: 5, title: 'Скидки', field: sortFields.DISCOUNT, direction: sortDirections.DESC },
         ];
         return {
             sortValue: sortOptions[0],
