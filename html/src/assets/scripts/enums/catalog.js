@@ -3,6 +3,7 @@ export const sortFields = Object.freeze({
     PRICE: 'price',
     NEW: 'new',
     DISCOUNT: 'discount',
+    RELEVANCE: 'relevance',
 });
 
 export const masterclassTimeCode = Object.freeze({

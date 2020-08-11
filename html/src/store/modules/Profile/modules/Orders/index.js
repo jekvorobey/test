@@ -11,6 +11,7 @@ export const REFERRAL_DATA = 'referralData';
 export const NAME = 'orders';
 export const LOAD_PATH = 'loadPath';
 
+export const FILTERS = 'filters';
 export const ORDERS = 'orders';
 export const ORDER_DETAILS = 'orderDetails';
 
@@ -32,6 +33,7 @@ export default function createModule() {
             [LOAD_PATH]: '',
 
             [REFERRAL_DATA]: {},
+            [FILTERS]: [],
             [ORDERS]: [],
             [RANGE]: 0,
             [ORDER_DETAILS]: {

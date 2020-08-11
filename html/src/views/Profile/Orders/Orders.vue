@@ -1,16 +1,19 @@
 <template>
     <section class="section orders-view">
-        <div class="orders-view__header">
-            <h2 class="container container--tablet-lg orders-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+        <div class="container container--tablet-lg orders-view__header">
+            <h2 class="orders-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
             <v-select
+                v-for="filter in filters"
+                :key="filter.id"
                 class="orders-view__filters-sort"
-                label="title"
+                label="name"
                 track-by="id"
-                v-model="filterValue"
-                :options="filterOptions"
+                :value="filterValueMap[filter.name]"
+                :options="filter.items"
                 :searchable="false"
                 :allow-empty="false"
                 :show-labels="false"
+                @input="onChangeFilter(filter.name, $event)"
             />
         </div>
 
@@ -305,7 +308,7 @@ import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { LOCALE } from '@store';
+import { LOCALE, SCROLL } from '@store';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
@@ -321,6 +324,7 @@ import {
     ORDER_FIELD,
     ACTIVE_PAGE,
     REFERRAL_DATA,
+    FILTERS,
 } from '@store/modules/Profile/modules/Orders';
 import {
     REFERRAL_ARC_DATA,
@@ -374,44 +378,35 @@ export default {
     },
 
     data() {
-        const filterOptions = [
-            {
-                id: filterField.ALL_TIME,
-                title: 'Всё время',
-                field: filterField.ALL_TIME,
-            },
-            {
-                id: filterField.YEAR,
-                title: 'Год',
-                field: filterField.YEAR,
-            },
-            {
-                id: filterField.MONTH,
-                title: 'Месяц',
-                field: filterField.MONTH,
-            },
-            {
-                id: filterField.DAY,
-                title: 'День',
-                field: filterField.DAY,
-            },
-        ];
         return {
             showMore: false,
             filterModal: false,
             isDisabled: false,
-            filterOptions,
-            filterValue: filterOptions[0],
         };
     },
 
     computed: {
-        ...mapState([LOCALE]),
-        ...mapState(ORDERS_MODULE_PATH, [ORDERS, ORDER_DIRECTION, ORDER_FIELD, ACTIVE_PAGE, REFERRAL_DATA]),
+        ...mapState([LOCALE, SCROLL]),
+        ...mapState(ORDERS_MODULE_PATH, [ORDERS, FILTERS, ORDER_DIRECTION, ORDER_FIELD, ACTIVE_PAGE, REFERRAL_DATA]),
         ...mapGetters(ORDERS_MODULE_PATH, [PAGES_COUNT, REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, LEVEL]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
+
+        filterValueMap() {
+            const {
+                filters,
+                $route: { query },
+            } = this;
+
+            const map = filters.reduce((accum, current) => {
+                const { name, items } = current;
+                const code = query[name];
+                accum[name] = (code && items.find(i => i.code === code)) || items[0];
+                return accum;
+            }, {});
+            return map;
+        },
 
         arcSettings() {
             return {
@@ -431,20 +426,6 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
-        },
-    },
-
-    watch: {
-        filterValue(value, oldValue) {
-            if (value !== oldValue) {
-                this.$router.replace({
-                    path: this.$route.path,
-                    query: {
-                        ...this.$route.query,
-                        time: value.field,
-                    },
-                });
-            }
         },
     },
 
@@ -525,8 +506,17 @@ export default {
             }
         },
 
-        setFilterValue(field) {
-            this.filterValue = this.filterOptions.find(o => o.field === field) || this.filterOptions[0];
+        onChangeFilter(name, value) {
+            const { code } = value;
+
+            this.$router.replace({
+                path: this.$route.path,
+                query: {
+                    ...this.$route.query,
+                    [name]: code,
+                    page: undefined,
+                },
+            });
         },
     },
 
@@ -535,22 +525,15 @@ export default {
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
 
-        const {
-            fullPath,
-            query: {
-                page = DEFAULT_PAGE,
-                orderField = sortFields.NUMBER,
-                orderDirection = sortDirections.DESC,
-                time = filterField.ALL_TIME,
-            },
-        } = to;
+        const { fullPath, query } = to;
+        const { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC } = query;
 
         const { loadPath } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
+        const filter = { ...query, page: undefined, orderField: undefined, orderDirection: undefined };
 
         // если все загружено, пропускаем
         if (loadPath === fullPath)
             next(vm => {
-                vm.setFilterValue(time);
                 updateBreadcrumbs(vm);
             });
         else {
@@ -560,13 +543,12 @@ export default {
                     page,
                     orderField,
                     orderDirection,
-                    filter: { time: time },
+                    filter,
                 })
                 .then(data => {
                     $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => {
                         $progress.finish();
-                        vm.setFilterValue(time);
                         updateBreadcrumbs(vm);
                     });
                 })
@@ -588,21 +570,16 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        const {
-            query: {
-                page = DEFAULT_PAGE,
-                orderField = sortFields.NUMBER,
-                orderDirection = sortDirections.DESC,
-                time = filterField.ALL_TIME,
-            },
-        } = to;
+        const { query } = to;
+        const { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC } = query;
+        const filter = { ...query, page: undefined, orderField: undefined, orderDirection: undefined };
 
         const {
             query: { page: fromPage },
         } = from;
 
         try {
-            if (!this.showMore && page !== fromPage)
+            if (this[SCROLL] && !this.showMore && page !== fromPage)
                 this.scrollTo({
                     top: this.$refs.hook.offsetTop,
                     behavior: 'smooth',
@@ -613,10 +590,9 @@ export default {
                 page,
                 orderField,
                 orderDirection,
+                filter,
                 showMore: this.showMore,
-                filter: { time: time },
             });
-            this.setFilterValue(time);
             this.$progress.finish();
             next();
         } catch (error) {

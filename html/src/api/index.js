@@ -258,6 +258,10 @@ export function getProfileOrdersInfo() {
     return $http.get('/v1/lk/order/info');
 }
 
+export function getProfileOrderFilters() {
+    return $http.get(`/v1/lk/order/filters`);
+}
+
 export function getProfileOrders(sortDirection, sortKey, pageNum, perPage, filter) {
     return $http.get('/v1/lk/order', {
         params: {
@@ -265,7 +269,12 @@ export function getProfileOrders(sortDirection, sortKey, pageNum, perPage, filte
             sortKey,
             pageNum,
             perPage,
-            // filter,
+            filter,
+        },
+        paramsSerializer(params) {
+            return qs.stringify(params, {
+                encode: false,
+            });
         },
     });
 }
