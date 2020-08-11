@@ -46,18 +46,16 @@ export function rawPhone(str) {
  */
 
 export function pluralize(number, words) {
-    const word = (number) => {
-        number = Math.abs(number) % 100;
-        const numberTwo = number % 10;
+    const word = (n) => {
+        n = Math.abs(n) % 100;
+        const numberTwo = n % 10;
         switch (numberTwo) {
             case 2:
             case 3:
             case 4:
                 return words[1];
-                break;
             case 1:
                 return words[0];
-                break;
             default:
                 return words[2];
         }
@@ -174,7 +172,7 @@ export function preparePrice(number, decimals, dec_point, thousands_sep) {
 }
 
 function round(n, precision) {
-    const prec = Math.pow(10, precision);
+    const prec = 10 ** precision;
     return Math.round(n * prec) / prec;
 }
 
@@ -183,7 +181,7 @@ export function shortNumberFormat(n) {
     let base = Math.floor(Math.log(Math.abs(n)) / Math.log(1000));
     const suffix = abbrev[Math.min(2, base - 1)];
     base = abbrev.indexOf(suffix) + 1;
-    return suffix ? round(n / Math.pow(1000, base), 2) + suffix : `${n}`;
+    return suffix ? round(n / 1000 ** base, 2) + suffix : `${n}`;
 }
 
 /**
@@ -221,7 +219,7 @@ export function addDays(date, days) {
     return result;
 }
 
-export function downloadFile(path, ext) {
+export function downloadFile(path) {
     const downloadLink = document.createElement('a');
     downloadLink.setAttribute('class', 'download-input');
     downloadLink.setAttribute('href', path);
@@ -279,7 +277,7 @@ export function getPosition(el) {
     let x = 0;
     let y = 0;
 
-    while (el != null && (el.tagName || '').toLowerCase() != 'html') {
+    while (el != null && (el.tagName || '').toLowerCase() !== 'html') {
         x += el.offsetLeft || 0;
         y += el.offsetTop || 0;
         el = el.parentElement;
