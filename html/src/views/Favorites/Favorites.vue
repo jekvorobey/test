@@ -53,7 +53,7 @@
                         :image="product.image"
                         :price="product.price"
                         :old-price="product.oldPrice"
-                        :tags="product.tags"
+                        :badges="product.badges"
                         :rating="product.rating"
                         :show-buy-btn="product.stock.qty > 0"
                         @add-item="onAddToCart(product)"

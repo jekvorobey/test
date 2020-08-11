@@ -15,7 +15,7 @@
                         :image="item.image"
                         :price="item.price"
                         :old-price="item.oldPrice"
-                        :tags="item.tags"
+                        :badges="item.badges"
                         :rating="item.rating"
                         :show-buy-btn="item.stock.qty > 0"
                         :offer-id="item.productId"
@@ -36,7 +36,11 @@
             </ul>
             <div class="product-bundle-panel__total">
                 <div class="product-bundle-panel__total-info">
-                    <price class="text-bold product-bundle-panel__price product-bundle-panel__price--current" v-if="price" v-bind="price" />
+                    <price
+                        class="text-bold product-bundle-panel__price product-bundle-panel__price--current"
+                        v-if="price"
+                        v-bind="price"
+                    />
                     <div class="product-bundle-panel__price-sale">
                         <price
                             class="text-sm text-grey text-strike product-bundle-panel__price product-bundle-panel__price--old"
@@ -54,10 +58,7 @@
                     </div>
                 </div>
                 <div class="product-bundle-panel__total-controls">
-                    <buy-button
-                        class="product-bundle-panel__btn"
-                        @click.prevent="onAddBundle"
-                    >
+                    <buy-button class="product-bundle-panel__btn" @click.prevent="onAddBundle">
                         Добавить в корзину
                     </buy-button>
                 </div>
@@ -71,10 +72,10 @@ import VButton from '@controls/VButton/VButton.vue';
 import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 
-import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue'
-import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue'
+import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
 
-import './ProductBundlePanel.css'
+import './ProductBundlePanel.css';
 
 export default {
     name: 'product-bundle-panel',
@@ -119,11 +120,11 @@ export default {
             return this.$mq.tabletLg;
         },
 
-        diffPrice () {
+        diffPrice() {
             return {
                 value: this.oldPrice.value - this.price.value,
                 currency: this.price.currency,
-            }
+            };
         },
     },
 
@@ -134,6 +135,6 @@ export default {
                 count: 1,
             });
         },
-    }
-}
+    },
+};
 </script>

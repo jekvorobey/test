@@ -109,13 +109,6 @@ export default {
     },
 
     props: {
-        tags: {
-            type: Array,
-            default() {
-                return [];
-            },
-        },
-
         offerId: {
             type: [String, Number],
             required: true,

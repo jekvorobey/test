@@ -20,7 +20,7 @@
                         :image="item.image"
                         :price="item.price"
                         :old-price="item.oldPrice"
-                        :tags="item.tags"
+                        :badges="item.badges"
                         :rating="item.rating"
                         :is-small="isTablet"
                         :show-buy-btn="item.stock.qty > 0"
@@ -105,7 +105,7 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState('route', {
-            guideId: (state) => state.params && state.params.guideId,
+            guideId: state => state.params && state.params.guideId,
         }),
 
         backUrl() {
@@ -123,7 +123,7 @@ export default {
 
     beforeRouteEnter(to, from, next) {
         const { name, params } = to;
-        next((vm) => {
+        next(vm => {
             vm[UPDATE_BREADCRUMB]([
                 { name: vm.$t('profile.routes.Guides'), to: { name: 'Guides' } },
                 { name: 'ШАМПУНИ И КОНДИЦИОНЕРЫ AVEDA ДЛЯ ВЬЮЩИХСЯ ВОЛОС', to: { name, params } },

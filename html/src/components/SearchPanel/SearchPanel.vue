@@ -35,7 +35,7 @@
                                 :image="generateImageObject(item.image)"
                                 :price="item.price"
                                 :old-price="item.oldPrice"
-                                :tags="item.tags"
+                                :badges="item.badges"
                                 :rating="item.rating"
                                 :show-buy-btn="item.stock.qty > 0"
                                 @add-item="onAddToCart(item)"
