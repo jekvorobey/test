@@ -643,10 +643,6 @@ export function getMasterclasses(data) {
     return $http.get('/v1/masterclasses', data);
 }
 
-export function getInstagram(data) {
-    return $http.get('/v1/instagram', data);
-}
-
 export function getProduct(code, offer_id, referrerCode) {
     return $http.get('/v1/catalog/product-detail', {
         params: {

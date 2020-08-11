@@ -1,25 +1,15 @@
 import { DEFAULT_PAGE } from '@constants';
-import { sortDirections } from '@enums';
 import { masterclassTimeCode, masterclassFilterName } from '@enums/catalog';
 import { storeErrorHandler } from '@util/store';
 
-import { getInstagram, getMasterclasses, getMasterclass, getCatalogMasterclasses, getMasterclassFilters } from '@api';
-import {
-    SET_MASTERCLASS,
-    SET_FEATURED,
-    SET_INSTAGRAM_ITEMS,
-    SET_ITEMS,
-    SET_ITEMS_MORE,
-    SET_QUERY_PARAMS,
-    SET_FILTERS,
-} from './mutations';
+import { getMasterclasses, getMasterclass, getCatalogMasterclasses, getMasterclassFilters } from '@api';
+import { SET_MASTERCLASS, SET_FEATURED, SET_ITEMS, SET_ITEMS_MORE, SET_QUERY_PARAMS, SET_FILTERS } from './mutations';
 
 export const FETCH_MASTERCLASS_CATALOG_DATA = 'FETCH_MASTERCLASS_CATALOG_DATA';
 export const FETCH_MASTERCLASS_ITEMS = 'FETCH_MASTERCLASS_ITEMS';
 export const FETCH_MASTERCLASS_FILTERS = 'FETCH_MASTERCLASS_FILTERS';
 
 export const FETCH_MASTERCLASS_DATA = 'FETCH_MASTERCLASS_DATA';
-export const FETCH_INSTAGRAM_ITEMS = 'FETCH_INSTAGRAM_ITEMS';
 export const FETCH_MASTERCLASS = 'FETCH_MASTERCLASS';
 export const FETCH_FEATURED = 'FETCH_FEATURED';
 
@@ -49,7 +39,8 @@ export default {
         }
     },
 
-    async [FETCH_MASTERCLASS_FILTERS]({ commit }, {}) {
+    // eslint-disable-next-line no-unused-vars
+    async [FETCH_MASTERCLASS_FILTERS]({ commit }, payload) {
         try {
             const excludedFilters = ['place_name']; // фильтр 'Места' пока скрыт
             const { items } = await getMasterclassFilters(excludedFilters);
@@ -77,21 +68,8 @@ export default {
         }
     },
 
-    async [FETCH_INSTAGRAM_ITEMS]({ commit }, payload) {
-        try {
-            const data = await getInstagram(payload);
-            commit(SET_INSTAGRAM_ITEMS, data.slice(0, 4));
-        } catch (error) {
-            storeErrorHandler(FETCH_INSTAGRAM_ITEMS)(error);
-        }
-    },
-
-    async [FETCH_MASTERCLASS_DATA]({ dispatch, commit }, payload) {
-        return Promise.all([
-            dispatch(FETCH_MASTERCLASS, payload),
-            dispatch(FETCH_INSTAGRAM_ITEMS, payload),
-            dispatch(FETCH_FEATURED, payload),
-        ]);
+    async [FETCH_MASTERCLASS_DATA]({ dispatch }, payload) {
+        return Promise.all([dispatch(FETCH_MASTERCLASS, payload), dispatch(FETCH_FEATURED, payload)]);
     },
 
     async [FETCH_MASTERCLASS_CATALOG_DATA]({ dispatch }, payload) {

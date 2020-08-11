@@ -3,33 +3,24 @@ import {
     getProduct,
     getBanners,
     getProducts,
-    getInstagram,
     getMasterclasses,
     getProductOptions,
     getProductPickupPoints,
     getProductBundles,
-    getReviews,
-    addReview,
-    changeReviewVote,
 } from '@api';
+
 import {
     SET_PRODUCT,
     SET_BANNERS,
     SET_FEATURED_PRODUCTS,
-    SET_INSTAGRAM_ITEMS,
     SET_MASTERCLASSES,
     SET_PRODUCT_OPTIONS,
     SET_REFERRER_CODE,
     SET_PICKUP_POINTS,
     SET_PRODUCT_BUNDLES,
-    SET_REVIEWS_DATA,
-    ADD_REVIEWS_DATA,
-    SET_REVIEWS_PAGE,
 } from './mutations';
-import { DEFAULT_REVIEWS_PAGE_SIZE } from '@constants';
 
 export const FETCH_PRODUCT_DATA = 'FETCH_PRODUCT_DATA';
-export const FETCH_INSTAGRAM_ITEMS = 'FETCH_INSTAGRAM_ITEMS';
 export const FETCH_FEATURED_PRODUCTS = 'FETCH_FEATURED_PRODUCTS';
 
 export const FETCH_PRODUCT = 'FETCH_PRODUCT';
@@ -80,16 +71,7 @@ export default {
         }
     },
 
-    async [FETCH_INSTAGRAM_ITEMS]({ commit }, payload) {
-        try {
-            const data = await getInstagram(payload);
-            commit(SET_INSTAGRAM_ITEMS, data.slice(0, 4));
-        } catch (error) {
-            storeErrorHandler(FETCH_INSTAGRAM_ITEMS)(error);
-        }
-    },
-
-    async [FETCH_PRODUCT_PICKUP_POINTS]({ dispatch, commit }, { code }) {
+    async [FETCH_PRODUCT_PICKUP_POINTS]({ commit }, { code }) {
         try {
             const data = await getProductPickupPoints(code);
             commit(SET_PICKUP_POINTS, data);
@@ -126,13 +108,12 @@ export default {
     },
 
     async [FETCH_PRODUCT_DATA]({ dispatch }, payload) {
-        return await Promise.all([
+        return Promise.all([
             dispatch(FETCH_PRODUCT, payload),
-            dispatch(FETCH_BANNERS, payload),
             dispatch(FETCH_FEATURED_PRODUCTS, payload),
-            dispatch(FETCH_INSTAGRAM_ITEMS, payload),
-            dispatch(FETCH_MASTERCLASSES, payload),
             dispatch(FETCH_PRODUCT_BUNDLES, payload),
+            // dispatch(FETCH_BANNERS, payload),
+            // dispatch(FETCH_MASTERCLASSES, payload),
         ]);
     },
 

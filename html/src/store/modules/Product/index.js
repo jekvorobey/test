@@ -1,5 +1,3 @@
-import { pointType } from '@enums/checkout';
-
 import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
@@ -10,7 +8,6 @@ export const PRODUCT_OPTIONS = 'productOptions';
 
 export const REFERRER_CODE = 'referrerCode';
 
-export const INSTAGRAM_ITEMS = 'instagramItems';
 export const FEATURED_PRODUCTS = 'featuredProducts';
 export const BANNERS = 'banners';
 export const MASTERCLASSES = 'masterClasses';
@@ -23,9 +20,6 @@ export const PICKUP_POINT_TYPES = 'pickupPointTypes';
 export const SELECTED_PICKUP_POINT_TYPE = 'selectedPickupPointType';
 
 export const PRODUCT_BUNDLES = 'productBundles';
-
-export const REVIEWS_DATA = 'reviewsData';
-
 export const NAME = 'product';
 
 export default function createModule() {
@@ -40,7 +34,6 @@ export default function createModule() {
             [PRODUCT_CODE]: null,
 
             [FEATURED_PRODUCTS]: { items: [], range: 0 },
-            [INSTAGRAM_ITEMS]: [],
             [BANNERS]: [],
             [MASTERCLASSES]: [],
 
@@ -52,7 +45,6 @@ export default function createModule() {
             [SELECTED_PICKUP_POINT_TYPE]: null,
 
             [PRODUCT_BUNDLES]: [],
-            [REVIEWS_DATA]: { reviews: [] },
         },
         actions,
         mutations,

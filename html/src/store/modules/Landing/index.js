@@ -29,7 +29,6 @@ export default function createModule() {
                 banner: {},
                 items: [],
             },
-            instagramItems: [],
             catalogLatestSets: [],
         },
         actions,

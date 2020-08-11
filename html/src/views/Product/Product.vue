@@ -719,7 +719,6 @@ import {
     BANNERS,
     MASTERCLASSES,
     FEATURED_PRODUCTS,
-    INSTAGRAM_ITEMS,
     PRODUCT_OPTIONS,
     PRODUCT_BUNDLES,
 } from '@store/modules/Product';
@@ -923,7 +922,6 @@ export default {
             MASTERCLASSES,
             BANNERS,
             FEATURED_PRODUCTS,
-            INSTAGRAM_ITEMS,
             PRODUCT_BUNDLES,
         ]),
 

@@ -9,8 +9,6 @@ export const MASTERCLASS = 'masterClass';
 export const MASTERCLASS_CODE = 'masterClassCode';
 
 export const FEATURED_MASTERCLASSES = 'featuredMasterClasses';
-export const INSTAGRAM_ITEMS = 'instagramItems';
-
 export const FILTERS = 'filters';
 
 export const ITEMS = 'items';
@@ -25,7 +23,6 @@ export default function createModule() {
             [MASTERCLASS_CODE]: '',
             [MASTERCLASS]: {},
             [FEATURED_MASTERCLASSES]: { items: [], range: 0 },
-            [INSTAGRAM_ITEMS]: [],
 
             [FILTERS]: [],
 

@@ -31,15 +31,17 @@ import {
     getProducts,
     getProductsHot,
     getCategories,
-    getBanners,
     getBrands,
-    getInstagram,
     getBannersByCode,
     getProductGroups,
     getFrequentCategories,
     getCatalogLatestSets,
 } from '@api';
 
+import { storeErrorHandler } from '@util/store';
+import { generatePictureSourcePath } from '@util/file';
+import { generateCategoryUrl } from '@util/catalog';
+import { productGroupTypes, productBadges } from '@enums/product';
 import {
     SET_BESTSELLER_PRODUCTS,
     SET_NEW_PRODUCTS,
@@ -47,16 +49,11 @@ import {
     SET_CATEGORIES,
     SET_BANNERS,
     SET_BRANDS,
-    SET_INSTAGRAM,
     SET_LOAD,
     SET_BRANDS_SET,
     SET_FREQUENT_CATEGORIES,
     SET_CATALOG_LATEST_SETS,
 } from './mutations';
-import { storeErrorHandler } from '@util/store';
-import { generatePictureSourcePath } from '@util/file';
-import { generateCategoryUrl } from '@util/catalog';
-import { productGroupTypes, productBadges } from '@enums/product';
 
 export const FETCH_LANDING_DATA = 'FETCH_LANDING_DATA';
 export const FETCH_NEW_PRODUCTS = 'FETCH_NEW_PRODUCTS';
@@ -65,21 +62,11 @@ export const FETCH_FEATURED_PRODUCTS = 'FETCH_FEATURED_PRODUCTS';
 export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 export const FETCH_BANNERS = 'FETCH_BANNERS';
 export const FETCH_BRANDS = 'FETCH_BRANDS';
-export const FETCH_INSTAGRAM = 'FETCH_INSTAGRAM';
 export const FETCH_BANNERS_SET = 'FETCH_BANNERS_SET';
 export const FETCH_FREQUENT_CATEGOIRES = 'FETCH_FREQUENT_CATEGOIRES';
 export const FETCH_CATALOG_LATEST_SETS = 'FETCH_CATALOG_LATEST_SETS';
 
 export default {
-    [FETCH_INSTAGRAM]({ commit }) {
-        return getInstagram()
-            .then((data) => commit(SET_INSTAGRAM, data))
-            .catch((error) => {
-                $logger.error(`FETCH_INSTAGRAM error: ${error}`);
-                return [];
-            });
-    },
-
     async [FETCH_BRANDS]({ commit }) {
         try {
             const data = await getBrands();
@@ -89,11 +76,9 @@ export default {
         }
     },
 
-    async [FETCH_BANNERS]({ commit }) {
+    [FETCH_BANNERS]({ commit }) {
         try {
-            const data = await getBanners();
             commit(SET_BANNERS, [
-                ...data,
                 {
                     id: 'middleBanner',
                     name: '',
@@ -155,7 +140,7 @@ export default {
             const orderField = 'name';
 
             const { items } = await getProductGroups(type, page, orderField);
-            const data = items ? items : [];
+            const data = items || [];
             commit(SET_BRANDS_SET, data);
         } catch (error) {
             storeErrorHandler(FETCH_BANNERS_SET)(error);
@@ -322,7 +307,6 @@ export default {
             dispatch(FETCH_CATEGORIES),
             dispatch(FETCH_BANNERS),
             dispatch(FETCH_BRANDS),
-            dispatch(FETCH_INSTAGRAM),
             dispatch(FETCH_BANNERS_SET),
             dispatch(FETCH_FREQUENT_CATEGOIRES),
             dispatch(FETCH_CATALOG_LATEST_SETS),

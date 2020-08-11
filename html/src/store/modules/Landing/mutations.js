@@ -1,23 +1,18 @@
+import { generateCategoryUrl } from '@util/catalog';
+import { productGroupTypes } from '@enums/product';
+
 export const SET_NEW_PRODUCTS = 'SET_NEW_PRODUCTS';
 export const SET_BESTSELLER_PRODUCTS = 'SET_BESTSELLER_PRODUCTS';
 export const SET_FEATURED_PRODUCTS = 'SET_FEATURED_PRODUCTS';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_BANNERS = 'SET_BANNERS';
 export const SET_BRANDS = 'SET_BRANDS';
-export const SET_INSTAGRAM = 'SET_INSTAGRAM';
 export const SET_LOAD = 'SET_LOAD';
 export const SET_BRANDS_SET = 'SET_BRANDS_SET';
-export const SET_FREQUENT_CATEGORIES= 'SET_FREQUENT_CATEGORIES';
+export const SET_FREQUENT_CATEGORIES = 'SET_FREQUENT_CATEGORIES';
 export const SET_CATALOG_LATEST_SETS = 'SET_CATALOG_LATEST_SETS';
 
-import { generateCategoryUrl } from '@util/catalog';
-import { productGroupTypes } from '@enums/product';
-
 export default {
-    [SET_INSTAGRAM](state, payload) {
-        state.instagramItems = payload;
-    },
-
     [SET_BRANDS](state, payload) {
         const brands = payload.map((item) => ({
             ...item,
@@ -154,9 +149,11 @@ export default {
             },
         ];
     },
+
     [SET_BRANDS_SET](state, payload) {
         state.bannersSet = payload;
     },
+
     [SET_CATALOG_LATEST_SETS](state, payload) {
         state.catalogLatestSets = payload;
     },

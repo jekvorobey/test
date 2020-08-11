@@ -636,7 +636,6 @@ import {
     NAME as MASTERCLASS_MODULE,
     MASTERCLASS,
     FEATURED_MASTERCLASSES,
-    INSTAGRAM_ITEMS,
 } from '@store/modules/Masterclass';
 import { FETCH_MASTERCLASS_DATA } from '@store/modules/Masterclass/actions';
 
@@ -821,7 +820,7 @@ export default {
     computed: {
         ...mapState([SCROLL, LOCALE]),
         ...mapState('route', { code: state => state.params.code }),
-        ...mapState(MASTERCLASS_MODULE, [MASTERCLASS, FEATURED_MASTERCLASSES, INSTAGRAM_ITEMS]),
+        ...mapState(MASTERCLASS_MODULE, [MASTERCLASS, FEATURED_MASTERCLASSES]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
         ...mapState(MODAL_MODULE, {
