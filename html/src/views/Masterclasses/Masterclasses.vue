@@ -40,32 +40,42 @@
                             {{ range }} {{ eventsLabel }}
                         </span>
                     </h1>
+
                     <div class="container container--tablet masterclasses-view__sets-header-top-controls">
-                        <v-select
-                            class="masterclasses-view__sets-header-select"
-                            v-for="filter in filters"
-                            track-by="id"
-                            label="name"
-                            :value="selectedValueMap[filter.name] || filter.items[0]"
-                            :key="filter.id"
-                            :options="filter.items"
-                            :placeholder="filter.title"
-                            :searchable="false"
-                            :allow-empty="false"
-                            :show-labels="false"
-                            @input="
-                                onChangeFilter(
-                                    filter,
-                                    $event && $event.code,
-                                    selectedValueMap[filter.name] && selectedValueMap[filter.name].code
-                                )
-                            "
+                        <template v-if="!isTablet">
+                            <v-select
+                                class="masterclasses-view__sets-header-select"
+                                v-for="filter in filters"
+                                track-by="id"
+                                label="name"
+                                :value="selectedValueMap[filter.name] || filter.items[0]"
+                                :key="filter.id"
+                                :options="filter.items"
+                                :placeholder="filter.title"
+                                :searchable="false"
+                                :allow-empty="false"
+                                :show-labels="false"
+                                @input="
+                                    onChangeFilter(
+                                        filter,
+                                        $event && $event.code,
+                                        selectedValueMap[filter.name] && selectedValueMap[filter.name].code
+                                    )
+                                "
+                            />
+                        </template>
+                        <filter-button
+                            v-else
+                            class="masterclasses-view__sets-header-btn"
+                            @click="filterModal = !filterModal"
                         >
-                        </v-select>
+                            Фильтр&nbsp;&nbsp;
+                            <span class="text-grey">{{ activeTags.length }}</span>
+                        </filter-button>
                     </div>
                 </div>
 
-                <div class="masterclasses-view__sets-header-bottom">
+                <div class="masterclasses-view__sets-header-bottom" v-if="!isTablet">
                     <radio-switch
                         v-if="times"
                         class="masterclasses-view__sets-header-switch"
@@ -185,41 +195,93 @@
                 </v-expander>
             </div>
         </section> -->
+
+        <transition name="fade-in">
+            <modal
+                class="masterclasses-view__modal-filter"
+                v-if="filterModal && isTabletLg"
+                :show-close-btn="false"
+                type="fullscreen"
+            >
+                <template v-slot:body>
+                    <v-sticky class="masterclasses-view__modal-filter-sticky">
+                        <template v-slot:sticky>
+                            <div class="masterclasses-view__modal-filter-header">
+                                <button
+                                    class="masterclasses-view__modal-filter-header-btn"
+                                    @click="filterModal = false"
+                                >
+                                    <v-svg name="cross-small" width="14" height="14" />Фильтр
+                                </button>
+                            </div>
+                        </template>
+
+                        <masterclass-catalog-filter class="masterclasses-view__modal-filter-panel" />
+
+                        <div class="masterclasses-view__modal-filter-controls">
+                            <v-button
+                                class="btn--outline masterclasses-view__modal-filter-clear-btn"
+                                :to="clearFilterUrl"
+                                replace
+                            >
+                                Очистить
+                            </v-button>
+                            <v-button
+                                class="masterclasses-view__modal-filter-close-btn"
+                                @click="filterModal = !filterModal"
+                            >
+                                Показать {{ range }}
+                            </v-button>
+                        </div>
+                    </v-sticky>
+                </template>
+            </modal>
+        </transition>
     </section>
 </template>
 
 <script>
-import Vue from 'vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
+import Modal from '@controls/modal/modal.vue';
 
 import SelectPanel from '@components/SelectPanel/SelectPanel.vue';
 import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 import MasterClassCard from '@components/MasterClassCard/MasterClassCard.vue';
 import MasterClassBannerCard from '@components/MasterClassBannerCard/MasterClassBannerCard.vue';
+import MasterclassCatalogFilter from '@components/MasterclassCatalogFilter/MasterclassCatalogFilter.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
+import FilterButton from '@components/FilterButton/FilterButton.vue';
 import EmptyPlaceholderPanel from '@components/EmptyPlaceholderPanel/EmptyPlaceholderPanel.vue';
-
-import { $store, $progress, $logger } from '@services';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { LOCALE, SCROLL } from '@store';
 
 import { NAME as MASTERCLASSES_MODULE, ITEMS, ACTIVE_PAGE, RANGE } from '@store/modules/Masterclass';
-import { PAGES_COUNT, ROUTE_SEGMENTS, FILTER_SEGMENTS, NULLABLE_FILTERS } from '@store/modules/Masterclass/getters';
+import {
+    PAGES_COUNT,
+    ROUTE_SEGMENTS,
+    FILTER_SEGMENTS,
+    NULLABLE_FILTERS,
+    ACTIVE_TAGS,
+} from '@store/modules/Masterclass/getters';
 import {
     FETCH_MASTERCLASS_CATALOG_DATA,
     FETCH_MASTERCLASS_ITEMS,
     SET_LOAD_PATH,
 } from '@store/modules/Masterclass/actions';
 
+import _debounce from 'lodash/debounce';
+import { $store, $progress, $logger } from '@services';
 import { MIN_SCROLL_VALUE } from '@constants';
 import { fileExtension } from '@enums';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
@@ -232,15 +294,14 @@ import {
     computeFilterMasterclassData,
     prepareMasterclassSpeakers,
 } from '@util/catalog';
-import _debounce from 'lodash/debounce';
+
+import '@images/sprites/home.svg';
 import './Masterclasses.css';
 
 import profileMasterClassImg1 from '@images/mock/profileMasterClass1.png';
 import profileMasterClassImg2 from '@images/mock/profileMasterClass2.png';
 import profileMasterClassImg3 from '@images/mock/profileMasterClass3.png';
 import profileMasterClassImg4 from '@images/mock/profileMasterClass4.png';
-import '@images/sprites/home.svg';
-
 
 const sliderOptions = {
     slidesPerView: 1,
@@ -261,60 +322,27 @@ const sliderOptions = {
     },
 };
 
-const masterclassStatus = [
-    {
-        value: 0,
-        title: 'Будущие события',
-    },
-    {
-        value: 1,
-        title: 'Прошедшие',
-    },
-];
-
-const topics = [
-    {
-        value: 0,
-        title: 'Все темы',
-    },
-    {
-        value: 1,
-        title: 'Парикмахерам',
-    },
-    {
-        value: 2,
-        title: 'Визажистам',
-    },
-    {
-        value: 3,
-        title: 'Нейл-мастерам',
-    },
-    {
-        value: 4,
-        title: 'Фотографам',
-    },
-    {
-        value: 5,
-        title: 'Стилистам',
-    },
-];
-
 export default {
     name: 'masterclasses',
 
     components: {
+        VSvg,
         VButton,
         VPagination,
         VExpander,
         VSlider,
         VSelect,
+        VSticky,
+        Modal,
 
         RadioSwitch,
         SelectPanel,
         ShowMoreButton,
+        FilterButton,
 
         MasterClassCard,
         MasterClassBannerCard,
+        MasterclassCatalogFilter,
 
         Breadcrumbs,
         BreadcrumbItem,
@@ -326,11 +354,10 @@ export default {
     data() {
         return {
             showMore: false,
+            filterModal: false,
 
             masterclassStatus,
             selectedStatus: masterclassStatus[0].value,
-
-            selectedFiltersMap: {},
 
             masterclassBanners: [
                 {
@@ -389,7 +416,17 @@ export default {
     computed: {
         ...mapState([LOCALE, SCROLL]),
         ...mapState(MASTERCLASSES_MODULE, [ITEMS, ACTIVE_PAGE, RANGE]),
-        ...mapGetters(MASTERCLASSES_MODULE, [PAGES_COUNT, ROUTE_SEGMENTS, FILTER_SEGMENTS, NULLABLE_FILTERS]),
+        ...mapGetters(MASTERCLASSES_MODULE, [
+            PAGES_COUNT,
+            ROUTE_SEGMENTS,
+            FILTER_SEGMENTS,
+            NULLABLE_FILTERS,
+            ACTIVE_TAGS,
+        ]),
+
+        clearFilterUrl() {
+            return { name: 'CatalogMasterclasses' };
+        },
 
         eventsLabel() {
             const range = this[RANGE];

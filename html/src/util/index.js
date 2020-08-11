@@ -183,7 +183,7 @@ export function shortNumberFormat(n) {
     let base = Math.floor(Math.log(Math.abs(n)) / Math.log(1000));
     const suffix = abbrev[Math.min(2, base - 1)];
     base = abbrev.indexOf(suffix) + 1;
-    return suffix ? round(n / Math.pow(1000, base), 2) + suffix : '' + n;
+    return suffix ? round(n / Math.pow(1000, base), 2) + suffix : `${n}`;
 }
 
 /**
@@ -254,16 +254,16 @@ export function saveToClipboard(text) {
 
 export function formatPhoneNumber(str, code = 7) {
     const countryCode = Number(code);
-    //Filter only numbers from the input
-    let cleaned = ('' + str).replace(/\D/g, '');
+    // Filter only numbers from the input
+    const cleaned = `${str}`.replace(/\D/g, '');
     const regex = new RegExp(`^(${countryCode}|)?(\\d{3})(\\d{3})(\\d{2})(\\d{2})$`);
-    //Check if the input is of correct
-    let match = cleaned.match(regex);
+    // Check if the input is of correct
+    const match = cleaned.match(regex);
 
     if (match) {
-        //Remove the matched extension code
-        //Change this to format for any country code.
-        let intlCode = match[1] ? `+${countryCode} ` : '';
+        // Remove the matched extension code
+        // Change this to format for any country code.
+        const intlCode = match[1] ? `+${countryCode} ` : '';
         return [intlCode, ' ', match[2], ' ', match[3], '-', match[4], '-', match[5]].join('');
     }
 
@@ -276,8 +276,8 @@ export function formatPhoneNumber(str, code = 7) {
  * @returns {object} { x: num, y: num }
  */
 export function getPosition(el) {
-    var x = 0,
-        y = 0;
+    let x = 0;
+    let y = 0;
 
     while (el != null && (el.tagName || '').toLowerCase() != 'html') {
         x += el.offsetLeft || 0;

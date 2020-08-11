@@ -1,0 +1,15 @@
+.masterclass-catalog-filter {
+    position: relative;
+    width: 100%;
+
+    &__filters {
+        padding-top: calc(var(--gs) * 2);
+        padding-bottom: calc(var(--gs) * 2);
+    }
+
+    &__select {
+        & + & {
+            margin-top: calc(var(--gs) * 2);
+        }
+    }
+}
