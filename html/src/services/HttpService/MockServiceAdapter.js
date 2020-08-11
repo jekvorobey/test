@@ -3,6 +3,9 @@ import HttpService from 'HttpServiceEntry';
 import HttpServiceBase from './base';
 import MockHttpService from './MockService';
 
+/**
+ * Адаптер для мок сервиса (часть запросов идут в реальное апи, часть в мок сервис)
+ */
 export default class MockServiceAdapter extends HttpServiceBase {
     constructor(context, cookie) {
         super(context.baseURL);
@@ -18,9 +21,7 @@ export default class MockServiceAdapter extends HttpServiceBase {
      */
     get(path, config) {
         switch (path) {
-            case '/v1/banners':
-            case '/v1/instagram':
-            case '/v1/masterclasses':
+            case '':
                 return this.mockServiceInstance.get(path, config);
             default:
                 return this.httpServiceInstance.get(path, config);

@@ -1,6 +1,5 @@
 import '@scripts';
 
-import Vue from 'vue';
 import { Container } from 'inversify';
 import { injectionType } from '@enums';
 import { injectableClass, injectClass } from '@util/container';
@@ -9,7 +8,7 @@ import ServiceLocator from '@services';
 
 import ClientLogger from '@services/LogService/ClientLogger';
 import ClientCookie from '@services/CookieService/ClientCookie';
-import HttpService from '@services/HttpService/MockServiceAdapter';
+import HttpService from '@services/HttpService/ClientHttpService';
 import ProgressService from '@services/ProgressService';
 import DadataHttpService from '@services/HttpService/DadataHttpService';
 import ApplicationContext from '@services/ApplicationContext';
@@ -46,7 +45,7 @@ $container.bind(injectionType.HTTP).to(HttpService).inSingletonScope();
 $container.bind(injectionType.DADATA).to(DadataHttpService).inSingletonScope();
 $container.bind(injectionType.RETAIL_ROCKET).to(RetailRocketService).inSingletonScope();
 
-const { app, router, store } = createApp($container, window.__INITIAL_STATE__);
+const { app, router } = createApp($container, window.__INITIAL_STATE__);
 
 // prime the store with server-initialized state.
 // the state is determined during SSR and inlined in the page markup.

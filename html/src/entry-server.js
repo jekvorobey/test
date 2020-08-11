@@ -8,7 +8,7 @@ import ServiceLocator from '@services';
 import ApplicationContext from '@services/ApplicationContext';
 import ServerLogger from '@services/LogService/ServerLogger';
 import ServerCookie from '@services/CookieService/ServerCookie';
-import HttpService from '@services/HttpService/MockServiceAdapter';
+import HttpService from '@services/HttpService/ServerHttpService';
 import DadataHttpService from '@services/HttpService/DadataHttpService';
 import MockProgressService from '@services/ProgressService/MockService';
 
@@ -58,6 +58,7 @@ export default (context) => {
         // set router's location
         router.push(url);
 
+        // eslint-disable-next-line no-unused-vars
         router.onReady((ctx) => {
             if (appContext.redirect) return reject({ code: appContext.statusCode, url: appContext.redirect });
             if (appContext.statusCode) res.status(appContext.statusCode);
