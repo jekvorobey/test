@@ -356,9 +356,6 @@ export default {
             showMore: false,
             filterModal: false,
 
-            masterclassStatus,
-            selectedStatus: masterclassStatus[0].value,
-
             masterclassBanners: [
                 {
                     id: 1,
