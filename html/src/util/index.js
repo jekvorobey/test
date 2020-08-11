@@ -243,7 +243,6 @@ export function saveToClipboard(text) {
         successful = document.execCommand('copy');
     } catch (err) {
         successful = false;
-        alert('Произошла ошибка при копировании');
     }
 
     document.body.removeChild(textArea);

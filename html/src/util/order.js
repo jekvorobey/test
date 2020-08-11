@@ -1,6 +1,5 @@
 import { orderStatus, deliveryStatus, filterField } from '@enums/order';
-import { numericYearDateSettings } from '@settings';
-import { dateToString } from '@util/index'
+import { dateToString } from '@util/index';
 
 export function getDeliveryStatusColorClass(status) {
     if (status === deliveryStatus.STATUS_DONE) return 'status-color-success';
@@ -18,18 +17,17 @@ export function getOrderStatusColorClass(status, isCanceled = false) {
 }
 
 export function getOrderFilterDate(field) {
-    const getDate = (field) => {
-        let today = new Date();
-        switch (field) {
+    const getDate = (f) => {
+        const today = new Date();
+        switch (f) {
             case filterField.YEAR:
                 return new Date(today.setFullYear(today.getFullYear() - 1));
             case filterField.MONTH:
                 return new Date(today.setMonth(today.getMonth() - 1));
-                break;
             case filterField.DAY:
                 return new Date(today.setDate(today.getDate() - 1));
-                break;
-            case filterField.ALL_TIME: default:
+            case filterField.ALL_TIME:
+            default:
                 return null;
         }
     };

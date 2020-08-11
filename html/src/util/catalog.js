@@ -2,7 +2,6 @@ import { $context } from '@services';
 import { productGroupTypes } from '@enums/product';
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
-import { search } from 'superagent';
 
 const rangeRegx = /from_\d*_to_\d*/;
 const numberRegx = /\d+/g;
@@ -77,7 +76,7 @@ export function concatCatalogRoutePath(type, entityCode, categoryCode, segments)
 }
 
 export function concatMasterclassesRoutePath(segments) {
-    let baseRoute = '/masterclasses/';
+    const baseRoute = '/masterclasses/';
     const basePath = segments.length > 0 ? `${baseRoute}filters` : baseRoute;
     return basePath.concat(...segments.map((s) => `/${s}`));
 }
@@ -167,7 +166,7 @@ export function computeFilterMasterclassData(pathMatch) {
     return { filter, routeSegments, filterSegments };
 }
 
-export function prepareProductImage(image, desktopSize, tabletSize, mobileSize) {
+export function prepareProductImage(image, desktopSize, tabletSize) {
     return {
         ...image,
         desktop: desktopSize && {
@@ -202,7 +201,7 @@ export function prepareProductImage(image, desktopSize, tabletSize, mobileSize) 
 
 export function prepareMasterclassSpeakers(speakers = []) {
     if (speakers.length > 0 && speakers.length <= 2) return getSpeakerString(speakers[0], true);
-    else if (speakers.length > 2) return `${getSpeakerString(speakers[0])}, ${getSpeakerString(speakers[1])} и др.`;
+    if (speakers.length > 2) return `${getSpeakerString(speakers[0])}, ${getSpeakerString(speakers[1])} и др.`;
 }
 
 export default {
