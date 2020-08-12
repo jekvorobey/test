@@ -34,8 +34,8 @@ export default {
             }
             this._cut = 10000 / Math.floor(this.duration);
             this._timer = setInterval(() => {
-                this.increase(this._cut * Math.random());
-                if (this.percent > 85) this.canSuccess ? this.pause() : this.finish();
+                if (this.percent > 85) !this.canSuccess && this.finish();
+                else this.increase(this._cut * Math.random());
             }, 100);
             return this;
         },

@@ -5,8 +5,12 @@
     right: 0;
     height: 2px;
     width: 0%;
-    transition: width 0.2s, opacity 0.4s;
+    transition: width var(--time), opacity var(--animation-time), color var(--animation-time);
     opacity: 1;
     background-color: var(--cl-gold);
     z-index: 999999;
+
+    &--fail {
+        background-color: var(--cl-red);
+    }
 }
