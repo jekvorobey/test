@@ -80,19 +80,14 @@
                                 <v-svg name="arrow-down" width="24" height="24" />
                             </v-link>
                         </li>
-                        <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" to="/">
-                                Доставка и оплата
-                            </v-link>
-                        </li>
-                        <li class="container mobile-menu__menu-item">
-                            <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" to="/">
-                                Возврат товара
-                            </v-link>
-                        </li>
-                        <li class="container mobile-menu__menu-item mobile-menu__menu-item--separator">
-                            <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" to="/">
-                                Гарантии
+                        <li
+                            class="container mobile-menu__menu-item"
+                            :class="{ 'mobile-menu__menu-item--separator': index === helpMenu.items.length - 1 }"
+                            v-for="(item, index) in helpMenu.items"
+                            :key="item.name"
+                        >
+                            <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" :to="item.url">
+                                {{ item.name }}
                             </v-link>
                         </li>
                     </ul>
@@ -175,7 +170,7 @@ import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { CATEGORIES } from '@store';
-import { HEADER_MENU } from '@store/getters';
+import { HEADER_MENU, HELP_MENU } from '@store/getters';
 import { SET_MENU_OPEN } from '@store/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
@@ -222,7 +217,7 @@ export default {
 
     computed: {
         ...mapState([CATEGORIES]),
-        ...mapGetters([HEADER_MENU]),
+        ...mapGetters([HEADER_MENU, HELP_MENU]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(FAVORITES_MODULE, [FAVORITE_ITEMS_COUNT]),
         ...mapState(GEO_MODULE, {
