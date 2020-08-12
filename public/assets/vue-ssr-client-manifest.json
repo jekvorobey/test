@@ -23,12 +23,12 @@
     "agreements-view.9771bce3e936ec7f5822.js",
     "agreements-view.9771bce3e936ec7f5822.js.br",
     "agreements-view.9771bce3e936ec7f5822.js.gz",
-    "app.35fdbf9d47f49d4d88aa.css",
-    "app.35fdbf9d47f49d4d88aa.css.br",
-    "app.35fdbf9d47f49d4d88aa.css.gz",
-    "app.35fdbf9d47f49d4d88aa.js",
-    "app.35fdbf9d47f49d4d88aa.js.br",
-    "app.35fdbf9d47f49d4d88aa.js.gz",
+    "app.bb3ace7bf1293c1538d2.css",
+    "app.bb3ace7bf1293c1538d2.css.br",
+    "app.bb3ace7bf1293c1538d2.css.gz",
+    "app.bb3ace7bf1293c1538d2.js",
+    "app.bb3ace7bf1293c1538d2.js.br",
+    "app.bb3ace7bf1293c1538d2.js.gz",
     "bonuses-view.9ad70c5687858cb4dabc.css",
     "bonuses-view.9ad70c5687858cb4dabc.css.br",
     "bonuses-view.9ad70c5687858cb4dabc.css.gz",
@@ -599,8 +599,8 @@
   ],
   "initial": [
     "vendors~app.cd9ca5e6c27735f5fdf0.js",
-    "app.35fdbf9d47f49d4d88aa.css",
-    "app.35fdbf9d47f49d4d88aa.js"
+    "app.bb3ace7bf1293c1538d2.css",
+    "app.bb3ace7bf1293c1538d2.js"
   ],
   "async": [
     "about-us-view.09a9f33a600b118d5640.css",
