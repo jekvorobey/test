@@ -522,7 +522,7 @@ export default {
                     params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
                     query: {
                         page = 1,
-                        orderField = sortFields.POPULARITY,
+                        orderField = sortFields.PRICE,
                         orderDirection = sortDirections.DESC,
                         search_string = null,
                     },
@@ -584,14 +584,9 @@ export default {
         const {
             fullPath,
             params: { code: toCode = null, entityCode: toEntityCode = null, type: toType, pathMatch },
-            query: {
-                page = 1,
-                orderField = sortFields.POPULARITY,
-                orderDirection = sortDirections.DESC,
-                search_string,
-            } = {
+            query: { page = 1, orderField = sortFields.PRICE, orderDirection = sortDirections.DESC, search_string } = {
                 page: 1,
-                orderField: sortFields.POPULARITY,
+                orderField: sortFields.PRICE,
                 orderDirection: sortDirections.DESC,
             },
         } = to;
@@ -658,7 +653,7 @@ export default {
             params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },
             query: {
                 page: toPage = 1,
-                orderField: toOrderField = sortFields.POPULARITY,
+                orderField: toOrderField = sortFields.PRICE,
                 orderDirection: toOrderDirection = sortDirections.DESC,
                 search_string: to_search_string,
             },
@@ -674,7 +669,7 @@ export default {
             params: { code: fromCode, entityCode: fromEntityCode, type: fromType, pathMatch: fromPathMatch },
             query: {
                 page: fromPage = 1,
-                orderField: fromOrderField = sortFields.POPULARITY,
+                orderField: fromOrderField = sortFields.PRICE,
                 orderDirection: fromOrderDirection = sortDirections.DESC,
                 search_string: from_search_string,
             },

@@ -552,7 +552,7 @@ export function getProducts({
 
 export function getCatalogItems({
     filter,
-    orderField = sortFields.POPULARITY,
+    orderField = sortFields.PRICE,
     orderDirection = sortDirections.DESC,
     page = 1,
 }) {
