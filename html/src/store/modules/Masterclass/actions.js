@@ -1,5 +1,5 @@
 import { DEFAULT_PAGE } from '@constants';
-import { masterclassTimeCode, masterclassFilterName } from '@enums/catalog';
+import { masterclassFilterName } from '@enums/catalog';
 import { storeErrorHandler } from '@util/store';
 
 import { getMasterclasses, getMasterclass, getCatalogMasterclasses, getMasterclassFilters } from '@api';
@@ -20,17 +20,27 @@ export default {
         commit(SET_LOAD_PATH, payload);
     },
 
-    async [FETCH_MASTERCLASS_ITEMS]({ commit }, { page = DEFAULT_PAGE, sortDirection, sortField, filter, showMore }) {
+    async [FETCH_MASTERCLASS_ITEMS](
+        { commit, state },
+        { page = DEFAULT_PAGE, sortDirection, sortField, filter, showMore }
+    ) {
         try {
-            // если фильтр по времени не выбран, фильтруем всегда по будущим событиям
-            const mergedFilter = {
-                ...filter,
-                [masterclassFilterName.TIME]:
-                    (filter[masterclassFilterName.TIME] && filter[masterclassFilterName.TIME][0]) ||
-                    masterclassTimeCode.FUTURE,
-            };
+            // Если фильтр не указан, значит берем первое дефолтное значение в фильтре
+            if (!filter[masterclassFilterName.TIME]) {
+                const { filters = [] } = state;
+                const { items } = filters.find((f) => f.name === masterclassFilterName.TIME) || { items: [] };
 
-            const data = await getCatalogMasterclasses(page, sortDirection, sortField, mergedFilter);
+                // если такого фильтр есть, и у него есть хотя бы 1 вариант - выбираем первый
+                if (items.length > 0) {
+                    const { code } = items[0];
+                    filter = {
+                        ...filter,
+                        [masterclassFilterName.TIME]: code,
+                    };
+                }
+            }
+
+            const data = await getCatalogMasterclasses(page, sortDirection, sortField, filter);
             commit(SET_QUERY_PARAMS, { page });
             if (showMore) commit(SET_ITEMS_MORE, data);
             else commit(SET_ITEMS, data);
@@ -73,6 +83,11 @@ export default {
     },
 
     async [FETCH_MASTERCLASS_CATALOG_DATA]({ dispatch }, payload) {
-        return Promise.all([dispatch(FETCH_MASTERCLASS_FILTERS, payload), dispatch(FETCH_MASTERCLASS_ITEMS, payload)]);
+        try {
+            await dispatch(FETCH_MASTERCLASS_FILTERS, payload);
+            await dispatch(FETCH_MASTERCLASS_ITEMS, payload);
+        } catch (error) {
+            storeErrorHandler(FETCH_MASTERCLASS_CATALOG_DATA, true)(error);
+        }
     },
 };
