@@ -176,10 +176,6 @@
                     }
                 }
 
-                @media (--tablet) {
-                    display: none;
-                }
-
                 @media (--desktop) {
                     padding: calc(var(--gs) * 2);
                 }
@@ -188,6 +184,10 @@
                     width: auto;
                     padding: calc(var(--gs) * 5);
                     margin-bottom: 0;
+                }
+
+                @media (--tablet) {
+                    display: none;
                 }
 
                 @media (--mobile-min) and (--tablet-lg) {
@@ -204,17 +204,6 @@
 
                     .icon {
                         opacity: 0.1;
-                    }
-                }
-
-                &--alone {
-                    /* !important важен для переопределения last-child'ов */
-                    @media (--tablet-lg) {
-                        padding: calc(var(--gs) * 11) !important;
-                    }
-
-                    @media (--desktop-diff) {
-                        padding: calc(var(--gs) * 16.5) !important;
                     }
                 }
 
@@ -236,6 +225,16 @@
                             @media (--desktop) {
                                 padding: calc(var(--gs) * 4);
                             }
+                        }
+                    }
+
+                    &:last-child {
+                        @media (--tablet-lg) {
+                            padding: calc(var(--gs) * 11);
+                        }
+
+                        @media (--desktop-diff) {
+                            padding: calc(var(--gs) * 16.5);
                         }
                     }
                 }

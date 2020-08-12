@@ -42,9 +42,6 @@
                             </div>
                             <div
                                 class="product-view__header-gallery-item"
-                                :class="
-                                    productImages.media.length == 1 ? 'product-view__header-gallery-item--alone' : ''
-                                "
                                 v-for="image in productImages.media"
                                 :key="image.id"
                             >
@@ -67,15 +64,6 @@
                                         alt=""
                                     />
                                 </v-picture>
-                            </div>
-
-                            <div class="product-view__header-detail-tags">
-                                <tag
-                                    class="product-view__header-detail-tags-item"
-                                    v-for="badge in computedBadges"
-                                    :key="badge.id"
-                                    :text="badge.text"
-                                />
                             </div>
                         </div>
                         <v-slider
