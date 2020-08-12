@@ -1,13 +1,13 @@
 <template>
     <div
         class="progress"
+        :class="[{ 'progress--in-progress': show }, { 'progress--fail': !canSuccess }]"
         :style="{
             width: percent + '%',
             height: height,
-            'background-color': canSuccess ? color : failedColor,
             opacity: show ? 1 : 0,
         }"
-    ></div>
+    />
 </template>
 
 <script>
@@ -21,10 +21,9 @@ export default {
             canSuccess: true,
             duration: 3000,
             height: '2px',
-            color: '#ffd338',
-            failedColor: '#ff0000',
         };
     },
+
     methods: {
         start() {
             this.show = true;
@@ -36,38 +35,43 @@ export default {
             this._cut = 10000 / Math.floor(this.duration);
             this._timer = setInterval(() => {
                 this.increase(this._cut * Math.random());
-                if (this.percent > 95) {
-                    this.finish();
-                }
+                if (this.percent > 85) this.canSuccess ? this.pause() : this.finish();
             }, 100);
             return this;
         },
+
         set(num) {
             this.show = true;
             this.canSuccess = true;
             this.percent = Math.floor(num);
             return this;
         },
+
         get() {
             return Math.floor(this.percent);
         },
+
         increase(num) {
             this.percent = this.percent + Math.floor(num);
             return this;
         },
+
         decrease(num) {
             this.percent = this.percent - Math.floor(num);
             return this;
         },
+
         finish() {
             this.percent = 100;
             this.hide();
             return this;
         },
+
         pause() {
             clearInterval(this._timer);
             return this;
         },
+
         hide() {
             clearInterval(this._timer);
             this._timer = null;
@@ -81,6 +85,7 @@ export default {
             }, 500);
             return this;
         },
+
         fail() {
             this.canSuccess = false;
             return this;
