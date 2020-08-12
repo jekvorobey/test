@@ -213,6 +213,11 @@
         border-collapse: collapse;
         margin-bottom: calc(var(--gs) * 4);
 
+        &-link {
+            display: flex;
+            border-bottom: none;
+        }
+
         &-img {
             display: flex;
             align-items: center;
@@ -307,7 +312,7 @@
             cursor: pointer;
 
             .icon {
-                margin-top: calc(var(--gs) * .25);
+                margin-top: calc(var(--gs) * 0.25);
                 vertical-align: middle;
             }
         }
@@ -391,7 +396,6 @@
     }
 
     &__modal-filter {
-
         &-sort {
             padding: calc(var(--gs) * 3);
 

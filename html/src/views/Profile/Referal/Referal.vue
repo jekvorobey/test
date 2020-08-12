@@ -114,22 +114,26 @@
                         <transition-group class="referal-view__table-body" tag="tbody" name="fade-in" appear>
                             <tr class="referal-view__table-tr" v-for="order in orders" :key="order.id">
                                 <td class="referal-view__table-td">
-                                    <div
-                                        class="referal-view__table-img"
-                                        :class="{ 'referal-view__table-img--empty': !order.image || !order.image.id }"
-                                    >
-                                        <v-picture v-if="order.image && order.image.id" :key="order.image.id">
-                                            <source :data-srcset="order.desktopImage" type="image/webp" />
-                                            <img
-                                                class="blur-up lazyload v-picture__img"
-                                                :data-src="order.defaultImage"
-                                            />
-                                        </v-picture>
-                                        <v-svg v-else name="logo" width="32" height="32" />
-                                    </div>
-                                    <div class="referal-view__table-title">
-                                        {{ order.name }}
-                                    </div>
+                                    <router-link class="referal-view__table-link" :to="order.url">
+                                        <div
+                                            class="referal-view__table-img"
+                                            :class="{
+                                                'referal-view__table-img--empty': !order.image || !order.image.id,
+                                            }"
+                                        >
+                                            <v-picture v-if="order.image && order.image.id" :key="order.image.id">
+                                                <source :data-srcset="order.desktopImage" type="image/webp" />
+                                                <img
+                                                    class="blur-up lazyload v-picture__img"
+                                                    :data-src="order.defaultImage"
+                                                />
+                                            </v-picture>
+                                            <v-svg v-else name="logo" width="32" height="32" />
+                                        </div>
+                                        <div class="referal-view__table-title">
+                                            {{ order.name }}
+                                        </div>
+                                    </router-link>
                                 </td>
                                 <td class="referal-view__table-td">{{ order.qty }} шт</td>
                                 <td class="referal-view__table-td">
@@ -163,21 +167,25 @@
             <ul class="referal-view__list" v-if="isTabletLg">
                 <li class="referal-view__list-item" v-for="order in orders" :key="order.id">
                     <info-row class="referal-view__list-item-row" name="Товар">
-                        <div
-                            class="referal-view__table-img"
-                            :class="{ 'referal-view__table-img--empty': !order.image || !order.image.id }"
-                        >
-                            <v-picture v-if="order.image && order.image.id" :key="order.image.id">
-                                <source :data-srcset="order.desktopImage" type="image/webp" />
-                                <img class="blur-up lazyload v-picture__img" :data-src="order.defaultImage" />
-                            </v-picture>
-                            <v-svg v-else name="logo" width="32" height="32" />
-                        </div>
-                        <div class="referal-view__table-title">
-                            {{ order.name }}
-                        </div>
+                        <router-link class="referal-view__table-link" :to="order.url">
+                            <div
+                                class="referal-view__table-img"
+                                :class="{ 'referal-view__table-img--empty': !order.image || !order.image.id }"
+                            >
+                                <v-picture v-if="order.image && order.image.id" :key="order.image.id">
+                                    <source :data-srcset="order.desktopImage" type="image/webp" />
+                                    <img class="blur-up lazyload v-picture__img" :data-src="order.defaultImage" />
+                                </v-picture>
+                                <v-svg v-else name="logo" width="32" height="32" />
+                            </div>
+                            <div class="referal-view__table-title">
+                                {{ order.name }}
+                            </div>
+                        </router-link>
                     </info-row>
+
                     <info-row class="referal-view__list-item-row" name="Количество"> {{ order.qty }} шт. </info-row>
+
                     <info-row class="referal-view__list-item-row" name="ID реферала">
                         <router-link :to="{ name: 'ReferalOrderDetails', params: { referalId: order.customer_id } }">
                             {{ order.customer_id }}
@@ -350,6 +358,7 @@ import { DEFAULT_PAGE } from '@constants';
 import { digit2DateSettings, numericYearDateSettings } from '@settings';
 import { baseChartOptions } from '@settings/profile';
 import { preparePrice, shortNumberFormat, saveToClipboard, getDate } from '@util';
+import { generateProductUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { generateReferralLink } from '@util/profile';
 import { getOrderFilterDate } from '@util/order';
@@ -468,13 +477,14 @@ export default {
             return items.map(i => {
                 const desktopImage = i.image && generatePictureSourcePath(40, 40, i.image.id, fileExtension.image.WEBP);
                 const defaultImage = i.image && generatePictureSourcePath(40, 40, i.image.id);
-                const date =
-                    i.order_date && getDate(i.order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
+                const date = i.order_date && getDate(i.order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
                 const sourceString = this.$t(`referralSource.${i.source}`);
+                const url = generateProductUrl(i.category_code, i.code);
 
                 return {
                     ...i,
                     qty: Number(i.qty),
+                    url,
                     sourceString,
                     date,
                     defaultImage,

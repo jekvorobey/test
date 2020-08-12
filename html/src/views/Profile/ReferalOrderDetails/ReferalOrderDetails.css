@@ -149,6 +149,11 @@
         border-collapse: collapse;
         margin-bottom: calc(var(--gs) * 4);
 
+        &-link {
+            display: flex;
+            border-bottom: none;
+        }
+
         &-img {
             display: flex;
             align-items: center;

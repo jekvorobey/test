@@ -123,27 +123,19 @@
 
         <info-panel
             class="order-details-view__panel"
-            v-for="delivery in deliveries"
+            v-for="delivery in deliveryItems"
             :key="delivery.number"
             :header="`Доставка №${delivery.number}`"
         >
             <div class="container container--tablet-lg">
                 <template v-if="deliveries.length > 1">
-                    <info-row
-                        class="order-details-view__panel-row"
-                        name="Способ доставки"
-                        :value="formatDeliveryMethod(delivery.delivery_method)"
-                    />
-                    <info-row
-                        class="order-details-view__panel-row"
-                        name="Дата доставки"
-                        :value="formatDate(delivery.delivery_at)"
-                    />
+                    <info-row class="order-details-view__panel-row" name="Способ доставки" :value="delivery.method" />
+                    <info-row class="order-details-view__panel-row" name="Дата доставки" :value="delivery.deliveryAt" />
                     <info-row
                         class="order-details-view__panel-row"
                         name="Статус доставки"
-                        :class="getDeliveryStatusClass(delivery.status)"
-                        :value="formatDeliveryStatus(delivery.status)"
+                        :class="delivery.statusClass"
+                        :value="delivery.status"
                     />
 
                     <template v-if="delivery.point && delivery.delivery_method === deliveryMethods.PICKUP">
@@ -167,18 +159,14 @@
                         </info-row>
                     </template>
 
-                    <info-row
-                        class="order-details-view__panel-row"
-                        name="Адрес доставки"
-                        :value="formatAddress(delivery)"
-                    />
+                    <info-row class="order-details-view__panel-row" name="Адрес доставки" :value="delivery.address" />
                 </template>
 
                 <info-row
-                    v-if="!!delivery.package_count"
+                    v-if="!!delivery.packageCount"
                     class="order-details-view__panel-row"
                     name="Количество коробок"
-                    :value="formatPackageCount(delivery.package_count)"
+                    :value="delivery.packageCount"
                 />
 
                 <ul class="order-details-view__panel-list">
@@ -191,18 +179,19 @@
                         :price="product.price"
                         :old-price="product.cost"
                         :count="product.qty"
+                        :href="product.url"
                     />
                 </ul>
             </div>
         </info-panel>
 
-        <info-panel v-if="items && items.length > 0" class="order-details-view__panel" header="Билеты">
+        <info-panel v-if="ticketItems && ticketItems.length > 0" class="order-details-view__panel" header="Билеты">
             <div class="container container--tablet-lg">
                 <ul class="order-details-view__panel-list">
                     <order-masterclass-card
                         class="order-details-view__panel-item"
                         type="masterclass"
-                        v-for="item in items"
+                        v-for="item in ticketItems"
                         :key="item.id"
                         :name="item.name"
                         :note="item.note"
@@ -273,7 +262,7 @@ import { orderPaymentStatus, orderStatus, deliveryStatus } from '@enums/order';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { orderDateLocaleOptions } from '@settings/profile';
 import { toAddressString } from '@util/address';
-import { generateMasterclassUrl, generateTicketDownloadUrl } from '@util/catalog';
+import { generateMasterclassUrl, generateTicketDownloadUrl, generateProductUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { getOrderStatusColorClass, getDeliveryStatusColorClass } from '@util/order';
 
@@ -325,7 +314,26 @@ export default {
             return order.receiver_email;
         },
 
-        items() {
+        deliveryItems() {
+            const { id, payment_status } = this[ORDER] || {};
+            const deliveries = this[DELIVERIES] || [];
+
+            return deliveries.map(d => {
+                return {
+                    ...d,
+                    method: this.formatDeliveryMethod(d.delivery_method),
+                    deliveryAt: this.formatDate(d.delivery_at),
+                    statusClass: this.getDeliveryStatusClass(d.status),
+                    status: this.formatDeliveryStatus(d.status),
+                    address: this.formatAddress(d),
+                    packageCount: this.formatPackageCount(d.package_count),
+                    products:
+                        d.products && d.products.map(p => ({ ...p, url: generateProductUrl(p.category_code, p.code) })),
+                };
+            });
+        },
+
+        ticketItems() {
             const { id, payment_status } = this[ORDER] || {};
             const tickets = this[TICKETS] || [];
 

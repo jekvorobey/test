@@ -1,17 +1,10 @@
 <template>
     <li class="package-product-card">
         <router-link class="package-product-card__img" :to="href">
-            <v-picture v-if="image" :image="image" alt="">
-                <template v-slot:source="{ image }">
-                    <source :data-srcset="generateSourcePath(64, 64, image.id, 'webp')" type="image/webp" />
-                </template>
-                <template v-slot:fallback="{ image, alt }">
-                    <img
-                        class="blur-up lazyload v-picture__img"
-                        :data-src="generateSourcePath(64, 64, image.id)"
-                        :alt="alt"
-                    />
-                </template>
+            <v-picture v-if="images">
+                <source :data-srcset="images.desktop.webp" type="image/webp" />
+                <source :data-srcset="images.desktop.orig" />
+                <img class="blur-up lazyload v-picture__img" :data-src="images.defaultImg" />
             </v-picture>
             <v-svg v-else id="package-product-card-empty" name="logo" width="48" height="48" />
         </router-link>
@@ -37,6 +30,7 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 
 import Price from '@components/Price/Price.vue';
 
+import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 import './PackageProductCard.css';
 
@@ -89,11 +83,17 @@ export default {
         quantity() {
             return Number(this.count);
         },
-    },
 
-    methods: {
-        generateSourcePath(x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext);
+        images() {
+            const { image } = this;
+            if (image && image.id)
+                return {
+                    desktop: {
+                        webp: generatePictureSourcePath(64, 64, image.id, fileExtension.image.WEBP),
+                        orig: generatePictureSourcePath(64, 64, image.id),
+                    },
+                    defaultImg: generatePictureSourcePath(64, 64, image.id),
+                };
         },
     },
 };
