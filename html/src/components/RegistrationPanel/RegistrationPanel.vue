@@ -60,10 +60,13 @@
                 </div>
                 <span class="text-grey registration-panel__form-info">
                     Нажимая кнопку «Регистрация», вы соглашаетесь с условиями
-                    <v-link to="/agreements/public-offer" class="registration-panel__form-info-link">оферты</v-link> и
-                    <v-link to="/agreements/personal-policy" class="registration-panel__form-info-link"
-                        >политикой конфиденциальности</v-link
+                    <a class="registration-panel__form-info-link" href="/agreements/public-offer" target="_blank"
+                        >оферты</a
                     >
+                    и
+                    <a class="registration-panel__form-info-link" href="/agreements/personal-policy" target="_blank">
+                        политикой конфиденциальности
+                    </a>
                 </span>
             </template>
 

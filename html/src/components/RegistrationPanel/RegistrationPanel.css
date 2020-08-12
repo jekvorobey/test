@@ -1,5 +1,4 @@
 .registration-panel {
-
     &__body {
         flex-grow: 1;
     }
@@ -52,6 +51,7 @@
 
         &-info {
             &-link {
+                border-bottom: none;
                 text-decoration: underline;
                 text-transform: none;
             }
@@ -103,8 +103,7 @@
         }
 
         &-password {
-
-            @media(--tablet-lg-min) {
+            @media (--tablet-lg-min) {
                 margin-top: calc(var(--gs) * 3);
             }
 
@@ -128,7 +127,7 @@
     &__socials {
         display: flex;
         align-items: center;
-        padding-top: calc(var(--gs)  * 2.5);
+        padding-top: calc(var(--gs) * 2.5);
         margin-top: calc(var(--gs) * 4);
         border-top: 1px solid var(--cl-divider-grey);
 
