@@ -82,4 +82,10 @@
             transform: scale(2);
         }
     }
+
+    &--disabled {
+        .swiper-pagination {
+            display: none;
+        }
+    }
 }

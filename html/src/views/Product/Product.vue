@@ -71,6 +71,7 @@
                             class="product-view__header-gallery"
                             name="gallery"
                             :options="productGalleryOptions"
+                            :controls="productImages.media.length > 1"
                         >
                             <div
                                 v-if="!productImages.media || !productImages.media.length"

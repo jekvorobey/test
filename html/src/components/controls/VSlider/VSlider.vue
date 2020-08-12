@@ -1,5 +1,5 @@
 <template>
-    <div class="v-slider" v-swiper:slider="options">
+    <div class="v-slider" :class="{ 'v-slider--disabled': !controls }" v-swiper:slider="options">
         <div class="swiper-wrapper">
             <slot />
         </div>
@@ -60,7 +60,7 @@ export default {
         controls: {
             type: Boolean,
             default: true,
-        }
+        },
     },
 
     watch: {

@@ -29,23 +29,23 @@
         &-slider {
             flex: 1;
             padding-bottom: calc(var(--gs) * 11);
+
+            .v-slider__controls {
+                bottom: calc(var(--gs) * 2);
+                left: 50%;
+                transform: translateX(-50%);
+
+                .swiper-button-disabled {
+                    display: flex;
+                    visibility: hidden;
+                }
+            }
         }
 
         &-item {
             min-height: 600px;
             @media (--desktop-lg) {
                 min-height: 400px;
-            }
-        }
-
-        .v-slider__controls {
-            bottom: calc(var(--gs) * 2);
-            left: 50%;
-            transform: translateX(-50%);
-
-            .swiper-button-disabled {
-                display: flex;
-                visibility: hidden;
             }
         }
     }
