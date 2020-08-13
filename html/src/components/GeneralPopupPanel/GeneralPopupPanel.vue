@@ -6,6 +6,7 @@
         :placement="placement"
         :open="open"
         :disabled="disabled"
+        :offset="offset"
         @apply-show="applyShow"
         @apply-hide="applyHide"
         @hide="onHide"
@@ -42,6 +43,11 @@ import './GeneralPopupPanel.css';
 export default {
     name: 'general-popup-panel',
 
+    components: {
+        VSvg,
+        VPopover,
+    },
+
     props: {
         popoverClass: {
             type: String,
@@ -77,6 +83,10 @@ export default {
             default: false,
         },
 
+        offset: {
+            type: [Number, String],
+        },
+
         disabled: {
             type: Boolean,
             default: false,
@@ -87,11 +97,6 @@ export default {
         return {
             mounted: false,
         };
-    },
-
-    components: {
-        VSvg,
-        VPopover,
     },
 
     methods: {

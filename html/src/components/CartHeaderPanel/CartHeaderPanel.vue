@@ -3,6 +3,7 @@
         popover-class="tooltip--white cart-header-panel"
         header="Мой заказ"
         trigger="hover"
+        offset="8"
         show-bottom
         :disabled="isTabletLg || !hasSession"
     >
