@@ -102,7 +102,7 @@
 
     &__links {
         @media (--tablet-lg) {
-            padding: calc(var(--gs) * 2) calc(var(--gs) * 3);
+            padding: 0 calc(var(--gs) * 3) calc(var(--gs) * 2);
         }
 
         @media (--tablet) {
