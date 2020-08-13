@@ -62,10 +62,9 @@
                 </template>
             </v-sticky>
 
-            <v-sticky class="thank-you-view__sticky">
+            <v-sticky class="thank-you-view__sticky" v-if="items && items.length > 0">
                 <template v-slot:sticky>
                     <info-panel
-                        v-if="items && items.length > 0"
                         class="thank-you-view__panel"
                         header="В корзине остались неоформленные позиции"
                         :max-lines="isTablet ? 2 : 1"

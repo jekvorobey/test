@@ -34,6 +34,11 @@
     &__sticky {
         @media (--tablet-lg-min) {
             width: calc(50% - calc(var(--gs) * 1.5));
+
+            &:first-of-type:last-of-type {
+                width: 100%;
+            }
+
             .v-sticky__container {
                 top: calc(var(--gs) * 8);
             }
