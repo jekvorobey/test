@@ -159,9 +159,9 @@ import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
 
-import CartMasterClassCard from '@components/cart/CartMasterClassCard/CartMasterClassCard.vue';
 import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
 import CartBundleProductCard from '@components/CartBundleProductCard/CartBundleProductCard.vue';
+import CartMasterClassCard from '@components/cart/CartMasterClassCard/CartMasterClassCard.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
