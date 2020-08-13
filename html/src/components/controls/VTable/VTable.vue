@@ -30,16 +30,19 @@ import './VTable.css';
  */
 export default {
     name: 'v-table',
+
     props: {
         keyField: {
             type: String,
         },
+
         items: {
             type: Array,
             default() {
                 return [];
             },
         },
+
         columns: {
             type: Array,
             default() {

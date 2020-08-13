@@ -1,7 +1,42 @@
 .info-pages-block {
-    margin: calc(var(--gs) * 7) auto;
+    margin: calc(var(--gs) * 5) auto calc(var(--gs) * 7);
+
+    @media (--tablet-lg) {
+        margin: calc(var(--gs) * 3) auto;
+    }
 
     &__table {
         margin: calc(var(--gs) * 4) 0;
+
+        th,
+        td {
+            &:nth-child(n + 2) {
+                text-align: center;
+            }
+        }
+    }
+
+    &__card {
+        padding: calc(var(--gs) * 3);
+        border-bottom: 1px solid var(--cl-divider-grey);
+
+        &:first-of-type {
+            border-top: 1px solid var(--cl-divider-grey);
+            margin-top: calc(var(--gs) * 3);
+        }
+
+        &:last-of-type {
+            margin-bottom: calc(var(--gs) * 3);
+        }
+
+        .info-row {
+            &__name {
+                margin-bottom: 0;
+            }
+        }
+
+        .info-row + .info-row {
+            margin-top: var(--gs);
+        }
     }
 }
