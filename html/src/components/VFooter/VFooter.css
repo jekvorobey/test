@@ -106,7 +106,7 @@
         }
 
         @media (--tablet) {
-            padding: calc(var(--gs) * 2);
+            padding: 0 calc(var(--gs) * 2) calc(var(--gs) * 2) calc(var(--gs) * 2);
         }
     }
 
@@ -172,6 +172,16 @@
 
             @media (--tablet) {
                 padding: calc(var(--gs) * 2);
+            }
+        }
+
+        .v-accordion__item--expanded {
+            .v-accordion__item-btn {
+                border-bottom-color: transparent !important;
+
+                &:hover {
+                    border-bottom-color: transparent !important;
+                }
             }
         }
 
