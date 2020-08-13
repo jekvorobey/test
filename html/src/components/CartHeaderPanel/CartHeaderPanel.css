@@ -1,6 +1,10 @@
 .cart-header-panel {
     width: calc(var(--gs) * 52.5);
 
+    &.tooltip[x-placement^='bottom'] {
+        padding-top: calc(var(--gs) * 1.5);
+    }
+
     .popover-arrow {
         display: none;
     }
