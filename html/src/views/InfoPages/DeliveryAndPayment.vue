@@ -1,8 +1,11 @@
 <template>
     <div class="info-pages-block">
-        <h2 class="container info-pages-block__title">
+        <h1 class="container info-pages-block__title">
             Оплата и доставка
-        </h2>
+        </h1>
+
+        <br />
+
         <div class="info-pages-block__content">
             <div class="container">
                 <h3 class="info-pages-block__subtitle">
