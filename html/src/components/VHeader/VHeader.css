@@ -1,6 +1,12 @@
 .v-header {
     height: auto;
 
+    @media (--tablet-lg) {
+        /* #63988 */
+        border-top: 1px solid var(--cl-global);
+        top: -1px;
+    }
+
     &--masked {
         height: 100%;
     }
