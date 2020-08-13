@@ -1,20 +1,20 @@
 .login-panel {
-
     &__body {
         flex-grow: 1;
     }
 
     &__desc {
-        margin-bottom: calc(var(--gs) * 3);
+        margin: calc(var(--gs) * 3) 0 calc(var(--gs) * 2);
+
+        @media (--tablet) {
+            margin-top: 0;
+        }
     }
 
     &__attention {
-        margin: calc(var(--gs) * 3) 0;
+        padding-right: calc(var(--gs) * 4);
+        margin-bottom: calc(var(--gs) * 3);
         fill: var(--cl-grey);
-
-        &--short {
-            padding-right: calc(var(--gs) * 3);
-        }
     }
 
     &__no-account {
@@ -84,7 +84,7 @@
     &__socials {
         display: flex;
         align-items: center;
-        padding-top: calc(var(--gs)  * 2.5);
+        padding-top: calc(var(--gs) * 2.5);
         margin-top: calc(var(--gs) * 4);
         border-top: 1px solid var(--cl-divider-grey);
 

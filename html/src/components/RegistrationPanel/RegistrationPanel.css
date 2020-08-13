@@ -4,10 +4,10 @@
     }
 
     &__desc {
-        margin-bottom: calc(var(--gs) * 3);
+        margin: calc(var(--gs) * 3) 0 calc(var(--gs) * 2);
 
         @media (--tablet) {
-            margin-bottom: calc(var(--gs) * 2);
+            margin-top: 0;
         }
 
         @media (--tablet-lg-diff) {
