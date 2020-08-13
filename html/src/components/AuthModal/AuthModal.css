@@ -1,11 +1,4 @@
 .auth-modal {
-
-    &.hidden-tabs {
-        .modal-body {
-            padding-top: 0;
-        }
-    }
-
     .popup {
         width: calc(var(--gs) * 55);
 
@@ -17,9 +10,8 @@
 
     .modal-body {
         padding: calc(var(--gs) * 3);
-        padding-bottom: var(--gs);
 
-        @media(--tablet) {
+        @media (--tablet) {
             padding: 0;
         }
     }
@@ -29,7 +21,7 @@
             margin-right: calc(var(--gs) * 4);
             border-bottom: 1px solid var(--cl-global);
 
-            @media(--tablet) {
+            @media (--tablet) {
                 display: none;
             }
         }

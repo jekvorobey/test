@@ -4,7 +4,7 @@
     }
 
     &__desc {
-        margin: calc(var(--gs) * 3) 0 calc(var(--gs) * 2);
+        margin: 0 0 calc(var(--gs) * 2);
 
         @media (--tablet) {
             margin-top: 0;
