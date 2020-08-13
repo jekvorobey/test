@@ -3,7 +3,6 @@
         popover-class="tooltip--white cart-header-panel"
         header="Мой заказ"
         trigger="hover"
-        offset="8"
         show-bottom
         :disabled="isTabletLg || !hasSession"
     >
@@ -52,6 +51,7 @@ import GeneralPopupPanel from '@components/GeneralPopupPanel/GeneralPopupPanel.v
 import CartPanelProductCard from '@components/CartPanelProductCard/CartPanelProductCard.vue';
 
 import { mapActions, mapState, mapGetters } from 'vuex';
+import { SCROLL } from '@store';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
@@ -77,6 +77,7 @@ export default {
     },
 
     computed: {
+        ...mapState([SCROLL]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_ITEMS, PRODUCT_ITEMS_SUM]),
 
