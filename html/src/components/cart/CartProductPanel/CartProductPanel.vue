@@ -35,6 +35,8 @@
                     :old-price="product.oldPrice"
                     :count="count"
                     :href="product.url"
+                    show-count
+                    show-controls
                     @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
                     @toggle-favorite-item="onToggleFavorite(product)"
                     @countChange="onAddCartItem(product.id, product.stock.storeId, $event.count)"
@@ -48,6 +50,8 @@
                     :old-price="product.oldPrice"
                     :items="product.items"
                     :count="count"
+                    show-count
+                    show-controls
                     @deleteBundle="onDeleteBundle"
                 />
             </li>

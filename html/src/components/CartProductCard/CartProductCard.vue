@@ -1,8 +1,8 @@
 <template>
     <div class="cart-product-card" :class="{ 'cart-product-card--small': isSmall }">
         <router-link class="cart-product-card__img" :to="href">
-            <v-picture v-if="image && image.id" :image="image" alt="">
-                <template v-slot:source="{ image }">
+            <v-picture v-if="image && image.id" alt="">
+                <slot>
                     <source
                         :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
                         type="image/webp"
@@ -13,20 +13,14 @@
                         type="image/webp"
                         media="(max-width: 479px)"
                     />
-                </template>
-                <template v-slot:fallback="{ image, lazy, alt }">
-                    <img
-                        class="blur-up lazyload v-picture__img"
-                        :data-src="generateSourcePath(300, 300, image.id)"
-                        :alt="alt"
-                    />
-                </template>
+                    <img class="blur-up lazyload v-picture__img" :data-src="generateSourcePath(300, 300, image.id)" />
+                </slot>
             </v-picture>
             <v-svg v-else id="cart-product-card-empty" name="logo" width="48" height="48" />
         </router-link>
         <div class="cart-product-card__body">
             <v-link class="cart-product-card__body-name" :to="href">{{ name }}</v-link>
-            <div class="cart-product-card__body-count">
+            <div class="cart-product-card__body-count" v-if="showCount">
                 <v-counter :value="count" min="1" @input="debounce_countChange" />
             </div>
 
@@ -46,7 +40,7 @@
             </div>
             <!-- #58322  -->
             <div class="text-grey cart-product-card__body-bonus" :style="{ visibility: 'hidden' }">+ 80 бонусов</div>
-            <div class="cart-product-card__body-controls">
+            <div class="cart-product-card__body-controls" v-if="showControls">
                 <favorites-button
                     class="cart-product-card__body-controls-link"
                     :is-active="inFavorites"
@@ -141,6 +135,16 @@ export default {
         count: {
             type: Number,
             default: 1,
+        },
+
+        showCount: {
+            type: Boolean,
+            default: false,
+        },
+
+        showControls: {
+            type: Boolean,
+            default: false,
         },
 
         isSmall: {

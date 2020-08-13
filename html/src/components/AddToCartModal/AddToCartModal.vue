@@ -15,6 +15,7 @@
                         :price="product.price"
                         :old-price="product.oldPrice"
                         :count="cartItem.count"
+                        show-count
                         href="/catalog"
                         @countChange="onCountChange($event.count, product)"
                     />

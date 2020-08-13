@@ -6,14 +6,17 @@
             </v-picture>
             <v-svg v-else id="cart-master-class-card-empty" name="logo" width="48" height="48" />
         </router-link>
+
         <div class="cart-master-class-card__body">
             <v-link class="cart-master-class-card__body-name" :to="href">
                 <div>{{ name }}</div>
                 <div v-if="note">({{ note }})</div>
             </v-link>
-            <div class="cart-master-class-card__body-count">
+
+            <div class="cart-master-class-card__body-count" v-if="showCount">
                 <v-counter :value="count" min="0" @input="debounce_countChange" />
             </div>
+
             <div class="cart-master-class-card__body-prices">
                 <price class="text-bold cart-master-class-card__body-price" v-bind="price" />
                 <price
@@ -22,11 +25,13 @@
                     v-bind="oldPrice"
                 />
             </div>
+
             <div class="text-grey text-sm cart-master-class-card__body-info">
                 <div>{{ date }}</div>
                 <div>{{ author }}</div>
             </div>
-            <div class="cart-master-class-card__body-controls">
+
+            <div class="cart-master-class-card__body-controls" v-if="showControls">
                 <!-- #58539 -->
                 <!-- <v-link class="cart-master-class-card__body-controls-link" tag="button">
                     <v-svg name="wishlist-middle" width="15" height="13" />
@@ -114,6 +119,16 @@ export default {
         count: {
             type: Number,
             default: 1,
+        },
+
+        showCount: {
+            type: Boolean,
+            default: false,
+        },
+
+        showControls: {
+            type: Boolean,
+            default: false,
         },
 
         isSmall: {

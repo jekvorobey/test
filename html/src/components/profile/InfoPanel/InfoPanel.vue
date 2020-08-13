@@ -25,14 +25,17 @@ export default {
     },
 
     props: {
-        header: String,
+        header: {
+            type: String,
+        },
+
+        maxLines: {
+            type: Number,
+            default: 1,
+        },
     },
 
     computed: {
-        maxLines() {
-            return 1;
-        },
-
         autoResize() {
             return true;
         },

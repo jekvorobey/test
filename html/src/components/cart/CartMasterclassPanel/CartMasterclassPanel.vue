@@ -25,6 +25,8 @@
                 :author="product.author"
                 :count="count"
                 :href="product.url"
+                show-count
+                show-controls
                 @deleteItem="onDeleteMasterclassItem(product.id)"
                 @countChange="onAddMasterclassItem(product.id, $event.count)"
             >

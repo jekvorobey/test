@@ -36,9 +36,11 @@
                     </li>
                 </ol>
             </div>
-            <div class="cart-bundle-product-card__body-count">
-                <v-counter :value="count" :min="1" :max="maxBundlesCount"  @input="debounce_countChange" />
+
+            <div class="cart-bundle-product-card__body-count" v-if="showCount">
+                <v-counter :value="count" :min="1" :max="maxBundlesCount" @input="debounce_countChange" />
             </div>
+
             <div class="cart-bundle-product-card__body-price">
                 <price tag="div" class="text-bold cart-bundle-product-card__price" v-bind="price" />
                 <price
@@ -48,7 +50,8 @@
                     v-bind="oldPrice"
                 />
             </div>
-            <div class="cart-bundle-product-card__body-controls">
+
+            <div class="cart-bundle-product-card__body-controls" v-if="showControls">
                 <favorites-button
                     class="cart-bundle-product-card__body-controls-link"
                     :is-active="inFavorites"
@@ -137,6 +140,16 @@ export default {
             type: Number,
             default: null,
         },
+
+        showCount: {
+            type: Boolean,
+            default: false,
+        },
+
+        showControls: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
@@ -168,7 +181,7 @@ export default {
 
     methods: {
         onToggleFavorite(value) {
-           return false;
+            return false;
         },
 
         onDeleteClick() {

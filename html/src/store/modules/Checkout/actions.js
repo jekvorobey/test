@@ -1,34 +1,8 @@
-import { $logger } from '@services';
 import { requestStatus } from '@enums';
 import { storeErrorHandler } from '@util/store';
 
 import {
-    RECEIVE_METHOD_STATUS,
-    ADDRESS_STATUS,
-    BONUS_STATUS,
-    CERTIFICATE_STATUS,
-    PROMOCODE_STATUS,
-    TICKET_STATUS,
-} from './getters';
-
-import {
-    SET_DATA,
-    SET_TYPE,
-    SET_PROFESSIONS,
-    SET_STATUS,
-    SET_AGREEMENT as M_SET_AGREEMENT,
-    SET_SUBSCRIBE as M_SET_SUBSCRIBE,
-    SET_RECIPIENT as M_SET_RECIPIENT,
-    SET_DELIVERY_TYPE as M_SET_DELIVERY_TYPE,
-    SET_CONFIRMATION_TYPE as M_SET_CONFIRMATION_TYPE,
-    CHANGE_CHUNK_DATE as M_CHANGE_CHUNK_DATE,
-    ADD_ADDRESS as M_ADD_ADDRESS,
-    CHANGE_ADDRESS as M_CHANGE_ADDRESS,
-    ADD_RECIPIENT as M_ADD_RECIPIENT,
-    CHANGE_RECIPIENT as M_CHANGE_RECIPIENT,
-} from './mutations';
-
-import {
+    getCheckoutOrder,
     getCheckoutData,
     setReceiveMethod,
     setAddress,
@@ -44,6 +18,33 @@ import {
     changeCheckoutMasterclassTickets,
     getProfessions,
 } from '@api';
+
+import {
+    RECEIVE_METHOD_STATUS,
+    ADDRESS_STATUS,
+    BONUS_STATUS,
+    CERTIFICATE_STATUS,
+    PROMOCODE_STATUS,
+    TICKET_STATUS,
+} from './getters';
+
+import {
+    SET_CHECKOUT_ORDER,
+    SET_DATA,
+    SET_TYPE,
+    SET_PROFESSIONS,
+    SET_STATUS,
+    SET_AGREEMENT as M_SET_AGREEMENT,
+    SET_SUBSCRIBE as M_SET_SUBSCRIBE,
+    SET_RECIPIENT as M_SET_RECIPIENT,
+    SET_DELIVERY_TYPE as M_SET_DELIVERY_TYPE,
+    SET_CONFIRMATION_TYPE as M_SET_CONFIRMATION_TYPE,
+    CHANGE_CHUNK_DATE as M_CHANGE_CHUNK_DATE,
+    ADD_ADDRESS as M_ADD_ADDRESS,
+    CHANGE_ADDRESS as M_CHANGE_ADDRESS,
+    ADD_RECIPIENT as M_ADD_RECIPIENT,
+    CHANGE_RECIPIENT as M_CHANGE_RECIPIENT,
+} from './mutations';
 
 export const FETCH_PROFESSIONS = 'FETCH_PROFESSIONS';
 
@@ -75,14 +76,15 @@ export const CHANGE_ADDRESS = 'CHANGE_ADDRESS';
 export const FETCH_CHECKOUT_DATA = 'FETCH_CHECKOUT_DATA';
 export const CLEAR_CHECKOUT_DATA = 'CLEAR_CHECKOUT_DATA';
 export const CHANGE_CHUNK_DATE = 'CHANGE_CHUNK_DATE';
+export const COMMIT_DATA = 'COMMIT_DATA';
 
 export const ADD_TICKET = 'ADD_TICKET';
 export const CHANGE_TICKET = 'CHANGE_TICKET';
 
-export const COMMIT_DATA = 'COMMIT_DATA';
+export const FETCH_CHECKOUT_ORDER = 'FETCH_CHECKOUT_ORDER';
 
 export default {
-    async [FETCH_PROFESSIONS]({ commit }, payload) {
+    async [FETCH_PROFESSIONS]({ commit }) {
         try {
             const { items } = await getProfessions();
             commit(SET_PROFESSIONS, items);
@@ -222,7 +224,7 @@ export default {
     },
 
     [CHANGE_ADDRESS]({ dispatch, commit }, payload = {}) {
-        const { index, address } = payload;
+        const { address } = payload;
         commit(M_CHANGE_ADDRESS, payload);
         return dispatch(SET_ADDRESS, address);
     },
@@ -238,7 +240,7 @@ export default {
         return dispatch(SET_RECIPIENT, recipient);
     },
 
-    [ADD_RECIPIENT]({ dispatch, commit }, recipient) {
+    [ADD_RECIPIENT]({ commit }, recipient) {
         commit(M_ADD_RECIPIENT, recipient);
     },
 
@@ -319,6 +321,15 @@ export default {
             return await commitCheckoutData(checkoutType, { data: checkoutData });
         } catch (error) {
             storeErrorHandler(COMMIT_DATA, true)(error);
+        }
+    },
+
+    async [FETCH_CHECKOUT_ORDER]({ commit }, id) {
+        try {
+            const data = await getCheckoutOrder(id);
+            commit(SET_CHECKOUT_ORDER, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_CHECKOUT_ORDER)(error);
         }
     },
 

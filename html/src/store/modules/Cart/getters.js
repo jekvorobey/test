@@ -1,6 +1,5 @@
-import { $logger } from '@services';
 import { cartItemTypes } from '@enums/product';
-import { requestStatus, currencySymbol } from '@enums';
+import { requestStatus } from '@enums';
 import { generateProductUrl, generateMasterclassUrl } from '@util/catalog';
 
 export const GET_ITEMS_BY_TYPE = 'GET_ITEMS_BY_TYPE';
@@ -8,8 +7,6 @@ export const IS_PRODUCT = 'IS_PRODUCT';
 export const IS_MASTER_CLASS = 'IS_MASTER_CLASS';
 export const IS_IN_CART = 'IS_IN_CART';
 
-export const PRODUCTS = 'products';
-export const MASTER_CLASSES = 'masterClasses';
 export const CART_TYPES = 'cartTypes';
 export const CART_ITEMS = 'cartItems';
 export const CART_ITEMS_COUNT = 'cartItemsCount';
@@ -75,6 +72,7 @@ export default {
     [CART_ITEMS]: (state, getters) => {
         const cartTypes = getters[CART_TYPES] || [];
         const items = [];
+        // eslint-disable-next-line no-restricted-syntax
         for (const type of cartTypes) items.push(...type.items);
         return items.map(prepareItem);
     },
@@ -93,7 +91,7 @@ export default {
         return sum;
     },
 
-    [IS_IN_CART]: (state, getters) => (type, id) => {
+    [IS_IN_CART]: (state) => (type, id) => {
         const data = state.cartData[type];
         return data && data.items.some((i) => i.p.id === id);
     },

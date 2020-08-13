@@ -855,6 +855,10 @@ export function changeReceiveMethod(data) {
     return $http.post('/v1/checkout/receive-method', data);
 }
 
+export function getCheckoutOrder(order_id) {
+    return $http.get(`/v1/checkout/order/${order_id}`);
+}
+
 // favorites
 
 export function getFavorites(pageNum, perPage, orderField, orderDirection) {

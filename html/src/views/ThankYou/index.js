@@ -1,5 +1,3 @@
-import { cartItemTypes } from '@enums/product';
-
 /**
  * @Module
  */
@@ -15,7 +13,7 @@ export default {
      */
     routes: [
         {
-            path: '/thank-you/:type',
+            path: '/thank-you/:id',
             component: ThankYouAsync,
         },
     ],

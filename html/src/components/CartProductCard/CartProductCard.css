@@ -4,7 +4,6 @@
     &__img {
         position: relative;
         display: flex;
-        width: 40%;
         max-width: 184px;
         height: 100%;
         padding: calc(var(--gs) * 2);

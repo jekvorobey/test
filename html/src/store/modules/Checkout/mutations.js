@@ -17,6 +17,7 @@ export const ADD_RECIPIENT = 'ADD_RECIPIENT';
 export const CHANGE_RECIPIENT = 'CHANGE_RECIPIENT';
 
 export const SET_PROFESSIONS = 'SET_PROFESSIONS';
+export const SET_CHECKOUT_ORDER = 'SET_CHECKOUT_ORDER';
 
 export default {
     [SET_STATUS](state, payload = {}) {
@@ -82,5 +83,9 @@ export default {
         const existRecipient = state.checkoutData.recipients[index];
         if (existRecipient) Object.assign(existRecipient, recipient);
         state.checkoutData.input.recipient = existRecipient;
+    },
+
+    [SET_CHECKOUT_ORDER](state, payload) {
+        state.order = payload;
     },
 };

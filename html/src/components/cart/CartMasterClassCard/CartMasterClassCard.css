@@ -14,7 +14,7 @@
         border-bottom: none;
 
         @media (--tablet) {
-            width: 33%;
+            max-width: 33%;
             margin-right: var(--gs);
         }
 
@@ -63,7 +63,7 @@
 
         &-name {
             order: 0;
-            width: 50%;
+            flex: 1;
             text-transform: none;
             font-weight: bold;
 

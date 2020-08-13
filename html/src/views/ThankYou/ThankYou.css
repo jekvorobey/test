@@ -2,8 +2,9 @@
     padding-top: calc(var(--gs) * 5);
     padding-bottom: calc(var(--gs) * 10);
 
-    @media (--tablet) {
-        padding: calc(var(--gs) * 4) 0;
+    @media (--tablet-lg) {
+        padding-top: calc(var(--gs) * 3);
+        padding-bottom: calc(var(--gs) * 4);
     }
 
     &__hl {
@@ -20,11 +21,22 @@
     &__container {
         display: flex;
         justify-content: space-between;
+
+        @media (--tablet-lg) {
+            flex-direction: column;
+        }
+
+        @media (--tablet) {
+            padding: 0;
+        }
     }
 
-    &__panel {
+    &__sticky {
         @media (--tablet-lg-min) {
             width: calc(50% - calc(var(--gs) * 1.5));
+            .v-sticky__container {
+                top: calc(var(--gs) * 8);
+            }
         }
 
         & + & {
@@ -32,7 +44,9 @@
                 margin-top: calc(var(--gs) * 4);
             }
         }
+    }
 
+    &__panel {
         &-attention {
             flex-wrap: nowrap;
         }
@@ -54,20 +68,15 @@
                 margin-top: calc(var(--gs) * 2);
             }
 
-            .package-product-card__img {
-                padding: calc(var(--gs) * 2);
-                width: calc(var(--gs) * 12);
-                max-width: calc(var(--gs) * 12);
-                max-height: calc(var(--gs) * 12);
+            .cart-master-class-card__img {
+                width: auto;
+                align-items: flex-start;
+                align-self: flex-start;
             }
 
-            .master-class-card__img {
-                width: calc(var(--gs) * 18);
-                max-height: calc(var(--gs) * 12);
-            }
-
-            .package-product-card__body,
-            .master-class-card__body {
+            .cart-product-card__body,
+            .cart-bundle-product-card__body,
+            .cart-master-class-card__body {
                 justify-content: space-between;
                 padding: 0;
             }
@@ -75,6 +84,16 @@
 
         &-btn {
             margin-top: calc(var(--gs) * 3);
+
+            @media (--tablet) {
+                width: 100%;
+            }
+        }
+
+        .info-panel__header {
+            @media (--tablet-lg-diff) {
+                padding-left: 0;
+            }
         }
     }
 }
