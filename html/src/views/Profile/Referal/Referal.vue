@@ -238,10 +238,6 @@
             </div>
         </attention-panel>
 
-        <div v-if="!(orders && orders.length)" class="referal-view__orders-null container container--tablet-lg">
-            Заказов в этот перод времени не было
-        </div>
-
         <div class="container container--tablet-lg referal-view__controls" v-if="pagesCount > 1">
             <show-more-button
                 v-if="activePage < pagesCount"
