@@ -4,7 +4,6 @@
     &__attention {
         flex-wrap: nowrap;
         fill: var(--cl-grey);
-        padding-top: calc(var(--gs) * 4);
 
         @media (--tablet-lg) {
             margin-bottom: calc(var(--gs) * 3);
@@ -57,6 +56,20 @@
                     .icon {
                         width: 20px;
                         height: 20px;
+                    }
+                }
+            }
+        }
+
+        &--recipient &-card {
+            &:first-of-type:last-child {
+                .checkout-option-card__right {
+                    @media (--tablet-min) {
+                        justify-content: center;
+
+                        &-selected {
+                            display: none;
+                        }
                     }
                 }
             }

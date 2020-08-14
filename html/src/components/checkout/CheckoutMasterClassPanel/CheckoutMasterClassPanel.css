@@ -62,6 +62,20 @@
             }
         }
 
+        &--recipient &-card {
+            &:first-of-type:last-child {
+                .checkout-option-card__right {
+                    @media (--tablet-min) {
+                        justify-content: center;
+
+                        &-selected {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+
         &--settings {
             padding-top: calc(var(--gs) * 3);
             border-top: 1px solid var(--cl-divider-grey);

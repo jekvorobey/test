@@ -1,7 +1,7 @@
 <template>
     <div class="checkout-product-panel">
         <template v-if="canDeliver">
-            <div class="checkout-product-panel__item">
+            <div class="checkout-product-panel__item checkout-product-panel__item--recipient">
                 <div class="checkout-product-panel__item-header">
                     <h2 class="checkout-product-panel__item-header-hl">Получатель</h2>
                 </div>

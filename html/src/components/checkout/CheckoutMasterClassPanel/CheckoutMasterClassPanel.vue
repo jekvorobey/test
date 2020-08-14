@@ -1,6 +1,6 @@
 <template>
     <div class="checkout-master-class-panel">
-        <div class="checkout-master-class-panel__item checkout-master-class-panel__item--recepient">
+        <div class="checkout-master-class-panel__item checkout-master-class-panel__item--recipient">
             <div class="checkout-master-class-panel__item-header">
                 <h2 class="checkout-master-class-panel__item-header-hl">Получатель</h2>
             </div>
