@@ -40,8 +40,10 @@ export default {
         }
     },
 
-    async [FETCH_CATEGORIES](context, { code } = {}) {
+    async [FETCH_CATEGORIES](context, { code, filter }) {
         try {
+            // todo
+            // return await getCategories(code, null, filter);
             return await getCategories(code);
         } catch (error) {
             storeErrorHandler(FETCH_CATEGORIES)(error);
@@ -116,7 +118,10 @@ export default {
             productGroupFilter = data.productGroup.filters;
 
             if (based === productGroupBase.FILTERS) {
-                fetchList.push({ action: FETCH_CATEGORIES, payload: { code: productGroupFilter.category } });
+                fetchList.push({
+                    action: FETCH_CATEGORIES,
+                    payload: { code: productGroupFilter.category, filter: productGroupFilter },
+                });
             } else {
                 data.categories = [];
                 data.activeCategories = [];

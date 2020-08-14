@@ -601,12 +601,19 @@ export function getProductBundles(code) {
     });
 }
 
-export function getCategories(node_code, max_depth) {
+export function getCategories(node_code, max_depth, filter) {
     return $http.get('/v1/categories', {
         params: {
+            // filter,
             node_code: node_code || undefined,
             max_depth: max_depth || undefined,
         },
+        // todo
+        // paramsSerializer(params) {
+        //     return qs.stringify(params, {
+        //         encode: false,
+        //     });
+        // },
     });
 }
 
