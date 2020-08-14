@@ -922,12 +922,16 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: modalName.profile.ADDRESS_EDIT,
                 open: true,
-                state: { address: { ...address } },
+                state: { address: { ...address }, btnText: 'Привезти сюда' },
             });
         },
 
         onAddAddress() {
-            this[CHANGE_MODAL_STATE]({ name: modalName.profile.ADDRESS_EDIT, open: true, state: { address: {} } });
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.profile.ADDRESS_EDIT,
+                open: true,
+                state: { address: {}, btnText: 'Привезти сюда' },
+            });
         },
 
         onSaveAddress(address) {

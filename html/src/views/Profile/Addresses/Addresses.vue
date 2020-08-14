@@ -165,7 +165,7 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: modalName.profile.ADDRESS_EDIT,
                 open: true,
-                state: { address: {} },
+                state: { address: {}, btnText: 'Добавить' },
             });
         },
 
@@ -181,7 +181,7 @@ export default {
             this[CHANGE_MODAL_STATE]({
                 name: modalName.profile.ADDRESS_EDIT,
                 open: true,
-                state: { address: { ...address } },
+                state: { address: { ...address }, btnText: 'Изменить' },
             });
         },
 
@@ -194,7 +194,7 @@ export default {
                     message: 'Адрес доставки будет удалён',
                     btnSubmitText: 'Удалить',
                     additionalArgs: address,
-                }
+                },
             });
         },
     },

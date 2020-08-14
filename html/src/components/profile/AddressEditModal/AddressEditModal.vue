@@ -183,7 +183,7 @@
 
                 <div class="address-edit-modal__form-submit">
                     <v-button class="address-edit-modal__form-submit-btn" @click.prevent="onSubmit">
-                        Привезти сюда
+                        {{ btnText }}
                     </v-button>
                 </div>
             </div>
@@ -308,6 +308,11 @@ export default {
             modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
         ...mapGetters(GEO_MODULE, [SELECTED_CITY_COORDS]),
+
+        btnText() {
+            const { modalState } = this;
+            return modalState.btnText || 'Сохранить';
+        },
 
         computedCoords() {
             return this.coords || this[SELECTED_CITY_COORDS];
