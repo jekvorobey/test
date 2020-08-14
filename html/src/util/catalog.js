@@ -31,6 +31,10 @@ export function generateMasterclassUrl(code, refCode) {
     return `/masterclasses/${code}`;
 }
 
+export function generateSearchUrl(search_string) {
+    return `/${productGroupTypes.SEARCH}/?search_string=${search_string}`;
+}
+
 export function generateTicketDownloadUrl(orderId, basketItemId) {
     return orderId && basketItemId && `/v1/lk/order/${orderId}/tickets?basket_item_id=${basketItemId}`;
 }

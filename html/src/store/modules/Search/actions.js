@@ -1,5 +1,4 @@
 import _debounce from 'lodash/debounce';
-import { $logger } from '@services';
 import { search, getProducts, getSearchPopularRequest } from '@api';
 import { storeErrorHandler } from '@util/store';
 import {
@@ -24,11 +23,11 @@ export const SET_SEARCH = 'SET_SEARCH';
 export const SEARCH = 'SEARCH';
 
 export default {
-    async [GET_POPULAR_PRODUCTS]({ commit, state }, payload = {}) {
+    async [GET_POPULAR_PRODUCTS]({ commit }, payload = {}) {
         try {
             const data = await getProducts(payload);
             commit(SET_POPULAR_PRODUCTS, data.items.slice(0, 4));
-        } catch(error) {
+        } catch (error) {
             storeErrorHandler(GET_POPULAR_PRODUCTS)(error);
         }
     },
@@ -37,7 +36,7 @@ export default {
         try {
             const { search_requests } = await getSearchPopularRequest(limit);
             commit(SET_POPULAR_REQUESTS, search_requests);
-        } catch(error) {
+        } catch (error) {
             storeErrorHandler(GET_POPULAR_REQUESTS)(error);
         }
     },

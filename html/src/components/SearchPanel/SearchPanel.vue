@@ -1,18 +1,31 @@
 <template>
     <div class="search-panel">
         <div class="search-panel__container" v-scroll-lock="search">
+            <search-filter
+                class="container container--tablet-lg search-panel__search"
+                v-if="isTabletLg"
+                v-focus
+                input-id="lower-filter"
+            />
+
             <div class="container">
+                <h2 class="text-grey text-medium search-panel__hl" v-if="isTablet">
+                    Популярные запросы
+                </h2>
+
                 <ul class="search-panel__categories-list">
-                    <template v-if="searchString !== '' && categories && categories.length > 0">
-                        <li class="search-panel__categories-item" :key="category" v-for="category in categories">
-                            <v-link class="search-panel__categories-link" :to="getLink(category)">{{
-                                category
-                            }}</v-link>
+                    <template v-if="!isEmpty && categories && categories.length > 0">
+                        <li class="search-panel__categories-item" :key="category.name" v-for="category in categories">
+                            <v-link class="search-panel__categories-link" :to="category.link">
+                                {{ category.name }}
+                            </v-link>
                         </li>
                     </template>
                     <template v-else>
-                        <li class="search-panel__categories-item" :key="request" v-for="request in popularRequests">
-                            <v-link class="search-panel__categories-link" :to="getLink(request)">{{ request }}</v-link>
+                        <li class="search-panel__categories-item" :key="request.name" v-for="request in requests">
+                            <v-link class="search-panel__categories-link" :to="request.url">
+                                {{ request.name }}
+                            </v-link>
                         </li>
                     </template>
                 </ul>
@@ -22,32 +35,35 @@
                     retailrocket.markup.render();
                 </script>
 
-                <div v-if="!isTablet && products && products.length > 0" class="search-panel__products">
-                    <p class="text-bold search-panel__hl" v-if="searchString === ''">Популярные товары</p>
-                    <ul class="search-panel__products-list" :class="{ 'has-preloader': preloader }">
-                        <li class="search-panel__products-card" v-for="item in products" :key="item.id">
-                            <catalog-product-card
-                                :offer-id="item.id"
-                                :product-id="item.productId"
-                                :name="item.name"
-                                :type="item.type"
-                                :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                                :image="generateImageObject(item.image)"
-                                :price="item.price"
-                                :old-price="item.oldPrice"
-                                :badges="item.badges"
-                                :rating="item.rating"
-                                :show-buy-btn="item.stock.qty > 0"
-                                @add-item="onAddToCart(item)"
-                                @preview="onPreview(item.code)"
-                                @toggle-favorite-item="onToggleFavorite(item)"
-                            />
-                        </li>
-                    </ul>
-                </div>
-                <v-button class="btn--outline search-panel__btn" v-if="showSubmitBtn" @click="toSearchClick">
-                    {{ getSearchBtnText }}
-                </v-button>
+                <template v-if="!isTablet && products && products.length > 0">
+                    <div class="search-panel__products">
+                        <p class="text-bold search-panel__hl" v-if="isEmpty">Популярные товары</p>
+                        <ul class="search-panel__products-list" :class="{ 'has-preloader': preloader }">
+                            <li class="search-panel__products-card" v-for="item in products" :key="item.id">
+                                <catalog-product-card
+                                    :offer-id="item.id"
+                                    :product-id="item.productId"
+                                    :name="item.name"
+                                    :type="item.type"
+                                    :href="item.url"
+                                    :image="item.image"
+                                    :price="item.price"
+                                    :old-price="item.oldPrice"
+                                    :badges="item.badges"
+                                    :rating="item.rating"
+                                    :show-buy-btn="item.stock.qty > 0"
+                                    @add-item="onAddToCart(item)"
+                                    @preview="onPreview(item.code)"
+                                    @toggle-favorite-item="onToggleFavorite(item)"
+                                />
+                            </li>
+                        </ul>
+                    </div>
+
+                    <v-button class="btn--outline search-panel__btn" v-if="showSubmitBtn" @click="onSearch">
+                        {{ searchBtnText }}
+                    </v-button>
+                </template>
             </div>
         </div>
     </div>
@@ -58,6 +74,7 @@ import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
+import SearchFilter from '@components/SearchFilter/SearchFilter.vue';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
 
@@ -82,6 +99,7 @@ import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { productGroupTypes } from '@enums/product';
+import { generateProductUrl, generateSearchUrl } from '@util/catalog';
 import { modalName } from '@enums';
 import './SearchPanel.css';
 
@@ -93,18 +111,50 @@ export default {
         VButton,
 
         CatalogProductCard,
+        SearchFilter,
     },
 
     computed: {
         ...mapState(SEARCH_MODULE, [SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS, POPULAR_REQUESTS, PRELOADER]),
-        ...mapState(SEARCH_MODULE, {
-            categories: state => state[SUGGESTIONS].categories,
-        }),
 
         products() {
-            return this.searchString && this[SUGGESTIONS].products
-                ? this[SUGGESTIONS].products
-                : this[POPULAR_PRODUCTS];
+            const { isEmpty } = this;
+            const { products } = this[SUGGESTIONS] || {};
+            const popularProducts = this[POPULAR_PRODUCTS];
+            const collection = (!isEmpty && products) || popularProducts || [];
+
+            return collection.map(i => ({
+                ...i,
+                url: generateProductUrl(i.categoryCodes[i.categoryCodes.length - 1], i.code),
+                image: this.generateImageObject(i.image),
+            }));
+        },
+
+        requests() {
+            const requests = this[POPULAR_REQUESTS] || [];
+            return requests.map(r => ({ name: r, url: generateSearchUrl(r) }));
+        },
+
+        categories() {
+            const { suggestions = [] } = this[SUGGESTIONS] || {};
+            return suggestions.map(s => ({ name: s, url: generateSearchUrl(s) }));
+        },
+
+        range() {
+            const { range } = this[SUGGESTIONS] || {};
+            return range || 0;
+        },
+
+        searchBtnText() {
+            const { range, isTabletLg } = this;
+
+            if (!isTabletLg) return `Показать ещё ${range} товаров`;
+            return `Найдено ${range} товаров`;
+        },
+
+        showSubmitBtn() {
+            const { range, isEmpty } = this;
+            return range && !isEmpty;
         },
 
         isTablet() {
@@ -115,23 +165,8 @@ export default {
             return this.$mq.tabletLg;
         },
 
-        categories() {
-            return this.suggestions.suggestions;
-        },
-
-        range() {
-            return this.suggestions.range;
-        },
-
-        getSearchBtnText() {
-            if (!this.isTabletLg) {
-                return `Показать ещё ${this.range} товаров`;
-            }
-            return `Найдено ${this.range} товаров`;
-        },
-
-        showSubmitBtn() {
-            return this.products && this.products.length && this.searchString !== '' && this[SUGGESTIONS].products;
+        isEmpty() {
+            return !this[SEARCH_STRING];
         },
     },
 
@@ -141,32 +176,27 @@ export default {
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
-        onToggleFavorite({ productId }) {
-            this[TOGGLE_FAVORITES_ITEM](productId);
-        },
-
         generateImageObject(image) {
-            if (image.id) {
-                return {
-                    id: image.id,
-                };
-            }
+            if (!image) return null;
+            if (image.id) return image;
             return {
                 id: image,
             };
         },
 
-        toSearchClick() {
+        generateLink(category) {
+            return `/${productGroupTypes.SEARCH}/?search_string=${category}`;
+        },
+
+        onToggleFavorite({ productId }) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
+        },
+
+        onSearch() {
             this.$router.replace({
                 path: `/${productGroupTypes.SEARCH}/?search_string=${this.searchString}`,
             });
             this[SET_SEARCH](false);
-        },
-
-        getLink(category) {
-            return {
-                path: `/${productGroupTypes.SEARCH}/?search_string=${category}`,
-            };
         },
 
         onPreview(code) {
@@ -182,8 +212,9 @@ export default {
         },
     },
 
-    created() {
-        Promise.all([this[GET_POPULAR_PRODUCTS](), this[GET_POPULAR_REQUESTS]()]);
+    mounted() {
+        this[GET_POPULAR_PRODUCTS]();
+        this[GET_POPULAR_REQUESTS]();
     },
 };
 </script>

@@ -6,7 +6,7 @@
     &--active {
         width: 100% !important;
 
-        @media(--tablet-lg-min) {
+        @media (--tablet-lg-min) {
             margin-top: calc(var(--gs) * 5);
         }
     }
@@ -49,7 +49,7 @@
 
     &__clear {
         display: none;
-        height: 20px;
+        height: 24px;
         margin-left: calc(var(--gs) * 1.5);
     }
 

@@ -15,7 +15,7 @@
             @keyup.enter="onSearch"
         />
         <button class="search-filter__clear" @click="onClearClick">
-            <v-svg name="cross" width="20" height="20" />
+            <v-svg name="cross" width="24" height="24" />
         </button>
     </div>
 </template>
@@ -23,17 +23,19 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 
-import { productGroupTypes } from '@enums/product';
+import { mapState, mapActions } from 'vuex';
 
+import { NAME as SEARCH_MODULE, SEARCH as SEARCH_STATE } from '@store/modules/Search';
+import { SET_SEARCH, SEARCH } from '@store/modules/Search/actions';
+
+import { productGroupTypes } from '@enums/product';
 import '@images/sprites/search-middle.svg';
 import '@images/sprites/cross.svg';
-
 import './SearchFilter.critical.css';
-
-import { mapState, mapActions } from 'vuex';
 
 export default {
     name: 'search-filter',
+
     components: {
         VSvg,
     },
@@ -53,33 +55,31 @@ export default {
     },
 
     computed: {
-        ...mapState('search', ['search']),
+        ...mapState(SEARCH_MODULE, [SEARCH_STATE]),
 
         searchPlaceholder() {
-            if (this.isFocus) {
-                return 'Что вы ищете?';
-            }
+            if (this.isFocus) return 'Что вы ищете?';
             return this.$t('header.middle.search');
         },
     },
 
     watch: {
         searchString(value) {
-            this.SEARCH(value);
+            this[SEARCH](value);
         },
     },
 
     methods: {
-        ...mapActions('search', ['SEARCH', 'SET_SEARCH']),
+        ...mapActions(SEARCH_MODULE, [SEARCH, SET_SEARCH]),
 
         onClearClick() {
             this.searchString = '';
-            this.SET_SEARCH(false);
+            this[SET_SEARCH](false);
         },
 
         onSearch() {
             if (!this.searchString) return;
-            this.SET_SEARCH(false);
+            this[SET_SEARCH](false);
             this.$router.push({
                 path: `/${productGroupTypes.SEARCH}`,
                 query: {
@@ -89,8 +89,8 @@ export default {
         },
 
         onSearchOpen() {
-            this.SET_SEARCH(true);
-        }
+            this[SET_SEARCH](true);
+        },
     },
 };
 </script>
