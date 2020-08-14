@@ -16,6 +16,7 @@
                     :locale="datepickerLocale"
                     :maxDate="maxDate"
                     :minDate="minDate"
+                    month-selector-type="static"
                     date-format="Y-m-d"
                     inline
                 />
@@ -80,12 +81,12 @@ export default {
 
     computed: {
         ...mapState({
-            datepickerLocale: (state) =>
+            datepickerLocale: state =>
                 state[LOCALIZATIONS][state[LOCALE]] && state[LOCALIZATIONS][state[LOCALE]].flatpickrLocale,
         }),
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
-            state: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            state: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         availableDates() {

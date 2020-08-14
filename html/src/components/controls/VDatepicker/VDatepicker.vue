@@ -129,6 +129,11 @@ export default {
             type: String,
             default: null,
         },
+
+        monthSelectorType: {
+            type: String,
+            default: 'dropdown',
+        },
     },
     data() {
         return {
@@ -204,6 +209,7 @@ export default {
                 maxDate: this.maxDate,
                 nextArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
                 prevArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
+                monthSelectorType: this.monthSelectorType,
 
                 onChange(selectedDates, dateStr, instance) {
                     that.internal_value = [...dateStr.split(', ')];

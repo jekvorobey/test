@@ -221,6 +221,7 @@ https://flatpickr.js.org/
         }
     }
 }
+
 .flatpickr-current-month {
     position: static;
     width: 100%;
@@ -231,9 +232,22 @@ https://flatpickr.js.org/
         /* inline немного увеличивает полезную область под месяц, что повышает удобство скролла */
         display: inline;
         margin-left: 0;
+
+        &:hover {
+            background: transparent;
+        }
+    }
+
+    .numInputWrapper {
+        padding-right: calc(var(--gs) * 2);
+
+        &:hover {
+            background: transparent;
+        }
     }
 
     input.cur-year {
+        padding: 0;
         font-weight: 700;
 
         &[disabled] {
