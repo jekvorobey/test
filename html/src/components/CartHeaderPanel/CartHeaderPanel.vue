@@ -30,7 +30,7 @@
                 Оформить заказ
             </v-button>
             <div class="cart-header-panel__total" v-if="cartItemsCount > 0">
-                {{ $tc('cart.items', cartItemsCount) }} на сумму
+                {{ productCount }} на сумму
                 <price tag="div" class="text-bold" v-bind="productItemsSum" />
             </div>
             <div class="cart-header-panel__total" v-else>
@@ -58,6 +58,7 @@ import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM, CART_TYPES, CART_ITEMS } from '@store/modules/Cart/getters';
 
+import { pluralize } from '@util';
 import { generateProductUrl } from '@util/catalog';
 import '@images/sprites/cross.svg';
 import './CartHeaderPanel.css';
@@ -80,6 +81,11 @@ export default {
         ...mapState([SCROLL]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_ITEMS, PRODUCT_ITEMS_SUM]),
+
+        productCount() {
+            const { cartItemsCount } = this;
+            return `${cartItemsCount} ${pluralize(cartItemsCount, ['продукт', 'продукта', 'продуктов'])}`;
+        },
 
         isTabletLg() {
             return this.$mq.tabletLg;
