@@ -24,42 +24,17 @@
             <div class="text-grey help-panel__info">Всегда отвечаем на ваши сообщения</div>
             <div class="help-panel__socials">
                 <v-link
+                    v-for="link in links"
                     class="help-panel__socials-icon"
-                    :href="links.telegram.href"
-                    :title="links.telegram.title"
-                    @mouseover="telegram_hover = true"
-                    @mouseleave="telegram_hover = false"
+                    :key="link.href"
+                    :href="link.href"
+                    :title="link.title"
+                    @mouseover="link.hover = true"
+                    @mouseleave="link.hover = false"
                     target="_blank"
                     rel="nofollow"
                 >
-                    <v-svg v-if="!telegram_hover" name="telegram" width="40" height="40" />
-                    <v-svg v-else name="telegram-hover" width="40" height="40" />
-                </v-link>
-
-                <v-link
-                    class="help-panel__socials-icon"
-                    :href="links.whatsapp.href"
-                    :title="links.whatsapp.title"
-                    @mouseover="whatsup_hover = true"
-                    @mouseleave="whatsup_hover = false"
-                    target="_blank"
-                    rel="nofollow"
-                >
-                    <v-svg v-if="!whatsup_hover" name="whatsup-bw" width="40" height="40" />
-                    <v-svg v-else name="whatsup-hover" width="40" height="40" />
-                </v-link>
-
-                <v-link
-                    class="help-panel__socials-icon"
-                    :href="links.viber.href"
-                    :title="links.viber.title"
-                    @mouseover="viber_hover = true"
-                    @mouseleave="viber_hover = false"
-                    target="_blank"
-                    rel="nofollow"
-                >
-                    <v-svg v-if="!viber_hover" name="viber" width="40" height="40" />
-                    <v-svg v-else name="viber-hover" width="40" height="40" />
+                    <v-svg :name="link.hover ? link.iconHover : link.icon" width="40" height="40" />
                 </v-link>
             </div>
         </template>
@@ -88,6 +63,10 @@ import '@images/sprites/socials/whatsup-bw.svg';
 import '@images/sprites/socials/whatsup-hover.svg';
 import '@images/sprites/socials/viber.svg';
 import '@images/sprites/socials/viber-hover.svg';
+import '@images/sprites/socials/vkontakte.svg';
+import '@images/sprites/socials/vkontakte-hover.svg';
+import '@images/sprites/socials/facebook.svg';
+import '@images/sprites/socials/facebook-hover.svg';
 import './HelpPanel.css';
 
 export default {
@@ -102,24 +81,45 @@ export default {
 
     data() {
         return {
-            telegram_hover: false,
-            whatsup_hover: false,
-            viber_hover: false,
             isOpen: false,
-            links: {
-                telegram: {
+
+            links: [
+                {
                     href: 'tg://resolve?domain=Bessovestnyj_bot',
                     title: 'Связаться с нами в Telegram',
+                    hover: false,
+                    icon: 'telegram',
+                    iconHover: 'telegram-hover',
                 },
-                whatsapp: {
+                {
                     href: 'https://api.whatsapp.com/send?phone=79162001869',
                     title: 'Связаться с нами в WhatsApp',
+                    hover: false,
+                    icon: 'whatsup-bw',
+                    iconHover: 'whatsup-hover',
                 },
-                viber: {
+                {
                     href: 'viber://pa/?chatURI=ibtru',
                     title: 'Связаться с нами в Viber',
+                    hover: false,
+                    icon: 'viber',
+                    iconHover: 'viber-hover',
                 },
-            },
+                {
+                    href: 'https://vk.me/bessovestnotalantlivy',
+                    title: 'Связаться с нами в VK',
+                    hover: false,
+                    icon: 'vkontakte',
+                    iconHover: 'vkontakte-hover',
+                },
+                {
+                    href: 'https://m.me/bessovestnotalantlivy',
+                    title: 'Связаться с нами в Facebook',
+                    hover: false,
+                    icon: 'facebook',
+                    iconHover: 'facebook-hover',
+                },
+            ],
         };
     },
 

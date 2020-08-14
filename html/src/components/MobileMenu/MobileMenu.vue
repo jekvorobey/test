@@ -97,35 +97,19 @@
                             8 800 707-90-70
                         </v-link>
                         <p class="text-grey">Всегда отвечаем на ваши сообщения</p>
+
                         <ul class="mobile-menu__menu-socials-links">
-                            <li class="mobile-menu__menu-socials-link">
+                            <li class="mobile-menu__menu-socials-link" v-for="link in links" :key="link.href">
                                 <v-link
-                                    href="tg://resolve?domain=Bessovestnyj_bot"
+                                    class="mobile-menu__menu-socials-icon"
+                                    :href="link.href"
+                                    :title="link.title"
+                                    @mouseover="link.hover = true"
+                                    @mouseleave="link.hover = false"
                                     target="_blank"
                                     rel="nofollow"
-                                    class="mobile-menu__menu-socials-icon"
                                 >
-                                    <v-svg name="telegram-bw" width="40" height="40" />
-                                </v-link>
-                            </li>
-                            <li class="mobile-menu__menu-socials-link">
-                                <v-link
-                                    href="https://api.whatsapp.com/send?phone=79162001869"
-                                    target="_blank"
-                                    rel="nofollow"
-                                    class="mobile-menu__menu-socials-icon"
-                                >
-                                    <v-svg name="whatsup-bw" width="40" height="40" />
-                                </v-link>
-                            </li>
-                            <li class="mobile-menu__menu-socials-link">
-                                <v-link
-                                    href="viber://pa/?chatURI=ibtru"
-                                    target="_blank"
-                                    rel="nofollow"
-                                    class="mobile-menu__menu-socials-icon"
-                                >
-                                    <v-svg name="viber-bw" width="40" height="40" />
+                                    <v-svg :name="link.hover ? link.iconHover : link.icon" width="40" height="40" />
                                 </v-link>
                             </li>
                         </ul>
@@ -184,9 +168,16 @@ import { FAVORITE_ITEMS_COUNT } from '@store/modules/Favorites/getters';
 
 import { modalName, authMode } from '@enums';
 import { productGroupTypes } from '@enums/product';
-import '@images/sprites/socials/viber-bw.svg';
+import '@images/sprites/socials/telegram.svg';
+import '@images/sprites/socials/telegram-hover.svg';
 import '@images/sprites/socials/whatsup-bw.svg';
-import '@images/sprites/socials/telegram-bw.svg';
+import '@images/sprites/socials/whatsup-hover.svg';
+import '@images/sprites/socials/viber.svg';
+import '@images/sprites/socials/viber-hover.svg';
+import '@images/sprites/socials/vkontakte.svg';
+import '@images/sprites/socials/vkontakte-hover.svg';
+import '@images/sprites/socials/facebook.svg';
+import '@images/sprites/socials/facebook-hover.svg';
 
 import '@images/sprites/pin.svg';
 import '@images/sprites/account-middle.svg';
@@ -212,6 +203,44 @@ export default {
         return {
             showCategories: false,
             selectedCategories: [],
+
+            links: [
+                {
+                    href: 'tg://resolve?domain=Bessovestnyj_bot',
+                    title: 'Связаться с нами в Telegram',
+                    hover: false,
+                    icon: 'telegram',
+                    iconHover: 'telegram-hover',
+                },
+                {
+                    href: 'https://api.whatsapp.com/send?phone=79162001869',
+                    title: 'Связаться с нами в WhatsApp',
+                    hover: false,
+                    icon: 'whatsup-bw',
+                    iconHover: 'whatsup-hover',
+                },
+                {
+                    href: 'viber://pa/?chatURI=ibtru',
+                    title: 'Связаться с нами в Viber',
+                    hover: false,
+                    icon: 'viber',
+                    iconHover: 'viber-hover',
+                },
+                {
+                    href: 'https://vk.me/bessovestnotalantlivy',
+                    title: 'Связаться с нами в VK',
+                    hover: false,
+                    icon: 'vkontakte',
+                    iconHover: 'vkontakte-hover',
+                },
+                {
+                    href: 'https://m.me/bessovestnotalantlivy',
+                    title: 'Связаться с нами в Facebook',
+                    hover: false,
+                    icon: 'facebook',
+                    iconHover: 'facebook-hover',
+                },
+            ],
         };
     },
 
