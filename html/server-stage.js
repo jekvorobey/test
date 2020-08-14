@@ -7,7 +7,6 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const httpProxy = require('express-http-proxy');
-const request = require('superagent');
 const gracefulShutdown = require('http-graceful-shutdown');
 
 const favicon = require('serve-favicon');
@@ -29,9 +28,16 @@ const serve = (resourcePath, cache) =>
         maxAge: cache ? 1000 * 60 * 60 * 24 * 365 : 0,
     });
 
-const proxy = (hostname) =>
+const proxy = (hostname, originalPath) =>
     httpProxy(hostname, {
-        proxyReqPathResolver: (req) => req.originalUrl,
+        proxyReqPathResolver: (req) => {
+            if (originalPath) {
+                const parts = req.url.split('?');
+                const queryString = parts[1];
+                return `${originalPath}?${queryString}`;
+            }
+            return req.originalUrl;
+        },
     });
 
 const app = express();
@@ -188,7 +194,7 @@ for (let i = 0; i < enable.length; i++) {
 for (let i = 0; i < proxies.length; i++) {
     const entry = proxies[i];
     logger.info('proxy', `path: ${entry.path}, host: ${entry.host}`);
-    app.use(entry.path, proxy(entry.host));
+    app.use(entry.path, proxy(entry.host, entry.originalPath));
 }
 
 // since this app has no user-specific content, every page is micro-cacheable.

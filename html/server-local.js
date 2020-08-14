@@ -6,7 +6,6 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const httpProxy = require('express-http-proxy');
-const request = require('superagent');
 const gracefulShutdown = require('http-graceful-shutdown');
 
 const LRUCache = require('lru-cache');
@@ -32,9 +31,16 @@ const serve = (resourcePath, cache) =>
         maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 365 : 0,
     });
 
-const proxy = (hostname) =>
+const proxy = (hostname, originalPath) =>
     httpProxy(hostname, {
-        proxyReqPathResolver: (req) => req.originalUrl,
+        proxyReqPathResolver: (req) => {
+            if (originalPath) {
+                const parts = req.url.split('?');
+                const queryString = parts[1];
+                return `${originalPath}?${queryString}`;
+            }
+            return req.originalUrl;
+        },
     });
 
 const app = express();
@@ -194,7 +200,7 @@ for (let i = 0; i < enable.length; i++) {
 for (let i = 0; i < proxies.length; i++) {
     const entry = proxies[i];
     logger.info('proxy', `path: ${entry.path}, host: ${entry.host}`);
-    app.use(entry.path, proxy(entry.host));
+    app.use(entry.path, proxy(entry.host, entry.originalPath));
 }
 
 if (isProd) {
@@ -219,20 +225,6 @@ const renderFunction = isProd
 
 app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());
-app.use('/catalog/export', async (req, res, next) => {
-    try {
-        const baseURL = `${req.protocol}://${req.get('host')}`;
-        const {
-            body: { file_id, type },
-        } = await request.get(`${baseURL}/v1/catalog/export`).query({ ...req.query });
-        const fileRes = await request.get(`${baseURL}/files/original/${file_id}`);
-        res.setHeader('content-type', fileRes.get('content-type'));
-        res.setHeader('content-disposition', fileRes.get('content-disposition'));
-        res.send(fileRes.text);
-    } catch (error) {
-        res.status(error.status).send(error.response && error.response.text);
-    }
-});
 
 app.get('*', renderFunction);
 app.listen(port, host, () => logger.success(`server started at ${host}:${port}`));
