@@ -20,8 +20,10 @@
                         <v-input
                             type="number"
                             class="phone-edit-modal__form-input"
+                            key="phone-code"
                             maxLength="4"
                             v-model="code"
+                            v-focus
                             :error="codeError"
                         >
                             Код из СМС

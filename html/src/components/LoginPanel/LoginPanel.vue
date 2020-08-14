@@ -5,7 +5,7 @@
         </p>
 
         <form v-if="!restore" class="login-panel__form" @submit.prevent="onSubmit">
-            <v-input-mask v-model="phone" :options="maskOptions" :error="phoneError" :autofocus="true">
+            <v-input-mask key="login-phone" v-model="phone" v-focus :options="maskOptions" :error="phoneError">
                 Номер телефона
             </v-input-mask>
             <v-password v-model="password" :error="passwordError" class="login-panel__form-password-input">
@@ -26,10 +26,12 @@
                 Введите номер телефона, использованный при регистрации. Мы отправим на него новый код в СМС.
             </p>
 
-            <form class="login-panel__form" @submit.prevent="onSubmit">
+            <form @submit.prevent="onSubmit">
                 <v-input-mask
                     class="login-panel__form-input"
+                    key="restore-phone"
                     v-model="rawRestorePhone"
+                    v-focus
                     :options="maskOptions"
                     :raw="false"
                     :error="restorePhoneError"
@@ -54,7 +56,15 @@
             </p>
 
             <form class="login-panel__form" @submit.prevent="onSubmit">
-                <v-input class="login-panel__form-input" type="number" v-model="code" maxLength="4" :error="codeError">
+                <v-input
+                    class="login-panel__form-input"
+                    key="sms-code"
+                    type="number"
+                    v-model="code"
+                    v-focus
+                    maxLength="4"
+                    :error="codeError"
+                >
                     Код из СМС
                     <template v-slot:after>
                         <v-button class="login-panel__form-btn" type="submit">
@@ -88,7 +98,13 @@
             </span>
 
             <form class="login-panel__form" @submit.prevent="onSubmit">
-                <v-password class="login-panel__form-input" v-model="restorePassword" :error="restorePasswordError">
+                <v-password
+                    class="login-panel__form-input"
+                    key="change-password"
+                    v-model="restorePassword"
+                    v-focus
+                    :error="restorePasswordError"
+                >
                     Пароль
                     <template v-slot:error="{ error }">
                         <transition name="slide-in-bottom" mode="out-in">

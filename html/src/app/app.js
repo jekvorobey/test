@@ -12,6 +12,7 @@ import '@plugins/meta';
 import '@plugins/scroll-lock';
 import '@plugins/observer';
 import '@plugins/sticky';
+import '@plugins/focus';
 
 import '@util';
 import '@util/catalog';

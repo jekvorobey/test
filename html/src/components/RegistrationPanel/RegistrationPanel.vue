@@ -38,7 +38,14 @@
 
             <template v-else-if="!accepted">
                 <div class="registration-panel__form-confirmation">
-                    <v-input class="registration-panel__form-input" maxLength="4" v-model="code" :error="codeError">
+                    <v-input
+                        class="registration-panel__form-input"
+                        key="registration-code"
+                        maxLength="4"
+                        v-model="code"
+                        v-focus
+                        :error="codeError"
+                    >
                         Код из СМС
                         <template v-slot:after>
                             <v-button class="registration-panel__form-btn" type="submit">Регистрация</v-button>
@@ -77,7 +84,13 @@
                     Придумайте пароль для входа в Личный кабинет.<br />
                     Он должен состоять из латинских букв, содержать как минимум одну цифру, заглавную и строчную буквы.
                 </span>
-                <v-password class="registration-panel__form-input" v-model="password" :error="passwordError">
+                <v-password
+                    class="registration-panel__form-input"
+                    key="new-password"
+                    v-model="password"
+                    v-focus
+                    :error="passwordError"
+                >
                     Пароль
                     <template v-slot:error="{ error }">
                         <transition name="slide-in-bottom" mode="out-in">
