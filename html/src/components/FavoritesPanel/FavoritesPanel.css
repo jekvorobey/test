@@ -1,6 +1,10 @@
 .favorites-panel {
     width: 544px;
 
+    &.tooltip[x-placement^='bottom'] {
+        padding-top: 34px;
+    }
+
     .general-popup-panel__header {
         align-items: flex-start;
         margin-bottom: calc(var(--gs) * 3);
