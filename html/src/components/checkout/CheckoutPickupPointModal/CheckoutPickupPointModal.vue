@@ -345,10 +345,6 @@ export default {
         },
     },
 
-    created() {
-        this.selectedType = this[PICKUP_POINT_TYPES][0];
-    },
-
     mounted() {
         setTimeout(() => (this.showMap = true), 400);
     },

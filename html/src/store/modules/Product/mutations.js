@@ -43,7 +43,6 @@ export default {
     [SET_PICKUP_POINTS](state, payload) {
         state.pickupPoints = payload || [];
         state.pickupPointTypes = pickupPointTypes.filter((t) => state.pickupPoints.some((p) => p.methodID === t.id));
-        state.selectedPickupPointType = state.pickupPointTypes[0];
     },
 
     [SET_SELECTED_PICKUP_POINT](state, { point, index }) {

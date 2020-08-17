@@ -1,3 +1,5 @@
+import { DEFAULT_REVIEWS_PAGE_SIZE } from '@constants';
+
 const PRODUCT_OPTIONS = 'productOptions';
 
 export const COMBINATIONS = 'combinations';
@@ -15,22 +17,20 @@ export const FILTERED_PICKUP_POINTS = 'filteredPickupPoints';
 const PICKUP_POINTS = 'pickupPoints';
 const SELECTED_PICKUP_POINT_TYPE = 'selectedPickupPointType';
 
-import { DEFAULT_REVIEWS_PAGE_SIZE } from '@constants';
-
 export default {
     [FILTERED_PICKUP_POINTS](state) {
         const pickupPoints = state[PICKUP_POINTS] || [];
-        const selectedPickupPointType = state[SELECTED_PICKUP_POINT_TYPE] || {};
+        const selectedPickupPointType = state[SELECTED_PICKUP_POINT_TYPE];
 
-        return pickupPoints.filter(p => p.methodID === selectedPickupPointType.id);
+        return pickupPoints.filter((p) => !selectedPickupPointType || p.methodID === selectedPickupPointType.id);
     },
 
     [CHARACTERISTICS](state, getters) {
         const characteristics = (state[PRODUCT_OPTIONS] && state[PRODUCT_OPTIONS][CHARACTERISTICS]) || [];
-        return characteristics.map(c => {
+        return characteristics.map((c) => {
             return {
                 ...c,
-                options: c.options.map(p => {
+                options: c.options.map((p) => {
                     return {
                         ...p,
                         isSelected: getters[IS_SELECTED](c.code, p.value),
@@ -47,14 +47,14 @@ export default {
 
     [SELECTED_COMBINATION]({ product }, getters) {
         const combinations = getters[COMBINATIONS];
-        return combinations.find(c => c.code === product.code);
+        return combinations.find((c) => c.code === product.code);
     },
 
     [GET_NEXT_COMBINATION]: (state, getters) => (code, value) => {
         const selectedCombination = getters[SELECTED_COMBINATION] || {};
         const combinations = state[PRODUCT_OPTIONS][COMBINATIONS] || [];
 
-        return combinations.find(c => {
+        return combinations.find((c) => {
             let accepted = true;
             for (const optName in selectedCombination.props) {
                 if (optName === code) continue;
@@ -78,6 +78,6 @@ export default {
     },
 
     [REVIEWS_PAGES_COUNT]: (state) => {
-        return Math.ceil(state.reviewsData.reviewsCount / (DEFAULT_REVIEWS_PAGE_SIZE));
-    }
+        return Math.ceil(state.reviewsData.reviewsCount / DEFAULT_REVIEWS_PAGE_SIZE);
+    },
 };
