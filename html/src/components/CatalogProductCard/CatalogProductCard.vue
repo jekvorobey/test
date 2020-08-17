@@ -10,9 +10,9 @@
             </v-picture>
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
 
-            <div class="catalog-product-card__controls">
+            <div class="catalog-product-card__controls" v-if="showControls && !isTablet">
                 <buy-button
-                    v-if="showBuyBtn && !isTablet"
+                    v-if="showBuyBtn"
                     class="btn--outline catalog-product-card__controls-btn"
                     @click.prevent="onBuyButtonClick"
                 >
@@ -161,6 +161,11 @@ export default {
         isSmall: {
             type: Boolean,
             default: false,
+        },
+
+        showControls: {
+            type: Boolean,
+            default: true,
         },
 
         showBuyBtn: {

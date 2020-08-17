@@ -4,36 +4,36 @@
             Выгодный комплект
         </h2>
         <div class="product-bundle-panel__content">
-            <ul class="product-bundle-panel__list" v-if="!tabletLg && items.length <= 4">
-                <li class="product-bundle-panel__list-item" v-for="item in items" :key="item.id">
-                    <catalog-product-card
-                        class="product-bundle-panel__item"
-                        :product-id="item.productId"
-                        :type="item.type"
-                        :name="item.name"
-                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                        :image="item.image"
-                        :price="item.price"
-                        :old-price="item.oldPrice"
-                        :badges="item.badges"
-                        :rating="item.rating"
-                        :show-buy-btn="item.stock.qty > 0"
-                        :offer-id="item.productId"
-                    />
-                </li>
-            </ul>
-            <ul class="product-bundle-panel__panel-list" v-else>
+            <template v-for="item in products">
+                <catalog-product-card
+                    v-if="!tabletLg && products.length <= 4"
+                    class="product-bundle-panel__item"
+                    :key="item.id"
+                    :product-id="item.productId"
+                    :type="item.type"
+                    :name="item.name"
+                    :href="item.url"
+                    :image="item.image"
+                    :price="item.price"
+                    :old-price="item.oldPrice"
+                    :badges="item.badges"
+                    :rating="item.rating"
+                    :offer-id="item.productId"
+                    :show-controls="false"
+                />
                 <package-product-card
-                    v-for="item in items"
-                    class="product-bundle-panel__panel-list-item"
+                    v-else
+                    class="product-bundle-panel__item product-bundle-panel__item--panel"
                     :key="item.id"
                     :name="item.name"
                     :image="item.image"
+                    :href="item.url"
                     :price="item.price"
                     :old-price="item.oldPrice"
                     :count="item.qty"
                 />
-            </ul>
+            </template>
+
             <div class="product-bundle-panel__total">
                 <div class="product-bundle-panel__total-info">
                     <price
@@ -75,6 +75,7 @@ import BuyButton from '@components/BuyButton/BuyButton.vue';
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
 
+import { generateProductUrl } from '@util/catalog';
 import './ProductBundlePanel.css';
 
 export default {
@@ -125,6 +126,14 @@ export default {
                 value: this.oldPrice.value - this.price.value,
                 currency: this.price.currency,
             };
+        },
+
+        products() {
+            const { items = [] } = this;
+            return items.map(i => ({
+                ...i,
+                url: generateProductUrl(i.categoryCodes[i.categoryCodes.length - 1], i.code),
+            }));
         },
     },
 
