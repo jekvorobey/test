@@ -5,9 +5,9 @@
                 <h2 class="promopage-view__hl">
                     {{ $t(`profile.routes.${$route.name}`) }}
                 </h2>
-                <span v-if="items && items.length" class="text-grey text-sm"
-                    >{{ items && items.length }} {{ !isDesktopLg ? 'продуктов' : ''}}</span
-                >
+                <span class="text-grey text-sm" v-if="items && items.length">
+                    {{ items && items.length }} {{ !isDesktop ? productName : '' }}
+                </span>
             </div>
             <div
                 v-if="items && items.length"
@@ -15,7 +15,7 @@
             >
                 <v-link class="promopage-view__panel-link" tag="button" @click="onCopyReferralLink">
                     <v-svg name="link" :width="iconSize" :height="iconSize" />
-                    &nbsp;&nbsp;{{ !isDesktopLg ? 'Скопировать ссылку' : 'Скопировать' }}
+                    &nbsp;&nbsp;{{ !isDesktop ? 'Скопировать ссылку' : 'Скопировать' }}
                 </v-link>
 
                 <v-button class="btn--outline promopage-view__panel-btn" @click="loadPreview">
@@ -138,7 +138,7 @@ import { NAME as PROMOPAGE_MODULE, TITLE, ITEMS, RANGE, ACTIVE_PAGE } from '@sto
 import { PAGES_COUNT } from '@store/modules/Profile/modules/Promopage/getters';
 import { FETCH_PROMOPAGE, SET_LOAD_PATH, DELETE_PRODUCT } from '@store/modules/Profile/modules/Promopage/actions';
 
-import { saveToClipboard } from '@util';
+import { saveToClipboard, pluralize } from '@util';
 import { generateProductUrl } from '@util/catalog';
 import { generateReferralPromopageLink } from '@util/profile';
 import { DEFAULT_PAGE } from '@constants';
@@ -208,6 +208,11 @@ export default {
             });
         },
 
+        productName() {
+            const items = this[ITEMS] || [];
+            return pluralize(items.length, ['продукт', 'продукта', 'продуктов']);
+        },
+
         isTablet() {
             return this.$mq.tablet;
         },
@@ -216,8 +221,8 @@ export default {
             return this.$mq.tabletLg;
         },
 
-        isDesktopLg() {
-            return this.$mq.desktopLg;
+        isDesktop() {
+            return this.$mq.desktop;
         },
 
         iconSize() {
