@@ -6,7 +6,7 @@
         <div class="product-bundle-panel__content">
             <template v-for="item in products">
                 <catalog-product-card
-                    v-if="!tabletLg && products.length <= 4"
+                    v-if="!isTabletLg && products.length <= 4"
                     class="product-bundle-panel__item"
                     :key="item.id"
                     :product-id="item.productId"
@@ -29,34 +29,42 @@
                     :image="item.image"
                     :href="item.url"
                     :price="item.price"
-                    :old-price="item.oldPrice"
+                    :old-price="item.price"
                     :count="item.qty"
-                />
+                    :show-count="false"
+                >
+                    <source :data-srcset="item.desktopImg.webp" type="image/webp" />
+                    <source :data-srcset="item.desktopImg.orig" />
+                    <img class="blur-up lazyload v-picture__img" :data-src="item.defaultImg" />
+                </package-product-card>
             </template>
 
             <div class="product-bundle-panel__total">
                 <div class="product-bundle-panel__total-info">
+                    <price class="text-bold product-bundle-panel__total-info-price" v-if="price" v-bind="price" />
+
                     <price
-                        class="text-bold product-bundle-panel__price product-bundle-panel__price--current"
-                        v-if="price"
-                        v-bind="price"
+                        class="text-sm text-grey text-strike product-bundle-panel__total-info-price"
+                        v-if="oldPrice && isTablet"
+                        v-bind="oldPrice"
                     />
-                    <div class="product-bundle-panel__price-sale">
+
+                    <div class="product-bundle-panel__total-info-sale">
                         <price
-                            class="text-sm text-grey text-strike product-bundle-panel__price product-bundle-panel__price--old"
-                            v-if="oldPrice"
+                            class="text-sm text-grey text-strike product-bundle-panel__total-info-sale-price"
+                            v-if="oldPrice && !isTablet"
                             v-bind="oldPrice"
                         />
-                        <span class="product-bundle-panel__price-span">
-                            Вы сэкономите
-                            <price
-                                class="text-grey product-bundle-panel__price product-bundle-panel__price--diff"
+
+                        <span class="text-grey product-bundle-panel__total-info-sale-span">
+                            Вы сэкономите&nbsp;<price
+                                class="product-bundle-panel__total-info-sale-span-price"
                                 v-if="diffPrice"
                                 v-bind="diffPrice"
-                            />
-                        </span>
+                        /></span>
                     </div>
                 </div>
+
                 <div class="product-bundle-panel__total-controls">
                     <buy-button class="product-bundle-panel__btn" @click.prevent="onAddBundle">
                         Добавить в корзину
@@ -76,6 +84,8 @@ import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCar
 import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
 
 import { generateProductUrl } from '@util/catalog';
+import { generatePictureSourcePath } from '@util/file';
+import { fileExtension } from '@enums';
 import './ProductBundlePanel.css';
 
 export default {
@@ -117,10 +127,6 @@ export default {
     },
 
     computed: {
-        tabletLg() {
-            return this.$mq.tabletLg;
-        },
-
         diffPrice() {
             return {
                 value: this.oldPrice.value - this.price.value,
@@ -130,10 +136,30 @@ export default {
 
         products() {
             const { items = [] } = this;
-            return items.map(i => ({
-                ...i,
-                url: generateProductUrl(i.categoryCodes[i.categoryCodes.length - 1], i.code),
-            }));
+            return items.map(i => {
+                const { image } = i;
+
+                const defaultImg = image && generatePictureSourcePath(128, 128, image.id);
+                const desktopImg = image && {
+                    webp: generatePictureSourcePath(128, 128, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(128, 128, image.id),
+                };
+
+                return {
+                    ...i,
+                    desktopImg,
+                    defaultImg,
+                    url: generateProductUrl(i.categoryCodes[i.categoryCodes.length - 1], i.code),
+                };
+            });
+        },
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 

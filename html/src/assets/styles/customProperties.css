@@ -41,6 +41,8 @@
 
     /* Шрифты */
     --base-font: 'Futura PT', arial, sans-serif;
+    --base-font-medium: 'Futura PT-medium', arial, sans-serif;
+    --base-font-bold: 'Futura PT-bold', arial, sans-serif;
 
     /* Максимальная длина контейнера */
     --container-max-width: 1440px;

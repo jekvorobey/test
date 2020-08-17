@@ -1,10 +1,12 @@
 <template>
     <li class="package-product-card">
         <router-link class="package-product-card__img" :to="href">
-            <v-picture v-if="images">
-                <source :data-srcset="images.desktop.webp" type="image/webp" />
-                <source :data-srcset="images.desktop.orig" />
-                <img class="blur-up lazyload v-picture__img" :data-src="images.defaultImg" />
+            <v-picture v-if="image">
+                <slot>
+                    <source :data-srcset="images.desktop.webp" type="image/webp" />
+                    <source :data-srcset="images.desktop.orig" />
+                    <img class="blur-up lazyload v-picture__img" :data-src="images.defaultImg" />
+                </slot>
             </v-picture>
             <v-svg v-else id="package-product-card-empty" name="logo" width="48" height="48" />
         </router-link>
