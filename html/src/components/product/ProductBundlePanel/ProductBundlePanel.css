@@ -74,20 +74,20 @@
 
             & + & {
                 &:before {
-                    content: '+';
+                    content: svg-load('plus-small.svg');
                     display: block;
                     position: absolute;
-                    top: -24px;
+                    top: -22px;
                     left: calc(50% + 12px);
                 }
             }
 
             &:last-child {
                 &:after {
-                    content: '=';
+                    content: svg-load('equal-small.svg');
                     display: block;
                     position: absolute;
-                    bottom: -24px;
+                    bottom: -28px;
                     left: calc(50% + 12px);
                 }
             }
