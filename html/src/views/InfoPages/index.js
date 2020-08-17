@@ -16,12 +16,8 @@ export default {
     routes: [
         {
             name: 'InfoPages',
-            path: `/info-pages/:page(${infoPages.VACANCIES}|${infoPages.FEEDBACK}|${infoPages.PURCHASE_RETURNS}|${infoPages.DELIVERY_AND_PAYMENT})`,
+            path: `/:page(${infoPages.VACANCIES}|${infoPages.FEEDBACK}|${infoPages.PURCHASE_RETURNS}|${infoPages.DELIVERY_AND_PAYMENT})`,
             component: InfoPages,
         },
-        {
-            path: '/info-pages',
-            redirect: `/info-pages/${infoPages.FEEDBACK}`,
-        }
     ],
 };
