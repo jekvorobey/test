@@ -156,6 +156,7 @@
 
         &-sale {
             display: flex;
+            align-items: center;
 
             @media (--tablet) {
                 justify-content: center;
