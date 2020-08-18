@@ -2,7 +2,7 @@
     <general-modal type="sm" class="notification-modal" :header="title" @close="onClose" :is-mobile="isTablet">
         <template v-slot:content>
             <div class="notification-modal__body">
-                <h3 v-if="!isTablet" class="notification-modal__hl">{{ title }}</h3>
+                <h4 v-if="!isTablet" class="notification-modal__hl">{{ title }}</h4>
                 <p class="notification-modal__message">{{ message }}</p>
                 <v-button class="notification-modal__btn" @click="onClose">{{ btnText }}</v-button>
             </div>
@@ -64,11 +64,10 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         onClose() {
-            if (this.href) {
-                this.$router.push(this.href);
-            }
+            if (this.href) this.$router.push(this.href);
+
             this.$emit('close');
-            this.CHANGE_MODAL_STATE({ name: NAME, open: false });
+            this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
         },
     },
 };

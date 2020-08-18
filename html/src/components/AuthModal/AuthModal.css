@@ -27,6 +27,8 @@
         }
 
         &__panel {
+            padding-bottom: 0;
+
             @media (--tablet) {
                 padding: calc(var(--gs) * 2);
             }

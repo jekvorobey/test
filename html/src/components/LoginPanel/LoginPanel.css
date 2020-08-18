@@ -1,4 +1,10 @@
 .login-panel {
+    &__hl {
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+    }
+
     &__body {
         flex-grow: 1;
     }
@@ -20,6 +26,10 @@
     &__no-account {
         display: block;
         margin: 0 auto;
+    }
+
+    &__password-text {
+        margin-bottom: calc(var(--gs) * 2);
     }
 
     &__form {

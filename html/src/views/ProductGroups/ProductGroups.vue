@@ -4,8 +4,8 @@
             <breadcrumbs class="container container--tablet-lg product-groups-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
-                    <span v-else>Главная</span></breadcrumb-item
-                >
+                    <span v-else>Главная</span>
+                </breadcrumb-item>
                 <breadcrumb-item key="sets" :to="{ path: $route.path }">
                     {{ $t(`productGroups.title.${type}`) }}
                 </breadcrumb-item>
@@ -312,9 +312,8 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        if (this.showMore) {
-            this.fetchCatalog(to, from, this.showMore);
-        } else this.debounce_fetchCatalog(to, from);
+        if (this.showMore) this.fetchCatalog(to, from, this.showMore);
+        else this.debounce_fetchCatalog(to, from);
         next();
     },
 

@@ -8,13 +8,16 @@
             <v-input-mask key="login-phone" v-model="phone" v-focus :options="maskOptions" :error="phoneError">
                 Номер телефона
             </v-input-mask>
+
             <v-password v-model="password" :error="passwordError" class="login-panel__form-password-input">
                 Пароль
             </v-password>
+
             <div class="login-panel__form-submit">
                 <v-button class="login-panel__form-submit-btn" type="submit">
                     Войти
                 </v-button>
+
                 <v-link class="login-panel__form-submit-link" tag="button" @click.stop="onRestore">
                     Забыли пароль?
                 </v-link>
@@ -22,6 +25,8 @@
         </form>
 
         <template v-else-if="!sent">
+            <h4 class="login-panel__hl" v-if="!isTablet">Смена пароля</h4>
+
             <p class="login-panel__attention">
                 Введите номер телефона, использованный при регистрации. Мы отправим на него новый код в СМС.
             </p>
@@ -51,6 +56,8 @@
         </template>
 
         <template v-else-if="!accepted">
+            <h4 class="login-panel__hl" v-if="!isTablet">Смена пароля</h4>
+
             <p class="login-panel__attention login-panel__attention--short">
                 Проверьте телефон {{ rawRestorePhone }}. Мы отправили на него новый код в СМС.
             </p>
@@ -90,12 +97,12 @@
         </template>
 
         <template v-else>
-            <h2 class="login-panel__h2" v-if="!isTablet">Смена пароля</h2>
+            <h4 class="login-panel__hl" v-if="!isTablet">Смена пароля</h4>
 
-            <span class="login-panel__form-password-text">
+            <p class="login-panel__password-text">
                 Придумайте пароль для входа в Личный кабинет.<br />
                 Он должен состоять из латинских букв, содержать как минимум одну цифру, заглавную и строчную буквы.
-            </span>
+            </p>
 
             <form class="login-panel__form" @submit.prevent="onSubmit">
                 <v-password

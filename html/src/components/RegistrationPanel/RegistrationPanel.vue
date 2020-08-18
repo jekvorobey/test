@@ -24,10 +24,11 @@
                 >
                     Номер телефона
                     <template v-slot:after>
-                        <v-button class="registration-panel__form-btn" type="submit" :disabled="isDisabledGetCodeBtn"
-                            >Получить код</v-button
-                        >
+                        <v-button class="registration-panel__form-btn" type="submit" :disabled="isDisabledGetCodeBtn">
+                            Получить код
+                        </v-button>
                     </template>
+
                     <template v-slot:error="{ error }">
                         <transition name="slide-in-bottom" mode="out-in">
                             <div :key="error" v-if="error">{{ error }}</div>
@@ -50,6 +51,7 @@
                         <template v-slot:after>
                             <v-button class="registration-panel__form-btn" type="submit">Регистрация</v-button>
                         </template>
+
                         <template v-slot:error="{ error }">
                             <transition name="slide-in-bottom" mode="out-in">
                                 <div :key="error" v-if="error">{{ error }}</div>
@@ -57,14 +59,17 @@
                         </template>
                     </v-input>
                 </div>
+
                 <div class="registration-panel__form-timer">
                     <span v-if="counter !== 0">
                         Получить новый код можно через <strong>{{ counter }} сек.</strong>
                     </span>
+
                     <v-link v-else class="registration-panel__form-repeat" tag="button" @click.stop="sendSms">
                         Отправить новый код
                     </v-link>
                 </div>
+
                 <span class="text-grey registration-panel__form-info">
                     Нажимая кнопку «Регистрация», вы соглашаетесь с условиями
                     <a class="registration-panel__form-info-link" href="/agreements/public-offer" target="_blank"
@@ -78,12 +83,13 @@
             </template>
 
             <div v-else class="registration-panel__form-password">
-                <h2 class="registration-panel__h2" v-if="!isTablet">Создание пароля</h2>
+                <h4 class="registration-panel__hl" v-if="!isTablet">Создание пароля</h4>
 
-                <span class="registration-panel__form-password-text">
+                <p class="registration-panel__form-password-text">
                     Придумайте пароль для входа в Личный кабинет.<br />
                     Он должен состоять из латинских букв, содержать как минимум одну цифру, заглавную и строчную буквы.
-                </span>
+                </p>
+
                 <v-password
                     class="registration-panel__form-input"
                     key="new-password"
@@ -98,6 +104,7 @@
                         </transition>
                     </template>
                 </v-password>
+
                 <v-password
                     class="registration-panel__form-input"
                     v-model="passwordRepeat"
@@ -110,6 +117,7 @@
                         </transition>
                     </template>
                 </v-password>
+
                 <v-button class="registration-panel__form-btn" type="submit">Сохранить</v-button>
             </div>
         </form>
@@ -119,6 +127,7 @@
                 <button class="registration-panel__socials-item" @click="onRegisterBySocial('google')">
                     <v-svg name="google-bw" height="19" width="20" class="registration-panel__socials-item--google" />
                 </button>
+
                 <button class="registration-panel__socials-item" @click="onRegisterBySocial('vkontakte')">
                     <v-svg
                         name="vkontakte-bw"
@@ -127,6 +136,7 @@
                         class="registration-panel__socials-item--vkontake"
                     />
                 </button>
+
                 <button class="registration-panel__socials-item" @click="onRegisterBySocial('facebook')">
                     <v-svg
                         name="facebook-bw"
@@ -136,6 +146,7 @@
                     />
                 </button>
             </div>
+
             <span class="registration-panel__socials-text">Или зарегистрируйтесь через соцсеть</span>
         </div>
 
@@ -284,8 +295,10 @@ export default {
         },
 
         passwordRepeatError() {
-            if (this.$v.password.$dirty && this.$v.passwordRepeat.$dirty && !this.$v.passwordRepeat.sameAs)
-                return 'Пароль не совпадает';
+            if (this.$v.passwordRepeat.$dirty) {
+                if (!this.$v.passwordRepeat.required) return this.$t('validation.errors.required');
+                if (!this.$v.passwordRepeat.sameAs) return 'Не совпадает';
+            }
         },
 
         isVisibleTabs() {

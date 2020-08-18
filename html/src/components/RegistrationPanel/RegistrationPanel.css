@@ -1,4 +1,10 @@
 .registration-panel {
+    &__hl {
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+    }
+
     &__body {
         flex-grow: 1;
     }
@@ -18,6 +24,10 @@
     &__has-account {
         display: block;
         margin: 0 auto;
+    }
+
+    &__password-text {
+        margin-bottom: calc(var(--gs) * 2);
     }
 
     &__form {
@@ -103,23 +113,9 @@
         }
 
         &-password {
-            @media (--tablet-lg-min) {
-                margin-top: calc(var(--gs) * 3);
-            }
-
             &-text {
                 display: block;
                 margin-bottom: calc(var(--gs) * 1.5);
-            }
-        }
-    }
-
-    &__form {
-        min-height: calc(var(--gs) * 22);
-
-        &-password {
-            @media (--tablet-min) {
-                margin-top: calc(var(--gs) * 2);
             }
         }
     }

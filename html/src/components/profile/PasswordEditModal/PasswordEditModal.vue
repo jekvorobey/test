@@ -8,36 +8,47 @@
         @close="onClose"
     >
         <template v-slot:content>
-            <h4 class="password-edit-modal__hl">{{ header }}</h4>
-            <form class="password-edit-modal__form" @submit.prevent="onSubmit">
-                <v-password
-                    v-if="hasPassword"
-                    class="password-edit-modal__form-row"
-                    v-model="oldPassword"
-                    placeholder="Введите старый пароль"
-                    :error="oldPasswordError"
-                >
-                    Старый пароль
-                    <template v-slot:error="{ error }">
-                        <transition name="slide-in-bottom" mode="out-in">
-                            <div :key="error" v-if="error">{{ error }}</div>
-                        </transition>
-                    </template>
-                </v-password>
-                <v-password
-                    class="password-edit-modal__form-row"
-                    v-model="newPassword"
-                    placeholder="Введите новый пароль"
-                    :error="newPasswordError"
-                >
-                    Новый пароль
-                    <template v-slot:error="{ error }">
-                        <transition name="slide-in-bottom" mode="out-in">
-                            <div :key="error" v-if="error">{{ error }}</div>
-                        </transition>
-                    </template>
-                </v-password>
-            </form>
+            <h4 class="password-edit-modal__hl">
+                {{ header }}
+            </h4>
+
+            <div class="container container--tablet">
+                <p class="password-edit-modal__password-text">
+                    Придумайте пароль для входа в Личный кабинет.<br />
+                    Он должен состоять из латинских букв, содержать как минимум одну цифру, заглавную и строчную буквы.
+                </p>
+
+                <form class="password-edit-modal__form" @submit.prevent="onSubmit">
+                    <v-password
+                        v-if="hasPassword"
+                        class="password-edit-modal__form-row"
+                        v-model="oldPassword"
+                        placeholder="Введите старый пароль"
+                        :error="oldPasswordError"
+                    >
+                        Старый пароль
+                        <template v-slot:error="{ error }">
+                            <transition name="slide-in-bottom" mode="out-in">
+                                <div :key="error" v-if="error">{{ error }}</div>
+                            </transition>
+                        </template>
+                    </v-password>
+
+                    <v-password
+                        class="password-edit-modal__form-row"
+                        v-model="newPassword"
+                        placeholder="Введите новый пароль"
+                        :error="newPasswordError"
+                    >
+                        Новый пароль
+                        <template v-slot:error="{ error }">
+                            <transition name="slide-in-bottom" mode="out-in">
+                                <div :key="error" v-if="error">{{ error }}</div>
+                            </transition>
+                        </template>
+                    </v-password>
+                </form>
+            </div>
 
             <div class="password-edit-modal__submit">
                 <v-button class="password-edit-modal__submit-btn" @click="onSubmit">
