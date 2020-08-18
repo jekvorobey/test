@@ -1,11 +1,13 @@
 <template>
     <div class="checkout-master-class-panel">
         <div class="checkout-master-class-panel__item checkout-master-class-panel__item--recipient">
-            <div class="checkout-master-class-panel__item-header">
-                <h2 class="checkout-master-class-panel__item-header-hl">Получатель</h2>
+            <div class="container container--tablet checkout-master-class-panel__item-container">
+                <div class="checkout-master-class-panel__item-header">
+                    <h2 class="checkout-master-class-panel__item-header-hl">Получатель</h2>
+                </div>
             </div>
 
-            <ul class="checkout-master-class-panel__item-list">
+            <ul class="container container--tablet checkout-master-class-panel__item-list">
                 <checkout-option-card
                     class="checkout-master-class-panel__item-card"
                     v-for="(recipient, index) in recipients"
@@ -21,144 +23,162 @@
                 </checkout-option-card>
             </ul>
 
-            <attention-panel class="checkout-master-class-panel__attention">
-                На указанный адрес электронной почты мы вышлем вам копии билетов
-            </attention-panel>
-
             <v-link class="checkout-master-class-panel__item-header-link" tag="button" @click="onAddRecipient">
                 <v-svg name="plus" width="24" height="24" />&nbsp;Добавить нового получателя
             </v-link>
         </div>
 
-        <div class="checkout-master-class-panel__item">
-            <div class="checkout-master-class-panel__item-header" ref="events">
-                <h2 class="checkout-master-class-panel__item-header-hl">
-                    Участники&nbsp;<v-spinner width="24" height="24" :show="isTicketPending" />
-                </h2>
-            </div>
+        <attention-panel
+            class="checkout-master-class-panel__attention"
+            :class="{
+                'checkout-master-class-panel__attention--no-email': !selectedRecipient || !selectedRecipient.email,
+            }"
+        >
+            <span class="status-color-error" v-if="!selectedRecipient || !selectedRecipient.email">
+                Укажите адрес электронной почты получателя для получения билетов
+            </span>
+            <span v-else>
+                На указанный адрес электронной почты мы вышлем вам копии билетов
+            </span>
+        </attention-panel>
 
-            <div v-for="({ cartItem: { p: product, count }, tickets, offerId }, index) in masterClasses" :key="offerId">
-                <checkout-masterclass-card
-                    class="checkout-master-class-panel__item-masterclass"
-                    type="masterclass"
-                    :key="product.id"
-                    :product-id="product.id"
-                    :name="product.name"
-                    :image="product.image"
-                    :price="product.price"
-                    :old-price="product.oldPrice"
-                    :date="product.dateTime"
-                    :author="product.author"
-                    :count="count"
-                    :href="product.url"
-                    :is-small="isTablet"
+        <template v-if="selectedRecipient && selectedRecipient.email">
+            <div class="checkout-master-class-panel__item">
+                <div class="container container--tablet checkout-master-class-panel__item-container">
+                    <div class="checkout-master-class-panel__item-header" ref="events">
+                        <h2 class="checkout-master-class-panel__item-header-hl">
+                            Участники&nbsp;<v-spinner width="24" height="24" :show="isTicketPending" />
+                        </h2>
+                    </div>
+                </div>
+
+                <div
+                    v-for="({ cartItem: { p: product, count }, tickets, offerId }, index) in masterClasses"
+                    :key="offerId"
                 >
-                    <source :data-srcset="product.desktopImg.webp" type="image/webp" />
-                    <source :data-srcset="product.desktopImg.orig" />
-                    <img class="blur-up lazyload v-picture__img" :data-src="product.defaultImg" alt="" />
-                </checkout-masterclass-card>
-
-                {{ publicEventsError }}
-
-                <ul class="checkout-master-class-panel__item-list">
-                    <checkout-option-card
-                        class="checkout-master-class-panel__item-card"
-                        v-for="(ticket, index) in tickets"
-                        :key="ticket.id"
-                        :show-check="false"
-                        selected
-                        @btnClick="onChangeTicket(ticket, offerId, index)"
+                    <checkout-masterclass-card
+                        class="checkout-master-class-panel__item-masterclass"
+                        type="masterclass"
+                        :key="product.id"
+                        :product-id="product.id"
+                        :name="product.name"
+                        :image="product.image"
+                        :price="product.price"
+                        :old-price="product.oldPrice"
+                        :date="product.dateTime"
+                        :author="product.author"
+                        :count="count"
+                        :href="product.url"
+                        :is-small="isTablet"
                     >
-                        <p class="text-bold">Билет {{ index + 1 }}</p>
-                        <p>
-                            <span>{{ ticket.lastName }} {{ ticket.firstName }} {{ ticket.middleName }},</span>
-                            <span v-if="professionsMap[ticket.professionId]">
-                                {{ professionsMap[ticket.professionId].name }}
-                            </span>
-                        </p>
-                        <p>{{ formatPhoneNumber(ticket.phone) }}</p>
-                        <p>{{ ticket.email }}</p>
-                    </checkout-option-card>
-                    <checkout-option-card
-                        v-if="tickets.length < count"
-                        class="checkout-master-class-panel__item-card"
-                        :class="{
-                            'checkout-master-class-panel__item-card--invalid':
-                                $v.publicEvents.$anyDirty && !$v.publicEvents.$each.$iter[index].isFull,
-                        }"
-                        key="new"
-                        :show-check="false"
-                        selected
-                        readonly
-                    >
-                        <p class="text-bold">Билет {{ tickets.length + 1 }}</p>
-                        <br />
-                        <button
-                            class="checkout-master-class-panel__item-card-link text-grey"
+                        <source :data-srcset="product.desktopImg.webp" type="image/webp" />
+                        <source :data-srcset="product.desktopImg.orig" />
+                        <img class="blur-up lazyload v-picture__img" :data-src="product.defaultImg" alt="" />
+                    </checkout-masterclass-card>
+
+                    {{ publicEventsError }}
+
+                    <ul class="container container--tablet checkout-master-class-panel__item-list">
+                        <checkout-option-card
+                            class="checkout-master-class-panel__item-card"
+                            v-for="(ticket, index) in tickets"
+                            :key="ticket.id"
+                            :show-check="false"
+                            selected
+                            @btnClick="onChangeTicket(ticket, offerId, index)"
+                        >
+                            <p class="text-bold">Билет {{ index + 1 }}</p>
+                            <p>
+                                <span>{{ ticket.lastName }} {{ ticket.firstName }} {{ ticket.middleName }},</span>
+                                <span v-if="professionsMap[ticket.professionId]">
+                                    {{ professionsMap[ticket.professionId].name }}
+                                </span>
+                            </p>
+                            <p>{{ formatPhoneNumber(ticket.phone) }}</p>
+                            <p>{{ ticket.email }}</p>
+                        </checkout-option-card>
+                        <checkout-option-card
+                            v-if="tickets.length < count"
+                            class="checkout-master-class-panel__item-card"
                             :class="{
-                                'status-color-error':
+                                'checkout-master-class-panel__item-card--invalid':
                                     $v.publicEvents.$anyDirty && !$v.publicEvents.$each.$iter[index].isFull,
                             }"
-                            @click="onAddTicket(offerId)"
+                            key="new"
+                            :show-check="false"
+                            selected
+                            readonly
                         >
-                            Добавить данные участника
-                        </button>
-                        <br />
-                        <br />
+                            <p class="text-bold">Билет {{ tickets.length + 1 }}</p>
+                            <br />
+                            <button
+                                class="checkout-master-class-panel__item-card-link text-grey"
+                                :class="{
+                                    'status-color-error':
+                                        $v.publicEvents.$anyDirty && !$v.publicEvents.$each.$iter[index].isFull,
+                                }"
+                                @click="onAddTicket(offerId)"
+                            >
+                                Добавить данные участника
+                            </button>
+                            <br />
+                            <br />
+                        </checkout-option-card>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="checkout-master-class-panel__item checkout-master-class-panel__item--payment">
+                <div class="container container--tablet checkout-master-class-panel__item-container">
+                    <div class="checkout-master-class-panel__item-header">
+                        <h2 class="checkout-master-class-panel__item-header-hl">Способ оплаты</h2>
+                    </div>
+                </div>
+
+                <ul class="container container--tablet checkout-master-class-panel__item-list">
+                    <checkout-option-card
+                        class="checkout-master-class-panel__item-card"
+                        v-for="method in paymentMethods"
+                        :key="method.id"
+                        :selected="method.id === selectedPaymentMethodID"
+                        readonly
+                    >
+                        <div class="checkout-master-class-panel__item-payment" v-if="method.type === 'card'">
+                            <div class="text-bold checkout-master-class-panel__item-payment-title">
+                                {{ method.title }}
+                            </div>
+
+                            <div class="checkout-master-class-panel__item-payment-list">
+                                <div class="checkout-master-class-panel__item-payment-list-item">
+                                    <v-svg name="visa" width="40" height="24" />
+                                </div>
+                                <div class="checkout-master-class-panel__item-payment-list-item">
+                                    <v-svg name="mastercard" width="40" height="24" />
+                                </div>
+                                <div class="checkout-master-class-panel__item-payment-list-item">
+                                    <v-svg name="mir" width="40" height="24" />
+                                </div>
+                                <div class="checkout-master-class-panel__item-payment-list-item">
+                                    <v-svg name="apple" width="40" height="24" />
+                                </div>
+                                <div class="checkout-master-class-panel__item-payment-list-item">
+                                    <v-svg name="google" width="40" height="24" />
+                                </div>
+                                <div class="checkout-master-class-panel__item-payment-list-item">
+                                    <v-svg name="yandex" width="56" height="24" />
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-bold" v-else>{{ method.title }}</p>
                     </checkout-option-card>
                 </ul>
-            </div>
-        </div>
 
-        <div class="checkout-master-class-panel__item checkout-master-class-panel__item--payment">
-            <div class="checkout-master-class-panel__item-header">
-                <h2 class="checkout-master-class-panel__item-header-hl">Способ оплаты</h2>
-            </div>
-
-            <ul class="checkout-master-class-panel__item-list">
-                <checkout-option-card
-                    class="checkout-master-class-panel__item-card"
-                    v-for="method in paymentMethods"
-                    :key="method.id"
-                    :selected="method.id === selectedPaymentMethodID"
-                    readonly
+                <div
+                    class="checkout-master-class-panel__item checkout-master-class-panel__item checkout-master-class-panel__item--child checkout-master-class-panel__item--settings"
                 >
-                    <div class="checkout-master-class-panel__item-payment" v-if="method.type === 'card'">
-                        <div class="text-bold checkout-master-class-panel__item-payment-title">
-                            {{ method.title }}
-                        </div>
-
-                        <div class="checkout-master-class-panel__item-payment-list">
-                            <div class="checkout-master-class-panel__item-payment-list-item">
-                                <v-svg name="visa" width="40" height="24" />
-                            </div>
-                            <div class="checkout-master-class-panel__item-payment-list-item">
-                                <v-svg name="mastercard" width="40" height="24" />
-                            </div>
-                            <div class="checkout-master-class-panel__item-payment-list-item">
-                                <v-svg name="mir" width="40" height="24" />
-                            </div>
-                            <div class="checkout-master-class-panel__item-payment-list-item">
-                                <v-svg name="apple" width="40" height="24" />
-                            </div>
-                            <div class="checkout-master-class-panel__item-payment-list-item">
-                                <v-svg name="google" width="40" height="24" />
-                            </div>
-                            <div class="checkout-master-class-panel__item-payment-list-item">
-                                <v-svg name="yandex" width="56" height="24" />
-                            </div>
-                        </div>
-                    </div>
-                    <p class="text-bold" v-else>{{ method.title }}</p>
-                </checkout-option-card>
-            </ul>
-
-            <div
-                class="checkout-master-class-panel__item checkout-master-class-panel__item checkout-master-class-panel__item--child checkout-master-class-panel__item--settings"
-            >
-                <div class="checkout-master-class-panel__item-panel" ref="agreement">
-                    <!-- #58436 -->
-                    <!-- <v-check
+                    <div class="container container--tablet checkout-master-class-panel__item-panel" ref="agreement">
+                        <!-- #58436 -->
+                        <!-- <v-check
                         id="check-promo"
                         :checked="subscribe"
                         class="checkout-master-class-panel__item-panel-check"
@@ -168,53 +188,54 @@
                         Сообщать мне об акциях, скидках и специальных предложениях
                     </v-check> -->
 
-                    <v-check
-                        id="check-agreement"
-                        :checked="agreement"
-                        class="checkout-master-class-panel__item-panel-check"
-                        name="agreement"
-                        @change="onSetAgreement"
-                    >
-                        Я согласен с
-                        <router-link
-                            :to="{ name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER } }"
-                            target="_blank"
+                        <v-check
+                            id="check-agreement"
+                            :checked="agreement"
+                            class="checkout-master-class-panel__item-panel-check"
+                            name="agreement"
+                            @change="onSetAgreement"
                         >
-                            условиями оферты
-                        </router-link>
-                        и
-                        <router-link
-                            :to="{ name: 'Agreements', params: { type: agreementTypes.PERSONAL_POLICY } }"
-                            target="_blank"
+                            Я согласен с
+                            <router-link
+                                :to="{ name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER } }"
+                                target="_blank"
+                            >
+                                условиями оферты
+                            </router-link>
+                            и
+                            <router-link
+                                :to="{ name: 'Agreements', params: { type: agreementTypes.PERSONAL_POLICY } }"
+                                target="_blank"
+                            >
+                                политикой конфиденциальности
+                            </router-link>
+                        </v-check>
+
+                        <transition name="slide-in-bottom" mode="out-in">
+                            <div class="status-color-error" :key="agreementError" v-if="agreementError">
+                                {{ agreementError }}
+                            </div>
+                        </transition>
+                    </div>
+
+                    <div class="container container--tablet checkout-master-class-panel__item-panel">
+                        <v-check
+                            class="checkout-master-class-panel__item-panel-check"
+                            type="radio"
+                            v-for="confirmation in confirmationTypes"
+                            :key="confirmation.id"
+                            :id="`check-accept-${confirmation.id}`"
+                            :model-value="selectedConfirmationTypeID"
+                            :value="confirmation.id"
+                            :name="confirmation.type"
+                            @change="onSetConfirmationType"
                         >
-                            политикой конфиденциальности
-                        </router-link>
-                    </v-check>
-
-                    <transition name="slide-in-bottom" mode="out-in">
-                        <div class="status-color-error" :key="agreementError" v-if="agreementError">
-                            {{ agreementError }}
-                        </div>
-                    </transition>
-                </div>
-
-                <div class="checkout-master-class-panel__item-panel">
-                    <v-check
-                        class="checkout-master-class-panel__item-panel-check"
-                        type="radio"
-                        v-for="confirmation in confirmationTypes"
-                        :key="confirmation.id"
-                        :id="`check-accept-${confirmation.id}`"
-                        :model-value="selectedConfirmationTypeID"
-                        :value="confirmation.id"
-                        :name="confirmation.type"
-                        @change="onSetConfirmationType"
-                    >
-                        {{ confirmation.title }}
-                    </v-check>
+                            {{ confirmation.title }}
+                        </v-check>
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
 
         <transition name="fade">
             <checkout-recipient-modal
@@ -334,6 +355,7 @@ export default {
 
         [SELECTED_RECIPIENT]: {
             required,
+            hasEmail: value => value && !!value.email,
         },
 
         [PUBLIC_EVENTS]: {
