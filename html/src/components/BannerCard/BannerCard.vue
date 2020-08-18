@@ -1,5 +1,5 @@
 <template>
-    <component :is="tag" class="banner-card">
+    <component :is="tag" class="banner-card" :to="url">
         <div class="banner-card__img">
             <v-picture :key="image.id" v-if="image && image.id">
                 <source :data-srcset="desktopImage" type="image/webp" media="(min-width: 480px)" />
@@ -58,6 +58,11 @@ export default {
     },
 
     computed: {
+        url() {
+            const { tag, to } = this;
+            return tag === 'router-link' ? to : null;
+        },
+
         desktopImage() {
             if (this.image && this.image.id)
                 return generatePictureSourcePath(392, 240, this.image.id, fileExtension.image.WEBP);

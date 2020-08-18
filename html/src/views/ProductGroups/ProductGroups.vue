@@ -36,7 +36,7 @@
                     <ul class="product-groups-view__sets-list">
                         <banner-card
                             class="product-groups-view__sets-list-item"
-                            tag="li"
+                            tag="router-link"
                             v-for="item in items"
                             :key="item.id"
                             :title="item.name"
