@@ -9,7 +9,7 @@
     >
         <template v-slot:content>
             <div class="phone-edit-modal__body">
-                <h3 v-if="!isTablet" class="phone-edit-modal__hl">{{ header }}</h3>
+                <h4 v-if="!isTablet" class="phone-edit-modal__hl">{{ header }}</h4>
                 <div class="phone-edit-modal__desc">
                     Мы отправили код на <strong>{{ formatPhone }}</strong>
                     , введите его для подтверждения.
@@ -32,6 +32,7 @@
                                     Отправить
                                 </v-button>
                             </template>
+
                             <template v-slot:error="{ error }">
                                 <transition name="slide-in-bottom" mode="out-in">
                                     <div :key="error" v-if="error">{{ error }}</div>
@@ -43,7 +44,14 @@
                         <span v-if="counter !== 0">
                             Получить новый код можно через <strong>{{ counter }} сек.</strong>
                         </span>
-                        <v-link class="phone-edit-modal__form-repeat" v-else tag="button" @click.stop="sendCode(phone)">
+
+                        <v-link
+                            class="phone-edit-modal__form-repeat"
+                            v-else
+                            tag="button"
+                            @click.stop="sendCode(phone)"
+                            :disabled="isDisabledGetCodeBtn"
+                        >
                             Отправить новый код
                         </v-link>
                     </div>
@@ -98,8 +106,8 @@ export default {
             minLength: minLength(4),
         },
 
-        exists: {
-            valid: value => value === false,
+        error: {
+            valid: value => value === null,
         },
     },
 
@@ -112,8 +120,9 @@ export default {
     data() {
         return {
             code: null,
-            exists: false,
-            counter: 59,
+            error: null,
+            counter: 5,
+            isDisabledGetCodeBtn: false,
         };
     },
 
@@ -137,14 +146,14 @@ export default {
         codeError() {
             if (this.$v.code.$dirty && !this.$v.code.required) return this.$t('validation.errors.required');
             if (this.$v.code.$dirty && !this.$v.code.minLength) return 'Неверно введен номер';
-            if (this.$v.exists.$dirty && !this.$v.exists.valid) return 'Такой телефон уже существует';
+            if (!this.$v.error.valid) return this.error;
         },
     },
 
     watch: {
         code() {
             if (this.$v.code.$dirty) {
-                this.exists = false;
+                this.error = null;
                 this.$v.code.$reset();
             }
         },
@@ -154,30 +163,21 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(CABINET_MODULE_PATH, [SEND_CODE, UPDATE_CREDENTIAL]),
 
-        startCounter() {
-            this.stopCounter();
-            this.counter = 59;
-
-            this.timer = setInterval(() => {
-                this.counter -= 1;
-                if (this.counter === 0) this.stopCounter();
-            }, 1000);
-        },
-
-        stopCounter() {
-            clearInterval(this.timer);
-            this.timer = null;
-        },
-
         async sendCode(destination) {
             try {
+                this.isDisabledGetCodeBtn = true;
                 await this[SEND_CODE]({
                     destination,
                     type: verificationCodeType.PROFILE_PHONE,
                 });
+                this.startCounter();
+                this.isDisabledGetCodeBtn = false;
             } catch (error) {
-                this.exists = true;
-                this.$v.exists.$touch();
+                const { data } = error;
+                const { message } = data || {};
+                this.error = message;
+                this.stopCounter();
+                this.isDisabledGetCodeBtn = false;
             }
         },
 
@@ -190,14 +190,30 @@ export default {
                 });
                 this.onClose();
             } catch (error) {
-                this.exists = true;
-                this.$v.exists.$touch();
+                const { data } = error;
+                const { message } = data || {};
+                this.error = message;
             }
         },
 
         async onSubmit() {
             this.$v.code.$touch();
             if (!this.$v.code.$invalid) this.updatePhone(this.phone, this.code);
+        },
+
+        startCounter() {
+            this.stopCounter();
+            this.counter = 5;
+
+            this.timer = setInterval(() => {
+                this.counter -= 1;
+                if (this.counter === 0) this.stopCounter();
+            }, 1000);
+        },
+
+        stopCounter() {
+            clearInterval(this.timer);
+            this.timer = null;
         },
 
         onClose() {
@@ -207,7 +223,6 @@ export default {
     },
 
     beforeMount() {
-        this.sendCode(this.phone);
         this.startCounter();
     },
 

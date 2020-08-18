@@ -149,14 +149,20 @@ import {
     All_ACTIVITIES,
 } from '@store/modules/Profile/modules/Cabinet';
 import { FULL_NAME } from '@store/modules/Profile/modules/Cabinet/getters';
-import { UPDATE_PERSONAL, UPDATE_CREDENTIAL, UPDATE_ACTIVITIES } from '@store/modules/Profile/modules/Cabinet/actions';
+import {
+    UPDATE_PERSONAL,
+    UPDATE_CREDENTIAL,
+    UPDATE_ACTIVITIES,
+    SEND_CODE,
+} from '@store/modules/Profile/modules/Cabinet/actions';
 
+import { nameAll } from '@regex/validation';
+import { verificationCodeType } from '@enums/auth';
 import { httpCodes, interval, modalName } from '@enums';
 import { genderType } from '@enums/profile';
 import { phoneMaskOptions } from '@settings';
 import validationMixin, { required, email, minLength } from '@plugins/validation';
 import './CabinetInfoPanel.css';
-import { nameAll } from '@regex/validation';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 
@@ -263,7 +269,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(CABINET_MODULE_PATH, [UPDATE_PERSONAL, UPDATE_CREDENTIAL, UPDATE_ACTIVITIES]),
+        ...mapActions(CABINET_MODULE_PATH, [UPDATE_PERSONAL, UPDATE_CREDENTIAL, UPDATE_ACTIVITIES, SEND_CODE]),
 
         isSelectedActivity(activity) {
             return this.selectedActivities.some(a => a.id === activity.id);
@@ -300,12 +306,52 @@ export default {
             if (!nameAll.test(e.key)) e.preventDefault();
         },
 
-        onConfirmPhone() {
-            this[CHANGE_MODAL_STATE]({ name: modalName.profile.PHONE_EDIT, open: true });
+        async onConfirmPhone() {
+            const { credential } = this;
+            try {
+                await this[SEND_CODE]({
+                    destination: credential[PHONE],
+                    type: verificationCodeType.PROFILE_PHONE,
+                });
+
+                this[CHANGE_MODAL_STATE]({ name: modalName.profile.PHONE_EDIT, open: true });
+            } catch (error) {
+                const { data, message } = error;
+                const { message: dataMessage } = data || {};
+
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.NOTIFICATION,
+                    open: true,
+                    state: {
+                        title: 'Уведомление',
+                        message: dataMessage || message,
+                    },
+                });
+            }
         },
 
-        onConfirmEmail() {
-            this[CHANGE_MODAL_STATE]({ name: modalName.profile.EMAIL_EDIT, open: true });
+        async onConfirmEmail() {
+            const { credential } = this;
+            try {
+                await this[SEND_CODE]({
+                    destination: credential[EMAIL],
+                    type: verificationCodeType.PROFILE_EMAIL,
+                });
+
+                this[CHANGE_MODAL_STATE]({ name: modalName.profile.EMAIL_EDIT, open: true });
+            } catch (error) {
+                const { data, message } = error;
+                const { message: dataMessage } = data || {};
+
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.NOTIFICATION,
+                    open: true,
+                    state: {
+                        title: 'Уведомление',
+                        message: dataMessage || message,
+                    },
+                });
+            }
         },
 
         onSubmitInfo() {

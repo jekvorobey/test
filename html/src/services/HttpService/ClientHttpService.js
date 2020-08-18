@@ -33,9 +33,9 @@ export default class ClientHttpService extends HttpServiceBase {
                 if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NOT_MODIFIED) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (thrown) {
-                let status = null;
-                if (thrown.response) status = thrown.response.status;
-                reject({ isCancel: axios.isCancel(thrown), message: thrown.message, status });
+                const { message, response } = thrown;
+                const { status = null, data: thrownData = null } = response || {};
+                reject({ isCancel: axios.isCancel(thrown), message, status, data: thrownData });
             }
         });
     }
@@ -53,9 +53,9 @@ export default class ClientHttpService extends HttpServiceBase {
                 if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NOT_MODIFIED) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (thrown) {
-                let status = null;
-                if (thrown.response) status = thrown.response.status;
-                reject({ isCancel: axios.isCancel(thrown), message: thrown.message, status });
+                const { message, response } = thrown;
+                const { status = null, data: thrownData = null } = response || {};
+                reject({ isCancel: axios.isCancel(thrown), message, status, data: thrownData });
             }
         });
     }
@@ -73,9 +73,9 @@ export default class ClientHttpService extends HttpServiceBase {
                 if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NO_CONTENT) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (thrown) {
-                let status = null;
-                if (thrown.response) status = thrown.response.status;
-                reject({ isCancel: axios.isCancel(thrown), message: thrown.message, status });
+                const { message, response } = thrown;
+                const { status = null, data: thrownData = null } = response || {};
+                reject({ isCancel: axios.isCancel(thrown), message, status, data: thrownData });
             }
         });
     }
@@ -93,9 +93,9 @@ export default class ClientHttpService extends HttpServiceBase {
                 if (resp.status >= httpCodes.SUCCESS && resp.status <= httpCodes.NO_CONTENT) resolve(resp.data);
                 else reject(`status code ${resp.status}`);
             } catch (thrown) {
-                let status = null;
-                if (thrown.response) status = thrown.response.status;
-                reject({ isCancel: axios.isCancel(thrown), message: thrown.message, status });
+                const { message, response } = thrown;
+                const { status = null, data: thrownData = null } = response || {};
+                reject({ isCancel: axios.isCancel(thrown), message, status, data: thrownData });
             }
         });
     }

@@ -9,7 +9,7 @@
     >
         <template v-slot:content>
             <div class="email-edit-modal__body">
-                <h3 v-if="!isTablet" class="email-edit-modal__hl">{{ header }}</h3>
+                <h4 v-if="!isTablet" class="email-edit-modal__hl">{{ header }}</h4>
                 <div class="email-edit-modal__desc">
                     Мы отправили код на <strong>{{ email }}</strong>
                     , введите его для подтверждения.
@@ -41,7 +41,14 @@
                         <span v-if="counter !== 0">
                             Получить новый код можно через <strong>{{ counter }} сек.</strong>
                         </span>
-                        <v-link class="email-edit-modal__form-repeat" v-else tag="button" @click.stop="sendCode(email)">
+
+                        <v-link
+                            class="email-edit-modal__form-repeat"
+                            v-else
+                            tag="button"
+                            @click.stop="sendCode(email)"
+                            :disabled="isDisabledGetCodeBtn"
+                        >
                             Отправить новый код
                         </v-link>
                     </div>
@@ -51,6 +58,7 @@
     </general-modal>
 </template>
 <script>
+import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
@@ -77,6 +85,7 @@ export default {
     mixins: [validationMixin],
 
     components: {
+        VLink,
         VButton,
         VInput,
         GeneralModal,
@@ -88,8 +97,8 @@ export default {
             minLength: minLength(4),
         },
 
-        exists: {
-            valid: value => value === false,
+        error: {
+            valid: value => value === null,
         },
     },
 
@@ -102,7 +111,7 @@ export default {
     data() {
         return {
             code: null,
-            exists: false,
+            error: null,
             isDisabledGetCodeBtn: false,
             counter: 59,
         };
@@ -124,14 +133,14 @@ export default {
         codeError() {
             if (this.$v.code.$dirty && !this.$v.code.required) return this.$t('validation.errors.required');
             if (this.$v.code.$dirty && !this.$v.code.minLength) return 'Неправильный код';
-            if (this.$v.exists.$dirty && !this.$v.exists.valid) return 'Такой Email уже существует';
+            if (!this.$v.error.valid) return this.error;
         },
     },
 
     watch: {
         code() {
             if (this.$v.code.$dirty) {
-                this.exists = false;
+                this.error = null;
                 this.$v.code.$reset();
             }
         },
@@ -143,27 +152,35 @@ export default {
 
         async sendCode(destination) {
             try {
+                this.isDisabledGetCodeBtn = true;
                 await this[SEND_CODE]({
                     destination,
                     type: verificationCodeType.PROFILE_EMAIL,
                 });
+                this.startCounter();
+                this.isDisabledGetCodeBtn = false;
             } catch (error) {
-                this.exists = true;
+                const { data } = error;
+                const { message } = data || {};
+                this.error = message;
+                this.stopCounter();
+                this.isDisabledGetCodeBtn = false;
             }
         },
 
         async updateEmail(value, code) {
             try {
-                this.isDisabledGetCodeBtn = true;
                 await this[UPDATE_CREDENTIAL]({
                     value,
                     code,
                     type: verificationCodeType.PROFILE_EMAIL,
                 });
-                this.isDisabledGetCodeBtn = false;
+
                 this.onClose();
             } catch (error) {
-                this.isDisabledGetCodeBtn = false;
+                const { data } = error;
+                const { message } = data || {};
+                this.error = message;
             }
         },
 
@@ -193,7 +210,6 @@ export default {
     },
 
     beforeMount() {
-        this.sendCode(this.email);
         this.startCounter();
     },
 

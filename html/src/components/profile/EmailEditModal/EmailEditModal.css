@@ -7,6 +7,16 @@
         padding: 0;
     }
 
+    &__hl {
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+
+        @media (--tablet) {
+            display: none;
+        }
+    }
+
     &__body {
         flex-grow: 1;
     }
