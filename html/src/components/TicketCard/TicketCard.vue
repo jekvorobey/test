@@ -2,7 +2,7 @@
     <li class="ticket-card">
         <div class="ticket-card__info">
             <div class="text-medium ticket-card__name">{{ name }}</div>
-            <div class="text-grey text-sm ticket-card__desc">{{ description }}</div>
+            <p class="text-grey text-sm ticket-card__desc">{{ description }}</p>
         </div>
         <div class="ticket-card__body">
             <div class="ticket-card__remain">

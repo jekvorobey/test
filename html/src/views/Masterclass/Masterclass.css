@@ -744,10 +744,6 @@
         position: relative;
 
         &-container {
-            @media (--tablet-lg) {
-                padding: 0;
-            }
-
             @media (--tablet) {
                 text-align: center;
             }

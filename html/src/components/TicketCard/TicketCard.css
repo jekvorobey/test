@@ -31,6 +31,7 @@
     }
 
     &__desc {
+        line-height: 24px;
         padding-right: calc(var(--gs) * 3);
 
         @media (--tablet-lg) {
@@ -40,10 +41,11 @@
 
     &__remain,
     &__count,
-    &__price {
-        width: 20%;
+    &__prices {
+        flex: 1;
 
         @media (--tablet) {
+            flex: auto;
             width: 50%;
         }
     }
