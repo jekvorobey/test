@@ -70,16 +70,14 @@ export default {
 
         onClose() {
             this.$emit('close');
-            this.CHANGE_MODAL_STATE({ name: NAME, open: false });
+            this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
         },
 
         onSubmit() {
             const { additionalArgs } = this.modalState;
-            console.log(additionalArgs);
-
             this.$emit('submit', additionalArgs);
-            this.CHANGE_MODAL_STATE({ name: NAME, open: false });
-        }
+            this.onClose();
+        },
     },
 };
 </script>

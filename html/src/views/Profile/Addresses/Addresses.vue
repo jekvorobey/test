@@ -169,20 +169,20 @@ export default {
             });
         },
 
-        onSaveAddress(address) {
-            this[UPDATE_ADDRESS](address);
-        },
-
-        onDeleteAddress(address) {
-            this[DELETE_ADDRESS](address);
-        },
-
         onChangeAddress(address) {
             this[CHANGE_MODAL_STATE]({
                 name: modalName.profile.ADDRESS_EDIT,
                 open: true,
                 state: { address: { ...address }, btnText: 'Изменить' },
             });
+        },
+
+        onSaveAddress(address) {
+            this[UPDATE_ADDRESS](address);
+        },
+
+        onDeleteAddress(address) {
+            this[DELETE_ADDRESS](address);
         },
 
         onConfirmationModalOpen(address) {

@@ -211,7 +211,7 @@ import { SELECTED_CITY_COORDS } from '@store/modules/Geolocation/getters';
 import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 
 import validationMixin, { required } from '@plugins/validation';
-import { $dadata } from '@services';
+import { $dadata, $logger } from '@services';
 import { yaMapSettings } from '@settings';
 import { modalName } from '@enums';
 import { suggestionTypes } from '@enums/suggestions';
@@ -258,24 +258,26 @@ export default {
     data() {
         return {
             address: {
-                country_code: '',
-                post_index: '',
-                region: '',
-                region_guid: '',
-                area: '',
-                area_guid: '',
-                city: '',
-                city_guid: '',
-                street: '',
-                house: '',
-                block: '',
-                flat: '',
-                floor: '',
-                porch: '',
-                intercom: '',
-                comment: '',
-                geo_lat: '',
-                geo_lon: '',
+                country_code: null,
+                post_index: null,
+                region: null,
+                region_guid: null,
+                area: null,
+                area_guid: null,
+                city: null,
+                city_guid: null,
+                settlement_guid: null,
+                street: null,
+                street_guid: null,
+                house: null,
+                block: null,
+                flat: null,
+                floor: null,
+                porch: null,
+                intercom: null,
+                comment: null,
+                geo_lat: null,
+                geo_lon: null,
             },
 
             zoom: null,
@@ -353,6 +355,13 @@ export default {
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
+        findAddressById(query) {
+            return $dadata.post('/findById/address', {
+                query,
+                count: 1,
+            });
+        },
+
         findAddress(type, query, count, locations) {
             let from_bound = { value: type };
             let to_bound;
@@ -362,7 +371,7 @@ export default {
                     to_bound = { value: suggestionTypes.AREA };
                     break;
                 case suggestionTypes.CITY:
-                    to_bound = { value: suggestionTypes.CITY };
+                    to_bound = { value: suggestionTypes.SETTLEMENT };
                     break;
                 case suggestionTypes.STREET:
                     to_bound = { value: suggestionTypes.STREET };
@@ -388,53 +397,40 @@ export default {
                 const { suggestions } = await this.findAddress(suggestionTypes.CITY, query || this.address.value, 20);
                 this.cities = suggestions;
             } catch (error) {
-                console.log(error);
+                $logger.error(error);
                 return null;
             }
         },
 
         async onStreetInputChange(query = '') {
             try {
-                let filter = [];
-                // return the matching countries as an array
+                const { city_guid, settlement_guid } = this.address;
+                const filter = {};
 
-                if (this.address && this.address.city_guid)
-                    filter.push({
-                        city_fias_id: this.address.city_guid,
-                    });
+                if (city_guid) filter.city_fias_id = city_guid;
+                if (settlement_guid) filter.settlement_fias_id = settlement_guid;
 
-                if (this.address && this.address.city) query = `${this.address.city} ${query}`;
-
-                const { suggestions } = await this.findAddress(suggestionTypes.STREET, query, 20, filter);
+                const { suggestions } = await this.findAddress(suggestionTypes.STREET, query, 20, [filter]);
                 this.streets = suggestions;
             } catch (error) {
-                console.log(error);
+                $logger.error(error);
                 return null;
             }
         },
 
         async onHouseInputChange(query = '') {
             try {
-                let filter = [];
-                // return the matching countries as an array
+                const { city_guid, settlement_guid, street_guid } = this.address;
+                const filter = {};
 
-                if (this.address && this.address.city_guid)
-                    filter.push({
-                        city_fias_id: this.address.city_guid,
-                    });
-
-                if (this.address && this.address.street_guid)
-                    filter.push({
-                        street_fias_id: this.address.street_guid,
-                    });
-
-                if (this.address && this.address.city) query = `${this.address.city} ${query}`;
-                if (this.address && this.address.street) query = `${this.address.street} ${query}`;
+                if (city_guid) filter.city_fias_id = city_guid;
+                if (settlement_guid) filter.settlement_fias_id = settlement_guid;
+                if (street_guid) filter.street_fias_id = street_guid;
 
                 const { suggestions = [] } = await this.findAddress(suggestionTypes.HOUSE, query, 20, filter);
-                this.houses = suggestions.filter(h => !h.data.settlement);
+                this.houses = suggestions;
             } catch (error) {
-                console.log(error);
+                $logger.error(error);
                 return null;
             }
         },
@@ -447,7 +443,7 @@ export default {
                     this.applyAddress(suggestionTypes.CITY, suggestions[0]);
                 }, 0);
             } catch (error) {
-                console.log(error);
+                $logger.error(error);
             }
         },
 
@@ -459,7 +455,7 @@ export default {
                     this.applyAddress(suggestionTypes.STREET, suggestions[0]);
                 }, 0);
             } catch (error) {
-                console.log(error);
+                $logger.error(error);
             }
         },
 
@@ -471,7 +467,7 @@ export default {
                     this.applyAddress(suggestionTypes.HOUSE, suggestions[0]);
                 }, 0);
             } catch (error) {
-                console.log(error);
+                $logger.error(error);
             }
         },
 
@@ -531,11 +527,13 @@ export default {
                 address.area_guid = value.data.area_fias_id;
 
                 address.city =
-                    value.data.city_with_type ||
-                    value.data.city ||
                     value.data.settlement_with_type ||
-                    value.data.settlement;
-                address.city_guid = value.data.city_fias_id || value.data.settlement_fias_id;
+                    value.data.settlement ||
+                    value.data.city_with_type ||
+                    value.data.city;
+
+                address.city_guid = value.data.city_fias_id;
+                address.settlement_guid = value.data.settlement_fias_id;
             }
         },
 
@@ -580,12 +578,48 @@ export default {
         onSubmit() {
             this.$v.$touch();
             if (this.$v.$invalid) return;
+
+            const {
+                country_code,
+                post_index,
+                region,
+                region_guid,
+                area,
+                area_guid,
+                city,
+                city_guid,
+                settlement_guid,
+                street,
+                house,
+                block,
+                flat,
+                floor,
+                porch,
+                intercom,
+                comment,
+                geo_lat,
+                geo_lon,
+            } = this.address;
+
             const address = {
-                ...this.address,
-                porch: String(this.address.porch || ''),
-                floor: String(this.address.floor || ''),
-                flat: String(this.address.flat || ''),
-                post_index: String(this.address.post_index),
+                country_code,
+                region,
+                region_guid,
+                area,
+                area_guid,
+                city,
+                city_guid: settlement_guid || city_guid,
+                street,
+                house,
+                block,
+                intercom,
+                comment,
+                geo_lat,
+                geo_lon,
+                porch: String(porch || ''),
+                floor: String(floor || ''),
+                flat: String(flat || ''),
+                post_index: String(post_index || ''),
             };
             this.$emit('save', address);
             this.onClose();
@@ -596,15 +630,27 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false, state: { address: null, onSave: null } });
         },
 
-        init() {
-            if (this.modalState.address) {
-                if (this.modalState.address.geo_lat && this.modalState.address.geo_lon) {
-                    this.zoom = 17;
-                    this.coords = [Number(this.modalState.address.geo_lat), Number(this.modalState.address.geo_lon)];
-                } else this.zoom = 11;
+        async init() {
+            const { address } = this.modalState;
+            const initAddress = address && { ...address };
 
-                this.address = { ...this.modalState.address };
+            try {
+                if (initAddress) {
+                    const { geo_lat, geo_lon, city_guid } = initAddress;
+
+                    if (geo_lat && geo_lon) {
+                        this.zoom = 17;
+                        this.coords = [Number(geo_lat), Number(geo_lon)];
+                    } else this.zoom = 11;
+
+                    const { suggestions } = await this.findAddressById(city_guid);
+                    this.applyCity(suggestions[0], initAddress);
+                }
+            } catch (error) {
+                $logger.error(error);
             }
+
+            Object.assign(this.address, initAddress);
         },
     },
 
