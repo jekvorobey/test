@@ -4,13 +4,13 @@
         class="fake-vue-body"
         :class="{ 'fake-vue-body--scroll': scroll, 'fake-vue-body--hidden-header': hideDefaultHeader }"
     >
-        <v-header v-if="!hideDefaultHeader" />
-        <main>
+        <v-header class="header" v-if="!hideDefaultHeader" :is-sticky="isTabletLg || scroll" />
+        <main class="content">
             <!-- <transition name="fade" mode="out-in"> -->
             <router-view class="view" />
             <!-- </transition> -->
         </main>
-        <v-footer />
+        <v-footer class="footer" />
 
         <transition name="fade-in">
             <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
@@ -71,7 +71,6 @@ import AuthModal from '@components/AuthModal/AuthModal.vue';
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions } from 'vuex';
 
-import { SCROLL, CATEGORIES } from '@store';
 import { SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN } from '@store/actions';
 
 import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
@@ -92,6 +91,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { $cookie } from '@services';
 import { eventName, interval, modalName, cookieNames } from '@enums';
 import { MIN_SCROLL_VALUE, SCROLL_DEBOUNCE_TIME } from '@constants';
+import { SCROLL, IS_MENU_OPEN } from '@store';
 
 Vue.use(SocialSharing);
 Vue.component('v-svg', VSvg);
@@ -110,8 +110,14 @@ export default {
         AuthModal,
     },
 
+    data() {
+        return {
+            isSticky: false,
+        };
+    },
+
     computed: {
-        ...mapState([SCROLL]),
+        ...mapState([SCROLL, IS_MENU_OPEN]),
         ...mapState(AUTH_MODULE, [HAS_SESSION, USER]),
         ...mapState(AUTH_MODULE, {
             [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
@@ -152,9 +158,9 @@ export default {
         },
 
         onScroll() {
-            this[SET_SCROLL](
-                document.body.scrollTop > MIN_SCROLL_VALUE || document.documentElement.scrollTop > MIN_SCROLL_VALUE
-            );
+            const result = window.pageYOffset > 122;
+            this[SET_SCROLL](result);
+            console.log(result);
         },
 
         scrollFix() {
@@ -219,9 +225,11 @@ export default {
     },
 
     mounted() {
-        const onSetScrollDebounce = _debounce(this.onScroll, SCROLL_DEBOUNCE_TIME);
-        document.addEventListener(eventName.SCROLL, onSetScrollDebounce, true);
-        this.$once('hook:beforeDestroy', () => document.removeEventListener(eventName.SCROLL, onSetScrollDebounce));
+        // const onSetScrollDebounce = _debounce(this.onScroll, SCROLL_DEBOUNCE_TIME);
+        // document.addEventListener(eventName.SCROLL, onSetScrollDebounce, true);
+        // this.$once('hook:beforeDestroy', () => document.removeEventListener(eventName.SCROLL, onSetScrollDebounce));
+
+        window.addEventListener(eventName.SCROLL, this.onScroll);
 
         // скролл страницы до хеша при первой загрузке страницы
         if (this.$route.hash) setTimeout(this.scrollFix, 1);
@@ -230,6 +238,10 @@ export default {
 
     beforeDestroy() {
         this.stopSessionTimer();
+    },
+
+    beforeDestroy() {
+        window.removeEventListener(eventName.SCROLL, this.onScroll);
     },
 };
 </script>

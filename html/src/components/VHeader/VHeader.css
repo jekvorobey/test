@@ -1,12 +1,6 @@
 .v-header {
     height: auto;
 
-    @media (--tablet-lg) {
-        /* #63988 */
-        border-top: 1px solid var(--cl-global);
-        top: -1px;
-    }
-
     &--masked {
         height: 100%;
     }
@@ -20,22 +14,17 @@
         }
     }
 
+    &.sticky &__bottom {
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        width: 100%;
+    }
+
     &__middle {
         &-search-panel {
             width: 100%;
             height: 100%;
-        }
-    }
-
-    &__mask {
-        border-top: 1px solid var(--cl-divider-grey);
-        background-color: rgba(0, 0, 0, 0.8);
-        flex: 1;
-        max-height: 100%;
-        overflow: auto;
-
-        @media (--tablet-lg) {
-            border-top: none;
         }
     }
 }

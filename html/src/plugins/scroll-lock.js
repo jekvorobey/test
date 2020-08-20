@@ -73,7 +73,7 @@ class VScrollLock {
  * @param {*} options
  */
 function disableScroll(targetElement, options) {
-    options.reserveScrollBarGap = true;
+    options.reserveScrollBarGap = false;
     disableBodyScroll(targetElement, options);
 }
 

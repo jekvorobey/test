@@ -6,35 +6,24 @@
     display: flex;
     flex-direction: column;
     background: var(--cl-white);
-    padding-top: 168px;
     min-height: 100vh;
-
-    @media (--tablet-lg-min) {
-        @supports (grid-template-columns: auto) {
-            transition: padding-top var(--time) ease-in;
-        }
-    }
-
-    &--scroll {
-        padding-top: 48px;
-    }
 
     &--hidden-header {
         /* переопределение всех адаптивных стилей для того, чтобы документ
         не скакал при скрытом хедере. important нужен. */
         padding-top: 0 !important;
     }
-
-    @media (--tablet-lg) {
-        padding-top: calc(var(--gs) * 8);
-    }
-
-    @media (--tablet) {
-        padding-top: calc(var(--gs) * 6);
-    }
 }
 
 .view {
     margin: 0 auto;
     position: relative;
+}
+
+.header.sticky + .content {
+    padding-top: calc(var(--gs) * 6);
+
+    @media (--tablet-lg) and (--tablet-min) {
+        padding-top: calc(var(--gs) * 8);
+    }
 }

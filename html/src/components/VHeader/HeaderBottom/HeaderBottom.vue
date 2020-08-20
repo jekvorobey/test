@@ -1,33 +1,10 @@
 <template>
     <div class="header-bottom" :class="{ 'header-bottom--scroll': scroll && !isTabletLg }">
-        <transition
-            @before-enter="onBeforeEnter"
-            @enter="onEnter"
-            @after-enter="onAfterEnter"
-            @before-leave="onBeforeLeave"
-            @leave="onLeave"
-        >
-            <div key="bottom-main" class="header-bottom__main" v-show="!scroll">
-                <div class="container header-bottom__container header-bottom__main-container">
-                    <search-filter
-                        class="header-bottom__main-search"
-                        input-id="upper-filter"
-                        v-show="!isTabletLg || (search && isTabletLg)"
-                    />
-                    <header-logo-panel v-show="!search && !isTabletLg">
-                        {{ $t('header.middle.professionals') }}
-                    </header-logo-panel>
-                    <header-user-panel class="header-bottom__main-user" v-show="!search && !isTabletLg" />
-                </div>
-            </div>
-        </transition>
         <div class="header-bottom__bottom" v-show="!search">
             <div class="container header-bottom__container">
-                <template v-if="scroll">
-                    <router-link class="header-bottom__bottom-logo" to="/">
-                        <v-svg name="logo" width="30" height="30" />
-                    </router-link>
-                </template>
+                <router-link v-if="scroll" class="header-bottom__bottom-logo" to="/">
+                    <v-svg name="logo" width="30" height="30" />
+                </router-link>
 
                 <header-navigation-panel class="header-bottom__bottom-nav" />
 
@@ -42,6 +19,19 @@
                 </template>
             </div>
         </div>
+
+        <transition name="fade">
+            <div
+                class="header-bottom__mask"
+                v-if="showMask"
+                @touchstart.self.prevent="onCloseMenu"
+                @click.self.prevent="onCloseMenu"
+                @touchmove.self.prevent
+            >
+                <search-panel class="header-bottom__search" v-if="search" />
+                <nav-panel v-else-if="isMenuOpen" />
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -54,6 +44,8 @@ import HeaderUserPanel from '@components/VHeader/HeaderUserPanel/HeaderUserPanel
 import HeaderLogoPanel from '@components/VHeader/HeaderLogoPanel/HeaderLogoPanel.vue';
 import HeaderNavigationPanel from '@components/VHeader/HeaderNavigationPanel/HeaderNavigationPanel.vue';
 import SearchFilter from '@components/SearchFilter/SearchFilter.vue';
+import SearchPanel from '@components/SearchPanel/SearchPanel.vue';
+import NavPanel from '@components/NavPanel/NavPanel.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, IS_MENU_OPEN, CATEGORIES } from '@store';
@@ -84,7 +76,9 @@ export default {
         VLink,
         VBurger,
 
+        SearchPanel,
         SearchFilter,
+        NavPanel,
         HeaderLogoPanel,
         HeaderUserPanel,
         HeaderNavigationPanel,
@@ -93,7 +87,6 @@ export default {
     computed: {
         ...mapState([SCROLL, IS_MENU_OPEN]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
-
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
 
         isTablet() {
@@ -109,52 +102,20 @@ export default {
         },
     },
 
+    watch: {
+        search(value) {
+            if (value) this[SET_MENU_OPEN](false);
+        },
+    },
+
     methods: {
         ...mapActions([SET_MENU_OPEN]),
         ...mapActions(SEARCH_MODULE, [SET_SEARCH]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
-        onBeforeEnter(el) {
-            el.style.height = 0;
-        },
-
-        itemAnimation(el, value, delay) {
-            return new Promise((resolve, reject) => {
-                try {
-                    requestAnimationFrame(() => {
-                        el.style.height = value + 'px';
-                        setTimeout(() => {
-                            resolve();
-                        }, delay);
-                    });
-                } catch (error) {
-                    reject(error);
-                }
-            });
-        },
-
-        async onEnter(el, done) {
-            await this.itemAnimation(el, el.scrollHeight, 400);
-            done();
-        },
-
-        onAfterEnter(el) {
-            el.style.height = 'auto';
-        },
-
-        onBeforeLeave(el) {
-            el.style.height = el.scrollHeight + 'px';
-        },
-
-        async onLeave(el, done) {
-            await this.itemAnimation(el, 0, 400);
-            done();
-        },
-    },
-
-    watch: {
-        search(value) {
-            if (value) this[SET_MENU_OPEN](false);
+        onCloseMenu() {
+            this[SET_MENU_OPEN](false);
+            this[SET_SEARCH](false);
         },
     },
 };

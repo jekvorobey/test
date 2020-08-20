@@ -2,13 +2,13 @@
     <div class="search-panel">
         <div class="search-panel__container" v-scroll-lock="search">
             <search-filter
-                class="container container--tablet-lg search-panel__search"
-                v-if="isTabletLg"
+                class="container search-panel__search"
                 v-focus
                 input-id="lower-filter"
+                v-if="isTabletLg || scroll"
             />
 
-            <div class="container">
+            <div class="container search-panel__request">
                 <h2 class="text-grey text-medium search-panel__hl" v-if="isTablet">
                     Популярные запросы
                 </h2>
@@ -102,6 +102,7 @@ import { productGroupTypes } from '@enums/product';
 import { generateProductUrl, generateSearchUrl } from '@util/catalog';
 import { modalName } from '@enums';
 import './SearchPanel.css';
+import { SCROLL } from '@store';
 
 export default {
     name: 'search-panel',
@@ -115,6 +116,7 @@ export default {
     },
 
     computed: {
+        ...mapState([SCROLL]),
         ...mapState(SEARCH_MODULE, [SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS, POPULAR_REQUESTS, PRELOADER]),
 
         products() {

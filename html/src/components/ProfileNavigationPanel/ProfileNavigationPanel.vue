@@ -3,7 +3,7 @@
         popover-class="tooltip--white profile-navigation-panel"
         placement="bottom"
         trigger="hover"
-        :disabled="!hasSession"
+        :disabled="isTabletLg || !hasSession"
     >
         <slot />
         <template v-slot:header>
@@ -43,6 +43,10 @@ export default {
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
 
         groups() {
             const groups = [

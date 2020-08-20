@@ -246,10 +246,6 @@
             max-width: 392px;
             grid-column: 2;
 
-            .fake-vue-body--scroll & > .v-sticky__container {
-                padding-top: calc(var(--gs) * 8);
-            }
-
             @media (--tablet-lg) {
                 flex-basis: 100%;
                 max-width: 100%;
