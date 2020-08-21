@@ -8,11 +8,14 @@
     }
 
     &__hl {
-        font-size: 16px;
-        margin-bottom: var(--gs);
+        display: flex;
     }
 
-    &__list {
+    &__equals {
+        &-hl {
+            font-size: 16px;
+            margin-bottom: var(--gs);
+        }
     }
 
     &__tags {

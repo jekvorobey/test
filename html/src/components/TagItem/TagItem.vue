@@ -1,7 +1,7 @@
 <template>
     <li class="tag-item">
         {{ text }}&nbsp;
-        <button class="tag-item__btn" @click="onBtnClick">
+        <button class="tag-item__btn" @click="onBtnClick" :disabled="disabled">
             <v-svg name="cross-small" width="10" height="10" />
         </button>
     </li>
@@ -24,6 +24,11 @@ export default {
         text: {
             type: String,
             default: '',
+        },
+
+        disabled: {
+            type: Boolean,
+            default: false,
         },
     },
 

@@ -7,7 +7,9 @@
             :key="entityType"
             :entity-type="entityType"
             :equal-preferences="equalPreferences"
+            :in-process="inProcess[entityType]"
             @change-equal="onChangeEqual"
+            @delete-all="onDeleteAll"
         />
 
         <transition name="fade">
@@ -31,11 +33,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 
-import {
-    NAME as PREFERENCES_MODULE,
-    CUSTOMER,
-    TYPE,
-} from '@store/modules/Profile/modules/Preferences';
+import { NAME as PREFERENCES_MODULE, CUSTOMER, TYPE } from '@store/modules/Profile/modules/Preferences';
 import { GET_CUSTOMER_BY_TYPE } from '@store/modules/Profile/modules/Preferences/getters';
 import {
     FETCH_PREFERENCES_DATA,
@@ -74,10 +72,14 @@ export default {
         PreferenceEditModal,
     },
 
-    data(){
+    data() {
         return {
+            inProcess: {
+                [preferenceEntityTypes.BRANDS]: false,
+                [preferenceEntityTypes.CATEGORIES]: false,
+            },
             actualEqual: [],
-        }; 
+        };
     },
 
     computed: {
@@ -86,10 +88,7 @@ export default {
                 state[MODALS][modalName.profile.PREFERENCE_EDIT] &&
                 state[MODALS][modalName.profile.PREFERENCE_EDIT].open,
         }),
-        ...mapState(PREFERENCES_MODULE_PATH, [
-            CUSTOMER,
-            TYPE,
-        ]),
+        ...mapState(PREFERENCES_MODULE_PATH, [CUSTOMER, TYPE]),
         ...mapGetters(PREFERENCES_MODULE_PATH, [GET_CUSTOMER_BY_TYPE]),
 
         prefType() {
@@ -102,7 +101,7 @@ export default {
             return customer.equal_preferences;
         },
 
-        entityTypes(){
+        entityTypes() {
             return preferenceEntityTypes;
         },
 
@@ -114,7 +113,13 @@ export default {
             return this.$mq.tablet ? 24 : 16;
         },
     },
-    
+
+    watch: {
+        equalPreferences(value) {
+            if (value) this.actualEqual = [...value];
+        },
+    },
+
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(PREFERENCES_MODULE_PATH, [
@@ -125,20 +130,35 @@ export default {
             FETCH_ALL_PREFERENCES_DATA,
         ]),
 
-        onChangeEqual(entityType){
+        hasEqual(entityType) {
             const { actualEqual } = this;
-            if(actualEqual.includes(entityType)) actualEqual.splice(actualEqual.indexOf(entityType), 1)
+            return actualEqual.includes(entityType);
+        },
+
+        toggleEqual(entityType) {
+            const { actualEqual } = this;
+            if (actualEqual.includes(entityType)) actualEqual.splice(actualEqual.indexOf(entityType), 1);
             else actualEqual.push(entityType);
-            
-            this.debounce_updateEqual([...actualEqual]);
+            return actualEqual;
+        },
+
+        async onChangeEqual(entityType, force = false) {
+            this.inProcess[entityType] = true;
+            const items = [...this.toggleEqual(entityType)];
+            await this[UPDATE_EQUAL_PREFERENCES](items);
+            this.inProcess[entityType] = false;
+        },
+
+        async onDeleteAll({ prefType, type }) {
+            await this.onSubmit({ prefType, type, items: [] });
         },
 
         async onSubmit({ prefType, type, items = [] }) {
-            try {
-                await this[UPDATE_ENTITIES]({ prefType, type, items });
-            } catch (error) {
-                $logger.error(error);
-            }
+            this.inProcess[type] = true;
+            const isEqual = prefType === preferenceType.PROFESSIONAL && this.hasEqual(type);
+            const equals = isEqual ? this.toggleEqual(type) : null;
+            await this[UPDATE_ENTITIES]({ prefType, type, items, equals });
+            this.inProcess[type] = false;
         },
     },
 
@@ -156,8 +176,11 @@ export default {
 
         $progress.start();
         Promise.all([
-            $store.dispatch(`${PREFERENCES_MODULE_PATH}/${FETCH_ALL_PREFERENCES_DATA}`, 
-            $store.dispatch(`${PREFERENCES_MODULE_PATH}/${FETCH_PREFERENCES_DATA}`, { prefType, isServer: $context.isServer }))
+            $store.dispatch(`${PREFERENCES_MODULE_PATH}/${FETCH_ALL_PREFERENCES_DATA}`),
+            $store.dispatch(`${PREFERENCES_MODULE_PATH}/${FETCH_PREFERENCES_DATA}`, {
+                prefType,
+                isServer: $context.isServer,
+            }),
         ])
             .then(() => {
                 $store.dispatch(`${PREFERENCES_MODULE_PATH}/${SET_TYPE}`, prefType);
@@ -176,12 +199,6 @@ export default {
     created() {
         this.preferenceType = preferenceType;
         this.preferenceEntityTypes = preferenceEntityTypes;
-
-        this.debounce_updateEqual = _debounce(
-            items => this[UPDATE_EQUAL_PREFERENCES](items),
-            1000
-        );
-
         this.actualEqual = [...this.equalPreferences];
     },
 };

@@ -160,7 +160,6 @@ export default {
         onScroll() {
             const result = window.pageYOffset > 122;
             this[SET_SCROLL](result);
-            console.log(result);
         },
 
         scrollFix() {

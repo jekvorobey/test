@@ -26,10 +26,11 @@ export default {
         commit(SET_TYPE, payload);
     },
 
-    async [UPDATE_ENTITIES]({ commit }, { prefType, type, items = [] }) {
+    async [UPDATE_ENTITIES]({ dispatch, commit }, { prefType, type, items = [], equals = null }) {
         try {
             await changeProfilePreferences(prefType, type, items);
-            commit(SET_ENTITIES, { prefType, type, items });
+            if (equals) await dispatch(UPDATE_EQUAL_PREFERENCES, equals);
+            else commit(SET_ENTITIES, { prefType, type, items });
         } catch (error) {
             storeErrorHandler(UPDATE_ENTITIES)(error);
         }
@@ -56,7 +57,7 @@ export default {
     async [UPDATE_EQUAL_PREFERENCES]({ dispatch }, payload) {
         try {
             await changeProfileEqualPreferences(payload || []);
-            dispatch(FETCH_PREFERENCES, preferenceType.PROFESSIONAL);
+            await dispatch(FETCH_PREFERENCES, preferenceType.PROFESSIONAL);
         } catch (error) {
             storeErrorHandler(UPDATE_EQUAL_PREFERENCES)(error);
         }
@@ -65,14 +66,15 @@ export default {
     async [FETCH_PREFERENCES_DATA]({ commit, dispatch }, { prefType, isServer }) {
         try {
             switch (prefType) {
-                case preferenceType.PERSONAL:
-                    await dispatch(FETCH_PREFERENCES, preferenceType.PERSONAL);
-                    break;
                 case preferenceType.PROFESSIONAL:
                     Promise.all([
                         dispatch(FETCH_PREFERENCES, preferenceType.PERSONAL),
                         dispatch(FETCH_PREFERENCES, preferenceType.PROFESSIONAL),
                     ]);
+                    break;
+                case preferenceType.PERSONAL:
+                default:
+                    await dispatch(FETCH_PREFERENCES, preferenceType.PERSONAL);
                     break;
             }
             commit(SET_LOAD, isServer);
