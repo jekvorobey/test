@@ -20,6 +20,10 @@
             flex-wrap: wrap;
         }
 
+        &-btn {
+            display: flex;
+        }
+
         &-rating {
             margin-right: calc(var(--gs) * 1.5);
         }

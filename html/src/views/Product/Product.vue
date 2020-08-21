@@ -124,6 +124,7 @@
                             :reviews-count="product.reviewsCount"
                             :vendor-code="product.vendorCode"
                             :rating="product.rating"
+                            @rating-click="onScrollTo($refs.reviews, !isTabletLg ? 64 : isTablet ? -24 : -48)"
                         />
 
                         <product-option-panel
@@ -519,7 +520,7 @@
         </section> -->
 
         <!-- #58437 -->
-        <section class="section product-view__section product-view__reviews">
+        <section ref="reviews" class="section product-view__section product-view__reviews">
             <div class="container">
                 <reviews-panel
                     class="product-view__reviews-panel"
@@ -937,23 +938,9 @@ export default {
             });
         },
 
-        inCart() {
-            const { id } = this[PRODUCT];
-            return this[IS_IN_CART](cartItemTypes.PRODUCT, id);
-        },
-
-        inFavorites() {
-            const { productId } = this[PRODUCT];
-            return this[IS_IN_FAVORITES](productId);
-        },
-
         howToList() {
             const { howto } = this[PRODUCT] || {};
             return howto && howto.content && howto.content.split('|');
-        },
-
-        canBuy() {
-            return this.product.stock.qty > 0;
         },
 
         brandUrl() {
@@ -1060,20 +1047,34 @@ export default {
             return this.isTablet ? 'slide-bottom' : 'slide-top';
         },
 
+        productType() {
+            return cartItemTypes.PRODUCT;
+        },
+
+        canBuy() {
+            return this.product.stock.qty > 0;
+        },
+
+        canWriteReview() {
+            return this[PRODUCT] && this[PRODUCT].canWriteReview;
+        },
+
+        inCart() {
+            const { id } = this[PRODUCT];
+            return this[IS_IN_CART](cartItemTypes.PRODUCT, id);
+        },
+
+        inFavorites() {
+            const { productId } = this[PRODUCT];
+            return this[IS_IN_FAVORITES](productId);
+        },
+
         isTabletLg() {
             return this.$mq.tabletLg;
         },
 
         isTablet() {
             return this.$mq.tablet;
-        },
-
-        productType() {
-            return cartItemTypes.PRODUCT;
-        },
-
-        canWriteReview() {
-            return this[PRODUCT] && this[PRODUCT].canWriteReview;
         },
     },
 
@@ -1235,6 +1236,10 @@ export default {
 
         onPriceVisibilityChanged(isVisible) {
             this.isPriceVisible = isVisible;
+        },
+
+        onScrollTo(ref, offset = 0) {
+            window.scrollTo({ top: ref.offsetTop + offset, behavior: 'smooth' });
         },
     },
 
