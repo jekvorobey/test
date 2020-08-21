@@ -46,8 +46,19 @@
             }
 
             .v-picture {
+                @media (--tablet) {
+                    max-width: 200px;
+                    margin: 0 auto;
+                }
+
                 &__img {
                     height: auto;
+                    font-family: 'object-fit: contain;';
+
+                    @supports (object-fit: contain) {
+                        font-family: inherit;
+                        object-fit: contain;
+                    }
                 }
             }
         }
