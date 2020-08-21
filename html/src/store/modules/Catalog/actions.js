@@ -83,7 +83,7 @@ export default {
             type = null,
             entityCode = null,
 
-            filter,
+            filter = {},
             routeSegments,
             filterSegments,
 
@@ -97,6 +97,7 @@ export default {
         const data = {};
         const fetchList = [];
 
+        let mergedCategory = filter.category;
         let mergedfilter = filter;
 
         let based = null;
@@ -136,14 +137,15 @@ export default {
             productGroupFilter = state.productGroup.filters;
         }
 
+        mergedCategory = filter.category || productGroupFilter.category || undefined;
         mergedfilter = {
             ..._mergeWith(filter, productGroupFilter, mergeFunction),
-            category: filter.category || productGroupFilter.category || undefined,
+            category: mergedCategory,
         };
 
         if (based === productGroupBase.FILTERS) {
             data.baseCategoryCode = productGroupFilter.category;
-            data.categoryCode = filter.category;
+            data.categoryCode = mergedfilter.category;
 
             fetchList.push({
                 action: FETCH_FILTERS,

@@ -74,7 +74,12 @@
                         <div class="catalog-view__main-header-title">
                             <template v-if="type !== productGroupTypes.SEARCH">
                                 <h1 class="catalog-view__main-header-hl">
-                                    {{ activeCategory ? activeCategory.name : 'Все категории' }}
+                                    <template v-if="entityCode">
+                                        {{ productGroup && productGroup.name }}
+                                    </template>
+                                    <template v-else>
+                                        {{ activeCategory ? activeCategory.name : 'Все категории' }}
+                                    </template>
                                 </h1>
                                 <p class="text-grey catalog-view__main-header-text">{{ range }} {{ productName }}</p>
                             </template>
