@@ -95,7 +95,7 @@
                             label="title"
                             track-by="id"
                             v-model="sortValue"
-                            :options="sortOptions"
+                            :options="typeSortOptions"
                             :searchable="false"
                             :allow-empty="false"
                             :show-labels="false"
@@ -334,15 +334,27 @@ export default {
 
     data() {
         const sortOptions = [
-            //{ id: 1, title: 'Популярное', field: sortFields.POPULARITY, direction: sortDirections.DESC },
-            { id: 2, title: 'Сначала подороже', field: sortFields.PRICE, direction: sortDirections.DESC },
-            { id: 3, title: 'Сначала подешевле', field: sortFields.PRICE, direction: sortDirections.ASC },
-            // { id: 4, title: 'Новинки', field: sortFields.NEW, direction: sortDirections.DESC },
-            // { id: 5, title: 'Скидки', field: sortFields.DISCOUNT, direction: sortDirections.DESC },
+            {
+                id: 1,
+                title: 'По релевантности',
+                field: sortFields.RELEVANCE,
+                direction: sortDirections.DESC,
+            },
+            { id: 2, title: 'Популярное', field: sortFields.POPULARITY, direction: sortDirections.DESC },
+            { id: 3, title: 'Сначала подороже', field: sortFields.PRICE, direction: sortDirections.DESC },
+            { id: 4, title: 'Сначала подешевле', field: sortFields.PRICE, direction: sortDirections.ASC },
+            { id: 5, title: 'Новинки', field: sortFields.NEW, direction: sortDirections.DESC },
+            {
+                id: 6,
+                title: 'По размеру скидки',
+                field: sortFields.DISCOUNT,
+                direction: sortDirections.DESC,
+            },
         ];
+
         return {
-            sortValue: sortOptions[0],
-            sortOptions,
+            sortValue: null,
+            sortOptions: sortOptions,
             filterModal: false,
             showMore: false,
         };
@@ -459,6 +471,11 @@ export default {
             else if (range && !searchQuery) return `По запросу найдено ${range} продуктов`;
             else return `По запросу «${searchQuery}» ничего не найдено`;
         },
+
+        typeSortOptions() {
+            const { type, sortOptions } = this;
+            return sortOptions.filter(o => type === productGroupTypes.SEARCH || o.field !== sortFields.RELEVANCE);
+        },
     },
 
     watch: {
@@ -492,8 +509,9 @@ export default {
         },
 
         setSortValue(field, direction) {
+            const { typeSortOptions } = this;
             this.sortValue =
-                this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
+                typeSortOptions.find(o => o.field === field && o.direction === direction) || typeSortOptions[0];
         },
 
         onClickDeleteTag(value) {
@@ -527,7 +545,7 @@ export default {
                     params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
                     query: {
                         page = 1,
-                        orderField = sortFields.PRICE,
+                        orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.POPULARITY,
                         orderDirection = sortDirections.DESC,
                         search_string = null,
                     },
@@ -589,9 +607,14 @@ export default {
         const {
             fullPath,
             params: { code: toCode = null, entityCode: toEntityCode = null, type: toType, pathMatch },
-            query: { page = 1, orderField = sortFields.PRICE, orderDirection = sortDirections.DESC, search_string } = {
+            query: {
+                page = 1,
+                orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.POPULARITY,
+                orderDirection = sortDirections.DESC,
+                search_string,
+            } = {
                 page: 1,
-                orderField: sortFields.PRICE,
+                orderField: sortFields.POPULARITY,
                 orderDirection: sortDirections.DESC,
             },
         } = to;
@@ -658,7 +681,7 @@ export default {
             params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },
             query: {
                 page: toPage = 1,
-                orderField: toOrderField = sortFields.PRICE,
+                orderField: toOrderField = sortFields.POPULARITY,
                 orderDirection: toOrderDirection = sortDirections.DESC,
                 search_string: to_search_string,
             },
@@ -674,7 +697,7 @@ export default {
             params: { code: fromCode, entityCode: fromEntityCode, type: fromType, pathMatch: fromPathMatch },
             query: {
                 page: fromPage = 1,
-                orderField: fromOrderField = sortFields.PRICE,
+                orderField: fromOrderField = sortFields.POPULARITY,
                 orderDirection: fromOrderDirection = sortDirections.DESC,
                 search_string: from_search_string,
             },

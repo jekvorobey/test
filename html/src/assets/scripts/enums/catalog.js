@@ -3,7 +3,7 @@ export const sortFields = Object.freeze({
     PRICE: 'price',
     NEW: 'new',
     DISCOUNT: 'discount',
-    RELEVANCE: 'relevance',
+    RELEVANCE: 'relevance', // default for search
 });
 
 export const masterclassFilterName = Object.freeze({
