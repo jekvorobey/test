@@ -221,7 +221,7 @@
                                 min="1"
                                 :max="availableBonus"
                                 class="checkout-product-panel__item-controls-input"
-                                placeholder="Сколько бонусов использовать?"
+                                placeholder="Сколько списать?"
                                 v-model="bonusAmount"
                                 @keydown.enter.prevent="ADD_BONUS(bonusAmount)"
                             />
