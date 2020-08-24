@@ -50,15 +50,9 @@
 
     &__breadcrumbs {
         order: 0;
-        margin: var(--gs) 0;
 
         @media (--tablet-lg) {
             order: 1;
-            padding: 0 calc(var(--gs) * 3);
-        }
-
-        @media (--tablet) {
-            padding: 0 calc(var(--gs) * 2);
         }
     }
 
@@ -143,6 +137,9 @@
                 margin-right: calc(var(--gs) * 2);
 
                 @media (--tablet) {
+                    font-size: 24px;
+                    line-height: 32px;
+                    letter-spacing: 0.02em;
                     padding: 0 calc(var(--gs) * 2);
                     margin-right: 0;
                 }

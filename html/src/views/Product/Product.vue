@@ -1,26 +1,20 @@
 <template>
     <section class="section product-view" :class="{ 'product-view--scroll': scroll }">
-        <div class="container">
-            <breadcrumbs class="product-view__breadcrumbs">
-                <breadcrumb-item key="main" to="/">
-                    <v-svg v-if="isTablet" name="home" width="10" height="10" />
-                    <span v-else>Главная</span></breadcrumb-item
-                >
-                <breadcrumb-item key="Catalog" :to="{ name: 'Catalog' }">
-                    Каталог
-                </breadcrumb-item>
-                <breadcrumb-item
-                    v-for="category in product.categoryCodes"
-                    :key="category.code"
-                    :to="generateBreadcrumbUrl(category.code)"
-                >
-                    {{ category.name }}
-                </breadcrumb-item>
-                <breadcrumb-item :key="product.id" :to="{ path: $route.path }">
-                    {{ product.title }}
-                </breadcrumb-item>
-            </breadcrumbs>
-        </div>
+        <breadcrumbs class="container product-view__breadcrumbs">
+            <breadcrumb-item key="main" to="/">
+                <v-svg v-if="isTablet" name="home" width="10" height="10" />
+                <span v-else>Главная</span></breadcrumb-item
+            >
+            <breadcrumb-item key="Catalog" :to="{ name: 'Catalog' }">Каталог</breadcrumb-item>
+            <breadcrumb-item
+                v-for="category in product.categoryCodes"
+                :key="category.code"
+                :to="generateBreadcrumbUrl(category.code)"
+                >{{ category.name }}</breadcrumb-item
+            >
+            <breadcrumb-item :key="product.id" :to="{ path: $route.path }">{{ product.title }}</breadcrumb-item>
+        </breadcrumbs>
+
         <section class="section">
             <div class="container product-view__header">
                 <div class="product-view__header-mobile-controls" v-if="isTablet">
@@ -180,22 +174,20 @@
                             @pickup-points="onShowPickupPoints"
                         />
 
-                        <div
-                            v-if="product.description && product.description.content"
-                            class="product-view__header-detail-section"
-                        >
-                            <p class="text-bold product-view__header-detail-section-hl">
-                                Описание и характеристики
-                            </p>
-                            <v-clamp tag="p" :max-lines="maxDescriptionLines" :autoresize="true">
-                                {{ product.description.content }}
-                            </v-clamp>
-                            <a class="product-view__header-detail-brand-link" href="#description">
-                                Подробнее
-                            </a>
-                        </div>
-                        <div v-if="product.brand" class="product-view__header-detail-section">
-                            <div class="product-view__header-detail-brand">
+                        <div class="product-view__header-detail-section" v-if="product.description || product.brand">
+                            <template v-if="product.description && product.description.content">
+                                <p class="text-bold product-view__header-detail-section-hl">
+                                    Описание и характеристики
+                                </p>
+                                <v-clamp tag="p" :max-lines="maxDescriptionLines" :autoresize="true">
+                                    {{ product.description.content }}
+                                </v-clamp>
+                                <a class="product-view__header-detail-brand-link" href="#description">
+                                    Подробнее
+                                </a>
+                            </template>
+
+                            <div v-if="product.brand" class="product-view__header-detail-brand">
                                 <router-link :to="brandUrl || null" class="link">
                                     <v-picture
                                         v-if="productImages.brand"
@@ -610,21 +602,25 @@
             </div>
         </section>
 
-        <transition :name="pricePanelAnimation" appear>
-            <product-price-panel
-                class="product-view__top-panel"
-                v-if="(scroll && !isPriceVisible) || isTablet"
-                :name="product.title"
-                :image="product.media && product.media.length > 0 ? product.media[0] : null"
-                :price="product.price"
-                :old-price="product.oldPrice"
-                :bonus="product.bonus"
-                :disabled="!canBuy"
-                @add-item="onBuyProduct"
-            >
-                {{ buyBtnText }}
-            </product-price-panel>
-        </transition>
+        <section class="section" :style="{ height: isTablet ? '48px' : 0 }">
+            <transition :name="pricePanelAnimation" appear>
+                <product-price-panel
+                    class="product-view__top-panel"
+                    :class="{ 'product-view__top-panel--static': !isPanelSticky }"
+                    v-if="(scroll && !isPriceVisible) || isTablet"
+                    :name="product.title"
+                    :image="product.media && product.media.length > 0 ? product.media[0] : null"
+                    :price="product.price"
+                    :old-price="product.oldPrice"
+                    :bonus="product.bonus"
+                    :disabled="!canBuy"
+                    @add-item="onBuyProduct"
+                >
+                    {{ buyBtnText }}
+                </product-price-panel>
+            </transition>
+        </section>
+        <div v-observe-visibility="onEndReached" />
 
         <transition name="fade-in">
             <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" :images="productImages.gallery">
@@ -784,6 +780,7 @@ const sliderOptions = {
     spaceBetween: 24,
     slidesPerView: 4,
     grabCursor: true,
+    autoHeight: true,
 
     navigation: {
         nextEl: '.swiper-button-next',
@@ -893,6 +890,7 @@ export default {
     data() {
         return {
             isPriceVisible: true,
+            isPanelSticky: true,
             btnLink: 'https://www.instagram.com/bessovestnotalantlivy/',
         };
     },
@@ -1236,6 +1234,11 @@ export default {
 
         onPriceVisibilityChanged(isVisible) {
             this.isPriceVisible = isVisible;
+        },
+
+        onEndReached(isVisible) {
+            const { isTablet } = this;
+            this.isPanelSticky = !isTablet || !isVisible;
         },
 
         onScrollTo(ref, offset = 0) {

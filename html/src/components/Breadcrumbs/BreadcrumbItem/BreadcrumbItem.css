@@ -1,8 +1,9 @@
 .breadcrumb-item {
     color: var(--cl-grey);
     fill: currentColor;
-    font-size: 11px;
-    line-height: 24px;
+    font-size: 10px;
+    line-height: 16px;
+    letter-spacing: 0.02em;
     flex-shrink: 0;
 
     @media (--tablet) {
@@ -17,7 +18,8 @@
     &__link {
         border-bottom: none;
         text-transform: uppercase;
-        line-height: 24px;
+        font-size: inherit;
+        line-height: inherit;
     }
 
     & .icon {

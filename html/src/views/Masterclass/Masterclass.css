@@ -1,6 +1,4 @@
 .master-class-view {
-    padding-bottom: calc(var(--gs) * 10);
-
     &__header {
         display: flex;
         flex-direction: column;
@@ -14,7 +12,6 @@
 
     &__breadcrumbs {
         order: 0;
-        margin: var(--gs) 0;
 
         @media (--tablet-lg) {
             order: 1;
@@ -295,6 +292,7 @@
 
                 @media (--mobile-sm) {
                     max-height: calc(var(--gs) * 30);
+                    margin: calc(var(--gs) * 4) 0 0;
                 }
 
                 &::after {
@@ -742,86 +740,6 @@
 
     &__instagram {
         position: relative;
-
-        &-container {
-            @media (--tablet) {
-                text-align: center;
-            }
-        }
-
-        &-hl {
-            @media (--tablet-min) and (--tablet-lg) {
-                padding-left: calc(var(--gs) * 3);
-            }
-
-            @media (--tablet) {
-                font-size: 28px;
-                line-height: 40px;
-            }
-        }
-
-        &-link {
-            @media (--tablet) {
-                position: relative;
-                width: calc(100% - 32px);
-                left: auto;
-                right: auto;
-            }
-        }
-
-        &-slider {
-            padding-bottom: calc(var(--gs) * 6);
-
-            .v-slider__controls {
-                bottom: calc(var(--gs) * 3);
-                left: 50%;
-                transform: translateX(-50%);
-            }
-        }
-
-        &-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: 1fr;
-            grid-gap: calc(var(--gs) * 3);
-            opacity: 0;
-            transition: all var(--animation-time) ease-in;
-
-            @media (--tablet-lg) {
-                grid-template-columns: 1fr;
-                grid-template-rows: repeat(4, 1fr);
-            }
-
-            &--initialized {
-                opacity: 1;
-            }
-        }
-
-        &-slider,
-        &-grid {
-            @media (--tablet-lg-min) {
-                margin-bottom: calc(var(--gs) * 3);
-            }
-        }
-
-        &-note {
-            text-align: center;
-            margin: 0 auto;
-
-            @media (--tablet-lg-min) {
-                padding-bottom: calc(var(--gs) * 6);
-                border-bottom: 1px solid var(--cl-divider-grey);
-            }
-
-            @media (--tablet-lg) {
-                width: calc(100% - 48px);
-            }
-
-            @media (--tablet) {
-                width: calc(100% - 32px);
-                margin-bottom: calc(var(--gs) * 3);
-            }
-        }
     }
 
     &__top-panel {
@@ -842,6 +760,14 @@
 
             .masterclass-price-panel__name {
                 display: none;
+            }
+        }
+
+        &--static {
+            @media (--tablet) {
+                position: absolute;
+                top: 0;
+                width: 100%;
             }
         }
     }

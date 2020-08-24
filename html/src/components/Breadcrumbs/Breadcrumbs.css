@@ -1,5 +1,11 @@
 .breadcrumbs {
-    margin: var(--gs) 0;
     display: flex;
     overflow: auto;
+    padding-top: calc(var(--gs) * 1.5);
+    padding-bottom: calc(var(--gs) * 1.5);
+
+    @media (--tablet) {
+        padding-top: var(--gs);
+        padding-bottom: var(--gs);
+    }
 }

@@ -15,10 +15,6 @@
         top: calc(var(--gs) * -16);
     }
 
-    &__breadcrumbs {
-        margin: var(--gs) 0;
-    }
-
     &__section {
         margin-bottom: calc(var(--gs) * 7);
 
@@ -72,6 +68,10 @@
         @media (--tablet-lg) {
             flex-direction: column;
             padding: 0;
+        }
+
+        @media (--tablet) {
+            margin-bottom: 0;
         }
 
         &-sticky {
@@ -275,6 +275,7 @@
             &-brand {
                 display: flex;
                 align-items: center;
+                padding-top: calc(var(--gs) * 3);
 
                 &-img {
                     max-width: 135px;
@@ -1266,6 +1267,14 @@
 
             .product-price-panel__name {
                 display: none;
+            }
+        }
+
+        &--static {
+            @media (--tablet) {
+                position: absolute;
+                top: 0;
+                width: 100%;
             }
         }
     }

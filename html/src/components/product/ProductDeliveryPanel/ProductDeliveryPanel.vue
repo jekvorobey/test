@@ -3,14 +3,18 @@
         <p>
             Получить в
             <button class="product-delivery-panel__btn" title="Выбрать город" @click="onOpenCitySelection">
-                <v-clamp :max-lines="1" autoresize>{{ city }}</v-clamp>
+                <v-clamp class="product-delivery-panel__btn-text" :max-lines="1" autoresize>
+                    {{ city }}
+                </v-clamp>
                 <v-svg name="arrow-down" width="16" height="16" />
             </button>
         </p>
+
         <p class="status-color-error" v-if="!deliveryMethods || !deliveryMethods.length">
             Доставка в данный регион не осуществляется.<br />
             Выберите другой населенный пункт.
         </p>
+
         <p v-for="method in deliveryMethods" :key="method.deliveryMethod">
             <template v-if="method.deliveryMethod === receiveMethods.PICKUP">
                 {{ $t(`product.deliveryMethod.${method.deliveryMethod}[0]`) }}
@@ -98,7 +102,8 @@ export default {
             else if (today + 1 === dateObj.getDate()) additionalText = `завтра`;
             else additionalText = dateObj && this.$t(`weekdays.short.${dateObj.getDay()}`);
 
-            return `c ${dateObj && dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)} (${additionalText})`;
+            return `c ${dateObj &&
+                dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)} (${additionalText})`;
         },
 
         onOpenCitySelection() {

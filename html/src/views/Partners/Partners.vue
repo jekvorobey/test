@@ -1,7 +1,7 @@
 <template>
     <section class="section partners-view">
-        <div class="container partners-view__header">
-            <breadcrumbs class="partners-view__breadcrumbs">
+        <div class="partners-view__header">
+            <breadcrumbs class="container partners-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>

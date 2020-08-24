@@ -1,7 +1,7 @@
 <template>
     <section class="section catalog-view">
         <div ref="catalogHeader" class="container catalog-view__header">
-            <breadcrumbs class="catalog-view__breadcrumbs">
+            <breadcrumbs class="container container--tablet-lg catalog-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span></breadcrumb-item
@@ -94,11 +94,12 @@
                             class="catalog-view__main-header-sort"
                             label="title"
                             track-by="id"
-                            v-model="sortValue"
+                            :value="sortValue"
                             :options="typeSortOptions"
                             :searchable="false"
                             :allow-empty="false"
                             :show-labels="false"
+                            @input="onChangeSortValue"
                         />
 
                         <filter-button class="catalog-view__main-header-btn" @click="filterModal = !filterModal">
@@ -483,15 +484,6 @@ export default {
             const category = this[ACTIVE_CATEGORY];
             if (category) $retailRocket.addCategoryView(category.id);
         },
-
-        sortValue(value, oldValue) {
-            if (value !== oldValue) {
-                this.$router.replace({
-                    path: this.$route.path,
-                    query: { ...this.$route.query, orderField: value.field, orderDirection: value.direction },
-                });
-            }
-        },
     },
 
     methods: {
@@ -512,6 +504,26 @@ export default {
             const { typeSortOptions } = this;
             this.sortValue =
                 typeSortOptions.find(o => o.field === field && o.direction === direction) || typeSortOptions[0];
+            this.onChangeSortValue(this.sortValue);
+        },
+
+        onChangeSortValue(value) {
+            if (value) {
+                const {
+                    params: { type },
+                    query: {
+                        orderField = type === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.POPULARITY,
+                        orderDirection = sortDirections.DESC,
+                    },
+                } = this.$route;
+
+                const { field, direction } = value;
+                if (field !== orderField || direction !== orderDirection)
+                    this.$router.replace({
+                        path: this.$route.path,
+                        query: { ...this.$route.query, orderField: field, orderDirection: direction },
+                    });
+            }
         },
 
         onClickDeleteTag(value) {
@@ -587,9 +599,9 @@ export default {
                     showMore,
                 });
 
+                next();
                 this.setSortValue(orderField, orderDirection);
                 this.$progress.finish();
-                next();
 
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
             } catch (thrown) {
@@ -715,9 +727,8 @@ export default {
         )
             return next();
 
-        if (this.showMore) {
-            this.fetchCatalog(to, from, next, this.showMore);
-        } else this.debounce_fetchCatalog(to, from, next);
+        if (this.showMore) this.fetchCatalog(to, from, next, this.showMore);
+        else this.debounce_fetchCatalog(to, from, next);
     },
 
     beforeRouteLeave(to, from, next) {

@@ -556,13 +556,7 @@
             </div>
         </section> -->
 
-        <section class="section master-class-view__section master-class-view__instagram">
-            <div class="container master-class-view__instagram-container">
-                <frisbuy-product-container :script="frisbuyScript" />
-            </div>
-        </section>
-
-        <section class="section product-view__section">
+        <section class="section master-class-view__section master-class-view__review">
             <div class="container">
                 <reviews-panel
                     :key="masterClass.code"
@@ -573,18 +567,28 @@
             </div>
         </section>
 
-        <transition :name="pricePanelAnimation" appear>
-            <masterclass-price-panel
-                class="master-class-view__top-panel"
-                v-if="(scroll && !isPanelVisible) || isTablet"
-                :name="masterClass.title"
-                :price-to="masterClass.priceTo"
-                :price-from="masterClass.priceFrom"
-                @add-item="onScrollTo($refs.panel)"
-            >
-                {{ buyBtnText }}
-            </masterclass-price-panel>
-        </transition>
+        <section class="section master-class-view__section master-class-view__instagram">
+            <div class="container master-class-view__instagram-container">
+                <frisbuy-product-container :script="frisbuyScript" />
+            </div>
+        </section>
+
+        <section class="section" :style="{ height: isTablet ? '64px' : 0 }">
+            <transition :name="pricePanelAnimation" appear>
+                <masterclass-price-panel
+                    class="master-class-view__top-panel"
+                    :class="{ 'master-class-view__top-panel--static': !isPanelSticky }"
+                    v-if="(scroll && !isPanelVisible) || isTablet"
+                    :name="masterClass.title"
+                    :price-to="masterClass.priceTo"
+                    :price-from="masterClass.priceFrom"
+                    @add-item="onScrollTo($refs.panel)"
+                >
+                    {{ buyBtnText }}
+                </masterclass-price-panel>
+            </transition>
+        </section>
+        <div v-observe-visibility="onEndReached" />
 
         <transition name="fade-in">
             <author-modal v-if="$isServer || isAuthorOpen" />
@@ -632,11 +636,7 @@ import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, LOCALE } from '@store';
 
-import {
-    NAME as MASTERCLASS_MODULE,
-    MASTERCLASS,
-    FEATURED_MASTERCLASSES,
-} from '@store/modules/Masterclass';
+import { NAME as MASTERCLASS_MODULE, MASTERCLASS, FEATURED_MASTERCLASSES } from '@store/modules/Masterclass';
 import { FETCH_MASTERCLASS_DATA } from '@store/modules/Masterclass/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
@@ -779,6 +779,7 @@ export default {
         return {
             showMap: false,
             isPanelVisible: false,
+            isPanelSticky: true,
             inProcess: {},
 
             markerIcon: {
@@ -1135,6 +1136,11 @@ export default {
 
         onPanelVisibilityChanged(isVisible) {
             this.isPanelVisible = isVisible;
+        },
+
+        onEndReached(isVisible) {
+            const { isTablet } = this;
+            this.isPanelSticky = !isTablet || !isVisible;
         },
 
         onScrollTo(ref) {

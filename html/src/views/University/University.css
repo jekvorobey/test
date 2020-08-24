@@ -1,25 +1,12 @@
 .university-view {
-    &__header {
-        display: flex;
-        flex-direction: column;
-
-        @media (--tablet-lg) {
-            margin-bottom: 0;
-            padding: 0;
-        }
-    }
-
     &__breadcrumbs {
         order: 0;
-        margin: var(--gs) 0;
 
         @media (--tablet-lg) {
             order: 1;
-            padding: 0 calc(var(--gs) * 3);
         }
 
         @media (--tablet) {
-            padding: 0 calc(var(--gs) * 2);
             z-index: 1;
         }
 

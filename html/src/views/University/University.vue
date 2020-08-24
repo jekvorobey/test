@@ -1,7 +1,7 @@
 <template>
     <section class="section university-view">
-        <div class="container university-view__header">
-            <breadcrumbs class="university-view__breadcrumbs">
+        <div class="university-view__header">
+            <breadcrumbs class="container university-view__breadcrumbs">
                 <breadcrumb-item key="main" to="/">
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>

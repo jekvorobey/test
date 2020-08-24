@@ -18,7 +18,6 @@
 
     &__breadcrumbs {
         order: 0;
-        margin: var(--gs) 0;
 
         @media (--tablet-lg) {
             order: 1;
