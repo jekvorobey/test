@@ -9,8 +9,8 @@
         <template v-slot:body>
             <ul class="category-list-panel__list">
                 <li class="category-list-panel__item" v-for="item in subcategories" :key="item.id">
-                    <router-link class="category-list-panel__link" :to="item.href">
-                        <span class="category-list-panel__link-text">{{ item.name }}</span>
+                    <router-link class="category-list-panel__item-link" :to="item.href">
+                        <span class="category-list-panel__item-link-text">{{ item.name }}</span>
                     </router-link>
                 </li>
             </ul>

@@ -1,42 +1,9 @@
 .category-list-panel {
-    /* important необходим для переназначения стилей popover'а */
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-
-    &__list {
-        width: 100%;
-    }
-
-    &__item {
-        line-height: normal;
-
-        &:not(:last-child) {
-            & > .category-list-panel__link {
-                padding-bottom: var(--gs);
-            }
-        }
-        &:not(:first-child) {
-            & > .category-list-panel__link {
-                padding-top: var(--gs);
-            }
-        }
-    }
-
-    &__link {
-        display: block;
-        width: 100%;
-        border-bottom: none;
-
-        &:hover > &-text {
-            border-bottom: 1px solid var(--cl-global);
-        }
+    &.tooltip[x-placement^='bottom'] {
+        padding-top: 0;
     }
 
     .general-popup-panel {
-        &__header {
-            display: none;
-        }
-
         .tooltip-inner {
             position: relative;
             padding: calc(var(--gs) * 2) 0;
@@ -44,7 +11,36 @@
         }
 
         .popover-inner {
-            margin: calc(var(--gs) * 2.5) 0;
+            margin: calc(var(--gs) * 2) 0;
+        }
+
+        &__header {
+            display: none;
+        }
+
+        &__body {
+            padding: 0;
+        }
+    }
+
+    &__list {
+        width: 100%;
+    }
+
+    &__item {
+        &-link {
+            display: block;
+            width: 100%;
+            border-bottom: none;
+            padding: 0 calc(var(--gs) * 3) calc(var(--gs) * 1.5);
+
+            &:hover > &-text {
+                border-bottom: 1px solid var(--cl-global);
+            }
+        }
+
+        &:last-child &-link {
+            padding-bottom: 0;
         }
     }
 }
