@@ -57,9 +57,10 @@
                                     </ul>
                                 </info-row>
                             </ul>
-                            <v-button class="btn--outline thank-you-view__panel-btn" to="/"
-                                >На главную страницу</v-button
-                            >
+
+                            <v-button class="thank-you-view__panel-btn" to="/">
+                                На главную страницу
+                            </v-button>
                         </div>
                     </info-panel>
                 </template>
@@ -141,7 +142,7 @@
                         </ul>
 
                         <div class="container container--tablet">
-                            <v-button class="thank-you-view__panel-btn" :to="{ name: 'Cart' }">
+                            <v-button class="btn--outline thank-you-view__panel-btn" :to="{ name: 'Cart' }">
                                 Перейти в оформлению
                             </v-button>
                         </div>
