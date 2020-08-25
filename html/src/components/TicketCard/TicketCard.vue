@@ -6,10 +6,15 @@
         </div>
         <div class="ticket-card__body">
             <div class="ticket-card__remain">
-                <template v-if="showCount"> Осталось {{ max }} мест </template>
+                <template v-if="showCount">
+                    <template v-if="isAvaliable"> Осталось {{ max }} мест </template>
+                    <template v-else>
+                        Нет в наличии
+                    </template>
+                </template>
             </div>
             <div class="ticket-card__count">
-                <v-counter v-model="count" min="1" :max="max" :disabled="disabled" />
+                <v-counter v-if="isAvaliable" v-model="count" min="1" :max="max" :disabled="disabled" />
             </div>
             <div class="ticket-card__prices">
                 <price class="text-bold ticket-card__price" :value="computedPriceValue" :currency="price.currency" />
@@ -21,7 +26,12 @@
                 />
             </div>
 
-            <buy-button class="ticket-card__btn" :class="{ 'btn--transparent': inProcess }" @click="onBtnClick">
+            <buy-button
+                class="ticket-card__btn"
+                :class="{ 'btn--transparent': inProcess }"
+                :disabled="!isAvaliable"
+                @click="onBtnClick"
+            >
                 <v-spinner v-if="inProcess" width="24" height="24" show />
                 <slot v-else>Добавить</slot>
             </buy-button>
@@ -100,6 +110,11 @@ export default {
     },
 
     computed: {
+        isAvaliable() {
+            const { max } = this;
+            return max > 0;
+        },
+
         computedPriceValue() {
             return this.count * this.price.value;
         },
