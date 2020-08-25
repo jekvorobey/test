@@ -7,8 +7,7 @@ import {
     setReceiveMethod,
     setAddress,
     setPickupPoint,
-    addBonus,
-    deleteBonus,
+    changeBonus,
     addCertificate,
     deleteCertificate,
     addPromocode,
@@ -93,108 +92,100 @@ export default {
         }
     },
 
-    [CHANGE_CITY]({ commit, state }, payload) {
-        commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.PENDING });
-        return changeCity({ city: payload, data: state.checkoutData })
-            .then((data) => {
-                commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.SUCCESS });
-                commit(SET_DATA, data);
-            })
-            .catch((error) => {
-                commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.ERROR });
-                storeErrorHandler(CHANGE_CITY, true)(error);
-            });
+    async [CHANGE_CITY]({ commit, state }, payload) {
+        try {
+            commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.PENDING });
+            const data = await changeCity({ city: payload, data: state.checkoutData });
+            commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.SUCCESS });
+            commit(SET_DATA, data);
+        } catch (error) {
+            commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(CHANGE_CITY, true)(error);
+        }
     },
 
-    [SET_RECEIVE_METHOD]({ commit, state }, payload) {
-        commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.PENDING });
-        return setReceiveMethod({ method: payload, data: state.checkoutData })
-            .then((data) => {
-                commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.SUCCESS });
-                commit(SET_DATA, data);
-            })
-            .catch((error) => {
-                commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.ERROR });
-                storeErrorHandler(SET_RECEIVE_METHOD, true)(error);
-            });
+    async [SET_RECEIVE_METHOD]({ commit, state }, payload) {
+        try {
+            commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.PENDING });
+            const data = await setReceiveMethod({ method: payload, data: state.checkoutData });
+            commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.SUCCESS });
+            commit(SET_DATA, data);
+        } catch (error) {
+            commit(SET_STATUS, { name: RECEIVE_METHOD_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(SET_RECEIVE_METHOD, true)(error);
+        }
     },
 
-    [SET_ADDRESS]({ commit, state }, payload) {
-        commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
-        return setAddress({ address: payload, data: state.checkoutData })
-            .then((data) => {
-                commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
-                commit(SET_DATA, data);
-            })
-            .catch((error) => {
-                commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
-                storeErrorHandler(SET_ADDRESS, true)(error);
-            });
+    async [SET_ADDRESS]({ commit, state }, payload) {
+        try {
+            commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
+            const data = await setAddress({ address: payload, data: state.checkoutData });
+            commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
+            commit(SET_DATA, data);
+        } catch (error) {
+            commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(SET_ADDRESS, true)(error);
+        }
     },
 
-    [SET_PICKUP_POINT]({ commit, state }, payload) {
-        commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
-        return setPickupPoint({ pickupPoint: payload, data: state.checkoutData })
-            .then((data) => {
-                commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
-                commit(SET_DATA, data);
-            })
-            .catch((error) => {
-                commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
-                storeErrorHandler(SET_PICKUP_POINT, true)(error);
-            });
+    async [SET_PICKUP_POINT]({ commit, state }, payload) {
+        try {
+            commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
+            const data = await setPickupPoint({ pickupPoint: payload, data: state.checkoutData });
+            commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
+            commit(SET_DATA, data);
+        } catch (error) {
+            commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(SET_PICKUP_POINT, true)(error);
+        }
     },
 
-    [ADD_BONUS]({ commit, state }, payload) {
-        commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.PENDING });
-        return addBonus({ bonus: payload, data: state.checkoutData })
-            .then((data) => {
-                commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.SUCCESS });
-                commit(SET_DATA, data);
-            })
-            .catch((error) => {
-                commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.ERROR });
-                storeErrorHandler(ADD_BONUS, true)(error);
-            });
+    async [ADD_BONUS]({ commit, state }, payload) {
+        try {
+            commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.PENDING });
+            const data = await changeBonus({ bonus: payload, data: state.checkoutData });
+            commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.SUCCESS });
+            commit(SET_DATA, data);
+        } catch (error) {
+            commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(ADD_BONUS, true)(error);
+        }
     },
 
-    [DELETE_BONUS]({ commit, state }) {
-        commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.PENDING });
-        return deleteBonus({ data: state.checkoutData })
-            .then((data) => {
-                commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.SUCCESS });
-                commit(SET_DATA, data);
-            })
-            .catch((error) => {
-                commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.ERROR });
-                storeErrorHandler(DELETE_BONUS, true)(error);
-            });
+    async [DELETE_BONUS]({ commit, state }) {
+        try {
+            commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.PENDING });
+            const data = await changeBonus({ bonus: 0, data: state.checkoutData });
+            commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.SUCCESS });
+            commit(SET_DATA, data);
+        } catch (error) {
+            commit(SET_STATUS, { name: BONUS_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(DELETE_BONUS, true)(error);
+        }
     },
 
-    [ADD_CERTIFICATE]({ commit, state }, payload) {
-        commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.PENDING });
-        return addCertificate({ code: payload, data: state.checkoutData })
-            .then((data) => {
-                commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.SUCCESS });
-                commit(SET_DATA, data);
-            })
-            .catch((error) => {
-                commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.ERROR });
-                storeErrorHandler(ADD_CERTIFICATE, true)(error);
-            });
+    async [ADD_CERTIFICATE]({ commit, state }, payload) {
+        try {
+            commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.PENDING });
+            const data = await addCertificate({ code: payload, data: state.checkoutData });
+            commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.SUCCESS });
+            commit(SET_DATA, data);
+        } catch (error) {
+            commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(ADD_CERTIFICATE, true)(error);
+        }
     },
 
-    [DELETE_CERTIFICATE]({ commit, state }, payload) {
-        commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.PENDING });
-        return deleteCertificate({ code: payload, data: state.checkoutData })
-            .then((data) => {
-                commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.SUCCESS });
-                commit(SET_DATA, data);
-            })
-            .catch((error) => {
-                commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.ERROR });
-                storeErrorHandler(DELETE_CERTIFICATE, true)(error);
-            });
+    async [DELETE_CERTIFICATE]({ commit, state }, payload) {
+        try {
+            commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.PENDING });
+            const data = await deleteCertificate({ code: payload, data: state.checkoutData });
+            commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.SUCCESS });
+            commit(SET_DATA, data);
+        } catch (error) {
+            commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(DELETE_CERTIFICATE, true)(error);
+        }
     },
 
     async [ADD_PROMOCODE]({ commit, state }, payload) {

@@ -820,10 +820,6 @@ export function setPickupPoint(data) {
     return $http.post('/v1/checkout/pickup-point', data);
 }
 
-export function addBonus(data) {
-    return $http.post('/v1/checkout/bonus', data);
-}
-
 export function deleteCertificate(data) {
     return $http.post('/v1/checkout/remove-certificate', data);
 }
@@ -832,7 +828,7 @@ export function addCertificate(data) {
     return $http.post('/v1/checkout/add-certificate', data);
 }
 
-export function deleteBonus(data) {
+export function changeBonus(data) {
     return $http.post('/v1/checkout/bonus', data);
 }
 

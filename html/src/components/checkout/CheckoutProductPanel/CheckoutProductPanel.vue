@@ -211,9 +211,11 @@
                             <span v-if="!isTablet" class="text-sm text-normal text-grey">
                                 (1 бонус = {{ bonusPerRub }} рубль)
                             </span>
+                            &nbsp;
                             <v-spinner width="24" height="24" :show="isBonusPending" />
                         </h3>
                     </div>
+
                     <div v-if="!bonus" class="checkout-product-panel__item-controls">
                         <template v-if="availableBonus > 0">
                             <v-input
