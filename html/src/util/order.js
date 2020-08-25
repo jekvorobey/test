@@ -1,3 +1,4 @@
+import { $context } from '@services';
 import { orderStatus, deliveryStatus, filterField } from '@enums/order';
 import { dateToString } from '@util/index';
 
@@ -33,4 +34,8 @@ export function getOrderFilterDate(field) {
     };
 
     return getDate(field) ? dateToString(getDate(field)) : null;
+}
+
+export function generateThankPageUrl(orderId) {
+    return `${$context.baseURL}/thank-you/${orderId}`;
 }

@@ -342,7 +342,7 @@ import {
 } from '@store/modules/Profile/modules/Orders/actions';
 
 import { preparePrice, shortNumberFormat } from '@util';
-import { getOrderStatusColorClass } from '@util/order';
+import { getOrderStatusColorClass, generateThankPageUrl } from '@util/order';
 import { orderStatus, orderPaymentStatus, sortFields, filterField } from '@enums/order';
 import { orderDateLocaleOptions } from '@settings/profile';
 import { sortDirections } from '@enums';
@@ -453,9 +453,17 @@ export default {
         },
 
         async onContinuePayment(orderId, paymentId) {
-            const backUrl = `${document.location.origin}/thank-you`;
-            const { url } = await this[GET_ORDER_PAYMENT_LINK]({ orderId, paymentId, backUrl });
-            document.location.href = url;
+            try {
+                const backUrl = generateThankPageUrl(orderId);
+                const { url } = await this[GET_ORDER_PAYMENT_LINK]({ orderId, paymentId, backUrl });
+
+                // заменяем текущий роут на роут thank-you, чтобы при переходе по стрелке мы вернулись на страницу
+                // благодарности за заказ
+                window.history.replaceState(null, '', backUrl);
+                document.location.href = url;
+            } catch (error) {
+                alert('Ошибка при переходе на оплату');
+            }
         },
 
         onShowMore() {

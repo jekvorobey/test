@@ -39,7 +39,7 @@ export default {
         try {
             return await getProfileOrderPaymentLink(orderId, paymentId, backUrl);
         } catch (error) {
-            storeErrorHandler(GET_ORDER_PAYMENT_LINK)(error);
+            storeErrorHandler(GET_ORDER_PAYMENT_LINK, true)(error);
         }
     },
 

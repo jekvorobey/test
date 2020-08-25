@@ -264,7 +264,7 @@ import { orderDateLocaleOptions } from '@settings/profile';
 import { toAddressString } from '@util/address';
 import { generateMasterclassUrl, generateTicketDownloadUrl, generateProductUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
-import { getOrderStatusColorClass, getDeliveryStatusColorClass } from '@util/order';
+import { getOrderStatusColorClass, getDeliveryStatusColorClass, generateThankPageUrl } from '@util/order';
 
 import '@images/sprites/arrow-small.svg';
 import './OrderDetails.css';
@@ -431,9 +431,17 @@ export default {
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
 
         async onContinuePayment(orderId) {
-            const backUrl = `${document.location.origin}/thank-you`;
-            const url = await this[GET_ORDER_PAYMENT_LINK]({ id: orderId, backUrl });
-            document.location.href = url;
+            try {
+                const backUrl = generateThankPageUrl(orderId);
+                const { url } = await this[GET_ORDER_PAYMENT_LINK]({ orderId, paymentId, backUrl });
+
+                // заменяем текущий роут на роут thank-you, чтобы при переходе по стрелке мы вернулись на страницу
+                // благодарности за заказ
+                window.history.replaceState(null, '', backUrl);
+                document.location.href = url;
+            } catch (error) {
+                alert('Ошибка при переходе на оплату');
+            }
         },
 
         async onRepeatOrder(orderId) {

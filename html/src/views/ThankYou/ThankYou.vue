@@ -245,7 +245,7 @@ export default {
                         const url = generateMasterclassUrl(p.code);
                         const speaker = p.speakers && p.speakers[0];
                         const author = speaker && `${speaker.firstName} ${speaker.lastName}, ${speaker.profession}`;
-                        const name = `${p.name} (Входной билет ${p.ticketTypeName})`;
+                        const name = `${p.name} (${p.ticketTypeName})`;
 
                         const defaultImg = p.image && generatePictureSourcePath(144, 96, p.image.id);
                         const desktopImg = p.image && {

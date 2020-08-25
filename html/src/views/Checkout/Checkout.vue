@@ -160,6 +160,7 @@ import {
 import { CHECKOUT, PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT } from '@store/modules/Checkout/getters';
 
 import { preparePrice } from '@util';
+import { generateThankPageUrl } from '@util/order';
 import { cartItemTypes } from '@enums/product';
 import { cancelRoute } from '@settings';
 import '@images/sprites/check-small.svg';
@@ -245,7 +246,11 @@ export default {
                 if (!panel.validate()) return;
 
                 this.isCommit = true;
-                const { paymentUrl } = await this[COMMIT_DATA]();
+                const { paymentUrl, orderId } = await this[COMMIT_DATA]();
+                const backUrl = generateThankPageUrl(orderId);
+                // заменяем текущий роут на роут thank-you, чтобы при переходе по стрелке мы вернулись на страницу
+                // благодарности за заказ
+                window.history.replaceState(null, '', backUrl);
                 document.location.href = paymentUrl;
             } catch (error) {
                 this.isCommit = false;
