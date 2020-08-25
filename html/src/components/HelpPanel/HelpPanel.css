@@ -1,18 +1,24 @@
 .help-panel {
-    min-width: 336px;
+    min-width: 320px;
 
-    .general-popup-panel__header {
-        align-items: flex-start;
-        margin-bottom: calc(var(--gs) * 3);
-        justify-content: space-between;
-    }
+    .general-popup-panel {
+        @media (--tablet) {
+            max-width: 310px;
+        }
 
-    .general-popup-panel__body {
-        display: block;
-    }
+        .general-popup-panel__header {
+            align-items: flex-start;
+            margin-bottom: calc(var(--gs) * 3);
+            justify-content: space-between;
+        }
 
-    .general-popup-panel__bottom {
-        display: block;
+        .general-popup-panel__body {
+            display: block;
+        }
+
+        .general-popup-panel__bottom {
+            display: block;
+        }
     }
 
     .tooltip-arrow {
@@ -30,16 +36,15 @@
     }
 
     &__socials {
-        margin-bottom: calc(var(--gs) * 4);
         display: flex;
+        margin: 0 calc(var(--gs) * -1) calc(var(--gs) * 4);
 
         &-icon {
+            display: flex;
             margin-left: calc(var(--gs) * 3);
+            width: calc(calc(100% / 5) - calc(var(--gs) * 2));
+            margin: 0 var(--gs);
             cursor: pointer;
-
-            &:first-of-type {
-                margin-left: 0;
-            }
         }
     }
 

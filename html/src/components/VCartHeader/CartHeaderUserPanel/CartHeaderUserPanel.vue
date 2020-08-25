@@ -1,10 +1,18 @@
 <template>
     <div class="cart-header-user-panel">
-        <router-link class="cart-header-user-panel__link" :to="'/'">Вернуться к покупкам</router-link>
+        <router-link
+            class="cart-header-user-panel__link"
+            :class="{ 'cart-header-user-panel__link--hidden': hideLink }"
+            to="/"
+        >
+            Вернуться к покупкам
+        </router-link>
+
         <help-panel class="cart-header-user-panel__help">
             {{ $t('header.top.help') }}
             <v-svg name="arrow-down" class="help-panel__icon-arrow" width="20" height="20" />
         </help-panel>
+
         <template v-if="hasSession">
             <div class="cart-header-user-panel__controls">
                 <profile-navigation-panel class="cart-header-user-panel__account">
@@ -59,6 +67,13 @@ export default {
         ProfileNavigationPanel,
         HelpPanel,
         FavoritesPanel,
+    },
+
+    props: {
+        hideLink: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {

@@ -1,10 +1,11 @@
 .v-cart-header {
     background-color: var(--cl-white);
     overflow: hidden;
-    margin-bottom: calc(var(--gs) * 4);
+    margin-bottom: calc(var(--gs) * 5);
 
     @media (--tablet-lg) {
         max-height: calc(var(--gs) * 8);
+        margin-bottom: calc(var(--gs) * 3);
     }
 
     &__container {
@@ -17,23 +18,34 @@
         padding: calc(var(--gs) * 2) 0;
         border-bottom: 1px solid var(--cl-divider-grey);
     }
+
     &__bottom {
         padding: 20px 0;
         background: var(--cl-global);
-        fill: var(--cl-global-invert);
-        color: var(--cl-global-invert);
+        fill: var(--cl-white);
+        color: var(--cl-white);
+
+        @media (--tablet) {
+            padding: 9px 0;
+        }
+
         &-nav {
             width: calc(30% - calc(var(--gs) * 1.5));
             margin-right: calc(var(--gs) * 3);
-            @media(--tablet) {
+
+            @media (--tablet) {
                 width: calc(50% - calc(var(--gs) * 1.5));
                 margin-right: 0;
             }
         }
-        @media(--tablet) {
-            padding: 9px 0;
+    }
+
+    &__region-panel {
+        &--hidden {
+            visibility: hidden;
         }
     }
+
     &__user-panel {
         white-space: nowrap;
     }

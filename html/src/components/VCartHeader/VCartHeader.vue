@@ -1,23 +1,29 @@
 <template>
     <div class="v-cart-header">
-
         <div class="v-cart-header__main" v-if="!isTabletLg">
             <div class="container v-cart-header__container">
-                <cart-header-region-panel />
+                <cart-header-region-panel
+                    class="v-cart-header__region-panel"
+                    :class="{ 'v-cart-header__region-panel--hidden': hideCity }"
+                />
+
                 <header-logo-panel>
                     {{ $t('header.middle.professionals') }}
                 </header-logo-panel>
-                <cart-header-user-panel class="v-cart-header__user-panel" />
+
+                <cart-header-user-panel class="v-cart-header__user-panel" :hide-link="hideCity" />
             </div>
         </div>
 
         <div class="v-cart-header__bottom" v-if="isTabletLg">
             <div class="container v-cart-header__container">
                 <header-navigation-panel class="v-cart-header__bottom-nav" />
+
                 <router-link class="header-bottom__bottom-logo-middle" to="/">
                     <v-svg name="logo-text" width="278" height="28" />
                     <v-svg name="logo" width="30" height="30" />
                 </router-link>
+
                 <help-panel class="cart-header-user-panel__help">
                     <v-svg name="question-middle" width="24" height="24" />
                 </help-panel>
@@ -27,7 +33,6 @@
         <transition name="fade">
             <mobile-menu class="v-header__modal-menu" v-if="isMenuOpen && isTabletLg" />
         </transition>
-
     </div>
 </template>
 
@@ -64,6 +69,13 @@ export default {
 
         CartHeaderRegionPanel,
         CartHeaderUserPanel,
+    },
+
+    props: {
+        hideCity: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {

@@ -5,6 +5,10 @@
 
     &__link {
         border-bottom: none;
+
+        &--hidden {
+            visibility: hidden;
+        }
     }
 
     &__help {

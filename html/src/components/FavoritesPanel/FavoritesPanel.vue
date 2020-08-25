@@ -27,14 +27,9 @@
                     @add-item="onAddToCart(product)"
                     isFavorite
                 />
-                <img
-                    v-if="isLoadMore"
-                    :src="preloaderIcon"
-                    class="preloader favorites-panel__preloader"
-                    width="30"
-                    height="30"
-                />
+                <v-spinner :show="isLoadMore" class="favorites-panel__preloader" width="30" height="30" />
             </ul>
+
             <div class="favorites-panel__total" v-else>
                 Раздел "Избранное" пуст
             </div>
@@ -45,31 +40,34 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
 import GeneralPopupPanel from '@components/GeneralPopupPanel/GeneralPopupPanel.vue';
 import CartPanelProductCard from '@components/CartPanelProductCard/CartPanelProductCard.vue';
 
 import { mapActions, mapState, mapGetters } from 'vuex';
-import { $store, $progress, $logger } from '@services';
 
 import { PAGES_COUNT } from '@store/modules/Favorites/getters';
+
+import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
+import { CART_TYPES } from '@store/modules/Cart/getters';
 import { ADD_CART_ITEM, ADD_CART_BUNDLE } from '@store/modules/Cart/actions';
 
 import preloader from '@images/icons/preloader.svg';
 
-import './FavoritesPanel.css';
-import { CART_TYPES } from '@store/modules/Cart/getters';
-
-import { generateProductUrl } from '@util/catalog';
 import _debounce from 'lodash/debounce';
+import { $store, $progress, $logger } from '@services';
+import { generateProductUrl } from '@util/catalog';
+import './FavoritesPanel.css';
 
-import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
 export default {
     name: 'favorites-panel',
 
     components: {
         VSvg,
         VLink,
+        VSpinner,
+
         CartPanelProductCard,
         GeneralPopupPanel,
     },
@@ -90,6 +88,7 @@ export default {
                 return [];
             },
         },
+
         isLoadMore: {
             type: Boolean,
         },
@@ -97,10 +96,11 @@ export default {
 
     computed: {
         ...mapGetters(CART_MODULE, [CART_TYPES]),
+
         favoritesList() {
             if (this.cartTypes && this.cartTypes[0]) {
                 const cartItems = this.cartTypes[0].items;
-                return this.allFavorites.map((fav) => {
+                return this.allFavorites.map(fav => {
                     const basketInclude = cartItems.find(({ p }) => fav.id === (p && p.id));
                     const btnLoader = this.favoritesBtns.find(({ id }) => id === fav.id);
 
@@ -113,21 +113,16 @@ export default {
             }
             return this.allFavorites;
         },
-        preloaderIcon() {
-            return preloader;
-        },
-    },
-
-    created() {
-        this.debounce_favorites = _debounce(this.loadMore, 300);
     },
 
     methods: {
+        ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+
         applyShow() {
             setTimeout(() => {
                 const listElm = this.$refs.favorites_panel;
                 if (listElm && this.isLoadMore) {
-                    this.listener = (e) => {
+                    this.listener = e => {
                         if (listElm.scrollTop + listElm.clientHeight >= listElm.scrollHeight - 150) {
                             this.debounce_favorites();
                         }
@@ -139,7 +134,7 @@ export default {
         },
 
         genShowBtns() {
-            this.favoritesBtns = this.favoritesList.map((fav) => {
+            this.favoritesBtns = this.favoritesList.map(fav => {
                 return {
                     id: fav.id,
                     isLoadButton: false,
@@ -155,7 +150,7 @@ export default {
         },
 
         async onAddToCart({ id, stock, type }) {
-            const btnLoaderIndex = this.favoritesBtns.findIndex((fav) => id === fav.id);
+            const btnLoaderIndex = this.favoritesBtns.findIndex(fav => id === fav.id);
             this.favoritesBtns.splice(btnLoaderIndex, 1, {
                 ...this.favoritesBtns[btnLoaderIndex],
                 isLoadButton: true,
@@ -183,8 +178,10 @@ export default {
                 await this.$emit('fetchFavorites', this.page);
             }
         },
+    },
 
-        ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
+    created() {
+        this.debounce_favorites = _debounce(this.loadMore, 300);
     },
 };
 </script>

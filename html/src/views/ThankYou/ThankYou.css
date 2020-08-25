@@ -1,9 +1,7 @@
 .thank-you-view {
-    padding-top: calc(var(--gs) * 5);
     padding-bottom: calc(var(--gs) * 10);
 
     @media (--tablet-lg) {
-        padding-top: calc(var(--gs) * 3);
         padding-bottom: calc(var(--gs) * 4);
     }
 

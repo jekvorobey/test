@@ -1,10 +1,13 @@
 <template>
     <section class="section thank-you-view">
+        <v-cart-header hide-city />
+
         <div class="container">
             <h1 class="thank-you-view__hl">
                 {{ title }}
             </h1>
         </div>
+
         <div class="container thank-you-view__container">
             <v-sticky class="thank-you-view__sticky">
                 <template v-slot:sticky>
@@ -152,6 +155,7 @@
 <script>
 import VButton from '@controls/VButton/VButton.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
+import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
 
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
@@ -164,6 +168,7 @@ import CartMasterClassCard from '@components/cart/CartMasterClassCard/CartMaster
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
 import { NAME as CHECKOUT_MODULE, ORDER } from '@store/modules/Checkout';
 import { FETCH_CHECKOUT_ORDER } from '@store/modules/Checkout/actions';
@@ -174,7 +179,7 @@ import { $store, $progress } from '@services';
 import { fileExtension } from '@enums';
 import { receiveMethods } from '@enums/checkout';
 import { cartItemTypes } from '@enums/product';
-import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
+import { dayMonthLongDateSettings, hourMinuteTimeSettings, cancelRoute } from '@settings';
 import { formatPhoneNumber, getDate } from '@util';
 import { toAddressString } from '@util/address';
 import { generatePictureSourcePath } from '@util/file';
@@ -187,6 +192,7 @@ export default {
     components: {
         VButton,
         VSticky,
+        VCartHeader,
 
         InfoRow,
         InfoPanel,
@@ -200,6 +206,7 @@ export default {
 
     computed: {
         ...mapState([LOCALE]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(CART_MODULE, [CART_DATA]),
         ...mapState(CHECKOUT_MODULE, [ORDER]),
         ...mapState('route', {
@@ -337,6 +344,12 @@ export default {
         },
     },
 
+    watch: {
+        [HAS_SESSION](value) {
+            if (!value) this.$router.replace(cancelRoute.path);
+        },
+    },
+
     beforeRouteEnter(to, from, next) {
         // вызывается до подтверждения пути, соответствующего этому компоненту.
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
@@ -349,7 +362,7 @@ export default {
         const { order } = $store.state[CHECKOUT_MODULE];
 
         // если все загружено, пропускаем
-        if (false) next();
+        if (order) next();
         else {
             $progress.start();
             $store
