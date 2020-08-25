@@ -345,7 +345,7 @@ export default {
                 const url = generateMasterclassUrl(i.code);
                 const downloadUrl =
                     payment_status === orderPaymentStatus.PAID ? generateTicketDownloadUrl(id, i.basketItemId) : null;
-                const note = `Входной билет ${i.ticketTypeName}`;
+                const note = i.ticketTypeName;
 
                 const speaker = i.speakers && i.speakers[0];
                 const author = speaker && `${speaker.firstName} ${speaker.lastName}, ${speaker.profession}`;

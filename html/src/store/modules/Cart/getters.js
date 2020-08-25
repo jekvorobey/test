@@ -31,7 +31,7 @@ function prepareItem(item) {
 
         case cartItemTypes.MASTERCLASS: {
             const url = generateMasterclassUrl(p.code);
-            const note = `Входной билет ${p.ticketTypeName}`;
+            const note = p.ticketTypeName;
             return { ...item, p: { ...p, url, note } };
         }
         default:
