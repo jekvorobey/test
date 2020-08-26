@@ -14,7 +14,7 @@
             </v-link>
 
             <div class="cart-master-class-card__body-count" v-if="showCount">
-                <v-counter :value="count" min="0" @input="debounce_countChange" />
+                <v-counter :value="count" min="1" @input="debounce_countChange" />
             </div>
 
             <div class="cart-master-class-card__body-prices">
@@ -145,8 +145,7 @@ export default {
 
     methods: {
         onCountChange(value) {
-            if (value > 0) this.$emit('countChange', { id: this.productId, type: this.type, count: value });
-            else this.$emit('deleteItem', { id: this.productId, type: this.type });
+            this.$emit('countChange', { id: this.productId, type: this.type, count: value });
         },
 
         onDeleteClick() {
