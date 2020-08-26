@@ -480,7 +480,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import validationMixin, { required } from '@plugins/validation';
 import { formatPhoneNumber, getPosition } from '@util';
 import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '@enums/checkout';
-import { requestStatus, modalName, weekDays, agreementTypes } from '@enums';
+import { requestStatus, modalName, weekDays, agreementTypes, httpCodes } from '@enums';
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
 
 import _cloneDeep from 'lodash/cloneDeep';
@@ -936,9 +936,23 @@ export default {
             });
         },
 
-        onSaveAddress(address) {
-            if (this.addressIndexToChange !== null) this[CHANGE_ADDRESS]({ index: this.addressIndexToChange, address });
-            else this[ADD_ADDRESS](address);
+        async onSaveAddress(address) {
+            try {
+                if (this.addressIndexToChange !== null)
+                    await this[CHANGE_ADDRESS]({ index: this.addressIndexToChange, address });
+                else await this[ADD_ADDRESS](address);
+            } catch (error) {
+                const { status } = error;
+                if (status === httpCodes.BAD_REQUEST)
+                    this[CHANGE_MODAL_STATE]({
+                        name: modalName.general.NOTIFICATION,
+                        open: true,
+                        state: {
+                            title: 'Уведомление',
+                            message: 'По указаному адресу доставка невозможна. Введите другой адрес.',
+                        },
+                    });
+            }
         },
 
         onCloseAddressModal() {

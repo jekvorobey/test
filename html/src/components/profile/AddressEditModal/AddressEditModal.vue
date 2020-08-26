@@ -258,6 +258,7 @@ export default {
     data() {
         return {
             address: {
+                id: null,
                 country_code: null,
                 post_index: null,
                 region: null,
@@ -580,6 +581,7 @@ export default {
             if (this.$v.$invalid) return;
 
             const {
+                id,
                 country_code,
                 post_index,
                 region,
@@ -602,6 +604,7 @@ export default {
             } = this.address;
 
             const address = {
+                id,
                 country_code,
                 region,
                 region_guid,

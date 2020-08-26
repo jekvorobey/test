@@ -119,7 +119,7 @@ export default {
     async [SET_ADDRESS]({ commit, state }, payload) {
         try {
             commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
-            const data = await setAddress({ address: payload, data: state.checkoutData });
+            const data = await setAddress({ save2Lk: true, address: payload, data: state.checkoutData });
             commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
             commit(SET_DATA, data);
         } catch (error) {
@@ -214,14 +214,13 @@ export default {
         }
     },
 
-    [CHANGE_ADDRESS]({ dispatch, commit }, payload = {}) {
+    async [CHANGE_ADDRESS]({ dispatch, commit }, payload = {}) {
         const { address } = payload;
+        await dispatch(SET_ADDRESS, address);
         commit(M_CHANGE_ADDRESS, payload);
-        return dispatch(SET_ADDRESS, address);
     },
 
-    [ADD_ADDRESS]({ dispatch, commit }, address) {
-        commit(M_ADD_ADDRESS, address);
+    [ADD_ADDRESS]({ dispatch }, address) {
         return dispatch(SET_ADDRESS, address);
     },
 
