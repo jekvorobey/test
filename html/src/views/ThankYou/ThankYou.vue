@@ -242,7 +242,7 @@ export default {
                         const dateObj = new Date(`${p.nearestDate} ${p.nearestTimeFrom}`);
                         const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
                         const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
-                        const dateTime = `${date}, ${time}`;
+                        const dateTime = `${date} (${this.$t(`weekdays.short.${dateObj.getDay()}`)}), ${time}`;
                         const url = generateMasterclassUrl(p.code);
                         const speaker = p.speakers && p.speakers[0];
                         const author = speaker && `${speaker.firstName} ${speaker.lastName}, ${speaker.profession}`;
