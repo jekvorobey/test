@@ -6,7 +6,7 @@
                 class="checkout-address-panel__list-item"
                 v-for="(address, index) in addresses"
                 :key="`${address.region_guid}-${address.city_guid || address.settlment_guid}-${address.house}`"
-                :selected="selectedAddress && isEqualObject(selectedAddress, address)"
+                :selected="selectedAddress && selectedAddress.id === address.id"
                 @cardClick="onSetAddress(address)"
                 @btnClick="onChangeAddress(address, index)"
             >
@@ -32,7 +32,7 @@ import _isEqual from 'lodash/isEqual';
 import './CheckoutAddressPanel.css';
 
 export default {
-    name: 'checkout-pickup-point-panel',
+    name: 'checkout-address-panel',
 
     components: {
         CheckoutOptionCard,
