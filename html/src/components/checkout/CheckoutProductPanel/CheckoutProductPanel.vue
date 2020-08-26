@@ -387,11 +387,7 @@
         </transition>
 
         <transition name="fade">
-            <address-edit-modal
-                v-if="$isServer || isAddressModalOpen"
-                @save="onSaveAddress"
-                @close="onCloseAddressModal"
-            />
+            <address-edit-modal v-if="$isServer || isAddressModalOpen" @save="onSaveAddress" />
         </transition>
     </div>
 </template>
@@ -569,7 +565,7 @@ export default {
             case receiveMethods.PICKUP:
                 return {
                     [AGREEMENT]: {
-                        valid: value => value === true,
+                        valid: (value) => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -586,7 +582,7 @@ export default {
             default:
                 return {
                     [AGREEMENT]: {
-                        valid: value => value === true,
+                        valid: (value) => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -605,23 +601,22 @@ export default {
             bonusAmount: null,
             certificateCode: null,
             recipientIndexToChange: null,
-            addressIndexToChange: null,
         };
     },
 
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
         ...mapState(MODAL_MODULE, {
-            isPickupPointModalOpen: state =>
+            isPickupPointModalOpen: (state) =>
                 state[MODALS][CheckoutPickupPointModal.name] && state[MODALS][CheckoutPickupPointModal.name].open,
-            isDateModalOpen: state =>
+            isDateModalOpen: (state) =>
                 state[MODALS][CheckoutDateModal.name] && state[MODALS][CheckoutDateModal.name].open,
-            isAddressModalOpen: state =>
+            isAddressModalOpen: (state) =>
                 state[MODALS][modalName.profile.ADDRESS_EDIT] && state[MODALS][modalName.profile.ADDRESS_EDIT].open,
-            isRecipientModalOpen: state =>
+            isRecipientModalOpen: (state) =>
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT] &&
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT].open,
         }),
@@ -751,10 +746,10 @@ export default {
         computedDeliveryTypes(value) {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
             if (value) {
-                value.forEach(el => {
+                value.forEach((el) => {
                     if (el) {
                         if (el.items)
-                            el.items.forEach(delivery => {
+                            el.items.forEach((delivery) => {
                                 if (deliveryType) {
                                     this[CHANGE_CHUNK_DATE]({
                                         ...delivery,
@@ -833,7 +828,7 @@ export default {
             }
 
             const note = 'Доставим';
-            const uniqueDates = Array.from(new Set(deliveryType.items.map(i => i.selectedDate)));
+            const uniqueDates = Array.from(new Set(deliveryType.items.map((i) => i.selectedDate)));
             return uniqueDates.reduce(
                 (accum, current, index) =>
                     accum + `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(this[LOCALE], options)}`,
@@ -854,7 +849,7 @@ export default {
         },
 
         onSetDeliveryType(id) {
-            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find(t => t.id === id);
+            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find((t) => t.id === id);
             this[SET_DELIVERY_TYPE](selectedType);
         },
 
@@ -870,7 +865,7 @@ export default {
 
         onChangeDate(chunkItemId) {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
-            const chunkItem = deliveryType.items.find(i => i.id === chunkItemId);
+            const chunkItem = deliveryType.items.find((i) => i.id === chunkItemId);
 
             const state = {
                 id: chunkItem.id,
@@ -919,8 +914,7 @@ export default {
             this.recipientIndexToChange = null;
         },
 
-        onChangeAddress({ address, index }) {
-            this.addressIndexToChange = index;
+        onChangeAddress({ address }) {
             this[CHANGE_MODAL_STATE]({
                 name: modalName.profile.ADDRESS_EDIT,
                 open: true,
@@ -938,9 +932,7 @@ export default {
 
         async onSaveAddress(address) {
             try {
-                if (this.addressIndexToChange !== null)
-                    await this[CHANGE_ADDRESS]({ index: this.addressIndexToChange, address });
-                else await this[ADD_ADDRESS](address);
+                await this[CHANGE_ADDRESS](address);
             } catch (error) {
                 const { status } = error;
                 if (status === httpCodes.BAD_REQUEST)
@@ -953,10 +945,6 @@ export default {
                         },
                     });
             }
-        },
-
-        onCloseAddressModal() {
-            this.addressIndexToChange = null;
         },
 
         onChangePickupPoint() {

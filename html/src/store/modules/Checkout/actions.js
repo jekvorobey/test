@@ -214,10 +214,8 @@ export default {
         }
     },
 
-    async [CHANGE_ADDRESS]({ dispatch, commit }, payload = {}) {
-        const { address } = payload;
-        await dispatch(SET_ADDRESS, address);
-        commit(M_CHANGE_ADDRESS, payload);
+    [CHANGE_ADDRESS]({ dispatch }, address) {
+        return dispatch(SET_ADDRESS, address);
     },
 
     [ADD_ADDRESS]({ dispatch }, address) {
