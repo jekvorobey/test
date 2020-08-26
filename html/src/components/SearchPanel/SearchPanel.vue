@@ -30,10 +30,7 @@
                     </template>
                 </ul>
 
-                <div data-retailrocket-markup-block="5f21670297a5282edc07d7cc" />
-                <script>
-                    retailrocket.markup.render();
-                </script>
+                <retail-rocket-container data-retailrocket-markup-block="5f21670297a5282edc07d7cc" force-render />
 
                 <template v-if="!isTablet && products && products.length > 0">
                     <div class="search-panel__products">
@@ -75,6 +72,7 @@ import VButton from '@controls/VButton/VButton.vue';
 
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import SearchFilter from '@components/SearchFilter/SearchFilter.vue';
+import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
 
@@ -113,6 +111,7 @@ export default {
 
         CatalogProductCard,
         SearchFilter,
+        RetailRocketContainer,
     },
 
     computed: {
@@ -125,7 +124,7 @@ export default {
             const popularProducts = this[POPULAR_PRODUCTS];
             const collection = (!isEmpty && products) || popularProducts || [];
 
-            return collection.map(i => ({
+            return collection.map((i) => ({
                 ...i,
                 url: generateProductUrl(i.categoryCodes[i.categoryCodes.length - 1], i.code),
                 image: this.generateImageObject(i.image),
@@ -134,12 +133,12 @@ export default {
 
         requests() {
             const requests = this[POPULAR_REQUESTS] || [];
-            return requests.map(r => ({ name: r, url: generateSearchUrl(r) }));
+            return requests.map((r) => ({ name: r, url: generateSearchUrl(r) }));
         },
 
         categories() {
             const { suggestions = [] } = this[SUGGESTIONS] || {};
-            return suggestions.map(s => ({ name: s, url: generateSearchUrl(s) }));
+            return suggestions.map((s) => ({ name: s, url: generateSearchUrl(s) }));
         },
 
         range() {

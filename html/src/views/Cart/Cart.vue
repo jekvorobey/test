@@ -129,12 +129,12 @@
 
         <section class="section">
             <div class="container">
-                <div
+                <retail-rocket-container
                     v-if="cartItemsCount > 0"
                     data-retailrocket-markup-block="5f21670e97a5282edc07d7cd"
                     :data-products="activeItemIds"
                 />
-                <div v-else data-retailrocket-markup-block="5f21671697a5282edc07d7ce" />
+                <retail-rocket-container v-else data-retailrocket-markup-block="5f21671697a5282edc07d7ce" />
             </div>
         </section>
 
@@ -190,6 +190,8 @@ import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCar
 import CartBundleProductCard from '@components/CartBundleProductCard/CartBundleProductCard.vue';
 import ClearCartModal from '@components/ClearCartModal/ClearCartModal.vue';
 import VTabs from '@controls/VTabs/VTabs.vue';
+
+import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
 import { $store, $logger, $progress } from '@services';
 
@@ -284,6 +286,8 @@ export default {
 
         CartProductPanel,
         CartMasterclassPanel,
+
+        RetailRocketContainer,
     },
 
     data() {
@@ -299,10 +303,10 @@ export default {
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS, PROMO_CODE]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
         ...mapState(MODAL_MODULE, {
-            isModalOpen: state =>
+            isModalOpen: (state) =>
                 state[MODALS][modalName.cart.CLEAR_CART] && state[MODALS][modalName.cart.CLEAR_CART].open,
         }),
 
@@ -326,7 +330,7 @@ export default {
         activeItemIds() {
             const { activeTabItem = {} } = this;
             const { items = [] } = activeTabItem;
-            return items.map(i => i.id).join(',');
+            return items.map((i) => i.p.id).join(',');
         },
     },
 
@@ -396,8 +400,8 @@ export default {
         $progress.start();
         $store
             .dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`)
-            .then(() => next(vm => $progress.finish()))
-            .catch(() => next(vm => $progress.fail()));
+            .then(() => next((vm) => $progress.finish()))
+            .catch(() => next((vm) => $progress.fail()));
     },
 
     mounted() {
