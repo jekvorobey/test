@@ -1,44 +1,51 @@
 <template>
-    <section class="section">
-        <div class="slider-banners-section" :style="{ 'background-color': backgroundColor }">
-            <v-slider class="container slider-banners-section__slider" name="banners" :options="sliderOptions">
-                <template v-for="banner in items">
-                    <slot name="item" :item="banner">
-                        <catalog-banner-card
-                            class="swiper-slide slider-banners-section__card"
-                            :key="banner.id"
-                            :item="banner"
-                        >
-                            <template v-if="banner.desktopImage">
-                                <source :data-srcset="getWebpImageWithRetina(banner.desktopImage)" media="(min-width: 1024px)" />
-                                <source
-                                    :data-srcset="banner.desktopImage.webp"
-                                    type="image/webp"
-                                    media="(min-width: 1024px)"
-                                />
-                            </template>
-                            <template v-if="banner.tabletImage">
-                                <source :data-srcset="getWebpImageWithRetina(banner.tabletImage)" media="(min-width: 768px)" />
-                                <source
-                                    :data-srcset="banner.tabletImage.webp"
-                                    type="image/webp"
-                                    media="(min-width: 768px)"
-                                />
-                            </template>
-                            <template v-if="banner.mobileImage">
-                                <source :data-srcset="getWebpImageWithRetina(banner.mobileImage)" media="(min-width: 320px)" />
-                                <source
-                                    :data-srcset="banner.mobileImage.webp"
-                                    type="image/webp"
-                                    media="(min-width: 320px)"
-                                />
-                            </template>
-                            <img class="blur-up lazyload v-picture__img" :data-src="banner.defaultImage" alt="" />
-                        </catalog-banner-card>
-                    </slot>
-                </template>
-            </v-slider>
-        </div>
+    <section class="section slider-banners-section" :style="{ 'background-color': backgroundColor }">
+        <v-slider class="container slider-banners-section__slider" name="banners" :options="sliderOptions">
+            <template v-for="banner in items">
+                <slot name="item" :item="banner">
+                    <catalog-banner-card
+                        class="swiper-slide slider-banners-section__card"
+                        :key="banner.id"
+                        :item="banner"
+                    >
+                        <template v-if="banner.desktopImage">
+                            <source
+                                :data-srcset="getWebpImageWithRetina(banner.desktopImage)"
+                                media="(min-width: 1024px)"
+                            />
+                            <source
+                                :data-srcset="banner.desktopImage.webp"
+                                type="image/webp"
+                                media="(min-width: 1024px)"
+                            />
+                        </template>
+                        <template v-if="banner.tabletImage">
+                            <source
+                                :data-srcset="getWebpImageWithRetina(banner.tabletImage)"
+                                media="(min-width: 768px)"
+                            />
+                            <source
+                                :data-srcset="banner.tabletImage.webp"
+                                type="image/webp"
+                                media="(min-width: 768px)"
+                            />
+                        </template>
+                        <template v-if="banner.mobileImage">
+                            <source
+                                :data-srcset="getWebpImageWithRetina(banner.mobileImage)"
+                                media="(min-width: 320px)"
+                            />
+                            <source
+                                :data-srcset="banner.mobileImage.webp"
+                                type="image/webp"
+                                media="(min-width: 320px)"
+                            />
+                        </template>
+                        <img class="blur-up lazyload v-picture__img" :data-src="banner.defaultImage" alt="" />
+                    </catalog-banner-card>
+                </slot>
+            </template>
+        </v-slider>
     </section>
 </template>
 
@@ -112,7 +119,7 @@ export default {
     methods: {
         mobileImage(banner) {
             const image = banner.mobileImage || banner.tabletImage || banner.desktopImage;
-            const imageRetina = banner.mobileImageRetina || banner.tabletImageRetina 
+            const imageRetina = banner.mobileImageRetina || banner.tabletImageRetina;
             if (typeof image === 'string')
                 return {
                     webp: image,
@@ -175,7 +182,7 @@ export default {
                 result += `, ${image.retina} 2x`;
             }
             return result;
-        }
+        },
     },
 };
 </script>

@@ -1,7 +1,5 @@
 .categories-section {
     &__container {
-        padding-top: calc(var(--gs) * 2);
-
         @media (--tablet) {
             padding: 0 var(--gs);
             margin-bottom: calc(var(--gs) * 3);

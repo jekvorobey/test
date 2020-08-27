@@ -5,4 +5,14 @@
         padding-top: 0;
         padding-bottom: calc(var(--gs) * 4);
     }
+
+    .separator-section {
+        &:first-of-type {
+            padding-top: calc(var(--gs) * 3);
+
+            @media (--tablet) {
+                padding: 0;
+            }
+        }
+    }
 }

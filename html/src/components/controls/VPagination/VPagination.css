@@ -55,5 +55,12 @@
                 background-image: svg-load('arrow-small.svg', fill: var(--cl-global));
             }
         }
+
+        &--disabled &-link {
+            &::after {
+                cursor: default;
+                opacity: 0.1;
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
 .slider-banners-section {
     display: flex;
-    margin-bottom: calc(var(--gs) * 6);
+    margin-bottom: calc(var(--gs) * 7);
 
     @media (--desktop-lg-min) {
         padding: 0;
@@ -11,7 +11,7 @@
     }
 
     @media (--desktop-lg) and (--tablet-height) {
-        margin-bottom: calc(var(--gs) * 2);
+        margin-bottom: calc(var(--gs) * 4);
     }
 
     @media (--desktop) {

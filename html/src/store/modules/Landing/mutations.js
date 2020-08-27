@@ -117,10 +117,6 @@ export default {
                     banners: state.catalogLatestSets,
                 },
             },
-            {
-                id: 13,
-                component: 'separator-section',
-            },
             // {
             //     id: 14,
             //     component: 'products-section',
