@@ -196,7 +196,10 @@
                                     v-for="item in sortOptions"
                                     :key="item.title"
                                 >
-                                    <button class="catalog-view__modal-filter-sort-btn" @click="sortValue = item">
+                                    <button
+                                        class="catalog-view__modal-filter-sort-btn"
+                                        @click="onChangeSortValue(item)"
+                                    >
                                         {{ item.title }}
                                     </button>
                                 </li>
