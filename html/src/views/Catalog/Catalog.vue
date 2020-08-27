@@ -462,7 +462,10 @@ export default {
 
         clearFilterUrl() {
             const { type, entityCode, code } = this;
-            return { path: generateCategoryUrl(type, entityCode, code), query: { ...this.$route.query } };
+            return {
+                path: generateCategoryUrl(type, entityCode, code),
+                query: { ...this.$route.query, page: undefined },
+            };
         },
 
         productName() {
