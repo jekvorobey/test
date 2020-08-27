@@ -363,7 +363,7 @@ export default {
         const { order } = $store.state[CHECKOUT_MODULE];
 
         // если все загружено, пропускаем
-        if (order) next();
+        if (order && order.id == id) next();
         else {
             $progress.start();
             $store

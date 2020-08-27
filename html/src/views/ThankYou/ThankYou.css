@@ -38,7 +38,7 @@
             }
 
             .v-sticky__container {
-                top: calc(var(--gs) * 8);
+                top: calc(var(--gs) * 4);
             }
         }
 

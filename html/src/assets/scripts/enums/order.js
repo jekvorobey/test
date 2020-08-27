@@ -45,6 +45,12 @@ export const orderPaymentStatus = Object.freeze({
 
     /* Просрочен */
     TIMEOUT: 3,
+
+    /* средства захолдированы */
+    HOLD: 4,
+
+    /* ошибка */
+    ERROR: 5,
 });
 
 export const sortFields = Object.freeze({
