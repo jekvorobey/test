@@ -35,7 +35,7 @@ export default {
                     const { code } = items[0];
                     filter = {
                         ...filter,
-                        [masterclassFilterName.TIME]: code,
+                        [masterclassFilterName.TIME]: [code],
                     };
                 }
             }
