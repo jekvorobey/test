@@ -521,7 +521,7 @@ export default {
                 if (field !== orderField || direction !== orderDirection)
                     this.$router.replace({
                         path: this.$route.path,
-                        query: { ...this.$route.query, orderField: field, orderDirection: direction },
+                        query: { ...this.$route.query, orderField: field, orderDirection: direction, page: undefined },
                     });
             }
         },
@@ -534,8 +534,9 @@ export default {
                 const index = routeSegments.indexOf(value);
                 if (index !== -1) routeSegments.splice(index, 1);
             }
+
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path });
+            this.$router.replace({ path, query: { ...this.$route.query, page: undefined } });
         },
 
         onShowMore() {

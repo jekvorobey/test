@@ -93,6 +93,7 @@ export default {
                 isRoot,
                 disabled,
             } = this;
+
             return rootCategory ? code && (isRoot || !disabled) : code;
         },
 
@@ -108,7 +109,7 @@ export default {
 
             return {
                 path: generateCategoryUrl(type, entityCode, rootCategory ? !isRoot && code : code),
-                query: { search_string: this.$route.query.search_string },
+                query: { ...this.$route.query, page: undefined },
             };
         },
 

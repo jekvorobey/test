@@ -126,21 +126,6 @@ export default {
         },
     },
 
-    watch: {
-        sortValue(value, oldValue) {
-            if (value !== oldValue) {
-                this.$router.replace({
-                    path: this.$route.path,
-                    query: {
-                        orderField: value.field,
-                        orderDirection: value.direction,
-                        search_string: this.$route.query.search_string,
-                    },
-                });
-            }
-        },
-    },
-
     methods: {
         ...mapActions(CATALOG_MODULE, [CHANGE_FILTER_STATE]),
 
@@ -151,7 +136,7 @@ export default {
             routeSegments = routeSegments.filter(s => s === value);
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path, query: { search_string: this.$route.query.search_string } });
+            this.$router.replace({ path, query: { ...this.$route.query, page: undefined } });
         },
 
         onCheckChange(e, value) {
@@ -169,7 +154,7 @@ export default {
             }
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path, query: { search_string: this.$route.query.search_string } });
+            this.$router.replace({ path, query: { ...this.$route.query, page: undefined } });
         },
 
         onShowMoreClick({ name }) {
@@ -210,7 +195,8 @@ export default {
             this.$router.replace({
                 path,
                 query: {
-                    search_string: this.$route.query.search_string,
+                    ...this.$route.query,
+                    page: undefined,
                 },
             });
         }, 500);
