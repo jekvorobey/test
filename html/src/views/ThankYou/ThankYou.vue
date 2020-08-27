@@ -58,9 +58,22 @@
                                 </info-row>
                             </ul>
 
-                            <v-button class="thank-you-view__panel-btn" to="/">
-                                На главную страницу
-                            </v-button>
+                            <div class="thank-you-view__panel-controls">
+                                <v-button
+                                    v-if="canContinuePayment"
+                                    class="thank-you-view__panel-btn"
+                                    :href="order.payment_url"
+                                >
+                                    Оплатить
+                                </v-button>
+
+                                <v-link
+                                    class="thank-you-view__panel-btn thank-you-view__panel-btn--link"
+                                    :to="{ name: 'Orders' }"
+                                >
+                                    Перейти в мои заказы
+                                </v-link>
+                            </div>
                         </div>
                     </info-panel>
                 </template>
@@ -141,7 +154,7 @@
                             </template>
                         </ul>
 
-                        <div class="container container--tablet">
+                        <div class="container container--tablet thank-you-view__panel-controls">
                             <v-button class="btn--outline thank-you-view__panel-btn" :to="{ name: 'Cart' }">
                                 Перейти в оформлению
                             </v-button>
@@ -154,6 +167,7 @@
 </template>
 
 <script>
+import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
 import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
@@ -171,6 +185,11 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+
+import { NAME as ORDERS_MODULE } from '@store/modules/Profile/modules/Orders';
+import { GET_ORDER_PAYMENT_LINK } from '@store/modules/Profile/modules/Orders/actions';
+
 import { NAME as CHECKOUT_MODULE, ORDER } from '@store/modules/Checkout';
 import { FETCH_CHECKOUT_ORDER } from '@store/modules/Checkout/actions';
 
@@ -179,6 +198,7 @@ import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
 import { $store, $progress } from '@services';
 import { fileExtension } from '@enums';
 import { receiveMethods } from '@enums/checkout';
+import { orderPaymentStatus } from '@enums/order';
 import { cartItemTypes } from '@enums/product';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings, cancelRoute } from '@settings';
 import { formatPhoneNumber, getDate } from '@util';
@@ -187,10 +207,13 @@ import { generatePictureSourcePath } from '@util/file';
 import { generateMasterclassUrl, generateProductUrl } from '@util/catalog';
 import './ThankYou.css';
 
+const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
+
 export default {
     name: 'thank-you',
 
     components: {
+        VLink,
         VButton,
         VSticky,
         VCartHeader,
@@ -211,8 +234,15 @@ export default {
         ...mapState(CART_MODULE, [CART_DATA]),
         ...mapState(CHECKOUT_MODULE, [ORDER]),
         ...mapState('route', {
-            id: state => state.params.id,
+            id: (state) => state.params.id,
         }),
+
+        canContinuePayment() {
+            const { order } = this;
+            const { payment_status, payment_url } = order || {};
+
+            return payment_status === orderPaymentStatus.NOT_PAID && payment_url;
+        },
 
         dates() {
             const {
@@ -221,7 +251,7 @@ export default {
 
             const { dates = [] } = delivery;
 
-            return dates.map(s => {
+            return dates.map((s) => {
                 const dateObj = getDate(s);
                 const date = dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings);
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
@@ -237,7 +267,7 @@ export default {
             switch (order.type) {
                 case cartItemTypes.PRODUCT: {
                     const { items = [] } = cartData[cartItemTypes.MASTERCLASS] || {};
-                    return items.map(i => {
+                    return items.map((i) => {
                         const { p } = i;
                         const dateObj = new Date(`${p.nearestDate} ${p.nearestTimeFrom}`);
                         const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
@@ -259,7 +289,7 @@ export default {
 
                 case cartItemTypes.MASTERCLASS: {
                     const { items = [] } = cartData[cartItemTypes.PRODUCT] || {};
-                    return items.map(i => {
+                    return items.map((i) => {
                         const { p } = i;
                         const categoryCode = p.categoryCodes && p.categoryCodes[p.categoryCodes.length - 1];
                         const href = generateProductUrl(categoryCode, p.code);
@@ -351,6 +381,16 @@ export default {
         },
     },
 
+    methods: {
+        ...mapActions(ORDERS_MODULE_PATH, [GET_ORDER_PAYMENT_LINK]),
+
+        async onContinuePayment() {
+            const { order } = this;
+            const { id } = order;
+            await this[GET_ORDER_PAYMENT_LINK]();
+        },
+    },
+
     beforeRouteEnter(to, from, next) {
         // вызывается до подтверждения пути, соответствующего этому компоненту.
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
@@ -369,11 +409,11 @@ export default {
             $store
                 .dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_ORDER}`, id)
                 .then(() => {
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                     });
                 })
-                .catch(error => {
+                .catch((error) => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
                     else next(new Error(error.message));

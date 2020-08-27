@@ -85,11 +85,40 @@
             }
         }
 
-        &-btn {
+        &-controls {
             margin-top: calc(var(--gs) * 3);
 
             @media (--tablet) {
+                text-align: center;
+            }
+        }
+
+        &-btn {
+            @media (--tablet) {
                 width: 100%;
+            }
+
+            & + & {
+                margin-left: calc(var(--gs) * 4);
+
+                @media (--tablet) {
+                    margin-left: 0;
+                    margin-top: calc(var(--gs) * 2);
+                }
+            }
+
+            &--link {
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 24px;
+                letter-spacing: 0.02em;
+                text-transform: uppercase;
+                border-bottom: 2px solid var(--cl-global);
+
+                @media (--tablet) {
+                    display: inline-block;
+                    width: auto;
+                }
             }
         }
 

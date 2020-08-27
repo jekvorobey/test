@@ -1,5 +1,4 @@
 import hasSession from '@router/middleware/hasSession';
-import canUserBuy from '@router/middleware/canUserBuy';
 import setUser from '@router/middleware/setUser';
 
 /**
@@ -22,7 +21,7 @@ export default {
 
             meta: {
                 hideDefaultHeader: true,
-                middleware: [hasSession, setUser, canUserBuy],
+                middleware: [hasSession, setUser],
             },
         },
     ],
