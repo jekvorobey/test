@@ -16,9 +16,7 @@
             <div class="container referrer-view__header">
                 <h1 class="referrer-view__header-hl">
                     {{ title }}
-                    <span class="referrer-view__header-counter" v-if="items && items.length > 0">
-                        {{ items.length }} {{ productName }}
-                    </span>
+                    <span class="referrer-view__header-counter" v-if="range > 0"> {{ range }} {{ productName }} </span>
                 </h1>
             </div>
 
@@ -85,7 +83,7 @@ import { $store, $progress, $logger } from '@services';
 import { NAME as AUTH_MODULE } from '@store/modules/Auth';
 import { SET_SESSION_REFERRAL_CODE } from '@store/modules/Auth/actions';
 
-import { NAME as REFERRER_MODULE, ITEMS, ACTIVE_PAGE, TITLE } from '@store/modules/Referrer';
+import { NAME as REFERRER_MODULE, ITEMS, ACTIVE_PAGE, TITLE, RANGE } from '@store/modules/Referrer';
 import { PAGES_COUNT } from '@store/modules/Referrer/getters';
 import { FETCH_REFERRER_DATA, FETCH_ITEMS, SET_LOAD_PATH } from '@store/modules/Referrer/actions';
 
@@ -120,7 +118,7 @@ export default {
     },
 
     computed: {
-        ...mapState(REFERRER_MODULE, [TITLE, ITEMS, ACTIVE_PAGE]),
+        ...mapState(REFERRER_MODULE, [TITLE, ITEMS, ACTIVE_PAGE, RANGE]),
         ...mapGetters(REFERRER_MODULE, [PAGES_COUNT]),
 
         ...mapState('route', {
@@ -128,8 +126,7 @@ export default {
         }),
 
         productName() {
-            const items = this[ITEMS] || [];
-            return pluralize(items.length, ['продукт', 'продукта', 'продуктов']);
+            return pluralize(this[RANGE], ['продукт', 'продукта', 'продуктов']);
         },
 
         isTablet() {

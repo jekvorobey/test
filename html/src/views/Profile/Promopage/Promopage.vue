@@ -5,10 +5,12 @@
                 <h2 class="promopage-view__hl">
                     {{ $t(`profile.routes.${$route.name}`) }}
                 </h2>
-                <span class="text-grey text-sm" v-if="items && items.length">
-                    {{ items && items.length }} {{ !isDesktop ? productName : '' }}
+
+                <span class="text-grey text-sm" v-if="range > 0">
+                    {{ range }} {{ !isDesktop ? productName : '' }}
                 </span>
             </div>
+
             <div
                 v-if="items && items.length"
                 class="promopage-view__panel-controls promopage-view__panel-controls--right"
@@ -209,8 +211,7 @@ export default {
         },
 
         productName() {
-            const items = this[ITEMS] || [];
-            return pluralize(items.length, ['продукт', 'продукта', 'продуктов']);
+            return pluralize(this[RANGE], ['продукт', 'продукта', 'продуктов']);
         },
 
         isTablet() {

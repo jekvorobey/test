@@ -469,7 +469,7 @@ export default {
         },
 
         productName() {
-            return pluralize(this.range, ['продукт', 'продукта', 'продуктов']);
+            return pluralize(this[RANGE], ['продукт', 'продукта', 'продуктов']);
         },
 
         searchTitle() {
