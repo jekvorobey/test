@@ -91,6 +91,7 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { DEFAULT_PAGE } from '@constants';
+import { pluralize } from '@util';
 import { modalName, sortDirections } from '@enums';
 
 import '@images/sprites/home.svg';
