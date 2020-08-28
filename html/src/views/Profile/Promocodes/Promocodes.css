@@ -113,6 +113,10 @@
 
         &-td {
             vertical-align: top;
+
+            &:first-of-type {
+                display: flex;
+            }
         }
 
         &-th {
@@ -153,6 +157,7 @@
         text-transform: none;
         font-size: 14px;
         font-weight: normal;
+        margin-left: var(--gs);
 
         .icon {
             margin-right: var(--gs);

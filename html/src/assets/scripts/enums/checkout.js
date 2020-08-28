@@ -6,6 +6,15 @@ export const discountType = Object.freeze({
     PROMOCODE: 5, // Скидка по промокоду,
 });
 
+export const promocodeDiscountType = Object.freeze({
+    OFFER: 1, // Скидка на Оффер
+    BUNDLE: 2, // Скидка на Бандл
+    BRAND: 3, // Скидка на Бренд
+    CATEGORY: 4, // Скидка на Категорию
+    DELIVERY: 5, // Скидка на Доставку
+    CART: 6, // Скидка на Сумму корзины
+});
+
 export const promocodeType = Object.freeze({
     PRODUCT: 1, // Промокод на скидку (товар, корзина)
     DELIVERY: 2, // Промокод на бесплатную доставку,

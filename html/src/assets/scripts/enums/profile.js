@@ -10,11 +10,11 @@ export const referralOrderSortFields = Object.freeze({
     ORDER_DATE: 'order_date',
     CUSTOMER_ID: 'customer_id',
     PRICE_PRODUCT: 'price_product',
-    PRICE_COMMISSION: 'price_commission'
+    PRICE_COMMISSION: 'price_commission',
 });
 
 export const billingOperationType = Object.freeze({
-    EARNING: 1, //начисление
+    EARNING: 1, // начисление
     PAYMENT: 2, // оплата заказа
     REFUND: 3, // возврат
     WITHDRAW: 4, // вывод средств
@@ -51,8 +51,8 @@ export const referralSource = Object.freeze({
 });
 
 export const bonusStatus = Object.freeze({
-    DELAYED: 1, //- на удержании
-    ACTIVE: 2, //- активный
+    DELAYED: 1, // - на удержании
+    ACTIVE: 2, // - активный
     FINISHED: 3, // - завершен
     TAKEN: 4, // - списание
 });
@@ -61,7 +61,7 @@ export const returnMethods = Object.freeze({
     COURIER: 1,
     OUTPOST: 2,
     POST: 3,
-})
+});
 
 export const userStatus = Object.freeze({
     CREATED: 1, // Создан
@@ -73,4 +73,4 @@ export const userStatus = Object.freeze({
     BLOCK: 7, // Заблокирован
     POTENTIAL_RP: 8, // Потенциальный реф. партнер
     TEMPORARILY_SUSPENDED: 9, // Временно приостановлен
-})
+});

@@ -23,6 +23,7 @@ export default {
 
             const offersMap = {};
             if (itemOffers)
+                // eslint-disable-next-line no-restricted-syntax
                 for (const offer of itemOffers) {
                     const key = `${offer.category.name} ${offer.brand.name}`;
                     if (!offersMap[key]) offersMap[key] = { id: key, isOpen: false, items: [] };
@@ -35,6 +36,7 @@ export default {
                 discount: i.discountInfo && i.discountInfo.value,
                 startDate: startDate && startDate.toLocaleDateString(locale, digit2DateSettings),
                 endDate: endDate && endDate.toLocaleDateString(locale, digit2DateSettings),
+                discountType: i.discountInfo && i.discountInfo.type,
                 brands: i.discountInfo && {
                     isOpen: false,
                     items: i.discountInfo.brands.map((b) => brands[b]),
