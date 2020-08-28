@@ -9,17 +9,29 @@ import {
     addProfilePromopageProductById,
     deleteProfilePromopageProductById,
     getProfilePromopageProducts,
+    getProfilePromopageItemsIds,
 } from '@api';
 
-import { SET_PRODUCTS, SET_PRODUCTS_MORE, SET_TITLE, SET_SEARCH_RESULTS, SET_QUERY_PARAMS } from './mutations';
+import {
+    SET_PRODUCTS,
+    SET_PRODUCTS_MORE,
+    SET_TITLE,
+    SET_SEARCH_RESULTS,
+    SET_QUERY_PARAMS,
+    SET_ITEMS_IDS,
+} from './mutations';
 
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 export const FETCH_PROMOPAGE = 'FETCH_PROMOPAGE';
-export const SEARCH_PRODUCTS = 'SEARCH_PRODUCTS';
+export const FETCH_PROMOPAGE_DATA = 'FETCH_PROMOPAGE_DATA';
+export const FETCH_ITEMS_IDS = 'FETCH_ITEMS_IDS';
+
 export const SET_PROMOPAGE_TITLE = 'SET_PROMOPAGE_TITLE';
+
+export const SEARCH_PRODUCTS = 'SEARCH_PRODUCTS';
 export const ADD_PRODUCT = 'ADD_PRODUCT';
-export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const ADD_PRODUCTS = 'ADD_PRODUCTS';
+export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 
 export default {
     [SET_LOAD_PATH]({ commit }, payload) {
@@ -39,7 +51,7 @@ export default {
         try {
             const { id, refresh = false } = payload;
             await deleteProfilePromopageProductById(id);
-            if (refresh) dispatch(FETCH_PROMOPAGE, {});
+            if (refresh) dispatch(FETCH_PROMOPAGE_DATA, {});
         } catch (error) {
             storeErrorHandler(DELETE_PRODUCT)(error);
         }
@@ -54,7 +66,7 @@ export default {
                 const code = link.split('/').slice(-1);
                 await addProfilePromopageProductByCode(code);
             }
-            if (refresh) dispatch(FETCH_PROMOPAGE, {});
+            if (refresh) dispatch(FETCH_PROMOPAGE_DATA, {});
         } catch (error) {
             storeErrorHandler(ADD_PRODUCT, bubbleOnError)(error);
             if (error.status === httpCodes.NOT_FOUND) return link;
@@ -70,13 +82,13 @@ export default {
             let errorLinks = await Promise.all(promises);
             errorLinks = errorLinks.filter((l) => !!l);
 
-            if (refresh) dispatch(FETCH_PROMOPAGE, {});
+            if (refresh) dispatch(FETCH_PROMOPAGE_DATA, {});
             if (errorLinks.length > 0)
-                throw {
+                throw new Error({
                     errorLinks,
                     message: 'Something went wrong or not found',
                     isCancel: false,
-                };
+                });
         } catch (error) {
             storeErrorHandler(ADD_PRODUCTS, true)(error);
         }
@@ -108,5 +120,18 @@ export default {
         } catch (error) {
             storeErrorHandler(FETCH_PROMOPAGE, true)(error);
         }
+    },
+
+    async [FETCH_ITEMS_IDS]({ commit }) {
+        try {
+            const data = await getProfilePromopageItemsIds();
+            commit(SET_ITEMS_IDS, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_ITEMS_IDS)(error);
+        }
+    },
+
+    [FETCH_PROMOPAGE_DATA]({ dispatch }, payload) {
+        return Promise.all([dispatch(FETCH_ITEMS_IDS), dispatch(FETCH_PROMOPAGE, payload)]);
     },
 };

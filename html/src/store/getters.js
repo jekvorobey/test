@@ -46,9 +46,8 @@ export default {
         const badges = state[BADGES];
         const map = {};
 
-        for (const badge of badges) {
-            if (badge.code) map[badge.code] = badge;
-        }
+        // eslint-disable-next-line no-restricted-syntax
+        for (const badge of badges) if (badge.code) map[badge.code] = badge;
         return map;
     },
 };

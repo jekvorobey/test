@@ -23,7 +23,7 @@
                         :class="{
                             'promopage-add-modal__list-item--selected': isSelected(item.productId),
                         }"
-                        v-for="item in searchItems"
+                        v-for="item in filteredSearchItems"
                         :key="item.id"
                         :product-id="item.id"
                         :type="item.type"
@@ -55,13 +55,17 @@ import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import CartPanelProductCard from '@components/CartPanelProductCard/CartPanelProductCard.vue';
 
 import _debounce from 'lodash/debounce';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
+
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+
 import { NAME as PROMOPAGE_MODULE, TITLE, SEARCH_ITEMS } from '@store/modules/Profile/modules/Promopage';
+import { ITEMS_IDS_MAP } from '@store/modules/Profile/modules/Promopage/getters';
 import { SEARCH_PRODUCTS, ADD_PRODUCT } from '@store/modules/Profile/modules/Promopage/actions';
+
 import { modalName } from '@enums';
 import './PromopageAddModal.css';
 
@@ -89,9 +93,16 @@ export default {
 
     computed: {
         ...mapState(PROMOPAGE_MODULE_PATH, [SEARCH_ITEMS]),
+        ...mapGetters(PROMOPAGE_MODULE_PATH, [ITEMS_IDS_MAP]),
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
         }),
+
+        filteredSearchItems() {
+            const searchItems = this[SEARCH_ITEMS] || [];
+            const itemsIdsMap = this[ITEMS_IDS_MAP] || {};
+            return searchItems.filter(i => !itemsIdsMap[i.productId]);
+        },
 
         isTablet() {
             return this.$mq.tablet;

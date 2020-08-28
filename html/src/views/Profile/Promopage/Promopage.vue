@@ -138,7 +138,12 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as PROMOPAGE_MODULE, TITLE, ITEMS, RANGE, ACTIVE_PAGE } from '@store/modules/Profile/modules/Promopage';
 import { PAGES_COUNT } from '@store/modules/Profile/modules/Promopage/getters';
-import { FETCH_PROMOPAGE, SET_LOAD_PATH, DELETE_PRODUCT } from '@store/modules/Profile/modules/Promopage/actions';
+import {
+    FETCH_PROMOPAGE,
+    SET_LOAD_PATH,
+    DELETE_PRODUCT,
+    FETCH_PROMOPAGE_DATA,
+} from '@store/modules/Profile/modules/Promopage/actions';
 
 import { saveToClipboard, pluralize } from '@util';
 import { generateProductUrl } from '@util/catalog';
@@ -304,7 +309,7 @@ export default {
         else {
             $progress.start();
             $store
-                .dispatch(`${PROMOPAGE_MODULE_PATH}/${FETCH_PROMOPAGE}`, { page })
+                .dispatch(`${PROMOPAGE_MODULE_PATH}/${FETCH_PROMOPAGE_DATA}`, { page })
                 .then(() => {
                     $store.dispatch(`${PROMOPAGE_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
                     next(vm => $progress.finish());

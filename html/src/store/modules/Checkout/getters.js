@@ -77,6 +77,7 @@ export default {
         const professions = state[PROFESSIONS] || [];
         const map = {};
 
+        // eslint-disable-next-line no-restricted-syntax
         for (const prof of professions) map[prof.id] = prof;
         return map;
     },

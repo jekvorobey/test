@@ -10,6 +10,7 @@ export const LOAD_PATH = 'loadPath';
 export const TITLE = 'title';
 export const SEARCH_ITEMS = 'searchItems';
 
+export const ITEMS_IDS = 'itemsIds';
 export const ITEMS = 'items';
 export const RANGE = 'range';
 export const ACTIVE_PAGE = 'activePage';
@@ -22,9 +23,12 @@ export default function createModule() {
         state: {
             [LOAD_PATH]: '',
             [TITLE]: '',
+
             [ITEMS]: [],
             [RANGE]: 0,
             [ACTIVE_PAGE]: DEFAULT_PAGE,
+            [ITEMS_IDS]: [],
+
             [SEARCH_ITEMS]: [],
         },
 

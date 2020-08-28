@@ -312,6 +312,10 @@ export function getProfilePromopage(pageNum, perPage) {
     });
 }
 
+export function getProfilePromopageItemsIds() {
+    return $http.get('/v1/lk/promo-page/all');
+}
+
 export function getProfilePromopageProducts(name, limit) {
     return $http.get('/v1/lk/promo-page/products', {
         params: {
