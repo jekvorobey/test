@@ -17,7 +17,7 @@
                 <h1 class="referrer-view__header-hl">
                     {{ title }}
                     <span class="referrer-view__header-counter" v-if="items && items.length > 0">
-                        {{ items.length }} продуктов
+                        {{ items.length }} {{ productName }}
                     </span>
                 </h1>
             </div>
@@ -124,8 +124,13 @@ export default {
         ...mapGetters(REFERRER_MODULE, [PAGES_COUNT]),
 
         ...mapState('route', {
-            code: (state) => state.params.code,
+            code: state => state.params.code,
         }),
+
+        productName() {
+            const items = this[ITEMS] || [];
+            return pluralize(items.length, ['продукт', 'продукта', 'продуктов']);
+        },
 
         isTablet() {
             return this.$mq.tablet;
@@ -164,15 +169,15 @@ export default {
             $progress.start();
             $store
                 .dispatch(`${REFERRER_MODULE}/${FETCH_REFERRER_DATA}`, { code, page })
-                .then((data) => {
+                .then(data => {
                     $store.dispatch(`${REFERRER_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
+                    next(vm => {
                         $progress.finish();
                     });
                 })
-                .catch((thrown) => {
+                .catch(thrown => {
                     if (thrown && thrown.isCancel === true) return true;
-                    next((vm) => {
+                    next(vm => {
                         $progress.fail();
                     });
                 });
