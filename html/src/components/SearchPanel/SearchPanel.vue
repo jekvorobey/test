@@ -16,7 +16,7 @@
                 <ul class="search-panel__categories-list">
                     <template v-if="!isEmpty && categories && categories.length > 0">
                         <li class="search-panel__categories-item" :key="category.name" v-for="category in categories">
-                            <v-link class="search-panel__categories-link" :to="category.link">
+                            <v-link class="search-panel__categories-link" :to="category.url">
                                 {{ category.name }}
                             </v-link>
                         </li>
@@ -124,7 +124,7 @@ export default {
             const popularProducts = this[POPULAR_PRODUCTS];
             const collection = (!isEmpty && products) || popularProducts || [];
 
-            return collection.map((i) => ({
+            return collection.map(i => ({
                 ...i,
                 url: generateProductUrl(i.categoryCodes[i.categoryCodes.length - 1], i.code),
                 image: this.generateImageObject(i.image),
@@ -133,12 +133,12 @@ export default {
 
         requests() {
             const requests = this[POPULAR_REQUESTS] || [];
-            return requests.map((r) => ({ name: r, url: generateSearchUrl(r) }));
+            return requests.map(r => ({ name: r, url: generateSearchUrl(r) }));
         },
 
         categories() {
             const { suggestions = [] } = this[SUGGESTIONS] || {};
-            return suggestions.map((s) => ({ name: s, url: generateSearchUrl(s) }));
+            return suggestions.map(s => ({ name: s, url: generateSearchUrl(s) }));
         },
 
         range() {
