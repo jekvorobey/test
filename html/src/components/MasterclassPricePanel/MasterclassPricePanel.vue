@@ -55,11 +55,11 @@ export default {
             type: String,
         },
 
-        priceTo: {
+        price: {
             type: Object,
         },
 
-        priceFrom: {
+        oldPrice: {
             type: Object,
         },
 
@@ -72,13 +72,6 @@ export default {
     computed: {
         isTablet() {
             return this.$mq.tablet;
-        },
-
-        price() {
-            const { priceTo, priceFrom } = this;
-            return {
-                value: { to: priceTo.value, from: priceFrom.value, currency: priceTo.currency },
-            };
         },
     },
 

@@ -580,8 +580,7 @@
                     :class="{ 'master-class-view__top-panel--static': !isPanelSticky }"
                     v-if="(scroll && !isPanelVisible) || isTablet"
                     :name="masterClass.title"
-                    :price-to="masterClass.priceTo"
-                    :price-from="masterClass.priceFrom"
+                    :price="masterClass.price"
                     @add-item="onScrollTo($refs.panel)"
                 >
                     {{ buyBtnText }}
