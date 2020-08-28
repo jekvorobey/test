@@ -234,7 +234,7 @@ export default {
         ...mapState(CART_MODULE, [CART_DATA]),
         ...mapState(CHECKOUT_MODULE, [ORDER]),
         ...mapState('route', {
-            id: (state) => state.params.id,
+            id: state => state.params.id,
         }),
 
         canContinuePayment() {
@@ -251,7 +251,7 @@ export default {
 
             const { dates = [] } = delivery;
 
-            return dates.map((s) => {
+            return dates.map(s => {
                 const dateObj = getDate(s);
                 const date = dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings);
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
@@ -267,7 +267,7 @@ export default {
             switch (order.type) {
                 case cartItemTypes.PRODUCT: {
                     const { items = [] } = cartData[cartItemTypes.MASTERCLASS] || {};
-                    return items.map((i) => {
+                    return items.map(i => {
                         const { p } = i;
                         const dateObj = new Date(`${p.nearestDate} ${p.nearestTimeFrom}`);
                         const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
@@ -289,7 +289,7 @@ export default {
 
                 case cartItemTypes.MASTERCLASS: {
                     const { items = [] } = cartData[cartItemTypes.PRODUCT] || {};
-                    return items.map((i) => {
+                    return items.map(i => {
                         const { p } = i;
                         const categoryCode = p.categoryCodes && p.categoryCodes[p.categoryCodes.length - 1];
                         const href = generateProductUrl(categoryCode, p.code);
@@ -341,7 +341,9 @@ export default {
                     user: { name, phone, email },
                 },
             } = this;
-            return `${name}, ${formatPhoneNumber(phone)}, ${email}`;
+
+            const fullInfo = `${name}, ${formatPhoneNumber(phone)}`;
+            return email ? `${fullInfo}, ${email}` : fullInfo;
         },
 
         deliveryAddress() {
@@ -409,11 +411,11 @@ export default {
             $store
                 .dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_ORDER}`, id)
                 .then(() => {
-                    next((vm) => {
+                    next(vm => {
                         $progress.finish();
                     });
                 })
-                .catch((error) => {
+                .catch(error => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
                     else next(new Error(error.message));
