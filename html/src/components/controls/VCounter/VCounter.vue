@@ -5,7 +5,7 @@
             ref="decrement"
             type="button"
             @click="onBtnClick($event, 'decrement')"
-            :disabled="disabled || isMinDisabled"
+            :disabled="isMinDisabled"
         >
             <slot name="decrement">
                 <v-svg name="minus-small" width="16" height="16" />
@@ -28,7 +28,7 @@
             ref="increment"
             type="button"
             @click="onBtnClick($event, 'increment')"
-            :disabled="disabled || isMaxDisabled"
+            :disabled="isMaxDisabled"
         >
             <slot name="increment">
                 <v-svg name="plus-small" width="16" height="16" />
@@ -45,8 +45,8 @@ import '@images/sprites/plus-small.svg';
 import './VCounter.css';
 
 const actionType = {
-    decrement: 'decrement',
-    increment: 'increment',
+    DECREMENT: 'decrement',
+    INCREMENT: 'increment',
 };
 
 let pressHoldEvent = null;
@@ -55,13 +55,16 @@ if (typeof document !== 'undefined') pressHoldEvent = new CustomEvent('pressHold
 export default {
     name: 'v-counter',
     inheritAttrs: false,
+
     components: {
         VSvg,
     },
+
     model: {
         prop: 'value',
         event: 'input',
     },
+
     props: {
         value: {
             type: [Number, String],
@@ -98,6 +101,7 @@ export default {
         const value = this.value < this.max ? this.value : this.max;
         return {
             pressHoldDuration: 20,
+            currentActionType: null,
             timerID: null,
             counter: 0,
             value_internal: Number(value),
@@ -106,17 +110,27 @@ export default {
 
     computed: {
         isMinDisabled() {
-            return Number(this.value_internal) === Number(this.min);
+            const { disabled } = this;
+            return disabled || Number(this.value_internal) === Number(this.min);
         },
 
         isMaxDisabled() {
-            return Number(this.value_internal) === Number(this.max);
+            const { disabled } = this;
+            return disabled || Number(this.value_internal) === Number(this.max);
         },
     },
 
     watch: {
         value(value) {
             this.value_internal = Number(value);
+        },
+
+        isMinDisabled(value) {
+            if (value && this.currentActionType === actionType.DECREMENT) this.onNotPressingDown();
+        },
+
+        isMaxDisabled(value) {
+            if (value && this.currentActionType === actionType.INCREMENT) this.onNotPressingDown();
         },
     },
 
@@ -129,11 +143,11 @@ export default {
                 const min = Number(input.min);
                 let nextValue = 0;
                 switch (action) {
-                    case actionType.decrement:
+                    case actionType.DECREMENT:
                         nextValue = this.value_internal - step;
                         if (nextValue >= min) this.value_internal = nextValue;
                         break;
-                    case actionType.increment:
+                    case actionType.INCREMENT:
                         nextValue = this.value_internal + step;
                         if (nextValue <= max) this.value_internal = nextValue;
                         break;
@@ -168,6 +182,7 @@ export default {
             // Stop the timer
             cancelAnimationFrame(this.timerID);
             if (this.timeout) clearInterval(this.timeout);
+            this.currentActionType = null;
             this.timeout = null;
             this.timerID = null;
             this.counter = 0;
@@ -209,14 +224,15 @@ export default {
 
         onHold(action) {
             if (this.timeout) clearInterval(this.timeout);
+            this.currentActionType = action;
             this.timeout = setInterval(this.updateValue.bind(this, action), this.delay);
         },
     },
 
     mounted() {
         const { increment, decrement } = this.$refs;
-        this.bindEvents(increment, this.onHold.bind(this, actionType.increment));
-        this.bindEvents(decrement, this.onHold.bind(this, actionType.decrement));
+        this.bindEvents(increment, this.onHold.bind(this, actionType.INCREMENT));
+        this.bindEvents(decrement, this.onHold.bind(this, actionType.DECREMENT));
     },
 
     beforeDestroy() {

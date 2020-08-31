@@ -447,16 +447,19 @@
         </section>
 
         <section
-            v-if="product.characteristics || product.ingredients"
+            v-if="
+                (productCharacteristics && productCharacteristics.length > 0) ||
+                (productIngredients && productIngredients.length > 0)
+            "
             class="section product-view__section product-view__characteristics"
         >
             <div class="container">
-                <template v-if="product.characteristics && product.characteristics.length > 0">
+                <template v-if="productCharacteristics && productCharacteristics.length > 0">
                     <h2 class="product-view__section-hl">{{ $t('product.title.characteristics') }}</h2>
                     <ul class="product-view__characteristics-list">
                         <li
                             class="product-view__characteristics-item"
-                            v-for="item in product.characteristics"
+                            v-for="item in productCharacteristics"
                             :key="item.id"
                         >
                             <div class="product-view__characteristics-item-title">{{ item.title }}</div>
@@ -467,10 +470,10 @@
                     </ul>
                 </template>
 
-                <template v-if="product.ingredients && product.ingredients.length > 0">
+                <template v-if="productIngredients && productIngredients.length > 0">
                     <h2 class="product-view__section-hl">{{ $t('product.title.ingredients') }}</h2>
                     <div class="product-view__characteristics-list">
-                        {{ product.ingredients.join(', ') }}
+                        {{ productIngredients.join(', ') }}
                     </div>
                 </template>
             </div>
@@ -949,6 +952,16 @@ export default {
         frisbuyUrl() {
             const { id } = this[PRODUCT];
             return `https://www.frisbuy.ru/fb/widget?embed_id=e9575241-9f3d-11ea-ba01-0242ac150002&sku=${id}`;
+        },
+
+        productCharacteristics() {
+            const { characteristics = [] } = this[PRODUCT] || {};
+            return characteristics && characteristics.filter(c => !!c.value);
+        },
+
+        productIngredients() {
+            const { ingredients = [] } = this[PRODUCT] || {};
+            return ingredients && ingredients.filter(i => !!i);
         },
 
         productVideos() {
