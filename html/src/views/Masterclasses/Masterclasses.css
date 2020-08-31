@@ -34,6 +34,7 @@
     }
 
     &__breadcrumbs {
+        width: 100%;
         order: 0;
 
         @media (--tablet-lg) {
