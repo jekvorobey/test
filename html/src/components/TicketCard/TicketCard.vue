@@ -20,7 +20,7 @@
                 <price class="text-bold ticket-card__price" :value="computedPriceValue" :currency="price.currency" />
                 <price
                     v-if="oldPrice"
-                    class="text-grey text-sm text-strike"
+                    class="text-grey text-strike ticket-card__price ticket-card__price--old"
                     :value="computedOldPriceValue"
                     :currency="price.currency"
                 />
