@@ -7,7 +7,7 @@
     width: 0%;
     transition: width var(--time), opacity var(--animation-time), color var(--animation-time);
     opacity: 1;
-    background-color: var(--cl-gold);
+    background-color: var(--cl-grey);
     z-index: 999999;
 
     &--fail {

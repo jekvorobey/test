@@ -258,6 +258,13 @@
                 padding-bottom: calc(var(--gs) * 2);
             }
 
+            &--child {
+                @media (--tablet) {
+                    margin-bottom: 0;
+                    padding-bottom: 0;
+                }
+            }
+
             .v-picture.img {
                 width: 100%;
                 margin-top: calc(var(--gs) * 7);
@@ -359,6 +366,8 @@
             &-social {
                 @media (--tablet) {
                     text-align: center;
+                    margin-bottom: calc(var(--gs) * 4);
+                    padding-bottom: calc(var(--gs) * 4);
                 }
 
                 &-container {
@@ -431,6 +440,12 @@
                 left: 50%;
                 transform: translateX(-50%);
             }
+        }
+    }
+
+    &__gallery {
+        @media (--tablet) {
+            border-bottom: 1px solid var(--cl-divider-grey);
         }
     }
 

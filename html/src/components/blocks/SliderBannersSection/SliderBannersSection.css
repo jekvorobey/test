@@ -1,6 +1,6 @@
 .slider-banners-section {
     display: flex;
-    margin-bottom: calc(var(--gs) * 7);
+    margin-bottom: calc(var(--gs) * 8);
 
     @media (--desktop-lg-min) {
         padding: 0;

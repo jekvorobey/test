@@ -206,7 +206,9 @@
                 <div class="master-class-view__panel">
                     <div class="master-class-view__panel-body master-class-view__panel-body--accordion">
                         <div class="master-class-view__panel-left"></div>
-                        <div class="master-class-view__panel-middle master-class-view__panel-middle--no-padding">
+                        <div
+                            class="master-class-view__panel-middle master-class-view__panel-middle--child master-class-view__panel-middle--no-padding"
+                        >
                             <p class="container container--tablet text-bold master-class-view__section-hl">
                                 Программа
                             </p>
@@ -248,7 +250,10 @@
                                                     v-html="item.description"
                                                 />
 
-                                                <div class="master-class-view__panel-right" :style="{ order: 1 }">
+                                                <div
+                                                    class="master-class-view__panel-right"
+                                                    :style="{ order: 1 }"
+                                                >
                                                     <p class="text-bold master-class-view__panel-right-hl">
                                                         Что взять с собой
                                                     </p>
