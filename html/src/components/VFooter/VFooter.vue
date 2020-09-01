@@ -39,8 +39,18 @@
             <hr />
             <div class="v-footer__row v-footer__bottom-links">
                 <p class="v-footer__rights" v-html="$t('footer.rights')" />
-                <router-link class="v-footer__link" :to="{name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER }}">{{ $t('footer.terms_of_use') }}</router-link>
-                <router-link class="v-footer__link" :to="{name: 'Agreements', params: {type: agreementTypes.PERSONAL_POLICY }}">{{ $t('footer.offer') }}</router-link>
+                <router-link
+                    class="v-footer__link"
+                    :to="{ name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER } }"
+                >
+                    {{ $t('footer.terms_of_use') }}
+                </router-link>
+                <router-link
+                    class="v-footer__link"
+                    :to="{ name: 'Agreements', params: { type: agreementTypes.PERSONAL_POLICY } }"
+                >
+                    {{ $t('footer.offer') }}
+                </router-link>
             </div>
         </div>
 
@@ -48,8 +58,8 @@
             class="v-footer__accordion v-footer__col"
             key-field="id"
             :items="links"
-            :item-expanded="item => !!item.isExpanded"
-            :item-toggled="item => (item.isExpanded = !item.isExpanded)"
+            :item-expanded="(item) => !!item.isExpanded"
+            :item-toggled="(item) => (item.isExpanded = !item.isExpanded)"
         >
             <template v-slot:content="{ item }">
                 <ul class="v-footer__links">
@@ -65,7 +75,7 @@
         </v-accordion>
 
         <div class="container v-footer__container v-footer__container--mobile v-footer__col">
-            <p class="v-footer__col-title">{{ socials.name }}</p>
+            <p class="v-footer__col-title v-footer__col-title--socials">{{ socials.name }}</p>
             <ul class="v-footer__socials">
                 <li class="v-footer__socials-item" :key="link.id" v-for="link in socials.items" :title="link.name">
                     <a class="v-footer__link" :href="link.href" target="_blank">
@@ -76,8 +86,20 @@
         </div>
 
         <div class="v-footer__container v-footer__container--mobile v-footer__col v-footer__mobile-links">
-            <v-link class="v-footer__link" :to="{name: 'Agreements', params: {type: 'public-offer'}}" target="_blank">{{ $t('footer.terms_of_use') }}</v-link>
-            <v-link class="v-footer__link" :to="{name: 'Agreements', params: {type: 'personal-policy'}}" target="_blank">{{ $t('footer.offer') }}</v-link>
+            <v-link
+                class="v-footer__link"
+                :to="{ name: 'Agreements', params: { type: 'public-offer' } }"
+                target="_blank"
+            >
+                {{ $t('footer.terms_of_use') }}
+            </v-link>
+            <v-link
+                class="v-footer__link"
+                :to="{ name: 'Agreements', params: { type: 'personal-policy' } }"
+                target="_blank"
+            >
+                {{ $t('footer.offer') }}
+            </v-link>
             <p class="v-footer__rights" v-html="$t('footer.rights')" />
         </div>
     </footer>
@@ -167,6 +189,6 @@ export default {
 
     created() {
         this.agreementTypes = agreementTypes;
-    }
+    },
 };
 </script>
