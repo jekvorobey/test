@@ -356,6 +356,7 @@
                 height: 100%;
             }
         }
+
         &-controls {
             @media (--tablet-lg) {
                 position: sticky;
@@ -367,6 +368,7 @@
                 box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             }
         }
+
         &-clear-btn {
             &:hover {
                 @media (--tablet-lg) {
@@ -383,9 +385,29 @@
                 border-bottom: 2px solid var(--cl-global);
             }
         }
+
         &-close-btn {
             @media (--tablet-lg) {
                 width: 100%;
+            }
+        }
+    }
+
+    &__history {
+        @media (--tablet-lg) {
+            display: none;
+        }
+
+        &-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: 1fr;
+            grid-gap: calc(var(--gs) * 3);
+
+            @media (--desktop) {
+                grid-template-columns: repeat(6, 1fr);
+                grid-template-rows: 1fr;
+                grid-gap: var(--gs);
             }
         }
     }

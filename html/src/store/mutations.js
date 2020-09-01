@@ -7,6 +7,7 @@ export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_BANNER = 'SET_BANNER';
 export const SET_MENU = 'SET_MENU';
 export const SET_FREQUENT_CATEGOIRES = 'SET_FREQUENT_CATEGOIRES';
+export const SET_RECENTLY_VIEWED_PRODUCTS = 'SET_RECENTLY_VIEWED_PRODUCTS';
 export const SET_BADGES = 'SET_BADGES';
 
 export default {
@@ -32,6 +33,10 @@ export default {
 
     [SET_CATEGORIES](state, payload) {
         state.categories = payload;
+    },
+
+    [SET_RECENTLY_VIEWED_PRODUCTS](state, payload) {
+        state.recentlyViewedProducts = payload || [];
     },
 
     [SET_FREQUENT_CATEGOIRES](state, payload) {

@@ -588,17 +588,20 @@
             </div>
         </section>
 
-        <section class="section product-view__section product-view__history">
+        <section
+            class="section product-view__section product-view__history"
+            v-if="recentlyViewed && recentlyViewed.length > 0"
+        >
             <div class="container product-view__history-container">
                 <h2 class="product-view__section-hl">{{ $t('product.title.history') }}</h2>
                 <div class="product-view__history-grid">
                     <recently-viewed-product-card
-                        v-for="item in featuredProducts.items.slice(0, 6)"
+                        v-for="item in recentlyViewed"
                         :key="item.id"
                         :offer-id="item.id"
                         :product-id="item.productId"
                         :name="item.name"
-                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                        :href="item.url"
                         :image="item.image"
                     />
                 </div>
@@ -696,7 +699,7 @@ import ReviewsPanel from '@components/reviews/ReviewsPanel/ReviewsPanel.vue';
 import MapModal, { NAME as MAP_MODAL_NAME } from '@components/MapModal/MapModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { SCROLL } from '@store';
+import { SCROLL, RECENTLY_VIEWED_PRODUCTS } from '@store';
 import { BADGES_MAP } from '@store/getters';
 
 import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
@@ -752,6 +755,7 @@ import '@images/sprites/logo.svg';
 import '@images/sprites/home.svg';
 
 import './Product.css';
+import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
 
 const productGalleryOptions = {
     spaceBetween: 8,
@@ -899,7 +903,7 @@ export default {
     },
 
     computed: {
-        ...mapState([SCROLL]),
+        ...mapState([SCROLL, RECENTLY_VIEWED_PRODUCTS]),
         ...mapGetters([BADGES_MAP]),
 
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
@@ -928,6 +932,19 @@ export default {
             refCode: state => state.query.refCode,
             modal: state => state.query.modal,
         }),
+
+        recentlyViewed() {
+            const items = this[RECENTLY_VIEWED_PRODUCTS] || [];
+            return items.map(i => {
+                const { code, categoryCodes } = i;
+                const categoryCode = categoryCodes && categoryCodes[categoryCodes.length - 1];
+
+                return {
+                    ...i,
+                    url: categoryCode && generateProductUrl(categoryCode, i.code),
+                };
+            });
+        },
 
         computedBadges() {
             const { product, badgesMap } = this;
@@ -1093,6 +1110,7 @@ export default {
         [PRODUCT](value) {
             const product = this[PRODUCT] || {};
             $retailRocket.addProductView([product.id]);
+            this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
         },
 
         [SELECTED_CITY](value) {
@@ -1105,6 +1123,7 @@ export default {
     },
 
     methods: {
+        ...mapActions([FETCH_RECENTLY_VIEWED_PRODUCTS]),
         ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE]),
         ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE]),
@@ -1323,9 +1342,10 @@ export default {
     },
 
     beforeMount() {
+        this.debounce_fetchProduct = _debounce(this.fetchProduct, 500);
         const product = this[PRODUCT] || {};
         $retailRocket.addProductView([product.id]);
-        this.debounce_fetchProduct = _debounce(this.fetchProduct, 500);
+        this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
     },
 };
 </script>

@@ -35,8 +35,8 @@ export const SCROLL = 'scroll';
 export const BADGES = 'badges';
 export const CATEGORIES = 'categories';
 export const FREQUENT_CATEGORIES = 'frequentCategories';
+export const RECENTLY_VIEWED_PRODUCTS = 'recentlyViewedProducts';
 export const BANNER = 'banner';
-export const SELECTED_CITY = 'selectedCity';
 
 export const LOCALIZATIONS = 'localizations';
 export const LOCALE = 'locale';
@@ -52,21 +52,25 @@ export default function createStore(container) {
     const store = new Vuex.Store({
         strict: process.env.NODE_ENV !== 'production',
         state: {
+            [ENV]: context.env,
+
+            [SCROLL]: false,
+            [IS_MENU_OPEN]: false,
+            [IS_CITY_CONFIRMATION_OPEN]: false,
+
             [MENU]: [],
+            [CATEGORIES]: [],
+            [FREQUENT_CATEGORIES]: [],
+            [RECENTLY_VIEWED_PRODUCTS]: [],
+            [BADGES]: [],
+            [BANNER]: {},
+
             [LOCALE]: ruLocale.LOCALE,
             [FALLBACK_LOCALE]: enLocale.LOCALE,
             [LOCALIZATIONS]: {
                 [ruLocale.LOCALE]: ruLocale,
                 [enLocale.LOCALE]: enLocale,
             },
-            [SCROLL]: false,
-            [IS_MENU_OPEN]: false,
-            [IS_CITY_CONFIRMATION_OPEN]: false,
-            [CATEGORIES]: [],
-            [BANNER]: {},
-            [ENV]: context.env,
-            [FREQUENT_CATEGORIES]: [],
-            [BADGES]: [],
         },
 
         getters,

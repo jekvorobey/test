@@ -583,6 +583,10 @@ export function getCatalogItems({
     });
 }
 
+export function getRecentlyViewedProducts() {
+    return $http.get('/v1/catalog/recently-viewed');
+}
+
 export function getFilters(appliedFilters, excludedFilters) {
     return $http.get('/v1/catalog/filter', {
         params: {

@@ -1,9 +1,23 @@
 import axios from 'axios';
-import { getMenu, getCategories, getBanners, getBannersByCode, getFrequentCategories, getBadges } from '@api';
+import {
+    getMenu,
+    getCategories,
+    getBannersByCode,
+    getFrequentCategories,
+    getBadges,
+    getRecentlyViewedProducts,
+} from '@api';
 import { $logger, $locale } from '@services';
 import { storeErrorHandler } from '@util/store';
 
-import { SET_CATEGORIES, SET_MENU, SET_BANNER, SET_FREQUENT_CATEGOIRES, SET_BADGES } from './mutations';
+import {
+    SET_CATEGORIES,
+    SET_MENU,
+    SET_BANNER,
+    SET_FREQUENT_CATEGOIRES,
+    SET_BADGES,
+    SET_RECENTLY_VIEWED_PRODUCTS,
+} from './mutations';
 
 const FETCH_BANNER = 'FETCH_BANNER';
 const FETCH_MENU = 'FETCH_MENU';
@@ -12,6 +26,7 @@ const FETCH_FREQUENT_CATEGORIES = 'FETCH_FREQUENT_CATEGOIRES';
 const FETCH_BADGES = 'FETCH_BADGES';
 
 export const FETCH_COMMON_DATA = 'FETCH_COMMON_DATA';
+export const FETCH_RECENTLY_VIEWED_PRODUCTS = 'FETCH_RECENTLY_VIEWED_PRODUCTS';
 
 export const SET_LOCALE = 'SET_LOCALE';
 export const ADD_LOCALIZATION = 'ADD_LOCALIZATION';
@@ -100,7 +115,16 @@ export default {
         }
     },
 
-    async [FETCH_COMMON_DATA]({ dispatch }, payload) {
+    async [FETCH_RECENTLY_VIEWED_PRODUCTS]({ commit }) {
+        try {
+            const { items } = await getRecentlyViewedProducts();
+            commit(SET_RECENTLY_VIEWED_PRODUCTS, items);
+        } catch (error) {
+            storeErrorHandler(FETCH_RECENTLY_VIEWED_PRODUCTS)(error);
+        }
+    },
+
+    async [FETCH_COMMON_DATA]({ dispatch }) {
         try {
             await Promise.all([
                 dispatch(FETCH_MENU),

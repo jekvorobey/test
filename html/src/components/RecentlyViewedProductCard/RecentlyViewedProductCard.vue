@@ -1,21 +1,21 @@
 <template>
-   <router-link tag="a" class="recently-viewed-product-card" :to="href">
-       <div class="recently-viewed-product-card__img">
-            <v-picture :key="image.id" v-if="image && image.id">
-                <source :data-srcset="bigImg.webp" type="image/webp" media="(min-width: 480px)" />
-                <source :data-srcset="bigImg.orig" media="(min-width: 480px)" />
-                <source :data-srcset="smallImg.webp" type="image/webp" media="(max-width: 479px)" />
-                <source :data-srcset="smallImg.orig" media="(max-width: 479px)" />
-                <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
+    <router-link tag="a" class="recently-viewed-product-card" :to="href">
+        <div class="recently-viewed-product-card__img">
+            <v-picture :key="image.id" v-if="images">
+                <source :data-srcset="images.desktop.webp" type="image/webp" media="(min-width: 480px)" />
+                <source :data-srcset="images.desktop.orig" media="(min-width: 480px)" />
+                <source :data-srcset="images.mobile.webp" type="image/webp" media="(max-width: 479px)" />
+                <source :data-srcset="images.mobile.orig" media="(max-width: 479px)" />
+                <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" />
             </v-picture>
             <v-svg v-else id="recently-viewed-product-card-empty" name="logo" width="48" height="48" />
         </div>
         <div class="recently-viewed-product-card__body">
             <div class="recently-viewed-product-card__title">
-                {{ title }}
+                {{ name }}
             </div>
         </div>
-   </router-link>
+    </router-link>
 </template>
 
 <script>
@@ -40,17 +40,14 @@ export default {
     props: {
         offerId: {
             type: [String, Number],
-            required: true,
         },
 
         productId: {
             type: [String, Number],
-            required: true,
         },
 
         name: {
             type: String,
-            required: true,
         },
 
         href: {
@@ -64,37 +61,24 @@ export default {
     },
 
     computed: {
-        bigImg() {
-            return {
-                webp: generatePictureSourcePath(300, 300, this.image.id, fileExtension.image.WEBP),
-                orig: generatePictureSourcePath(300, 300, this.image.id),
-            };
-        },
+        images() {
+            const { image } = this;
 
-        smallImg() {
-            return {
-                webp: generatePictureSourcePath(200, 200, this.image.id, fileExtension.image.WEBP),
-                orig: generatePictureSourcePath(200, 200, this.image.id),
-            };
-        },
+            if (image && image.id)
+                return {
+                    desktop: {
+                        webp: generatePictureSourcePath(300, 300, image.id, fileExtension.image.WEBP),
+                        orig: generatePictureSourcePath(300, 300, image.id),
+                    },
 
-        defaultImg() {
-            return generatePictureSourcePath(200, 200, this.image.id);
-        },
+                    mobile: {
+                        webp: generatePictureSourcePath(200, 200, image.id, fileExtension.image.WEBP),
+                        orig: generatePictureSourcePath(200, 200, image.id),
+                    },
 
-        title() {
-            if (this.name.length > 80) {
-                return this.name.substring(0, 80) + '...';
-            } else {
-                return this.name;
-            }
+                    default: generatePictureSourcePath(200, 200, image.id),
+                };
         },
     },
-
-    methods: {
-        generateSourcePath(x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext);
-        },
-    }
-}
+};
 </script>

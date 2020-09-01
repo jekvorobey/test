@@ -170,6 +170,26 @@
             </div>
         </section>
 
+        <section
+            class="section catalog-view__section catalog-view__history"
+            v-if="showRecentlyViewed && recentlyViewed && recentlyViewed.length > 0"
+        >
+            <div class="container catalog-view__history-container">
+                <h2 class="catalog-view__section-hl">{{ $t('product.title.history') }}</h2>
+                <div class="catalog-view__history-grid">
+                    <recently-viewed-product-card
+                        v-for="item in recentlyViewed"
+                        :key="item.id"
+                        :offer-id="item.id"
+                        :product-id="item.productId"
+                        :name="item.name"
+                        :href="item.url"
+                        :image="item.image"
+                    />
+                </div>
+            </div>
+        </section>
+
         <transition name="fade-in">
             <modal
                 class="catalog-view__modal-filter"
@@ -265,12 +285,14 @@ import CatalogFilter from '@components/CatalogFilter/CatalogFilter.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
+import RecentlyViewedProductCard from '@components/RecentlyViewedProductCard/RecentlyViewedProductCard.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger, $retailRocket } from '@services';
 
-import { SCROLL } from '@store';
+import { SCROLL, RECENTLY_VIEWED_PRODUCTS } from '@store';
+import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
@@ -298,7 +320,13 @@ import {
 } from '@store/modules/Catalog/getters';
 
 import { pluralize } from '@util';
-import { concatCatalogRoutePath, generateCategoryUrl, mapFilterSegments, computeFilterData } from '@util/catalog';
+import {
+    concatCatalogRoutePath,
+    generateCategoryUrl,
+    mapFilterSegments,
+    computeFilterData,
+    generateProductUrl,
+} from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { registerModuleIfNotExists } from '@util/store';
 import { createNotFoundRoute } from '@util/router';
@@ -334,6 +362,7 @@ export default {
         CatalogProductList,
         CatalogBannerCard,
         ShowMoreButton,
+        RecentlyViewedProductCard,
     },
 
     data() {
@@ -365,7 +394,7 @@ export default {
     },
 
     computed: {
-        ...mapState([SCROLL]),
+        ...mapState([SCROLL, RECENTLY_VIEWED_PRODUCTS]),
         ...mapGetters(CATALOG_MODULE, [
             ACTIVE_TAGS,
             ACTIVE_CATEGORY,
@@ -393,6 +422,32 @@ export default {
 
         isFiltersPage() {
             return this.$route.path.includes('filters');
+        },
+
+        showRecentlyViewed() {
+            const { type } = this;
+
+            switch (type) {
+                case productGroupTypes.PROMO:
+                case productGroupTypes.SETS:
+                case productGroupTypes.BRANDS:
+                    return false;
+                default:
+                    return true;
+            }
+        },
+
+        recentlyViewed() {
+            const items = this[RECENTLY_VIEWED_PRODUCTS] || [];
+            return items.map(i => {
+                const { code, categoryCodes } = i;
+                const categoryCode = categoryCodes && categoryCodes[categoryCodes.length - 1];
+
+                return {
+                    ...i,
+                    url: categoryCode && generateProductUrl(categoryCode, i.code),
+                };
+            });
         },
 
         breadcrumbRootUrl() {
@@ -493,6 +548,7 @@ export default {
     },
 
     methods: {
+        ...mapActions([FETCH_RECENTLY_VIEWED_PRODUCTS]),
         ...mapActions(CATALOG_MODULE, [FETCH_CATALOG_DATA, SET_LOAD_PATH]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
@@ -744,14 +800,16 @@ export default {
         next();
     },
 
+    created() {
+        this.productGroupTypes = productGroupTypes;
+    },
+
     beforeMount() {
         const category = this[ACTIVE_CATEGORY] || null;
         if (category) $retailRocket.addCategoryView(category.id);
         this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
-    },
 
-    created() {
-        this.productGroupTypes = productGroupTypes;
+        this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
     },
 };
 </script>
