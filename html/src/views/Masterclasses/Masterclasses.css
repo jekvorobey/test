@@ -213,10 +213,13 @@
             flex-wrap: wrap;
             margin: 0 calc(var(--gs) * -3 / 2);
 
+            @media (--tablet-lg) {
+                padding-bottom: calc(var(--gs) * 4);
+            }
+
             @media (--tablet) {
                 margin: 0;
-                padding: 0;
-                padding-bottom: calc(var(--gs) * 4);
+                padding: 0 0 calc(var(--gs) * 4);
             }
 
             &-item {
@@ -254,7 +257,6 @@
 
             @media (--tablet-lg) {
                 border-bottom: none;
-                padding-top: calc(var(--gs) * 3);
                 padding-bottom: 0;
                 margin-bottom: 0;
             }
