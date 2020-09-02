@@ -48,16 +48,26 @@ export function rawPhone(str) {
 export function pluralize(number, words) {
     const word = (n) => {
         n = Math.abs(n) % 100;
-        const numberTwo = n % 10;
-        switch (numberTwo) {
-            case 2:
-            case 3:
-            case 4:
-                return words[1];
-            case 1:
-                return words[0];
-            default:
+        switch (n) {
+            // 11-14 товаров, но 21 товар, 22-24 товара
+            case 14:
+            case 13:
+            case 12:
+            case 11:
                 return words[2];
+            default: {
+                const numberTwo = n % 10;
+                switch (numberTwo) {
+                    case 2:
+                    case 3:
+                    case 4:
+                        return words[1];
+                    case 1:
+                        return words[0];
+                    default:
+                        return words[2];
+                }
+            }
         }
     };
 
