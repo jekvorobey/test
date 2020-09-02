@@ -17,7 +17,11 @@
         }
 
         @media (--tablet-lg) {
-            margin: 0 calc(var(--gs) * -1);
+            margin: 0 calc(var(--gs) / -2);
+        }
+
+        @media (--tablet) {
+            margin: 0 calc(var(--gs) / -1);
         }
     }
 
@@ -31,12 +35,13 @@
         }
 
         @media (--tablet-lg) {
-            width: calc(calc(100% / 6) - calc(var(--gs) * 2));
-            margin: 0 var(--gs) calc(var(--gs) * 3);
+            width: calc(calc(100% / 8) - var(--gs));
+            margin: 0 calc(var(--gs) / 2) calc(var(--gs) * 3);
         }
 
         @media (--tablet) {
             width: calc(25% - calc(var(--gs) * 2));
+            margin: 0 var(--gs) calc(var(--gs) * 3);
         }
 
         .trigger {
