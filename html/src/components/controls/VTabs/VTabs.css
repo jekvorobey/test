@@ -14,14 +14,15 @@
             letter-spacing: 0.02em;
             padding-bottom: calc(var(--gs) * 1.5);
             border-bottom: 2px solid transparent;
+            border-radius: 0;
 
             & + & {
                 margin-left: calc(var(--gs) * 2);
             }
 
             &:hover {
-                color: var(--cl-dark-blue);
-                fill: var(--cl-dark-blue);
+                color: var(--cl-global);
+                fill: var(--cl-global);
             }
 
             &.is-active,
@@ -39,11 +40,10 @@
     }
 
     &__panel {
-
         .is-hidden + & {
             padding-top: 0;
         }
-        
+
         position: relative;
         padding: calc(var(--gs) * 2) 0;
     }
