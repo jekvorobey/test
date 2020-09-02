@@ -35,7 +35,12 @@
                             </p>
 
                             <p class="cart-view__main-panel-line">
-                                Сумма заказа: {{ $t(`cart.summary.type.${activeTabItem.type}`) }}
+                                <span>
+                                    Сумма заказа:
+                                    <span class="text-lowercase">
+                                        {{ $t(`cart.summary.type.${activeTabItem.type}`) }}
+                                    </span>
+                                </span>
                                 <price v-bind="activeTabItem.summary.sum" />
                             </p>
 
@@ -303,10 +308,10 @@ export default {
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS, PROMO_CODE]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
         ...mapState(MODAL_MODULE, {
-            isModalOpen: (state) =>
+            isModalOpen: state =>
                 state[MODALS][modalName.cart.CLEAR_CART] && state[MODALS][modalName.cart.CLEAR_CART].open,
         }),
 
@@ -330,7 +335,7 @@ export default {
         activeItemIds() {
             const { activeTabItem = {} } = this;
             const { items = [] } = activeTabItem;
-            return items.map((i) => i.p.id).join(',');
+            return items.map(i => i.p.id).join(',');
         },
     },
 
@@ -400,8 +405,8 @@ export default {
         $progress.start();
         $store
             .dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`)
-            .then(() => next((vm) => $progress.finish()))
-            .catch(() => next((vm) => $progress.fail()));
+            .then(() => next(vm => $progress.finish()))
+            .catch(() => next(vm => $progress.fail()));
     },
 
     mounted() {
