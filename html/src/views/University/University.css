@@ -90,53 +90,6 @@
         }
     }
 
-    &__slider {
-        &-title {
-            position: absolute;
-            &-h1 {
-                font-weight: 500;
-                font-size: 28px;
-                line-height: 40px;
-            }
-        }
-
-        &-gallery {
-            .swiper-slide {
-                @media (--tablet-lg) {
-                    width: 80% !important;
-                }
-
-                img {
-                    width: 100%;
-                }
-            }
-
-            .swiper-wrapper {
-                padding-top: calc(var(--gs) * 7);
-            }
-
-            .v-slider__controls {
-                position: relative;
-                bottom: 320px;
-                right: 0;
-                display: flex;
-                justify-content: flex-end;
-
-                @media (--tablet-lg) {
-                    position: relative;
-                    top: 0;
-                    left: 0;
-                    display: flex;
-                    justify-content: center;
-                }
-
-                .swiper-pagination {
-                    display: block;
-                }
-            }
-        }
-    }
-
     &__feedback {
         display: flex;
         flex-wrap: wrap;
