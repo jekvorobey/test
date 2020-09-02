@@ -197,11 +197,6 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            margin-bottom: calc(var(--gs) * 5);
-
-            @media (--tablet) {
-                margin-bottom: 0;
-            }
         }
 
         &-card {
@@ -265,9 +260,30 @@
             }
         }
 
-        &-masterclass {
-            padding-top: calc(var(--gs) * 3);
+        &-tickets {
+            margin-bottom: calc(var(--gs) * 5);
+            padding-bottom: calc(var(--gs) * 5);
+            border-bottom: 1px solid var(--cl-divider-grey);
 
+            @media (--tablet) {
+                margin-bottom: calc(var(--gs) * 3);
+                padding-bottom: calc(var(--gs) * 3);
+            }
+
+            &:nth-child(2) {
+                padding-top: calc(var(--gs) * 3);
+            }
+
+            &:last-child {
+                @media (--tablet) {
+                    margin-bottom: 0;
+                    padding-bottom: 0;
+                    border-bottom: none;
+                }
+            }
+        }
+
+        &-masterclass {
             .master-class-card__img {
                 @media (--tablet-min) {
                     width: 20%;

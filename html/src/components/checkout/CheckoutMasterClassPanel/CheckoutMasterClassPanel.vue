@@ -53,6 +53,7 @@
                 </div>
 
                 <div
+                    class="checkout-master-class-panel__item-tickets"
                     v-for="({ cartItem: { p: product, count }, tickets, offerId }, index) in masterClasses"
                     :key="offerId"
                 >
