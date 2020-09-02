@@ -55,6 +55,7 @@ import { LOCALE } from '@store';
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_MASTERCLASS_ITEM, DELETE_MASTERCLASS_ITEM } from '@store/modules/Cart/actions';
 
+import { getDate } from '@util';
 import { fileExtension } from '@enums';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { generatePictureSourcePath } from '@util/file';
@@ -87,10 +88,10 @@ export default {
         masterclasses() {
             return this.items.map(i => {
                 const { p } = i;
-                const dateObj = new Date(`${p.nearestDate} ${p.nearestTimeFrom}`);
+                const dateObj = getDate(`${p.nearestDate} ${p.nearestTimeFrom}`);
                 const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
-                const dateTime = `${date}, ${time}`;
+                const dateTime = `${date} (${this.$t(`weekdays.short.${dateObj.getDay()}`)}), ${time}`;
                 const url = generateMasterclassUrl(p.code);
                 const speaker = p.speakers && p.speakers[0];
                 const author = speaker && `${speaker.firstName} ${speaker.lastName}, ${speaker.profession}`;

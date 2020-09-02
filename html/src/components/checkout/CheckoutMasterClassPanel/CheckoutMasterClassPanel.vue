@@ -309,7 +309,7 @@ import _debounce from 'lodash/debounce';
 
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
 import { requestStatus, agreementTypes, fileExtension, modalName } from '@enums';
-import { getPosition, formatPhoneNumber } from '@util';
+import { getPosition, formatPhoneNumber, getDate } from '@util';
 import { generateMasterclassUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
@@ -435,10 +435,10 @@ export default {
 
             return this.publicEvents.map(i => {
                 const p = i.cartItem.p;
-                const dateObj = new Date(`${p.nearestDate} ${p.nearestTimeFrom}`);
+                const dateObj = getDate(`${p.nearestDate} ${p.nearestTimeFrom}`);
                 const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
-                const dateTime = `${date}, ${time}`;
+                const dateTime = `${date} (${this.$t(`weekdays.short.${dateObj.getDay()}`)}), ${time}`;
                 const url = generateMasterclassUrl(p.code);
                 const speaker = p.speakers && p.speakers[0];
                 const author = speaker && `${speaker.firstName} ${speaker.lastName}, ${speaker.profession}`;
