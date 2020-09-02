@@ -99,31 +99,10 @@
         <separator-section class="partners-view__separator" />
 
         <section class="section">
-            <div class="container university-view__slider">
-                <div class="university-view__slider-title">
-                    <h1 class="university-view__slider-title-h1">Галлерея</h1>
-                </div>
-
-                <v-slider class="university-view__slider-gallery" name="gallery" :options="univerSliderOptions">
-                    <div
-                        v-if="!univerSlider || !univerSlider.length"
-                        class="swiper-slide university-view__slider-gallery-item"
-                    >
-                        <v-svg name="logo" width="56" height="56" />
-                    </div>
-
-                    <div
-                        class="swiper-slide university-view__slider-gallery-item"
-                        v-for="item in univerSlider"
-                        :key="item.id"
-                    >
-                        <v-picture class="university-view__slider-gallery-item-img">
-                            <source media="(max-width: 479px)" :srcset="UniverSlide" />
-                            <source media="(min-width: 480px)" :srcset="UniverSlide" />
-                            <img class="university-view__slider-gallery-item-img" :src="UniverSlide" alt="" />
-                        </v-picture>
-                    </div>
-                </v-slider>
+            <div class="container">
+                <frisbuy-product-container
+                    script="https://www.frisbuy.ru/fb/widget?embed_id=e6718e5b-de39-11ea-ba01-0242ac150002"
+                />
             </div>
         </section>
 
@@ -188,6 +167,7 @@ import UniverMain from '@images/mock/UniverMain.png';
 import UniverMainMd from '@images/mock/UniverMainMd.png';
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
+import FrisbuyProductContainer from '@components/FrisbuyProductContainer/FrisbuyProductContainer.vue';
 
 import { breakpoints } from '@enums';
 import { phoneMaskOptions } from '@settings';
@@ -215,6 +195,7 @@ export default {
         Breadcrumbs,
         BreadcrumbItem,
         SeparatorSection,
+        FrisbuyProductContainer,
     },
 
     validations: {
