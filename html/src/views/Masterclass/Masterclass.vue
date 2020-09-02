@@ -33,7 +33,10 @@
 
         <section class="section master-class-view__section master-class-view__panel">
             <div class="container master-class-view__panel-container">
-                <div class="master-class-view__panel-body">
+                <div
+                    class="master-class-view__panel-body"
+                    :class="{ 'master-class-view__panel-body--single': isSingleStage }"
+                >
                     <div class="container container--tablet master-class-view__panel-left">
                         <attention-panel v-if="anotherCities && anotherCities.length > 0">
                             <span>
@@ -167,6 +170,7 @@
                         <div
                             v-if="!isTablet"
                             class="container container--tablet master-class-view__panel-right-section master-class-view__panel-right-social"
+                            :class="{ 'master-class-view__panel-right-social--single': isSingleStage }"
                         >
                             <p class="text-bold master-class-view__panel-right-hl">
                                 Поделиться
@@ -201,6 +205,53 @@
             </div>
         </section>
 
+        <section
+            class="section master-class-view__section master-class-view__gallery"
+            v-if="isSingleStage && !isTablet && gallery && gallery.length > 0"
+        >
+            <div class="container" v-if="!isTablet">
+                <ul class="master-class-view__gallery-list">
+                    <li
+                        class="master-class-view__gallery-item"
+                        v-for="media in gallery"
+                        :key="media.value.id || media.id"
+                    >
+                        <v-picture v-if="media.type === mediaType.IMAGE">
+                            <source :data-srcset="media.desktopImg.webp" type="image/webp" />
+                            <source :data-srcset="media.desktopImg.orig" />
+                            <img class="blur-up lazyload v-picture__img" :data-src="media.defaultImg" alt="" />
+                        </v-picture>
+                        <v-youtube :code="media.value" v-else-if="media.type === mediaType.YOUTUBE" />
+                        <v-video controls v-else-if="media.type === mediaType.VIDEO">
+                            <source :src="media.src" :type="media.mimeType" />
+                        </v-video>
+                    </li>
+                </ul>
+            </div>
+            <v-slider
+                name="masterclass-gallery-slider"
+                class="master-class-view__gallery-slider"
+                :options="sliderOptions.gallery"
+                v-else
+            >
+                <div
+                    class="swiper-slide master-class-view__gallery-item"
+                    v-for="media in gallery"
+                    :key="media.value.id || media.id"
+                >
+                    <v-picture v-if="media.type === 'image'">
+                        <source :data-srcset="media.desktopImg.webp" type="image/webp" />
+                        <source :data-srcset="media.desktopImg.orig" />
+                        <img class="blur-up lazyload v-picture__img" :data-src="media.defaultImg" alt="" />
+                    </v-picture>
+                    <v-youtube :code="media.value" v-else-if="media.type === 'youtube'" />
+                    <v-video controls v-else-if="media.type === 'video'">
+                        <source :src="media.src" :type="media.mimeType" />
+                    </v-video>
+                </div>
+            </v-slider>
+        </section>
+
         <section class="section master-class-view__section">
             <div class="container master-class-view__panel-container">
                 <div class="master-class-view__panel">
@@ -209,61 +260,82 @@
                         <div
                             class="master-class-view__panel-middle master-class-view__panel-middle--child master-class-view__panel-middle--no-padding"
                         >
-                            <p class="container container--tablet text-bold master-class-view__section-hl">
-                                Программа
-                            </p>
+                            <template v-if="stages && !isSingleStage">
+                                <p class="container container--tablet text-bold master-class-view__section-hl">
+                                    Программа
+                                </p>
 
-                            <v-accordion class="master-class-view__accordion" :items="stages" key-field="id">
-                                <template v-slot:header="{ item }">
-                                    <div class="master-class-view__accordion-header">
-                                        <div class="master-class-view__accordion-header-info">
-                                            <h4 class="master-class-view__accordion-header-name">
-                                                {{ item.name }}
-                                            </h4>
-                                            <div class="text-sm text-grey">{{ item.date }}</div>
-                                            <div>{{ item.address }}</div>
-                                        </div>
+                                <v-accordion class="master-class-view__accordion" :items="stages" key-field="id">
+                                    <template v-slot:header="{ item }">
+                                        <div class="master-class-view__accordion-header">
+                                            <div class="master-class-view__accordion-header-info">
+                                                <h4 class="master-class-view__accordion-header-name">
+                                                    {{ item.name }}
+                                                </h4>
+                                                <div class="text-sm text-grey">{{ item.date }}</div>
+                                                <div>{{ item.address }}</div>
+                                            </div>
 
-                                        <ul class="master-class-view__accordion-header-speakers">
-                                            <author-card
-                                                class="master-class-view__panel-right-card"
-                                                v-for="speaker in item.stageSpeakers"
-                                                :key="speaker.id"
-                                                :first-name="speaker.firstName"
-                                                :last-name="speaker.lastName"
-                                                :nick-name="speaker.profession"
-                                                :image="speaker.avatar.defaultImg"
-                                            />
-                                        </ul>
-                                    </div>
-                                </template>
-
-                                <template v-slot:content="{ item }">
-                                    <div class="master-class-view__accordion-content">
-                                        <div class="master-class-view__panel">
-                                            <div
-                                                class="container container--tablet master-class-view__panel-body master-class-view__panel-body--accordion"
-                                            >
-                                                <v-html
-                                                    class="master-class-view__panel-middle"
-                                                    :style="{ order: 0 }"
-                                                    v-html="item.description"
+                                            <ul class="master-class-view__accordion-header-speakers">
+                                                <author-card
+                                                    class="master-class-view__panel-right-card"
+                                                    v-for="speaker in item.stageSpeakers"
+                                                    :key="speaker.id"
+                                                    :first-name="speaker.firstName"
+                                                    :last-name="speaker.lastName"
+                                                    :nick-name="speaker.profession"
+                                                    :image="speaker.avatar.defaultImg"
                                                 />
+                                            </ul>
+                                        </div>
+                                    </template>
 
+                                    <template v-slot:content="{ item }">
+                                        <div class="master-class-view__accordion-content">
+                                            <div class="master-class-view__panel">
                                                 <div
-                                                    class="master-class-view__panel-right"
-                                                    :style="{ order: 1 }"
+                                                    class="container container--tablet master-class-view__panel-body master-class-view__panel-body--accordion"
                                                 >
-                                                    <p class="text-bold master-class-view__panel-right-hl">
-                                                        Что взять с собой
-                                                    </p>
-                                                    <v-html v-html="item.raider" />
+                                                    <v-html
+                                                        class="master-class-view__panel-middle"
+                                                        :style="{ order: 0 }"
+                                                        v-html="item.description"
+                                                    />
+
+                                                    <div class="master-class-view__panel-right" :style="{ order: 1 }">
+                                                        <p class="text-bold master-class-view__panel-right-hl">
+                                                            Что взять с собой
+                                                        </p>
+                                                        <v-html v-html="item.raider" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </template>
+                                </v-accordion>
+                            </template>
+                            <div
+                                class="master-class-view__panel master-class-view__panel--single"
+                                v-else-if="stages && isSingleStage"
+                            >
+                                <div
+                                    class="container container--tablet master-class-view__panel-body master-class-view__panel-body--accordion"
+                                >
+                                    <div class="master-class-view__panel-middle">
+                                        <p class="text-bold master-class-view__section-hl">
+                                            Программа
+                                        </p>
+                                        <v-html :style="{ order: 0 }" v-html="stages[0].description" />
                                     </div>
-                                </template>
-                            </v-accordion>
+
+                                    <div class="master-class-view__panel-right" :style="{ order: 1 }">
+                                        <p class="text-bold master-class-view__panel-right-hl">
+                                            Что взять с собой
+                                        </p>
+                                        <v-html v-html="stages[0].raider" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -272,7 +344,7 @@
 
         <section
             class="section master-class-view__section master-class-view__gallery"
-            v-if="gallery && gallery.length > 0"
+            v-if="(!isSingleStage || isTablet) && gallery && gallery.length > 0"
         >
             <div class="container" v-if="!isTablet">
                 <ul class="master-class-view__gallery-list">
@@ -1096,6 +1168,11 @@ export default {
                 gallery: sliderOptions,
                 history: historySliderOptions,
             };
+        },
+
+        isSingleStage() {
+            const { stages } = this;
+            return stages && stages.length === 1;
         },
 
         isTabletLg() {

@@ -205,6 +205,12 @@
             }
         }
 
+        &--single &-body {
+            @media (--tablet-lg) {
+                flex-direction: column-reverse;
+            }
+        }
+
         &-body {
             display: flex;
             border-bottom: 1px solid var(--cl-divider-grey);
@@ -213,6 +219,10 @@
                 padding-bottom: 0;
                 border-bottom: none;
                 flex-direction: column;
+            }
+
+            &--single {
+                border-bottom: 0;
             }
 
             &--accordion {
@@ -369,6 +379,11 @@
                     text-align: center;
                     margin-bottom: calc(var(--gs) * 4);
                     padding-bottom: calc(var(--gs) * 4);
+                }
+
+                &--single {
+                    margin-bottom: 0;
+                    padding-bottom: 0;
                 }
 
                 &-container {
