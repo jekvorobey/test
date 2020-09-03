@@ -73,6 +73,7 @@ export const eventName = Object.freeze({
     SCROLL: 'scroll',
     RESIZE: 'resize',
     CLICK: 'click',
+    KEYUP: 'keyup',
 
     video: {
         PAUSE: 'pause',

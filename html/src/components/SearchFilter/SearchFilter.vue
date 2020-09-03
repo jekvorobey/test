@@ -3,17 +3,20 @@
         <label class="search-filter__label" :for="inputId" @click="onSearchOpen">
             <v-svg name="search-middle" width="24" height="24" />
         </label>
+
         <input
             class="search-filter__input"
             type="text"
+            ref="input"
             v-model="searchString"
             :id="inputId"
             :placeholder="searchPlaceholder"
             @focus.self="SET_SEARCH(true)"
             @focus="isFocus = true"
-            @focusout="isFocus = false"
+            @blur="isFocus = false"
             @keyup.enter="onSearch"
         />
+
         <button class="search-filter__clear" @click="onClearClick">
             <v-svg name="cross" width="24" height="24" />
         </button>
@@ -25,8 +28,8 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 
 import { mapState, mapActions } from 'vuex';
 
-import { NAME as SEARCH_MODULE, SEARCH as SEARCH_STATE } from '@store/modules/Search';
-import { SET_SEARCH, SEARCH } from '@store/modules/Search/actions';
+import { NAME as SEARCH_MODULE, SEARCH } from '@store/modules/Search';
+import { SET_SEARCH, SEARCH_SUGGESTIONS } from '@store/modules/Search/actions';
 
 import { productGroupTypes } from '@enums/product';
 import '@images/sprites/search-middle.svg';
@@ -55,7 +58,7 @@ export default {
     },
 
     computed: {
-        ...mapState(SEARCH_MODULE, [SEARCH_STATE]),
+        ...mapState(SEARCH_MODULE, [SEARCH]),
 
         searchPlaceholder() {
             if (this.isFocus) return 'Что вы ищете?';
@@ -64,13 +67,17 @@ export default {
     },
 
     watch: {
+        search(value) {
+            if (!value && this.$refs.input) this.$refs.input.blur();
+        },
+
         searchString(value) {
-            this[SEARCH](value);
+            this[SEARCH_SUGGESTIONS](value);
         },
     },
 
     methods: {
-        ...mapActions(SEARCH_MODULE, [SEARCH, SET_SEARCH]),
+        ...mapActions(SEARCH_MODULE, [SEARCH_SUGGESTIONS, SET_SEARCH]),
 
         onClearClick() {
             this.searchString = '';

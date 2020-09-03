@@ -76,6 +76,7 @@ import SearchFilter from '@components/SearchFilter/SearchFilter.vue';
 import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
+import { SCROLL } from '@store';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -99,9 +100,8 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { productGroupTypes } from '@enums/product';
 import { generateProductUrl, generateSearchUrl } from '@util/catalog';
-import { modalName } from '@enums';
+import { modalName, eventName } from '@enums';
 import './SearchPanel.css';
-import { SCROLL } from '@store';
 
 export default {
     name: 'search-panel',
@@ -212,11 +212,23 @@ export default {
                 state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
             });
         },
+
+        onKeyUp(e) {
+            if (e.key === 'Escape') this[SET_SEARCH](false);
+        },
+    },
+
+    beforeMount() {
+        document.addEventListener(eventName.KEYUP, this.onKeyUp);
     },
 
     mounted() {
         this[GET_POPULAR_PRODUCTS]();
         this[GET_POPULAR_REQUESTS]();
+    },
+
+    beforeDestroy() {
+        document.removeEventListener(eventName.KEYUP, this.onKeyUp);
     },
 };
 </script>

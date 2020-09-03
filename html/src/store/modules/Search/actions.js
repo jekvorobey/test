@@ -20,7 +20,7 @@ const debounce_Suggestion = _debounce(async (commit, payload) => {
 export const GET_POPULAR_PRODUCTS = 'GET_POPULAR_PRODUCTS';
 export const GET_POPULAR_REQUESTS = 'GET_POPULAR_REQUESTS';
 export const SET_SEARCH = 'SET_SEARCH';
-export const SEARCH = 'SEARCH';
+export const SEARCH_SUGGESTIONS = 'SEARCH_SUGGESTIONS';
 
 export default {
     async [GET_POPULAR_PRODUCTS]({ commit }, payload = {}) {
@@ -45,7 +45,7 @@ export default {
         commit(M_SET_SEARCH, payload);
     },
 
-    [SEARCH]({ commit }, payload) {
+    [SEARCH_SUGGESTIONS]({ commit }, payload) {
         commit(SET_SEARCH_STRING, payload);
         return debounce_Suggestion(commit, payload);
     },
