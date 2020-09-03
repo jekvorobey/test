@@ -3,6 +3,7 @@
         <div class="search-panel__container" v-scroll-lock="search">
             <search-filter
                 class="container search-panel__search"
+                :class="{ 'search-panel__search--scroll': scroll }"
                 v-focus
                 input-id="lower-filter"
                 v-if="isTabletLg || scroll"

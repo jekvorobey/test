@@ -317,7 +317,7 @@ export default {
             const data = await getCheckoutOrder(id);
             commit(SET_CHECKOUT_ORDER, data);
         } catch (error) {
-            storeErrorHandler(FETCH_CHECKOUT_ORDER)(error);
+            storeErrorHandler(FETCH_CHECKOUT_ORDER, true)(error);
         }
     },
 

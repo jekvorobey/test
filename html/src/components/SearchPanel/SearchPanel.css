@@ -37,6 +37,13 @@
         padding-bottom: calc(var(--gs) * 1.5);
         border-bottom: 1px solid var(--cl-divider-grey);
 
+        &--scroll {
+            @media (--tablet-lg-min) {
+                padding-top: calc(var(--gs) / 2);
+                padding-bottom: calc(var(--gs) / 2);
+            }
+        }
+
         @media (--tablet) {
             padding-top: calc(var(--gs) / 2);
             padding-bottom: calc(var(--gs) / 2);

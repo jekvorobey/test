@@ -196,12 +196,13 @@ import { FETCH_CHECKOUT_ORDER } from '@store/modules/Checkout/actions';
 import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
 
 import { $store, $progress } from '@services';
-import { fileExtension } from '@enums';
+import { fileExtension, httpCodes } from '@enums';
 import { receiveMethods } from '@enums/checkout';
 import { orderPaymentStatus } from '@enums/order';
 import { cartItemTypes } from '@enums/product';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings, cancelRoute } from '@settings';
 import { formatPhoneNumber, getDate } from '@util';
+import { createNotFoundRoute } from '@util/router';
 import { toAddressString } from '@util/address';
 import { generatePictureSourcePath } from '@util/file';
 import { generateMasterclassUrl, generateProductUrl } from '@util/catalog';
@@ -263,6 +264,7 @@ export default {
         items() {
             const { order, cartData = {} } = this;
             let cartType = null;
+            if (!order) return [];
 
             switch (order.type) {
                 case cartItemTypes.PRODUCT: {
