@@ -216,21 +216,23 @@
                         </h3>
                     </div>
 
-                    <div v-if="!bonus" class="checkout-product-panel__item-controls">
+                    <div v-if="isBonusEdit" class="checkout-product-panel__item-controls">
                         <template v-if="availableBonus > 0">
                             <v-input
-                                type="number"
-                                min="1"
-                                :max="availableBonus"
                                 class="checkout-product-panel__item-controls-input"
+                                type="number"
+                                min="0"
                                 placeholder="Сколько списать?"
                                 v-model="bonusAmount"
-                                @keydown.enter.prevent="ADD_BONUS(bonusAmount)"
+                                v-focus
+                                :max="maxAmountBonus"
+                                :disabled="isBonusPending"
+                                @keydown.enter.prevent="onAddBonus(bonusAmount)"
                             />
                             <v-button
                                 class="btn--outline checkout-product-panel__item-controls-btn"
-                                @click="ADD_BONUS(bonusAmount)"
-                                :disabled="!bonusAmount"
+                                @click="onAddBonus(bonusAmount)"
+                                :disabled="isBonusPending"
                             >
                                 Применить
                             </v-button>
@@ -250,7 +252,7 @@
                             <div v-if="isTablet" class="text-sm text-normal text-grey">
                                 (1 бонус = {{ bonusPerRub }} рубль)
                             </div>
-                            <v-link class="checkout-product-panel__item-card-link" tag="button" @click="DELETE_BONUS">
+                            <v-link class="checkout-product-panel__item-card-link" tag="button" @click="onEditBonus">
                                 Изменить
                             </v-link>
                         </div>
@@ -565,7 +567,7 @@ export default {
             case receiveMethods.PICKUP:
                 return {
                     [AGREEMENT]: {
-                        valid: (value) => value === true,
+                        valid: value => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -582,7 +584,7 @@ export default {
             default:
                 return {
                     [AGREEMENT]: {
-                        valid: (value) => value === true,
+                        valid: value => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -598,6 +600,7 @@ export default {
 
     data() {
         return {
+            isBonusEdit: false,
             bonusAmount: null,
             certificateCode: null,
             recipientIndexToChange: null,
@@ -607,16 +610,16 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
         ...mapState(MODAL_MODULE, {
-            isPickupPointModalOpen: (state) =>
+            isPickupPointModalOpen: state =>
                 state[MODALS][CheckoutPickupPointModal.name] && state[MODALS][CheckoutPickupPointModal.name].open,
-            isDateModalOpen: (state) =>
+            isDateModalOpen: state =>
                 state[MODALS][CheckoutDateModal.name] && state[MODALS][CheckoutDateModal.name].open,
-            isAddressModalOpen: (state) =>
+            isAddressModalOpen: state =>
                 state[MODALS][modalName.profile.ADDRESS_EDIT] && state[MODALS][modalName.profile.ADDRESS_EDIT].open,
-            isRecipientModalOpen: (state) =>
+            isRecipientModalOpen: state =>
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT] &&
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT].open,
         }),
@@ -743,13 +746,17 @@ export default {
     },
 
     watch: {
+        isBonusEdit(value) {
+            if (value) this.bonusAmount = this[BONUS];
+        },
+
         computedDeliveryTypes(value) {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
             if (value) {
-                value.forEach((el) => {
+                value.forEach(el => {
                     if (el) {
                         if (el.items)
-                            el.items.forEach((delivery) => {
+                            el.items.forEach(delivery => {
                                 if (deliveryType) {
                                     this[CHANGE_CHUNK_DATE]({
                                         ...delivery,
@@ -828,7 +835,7 @@ export default {
             }
 
             const note = 'Доставим';
-            const uniqueDates = Array.from(new Set(deliveryType.items.map((i) => i.selectedDate)));
+            const uniqueDates = Array.from(new Set(deliveryType.items.map(i => i.selectedDate)));
             return uniqueDates.reduce(
                 (accum, current, index) =>
                     accum + `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(this[LOCALE], options)}`,
@@ -849,7 +856,7 @@ export default {
         },
 
         onSetDeliveryType(id) {
-            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find((t) => t.id === id);
+            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find(t => t.id === id);
             this[SET_DELIVERY_TYPE](selectedType);
         },
 
@@ -865,7 +872,7 @@ export default {
 
         onChangeDate(chunkItemId) {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
-            const chunkItem = deliveryType.items.find((i) => i.id === chunkItemId);
+            const chunkItem = deliveryType.items.find(i => i.id === chunkItemId);
 
             const state = {
                 id: chunkItem.id,
@@ -949,6 +956,19 @@ export default {
 
         onChangePickupPoint() {
             this[CHANGE_MODAL_STATE]({ name: CheckoutPickupPointModal.name, open: true });
+        },
+
+        onEditBonus() {
+            this.isBonusEdit = true;
+        },
+
+        async onAddBonus(value) {
+            try {
+                await this[ADD_BONUS](value || 0);
+                this.isBonusEdit = false;
+            } catch (error) {
+                this.isBonusEdit = true;
+            }
         },
 
         scrollToError(element) {
