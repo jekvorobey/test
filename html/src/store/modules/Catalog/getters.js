@@ -1,5 +1,4 @@
-import { mapFilterSegments, getActiveCategories, getAllActiveCategories } from '@util/catalog';
-import { productGroupTypes } from '@enums';
+import { mapFilterSegments, getAllActiveCategories } from '@util/catalog';
 
 export const ROUTE_SEGMENTS = 'routeSegments';
 export const FILTER_SEGMENTS = 'filterSegments';
@@ -13,11 +12,6 @@ export const BREADCRUMBS = 'breadcrumbs';
 export const SHOW_PANEL = 'showPanel';
 
 const pageSize = 12;
-
-const productGroupBase = {
-    FILTERS: 'filters',
-    PRODUCTS: 'products',
-};
 
 export default {
     [ACTIVE_CATEGORIES]({ categories, baseCategoryCode, categoryCode }) {

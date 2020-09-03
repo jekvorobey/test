@@ -36,6 +36,7 @@
                 <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt />
             </catalog-banner-card> -->
         </div>
+
         <section class="section catalog-view__section--grid">
             <div class="container catalog-view__grid" data-v-sticky-container>
                 <v-sidebar

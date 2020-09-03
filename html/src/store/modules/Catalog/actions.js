@@ -42,9 +42,7 @@ export default {
 
     async [FETCH_CATEGORIES](context, { code, filter }) {
         try {
-            // todo
-            // return await getCategories(code, null, filter);
-            return await getCategories(code);
+            return await getCategories(code, null, filter);
         } catch (error) {
             storeErrorHandler(FETCH_CATEGORIES)(error);
             return [];
