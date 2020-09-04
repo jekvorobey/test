@@ -13,10 +13,6 @@
         margin: 0 calc(var(--gs) * -2.5);
 
         @media (--desktop) {
-            margin: 0 calc(var(--gs) * -2.5);
-        }
-
-        @media (--tablet-lg) {
             margin: 0 calc(var(--gs) / -2);
         }
 
@@ -29,12 +25,12 @@
         width: calc(calc(100% / 8) - calc(var(--gs) * 5));
         margin: 0 calc(var(--gs) * 2.5) calc(var(--gs) * 3);
 
-        @media (--desktop) {
+        /* @media (--desktop) {
             width: calc(calc(100% / 6) - calc(var(--gs) * 5));
             margin: 0 calc(var(--gs) * 2.5) calc(var(--gs) * 3);
-        }
+        } */
 
-        @media (--tablet-lg) {
+        @media (--desktop) {
             width: calc(calc(100% / 8) - var(--gs));
             margin: 0 calc(var(--gs) / 2) calc(var(--gs) * 3);
         }
