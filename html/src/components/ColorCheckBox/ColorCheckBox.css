@@ -1,0 +1,48 @@
+.color-check-box {
+    position: relative;
+    display: inline-block;
+
+    input[type='checkbox'] + label {
+        padding: 0;
+        margin: 0;
+
+        &::after,
+        &::before {
+            display: none;
+        }
+    }
+
+    input[type='checkbox']:checked + label &__square {
+        &::before {
+            transform: scale(1);
+        }
+    }
+
+    &__square {
+        border-radius: 2px;
+
+        &::before {
+            content: '';
+            position: absolute;
+            transform: scale(0);
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+            width: 100%;
+            height: 100%;
+            background-image: svg-load('check.svg', 'fill: #fff');
+            transition: all var(--time) ease;
+        }
+
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 100%;
+                padding-bottom: 0;
+            }
+        }
+    }
+}

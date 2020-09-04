@@ -4,8 +4,34 @@
 
     &__filters {
         &-range,
-        &-check {
+        &-check,
+        &-color {
             padding-top: calc(var(--gs) * 2);
+        }
+
+        &-color {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 calc(var(--gs) * -0.75);
+
+            @media (--tablet-lg) {
+                margin: 0 calc(var(--gs) * -1.25);
+            }
+
+            &-item {
+                width: calc(calc(100% / 6) - calc(var(--gs) * 1.5));
+                margin: 0 calc(var(--gs) * 0.75) calc(var(--gs) * 1.5);
+
+                @media (--tablet-lg) {
+                    width: calc(calc(100% / 14) - calc(var(--gs) * 2.5));
+                    margin: 0 calc(var(--gs) * 1.25) calc(var(--gs) * 2);
+                }
+
+                @media (--tablet) {
+                    width: calc(calc(100% / 6) - calc(var(--gs) * 2.5));
+                    margin: 0 calc(var(--gs) * 1.25) calc(var(--gs) * 2);
+                }
+            }
         }
 
         &-more {
@@ -27,6 +53,7 @@
             font-size: 20px;
             line-height: 24px;
             font-weight: 500;
+            text-align: left;
         }
 
         .v-accordion__item-panel {

@@ -53,6 +53,21 @@
                         {{ option.name }}
                     </v-check>
                 </div>
+                <div class="catalog-filter__filters-color" v-else-if="filter.type === 'color'">
+                    <color-check-box
+                        class="catalog-filter__filters-color-item"
+                        v-for="option in filter.items"
+                        :id="`${filter.name}-${option.id}`"
+                        :key="option.id"
+                        :name="option.name"
+                        :color="option.code"
+                        :checked="filterSegments[filter.name] && filterSegments[filter.name][option.code]"
+                        :disabled="!!option.disabled"
+                        @change="onCheckChange($event, `${filter.name}-${option.code}`)"
+                    >
+                        {{ option.name }}
+                    </color-check-box>
+                </div>
             </template>
         </v-accordion>
     </div>
@@ -64,6 +79,8 @@ import VRange from '@controls/VRange/VRange.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 import VAccordion from '@controls/VAccordion/VAccordion.vue';
 import VLink from '@controls/VLink/VLink.vue';
+
+import ColorCheckBox from '@components/ColorCheckBox/ColorCheckBox.vue';
 
 import { NAME as CATALOG_MODULE, FILTERS, FILTERS_STATE_MAP } from '@store/modules/Catalog';
 import { CHANGE_FILTER_STATE } from '@store/modules/Catalog/actions';
@@ -77,7 +94,15 @@ import './CatalogFilter.css';
 export default {
     name: 'catalog-filter',
 
-    components: { VButton, VCheck, VRange, VAccordion, VLink },
+    components: {
+        VButton,
+        VCheck,
+        VRange,
+        VAccordion,
+        VLink,
+
+        ColorCheckBox,
+    },
 
     data() {
         return {
