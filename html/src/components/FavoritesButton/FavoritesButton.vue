@@ -66,15 +66,20 @@ export default {
 
         onBtnClick(e) {
             e.stopPropagation();
+            e.preventDefault();
             if (this.checkPermissions()) this.$emit('click', e);
         },
 
         checkPermissions() {
             const hasSession = this[HAS_SESSION];
             if (!hasSession) {
-                this[CHANGE_MODAL_STATE]({ name: modalName.general.AUTH, open: true, state: {
-                    activeTab: authMode.LOGIN,
-                }});
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.AUTH,
+                    open: true,
+                    state: {
+                        activeTab: authMode.LOGIN,
+                    },
+                });
                 return false;
             }
             return hasSession;
