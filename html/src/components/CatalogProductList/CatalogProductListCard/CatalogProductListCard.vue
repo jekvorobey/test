@@ -7,9 +7,9 @@
     >
         <div class="catalog-product-list-card__img" v-once>
             <v-picture v-if="item.image && item.image.id">
-                <source :data-srcset="bigImg.webp" media="(min-width: 480px)" type="image/webp"  />
+                <source :data-srcset="bigImg.webp" media="(min-width: 480px)" type="image/webp" />
                 <source :data-srcset="bigImg.orig" media="(min-width: 480px)" />
-                <source :data-srcset="smallImg.webp" media="(max-width: 479px)" type="image/webp"  />
+                <source :data-srcset="smallImg.webp" media="(max-width: 479px)" type="image/webp" />
                 <source :data-srcset="smallImg.orig" media="(max-width: 479px)" />
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
             </v-picture>
@@ -29,11 +29,17 @@
         </div>
         <div class="catalog-product-list-card__body" v-once>
             <div class="catalog-product-list-card__prices">
-                <price class="text-bold catalog-product-list-card__price" v-if="item.price" v-bind="item.price" />
+                <price
+                    class="text-bold catalog-product-list-card__price"
+                    v-if="item.price"
+                    v-bind="item.price"
+                    has-articles
+                />
                 <price
                     class="text-sm text-grey text-strike catalog-product-list-card__price"
                     v-if="item.oldPrice"
                     v-bind="item.oldPrice"
+                    has-articles
                 />
             </div>
             <div class="link--sm catalog-product-list-card__link">{{ item.name }}</div>

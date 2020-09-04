@@ -26,11 +26,12 @@
 
         <div class="catalog-product-card__body">
             <div class="catalog-product-card__prices">
-                <price class="text-bold catalog-product-card__price" v-if="price" v-bind="price" />
+                <price class="text-bold catalog-product-card__price" v-if="price" v-bind="price" has-articles />
                 <price
                     class="text-sm text-grey text-strike catalog-product-card__price"
                     v-if="oldPrice"
                     v-bind="oldPrice"
+                    has-articles
                 />
             </div>
 
