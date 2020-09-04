@@ -156,7 +156,7 @@
 
                         <div class="container container--tablet thank-you-view__panel-controls">
                             <v-button class="btn--outline thank-you-view__panel-btn" :to="{ name: 'Cart' }">
-                                Перейти в оформлению
+                                Перейти к оформлению
                             </v-button>
                         </div>
                     </info-panel>
