@@ -633,10 +633,6 @@ export function getFrequentCategories(node_code, max_depth) {
     });
 }
 
-export function getBadges() {
-    return $http.get('/v1/content/badges');
-}
-
 export function getBannersByCode(typeCode, random = false) {
     return $http.get('/v1/content/banners', {
         params: {

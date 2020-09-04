@@ -1,12 +1,5 @@
 import axios from 'axios';
-import {
-    getMenu,
-    getCategories,
-    getBannersByCode,
-    getFrequentCategories,
-    getBadges,
-    getRecentlyViewedProducts,
-} from '@api';
+import { getMenu, getCategories, getBannersByCode, getFrequentCategories, getRecentlyViewedProducts } from '@api';
 import { $logger, $locale } from '@services';
 import { storeErrorHandler } from '@util/store';
 
@@ -70,15 +63,6 @@ export default {
         commit(SET_MENU_OPEN, payload);
     },
 
-    async [FETCH_BADGES]({ commit }) {
-        try {
-            const { badges } = await getBadges();
-            commit(SET_BADGES, badges);
-        } catch (error) {
-            storeErrorHandler(FETCH_BADGES)(error);
-        }
-    },
-
     async [FETCH_BANNER]({ commit }) {
         try {
             const data = await getBannersByCode('header', true);
@@ -131,7 +115,6 @@ export default {
                 dispatch(FETCH_CATEGORIES),
                 dispatch(FETCH_BANNER),
                 dispatch(FETCH_FREQUENT_CATEGORIES),
-                dispatch(FETCH_BADGES),
             ]);
         } catch (error) {
             storeErrorHandler(FETCH_COMMON_DATA)(error);

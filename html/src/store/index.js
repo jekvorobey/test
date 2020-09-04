@@ -32,7 +32,6 @@ export const IS_MENU_OPEN = 'isMenuOpen';
 export const IS_CITY_CONFIRMATION_OPEN = 'isCityConfirmationOpen';
 export const SCROLL = 'scroll';
 
-export const BADGES = 'badges';
 export const CATEGORIES = 'categories';
 export const FREQUENT_CATEGORIES = 'frequentCategories';
 export const RECENTLY_VIEWED_PRODUCTS = 'recentlyViewedProducts';
@@ -62,7 +61,6 @@ export default function createStore(container) {
             [CATEGORIES]: [],
             [FREQUENT_CATEGORIES]: [],
             [RECENTLY_VIEWED_PRODUCTS]: [],
-            [BADGES]: [],
             [BANNER]: {},
 
             [LOCALE]: ruLocale.LOCALE,

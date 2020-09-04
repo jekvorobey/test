@@ -1,12 +1,12 @@
 <template>
     <router-link tag="a" class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }" :to="href">
         <div class="catalog-product-card__img">
-            <v-picture :key="image.id" v-if="image && image.id">
-                <source :data-srcset="bigImg.webp" type="image/webp" media="(min-width: 480px)" />
-                <source :data-srcset="bigImg.orig" media="(min-width: 480px)" />
-                <source :data-srcset="smallImg.webp" type="image/webp" media="(max-width: 479px)" />
-                <source :data-srcset="smallImg.orig" media="(max-width: 479px)" />
-                <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
+            <v-picture :key="image.id" v-if="images">
+                <source :data-srcset="images.desktop.webp" type="image/webp" media="(min-width: 480px)" />
+                <source :data-srcset="images.desktop.orig" media="(min-width: 480px)" />
+                <source :data-srcset="images.mobile.webp" type="image/webp" media="(max-width: 479px)" />
+                <source :data-srcset="images.mobile.orig" media="(max-width: 479px)" />
+                <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" />
             </v-picture>
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
 
@@ -18,6 +18,7 @@
                 >
                     Купить
                 </buy-button>
+
                 <v-link tag="button" class="catalog-product-card__controls-link" @click.prevent="onPreview">
                     Быстрый&nbsp;просмотр
                 </v-link>
@@ -50,12 +51,7 @@
         </div>
 
         <div class="catalog-product-card__tags">
-            <tag
-                class="catalog-product-card__tags-item"
-                v-for="badge in computedBadges"
-                :key="badge.id"
-                :text="badge.text"
-            />
+            <tag class="catalog-product-card__tags-item" v-for="badge in badges" :key="badge" :text="badge" />
         </div>
 
         <favorites-button
@@ -79,9 +75,7 @@ import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 
-import { mapGetters, mapActions, mapState } from 'vuex';
-import { BADGES_MAP } from '@store/getters';
-
+import { mapGetters } from 'vuex';
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
@@ -181,43 +175,40 @@ export default {
     },
 
     computed: {
-        ...mapGetters([BADGES_MAP]),
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
 
-        bigImg() {
-            return {
-                webp: `${generatePictureSourcePath(
-                    380,
-                    380,
-                    this.image.id,
-                    fileExtension.image.WEBP
-                )}, ${generatePictureSourcePath(760, 760, this.image.id, fileExtension.image.WEBP)} 2x`,
-                orig: `${generatePictureSourcePath(380, 380, this.image.id)}, ${generatePictureSourcePath(
-                    760,
-                    760,
-                    this.image.id
-                )} 2x`,
-            };
-        },
-
-        smallImg() {
-            return {
-                webp: `${generatePictureSourcePath(
-                    230,
-                    230,
-                    this.image.id,
-                    fileExtension.image.WEBP
-                )} 1x, ${generatePictureSourcePath(460, 460, this.image.id, fileExtension.image.WEBP)} 2x`,
-                orig: `${generatePictureSourcePath(230, 230, this.image.id)}, ${generatePictureSourcePath(
-                    460,
-                    460,
-                    this.image.id
-                )} 2x`,
-            };
-        },
-
-        defaultImg() {
-            return generatePictureSourcePath(760, 760, this.image.id);
+        images() {
+            const { image } = this;
+            if (image && image.id)
+                return {
+                    desktop: {
+                        webp: `${generatePictureSourcePath(
+                            380,
+                            380,
+                            image.id,
+                            fileExtension.image.WEBP
+                        )}, ${generatePictureSourcePath(760, 760, image.id, fileExtension.image.WEBP)} 2x`,
+                        orig: `${generatePictureSourcePath(380, 380, image.id)}, ${generatePictureSourcePath(
+                            760,
+                            760,
+                            image.id
+                        )} 2x`,
+                    },
+                    mobile: {
+                        webp: `${generatePictureSourcePath(
+                            230,
+                            230,
+                            image.id,
+                            fileExtension.image.WEBP
+                        )} 1x, ${generatePictureSourcePath(460, 460, image.id, fileExtension.image.WEBP)} 2x`,
+                        orig: `${generatePictureSourcePath(230, 230, image.id)}, ${generatePictureSourcePath(
+                            460,
+                            460,
+                            image.id
+                        )} 2x`,
+                    },
+                    default: generatePictureSourcePath(760, 760, image.id),
+                };
         },
 
         inFavorites() {
@@ -226,15 +217,6 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
-        },
-
-        computedBadges() {
-            const { badges = [], badgesMap } = this;
-
-            const productBadges = badges.filter(code => !!badgesMap[code]).map(code => badgesMap[code]);
-            return productBadges.sort((a, b) => {
-                return a.order_num - b.order_num;
-            });
         },
     },
 
@@ -249,10 +231,6 @@ export default {
 
         onPreview() {
             this.$emit('preview', { id: this.productId, type: this.type });
-        },
-
-        generateSourcePath(x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext);
         },
     },
 };

@@ -5,16 +5,17 @@
         :class="{ 'catalog-product-list-card--small': isSmall }"
         :to="href"
     >
-        <div class="catalog-product-list-card__img" v-once>
-            <v-picture v-if="item.image && item.image.id">
-                <source :data-srcset="bigImg.webp" media="(min-width: 480px)" type="image/webp" />
-                <source :data-srcset="bigImg.orig" media="(min-width: 480px)" />
-                <source :data-srcset="smallImg.webp" media="(max-width: 479px)" type="image/webp" />
-                <source :data-srcset="smallImg.orig" media="(max-width: 479px)" />
-                <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
+        <div class="catalog-product-list-card__img">
+            <v-picture :key="item.image.id" v-if="images">
+                <source :data-srcset="images.desktop.webp" type="image/webp" media="(min-width: 480px)" />
+                <source :data-srcset="images.desktop.orig" media="(min-width: 480px)" />
+                <source :data-srcset="images.mobile.webp" type="image/webp" media="(max-width: 479px)" />
+                <source :data-srcset="images.mobile.orig" media="(max-width: 479px)" />
+                <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" />
             </v-picture>
             <v-svg v-else id="catalog-product-list-card-empty" name="logo" width="48" height="48" />
-            <div class="catalog-product-list-card__controls">
+
+            <div class="catalog-product-list-card__controls" v-once>
                 <buy-button
                     v-if="showBuyBtn && !isTablet"
                     class="btn--outline catalog-product-list-card__controls-btn"
@@ -27,6 +28,7 @@
                 </v-link>
             </div>
         </div>
+
         <div class="catalog-product-list-card__body" v-once>
             <div class="catalog-product-list-card__prices">
                 <price
@@ -42,7 +44,11 @@
                     has-articles
                 />
             </div>
-            <div class="link--sm catalog-product-list-card__link">{{ item.name }}</div>
+
+            <div class="link--sm catalog-product-list-card__link">
+                {{ item.name }}
+            </div>
+
             <div class="catalog-product-list-card__rating" v-once>
                 <span
                     v-for="number in 5"
@@ -52,13 +58,9 @@
                 />
             </div>
         </div>
+
         <div class="catalog-product-list-card__tags" v-once>
-            <tag
-                class="catalog-product-list-card__tags-item"
-                v-for="badge in computedBadges"
-                :key="badge.id"
-                :text="badge.text"
-            />
+            <tag class="catalog-product-list-card__tags-item" v-for="badge in item.badges" :key="badge" :text="badge" />
         </div>
 
         <favorites-button
@@ -82,7 +84,6 @@ import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 
 import { mapGetters } from 'vuex';
-import { BADGES_MAP } from '@store/getters';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
@@ -140,21 +141,10 @@ export default {
     },
 
     computed: {
-        ...mapGetters([BADGES_MAP]),
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
 
         inFavorites() {
             return this[IS_IN_FAVORITES](this.item.productId);
-        },
-
-        computedBadges() {
-            const { item = {}, badgesMap } = this;
-            const { badges = [] } = item;
-
-            const productBadges = badges.filter(code => !!badgesMap[code]).map(code => badgesMap[code]);
-            return productBadges.sort((a, b) => {
-                return a.order_num - b.order_num;
-            });
         },
 
         showBuyBtn() {
@@ -162,37 +152,38 @@ export default {
             return qty > 0;
         },
 
-        bigImg() {
+        images() {
             const { image } = this.item;
-            return {
-                webp: `${generatePictureSourcePath(
-                    380,
-                    380,
-                    image.id,
-                    fileExtension.image.WEBP
-                )}, ${generatePictureSourcePath(760, 760, image.id, fileExtension.image.WEBP)} 2x`,
-                orig: `${generatePictureSourcePath(380, 380, image.id)},
-                ${generatePictureSourcePath(760, 760, image.id)} 2x`,
-            };
-        },
-
-        smallImg() {
-            const { image } = this.item;
-            return {
-                webp: `${generatePictureSourcePath(
-                    230,
-                    230,
-                    image.id,
-                    fileExtension.image.WEBP
-                )}, ${generatePictureSourcePath(460, 460, image.id, fileExtension.image.WEBP)} 2x`,
-                orig: `${generatePictureSourcePath(230, 230, image.id)},
-                ${generatePictureSourcePath(460, 460, image.id)} 2x`,
-            };
-        },
-
-        defaultImg() {
-            const { image } = this.item;
-            return generatePictureSourcePath(760, 760, image.id);
+            if (image && image.id)
+                return {
+                    desktop: {
+                        webp: `${generatePictureSourcePath(
+                            380,
+                            380,
+                            image.id,
+                            fileExtension.image.WEBP
+                        )}, ${generatePictureSourcePath(760, 760, image.id, fileExtension.image.WEBP)} 2x`,
+                        orig: `${generatePictureSourcePath(380, 380, image.id)}, ${generatePictureSourcePath(
+                            760,
+                            760,
+                            image.id
+                        )} 2x`,
+                    },
+                    mobile: {
+                        webp: `${generatePictureSourcePath(
+                            230,
+                            230,
+                            image.id,
+                            fileExtension.image.WEBP
+                        )} 1x, ${generatePictureSourcePath(460, 460, image.id, fileExtension.image.WEBP)} 2x`,
+                        orig: `${generatePictureSourcePath(230, 230, image.id)}, ${generatePictureSourcePath(
+                            460,
+                            460,
+                            image.id
+                        )} 2x`,
+                    },
+                    default: generatePictureSourcePath(760, 760, image.id),
+                };
         },
 
         href() {

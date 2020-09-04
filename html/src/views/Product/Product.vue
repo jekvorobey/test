@@ -103,9 +103,9 @@
                     <div class="product-view__header-detail-tags">
                         <tag
                             class="product-view__header-detail-tags-item"
-                            v-for="badge in computedBadges"
-                            :key="badge.id"
-                            :text="badge.text"
+                            v-for="badge in badges"
+                            :key="badge"
+                            :text="badge"
                         />
                     </div>
                 </v-sticky>
@@ -700,7 +700,7 @@ import MapModal, { NAME as MAP_MODAL_NAME } from '@components/MapModal/MapModal.
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, RECENTLY_VIEWED_PRODUCTS } from '@store';
-import { BADGES_MAP } from '@store/getters';
+import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
 
 import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
 import { SET_SESSION_REFERRAL_CODE } from '@store/modules/Auth/actions';
@@ -755,7 +755,6 @@ import '@images/sprites/logo.svg';
 import '@images/sprites/home.svg';
 
 import './Product.css';
-import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
 
 const productGalleryOptions = {
     spaceBetween: 8,
@@ -904,7 +903,6 @@ export default {
 
     computed: {
         ...mapState([SCROLL, RECENTLY_VIEWED_PRODUCTS]),
-        ...mapGetters([BADGES_MAP]),
 
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
@@ -946,14 +944,10 @@ export default {
             });
         },
 
-        computedBadges() {
-            const { product, badgesMap } = this;
-            const { badges = [] } = product || {};
-
-            const productBadges = badges.filter(code => !!badgesMap[code]).map(code => badgesMap[code]);
-            return productBadges.sort((a, b) => {
-                return a.order_num - b.order_num;
-            });
+        badges() {
+            const { product } = this;
+            const { badges } = product || {};
+            return badges || [];
         },
 
         howToList() {
