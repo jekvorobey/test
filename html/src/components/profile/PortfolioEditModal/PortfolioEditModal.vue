@@ -1,5 +1,5 @@
 <template>
-    <general-modal v-if="isOpen" class="portfolio-edit-modal" :header="header" @close="onClose" :is-mobile="isTablet">
+    <general-modal class="portfolio-edit-modal" v-if="isOpen" :header="header" @close="onClose" :is-mobile="isTablet">
         <template v-slot:content>
             <div class="containet container--tablet portfolio-edit-modal__section">
                 <h4 class="portfolio-edit-modal__hl">{{ header }}</h4>
@@ -35,29 +35,40 @@
                             placeholder="Введите описание"
                             :show-error="false"
                             :error="nameError(v.name)"
-                            >{{ index == 0 ? 'Описание ссылки' : null }}</v-input
                         >
+                            {{ index == 0 ? 'Описание ссылки' : null }}
+                        </v-input>
                     </li>
                 </ul>
 
-                <v-button class="btn--outline portfolio-edit-modal__list-btn" @click="onAddPortfolio"
-                    >Добавить поле</v-button
-                >
+                <v-button class="btn--outline portfolio-edit-modal__list-btn" @click="onAddPortfolio">
+                    Добавить поле
+                </v-button>
             </div>
             <div class="portfolio-edit-modal__section">
                 <p class="text-grey">Файлы форматов jpeg, png, pdf, doc, docx, не более 5Mb каждый</p>
                 <v-file
                     class="portfolio-edit-modal__files"
-                    @change="onFilesChanged"
                     :accepted-types="fileAcceptedTypes"
                     :max-file-size="5242880"
+                    @change="onFilesChanged"
+                    @error="onHandleError"
                 />
+                <div class="status-color-error">
+                    <transition name="slide-in-bottom">
+                        <span v-if="error" key="error">{{ error }}</span>
+                    </transition>
+                </div>
             </div>
 
             <div class="portfolio-edit-modal__submit">
-                <v-button class="portfolio-edit-modal__submit-btn" @click="onSubmit" :disabled="isDisabled || inProcess"
-                    >Отправить</v-button
+                <v-button
+                    class="portfolio-edit-modal__submit-btn"
+                    @click="onSubmit"
+                    :disabled="isDisabled || inProcess"
                 >
+                    Отправить
+                </v-button>
             </div>
         </template>
     </general-modal>
@@ -125,6 +136,7 @@ export default {
     data() {
         const index = 0;
         return {
+            error: null,
             inProcess: false,
             editablePortfolio: [{ id: index, name: null, link: null }],
             files: [],
@@ -187,6 +199,11 @@ export default {
 
         onFilesChanged(files) {
             this.files = files || [];
+        },
+
+        onHandleError(files) {
+            this.error = 'Не удалось загрузить файлы. Проверьте размер и формат файлов.';
+            setTimeout(() => (this.error = null), 5000);
         },
 
         async onSubmit() {

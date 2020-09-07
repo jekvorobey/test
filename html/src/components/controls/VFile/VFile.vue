@@ -104,7 +104,6 @@ export default {
                 this.acceptedTypes && (this.acceptedTypes.length === 0 || this.acceptedTypes.includes(file.type));
 
             const isAcceptedSize = this.maxFileSize && file.size < this.maxFileSize;
-
             return isAcceptedType && isAcceptedSize;
         },
 
@@ -113,11 +112,16 @@ export default {
         },
 
         handleFiles(fs) {
-            const buffer = [...fs]
-                .slice(0, this.maxFiles - this.files.length)
-                .filter(f => !this.files.some(fl => fl.name === f.name) && this.isAccepted(f));
+            const notAccepted = [];
+            const buffer = [...fs].slice(0, this.maxFiles - this.files.length).filter(f => {
+                const accepted = !this.files.some(fl => fl.name === f.name) && this.isAccepted(f);
+                if (!accepted) notAccepted.push(f);
+                return accepted;
+            });
+
             this.files.push(...buffer);
             this.inputId += 1;
+            if (notAccepted.length > 0) this.$emit('error', notAccepted);
         },
 
         handleDrop(e) {
