@@ -20,6 +20,7 @@
                             {{ index == 0 ? 'Ссылка' : null }}
                             <template v-slot:after>
                                 <button
+                                    v-if="editablePortfolio && editablePortfolio.length > 1"
                                     class="portfolio-edit-modal__list-row-btn"
                                     type="button"
                                     @click.stop="onDeletePortfolio(index)"
