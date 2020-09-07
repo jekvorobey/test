@@ -2,8 +2,7 @@
     <general-popup-panel
         popover-class="tooltip--white favorites-panel"
         header="Избранное"
-        trigger="manual"
-        open
+        trigger="hover"
         placement="bottom-end"
         @applyShow="applyShow"
         @applyHide="applyHide"
