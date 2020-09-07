@@ -1,6 +1,6 @@
 <template>
-    <v-check class="color-check-box" v-bind="$attrs" v-on="$listeners">
-        <div class="color-check-box__square" :style="innerStyle" :title="name" />
+    <v-check class="color-check-box" v-bind="$attrs" v-on="$listeners" :name="name">
+        <div class="color-check-box__square" :style="innerStyle" :title="title" />
     </v-check>
 </template>
 
@@ -17,8 +17,13 @@ export default {
     },
 
     props: {
+        title: {
+            type: String,
+        },
+
         name: {
             type: String,
+            default: 'color',
         },
 
         color: {
