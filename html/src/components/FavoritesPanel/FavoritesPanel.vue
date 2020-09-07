@@ -2,7 +2,8 @@
     <general-popup-panel
         popover-class="tooltip--white favorites-panel"
         header="Избранное"
-        trigger="hover"
+        trigger="manual"
+        open
         placement="bottom-end"
         @applyShow="applyShow"
         @applyHide="applyHide"
@@ -14,7 +15,6 @@
                     class="favorites-panel__list-item"
                     v-for="product in favoritesList"
                     :key="product.id"
-                    :product-id="product.id"
                     :type="product.type"
                     :name="product.name"
                     :stock="product.stock"
@@ -22,10 +22,10 @@
                     :price="product.price"
                     :old-price="product.oldPrice"
                     :href="generateItemProductUrl(product)"
-                    :insideBasket="product.insideBasket"
-                    :isLoadButton="product.isLoadButton"
+                    :inside-basket="product.insideBasket"
+                    :is-load-button="product.isLoadButton"
                     @add-item="onAddToCart(product)"
-                    isFavorite
+                    is-favorite
                 />
                 <v-spinner :show="isLoadMore" class="favorites-panel__preloader" width="30" height="30" />
             </ul>

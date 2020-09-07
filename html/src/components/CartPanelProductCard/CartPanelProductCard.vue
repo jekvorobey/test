@@ -17,7 +17,7 @@
             <v-svg v-else id="cart-panel-product-card-empty" name="logo" width="48" height="48" />
         </div>
 
-        <div class="cart-panel-product-card__body">
+        <div class="cart-panel-product-card__body" :class="{ 'cart-panel-product-card__body--favorite': isFavorite }">
             <v-link class="cart-panel-product-card__body-name" :to="href">
                 <div>{{ name }}</div>
                 <div v-if="note">({{ note }})</div>

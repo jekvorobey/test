@@ -52,30 +52,38 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-
-            .price {
-                text-align: right;
-            }
-
-            .cart-panel-product-card--favorites & {
-                justify-content: start;
-            }
         }
 
         &-price {
             white-space: nowrap;
             font-size: 16px;
             line-height: 24px;
+            text-align: right;
 
             &--old {
                 font-size: 14px;
                 line-height: 24px;
             }
         }
+
+        &--favorite &-name {
+            padding-right: calc(var(--gs) * 2);
+            margin-bottom: var(--gs);
+        }
+
+        &--favorite &-prices {
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+
+        &--favorite &-price {
+            &--old {
+                margin-left: var(--gs);
+            }
+        }
     }
 
     &__btn {
-        margin-left: calc(var(--gs) * 4);
         &--loader {
             &::before {
                 content: svg-load('preloader.svg');

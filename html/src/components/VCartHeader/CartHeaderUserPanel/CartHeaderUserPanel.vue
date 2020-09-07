@@ -21,7 +21,12 @@
                     </button>
                 </profile-navigation-panel>
 
-                <favorites-panel @fetchFavorites="fetchFavorites" :allFavorites="allFavorites" :isLoadMore="isLoadMore">
+                <favorites-panel
+                    v-if="!hideFavorites"
+                    :all-favorites="allFavorites"
+                    :is-load-more="isLoadMore"
+                    @fetchFavorites="fetchFavorites"
+                >
                     <button class="cart-header-user-panel__btn cart-header-user-panel__favorite" @click="onToFavorites">
                         <v-svg :name="favoriteItemsIcon" width="24" height="24" />
                         <span class="cart-header-user-panel__btn-count" v-if="hasFavoriteItems">
@@ -71,6 +76,11 @@ export default {
 
     props: {
         hideLink: {
+            type: Boolean,
+            default: false,
+        },
+
+        hideFavorites: {
             type: Boolean,
             default: false,
         },

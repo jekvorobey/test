@@ -1,6 +1,6 @@
 <template>
     <section class="section checkout-view">
-        <v-cart-header />
+        <v-cart-header hide-favorites />
         <div class="container">
             <div class="checkout-view__header">
                 <h1 class="checkout-view__header-hl">

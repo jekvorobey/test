@@ -11,7 +11,11 @@
                     {{ $t('header.middle.professionals') }}
                 </header-logo-panel>
 
-                <cart-header-user-panel class="v-cart-header__user-panel" :hide-link="hideCity" />
+                <cart-header-user-panel
+                    class="v-cart-header__user-panel"
+                    :hide-link="hideCity"
+                    :hide-favorites="hideFavorites"
+                />
             </div>
         </div>
 
@@ -73,6 +77,11 @@ export default {
 
     props: {
         hideCity: {
+            type: Boolean,
+            default: false,
+        },
+
+        hideFavorites: {
             type: Boolean,
             default: false,
         },
