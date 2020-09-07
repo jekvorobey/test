@@ -31,11 +31,7 @@
                         :value="deliveryMethod"
                     />
 
-                    <info-row
-                        class="order-details-view__details-row"
-                        name="Дата заказа"
-                        :value="formatDate(order.created_at)"
-                    />
+                    <info-row class="order-details-view__details-row" name="Дата заказа" :value="createDate" />
 
                     <info-row
                         v-if="deliveryDate"
@@ -158,12 +154,10 @@
                             </div>
                         </info-row>
                     </template>
-
-                    <info-row class="order-details-view__panel-row" name="Адрес доставки" :value="delivery.address" />
                 </template>
 
                 <info-row
-                    v-if="!!delivery.packageCount"
+                    v-if="delivery.packageCount > 0"
                     class="order-details-view__panel-row"
                     name="Количество коробок"
                     :value="delivery.packageCount"
@@ -369,7 +363,7 @@ export default {
         },
 
         canPay() {
-            const { payment_status = 3, payments = [] } = this[ORDER];
+            const { payment_status = 3, payments = [] } = this[ORDER] || {};
             return payment_status === orderPaymentStatus.NOT_PAID && payments.length !== 0;
         },
 
@@ -378,7 +372,7 @@ export default {
         },
 
         deliveryMethod() {
-            const deliveries = this[DELIVERIES];
+            const deliveries = this[DELIVERIES] || [];
             if (deliveries.length === 1) {
                 const { delivery_method } = deliveries[0];
                 return this.formatDeliveryMethod(delivery_method);
@@ -386,7 +380,7 @@ export default {
         },
 
         deliveryMethodId() {
-            const deliveries = this[DELIVERIES];
+            const deliveries = this[DELIVERIES] || [];
             if (deliveries.length === 1) {
                 const { delivery_method } = deliveries[0];
                 return delivery_method;
@@ -394,7 +388,7 @@ export default {
         },
 
         deliveryDate() {
-            const deliveries = this[DELIVERIES];
+            const deliveries = this[DELIVERIES] || [];
             if (deliveries.length === 1) {
                 const { delivery_at } = deliveries[0];
                 return this.formatDate(delivery_at);
@@ -402,17 +396,22 @@ export default {
         },
 
         deliveryAddress() {
-            const deliveries = this[DELIVERIES];
-            if (deliveries.length === 1) return this.formatAddress(deliveries[0]);
+            const deliveries = this[DELIVERIES] || [];
+            return this.formatAddress(deliveries[0]);
         },
 
         deliveryPoint() {
-            const deliveries = this[DELIVERIES];
+            const deliveries = this[DELIVERIES] || [];
             if (deliveries.length === 1) return deliveries[0].point;
         },
 
+        createDate() {
+            const { created_at } = this[ORDER] || {};
+            return this.formatDate(created_at);
+        },
+
         orderStatus() {
-            const { status } = this[ORDER];
+            const { status } = this[ORDER] || {};
             return this.$t(`orderStatus.${status}`);
         },
 
