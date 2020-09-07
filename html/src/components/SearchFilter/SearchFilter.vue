@@ -86,13 +86,15 @@ export default {
 
         onSearch() {
             if (!this.searchString) return;
-            this[SET_SEARCH](false);
-            this.$router.push({
-                path: `/${productGroupTypes.SEARCH}`,
-                query: {
-                    search_string: this.searchString,
+            this.$router.push(
+                {
+                    path: `/${productGroupTypes.SEARCH}`,
+                    query: {
+                        search_string: this.searchString,
+                    },
                 },
-            });
+                this.onClearClick
+            );
         },
 
         onSearchOpen() {
