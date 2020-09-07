@@ -36,27 +36,15 @@
                             </div>
                             <div
                                 class="product-view__header-gallery-item"
-                                v-for="image in productImages.media"
+                                v-for="image in currentGalleryImages"
                                 :key="image.id"
                             >
                                 <v-picture v-if="image && image.id">
-                                    <source
-                                        :data-srcset="image.desktop.webp"
-                                        type="image/webp"
-                                        media="(min-width: 480px)"
-                                    />
-                                    <source :data-srcset="image.desktop.orig" media="(min-width: 480px)" />
-                                    <source
-                                        :data-srcset="image.tablet.webp"
-                                        type="image/webp"
-                                        media="(max-width: 479px)"
-                                    />
-                                    <source :data-srcset="image.tablet.orig" media="(max-width: 479px)" />
-                                    <img
-                                        class="blur-up lazyload v-picture__img"
-                                        :data-src="image.desktop.orig"
-                                        alt=""
-                                    />
+                                    <source :srcset="image.desktop.webp" type="image/webp" media="(min-width: 480px)" />
+                                    <source :srcset="image.desktop.orig" media="(min-width: 480px)" />
+                                    <source :srcset="image.tablet.webp" type="image/webp" media="(max-width: 479px)" />
+                                    <source :srcset="image.tablet.orig" media="(max-width: 479px)" />
+                                    <img class="v-picture__img" :src="image.desktop.orig" alt="" />
                                 </v-picture>
                             </div>
                         </div>
@@ -150,6 +138,8 @@
                                     :selected="option.isSelected"
                                     :disabled="option.isDisabled"
                                     @click="onSelectOption(char.code, option.value)"
+                                    @mouseover="onShowOption(char.code, option.value)"
+                                    @mouseleave="onHideOption"
                                 />
                             </div>
                         </product-option-panel>
@@ -841,6 +831,10 @@ const instagramOptions = {
     },
 };
 
+const gallerySize = 800;
+const desktopSize = 600;
+const tabletSize = 400;
+
 export default {
     name: 'product',
 
@@ -897,7 +891,7 @@ export default {
         return {
             isPriceVisible: true,
             isPanelSticky: true,
-            btnLink: 'https://www.instagram.com/bessovestnotalantlivy/',
+            optionImage: null,
         };
     },
 
@@ -1030,10 +1024,6 @@ export default {
             }
 
             if (Array.isArray(media) && media.length > 0) {
-                const gallerySize = 800;
-                const desktopSize = 600;
-                const tabletSize = 400;
-
                 imageMap.media = media.map(image => prepareProductImage(image, desktopSize, tabletSize));
                 imageMap.gallery = media.map(image => prepareProductImage(image, gallerySize));
             } else {
@@ -1042,6 +1032,14 @@ export default {
             }
 
             return imageMap;
+        },
+
+        currentGalleryImages() {
+            const { productImages, optionImage } = this;
+            const { media } = productImages;
+
+            const mainImage = optionImage && prepareProductImage(optionImage, desktopSize, tabletSize);
+            return mainImage ? [mainImage, ...media.slice(1)] : media;
         },
 
         maxDescriptionLines() {
@@ -1252,10 +1250,20 @@ export default {
 
         onSelectOption(charCode, optValue) {
             const { categoryCode } = this;
-            const nextCombination = this[GET_NEXT_COMBINATION](charCode, optValue);
+            const { code } = this[GET_NEXT_COMBINATION](charCode, optValue);
             this.$router.push({
-                path: generateProductUrl(categoryCode, nextCombination.code),
+                path: generateProductUrl(categoryCode, code),
             });
+        },
+
+        onShowOption(charCode, optValue) {
+            const { categoryCode } = this;
+            const { image } = this[GET_NEXT_COMBINATION](charCode, optValue);
+            this.optionImage = image;
+        },
+
+        onHideOption() {
+            this.optionImage = null;
         },
 
         onPriceVisibilityChanged(isVisible) {
