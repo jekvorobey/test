@@ -606,32 +606,54 @@
             </div>
         </section>
 
-        <!-- <section
-            v-if="masterclassBanners && masterclassBanners.length > 0"
-            class="section master-class-view__masterclass"
+        <section
+            v-if="recommendations && recommendations.length > 0"
+            class="section master-class-view__recommendations"
         >
-            <div class="container master-class-view__masterclass-container">
-                <h2 class="master-class-view__section-hl master-class-view__masterclass-hl">
+            <div class="container master-class-view__recommendations-container">
+                <h2 class="master-class-view__section-hl master-class-view__recommendations-hl">
                     Похожие мастер-классы
                 </h2>
-                <ul class="master-class-view__masterclass-list">
+                <ul class="master-class-view__recommendations-list">
                     <master-class-banner-card
-                        class="master-class-view__masterclass-item"
-                        v-for="item in masterclassBanners"
+                        class="master-class-view__recommendations-item"
+                        v-for="item in recommendations"
                         :key="item.id"
                         :name="item.name"
                         :image="item.image"
                         :price="item.price"
                         :author="item.author"
-                        :description="item.date"
-                        :to="generateMasterclassUrl(item.code)"
-                    />
+                        :description="item.dateTime"
+                        :to="item.url"
+                    >
+                        <template v-if="item.desktopImg">
+                            <source :data-srcset="item.desktopImg.webp" type="image/webp" media="(min-width: 1024px)" />
+                            <source :data-srcset="item.desktopImg.orig" media="(min-width: 1024px)" />
+                        </template>
+                        <template v-if="item.tabletImg">
+                            <source :data-srcset="item.tabletImg.webp" type="image/webp" media="(min-width: 768px)" />
+                            <source :data-srcset="item.tabletImg.orig" media="(min-width: 768px)" />
+                        </template>
+                        <template v-if="item.mobileImg">
+                            <source :data-srcset="item.mobileImg.webp" type="image/webp" media="(min-width: 320px)" />
+                            <source :data-srcset="item.mobileImg.orig" media="(min-width: 320px)" />
+                        </template>
+                        <img
+                            v-if="item.defaultImg"
+                            class="blur-up lazyload v-picture__img"
+                            :data-src="item.defaultImg"
+                            alt
+                        />
+                    </master-class-banner-card>
                 </ul>
-                <v-button class="btn--outline master-class-view__section-link master-class-view__masterclass-link">
+                <v-button
+                    class="btn--outline master-class-view__section-link master-class-view__recommendations-link"
+                    :to="{ name: 'CatalogMasterclasses' }"
+                >
                     {{ $t('product.showAll') }}
                 </v-button>
             </div>
-        </section> -->
+        </section>
 
         <section class="section master-class-view__section master-class-view__review">
             <div class="container">
@@ -729,7 +751,7 @@ import { saveToClipboard, getDate } from '@util';
 import { registerModuleIfNotExists } from '@util/store';
 import { generatePictureSourcePath, generateFileOriginalPath } from '@util/file';
 import { getInstagramUserNameFromUrl } from '@util/socials';
-import { generateAbsoluteMasterclassUrl } from '@util/catalog';
+import { generateAbsoluteMasterclassUrl, generateMasterclassUrl, prepareMasterclassSpeakers } from '@util/catalog';
 import { yaMapSettings, dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { breakpoints, fileExtension, modalName, mediaType } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
@@ -864,33 +886,6 @@ export default {
                 imageSize: [24, 24],
                 imageOffset: [0, 0],
             },
-
-            masterclassBanners: [
-                {
-                    id: 1,
-                    name: 'Свадебный стилист',
-                    date: '3 сентября (пт), 12:00',
-                    author: 'Владимир Перельман',
-                    image: profileMasterClassImg1,
-                    code: 'code1',
-                    price: {
-                        value: 5000,
-                        currency: 'RUB',
-                    },
-                },
-                {
-                    id: 2,
-                    name: 'Модные косы',
-                    date: '4 сентября (пт), 12:00',
-                    author: 'Владимир Перельман',
-                    image: profileMasterClassImg2,
-                    code: 'code2',
-                    price: {
-                        value: 6000,
-                        currency: 'RUB',
-                    },
-                },
-            ],
         };
     },
 
@@ -1118,6 +1113,31 @@ export default {
             });
         },
 
+        recommendations() {
+            const { recommendations = [] } = this[MASTERCLASS] || {};
+            return recommendations.map(i => {
+                const dateObj = getDate(`${i.nearestDate} ${i.nearestTimeFrom}`);
+                const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
+                const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
+                const dateTime = `${date} (${this.$t(`weekdays.short.${dateObj.getDay()}`)}), ${time}`;
+                const url = generateMasterclassUrl(i.code);
+                const author = prepareMasterclassSpeakers([i.speakers[0]]);
+
+                const defaultImg = i.image && generatePictureSourcePath(null, null, i.image.id);
+                const desktopImg = i.image && {
+                    webp: generatePictureSourcePath(null, null, i.image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(null, null, i.image.id),
+                };
+
+                const mobileImg = i.image && {
+                    webp: generatePictureSourcePath(425, 240, i.image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(425, 240, i.image.id),
+                };
+
+                return { ...i, url, author, dateTime, desktopImg, mobileImg, defaultImg };
+            });
+        },
+
         speakers() {
             const { speakers = [] } = this[MASTERCLASS] || {};
 
@@ -1272,8 +1292,7 @@ export default {
             params: { code },
         } = to;
 
-        this.debounce_fetchProduct(code);
-        next();
+        this.debounce_fetchProduct(code, next);
     },
 
     created() {
@@ -1281,7 +1300,7 @@ export default {
     },
 
     beforeMount() {
-        this.debounce_fetchProduct = _debounce(async code => {
+        this.debounce_fetchProduct = _debounce(async (code, next) => {
             try {
                 const { masterClassCode } = this;
 
@@ -1289,6 +1308,7 @@ export default {
                     this.$progress.start();
                     await this[FETCH_MASTERCLASS_DATA]({ code });
                     this.$progress.finish();
+                    next();
                 }
             } catch (error) {
                 this.$progress.fail();

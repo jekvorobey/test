@@ -22,7 +22,7 @@
 
         /* чинит padding-bottom: 100% в FireFox для распорки */
         @supports (-moz-user-select: none) {
-            margin-top: 30%%;
+            margin-top: 30%;
             padding-bottom: 0;
         }
     }

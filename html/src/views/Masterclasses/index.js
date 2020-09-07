@@ -1,4 +1,3 @@
-import { productGroupTypes } from '@enums/product';
 import registerModule from '@router/middleware/registerModule';
 
 /**
