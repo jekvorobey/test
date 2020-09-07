@@ -59,7 +59,7 @@
                         v-for="option in filter.items"
                         :id="`${filter.name}-${option.id}`"
                         :key="option.id"
-                        :name="option.name"
+                        :title="option.name"
                         :color="option.code"
                         :checked="filterSegments[filter.name] && filterSegments[filter.name][option.code]"
                         :disabled="!!option.disabled"
