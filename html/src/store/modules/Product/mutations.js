@@ -70,8 +70,9 @@ export default {
         state.banners = payload;
     },
 
-    [SET_FEATURED_PRODUCTS](state, payload = []) {
-        state.featuredProducts = payload;
+    [SET_FEATURED_PRODUCTS](state, payload = {}) {
+        const { items = [], range = 0 } = payload;
+        state.featuredProducts = { items: items.slice(0, 6), range: range || 0 };
     },
 
     [SET_PRODUCT_BUNDLES](state, payload = []) {

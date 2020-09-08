@@ -583,8 +583,10 @@
             v-if="recentlyViewed && recentlyViewed.length > 0"
         >
             <div class="container product-view__history-container">
-                <h2 class="product-view__section-hl">{{ $t('product.title.history') }}</h2>
-                <div class="product-view__history-grid">
+                <h2 class="container container--tablet-lg product-view__section-hl product-view__history-hl">
+                    {{ $t('product.title.history') }}
+                </h2>
+                <div v-if="!isTabletLg" class="product-view__history-grid">
                     <recently-viewed-product-card
                         v-for="item in recentlyViewed"
                         :key="item.id"
@@ -595,6 +597,18 @@
                         :image="item.image"
                     />
                 </div>
+                <v-slider v-else class="product-view__history-slider" name="history" :options="sliderOptions">
+                    <recently-viewed-product-card
+                        class="swiper-slide product-view__history-card"
+                        v-for="item in recentlyViewed"
+                        :key="item.id"
+                        :offer-id="item.id"
+                        :product-id="item.productId"
+                        :name="item.name"
+                        :href="item.url"
+                        :image="item.image"
+                    />
+                </v-slider>
             </div>
         </section>
 
@@ -800,33 +814,6 @@ const sliderOptions = {
             spaceBetween: 12,
             slidesOffsetBefore: 0,
             slidesOffsetAfter: 0,
-        },
-    },
-};
-
-const instagramOptions = {
-    spaceBetween: 24,
-    slidesOffsetBefore: 24,
-    slidesOffsetAfter: 24,
-    slidesPerView: 3.5,
-    grabCursor: true,
-
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-    },
-
-    pagination: {
-        el: '.swiper-pagination',
-        type: 'bullets',
-    },
-
-    breakpoints: {
-        [breakpoints.tablet - 1]: {
-            slidesPerView: 1.5,
-            spaceBetween: 16,
-            slidesOffsetBefore: 16,
-            slidesOffsetAfter: 16,
         },
     },
 };
@@ -1057,10 +1044,6 @@ export default {
 
         sliderOptions() {
             return sliderOptions;
-        },
-
-        instagramOptions() {
-            return instagramOptions;
         },
 
         pricePanelAnimation() {

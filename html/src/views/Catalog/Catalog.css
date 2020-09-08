@@ -394,8 +394,18 @@
     }
 
     &__history {
-        @media (--tablet-lg) {
-            display: none;
+        &-container {
+            @media (--tablet-lg) {
+                padding: 0;
+            }
+        }
+
+        &-hl {
+            margin-bottom: calc(var(--gs) * 2);
+
+            @media (--tablet) {
+                text-align: center;
+            }
         }
 
         &-grid {
@@ -408,6 +418,16 @@
                 grid-template-columns: repeat(6, 1fr);
                 grid-template-rows: 1fr;
                 grid-gap: var(--gs);
+            }
+        }
+
+        &-slider {
+            padding-bottom: calc(var(--gs) * 6);
+
+            .v-slider__controls {
+                bottom: calc(var(--gs) * 3);
+                left: 50%;
+                transform: translateX(-50%);
             }
         }
     }
