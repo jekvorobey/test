@@ -5,13 +5,17 @@
                 <h3 class="city-selection-modal__hl">{{ header }}</h3>
                 <v-input
                     class="city-selection-modal__input"
-                    @input="debounce_onCityInputChange"
+                    :class="{ 'city-selection-modal__input--empty': !focus && !searchString }"
+                    v-model="searchString"
+                    @focus="focus = true"
+                    @blur="focus = false"
                     placeholder="Ваш город"
                 >
                     <template v-slot:after>
                         <v-svg name="search-middle" width="24" height="24" />
                     </template>
                 </v-input>
+
                 <div class="city-selection-modal__wrapper">
                     <ul class="city-selection-modal__list">
                         <li
@@ -77,6 +81,8 @@ export default {
 
     data() {
         return {
+            focus: false,
+            searchString: null,
             suggestions: [],
         };
     },
@@ -94,6 +100,12 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+    },
+
+    watch: {
+        searchString(value) {
+            this.debounce_onCityInputChange(value);
         },
     },
 

@@ -40,8 +40,6 @@
             padding: calc(var(--gs) * 2);
         }
 
-        
-
         &:after,
         &:before {
             content: '';
@@ -62,13 +60,17 @@
             top: 105px;
             background: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
 
-            @media(--tablet) {
+            @media (--tablet) {
                 top: 65px;
             }
         }
     }
 
     &__input {
+        &--empty {
+            fill: var(--cl-grey);
+        }
+
         input[type='text'] {
             padding-right: calc(var(--gs) * 5);
         }
@@ -85,7 +87,6 @@
     &__wrapper {
         position: relative;
         overflow: auto;
-
     }
 
     &__list {
@@ -95,7 +96,7 @@
         &-item {
             padding: 1px;
             & + & {
-                margin-top: calc(var(--gs) * .5);
+                margin-top: calc(var(--gs) * 0.5);
             }
         }
 
