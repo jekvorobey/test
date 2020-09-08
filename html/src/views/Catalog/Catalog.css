@@ -120,6 +120,7 @@
                 display: flex;
                 flex-wrap: wrap;
                 align-items: baseline;
+                flex: 1;
 
                 @media (--tablet) {
                     flex-direction: column;
