@@ -22,10 +22,10 @@
 
         <section class="section">
             <div class="container university-view__main">
-                <h2 class="university-view__main-h2">
+                <h1 class="university-view__main-h1">
                     Профессиональный образовательный проект с инновационным <br />
                     подходом для мастеров бьюти-индустрии
-                </h2>
+                </h1>
 
                 <div class="university-view__main-row">
                     <v-picture class="university-view__main-row--img">
@@ -35,7 +35,7 @@
                     </v-picture>
 
                     <div class="university-view__main-row--content">
-                        <h1 class="university-view__main-row--content-h1">Университет Бессовестно Талантливый</h1>
+                        <h2 class="university-view__main-row-h2">Университет Бессовестно Талантливый</h2>
                         <p class="university-view__main-content-row--text">
                             Образовательный проект для мастеров бьюти-индустрии, цель которого — поддерживать
                             профессионалов в стремлении становиться сильнее в своем ремесле. Наша команда находит лучшие
@@ -54,7 +54,7 @@
             <div class="container university-view__main">
                 <div class="university-view__main-row university-view__main-row--reverse">
                     <div class="university-view__main-row--content">
-                        <h1 class="university-view__main-row--content-h1">Коллаборации</h1>
+                        <h2 class="university-view__main-row-h2">Коллаборации</h2>
                         <p class="university-view__main-content-row--text">
                             Мы открыты для сотрудничества и совместных проектов с лучшими профессионалами индустрии
                             России и мира. В качестве платформы для своих мастер-классов Университет Бессовестно

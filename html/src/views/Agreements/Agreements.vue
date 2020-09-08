@@ -1,6 +1,7 @@
 <template>
     <component :is="renderComponent" />
 </template>
+
 <script>
 import PublicOffer from './PublicOffer.vue';
 import PersonalPolicy from './PersonalPolicy.vue';

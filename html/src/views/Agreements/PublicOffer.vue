@@ -1,8 +1,9 @@
 <template>
     <div class="container agreements-block">
-        <h2 class="agreements-block__title">
+        <h1 class="agreements-block__title">
             Публичная оферта
-        </h2>
+        </h1>
+
         <div class="agreements-block__content">
             <strong>Термины и определения</strong>
 

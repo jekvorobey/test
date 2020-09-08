@@ -1,8 +1,9 @@
 <template>
     <div class="container info-pages-block">
-        <h2 class="info-pages-block__title">
+        <h1 class="info-pages-block__title">
             Вакансии
-        </h2>
+        </h1>
+
         <div class="info-pages-block__content">
             <p>
                 Интересует работа в компании Бессовестно Талантливый? Присылай резюме на

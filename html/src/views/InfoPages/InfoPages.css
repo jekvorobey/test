@@ -5,6 +5,21 @@
         margin: calc(var(--gs) * 3) auto calc(var(--gs) * 7);
     }
 
+    &__title {
+        font-size: 28px;
+        line-height: 40px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+
+        @media (--tablet) {
+            font-size: 24px;
+            line-height: 32px;
+
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+    }
+
     &__table {
         margin: calc(var(--gs) * 4) 0;
 

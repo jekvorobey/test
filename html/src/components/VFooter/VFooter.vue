@@ -64,7 +64,9 @@
             <template v-slot:content="{ item }">
                 <ul class="v-footer__links">
                     <li class="v-footer__links-item" :key="link.name" v-for="link in item.items" :title="link.name">
-                        <a class="v-footer__link" :href="link.url">{{ link.name }}</a>
+                        <router-link v-if="link.url" class="v-footer__link" :to="link.url">
+                            {{ link.name }}
+                        </router-link>
                     </li>
                 </ul>
             </template>
