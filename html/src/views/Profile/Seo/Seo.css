@@ -29,8 +29,6 @@
     }
 
     &__switch {
-        width: 288px;
-
         @media (--tablet) {
             width: 100%;
         }
