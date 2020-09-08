@@ -10,6 +10,10 @@
         padding: calc(var(--gs) * 2);
     }
 
+    @media (--tablet-lg) {
+        width: 100%;
+    }
+
     &--selected {
         border-color: var(--cl-global);
     }
@@ -22,14 +26,6 @@
 
     &:hover {
         cursor: pointer;
-    }
-
-    @media (--tablet-lg) {
-        width: 100%;
-    }
-
-    &:first-of-type:last-of-type {
-        width: 100%;
     }
 
     &__left {

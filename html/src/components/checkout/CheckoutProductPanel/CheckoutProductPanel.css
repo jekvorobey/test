@@ -63,6 +63,8 @@
 
         &--recipient &-card {
             &:first-of-type:last-child {
+                width: 100%;
+
                 .checkout-option-card__right {
                     @media (--tablet-min) {
                         justify-content: center;
@@ -342,6 +344,7 @@
 
         &-payment {
             display: flex;
+            flex-wrap: wrap;
             align-content: center;
             min-height: auto;
 
@@ -351,6 +354,11 @@
 
             &-title {
                 flex: 1;
+                margin-bottom: calc(var(--gs) * 2);
+
+                @media (--tablet-lg) {
+                    margin-bottom: 0;
+                }
 
                 @media (--tablet) {
                     margin-bottom: calc(var(--gs) * 2);
@@ -360,16 +368,19 @@
             &-list {
                 flex-wrap: wrap;
                 display: flex;
-                margin: 0 calc(var(--gs) * 3 / -2);
 
                 &-item {
                     display: flex;
-                    width: calc(calc(100% / 8) - calc(var(--gs) * 3 / 2));
-                    margin: 0 calc(var(--gs) * 3 / 2);
+                    justify-content: center;
+                    margin-bottom: var(--gs);
+                    margin-right: calc(var(--gs) * 2);
 
-                    @media (--tablet) {
-                        width: calc(calc(100% / 4) - calc(var(--gs) * 3 / 2));
-                        margin-bottom: calc(var(--gs) * 1.5);
+                    @media (--tablet-lg) and (--tablet-min) {
+                        margin-bottom: 0;
+                    }
+
+                    &:last-child {
+                        margin-right: 0;
                     }
                 }
             }
