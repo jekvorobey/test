@@ -77,6 +77,9 @@ const main = {
         errors: {
             required: 'Required',
             email: 'name@domain.com format',
+
+            promocodeInvalid: 'Invalid Promocode',
+            promocodeNotExist: 'Promocode does not exist',
         },
     },
 

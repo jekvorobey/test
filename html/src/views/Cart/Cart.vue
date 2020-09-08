@@ -77,20 +77,29 @@
                                         class="cart-view__main-panel-promo-input"
                                         placeholder="Ваш промокод"
                                         v-model="inputPromocode"
-                                    />
+                                        :error="promocodeError"
+                                    >
+                                        <template v-slot:error="{ error }">
+                                            <transition name="slide-in-bottom" mode="out-in">
+                                                <div :key="error" v-if="error">{{ error }}</div>
+                                            </transition>
+                                        </template>
+                                    </v-input>
 
                                     <v-button
                                         class="btn--outline cart-view__main-panel-promo-btn"
-                                        @click="ADD_PROMOCODE(inputPromocode)"
-                                        :disabled="!inputPromocode"
+                                        @click="onAddPromocode"
+                                        :disabled="isLoad || isPromocodePending || !inputPromocode"
                                     >
-                                        Применить
+                                        <template v-if="!isPromocodePending">
+                                            Применить
+                                        </template>
+                                        <v-spinner v-else show height="24" width="24" />
                                     </v-button>
                                 </div>
-
                                 <div v-else class="cart-view__main-panel-promo cart-view__main-panel-promo--success">
                                     <div class="cart-view__main-panel-promo-icon">
-                                        <v-svg name="check-small" width="16" height="16" />
+                                        <v-svg name="check" width="16" height="16" />
                                     </div>
 
                                     <div>
@@ -98,7 +107,8 @@
                                         <v-link
                                             tag="button"
                                             class="cart-view__main-panel-promo-link"
-                                            @click="DELETE_PROMOCODE(promocode)"
+                                            @click="onDeletePromocode"
+                                            :disabled="isLoad || isPromocodePending"
                                         >
                                             Отменить
                                         </v-link>
@@ -106,7 +116,12 @@
                                 </div>
                             </template>
 
-                            <v-button class="cart-view__main-panel-submit" v-if="!isLoad" @click="loadCheckout">
+                            <v-button
+                                class="cart-view__main-panel-submit"
+                                v-if="!isLoad"
+                                @click="loadCheckout"
+                                :disabled="isPromocodePending"
+                            >
                                 Оформить заказ
                             </v-button>
                             <div class="cart-view__main-panel-preloader" v-else>
@@ -219,6 +234,7 @@ import {
     CART_ITEMS_COUNT,
     CART_TYPES,
     PROMO_CODE,
+    PROMOCODE_STATUS,
 } from '@store/modules/Cart/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -230,11 +246,12 @@ import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { cancelRoute } from '@settings';
-import { breakpoints, modalName } from '@enums';
+import { breakpoints, modalName, httpCodes, requestStatus } from '@enums';
 import { preparePrice } from '@util';
 import { generateProductUrl } from '@util/catalog';
 import { registerModuleIfNotExists } from '@util/store';
 
+import '@images/sprites/check.svg';
 import '@images/sprites/cart.svg';
 import './Cart.css';
 
@@ -242,6 +259,7 @@ const sliderOptions = {
     spaceBetween: 24,
     slidesPerView: 4,
     grabCursor: true,
+    autoHeight: true,
 
     navigation: {
         nextEl: '.swiper-button-next',
@@ -298,6 +316,7 @@ export default {
     data() {
         return {
             activeTab: 0,
+            promocodeError: null,
             inputPromocode: null,
             isLoad: false,
         };
@@ -305,7 +324,14 @@ export default {
 
     computed: {
         ...mapState(CART_MODULE, [FEATURED_PRODUCTS, CART_DATA]),
-        ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_TYPES, IS_PRODUCT, IS_MASTER_CLASS, PROMO_CODE]),
+        ...mapGetters(CART_MODULE, [
+            CART_ITEMS_COUNT,
+            CART_TYPES,
+            IS_PRODUCT,
+            IS_MASTER_CLASS,
+            PROMO_CODE,
+            PROMOCODE_STATUS,
+        ]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
@@ -318,6 +344,10 @@ export default {
         isProduct() {
             const { activeTabItem } = this;
             return this[IS_PRODUCT](activeTabItem);
+        },
+
+        isPromocodePending() {
+            return this[PROMOCODE_STATUS] === requestStatus.PENDING;
         },
 
         isTabletLg() {
@@ -356,6 +386,29 @@ export default {
             DELETE_PROMOCODE,
             ADD_CART_ITEM,
         ]),
+
+        async onAddPromocode() {
+            try {
+                const { inputPromocode } = this;
+                await this[ADD_PROMOCODE](inputPromocode);
+            } catch (error) {
+                const { status } = error;
+                switch (status) {
+                    case httpCodes.BAD_REQUEST:
+                        this.promocodeError = this.$t('validation.errors.promocodeInvalid');
+                        break;
+                    case httpCodes.NOT_FOUND:
+                        this.promocodeError = this.$t('validation.errors.promocodeNotExist');
+                        break;
+                }
+
+                setTimeout(() => (this.promocodeError = null), 5000);
+            }
+        },
+
+        onDeletePromocode() {
+            this[DELETE_PROMOCODE]();
+        },
 
         onToggleFavorite({ productId }) {
             this[TOGGLE_FAVORITES_ITEM](productId);

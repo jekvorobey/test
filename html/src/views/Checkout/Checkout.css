@@ -219,19 +219,29 @@
             }
 
             &-total {
-                margin: calc(var(--gs) * 3) 0;
+                margin-top: calc(var(--gs) * 3);
+
+                p {
+                    margin: 0;
+                }
             }
 
             &-promo {
                 display: flex;
+                align-items: flex-end;
                 margin-bottom: calc(var(--gs) * 2);
 
                 &--success {
+                    align-items: flex-start;
                     background-color: var(--cl-divider-grey);
                     padding: var(--gs) calc(var(--gs) * 2);
+                    margin-top: calc(var(--gs) * 3);
                 }
 
                 &--success &-icon {
+                    height: 24px;
+                    display: flex;
+                    align-items: center;
                     margin-right: var(--gs);
                 }
 
@@ -244,15 +254,21 @@
                 }
 
                 &-btn {
+                    display: flex;
+                    justify-content: center;
+                    min-width: 124px;
                     padding: 6px calc(var(--gs) * 2);
                 }
 
                 &-input {
                     flex: 1;
                     margin-right: var(--gs);
+                    padding-top: calc(var(--gs) * 3);
 
                     .v-input__error {
-                        display: none;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
                     }
                 }
             }

@@ -77,6 +77,9 @@ const main = {
         errors: {
             required: 'Обязательное поле',
             email: 'Формат name@domain.com',
+
+            promocodeInvalid: 'Промокод недействителен',
+            promocodeNotExist: 'Промокод не существует',
         },
     },
 

@@ -1,5 +1,5 @@
 import { cookieNames, requestStatus } from '@enums';
-import { $logger, $cookie, $retailRocket } from '@services';
+import { $cookie, $retailRocket } from '@services';
 import {
     getProducts,
     getCartData,

@@ -86,16 +86,27 @@
 
                             <div v-if="!promocode" class="checkout-view__main-panel-promo">
                                 <v-input
-                                    v-model="inputPromocode"
                                     class="checkout-view__main-panel-promo-input"
                                     placeholder="Ваш промокод"
-                                />
+                                    v-model="inputPromocode"
+                                    :error="promocodeError"
+                                >
+                                    <template v-slot:error="{ error }">
+                                        <transition name="slide-in-bottom" mode="out-in">
+                                            <div :key="error" v-if="error">{{ error }}</div>
+                                        </transition>
+                                    </template>
+                                </v-input>
+
                                 <v-button
                                     class="btn--outline checkout-view__main-panel-promo-btn"
-                                    @click="ADD_PROMOCODE(inputPromocode)"
-                                    :disabled="!inputPromocode"
+                                    @click="onAddPromocode"
+                                    :disabled="!inputPromocode || isPromocodePending"
                                 >
-                                    Применить
+                                    <template v-if="!isPromocodePending">
+                                        Применить
+                                    </template>
+                                    <v-spinner v-else show height="24" width="24" />
                                 </v-button>
                             </div>
                             <div
@@ -103,20 +114,27 @@
                                 class="checkout-view__main-panel-promo checkout-view__main-panel-promo--success"
                             >
                                 <div class="checkout-view__main-panel-promo-icon">
-                                    <v-svg name="check-small" width="16" height="16" />
+                                    <v-svg name="check" width="16" height="16" />
                                 </div>
+
                                 <div>
                                     Промокод&nbsp;{{ promocode }}&nbsp;применён
                                     <v-link
                                         tag="button"
                                         class="checkout-view__main-panel-promo-link"
-                                        @click="DELETE_PROMOCODE(promocode)"
+                                        @click="onDeletePromocode"
+                                        :disabled="isPromocodePending"
                                     >
                                         Отменить
                                     </v-link>
                                 </div>
                             </div>
-                            <v-button class="checkout-view__main-panel-submit" @click="onCommit" :disabled="isCommit">
+
+                            <v-button
+                                class="checkout-view__main-panel-submit"
+                                @click="onCommit"
+                                :disabled="isPromocodePending || isCommit"
+                            >
                                 Перейти к оплате
                             </v-button>
                         </div>
@@ -133,6 +151,7 @@ import VLink from '@controls/VLink/VLink.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
 import Price from '@components/Price/Price.vue';
 import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
@@ -157,13 +176,21 @@ import {
     CLEAR_CHECKOUT_DATA,
     FETCH_PROFESSIONS,
 } from '@store/modules/Checkout/actions';
-import { CHECKOUT, PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT } from '@store/modules/Checkout/getters';
+import {
+    CHECKOUT,
+    PROMO_CODE,
+    SUMMARY,
+    RECEIVE_METHODS,
+    BONUS_PAYMENT,
+    PROMOCODE_STATUS,
+} from '@store/modules/Checkout/getters';
 
+import { httpCodes, requestStatus } from '@enums';
 import { preparePrice } from '@util';
 import { generateThankPageUrl } from '@util/order';
 import { cartItemTypes } from '@enums/product';
 import { cancelRoute } from '@settings';
-import '@images/sprites/check-small.svg';
+import '@images/sprites/check.svg';
 import '@images/sprites/arrow-small.svg';
 import './Checkout.css';
 
@@ -176,6 +203,7 @@ export default {
         VButton,
         VInput,
         VSticky,
+        VSpinner,
         VCartHeader,
 
         Price,
@@ -185,6 +213,7 @@ export default {
 
     data() {
         return {
+            promocodeError: null,
             inputPromocode: null,
             isCommit: false,
         };
@@ -202,10 +231,14 @@ export default {
             checkoutType: state => state.params.type,
         }),
 
-        ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT]),
+        ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT, PROMOCODE_STATUS]),
 
         isProduct() {
             return this.checkoutType === cartItemTypes.PRODUCT;
+        },
+
+        isPromocodePending() {
+            return this[PROMOCODE_STATUS] === requestStatus.PENDING;
         },
 
         canDeliver() {
@@ -239,6 +272,29 @@ export default {
             DELETE_PROMOCODE,
             COMMIT_DATA,
         ]),
+
+        async onAddPromocode() {
+            try {
+                const { inputPromocode } = this;
+                await this[ADD_PROMOCODE](inputPromocode);
+            } catch (error) {
+                const { status } = error;
+                switch (status) {
+                    case httpCodes.BAD_REQUEST:
+                        this.promocodeError = this.$t('validation.errors.promocodeInvalid');
+                        break;
+                    case httpCodes.NOT_FOUND:
+                        this.promocodeError = this.$t('validation.errors.promocodeNotExist');
+                        break;
+                }
+
+                setTimeout(() => (this.promocodeError = null), 5000);
+            }
+        },
+
+        onDeletePromocode() {
+            this[DELETE_PROMOCODE]();
+        },
 
         async onCommit() {
             try {
