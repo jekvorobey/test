@@ -249,7 +249,7 @@ export default {
 
         onDownloadFiles(files) {
             if (Array.isArray(files))
-                for (const file of files) downloadFile(generatePictureSourcePath(null, null, file.id));
+                for (const file of files) downloadFile(generatePictureSourcePath(null, null, file.id, file.sourceExt));
         },
 
         onCopyToClipboard(e, text) {
