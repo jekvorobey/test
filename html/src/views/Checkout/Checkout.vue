@@ -101,7 +101,7 @@
                                 <v-button
                                     class="btn--outline checkout-view__main-panel-promo-btn"
                                     @click="onAddPromocode"
-                                    :disabled="!inputPromocode || isPromocodePending"
+                                    :disabled="isCommit || isPromocodePending || !inputPromocode"
                                 >
                                     <template v-if="!isPromocodePending">
                                         Применить
@@ -123,7 +123,7 @@
                                         tag="button"
                                         class="checkout-view__main-panel-promo-link"
                                         @click="onDeletePromocode"
-                                        :disabled="isPromocodePending"
+                                        :disabled="isCommit || isPromocodePending"
                                     >
                                         Отменить
                                     </v-link>
@@ -133,7 +133,7 @@
                             <v-button
                                 class="checkout-view__main-panel-submit"
                                 @click="onCommit"
-                                :disabled="isPromocodePending || isCommit"
+                                :disabled="isCommit || isPromocodePending"
                             >
                                 Перейти к оплате
                             </v-button>
