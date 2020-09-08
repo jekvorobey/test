@@ -423,8 +423,9 @@ export default {
                 this.accepted = true;
             } catch (error) {
                 this.accepted = false;
-                this.$v.accepted.$touch();
             }
+
+            this.$v.accepted.$touch();
         },
 
         async resetPassword() {

@@ -385,15 +385,16 @@ export default {
 
         async checkCode() {
             try {
-                await this[CHECK_CODE]({
+                const { isCodeValid } = await this[CHECK_CODE]({
                     code: this.code,
                     type: verificationCodeType.REGISTRATION,
                 });
-                this.accepted = true;
+                this.accepted = isCodeValid;
             } catch (error) {
                 this.accepted = false;
-                this.$v.accepted.$touch();
             }
+
+            this.$v.accepted.$touch();
         },
 
         async onSubmit() {

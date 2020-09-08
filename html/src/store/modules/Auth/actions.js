@@ -53,7 +53,7 @@ export default {
 
     async [CHECK_CODE]({ commit }, { code, type }) {
         try {
-            await checkCode(code, type);
+            return await checkCode(code, type);
         } catch (error) {
             storeErrorHandler(CHECK_CODE, true)(error);
         }
@@ -139,7 +139,12 @@ export default {
         let user = null;
 
         try {
-            const { can_buy: canBuy, referral_code: referralCode, referral_partner: referralPartner, status } = await getUser();
+            const {
+                can_buy: canBuy,
+                referral_code: referralCode,
+                referral_partner: referralPartner,
+                status,
+            } = await getUser();
             const { avatar, first_name: firstName, last_name: lastName } = await getUserInfo();
             user = { canBuy, referralCode, referralPartner, avatar, firstName, lastName, status };
             commit(SET_USER, user);
@@ -158,7 +163,7 @@ export default {
         try {
             const { count } = await getUnreadMesagesCount();
             commit(SET_UNREAD_MESSAGES, count);
-        } catch(error) {
+        } catch (error) {
             storeErrorHandler(FETCH_UNREAD_MESSAGES)(error);
         }
     },
