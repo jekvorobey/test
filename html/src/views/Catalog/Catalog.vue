@@ -228,7 +228,7 @@
                                 <li
                                     class="catalog-view__modal-filter-sort-item"
                                     :class="{ 'catalog-view__modal-filter-sort-item--active': item === sortValue }"
-                                    v-for="item in sortOptions"
+                                    v-for="item in typeSortOptions"
                                     :key="item.title"
                                 >
                                     <button
@@ -355,7 +355,6 @@ import '@plugins/sticky';
 import '@images/sprites/cross-small.svg';
 import '@images/sprites/home.svg';
 import './Catalog.css';
-
 
 const sliderOptions = {
     spaceBetween: 24,
