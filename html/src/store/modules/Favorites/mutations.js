@@ -35,6 +35,7 @@ export default {
     },
 
     [ADD_FAVORITES_ITEM](state, productId) {
+        if (state.favoritesAll.includes(productId)) return;
         state.favoritesAll = [...state.favoritesAll, productId];
     },
 

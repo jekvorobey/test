@@ -2,26 +2,22 @@
     <div class="cart-bundle-product-card">
         <div class="cart-bundle-product-card__images" :class="`length-is-${items.length}`">
             <div class="cart-bundle-product-card__image" v-for="({ image }, index) in items" :key="index">
-                <v-picture v-if="image && image.id" :image="image" alt="">
-                    <template v-slot:source="{ image }">
-                        <source
-                            :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
-                            type="image/webp"
-                            media="(min-width: 480px)"
-                        />
-                        <source
-                            :data-srcset="generateSourcePath(72, 72, image.id, 'webp')"
-                            type="image/webp"
-                            media="(max-width: 479px)"
-                        />
-                    </template>
-                    <template v-slot:fallback="{ image, lazy, alt }">
-                        <img
-                            class="blur-up lazyload v-picture__img"
-                            :data-src="generateSourcePath(300, 300, image.id)"
-                            :alt="alt"
-                        />
-                    </template>
+                <v-picture v-if="image && image.id">
+                    <source
+                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
+                        type="image/webp"
+                        media="(min-width: 480px)"
+                    />
+                    <source
+                        :data-srcset="generateSourcePath(72, 72, image.id, 'webp')"
+                        type="image/webp"
+                        media="(max-width: 479px)"
+                    />
+                    <img
+                        class="blur-up lazyload v-picture__img"
+                        :data-src="generateSourcePath(300, 300, image.id)"
+                        alt=""
+                    />
                 </v-picture>
                 <v-svg v-else id="cart-bundle-product-card-empty" name="logo" width="48" height="48" />
             </div>
@@ -83,6 +79,7 @@ import { mapGetters, mapActions, mapState } from 'vuex';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
+import { ADD_FAVORITES_ITEM, DELETE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import _debounce from 'lodash/debounce';
 import { generatePictureSourcePath } from '@util/file';
@@ -162,7 +159,8 @@ export default {
         },
 
         inFavorites() {
-            return this[IS_IN_FAVORITES](this.bundleId);
+            const { items = [] } = this;
+            return items.every(i => this[IS_IN_FAVORITES](i.productId));
         },
 
         deleteBtnText() {
@@ -180,8 +178,15 @@ export default {
     },
 
     methods: {
-        onToggleFavorite(value) {
-            return false;
+        ...mapActions(FAVORITES_MODULE, [ADD_FAVORITES_ITEM, DELETE_FAVORITES_ITEM]),
+
+        onToggleFavorite() {
+            const { inFavorites, items = [] } = this;
+
+            for (const { productId } of items) {
+                if (inFavorites) this[DELETE_FAVORITES_ITEM](productId);
+                else this[ADD_FAVORITES_ITEM](productId);
+            }
         },
 
         onDeleteClick() {
