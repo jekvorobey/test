@@ -71,8 +71,8 @@
                                 </p>
                             </div>
 
-                            <template v-if="isProduct">
-                                <div v-if="!promocode" class="cart-view__main-panel-promo">
+                            <div v-if="!promocode" class="cart-view__main-panel-promo">
+                                <template v-if="isProduct">
                                     <v-input
                                         class="cart-view__main-panel-promo-input"
                                         placeholder="Ваш промокод"
@@ -96,8 +96,10 @@
                                         </template>
                                         <v-spinner v-else show height="24" width="24" />
                                     </v-button>
-                                </div>
-                                <div v-else class="cart-view__main-panel-promo cart-view__main-panel-promo--success">
+                                </template>
+                            </div>
+                            <div v-else class="cart-view__main-panel-promo cart-view__main-panel-promo--success">
+                                <template v-if="isProduct">
                                     <div class="cart-view__main-panel-promo-icon">
                                         <v-svg name="check" width="16" height="16" />
                                     </div>
@@ -113,8 +115,8 @@
                                             Отменить
                                         </v-link>
                                     </div>
-                                </div>
-                            </template>
+                                </template>
+                            </div>
 
                             <v-button
                                 class="cart-view__main-panel-submit"

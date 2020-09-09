@@ -45,16 +45,20 @@ export default {
         },
 
         currencySymbol() {
-            return currencySymbol[this.currency];
+            const { isObject, hasArticles, value } = this;
+            if (!isObject) return value > 0 ? currencySymbol[this.currency] : null;
+            else return currencySymbol[this.currency];
         },
 
         computedValue() {
             const { isObject, hasArticles, value } = this;
-            if (!isObject) return preparePrice(value);
+            if (!isObject) return value > 0 ? preparePrice(value) : 'Бесплатно';
 
             let stringValue = '';
-            if (value.from) stringValue += hasArticles ? `от ${preparePrice(value.from)}` : preparePrice(value.from);
-            if (value.to) stringValue += hasArticles ? ` до ${preparePrice(value.to)}` : ` - ${preparePrice(value.to)}`;
+            if (value.from !== null)
+                stringValue += hasArticles ? `от ${preparePrice(value.from)}` : preparePrice(value.from);
+            if (value.to !== null)
+                stringValue += hasArticles ? ` до ${preparePrice(value.to)}` : ` - ${preparePrice(value.to)}`;
             return stringValue;
         },
     },
