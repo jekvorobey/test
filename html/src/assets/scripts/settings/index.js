@@ -34,7 +34,7 @@ export const cancelRoute = Object.freeze({
 });
 
 export const yaMapSettings = Object.freeze({
-    apiKey: '46c69919-a571-416e-8198-189ed26c6a79',
+    apiKey: 'fff2295f-9b6e-45b1-be7e-5bb163c84513',
     lang: 'ru_RU',
     coordorder: 'latlong',
     version: '2.1',
