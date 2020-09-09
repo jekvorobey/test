@@ -3,7 +3,6 @@ import {
     getProduct,
     getBanners,
     getProducts,
-    getMasterclasses,
     getProductOptions,
     getProductPickupPoints,
     getProductBundles,
@@ -13,7 +12,6 @@ import {
     SET_PRODUCT,
     SET_BANNERS,
     SET_FEATURED_PRODUCTS,
-    SET_MASTERCLASSES,
     SET_PRODUCT_OPTIONS,
     SET_REFERRER_CODE,
     SET_PICKUP_POINTS,
@@ -42,15 +40,6 @@ export default {
 
     [SET_SELECTED_PICKUP_POINT]({ commit }, payload) {
         commit(SET_SELECTED_PICKUP_POINT, payload);
-    },
-
-    async [FETCH_MASTERCLASSES]({ commit }, payload) {
-        try {
-            const data = await getMasterclasses(payload);
-            commit(SET_MASTERCLASSES, data);
-        } catch (error) {
-            storeErrorHandler(FETCH_MASTERCLASSES)(error);
-        }
     },
 
     async [FETCH_FEATURED_PRODUCTS]({ commit }, payload) {
@@ -113,7 +102,6 @@ export default {
             dispatch(FETCH_FEATURED_PRODUCTS, payload),
             dispatch(FETCH_PRODUCT_BUNDLES, payload),
             // dispatch(FETCH_BANNERS, payload),
-            // dispatch(FETCH_MASTERCLASSES, payload),
         ]);
     },
 

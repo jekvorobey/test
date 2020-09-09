@@ -1,5 +1,4 @@
 export const SET_MASTERCLASS = 'SET_MASTERCLASS';
-export const SET_FEATURED = 'SET_FEATURED';
 export const SET_QUERY_PARAMS = 'SET_QUERY_PARAMS';
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 
@@ -20,10 +19,6 @@ export default {
     [SET_MASTERCLASS](state, payload = {}) {
         state.masterClassCode = payload.code;
         state.masterClass = payload;
-    },
-
-    [SET_FEATURED](state, payload = []) {
-        state.featured = payload;
     },
 
     [SET_ITEMS_MORE](state, payload) {

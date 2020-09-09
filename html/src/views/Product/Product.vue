@@ -713,7 +713,6 @@ import {
     NAME as PRODUCT_MODULE,
     PRODUCT,
     BANNERS,
-    MASTERCLASSES,
     FEATURED_PRODUCTS,
     PRODUCT_OPTIONS,
     PRODUCT_BUNDLES,
@@ -893,7 +892,6 @@ export default {
         ...mapState(PRODUCT_MODULE, [
             PRODUCT,
             PRODUCT_OPTIONS,
-            MASTERCLASSES,
             BANNERS,
             FEATURED_PRODUCTS,
             PRODUCT_BUNDLES,

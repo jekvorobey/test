@@ -2,8 +2,8 @@ import { DEFAULT_PAGE } from '@constants';
 import { masterclassFilterName } from '@enums/catalog';
 import { storeErrorHandler } from '@util/store';
 
-import { getMasterclasses, getMasterclass, getCatalogMasterclasses, getMasterclassFilters } from '@api';
-import { SET_MASTERCLASS, SET_FEATURED, SET_ITEMS, SET_ITEMS_MORE, SET_QUERY_PARAMS, SET_FILTERS } from './mutations';
+import { getMasterclass, getCatalogMasterclasses, getMasterclassFilters } from '@api';
+import { SET_MASTERCLASS, SET_ITEMS, SET_ITEMS_MORE, SET_QUERY_PARAMS, SET_FILTERS } from './mutations';
 
 export const FETCH_MASTERCLASS_CATALOG_DATA = 'FETCH_MASTERCLASS_CATALOG_DATA';
 export const FETCH_MASTERCLASS_ITEMS = 'FETCH_MASTERCLASS_ITEMS';
@@ -11,7 +11,6 @@ export const FETCH_MASTERCLASS_FILTERS = 'FETCH_MASTERCLASS_FILTERS';
 
 export const FETCH_MASTERCLASS_DATA = 'FETCH_MASTERCLASS_DATA';
 export const FETCH_MASTERCLASS = 'FETCH_MASTERCLASS';
-export const FETCH_FEATURED = 'FETCH_FEATURED';
 
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 
@@ -69,17 +68,8 @@ export default {
         }
     },
 
-    async [FETCH_FEATURED]({ commit }, payload) {
-        try {
-            const data = await getMasterclasses(payload);
-            commit(SET_FEATURED, data);
-        } catch (error) {
-            storeErrorHandler(FETCH_FEATURED)(error);
-        }
-    },
-
     async [FETCH_MASTERCLASS_DATA]({ dispatch }, payload) {
-        return Promise.all([dispatch(FETCH_MASTERCLASS, payload), dispatch(FETCH_FEATURED, payload)]);
+        return dispatch(FETCH_MASTERCLASS, payload);
     },
 
     async [FETCH_MASTERCLASS_CATALOG_DATA]({ dispatch }, payload) {

@@ -658,10 +658,6 @@ export function getBrands(data) {
     return $http.get('/v1/brands', data);
 }
 
-export function getMasterclasses(data) {
-    return $http.get('/v1/masterclasses', data);
-}
-
 export function getProduct(code, offer_id, referrerCode) {
     return $http.get('/v1/catalog/product-detail', {
         params: {
