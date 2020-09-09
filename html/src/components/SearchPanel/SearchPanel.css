@@ -109,6 +109,10 @@
             width: calc(calc(100% / 4) - calc(var(--gs) * 3));
             margin: 0 calc(var(--gs) * 3 / 2);
             margin-bottom: calc(var(--gs) * 3);
+
+            @media (--tablet-lg) {
+                width: calc(calc(100% / 3) - calc(var(--gs) * 3));
+            }
         }
     }
 
