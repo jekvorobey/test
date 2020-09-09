@@ -9,16 +9,13 @@
         width: calc(var(--gs) * 4);
         height: calc(var(--gs) * 4);
         border-radius: 2px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     }
 
     &--selected {
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         pointer-events: none;
     }
 
     &:hover {
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         border: 2px solid;
     }
 
