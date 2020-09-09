@@ -1,7 +1,7 @@
 <template>
     <button
         class="product-color-tag"
-        :class="{ ['product-color-tag--selected']: selected }"
+        :class="[{ ['product-color-tag--selected']: selected }, { ['product-color-tag--light']: isLightColor }]"
         :disabled="disabled"
         :style="buttonStyle"
         v-on="$listeners"
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { isLightColor } from '@util';
 import './ProductColorTag.css';
 
 export default {
@@ -33,16 +34,28 @@ export default {
     },
 
     computed: {
-        buttonStyle() {
-            return {
-                borderColor: this.selected ? `#${this.color}` : null,
-            };
+        innerColor() {
+            const { color } = this;
+            return `#${color}`;
         },
 
         innerStyle() {
+            const { innerColor } = this;
             return {
-                backgroundColor: `#${this.color}`,
+                backgroundColor: innerColor,
             };
+        },
+
+        buttonStyle() {
+            const { innerColor, selected } = this;
+            return {
+                borderColor: selected ? innerColor : null,
+            };
+        },
+
+        isLightColor() {
+            const { innerColor } = this;
+            return isLightColor(innerColor);
         },
     },
 };

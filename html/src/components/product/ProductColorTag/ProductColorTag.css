@@ -30,7 +30,13 @@
             width: 14px;
             height: 14px;
             background-position: center;
-            background-image: svg-load('cross-small.svg');
+            background-image: svg-load('cross-small.svg', 'fill: #fff');
+        }
+    }
+
+    &--light:disabled {
+        &::after {
+            background-image: svg-load('cross-small.svg', 'fill: #000');
         }
     }
 }
