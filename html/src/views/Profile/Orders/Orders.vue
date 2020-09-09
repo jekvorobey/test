@@ -76,10 +76,12 @@
 
         <div ref="hook" />
 
-        <!-- <filter-button class="orders-view__filter-btn" @click="filterModal = !filterModal">
+        <div class="container" v-if="isTabletLg">
+            <filter-button class="orders-view__filter-btn" @click="filterModal = !filterModal">
                 Фильтр и сортировка&nbsp;&nbsp;
-                <span class="text-grey">4</span>
-            </filter-button> -->
+                <span class="text-grey">{{ filterCount }}</span>
+            </filter-button>
+        </div>
 
         <template v-if="orders.length > 0">
             <table class="container container--tablet-lg orders-view__table" v-if="!isTabletLg">
@@ -288,6 +290,95 @@
 
             <v-button class="btn--outline" to="/catalog">перейти к покупкам</v-button>
         </div>
+
+        <transition name="fade-in">
+            <modal
+                class="orders-view__modal-filter"
+                v-if="filterModal && isTabletLg"
+                :show-close-btn="false"
+                type="fullscreen"
+            >
+                <template v-slot:body>
+                    <v-sticky class="orders-view__modal-filter-sticky">
+                        <template v-slot:sticky>
+                            <div class="orders-view__modal-filter-header">
+                                <button class="orders-view__modal-filter-header-btn" @click="filterModal = false">
+                                    <v-svg name="cross-small" width="14" height="14" />Фильтр
+                                </button>
+                            </div>
+                        </template>
+
+                        <div class="orders-view__modal-filter-sort">
+                            <div class="container container--tablet-lg orders-view__modal-filter-sort-title">
+                                Сортировка
+                            </div>
+
+                            <ul
+                                class="orders-view__modal-filter-sort-list"
+                                v-for="filter in filters"
+                                :key="filter.name"
+                            >
+                                <li
+                                    class="orders-view__modal-filter-sort-item"
+                                    :class="{
+                                        'orders-view__modal-filter-sort-item--active':
+                                            item === filterValueMap[filter.name],
+                                    }"
+                                    :key="item.name"
+                                    v-for="item in filter.items"
+                                >
+                                    <button
+                                        class="orders-view__modal-filter-sort-item-btn"
+                                        :disabled="item === filterValueMap[filter.name]"
+                                        @click="onChangeFilter(filter.name, item)"
+                                    >
+                                        {{ item.name }}
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <ul class="orders-view__modal-filter-sort-list">
+                                <li
+                                    class="orders-view__modal-filter-sort-item"
+                                    :class="{
+                                        'orders-view__modal-filter-sort-item--active': orderField === sortFields.NUMBER,
+                                    }"
+                                >
+                                    <button
+                                        class="orders-view__modal-filter-sort-item-btn"
+                                        :disabled="orderField === sortFields.NUMBER"
+                                        @click="onChangeSort(sortFields.NUMBER)"
+                                    >
+                                        Номер заказа
+                                    </button>
+                                </li>
+                                <li
+                                    class="orders-view__modal-filter-sort-item"
+                                    :class="{
+                                        'orders-view__modal-filter-sort-item--active':
+                                            orderField === sortFields.CREATED_AT,
+                                    }"
+                                >
+                                    <button
+                                        class="orders-view__modal-filter-sort-item-btn"
+                                        :disabled="orderField === sortFields.CREATED_AT"
+                                        @click="onChangeSort(sortFields.CREATED_AT)"
+                                    >
+                                        Дата заказа
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="orders-view__modal-filter-controls">
+                            <v-button class="orders-view__modal-filter-close-btn" @click="filterModal = !filterModal">
+                                Показать
+                            </v-button>
+                        </div>
+                    </v-sticky>
+                </template>
+            </modal>
+        </transition>
     </section>
 </template>
 
@@ -297,8 +388,10 @@ import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
+import VSticky from '@controls/VSticky/VSticky.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VArcCounter from '@controls/VArcCounter/VArcCounter.vue';
+import modal from '@controls/modal/modal.vue';
 
 import FilterButton from '@components/FilterButton/FilterButton.vue';
 import Price from '@components/Price/Price.vue';
@@ -370,6 +463,8 @@ export default {
         VSelect,
         VPagination,
         VArcCounter,
+        VSticky,
+        modal,
 
         FilterButton,
         Price,
@@ -392,6 +487,25 @@ export default {
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
+
+        filterCount() {
+            const {
+                filters,
+                $route: { query },
+                orderField = sortFields.NUMBER,
+            } = this;
+
+            let count = filters.reduce((accum, current) => {
+                const { name, items } = current;
+                const code = query[name];
+                const item = code && items.find(i => i.code === code);
+                if (item && item !== items[0]) accum += 1;
+                return accum;
+            }, 0);
+
+            if (orderField !== sortFields.NUMBER) count += 1;
+            return count;
+        },
 
         filterValueMap() {
             const {
