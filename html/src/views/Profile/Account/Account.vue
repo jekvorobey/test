@@ -91,7 +91,7 @@
                                     <span class="status-color-error" v-if="operation.status === 3">Ошибка</span>
                                 </td>
                                 <td class="account-view__table-td">
-                                    <price v-bind="operation.value" />
+                                    <price v-bind="operation.value" always-number />
                                 </td>
                             </tr>
                         </transition-group>

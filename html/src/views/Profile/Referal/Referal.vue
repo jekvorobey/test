@@ -194,10 +194,10 @@
                     <info-row class="referal-view__list-item-row" name="Источник" :value="order.sourceString" />
                     <info-row class="referal-view__list-item-row" name="Дата заказа" :value="order.date" />
                     <info-row class="referal-view__list-item-row" name="Сумма">
-                        <price v-bind="order.price_product" />
+                        <price v-bind="order.price_product" always-number />
                     </info-row>
                     <info-row class="referal-view__list-item-row" name="Сумма вознаграждения">
-                        <price v-bind="order.price_commission" />
+                        <price v-bind="order.price_commission" always-number />
                     </info-row>
                 </li>
             </ul>
