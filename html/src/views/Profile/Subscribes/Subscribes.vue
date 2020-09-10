@@ -6,7 +6,7 @@
         <info-panel class="subscribes-view__panel" header="Что вас интересует?">
             <div class="container container--tablet-lg">
                 <v-check
-                    v-model="$v.actualSubscrubes.topics.$model"
+                    v-model="$v.actualSubscribes.topics.$model"
                     v-for="topic in content.topics"
                     :id="`topic-${topic.id}`"
                     :key="topic.id"
@@ -24,7 +24,7 @@
         <info-panel class="subscribes-view__panel" header="Как часто?">
             <div class="container container--tablet-lg">
                 <v-check
-                    v-model="$v.actualSubscrubes.periodicity.$model"
+                    v-model="$v.actualSubscribes.periodicity.$model"
                     v-for="period in content.periods"
                     :id="`period-${period.value}`"
                     :key="period.value"
@@ -40,7 +40,7 @@
         <info-panel class="subscribes-view__panel" header="Предпочитаемый способ связи">
             <div class="container container--tablet-lg">
                 <v-check
-                    v-model="$v.actualSubscrubes.channels.$model"
+                    v-model="$v.actualSubscribes.channels.$model"
                     v-for="channel in content.channels"
                     :id="`channel-${channel.value}`"
                     :key="channel.value"
@@ -113,7 +113,7 @@ export default {
     },
 
     validations: {
-        actualSubscrubes: {
+        actualSubscribes: {
             channels: {},
             periodicity: {},
             topics: {},
@@ -123,7 +123,7 @@ export default {
     data() {
         return {
             inProcess: false,
-            actualSubscrubes: { channels: [], periodicity: 1, topics: [] },
+            actualSubscribes: { channels: [], periodicity: 1, topics: [] },
         };
     },
 
@@ -146,16 +146,16 @@ export default {
         ...mapActions(SUBSCRIBES_MODULE_PATH, [UPDATE_SUBSCRIBES]),
 
         setActualSubscribes(value) {
-            this.actualSubscrubes = _cloneDeep(value);
+            this.actualSubscribes = _cloneDeep(value);
             this.$v.$reset();
         },
 
         async onSave() {
             try {
-                const { actualSubscrubes } = this;
+                const { actualSubscribes } = this;
 
                 this.inProcess = true;
-                await this[UPDATE_SUBSCRIBES](actualSubscrubes);
+                await this[UPDATE_SUBSCRIBES](actualSubscribes);
                 this.inProcess = false;
             } catch (error) {
                 this.inProcess = false;
