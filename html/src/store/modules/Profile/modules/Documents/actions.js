@@ -14,7 +14,7 @@ export default {
         commit(SET_LOAD_PATH, payload);
     },
 
-    async [FETCH_DOCUMENTS_DATA]({ commit, dispatch }, { type = null, status = null } = {}) {
+    async [FETCH_DOCUMENTS_DATA]({ dispatch }, { type = null, status = null } = {}) {
         try {
             await Promise.all([dispatch(FETCH_DOCUMENTS, { type, status }), dispatch(FETCH_FILTERS)]);
         } catch (error) {
@@ -27,7 +27,7 @@ export default {
             const { documents } = await getDocuments({ type, status });
             commit(SET_DOCUMENTS, documents);
         } catch (error) {
-            storeErrorHandler(FETCH_DOCUMENTS, error);
+            storeErrorHandler(FETCH_DOCUMENTS)(error);
         }
     },
 
@@ -36,7 +36,7 @@ export default {
             const data = await getDocumentsFilters();
             commit(SET_FILTERS, data);
         } catch (error) {
-            storeErrorHandler(FETCH_FILTERS, error);
+            storeErrorHandler(FETCH_FILTERS)(error);
         }
     },
 };
