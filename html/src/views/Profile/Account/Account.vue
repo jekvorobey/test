@@ -6,7 +6,7 @@
             <div class="account-view__panel">
                 <div class="text-grey">На вашем счете</div>
                 <div class="account-view__panel-count">
-                    <price class="text-bold" v-bind="billingData.referral_bill" />
+                    <price class="text-bold" v-bind="billingData.referral_bill" always-number />
                 </div>
             </div>
             <div class="account-view__panel">
@@ -114,7 +114,7 @@
                         </template>
                     </info-row>
                     <info-row class="account-view__list-item-row" name="Начислено/cписано">
-                        <price v-bind="operation.value" />
+                        <price v-bind="operation.value" always-number />
                     </info-row>
                 </li>
             </ul>
@@ -294,7 +294,8 @@ export default {
         operations() {
             const items = this[ITEMS] || [];
             return items.map(i => {
-                const date = i.created_at && getDate(i.created_at).toLocaleDateString(this[LOCALE], monthLongDateSettings);
+                const date =
+                    i.created_at && getDate(i.created_at).toLocaleDateString(this[LOCALE], monthLongDateSettings);
                 const type = this.$t(`billingOperationType.${i.type}`);
 
                 return {

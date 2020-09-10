@@ -148,10 +148,10 @@
                                 </td>
                                 <td class="referal-view__table-td">{{ order.date }}</td>
                                 <td class="referal-view__table-td">
-                                    <price v-bind="order.price_product" />
+                                    <price v-bind="order.price_product" always-number />
                                 </td>
                                 <td class="referal-view__table-td">
-                                    <price v-bind="order.price_commission" />
+                                    <price v-bind="order.price_commission" always-number />
                                 </td>
                             </tr>
                         </transition-group>

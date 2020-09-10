@@ -37,6 +37,11 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        alwaysNumber: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
@@ -45,14 +50,14 @@ export default {
         },
 
         currencySymbol() {
-            const { isObject, hasArticles, value } = this;
-            if (!isObject) return value > 0 ? currencySymbol[this.currency] : null;
-            else return currencySymbol[this.currency];
+            const { isObject, alwaysNumber, value, currency } = this;
+            if (!isObject) return value === 0 && !alwaysNumber ? null : currencySymbol[currency];
+            else return currencySymbol[currency];
         },
 
         computedValue() {
-            const { isObject, hasArticles, value } = this;
-            if (!isObject) return value > 0 ? preparePrice(value) : 'Бесплатно';
+            const { isObject, hasArticles, alwaysNumber, value } = this;
+            if (!isObject) return value === 0 && !alwaysNumber ? 'Бесплатно' : preparePrice(value);
 
             let stringValue = '';
             if (value.from !== null)
