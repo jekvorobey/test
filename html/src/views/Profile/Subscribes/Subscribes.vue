@@ -6,17 +6,17 @@
         <info-panel class="subscribes-view__panel" header="Что вас интересует?">
             <div class="container container--tablet-lg">
                 <v-check
-                    v-model="selectedSubscribes"
-                    v-for="subscribe in subscribes"
-                    :id="`subscribe-${subscribe.id}`"
-                    :key="subscribe.id"
-                    :value="subscribe.id"
-                    name="subscribes"
+                    v-model="$v.actualSubscrubes.topics.$model"
+                    v-for="topic in content.topics"
+                    :id="`topic-${topic.id}`"
+                    :key="topic.id"
+                    :value="topic.id"
+                    name="topics"
                 >
-                    {{ subscribe.name }}
-                    <div class="text-grey text-sm">
+                    {{ topic.name }}
+                    <!-- <div class="text-grey text-sm">
                         {{ subscribe.description }}
-                    </div>
+                    </div> -->
                 </v-check>
             </div>
         </info-panel>
@@ -24,11 +24,11 @@
         <info-panel class="subscribes-view__panel" header="Как часто?">
             <div class="container container--tablet-lg">
                 <v-check
-                    v-model="selectedPeriod"
-                    v-for="period in periods"
-                    :id="`period-${period.id}`"
-                    :key="period.id"
-                    :value="period.id"
+                    v-model="$v.actualSubscrubes.periodicity.$model"
+                    v-for="period in content.periods"
+                    :id="`period-${period.value}`"
+                    :key="period.value"
+                    :value="period.value"
                     type="radio"
                     name="period"
                 >
@@ -40,121 +40,163 @@
         <info-panel class="subscribes-view__panel" header="Предпочитаемый способ связи">
             <div class="container container--tablet-lg">
                 <v-check
-                    v-model="selectedReceivers"
-                    v-for="receiver in receivers"
-                    :id="`receiver-${receiver.id}`"
-                    :key="receiver.id"
-                    :value="receiver.id"
-                    name="receivers"
+                    v-model="$v.actualSubscrubes.channels.$model"
+                    v-for="channel in content.channels"
+                    :id="`channel-${channel.value}`"
+                    :key="channel.value"
+                    :value="channel.value"
+                    name="channels"
                 >
-                    {{ receiver.name }}
+                    {{ channel.name }}
                 </v-check>
             </div>
         </info-panel>
 
         <div class="container subscribes-view__submit">
-            <v-button class="subscribes-view__submit-btn" @click="onSave">
-                Сохранить
-            </v-button>
+            <transition name="fade-in">
+                <v-button
+                    v-if="isDirty"
+                    class="subscribes-view__submit-btn"
+                    :class="{ 'btn--outline ': inProcess }"
+                    key="submit"
+                    :disabled="inProcess"
+                    @click="onSave"
+                >
+                    <v-spinner v-if="inProcess" height="24" width="24" show />
+                    <template v-else>
+                        Сохранить
+                    </template>
+                </v-button>
+            </transition>
         </div>
     </section>
 </template>
 
 <script>
 import VButton from '@controls/VButton/VButton.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 
-import { mapActions, mapState } from 'vuex';
-import { $store } from '@services';
+import { mapState, mapActions } from 'vuex';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+
+import { NAME as SUBSCRIBES_MODULE, CONTENT, SUBSCRIBES } from '@store/modules/Profile/modules/Subscribes';
+import { SET_LOAD, FETCH_SUBSCRIBES_DATA, UPDATE_SUBSCRIBES } from '@store/modules/Profile/modules/Subscribes/actions';
+
+import _cloneDeep from 'lodash/cloneDeep';
+import { $store, $progress, $logger, $context } from '@services';
+import { modalName } from '@enums';
+import validationMixin, { required, minLength, email } from '@plugins/validation';
 import './Subscribes.css';
+
+const SUBSCRIBES_MODULE_PATH = `${PROFILE_MODULE}/${SUBSCRIBES_MODULE}`;
 
 export default {
     name: 'subscribes',
+    mixins: [validationMixin],
 
     components: {
         VButton,
         VCheck,
+        VSpinner,
 
         InfoPanel,
     },
 
+    validations: {
+        actualSubscrubes: {
+            channels: {},
+            periodicity: {},
+            topics: {},
+        },
+    },
+
     data() {
         return {
-            selectedSubscribes: [],
-            subscribes: [
-                {
-                    id: 1,
-                    name: 'Новинки лучших мировых брендов',
-                    description: 'Самые свежие новости в удобном формате в одном месте',
-                },
-                {
-                    id: 2,
-                    name: 'Персональные рекомендации',
-                    description: 'Рекомендации по твоим предпочтениям (настроить можно в разделе «Мои предпочтения»)',
-                },
-                {
-                    id: 3,
-                    name: 'СМС-оповещения',
-                    description: 'Оповещения на любую тему',
-                },
-            ],
-
-            selectedPeriod: 1,
-            periods: [
-                {
-                    id: 1,
-                    name: 'Каждый день',
-                },
-                {
-                    id: 2,
-                    name: '1 раз в неделю',
-                },
-                {
-                    id: 3,
-                    name: '2 раза в месяц',
-                },
-                {
-                    id: 4,
-                    name: 'Никогда',
-                },
-            ],
-
-            selectedReceivers: [],
-            receivers: [
-                {
-                    id: 1,
-                    name: 'SMS',
-                },
-                {
-                    id: 2,
-                    name: 'WhatsApp',
-                },
-                {
-                    id: 3,
-                    name: 'Viber',
-                },
-                {
-                    id: 4,
-                    name: 'Telegram',
-                },
-            ],
+            inProcess: false,
+            actualSubscrubes: { channels: [], periodicity: 1, topics: [] },
         };
     },
 
     computed: {
-        ...mapState(MODAL_MODULE, {}),
+        ...mapState(SUBSCRIBES_MODULE_PATH, [CONTENT, SUBSCRIBES]),
+
+        isDirty() {
+            return this.$v.$anyDirty;
+        },
+    },
+
+    watch: {
+        [SUBSCRIBES](value) {
+            this.setActualSubscribes(value);
+        },
     },
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(SUBSCRIBES_MODULE_PATH, [UPDATE_SUBSCRIBES]),
 
-        onSave() {},
+        setActualSubscribes(value) {
+            this.actualSubscrubes = _cloneDeep(value);
+            this.$v.$reset();
+        },
+
+        async onSave() {
+            try {
+                const { actualSubscrubes } = this;
+
+                this.inProcess = true;
+                await this[UPDATE_SUBSCRIBES](actualSubscrubes);
+                this.inProcess = false;
+            } catch (error) {
+                this.inProcess = false;
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.NOTIFICATION,
+                    open: true,
+                    state: {
+                        title: 'Уведомление',
+                        message: 'Произошла ошибка. Попробуйте ещё раз позже',
+                    },
+                });
+            }
+        },
+    },
+
+    beforeRouteEnter(to, from, next) {
+        const { isServer } = $context;
+        const { load } = $store.state[PROFILE_MODULE][SUBSCRIBES_MODULE];
+
+        if (load) {
+            $store.dispatch(`${SUBSCRIBES_MODULE_PATH}/${SET_LOAD}`, false);
+            return next();
+        }
+
+        $progress.start();
+        $store
+            .dispatch(`${SUBSCRIBES_MODULE_PATH}/${FETCH_SUBSCRIBES_DATA}`, isServer)
+            .then(() => {
+                next(vm => {
+                    $progress.finish();
+                });
+            })
+            .catch(thrown => {
+                $progress.fail();
+                if (thrown.status === httpCodes.FORBIDDEN) {
+                    $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);
+                    return next(false);
+                }
+                next();
+            });
+    },
+
+    created() {
+        this.setActualSubscribes(this[SUBSCRIBES]);
     },
 };
 </script>

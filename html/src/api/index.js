@@ -416,6 +416,18 @@ export function getPromocodeData(isArchive = 0) {
     });
 }
 
+export function getSubscribesContent() {
+    return $http.get('/v1/lk/newsletter/content');
+}
+
+export function getSubscribes() {
+    return $http.get('/v1/lk/newsletter/subscriptions');
+}
+
+export function updateSubscribes(data) {
+    return $http.put('/v1/lk/newsletter/subscriptions/edit', data);
+}
+
 // messages
 
 export function getProfileChats() {

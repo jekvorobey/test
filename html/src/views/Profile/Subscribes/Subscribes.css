@@ -94,11 +94,17 @@
     }
 
     &__submit {
+        min-height: calc(var(--gs) * 5);
+
         @media (--tablet-lg-min) {
             padding: 0;
         }
 
         &-btn {
+            display: flex;
+            justify-content: center;
+            min-width: 120px;
+
             @media (--tablet) {
                 width: 100%;
             }

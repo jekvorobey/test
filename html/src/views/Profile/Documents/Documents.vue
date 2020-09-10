@@ -43,12 +43,10 @@ import { NAME as DOCUMENTS_MODULE, ITEMS, FILTERS } from '@store/modules/Profile
 import { SET_LOAD_PATH, FETCH_DOCUMENTS, FETCH_DOCUMENTS_DATA } from '@store/modules/Profile/modules/Documents/actions';
 
 import { generateFileOriginalPath, formatFileSize } from '@util/file';
-
 import { documentsTypes } from '@enums/documents';
+import './Documents.css';
 
 const DOCUMENTS_MODULE_PATH = `${PROFILE_MODULE}/${DOCUMENTS_MODULE}`;
-
-import './Documents.css';
 
 export default {
     name: 'documents',

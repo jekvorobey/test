@@ -139,7 +139,7 @@ export default {
                         { name: 'Preferences', exact: true },
                         { name: 'Addresses', exact: true },
                         // { name: 'Payment', exact: true },
-                        // { name: 'Subscribes', exact: true },
+                        { name: 'Subscribes', exact: true },
                         {
                             name: 'Messages',
                             displayName:
