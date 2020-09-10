@@ -81,6 +81,9 @@ import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 
 import { mapState, mapActions } from 'vuex';
 
+import { NAME as AUTH_MODULE } from '@store/modules/Auth';
+import { CHECK_SESSION } from '@store/modules/Auth/actions';
+
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
@@ -91,7 +94,7 @@ import { SET_LOAD, FETCH_SUBSCRIBES_DATA, UPDATE_SUBSCRIBES } from '@store/modul
 
 import _cloneDeep from 'lodash/cloneDeep';
 import { $store, $progress, $logger, $context } from '@services';
-import { modalName } from '@enums';
+import { modalName, httpCodes } from '@enums';
 import validationMixin, { required, minLength, email } from '@plugins/validation';
 import './Subscribes.css';
 
