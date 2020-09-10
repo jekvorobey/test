@@ -679,19 +679,14 @@ export default {
                     },
                 } = to;
 
-                const encodeSearchString =
-                    search_string && toType === productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
-
                 const {
                     params: { code: fromCode, entityCode: fromEntityCode, type: fromType },
                 } = from;
 
                 const { query: { page: fromPage = 1 } = { page: 1 } } = from;
-                const { filter, routeSegments, filterSegments } = computeFilterData(
-                    pathMatch,
-                    toCode,
-                    encodeSearchString
-                );
+                const searchString =
+                    search_string && toType === productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
+                const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
 
                 if (!showMore && page !== fromPage)
                     this.scrollTo({
@@ -709,6 +704,7 @@ export default {
                     routeSegments,
                     filterSegments,
 
+                    searchString,
                     page,
                     orderField,
                     orderDirection,
@@ -747,17 +743,16 @@ export default {
             },
         } = to;
 
-        // Если у нас нет поисковой строки, либо продуктовая группа !== search, ничего искать не нужно
-        const encodeSearchString =
-            search_string && toType === productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
-
         const { loadPath, categoryCode, entityCode, type } = $store.state[CATALOG_MODULE];
 
         // если все загружено, пропускаем
         if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode)
             next(vm => vm.setSortValue(orderField, orderDirection));
         else {
-            const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode, encodeSearchString);
+            // Если у нас нет поисковой строки, либо продуктовая группа !== search, ничего искать не нужно
+            const searchString =
+                search_string && toType === productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
+            const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
 
             $progress.start();
             $store
@@ -770,6 +765,7 @@ export default {
                     routeSegments,
                     filterSegments,
 
+                    searchString,
                     page,
                     orderField,
                     orderDirection,
@@ -814,12 +810,6 @@ export default {
                 search_string: to_search_string,
             },
         } = to;
-
-        // Если у нас нет поисковой строки, либо продуктовая группа !== search, ничего искать не нужно
-        const encodeSearchString =
-            to_search_string && toType === productGroupTypes.SEARCH ? encodeURI(to_search_string) : undefined;
-
-        const { filter, routeSegments, filterSegments } = computeFilterData(toPathMatch, toCode, encodeSearchString);
 
         const {
             params: { code: fromCode, entityCode: fromEntityCode, type: fromType, pathMatch: fromPathMatch },

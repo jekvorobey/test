@@ -133,7 +133,7 @@ export function getActiveCategories(code, item, activeItems = []) {
     return false;
 }
 
-export function computeFilterData(pathMatch, code = null, searchString = null) {
+export function computeFilterData(pathMatch, code = null) {
     const filter = { category: code };
     const routeSegments = pathMatch ? pathMatch.split('/') : [];
     const filterSegments = mapFilterSegments(routeSegments);
@@ -145,10 +145,6 @@ export function computeFilterData(pathMatch, code = null, searchString = null) {
 
         if (Array.isArray(segment)) filter[filterName] = segment;
         else filter[filterName] = Object.keys(segment);
-    }
-
-    if (searchString) {
-        filter.search_string = searchString;
     }
 
     return { filter, routeSegments, filterSegments };

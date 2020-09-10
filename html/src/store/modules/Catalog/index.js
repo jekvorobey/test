@@ -11,6 +11,7 @@ export const TYPE = 'type';
 export const ENTITY_CODE = 'entityCode';
 export const CATEGORY_CODE = 'categoryCode';
 export const BASE_CATEGORY_CODE = 'baseCategoryCode';
+export const SEARCH_STRING = 'searchString';
 
 export const CATEGORIES = 'categories';
 export const FILTERS = 'filters';
@@ -34,6 +35,7 @@ export default function createModule() {
             [ENTITY_CODE]: null,
             [CATEGORY_CODE]: null,
             [BASE_CATEGORY_CODE]: null,
+            [SEARCH_STRING]: null,
 
             [PRODUCT_GROUP]: {
                 type: productGroupTypes.CATALOG,

@@ -84,6 +84,7 @@ export default {
             filter = {},
             routeSegments,
             filterSegments,
+            searchString,
 
             page,
             orderField,
@@ -114,25 +115,16 @@ export default {
             // eslint-disable-next-line prefer-destructuring
             based = data.productGroup.based;
             excludedFilters = data.productGroup.excluded_filters;
-            productGroupFilter = data.productGroup.filters;
-
-            if (based === productGroupBase.FILTERS) {
-                fetchList.push({
-                    action: FETCH_CATEGORIES,
-                    payload: { code: productGroupFilter.category, filter: productGroupFilter },
-                });
-            } else {
-                data.categories = [];
-                data.activeCategories = [];
-            }
+            // подмешиваем серч строку в фильтры продуктовой группы
+            productGroupFilter = { ...data.productGroup.filters, search_string: searchString };
         } else {
             data.productGroup = state.productGroup;
-            data.categories = state.categories;
 
             // eslint-disable-next-line prefer-destructuring
             based = state.productGroup.based;
             excludedFilters = state.productGroup.excluded_filters;
-            productGroupFilter = state.productGroup.filters;
+            // подмешиваем серч строку в фильтры продуктовой группы
+            productGroupFilter = { ...state.productGroup.filters, search_string: searchString };
         }
 
         mergedCategory = filter.category || productGroupFilter.category || undefined;
@@ -142,8 +134,17 @@ export default {
         };
 
         if (based === productGroupBase.FILTERS) {
-            data.baseCategoryCode = productGroupFilter.category;
-            data.categoryCode = mergedfilter.category;
+            if (state.type !== type || state.entityCode !== entityCode || state.searchString !== searchString) {
+                fetchList.push({
+                    action: FETCH_CATEGORIES,
+                    payload: { code: productGroupFilter.category, filter: productGroupFilter },
+                });
+            } else {
+                data.categories = state.categories;
+            }
+
+            data.baseCategoryCode = productGroupFilter.category || null;
+            data.categoryCode = mergedfilter.category || null;
 
             fetchList.push({
                 action: FETCH_FILTERS,
@@ -153,11 +154,13 @@ export default {
                 },
             });
         } else {
+            data.categories = [];
+            data.filters = [];
             data.baseCategoryCode = null;
             data.categoryCode = null;
-            data.filters = [];
         }
 
+        data.searchString = searchString;
         data.routeSegments = routeSegments;
         data.filterSegments = filterSegments;
         data.page = page;
@@ -177,7 +180,6 @@ export default {
         for (let i = 0; i < fetchList.length; i++) {
             const method = fetchList[i];
             const fetchItem = fetchData[i];
-            const { items = [], range = 0 } = fetchItem;
 
             switch (method.action) {
                 case FETCH_CATEGORIES:
@@ -187,16 +189,19 @@ export default {
                     data.filters = fetchItem;
                     data.filtersStateMap = {};
                     // eslint-disable-next-line no-restricted-syntax
-                    for (const datafilter of data.filters)
-                        data.filtersStateMap[datafilter.name] = state.filtersStateMap[datafilter.name] || {
+                    for (const dataFilter of data.filters)
+                        data.filtersStateMap[dataFilter.name] = state.filtersStateMap[dataFilter.name] || {
                             isExpanded: true,
                             showMore: false,
                         };
                     break;
                 case FETCH_ITEMS:
-                    if (showMore) data.items = [...state.items, ...items];
-                    else data.items = items;
-                    data.range = range;
+                    {
+                        const { items = [], range = 0 } = fetchItem;
+                        if (showMore) data.items = [...state.items, ...items];
+                        else data.items = items;
+                        data.range = range;
+                    }
                     break;
                 default:
                     break;
