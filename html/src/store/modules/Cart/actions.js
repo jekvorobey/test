@@ -1,8 +1,12 @@
-import { cookieNames, requestStatus } from '@enums';
+import { cookieNames, requestStatus, httpCodes } from '@enums';
 import { $cookie, $retailRocket } from '@services';
+import { getRandomIntInclusive } from '@util';
+import { storeErrorHandler } from '@util/store';
+
 import {
     getProducts,
     getCartData,
+    checkCartData,
     deleteCartItem,
     addCartItem,
     addMasterclassItem,
@@ -13,8 +17,6 @@ import {
     addCartBundle,
     deleteCartBundle,
 } from '@api';
-import { getRandomIntInclusive } from '@util';
-import { storeErrorHandler } from '@util/store';
 
 import { SET_CART_DATA, SET_FEATURED_PRODUCTS, SET_RELATIVE_PRODUCTS, SET_STATUS } from './mutations';
 import { PROMOCODE_STATUS } from './getters';
@@ -22,6 +24,7 @@ import { PROMOCODE_STATUS } from './getters';
 export const SET_LOAD = 'SET_LOAD';
 export const CLEAR_CART_DATA = 'CLEAR_CART_DATA';
 export const FETCH_CART_DATA = 'FETCH_CART_DATA';
+export const CHECK_CART_DATA = 'CHECK_CART_DATA';
 
 export const FETCH_RELATIVE_PRODUCTS = 'FETCH_RELATIVE_PRODUCTS';
 export const FETCH_FEATURED_PRODUCTS = 'FETCH_FEATURED_PRODUCTS';
@@ -53,7 +56,7 @@ export default {
             const data = await getProducts(payload);
             commit(SET_FEATURED_PRODUCTS, data.items.slice(2, 11));
         } catch (error) {
-            storeErrorHandler(FETCH_FEATURED_PRODUCTS, error);
+            storeErrorHandler(FETCH_FEATURED_PRODUCTS)(error);
         }
     },
 
@@ -65,7 +68,7 @@ export default {
             const offset = start + getRandomIntInclusive(1, 3);
             commit(SET_RELATIVE_PRODUCTS, data.items.slice(start, offset));
         } catch (error) {
-            storeErrorHandler(FETCH_RELATIVE_PRODUCTS, error);
+            storeErrorHandler(FETCH_RELATIVE_PRODUCTS)(error);
         }
     },
 
@@ -75,7 +78,7 @@ export default {
             const data = { ...state.cartData, [type]: undefined };
             commit(SET_CART_DATA, data);
         } catch (error) {
-            storeErrorHandler(DELETE_ALL_ITEMS, error);
+            storeErrorHandler(DELETE_ALL_ITEMS)(error);
         }
     },
 
@@ -89,7 +92,7 @@ export default {
             const data = await addCartItem(offerId, storeId, count, code);
             commit(SET_CART_DATA, data);
         } catch (error) {
-            storeErrorHandler(ADD_CART_ITEM, error);
+            storeErrorHandler(ADD_CART_ITEM)(error);
         }
     },
 
@@ -98,7 +101,7 @@ export default {
             const data = await addMasterclassItem(offerId, count);
             commit(SET_CART_DATA, data);
         } catch (error) {
-            storeErrorHandler(ADD_MASTERCLASS_ITEM, error);
+            storeErrorHandler(ADD_MASTERCLASS_ITEM)(error);
         }
     },
 
@@ -107,7 +110,7 @@ export default {
             const data = await deleteMasterclassItem(offerId);
             commit(SET_CART_DATA, data);
         } catch (error) {
-            storeErrorHandler(DELETE_MASTERCLASS_ITEM, error);
+            storeErrorHandler(DELETE_MASTERCLASS_ITEM)(error);
         }
     },
 
@@ -116,7 +119,7 @@ export default {
             const data = await deleteCartItem(offerId, storeId);
             commit(SET_CART_DATA, data);
         } catch (error) {
-            storeErrorHandler(DELETE_CART_ITEM, error);
+            storeErrorHandler(DELETE_CART_ITEM)(error);
         }
     },
 
@@ -126,7 +129,16 @@ export default {
             const data = await addCartBundle(bundleId, count, code);
             commit(SET_CART_DATA, data);
         } catch (error) {
-            storeErrorHandler(ADD_CART_BUNDLE, error);
+            storeErrorHandler(ADD_CART_BUNDLE)(error);
+        }
+    },
+
+    async [DELETE_CART_BUNDLE]({ commit }, bundleId) {
+        try {
+            const data = await deleteCartBundle(bundleId);
+            commit(SET_CART_DATA, data);
+        } catch (error) {
+            storeErrorHandler(DELETE_CART_BUNDLE)(error);
         }
     },
 
@@ -154,22 +166,28 @@ export default {
         }
     },
 
+    async [CHECK_CART_DATA]({ commit }) {
+        try {
+            await checkCartData();
+        } catch (error) {
+            const { data, status } = error;
+            const { cart, errors, warnings } = data || {};
+            storeErrorHandler(CHECK_CART_DATA)(error);
+
+            if (status === httpCodes.BAD_REQUEST) {
+                commit(SET_CART_DATA, cart);
+                return { errors, warnings };
+            }
+        }
+    },
+
     async [FETCH_CART_DATA]({ commit }, isServer) {
         try {
             const data = await getCartData();
             commit(SET_LOAD, isServer);
             commit(SET_CART_DATA, data);
         } catch (error) {
-            storeErrorHandler(FETCH_CART_DATA, error);
-        }
-    },
-
-    async [DELETE_CART_BUNDLE]({ commit }, bundleId) {
-        try {
-            const data = await deleteCartBundle(bundleId);
-            commit(SET_CART_DATA, data);
-        } catch (error) {
-            storeErrorHandler(DELETE_CART_BUNDLE, error);
+            storeErrorHandler(FETCH_CART_DATA)(error);
         }
     },
 };

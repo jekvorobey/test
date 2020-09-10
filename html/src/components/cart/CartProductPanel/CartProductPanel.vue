@@ -34,6 +34,7 @@
                     :price="product.price"
                     :old-price="product.oldPrice"
                     :count="count"
+                    :max-count="product.stock && product.stock.qty"
                     :href="product.url"
                     show-count
                     show-controls

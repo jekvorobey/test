@@ -716,6 +716,10 @@ export function getCartData() {
     return $http.get('/v1/cart/data');
 }
 
+export function checkCartData() {
+    return $http.post('/v1/cart/check');
+}
+
 export function deleteAllItems(type) {
     switch (type) {
         case cartItemTypes.MASTERCLASS:

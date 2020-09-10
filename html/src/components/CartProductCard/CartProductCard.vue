@@ -21,7 +21,7 @@
         <div class="cart-product-card__body">
             <v-link class="cart-product-card__body-name" :to="href">{{ name }}</v-link>
             <div class="cart-product-card__body-count" v-if="showCount">
-                <v-counter :value="count" min="1" @input="debounce_countChange" />
+                <v-counter min="1" :max="maxCount" :value="count" @input="debounce_countChange" />
             </div>
 
             <div class="cart-product-card__body-prices">
@@ -133,6 +133,11 @@ export default {
         },
 
         count: {
+            type: Number,
+            default: 1,
+        },
+
+        maxCount: {
             type: Number,
             default: 1,
         },
