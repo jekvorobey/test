@@ -1,4 +1,5 @@
 import { DEFAULT_REVIEWS_PAGE_SIZE } from '@constants';
+import { pluralize } from '@util';
 
 const PRODUCT_OPTIONS = 'productOptions';
 
@@ -28,15 +29,20 @@ export default {
     [CHARACTERISTICS](state, getters) {
         const characteristics = (state[PRODUCT_OPTIONS] && state[PRODUCT_OPTIONS][CHARACTERISTICS]) || [];
         return characteristics.map((c) => {
+            const options = c.options.map((p) => ({
+                ...p,
+                isSelected: getters[IS_SELECTED](c.code, p.value),
+                isDisabled: getters[IS_DISABLED](c.code, p.value),
+            }));
+
+            const selectedOption = options.find((o) => !!o.isSelected);
+            const note = `${options.length} ${pluralize(options.length, ['Вариант', 'Варианта', 'Вариантов'])}`;
+
             return {
                 ...c,
-                options: c.options.map((p) => {
-                    return {
-                        ...p,
-                        isSelected: getters[IS_SELECTED](c.code, p.value),
-                        isDisabled: getters[IS_DISABLED](c.code, p.value),
-                    };
-                }),
+                note,
+                selectedOption,
+                options,
             };
         });
     },
@@ -56,9 +62,9 @@ export default {
 
         return combinations.find((c) => {
             let accepted = true;
+            // eslint-disable-next-line no-restricted-syntax
             for (const optName in selectedCombination.props) {
-                if (optName === code) continue;
-                if (selectedCombination.props[optName] !== c.props[optName]) {
+                if (optName !== code && selectedCombination.props[optName] !== c.props[optName]) {
                     accepted = false;
                     break;
                 }

@@ -114,7 +114,8 @@
                             :key="char.code"
                             v-for="char in characteristics"
                             :header="char.name"
-                            :note="$tc('product.variants', char.options.length)"
+                            :selected-option="char.selectedOption && char.selectedOption.name"
+                            :note="char.note"
                         >
                             <div class="product-view__header-detail-options-tags" v-if="char.type === 'radio'">
                                 <product-option-tag
@@ -889,13 +890,7 @@ export default {
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
 
         ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION]),
-        ...mapState(PRODUCT_MODULE, [
-            PRODUCT,
-            PRODUCT_OPTIONS,
-            BANNERS,
-            FEATURED_PRODUCTS,
-            PRODUCT_BUNDLES,
-        ]),
+        ...mapState(PRODUCT_MODULE, [PRODUCT, PRODUCT_OPTIONS, BANNERS, FEATURED_PRODUCTS, PRODUCT_BUNDLES]),
 
         ...mapState(MODAL_MODULE, {
             isGalleryOpen: state =>

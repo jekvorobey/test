@@ -1,8 +1,11 @@
 <template>
     <div class="product-option-panel">
         <div class="product-option-panel__header">
-            <div class="text-bold text-uppercase">{{ header }}</div>
-            <div v-if="note" class="text-grey text-sm">{{ note }}</div>
+            <div class="text-bold product-option-panel__header-text">
+                <span class="text-uppercase">{{ header }} </span>
+                <span class="product-option-panel__header-text-option">{{ selectedOption }}</span>
+            </div>
+            <div class="text-grey text-sm product-option-panel__header-note" v-if="note">{{ note }}</div>
         </div>
         <slot />
     </div>
@@ -18,6 +21,10 @@ export default {
         header: {
             type: String,
             required: true,
+        },
+
+        selectedOption: {
+            type: [String, Number],
         },
 
         note: {
