@@ -522,11 +522,12 @@ export function getProductGroups(type, page, orderField = 'name') {
     });
 }
 
-export function getProductGroup(type, code) {
+export function getProductGroup(type, code, filter) {
     return $http.get('/v1/catalog/product-group', {
         params: {
             type_code: type,
             code,
+            filter,
         },
         paramsSerializer(params) {
             return qs.stringify(params, {

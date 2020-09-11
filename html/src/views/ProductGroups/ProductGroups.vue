@@ -6,9 +6,9 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="sets" :to="{ path: $route.path }">
-                    {{ $t(`productGroups.title.${type}`) }}
-                </breadcrumb-item>
+                <breadcrumb-item key="sets" :to="{ path: $route.path }">{{
+                    $t(`productGroups.title.${type}`)
+                }}</breadcrumb-item>
             </breadcrumbs>
         </div>
 

@@ -67,9 +67,9 @@ export default {
         }
     },
 
-    async [FETCH_PRODUCT_GROUP](context, { type, entityCode }) {
+    async [FETCH_PRODUCT_GROUP](context, { type, entityCode, filter }) {
         try {
-            const data = await getProductGroup(type, entityCode || undefined);
+            const data = await getProductGroup(type, entityCode || undefined, filter);
             return data;
         } catch (error) {
             storeErrorHandler(FETCH_PRODUCT_GROUP, true)(error);
@@ -84,8 +84,8 @@ export default {
             filter = {},
             routeSegments,
             filterSegments,
-            searchString,
 
+            searchString,
             page,
             orderField,
             orderDirection,
@@ -107,6 +107,9 @@ export default {
             data.productGroup = await dispatch(FETCH_PRODUCT_GROUP, {
                 type,
                 entityCode,
+                filter: {
+                    search_string: searchString,
+                },
             });
 
             data.entityCode = entityCode;
@@ -115,16 +118,14 @@ export default {
             // eslint-disable-next-line prefer-destructuring
             based = data.productGroup.based;
             excludedFilters = data.productGroup.excluded_filters;
-            // подмешиваем серч строку в фильтры продуктовой группы
-            productGroupFilter = { ...data.productGroup.filters, search_string: searchString };
+            productGroupFilter = data.productGroup.filters;
         } else {
             data.productGroup = state.productGroup;
 
             // eslint-disable-next-line prefer-destructuring
             based = state.productGroup.based;
             excludedFilters = state.productGroup.excluded_filters;
-            // подмешиваем серч строку в фильтры продуктовой группы
-            productGroupFilter = { ...state.productGroup.filters, search_string: searchString };
+            productGroupFilter = state.productGroup.filters;
         }
 
         mergedCategory = filter.category || productGroupFilter.category || undefined;
