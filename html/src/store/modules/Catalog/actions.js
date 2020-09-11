@@ -95,6 +95,8 @@ export default {
 
         const data = {};
         const fetchList = [];
+        const isProductGroupChanged =
+            state.type !== type || state.entityCode !== entityCode || state.searchString !== searchString;
 
         let mergedCategory = filter.category;
         let mergedfilter = filter;
@@ -103,7 +105,7 @@ export default {
         let excludedFilters = null;
         let productGroupFilter = null;
 
-        if (state.type !== type || state.entityCode !== entityCode) {
+        if (isProductGroupChanged) {
             data.productGroup = await dispatch(FETCH_PRODUCT_GROUP, {
                 type,
                 entityCode,
@@ -135,7 +137,7 @@ export default {
         };
 
         if (based === productGroupBase.FILTERS) {
-            if (state.type !== type || state.entityCode !== entityCode || state.searchString !== searchString) {
+            if (isProductGroupChanged) {
                 fetchList.push({
                     action: FETCH_CATEGORIES,
                     payload: { code: productGroupFilter.category, filter: productGroupFilter },
