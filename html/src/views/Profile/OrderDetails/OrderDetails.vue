@@ -397,7 +397,7 @@ export default {
 
         deliveryAddress() {
             const deliveries = this[DELIVERIES] || [];
-            return this.formatAddress(deliveries[0]);
+            return deliveries[0] && this.formatAddress(deliveries[0]);
         },
 
         deliveryPoint() {
