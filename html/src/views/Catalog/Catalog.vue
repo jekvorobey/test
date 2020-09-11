@@ -735,7 +735,7 @@ export default {
                 page = 1,
                 orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.POPULARITY,
                 orderDirection = sortDirections.DESC,
-                search_string,
+                search_string: toSearchString,
             } = {
                 page: 1,
                 orderField: sortFields.POPULARITY,
@@ -743,15 +743,23 @@ export default {
             },
         } = to;
 
-        const { loadPath, categoryCode, entityCode, type } = $store.state[CATALOG_MODULE];
+        const { loadPath, categoryCode, entityCode, type, searchString: stateSearchString } = $store.state[
+            CATALOG_MODULE
+        ];
 
         // если все загружено, пропускаем
-        if (loadPath === fullPath && toType === type && toCode === categoryCode && toEntityCode === entityCode)
+        if (
+            loadPath === fullPath &&
+            toType === type &&
+            toCode === categoryCode &&
+            toEntityCode === entityCode &&
+            toSearchString === stateSearchString
+        )
             next(vm => vm.setSortValue(orderField, orderDirection));
         else {
             // Если у нас нет поисковой строки, либо продуктовая группа !== search, ничего искать не нужно
             const searchString =
-                search_string && toType === productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
+                toSearchString && toType === productGroupTypes.SEARCH ? encodeURI(toSearchString) : undefined;
             const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
 
             $progress.start();
