@@ -159,8 +159,10 @@ export default {
                 if (selectedCitySuggestion) {
                     const {
                         city,
+                        city_type,
                         city_fias_id,
                         settlement,
+                        settlement_type,
                         settlement_fias_id,
                         geo_lat,
                         geo_lon,
@@ -170,6 +172,7 @@ export default {
                     await this[SET_SELECTED_CITY]({
                         city: {
                             name: settlement || city,
+                            type: settlement_type || city_type,
                             fias_id: settlement_fias_id || city_fias_id,
                             geo_lat: geo_lat,
                             geo_lon: geo_lon,

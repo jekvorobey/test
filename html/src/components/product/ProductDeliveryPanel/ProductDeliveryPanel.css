@@ -7,8 +7,12 @@
         font-weight: normal;
         text-transform: none;
 
+        &-type,
         &-text {
             margin-right: calc(var(--gs) / 2);
+        }
+
+        &-text {
             border-bottom: 1px solid var(--cl-global);
         }
 

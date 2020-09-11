@@ -3,6 +3,7 @@
         <p>
             Получить в
             <button class="product-delivery-panel__btn" title="Выбрать город" @click="onOpenCitySelection">
+                <span class="product-delivery-panel__btn-type" v-if="cityType">{{ cityType }}.</span>
                 <v-clamp class="product-delivery-panel__btn-text" :max-lines="1" autoresize>
                     {{ city }}
                 </v-clamp>
@@ -87,6 +88,7 @@ export default {
         ...mapState([LOCALE]),
         ...mapState(GEO_MODULE, {
             city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            cityType: state => (state[SELECTED_CITY] && state[SELECTED_CITY].type) || null,
         }),
     },
 
