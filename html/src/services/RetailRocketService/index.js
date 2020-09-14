@@ -3,13 +3,14 @@
  */
 export default class RetailRocketService {
     get apiEventQueue() {
-        return (window['rrApiOnReady'] = window['rrApiOnReady'] || []);
+        if (!window.rrApiOnReady) window.rrApiOnReady = [];
+        return window.rrApiOnReady;
     }
 
     addProductView(productIds) {
         this.apiEventQueue.push(() => {
             try {
-                rrApi.groupView([...productIds]);
+                window.rrApi.groupView([...productIds]);
             } catch (e) {}
         });
     }
@@ -17,24 +18,32 @@ export default class RetailRocketService {
     addCategoryView(categoryId) {
         this.apiEventQueue.push(() => {
             try {
-                rrApi.categoryView(categoryId);
+                window.rrApi.categoryView(categoryId);
             } catch (e) {}
         });
     }
 
     addProductToBasket(productId) {
         try {
-            rrApi.addToBasket(productId);
+            window.rrApi.addToBasket(productId);
         } catch (e) {}
     }
 
     addTransaction(transactionId, items) {
         this.apiEventQueue.push(() => {
             try {
-                rrApi.order({
+                window.rrApi.order({
                     transaction: `${transactionId}`,
                     items: [...items],
                 });
+            } catch (e) {}
+        });
+    }
+
+    setEmail(email, info) {
+        this.apiEventQueue.push(() => {
+            try {
+                window.rrApi.setEmail(email, info);
             } catch (e) {}
         });
     }
