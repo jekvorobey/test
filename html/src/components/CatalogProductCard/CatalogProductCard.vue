@@ -10,7 +10,7 @@
             </v-picture>
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
 
-            <div class="catalog-product-card__controls" v-if="showControls && !isTablet">
+            <div class="catalog-product-card__controls" v-if="showControls && !isTabletLg">
                 <buy-button
                     v-if="showBuyBtn"
                     class="btn--outline catalog-product-card__controls-btn"
@@ -215,8 +215,8 @@ export default {
             return this[IS_IN_FAVORITES](this.productId);
         },
 
-        isTablet() {
-            return this.$mq.tablet;
+        isTabletLg() {
+            return this.$mq.tabletLg;
         },
     },
 

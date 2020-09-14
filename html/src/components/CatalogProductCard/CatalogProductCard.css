@@ -17,7 +17,7 @@
     &:hover &__img {
         border-color: var(--cl-divider-grey);
 
-        @media (--tablet-min) {
+        @media (--tablet-lg-min) {
             img {
                 opacity: 0.2;
                 transition: all var(--time) ease-in;

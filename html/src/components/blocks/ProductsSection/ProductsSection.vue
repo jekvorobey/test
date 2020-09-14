@@ -190,15 +190,22 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
-        onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: 'quick-view-modal', open: true, state: { code } });
+        onAddToCart(item) {
+            const { code, type, stock, id, variantGroups } = item;
+
+            if (variantGroups) this.onPreview(code);
+            else
+                this[ADD_CART_ITEM]({
+                    offerId: id,
+                    storeId: stock && stock.storeId,
+                });
         },
 
-        onAddToCart(item) {
+        onPreview(code) {
             this[CHANGE_MODAL_STATE]({
-                name: modalName.general.ADD_TO_CART,
+                name: modalName.general.QUICK_VIEW,
                 open: true,
-                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
+                state: { code },
             });
         },
 

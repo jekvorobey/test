@@ -152,24 +152,31 @@ export default {
         },
 
         onPreview(code) {
+            const { referralCode } = this;
+
             this[CHANGE_MODAL_STATE]({
                 name: modalName.general.QUICK_VIEW,
                 open: true,
-                state: { code, referralCode: this.referralCode },
+                state: { code, referralCode },
             });
         },
 
         onAddToCart(item) {
-            this[CHANGE_MODAL_STATE]({
-                name: modalName.general.ADD_TO_CART,
-                open: true,
-                state: {
-                    offerId: item.id,
-                    storeId: item.stock.storeId,
-                    type: item.type,
-                    referralCode: this.referralCode,
-                },
-            });
+            const { referralCode } = this;
+            const { code, type, stock, id, variantGroups } = item;
+
+            if (variantGroups) this.onPreview(code);
+            else
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.ADD_TO_CART,
+                    open: true,
+                    state: {
+                        offerId: id,
+                        storeId: stock && stock.storeId,
+                        type,
+                        referralCode,
+                    },
+                });
         },
     },
 };

@@ -52,6 +52,7 @@
                             v-else
                             class="product-view__header-gallery"
                             name="gallery"
+                            :key="code"
                             :options="productGalleryOptions"
                             :controls="productImages.media.length > 1"
                         >
@@ -70,19 +71,11 @@
                                 "
                             >
                                 <v-picture>
-                                    <source
-                                        :data-srcset="image.desktop.webp"
-                                        type="image/webp"
-                                        media="(min-width: 480px)"
-                                    />
-                                    <source :data-srcset="image.desktop.orig" media="(min-width: 480px)" />
-                                    <source
-                                        :data-srcset="image.tablet.webp"
-                                        type="image/webp"
-                                        media="(max-width: 479px)"
-                                    />
-                                    <source :data-srcset="image.tablet.orig" media="(max-width: 479px)" />
-                                    <img class="blur-up lazyload v-picture__img" :data-src="image.default" alt="" />
+                                    <source :srcset="image.desktop.webp" type="image/webp" media="(min-width: 480px)" />
+                                    <source :srcset="image.desktop.orig" media="(min-width: 480px)" />
+                                    <source :srcset="image.tablet.webp" type="image/webp" media="(max-width: 479px)" />
+                                    <source :srcset="image.tablet.orig" media="(max-width: 479px)" />
+                                    <img class="v-picture__img" :src="image.default" alt="" />
                                 </v-picture>
                             </div>
                         </v-slider>
@@ -1159,10 +1152,6 @@ export default {
             this[TOGGLE_FAVORITES_ITEM](productId);
         },
 
-        onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
-        },
-
         onShowGallery() {
             const { gallery } = this.productImages;
             if (!gallery || !gallery.length) return;
@@ -1191,10 +1180,17 @@ export default {
         },
 
         onAddToCart(item) {
+            const { code, type, stock, id, variantGroups } = item;
+
+            if (variantGroups) this.onPreview(code);
+            else this[ADD_CART_ITEM]({ offerId: id, storeId: stock && stock.storeId });
+        },
+
+        onPreview(code) {
             this[CHANGE_MODAL_STATE]({
-                name: modalName.general.ADD_TO_CART,
+                name: modalName.general.QUICK_VIEW,
                 open: true,
-                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
+                state: { code },
             });
         },
 
@@ -1233,7 +1229,6 @@ export default {
         },
 
         onShowOption(charCode, optValue) {
-            const { categoryCode } = this;
             const { image } = this[GET_NEXT_COMBINATION](charCode, optValue);
             this.optionImage = image;
         },

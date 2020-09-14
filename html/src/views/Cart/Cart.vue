@@ -179,7 +179,7 @@
                         :badges="item.badges"
                         :rating="item.rating"
                         :show-buy-btn="item.stock.qty > 0"
-                        @add-item="onAddCartItem(item.id, item.stock.storeId)"
+                        @add-item="onAddToCart(item)"
                         @preview="onPreview(item.code)"
                         @toggle-favorite-item="onToggleFavorite(item)"
                     />
@@ -416,16 +416,27 @@ export default {
             this[TOGGLE_FAVORITES_ITEM](productId);
         },
 
-        onAddCartItem(offerId, storeId) {
-            this[ADD_CART_ITEM]({ offerId, storeId });
+        onAddToCart(item) {
+            const { code, type, stock, id, variantGroups } = item;
+
+            if (variantGroups) this.onPreview(code);
+            else this[ADD_CART_ITEM]({ offerId: id, storeId: stock && stock.storeId });
         },
 
         onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.QUICK_VIEW,
+                open: true,
+                state: { code },
+            });
         },
 
         openOnClearCart(type) {
-            this[CHANGE_MODAL_STATE]({ name: modalName.cart.CLEAR_CART, open: true, state: { type } });
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.cart.CLEAR_CART,
+                open: true,
+                state: { type },
+            });
         },
 
         prepareBonus(value) {

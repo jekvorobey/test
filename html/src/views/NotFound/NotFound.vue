@@ -137,15 +137,18 @@ export default {
             this[TOGGLE_FAVORITES_ITEM](productId);
         },
 
-        onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: modalName.general.QUICK_VIEW, open: true, state: { code } });
+        onAddToCart(item) {
+            const { code, type, stock, id, variantGroups } = item;
+
+            if (variantGroups) this.onPreview(code);
+            else this[ADD_CART_ITEM]({ offerId: id, storeId: stock && stock.storeId });
         },
 
-        onAddToCart(item) {
+        onPreview(code) {
             this[CHANGE_MODAL_STATE]({
-                name: modalName.general.ADD_TO_CART,
+                name: modalName.general.QUICK_VIEW,
                 open: true,
-                state: { offerId: item.id, storeId: item.stock.storeId, type: item.type },
+                state: { code },
             });
         },
     },

@@ -15,9 +15,9 @@
             </v-picture>
             <v-svg v-else id="catalog-product-list-card-empty" name="logo" width="48" height="48" />
 
-            <div class="catalog-product-list-card__controls" v-once>
+            <div v-if="!isTabletLg" class="catalog-product-list-card__controls" v-once>
                 <buy-button
-                    v-if="showBuyBtn && !isTablet"
+                    v-if="showBuyBtn"
                     class="btn--outline catalog-product-list-card__controls-btn"
                     @click.prevent="onBuyButtonClick"
                 >
@@ -194,8 +194,8 @@ export default {
             );
         },
 
-        isTablet() {
-            return this.$mq.tablet;
+        isTabletLg() {
+            return this.$mq.tabletLg;
         },
     },
 

@@ -255,7 +255,11 @@ export default {
         },
 
         onPreview(code) {
-            this[CHANGE_MODAL_STATE]({ name: 'quick-view-modal', open: true, state: { code } });
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.QUICK_VIEW,
+                open: true,
+                state: { code },
+            });
         },
 
         onDeleteProduct(id) {
