@@ -88,8 +88,6 @@
             }
 
             .v-sticky {
-                overflow: hidden;
-
                 &__container {
                     top: 60px;
                     margin-bottom: auto;
@@ -447,6 +445,13 @@
                         line-height: 16px;
                         margin-bottom: var(--gs);
                     }
+                }
+            }
+
+            .v-sticky {
+                &__container {
+                    top: 60px;
+                    margin-bottom: auto;
                 }
             }
         }
