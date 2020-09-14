@@ -1,19 +1,21 @@
 <template>
     <general-modal type="wide" class="quick-view-modal" @close="onClose">
         <template v-slot:content>
-            <div class="quick-view-modal__body" v-if="!isPending">
+            <div class="quick-view-modal__body" v-if="productPreview">
                 <ul class="quick-view-modal__gallery">
                     <li
-                        v-if="!images || !images.length"
+                        v-if="!currentGalleryImages || !currentGalleryImages.length"
                         class="quick-view-modal__gallery-item quick-view-modal__gallery-item--empty"
                     >
                         <v-svg name="logo" width="56" height="56" />
                     </li>
-                    <li class="quick-view-modal__gallery-item" v-for="image in images" :key="image.id">
+                    <li class="quick-view-modal__gallery-item" v-for="image in currentGalleryImages" :key="image.id">
                         <v-picture>
-                            <source :data-srcset="image.bigImage" type="image/webp" media="(min-width: 480px)" />
-                            <source :data-srcset="image.smallImage" type="image/webp" media="(max-width: 479px)" />
-                            <img class="blur-up lazyload v-picture__img" :data-src="image.defaultImage" alt="" />
+                            <source :srcset="image.desktop.webp" type="image/webp" media="(min-width: 480px)" />
+                            <source :srcset="image.desktop.orig" media="(min-width: 480px)" />
+                            <source :srcset="image.tablet.webp" type="image/webp" media="(max-width: 479px)" />
+                            <source :srcset="image.tablet.orig" media="(max-width: 479px)" />
+                            <img class="v-picture__img" :src="image.default" alt="" />
                         </v-picture>
                     </li>
                 </ul>
@@ -25,22 +27,61 @@
                         :vendor-code="productPreview.vendorCode"
                         :rating="productPreview.rating"
                     />
-                    <product-cart-panel
-                        class="quick-view-modal__detail-cart"
-                        :productId="productPreview.productId"
-                        :price="productPreview.price"
-                        :old-price="productPreview.oldPrice"
-                        :bonus="productPreview.bonus"
-                        :disabled="!canBuy"
-                        @cart="onCartStateChange"
-                        @wishlist="onToggleFavorite(productPreview.productId)"
-                    >
-                        {{ buyBtnText }}
-                    </product-cart-panel>
-                    <product-delivery-panel
-                        :deliveryMethods="productPreview.deliveryMethods"
-                        @pickup-points="onPickupPoints"
-                    />
+
+                    <v-scroll class="quick-view-modal__detail-scroll">
+                        <product-option-panel
+                            class="quick-view-modal__detail-section quick-view-modal__detail-options"
+                            :key="char.code"
+                            v-for="char in characteristics"
+                            :header="char.name"
+                            :selected-option="char.selectedOption && char.selectedOption.name"
+                            :note="char.note"
+                        >
+                            <div class="quick-view-modal__detail-options-tags" v-if="char.type === 'radio'">
+                                <product-option-tag
+                                    class="quick-view-modal__detail-options-item"
+                                    v-for="option in char.options"
+                                    :key="`${char.code}-${option.value}`"
+                                    :selected="option.isSelected"
+                                    :disabled="option.isDisabled"
+                                    @click.stop="onSelectOption(char.code, option.value)"
+                                >
+                                    {{ option.name }}
+                                </product-option-tag>
+                            </div>
+
+                            <div class="quick-view-modal__detail-options-colors" v-if="char.type === 'color'">
+                                <product-color-tag
+                                    class="quick-view-modal__detail-options-item"
+                                    v-for="option in char.options"
+                                    :key="`${char.code}-${option.value}`"
+                                    :color="option.value"
+                                    :selected="option.isSelected"
+                                    :disabled="option.isDisabled"
+                                    @click.stop="onSelectOption(char.code, option.value)"
+                                    @mouseover="onShowOption(char.code, option.value)"
+                                    @mouseleave="onHideOption"
+                                />
+                            </div>
+                        </product-option-panel>
+
+                        <product-cart-panel
+                            class="quick-view-modal__detail-cart"
+                            :productId="productPreview.productId"
+                            :price="productPreview.price"
+                            :old-price="productPreview.oldPrice"
+                            :bonus="productPreview.bonus"
+                            :disabled="!canBuy"
+                            @cart="onCartStateChange"
+                            @wishlist="onToggleFavorite(productPreview.productId)"
+                        >
+                            {{ buyBtnText }}
+                        </product-cart-panel>
+                        <product-delivery-panel
+                            :deliveryMethods="productPreview.deliveryMethods"
+                            @pickup-points="onPickupPoints"
+                        />
+                    </v-scroll>
                 </div>
 
                 <div class="quick-view-modal__detail-tags">
@@ -52,7 +93,10 @@
                     />
                 </div>
             </div>
-            <v-spinner class="quick-view-modal__spinner" :show="isPending" />
+            <template v-if="isPending">
+                <div class="quick-view-modal__mask" />
+                <v-spinner class="quick-view-modal__spinner" show />
+            </template>
         </template>
     </general-modal>
 </template>
@@ -60,6 +104,7 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
+import VScroll from '@controls/VScroll/VScroll.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import ProductCartPanel from '@components/product/ProductCartPanel/ProductCartPanel.vue';
@@ -68,8 +113,13 @@ import ProductDeliveryPanel from '@components/product/ProductDeliveryPanel/Produ
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
 import Tag from '@components/Tag/Tag.vue';
 
+import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
+import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag.vue';
+import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOptionPanel.vue';
+
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as PREVIEW_MODULE, PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS } from '@store/modules/Preview';
+import { CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Preview/getters';
 import { FETCH_PRODUCT_PREVIEW } from '@store/modules/Preview/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -88,11 +138,14 @@ import { $logger, $retailRocket } from '@services';
 import { requestStatus, fileExtension, modalName } from '@enums';
 import { cartItemTypes } from '@enums/product';
 import { generatePictureSourcePath } from '@util/file';
-import { generateProductUrl } from '@util/catalog';
+import { generateProductUrl, prepareProductImage } from '@util/catalog';
 import '@images/sprites/logo.svg';
 import './QuickViewModal.css';
 
 const NAME = modalName.general.QUICK_VIEW;
+
+const desktopSize = 600;
+const tabletSize = 400;
 
 export default {
     name: NAME,
@@ -101,12 +154,23 @@ export default {
         VSvg,
         VPicture,
         VSpinner,
+        VScroll,
 
         Tag,
         GeneralModal,
         ProductCartPanel,
+        ProductOptionPanel,
         ProductDetailPanel,
         ProductDeliveryPanel,
+
+        ProductOptionTag,
+        ProductColorTag,
+    },
+
+    data() {
+        return {
+            optionImage: null,
+        };
     },
 
     computed: {
@@ -116,6 +180,7 @@ export default {
         }),
 
         ...mapState(PREVIEW_MODULE, [PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS]),
+        ...mapGetters(PREVIEW_MODULE, [CHARACTERISTICS, GET_NEXT_COMBINATION]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
 
@@ -125,16 +190,15 @@ export default {
             return badges || [];
         },
 
-        images() {
+        currentGalleryImages() {
+            const { productImages, optionImage } = this;
+            const mainImage = optionImage && prepareProductImage(optionImage, desktopSize, tabletSize);
+            return mainImage ? [mainImage, ...productImages.slice(1)] : productImages;
+        },
+
+        productImages() {
             const { media = [] } = this[PRODUCT_PREVIEW] || {};
-            return media.slice(0, 4).map(i => {
-                return {
-                    ...i,
-                    bigImage: generatePictureSourcePath(504, 504, i.id, fileExtension.image.WEBP),
-                    smallImage: generatePictureSourcePath(200, 200, i.id, fileExtension.image.WEBP),
-                    defaultImage: generatePictureSourcePath(504, 504, i.id),
-                };
-            });
+            return media.slice(0, 4).map(i => prepareProductImage(i, desktopSize, tabletSize));
         },
 
         inCart() {
@@ -163,8 +227,7 @@ export default {
         },
 
         [PRODUCT_PREVIEW](value) {
-            const product = value || {};
-            $retailRocket.addProductView([product.id]);
+            if (value) $retailRocket.addProductView([value.id]);
         },
     },
 
@@ -173,6 +236,21 @@ export default {
         ...mapActions(PREVIEW_MODULE, [FETCH_PRODUCT_PREVIEW]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
+
+        onSelectOption(charCode, optValue) {
+            const { code } = this[GET_NEXT_COMBINATION](charCode, optValue);
+            this[FETCH_PRODUCT_PREVIEW]({ code });
+        },
+
+        onShowOption(charCode, optValue) {
+            const { image } = this[GET_NEXT_COMBINATION](charCode, optValue);
+            this.optionImage = image;
+        },
+
+        onHideOption() {
+            const { isPending } = this;
+            if (!isPending) this.optionImage = null;
+        },
 
         onPickupPoints() {
             const { categoryCodes, code } = this[PRODUCT_PREVIEW] || {};
@@ -188,12 +266,13 @@ export default {
         },
 
         onToggleFavorite() {
-            this[TOGGLE_FAVORITES_ITEM](this.productPreview.productId);
+            const { productId } = this[PRODUCT_PREVIEW];
+            this[TOGGLE_FAVORITES_ITEM](productId);
         },
 
         onCartStateChange() {
             const { referralCode } = this.modalState;
-            const { id, stock } = this.productPreview;
+            const { id, stock } = this[PRODUCT_PREVIEW];
 
             this.onClose();
             this[CHANGE_MODAL_STATE]({
@@ -213,8 +292,9 @@ export default {
         },
     },
 
-    beforeMount() {
-        this[FETCH_PRODUCT_PREVIEW](this.modalState);
+    async beforeMount() {
+        const { offerId, code } = this.modalState || {};
+        this[FETCH_PRODUCT_PREVIEW]({ offerId, code, clear: true });
     },
 };
 </script>

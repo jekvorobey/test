@@ -1,7 +1,7 @@
 .product-detail-panel {
     &__hl {
         letter-spacing: 0.02em;
-        margin-bottom: calc(var(--gs) * 1.5);
+        margin-bottom: var(--gs);
 
         @media (--tablet) {
             font-size: 18px;
