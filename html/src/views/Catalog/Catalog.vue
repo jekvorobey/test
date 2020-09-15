@@ -179,29 +179,8 @@
                 <h2 class="container container--tablet-lg catalog-view__section-hl catalog-view__history-hl">
                     {{ $t('product.title.history') }}
                 </h2>
-                <div v-if="!isTabletLg" class="catalog-view__history-grid">
-                    <recently-viewed-product-card
-                        v-for="item in recentlyViewed"
-                        :key="item.id"
-                        :offer-id="item.id"
-                        :product-id="item.productId"
-                        :name="item.name"
-                        :href="item.url"
-                        :image="item.image"
-                    />
-                </div>
-                <v-slider v-else class="catalog-view__history-slider" name="history" :options="sliderOptions">
-                    <recently-viewed-product-card
-                        class="swiper-slide catalog-view__history-card"
-                        v-for="item in recentlyViewed"
-                        :key="item.id"
-                        :offer-id="item.id"
-                        :product-id="item.productId"
-                        :name="item.name"
-                        :href="item.url"
-                        :image="item.image"
-                    />
-                </v-slider>
+
+                <history-panel class="catalog-view__history-panel" :items="recentlyViewed" />
             </div>
         </section>
 
@@ -301,7 +280,7 @@ import CatalogFilter from '@components/CatalogFilter/CatalogFilter.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
-import RecentlyViewedProductCard from '@components/RecentlyViewedProductCard/RecentlyViewedProductCard.vue';
+import HistoryPanel from '@components/HistoryPanel/HistoryPanel.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -348,45 +327,13 @@ import { registerModuleIfNotExists } from '@util/store';
 import { createNotFoundRoute } from '@util/router';
 import { productGroupTypes } from '@enums/product';
 import { sortFields } from '@enums/catalog';
-import { sortDirections, fileExtension, httpCodes, breakpoints } from '@enums';
+import { sortDirections, fileExtension, httpCodes } from '@enums';
 import { MIN_SCROLL_VALUE } from '@constants';
 
 import '@plugins/sticky';
 import '@images/sprites/cross-small.svg';
 import '@images/sprites/home.svg';
 import './Catalog.css';
-
-const sliderOptions = {
-    spaceBetween: 24,
-    slidesPerView: 4,
-    grabCursor: true,
-    autoHeight: true,
-
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-    },
-
-    pagination: {
-        el: '.swiper-pagination',
-        type: 'bullets',
-    },
-
-    breakpoints: {
-        [breakpoints.tabletLg - 1]: {
-            slidesPerView: 3.5,
-            slidesOffsetBefore: 24,
-            slidesOffsetAfter: 24,
-        },
-
-        [breakpoints.tablet - 1]: {
-            slidesPerView: 2,
-            spaceBetween: 12,
-            slidesOffsetBefore: 0,
-            slidesOffsetAfter: 0,
-        },
-    },
-};
 
 export default {
     name: 'catalog',
@@ -411,7 +358,7 @@ export default {
         CatalogProductList,
         CatalogBannerCard,
         ShowMoreButton,
-        RecentlyViewedProductCard,
+        HistoryPanel,
     },
 
     data() {
@@ -578,10 +525,6 @@ export default {
         typeSortOptions() {
             const { type, sortOptions } = this;
             return sortOptions.filter(o => type === productGroupTypes.SEARCH || o.field !== sortFields.RELEVANCE);
-        },
-
-        sliderOptions() {
-            return sliderOptions;
         },
 
         isTabletLg() {

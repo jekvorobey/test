@@ -408,29 +408,6 @@
                 text-align: center;
             }
         }
-
-        &-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            grid-template-rows: 1fr;
-            grid-gap: calc(var(--gs) * 3);
-
-            @media (--desktop) {
-                grid-template-columns: repeat(6, 1fr);
-                grid-template-rows: 1fr;
-                grid-gap: var(--gs);
-            }
-        }
-
-        &-slider {
-            padding-bottom: calc(var(--gs) * 6);
-
-            .v-slider__controls {
-                bottom: calc(var(--gs) * 3);
-                left: 50%;
-                transform: translateX(-50%);
-            }
-        }
     }
 
     &__seo {

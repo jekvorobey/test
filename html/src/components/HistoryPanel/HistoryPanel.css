@@ -1,0 +1,31 @@
+.history-panel {
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        margin: calc(var(--gs) * -1.5);
+
+        @media (--desktop) {
+            margin: calc(var(--gs) / -2);
+        }
+
+        &-item {
+            width: calc(calc(100% / 6) - calc(var(--gs) * 3));
+            margin: calc(var(--gs) * 1.5);
+
+            @media (--desktop) {
+                width: calc(calc(100% / 6) - var(--gs));
+                margin: calc(var(--gs) / 2);
+            }
+        }
+    }
+
+    &__slider {
+        padding-bottom: calc(var(--gs) * 6);
+
+        .v-slider__controls {
+            bottom: calc(var(--gs) * 3);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+}

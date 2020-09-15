@@ -580,29 +580,8 @@
                 <h2 class="container container--tablet-lg product-view__section-hl product-view__history-hl">
                     {{ $t('product.title.history') }}
                 </h2>
-                <div v-if="!isTabletLg" class="product-view__history-grid">
-                    <recently-viewed-product-card
-                        v-for="item in recentlyViewed"
-                        :key="item.id"
-                        :offer-id="item.id"
-                        :product-id="item.productId"
-                        :name="item.name"
-                        :href="item.url"
-                        :image="item.image"
-                    />
-                </div>
-                <v-slider v-else class="product-view__history-slider" name="history" :options="sliderOptions">
-                    <recently-viewed-product-card
-                        class="swiper-slide product-view__history-card"
-                        v-for="item in recentlyViewed"
-                        :key="item.id"
-                        :offer-id="item.id"
-                        :product-id="item.productId"
-                        :name="item.name"
-                        :href="item.url"
-                        :image="item.image"
-                    />
-                </v-slider>
+
+                <history-panel class="product-view__history-panel" :items="recentlyViewed" />
             </div>
         </section>
 
@@ -690,8 +669,7 @@ import ProductBundlePanel from '@components/product/ProductBundlePanel/ProductBu
 import ProductPickupPointsMap from '@components/product/ProductPickupPointsMap/ProductPickupPointsMap.vue';
 import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPanel/ProductPickupPointsPanel.vue';
 
-import RecentlyViewedProductCard from '@components/RecentlyViewedProductCard/RecentlyViewedProductCard.vue';
-
+import HistoryPanel from '@components/HistoryPanel/HistoryPanel.vue';
 import ReviewsPanel from '@components/reviews/ReviewsPanel/ReviewsPanel.vue';
 
 import MapModal, { NAME as MAP_MODAL_NAME } from '@components/MapModal/MapModal.vue';
@@ -862,9 +840,9 @@ export default {
         GalleryModal,
 
         FrisbuyProductContainer,
-        ReviewsPanel,
 
-        RecentlyViewedProductCard,
+        ReviewsPanel,
+        HistoryPanel,
     },
 
     data() {
