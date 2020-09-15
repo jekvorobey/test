@@ -9,7 +9,7 @@
         display: inline;
 
         &:hover &-link {
-            color: var(--cl-dark-blue);
+            color: var(--cl-global);
         }
 
         &-link {
@@ -17,7 +17,8 @@
             float: left;
             padding: 5px 7px;
             min-width: 24px;
-            line-height: 1.42857143;
+            font-weight: 700;
+            line-height: 24px;
             background-color: var(--cl-white);
             cursor: pointer;
             text-decoration: none;
@@ -31,6 +32,8 @@
         }
 
         &--prev &-link {
+            margin-right: calc(var(--gs) * 2.5);
+            margin-left: 0;
             padding: calc(var(--gs) / 2);
 
             &::after {
@@ -44,6 +47,8 @@
         }
 
         &--next &-link {
+            margin-left: calc(var(--gs) * 2.5);
+            margin-right: 0;
             padding: calc(var(--gs) / 2);
 
             &::after {
