@@ -197,10 +197,12 @@ export default {
         },
 
         onAddToCart(item) {
-            const { code, type, stock, id, variantGroups } = item;
-
-            if (variantGroups) this.onPreview(code);
-            else this[ADD_CART_ITEM]({ offerId: id, storeId: stock && stock.storeId });
+            const { code, type, stock, id } = item;
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.ADD_TO_CART,
+                open: true,
+                state: { offerId: id, storeId: stock && stock.storeId, type },
+            });
         },
 
         onPreview(code) {
