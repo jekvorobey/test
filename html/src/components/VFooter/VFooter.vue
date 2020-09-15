@@ -41,13 +41,13 @@
                 <p class="v-footer__rights" v-html="$t('footer.rights')" />
                 <router-link
                     class="v-footer__link"
-                    :to="{ name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER } }"
+                    :to="{ name: 'Agreements', params: { type: agreementTypes.PERSONAL_POLICY } }"
                 >
                     {{ $t('footer.terms_of_use') }}
                 </router-link>
                 <router-link
                     class="v-footer__link"
-                    :to="{ name: 'Agreements', params: { type: agreementTypes.PERSONAL_POLICY } }"
+                    :to="{ name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER } }"
                 >
                     {{ $t('footer.offer') }}
                 </router-link>
@@ -90,14 +90,14 @@
         <div class="v-footer__container v-footer__container--mobile v-footer__col v-footer__mobile-links">
             <v-link
                 class="v-footer__link"
-                :to="{ name: 'Agreements', params: { type: 'personal-policy' } }"
+                :to="{ name: 'Agreements', params: { type: agreementTypes.PERSONAL_POLICY } }"
                 target="_blank"
             >
                 {{ $t('footer.terms_of_use') }}
             </v-link>
             <v-link
                 class="v-footer__link"
-                :to="{ name: 'Agreements', params: { type: 'public-offer' } }"
+                :to="{ name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER } }"
                 target="_blank"
             >
                 {{ $t('footer.offer') }}
