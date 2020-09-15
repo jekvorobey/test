@@ -1,19 +1,16 @@
 <template>
-    <div class="cart-product-card" :class="{ 'cart-product-card--small': isSmall }">
+    <div
+        class="cart-product-card"
+        :class="[{ 'cart-product-card--small': isSmall }, { 'cart-product-card--inactive': !isActive }]"
+    >
         <router-link class="cart-product-card__img" :to="href">
-            <v-picture v-if="image && image.id" alt="">
+            <v-picture v-if="image && image.id">
                 <slot>
-                    <source
-                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
-                        type="image/webp"
-                        media="(min-width: 480px)"
-                    />
-                    <source
-                        :data-srcset="generateSourcePath(72, 72, image.id, 'webp')"
-                        type="image/webp"
-                        media="(max-width: 479px)"
-                    />
-                    <img class="blur-up lazyload v-picture__img" :data-src="generateSourcePath(300, 300, image.id)" />
+                    <source :data-srcset="images.desktop.webp" type="image/webp" media="(min-width: 480px)" />
+                    <source :data-srcset="images.desktop.orig" media="(min-width: 480px)" />
+                    <source :data-srcset="images.mobile.webp" type="image/webp" media="(max-width: 479px)" />
+                    <source :data-srcset="images.mobile.orig" media="(max-width: 479px)" />
+                    <img class="blur-up lazyload v-picture__img" :data-src="images.desktop" alt="" />
                 </slot>
             </v-picture>
             <v-svg v-else id="cart-product-card-empty" name="logo" width="48" height="48" />
@@ -21,7 +18,7 @@
         <div class="cart-product-card__body">
             <v-link class="cart-product-card__body-name" :to="href">{{ name }}</v-link>
             <div class="cart-product-card__body-count" v-if="showCount">
-                <v-counter min="1" :max="maxCount" :value="count" @input="debounce_countChange" />
+                <v-counter min="1" :max="maxCount" :value="count" @input="debounce_countChange" :disabled="!isActive" />
             </div>
 
             <div class="cart-product-card__body-prices">
@@ -33,10 +30,15 @@
                     v-bind="oldPrice"
                 />
             </div>
-            <div class="text-grey text-sm cart-product-card__body-info">
-                <!-- неизвестно, будет ли это -->
-                <!-- Ближайшая доставка 24 июня<br />
-                Ближайший самовывоз c 26 июня -->
+            <div class="cart-product-card__body-info">
+                <div class="text-grey text-sm" v-if="isActive">
+                    <!-- неизвестно, будет ли это -->
+                    <!-- Ближайшая доставка 24 июня<br />
+                    Ближайший самовывоз c 26 июня -->
+                </div>
+                <div class="status-color-error text-sm" v-else>
+                    Товар закончился
+                </div>
             </div>
             <!-- #58322  -->
             <div class="text-grey cart-product-card__body-bonus" :style="{ visibility: 'hidden' }">+ 80 бонусов</div>
@@ -80,6 +82,7 @@ import '@images/sprites/cross-small.svg';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/logo.svg';
 import './CartProductCard.css';
+import { fileExtension } from '@enums';
 
 export default {
     name: 'cart-product-card',
@@ -152,6 +155,11 @@ export default {
             default: false,
         },
 
+        isActive: {
+            type: Boolean,
+            default: true,
+        },
+
         isSmall: {
             type: Boolean,
             default: false,
@@ -160,6 +168,22 @@ export default {
 
     computed: {
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+
+        images() {
+            const { image } = this;
+            if (image && image.id)
+                return {
+                    desktop: {
+                        webp: generatePictureSourcePath(300, 300, image.id, fileExtension.image.WEBP),
+                        orig: generatePictureSourcePath(300, 300, image.id),
+                    },
+                    mobile: {
+                        webp: generatePictureSourcePath(72, 72, image.id, fileExtension.image.WEBP),
+                        orig: generatePictureSourcePath(72, 72, image.id),
+                    },
+                    default: generatePictureSourcePath(300, 300, image.id),
+                };
+        },
 
         favoritesBtnText() {
             if (this.isTablet) return '';
@@ -193,10 +217,6 @@ export default {
 
         onDeleteClick() {
             this.$emit('deleteItem', { id: this.offerId, type: this.type });
-        },
-
-        generateSourcePath(x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext);
         },
     },
 

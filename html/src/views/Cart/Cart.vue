@@ -21,6 +21,24 @@
                         </template>
                     </v-tabs>
 
+                    <!-- <ul
+                        class="container container--tablet status-color-error cart-view__main-tabs-errors"
+                        v-if="errorStrings && errorStrings.length > 0"
+                    >
+                        <li v-for="error in errorStrings" :key="error">
+                            {{ error }}
+                        </li>
+                    </ul>
+
+                    <ul
+                        class="container container--tablet status-color-warning cart-view__main-tabs-errors"
+                        v-if="warningStrings && warningStrings.length > 0"
+                    >
+                        <li v-for="warning in warningStrings" :key="warning">
+                            {{ warning }}
+                        </li>
+                    </ul> -->
+
                     <v-link class="cart-view__main-clear" tag="button" @click="openOnClearCart(activeTabItem.type)">
                         <v-svg name="cross-small" width="13" height="13" />
                         &nbsp;&nbsp;Очистить корзину
@@ -227,6 +245,7 @@ import {
     FETCH_CART_DATA,
     SET_LOAD,
     ADD_CART_ITEM,
+    CHECK_CART_DATA,
 } from '@store/modules/Cart/actions';
 import {
     PRODUCTS,
@@ -237,6 +256,8 @@ import {
     CART_TYPES,
     PROMO_CODE,
     PROMOCODE_STATUS,
+    ERRORS,
+    WARNINGS,
 } from '@store/modules/Cart/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -333,6 +354,8 @@ export default {
             IS_MASTER_CLASS,
             PROMO_CODE,
             PROMOCODE_STATUS,
+            ERRORS,
+            WARNINGS,
         ]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
@@ -342,6 +365,16 @@ export default {
             isModalOpen: state =>
                 state[MODALS][modalName.cart.CLEAR_CART] && state[MODALS][modalName.cart.CLEAR_CART].open,
         }),
+
+        errorStrings() {
+            const errors = this[ERRORS] || [];
+            return errors.map(e => this.$t(`validation.cart.${e}`));
+        },
+
+        warningStrings() {
+            const warnings = this[WARNINGS] || [];
+            return warnings.map(e => this.$t(`validation.cart.${e}`));
+        },
 
         isProduct() {
             const { activeTabItem } = this;
@@ -382,6 +415,7 @@ export default {
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
         ...mapActions(CART_MODULE, [
             FETCH_CART_DATA,
+            CHECK_CART_DATA,
             FETCH_FEATURED_PRODUCTS,
             DELETE_ALL_ITEMS,
             ADD_PROMOCODE,
@@ -443,13 +477,13 @@ export default {
             return preparePrice(value);
         },
 
-        loadCheckout() {
+        async loadCheckout() {
             try {
                 this.isLoad = true;
+                await this[CHECK_CART_DATA]();
                 this.$router.push(`/checkout/${this.activeTabItem.type}`);
             } catch (error) {
                 this.isLoad = false;
-                console.error('Ошибка в loadCheckout');
             }
         },
     },

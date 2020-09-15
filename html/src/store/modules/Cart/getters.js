@@ -13,6 +13,8 @@ export const CART_ITEMS_COUNT = 'cartItemsCount';
 export const PRODUCT_ITEMS_SUM = 'productItemsSum';
 export const PROMO_CODE = 'promocode';
 export const DELIVERY_INFO = 'deliveryInfo';
+export const ERRORS = 'errors';
+export const WARNINGS = 'warnings';
 
 export const PROMOCODE_STATUS = 'promocodeStatus';
 export const CART_STATUS = 'cartStatus';
@@ -40,6 +42,10 @@ function prepareItem(item) {
 }
 
 export default {
+    [ERRORS]: (state) => (state.cartData && state.cartData[ERRORS]) || [],
+
+    [WARNINGS]: (state) => (state.cartData && state.cartData[WARNINGS]) || [],
+
     [PROMO_CODE]: (state) => state.cartData.product && state.cartData.product.input.promoCode,
 
     [DELIVERY_INFO]: (state) => state.cartData.deliveryInfo,

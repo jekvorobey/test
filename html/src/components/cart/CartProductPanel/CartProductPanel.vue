@@ -36,6 +36,7 @@
                     :count="count"
                     :max-count="product.stock && product.stock.qty"
                     :href="product.url"
+                    :is-active="product.active"
                     show-count
                     show-controls
                     @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
@@ -51,6 +52,7 @@
                     :old-price="product.oldPrice"
                     :items="product.items"
                     :count="count"
+                    :is-active="product.active"
                     show-count
                     show-controls
                     @deleteBundle="onDeleteBundle"

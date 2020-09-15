@@ -4,6 +4,7 @@ import { receiveMethods, discountType } from '@enums/checkout';
 import { genderType, billingOperationType, referralSource, bonusStatus, preferenceEntityTypes } from '@enums/profile';
 import { orderStatus, deliveryStatus } from '@enums/order';
 import { cartItemTypes } from '@enums/product';
+import { cartErrors, cartWarnings } from '@enums/cart';
 
 const flatpickrLocale = flatPickrRu.ru;
 const main = {
@@ -80,6 +81,23 @@ const main = {
 
             promocodeInvalid: 'Промокод недействителен',
             promocodeNotExist: 'Промокод не существует',
+        },
+
+        cart: {
+            [cartErrors.PRODUCT_INACTIVE]: 'Некоторые товары стали архивными или остаток равен 0',
+            [cartErrors.BUNDLE_INACTIVE]: 'Некоторые бандлы стали неактивными',
+            [cartErrors.BUNDLE_PRODUCT_STOCKS]:
+                'Суммарное количество товаров и товаров в бандлах превышает количество остатков по товару',
+            [cartErrors.BUNDLE_MASTERCLASS_STOCKS]:
+                'Суммарное количество одиночных билетов и билетов в бандлах превышает количество остатков билетов',
+            [cartErrors.MASTERCLASS_STOCKS]: 'Некоторые билеты стали неактивными',
+
+            [cartWarnings.PRODUCT_COUNT_CHANGE]: 'Предупреждение об изменении количества товара',
+            [cartWarnings.BUNDLE_DELETED]: 'Предупреждение об удалении бандла из корзины',
+            [cartWarnings.PRODUCT_ADD_COUNT_CHANGE]: 'Предупреждение об изменении количества товара при добавлении',
+            [cartWarnings.MASTERCLASS_COUNT_CHANGE]: 'Предупреждение об изменении количества мастерклассов',
+            [cartWarnings.MASTERCLASS_ADD_COUNT_CHANGE]:
+                'Предупреждение об изменении количества мастерклассов при добавлении',
         },
     },
 

@@ -105,6 +105,10 @@
                     padding-bottom: 0;
                 }
             }
+
+            &-errors {
+                margin-bottom: calc(var(--gs) * 2);
+            }
         }
 
         &-sticky {

@@ -28,6 +28,10 @@
 
             &:last-child {
                 margin-bottom: 0;
+
+                @media (--tablet) {
+                    border-bottom: none;
+                }
             }
         }
     }

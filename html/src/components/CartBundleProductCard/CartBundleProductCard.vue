@@ -1,5 +1,5 @@
 <template>
-    <div class="cart-bundle-product-card">
+    <div class="cart-bundle-product-card" :class="[{ 'cart-bundle-product-card--inactive': !isActive }]">
         <div class="cart-bundle-product-card__images" :class="`length-is-${items.length}`">
             <div class="cart-bundle-product-card__image" v-for="({ image }, index) in items" :key="index">
                 <v-picture v-if="image && image.id">
@@ -31,6 +31,10 @@
                         {{ item.name }};
                     </li>
                 </ol>
+
+                <p class="status-color-error text-sm" v-if="!isActive">
+                    Товар закончился
+                </p>
             </div>
 
             <div class="cart-bundle-product-card__body-count" v-if="showCount">
@@ -144,6 +148,11 @@ export default {
         },
 
         showControls: {
+            type: Boolean,
+            default: false,
+        },
+
+        isActive: {
             type: Boolean,
             default: false,
         },

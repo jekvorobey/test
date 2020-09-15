@@ -93,6 +93,10 @@
         }
     }
 
+    &--inactive &__images {
+        opacity: 0.3;
+    }
+
     &__price {
         font-size: 20px;
 
@@ -198,6 +202,14 @@
                     margin-left: calc(var(--gs) * 2);
                 }
             }
+        }
+    }
+
+    &--inactive &__body {
+        &-name,
+        &-price,
+        &-count {
+            opacity: 0.3;
         }
     }
 

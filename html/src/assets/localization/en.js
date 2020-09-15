@@ -4,6 +4,7 @@ import { genderType, billingOperationType, referralSource, bonusStatus, preferen
 import { socials, weekDays } from '@enums';
 import { orderStatus, deliveryStatus } from '@enums/order';
 import { cartItemTypes } from '@enums/product';
+import { cartErrors, cartWarnings } from '@enums/cart';
 
 const flatpickrLocale = flatPickrEn;
 const main = {
@@ -80,6 +81,23 @@ const main = {
 
             promocodeInvalid: 'Invalid Promocode',
             promocodeNotExist: 'Promocode does not exist',
+        },
+
+        cart: {
+            [cartErrors.PRODUCT_INACTIVE]: 'Some products have become archived or the qty is 0',
+            [cartErrors.BUNDLE_INACTIVE]: 'Some bundles have become inactive',
+            [cartErrors.BUNDLE_PRODUCT_STOCKS]:
+                'The total number of goods and goods in bundles exceeds the number of product balances',
+            [cartErrors.BUNDLE_MASTERCLASS_STOCKS]:
+                'The total number of single tickets and tickets in bundles exceeds the number of ticket balances',
+            [cartErrors.MASTERCLASS_STOCKS]: 'Some tickets have become inactive',
+
+            [cartWarnings.PRODUCT_COUNT_CHANGE]: 'Quantity change warning',
+            [cartWarnings.BUNDLE_DELETED]: 'Warning about deleting a bundle from the trash',
+            [cartWarnings.PRODUCT_ADD_COUNT_CHANGE]: 'Product quantity change warning when adding',
+            [cartWarnings.MASTERCLASS_COUNT_CHANGE]: 'Warning about changing the number of masterclasses',
+            [cartWarnings.MASTERCLASS_ADD_COUNT_CHANGE]:
+                'Warning about changing the number of masterclasses when adding',
         },
     },
 

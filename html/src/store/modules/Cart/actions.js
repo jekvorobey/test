@@ -171,13 +171,8 @@ export default {
             await checkCartData();
         } catch (error) {
             const { data, status } = error;
-            const { cart, errors, warnings } = data || {};
-            storeErrorHandler(CHECK_CART_DATA)(error);
-
-            if (status === httpCodes.BAD_REQUEST) {
-                commit(SET_CART_DATA, cart);
-                return { errors, warnings };
-            }
+            if (status === httpCodes.BAD_REQUEST) commit(SET_CART_DATA, data);
+            storeErrorHandler(CHECK_CART_DATA, true)(error);
         }
     },
 

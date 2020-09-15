@@ -217,4 +217,16 @@
             }
         }
     }
+
+    &--inactive &__img {
+        opacity: 0.3;
+    }
+
+    &--inactive &__body {
+        &-count,
+        &-name,
+        &-prices {
+            opacity: 0.3;
+        }
+    }
 }
