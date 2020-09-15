@@ -90,14 +90,14 @@
         <div class="v-footer__container v-footer__container--mobile v-footer__col v-footer__mobile-links">
             <v-link
                 class="v-footer__link"
-                :to="{ name: 'Agreements', params: { type: 'public-offer' } }"
+                :to="{ name: 'Agreements', params: { type: 'personal-policy' } }"
                 target="_blank"
             >
                 {{ $t('footer.terms_of_use') }}
             </v-link>
             <v-link
                 class="v-footer__link"
-                :to="{ name: 'Agreements', params: { type: 'personal-policy' } }"
+                :to="{ name: 'Agreements', params: { type: 'public-offer' } }"
                 target="_blank"
             >
                 {{ $t('footer.offer') }}
