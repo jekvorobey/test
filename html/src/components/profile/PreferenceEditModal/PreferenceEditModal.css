@@ -1,19 +1,13 @@
 .preference-edit-modal {
     .popup--sm {
         width: 440px;
-
-        @media (--tablet-min) {
-            height: 500px;
-        }
     }
 
     .modal-body {
         padding: calc(var(--gs) * 3);
-
+        display: flex;
+        flex-direction: column;
         @media (--tablet-min) {
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
         }
 
         @media (--tablet) {
@@ -61,17 +55,20 @@
         }
     }
 
-    &__list {
-        overflow: auto;
+    &__body {
+        height: 364px;
         margin-bottom: calc(var(--gs) * 2);
 
         @media (--tablet) {
-            padding: 0 calc(var(--gs) * 2);
             height: 100%;
+            padding: 0 calc(var(--gs) * 2);
         }
+    }
 
+    &__list {
         &-item {
             padding: 1px;
+
             & + & {
                 margin-top: var(--gs);
             }

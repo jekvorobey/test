@@ -5,6 +5,7 @@
         class="preference-edit-modal"
         :header="header"
         @close="onClose"
+        :is-scroll-locked="isTablet"
         :is-mobile="isTablet"
     >
         <template v-slot:content>
@@ -16,21 +17,44 @@
             </v-input>
 
             <h6 class="preference-edit-modal__title">{{ title }}</h6>
-            <ul class="preference-edit-modal__list">
-                <li class="preference-edit-modal__list-item" v-for="entity in filteredEntities" :key="entity.id">
-                    <v-check
-                        class="preference-edit-modal__list-check"
-                        :name="type"
-                        :id="`${type}-${entity.id}`"
-                        :key="entity.id"
-                        :value="entity.id"
-                        :checked="isChecked(entity.id)"
-                        @change="onCheckedChanged($event, entity)"
-                    >
-                        {{ entity.name }}
-                    </v-check>
-                </li>
-            </ul>
+            <div class="preference-edit-modal__body">
+                <ul v-if="isTablet" class="preference-edit-modal__list">
+                    <li class="preference-edit-modal__list-item" v-for="entity in filteredEntities" :key="entity.id">
+                        <v-check
+                            class="preference-edit-modal__list-check"
+                            :name="type"
+                            :id="`${type}-${entity.id}`"
+                            :key="entity.id"
+                            :value="entity.id"
+                            :checked="isChecked(entity.id)"
+                            @change="onCheckedChanged($event, entity)"
+                        >
+                            {{ entity.name }}
+                        </v-check>
+                    </li>
+                </ul>
+                <v-scroll v-else class="preference-edit-modal__scroll" scroll-lock>
+                    <ul class="preference-edit-modal__list">
+                        <li
+                            class="preference-edit-modal__list-item"
+                            v-for="entity in filteredEntities"
+                            :key="entity.id"
+                        >
+                            <v-check
+                                class="preference-edit-modal__list-check"
+                                :name="type"
+                                :id="`${type}-${entity.id}`"
+                                :key="entity.id"
+                                :value="entity.id"
+                                :checked="isChecked(entity.id)"
+                                @change="onCheckedChanged($event, entity)"
+                            >
+                                {{ entity.name }}
+                            </v-check>
+                        </li>
+                    </ul>
+                </v-scroll>
+            </div>
 
             <div class="preference-edit-modal__submit">
                 <v-button class="preference-edit-modal__submit-btn" @click="onSubmit">
@@ -46,6 +70,7 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 import VInput from '@controls/VInput/VInput.vue';
+import VScroll from '@controls/VScroll/VScroll.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapActions, mapState } from 'vuex';
@@ -66,6 +91,8 @@ export default {
         VButton,
         VCheck,
         VInput,
+        VScroll,
+
         GeneralModal,
     },
 
@@ -78,8 +105,8 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
-            modalState: state =>
+            isOpen: (state) => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+            modalState: (state) =>
                 (state[MODALS][NAME] && state[MODALS][NAME].state) || { availableEntities: [], entities: [] },
         }),
 
@@ -98,7 +125,7 @@ export default {
         filteredEntities() {
             const filter = (this.filterString || '').toLowerCase();
             return this.modalState.availableEntities.filter(
-                e => !this.entities.some(se => se.id === e.id) && (e.name || '').toLowerCase().includes(filter)
+                (e) => !this.entities.some((se) => se.id === e.id) && (e.name || '').toLowerCase().includes(filter)
             );
         },
 
@@ -137,7 +164,7 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         isChecked(id) {
-            return this.selectedEntities.some(e => e.id === id);
+            return this.selectedEntities.some((e) => e.id === id);
         },
 
         onFilterChange(filterString) {
@@ -155,7 +182,7 @@ export default {
         onSubmit() {
             const { type, prefType } = this;
 
-            const newEntities = [...this.entities.map(e => e.id), ...this.selectedEntities.map(e => e.id)];
+            const newEntities = [...this.entities.map((e) => e.id), ...this.selectedEntities.map((e) => e.id)];
             this.$emit('submit', { prefType, type, items: newEntities });
             this.onClose();
         },
