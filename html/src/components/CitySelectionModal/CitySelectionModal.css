@@ -1,26 +1,16 @@
 .city-selection-modal {
     .popup--sm {
         width: 440px;
-        height: 440px;
     }
 
     .modal-body {
         padding: calc(var(--gs) * 3);
-        padding-bottom: calc(var(--gs) * 4);
-        overflow: hidden;
         display: flex;
         flex-direction: column;
 
         @media (--tablet) {
             padding: 0;
             padding-bottom: calc(var(--gs) * 4);
-        }
-    }
-
-    .general-modal__sticky {
-        @media (--tablet) {
-            height: 100%;
-            overflow: hidden;
         }
     }
 
@@ -31,7 +21,6 @@
     }
 
     &__body {
-        height: 100%;
         display: flex;
         flex-direction: column;
         position: relative;
@@ -51,6 +40,7 @@
             z-index: 10;
             pointer-events: none;
         }
+
         &:after {
             bottom: 0;
             background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
@@ -86,15 +76,17 @@
 
     &__wrapper {
         position: relative;
-        overflow: auto;
+        height: 280px;
+
+        @media (--tablet) {
+            height: 100%;
+        }
     }
 
     &__list {
-        overflow: auto;
-        height: 100%;
-
         &-item {
             padding: 1px;
+
             & + & {
                 margin-top: calc(var(--gs) * 0.5);
             }

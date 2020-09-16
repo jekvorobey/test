@@ -1,4 +1,6 @@
 .v-scroll {
+    -webkit-overflow-scrolling: touch;
+
     .__bar {
         &-is-vertical {
             opacity: 1 !important;

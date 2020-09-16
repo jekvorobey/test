@@ -23,8 +23,9 @@ class VScrollLock {
      * @param {Object} Vue The Vue instance.
      * @param {Object} options Options passed to plugin.
      */
-    install(Vue, options) {
-        Vue.directive('scroll-lock', {
+    // eslint-disable-next-line no-unused-vars
+    install(vue, options) {
+        vue.directive('scroll-lock', {
             inserted: this.inserted.bind(this),
             componentUpdated: this.componentUpdated.bind(this),
             unbind: this.unbind.bind(this),

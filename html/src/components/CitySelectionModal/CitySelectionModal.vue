@@ -1,5 +1,12 @@
 <template>
-    <general-modal type="sm" class="city-selection-modal" :header="header" @close="onClose" :is-mobile="isTablet">
+    <general-modal
+        type="sm"
+        class="city-selection-modal"
+        :header="header"
+        @close="onClose"
+        :is-mobile="isTablet"
+        :is-scroll-locked="isTablet"
+    >
         <template v-slot:content>
             <div class="city-selection-modal__body">
                 <h3 class="city-selection-modal__hl">{{ header }}</h3>
@@ -17,7 +24,7 @@
                 </v-input>
 
                 <div class="city-selection-modal__wrapper">
-                    <ul class="city-selection-modal__list">
+                    <ul v-if="isTablet" class="city-selection-modal__list">
                         <li
                             class="city-selection-modal__list-item"
                             v-for="suggestion in suggestions"
@@ -25,7 +32,8 @@
                         >
                             <button class="city-selection-modal__list-btn" @click="onSubmit(suggestion)">
                                 <template v-if="suggestion.data.settlement_with_type">
-                                    {{ suggestion.data.settlement_with_type }}, {{ suggestion.data.region_with_type }}
+                                    {{ suggestion.data.settlement_with_type }},
+                                    {{ suggestion.data.region_with_type }}
                                 </template>
 
                                 <template v-if="suggestion.data.city">
@@ -37,6 +45,30 @@
                             </button>
                         </li>
                     </ul>
+                    <v-scroll v-else class="city-selection-modal__scroll" scroll-lock>
+                        <ul class="city-selection-modal__list">
+                            <li
+                                class="city-selection-modal__list-item"
+                                v-for="suggestion in suggestions"
+                                :key="suggestion.value"
+                            >
+                                <button class="city-selection-modal__list-btn" @click="onSubmit(suggestion)">
+                                    <template v-if="suggestion.data.settlement_with_type">
+                                        {{ suggestion.data.settlement_with_type }},
+                                        {{ suggestion.data.region_with_type }}
+                                    </template>
+
+                                    <template v-if="suggestion.data.city">
+                                        {{ suggestion.data.city
+                                        }}<span
+                                            v-if="suggestion.data.city_with_type !== suggestion.data.region_with_type"
+                                            >, {{ suggestion.data.region_with_type }}</span
+                                        >
+                                    </template>
+                                </button>
+                            </li>
+                        </ul>
+                    </v-scroll>
                 </div>
             </div>
         </template>
@@ -46,6 +78,7 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VInput from '@controls/VInput/VInput.vue';
+import VScroll from '@controls/VScroll/VScroll.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
@@ -76,6 +109,8 @@ export default {
     components: {
         VSvg,
         VInput,
+        VScroll,
+
         GeneralModal,
     },
 
@@ -91,7 +126,7 @@ export default {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         header() {
