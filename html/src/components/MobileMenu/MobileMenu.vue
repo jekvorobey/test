@@ -250,7 +250,7 @@ export default {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(FAVORITES_MODULE, [FAVORITE_ITEMS_COUNT]),
         ...mapState(GEO_MODULE, {
-            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
 
         favoriteItemsIcon() {
@@ -306,7 +306,8 @@ export default {
 
         onRegister() {
             if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
-            else
+            else {
+                this[SET_MENU_OPEN](false);
                 this[CHANGE_MODAL_STATE]({
                     name: modalName.general.AUTH,
                     open: true,
@@ -314,6 +315,7 @@ export default {
                         activeTab: authMode.LOGIN,
                     },
                 });
+            }
         },
     },
 };

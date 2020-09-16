@@ -8,7 +8,6 @@ import {
     SET_MENU,
     SET_BANNER,
     SET_FREQUENT_CATEGOIRES,
-    SET_BADGES,
     SET_RECENTLY_VIEWED_PRODUCTS,
 } from './mutations';
 
@@ -16,7 +15,6 @@ const FETCH_BANNER = 'FETCH_BANNER';
 const FETCH_MENU = 'FETCH_MENU';
 const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 const FETCH_FREQUENT_CATEGORIES = 'FETCH_FREQUENT_CATEGOIRES';
-const FETCH_BADGES = 'FETCH_BADGES';
 
 export const FETCH_COMMON_DATA = 'FETCH_COMMON_DATA';
 export const FETCH_RECENTLY_VIEWED_PRODUCTS = 'FETCH_RECENTLY_VIEWED_PRODUCTS';
@@ -53,10 +51,6 @@ export default {
 
     [SET_SCROLL]({ commit }, payload) {
         commit(SET_SCROLL, payload);
-    },
-
-    [SET_MENU_OPEN]({ commit }, payload) {
-        commit(SET_MENU_OPEN, payload);
     },
 
     [SET_MENU_OPEN]({ commit }, payload) {

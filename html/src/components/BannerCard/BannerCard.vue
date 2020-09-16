@@ -1,9 +1,10 @@
 <template>
     <component :is="tag" class="banner-card" :to="url">
         <div class="banner-card__img">
-            <v-picture :key="image.id" v-if="image && image.id">
-                <source :data-srcset="desktopImage" type="image/webp" media="(min-width: 480px)" />
-                <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
+            <v-picture :key="image.id" v-if="images">
+                <source :data-srcset="images.desktop.webp" type="image/webp" />
+                <source :data-srcset="images.desktop.orig" />
+                <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" />
             </v-picture>
             <v-picture v-else :image="image" />
             <v-button class="btn--outline banner-card__img-btn" :to="to">{{ buttonText }}</v-button>
@@ -63,13 +64,17 @@ export default {
             return tag === 'router-link' ? to : null;
         },
 
-        desktopImage() {
-            if (this.image && this.image.id)
-                return generatePictureSourcePath(392, 240, this.image.id, fileExtension.image.WEBP);
-        },
+        images() {
+            const { image } = this;
 
-        defaultImage() {
-            if (this.image && this.image.id) return generatePictureSourcePath(392, 240, this.image.id);
+            if (image && image.id)
+                return {
+                    desktop: {
+                        webp: generatePictureSourcePath(392, 240, image.id, fileExtension.image.WEBP),
+                        orig: generatePictureSourcePath(392, 240, image.id),
+                    },
+                    default: generatePictureSourcePath(392, 240, image.id),
+                };
         },
     },
 };

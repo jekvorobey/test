@@ -242,15 +242,15 @@ export default {
         },
 
         fail: {
-            valid: value => value !== true,
+            valid: (value) => value !== true,
         },
 
         accepted: {
-            valid: value => value === true,
+            valid: (value) => value === true,
         },
 
         restoreFail: {
-            valid: value => value !== true,
+            valid: (value) => value !== true,
         },
     },
 
@@ -500,7 +500,10 @@ export default {
         },
 
         onClose() {
-            this.CHANGE_MODAL_STATE({ name: modalName.general.AUTH, open: false });
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.AUTH,
+                open: false,
+            });
         },
     },
 
