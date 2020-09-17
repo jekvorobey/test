@@ -23,7 +23,7 @@
                     :autofocus="true"
                 >
                     Номер телефона
-                    <template v-slot:after>
+                    <template v-if="!isTablet" v-slot:after>
                         <v-button class="registration-panel__form-btn" type="submit" :disabled="isDisabledGetCodeBtn">
                             Получить код
                         </v-button>
@@ -35,6 +35,15 @@
                         </transition>
                     </template>
                 </v-input-mask>
+
+                <v-button
+                    v-if="isTablet"
+                    class="registration-panel__form-btn"
+                    type="submit"
+                    :disabled="isDisabledGetCodeBtn"
+                >
+                    Получить код
+                </v-button>
             </div>
 
             <template v-else-if="!accepted">
@@ -48,7 +57,7 @@
                         :error="codeError"
                     >
                         Код из СМС
-                        <template v-slot:after>
+                        <template v-if="!isTablet" v-slot:after>
                             <v-button class="registration-panel__form-btn" type="submit">Регистрация</v-button>
                         </template>
 
@@ -58,6 +67,8 @@
                             </transition>
                         </template>
                     </v-input>
+
+                    <v-button class="registration-panel__form-btn" v-if="isTablet" type="submit">Регистрация</v-button>
                 </div>
 
                 <div class="registration-panel__form-timer">
@@ -218,7 +229,7 @@ export default {
         },
 
         phoneExists: {
-            exists: value => value === false,
+            exists: (value) => value === false,
         },
 
         code: {
@@ -226,7 +237,7 @@ export default {
         },
 
         accepted: {
-            valid: value => value === true,
+            valid: (value) => value === true,
         },
     },
 
@@ -257,7 +268,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         phone() {

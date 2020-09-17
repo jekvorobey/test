@@ -37,7 +37,8 @@
             align-items: flex-end;
 
             @media (--tablet) {
-                flex-wrap: wrap;
+                flex-direction: column;
+                align-items: stretch;
             }
         }
 
@@ -77,14 +78,13 @@
                 }
             }
 
-            .v-input__input {
-                @media (--tablet) {
-                    margin-bottom: calc(var(--gs) * 2);
-                }
-            }
-
             @media (--tablet) {
                 margin-right: 0;
+            }
+        }
+
+        &-confirmation &-btn {
+            @media (--tablet) {
                 margin-bottom: calc(var(--gs) * 2);
             }
         }
