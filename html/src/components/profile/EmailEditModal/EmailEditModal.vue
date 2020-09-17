@@ -76,6 +76,7 @@ import { SEND_CODE, UPDATE_CREDENTIAL } from '@store/modules/Profile/modules/Cab
 import { modalName } from '@enums';
 import { verificationCodeType } from '@enums/auth';
 import './EmailEditModal.css';
+import { $retailRocket } from '@services';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 const NAME = modalName.profile.EMAIL_EDIT;
@@ -98,7 +99,7 @@ export default {
         },
 
         error: {
-            valid: value => value === null,
+            valid: (value) => value === null,
         },
     },
 
@@ -119,7 +120,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         header() {
@@ -175,6 +176,8 @@ export default {
                     code,
                     type: verificationCodeType.PROFILE_EMAIL,
                 });
+
+                $retailRocket.setEmail(value);
 
                 this.onClose();
             } catch (error) {

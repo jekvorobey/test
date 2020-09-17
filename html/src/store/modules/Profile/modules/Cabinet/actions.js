@@ -51,7 +51,7 @@ export default {
         commit(SET_CAN_EDIT_CODE, payload);
     },
 
-    async [SEND_CODE]({ state, commit }, { destination, type }) {
+    async [SEND_CODE](context, { destination, type }) {
         try {
             await sendCode(destination, type);
         } catch (error) {
@@ -59,7 +59,7 @@ export default {
         }
     },
 
-    async [UPLOAD_CERTIFICATE]({ commit }, payload) {
+    async [UPLOAD_CERTIFICATE](context, payload) {
         try {
             return await uploadProfileCertificate(payload);
         } catch (error) {
@@ -67,7 +67,7 @@ export default {
         }
     },
 
-    async [LOAD_CERTIFICATE]({ commit }, name) {
+    async [LOAD_CERTIFICATE](context, name) {
         try {
             return await loadProfileCertificate(name);
         } catch (error) {
@@ -75,7 +75,7 @@ export default {
         }
     },
 
-    async [DELETE_CERTIFICATE]({ commit }, id) {
+    async [DELETE_CERTIFICATE](context, id) {
         try {
             await deleteProfileCertificate(id);
         } catch (error) {
@@ -94,7 +94,7 @@ export default {
 
     async [UPDATE_AVATAR]({ commit }, payload) {
         try {
-            const { name, url } = await changeProfileAvatar(payload);
+            const { url } = await changeProfileAvatar(payload);
             commit(UPDATE_AVATAR, url);
         } catch (error) {
             storeErrorHandler(UPDATE_AVATAR, true)(error);
@@ -129,6 +129,8 @@ export default {
                 case verificationCodeType.PROFILE_EMAIL:
                     commit(UPDATE_EMAIL, value);
                     break;
+                default:
+                    break;
             }
         } catch (error) {
             storeErrorHandler(UPDATE_CREDENTIAL, true)(error);
@@ -144,7 +146,7 @@ export default {
         }
     },
 
-    async [UPDATE_ACTIVITIES]({ state, commit }, payload = []) {
+    async [UPDATE_ACTIVITIES]({ commit }, payload = []) {
         try {
             await changeProfileActivities(payload.map((a) => a.id));
             commit(UPDATE_ACTIVITIES, payload);
@@ -181,7 +183,7 @@ export default {
         }
     },
 
-    async [UPDATE_REFERRER_CODE]({ commit }, code) {
+    async [UPDATE_REFERRER_CODE](context, code) {
         try {
             return await changeProfileReferralCode(code);
         } catch (error) {
