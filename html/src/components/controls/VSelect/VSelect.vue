@@ -107,66 +107,69 @@
                 :style="{ maxHeight: optimizedHeight + 'px' }"
                 ref="list"
             >
-                <ul class="multiselect__content" :style="contentStyle" role="listbox" :id="'listbox-' + id">
-                    <slot name="beforeList"></slot>
-                    <li v-if="multiple && max === internalValue.length">
-                        <span class="multiselect__option">
-                            <slot name="maxElements">
-                                Maximum of {{ max }} options selected. First remove a selected option to select another.
-                            </slot>
-                        </span>
-                    </li>
-                    <template v-if="!max || internalValue.length < max">
-                        <li
-                            class="multiselect__element"
-                            v-for="(option, index) of filteredOptions"
-                            :key="index"
-                            v-bind:id="id + '-' + index"
-                            v-bind:role="!(option && (option.$isLabel || option.$isDisabled)) ? 'option' : null"
-                        >
-                            <span
-                                v-if="!(option && (option.$isLabel || option.$isDisabled))"
-                                :class="optionHighlight(index, option)"
-                                @click.stop="select(option)"
-                                @mouseenter.self="pointerSet(index)"
-                                :data-select="option && option.isTag ? tagPlaceholder : selectLabelText"
-                                :data-selected="selectedLabelText"
-                                :data-deselect="deselectLabelText"
-                                class="multiselect__option"
-                            >
-                                <slot name="option" :option="option" :search="search">
-                                    <span>{{ getOptionLabel(option) }}</span>
-                                </slot>
-                            </span>
-                            <span
-                                v-if="option && (option.$isLabel || option.$isDisabled)"
-                                :data-select="groupSelect && selectGroupLabelText"
-                                :data-deselect="groupSelect && deselectGroupLabelText"
-                                :class="groupHighlight(index, option)"
-                                @mouseenter.self="groupSelect && pointerSet(index)"
-                                @mousedown.prevent="selectGroup(option)"
-                                class="multiselect__option"
-                            >
-                                <slot name="option" :option="option" :search="search">
-                                    <span>{{ getOptionLabel(option) }}</span>
+                <v-scroll class="multiselect__scroll">
+                    <ul class="multiselect__content" :style="contentStyle" role="listbox" :id="'listbox-' + id">
+                        <slot name="beforeList"></slot>
+                        <li v-if="multiple && max === internalValue.length">
+                            <span class="multiselect__option">
+                                <slot name="maxElements">
+                                    Maximum of {{ max }} options selected. First remove a selected option to select
+                                    another.
                                 </slot>
                             </span>
                         </li>
-                    </template>
-                    <li v-show="showNoResults && (filteredOptions.length === 0 && search && !loading)">
-                        <span class="multiselect__option">
-                            <slot name="noResult" :search="search">
-                                Ничего не найдено.
-                            </slot>
-                        </span>
-                    </li>
-                    <li v-show="showNoOptions && (options.length === 0 && !search && !loading)">
-                        <span class="multiselect__option">
-                            <slot name="noOptions">Список пуст.</slot>
-                        </span>
-                    </li>
-                    <slot name="afterList"></slot>
-                </ul>
+                        <template v-if="!max || internalValue.length < max">
+                            <li
+                                class="multiselect__element"
+                                v-for="(option, index) of filteredOptions"
+                                :key="index"
+                                v-bind:id="id + '-' + index"
+                                v-bind:role="!(option && (option.$isLabel || option.$isDisabled)) ? 'option' : null"
+                            >
+                                <span
+                                    v-if="!(option && (option.$isLabel || option.$isDisabled))"
+                                    :class="optionHighlight(index, option)"
+                                    @click.stop="select(option)"
+                                    @mouseenter.self="pointerSet(index)"
+                                    :data-select="option && option.isTag ? tagPlaceholder : selectLabelText"
+                                    :data-selected="selectedLabelText"
+                                    :data-deselect="deselectLabelText"
+                                    class="multiselect__option"
+                                >
+                                    <slot name="option" :option="option" :search="search">
+                                        <span>{{ getOptionLabel(option) }}</span>
+                                    </slot>
+                                </span>
+                                <span
+                                    v-if="option && (option.$isLabel || option.$isDisabled)"
+                                    :data-select="groupSelect && selectGroupLabelText"
+                                    :data-deselect="groupSelect && deselectGroupLabelText"
+                                    :class="groupHighlight(index, option)"
+                                    @mouseenter.self="groupSelect && pointerSet(index)"
+                                    @mousedown.prevent="selectGroup(option)"
+                                    class="multiselect__option"
+                                >
+                                    <slot name="option" :option="option" :search="search">
+                                        <span>{{ getOptionLabel(option) }}</span>
+                                    </slot>
+                                </span>
+                            </li>
+                        </template>
+                        <li v-show="showNoResults && (filteredOptions.length === 0 && search && !loading)">
+                            <span class="multiselect__option">
+                                <slot name="noResult" :search="search">
+                                    Ничего не найдено.
+                                </slot>
+                            </span>
+                        </li>
+                        <li v-show="showNoOptions && (options.length === 0 && !search && !loading)">
+                            <span class="multiselect__option">
+                                <slot name="noOptions">Список пуст.</slot>
+                            </span>
+                        </li>
+                        <slot name="afterList"></slot>
+                    </ul>
+                </v-scroll>
             </div>
         </div>
     </div>
@@ -174,11 +177,17 @@
 
 <script>
 import { multiselectMixin, pointerMixin } from 'vue-multiselect';
+import VScroll from '@controls/VScroll/VScroll.vue';
 import './VSelect.css';
 
 export default {
     name: 'v-select',
     mixins: [multiselectMixin, pointerMixin],
+
+    components: {
+        VScroll,
+    },
+
     props: {
         /**
          * name attribute to match optional label element
@@ -270,7 +279,7 @@ export default {
          */
         limitText: {
             type: Function,
-            default: count => `and ${count} more`,
+            default: (count) => `and ${count} more`,
         },
         /**
          * Set true to trigger the loading spinner.

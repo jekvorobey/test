@@ -283,10 +283,10 @@ fieldset[disabled] .multiselect {
     display: none;
 }
 .multiselect__content-wrapper {
-    display: block;
+    display: flex;
     width: 100%;
     max-height: 240px;
-    overflow: auto;
+    overflow: hidden;
     -webkit-overflow-scrolling: touch;
 }
 .multiselect__content {
@@ -296,6 +296,9 @@ fieldset[disabled] .multiselect {
     margin: 0;
     min-width: 100%;
     vertical-align: top;
+}
+.multiselect__scroll {
+    height: auto !important;
 }
 .multiselect--above .multiselect__content-wrapper {
     bottom: 100%;

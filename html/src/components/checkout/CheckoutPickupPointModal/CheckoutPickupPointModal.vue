@@ -144,25 +144,23 @@
                     </div>
                 </div>
 
-                <ul
-                    class="checkout-pickup-point-modal__filter-list"
-                    v-if="filteredPickupPoints.length"
-                    v-scroll-lock="isOpen"
-                >
-                    <checkout-option-card
-                        class="checkout-pickup-point-modal__filter-list-item"
-                        v-for="point in filteredPickupPoints"
-                        :key="point.id"
-                        readonly
-                        @cardClick="onShowPoint(point)"
-                    >
-                        <div class="text-bold">{{ point.title }}</div>
-                        <div class="checkout-pickup-point-modal__filter-list-item-name">{{ point.name }}</div>
-                        <div class="text-grey text-sm" v-if="point.startDate">
-                            Можно забрать с {{ point.startDate }}, {{ point.startDateDay }}
-                        </div>
-                    </checkout-option-card>
-                </ul>
+                <v-scroll v-if="filteredPickupPoints && filteredPickupPoints.length > 0" :scroll-lock="isOpen">
+                    <ul class="checkout-pickup-point-modal__filter-list">
+                        <checkout-option-card
+                            class="checkout-pickup-point-modal__filter-list-item"
+                            v-for="point in filteredPickupPoints"
+                            :key="point.id"
+                            readonly
+                            @cardClick="onShowPoint(point)"
+                        >
+                            <div class="text-bold">{{ point.title }}</div>
+                            <div class="checkout-pickup-point-modal__filter-list-item-name">{{ point.name }}</div>
+                            <div class="text-grey text-sm" v-if="point.startDate">
+                                Можно забрать с {{ point.startDate }}, {{ point.startDateDay }}
+                            </div>
+                        </checkout-option-card>
+                    </ul>
+                </v-scroll>
                 <div class="checkout-pickup-point-modal__filter" v-else>
                     <span class="checkout-pickup-point-modal__filter-empty-text">
                         Не найдено ни одного пункта самовывоза.
@@ -180,6 +178,7 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
+import VScroll from '@controls/VScroll/VScroll.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
@@ -213,6 +212,7 @@ export default {
         VLink,
         VButton,
         VSelect,
+        VScroll,
 
         CheckoutOptionCard,
         GeneralModal,
@@ -258,7 +258,7 @@ export default {
         ...mapGetters(GEO_MODULE, [SELECTED_CITY_COORDS]),
         ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, PICKUP_POINT_TYPES]),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         coords() {
@@ -270,14 +270,14 @@ export default {
 
         filteredPickupPoints() {
             const points = this[PICKUP_POINTS] || [];
-            const filteredPoints = points.filter(p => !this.selectedType || p.methodID === this.selectedType.id);
+            const filteredPoints = points.filter((p) => !this.selectedType || p.methodID === this.selectedType.id);
 
-            return filteredPoints.map(p => {
+            return filteredPoints.map((p) => {
                 const dateObj = new Date(p.startDate);
                 const startDate = p.startDate && dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings);
                 const startDateDay = p.startDate && dateObj.getDay();
                 const phones = p.phone && p.phone.split(', ');
-                const phone = phones && phones.map(p => formatPhoneNumber(p)).join(', ');
+                const phone = phones && phones.map((p) => formatPhoneNumber(p)).join(', ');
 
                 return {
                     ...p,
@@ -333,12 +333,12 @@ export default {
 
         initHandler(e) {
             const vm = this;
-            e.geoObjects.events.add('click', e => {
+            e.geoObjects.events.add('click', (e) => {
                 // marker-4238 => 4238
                 // defaultPrevented === true if group of markers
                 if (!e._defaultPrevented) {
                     const id = +e.get('target').properties._data.markerId.split('-')[1];
-                    const point = this.filteredPickupPoints.find(item => item.id === id);
+                    const point = this.filteredPickupPoints.find((item) => item.id === id);
                     this.onShowPoint(point);
                 }
             });
