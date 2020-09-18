@@ -351,17 +351,17 @@ export default {
 
     validations: {
         [AGREEMENT]: {
-            valid: value => value === true,
+            valid: (value) => value === true,
         },
 
         [SELECTED_RECIPIENT]: {
             required,
-            hasEmail: value => value && !!value.email,
+            hasEmail: (value) => value && !!value.email,
         },
 
         [PUBLIC_EVENTS]: {
             $each: {
-                isFull: value => value.tickets.length === value.cartItem.count,
+                isFull: (value) => value.tickets.length === value.cartItem.count,
 
                 tickets: {
                     $each: {
@@ -402,10 +402,10 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(MODAL_MODULE, {
-            isRecipientModalOpen: state =>
+            isRecipientModalOpen: (state) =>
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT] &&
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT].open,
-            isTicketModalOpen: state =>
+            isTicketModalOpen: (state) =>
                 state[MODALS][modalName.checkout.TICKET_EDIT] && state[MODALS][modalName.checkout.TICKET_EDIT].open,
         }),
 
@@ -434,7 +434,7 @@ export default {
         masterClasses() {
             const publicEvents = this[PUBLIC_EVENTS] || [];
 
-            return this.publicEvents.map(i => {
+            return this.publicEvents.map((i) => {
                 const p = i.cartItem.p;
                 const dateObj = getDate(`${p.nearestDate} ${p.nearestTimeFrom}`);
                 const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);

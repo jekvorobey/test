@@ -157,6 +157,8 @@
         }
 
         &--payment &-list {
+            margin-bottom: calc(var(--gs) * 7);
+
             @media (--tablet) {
                 margin-bottom: calc(var(--gs) * 3);
             }

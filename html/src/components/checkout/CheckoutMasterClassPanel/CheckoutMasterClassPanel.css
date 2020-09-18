@@ -108,9 +108,11 @@
             padding-top: calc(var(--gs) * 2);
         }
 
-        &--payment {
+        &--payment &-list {
+            margin-bottom: calc(var(--gs) * 7);
+
             @media (--tablet) {
-                padding-bottom: 0;
+                margin-bottom: calc(var(--gs) * 3);
             }
         }
 
