@@ -74,6 +74,7 @@
         "mime-types": "^2.1.27",
         "nouislider": "^14.6.1",
         "nuxt-dropzone": "^1.0.4",
+        "picturefill": "^3.0.3",
         "proxy-polyfill": "^0.3.2",
         "qs": "^6.9.4",
         "reflect-metadata": "^0.1.13",
