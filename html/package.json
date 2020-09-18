@@ -78,6 +78,7 @@
         "qs": "^6.9.4",
         "reflect-metadata": "^0.1.13",
         "regenerator-runtime": "^0.13.7",
+        "resize-observer-polyfill": "^1.5.1",
         "route-cache": "^0.4.5",
         "serve-favicon": "^2.5.0",
         "superagent": "^6.0.0",

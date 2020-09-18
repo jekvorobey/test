@@ -18,6 +18,7 @@ import '@polyfills/insertAdjacentElement';
 import '@polyfills/classlist-polyfill';
 import '@polyfills/linq-es6';
 import '@polyfills/resizeSensor';
+import 'resize-observer-polyfill/dist/ResizeObserver.global';
 import 'custom-event-polyfill';
 import 'intersection-observer';
 import 'focus-visible';
