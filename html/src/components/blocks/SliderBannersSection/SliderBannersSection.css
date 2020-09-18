@@ -7,7 +7,7 @@
     }
 
     @media (--desktop-min) {
-        max-height: 520px;
+        max-height: 420px;
     }
 
     @media (--desktop-lg) and (--tablet-height) {
@@ -30,7 +30,7 @@
             &::after {
                 content: '';
                 display: block;
-                padding-bottom: 42.5%;
+                padding-bottom: 34.3%;
 
                 @media (--tablet-lg) {
                     padding-bottom: 52%;
@@ -41,7 +41,7 @@
                 }
 
                 @supports (-moz-user-select: none) {
-                    margin-top: 42.5%;
+                    margin-top: 34.3%;
                     padding-bottom: 0;
 
                     @media (--tablet-lg) {

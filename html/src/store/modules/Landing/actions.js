@@ -19,12 +19,12 @@ import middleDesktopImgRetina from '@images/mock/middle/middleDesktop5@2x.jpg';
 import middleTabletImgRetina from '@images/mock/middle/middleTablet5@2x.jpg';
 import middleMobileImgRetina from '@images/mock/middle/middleMobile5@2x.jpg';
 
-import mainDesktopImg from '@images/mock/main/mainDesktop5.jpg';
-import mainTabletImg from '@images/mock/main/mainTablet5.jpg';
-import mainMobileImg from '@images/mock/main/mainMobile5.jpg';
-import mainDesktopImgRetina from '@images/mock/main/mainDesktop5@2x.jpg';
-import mainTabletImgRetina from '@images/mock/main/mainTablet5@2x.jpg';
-import mainMobileImgRetina from '@images/mock/main/mainMobile5@2x.jpg';
+import mainDesktopImg from '@images/mock/landing-banner/mainDesktop.jpg';
+import mainTabletImg from '@images/mock/landing-banner/mainTablet.jpg';
+import mainMobileImg from '@images/mock/landing-banner/mainMobile.jpg';
+import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg';
+import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
+import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
 import { $logger } from '@services';
 import {
@@ -103,13 +103,13 @@ export default {
                     name: '',
                     type: 'banner',
                     url: '/?registration=true',
-                    button: {
-                        id: 2,
-                        url: '/?registration=true',
-                        text: 'Присоединиться',
-                        location: 'bottom_right',
-                        type: 'white',
-                    },
+                    // button: {
+                    //     id: 2,
+                    //     url: '/?registration=true',
+                    //     text: 'Присоединиться',
+                    //     location: 'bottom_right',
+                    //     type: 'white',
+                    // },
                     desktopImage: mainDesktopImg,
                     desktopImageRetina: mainDesktopImgRetina,
                     tabletImage: mainTabletImg,
