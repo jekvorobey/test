@@ -523,7 +523,9 @@ export default {
                 case productGroupTypes.CATALOG:
                     return activeCategory ? activeCategory.name : 'Все категории';
                 default:
-                    return activeCategory ? activeCategory.name : productGroup && productGroup.name;
+                    return activeCategory
+                        ? activeCategory.name
+                        : (productGroup && productGroup.name) || 'Все категории';
             }
         },
 
