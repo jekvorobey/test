@@ -73,22 +73,15 @@
                 <div class="catalog-view__main">
                     <div class="catalog-view__main-header">
                         <div class="catalog-view__main-header-title">
-                            <template v-if="type !== productGroupTypes.SEARCH">
-                                <h1 class="catalog-view__main-header-hl">
-                                    <template v-if="entityCode">
-                                        {{ productGroup && productGroup.name }}
-                                    </template>
-                                    <template v-else>
-                                        {{ activeCategory ? activeCategory.name : 'Все категории' }}
-                                    </template>
-                                </h1>
-                                <p class="text-grey catalog-view__main-header-text">{{ range }} {{ productName }}</p>
-                            </template>
-                            <template v-else>
-                                <h1 class="catalog-view__main-header-hl">
-                                    {{ searchTitle }}
-                                </h1>
-                            </template>
+                            <h1 class="catalog-view__main-header-hl">
+                                {{ catalogTitle }}
+                            </h1>
+                            <p
+                                class="text-grey catalog-view__main-header-text"
+                                v-if="type !== productGroupTypes.SEARCH"
+                            >
+                                {{ range }} {{ productName }}
+                            </p>
                         </div>
 
                         <v-select
@@ -462,9 +455,8 @@ export default {
                         query: { search_string: this.$route.query.search_string },
                     };
                 default:
-                    return { name: 'ProductGroups', parmas: { type } };
+                    return { name: 'ProductGroups', params: { type } };
             }
-            return { name, params: { type } };
         },
 
         mobileImg() {
@@ -520,6 +512,19 @@ export default {
             if (range && searchQuery) return `По запросу «${searchQuery}» найдено ${range} продуктов`;
             else if (range && !searchQuery) return `По запросу найдено ${range} продуктов`;
             else return `По запросу «${searchQuery}» ничего не найдено`;
+        },
+
+        catalogTitle() {
+            const { type, entityCode, productGroup, activeCategory, searchTitle } = this;
+
+            switch (type) {
+                case productGroupTypes.SEARCH:
+                    return searchTitle;
+                case productGroupTypes.CATALOG:
+                    return activeCategory ? activeCategory.name : 'Все категории';
+                default:
+                    return activeCategory ? activeCategory.name : productGroup && productGroup.name;
+            }
         },
 
         typeSortOptions() {
