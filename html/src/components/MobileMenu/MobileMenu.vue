@@ -19,12 +19,108 @@
             </template>
         </template>
         <template v-slot:content>
-            <transition name="fade-in" mode="out-in">
+            <div class="container mobile-menu__container" v-if="!isTablet">
+                <div class="mobile-menu__panel">
+                    <ul class="mobile-menu__list mobile-menu__panel-part">
+                        <li class="mobile-menu__menu-item" v-for="category in currentCategories" :key="category.id">
+                            <v-link
+                                class="mobile-menu__menu-link"
+                                :to="`/catalog/${category.code}`"
+                                :class="{ 'mobile-menu__menu-link--final': !(category.items && category.items.length) }"
+                            >
+                                {{ category.name }}
+                            </v-link>
+                        </li>
+                    </ul>
+                    <ul class="mobile-menu__list mobile-menu__panel-part">
+                        <li class="mobile-menu__menu-item" v-for="item in headerMenuItems" :key="item.name">
+                            <v-link class="mobile-menu__menu-link" :to="item.url">
+                                {{ item.name }}
+                            </v-link>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mobile-menu__panel">
+                    <div class="mobile-menu__panel-part">
+                        <ul class="mobile-menu__list">
+                            <li class="mobile-menu__menu-item">
+                                <v-link
+                                    tag="button"
+                                    class="mobile-menu__menu-link mobile-menu__menu-link--full"
+                                    @click="onRegister"
+                                >
+                                    <v-svg
+                                        class="mobile-menu__menu-link-container"
+                                        name="account-middle"
+                                        width="24"
+                                        height="24"
+                                    />Личный кабинет
+                                </v-link>
+                            </li>
+                            <li class="mobile-menu__menu-item" v-if="hasSession">
+                                <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" to="/favorites">
+                                    <span class="mobile-menu__menu-link-container">
+                                        <v-svg :name="favoriteItemsIcon" width="24" height="24" />
+                                        <span class="mobile-menu__menu-link-count" v-if="hasFavoriteItems">
+                                            {{ favoriteItemsCount }}
+                                        </span>
+                                    </span>
+
+                                    Избранное
+                                </v-link>
+                            </li>
+                            <li class="mobile-menu__menu-item">
+                                <v-link
+                                    tag="button"
+                                    class="mobile-menu__menu-link"
+                                    @click.prevent="onOpenCitySelection"
+                                >
+                                    <v-svg class="mobile-menu__menu-link-container" name="pin" width="24" height="24" />
+                                    <v-clamp :max-lines="2" autoresize>{{ city }}</v-clamp>
+                                </v-link>
+                            </li>
+                            <li class="mobile-menu__menu-item" v-for="item in helpMenu.items" :key="item.name">
+                                <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" :to="item.url">
+                                    {{ item.name }}
+                                </v-link>
+                            </li>
+                        </ul>
+                        <div class="mobile-menu__menu-socials">
+                            <p class="text-grey">Каждый день с 9:00 до 21:00</p>
+                            <v-link class="mobile-menu__menu-socials-phone" href="tel:88007079070">
+                                8 800 707-90-70
+                            </v-link>
+                            <p class="text-grey">Всегда отвечаем на ваши сообщения</p>
+
+                            <ul class="mobile-menu__menu-socials-links">
+                                <li class="mobile-menu__menu-socials-link" v-for="link in links" :key="link.href">
+                                    <v-link
+                                        class="mobile-menu__menu-socials-icon"
+                                        :href="link.href"
+                                        :title="link.title"
+                                        @mouseover="link.hover = true"
+                                        @mouseleave="link.hover = false"
+                                        target="_blank"
+                                        rel="nofollow"
+                                    >
+                                        <v-svg :name="link.hover ? link.iconHover : link.icon" width="40" height="40" />
+                                    </v-link>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mobile-menu__panel-part">
+                        <!-- <catalog-banner-card /> -->
+                    </div>
+                </div>
+            </div>
+            <transition v-else name="fade-in" mode="out-in">
                 <div v-if="!showCategories" class="mobile-menu__panel-root">
                     <ul class="mobile-menu__menu">
                         <li
                             class="container mobile-menu__menu-item mobile-menu__menu-item--separator"
-                            v-for="(item, index) in headerMenu.items"
+                            v-for="(item, index) in headerMenuItems"
                             :key="item.name"
                         >
                             <v-link
@@ -150,6 +246,7 @@ import VLink from '@controls/VLink/VLink.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
 import VClamp from 'vue-clamp';
 
+import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -197,6 +294,7 @@ export default {
         VClamp,
 
         GeneralModal,
+        CatalogBannerCard,
     },
 
     data() {
@@ -250,7 +348,7 @@ export default {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(FAVORITES_MODULE, [FAVORITE_ITEMS_COUNT]),
         ...mapState(GEO_MODULE, {
-            city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
 
         favoriteItemsIcon() {
@@ -277,8 +375,17 @@ export default {
                 : this.$t(`productGroups.links.${productGroupTypes.CATALOG}`);
         },
 
+        headerMenuItems() {
+            const { isTablet, headerMenu: { items = [] } = {} } = this;
+            return !isTablet ? items.filter(i => i.url && !i.url.includes('/catalog')) : items;
+        },
+
         isTabletLg() {
             return this.$mq.tabletLg;
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 
