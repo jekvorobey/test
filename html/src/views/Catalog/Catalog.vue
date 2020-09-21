@@ -441,7 +441,6 @@ export default {
 
         breadcrumbRootUrl() {
             const { type } = this;
-            let name = '';
 
             switch (type) {
                 case productGroupTypes.CATALOG:
