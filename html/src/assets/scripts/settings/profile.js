@@ -107,11 +107,11 @@ export const baseChartOptions = Object.freeze({
         custom({ series, seriesIndex, dataPointIndex, w }) {
             const dataPoints = series[seriesIndex] || [];
             const middleIndex = Math.round((dataPoints.length - 1) / 2);
-            const arrowBoxClass = middleIndex > dataPointIndex ? 'arrow_box--left' : 'arrow_box--right';
+            const arrowBoxClass = middleIndex > dataPointIndex ? 'v-chart__tooltip--left' : 'v-chart__tooltip--right';
 
             return (
                 // eslint-disable-next-line
-                `<div class="arrow_box ${arrowBoxClass}">` +
+                `<div class="v-chart__tooltip ${arrowBoxClass}">` +
                 '<span>' +
                 series[seriesIndex][dataPointIndex] +
                 '</span>' +
