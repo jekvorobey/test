@@ -1,6 +1,7 @@
 .cart-product-panel {
     &__alert {
         display: flex;
+        flex-wrap: nowrap;
         align-items: center;
         padding: calc(var(--gs) * 2) calc(var(--gs) * 3);
         background-color: var(--cl-elem-grey);
@@ -8,10 +9,6 @@
 
         @media (--tablet) {
             padding: calc(var(--gs) * 2);
-        }
-
-        .icon {
-            margin-right: calc(var(--gs) * 2);
         }
     }
 

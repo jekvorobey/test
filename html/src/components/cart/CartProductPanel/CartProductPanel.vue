@@ -1,14 +1,9 @@
 <template>
     <div class="cart-product-panel">
-        <div v-if="deliveryInfo && deliveryInfo.length > 0" class="cart-product-panel__alert">
-            <div class="cart-product-panel__alert-icon">
-                <v-svg name="alert" width="24" height="24" />
-            </div>
+        <attention-panel class="cart-product-panel__alert">
+            Точная дата доставки будет рассчитана на следующем шаге оформления заказа
+        </attention-panel>
 
-            <div class="cart-product-panel__alert-text">
-                <div v-for="alert in deliveryInfo" :key="alert.id">{{ alert.name }} {{ alert.description }}</div>
-            </div>
-        </div>
         <transition-group
             class="cart-product-panel__list"
             tag="ul"
@@ -66,6 +61,8 @@
 import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
 import CartBundleProductCard from '@components/CartBundleProductCard/CartBundleProductCard.vue';
 
+import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
+
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
 
@@ -80,8 +77,6 @@ import { fileExtension } from '@enums';
 import { cartItemTypes } from '@enums/product';
 import { generatePictureSourcePath } from '@util/file';
 import { generateProductUrl } from '@util/catalog';
-
-import '@images/sprites/alert.svg';
 import './CartProductPanel.css';
 
 const itemAnimationDelayDelta = 100;
@@ -91,6 +86,8 @@ export default {
     name: 'cart-product-panel',
 
     components: {
+        AttentionPanel,
+
         CartProductCard,
         CartBundleProductCard,
     },
