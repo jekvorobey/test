@@ -58,16 +58,26 @@ export default {
 
     [ACTIVE_TAGS](state, getters) {
         const activeTags = [];
-        const filters = state.filters.filter((f) => f.type !== 'range');
-        const { filterSegments } = getters;
+        const { filters = [] } = state;
+        const { filterSegments = {} } = getters;
         for (let i = 0; i < filters.length; i++) {
             const filter = filters[i];
-            if (filter.items)
+            if (Array.isArray(filter.items))
                 for (let j = 0; j < filter.items.length; j++) {
                     const item = filter.items[j];
                     if (filterSegments[filter.name] && filterSegments[filter.name][item.code])
                         activeTags.push({ ...item, segment: `${filter.name}-${item.code}` });
                 }
+            else if (filter.type === 'range') {
+                if (filterSegments[filter.name] && filter.name === 'price') {
+                    const values = filterSegments[filter.name];
+                    activeTags.push({
+                        ...filter,
+                        name: `Цена: от ${values[0]} до ${values[1]}`,
+                        segment: `${filter.name}-from_${values[0]}_to_${values[1]}`,
+                    });
+                }
+            }
         }
         return activeTags;
     },

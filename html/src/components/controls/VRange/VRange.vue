@@ -74,10 +74,6 @@ export default {
         };
     },
     watch: {
-        value_internal(value, oldValue) {
-            if (oldValue) this.$emit('input', value);
-        },
-
         value() {
             for (let i = 0; i < this.value.length; i++) {
                 if (this.value_internal[i] !== this.value[i]) {
@@ -117,23 +113,30 @@ export default {
             this.slider.set(this.value_internal);
         },
 
+        onUpdate(values, handle, unencoded, tap, positions) {
+            this.value_internal = values;
+        },
+
         onChange(values, handle, unencoded, tap, positions) {
             this.value_internal = values;
+            this.$emit('input', this.value_internal);
         },
     },
 
     mounted() {
         const { body } = this.$refs;
         this.slider = noUiSlider.create(body, this.options);
-        this.slider.on('update', this.onChange);
+        this.slider.on('update', this.onUpdate);
         this.slider.on('change', this.onChange);
+    },
+
+    beforeDestroy() {
+        if (this.slider) this.slider.off();
     },
 
     destroyed() {
         setTimeout(() => {
             if (this.slider) {
-                this.slider.off('update');
-                this.slider.off('change');
                 this.slider.destroy();
                 this.slider = null;
             }

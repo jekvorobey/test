@@ -106,7 +106,7 @@
                         <tag-item
                             v-for="(tag, index) in activeTags"
                             :data-index="index"
-                            :key="tag.code"
+                            :key="tag.code || tag.id"
                             :text="tag.name"
                             @delete="onClickDeleteTag(tag.segment)"
                         />
