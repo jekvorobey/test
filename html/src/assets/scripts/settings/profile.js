@@ -8,11 +8,16 @@ export const orderDateLocaleOptions = {
 
 export const baseChartOptions = Object.freeze({
     chart: {
+        width: '100%',
+        fontFamily: 'Futura PT, Arial, sans-serif',
+
         toolbar: {
             show: false,
         },
-        width: '100%',
-        fontFamily: 'Futura PT, Arial, sans-serif',
+
+        zoom: {
+            enabled: false,
+        },
     },
 
     dataLabels: {
@@ -100,8 +105,17 @@ export const baseChartOptions = Object.freeze({
 
     tooltip: {
         custom({ series, seriesIndex, dataPointIndex, w }) {
+            const dataPoints = series[seriesIndex] || [];
+            const middleIndex = Math.round((dataPoints.length - 1) / 2);
+            const arrowBoxClass = middleIndex > dataPointIndex ? 'arrow_box--left' : 'arrow_box--right';
+
             return (
-                '<div class="v-chart__tooltip">' + '<span>' + series[seriesIndex][dataPointIndex] + '</span>' + '</div>'
+                // eslint-disable-next-line
+                `<div class="arrow_box ${arrowBoxClass}">` +
+                '<span>' +
+                series[seriesIndex][dataPointIndex] +
+                '</span>' +
+                '</div>'
             );
         },
     },
