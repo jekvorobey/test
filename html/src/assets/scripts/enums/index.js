@@ -302,6 +302,7 @@ export const infoPages = Object.freeze({
     DELIVERY_AND_PAYMENT: 'delivery-and-payment',
     PURCHASE_RETURNS: 'purchase-returns',
     FEEDBACK: 'feedback',
+    BONUSES: 'bonuses',
 });
 
 export const reviewOpinion = Object.freeze({

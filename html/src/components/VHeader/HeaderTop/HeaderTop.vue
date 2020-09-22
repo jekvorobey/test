@@ -7,19 +7,14 @@
             </button>
 
             <div class="header-top__middle">
-                <span class="header-top__middle-item">
-                    <v-svg name="delivery" width="16" height="16" />{{ $t('header.top.delivery') }}
-                </span>
-                <span class="header-top__middle-item">
-                    <v-svg name="box" width="16" height="16" />{{ $t('header.top.benefits') }}
-                </span>
-                <span class="header-top__middle-item">
-                    <v-svg name="gift" width="16" height="16" />{{ $t('header.top.gifts') }}
-                </span>
+                <router-link class="header-top__middle-item" v-for="link in links" :key="link.id" :to="link.to">
+                    <v-svg :name="link.icon" width="16" height="16" />{{ link.name }}
+                </router-link>
             </div>
 
             <help-panel class="header-top__help">
-                {{ $t('header.top.help') }}<v-svg name="arrow-down" class="help-panel__icon-arrow" width="20" height="20" />
+                {{ $t('header.top.help')
+                }}<v-svg name="arrow-down" class="help-panel__icon-arrow" width="20" height="20" />
             </help-panel>
         </div>
     </div>
@@ -39,13 +34,14 @@ import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { modalName } from '@enums';
+import { modalName, infoPages } from '@enums';
 import '@images/sprites/gift.svg';
 import '@images/sprites/box.svg';
 import '@images/sprites/delivery.svg';
 import '@images/sprites/pin.svg';
 import '@images/sprites/arrow-down.svg';
 import './HeaderTop.critical.css';
+import { productGroupTypes } from '@enums/product';
 
 export default {
     name: 'header-top',
@@ -61,8 +57,31 @@ export default {
         ...mapState([SCROLL]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
         ...mapState(GEO_MODULE, {
-            city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
+
+        links() {
+            return [
+                {
+                    id: 1,
+                    name: this.$t('header.top.delivery'),
+                    to: { name: 'InfoPages', params: { page: infoPages.DELIVERY_AND_PAYMENT } },
+                    icon: 'delivery',
+                },
+                {
+                    id: 2,
+                    name: this.$t('header.top.benefits'),
+                    to: { name: 'Catalog', params: { type: productGroupTypes.CATALOG } },
+                    icon: 'box',
+                },
+                {
+                    id: 3,
+                    to: { name: 'InfoPages', params: { page: infoPages.BONUSES } },
+                    name: this.$t('header.top.gifts'),
+                    icon: 'gift',
+                },
+            ];
+        },
 
         isTabletLg() {
             return this.$mq.tabletLg;

@@ -729,8 +729,9 @@ export default {
                 })
                 .then(data => {
                     $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
+                    $progress.finish();
+
                     next(vm => {
-                        $progress.finish();
                         vm.setSortValue(orderField, orderDirection);
 
                         if (vm[SCROLL])

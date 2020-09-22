@@ -3,7 +3,7 @@ import { infoPages } from '@enums';
 /**
  * @Module
  */
-
+const types = Object.values(infoPages);
 const InfoPages = () => import(/* webpackChunkName: "info-pages-view" */ './InfoPages.vue');
 
 /**
@@ -16,7 +16,7 @@ export default {
     routes: [
         {
             name: 'InfoPages',
-            path: `/:page(${infoPages.VACANCIES}|${infoPages.FEEDBACK}|${infoPages.PURCHASE_RETURNS}|${infoPages.DELIVERY_AND_PAYMENT})`,
+            path: `/:page(${types.join('|')})`,
             component: InfoPages,
         },
     ],

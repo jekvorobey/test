@@ -84,6 +84,8 @@
 
     &__middle-item {
         white-space: nowrap;
+        border-bottom: none;
+
         & + & {
             margin-left: calc(var(--gs) * 9);
 

@@ -7,6 +7,7 @@ import Vacancies from './Vacancies.vue';
 import Feedback from './Feedback.vue';
 import DeliveryAndPayment from './DeliveryAndPayment.vue';
 import PurchaseReturns from './PurchaseReturns.vue';
+import Bonuses from './Bonuses.vue';
 
 import { mapState } from 'vuex';
 import { infoPages } from '@enums';
@@ -24,14 +25,15 @@ export default {
             const { page } = this;
 
             switch (page) {
-                case infoPages.VACANCIES:
-                    return Vacancies;
                 case infoPages.FEEDBACK:
                     return Feedback;
                 case infoPages.DELIVERY_AND_PAYMENT:
                     return DeliveryAndPayment;
                 case infoPages.PURCHASE_RETURNS:
                     return PurchaseReturns;
+                case infoPages.BONUSES:
+                    return Bonuses;
+                case infoPages.VACANCIES:
                 default:
                     return Vacancies;
             }
