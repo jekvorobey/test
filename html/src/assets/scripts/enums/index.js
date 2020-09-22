@@ -295,6 +295,7 @@ export const weekDays = Object.freeze({
 export const agreementTypes = Object.freeze({
     PUBLIC_OFFER: 'public-offer',
     PERSONAL_POLICY: 'personal-policy',
+    BONUS_PROGRAM: 'bonus-program',
 });
 
 export const infoPages = Object.freeze({

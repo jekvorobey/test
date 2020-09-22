@@ -34,7 +34,7 @@
             <span>
                 С полными правилами бонусной программы можно ознакомиться по
                 <strong>
-                    <router-link :to="$route.path">ссылке</router-link>
+                    <router-link :to="bonusProgramLink">ссылке</router-link>
                 </strong>
             </span>
         </div>
@@ -42,7 +42,15 @@
 </template>
 
 <script>
+import { agreementTypes } from '@enums';
+
 export default {
     name: 'info-pages-bonuses',
+
+    computed: {
+        bonusProgramLink() {
+            return { name: 'Agreements', params: { type: agreementTypes.BONUS_PROGRAM } };
+        },
+    },
 };
 </script>

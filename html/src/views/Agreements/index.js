@@ -4,6 +4,7 @@ import { agreementTypes } from '@enums';
  * @Module
  */
 
+const types = Object.values(agreementTypes);
 const Agreements = () => import(/* webpackChunkName: "agreements-view" */ './Agreements.vue');
 
 /**
@@ -16,7 +17,7 @@ export default {
     routes: [
         {
             name: 'Agreements',
-            path: `/agreements/:type(${agreementTypes.PERSONAL_POLICY}|${agreementTypes.PUBLIC_OFFER})`,
+            path: `/agreements/:type(${types.join('|')})`,
             component: Agreements,
         },
         {
