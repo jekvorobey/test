@@ -1,5 +1,6 @@
-.v-chart {
+.v-chartjs {
     &__tooltip {
+        color: var(--cl-white);
         position: relative;
         background: var(--cl-global);
         border: 2px solid var(--cl-global);
@@ -8,14 +9,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-
-        &--right {
-            transform: translate(50%, -100%);
-        }
-
-        &--left {
-            transform: translate(-110%, -100%);
-        }
 
         &:after,
         &:before {
@@ -34,23 +27,5 @@
             border-top-color: var(--cl-global);
             border-width: 10px;
         }
-    }
-}
-
-.apexcharts-tooltip {
-    border-radius: 0;
-    box-shadow: none;
-    color: #fff;
-    transform: translateX(10px) translateY(10px);
-    overflow: visible !important;
-    white-space: normal !important;
-
-    span {
-        display: inline-block;
-    }
-
-    &.apexcharts-theme-light {
-        border-color: transparent;
-        background-color: transparent;
     }
 }

@@ -339,7 +339,32 @@ export function isLightColor(color) {
     return hsp > 127.5;
 }
 
+/**
+ * Calculate grid step size
+ * @param {*} range
+ * @param {*} targetSteps
+ */
+export function calculateStepSize(range, targetSteps) {
+    // calculate an initial guess at step size
+    const tempStep = range / targetSteps;
+
+    // get the magnitude of the step size
+    const mag = Math.floor(Math.log10(tempStep));
+    const magPow = 10 ** mag;
+
+    // calculate most significant digit of the new step size
+    let magMsd = Math.round(tempStep / magPow + 0.5);
+
+    // promote the MSD to either 1, 2, or 5
+    if (magMsd > 5) magMsd = 10;
+    else if (magMsd > 2) magMsd = 5;
+    else if (magMsd > 1) magMsd = 2;
+
+    return magMsd * magPow;
+}
+
 export default {
+    calculateStepSize,
     countCheckdigit,
     preparePrice,
     scrollTo,

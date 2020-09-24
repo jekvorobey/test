@@ -41,7 +41,7 @@
         justify-content: space-between;
         margin-bottom: calc(var(--gs) * 5);
 
-        @media (--tablet-lg) {
+        @media (--tablet) {
             flex-wrap: wrap;
         }
     }
@@ -68,6 +68,7 @@
             }
 
             @media (--tablet-lg) {
+                overflow: auto;
                 width: 100%;
             }
         }
@@ -92,7 +93,6 @@
 
             @media (--tablet-lg) {
                 justify-content: space-around;
-                padding-top: 0;
                 width: 100%;
             }
 
@@ -112,6 +112,21 @@
 
         &--empty &-item {
             align-items: flex-start !important;
+        }
+
+        &-group {
+            display: flex;
+            width: 100%;
+
+            @media (--tablet-min) {
+                flex-wrap: wrap;
+            }
+        }
+
+        &-group &-item {
+            @media (--tablet) {
+                margin-right: calc(var(--gs) * 4);
+            }
         }
 
         &-item {
@@ -195,6 +210,11 @@
 
         @media (--tablet-lg) {
             margin-bottom: calc(var(--gs) * 4);
+        }
+
+        &-container {
+            overflow-x: auto;
+            overflow-y: hidden;
         }
     }
 

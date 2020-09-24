@@ -3,19 +3,21 @@
         <h2 class="referal-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
         <div class="referal-view__panels" v-if="referralData && level">
             <div class="referal-view__panel">
-                <div class="referal-view__panel-item">
-                    <div class="text-grey referal-view__panel-name">Ваш уровень</div>
-                    <div class="referal-view__panel-level">{{ levelData.currentLevelName }}</div>
-                </div>
-                <div
-                    class="referal-view__panel-item"
-                    v-if="levelData.nextLevelName || (!levelData.nextLevelName && isTabletLg && !isTablet)"
-                    :style="{ visibility: levelData.nextLevelName ? 'visible' : 'hidden' }"
-                >
-                    <div class="text-grey referal-view__panel-name">
-                        Следующий уровень
+                <div class="referal-view__panel-group">
+                    <div class="referal-view__panel-item">
+                        <div class="text-grey referal-view__panel-name">Ваш уровень</div>
+                        <div class="referal-view__panel-level">{{ levelData.currentLevelName }}</div>
                     </div>
-                    <div class="text-grey referal-view__panel-level">{{ levelData.nextLevelName }}</div>
+                    <div
+                        class="referal-view__panel-item"
+                        v-if="levelData.nextLevelName || (!levelData.nextLevelName && isTabletLg && !isTablet)"
+                        :style="{ visibility: levelData.nextLevelName ? 'visible' : 'hidden' }"
+                    >
+                        <div class="text-grey referal-view__panel-name">
+                            Следующий уровень
+                        </div>
+                        <div class="text-grey referal-view__panel-level">{{ levelData.nextLevelName }}</div>
+                    </div>
                 </div>
 
                 <a class="referal-view__panel-link">Подробнее о реферальной программе</a>
@@ -61,7 +63,14 @@
         <template v-if="(orders && orders.length) || !!sumArcData.value">
             <section class="referal-view__section referal-view__graph">
                 <h3 class="container container--tablet-lg referal-view__section-hl">Новые рефералы</h3>
-                <v-chart v-if="isMounted" type="line" :options="chartOptions" :series="series" height="350px" />
+
+                <referral-chart
+                    :labels="series.labels"
+                    :data="series.points"
+                    :y-step="series.yStep"
+                    height="300px"
+                    width="912px"
+                />
             </section>
 
             <div class="container container--tablet-lg">
@@ -353,7 +362,7 @@ import { filterField } from '@enums/order';
 import { DEFAULT_PAGE } from '@constants';
 import { digit2DateSettings, numericYearDateSettings } from '@settings';
 import { baseChartOptions } from '@settings/profile';
-import { preparePrice, shortNumberFormat, saveToClipboard, getDate } from '@util';
+import { preparePrice, shortNumberFormat, saveToClipboard, getDate, calculateStepSize } from '@util';
 import { generateProductUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { generateReferralLink } from '@util/profile';
@@ -363,7 +372,8 @@ import '@images/sprites/arrow-down-small.svg';
 import './Referal.css';
 
 const REFERRAL_MODULE_PATH = `${PROFILE_MODULE}/${REFERRAL_MODULE}`;
-const VChart = () => import(/* webpackChunkName: "v-chart" */ '@controls/VChart/VChart.vue');
+const ReferralChart = () =>
+    import(/* webpackChunkName: "referral-chart" */ '@components/profile/ReferralChart/ReferralChart.vue');
 
 export default {
     name: 'referal',
@@ -376,7 +386,6 @@ export default {
         VLink,
         VSelect,
         VArcCounter,
-        VChart,
         GeneralModal,
 
         Price,
@@ -385,6 +394,8 @@ export default {
         ShowMoreButton,
         AttentionPanel,
         MessageModal,
+
+        ReferralChart,
     },
 
     data() {
@@ -422,6 +433,10 @@ export default {
             chartOptions: {
                 ...baseChartOptions,
             },
+
+            options: null,
+            chartData: null,
+            rectangleSet: false,
         };
     },
 
@@ -429,10 +444,10 @@ export default {
         ...mapState([LOCALE]),
         ...mapState(REFERRAL_MODULE_PATH, [ITEMS, ACTIVE_PAGE, REFERRAL_DATA]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
+            [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || false,
         }),
         ...mapState(MODAL_MODULE, {
-            isMessageOpen: state =>
+            isMessageOpen: (state) =>
                 state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
         }),
 
@@ -459,18 +474,22 @@ export default {
 
         series() {
             const data = this[REFERRALS] || [];
-            return [
-                {
-                    name: 'Новые рефералы',
-                    data,
-                },
-            ];
+            const labels = data.map((d) => d[0]);
+            const points = data.map((d) => d[1]);
+            const maxPoint = Math.max(...points);
+            const yStep = calculateStepSize(maxPoint, 10);
+
+            return {
+                labels,
+                points,
+                yStep,
+            };
         },
 
         orders() {
             const items = this[ITEMS] || [];
 
-            return items.map(i => {
+            return items.map((i) => {
                 const desktopImage = i.image && generatePictureSourcePath(40, 40, i.image.id, fileExtension.image.WEBP);
                 const defaultImage = i.image && generatePictureSourcePath(40, 40, i.image.id);
                 const date = i.order_date && getDate(i.order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
@@ -595,13 +614,14 @@ export default {
         },
 
         setOrderFilterValue(field) {
-            this.orderFilterValue = this.orderFilterOptions.find(o => o.field === field) || this.orderFilterOptions[0];
+            this.orderFilterValue =
+                this.orderFilterOptions.find((o) => o.field === field) || this.orderFilterOptions[0];
         },
 
         setSortValue(field) {
             if (field === undefined) return;
             if (this.sortValue.field !== field) {
-                this.sortValue = this.sortFields.find(o => o.field === field);
+                this.sortValue = this.sortFields.find((o) => o.field === field);
                 this.sortDirection = sortDirections.ASC;
             } else this.setSortDirection();
         },
@@ -655,13 +675,13 @@ export default {
                     date,
                 })
                 .then(() => {
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                         vm.setOrderFilterValue(orderFilterField);
                         vm.setSortValue(orderField);
                     });
                 })
-                .catch(thrown => {
+                .catch((thrown) => {
                     $progress.fail();
                     next();
                 });
