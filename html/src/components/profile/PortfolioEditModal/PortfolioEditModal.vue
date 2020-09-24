@@ -116,7 +116,7 @@ export default {
 
     validations: {
         editablePortfolio: {
-            oneOrMore: value => value && value.length > 0,
+            oneOrMore: (value) => value && value.length > 0,
 
             $each: {
                 name: {
@@ -130,7 +130,7 @@ export default {
         },
 
         files: {
-            oneOrMore: value => value && value.length > 0,
+            oneOrMore: (value) => value && value.length > 0,
         },
     },
 
@@ -147,7 +147,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         header() {
@@ -217,7 +217,7 @@ export default {
             if (!this.$v.editablePortfolio.$invalid) await this[UPDATE_PORTFOLIO](editablePortfolio);
             if (!this.$v.files.$invalid)
                 await Promise.all(
-                    files.map(file => {
+                    files.map((file) => {
                         const formData = new FormData();
                         formData.append('file', file, file.name);
                         return this[UPLOAD_CERTIFICATE](formData);
@@ -227,7 +227,16 @@ export default {
             try {
                 this[FETCH_CABINET_DATA](this.$isServer);
             } catch (error) {}
+
             this.onClose();
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state: {
+                    title: 'Уведомление',
+                    message: 'Все данные сохранены',
+                },
+            });
         },
 
         onClose() {
