@@ -220,15 +220,15 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
-            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
+            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || false,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isPasswordEditOpen: state =>
+            isPasswordEditOpen: (state) =>
                 state[MODALS][modalName.profile.PASSWORD_EDIT] && state[MODALS][modalName.profile.PASSWORD_EDIT].open,
-            isPortofioEditOpen: state =>
+            isPortofioEditOpen: (state) =>
                 state[MODALS][modalName.profile.PORTFOLIO_EDIT] && state[MODALS][modalName.profile.PORTFOLIO_EDIT].open,
         }),
 
@@ -245,9 +245,9 @@ export default {
         ]),
 
         avatarPlaceholder() {
-            return `${(this[LAST_NAME] && this[LAST_NAME].slice(0, 1)) || ''}${(this[FIRST_NAME] &&
-                this[FIRST_NAME].slice(0, 1)) ||
-                ''}`;
+            return `${(this[LAST_NAME] && this[LAST_NAME].slice(0, 1)) || ''}${
+                (this[FIRST_NAME] && this[FIRST_NAME].slice(0, 1)) || ''
+            }`;
         },
 
         avatarAcceptedTypes() {
@@ -261,7 +261,7 @@ export default {
         socialMap() {
             const social = this[SOCIAL] || [];
             const socialMap = {};
-            social.forEach(d => (socialMap[d.driver] = d));
+            social.forEach((d) => (socialMap[d.driver] = d));
             return socialMap;
         },
 
@@ -330,7 +330,7 @@ export default {
                 open: true,
                 state: {
                     title: 'Уведомление',
-                    message: 'Все данные сохранены',
+                    message: 'Данные профиля обновлены',
                 },
             });
         },
@@ -357,11 +357,11 @@ export default {
         $store
             .dispatch(`${CABINET_MODULE_PATH}/${FETCH_CABINET_DATA}`)
             .then(() => {
-                next(vm => {
+                next((vm) => {
                     $progress.finish();
                 });
             })
-            .catch(thrown => {
+            .catch((thrown) => {
                 $progress.fail();
                 if (thrown.status === httpCodes.FORBIDDEN) {
                     $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);
