@@ -217,7 +217,9 @@
             </div>
         </section>
 
-        <section class="section product-view__section">
+
+        <!-- #66085 -->
+        <!-- <section class="section product-view__section">
             <div class="container product-view__socials">
                 <div class="product-view__socials-inner">
                     <div class="product-view__socials-statistics">
@@ -237,7 +239,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <section class="section product-view__section">
             <div class="container">
