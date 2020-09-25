@@ -25,10 +25,7 @@
         margin-bottom: calc(var(--gs) * 2);
 
         @media (--tablet-lg) {
-            font-size: 14px;
-            line-height: 24px;
-            text-align: left;
-            padding-top: calc(var(--gs) * 2);
+            margin-bottom: calc(var(--gs) * 3);
         }
     }
 
@@ -56,7 +53,7 @@
             flex-wrap: wrap;
             line-height: 32px;
             overflow: hidden;
-            padding-bottom: calc(var(--gs) * 4.5);
+            padding-bottom: calc(var(--gs) * 5);
             padding-top: calc(var(--gs) * 1.5);
 
             @media (--tablet) {
