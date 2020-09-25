@@ -21,21 +21,29 @@
                     inline
                 />
             </div>
-            <div class="container checkout-date-modal__select" v-if="timeSlots.length">
+            <div class="container checkout-date-modal__select" v-if="timeSlots && timeSlots.length > 0">
                 <p class="checkout-date-modal__select-title">Время доставки</p>
                 <v-select
-                    v-model="slotTime"
-                    :searchable="false"
+                    v-model="selectedTime"
                     placeholder="Выберите время"
-                    label="name"
-                    track-by="value"
+                    track-by="code"
                     deselectLabel=""
-                    :allow-empty="false"
                     :options="timeSlots"
-                ></v-select>
+                    :allow-empty="false"
+                    :searchable="false"
+                >
+                    <template v-slot:singleLabel="{ option }">
+                        <span>С {{ option.from }} до {{ option.to }}</span>
+                    </template>
+                    <template v-slot:option="{ option }">
+                        <span>С {{ option.from }} до {{ option.to }}</span>
+                    </template>
+                </v-select>
             </div>
             <div class="checkout-date-modal__submit">
-                <v-button class="checkout-date-modal__submit-btn" @click="onChanged">Подтвердить доставку</v-button>
+                <v-button class="checkout-date-modal__submit-btn" @click="onChanged">
+                    Подтвердить доставку
+                </v-button>
             </div>
         </template>
     </general-modal>
@@ -72,21 +80,19 @@ export default {
     data() {
         return {
             selectedDate: null,
+            selectedTime: null,
             availableDateTimes: {},
-            slotTime: {
-                result: {},
-            },
         };
     },
 
     computed: {
         ...mapState({
-            datepickerLocale: state =>
+            datepickerLocale: (state) =>
                 state[LOCALIZATIONS][state[LOCALE]] && state[LOCALIZATIONS][state[LOCALE]].flatpickrLocale,
         }),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
-            state: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            state: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         availableDates() {
@@ -106,19 +112,8 @@ export default {
         },
 
         timeSlots() {
-            const slotDate = this.selectedDate && this.selectedDate[0];
-            const times = slotDate && this.availableDateTimes && this.availableDateTimes[slotDate];
-
-            if (slotDate && times) {
-                return times.map(({ from, to, code }, key) => {
-                    return {
-                        name: `С ${from}:00 до ${to}:00`,
-                        value: code,
-                        result: { deliveryTimeStart: from, deliveryTimeEnd: to, deliveryTimeCode: code },
-                    };
-                });
-            }
-            return [];
+            const selectedDate = this.selectedDate && this.selectedDate[0];
+            return (this.availableDateTimes && this.availableDateTimes[selectedDate]) || [];
         },
     },
 
@@ -130,17 +125,19 @@ export default {
         },
 
         onChanged() {
+            const { selectedDate, selectedTime } = this;
+
             this.$emit('changed', {
                 ...this.state,
-                ...this.slotTime.result,
-                selectedDate: this.selectedDate,
+                selectedTime,
+                selectedDate: selectedDate[0],
             });
             this.onClose();
         },
 
         onClose() {
             this.$emit('close');
-            this.CHANGE_MODAL_STATE({ name: NAME, open: false });
+            this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
         },
     },
 
@@ -149,24 +146,18 @@ export default {
             this.availableDateTimes = this.state.availableDateTimes;
             this.selectedDate = this.state.selectedDate;
         },
+
         timeSlots(value) {
-            if (value && value[0]) this.slotTime = value[0];
+            this.selectedTime = value && value[0];
         },
     },
 
     created() {
-        const options = { month: 'numeric', day: 'numeric', year: 'numeric' };
+        const { availableDateTimes, selectedDate, selectedTime } = this.state;
 
-        this.availableDateTimes = this.state.availableDateTimes || {};
-        this.selectedDate = this.state.selectedDate || [];
-
-        if (this.selectedDate.length && this.selectedDate[0].getMonth) {
-            this.selectedDate[0] = this.selectedDate[0]
-                .toLocaleDateString(this[LOCALE], options)
-                .split('.')
-                .reverse()
-                .join('-');
-        }
+        this.availableDateTimes = availableDateTimes || {};
+        this.selectedDate = selectedDate || [];
+        this.selectedTime = selectedTime || null;
     },
 };
 </script>

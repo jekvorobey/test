@@ -22,7 +22,7 @@
                                     <info-row
                                         class="thank-you-view__panel-item"
                                         name="Номер заказа"
-                                        :value="order.id"
+                                        :value="order.number"
                                     />
                                     <info-row
                                         class="thank-you-view__panel-item"
@@ -37,7 +37,11 @@
                             </template>
 
                             <ul v-else class="thank-you-view__panel-list">
-                                <info-row class="thank-you-view__panel-item" name="Номер заказа" :value="order.id" />
+                                <info-row
+                                    class="thank-you-view__panel-item"
+                                    name="Номер заказа"
+                                    :value="order.number"
+                                />
                                 <info-row class="thank-you-view__panel-item" name="Получатель" :value="fullUserInfo" />
                                 <info-row
                                     class="thank-you-view__panel-item"
@@ -235,7 +239,7 @@ export default {
         ...mapState(CART_MODULE, [CART_DATA]),
         ...mapState(CHECKOUT_MODULE, [ORDER]),
         ...mapState('route', {
-            id: state => state.params.id,
+            id: (state) => state.params.id,
         }),
 
         canContinuePayment() {
@@ -251,13 +255,20 @@ export default {
             } = this;
 
             const { dates = [] } = delivery;
+            return dates.map(({ date, time }) => {
+                const dateObj = getDate(date);
+                const timeFromObj = time && time.from && getDate(`${date} ${time.from}`);
+                const timeToObj = time && time.to && getDate(`${date} ${time.to}`);
 
-            return dates.map(s => {
-                const dateObj = getDate(s);
-                const date = dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings);
-                const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
+                const dateString = dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings);
+                const timeFrom = timeFromObj && timeFromObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
+                const timeTo = timeToObj && timeToObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
                 const weekday = this.$t(`weekdays.long.${dateObj.getDay()}`);
-                return `${date}, ${weekday}, ${time}`;
+
+                let dateTimeString = `${dateString}, ${weekday}${timeFrom || timeTo ? ',' : ''}`;
+                if (timeFrom) dateTimeString += ` c ${timeFrom}`;
+                if (timeTo) dateTimeString += ` по ${timeTo}`;
+                return dateTimeString;
             });
         },
 
@@ -269,7 +280,7 @@ export default {
             switch (order.type) {
                 case cartItemTypes.PRODUCT: {
                     const { items = [] } = cartData[cartItemTypes.MASTERCLASS] || {};
-                    return items.map(i => {
+                    return items.map((i) => {
                         const { p } = i;
                         const dateObj = new Date(`${p.nearestDate} ${p.nearestTimeFrom}`);
                         const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
@@ -291,7 +302,7 @@ export default {
 
                 case cartItemTypes.MASTERCLASS: {
                     const { items = [] } = cartData[cartItemTypes.PRODUCT] || {};
-                    return items.map(i => {
+                    return items.map((i) => {
                         const { p } = i;
                         const categoryCode = p.categoryCodes && p.categoryCodes[p.categoryCodes.length - 1];
                         const href = generateProductUrl(categoryCode, p.code);
@@ -413,11 +424,11 @@ export default {
             $store
                 .dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_ORDER}`, id)
                 .then(() => {
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                     });
                 })
-                .catch(error => {
+                .catch((error) => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
                     else next(new Error(error.message));
