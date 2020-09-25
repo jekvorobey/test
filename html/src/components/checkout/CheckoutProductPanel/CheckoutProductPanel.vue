@@ -476,7 +476,7 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import validationMixin, { required } from '@plugins/validation';
-import { formatPhoneNumber, getPosition } from '@util';
+import { formatPhoneNumber, getPosition, getDate } from '@util';
 import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '@enums/checkout';
 import { requestStatus, modalName, weekDays, agreementTypes, httpCodes } from '@enums';
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
@@ -499,28 +499,13 @@ import '@images/sprites/plus.svg';
 import '@images/sprites/edit.svg';
 import '@images/sprites/gift.svg';
 import './CheckoutProductPanel.css';
+import { dayMonthLongDateSettings } from '@settings';
 
 function prepareChunkItem(chunkItem) {
-    const selectedDate = chunkItem.selectedDate ? new Date(chunkItem.selectedDate) : null;
-    const selectedTime = !chunkItem.deliveryTimeStart
-        ? chunkItem.availableDateTimes &&
-          chunkItem.selectedDate &&
-          chunkItem.availableDateTimes[chunkItem.selectedDate] &&
-          chunkItem.availableDateTimes[chunkItem.selectedDate][0]
-        : null;
-    let time = {};
-
-    if (selectedTime) {
-        time = {
-            deliveryTimeStart: selectedTime.from,
-            deliveryTimeEnd: selectedTime.to,
-            deliveryTimeCode: selectedTime.code,
-        };
-    }
+    const selectedDate = chunkItem.selectedDate ? getDate(chunkItem.selectedDate) : null;
 
     return {
         ...chunkItem,
-        ...time,
         selectedDate,
     };
 }
@@ -567,7 +552,7 @@ export default {
             case receiveMethods.PICKUP:
                 return {
                     [AGREEMENT]: {
-                        valid: value => value === true,
+                        valid: (value) => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -584,7 +569,7 @@ export default {
             default:
                 return {
                     [AGREEMENT]: {
-                        valid: value => value === true,
+                        valid: (value) => value === true,
                     },
 
                     [SELECTED_RECIPIENT]: {
@@ -610,16 +595,16 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
         ...mapState(MODAL_MODULE, {
-            isPickupPointModalOpen: state =>
+            isPickupPointModalOpen: (state) =>
                 state[MODALS][CheckoutPickupPointModal.name] && state[MODALS][CheckoutPickupPointModal.name].open,
-            isDateModalOpen: state =>
+            isDateModalOpen: (state) =>
                 state[MODALS][CheckoutDateModal.name] && state[MODALS][CheckoutDateModal.name].open,
-            isAddressModalOpen: state =>
+            isAddressModalOpen: (state) =>
                 state[MODALS][modalName.profile.ADDRESS_EDIT] && state[MODALS][modalName.profile.ADDRESS_EDIT].open,
-            isRecipientModalOpen: state =>
+            isRecipientModalOpen: (state) =>
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT] &&
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT].open,
         }),
@@ -749,24 +734,6 @@ export default {
         isBonusEdit(value) {
             if (value) this.bonusAmount = this[BONUS];
         },
-
-        computedDeliveryTypes(value) {
-            const deliveryType = this[SELECTED_DELIVERY_TYPE];
-            if (value) {
-                value.forEach(el => {
-                    if (el) {
-                        if (el.items)
-                            el.items.forEach(delivery => {
-                                if (deliveryType) {
-                                    this[CHANGE_CHUNK_DATE]({
-                                        ...delivery,
-                                    });
-                                }
-                            });
-                    }
-                });
-            }
-        },
     },
 
     methods: {
@@ -809,36 +776,40 @@ export default {
         },
 
         generateChunkNote(chunkItem) {
-            const options = { month: 'long', day: 'numeric' };
-            const date = new Date(chunkItem.selectedDate);
+            const { selectedDate, selectedTime } = chunkItem || {};
             const today = new Date().getDate();
-            let additionalText = ``;
-            if (chunkItem.selectedDate) {
-                if (today === date.getDate()) additionalText = `сегодня`;
-                else if (today + 1 === date.getDate()) additionalText = `завтра`;
-                else additionalText = this.$t(`weekdays.long.${date.getDay()}`);
-                const timeString =
-                    chunkItem.deliveryTimeStart && chunkItem.deliveryTimeEnd
-                        ? `, с ${chunkItem.deliveryTimeStart}:00 до ${chunkItem.deliveryTimeEnd}:00`
-                        : '';
-                return `${date.toLocaleDateString(this[LOCALE], options)}, ${additionalText}${timeString}`;
+
+            if (selectedDate) {
+                let additionalText = ``;
+                if (today === selectedDate.getDate()) additionalText = `сегодня`;
+                else if (today + 1 === selectedDate.getDate()) additionalText = `завтра`;
+                else additionalText = this.$t(`weekdays.long.${selectedDate.getDay()}`);
+
+                const timeString = selectedTime ? `, с ${selectedTime.from} до ${selectedTime.to}` : '';
+
+                return `${selectedDate.toLocaleDateString(
+                    this[LOCALE],
+                    dayMonthLongDateSettings
+                )}, ${additionalText}${timeString}`;
             }
             return 'Для данного адреса сейчас нет доступных дат доставки';
         },
 
         generatePackageNote(deliveryType) {
-            const options = { month: 'long', day: 'numeric' };
-
             if (deliveryType.typeID === deliveryTypes.CONSOLIDATION) {
                 const date = new Date(deliveryType.items[0].selectedDate);
-                return `Доставим всё ${date.toLocaleDateString(this[LOCALE], options)}`;
+                return `Доставим всё ${date.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}`;
             }
 
             const note = 'Доставим';
-            const uniqueDates = Array.from(new Set(deliveryType.items.map(i => i.selectedDate)));
+            const uniqueDates = Array.from(new Set(deliveryType.items.map((i) => i.selectedDate)));
             return uniqueDates.reduce(
                 (accum, current, index) =>
-                    accum + `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(this[LOCALE], options)}`,
+                    accum +
+                    `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(
+                        this[LOCALE],
+                        dayMonthLongDateSettings
+                    )}`,
                 'Доставим'
             );
         },
@@ -856,30 +827,30 @@ export default {
         },
 
         onSetDeliveryType(id) {
-            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find(t => t.id === id);
+            const selectedType = this[DELIVERY_TYPES] && this[DELIVERY_TYPES].find((t) => t.id === id);
             this[SET_DELIVERY_TYPE](selectedType);
         },
 
         onDateChanged(state) {
+            const { id, selectedDate, selectedTime } = state;
+
             this[CHANGE_CHUNK_DATE]({
-                id: state.id,
-                selectedDate: state.selectedDate[0],
-                deliveryTimeStart: state.deliveryTimeStart,
-                deliveryTimeEnd: state.deliveryTimeEnd,
-                deliveryTimeCode: state.deliveryTimeCode,
+                id,
+                selectedDate,
+                selectedTime,
             });
         },
 
         onChangeDate(chunkItemId) {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
-            const chunkItem = deliveryType.items.find(i => i.id === chunkItemId);
+            const chunkItem = deliveryType.items.find((i) => i.id === chunkItemId);
+
+            debugger;
 
             const state = {
                 id: chunkItem.id,
                 selectedDate: [chunkItem.selectedDate],
-                deliveryTimeStart: chunkItem.deliveryTimeStart,
-                deliveryTimeEnd: chunkItem.deliveryTimeEnd,
-                deliveryTimeCode: chunkItem.deliveryTimeCode,
+                selectedTime: chunkItem.selectedTime,
                 availableDateTimes: { ...chunkItem.availableDateTimes },
             };
 
