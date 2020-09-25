@@ -55,8 +55,8 @@ export default {
     [CHANGE_CHUNK_DATE](state, { id, selectedDate, selectedTime }) {
         const chunkItem = state.checkoutData.input.deliveryType.items.find((i) => i.id === id);
         if (!chunkItem) return;
-        chunkItem.selectedDate = selectedDate;
-        chunkItem.selectedTime = selectedTime;
+        chunkItem.selectedDate = selectedDate || null;
+        chunkItem.selectedTime = selectedTime || null;
     },
 
     [ADD_ADDRESS](state, payload) {

@@ -845,12 +845,11 @@ export default {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
             const chunkItem = deliveryType.items.find((i) => i.id === chunkItemId);
 
-            debugger;
-
             const state = {
                 id: chunkItem.id,
                 selectedDate: [chunkItem.selectedDate],
                 selectedTime: chunkItem.selectedTime,
+                availableDates: [...chunkItem.availableDates],
                 availableDateTimes: { ...chunkItem.availableDateTimes },
             };
 

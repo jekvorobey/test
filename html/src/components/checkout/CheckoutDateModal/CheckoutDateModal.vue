@@ -81,6 +81,7 @@ export default {
         return {
             selectedDate: null,
             selectedTime: null,
+            availableDates: [],
             availableDateTimes: {},
         };
     },
@@ -94,10 +95,6 @@ export default {
             isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
             state: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
-
-        availableDates() {
-            return Object.keys(this.availableDateTimes);
-        },
 
         maxDate() {
             return this.availableDates.length > 0 ? this.availableDates[this.availableDates.length - 1] : null;
@@ -114,6 +111,21 @@ export default {
         timeSlots() {
             const selectedDate = this.selectedDate && this.selectedDate[0];
             return (this.availableDateTimes && this.availableDateTimes[selectedDate]) || [];
+        },
+    },
+
+    watch: {
+        state(value) {
+            if (value) {
+                this.availableDates = value.availableDates || [];
+                this.availableDateTimes = value.availableDateTimes || {};
+                this.selectedDate = value.selectedDate;
+                this.selectedTime = value.selectedTime;
+            }
+        },
+
+        timeSlots(value) {
+            this.selectedTime = value && value[0];
         },
     },
 
@@ -141,20 +153,10 @@ export default {
         },
     },
 
-    watch: {
-        state(value) {
-            this.availableDateTimes = this.state.availableDateTimes;
-            this.selectedDate = this.state.selectedDate;
-        },
-
-        timeSlots(value) {
-            this.selectedTime = value && value[0];
-        },
-    },
-
     created() {
-        const { availableDateTimes, selectedDate, selectedTime } = this.state;
+        const { availableDates, availableDateTimes, selectedDate, selectedTime } = this.state;
 
+        this.availableDates = availableDates || [];
         this.availableDateTimes = availableDateTimes || {};
         this.selectedDate = selectedDate || [];
         this.selectedTime = selectedTime || null;
