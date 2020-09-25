@@ -16,6 +16,10 @@
         font-weight: bold;
     }
 
+    &--disabled > &__label {
+        color: var(--cl-grey);
+    }
+
     &__link {
         transition: none;
         border-bottom: none;

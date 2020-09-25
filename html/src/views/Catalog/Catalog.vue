@@ -16,6 +16,7 @@
                     v-for="category in breadcrumbs"
                     :key="category.id"
                     :to="generateBreadcrumbUrl(category.code)"
+                    :disabled="category.disabled"
                     >{{ category.name }}</breadcrumb-item
                 >
             </breadcrumbs>
@@ -394,9 +395,9 @@ export default {
         ]),
         ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE, RANGE]),
         ...mapState('route', {
-            code: state => state.params.code,
-            entityCode: state => state.params.entityCode,
-            searchQuery: state => state.query.search_string,
+            code: (state) => state.params.code,
+            entityCode: (state) => state.params.entityCode,
+            searchQuery: (state) => state.query.search_string,
         }),
 
         isBrandPage() {
@@ -428,7 +429,7 @@ export default {
 
         recentlyViewed() {
             const items = this[RECENTLY_VIEWED_PRODUCTS] || [];
-            return items.map(i => {
+            return items.map((i) => {
                 const { code, categoryCodes } = i;
                 const categoryCode = categoryCodes && categoryCodes[categoryCodes.length - 1];
 
@@ -530,7 +531,7 @@ export default {
 
         typeSortOptions() {
             const { type, sortOptions } = this;
-            return sortOptions.filter(o => type === productGroupTypes.SEARCH || o.field !== sortFields.RELEVANCE);
+            return sortOptions.filter((o) => type === productGroupTypes.SEARCH || o.field !== sortFields.RELEVANCE);
         },
 
         isTabletLg() {
@@ -567,7 +568,7 @@ export default {
         setSortValue(field, direction) {
             const { typeSortOptions } = this;
             this.sortValue =
-                typeSortOptions.find(o => o.field === field && o.direction === direction) || typeSortOptions[0];
+                typeSortOptions.find((o) => o.field === field && o.direction === direction) || typeSortOptions[0];
             this.onChangeSortValue(this.sortValue);
         },
 
@@ -704,7 +705,7 @@ export default {
             toEntityCode === entityCode &&
             toSearchString === stateSearchString
         )
-            next(vm => vm.setSortValue(orderField, orderDirection));
+            next((vm) => vm.setSortValue(orderField, orderDirection));
         else {
             // Если у нас нет поисковой строки, либо продуктовая группа !== search, ничего искать не нужно
             const searchString =
@@ -727,11 +728,11 @@ export default {
                     orderField,
                     orderDirection,
                 })
-                .then(data => {
+                .then((data) => {
                     $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
                     $progress.finish();
 
-                    next(vm => {
+                    next((vm) => {
                         vm.setSortValue(orderField, orderDirection);
 
                         if (vm[SCROLL])
@@ -741,7 +742,7 @@ export default {
                             });
                     });
                 })
-                .catch(thrown => {
+                .catch((thrown) => {
                     if (thrown && thrown.isCancel === true) return next();
 
                     $progress.fail();
