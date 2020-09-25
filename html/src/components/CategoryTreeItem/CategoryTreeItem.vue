@@ -1,27 +1,30 @@
 <template>
     <li
         class="category-tree-item"
-        :class="[{ 'category-tree-item--root': depth === 0 }, { 'category-tree-item--active': isActive }]"
+        :class="[
+            { 'category-tree-item--root': depth === 0 },
+            { 'category-tree-item--active': isInteractive && isActive },
+            { 'category-tree-item--disabled': !isInteractive },
+        ]"
         @mouseover="onMouseOver(true)"
         @mouseleave="onMouseOver(false)"
     >
         <div class="category-tree-item__label">
-            <router-link v-if="isInteractive" :to="url" class="category-tree-item__link" :exact="item.code === ''">
+            <router-link class="category-tree-item__link" v-if="isInteractive" :to="url" :exact="item.code === ''">
                 {{ item.name }}
             </router-link>
-            <span v-else class="category-tree-item__link">
+            <span class="category-tree-item__link" v-else>
                 {{ item.name }}
             </span>
         </div>
         <transition name="slide-right">
-            <ul class="category-tree-item__list" v-if="hasChildren && (isHover || isActive)">
+            <ul class="category-tree-item__list" v-if="hasChildren && (!isInteractive || isHover || isActive)">
                 <category-tree-item
                     class="category-tree-item__item"
                     v-for="(item, index) in item.items"
                     :key="item.id || index"
                     :item="item"
                     :depth="depth + 1"
-                    :disabled="!isInteractive"
                 />
             </ul>
         </transition>
@@ -65,14 +68,14 @@ export default {
 
     computed: {
         ...mapState('route', {
-            type: state => state.params.type,
-            entityCode: state => state.params.entityCode,
+            type: (state) => state.params.type,
+            entityCode: (state) => state.params.entityCode,
         }),
         ...mapGetters(CATALOG_MODULE, [ROOT_CATEGORY, ACTIVE_CATEGORIES]),
 
         isActive() {
             const activeCategories = this[ACTIVE_CATEGORIES] || [];
-            return activeCategories.some(c => c.code === this.item.code);
+            return activeCategories.some((c) => c.code === this.item.code);
         },
 
         isRoot() {
@@ -87,14 +90,9 @@ export default {
 
         isInteractive() {
             const {
-                type,
-                item: { code },
-                rootCategory,
-                isRoot,
-                disabled,
+                item: { disabled },
             } = this;
-
-            return rootCategory ? code && (isRoot || !disabled) : code;
+            return !disabled;
         },
 
         url() {

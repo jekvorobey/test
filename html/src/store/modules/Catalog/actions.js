@@ -40,9 +40,9 @@ export default {
         }
     },
 
-    async [FETCH_CATEGORIES](context, { code, filter }) {
+    async [FETCH_CATEGORIES](context, { categories, filter }) {
         try {
-            return await getCategories(code, null, filter);
+            return await getCategories(categories, null, filter);
         } catch (error) {
             storeErrorHandler(FETCH_CATEGORIES)(error);
             return [];
@@ -132,7 +132,7 @@ export default {
 
         mergedCategory = filter.category || productGroupFilter.category || undefined;
         mergedfilter = {
-            ..._mergeWith(filter, productGroupFilter, mergeFunction),
+            ..._mergeWith({ ...filter }, productGroupFilter, mergeFunction),
             category: mergedCategory,
         };
 
@@ -140,14 +140,14 @@ export default {
             if (isProductGroupChanged) {
                 fetchList.push({
                     action: FETCH_CATEGORIES,
-                    payload: { code: productGroupFilter.category, filter: productGroupFilter },
+                    payload: { categories: productGroupFilter.category_roots || [], filter: productGroupFilter },
                 });
             } else {
                 data.categories = state.categories;
             }
 
             data.baseCategoryCode = productGroupFilter.category || null;
-            data.categoryCode = mergedfilter.category || null;
+            data.categoryCode = filter.category || null;
 
             fetchList.push({
                 action: FETCH_FILTERS,

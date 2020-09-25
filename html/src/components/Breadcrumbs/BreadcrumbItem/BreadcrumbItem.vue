@@ -1,6 +1,9 @@
 <template>
     <li class="breadcrumb-item">
-        <router-link class="breadcrumb-item__link" :to="to">
+        <span class="breadcrumb-item__link" v-if="disabled">
+            <slot />
+        </span>
+        <router-link class="breadcrumb-item__link" v-else :to="to" :disabled="disabled">
             <slot />
         </router-link>
     </li>
@@ -14,6 +17,11 @@ export default {
     props: {
         to: {
             type: [String, Object],
+        },
+
+        disabled: {
+            type: Boolean,
+            default: false,
         },
     },
 };
