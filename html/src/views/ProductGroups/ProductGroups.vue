@@ -33,30 +33,38 @@
                     {{ $t(`productGroups.title.${type || 'catalog'}`) }}
                 </h1>
                 <div class="container product-groups-view__sets-container">
-                    <ul class="product-groups-view__sets-list">
-                        <banner-card
-                            class="product-groups-view__sets-list-item"
-                            tag="router-link"
-                            v-for="item in items"
-                            :key="item.id"
-                            :title="item.name"
-                            :image="item.preview_photo"
-                            :to="generateCategoryUrl(item.code)"
-                            button-text="Смотреть товары"
-                        />
-                    </ul>
+                    <template v-if="items && items.length > 0">
+                        <ul class="product-groups-view__sets-list">
+                            <banner-card
+                                class="product-groups-view__sets-list-item"
+                                tag="router-link"
+                                v-for="item in items"
+                                :key="item.id"
+                                :title="item.name"
+                                :image="item.preview_photo"
+                                :to="generateCategoryUrl(item.code)"
+                                button-text="Смотреть товары"
+                            />
+                        </ul>
 
-                    <div class="product-groups-view__sets-controls" v-if="pagesCount > 1">
-                        <show-more-button
-                            v-if="activePage < pagesCount"
-                            btn-class="btn--outline product-groups-view__sets-controls-btn"
-                            @click="onShowMore"
-                            :show-preloader="showMore"
-                        >
-                            Показать ещё
-                        </show-more-button>
-                        <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
-                    </div>
+                        <div class="product-groups-view__sets-controls" v-if="pagesCount > 1">
+                            <show-more-button
+                                v-if="activePage < pagesCount"
+                                btn-class="btn--outline product-groups-view__sets-controls-btn"
+                                @click="onShowMore"
+                                :show-preloader="showMore"
+                            >
+                                Показать ещё
+                            </show-more-button>
+                            <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
+                        </div>
+                    </template>
+                    <empty-placeholder-panel class="product-groups-view__sets-empty" v-else @btn-click="onToCatalog">
+                        В данный момент нет активных акций
+                        <template v-slot:btn>
+                            В каталог
+                        </template>
+                    </empty-placeholder-panel>
                 </div>
             </section>
         </template>
@@ -103,28 +111,23 @@ import VSlider from '@controls/VSlider/VSlider.vue';
 import BannerCard from '@components/BannerCard/BannerCard.vue';
 import CategoriesSection from '@components/blocks/CategoriesSection/CategoriesSection.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
+import EmptyPlaceholderPanel from '@components/EmptyPlaceholderPanel/EmptyPlaceholderPanel.vue';
 
 import { $store, $progress, $logger } from '@services';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { CATEGORIES, SCROLL, FREQUENT_CATEGORIES } from '@store';
-import productGroupsModule, {
-    NAME as PRODUCT_GROUPS_MODULE,
-    ITEMS,
-    LOAD_PATH,
-    TYPE,
-} from '@store/modules/ProductGroups';
+import { NAME as PRODUCT_GROUPS_MODULE, ITEMS, LOAD_PATH, TYPE } from '@store/modules/ProductGroups';
 import { BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT } from '@store/modules/ProductGroups/getters';
 import { FETCH_ITEMS, SET_LOAD_PATH, SET_TYPE } from '@store/modules/ProductGroups/actions';
 
+import _debounce from 'lodash/debounce';
+import { httpCodes } from '@enums';
 import { productGroupTypes } from '@enums/product';
 import { MIN_SCROLL_VALUE } from '@constants';
-import { registerModuleIfNotExists } from '@util/store';
+import { createNotFoundRoute } from '@util/router';
 import { generateCategoryUrl } from '@util/catalog';
-import _debounce from 'lodash/debounce';
-
 import '@images/sprites/home.svg';
-
 import './ProductGroups.css';
 
 const sliderOptions = {
@@ -164,6 +167,8 @@ export default {
         SeparatorSection,
         CategoriesSection,
         ShowMoreButton,
+
+        EmptyPlaceholderPanel,
     },
 
     data() {
@@ -220,7 +225,11 @@ export default {
             this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
         },
 
-        async fetchCatalog(to, from, showMore) {
+        onToCatalog() {
+            this.$router.push({ name: 'Catalog', params: { type: productGroupTypes.CATALOG } });
+        },
+
+        async fetchCatalog(to, from, next, showMore) {
             try {
                 const {
                     fullPath,
@@ -233,23 +242,25 @@ export default {
                     query: { page: fromPage = 1 },
                 } = from;
 
-                // для брендов нам нужны сразу все страницы
-                const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
-                this.$progress.start();
-                await this[FETCH_ITEMS]({ type: toType, page: fetchPage, orderField, showMore });
-                this.$progress.finish();
-
                 if (!showMore && this[SCROLL] && (toType !== fromType || page !== fromPage))
                     window.scrollTo({
                         top: MIN_SCROLL_VALUE + 1,
                         behavior: 'smooth',
                     });
 
+                // для брендов нам нужны сразу все страницы
+                const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
+                this.$progress.start();
+                await this[FETCH_ITEMS]({ type: toType, page: fetchPage, orderField, showMore });
+
+                next();
+                this.$progress.finish();
+
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
             } catch (error) {
-                $logger.error(error);
                 this.$progress.fail();
-                this.$progress.finish();
+                if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
+                else next(new Error(error.message));
             }
         },
     },
@@ -265,13 +276,11 @@ export default {
             query: { page = 1, orderField = 'name' },
         } = to;
 
-        // регистрируем модуль, если такого нет
-        registerModuleIfNotExists($store, PRODUCT_GROUPS_MODULE, productGroupsModule);
         const { loadPath, type } = $store.state[PRODUCT_GROUPS_MODULE];
 
         // если все загружено, пропускаем
         if (loadPath === fullPath && type === toType)
-            next(vm => {
+            next((vm) => {
                 if (!vm.$isServer && vm[SCROLL]) {
                     window.scrollTo({
                         top: 0,
@@ -286,7 +295,7 @@ export default {
                 .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, { type: toType, page: fetchPage, orderField })
                 .then(() => {
                     $store.dispatch(`${PRODUCT_GROUPS_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                         if (!vm.$isServer && vm[SCROLL]) {
                             window.scrollTo({
@@ -295,11 +304,10 @@ export default {
                         }
                     });
                 })
-                .catch(error => {
-                    next(vm => {
-                        $progress.fail();
-                        $progress.finish();
-                    });
+                .catch((error) => {
+                    $progress.fail();
+                    if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
+                    else next(new Error(error.message));
                 });
         }
     },
@@ -312,9 +320,8 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        if (this.showMore) this.fetchCatalog(to, from, this.showMore);
-        else this.debounce_fetchCatalog(to, from);
-        next();
+        if (this.showMore) this.fetchCatalog(to, from, next, this.showMore);
+        else this.debounce_fetchCatalog(to, from, next);
     },
 
     beforeMount() {
