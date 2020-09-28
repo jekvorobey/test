@@ -90,7 +90,7 @@
 
                     <v-button
                         class="btn--outline order-details-view__details-controls-btn"
-                        @click.stop="onRepeatOrder(order.id)"
+                        @click.stop="onRepeatOrder(order)"
                         :disabled="isDisabled"
                     >
                         Повторить заказ
@@ -233,6 +233,9 @@ import { LOCALE } from '@store';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
 import {
     NAME as ORDERS_MODULE,
     ORDER_DETAILS,
@@ -247,10 +250,7 @@ import {
     REPEAT_ORDER,
 } from '@store/modules/Profile/modules/Orders/actions';
 
-import { NAME as CART_MODULE } from '@store/modules/Cart';
-import { FETCH_CART_DATA } from '@store/modules/Cart/actions';
-
-import { fileExtension } from '@enums';
+import { fileExtension, modalName } from '@enums';
 import { receiveMethods } from '@enums/checkout';
 import { orderPaymentStatus, orderStatus, deliveryStatus } from '@enums/order';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
@@ -427,7 +427,7 @@ export default {
     methods: {
         ...mapActions(PROFILE_MODULE, [UPDATE_BREADCRUMB]),
         ...mapActions(ORDERS_MODULE_PATH, [FETCH_ORDER_DETAILS, SET_LOAD_PATH, GET_ORDER_PAYMENT_LINK, REPEAT_ORDER]),
-        ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         async onContinuePayment(orderId) {
             try {
@@ -443,12 +443,33 @@ export default {
             }
         },
 
-        async onRepeatOrder(orderId) {
+        async onRepeatOrder(order) {
+            const { id, can_repeat, has_bad_offers } = order;
+
+            if (!can_repeat)
+                return this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.NOTIFICATION,
+                    open: true,
+                    state: {
+                        title: 'Уведомление',
+                        message: 'Невозможно повторить заказ',
+                    },
+                });
+
+            if (has_bad_offers)
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.NOTIFICATION,
+                    open: true,
+                    state: {
+                        title: 'Уведомление',
+                        message: 'Невозможно оформить заказ на некоторые выбранные товары',
+                    },
+                });
+
             try {
                 this.isDisabled = true;
-                await this[REPEAT_ORDER](orderId);
-                await this[FETCH_CART_DATA]();
-                this.$router.push({ path: '/cart' });
+                await this[REPEAT_ORDER](id);
+                await this.$router.push({ name: 'Cart' });
                 this.isDisabled = false;
             } catch (error) {
                 this.isDisabled = false;
