@@ -17,6 +17,17 @@
                     <v-svg name="cross" width="24" height="24" />
                 </button>
             </template>
+
+            <template v-if="isTabletLg && !isTablet">
+                <router-link class="mobile-menu__header-logo" to="/">
+                    <v-svg name="logo-text" width="278" height="28" />
+                </router-link>
+
+                <div class="mobile-menu__header-menu">
+                    <search-filter class="mobile-menu__header-search" input-id="modal-filter" />
+                    <header-user-panel class="mobile-menu__header-user" />
+                </div>
+            </template>
         </template>
         <template v-slot:content>
             <div class="container mobile-menu__container" v-if="!isTablet">
@@ -248,6 +259,8 @@ import VClamp from 'vue-clamp';
 
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
+import HeaderUserPanel from '@components/VHeader/HeaderUserPanel/HeaderUserPanel.vue';
+import SearchFilter from '@components/SearchFilter/SearchFilter.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { CATEGORIES } from '@store';
@@ -282,6 +295,7 @@ import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/wishlist-full.svg';
 import '@images/sprites/arrow-small.svg';
 import '@images/sprites/arrow-down.svg';
+import '@images/sprites/logo-text.svg';
 import './MobileMenu.css';
 
 export default {
@@ -295,6 +309,8 @@ export default {
 
         GeneralModal,
         CatalogBannerCard,
+        HeaderUserPanel,
+        SearchFilter,
     },
 
     data() {
