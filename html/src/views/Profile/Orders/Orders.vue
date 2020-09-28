@@ -405,10 +405,10 @@ import { LOCALE, SCROLL } from '@store';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
-import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as CART_MODULE } from '@store/modules/Cart';
-import { FETCH_CART_DATA } from '@store/modules/Cart/actions';
+import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
 
 import {
     NAME as ORDERS_MODULE,
@@ -438,7 +438,7 @@ import { preparePrice, shortNumberFormat } from '@util';
 import { getOrderStatusColorClass, generateThankPageUrl } from '@util/order';
 import { orderStatus, orderPaymentStatus, sortFields, filterField } from '@enums/order';
 import { orderDateLocaleOptions } from '@settings/profile';
-import { sortDirections } from '@enums';
+import { sortDirections, modalName } from '@enums';
 import { DEFAULT_PAGE } from '@constants';
 
 import '@images/sprites/arrow-updown.svg';
@@ -546,7 +546,7 @@ export default {
     methods: {
         ...mapActions(ORDERS_MODULE_PATH, [FETCH_ORDERS, SET_LOAD_PATH, GET_ORDER_PAYMENT_LINK, REPEAT_ORDER]),
         ...mapActions(PROFILE_MODULE, [UPDATE_BREADCRUMB]),
-        ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         formatDate(date) {
             if (typeof date !== 'string') return;
@@ -616,12 +616,33 @@ export default {
             this.$router.push({ name: 'OrderDetails', params: { orderId: id } });
         },
 
-        async onRepeatOrder({ id }) {
+        async onRepeatOrder(order) {
+            const { id, can_repeat, has_bad_offers } = order;
+
+            if (!can_repeat)
+                return this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.NOTIFICATION,
+                    open: true,
+                    state: {
+                        title: 'Уведомление',
+                        message: 'Невозможно повторить заказ',
+                    },
+                });
+
+            if (has_bad_offers)
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.NOTIFICATION,
+                    open: true,
+                    state: {
+                        title: 'Уведомление',
+                        message: 'Невозможно оформить заказ на некоторые выбранные товары',
+                    },
+                });
+
             try {
                 this.isDisabled = true;
                 await this[REPEAT_ORDER](id);
-                await this[FETCH_CART_DATA]();
-                this.$router.push({ path: '/cart' });
+                await this.$router.push({ name: 'Cart' });
                 this.isDisabled = false;
             } catch (error) {
                 this.isDisabled = false;
