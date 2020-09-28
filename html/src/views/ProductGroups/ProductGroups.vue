@@ -122,8 +122,8 @@ import { BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT } from '@store/modules/Product
 import { FETCH_ITEMS, SET_LOAD_PATH, SET_TYPE } from '@store/modules/ProductGroups/actions';
 
 import _debounce from 'lodash/debounce';
-import { httpCodes } from '@enums';
-import { productGroupTypes } from '@enums/product';
+import { httpCodes, sortDirections } from '@enums';
+import { productGroupTypes, productGroupSortFields } from '@enums/product';
 import { MIN_SCROLL_VALUE } from '@constants';
 import { createNotFoundRoute } from '@util/router';
 import { generateCategoryUrl } from '@util/catalog';
@@ -234,7 +234,11 @@ export default {
                 const {
                     fullPath,
                     params: { type: toType },
-                    query: { page = 1, orderField = 'name' },
+                    query: {
+                        page = 1,
+                        orderField = productGroupSortFields.CREATED_AT,
+                        orderDirection = sortDirections.DESC,
+                    },
                 } = to;
 
                 const {
@@ -251,7 +255,7 @@ export default {
                 // для брендов нам нужны сразу все страницы
                 const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
                 this.$progress.start();
-                await this[FETCH_ITEMS]({ type: toType, page: fetchPage, orderField, showMore });
+                await this[FETCH_ITEMS]({ type: toType, page: fetchPage, orderField, orderDirection, showMore });
 
                 next();
                 this.$progress.finish();
@@ -273,14 +277,14 @@ export default {
         const {
             fullPath,
             params: { type: toType },
-            query: { page = 1, orderField = 'name' },
+            query: { page = 1, orderField = productGroupSortFields.CREATED_AT, orderDirection = sortDirections.DESC },
         } = to;
 
         const { loadPath, type } = $store.state[PRODUCT_GROUPS_MODULE];
 
         // если все загружено, пропускаем
         if (loadPath === fullPath && type === toType)
-            next((vm) => {
+            next(vm => {
                 if (!vm.$isServer && vm[SCROLL]) {
                     window.scrollTo({
                         top: 0,
@@ -292,10 +296,15 @@ export default {
             const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
             $progress.start();
             $store
-                .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, { type: toType, page: fetchPage, orderField })
+                .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, {
+                    type: toType,
+                    page: fetchPage,
+                    orderField,
+                    orderDirection,
+                })
                 .then(() => {
                     $store.dispatch(`${PRODUCT_GROUPS_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
+                    next(vm => {
                         $progress.finish();
                         if (!vm.$isServer && vm[SCROLL]) {
                             window.scrollTo({
@@ -304,7 +313,7 @@ export default {
                         }
                     });
                 })
-                .catch((error) => {
+                .catch(error => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
                     else next(new Error(error.message));

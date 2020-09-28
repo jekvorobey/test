@@ -6,7 +6,7 @@ import { $http } from '@services';
 import { REQUEST_CANCEL_MESSAGE } from '@constants';
 import { interval, sortDirections } from '@enums';
 import { verificationCodeType } from '@enums/auth';
-import { cartItemTypes } from '@enums/product';
+import { cartItemTypes, productGroupSortFields } from '@enums/product';
 import { sortFields } from '@enums/catalog';
 
 let catalogItemsCancelSource = null;
@@ -507,12 +507,18 @@ export function getSearchPopularRequest(limit) {
 
 // catalog
 
-export function getProductGroups(type, page, orderField = 'name') {
+export function getProductGroups(
+    type,
+    page,
+    orderField = productGroupSortFields.CREATED_AT,
+    orderDirection = sortDirections.DESC
+) {
     return $http.get('/v1/catalog/product-groups', {
         params: {
             type_code: type,
             page,
             orderField,
+            orderDirection,
         },
         paramsSerializer(params) {
             return qs.stringify(params, {
