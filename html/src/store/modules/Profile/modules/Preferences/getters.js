@@ -1,6 +1,3 @@
-import { preferenceType, preferenceEntityTypes } from '@enums/profile';
-import { EQUAL_PREFERENCES } from './index';
-
 const PREFERENCES_DATA = 'preferencesData';
 const CUSTOMER = 'customer';
 
