@@ -242,15 +242,15 @@ export default {
         },
 
         fail: {
-            valid: (value) => value !== true,
+            valid: value => value !== true,
         },
 
         accepted: {
-            valid: (value) => value === true,
+            valid: value => value === true,
         },
 
         restoreFail: {
-            valid: (value) => value !== true,
+            valid: value => value !== true,
         },
     },
 
@@ -352,6 +352,10 @@ export default {
             if (!value) this.sent = false;
         },
 
+        restorePhone() {
+            this.resetRestoreValidation();
+        },
+
         phone(value) {
             this.resetLoginValidation();
         },
@@ -369,6 +373,11 @@ export default {
             if (this.$v.phone.$dirty) this.$v.phone.$reset();
             if (this.$v.password.$dirty) this.$v.password.$reset();
             if (this.$v.fail.$dirty) this.$v.fail.$reset();
+        },
+
+        resetRestoreValidation() {
+            if (this.$v.restorePhone.$dirty) this.$v.restorePhone.$reset();
+            if (this.$v.restoreFail.$dirty) this.$v.restoreFail.$reset();
         },
 
         async onSubmit() {
