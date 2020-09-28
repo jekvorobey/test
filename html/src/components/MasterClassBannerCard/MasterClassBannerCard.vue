@@ -17,9 +17,11 @@
             </div>
             <div class="text-bold master-class-banner-card__right-panel">
                 <price v-if="price" class="text-bold master-class-banner-card__price" v-bind="price" />
-                <v-button class="btn--white master-class-banner-card__btn" :to="to" @click="onBtnClick">
-                    {{ btnText }}
-                </v-button>
+                <slot name="btn">
+                    <v-button class="btn--white master-class-banner-card__btn" :to="to" @click="onBtnClick">
+                        {{ btnText }}
+                    </v-button>
+                </slot>
             </div>
         </div>
     </li>

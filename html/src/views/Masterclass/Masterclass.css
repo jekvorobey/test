@@ -17,7 +17,7 @@
     &__banner {
         .master-class-banner-card__name {
             @media (--desktop-min) {
-                max-width: 80%;
+                max-width: 70%;
             }
         }
 
@@ -39,6 +39,27 @@
         .master-class-banner-card__btn {
             @media (--tablet) {
                 display: none;
+            }
+        }
+
+        &-complete {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            color: var(--cl-white);
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+
+            @media (--tablet) {
+                display: none;
+            }
+
+            &-link {
+                font-weight: normal;
+                font-size: 16px;
+                text-decoration: underline;
+                text-transform: none;
             }
         }
     }

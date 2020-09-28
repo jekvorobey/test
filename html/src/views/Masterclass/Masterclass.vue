@@ -28,6 +28,15 @@
                 <source :data-srcset="bannerImage.mobileImg.webp" type="image/webp" media="(min-width: 320px)" />
                 <source :data-srcset="bannerImage.mobileImg.orig" media="(min-width: 320px)" />
                 <img class="blur-up lazyload v-picture__img" :data-src="bannerImage.defaultImg" alt="" />
+
+                <template v-if="isComplete" v-slot:btn>
+                    <div class="master-class-view__banner-complete">
+                        Мероприятие уже закончилось
+                        <button class="master-class-view__banner-complete-link" @click="onScrollTo($refs.panel)">
+                            {{ reviewsCount }} {{ reviewsLabel }}
+                        </button>
+                    </div>
+                </template>
             </master-class-banner-card>
         </div>
 
@@ -421,9 +430,20 @@
             <v-svg name="link" width="24" height="24" /> -->
         </div>
 
+        <section class="section master-class-view__section master-class-view__review" v-if="isComplete" ref="panel">
+            <div class="container">
+                <reviews-panel
+                    :key="masterClass.code"
+                    :code="masterClass.code"
+                    :type="productType"
+                    :can-add="masterClass.canWriteReview"
+                />
+            </div>
+        </section>
         <section
             class="section master-class-view__section master-class-view__tickets"
             ref="panel"
+            v-else
             v-observe-visibility="onPanelVisibilityChanged"
         >
             <div class="container master-class-view__tickets-container">
@@ -655,24 +675,13 @@
             </div>
         </section>
 
-        <section class="section master-class-view__section master-class-view__review">
-            <div class="container">
-                <reviews-panel
-                    :key="masterClass.code"
-                    :code="masterClass.code"
-                    :type="productType"
-                    :can-add="masterClass.canWriteReview"
-                />
-            </div>
-        </section>
-
         <section class="section master-class-view__section master-class-view__instagram">
             <div class="container master-class-view__instagram-container">
                 <frisbuy-product-container :script="frisbuyScript" />
             </div>
         </section>
 
-        <section class="section" :style="{ height: isTablet ? '64px' : 0 }">
+        <section class="section" v-if="!isComplete" :style="{ height: isTablet ? '64px' : 0 }">
             <transition :name="pricePanelAnimation" appear>
                 <masterclass-price-panel
                     class="master-class-view__top-panel"
@@ -747,13 +756,14 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
-import { saveToClipboard, getDate } from '@util';
+import { saveToClipboard, getDate, pluralize } from '@util';
 import { registerModuleIfNotExists } from '@util/store';
+import { createNotFoundRoute } from '@util/router';
 import { generatePictureSourcePath, generateFileOriginalPath } from '@util/file';
 import { getInstagramUserNameFromUrl } from '@util/socials';
 import { generateAbsoluteMasterclassUrl, generateMasterclassUrl, prepareMasterclassSpeakers } from '@util/catalog';
 import { yaMapSettings, dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
-import { breakpoints, fileExtension, modalName, mediaType } from '@enums';
+import { breakpoints, fileExtension, modalName, mediaType, httpCodes } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
@@ -1171,6 +1181,16 @@ export default {
             return [...new Set(cities)];
         },
 
+        reviewsCount() {
+            const { reviewsCount } = this[MASTERCLASS] || {};
+            return reviewsCount || 0;
+        },
+
+        reviewsLabel() {
+            const { reviewsCount } = this;
+            return pluralize(reviewsCount, ['отзыв', 'отзыва', 'отзывов']);
+        },
+
         productType() {
             return cartItemTypes.MASTERCLASS;
         },
@@ -1188,6 +1208,11 @@ export default {
                 gallery: sliderOptions,
                 history: historySliderOptions,
             };
+        },
+
+        isComplete() {
+            const { canBuy = false } = this[MASTERCLASS] || {};
+            return !canBuy;
         },
 
         isSingleStage() {
@@ -1271,9 +1296,12 @@ export default {
             $store
                 .dispatch(`${MASTERCLASS_MODULE}/${FETCH_MASTERCLASS_DATA}`, { code })
                 .then(() => next(vm => $progress.finish()))
-                .catch(error => {
+                .catch(thrown => {
+                    if (thrown && thrown.isCancel === true) return next();
+
                     $progress.fail();
-                    next();
+                    if (thrown && thrown.status === httpCodes.NOT_FOUND) return next(createNotFoundRoute(to));
+                    else next();
                 });
         }
     },
@@ -1285,8 +1313,6 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
-
-        const { fias_id } = this.selectedCity;
 
         const {
             params: { code },
@@ -1310,9 +1336,12 @@ export default {
                     this.$progress.finish();
                     next();
                 }
-            } catch (error) {
+            } catch (thrown) {
+                if (thrown && thrown.isCancel === true) return next();
+
                 this.$progress.fail();
-                this.$progress.finish();
+                if (thrown && thrown.status === httpCodes.NOT_FOUND) return next(createNotFoundRoute(to));
+                else next();
             }
         }, 500);
     },
