@@ -28,3 +28,8 @@ export const productBadges = Object.freeze({
     NEW: 1,
     BESTSELLERS: 2,
 });
+
+export const productGroupSortFields = Object.freeze({
+    NAME: 'name',
+    CREATED_AT: 'created_at',
+});
