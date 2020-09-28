@@ -99,19 +99,8 @@ import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PREFERENCES_MODULE, AVAILABLE, CUSTOMER, TYPE } from '@store/modules/Profile/modules/Preferences';
-import {
-    BRANDS,
-    CATEGORIES,
-    GET_CUSTOMER_BY_TYPE,
-    EQUAL_PREFERENCES_MAP,
-} from '@store/modules/Profile/modules/Preferences/getters';
-import {
-    DELETE_ENTITY,
-    DELETE_ALL_ENTITIES,
-    UPDATE_ENTITIES,
-    UPDATE_EQUAL_PREFERENCES,
-} from '@store/modules/Profile/modules/Preferences/actions';
+import { NAME as PREFERENCES_MODULE, AVAILABLE, TYPE } from '@store/modules/Profile/modules/Preferences';
+import { GET_CUSTOMER_BY_TYPE } from '@store/modules/Profile/modules/Preferences/getters';
 
 import _debounce from 'lodash/debounce';
 import { $store, $progress, $logger, $context } from '@services';
@@ -123,6 +112,12 @@ import '@images/sprites/info-middle.svg';
 import './PreferencesEntityPanel.css';
 
 const PREFERENCES_MODULE_PATH = `${PROFILE_MODULE}/${PREFERENCES_MODULE}`;
+
+const eventNames = {
+    CHANGE_EQUAL: 'change-equal',
+    DELETE_ALL: 'delete-all',
+    DELETE: 'delete',
+};
 
 export default {
     name: 'preferences-entity-panel',
@@ -244,15 +239,14 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(PREFERENCES_MODULE_PATH, [UPDATE_ENTITIES, UPDATE_EQUAL_PREFERENCES]),
 
         onChangeEqual(entityType) {
-            this.$emit('change-equal', entityType);
+            this.$emit(eventNames.CHANGE_EQUAL, entityType);
         },
 
         onDeleteAll() {
             const { prefType, entityType } = this;
-            this.$emit('delete-all', { prefType, type: entityType });
+            this.$emit(eventNames.DELETE_ALL, { prefType, type: entityType });
         },
 
         onDeleteEntity(index) {
@@ -286,7 +280,7 @@ export default {
         initHandlers() {
             const { prefType, entityType } = this;
             this.debounce_updateEntities = _debounce(
-                items => this[UPDATE_ENTITIES]({ prefType, type: entityType, items }),
+                items => this.$emit(eventNames.DELETE, { prefType, type: entityType, items }),
                 1000
             );
         },

@@ -9,6 +9,7 @@
             :equal-preferences="equalPreferences"
             :in-process="inProcess[entityType]"
             @change-equal="onChangeEqual"
+            @delete="onDelete"
             @delete-all="onDeleteAll"
         />
 
@@ -149,8 +150,12 @@ export default {
             this.inProcess[entityType] = false;
         },
 
+        async onDelete({ prefType, type, items }) {
+            await this.onSubmit({ prefType, type, items });
+        },
+
         async onDeleteAll({ prefType, type }) {
-            await this.onSubmit({ prefType, type, items: [] });
+            await this.onDelete({ prefType, type, items: [] });
         },
 
         async onSubmit({ prefType, type, items = [] }) {
