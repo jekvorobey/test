@@ -13,10 +13,10 @@
                     <v-svg name="logo" width="30" height="30" />
                 </router-link>
 
-                <template v-if="scroll || isTabletLg">
+                <div class="header-bottom__bottom-menu" v-if="scroll || isTabletLg">
                     <search-filter class="header-bottom__bottom-search" input-id="bottom-filter" />
                     <header-user-panel class="header-bottom__bottom-user" />
-                </template>
+                </div>
             </div>
         </div>
 
