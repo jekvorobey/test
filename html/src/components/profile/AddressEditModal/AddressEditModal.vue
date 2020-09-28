@@ -2,7 +2,7 @@
     <general-modal
         class="address-edit-modal"
         :type="isTabletLg ? 'fullscreen' : 'wide'"
-        header="Выбор пункта выдачи"
+        :header="header"
         @close="onClose"
         :is-mobile="isTabletLg"
     >
@@ -35,7 +35,7 @@
 
             <div class="address-edit-modal__form" v-show="!isTabletLg || !isMap">
                 <div class="address-edit-modal__form-header">
-                    <h3 class="address-edit-modal__form-header-hl">Адрес доставки</h3>
+                    <h3 class="address-edit-modal__form-header-hl">{{ header }}</h3>
                     <span class="text-grey text-sm">Укажите на карте или введите вручную</span>
                 </div>
 
@@ -338,6 +338,10 @@ export default {
         indexError() {
             if (this.$v.address.post_index.$dirty && !this.$v.address.post_index.required)
                 return this.$t('validation.errors.required');
+        },
+
+        header() {
+            return 'Адрес доставки';
         },
 
         isDesktop() {
