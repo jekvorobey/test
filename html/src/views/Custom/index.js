@@ -1,8 +1,11 @@
+import registerModule from '@router/middleware/registerModule';
+
 /**
  * @Module
  */
 
 const CustomAsync = () => import(/* webpackChunkName: "custom-view" */ './Custom.vue');
+const CustomModuleAsync = () => import(/* webpackChunkName: "custom-view" */ '@store/modules/Custom');
 
 /**
  * Модуль компонента CustomTextPage
@@ -13,9 +16,13 @@ export default {
      */
     routes: [
         {
+            path: '*',
             name: 'Custom',
-            path: '/custom', // ! Заглушка. Потом нужно будет удалить.
             component: CustomAsync,
+
+            meta: {
+                middleware: [registerModule(CustomModuleAsync)],
+            },
         },
     ],
 };

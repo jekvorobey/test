@@ -4,11 +4,11 @@
 
 <script>
 import VHtml from '@controls/VHtml/VHtml.vue';
-
 import './HtmlTextWidget.css';
 
 export default {
     name: 'html-text-widget',
+
     components: {
         VHtml,
     },
@@ -19,5 +19,5 @@ export default {
             default: '',
         },
     },
-}
+};
 </script>

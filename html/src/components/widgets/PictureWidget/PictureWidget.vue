@@ -1,10 +1,9 @@
 <template>
-    <v-picture class="picture-widget" v-if="content" :image="content" />
+    <v-picture class="picture-widget" v-if="content" :image="content" width="600" height="320" />
 </template>
 
 <script>
 import VPicture from '@controls/VPicture/VPicture.vue';
-
 import './PictureWidget.css';
 
 export default {
@@ -17,7 +16,7 @@ export default {
         content: {
             type: String,
             default: '',
-        }
-    }
-}
+        },
+    },
+};
 </script>

@@ -8,6 +8,7 @@ import { interval, sortDirections } from '@enums';
 import { verificationCodeType } from '@enums/auth';
 import { cartItemTypes, productGroupSortFields } from '@enums/product';
 import { sortFields } from '@enums/catalog';
+import { getPageData } from './mock';
 
 let catalogItemsCancelSource = null;
 const sessionCheckCache = new Cache({
@@ -993,4 +994,14 @@ export function changeReviewVote(review_id, opinion) {
 
 export function getProfessions() {
     return $http.get('/v1/directories/professions');
+}
+
+export function getCustomPageData(path) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const data = getPageData(path);
+            if (data) resolve(data);
+            else reject('not-found');
+        }, 300);
+    });
 }

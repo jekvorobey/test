@@ -1,0 +1,90 @@
+.html-text-widget {
+    h1,
+    h2 {
+        font-weight: 500;
+        font-size: 28px;
+        line-height: 40px;
+        /* or 143% */
+
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        font-family: var(--base-font-bold);
+
+        @media (--tablet) {
+            font-size: 24px;
+            line-height: 32px;
+            /* or 133% */
+
+            letter-spacing: 0.02em;
+        }
+    }
+
+    h3 {
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 32px;
+        letter-spacing: 0.02em;
+        font-family: var(--base-font-bold);
+    }
+
+    h4 {
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+    }
+
+    a[target='_blank'] {
+        border-bottom: 1px dashed var(--cl-global);
+    }
+
+    ul {
+        & > li {
+            line-height: inherit;
+            padding-left: calc(var(--gs) * 3);
+
+            &::before {
+                content: '—';
+                background: var(--cl-global);
+                display: inline-block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 0;
+            }
+
+            &:not(:last-child) {
+                margin-bottom: calc(var(--gs) / 2);
+            }
+
+            & ol,
+            & ul {
+                margin: var(--gs) 0;
+            }
+        }
+    }
+
+    ol {
+        counter-reset: olCounter;
+
+        & > li,
+        ol > li {
+            padding-left: calc(var(--gs) * 3);
+
+            &::before {
+                content: counter(olCounter) '.';
+                position: absolute;
+                top: 0;
+                left: 0;
+                counter-increment: olCounter;
+            }
+
+            &:not(:last-child) {
+                margin-bottom: calc(var(--gs) / 2);
+            }
+        }
+    }
+
+    p.before_list {
+        margin-bottom: calc(var(--gs) * 2);
+    }
+}

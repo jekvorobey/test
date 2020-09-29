@@ -1,11 +1,38 @@
 <template>
     <section class="section custom-view">
-        <component
-            v-for="renderItem in renderData"
-            :key="renderItem.id"
-            :is="renderItem.component"
-            v-bind="renderItem.data"
-        />
+        <div class="container custom-view__container">
+            <div class="custom-view__body">
+                <div class="custom-view__breadcrumbs">
+                    <component
+                        v-for="renderItem in pageData.breadcrumbs"
+                        :key="renderItem.id"
+                        :is="renderItem.component"
+                        v-bind="renderItem.data"
+                    />
+                </div>
+
+                <div
+                    class="custom-view__menu"
+                    :class="{ 'custom-view__menu--hidden': !pageData.menu || pageData.menu.length === 0 }"
+                >
+                    <component
+                        v-for="renderItem in pageData.menu"
+                        :key="renderItem.id"
+                        :is="renderItem.component"
+                        v-bind="renderItem.data"
+                    />
+                </div>
+
+                <div class="custom-view__main">
+                    <component
+                        v-for="renderItem in pageData.main"
+                        :key="renderItem.id"
+                        :is="renderItem.component"
+                        v-bind="renderItem.data"
+                    />
+                </div>
+            </div>
+        </div>
     </section>
 </template>
 
@@ -15,77 +42,89 @@ import SimpleTextWidget from '@components/widgets/SimpleTextWidget/SimpleTextWid
 import HtmlTextWidget from '@components/widgets/HtmlTextWidget/HtmlTextWidget.vue';
 import PictureWidget from '@components/widgets/PictureWidget/PictureWidget.vue';
 import SectionWidget from '@components/widgets/SectionWidget/SectionWidget.vue';
+import BreadcrumbsWidget from '@components/widgets/BreadcrumbsWidget/BreadcrumbsWidget.vue';
+import NavWidget from '@components/widgets/NavWidget/NavWidget.vue';
+
+import { mapState, mapActions } from 'vuex';
+import { NAME as CUSTOM_MODULE, PAGE_DATA } from '@store/modules/Custom';
+import { FETCH_CUSTOM_PAGE_DATA, SET_LOAD_PATH } from '@store/modules/Custom/actions';
 
 import widgetImage from '@images/mock/widgetImage.jpg';
 import catalogBanner from '@images/mock/catalogBanner2.jpg';
 
+import { $store, $progress } from '@services';
+import { httpCodes } from '@enums';
+import { createNotFoundRoute } from '@util/router';
 import './Custom.css';
 
 Vue.component(SimpleTextWidget.name, SimpleTextWidget);
 Vue.component(HtmlTextWidget.name, HtmlTextWidget);
 Vue.component(PictureWidget.name, PictureWidget);
 Vue.component(SectionWidget.name, SectionWidget);
+Vue.component(BreadcrumbsWidget.name, BreadcrumbsWidget);
+Vue.component(NavWidget.name, NavWidget);
 
 export default {
     name: 'custom',
-    components: {
-        SectionWidget,
-    },
 
     computed: {
-        renderData() {
-            return [
-                {
-                    id: 1,
-                    component: 'section-widget',
-                    data: {
-                        tag: 'h3',
-                        title: 'Заголовок H2',
-                        children: [
-                            {
-                                id: 1,
-                                component: 'simple-text-widget',
-                                data: {
-                                    content: `Эта страница создана для демонстрации блоков и элементов, которые используются на сайте, и служит руководством для всех, кто работает над ним.
-                                    Дизайнеры и технологи отрабатывают здесь стили, чтобы добиться приемлемых результатов в различных сочетаниях блоков и элементов.
-                                    Контент-менеджеры и редакторы используют страницу в качестве справочника по верстке типовых страниц.
-                                    Здесь же рассказывается о некоторых общих правилах оформления контента.`,
-                                },
-                            },
-                            {
-                                id: 2,
-                                component: 'html-text-widget',
-                                data: {
-                                    content: `<ul class="list">
-                                                <li>
-                                                    линии очертания букв оставлялись, а всё остальное срезалось;
-                                                </li>
-                                                <li>
-                                                    в доске вглубь вырезалось очертание букв — тогда буквы при печатании выходили белыми, а всё
-                                                    остальное оставалось чёрным.
-                                                </li>
-                                            </ul>`,
-                                },
-                            },
-                            {
-                                id: 3,
-                                component: 'picture-widget',
-                                data: {
-                                    content: widgetImage,
-                                },
-                            },
-                            {
-                                id: 4,
-                                component: 'picture-widget',
-                                data: {
-                                    content: catalogBanner,
-                                },
-                            },
-                        ]
-                    }
-                }
-            ]
-        },
+        ...mapState(CUSTOM_MODULE, [PAGE_DATA]),
+    },
+
+    methods: {
+        ...mapActions(CUSTOM_MODULE, [FETCH_CUSTOM_PAGE_DATA]),
+    },
+
+    beforeRouteEnter(to, from, next) {
+        // вызывается до подтверждения пути, соответствующего этому компоненту.
+        // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
+        // так как к моменту вызова экземпляр ещё не создан!
+
+        const {
+            fullPath,
+            params: { pathMatch },
+        } = to;
+
+        const { loadPath } = $store.state[CUSTOM_MODULE];
+
+        if (loadPath === fullPath) next();
+        else {
+            $progress.start();
+            $store
+                .dispatch(`${CUSTOM_MODULE}/${FETCH_CUSTOM_PAGE_DATA}`, pathMatch)
+                .then(() => {
+                    $store.dispatch(`${CUSTOM_MODULE}/${SET_LOAD_PATH}`, fullPath);
+                    $progress.finish();
+                    next();
+                })
+                .catch(() => {
+                    $progress.fail();
+                    next(createNotFoundRoute(to));
+                });
+        }
+    },
+
+    async beforeRouteUpdate(to, from, next) {
+        // вызывается, когда маршрут, что рендерит этот компонент, изменился,
+        // но этот компонент будет повторно использован в новом маршруте.
+        // Например, для маршрута с динамическими параметрами `/foo/:id`, когда мы
+        // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
+        // будет использован повторно, и этот хук будет вызван когда это случится.
+        // Также имеется доступ в `this` к экземпляру компонента.
+
+        try {
+            const {
+                params: { pathMatch },
+            } = to;
+
+            this.$progress.start();
+            await this[FETCH_CUSTOM_PAGE_DATA](pathMatch);
+            this.$progress.finish();
+            next();
+        } catch (error) {
+            this.$progress.fail();
+            next(createNotFoundRoute(to));
+        }
     },
 };
 </script>

@@ -18,6 +18,7 @@ export default {
             path: '*',
             name: 'NotFound',
             component: NotFoundAsync,
+
             meta: {
                 middleware: [notFound],
             },
