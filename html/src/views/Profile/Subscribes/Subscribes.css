@@ -54,6 +54,7 @@
                 background-color: var(--cl-global);
                 color: var(--cl-white);
                 border-radius: 50%;
+                font-weight: 500;
 
                 @media (--tablet-lg) {
                     left: calc(var(--gs) * 3);
