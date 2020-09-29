@@ -1,0 +1,11 @@
+.section-widget {
+    max-width: 600px;
+
+    & + & {
+        margin-top: calc(var(--gs) * 7);
+
+        @media (--tablet) {
+            margin-top: calc(var(--gs) * 4);
+        }
+    }
+}
