@@ -217,7 +217,6 @@
             </div>
         </section>
 
-
         <!-- #66085 -->
         <!-- <section class="section product-view__section">
             <div class="container product-view__socials">
@@ -603,12 +602,11 @@
             </div>
         </section>
 
-        <section class="section" :style="{ height: isTablet ? '48px' : 0 }">
-            <transition :name="pricePanelAnimation" appear>
+        <template v-if="isMounted">
+            <transition v-if="!isTablet" name="slide-top">
                 <product-price-panel
                     class="product-view__top-panel"
-                    :class="{ 'product-view__top-panel--static': !isPanelSticky }"
-                    v-if="(scroll && !isPriceVisible) || isTablet"
+                    v-if="scroll && !isPriceVisible"
                     :name="product.title"
                     :image="product.media && product.media.length > 0 ? product.media[0] : null"
                     :price="product.price"
@@ -620,29 +618,37 @@
                     {{ buyBtnText }}
                 </product-price-panel>
             </transition>
-        </section>
-        <div v-observe-visibility="onEndReached" />
+            <section class="section" :style="{ height: isTablet ? '56px' : 0 }" v-else>
+                <product-price-panel
+                    class="product-view__top-panel"
+                    :class="{ 'product-view__top-panel--static': !isPanelSticky }"
+                    :name="product.title"
+                    :image="product.media && product.media.length > 0 ? product.media[0] : null"
+                    :price="product.price"
+                    :old-price="product.oldPrice"
+                    :bonus="product.bonus"
+                    :disabled="!canBuy"
+                    @add-item="onBuyProduct"
+                >
+                    {{ buyBtnText }}
+                </product-price-panel>
+                <div v-observe-visibility="onEndReached" />
+            </section>
 
-        <transition name="fade-in">
-            <gallery-modal v-if="$isServer || (isGalleryOpen && !isTabletLg)" :images="productImages.gallery">
-                <template v-slot:image="{ image }">
-                    <source :data-srcset="image.desktop.webp" type="image/webp" />
-                    <source :data-srcset="image.desktop.orig" />
-                    <img class="blur-up lazyload v-picture__img" :data-src="image.default" alt="" />
-                </template>
-            </gallery-modal>
-        </transition>
+            <transition name="fade-in">
+                <gallery-modal v-if="!isTabletLg && isGalleryOpen" :images="productImages.gallery">
+                    <template v-slot:image="{ image }">
+                        <source :data-srcset="image.desktop.webp" type="image/webp" />
+                        <source :data-srcset="image.desktop.orig" />
+                        <img class="blur-up lazyload v-picture__img" :data-src="image.default" alt="" />
+                    </template>
+                </gallery-modal>
+            </transition>
 
-        <transition name="fade-in">
-            <map-modal v-if="$isServer || isModalOpen">
-                <template v-slot:map>
-                    <product-pickup-points-map />
-                </template>
-                <template v-slot:filter>
-                    <product-pickup-points-panel />
-                </template>
-            </map-modal>
-        </transition>
+            <transition name="fade-in">
+                <product-map-modal v-if="isModalOpen" />
+            </transition>
+        </template>
     </section>
 </template>
 
@@ -683,14 +689,10 @@ import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOp
 import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
 import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag.vue';
 import ProductBundlePanel from '@components/product/ProductBundlePanel/ProductBundlePanel.vue';
-
-import ProductPickupPointsMap from '@components/product/ProductPickupPointsMap/ProductPickupPointsMap.vue';
-import ProductPickupPointsPanel from '@components/product/ProductPickupPointsPanel/ProductPickupPointsPanel.vue';
+import ProductMapModal, { NAME as MAP_MODAL_NAME } from '@components/product/ProductMapModal/ProductMapModal.vue';
 
 import HistoryPanel from '@components/HistoryPanel/HistoryPanel.vue';
 import ReviewsPanel from '@components/reviews/ReviewsPanel/ReviewsPanel.vue';
-
-import MapModal, { NAME as MAP_MODAL_NAME } from '@components/MapModal/MapModal.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, RECENTLY_VIEWED_PRODUCTS } from '@store';
@@ -844,17 +846,13 @@ export default {
         ProductPricePanel,
         ProductDetailPanel,
         ProductDeliveryPanel,
+        ProductOptionPanel,
+        ProductBundlePanel,
 
         ProductColorTag,
         ProductOptionTag,
-        ProductOptionPanel,
 
-        ProductPickupPointsMap,
-        ProductPickupPointsPanel,
-
-        ProductBundlePanel,
-
-        MapModal,
+        ProductMapModal,
         GalleryModal,
 
         FrisbuyProductContainer,
@@ -865,6 +863,7 @@ export default {
 
     data() {
         return {
+            isMounted: false,
             isPriceVisible: true,
             isPanelSticky: true,
             optionImage: null,
@@ -882,21 +881,21 @@ export default {
         ...mapState(PRODUCT_MODULE, [PRODUCT, PRODUCT_OPTIONS, BANNERS, FEATURED_PRODUCTS, PRODUCT_BUNDLES]),
 
         ...mapState(MODAL_MODULE, {
-            isGalleryOpen: (state) =>
+            isGalleryOpen: state =>
                 state[MODALS][modalName.product.GALLERY] && state[MODALS][modalName.product.GALLERY].open,
-            isModalOpen: (state) => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
+            isModalOpen: state => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
         }),
 
         ...mapState('route', {
-            code: (state) => state.params.code,
-            categoryCode: (state) => state.params.categoryCode,
-            refCode: (state) => state.query.refCode,
-            modal: (state) => state.query.modal,
+            code: state => state.params.code,
+            categoryCode: state => state.params.categoryCode,
+            refCode: state => state.query.refCode,
+            modal: state => state.query.modal,
         }),
 
         recentlyViewed() {
             const items = this[RECENTLY_VIEWED_PRODUCTS] || [];
-            return items.map((i) => {
+            return items.map(i => {
                 const { code, categoryCodes } = i;
                 const categoryCode = categoryCodes && categoryCodes[categoryCodes.length - 1];
 
@@ -930,12 +929,12 @@ export default {
 
         productCharacteristics() {
             const { characteristics = [] } = this[PRODUCT] || {};
-            return characteristics && characteristics.filter((c) => !!c.value);
+            return characteristics && characteristics.filter(c => !!c.value);
         },
 
         productIngredients() {
             const { ingredients = [] } = this[PRODUCT] || {};
-            return ingredients && ingredients.filter((i) => !!i);
+            return ingredients && ingredients.filter(i => !!i);
         },
 
         productVideos() {
@@ -993,8 +992,8 @@ export default {
             }
 
             if (Array.isArray(media) && media.length > 0) {
-                imageMap.media = media.map((image) => prepareProductImage(image, desktopSize, tabletSize));
-                imageMap.gallery = media.map((image) => prepareProductImage(image, gallerySize));
+                imageMap.media = media.map(image => prepareProductImage(image, desktopSize, tabletSize));
+                imageMap.gallery = media.map(image => prepareProductImage(image, gallerySize));
             } else {
                 imageMap.media = [];
                 imageMap.gallery = [];
@@ -1267,18 +1266,18 @@ export default {
         const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
         // если все загружено, пропускаем
-        if (productCode === code && referrerCode === refCode) next((vm) => vm.handleModalQuery(modal));
+        if (productCode === code && referrerCode === refCode) next(vm => vm.handleModalQuery(modal));
         else {
             $progress.start();
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
                 .then(() => {
-                    next((vm) => {
+                    next(vm => {
                         $progress.finish();
                         vm.handleModalQuery(modal);
                     });
                 })
-                .catch((error) => {
+                .catch(error => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
                     else next(new Error(error.message));
@@ -1320,6 +1319,10 @@ export default {
         const product = this[PRODUCT] || {};
         $retailRocket.addProductView([product.id]);
         this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
+    },
+
+    mounted() {
+        this.$nextTick(() => (this.isMounted = true));
     },
 };
 </script>
