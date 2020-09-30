@@ -93,8 +93,8 @@ module.exports = merge(base, {
                           to: path.resolve(__dirname, '../../public/assets/favicon.ico'),
                       },
                       {
-                          from: path.resolve(__dirname, '../manifest.json'),
-                          to: path.resolve(__dirname, '../../public/assets/manifest.json'),
+                          from: path.resolve(__dirname, '../site.webmanifest'),
+                          to: path.resolve(__dirname, '../../public/assets/site.webmanifest'),
                       },
                   ],
               }),
@@ -198,8 +198,8 @@ module.exports = merge(base, {
                           to: path.resolve(__dirname, '../public/assets/favicon.ico'),
                       },
                       {
-                          from: path.resolve(__dirname, '../manifest.json'),
-                          to: path.resolve(__dirname, '../public/assets/manifest.json'),
+                          from: path.resolve(__dirname, '../site.webmanifest'),
+                          to: path.resolve(__dirname, '../public/assets/site.webmanifest'),
                       },
                   ],
               }),
