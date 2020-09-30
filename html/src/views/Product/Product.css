@@ -185,11 +185,7 @@
                 }
 
                 @media (--tablet) {
-                    display: none;
-                }
-
-                @media (--mobile-min) and (--tablet-lg) {
-                    padding: calc(var(--gs) * 11);
+                    padding: calc(var(--gs) * 2);
                 }
 
                 &--video {
@@ -227,10 +223,6 @@
                     }
 
                     &:last-child {
-                        @media (--tablet-lg) {
-                            padding: calc(var(--gs) * 11);
-                        }
-
                         @media (--desktop-diff) {
                             padding: calc(var(--gs) * 16.5);
                         }
