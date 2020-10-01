@@ -159,7 +159,7 @@ import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
 import CheckoutProductPanel from '@components/checkout/CheckoutProductPanel/CheckoutProductPanel.vue';
 import CheckoutMasterClassPanel from '@components/checkout/CheckoutMasterClassPanel/CheckoutMasterClassPanel.vue';
 
-import { $store, $logger, $progress } from '@services';
+import { $store, $logger, $progress, $retailRocket } from '@services';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER } from '@store/modules/Auth';
@@ -302,7 +302,8 @@ export default {
                 if (!panel.validate()) return;
 
                 this.isCommit = true;
-                const { paymentUrl, orderId } = await this[COMMIT_DATA]();
+                const { paymentUrl, orderId, orderNumber, items = [] } = await this[COMMIT_DATA]();
+                $retailRocket.addTransaction(orderNumber, items);
                 const backUrl = generateThankPageUrl(orderId);
                 // заменяем текущий роут на роут thank-you, чтобы при переходе по стрелке мы вернулись на страницу
                 // благодарности за заказ
