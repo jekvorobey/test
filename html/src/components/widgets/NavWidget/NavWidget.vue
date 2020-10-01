@@ -1,5 +1,5 @@
 <template>
-    <button v-if="isTablet" class="nav-widget nav-widget--btn">
+    <button v-if="isTabletLg" class="nav-widget nav-widget--btn">
         {{ currentName }}<v-svg name="arrow-updown" width="16" height="16" />
     </button>
     <nav v-else class="nav-widget nav-widget--panel">
@@ -30,8 +30,8 @@ export default {
     },
 
     computed: {
-        isTablet() {
-            return this.$mq.tablet;
+        isTabletLg() {
+            return this.$mq.tabletLg;
         },
 
         currentName() {

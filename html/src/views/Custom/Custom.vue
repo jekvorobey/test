@@ -38,31 +38,43 @@
 
 <script>
 import Vue from 'vue';
+
+import BreadcrumbsWidget from '@components/widgets/BreadcrumbsWidget/BreadcrumbsWidget.vue';
+import NavWidget from '@components/widgets/NavWidget/NavWidget.vue';
+
+import SectionWidget from '@components/widgets/SectionWidget/SectionWidget.vue';
+import ContainerWidget from '@components/widgets/ContainerWidget/ContainerWidget.vue';
+
 import SimpleTextWidget from '@components/widgets/SimpleTextWidget/SimpleTextWidget.vue';
 import HtmlTextWidget from '@components/widgets/HtmlTextWidget/HtmlTextWidget.vue';
 import PictureWidget from '@components/widgets/PictureWidget/PictureWidget.vue';
-import SectionWidget from '@components/widgets/SectionWidget/SectionWidget.vue';
-import BreadcrumbsWidget from '@components/widgets/BreadcrumbsWidget/BreadcrumbsWidget.vue';
-import NavWidget from '@components/widgets/NavWidget/NavWidget.vue';
+import SliderWidget from '@components/widgets/SliderWidget/SliderWidget.vue';
+import GridWidget from '@components/widgets/GridWidget/GridWidget.vue';
+import ProductCardWidget from '@components/widgets/ProductCardWidget/ProductCardWidget.vue';
+import TableWidget from '@components/widgets/TableWidget/TableWidget.vue';
 
 import { mapState, mapActions } from 'vuex';
 import { NAME as CUSTOM_MODULE, PAGE_DATA } from '@store/modules/Custom';
 import { FETCH_CUSTOM_PAGE_DATA, SET_LOAD_PATH } from '@store/modules/Custom/actions';
-
-import widgetImage from '@images/mock/widgetImage.jpg';
-import catalogBanner from '@images/mock/catalogBanner2.jpg';
 
 import { $store, $progress } from '@services';
 import { httpCodes } from '@enums';
 import { createNotFoundRoute } from '@util/router';
 import './Custom.css';
 
+Vue.component(BreadcrumbsWidget.name, BreadcrumbsWidget);
+Vue.component(NavWidget.name, NavWidget);
+
+Vue.component(SectionWidget.name, SectionWidget);
+Vue.component(ContainerWidget.name, ContainerWidget);
+
 Vue.component(SimpleTextWidget.name, SimpleTextWidget);
 Vue.component(HtmlTextWidget.name, HtmlTextWidget);
 Vue.component(PictureWidget.name, PictureWidget);
-Vue.component(SectionWidget.name, SectionWidget);
-Vue.component(BreadcrumbsWidget.name, BreadcrumbsWidget);
-Vue.component(NavWidget.name, NavWidget);
+Vue.component(SliderWidget.name, SliderWidget);
+Vue.component(GridWidget.name, GridWidget);
+Vue.component(ProductCardWidget.name, ProductCardWidget);
+Vue.component(TableWidget.name, TableWidget);
 
 export default {
     name: 'custom',

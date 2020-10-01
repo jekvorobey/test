@@ -6,7 +6,7 @@
     }
 
     &__container {
-        @media (--tablet) {
+        @media (--tablet-lg) {
             padding: 0;
             margin: 0;
         }
@@ -18,7 +18,7 @@
         grid-template-rows: 40px 1fr;
         gap: 24px;
 
-        @media (--tablet) {
+        @media (--tablet-lg) {
             grid-template-columns: 1fr;
             grid-template-rows: auto auto 1fr;
             gap: 0;
@@ -31,9 +31,6 @@
 
         @media (--tablet-lg) {
             top: 64px;
-        }
-
-        @media (--tablet) {
             grid-row: 2;
             margin-bottom: calc(var(--gs) * 3);
         }
@@ -44,7 +41,7 @@
         position: sticky;
         top: 64px;
         height: max-content;
-        z-index: 1;
+        z-index: 100;
 
         /* убрать когда кнопку сделаю */
         overflow: hidden;
@@ -58,25 +55,21 @@
         }
 
         @media (--tablet-lg) {
-            top: 88px;
+            top: 64px;
+            max-height: 40px;
+            grid-row: 1;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1), 0px -1px 0px #eff1f3;
         }
 
         @media (--tablet) {
-            max-height: 40px;
-            grid-row: 1;
             top: 48px;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1), 0px -1px 0px #eff1f3;
         }
     }
 
     &__main {
         grid-row: 2;
 
-        @media (--tablet-lg) and (--tablet-min) {
-            grid-column: 2/3;
-        }
-
-        @media (--tablet) {
+        @media (--tablet-lg) {
             grid-row: 3;
         }
     }
