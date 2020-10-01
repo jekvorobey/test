@@ -1,22 +1,22 @@
 <template>
-    <section class="section section-widget">
+    <div class="container-widget">
         <div :class="{ 'container container--tablet-lg': !noContainer }">
             <component
-                class="section-widget__child"
+                class="container-widget__child"
                 v-for="child in children"
                 :key="child.id"
                 :is="child.component"
                 v-bind="child.data"
             />
         </div>
-    </section>
+    </div>
 </template>
 
 <script>
-import './SectionWidget.css';
+import './ContainerWidget.css';
 
 export default {
-    name: 'section-widget',
+    name: 'container-widget',
 
     props: {
         noContainer: {

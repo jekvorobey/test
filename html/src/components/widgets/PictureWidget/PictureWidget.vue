@@ -8,6 +8,7 @@ import './PictureWidget.css';
 
 export default {
     name: 'picture-widget',
+
     components: {
         VPicture,
     },

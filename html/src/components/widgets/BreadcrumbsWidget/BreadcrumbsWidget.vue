@@ -1,5 +1,5 @@
 <template>
-    <breadcrumbs class="container container--tablet breadcrumbs-widget">
+    <breadcrumbs class="container container--tablet-lg breadcrumbs-widget">
         <breadcrumb-item key="main" to="/">
             <v-svg v-if="isTablet" name="home" width="10" height="10" />
             <span v-else>Главная</span></breadcrumb-item
