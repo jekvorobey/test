@@ -1,27 +1,83 @@
 <template>
     <div class="cart-bundle-product-card" :class="[{ 'cart-bundle-product-card--inactive': !isActive }]">
-        <div class="cart-bundle-product-card__images" :class="`length-is-${items.length}`">
-            <div class="cart-bundle-product-card__image" v-for="({ image }, index) in items" :key="index">
-                <v-picture v-if="image && image.id">
-                    <source
-                        :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
-                        type="image/webp"
-                        media="(min-width: 480px)"
-                    />
-                    <source
-                        :data-srcset="generateSourcePath(72, 72, image.id, 'webp')"
-                        type="image/webp"
-                        media="(max-width: 479px)"
-                    />
-                    <img
-                        class="blur-up lazyload v-picture__img"
-                        :data-src="generateSourcePath(300, 300, image.id)"
-                        alt=""
-                    />
-                </v-picture>
-                <v-svg v-else id="cart-bundle-product-card-empty" name="logo" width="48" height="48" />
+        <general-popup-panel
+            popover-class="tooltip--white cart-bundle-product-card__panel"
+            trigger="manual"
+            placement="bottom-start"
+            :open="isPanelOpen && selectedItem !== null"
+            :disabled="isTablet"
+            @onHide="onHidePanel"
+        >
+            <div class="cart-bundle-product-card__images" :class="`length-is-${items.length}`">
+                <div
+                    class="cart-bundle-product-card__image"
+                    v-for="({ image }, index) in items"
+                    :key="index"
+                    @mouseover="onOpenPanel(index)"
+                    @mouseout="onHidePanel"
+                >
+                    <v-picture v-if="image && image.id">
+                        <source
+                            :data-srcset="generateSourcePath(300, 300, image.id, 'webp')"
+                            type="image/webp"
+                            media="(min-width: 480px)"
+                        />
+                        <source
+                            :data-srcset="generateSourcePath(72, 72, image.id, 'webp')"
+                            type="image/webp"
+                            media="(max-width: 479px)"
+                        />
+                        <img
+                            class="blur-up lazyload v-picture__img"
+                            :data-src="generateSourcePath(300, 300, image.id)"
+                            alt=""
+                        />
+                    </v-picture>
+                    <v-svg v-else id="cart-bundle-product-card-empty" name="logo" width="48" height="48" />
+                </div>
             </div>
-        </div>
+            <template v-slot:header />
+            <template v-slot:body>
+                <div class="cart-bundle-product-card__panel-body" v-if="selectedItem">
+                    <div class="cart-bundle-product-card__panel-body-image">
+                        <v-picture
+                            :key="selectedItem.image.id"
+                            v-if="selectedItem && selectedItem.image && selectedItem.image.id"
+                        >
+                            <source
+                                :data-srcset="generateSourcePath(300, 300, selectedItem.image.id, 'webp')"
+                                type="image/webp"
+                            />
+                            <source :data-srcset="generateSourcePath(300, 300, selectedItem.image.id)" />
+                            <img
+                                class="blur-up lazyload v-picture__img"
+                                :data-src="generateSourcePath(300, 300, selectedItem.image.id)"
+                                alt=""
+                            />
+                        </v-picture>
+                        <v-svg v-else id="cart-bundle-product-card-empty" name="logo" width="48" height="48" />
+                    </div>
+
+                    <div class="cart-bundle-product-card__panel-body-info">
+                        <div class="cart-bundle-product-card__panel-body-info-name">
+                            {{ selectedItem.name }}
+                        </div>
+
+                        <div class="cart-bundle-product-card__panel-body-info-prices">
+                            <price
+                                class="text-bold cart-bundle-product-card__panel-body-info-price"
+                                v-bind="selectedItem.price"
+                            />
+                            <price
+                                class="text-sm text-grey cart-bundle-product-card__panel-body-info-price"
+                                v-if="selectedItem.oldPrice"
+                                v-bind="selectedItem.oldPrice"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </general-popup-panel>
 
         <div class="cart-bundle-product-card__body">
             <div class="cart-bundle-product-card__body-bundle-info">
@@ -84,6 +140,7 @@ import VCounter from '@controls/VCounter/VCounter.vue';
 
 import Price from '@components/Price/Price.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
+import GeneralPopupPanel from '@components/GeneralPopupPanel/GeneralPopupPanel.vue';
 
 import { mapGetters, mapActions, mapState } from 'vuex';
 import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
@@ -111,6 +168,7 @@ export default {
 
         Price,
         FavoritesButton,
+        GeneralPopupPanel,
     },
 
     props: {
@@ -163,6 +221,13 @@ export default {
             type: Boolean,
             default: false,
         },
+    },
+
+    data() {
+        return {
+            isPanelOpen: false,
+            selectedItem: null,
+        };
     },
 
     computed: {
@@ -224,6 +289,16 @@ export default {
 
         generateSourcePath(x, y, id, ext) {
             return generatePictureSourcePath(x, y, id, ext);
+        },
+
+        onOpenPanel(index) {
+            const { items } = this;
+            this.selectedItem = items[index] || null;
+            this.isPanelOpen = true;
+        },
+
+        onHidePanel() {
+            this.isPanelOpen = false;
         },
     },
 
