@@ -40,8 +40,12 @@
                     Товар закончился
                 </div>
             </div>
-            <!-- #58322  -->
-            <div class="text-grey cart-product-card__body-bonus" :style="{ visibility: 'hidden' }">+ 80 бонусов</div>
+            <div
+                class="text-grey cart-product-card__body-bonus"
+                :class="{ 'cart-product-card__body-bonus--hidden': referralPartner || bonus === 0 }"
+            >
+                + {{ bonus }} {{ bonusLabel }}
+            </div>
             <div class="cart-product-card__body-controls" v-if="showControls">
                 <favorites-button
                     class="cart-product-card__body-controls-link"
@@ -71,18 +75,19 @@ import Price from '@components/Price/Price.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 
 import { mapGetters, mapActions, mapState } from 'vuex';
+import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
 import _debounce from 'lodash/debounce';
+import { fileExtension } from '@enums';
+import { pluralize } from '@util';
 import { generatePictureSourcePath } from '@util/file';
-
 import '@images/sprites/cross-small.svg';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/logo.svg';
 import './CartProductCard.css';
-import { fileExtension } from '@enums';
 
 export default {
     name: 'cart-product-card',
@@ -135,6 +140,11 @@ export default {
             type: [Object, String],
         },
 
+        bonus: {
+            type: Number,
+            default: 0,
+        },
+
         count: {
             type: Number,
             default: 1,
@@ -168,6 +178,9 @@ export default {
 
     computed: {
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+        }),
 
         images() {
             const { image } = this;
@@ -194,6 +207,11 @@ export default {
         deleteBtnText() {
             if (this.isTablet) return '';
             return 'Удалить';
+        },
+
+        bonusLabel() {
+            const { bonus } = this;
+            return pluralize(bonus, ['бонус', 'бонуса', 'бонусов']);
         },
 
         inFavorites() {

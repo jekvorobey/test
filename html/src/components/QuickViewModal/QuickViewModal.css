@@ -84,7 +84,8 @@
             }
         }
 
-        &-scroll.hasVBar &-options {
+        &-scroll.hasVBar &-options,
+        &-scroll.hasVBar &-cart {
             padding-right: var(--gs);
         }
 

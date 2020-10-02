@@ -41,14 +41,20 @@
                 <v-counter :value="count" :min="1" :max="maxBundlesCount" @input="debounce_countChange" />
             </div>
 
-            <div class="cart-bundle-product-card__body-price">
+            <div class="cart-bundle-product-card__body-prices">
                 <price tag="div" class="text-bold cart-bundle-product-card__price" v-bind="price" />
                 <price
                     tag="div"
-                    class="text-grey text-strike cart-bundle-product-card__old-price cart-bundle-product-card__body-price--old"
+                    class="text-grey text-strike cart-bundle-product-card__price--old"
                     v-if="oldPrice"
                     v-bind="oldPrice"
                 />
+                <div
+                    class="text-grey cart-bundle-product-card__body-bonus"
+                    :class="{ 'cart-bundle-product-card__body-bonus--hidden': referralPartner || bonus === 0 }"
+                >
+                    + {{ bonus }} {{ bonusLabel }}
+                </div>
             </div>
 
             <div class="cart-bundle-product-card__body-controls" v-if="showControls">
@@ -80,14 +86,15 @@ import Price from '@components/Price/Price.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 
 import { mapGetters, mapActions, mapState } from 'vuex';
+import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 import { ADD_FAVORITES_ITEM, DELETE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import _debounce from 'lodash/debounce';
+import { pluralize } from '@util';
 import { generatePictureSourcePath } from '@util/file';
-
 import '@images/sprites/cross-small.svg';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/logo.svg';
@@ -139,7 +146,7 @@ export default {
 
         bonus: {
             type: Number,
-            default: null,
+            default: 0,
         },
 
         showCount: {
@@ -160,16 +167,14 @@ export default {
 
     computed: {
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+        }),
 
         favoritesBtnText() {
             if (this.isTablet) return '';
             if (this.inFavorites) return 'В избранном';
             return 'Перенести в избранное';
-        },
-
-        inFavorites() {
-            const { items = [] } = this;
-            return items.every(i => this[IS_IN_FAVORITES](i.productId));
         },
 
         deleteBtnText() {
@@ -179,6 +184,16 @@ export default {
 
         maxBundlesCount() {
             return Math.min(...this.items.map(item => item.stock.qty));
+        },
+
+        bonusLabel() {
+            const { bonus } = this;
+            return pluralize(bonus, ['бонус', 'бонуса', 'бонусов']);
+        },
+
+        inFavorites() {
+            const { items = [] } = this;
+            return items.every(i => this[IS_IN_FAVORITES](i.productId));
         },
 
         isTablet() {
@@ -203,7 +218,8 @@ export default {
         },
 
         onCountChange(value) {
-            if (value > 0) this.$emit('countChange', { id: this.id, count: this.count });
+            const { bundleId } = this;
+            if (value > 0) this.$emit('countChange', { id: bundleId, count: value });
         },
 
         generateSourcePath(x, y, id, ext) {

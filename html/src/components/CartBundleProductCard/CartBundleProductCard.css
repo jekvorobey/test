@@ -103,11 +103,12 @@
         @media (--tablet) {
             font-size: 16px;
         }
-    }
 
-    &__old-price {
-        @media (--tablet) {
-            font-size: 14px;
+        &--old {
+            @media (--tablet) {
+                font-size: 14px;
+                margin-left: var(--gs);
+            }
         }
     }
 
@@ -139,7 +140,7 @@
             }
         }
 
-        &-price {
+        &-prices {
             order: 2;
             text-align: right;
             padding-left: 16px;
@@ -149,11 +150,28 @@
             }
 
             @media (--tablet) {
+                display: flex;
                 width: 100%;
                 text-align: left;
                 order: 1;
                 margin-bottom: var(--gs);
                 padding-left: 0;
+            }
+        }
+
+        &-bonus {
+            text-align: right;
+            margin-top: calc(var(--gs) * 2);
+
+            &--hidden {
+                visibility: hidden;
+            }
+
+            @media (--tablet) {
+                font-size: 12px;
+                line-height: 24px;
+                margin-top: 0;
+                margin-left: auto;
             }
         }
 
@@ -207,7 +225,7 @@
 
     &--inactive &__body {
         &-name,
-        &-price,
+        &-prices,
         &-count {
             opacity: 0.3;
         }
