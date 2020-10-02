@@ -15,11 +15,15 @@
                 />
             </div>
             <div v-if="!referralPartner && bonus > 0" class="text-grey product-cart-panel__info-bonus">
-                +{{ $t('product.bonus', { n: bonus }) }}
+                + {{ bonus }} {{ bonusLabel }}
             </div>
         </div>
         <div class="product-cart-panel__controls">
-            <buy-button class="product-cart-panel__btn product-cart-panel__controls-btn" @click="onAddToCart" :disabled="disabled">
+            <buy-button
+                class="product-cart-panel__btn product-cart-panel__controls-btn"
+                @click="onAddToCart"
+                :disabled="disabled"
+            >
                 <slot />
             </buy-button>
 
@@ -48,6 +52,7 @@ import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
+import { pluralize } from '@util';
 import '@images/sprites/wishlist-middle.svg';
 import './ProductCartPanel.css';
 
@@ -85,6 +90,7 @@ export default {
 
         bonus: {
             type: Number,
+            default: 0,
         },
 
         disabled: {
@@ -101,6 +107,11 @@ export default {
 
         favoritesBtnText() {
             return this.inFavorites ? 'В избранном' : 'В избранноe';
+        },
+
+        bonusLabel() {
+            const { bonus } = this;
+            return pluralize(bonus, ['бонус', 'бонуса', 'бонусов']);
         },
 
         inFavorites() {

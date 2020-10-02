@@ -27,6 +27,7 @@
                     :name="product.name"
                     :image="product.image"
                     :price="product.price"
+                    :bonus="product.bonus"
                     :old-price="product.oldPrice"
                     :count="count"
                     :max-count="product.stock && product.stock.qty"
@@ -34,9 +35,9 @@
                     :is-active="product.active"
                     show-count
                     show-controls
-                    @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
                     @toggle-favorite-item="onToggleFavorite(product)"
                     @countChange="onAddCartItem(product.id, product.stock.storeId, $event.count)"
+                    @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
                 />
                 <cart-bundle-product-card
                     v-else-if="type === cartItemTypes.BUNDLE_PRODUCT"
@@ -50,7 +51,8 @@
                     :is-active="product.active"
                     show-count
                     show-controls
-                    @deleteBundle="onDeleteBundle"
+                    @countChange="onAddCartBundleItem(product.id, $event.count)"
+                    @deleteBundle="onDeleteCartBundleItem(product.id)"
                 />
             </li>
         </transition-group>
@@ -68,7 +70,7 @@ import { LOCALE } from '@store';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { DELIVERY_INFO } from '@store/modules/Cart/getters';
-import { ADD_CART_ITEM, DELETE_CART_ITEM, DELETE_CART_BUNDLE } from '@store/modules/Cart/actions';
+import { ADD_CART_ITEM, DELETE_CART_ITEM, DELETE_CART_BUNDLE, ADD_CART_BUNDLE } from '@store/modules/Cart/actions';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
@@ -111,7 +113,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(CART_MODULE, [ADD_CART_ITEM, DELETE_CART_ITEM, DELETE_CART_BUNDLE]),
+        ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE, DELETE_CART_ITEM, DELETE_CART_BUNDLE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         generateItemProductUrl(product) {
@@ -133,7 +135,11 @@ export default {
             this[DELETE_CART_ITEM]({ offerId, storeId });
         },
 
-        onDeleteBundle(bundleId) {
+        onAddCartBundleItem(bundleId, count) {
+            this[ADD_CART_BUNDLE]({ bundleId, count });
+        },
+
+        onDeleteCartBundleItem(bundleId) {
             this[DELETE_CART_BUNDLE](bundleId);
         },
 

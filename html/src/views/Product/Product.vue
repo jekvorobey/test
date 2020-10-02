@@ -30,7 +30,7 @@
                         <div class="product-view__header-container">
                             <div v-if="!isTabletLg" class="product-view__header-gallery" @click.prevent="onShowGallery">
                                 <div
-                                    v-if="!productImages.media || !productImages.media.length"
+                                    v-if="!currentGalleryImages || currentGalleryImages.length === 0"
                                     class="product-view__header-gallery-item product-view__header-gallery-item--empty"
                                 >
                                     <v-svg name="logo" width="56" height="56" />
@@ -885,21 +885,21 @@ export default {
         ...mapState(PRODUCT_MODULE, [PRODUCT, PRODUCT_OPTIONS, BANNERS, FEATURED_PRODUCTS, PRODUCT_BUNDLES]),
 
         ...mapState(MODAL_MODULE, {
-            isGalleryOpen: (state) =>
+            isGalleryOpen: state =>
                 state[MODALS][modalName.product.GALLERY] && state[MODALS][modalName.product.GALLERY].open,
-            isModalOpen: (state) => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
+            isModalOpen: state => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
         }),
 
         ...mapState('route', {
-            code: (state) => state.params.code,
-            categoryCode: (state) => state.params.categoryCode,
-            refCode: (state) => state.query.refCode,
-            modal: (state) => state.query.modal,
+            code: state => state.params.code,
+            categoryCode: state => state.params.categoryCode,
+            refCode: state => state.query.refCode,
+            modal: state => state.query.modal,
         }),
 
         recentlyViewed() {
             const items = this[RECENTLY_VIEWED_PRODUCTS] || [];
-            return items.map((i) => {
+            return items.map(i => {
                 const { code, categoryCodes } = i;
                 const categoryCode = categoryCodes && categoryCodes[categoryCodes.length - 1];
 
@@ -933,12 +933,12 @@ export default {
 
         productCharacteristics() {
             const { characteristics = [] } = this[PRODUCT] || {};
-            return characteristics && characteristics.filter((c) => !!c.value);
+            return characteristics && characteristics.filter(c => !!c.value);
         },
 
         productIngredients() {
             const { ingredients = [] } = this[PRODUCT] || {};
-            return ingredients && ingredients.filter((i) => !!i);
+            return ingredients && ingredients.filter(i => !!i);
         },
 
         productVideos() {
@@ -996,8 +996,8 @@ export default {
             }
 
             if (Array.isArray(media) && media.length > 0) {
-                imageMap.media = media.map((image) => prepareProductImage(image, desktopSize, tabletSize));
-                imageMap.gallery = media.map((image) => prepareProductImage(image, gallerySize));
+                imageMap.media = media.map(image => prepareProductImage(image, desktopSize, tabletSize));
+                imageMap.gallery = media.map(image => prepareProductImage(image, gallerySize));
             } else {
                 imageMap.media = [];
                 imageMap.gallery = [];
@@ -1270,18 +1270,18 @@ export default {
         const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
         // если все загружено, пропускаем
-        if (productCode === code && referrerCode === refCode) next((vm) => vm.handleModalQuery(modal));
+        if (productCode === code && referrerCode === refCode) next(vm => vm.handleModalQuery(modal));
         else {
             $progress.start();
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
                 .then(() => {
-                    next((vm) => {
+                    next(vm => {
                         $progress.finish();
                         vm.handleModalQuery(modal);
                     });
                 })
-                .catch((error) => {
+                .catch(error => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
                     else next(new Error(error.message));
