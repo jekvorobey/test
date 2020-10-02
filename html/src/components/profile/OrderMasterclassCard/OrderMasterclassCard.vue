@@ -34,14 +34,14 @@
                     Завершен
                 </div>
                 <div v-else-if="qtyReturned > 0">
-                    <template v-if="qtyReturned < qty"> Оформлен возврат {{ qtyReturned }} шт. </template>
+                    <template v-if="qtyReturned < qty"> Оформлен возврат {{ qtyReturned }} шт </template>
                     <template v-else>
                         Оформлен возврат
                     </template>
                 </div>
             </div>
 
-            <div class="order-masterclass-card__body-count">{{ qty }} шт.</div>
+            <div class="order-masterclass-card__body-count">{{ qty }} шт</div>
 
             <div class="order-masterclass-card__body-prices">
                 <price class="text-bold order-masterclass-card__body-price" v-bind="price" />
