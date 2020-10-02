@@ -2,7 +2,7 @@
     display: flex;
 
     @media (--tablet) {
-        align-items: flex-start;
+        flex-direction: column;
     }
 
     &--returned &__img {
@@ -20,6 +20,10 @@
         }
     }
 
+    &__container {
+        display: flex;
+    }
+
     &__img {
         position: relative;
         display: flex;
@@ -32,6 +36,8 @@
 
         @media (--tablet) {
             margin-right: var(--gs);
+            max-width: 104px;
+            max-height: 72px;
         }
 
         &::after {
@@ -77,13 +83,7 @@
                 font-size: 16px;
                 line-height: 24px;
                 font-weight: normal;
-            }
-        }
-
-        &-count {
-            text-align: right;
-            @media (--tablet) {
-                display: none;
+                margin-bottom: 0;
             }
         }
 
@@ -114,14 +114,28 @@
                     width: 32px;
                 }
             }
+
+            @media (--tablet) {
+                width: auto;
+                margin: 0;
+            }
+        }
+
+        &-count {
+            text-align: right;
+
+            @media (--tablet) {
+                flex: 1;
+                text-align: left;
+            }
         }
 
         &-download {
             text-align: center;
 
             @media (--tablet) {
-                order: 1;
-                width: 100%;
+                order: 0;
+                width: 96px;
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
@@ -155,6 +169,9 @@
                 padding-left: 0;
                 margin-bottom: var(--gs);
                 align-items: flex-end;
+                width: auto;
+                flex: 1;
+                margin: 0;
             }
         }
 
@@ -188,6 +205,14 @@
                 line-height: 24px;
                 order: 0;
                 margin-bottom: var(--gs);
+            }
+        }
+
+        &-return {
+            @media (--tablet) {
+                width: 100%;
+                order: 4;
+                margin-top: var(--gs);
             }
         }
 
@@ -236,6 +261,19 @@
                     }
                 }
             }
+        }
+    }
+
+    &__bottom {
+        display: flex;
+        flex-wrap: wrap;
+        padding: calc(var(--gs) * 2);
+        padding-top: 0;
+
+        &-info {
+            display: flex;
+            flex-wrap: wrap;
+            flex: 1;
         }
     }
 }

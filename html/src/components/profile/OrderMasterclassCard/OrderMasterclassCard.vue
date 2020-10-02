@@ -6,19 +6,62 @@
             { 'order-masterclass-card--returned': qty === qtyReturned },
         ]"
     >
-        <router-link class="order-masterclass-card__img" :to="url">
-            <v-picture v-if="image">
-                <slot />
-            </v-picture>
-            <v-svg v-else id="order-masterclass-card-empty" name="logo" width="48" height="48" />
-        </router-link>
+        <div class="order-masterclass-card__container">
+            <router-link class="order-masterclass-card__img" :to="url">
+                <v-picture v-if="image">
+                    <slot />
+                </v-picture>
+                <v-svg v-else id="order-masterclass-card-empty" name="logo" width="48" height="48" />
+            </router-link>
 
-        <div class="order-masterclass-card__body">
-            <v-link class="order-masterclass-card__body-name" :to="url">
-                <div>{{ name }}</div>
-                <div v-if="note">({{ note }})</div>
-            </v-link>
+            <div class="order-masterclass-card__body">
+                <v-link class="order-masterclass-card__body-name" :to="url">
+                    <div>{{ name }}</div>
+                    <div v-if="note">({{ note }})</div>
+                </v-link>
 
+                <template v-if="!isSmall">
+                    <div class="order-masterclass-card__body-download">
+                        <v-link
+                            class="order-masterclass-card__body-download-link"
+                            v-if="!isComplete && qtyReturned !== qty && downloadUrl"
+                            :href="downloadUrl"
+                            download
+                        >
+                            <v-svg name="ticket" width="16" height="16" />&nbsp;
+                            <span>Скачать</span>
+                        </v-link>
+
+                        <div v-if="isComplete">
+                            Завершен
+                        </div>
+                        <div v-else-if="qtyReturned > 0">
+                            <template v-if="qtyReturned < qty"> Оформлен возврат {{ qtyReturned }} шт </template>
+                            <template v-else>
+                                Оформлен возврат
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="order-masterclass-card__body-count">{{ qty }} шт</div>
+
+                    <div class="order-masterclass-card__body-prices">
+                        <price class="text-bold order-masterclass-card__body-price" v-bind="price" />
+                        <price
+                            class="text-grey text-strike order-masterclass-card__body-price order-masterclass-card__body-price--old"
+                            v-show="oldPrice"
+                            v-bind="oldPrice"
+                        />
+                    </div>
+                </template>
+
+                <div class="text-grey text-sm order-masterclass-card__body-info">
+                    <div>{{ additions }}</div>
+                    <div>{{ date }}, {{ author }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="order-masterclass-card__bottom" v-if="isSmall || isTablet">
             <div class="order-masterclass-card__body-download">
                 <v-link
                     class="order-masterclass-card__body-download-link"
@@ -33,28 +76,26 @@
                 <div v-if="isComplete">
                     Завершен
                 </div>
-                <div v-else-if="qtyReturned > 0">
-                    <template v-if="qtyReturned < qty"> Оформлен возврат {{ qtyReturned }} шт </template>
+            </div>
+
+            <div class="order-masterclass-card__bottom-info">
+                <div class="order-masterclass-card__body-count">{{ qty }}&nbsp;шт</div>
+
+                <div class="order-masterclass-card__body-prices">
+                    <price class="text-bold order-masterclass-card__body-price" v-bind="price" />
+                    <price
+                        class="text-grey text-strike order-masterclass-card__body-price order-masterclass-card__body-price--old"
+                        v-show="oldPrice"
+                        v-bind="oldPrice"
+                    />
+                </div>
+
+                <div class="order-masterclass-card__body-return" v-if="qtyReturned > 0">
+                    <template v-if="qtyReturned < qty"> Оформлен возврат {{ qtyReturned }} шт. </template>
                     <template v-else>
                         Оформлен возврат
                     </template>
                 </div>
-            </div>
-
-            <div class="order-masterclass-card__body-count">{{ qty }} шт</div>
-
-            <div class="order-masterclass-card__body-prices">
-                <price class="text-bold order-masterclass-card__body-price" v-bind="price" />
-                <price
-                    class="text-grey text-strike order-masterclass-card__body-price order-masterclass-card__body-price--old"
-                    v-show="oldPrice"
-                    v-bind="oldPrice"
-                />
-            </div>
-
-            <div class="text-grey text-sm order-masterclass-card__body-info">
-                <div>{{ additions }}</div>
-                <div>{{ date }}, {{ author }}</div>
             </div>
         </div>
     </li>
