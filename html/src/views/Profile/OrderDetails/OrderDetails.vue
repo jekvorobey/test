@@ -180,7 +180,7 @@
         </info-panel>
 
         <info-panel v-if="ticketItems && ticketItems.length > 0" class="order-details-view__panel" header="Билеты">
-            <div class="container container--tablet-lg">
+            <div :class="{ 'container container--tablet-lg': isTabletLg && !isTablet }">
                 <ul class="order-details-view__panel-list">
                     <order-masterclass-card
                         class="order-details-view__panel-item"
@@ -417,6 +417,10 @@ export default {
 
         backUrl() {
             return { name: 'Orders' };
+        },
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
         },
 
         isTablet() {
