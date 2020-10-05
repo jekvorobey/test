@@ -39,7 +39,6 @@ export default {
 
         height: {
             type: [String, Number],
-            default: '100%',
         },
 
         text: {
