@@ -24,7 +24,7 @@
             <div class="bonuses-view__panel-col">
                 <div class="text-bold bonuses-view__panel-amount">1 бонус = {{ info.bonus_per_rub }} рубль</div>
                 <div>
-                    <router-link to="/">Подробнее о бонусной программе</router-link>
+                    <router-link to="/bonuses">Подробнее о бонусной программе</router-link>
                 </div>
             </div>
         </div>
@@ -157,15 +157,18 @@ export default {
 
         nextDebDate() {
             const { next_debit_date } = this[INFO] || {};
-            return next_debit_date && getDate(next_debit_date).toLocaleDateString(this[LOCALE], numericYearDateSettings);
+            return (
+                next_debit_date && getDate(next_debit_date).toLocaleDateString(this[LOCALE], numericYearDateSettings)
+            );
         },
 
         bonuses() {
             const items = this[ITEMS] || [];
-            return items.map(i => {
-                const date = i.created_at && getDate(i.created_at).toLocaleDateString(this[LOCALE], numericYearDateSettings);
+            return items.map((i) => {
+                const date =
+                    i.created_at && getDate(i.created_at).toLocaleDateString(this[LOCALE], numericYearDateSettings);
                 const statusString = this.$t(`bonusStatus.${i.status}`);
-                
+
                 return {
                     ...i,
                     statusString,
@@ -211,11 +214,11 @@ export default {
                 .dispatch(`${BONUSES_MODULE_PATH}/${FETCH_BONUSES_DATA}`, { page })
                 .then(() => {
                     $store.dispatch(`${BONUSES_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                     });
                 })
-                .catch(thrown => {
+                .catch((thrown) => {
                     $progress.fail();
                     next();
                 });
