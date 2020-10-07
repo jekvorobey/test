@@ -261,7 +261,10 @@ const main = {
             },
 
             discount: {
-                [discountType.PRODUCT]: 'Скидка на товар',
+                [discountType.PRODUCT]: {
+                    [cartItemTypes.PRODUCT]: 'Скидка на товар',
+                    [cartItemTypes.MASTERCLASS]: 'Скидка на мастер-класс',
+                },
                 [discountType.DELIVERY]: 'Скидка на доставку',
                 [discountType.CART]: 'Скидка на корзину',
                 [discountType.CUSTOM]: 'Скидка для Вас',
