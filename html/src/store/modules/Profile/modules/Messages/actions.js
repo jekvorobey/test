@@ -44,7 +44,7 @@ export default {
         try {
             const { chat } = await createProfileChat(formData);
             dispatch(FETCH_CHATS);
-            //commit(SET_CHAT, data);
+            // commit(SET_CHAT, data);
         } catch (error) {
             storeErrorHandler(CREATE_CHAT, true)(error);
         }
@@ -54,7 +54,7 @@ export default {
         try {
             const data = await createProfileChatMessage(chatId, message, files);
             commit(PUSH_NEW_MESSAGE, data.message);
-            //commit(SET_CHAT_MESSAGE, data);
+            // commit(SET_CHAT_MESSAGE, data);
         } catch (error) {
             storeErrorHandler(CREATE_CHAT_MESSAGE, true)(error);
         }
