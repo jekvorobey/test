@@ -121,11 +121,11 @@ export default {
         ...mapState(PROFILE_MODULE, [BREADCRUMBS]),
         ...mapState(AUTH_MODULE, [HAS_SESSION, UNREAD_MESSAGES]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isNavigationOpen: state =>
+            isNavigationOpen: (state) =>
                 state[MODALS][modalName.profile.NAVIGATION] && state[MODALS][modalName.profile.NAVIGATION].open,
         }),
 
@@ -162,7 +162,7 @@ export default {
                         { name: 'ProPreferences', exact: true },
                         { name: 'Promopage', exact: true },
                         { name: 'Seo' },
-                        { name: 'Promocodes', exact: true },
+                        { name: 'Promocodes' },
                         { name: 'Account' },
                         { name: 'Documents', exact: true },
                     ],

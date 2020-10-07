@@ -6,13 +6,13 @@
             <div class="promocodes-view__header-controls">
                 <radio-switch
                     class="promocodes-view__header-switch"
-                    :value="selectedStatus"
-                    :items="promocodeStatus"
+                    v-if="showSwitch"
                     id="promocode-switch"
                     key-field="value"
                     name="promocodeStatus"
+                    :value="selectedStatus"
+                    :items="promocodeStatus"
                     @input="onStatusChanged"
-                    v-if="items && items.length"
                 />
 
                 <button class="btn btn--outline promocodes-view__header-btn" @click="onPromocodeRequest">
@@ -319,13 +319,13 @@ import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as PROMOCODES_MODULE, ITEMS } from '@store/modules/Profile/modules/Promocodes';
 
 import { PROMOCODES } from '@store/modules/Profile/modules/Promocodes/getters';
-import { FETCH_PROMOCODES_DATA, SET_LOAD_PATH } from '@store/modules/Profile/modules/Promocodes/actions';
+import { FETCH_PROMOCODES_DATA, SET_LOAD } from '@store/modules/Profile/modules/Promocodes/actions';
 
 import { modalName, themeCodes } from '@enums';
 import { promocodeType, promocodeDiscountType } from '@enums/checkout';
 import { digit2DateSettings } from '@settings';
 import { saveToClipboard } from '@util';
-import { $store, $progress, $logger } from '@services';
+import { $store, $progress, $logger, $context } from '@services';
 import '@images/sprites/copy.svg';
 import '@images/sprites/arrow-down.svg';
 import '@images/sprites/info-middle.svg';
@@ -372,9 +372,14 @@ export default {
         ...mapGetters(PROMOCODES_MODULE_PATH, [PROMOCODES]),
 
         ...mapState(MODAL_MODULE, {
-            isMessageOpen: state =>
+            isMessageOpen: (state) =>
                 state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
         }),
+
+        showSwitch() {
+            const { isArchive, items = [] } = this;
+            return (!isArchive && items && items.length > 0) || isArchive;
+        },
 
         isArchive() {
             const {
@@ -450,27 +455,30 @@ export default {
             query: { isArchive = 0 },
         } = to;
 
-        const { loadPath } = $store.state[PROFILE_MODULE][PROMOCODES_MODULE];
+        const { load } = $store.state[PROFILE_MODULE][PROMOCODES_MODULE];
+        const { isServer } = $context;
 
         // если все загружено, пропускаем
-        if (fullPath === loadPath) next(vm => vm.setFilterValue(isArchive));
-        else {
-            $progress.start();
-            $store
-                .dispatch(`${PROMOCODES_MODULE_PATH}/${FETCH_PROMOCODES_DATA}`, isArchive)
-                .then(() => {
-                    $store.dispatch(`${PROMOCODES_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
-                        vm.setFilterValue(isArchive);
-                        $progress.finish();
-                    });
-                })
-                .catch(error =>
-                    next(vm => {
-                        $progress.fail();
-                    })
-                );
+        if (load) {
+            $store.dispatch(`${PROMOCODES_MODULE_PATH}/${SET_LOAD}`, false);
+            return next((vm) => vm.setFilterValue(isArchive));
         }
+
+        $progress.start();
+        $store
+            .dispatch(`${PROMOCODES_MODULE_PATH}/${FETCH_PROMOCODES_DATA}`, isArchive)
+            .then(() => {
+                $store.dispatch(`${PROMOCODES_MODULE_PATH}/${SET_LOAD}`, isServer);
+                next((vm) => {
+                    vm.setFilterValue(isArchive);
+                    $progress.finish();
+                });
+            })
+            .catch((error) =>
+                next((vm) => {
+                    $progress.fail();
+                })
+            );
     },
 
     async beforeRouteUpdate(to, from, next) {
@@ -494,6 +502,7 @@ export default {
         try {
             this.$progress.start();
             await this[FETCH_PROMOCODES_DATA](isArchive);
+            this.setFilterValue(isArchive);
             this.$progress.finish();
             next();
         } catch (error) {
