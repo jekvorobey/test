@@ -4,14 +4,14 @@ import { getPromocodeData } from '@api';
 import { SET_PROMOCODES_DATA } from './mutations';
 
 export const FETCH_PROMOCODES_DATA = 'FETCH_PROMOCODES_DATA';
-export const SET_LOAD_PATH = 'SET_LOAD_PATH';
+export const SET_LOAD = 'SET_LOAD';
 
 export default {
-    [SET_LOAD_PATH]({ commit }, payload) {
-        commit(SET_LOAD_PATH, payload);
+    [SET_LOAD]({ commit }, payload) {
+        commit(SET_LOAD, payload);
     },
 
-    async [FETCH_PROMOCODES_DATA]({ state, commit }, isArchive) {
+    async [FETCH_PROMOCODES_DATA]({ commit }, isArchive) {
         try {
             const data = await getPromocodeData(isArchive);
             commit(SET_PROMOCODES_DATA, data);
