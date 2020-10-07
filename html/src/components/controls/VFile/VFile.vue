@@ -1,6 +1,6 @@
 <template>
     <div class="v-file" id="drop-area">
-        <template v-for="(file, index) in files">
+        <template v-for="(file, index) in internal_files">
             <slot name="file" :file="file" :index="index">
                 <v-file-item class="v-file__item" :key="file.name" :file="file" />
             </slot>
@@ -12,7 +12,7 @@
             @dragover.prevent
             @dragleave.prevent
             @drop.prevent="handleDrop"
-            v-if="files.length < maxFiles"
+            v-if="internal_files.length < maxFiles"
         >
             <label class="v-file__form-label" for="fileInput">
                 <slot>
@@ -53,6 +53,11 @@ export default {
     },
 
     props: {
+        files: {
+            type: Array,
+            default: () => [],
+        },
+
         acceptedTypes: {
             type: Array,
             default: () => [],
@@ -76,7 +81,7 @@ export default {
     data() {
         return {
             inputId: 0,
-            files: [],
+            internal_files: [],
         };
     },
 
@@ -86,18 +91,13 @@ export default {
         },
 
         isEmpty() {
-            return !this.files || this.files.length === 0;
-        },
-    },
-
-    watch: {
-        files() {
-            this.$emit('change', [...this.files]);
+            return !this.internal_files || this.internal_files.length === 0;
         },
     },
 
     methods: {
         isAccepted(file) {
+            if (!(file instanceof File)) return false;
             if (this.filter) return this.filter(file);
 
             const isAcceptedType =
@@ -108,19 +108,21 @@ export default {
         },
 
         deleteFile(file) {
-            this.files = this.files.filter(f => f !== file);
+            this.internal_files = this.internal_files.filter((f) => f !== file);
+            this.$emit('change', [...this.internal_files]);
         },
 
-        handleFiles(fs) {
+        handleFiles(fs, fireEvent = true) {
             const notAccepted = [];
-            const buffer = [...fs].slice(0, this.maxFiles - this.files.length).filter(f => {
-                const accepted = !this.files.some(fl => fl.name === f.name) && this.isAccepted(f);
+            const buffer = [...fs].slice(0, this.maxFiles - this.internal_files.length).filter((f) => {
+                const accepted = !this.internal_files.some((fl) => fl.name === f.name) && this.isAccepted(f);
                 if (!accepted) notAccepted.push(f);
                 return accepted;
             });
 
-            this.files.push(...buffer);
+            this.internal_files.push(...buffer);
             this.inputId += 1;
+            if (fireEvent) this.$emit('change', [...this.internal_files]);
             if (notAccepted.length > 0) this.$emit('error', notAccepted);
         },
 
@@ -128,6 +130,11 @@ export default {
             const files = (e.dataTransfer && e.dataTransfer.files) || [];
             this.handleFiles(files);
         },
+    },
+
+    created() {
+        const { files } = this;
+        this.handleFiles(files, false);
     },
 };
 </script>

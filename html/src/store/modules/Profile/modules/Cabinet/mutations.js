@@ -5,7 +5,7 @@ export const SET_CAN_EDIT_CODE = 'SET_CAN_EDIT_CODE';
 
 export const UPDATE_EMAIL = 'UPDATE_EMAIL';
 export const UPDATE_PHONE = 'UPDATE_PHONE';
-export const UPDATE_PORTFOLIO = 'UPDATE_PORTFOLIO';
+
 export const UPDATE_ACTIVITIES = 'UPDATE_ACTIVITIES';
 export const UPDATE_REQUISITES = 'UPDATE_REQUISITES';
 export const UPDATE_CREDENTIAL = 'UPDATE_CREDENTIAL';
@@ -14,6 +14,12 @@ export const UPDATE_AVATAR = 'UPDATE_AVATAR';
 export const UPDATE_PASSWORD = 'UPDATE_PASSWORD';
 export const DELETE_SOCIAL = 'DELETE_SOCIAL';
 export const DELETE_CERTIFICATE = 'DELETE_CERTIFICATE';
+
+export const UPDATE_FILES = 'UPDATE_FILES';
+export const UPDATE_PORTFOLIO = 'UPDATE_PORTFOLIO';
+export const ADD_PORTFOLIO = 'ADD_PORTFOLIO';
+export const DELETE_PORTFOLIO = 'DELETE_PORTFOLIO';
+export const CLEAR_PORTFOLIO_DATA = 'CLEAR_PORTFOLIO_DATA';
 
 export default {
     [SET_LOAD](state, payload = false) {
@@ -94,10 +100,6 @@ export default {
         state.gender = payload.gender;
     },
 
-    [UPDATE_PORTFOLIO](state, payload = []) {
-        state.portfolio = payload;
-    },
-
     [UPDATE_REQUISITES](state, payload = {}) {
         state.requisites = payload;
     },
@@ -126,5 +128,26 @@ export default {
         const index = state.social.indexOf(payload);
         if (index < 0) return;
         state.social.splice(index, 1);
+    },
+
+    [ADD_PORTFOLIO](state, payload) {
+        if (payload) state.editablePortfolio.push(payload);
+    },
+
+    [DELETE_PORTFOLIO](state, index) {
+        state.editablePortfolio.splice(index, 1);
+    },
+
+    [CLEAR_PORTFOLIO_DATA](state) {
+        state.files = [];
+        state.editablePortfolio = [{ id: 0, name: null, link: null }];
+    },
+
+    [UPDATE_FILES](state, payload) {
+        state.files = payload || [];
+    },
+
+    [UPDATE_PORTFOLIO](state, payload) {
+        state.portfolio = payload || [];
     },
 };

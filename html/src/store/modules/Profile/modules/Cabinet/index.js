@@ -21,6 +21,9 @@ export const ACTIVITIES = 'activities';
 export const All_ACTIVITIES = 'allActivities';
 export const REFERRAL_PERSONAL_DISCOUNT = 'referralPersonalDiscount';
 
+export const EDITABLE_PORTFOLIO = 'editablePortfolio';
+export const FILES = 'files';
+
 export const SOCIAL = 'social';
 export const CERTIFICATES = 'certificates';
 export const REQUISITES = 'requisites';
@@ -61,6 +64,9 @@ export default function createModule() {
                 bik: null,
                 correspondentAccount: null,
             },
+
+            [EDITABLE_PORTFOLIO]: [{ id: 0, name: null, link: null }],
+            [FILES]: [],
         },
 
         actions,

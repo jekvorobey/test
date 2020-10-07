@@ -20,7 +20,7 @@ import {
 import { SET_CABINET_DATA, UPDATE_PHONE, UPDATE_EMAIL } from './mutations';
 
 export const FETCH_CABINET_DATA = 'FETCH_CABINET_DATA';
-export const UPDATE_PORTFOLIO = 'UPDATE_PORTFOLIO';
+
 export const UPDATE_ACTIVITIES = 'UPDATE_ACTIVITIES';
 export const UPDATE_CREDENTIAL = 'UPDATE_CREDENTIAL';
 export const UPDATE_PERSONAL = 'UPDATE_PERSONAL';
@@ -29,9 +29,14 @@ export const UPDATE_PASSWORD = 'UPDATE_PASSWORD';
 export const UPDATE_REQUISITES = 'UPDATE_REQUISITES';
 export const UPDATE_REFERRER_CODE = 'UPDATE_REFERRER_CODE';
 
+export const ADD_PORTFOLIO = 'ADD_PORTFOLIO';
+export const DELETE_PORTFOLIO = 'DELETE_PORTFOLIO';
+export const UPDATE_PORTFOLIO = 'UPDATE_PORTFOLIO';
+export const UPDATE_FILES = 'UPDATE_FILES';
 export const UPLOAD_CERTIFICATE = 'UPLOAD_CERTIFICATE';
 export const LOAD_CERTIFICATE = 'LOAD_CERTIFICATE';
 export const DELETE_CERTIFICATE = 'DELETE_CERTIFICATE';
+export const CLEAR_PORTFOLIO_DATA = 'CLEAR_PORTFOLIO_DATA';
 
 export const DELETE_AVATAR = 'DELETE_AVATAR';
 export const DELETE_SOCIAL = 'DELETE_SOCIAL';
@@ -56,30 +61,6 @@ export default {
             await sendCode(destination, type);
         } catch (error) {
             storeErrorHandler(SEND_CODE, true)(error);
-        }
-    },
-
-    async [UPLOAD_CERTIFICATE](context, payload) {
-        try {
-            return await uploadProfileCertificate(payload);
-        } catch (error) {
-            storeErrorHandler(UPLOAD_CERTIFICATE)(error);
-        }
-    },
-
-    async [LOAD_CERTIFICATE](context, name) {
-        try {
-            return await loadProfileCertificate(name);
-        } catch (error) {
-            storeErrorHandler(LOAD_CERTIFICATE, true)(error);
-        }
-    },
-
-    async [DELETE_CERTIFICATE](context, id) {
-        try {
-            await deleteProfileCertificate(id);
-        } catch (error) {
-            storeErrorHandler(DELETE_CERTIFICATE, true)(error);
         }
     },
 
@@ -155,15 +136,6 @@ export default {
         }
     },
 
-    async [UPDATE_PORTFOLIO]({ commit }, payload = []) {
-        try {
-            await changeProfilePortfolio(payload);
-            commit(UPDATE_PORTFOLIO, payload);
-        } catch (error) {
-            storeErrorHandler(UPDATE_PORTFOLIO)(error);
-        }
-    },
-
     async [UPDATE_REQUISITES]({ commit }, payload = {}) {
         try {
             const {
@@ -188,6 +160,55 @@ export default {
             return await changeProfileReferralCode(code);
         } catch (error) {
             storeErrorHandler(UPDATE_REFERRER_CODE, true)(error);
+        }
+    },
+
+    [ADD_PORTFOLIO]({ commit }, payload) {
+        commit(ADD_PORTFOLIO, payload);
+    },
+
+    [DELETE_PORTFOLIO]({ commit }, payload) {
+        commit(DELETE_PORTFOLIO, payload);
+    },
+
+    [UPDATE_FILES]({ commit }, payload = []) {
+        commit(UPDATE_FILES, payload);
+    },
+
+    [CLEAR_PORTFOLIO_DATA]({ commit }) {
+        commit(CLEAR_PORTFOLIO_DATA);
+    },
+
+    async [UPDATE_PORTFOLIO]({ commit }, payload = []) {
+        try {
+            await changeProfilePortfolio(payload);
+            commit(UPDATE_PORTFOLIO, payload);
+        } catch (error) {
+            storeErrorHandler(UPDATE_PORTFOLIO)(error);
+        }
+    },
+
+    async [UPLOAD_CERTIFICATE](context, payload) {
+        try {
+            return await uploadProfileCertificate(payload);
+        } catch (error) {
+            storeErrorHandler(UPLOAD_CERTIFICATE)(error);
+        }
+    },
+
+    async [LOAD_CERTIFICATE](context, name) {
+        try {
+            return await loadProfileCertificate(name);
+        } catch (error) {
+            storeErrorHandler(LOAD_CERTIFICATE, true)(error);
+        }
+    },
+
+    async [DELETE_CERTIFICATE](context, id) {
+        try {
+            await deleteProfileCertificate(id);
+        } catch (error) {
+            storeErrorHandler(DELETE_CERTIFICATE, true)(error);
         }
     },
 

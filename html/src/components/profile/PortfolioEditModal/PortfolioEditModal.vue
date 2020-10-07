@@ -50,6 +50,7 @@
                 <p class="text-grey">Файлы форматов jpeg, png, pdf, doc, docx, не более 5Mb каждый</p>
                 <v-file
                     class="portfolio-edit-modal__files"
+                    :files="files"
                     :accepted-types="fileAcceptedTypes"
                     :max-file-size="5242880"
                     @change="onFilesChanged"
@@ -88,11 +89,15 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
-import { NAME as CABINET_MODULE, PORTFOLIO } from '@store/modules/Profile/modules/Cabinet';
+import { NAME as CABINET_MODULE, EDITABLE_PORTFOLIO, FILES } from '@store/modules/Profile/modules/Cabinet';
 import {
+    UPDATE_FILES,
     UPDATE_PORTFOLIO,
     UPLOAD_CERTIFICATE,
     FETCH_CABINET_DATA,
+    ADD_PORTFOLIO,
+    DELETE_PORTFOLIO,
+    CLEAR_PORTFOLIO_DATA,
 } from '@store/modules/Profile/modules/Cabinet/actions';
 
 import { modalName, mimeType } from '@enums';
@@ -115,7 +120,7 @@ export default {
     },
 
     validations: {
-        editablePortfolio: {
+        [EDITABLE_PORTFOLIO]: {
             oneOrMore: (value) => value && value.length > 0,
 
             $each: {
@@ -129,29 +134,28 @@ export default {
             },
         },
 
-        files: {
+        [FILES]: {
             oneOrMore: (value) => value && value.length > 0,
         },
     },
 
     data() {
-        const index = 0;
         return {
             error: null,
             inProcess: false,
-            editablePortfolio: [{ id: index, name: null, link: null }],
-            files: [],
-            index,
+            index: 0,
         };
     },
 
     computed: {
+        ...mapState(CABINET_MODULE_PATH, [EDITABLE_PORTFOLIO, FILES]),
         ...mapState(MODAL_MODULE, {
             isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         header() {
-            return this.$mq.tablet ? 'Подтверждение статуса' : 'Подтверждение профессионального статуса';
+            const { isTablet } = this;
+            return isTablet ? 'Подтверждение статуса' : 'Подтверждение профессионального статуса';
         },
 
         isTablet() {
@@ -179,7 +183,15 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(CABINET_MODULE_PATH, [UPDATE_PORTFOLIO, UPLOAD_CERTIFICATE, FETCH_CABINET_DATA]),
+        ...mapActions(CABINET_MODULE_PATH, [
+            FETCH_CABINET_DATA,
+            ADD_PORTFOLIO,
+            DELETE_PORTFOLIO,
+            UPDATE_PORTFOLIO,
+            UPDATE_FILES,
+            UPLOAD_CERTIFICATE,
+            CLEAR_PORTFOLIO_DATA,
+        ]),
 
         nameError(name) {
             if (this.$v.files.$invalid && name.$dirty && !name.required) return this.$t('validation.errors.required');
@@ -191,15 +203,15 @@ export default {
 
         onAddPortfolio() {
             this.index += 1;
-            this.editablePortfolio.push({ id: this.index, name: null, link: null });
+            this[ADD_PORTFOLIO]({ id: this.index, name: null, link: null });
         },
 
         onDeletePortfolio(index) {
-            this.editablePortfolio.splice(index, 1);
+            this[DELETE_PORTFOLIO](index);
         },
 
         onFilesChanged(files) {
-            this.files = files || [];
+            this[UPDATE_FILES](files);
         },
 
         onHandleError(files) {
@@ -241,6 +253,7 @@ export default {
         },
 
         onClose() {
+            this[CLEAR_PORTFOLIO_DATA]();
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
         },
     },
