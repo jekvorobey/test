@@ -19,7 +19,7 @@
 
         <div class="cart-panel-product-card__body" :class="{ 'cart-panel-product-card__body--favorite': isFavorite }">
             <v-link class="cart-panel-product-card__body-name" :to="href">
-                <div>{{ name }}</div>
+                <v-clamp :max-lines="3" autoresize>{{ name }}</v-clamp>
                 <div v-if="note">({{ note }})</div>
             </v-link>
             <div class="cart-panel-product-card__body-prices">
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import VClamp from 'vue-clamp';
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
@@ -65,6 +66,7 @@ export default {
         VSvg,
         VLink,
         VPicture,
+        VClamp,
 
         Price,
         BuyButton,
