@@ -261,7 +261,10 @@ const main = {
             },
 
             discount: {
-                [discountType.PRODUCT]: 'Product Discount',
+                [discountType.PRODUCT]: {
+                    [cartItemTypes.PRODUCT]: 'Product Discount',
+                    [cartItemTypes.MASTERCLASS]: 'Master-class Discount',
+                },
                 [discountType.DELIVERY]: 'Delivery Discount',
                 [discountType.CART]: 'Cart Discount',
                 [discountType.CUSTOM]: 'Discount for You',

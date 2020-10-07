@@ -49,7 +49,12 @@
                                 v-for="discount in summary.discounts"
                                 :key="discount.type"
                             >
-                                {{ $t(`cart.summary.discount.${discount.type}`) }}
+                                <template v-if="discount.type === discountType.PRODUCT">
+                                    {{ $t(`cart.summary.discount.${discount.type}.${checkoutType}`) }}
+                                </template>
+                                <template v-else>
+                                    {{ $t(`cart.summary.discount.${discount.type}`) }}
+                                </template>
                                 <span>-<price v-bind="discount.value" /></span>
                             </p>
 
@@ -186,6 +191,7 @@ import {
 } from '@store/modules/Checkout/getters';
 
 import { httpCodes, requestStatus } from '@enums';
+import { discountType } from '@enums/checkout';
 import { preparePrice } from '@util';
 import { generateThankPageUrl } from '@util/order';
 import { cartItemTypes } from '@enums/product';
@@ -224,11 +230,11 @@ export default {
         ...mapState(CHECKOUT_MODULE, [CHECKOUT_TYPE, CHECKOUT_DATA]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
         ...mapState('route', {
-            checkoutType: state => state.params.type,
+            checkoutType: (state) => state.params.type,
         }),
 
         ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT, PROMOCODE_STATUS]),
@@ -338,8 +344,8 @@ export default {
                 $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type),
                 $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_PROFESSIONS}`),
             ])
-                .then(() => next(vm => $progress.finish()))
-                .catch(() => next(vm => $progress.fail()));
+                .then(() => next((vm) => $progress.finish()))
+                .catch(() => next((vm) => $progress.fail()));
         }
     },
 
@@ -364,6 +370,10 @@ export default {
             this.$progress.fail();
             next(false);
         }
+    },
+
+    created() {
+        this.discountType = discountType;
     },
 
     beforeDestroy() {

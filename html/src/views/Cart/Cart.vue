@@ -67,7 +67,13 @@
                                 v-for="discount in activeTabItem.summary.discounts"
                                 :key="discount.type"
                             >
-                                {{ $t(`cart.summary.discount.${discount.type}`) }}
+                                <template v-if="discount.type === discountType.PRODUCT">
+                                    {{ $t(`cart.summary.discount.${discount.type}.${activeTabItem.type}`) }}
+                                </template>
+                                <template v-else>
+                                    {{ $t(`cart.summary.discount.${discount.type}`) }}
+                                </template>
+
                                 <span>-<price v-bind="discount.value" /></span>
                             </p>
 
@@ -270,10 +276,10 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { cancelRoute } from '@settings';
 import { breakpoints, modalName, httpCodes, requestStatus } from '@enums';
+import { discountType } from '@enums/checkout';
 import { preparePrice } from '@util';
 import { generateProductUrl } from '@util/catalog';
 import { registerModuleIfNotExists } from '@util/store';
-
 import '@images/sprites/check.svg';
 import '@images/sprites/cart.svg';
 import './Cart.css';
@@ -359,21 +365,21 @@ export default {
         ]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
         ...mapState(MODAL_MODULE, {
-            isModalOpen: state =>
+            isModalOpen: (state) =>
                 state[MODALS][modalName.cart.CLEAR_CART] && state[MODALS][modalName.cart.CLEAR_CART].open,
         }),
 
         errorStrings() {
             const errors = this[ERRORS] || [];
-            return errors.map(e => this.$t(`validation.cart.${e}`));
+            return errors.map((e) => this.$t(`validation.cart.${e}`));
         },
 
         warningStrings() {
             const warnings = this[WARNINGS] || [];
-            return warnings.map(e => this.$t(`validation.cart.${e}`));
+            return warnings.map((e) => this.$t(`validation.cart.${e}`));
         },
 
         isProduct() {
@@ -400,7 +406,7 @@ export default {
         activeItemIds() {
             const { activeTabItem = {} } = this;
             const { items = [] } = activeTabItem;
-            return items.map(i => i.p.id).join(',');
+            return items.map((i) => i.p.id).join(',');
         },
     },
 
@@ -505,8 +511,12 @@ export default {
         $progress.start();
         $store
             .dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`)
-            .then(() => next(vm => $progress.finish()))
-            .catch(() => next(vm => $progress.fail()));
+            .then(() => next((vm) => $progress.finish()))
+            .catch(() => next((vm) => $progress.fail()));
+    },
+
+    created() {
+        this.discountType = discountType;
     },
 
     mounted() {
