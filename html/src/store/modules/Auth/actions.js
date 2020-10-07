@@ -159,7 +159,6 @@ export default {
     },
 
     async [FETCH_UNREAD_MESSAGES]({ commit }) {
-        const messages = await getUnreadMesagesCount();
         try {
             const { count } = await getUnreadMesagesCount();
             commit(SET_UNREAD_MESSAGES, count);

@@ -15,7 +15,10 @@ export default {
 
     [SET_CHAT_MESSAGES](state, payload = {}) {
         const { chatId = null, title = '', messages = [] } = payload;
-        state.items.find((chat) => chat.id === chatId).isRead = true;
+        const { items = [] } = state;
+        const chat = items.find((c) => c.id === chatId);
+        if (chat) chat.isRead = true;
+
         state.chatId = chatId;
         state.title = title;
         state.messages = messages;

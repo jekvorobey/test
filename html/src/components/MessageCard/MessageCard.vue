@@ -17,7 +17,7 @@
             </div>
             <div class="message-card__body-bottom">
                 <v-clamp v-if="useClamp" :max-lines="1" autoresize>{{ message }}</v-clamp>
-                <span v-else>{{ message }}</span>
+                <v-html v-else v-html="messageHtml" />
             </div>
             <span class="text-sm text-grey message-card__body-date-mobile">{{ date }}</span>
         </div>
@@ -25,14 +25,15 @@
 </template>
 
 <script>
+import VHtml from '@controls/VHtml/VHtml.vue';
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VClamp from 'vue-clamp';
 
 import { mapState } from 'vuex';
-
 import { NAME as AUTH_MODULE, USER } from '@store/modules/Auth';
 
+import Autolinker from 'autolinker';
 import { generateFileOriginalPath } from '@util/file';
 import '@images/sprites/logo.svg';
 import './MessageCard.css';
@@ -44,6 +45,7 @@ export default {
         VSvg,
         VPicture,
         VClamp,
+        VHtml,
     },
 
     props: {
@@ -96,13 +98,22 @@ export default {
         ...mapState(AUTH_MODULE, [USER]),
 
         iconText() {
-            return `${this[USER].firstName ? this[USER].firstName.slice(0, 1) : ''}${
-                this[USER].lastName ? this[USER].lastName.slice(0, 1) : ''
-            }`;
+            const { firstName, lastName } = this[USER] || {};
+            return `${firstName ? firstName.slice(0, 1) : ''}${lastName ? lastName.slice(0, 1) : ''}`;
         },
 
         avatar() {
-            return generateFileOriginalPath(this[USER].avatar);
+            const { avatar } = this[USER] || {};
+            return avatar && generateFileOriginalPath(avatar);
+        },
+
+        messageHtml() {
+            const { message } = this;
+
+            return Autolinker.link(message, {
+                stripPrefix: false,
+                replaceFn: (match) => match.getType() === 'url' && /https?:\/\//.test(match.getUrl()),
+            });
         },
     },
 
