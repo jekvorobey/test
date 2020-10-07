@@ -236,8 +236,10 @@ export default {
                     params: { type: toType },
                     query: {
                         page = 1,
-                        orderField = productGroupSortFields.CREATED_AT,
-                        orderDirection = sortDirections.DESC,
+                        orderField = toType === productGroupTypes.BRANDS
+                            ? productGroupSortFields.NAME
+                            : productGroupSortFields.CREATED_AT,
+                        orderDirection = toType === productGroupTypes.BRANDS ? sortDirections.ASC : sortDirections.DESC,
                     },
                 } = to;
 
@@ -277,14 +279,20 @@ export default {
         const {
             fullPath,
             params: { type: toType },
-            query: { page = 1, orderField = productGroupSortFields.CREATED_AT, orderDirection = sortDirections.DESC },
+            query: {
+                page = 1,
+                orderField = toType === productGroupTypes.BRANDS
+                    ? productGroupSortFields.NAME
+                    : productGroupSortFields.CREATED_AT,
+                orderDirection = toType === productGroupTypes.BRANDS ? sortDirections.ASC : sortDirections.DESC,
+            },
         } = to;
 
         const { loadPath, type } = $store.state[PRODUCT_GROUPS_MODULE];
 
         // если все загружено, пропускаем
         if (loadPath === fullPath && type === toType)
-            next(vm => {
+            next((vm) => {
                 if (!vm.$isServer && vm[SCROLL]) {
                     window.scrollTo({
                         top: 0,
@@ -304,7 +312,7 @@ export default {
                 })
                 .then(() => {
                     $store.dispatch(`${PRODUCT_GROUPS_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                         if (!vm.$isServer && vm[SCROLL]) {
                             window.scrollTo({
@@ -313,7 +321,7 @@ export default {
                         }
                     });
                 })
-                .catch(error => {
+                .catch((error) => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
                     else next(new Error(error.message));
