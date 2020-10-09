@@ -3,7 +3,7 @@
         <span class="breadcrumb-item__link" v-if="disabled">
             <slot />
         </span>
-        <router-link class="breadcrumb-item__link" v-else :to="to" :disabled="disabled">
+        <router-link class="breadcrumb-item__link" v-else :to="to">
             <slot />
         </router-link>
     </li>

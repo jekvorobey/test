@@ -10,7 +10,12 @@
         @mouseleave="onMouseOver(false)"
     >
         <div class="category-tree-item__label">
-            <router-link class="category-tree-item__link" v-if="isInteractive" :to="url" :exact="item.code === ''">
+            <router-link
+                class="category-tree-item__link"
+                v-if="isInteractive && !sameRoute"
+                :to="url"
+                :exact="item.code === ''"
+            >
                 {{ item.name }}
             </router-link>
             <span class="category-tree-item__link" v-else>
@@ -68,14 +73,14 @@ export default {
 
     computed: {
         ...mapState('route', {
-            type: (state) => state.params.type,
-            entityCode: (state) => state.params.entityCode,
+            type: state => state.params.type,
+            entityCode: state => state.params.entityCode,
         }),
         ...mapGetters(CATALOG_MODULE, [ROOT_CATEGORY, ACTIVE_CATEGORIES]),
 
         isActive() {
             const activeCategories = this[ACTIVE_CATEGORIES] || [];
-            return activeCategories.some((c) => c.code === this.item.code);
+            return activeCategories.some(c => c.code === this.item.code);
         },
 
         isRoot() {
@@ -109,6 +114,12 @@ export default {
                 path: generateCategoryUrl(type, entityCode, rootCategory ? !isRoot && code : code),
                 query: { ...this.$route.query, page: undefined },
             };
+        },
+
+        sameRoute() {
+            const { url, $router, $route } = this;
+            const { href } = $router.resolve(url);
+            return href === $route.fullPath;
         },
 
         hasChildren() {

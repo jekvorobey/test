@@ -16,7 +16,7 @@ export default {
     routes: [
         {
             name: 'Favorites',
-            path: '/favorites',
+            path: '/favorites/',
             component: FavoritesAsync,
 
             meta: {

@@ -59,7 +59,7 @@ export default {
             },
         }
     ) {
-        return pathMatch ? pathMatch.split('/') : [];
+        return pathMatch ? pathMatch.split('/').filter((s) => s !== '') : [];
     },
 
     [FILTER_SEGMENTS](state, getters) {
