@@ -17,7 +17,7 @@ export default {
     routes: [
         {
             name: 'CatalogMasterclasses',
-            path: '/masterclasses',
+            path: '/masterclasses/',
             component: MasterclassesAsync,
 
             meta: {

@@ -36,7 +36,7 @@
                         <li class="mobile-menu__menu-item" v-for="category in currentCategories" :key="category.id">
                             <v-link
                                 class="mobile-menu__menu-link"
-                                :to="`/catalog/${category.code}`"
+                                :to="category.url"
                                 :class="{ 'mobile-menu__menu-link--final': !(category.items && category.items.length) }"
                             >
                                 {{ category.name }}
@@ -231,7 +231,7 @@
                     >
                         <v-link
                             class="mobile-menu__menu-link"
-                            :to="`/catalog/${category.code}`"
+                            :to="category.url"
                             :class="{ 'mobile-menu__menu-link--final': !(category.items && category.items.length) }"
                         >
                             {{ category.name }}
@@ -278,6 +278,7 @@ import { FAVORITE_ITEMS_COUNT } from '@store/modules/Favorites/getters';
 
 import { modalName, authMode } from '@enums';
 import { productGroupTypes } from '@enums/product';
+import { generateCategoryUrl } from '@util/catalog';
 import '@images/sprites/socials/telegram.svg';
 import '@images/sprites/socials/telegram-hover.svg';
 import '@images/sprites/socials/whatsup-bw.svg';
@@ -364,7 +365,7 @@ export default {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(FAVORITES_MODULE, [FAVORITE_ITEMS_COUNT]),
         ...mapState(GEO_MODULE, {
-            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
 
         favoriteItemsIcon() {
@@ -376,7 +377,8 @@ export default {
         },
 
         currentCategories() {
-            return this.selectedCategory ? this.selectedCategory.items : this.categories;
+            const categories = this.selectedCategory ? this.selectedCategory.items : this.categories;
+            return categories.map((c) => ({ ...c, url: generateCategoryUrl(productGroupTypes.CATALOG, null, c.code) }));
         },
 
         selectedCategory() {
@@ -393,7 +395,7 @@ export default {
 
         headerMenuItems() {
             const { isTablet, headerMenu: { items = [] } = {} } = this;
-            return !isTablet ? items.filter(i => i.url && !i.url.includes('/catalog')) : items;
+            return !isTablet ? items.filter((i) => i.url && !i.url.includes('/catalog')) : items;
         },
 
         isTabletLg() {
