@@ -1,6 +1,9 @@
 <template>
     <section class="section referal-view">
-        <h2 class="referal-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+        <h2 class="referal-view__hl">
+            {{ pageTitle }}
+        </h2>
+
         <div class="referal-view__panels" v-if="referralData && level">
             <div class="referal-view__panel">
                 <div class="referal-view__panel-group">
@@ -367,6 +370,7 @@ import { generateProductUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { generateReferralLink } from '@util/profile';
 import { getOrderFilterDate } from '@util/order';
+import metaMixin from '@plugins/meta';
 import '@images/sprites/logo.svg';
 import '@images/sprites/arrow-down-small.svg';
 import './Referal.css';
@@ -377,6 +381,7 @@ const ReferralChart = () =>
 
 export default {
     name: 'referal',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -396,6 +401,13 @@ export default {
         MessageModal,
 
         ReferralChart,
+    },
+
+    metaInfo() {
+        const { pageTitle, activePage } = this;
+        return {
+            title: activePage > 1 ? `${pageTitle} – страница ${activePage}` : pageTitle,
+        };
     },
 
     data() {
@@ -508,6 +520,10 @@ export default {
             });
         },
 
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
+        },
+
         isTabletLg() {
             return this.$mq.tabletLg;
         },
@@ -573,7 +589,10 @@ export default {
 
         onPageChanged(page) {
             this.showMore = false;
-            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+            this.$router.push({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: page > DEFAULT_PAGE ? page : undefined },
+            });
         },
 
         formatArcSum(sum) {

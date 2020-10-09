@@ -1,6 +1,8 @@
 <template>
     <section class="section account-view">
-        <h2 class="account-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+        <h2 class="account-view__hl">
+            {{ pageTitle }}
+        </h2>
 
         <div class="account-view__panels" v-if="billingData">
             <div class="account-view__panel">
@@ -222,13 +224,14 @@ import { currencySymbol, modalName, themeCodes } from '@enums';
 import { cardIdentificationStatus } from '@enums/profile';
 import { preparePrice, saveToClipboard, getDate } from '@util';
 import { generateYandexCardAuthUrl, generateYandexCardAuthBackUrl, generateReferralLink } from '@util/profile';
-
+import metaMixin from '@plugins/meta';
 import './Account.css';
 
 const BILLING_MODULE_PATH = `${PROFILE_MODULE}/${BILLING_MODULE}`;
 
 export default {
     name: 'account',
+    mixins: [metaMixin],
 
     components: {
         VLink,
@@ -244,6 +247,13 @@ export default {
         MessageModal,
     },
 
+    metaInfo() {
+        const { pageTitle, activePage } = this;
+        return {
+            title: activePage > 1 ? `${pageTitle} – страница ${activePage}` : pageTitle,
+        };
+    },
+
     data() {
         return {
             showMore: false,
@@ -256,10 +266,10 @@ export default {
         ...mapState([LOCALE]),
         ...mapState(BILLING_MODULE_PATH, [BILLING_DATA, ITEMS, ACTIVE_PAGE, SELECTED_CARD, CARD_CREATION_STATUS]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
+            [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || false,
         }),
         ...mapState(MODAL_MODULE, {
-            isMessageOpen: state =>
+            isMessageOpen: (state) =>
                 state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
         }),
 
@@ -282,7 +292,7 @@ export default {
 
         cards() {
             const { cards = [] } = this[BILLING_DATA] || {};
-            const cardList = cards.map(c => ({
+            const cardList = cards.map((c) => ({
                 ...c,
                 label: `${c.card_type} ${c.card_panmask}`,
             }));
@@ -293,7 +303,7 @@ export default {
 
         operations() {
             const items = this[ITEMS] || [];
-            return items.map(i => {
+            return items.map((i) => {
                 const date =
                     i.created_at && getDate(i.created_at).toLocaleDateString(this[LOCALE], monthLongDateSettings);
                 const type = this.$t(`billingOperationType.${i.type}`);
@@ -306,10 +316,6 @@ export default {
             });
         },
 
-        isTabletLg() {
-            return this.$mq.tabletLg;
-        },
-
         sumInputPlaceholder() {
             const { limits } = this.billingData;
             return limits.min !== null ? `Сумма от ${limits.min && limits.min.toLocaleString()} ₽` : '';
@@ -319,6 +325,14 @@ export default {
             return this.billingData.referral_bill.value > this.billingData.limits.max
                 ? this.billingData.limits.max
                 : this.billingData.referral_bill.value;
+        },
+
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
+        },
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
         },
     },
 
@@ -372,7 +386,10 @@ export default {
 
         onPageChanged(page) {
             this.showMore = false;
-            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+            this.$router.push({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: page > DEFAULT_PAGE ? page : undefined },
+            });
         },
 
         onCopyToClipboard(e) {
@@ -425,15 +442,15 @@ export default {
                 .dispatch(`${BILLING_MODULE_PATH}/${FETCH_BILLING_DATA}`, {
                     page,
                 })
-                .then(data => {
+                .then((data) => {
                     $store.dispatch(`${BILLING_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                     });
                 })
-                .catch(thrown => {
+                .catch((thrown) => {
                     if (thrown && thrown.isCancel === true) return next();
-                    next(vm => {
+                    next((vm) => {
                         $progress.fail();
                     });
                 });

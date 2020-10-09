@@ -6,9 +6,9 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="masterclasses" :to="{ name: 'CatalogMasterclasses' }">
-                    {{ $t('masterclasses.title') }}
-                </breadcrumb-item>
+                <breadcrumb-item key="masterclasses" :to="rootUrl" :disabled="rootUrl === $route.fullPath">{{
+                    catalogTitle
+                }}</breadcrumb-item>
             </breadcrumbs>
 
             <!-- <section class="section masterclasses-view__banners">
@@ -34,8 +34,9 @@
                 <div class="masterclasses-view__sets-header-top">
                     <h1
                         class="container container--tablet masterclasses-view__section-hl masterclasses-view__sets-header-hl"
+                        v-if="activePage === 1 || isMounted"
                     >
-                        <span>{{ $t('masterclasses.title') }}</span>
+                        <span>{{ catalogTitle }}</span>
                         <span class="text-grey masterclasses-view__sets-header-hl-count">
                             {{ range }} {{ eventsLabel }}
                         </span>
@@ -178,7 +179,7 @@
         </section>
 
         <!-- #62050
-        <section class="section masterclasses-view__section masterclasses-view__seo">
+        <section class="section masterclasses-view__section masterclasses-view__seo" v-if="activePage === 1 || isMounted">
             <div class="container masterclasses-view__seo-container">
                 <h2 class="masterclasses-view__section-hl masterclasses-view__seo-hl">Блок SEO текста</h2>
                 <v-expander class="masterclasses-view__seo-text" :min-height="80" has-mask>
@@ -281,8 +282,9 @@ import {
 } from '@store/modules/Masterclass/actions';
 
 import _debounce from 'lodash/debounce';
+import metaMixin from '@plugins/meta';
 import { $store, $progress, $logger } from '@services';
-import { MIN_SCROLL_VALUE } from '@constants';
+import { MIN_SCROLL_VALUE, DEFAULT_PAGE } from '@constants';
 import { fileExtension } from '@enums';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { pluralize, getDate } from '@util';
@@ -294,7 +296,6 @@ import {
     computeFilterMasterclassData,
     prepareMasterclassSpeakers,
 } from '@util/catalog';
-
 import '@images/sprites/home.svg';
 import './Masterclasses.css';
 
@@ -324,6 +325,7 @@ const sliderOptions = {
 
 export default {
     name: 'masterclasses',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -351,8 +353,16 @@ export default {
         EmptyPlaceholderPanel,
     },
 
+    metaInfo() {
+        const { catalogTitle, activePage } = this;
+        return {
+            title: activePage > 1 ? `${catalogTitle} – страница ${activePage}` : catalogTitle,
+        };
+    },
+
     data() {
         return {
+            isMounted: false,
             showMore: false,
             filterModal: false,
 
@@ -435,32 +445,32 @@ export default {
             const map = {};
 
             for (const key in filterSegments) {
-                const filter = this[NULLABLE_FILTERS].find(f => f.name === key);
+                const filter = this[NULLABLE_FILTERS].find((f) => f.name === key);
                 const keys = Object.keys(filterSegments[key]);
-                map[key] = filter.items.find(i => i.code === filterSegments[key][keys[0]]) || filter.items[0];
+                map[key] = filter.items.find((i) => i.code === filterSegments[key][keys[0]]) || filter.items[0];
             }
             return map;
         },
 
         professions() {
             const filters = this[NULLABLE_FILTERS] || [];
-            return filters.find(f => f.name === 'profession');
+            return filters.find((f) => f.name === 'profession');
         },
 
         times() {
             const filters = this[NULLABLE_FILTERS] || [];
-            return filters.find(f => f.name === 'time');
+            return filters.find((f) => f.name === 'time');
         },
 
         filters() {
             const filters = this[NULLABLE_FILTERS] || [];
-            return filters.filter(f => this.isTabletLg || (f.name !== 'profession' && f.name !== 'time'));
+            return filters.filter((f) => this.isTabletLg || (f.name !== 'profession' && f.name !== 'time'));
         },
 
         masterclasses() {
             const items = this[ITEMS] || [];
 
-            return items.map(i => {
+            return items.map((i) => {
                 const dateObj = getDate(`${i.nearestDate} ${i.nearestTimeFrom}`);
                 const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
@@ -485,6 +495,14 @@ export default {
 
         sliderOptions() {
             return sliderOptions;
+        },
+
+        catalogTitle() {
+            return this.$t('masterclasses.title');
+        },
+
+        rootUrl() {
+            return '/masterclasses/';
         },
 
         isTablet() {
@@ -518,10 +536,6 @@ export default {
             this.$router.replace({ path });
         },
 
-        generateMasterclassUrl(code) {
-            return generateMasterclassUrl(code);
-        },
-
         onShowMore() {
             this.showMore = true;
             this.$router.replace({
@@ -532,7 +546,10 @@ export default {
 
         onPageChanged(page) {
             this.showMore = false;
-            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+            this.$router.push({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: page > DEFAULT_PAGE ? page : undefined },
+            });
         },
 
         async fetchCatalog(to, from, showMore) {
@@ -540,29 +557,28 @@ export default {
                 const {
                     fullPath,
                     params: { pathMatch },
-                    query: { page = 1 },
+                    query: { page = DEFAULT_PAGE },
                 } = to;
 
                 const {
-                    query: { page: fromPage = 1 },
+                    query: { page: fromPage = DEFAULT_PAGE },
                 } = from;
 
                 const { filter, routeSegments, filterSegments } = computeFilterMasterclassData(pathMatch);
-
-                this.$progress.start();
-                await this[FETCH_MASTERCLASS_ITEMS]({ page, filter, showMore });
-                this.$progress.finish();
 
                 if (!showMore && this[SCROLL] && page !== fromPage)
                     window.scrollTo({
                         top: MIN_SCROLL_VALUE + 1,
                         behavior: 'smooth',
                     });
+
+                this.$progress.start();
+                await this[FETCH_MASTERCLASS_ITEMS]({ page, filter, showMore });
+                this.$progress.finish();
+
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
             } catch (error) {
-                $logger.error(error);
                 this.$progress.fail();
-                this.$progress.finish();
             }
         },
     },
@@ -575,7 +591,7 @@ export default {
         const {
             fullPath,
             params: { pathMatch },
-            query: { page = 1, orderField, orderDirection },
+            query: { page = DEFAULT_PAGE, orderField, orderDirection },
         } = to;
 
         const { loadPath } = $store.state[MASTERCLASSES_MODULE];
@@ -593,10 +609,10 @@ export default {
                 })
                 .then(() => {
                     $store.dispatch(`${MASTERCLASSES_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => $progress.finish());
+                    next((vm) => $progress.finish());
                 })
-                .catch(error => {
-                    next(vm => {
+                .catch((error) => {
+                    next((vm) => {
                         $progress.fail();
                         $progress.finish();
                     });
@@ -619,6 +635,10 @@ export default {
 
     beforeMount() {
         this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
+    },
+
+    mounted() {
+        this.isMounted = true;
     },
 };
 </script>

@@ -4,12 +4,13 @@ import { breakpoints } from '@enums';
 const MQ = 'GREENSIGHT_MEDIA_MQ';
 const MQMAP = 'GREENSIGHT_MEDIA_MQ_MAP';
 
-const MediaPlugin = vue => {
+const MediaPlugin = (vue) => {
     Object.defineProperty(Vue.prototype, '$mq', {
         get() {
             return this[MQ];
         },
     });
+
     vue.mixin({
         beforeCreate() {
             const isRoot = this === this.$root;
@@ -27,14 +28,15 @@ const MediaPlugin = vue => {
                     configurable: true,
                     get() {
                         return Object.keys(this)
-                            .filter(k => k !== 'all')
-                            .filter(k => this[k]);
+                            .filter((k) => k !== 'all')
+                            .filter((k) => this[k]);
                     },
                 });
 
                 Vue.util.defineReactive(this, MQ, observed);
             } else if (inherited) Vue.util.defineReactive(this, MQ, this.$parent[MQ]);
         },
+
         mounted() {
             const isRoot = this === this.$root;
             const inherited = this.$parent && this.$parent[MQ];
@@ -43,10 +45,10 @@ const MediaPlugin = vue => {
                 this[MQMAP] = {};
 
                 const mergedKeys = Object.keys(this.$options.mq);
-                mergedKeys.forEach(k => {
+                mergedKeys.forEach((k) => {
                     const ownQuery = this.$options.mq[k];
                     const mql = ownQuery ? window.matchMedia(ownQuery) : inherited[k];
-                    const handler = e => {
+                    const handler = (e) => {
                         this[MQ][k] = e.matches;
                     };
                     mql.addListener(handler);
@@ -56,12 +58,13 @@ const MediaPlugin = vue => {
                 });
             }
         },
+
         beforeDestroy() {
             const isRoot = this === this.$root;
             const inherited = this.$parent && this.$parent[MQ];
 
             if (isRoot && this.$options.mq) {
-                Object.keys(this[MQMAP]).forEach(key => {
+                Object.keys(this[MQMAP]).forEach((key) => {
                     const map = this[MQMAP][key];
                     map.mql.removeListener(map.handler);
                     map.mql = null;

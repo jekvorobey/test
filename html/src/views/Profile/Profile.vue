@@ -7,18 +7,18 @@
                         <v-svg v-if="isTablet" name="home" width="10" height="10" />
                         <span v-else>Главная</span></breadcrumb-item
                     >
-                    <breadcrumb-item key="Cabinet" :to="{ name: 'Cabinet' }">
-                        {{ $t('profile.routes.Cabinet') }}
+                    <breadcrumb-item key="Cabinet" :to="{ name: 'Cabinet' }"
+                        >{{ $t('profile.routes.Cabinet') }}
                     </breadcrumb-item>
                     <breadcrumb-item
                         v-if="$route.name !== 'Cabinet' && breadcrumbs && breadcrumbs.length === 0"
                         :key="$route.name"
                         :to="$route.path"
-                    >
-                        {{ $t(`profile.routes.${$route.name}`) }}
+                        :disabled="$route.path === $route.fullPath"
+                        >{{ routeTitle }}
                     </breadcrumb-item>
-                    <breadcrumb-item v-for="breadcrumb in breadcrumbs" :key="breadcrumb.name" :to="breadcrumb.to">
-                        {{ breadcrumb.name }}
+                    <breadcrumb-item v-for="breadcrumb in breadcrumbs" :key="breadcrumb.name" :to="breadcrumb.to"
+                        >{{ breadcrumb.name }}
                     </breadcrumb-item>
                 </breadcrumbs>
 
@@ -181,6 +181,10 @@ export default {
             // });
 
             return groups;
+        },
+
+        routeTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
         },
 
         isTabletLg() {

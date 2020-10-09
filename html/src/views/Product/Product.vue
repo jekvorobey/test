@@ -5,14 +5,15 @@
                 <v-svg v-if="isTablet" name="home" width="10" height="10" />
                 <span v-else>Главная</span></breadcrumb-item
             >
-            <breadcrumb-item key="Catalog" :to="{ name: 'Catalog' }">Каталог</breadcrumb-item>
-            <breadcrumb-item
-                v-for="category in product.categoryCodes"
-                :key="category.code"
-                :to="generateBreadcrumbUrl(category.code)"
-                >{{ category.name }}</breadcrumb-item
-            >
-            <breadcrumb-item :key="product.id" :to="{ path: $route.path }">{{ product.title }}</breadcrumb-item>
+            <breadcrumb-item key="Catalog" :to="rootUrl">
+                Каталог
+            </breadcrumb-item>
+            <breadcrumb-item v-for="category in categoryBreadcrumbs" :key="category.code" :to="category.url">{{
+                category.name
+            }}</breadcrumb-item>
+            <breadcrumb-item :key="product.id" disabled>
+                {{ product.title }}
+            </breadcrumb-item>
         </breadcrumbs>
 
         <section class="section">
@@ -739,7 +740,7 @@ import {
 import { createNotFoundRoute } from '@util/router';
 import { breakpoints, fileExtension, httpCodes, modalName, sortDirections } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
-import { generateCategoryUrl, generateProductUrl, prepareProductImage } from '@util/catalog';
+import { generateCategoryUrl, generateProductUrl, prepareProductImage, generateProductGroupUrl } from '@util/catalog';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/facebook-bw.svg';
@@ -885,21 +886,21 @@ export default {
         ...mapState(PRODUCT_MODULE, [PRODUCT, PRODUCT_OPTIONS, BANNERS, FEATURED_PRODUCTS, PRODUCT_BUNDLES]),
 
         ...mapState(MODAL_MODULE, {
-            isGalleryOpen: state =>
+            isGalleryOpen: (state) =>
                 state[MODALS][modalName.product.GALLERY] && state[MODALS][modalName.product.GALLERY].open,
-            isModalOpen: state => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
+            isModalOpen: (state) => state[MODALS][MAP_MODAL_NAME] && state[MODALS][MAP_MODAL_NAME].open,
         }),
 
         ...mapState('route', {
-            code: state => state.params.code,
-            categoryCode: state => state.params.categoryCode,
-            refCode: state => state.query.refCode,
-            modal: state => state.query.modal,
+            code: (state) => state.params.code,
+            categoryCode: (state) => state.params.categoryCode,
+            refCode: (state) => state.query.refCode,
+            modal: (state) => state.query.modal,
         }),
 
         recentlyViewed() {
             const items = this[RECENTLY_VIEWED_PRODUCTS] || [];
-            return items.map(i => {
+            return items.map((i) => {
                 const { code, categoryCodes } = i;
                 const categoryCode = categoryCodes && categoryCodes[categoryCodes.length - 1];
 
@@ -933,12 +934,12 @@ export default {
 
         productCharacteristics() {
             const { characteristics = [] } = this[PRODUCT] || {};
-            return characteristics && characteristics.filter(c => !!c.value);
+            return characteristics && characteristics.filter((c) => !!c.value);
         },
 
         productIngredients() {
             const { ingredients = [] } = this[PRODUCT] || {};
-            return ingredients && ingredients.filter(i => !!i);
+            return ingredients && ingredients.filter((i) => !!i);
         },
 
         productVideos() {
@@ -966,7 +967,7 @@ export default {
 
         productImages() {
             const imageMap = {};
-            const { brand, howto, description, media } = this.product;
+            const { brand, howto, description, media } = this[PRODUCT] || {};
 
             if (brand && brand.image) {
                 imageMap.brand = {
@@ -996,8 +997,8 @@ export default {
             }
 
             if (Array.isArray(media) && media.length > 0) {
-                imageMap.media = media.map(image => prepareProductImage(image, desktopSize, tabletSize));
-                imageMap.gallery = media.map(image => prepareProductImage(image, gallerySize));
+                imageMap.media = media.map((image) => prepareProductImage(image, desktopSize, tabletSize));
+                imageMap.gallery = media.map((image) => prepareProductImage(image, gallerySize));
             } else {
                 imageMap.media = [];
                 imageMap.gallery = [];
@@ -1012,6 +1013,18 @@ export default {
 
             const mainImage = optionImage && prepareProductImage(optionImage, desktopSize, tabletSize);
             return mainImage ? [mainImage, ...media.slice(1)] : media;
+        },
+
+        categoryBreadcrumbs() {
+            const { categoryCodes = [] } = this[PRODUCT] || {};
+            return categoryCodes.map((c) => ({
+                ...c,
+                url: generateCategoryUrl(productGroupTypes.CATALOG, null, c.code),
+            }));
+        },
+
+        rootUrl() {
+            return generateProductGroupUrl(productGroupTypes.CATALOG);
         },
 
         maxDescriptionLines() {
@@ -1108,10 +1121,6 @@ export default {
                 else next(false);
                 this.$progress.finish();
             }
-        },
-
-        generateBreadcrumbUrl(code) {
-            return { path: generateCategoryUrl(productGroupTypes.CATALOG, null, code) };
         },
 
         handleModalQuery(value) {
@@ -1270,18 +1279,18 @@ export default {
         const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
         // если все загружено, пропускаем
-        if (productCode === code && referrerCode === refCode) next(vm => vm.handleModalQuery(modal));
+        if (productCode === code && referrerCode === refCode) next((vm) => vm.handleModalQuery(modal));
         else {
             $progress.start();
             $store
                 .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
                 .then(() => {
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                         vm.handleModalQuery(modal);
                     });
                 })
-                .catch(error => {
+                .catch((error) => {
                     $progress.fail();
                     if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
                     else next(new Error(error.message));
