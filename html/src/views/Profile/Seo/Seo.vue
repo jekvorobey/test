@@ -1,7 +1,10 @@
 <template>
     <section class="section seo-view">
         <div class="container container--tablet-lg seo-view__header">
-            <h2 class="seo-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+            <h2 class="seo-view__hl">
+                {{ pageTitle }}
+            </h2>
+
             <radio-switch
                 class="seo-view__switch"
                 v-model="selectedActiveStatus"
@@ -136,12 +139,12 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { $store, $progress } from '@services';
 import { fileExtension, modalName } from '@enums';
-import { MIN_SCROLL_VALUE } from '@constants';
+import { MIN_SCROLL_VALUE, DEFAULT_PAGE } from '@constants';
 import { saveToClipboard, downloadFile } from '@util';
 import { registerModuleIfNotExists } from '@util/store';
 import { generatePictureSourcePath } from '@util/file';
 import { generateProductUrl, generateAbsoluteProductUrl, prepareProductImage } from '@util/catalog';
-
+import metaMixin from '@plugins/meta';
 import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/download.svg';
@@ -153,6 +156,7 @@ const SEO_MODULE_PATH = `${PROFILE_MODULE}/${SEO_MODULE}`;
 
 export default {
     name: 'seo',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -166,6 +170,13 @@ export default {
         InfoPanel,
         ShowMoreButton,
         GalleryModal,
+    },
+
+    metaInfo() {
+        const { pageTitle, activePage } = this;
+        return {
+            title: activePage > 1 ? `${pageTitle} – страница ${activePage}` : pageTitle,
+        };
     },
 
     data() {
@@ -191,11 +202,11 @@ export default {
         ...mapState(SEO_MODULE_PATH, [ITEMS, ACTIVE_PAGE, GALLERY_IMAGES]),
         ...mapGetters(SEO_MODULE_PATH, [PAGES_COUNT]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || null,
+            [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || null,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isGalleryOpen: state =>
+            isGalleryOpen: (state) =>
                 state[MODALS][modalName.product.GALLERY] && state[MODALS][modalName.product.GALLERY].open,
         }),
 
@@ -203,13 +214,21 @@ export default {
             const items = this[ITEMS] || [];
             const referralCode = this[REFERRAL_CODE];
 
-            return items.map(i => {
+            return items.map((i) => {
                 return {
                     ...i,
                     link: generateAbsoluteProductUrl(i.category_code, i.product_code, referralCode),
-                    files: i.files.map(f => prepareProductImage(f)),
+                    files: i.files.map((f) => prepareProductImage(f)),
                 };
             });
+        },
+
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
+        },
+
+        iconSize() {
+            return this.$mq.tablet ? 24 : 16;
         },
 
         isTabletLg() {
@@ -218,10 +237,6 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
-        },
-
-        iconSize() {
-            return this.$mq.tablet ? 24 : 16;
         },
     },
 
@@ -269,7 +284,10 @@ export default {
 
         onPageChanged(page) {
             this.showMore = false;
-            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+            this.$router.push({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: page > DEFAULT_PAGE ? page : undefined },
+            });
         },
 
         async fetchProducts(to, from, showMore) {
@@ -301,7 +319,6 @@ export default {
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
             } catch (thrown) {
                 if (thrown && thrown.isCancel === true) return;
-                console.log(thrown.message);
                 this.$progress.fail();
             }
         },
@@ -310,20 +327,20 @@ export default {
     beforeRouteEnter(to, from, next) {
         const {
             fullPath,
-            query: { isActive = 1, page = 1 },
+            query: { isActive = 1, page = DEFAULT_PAGE },
         } = to;
 
         const { loadPath } = $store.state[PROFILE_MODULE][SEO_MODULE];
 
-        if (loadPath === fullPath) next(vm => vm.setStatus(isActive));
+        if (loadPath === fullPath) next((vm) => vm.setStatus(isActive));
         else {
             $store
                 .dispatch(`${SEO_MODULE_PATH}/${FETCH_PRODUCTS}`, { page, isActive })
                 .then(() => {
                     $store.dispatch(`${SEO_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => vm.setStatus(isActive));
+                    next((vm) => vm.setStatus(isActive));
                 })
-                .catch(error => {
+                .catch((error) => {
                     $progress.fail();
                     next();
                 });

@@ -3,7 +3,7 @@
         <div class="promopage-view__header">
             <div class="promopage-view__header-title">
                 <h2 class="promopage-view__hl">
-                    {{ $t(`profile.routes.${$route.name}`) }}
+                    {{ pageTitle }}
                 </h2>
 
                 <span class="text-grey text-sm" v-if="range > 0">
@@ -20,7 +20,7 @@
                     &nbsp;&nbsp;{{ !isDesktop ? 'Скопировать ссылку' : 'Скопировать' }}
                 </v-link>
 
-                <v-button class="btn--outline promopage-view__panel-btn" @click="loadPreview">
+                <v-button class="btn--outline promopage-view__panel-btn" :to="previewUrl">
                     Предпросмотр
                 </v-button>
             </div>
@@ -145,8 +145,9 @@ import {
     FETCH_PROMOPAGE_DATA,
 } from '@store/modules/Profile/modules/Promopage/actions';
 
+import metaMixin from '@plugins/meta';
 import { saveToClipboard, pluralize } from '@util';
-import { generateProductUrl } from '@util/catalog';
+import { generateProductUrl, generateRe, generateReferrerUrl } from '@util/catalog';
 import { generateReferralPromopageLink } from '@util/profile';
 import { DEFAULT_PAGE } from '@constants';
 import { modalName } from '@enums';
@@ -163,6 +164,7 @@ const PROMOPAGE_MODULE_PATH = `${PROFILE_MODULE}/${PROMOPAGE_MODULE}`;
 
 export default {
     name: 'promopage',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -179,6 +181,14 @@ export default {
         PromopageAddByLinkModal,
     },
 
+    metaInfo() {
+        const { pageTitle, activePage } = this;
+
+        return {
+            title: activePage > 1 ? `${pageTitle} – страница ${activePage}` : pageTitle,
+        };
+    },
+
     data() {
         return {
             showMore: false,
@@ -190,22 +200,22 @@ export default {
         ...mapGetters(PROMOPAGE_MODULE_PATH, [PAGES_COUNT]),
 
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || null,
+            [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || null,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isNameEditOpen: state =>
+            isNameEditOpen: (state) =>
                 state[MODALS][modalName.profile.PROMO_EDIT] && state[MODALS][modalName.profile.PROMO_EDIT].open,
-            isProductAddOpen: state =>
+            isProductAddOpen: (state) =>
                 state[MODALS][modalName.profile.PROMO_ADD] && state[MODALS][modalName.profile.PROMO_ADD].open,
-            isProductAddByLinkOpen: state =>
+            isProductAddByLinkOpen: (state) =>
                 state[MODALS][modalName.profile.PROMO_ADD_BY_LINK] &&
                 state[MODALS][modalName.profile.PROMO_ADD_BY_LINK].open,
         }),
 
         products() {
             const items = this[ITEMS] || [];
-            return items.map(item => {
+            return items.map((item) => {
                 return {
                     ...item,
                     href: generateProductUrl(item.categoryCodes[item.categoryCodes.length - 1], item.code),
@@ -215,30 +225,33 @@ export default {
             });
         },
 
+        previewUrl() {
+            const referrerCode = this[REFERRAL_CODE];
+            return referrerCode ? generateReferrerUrl(referrerCode) : '/';
+        },
+
         productName() {
             return pluralize(this[RANGE], ['продукт', 'продукта', 'продуктов']);
         },
 
-        isTablet() {
-            return this.$mq.tablet;
+        iconSize() {
+            return this.$mq.tablet ? 24 : 16;
         },
 
-        isTabletLg() {
-            return this.$mq.tabletLg;
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
         },
 
         isDesktop() {
             return this.$mq.desktop;
         },
 
-        iconSize() {
-            return this.$mq.tablet ? 24 : 16;
+        isTabletLg() {
+            return this.$mq.tabletLg;
         },
-    },
 
-    watch: {
-        [ACTIVE_PAGE](value) {
-            this.onPageChanged(value);
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 
@@ -288,15 +301,10 @@ export default {
 
         onPageChanged(page) {
             this.showMore = false;
-            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
-        },
-
-        loadPreview() {
-            try {
-                this.$router.push(`/referrer/${this[REFERRAL_CODE]}`);
-            } catch {
-                console.error('Ошибка в loadPreview');
-            }
+            this.$router.push({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: page > DEFAULT_PAGE ? page : undefined },
+            });
         },
     },
 
@@ -316,10 +324,10 @@ export default {
                 .dispatch(`${PROMOPAGE_MODULE_PATH}/${FETCH_PROMOPAGE_DATA}`, { page })
                 .then(() => {
                     $store.dispatch(`${PROMOPAGE_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => $progress.finish());
+                    next((vm) => $progress.finish());
                 })
-                .catch(error => {
-                    next(vm => $progress.fail());
+                .catch((error) => {
+                    next((vm) => $progress.fail());
                 });
         }
     },

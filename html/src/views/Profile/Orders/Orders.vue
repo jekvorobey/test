@@ -1,7 +1,10 @@
 <template>
     <section class="section orders-view">
         <div class="container container--tablet-lg orders-view__header">
-            <h2 class="orders-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+            <h2 class="orders-view__hl">
+                {{ pageTitle }}
+            </h2>
+
             <v-select
                 v-for="filter in filters"
                 :key="filter.id"
@@ -440,7 +443,7 @@ import { orderStatus, orderPaymentStatus, sortFields, filterField } from '@enums
 import { orderDateLocaleOptions } from '@settings/profile';
 import { sortDirections, modalName } from '@enums';
 import { DEFAULT_PAGE } from '@constants';
-
+import metaMixin from '@plugins/meta';
 import '@images/sprites/arrow-updown.svg';
 import '@images/sprites/arrow-down.svg';
 import '@images/sprites/alert.svg';
@@ -454,6 +457,7 @@ function updateBreadcrumbs(vm) {
 
 export default {
     name: 'orders',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -472,6 +476,14 @@ export default {
         ShowMoreButton,
     },
 
+    metaInfo() {
+        const { pageTitle, activePage } = this;
+
+        return {
+            title: activePage > 1 ? `${pageTitle} – страница ${activePage}` : pageTitle,
+        };
+    },
+
     data() {
         return {
             showMore: false,
@@ -485,7 +497,7 @@ export default {
         ...mapState(ORDERS_MODULE_PATH, [ORDERS, FILTERS, ORDER_DIRECTION, ORDER_FIELD, ACTIVE_PAGE, REFERRAL_DATA]),
         ...mapGetters(ORDERS_MODULE_PATH, [PAGES_COUNT, REFERRAL_ARC_DATA, SUM_ARC_DATA, LEVEL_DATA, LEVEL]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
         filterCount() {
@@ -498,7 +510,7 @@ export default {
             let count = filters.reduce((accum, current) => {
                 const { name, items } = current;
                 const code = query[name];
-                const item = code && items.find(i => i.code === code);
+                const item = code && items.find((i) => i.code === code);
                 if (item && item !== items[0]) accum += 1;
                 return accum;
             }, 0);
@@ -516,7 +528,7 @@ export default {
             const map = filters.reduce((accum, current) => {
                 const { name, items } = current;
                 const code = query[name];
-                accum[name] = (code && items.find(i => i.code === code)) || items[0];
+                accum[name] = (code && items.find((i) => i.code === code)) || items[0];
                 return accum;
             }, {});
             return map;
@@ -532,6 +544,10 @@ export default {
                 activeStroke: '#141116',
                 dashCount: 100,
             };
+        },
+
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
         },
 
         isTabletLg() {
@@ -590,7 +606,10 @@ export default {
 
         onPageChanged(page) {
             this.showMore = false;
-            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+            this.$router.push({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: page > DEFAULT_PAGE ? page : undefined },
+            });
         },
 
         scrollTo(options) {
@@ -676,7 +695,7 @@ export default {
 
         // если все загружено, пропускаем
         if (loadPath === fullPath)
-            next(vm => {
+            next((vm) => {
                 updateBreadcrumbs(vm);
             });
         else {
@@ -688,16 +707,16 @@ export default {
                     orderDirection,
                     filter,
                 })
-                .then(data => {
+                .then((data) => {
                     $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                         updateBreadcrumbs(vm);
                     });
                 })
-                .catch(thrown => {
-                    if (thrown && thrown.isCancel === true) return next(vm => updateBreadcrumbs(vm));
-                    next(vm => {
+                .catch((thrown) => {
+                    if (thrown && thrown.isCancel === true) return next((vm) => updateBreadcrumbs(vm));
+                    next((vm) => {
                         $progress.fail();
                         updateBreadcrumbs(vm);
                     });

@@ -31,10 +31,12 @@ import { mapState, mapActions } from 'vuex';
 import { NAME as LANDING_MODULE, RENDER_DATA } from '@store/modules/Landing';
 import { FETCH_LANDING_DATA } from '@store/modules/Landing/actions';
 
+import metaMixin from '@plugins/meta';
 import './Landing.css';
 
 export default {
     name: 'landing',
+    mixins: [metaMixin],
 
     components: {
         SeparatorSection,
@@ -50,13 +52,11 @@ export default {
         RetailRocketHitsSection,
     },
 
-    // head: {
-    //     title: {
-    //         inner: 'landing',
-    //         separator: '-',
-    //         complement: ' Welcome!',
-    //     },
-    // },
+    metaInfo() {
+        return {
+            title: 'Бессовестно Талантливый - главная',
+        };
+    },
 
     computed: {
         ...mapState(LANDING_MODULE, [RENDER_DATA]),

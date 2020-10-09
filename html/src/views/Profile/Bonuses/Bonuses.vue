@@ -1,6 +1,8 @@
 <template>
     <section class="section bonuses-view">
-        <h2 class="bonuses-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+        <h2 class="bonuses-view__hl">
+            {{ pageTitle }}
+        </h2>
 
         <div class="bonuses-view__panel">
             <div class="bonuses-view__panel-col">
@@ -122,6 +124,7 @@ import {
 import { SET_LOAD_PATH, FETCH_BONUSES_DATA } from '@store/modules/Profile/modules/Bonuses/actions';
 import { PAGES_COUNT } from '@store/modules/Profile/modules/Bonuses/getters';
 
+import metaMixin from '@plugins/meta';
 import { $store, $progress } from '@services';
 import { getDate } from '@util';
 import { DEFAULT_PAGE } from '@constants';
@@ -133,6 +136,7 @@ const BONUSES_MODULE_PATH = `${PROFILE_MODULE}/${BONUSES_MODULE}`;
 
 export default {
     name: 'bonuses',
+    mixins: [metaMixin],
 
     components: {
         VLink,
@@ -142,6 +146,14 @@ export default {
 
         InfoRow,
         ShowMoreButton,
+    },
+
+    metaInfo() {
+        const { pageTitle, activePage } = this;
+
+        return {
+            title: activePage > 1 ? `${pageTitle} – страница ${activePage}` : pageTitle,
+        };
     },
 
     data() {
@@ -177,6 +189,10 @@ export default {
             });
         },
 
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
+        },
+
         isTablet() {
             return this.$mq.tablet;
         },
@@ -195,7 +211,10 @@ export default {
 
         onPageChanged(page) {
             this.showMore = false;
-            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+            this.$router.push({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: page > DEFAULT_PAGE ? page : undefined },
+            });
         },
     },
 

@@ -7,7 +7,9 @@
                 <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" />
             </v-picture>
             <v-picture v-else :image="image" />
-            <v-button class="btn--outline banner-card__img-btn" :to="to">{{ buttonText }}</v-button>
+            <v-button class="btn--outline banner-card__img-btn" v-if="isMounted" :to="to">
+                {{ buttonText }}
+            </v-button>
         </div>
         <div class="banner-card__title">{{ title }}</div>
     </component>
@@ -58,6 +60,12 @@ export default {
         },
     },
 
+    data() {
+        return {
+            isMounted: false,
+        };
+    },
+
     computed: {
         url() {
             const { tag, to } = this;
@@ -76,6 +84,10 @@ export default {
                     default: generatePictureSourcePath(392, 240, image.id),
                 };
         },
+    },
+
+    mounted() {
+        this.isMounted = true;
     },
 };
 </script>

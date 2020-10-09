@@ -6,8 +6,8 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span></breadcrumb-item
                 >
-                <breadcrumb-item key="Favorites" :to="$route.fullPath">
-                    Избранное
+                <breadcrumb-item key="Favorites" :to="rootUrl" :disabled="rootUrl === $route.fullPath">
+                    {{ catalogTitle }}
                 </breadcrumb-item>
             </breadcrumbs>
         </div>
@@ -15,7 +15,7 @@
         <section class="section favorites-view__section">
             <div class="container favorites-view__header">
                 <h1 class="favorites-view__header-hl">
-                    Избранное
+                    {{ catalogTitle }}
                     <span class="favorites-view__header-counter" v-if="favoritesAll.length > 0">
                         {{ favoritesAll.length }}
                         {{ productName }}
@@ -115,17 +115,16 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { pluralize } from '@util';
-
 import { DEFAULT_PAGE } from '@constants';
 import { modalName, sortDirections } from '@enums';
-
 import { sortFields } from '@enums/favorites';
-
+import metaMixin from '@plugins/meta';
 import '@images/sprites/home.svg';
 import './Favorites.css';
 
 export default {
     name: 'favorites',
+    mixins: [metaMixin],
 
     components: {
         VButton,
@@ -137,6 +136,13 @@ export default {
         ShowMoreButton,
         Breadcrumbs,
         BreadcrumbItem,
+    },
+
+    metaInfo() {
+        const { catalogTitle, activePage } = this;
+        return {
+            title: activePage > 1 ? `${catalogTitle} – страница ${activePage}` : catalogTitle,
+        };
     },
 
     data() {
@@ -155,12 +161,20 @@ export default {
         ...mapState(FAVORITES_MODULE, [FAVORITES, FAVORITES_ALL, FAVORITES_DIRECTION, FAVORITES_FIELD, ACTIVE_PAGE]),
         ...mapGetters(FAVORITES_MODULE, [PAGES_COUNT]),
 
-        isTablet() {
-            return this.$mq.tablet;
-        },
-
         productName() {
             return pluralize(this.favoritesAll.length, ['продукт', 'продукта', 'продуктов']);
+        },
+
+        catalogTitle() {
+            return 'Избранное';
+        },
+
+        rootUrl() {
+            return '/favorites/';
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 
@@ -189,7 +203,10 @@ export default {
 
         onPageChanged(page) {
             this.showMore = false;
-            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+            this.$router.push({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: page > DEFAULT_PAGE ? page : undefined },
+            });
         },
 
         onToggleFavorite({ productId }) {
@@ -219,7 +236,7 @@ export default {
 
         setSortValue(field, direction) {
             this.sortValue =
-                this.sortOptions.find(o => o.field === field && o.direction === direction) || this.sortOptions[0];
+                this.sortOptions.find((o) => o.field === field && o.direction === direction) || this.sortOptions[0];
         },
     },
 
@@ -245,16 +262,16 @@ export default {
                 orderField,
                 orderDirection,
             })
-            .then(data => {
+            .then((data) => {
                 $store.dispatch(`${FAVORITES_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                next(vm => {
+                next((vm) => {
                     vm.setSortValue(orderField, orderDirection);
                     $progress.finish();
                 });
             })
-            .catch(thrown => {
+            .catch((thrown) => {
                 if (thrown && thrown.isCancel === true) return true;
-                next(vm => {
+                next((vm) => {
                     $progress.fail();
                 });
             });

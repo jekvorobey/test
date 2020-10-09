@@ -12,31 +12,35 @@ function getSpeakerString(speaker, withProfession = false) {
 }
 
 export function generateAbsoluteProductUrl(categoryCode, code, refCode) {
-    if (refCode) return `${$context.baseURL}/${productGroupTypes.CATALOG}/${categoryCode}/${code}?refCode=${refCode}`;
-    return `${$context.baseURL}/${productGroupTypes.CATALOG}/${categoryCode}/${code}`;
+    if (refCode) return `${$context.baseURL}/${productGroupTypes.CATALOG}/${categoryCode}/${code}/?refCode=${refCode}`;
+    return `${$context.baseURL}/${productGroupTypes.CATALOG}/${categoryCode}/${code}/`;
 }
 
 export function generateAbsoluteMasterclassUrl(code, refCode) {
-    if (refCode) return `${$context.baseURL}/masterclasses/${code}?refCode=${refCode}`;
-    return `${$context.baseURL}/masterclasses/${code}`;
+    if (refCode) return `${$context.baseURL}/masterclasses/${code}/?refCode=${refCode}`;
+    return `${$context.baseURL}/masterclasses/${code}/`;
 }
 
 export function generateProductUrl(categoryCode, code, refCode) {
-    if (refCode) return `/${productGroupTypes.CATALOG}/${categoryCode}/${code}?refCode=${refCode}`;
-    return `/${productGroupTypes.CATALOG}/${categoryCode}/${code}`;
-}
-
-export function generateMasterclassUrl(code, refCode) {
-    if (refCode) return `/masterclasses/${code}?refCode=${refCode}`;
-    return `/masterclasses/${code}`;
+    if (refCode) return `/${productGroupTypes.CATALOG}/${categoryCode}/${code}/?refCode=${refCode}`;
+    return `/${productGroupTypes.CATALOG}/${categoryCode}/${code}/`;
 }
 
 export function generateSearchUrl(search_string) {
     return `/${productGroupTypes.SEARCH}/?search_string=${search_string}`;
 }
 
+export function generateMasterclassUrl(code, refCode) {
+    if (refCode) return `/masterclasses/${code}/?refCode=${refCode}`;
+    return `/masterclasses/${code}/`;
+}
+
+export function generateReferrerUrl(code) {
+    return `/referrer/${code}/`;
+}
+
 export function generateTicketDownloadUrl(orderId, basketItemId) {
-    return orderId && basketItemId && `/v1/lk/order/${orderId}/tickets?basket_item_id=${basketItemId}`;
+    return orderId && basketItemId && `/v1/lk/order/${orderId}/tickets/?basket_item_id=${basketItemId}`;
 }
 
 export function generateCategoryUrl(type, entityCode, categoryCode) {
@@ -45,16 +49,22 @@ export function generateCategoryUrl(type, entityCode, categoryCode) {
         case productGroupTypes.NEW:
         case productGroupTypes.BESTSELLERS:
         case productGroupTypes.SEARCH:
-            return categoryCode ? `/${type}/${categoryCode}` : `/${type}/`;
+            return categoryCode ? `/${type}/${categoryCode}/` : `/${type}/`;
 
         case productGroupTypes.PROMO:
         case productGroupTypes.SETS:
         case productGroupTypes.BRANDS:
-            return categoryCode ? `/${type}/${entityCode}/${categoryCode}/` : `/${type}/${entityCode}/`;
+            return categoryCode
+                ? `${generateProductGroupUrl(type, entityCode)}${categoryCode}/`
+                : generateProductGroupUrl(type, entityCode);
 
         default:
             return '/';
     }
+}
+
+export function generateProductGroupUrl(type, entityCode) {
+    return entityCode ? `/${type}/${entityCode}/` : `/${type}/`;
 }
 
 export function concatCatalogRoutePath(type, entityCode, categoryCode, segments) {
@@ -75,14 +85,14 @@ export function concatCatalogRoutePath(type, entityCode, categoryCode, segments)
             return '/';
     }
 
-    const basePath = segments.length > 0 ? `${baseRoute}filters` : baseRoute;
-    return basePath.concat(...segments.map((s) => `/${s}`));
+    const basePath = segments.length > 0 ? `${baseRoute}filters/` : baseRoute;
+    return basePath.concat(...segments.map((s) => `${s}/`));
 }
 
 export function concatMasterclassesRoutePath(segments) {
     const baseRoute = '/masterclasses/';
-    const basePath = segments.length > 0 ? `${baseRoute}filters` : baseRoute;
-    return basePath.concat(...segments.map((s) => `/${s}`));
+    const basePath = segments.length > 0 ? `${baseRoute}filters/` : baseRoute;
+    return basePath.concat(...segments.map((s) => `${s}/`));
 }
 
 export function mapFilterSegments(urlSegments) {
@@ -135,7 +145,7 @@ export function getActiveCategories(code, item, activeItems = []) {
 
 export function computeFilterData(pathMatch, code = null) {
     const filter = { category: code };
-    const routeSegments = pathMatch ? pathMatch.split('/') : [];
+    const routeSegments = pathMatch ? pathMatch.split('/').filter((s) => s !== '') : [];
     const filterSegments = mapFilterSegments(routeSegments);
     const filterNames = Object.keys(filterSegments);
 
@@ -152,7 +162,7 @@ export function computeFilterData(pathMatch, code = null) {
 
 export function computeFilterMasterclassData(pathMatch) {
     const filter = {};
-    const routeSegments = pathMatch ? pathMatch.split('/') : [];
+    const routeSegments = pathMatch ? pathMatch.split('/').filter((s) => s !== '') : [];
     const filterSegments = mapFilterSegments(routeSegments);
     const filterNames = Object.keys(filterSegments);
 

@@ -6,17 +6,24 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span></breadcrumb-item
                 >
-                <breadcrumb-item :key="type" :to="breadcrumbRootUrl">{{
-                    $t(`productGroups.title.${type}`)
-                }}</breadcrumb-item>
-                <breadcrumb-item v-if="entityCode" :key="entityCode" :to="generateBreadcrumbUrl(null)">{{
-                    productGroup && productGroup.name
-                }}</breadcrumb-item>
                 <breadcrumb-item
-                    v-for="category in breadcrumbs"
+                    :key="type"
+                    :to="breadcrumbRootUrl"
+                    :disabled="breadcrumbRootUrl === $route.fullPath"
+                    >{{ $t(`productGroups.title.${type || 'catalog'}`) }}</breadcrumb-item
+                >
+                <breadcrumb-item
+                    v-if="entityCode"
+                    :key="entityCode"
+                    :to="breadcrumbEntityUrl"
+                    :disabled="breadcrumbEntityUrl === $route.fullPath"
+                    >{{ productGroup && productGroup.name }}</breadcrumb-item
+                >
+                <breadcrumb-item
+                    v-for="category in categoriesBreadcrumbs"
                     :key="category.id"
-                    :to="generateBreadcrumbUrl(category.code)"
-                    :disabled="category.disabled"
+                    :to="category.url"
+                    :disabled="category.disabled || category.url === $route.fullPath"
                     >{{ category.name }}</breadcrumb-item
                 >
             </breadcrumbs>
@@ -74,7 +81,7 @@
                 <div class="catalog-view__main">
                     <div class="catalog-view__main-header">
                         <div class="catalog-view__main-header-title">
-                            <h1 class="catalog-view__main-header-hl">
+                            <h1 class="catalog-view__main-header-hl" v-if="activePage === 1 || isMounted">
                                 {{ catalogTitle }}
                             </h1>
                             <p
@@ -234,7 +241,7 @@
         </transition>
 
         <!-- 62050
-        <section class="section catalog-view__section catalog-view__seo">
+        <section class="section catalog-view__section catalog-view__seo" v-if="activePage === 1 || isMounted">
             <div class="container catalog-view__seo-container">
                 <h2 class="catalog-view__section-hl catalog-view__seo-hl">Блок SEO текста</h2>
                 <v-expander class="catalog-view__seo-text" :min-height="80" has-mask>
@@ -315,6 +322,8 @@ import {
     mapFilterSegments,
     computeFilterData,
     generateProductUrl,
+    generateSearchUrl,
+    generateProductGroupUrl,
 } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { registerModuleIfNotExists } from '@util/store';
@@ -322,7 +331,8 @@ import { createNotFoundRoute } from '@util/router';
 import { productGroupTypes } from '@enums/product';
 import { sortFields } from '@enums/catalog';
 import { sortDirections, fileExtension, httpCodes } from '@enums';
-import { MIN_SCROLL_VALUE } from '@constants';
+import { MIN_SCROLL_VALUE, DEFAULT_PAGE } from '@constants';
+import metaMixin from '@plugins/meta';
 
 import '@plugins/sticky';
 import '@images/sprites/cross-small.svg';
@@ -331,6 +341,7 @@ import './Catalog.css';
 
 export default {
     name: 'catalog',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -355,6 +366,13 @@ export default {
         HistoryPanel,
     },
 
+    metaInfo() {
+        const { catalogTitle, activePage } = this;
+        return {
+            title: activePage > 1 ? `${catalogTitle} – страница ${activePage}` : catalogTitle,
+        };
+    },
+
     data() {
         const sortOptions = [
             {
@@ -376,6 +394,7 @@ export default {
         ];
 
         return {
+            isMounted: false,
             sortValue: null,
             sortOptions: sortOptions,
             filterModal: false,
@@ -399,20 +418,6 @@ export default {
             entityCode: (state) => state.params.entityCode,
             searchQuery: (state) => state.query.search_string,
         }),
-
-        isBrandPage() {
-            const { type } = this;
-            return type === productGroupTypes.BRANDS;
-        },
-
-        isSearchPage() {
-            const { type } = this;
-            return type === productGroupTypes.SEARCH;
-        },
-
-        isFiltersPage() {
-            return this.$route.path.includes('filters');
-        },
 
         showRecentlyViewed() {
             const { type } = this;
@@ -438,25 +443,6 @@ export default {
                     url: categoryCode && generateProductUrl(categoryCode, i.code),
                 };
             });
-        },
-
-        breadcrumbRootUrl() {
-            const { type } = this;
-
-            switch (type) {
-                case productGroupTypes.CATALOG:
-                case productGroupTypes.NEW:
-                case productGroupTypes.BESTSELLERS:
-                    return { name: 'Catalog', params: { type } };
-                case productGroupTypes.SEARCH:
-                    return {
-                        name: 'Catalog',
-                        params: { type },
-                        query: { search_string: this.$route.query.search_string },
-                    };
-                default:
-                    return { name: 'ProductGroups', params: { type } };
-            }
         },
 
         mobileImg() {
@@ -529,9 +515,44 @@ export default {
             }
         },
 
+        categoriesBreadcrumbs() {
+            const { type, entityCode } = this;
+            const breadcrumbs = this[BREADCRUMBS] || [];
+            return breadcrumbs.map((b) => ({ ...b, url: generateCategoryUrl(type, entityCode, b.code) }));
+        },
+
+        breadcrumbRootUrl() {
+            const { type } = this;
+            switch (type) {
+                case productGroupTypes.SEARCH:
+                    return generateSearchUrl(this.$route.query.search_string);
+                default:
+                    return generateProductGroupUrl(type);
+            }
+        },
+
+        breadcrumbEntityUrl() {
+            const { type, entityCode } = this;
+            return generateCategoryUrl(type, entityCode);
+        },
+
         typeSortOptions() {
             const { type, sortOptions } = this;
             return sortOptions.filter((o) => type === productGroupTypes.SEARCH || o.field !== sortFields.RELEVANCE);
+        },
+
+        isBrandPage() {
+            const { type } = this;
+            return type === productGroupTypes.BRANDS;
+        },
+
+        isSearchPage() {
+            const { type } = this;
+            return type === productGroupTypes.SEARCH;
+        },
+
+        isFiltersPage() {
+            return this.$route.path.includes('filters');
         },
 
         isTabletLg() {
@@ -583,6 +604,7 @@ export default {
                 } = this.$route;
 
                 const { field, direction } = value;
+
                 if (field !== orderField || direction !== orderDirection)
                     this.$router.replace({
                         path: this.$route.path,
@@ -614,7 +636,10 @@ export default {
 
         onPageChanged(page) {
             this.showMore = false;
-            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+            this.$router.push({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: page > DEFAULT_PAGE ? page : undefined },
+            });
         },
 
         async fetchCatalog(to, from, next, showMore) {
@@ -622,7 +647,7 @@ export default {
                 const {
                     params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
                     query: {
-                        page = 1,
+                        page = DEFAULT_PAGE,
                         orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.POPULARITY,
                         orderDirection = sortDirections.DESC,
                         search_string = null,
@@ -631,9 +656,9 @@ export default {
 
                 const {
                     params: { code: fromCode, entityCode: fromEntityCode, type: fromType },
+                    query: { page: fromPage = DEFAULT_PAGE },
                 } = from;
 
-                const { query: { page: fromPage = 1 } = { page: 1 } } = from;
                 const searchString =
                     search_string && toType === productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
                 const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
@@ -682,14 +707,10 @@ export default {
             fullPath,
             params: { code: toCode = null, entityCode: toEntityCode = null, type: toType, pathMatch },
             query: {
-                page = 1,
+                page = DEFAULT_PAGE,
                 orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.POPULARITY,
                 orderDirection = sortDirections.DESC,
                 search_string: toSearchString,
-            } = {
-                page: 1,
-                orderField: sortFields.POPULARITY,
-                orderDirection: sortDirections.DESC,
             },
         } = to;
 
@@ -707,9 +728,6 @@ export default {
         )
             next((vm) => vm.setSortValue(orderField, orderDirection));
         else {
-            // Если у нас нет поисковой строки, либо продуктовая группа !== search, ничего искать не нужно
-            const searchString =
-                toSearchString && toType === productGroupTypes.SEARCH ? encodeURI(toSearchString) : undefined;
             const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
 
             $progress.start();
@@ -723,7 +741,7 @@ export default {
                     routeSegments,
                     filterSegments,
 
-                    searchString,
+                    searchString: toSearchString,
                     page,
                     orderField,
                     orderDirection,
@@ -763,7 +781,7 @@ export default {
         const {
             params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },
             query: {
-                page: toPage = 1,
+                page: toPage = DEFAULT_PAGE,
                 orderField: toOrderField = sortFields.POPULARITY,
                 orderDirection: toOrderDirection = sortDirections.DESC,
                 search_string: to_search_string,
@@ -773,7 +791,7 @@ export default {
         const {
             params: { code: fromCode, entityCode: fromEntityCode, type: fromType, pathMatch: fromPathMatch },
             query: {
-                page: fromPage = 1,
+                page: fromPage = DEFAULT_PAGE,
                 orderField: fromOrderField = sortFields.POPULARITY,
                 orderDirection: fromOrderDirection = sortDirections.DESC,
                 search_string: from_search_string,
@@ -812,6 +830,10 @@ export default {
         this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
 
         this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
+    },
+
+    mounted() {
+        this.isMounted = true;
     },
 };
 </script>

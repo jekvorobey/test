@@ -6,16 +6,17 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="root" to="/masterclasses">
+                <breadcrumb-item key="root" :to="rootUrl">
                     {{ rootTitle }}
                 </breadcrumb-item>
-                <breadcrumb-item :key="masterClass.code" :to="{ path: $route.path }">
-                    {{ masterClass.title }}
+                <breadcrumb-item :key="code" :to="masterclassUrl" :disabled="masterclassUrl === $route.fullPath">
+                    {{ masterClass && masterClass.title }}
                 </breadcrumb-item>
             </breadcrumbs>
 
             <master-class-banner-card
                 class="master-class-view__banner"
+                v-if="masterClass"
                 :image="bannerImage"
                 :name="masterClass.title"
                 :price="masterClass.price"
@@ -901,12 +902,12 @@ export default {
 
     computed: {
         ...mapState([SCROLL, LOCALE]),
-        ...mapState('route', { code: state => state.params.code }),
+        ...mapState('route', { code: (state) => state.params.code }),
         ...mapState(MASTERCLASS_MODULE, [MASTERCLASS, FEATURED_MASTERCLASSES]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
         ...mapState(MODAL_MODULE, {
-            isAuthorOpen: state =>
+            isAuthorOpen: (state) =>
                 state[MODALS][modalName.masterclass.AUTHOR] && state[MODALS][modalName.masterclass.AUTHOR].open,
         }),
 
@@ -928,7 +929,7 @@ export default {
 
         documents() {
             const { documents = [] } = this[MASTERCLASS] || {};
-            return documents.map(d => ({
+            return documents.map((d) => ({
                 ...d,
                 file: {
                     ...d.file,
@@ -947,7 +948,7 @@ export default {
 
         frisbuyScript() {
             const { speakers = [] } = this[MASTERCLASS] || {};
-            const instagramSpeaker = speakers.find(s => !!s.instagram);
+            const instagramSpeaker = speakers.find((s) => !!s.instagram);
 
             return (
                 instagramSpeaker &&
@@ -1026,8 +1027,8 @@ export default {
             const { speakers = [], places = [], dates = [] } = this;
 
             return stages.map((s, index) => {
-                const stageSpeakers = speakers.filter(sp => s.speakerIds && s.speakerIds.includes(sp.id));
-                const place = places.find(p => p.id === s.placeId);
+                const stageSpeakers = speakers.filter((sp) => s.speakerIds && s.speakerIds.includes(sp.id));
+                const place = places.find((p) => p.id === s.placeId);
                 const date = dates[index];
                 return { ...s, stageSpeakers, date, address: place && place.address };
             });
@@ -1036,7 +1037,7 @@ export default {
         dates() {
             const { stages = [] } = this[MASTERCLASS] || {};
 
-            return stages.map(s => {
+            return stages.map((s) => {
                 const dateObj = getDate(s.date);
                 const dateFrom = getDate(`${s.date} ${s.timeFrom}`);
                 const dateTo = getDate(`${s.date} ${s.timeTo}`);
@@ -1054,7 +1055,7 @@ export default {
         gallery() {
             const { gallery = [] } = this[MASTERCLASS] || {};
 
-            return gallery.map(i => {
+            return gallery.map((i) => {
                 switch (i.type) {
                     case mediaType.IMAGE: {
                         const desktopImg = {
@@ -1090,7 +1091,7 @@ export default {
         historyGallery() {
             const { historyGallery = [] } = this[MASTERCLASS] || {};
 
-            return historyGallery.map(i => {
+            return historyGallery.map((i) => {
                 switch (i.type) {
                     case mediaType.IMAGE: {
                         const desktopImg = {
@@ -1125,7 +1126,7 @@ export default {
 
         recommendations() {
             const { recommendations = [] } = this[MASTERCLASS] || {};
-            return recommendations.map(i => {
+            return recommendations.map((i) => {
                 const dateObj = getDate(`${i.nearestDate} ${i.nearestTimeFrom}`);
                 const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
@@ -1151,7 +1152,7 @@ export default {
         speakers() {
             const { speakers = [] } = this[MASTERCLASS] || {};
 
-            return speakers.map(s => {
+            return speakers.map((s) => {
                 if (s.avatar) s.avatar.defaultImg = generatePictureSourcePath(null, null, s.avatar.id);
                 return s;
             });
@@ -1160,10 +1161,10 @@ export default {
         places() {
             const { places = [] } = this[MASTERCLASS] || {};
 
-            return places.map(p => ({
+            return places.map((p) => ({
                 ...p,
                 coords: [Number(p.latitude), Number(p.longitude)],
-                gallery: p.gallery.map(i => {
+                gallery: p.gallery.map((i) => {
                     const desktopImg = {
                         webp: generatePictureSourcePath(200, 140, i.value.id, fileExtension.image.WEBP),
                         orig: generatePictureSourcePath(200, 140, i.value.id),
@@ -1177,7 +1178,7 @@ export default {
         anotherCities() {
             const selectedCity = this[SELECTED_CITY] || {};
             const { places = [] } = this[MASTERCLASS] || {};
-            const cities = places.filter(p => p.fiasId !== selectedCity.fias_id).map(p => p.cityName);
+            const cities = places.filter((p) => p.fiasId !== selectedCity.fias_id).map((p) => p.cityName);
             return [...new Set(cities)];
         },
 
@@ -1197,6 +1198,15 @@ export default {
 
         rootTitle() {
             return this.$t('masterclasses.title');
+        },
+
+        masterclassUrl() {
+            const { code, rootUrl } = this;
+            return code ? generateMasterclassUrl(code) : rootUrl;
+        },
+
+        rootUrl() {
+            return '/masterclasses/';
         },
 
         mapSettings() {
@@ -1295,8 +1305,8 @@ export default {
             $progress.start();
             $store
                 .dispatch(`${MASTERCLASS_MODULE}/${FETCH_MASTERCLASS_DATA}`, { code })
-                .then(() => next(vm => $progress.finish()))
-                .catch(thrown => {
+                .then(() => next((vm) => $progress.finish()))
+                .catch((thrown) => {
                     if (thrown && thrown.isCancel === true) return next();
 
                     $progress.fail();

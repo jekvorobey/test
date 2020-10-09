@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const Config = require('merge-config');
+const { URLSearchParams } = require('url');
 const LRUCache = require('lru-cache');
 
 const express = require('express');
@@ -22,6 +23,7 @@ const ServerLogger = require('./src/services/LogService/ServerLogger');
 const logger = new ServerLogger();
 
 const resolve = (file) => path.resolve(__dirname, file);
+const urlRegex = /\/$/;
 
 const serve = (resourcePath, cache) =>
     express.static(resolve(resourcePath), {
@@ -92,6 +94,7 @@ function render(req, res, env) {
             req,
             res,
             env,
+            render: {},
         };
 
         // In production: create server renderer using template and built server bundle.
@@ -212,22 +215,34 @@ for (let i = 0; i < cacheRoutes.length; i++) {
 
 app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());
-app.use('/catalog/export', async (req, res, next) => {
-    try {
-        const baseURL = `${req.protocol}://${req.get('host')}`;
-        const {
-            body: { file_id, type },
-        } = await request.get(`${baseURL}/v1/catalog/export`).query({ ...req.query });
-        const fileRes = await request.get(`${baseURL}/files/original/${file_id}`);
-        res.setHeader('content-type', fileRes.get('content-type'));
-        res.setHeader('content-disposition', fileRes.get('content-disposition'));
-        res.send(fileRes.text);
-    } catch (error) {
-        res.status(error.status).send(error.response && error.response.text);
-    }
-});
 
-app.get('*', (req, res) => render(req, res, env));
+app.get('*', (req, res) => {
+    let shouldRedirect = false;
+    let url = req.path;
+
+    if (!urlRegex.test(url)) {
+        url = `${url}/`;
+        shouldRedirect = true;
+    }
+
+    const params = new URLSearchParams(req.query);
+    if (params.has('page')) {
+        const value = Number(params.get('page'));
+
+        if (value === 1) {
+            params.delete('page');
+            shouldRedirect = true;
+        }
+    }
+
+    if (shouldRedirect) {
+        const queryString = params.toString();
+        url = queryString ? `${url}?${queryString}` : url;
+        return res.redirect(301, url);
+    }
+
+    return render(req, res, env);
+});
 app.listen(port, () => logger.success(`server started at port ${port}`));
 
 function onCleanup(signal) {

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { URLSearchParams } = require('url');
 const Config = require('merge-config');
 
 const express = require('express');
@@ -25,6 +26,7 @@ const logger = new ServerLogger();
 const setupDevServer = require('./build/setup-dev-server');
 
 const resolve = (file) => path.resolve(__dirname, file);
+const urlRegex = /\/$/;
 
 const serve = (resourcePath, cache) =>
     express.static(resolve(resourcePath), {
@@ -127,6 +129,7 @@ function render(req, res, env) {
         req,
         res,
         env,
+        render: {},
     };
 
     renderer
@@ -219,14 +222,37 @@ if (isProd) {
     }
 }
 
-const renderFunction = isProd
-    ? (req, res) => render(req, res, env)
-    : (req, res) => readyPromise.then(() => render(req, res, env));
-
 app.use(publicPath, serve(outputPath, true));
 app.use(cookieParser());
 
-app.get('*', renderFunction);
+app.get('*', (req, res) => {
+    let shouldRedirect = false;
+    let url = req.path;
+
+    if (!urlRegex.test(url)) {
+        url = `${url}/`;
+        shouldRedirect = true;
+    }
+
+    const params = new URLSearchParams(req.query);
+    if (params.has('page')) {
+        const value = Number(params.get('page'));
+
+        if (value === 1) {
+            params.delete('page');
+            shouldRedirect = true;
+        }
+    }
+
+    if (shouldRedirect) {
+        const queryString = params.toString();
+        url = queryString ? `${url}?${queryString}` : url;
+        return res.redirect(301, url);
+    }
+
+    if (isProd) return render(req, res, env);
+    return readyPromise.then(() => render(req, res, env));
+});
 app.listen(port, host, () => logger.success(`server started at ${host}:${port}`));
 
 function onCleanup(signal) {

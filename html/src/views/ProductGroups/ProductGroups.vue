@@ -6,9 +6,9 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="sets" :to="{ path: $route.path }">{{
-                    $t(`productGroups.title.${type}`)
-                }}</breadcrumb-item>
+                <breadcrumb-item key="sets" :to="rootUrl" :disabled="rootUrl === $route.fullPath"
+                    >{{ $t(`productGroups.title.${type || 'catalog'}`) }}
+                </breadcrumb-item>
             </breadcrumbs>
         </div>
 
@@ -29,7 +29,7 @@
 
         <template v-else>
             <section class="section product-groups-view__section product-groups-view__sets">
-                <h1 class="container product-groups-view__section-hl">
+                <h1 class="container product-groups-view__section-hl" v-if="activePage === 1 || isMounted">
                     {{ $t(`productGroups.title.${type || 'catalog'}`) }}
                 </h1>
                 <div class="container product-groups-view__sets-container">
@@ -38,11 +38,11 @@
                             <banner-card
                                 class="product-groups-view__sets-list-item"
                                 tag="router-link"
-                                v-for="item in items"
+                                v-for="item in productGroups"
                                 :key="item.id"
                                 :title="item.name"
                                 :image="item.preview_photo"
-                                :to="generateCategoryUrl(item.code)"
+                                :to="item.url"
                                 button-text="Смотреть товары"
                             />
                         </ul>
@@ -76,7 +76,7 @@
         </section>
 
         <!-- #62050
-        <section class="section product-groups-view__section product-groups-view__seo">
+        <section class="section product-groups-view__section product-groups-view__seo" v-if="activePage === 1 || isMounted">
             <div class="container product-groups-view__seo-container">
                 <h2 class="product-groups-view__section-hl product-groups-view__seo-hl">Блок SEO текста</h2>
                 <v-expander class="product-groups-view__seo-text" :min-height="80" has-mask>
@@ -124,9 +124,10 @@ import { FETCH_ITEMS, SET_LOAD_PATH, SET_TYPE } from '@store/modules/ProductGrou
 import _debounce from 'lodash/debounce';
 import { httpCodes, sortDirections } from '@enums';
 import { productGroupTypes, productGroupSortFields } from '@enums/product';
-import { MIN_SCROLL_VALUE } from '@constants';
+import { MIN_SCROLL_VALUE, DEFAULT_PAGE } from '@constants';
 import { createNotFoundRoute } from '@util/router';
-import { generateCategoryUrl } from '@util/catalog';
+import { generateCategoryUrl, generateProductGroupUrl } from '@util/catalog';
+import metaMixin from '@plugins/meta';
 import '@images/sprites/home.svg';
 import './ProductGroups.css';
 
@@ -151,6 +152,7 @@ const sliderOptions = {
 
 export default {
     name: 'product-groups',
+    mixins: [metaMixin],
 
     components: {
         VButton,
@@ -171,8 +173,17 @@ export default {
         EmptyPlaceholderPanel,
     },
 
+    metaInfo() {
+        const { type, activePage } = this;
+        const catalogTitle = this.$t(`productGroups.title.${type || 'catalog'}`);
+        return {
+            title: activePage > 1 ? `${catalogTitle} – страница ${activePage}` : catalogTitle,
+        };
+    },
+
     data() {
         return {
+            isMounted: false,
             showMore: false,
         };
     },
@@ -186,6 +197,15 @@ export default {
             return this[TYPE] === productGroupTypes.BRANDS;
         },
 
+        productGroups() {
+            const { type } = this;
+            const items = this[ITEMS] || [];
+            return items.map((i) => ({
+                ...i,
+                url: generateCategoryUrl(type, i.code),
+            }));
+        },
+
         columns() {
             if (this.isTablet) return 2;
             return this.isTabletLg ? 3 : 6;
@@ -193,6 +213,11 @@ export default {
 
         sliderOptions() {
             return sliderOptions;
+        },
+
+        rootUrl() {
+            const { type } = this;
+            return generateProductGroupUrl(type);
         },
 
         isTablet() {
@@ -222,7 +247,10 @@ export default {
 
         onPageChanged(page) {
             this.showMore = false;
-            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+            this.$router.push({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: page > DEFAULT_PAGE ? page : undefined },
+            });
         },
 
         onToCatalog() {
@@ -235,7 +263,7 @@ export default {
                     fullPath,
                     params: { type: toType },
                     query: {
-                        page = 1,
+                        page = DEFAULT_PAGE,
                         orderField = toType === productGroupTypes.BRANDS
                             ? productGroupSortFields.NAME
                             : productGroupSortFields.CREATED_AT,
@@ -245,7 +273,7 @@ export default {
 
                 const {
                     params: { type: fromType },
-                    query: { page: fromPage = 1 },
+                    query: { page: fromPage = DEFAULT_PAGE },
                 } = from;
 
                 if (!showMore && this[SCROLL] && (toType !== fromType || page !== fromPage))
@@ -280,7 +308,7 @@ export default {
             fullPath,
             params: { type: toType },
             query: {
-                page = 1,
+                page = DEFAULT_PAGE,
                 orderField = toType === productGroupTypes.BRANDS
                     ? productGroupSortFields.NAME
                     : productGroupSortFields.CREATED_AT,
@@ -343,6 +371,10 @@ export default {
 
     beforeMount() {
         this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
+    },
+
+    mounted() {
+        this.isMounted = true;
     },
 };
 </script>

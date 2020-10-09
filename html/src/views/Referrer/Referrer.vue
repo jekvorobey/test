@@ -6,15 +6,15 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span></breadcrumb-item
                 >
-                <breadcrumb-item key="Referrer" :to="$route.fullPath">
-                    {{ $route.params.code }}
+                <breadcrumb-item key="Referrer" :to="rootUrl" :disabled="rootUrl === $route.fullPath"
+                    >{{ $route.params.code }}
                 </breadcrumb-item>
             </breadcrumbs>
         </div>
 
         <section class="section">
             <div class="container referrer-view__header">
-                <h1 class="referrer-view__header-hl">
+                <h1 class="referrer-view__header-hl" v-if="activePage === 1 || isMounted">
                     {{ title }}
                     <span class="referrer-view__header-counter" v-if="range > 0"> {{ range }} {{ productName }} </span>
                 </h1>
@@ -45,7 +45,7 @@
         </section>
 
         <!-- #62050
-        <section class="section referrer-view__section referrer-view__seo">
+        <section class="section referrer-view__section referrer-view__seo" v-if="activePage === 1 || isMounted">
             <div class="container referrer-view__seo-container">
                 <h2 class="referrer-view__section-hl referrer-view__seo-hl">Блок SEO текста</h2>
                 <v-expander class="referrer-view__seo-text" :min-height="80" has-mask>
@@ -90,15 +90,17 @@ import { FETCH_REFERRER_DATA, FETCH_ITEMS, SET_LOAD_PATH } from '@store/modules/
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import metaMixin from '@plugins/meta';
 import { DEFAULT_PAGE } from '@constants';
-import { pluralize } from '@util';
 import { modalName, sortDirections } from '@enums';
-
+import { pluralize } from '@util';
+import { generateReferrerUrl } from '@util/catalog';
 import '@images/sprites/home.svg';
 import './Referrer.css';
 
 export default {
     name: 'referrer',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -112,8 +114,16 @@ export default {
         BreadcrumbItem,
     },
 
+    metaInfo() {
+        const { $route, activePage } = this;
+        return {
+            title: activePage > 1 ? `${$route.params.code} – страница ${activePage}` : $route.params.code,
+        };
+    },
+
     data() {
         return {
+            isMounted: false,
             showMore: false,
         };
     },
@@ -123,11 +133,16 @@ export default {
         ...mapGetters(REFERRER_MODULE, [PAGES_COUNT]),
 
         ...mapState('route', {
-            code: state => state.params.code,
+            code: (state) => state.params.code,
         }),
 
         productName() {
             return pluralize(this[RANGE], ['продукт', 'продукта', 'продуктов']);
+        },
+
+        rootUrl() {
+            const { code } = this;
+            return generateReferrerUrl(code);
         },
 
         isTablet() {
@@ -149,7 +164,10 @@ export default {
 
         onPageChanged(page) {
             this.showMore = false;
-            this.$router.push({ path: this.$route.path, query: { ...this.$route.query, page } });
+            this.$router.push({
+                path: this.$route.path,
+                query: { ...this.$route.query, page: page > DEFAULT_PAGE ? page : undefined },
+            });
         },
     },
 
@@ -167,15 +185,15 @@ export default {
             $progress.start();
             $store
                 .dispatch(`${REFERRER_MODULE}/${FETCH_REFERRER_DATA}`, { code, page })
-                .then(data => {
+                .then((data) => {
                     $store.dispatch(`${REFERRER_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                     });
                 })
-                .catch(thrown => {
+                .catch((thrown) => {
                     if (thrown && thrown.isCancel === true) return true;
-                    next(vm => {
+                    next((vm) => {
                         $progress.fail();
                     });
                 });
@@ -210,6 +228,10 @@ export default {
 
     created() {
         this[SET_SESSION_REFERRAL_CODE](this.code);
+    },
+
+    mounted() {
+        this.isMounted = true;
     },
 };
 </script>
