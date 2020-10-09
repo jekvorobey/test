@@ -106,11 +106,12 @@ export default {
         let productGroupFilter = null;
 
         if (isProductGroupChanged) {
+            const query = searchString ? encodeURI(searchString) : undefined;
             data.productGroup = await dispatch(FETCH_PRODUCT_GROUP, {
                 type,
                 entityCode,
                 filter: {
-                    search_string: searchString,
+                    search_string: query,
                 },
             });
 
