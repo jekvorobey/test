@@ -151,7 +151,6 @@
 
         &-attention {
             margin-top: calc(var(--gs) * 1.5);
-            padding-top: calc(var(--gs) * 4);
             fill: var(--cl-grey);
         }
     }
