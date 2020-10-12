@@ -14,7 +14,8 @@ export default {
     routes: [
         {
             name: 'QnA',
-            path: 'qna',
+            path: 'qna/',
+            pathToRegexpOptions: { strict: true },
             component: QnAAsync,
         },
     ],

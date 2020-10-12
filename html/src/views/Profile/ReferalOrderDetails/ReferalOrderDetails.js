@@ -17,7 +17,8 @@ export default {
     routes: [
         {
             name: 'ReferalOrderDetails',
-            path: 'referal-orders/:referalId',
+            path: 'referal/:referalId/',
+            pathToRegexpOptions: { strict: true },
             component: ReferalOrderDetailsAsync,
 
             meta: {

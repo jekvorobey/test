@@ -14,8 +14,9 @@ export default {
      */
     routes: [
         {
-            path: 'referal',
             name: 'Referal',
+            path: 'referal/',
+            pathToRegexpOptions: { strict: true },
             component: ReferalAsync,
 
             meta: {

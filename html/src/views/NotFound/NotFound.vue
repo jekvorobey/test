@@ -70,8 +70,8 @@ import { FETCH_FEATURED_PRODUCTS } from '@store/modules/Featured/actions';
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
+import metaMixin from '@plugins/meta';
 import { breakpoints, modalName } from '@enums';
-
 import './NotFound.css';
 
 const sliderOptions = {
@@ -108,12 +108,19 @@ const sliderOptions = {
 
 export default {
     name: 'not-found',
+    mixins: [metaMixin],
 
     components: {
         VButton,
         VSlider,
 
         CatalogProductCard,
+    },
+
+    metaInfo() {
+        return {
+            title: '404 - страница не найдена',
+        };
     },
 
     computed: {

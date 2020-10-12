@@ -12,11 +12,13 @@ export default {
     routes: [
         {
             name: 'ui-kit',
-            path: '/ui-kit/:type',
+            path: '/ui-kit/:type/',
+            pathToRegexpOptions: { strict: true },
             component: () => import(/* webpackChunkName: "ui-kit" */ './UiKit.vue'),
         },
         {
-            path: '/ui-kit',
+            path: '/ui-kit/',
+            pathToRegexpOptions: { strict: true },
             redirect: '/ui-kit/base',
         },
     ],

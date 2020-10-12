@@ -16,7 +16,8 @@ export default {
     routes: [
         {
             name: 'Promocodes',
-            path: 'promocodes',
+            path: 'promocodes/',
+            pathToRegexpOptions: { strict: true },
             component: PromocodesAsync,
 
             meta: {

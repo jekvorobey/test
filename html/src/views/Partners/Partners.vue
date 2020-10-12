@@ -6,9 +6,7 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="no-main" to="/partners">
-                    Партнерам
-                </breadcrumb-item>
+                <breadcrumb-item key="no-main" disabled>{{ pageTitle }}</breadcrumb-item>
             </breadcrumbs>
         </div>
 
@@ -227,6 +225,7 @@ import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbIte
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
 
 import { phoneMaskOptions } from '@settings';
+import metaMixin from '@plugins/meta';
 import validationMixin, { required, email, minLength } from '@plugins/validation';
 
 import ParghnerTop from '@images/mock/ParghnerTop.png';
@@ -258,7 +257,7 @@ import './Partners.css';
 
 export default {
     name: 'partners',
-    mixins: [validationMixin],
+    mixins: [metaMixin, validationMixin],
 
     components: {
         VSvg,
@@ -270,6 +269,13 @@ export default {
         Breadcrumbs,
         BreadcrumbItem,
         SeparatorSection,
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     validations: {
@@ -421,6 +427,10 @@ export default {
             if (this.$v.form.body.$dirty && !this.$v.form.body.required) {
                 return this.$t('validation.errors.required');
             }
+        },
+
+        pageTitle() {
+            return 'Партнерам';
         },
 
         isDesktop() {

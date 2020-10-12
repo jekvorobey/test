@@ -14,7 +14,8 @@ export default {
     routes: [
         {
             name: 'Subscribes',
-            path: 'subscribes',
+            path: 'subscribes/',
+            pathToRegexpOptions: { strict: true },
             component: SubscribesAsync,
         },
     ],

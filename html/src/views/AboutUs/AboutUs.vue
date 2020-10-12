@@ -6,9 +6,7 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="no-main" to="/about-us">
-                    О нас
-                </breadcrumb-item>
+                <breadcrumb-item key="no-main" disabled>{{ pageTitle }}</breadcrumb-item>
             </breadcrumbs>
         </div>
 
@@ -202,6 +200,7 @@ import FrisbuyProductContainer from '@components/FrisbuyProductContainer/Frisbuy
 
 import { breakpoints } from '@enums';
 import validationMixin, { required, email } from '@plugins/validation';
+import metaMixin from '@plugins/meta';
 import '@images/sprites/home.svg';
 import '@images/sprites/About1.svg';
 import '@images/sprites/About2.svg';
@@ -223,8 +222,8 @@ import './AboutUs.css';
 
 export default {
     name: 'about-us',
-    mixins: [validationMixin],
-
+    mixins: [metaMixin, validationMixin],
+     
     components: {
         VPicture,
         VInput,
@@ -251,6 +250,13 @@ export default {
                 required,
             },
         },
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     data() {
@@ -326,14 +332,6 @@ export default {
     },
 
     computed: {
-        isTablet() {
-            return this.$mq.tablet;
-        },
-
-        isTabletLg() {
-            return this.$mq.tabletLg;
-        },
-
         mailTo() {
             const { form } = this;
             const subject = `${form.name}, ${form.email}`;
@@ -357,6 +355,18 @@ export default {
             if (this.$v.form.body.$dirty && !this.$v.form.body.required) {
                 return this.$t('validation.errors.required');
             }
+        },
+
+        pageTitle() {
+            return 'О нас';
+        },
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 

@@ -210,12 +210,14 @@ import { createNotFoundRoute } from '@util/router';
 import { toAddressString } from '@util/address';
 import { generatePictureSourcePath } from '@util/file';
 import { generateMasterclassUrl, generateProductUrl } from '@util/catalog';
+import metaMixin from '@plugins/meta';
 import './ThankYou.css';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
 
 export default {
     name: 'thank-you',
+    mixins: [metaMixin],
 
     components: {
         VLink,
@@ -231,6 +233,13 @@ export default {
         CartMasterClassCard,
         CartProductCard,
         CartBundleProductCard,
+    },
+
+    metaInfo() {
+        const { title } = this;
+        return {
+            title,
+        };
     },
 
     computed: {

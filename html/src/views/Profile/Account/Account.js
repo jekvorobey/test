@@ -17,7 +17,8 @@ export default {
     routes: [
         {
             name: 'Account',
-            path: 'account',
+            path: 'account/',
+            pathToRegexpOptions: { strict: true },
             component: AccountAsync,
 
             meta: {

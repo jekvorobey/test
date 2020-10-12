@@ -14,7 +14,8 @@ export default {
     routes: [
         {
             name: 'HowItWorks',
-            path: 'how-it-works',
+            path: 'how-it-works/',
+            pathToRegexpOptions: { strict: true },
             component: HowItWorksAsync,
         },
     ],

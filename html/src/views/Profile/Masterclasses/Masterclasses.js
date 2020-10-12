@@ -14,7 +14,8 @@ export default {
     routes: [
         {
             name: 'Masterclasses',
-            path: 'masterclasses',
+            path: 'masterclasses/',
+            pathToRegexpOptions: { strict: true },
             component: MasterclassesAsync,
         },
     ],

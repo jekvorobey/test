@@ -16,7 +16,8 @@ export default {
      */
     routes: [
         {
-            path: '/thank-you/:id',
+            path: '/thank-you/:id/',
+            pathToRegexpOptions: { strict: true },
             component: ThankYouAsync,
 
             meta: {

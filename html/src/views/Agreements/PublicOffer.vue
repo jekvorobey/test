@@ -1,7 +1,7 @@
 <template>
     <div class="container agreements-block">
         <h1 class="agreements-block__title">
-            Публичная оферта
+            {{ pageTitle }}
         </h1>
 
         <div class="agreements-block__content">
@@ -552,7 +552,23 @@
     </div>
 </template>
 <script>
+import metaMixin from '@plugins/meta';
+
 export default {
     name: 'public-offer',
+    mixins: [metaMixin],
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
+    },
+
+    computed: {
+        pageTitle() {
+            return 'Публичная оферта';
+        },
+    },
 };
 </script>

@@ -183,7 +183,6 @@ export default {
 
     metaInfo() {
         const { pageTitle, activePage } = this;
-
         return {
             title: activePage > 1 ? `${pageTitle} – страница ${activePage}` : pageTitle,
         };

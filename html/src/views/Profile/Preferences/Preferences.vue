@@ -1,6 +1,8 @@
 <template>
     <section class="section preferences-view">
-        <h2 class="preferences-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+        <h2 class="preferences-view__hl">
+            {{ pageTitle }}
+        </h2>
 
         <preferences-entity-panel
             v-for="entityType in entityTypes"
@@ -49,6 +51,7 @@ import _debounce from 'lodash/debounce';
 import { $store, $progress, $logger, $context } from '@services';
 import { preferenceEntityTypes, preferenceType } from '@enums/profile';
 import { modalName } from '@enums';
+import metaMixin from '@plugins/meta';
 import '@images/sprites/cross.svg';
 import '@images/sprites/plus-small.svg';
 import '@images/sprites/info-middle.svg';
@@ -67,10 +70,18 @@ function getPreferenceType(name) {
 
 export default {
     name: 'preferences',
+    mixins: [metaMixin],
 
     components: {
         PreferencesEntityPanel,
         PreferenceEditModal,
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     data() {
@@ -104,6 +115,10 @@ export default {
 
         entityTypes() {
             return preferenceEntityTypes;
+        },
+
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
         },
 
         isTablet() {

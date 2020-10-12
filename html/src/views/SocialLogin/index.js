@@ -13,7 +13,7 @@ export default {
      */
     routes: [
         {
-            path: '/social-login/:driver*',
+            path: '/social-login/:driver/',
             meta: {
                 middleware: [socialLogin],
             },

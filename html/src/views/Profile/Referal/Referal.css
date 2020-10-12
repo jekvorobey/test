@@ -212,9 +212,10 @@
             margin-bottom: calc(var(--gs) * 4);
         }
 
-        &-container {
-            overflow-x: auto;
-            overflow-y: hidden;
+        &-table {
+            @media (--tablet-lg-min) {
+                min-height: 200px;
+            }
         }
     }
 

@@ -1,7 +1,7 @@
 <template>
     <div class="container info-pages-block">
         <h1 class="info-pages-block__title">
-            Бонусы за покупки
+            {{ pageTitle }}
         </h1>
 
         <div class="info-pages-block__content">
@@ -42,14 +42,27 @@
 </template>
 
 <script>
+import metaMixin from '@plugins/meta'
 import { agreementTypes } from '@enums';
 
 export default {
     name: 'info-pages-bonuses',
+    mixins: [metaMixin],
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
+    },
 
     computed: {
         bonusProgramLink() {
             return { name: 'Agreements', params: { type: agreementTypes.BONUS_PROGRAM } };
+        },
+
+        pageTitle(){
+            return 'Бонусы за покупки';
         },
     },
 };

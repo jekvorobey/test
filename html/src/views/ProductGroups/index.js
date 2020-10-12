@@ -20,6 +20,7 @@ export default {
         {
             name: 'ProductGroups',
             path: `/:type(${productGroupTypes.PROMO}|${productGroupTypes.SETS}|${productGroupTypes.BRANDS})/`,
+            pathToRegexpOptions: { strict: true },
             component: ProductGroupsAsync,
             meta: {
                 skipScroll: true,

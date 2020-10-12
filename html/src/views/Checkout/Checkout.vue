@@ -4,7 +4,7 @@
         <div class="container">
             <div class="checkout-view__header">
                 <h1 class="checkout-view__header-hl">
-                    Оформление заказа: {{ $t(`cart.summary.type.${checkoutType}`) }}
+                    {{ pageTitle }}
                 </h1>
                 <v-link class="checkout-view__header-link" to="/cart">
                     <v-svg name="arrow-small" width="24" height="24" />&nbsp;&nbsp;Вернуться в корзину
@@ -190,6 +190,7 @@ import {
     PROMOCODE_STATUS,
 } from '@store/modules/Checkout/getters';
 
+import metaMixin from '@plugins/meta';
 import { httpCodes, requestStatus } from '@enums';
 import { discountType } from '@enums/checkout';
 import { preparePrice } from '@util';
@@ -202,7 +203,8 @@ import './Checkout.css';
 
 export default {
     name: 'checkout',
-
+    mixins: [metaMixin],
+    
     components: {
         VSvg,
         VLink,
@@ -215,6 +217,13 @@ export default {
         Price,
 
         CheckoutProductPanel,
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     data() {
@@ -239,13 +248,6 @@ export default {
 
         ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT, PROMOCODE_STATUS]),
 
-        isProduct() {
-            return this.checkoutType === cartItemTypes.PRODUCT;
-        },
-
-        isPromocodePending() {
-            return this[PROMOCODE_STATUS] === requestStatus.PENDING;
-        },
 
         canDeliver() {
             const receiveMethods = this[RECEIVE_METHODS];
@@ -253,7 +255,8 @@ export default {
         },
 
         checkoutPanel() {
-            switch (this.checkoutType) {
+            const { checkoutType } = this;
+            switch (checkoutType) {
                 case cartItemTypes.PRODUCT:
                     return CheckoutProductPanel;
                 case cartItemTypes.MASTERCLASS:
@@ -261,6 +264,19 @@ export default {
                 default:
                     'div';
             }
+        },
+
+        pageTitle() {
+            const { checkoutType } = this;
+            return `Оформление заказа: ${this.$t(`cart.summary.type.${checkoutType}`)}`;
+        },
+
+        isPromocodePending() {
+            return this[PROMOCODE_STATUS] === requestStatus.PENDING;
+        },
+
+        isProduct() {
+            return this.checkoutType === cartItemTypes.PRODUCT;
         },
     },
 

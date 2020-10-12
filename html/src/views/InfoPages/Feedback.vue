@@ -1,7 +1,7 @@
 <template>
     <div class="container info-pages-block">
         <h1 class="info-pages-block__title">
-            Обратная связь
+            {{ pageTitle }}
         </h1>
 
         <div class="info-pages-block__content">
@@ -12,7 +12,23 @@
     </div>
 </template>
 <script>
+import metaMixin from '@plugins/meta'
+
 export default {
     name: 'info-pages-feedback',
+    mixins: [metaMixin],
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
+    },
+
+    computed: {
+        pageTitle(){
+            return 'Обратная связь';
+        },
+    },
 };
 </script>

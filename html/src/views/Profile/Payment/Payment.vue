@@ -1,6 +1,8 @@
 <template>
     <section class="section payment-view">
-        <h2 class="payment-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+        <h2 class="payment-view__hl">
+            {{ pageTitle }}
+        </h2>
         <!-- <info-panel class="payment-view__panel" header="Сохраненные карты">
             <template v-slot:controls>
                 <v-link class="payment-view__panel-link" tag="button">
@@ -82,7 +84,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { maskCardNumber } from '@util';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
-
+import metaMixin from '@plugins/meta';
 import '@images/sprites/payment/visa.svg';
 import '@images/sprites/payment/mastercard.svg';
 import '@images/sprites/payment/mir.svg';
@@ -93,6 +95,7 @@ import './Payment.css';
 
 export default {
     name: 'payment',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -102,6 +105,13 @@ export default {
 
         InfoPanel,
         CheckoutOptionCard,
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     data() {
@@ -153,6 +163,10 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {}),
+
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
+        },
 
         isTablet() {
             return this.$mq.tablet;

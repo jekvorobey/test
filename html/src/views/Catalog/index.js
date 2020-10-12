@@ -26,7 +26,8 @@ export default {
         },
         {
             name: 'Catalog',
-            path: `/:type(${productGroupTypes.CATALOG}|${productGroupTypes.NEW}|${productGroupTypes.BESTSELLERS}|${productGroupTypes.SEARCH})/:code?`,
+            path: `/:type(${productGroupTypes.CATALOG}|${productGroupTypes.NEW}|${productGroupTypes.BESTSELLERS}|${productGroupTypes.SEARCH})/:code?/`,
+            pathToRegexpOptions: { strict: true },
             component: CatalogAsync,
             meta: {
                 middleware: [registerModule(CatalogModuleAsync)],
@@ -42,7 +43,8 @@ export default {
             },
         },
         {
-            path: `/:type(${productGroupTypes.BRANDS}|${productGroupTypes.PROMO}|${productGroupTypes.SETS})/:entityCode/:code?`,
+            path: `/:type(${productGroupTypes.BRANDS}|${productGroupTypes.PROMO}|${productGroupTypes.SETS})/:entityCode/:code?/`,
+            pathToRegexpOptions: { strict: true },
             component: CatalogAsync,
             meta: {
                 middleware: [registerModule(CatalogModuleAsync)],

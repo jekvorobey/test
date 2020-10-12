@@ -14,7 +14,8 @@ export default {
     routes: [
         {
             name: 'OrderDetails',
-            path: 'orders/:orderId',
+            path: 'orders/:orderId/',
+            pathToRegexpOptions: { strict: true },
             component: OrderDetailsAsync,
         },
     ],

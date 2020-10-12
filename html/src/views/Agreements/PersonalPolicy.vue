@@ -1,7 +1,7 @@
 <template>
     <div class="container agreements-block">
         <h1 class="agreements-block__title">
-            Политика обработки и конфиденциальности персональных данных пользователей
+            {{ pageTitle }}
         </h1>
 
         <div class="agreements-block__content">
@@ -246,7 +246,23 @@
     </div>
 </template>
 <script>
+import metaMixin from '@plugins/meta';
+
 export default {
     name: 'personal-policy',
+    mixins: [metaMixin],
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
+    },
+
+    computed: {
+        pageTitle() {
+            return 'Политика обработки и конфиденциальности персональных данных пользователей';
+        },
+    },
 };
 </script>

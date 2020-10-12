@@ -1,4 +1,3 @@
-import { productGroupTypes } from '@enums/product';
 import registerModule from '@router/middleware/registerModule';
 
 /**
@@ -19,7 +18,8 @@ export default {
     routes: [
         {
             name: 'Masterclass',
-            path: '/masterclasses/:code',
+            path: '/masterclasses/:code/',
+            pathToRegexpOptions: { strict: true },
             component: MasterclassAsync,
 
             meta: {

@@ -18,7 +18,8 @@ export default {
     routes: [
         {
             name: 'Cart',
-            path: '/cart',
+            path: '/cart/',
+            pathToRegexpOptions: { strict: true },
             component: CartAsync,
 
             meta: {

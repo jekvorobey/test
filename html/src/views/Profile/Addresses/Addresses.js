@@ -14,7 +14,8 @@ export default {
     routes: [
         {
             name: 'Addresses',
-            path: 'addresses',
+            path: 'addresses/',
+            pathToRegexpOptions: { strict: true },
             component: AddressesAsync,
         },
     ],
