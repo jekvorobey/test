@@ -14,7 +14,8 @@ export default {
     routes: [
         {
             name: 'Messages',
-            path: 'messages',
+            path: 'messages/',
+            pathToRegexpOptions: { strict: true },
             component: MessagesAsync,
         },
     ],

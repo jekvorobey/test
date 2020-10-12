@@ -1,9 +1,6 @@
 /**
  * @Module
  */
-import { $store, $logger } from '@services';
-import { registerModuleIfNotExists } from '@util/store';
-
 import hasSession from '@router/middleware/hasSession';
 import setUser from '@router/middleware/setUser';
 import registerModule from '@router/middleware/registerModule';

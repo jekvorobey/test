@@ -5,7 +5,10 @@
                 <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем
                 заказам
             </v-link>
-            <h2 class="order-details-view__hl">{{ $t('profile.format.order', { id: order.number }) }}</h2>
+            
+            <h2 class="order-details-view__hl">
+                {{ pageTitle }}
+            </h2>
 
             <div class="order-details-view__details">
                 <div class="order-details-view__details-info">
@@ -259,22 +262,26 @@ import { toAddressString } from '@util/address';
 import { generateMasterclassUrl, generateTicketDownloadUrl, generateProductUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { getOrderStatusColorClass, getDeliveryStatusColorClass, generateThankPageUrl } from '@util/order';
-
+import metaMixin from '@plugins/meta';
 import '@images/sprites/arrow-small.svg';
 import './OrderDetails.css';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
 
 function updateBreadcrumbs(vm, name, params, number) {
+    const { href: rootHref } = vm.$router.resolve({ name: 'Orders' });
+    const { href: currentHref } = vm.$router.resolve({ name, params });
+
     vm[UPDATE_BREADCRUMB]([
-        { name: vm.$t('profile.routes.Orders'), to: { name: 'Orders' } },
-        { name: vm.$t('profile.format.order', { id: number }), to: { name, params } },
+        { name: vm.$t('profile.routes.Orders'), to: rootHref },
+        { name: vm.$t('profile.format.order', { id: number }), to: currentHref },
     ]);
 }
 
 export default {
     name: 'order-details',
-
+    mixins: [metaMixin],
+    
     components: {
         VSvg,
         VLink,
@@ -289,6 +296,13 @@ export default {
         OrderMasterclassCard,
     },
 
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
+    },
+
     data() {
         return {
             isDisabled: false,
@@ -298,9 +312,9 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(ORDERS_MODULE_PATH, {
-            [ORDER]: state => (state[ORDER_DETAILS] && state[ORDER_DETAILS][ORDER]) || {},
-            [DELIVERIES]: state => (state[ORDER_DETAILS] && state[ORDER_DETAILS][DELIVERIES]) || [],
-            [TICKETS]: state => (state[ORDER_DETAILS] && state[ORDER_DETAILS][TICKETS]) || [],
+            [ORDER]: (state) => (state[ORDER_DETAILS] && state[ORDER_DETAILS][ORDER]) || {},
+            [DELIVERIES]: (state) => (state[ORDER_DETAILS] && state[ORDER_DETAILS][DELIVERIES]) || [],
+            [TICKETS]: (state) => (state[ORDER_DETAILS] && state[ORDER_DETAILS][TICKETS]) || [],
         }),
 
         receiverEmail() {
@@ -312,7 +326,7 @@ export default {
             const { id, payment_status } = this[ORDER] || {};
             const deliveries = this[DELIVERIES] || [];
 
-            return deliveries.map(d => {
+            return deliveries.map((d) => {
                 return {
                     ...d,
                     method: this.formatDeliveryMethod(d.delivery_method),
@@ -322,7 +336,8 @@ export default {
                     address: this.formatAddress(d),
                     packageCount: this.formatPackageCount(d.package_count),
                     products:
-                        d.products && d.products.map(p => ({ ...p, url: generateProductUrl(p.category_code, p.code) })),
+                        d.products &&
+                        d.products.map((p) => ({ ...p, url: generateProductUrl(p.category_code, p.code) })),
                 };
             });
         },
@@ -331,7 +346,7 @@ export default {
             const { id, payment_status } = this[ORDER] || {};
             const tickets = this[TICKETS] || [];
 
-            return tickets.map(i => {
+            return tickets.map((i) => {
                 const dateObj = new Date(`${i.nearestDate} ${i.nearestTimeFrom}`);
                 const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
@@ -345,7 +360,7 @@ export default {
                 const author = speaker && `${speaker.firstName} ${speaker.lastName}, ${speaker.profession}`;
 
                 const participants = i.participants || [];
-                const additions = `Участники: ${participants.map(p => `${p.firstName} ${p.lastName}`).join(', ')}`;
+                const additions = `Участники: ${participants.map((p) => `${p.firstName} ${p.lastName}`).join(', ')}`;
 
                 const defaultImg = i.image && generatePictureSourcePath(400, 240, i.image.id);
                 const desktopImg = i.image && {
@@ -413,6 +428,11 @@ export default {
         orderStatus() {
             const { status } = this[ORDER] || {};
             return this.$t(`orderStatus.${status}`);
+        },
+
+        pageTitle() {
+            const { number } = this[ORDER] || {};
+            return this.$t('profile.format.order', { id: number || '000000' })
         },
 
         backUrl() {
@@ -512,20 +532,20 @@ export default {
         const { fullPath, name, params } = to;
         const { loadPath, orderDetails } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
 
-        if (loadPath === fullPath) next(vm => updateBreadcrumbs(vm, name, params, orderDetails.order.number));
+        if (loadPath === fullPath) next((vm) => updateBreadcrumbs(vm, name, params, orderDetails.order.number));
         else {
             $progress.start();
             $store
                 .dispatch(`${ORDERS_MODULE_PATH}/${FETCH_ORDER_DETAILS}`, params.orderId)
                 .then(({ number }) => {
                     $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         $progress.finish();
                         updateBreadcrumbs(vm, name, params, number);
                     });
                 })
-                .catch(error =>
-                    next(vm => {
+                .catch((error) =>
+                    next((vm) => {
                         $progress.fail();
                         updateBreadcrumbs(vm, name, params);
                     })
@@ -533,28 +553,12 @@ export default {
         }
     },
 
-    beforeRouteUpdate(to, from, next) {
-        const { name, params } = to;
-
-        this.$progress.start();
-        this[FETCH_ORDER_DETAILS](params.orderId)
-            .then(({ number }) => {
-                this.$progress.finish();
-                updateBreadcrumbs(this, name, params, number);
-            })
-            .catch(error => {
-                this.$progress.fail();
-                updateBreadcrumbs(this, name, params);
-            });
-        next();
-    },
-
     beforeRouteLeave(to, from, next) {
         this[UPDATE_BREADCRUMB]([]);
         next();
     },
 
-    beforeMount() {
+    created() {
         this.deliveryMethods = receiveMethods;
     },
 };

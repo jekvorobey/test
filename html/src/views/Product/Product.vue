@@ -731,6 +731,7 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
 import _debounce from 'lodash/debounce';
+import metaMixin from '@plugins/meta';
 import { $store, $progress, $logger, $retailRocket } from '@services';
 import {
     generatePictureSourcePath,
@@ -820,6 +821,7 @@ const tabletSize = 400;
 
 export default {
     name: 'product',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -864,6 +866,13 @@ export default {
 
         ReviewsPanel,
         HistoryPanel,
+    },
+
+    metaInfo() {
+        const { title } = this[PRODUCT] || {};
+        return {
+            title,
+        };
     },
 
     data() {

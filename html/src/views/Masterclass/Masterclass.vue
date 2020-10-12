@@ -757,6 +757,7 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
+import metaMixin from '@plugins/meta';
 import { saveToClipboard, getDate, pluralize } from '@util';
 import { registerModuleIfNotExists } from '@util/store';
 import { createNotFoundRoute } from '@util/router';
@@ -849,6 +850,7 @@ const panelScrollOffset = 24;
 
 export default {
     name: 'master-class',
+    mixins: [metaMixin],
 
     components: {
         yandexMap,
@@ -882,6 +884,13 @@ export default {
         MasterClassBannerCard,
 
         FrisbuyProductContainer,
+    },
+
+    metaInfo() {
+        const { title } = this[MASTERCLASS] || {};
+        return {
+            title,
+        };
     },
 
     data() {

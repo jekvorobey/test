@@ -1,7 +1,9 @@
 <template>
     <section class="section messages-view">
         <div class="messages-view__header">
-            <h2 class="messages-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+            <h2 class="messages-view__hl">
+                {{ pageTitle }}
+            </h2>
             <v-button class="messages-view__btn" @click="onCreateMessage">Новое сообщение</v-button>
         </div>
 
@@ -70,13 +72,15 @@ import { $store, $progress } from '@services';
 import { getDate } from '@util';
 import { modalName } from '@enums';
 import { numericYearDateSettings } from '@settings';
+import metaMixin from '@plugins/meta';
 import './Messages.css';
 
 const MESSAGES_MODULE_PATH = `${PROFILE_MODULE}/${MESSAGES_MODULE}`;
 
 export default {
     name: 'messages',
-
+    mixins: [metaMixin],
+    
     components: {
         VButton,
         VInput,
@@ -85,6 +89,13 @@ export default {
         MessageModal,
 
         EmptyPlaceholderPanel,
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     computed: {
@@ -102,6 +113,10 @@ export default {
                 ...c,
                 date: this.formatDate(c.date),
             }));
+        },
+
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
         },
 
         isTablet() {

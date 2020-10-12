@@ -6,7 +6,7 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="no-main" to="/university">Универститет</breadcrumb-item>
+                <breadcrumb-item key="no-main" disabled>{{ pageTitle }}</breadcrumb-item>
             </breadcrumbs>
         </div>
 
@@ -172,6 +172,7 @@ import FrisbuyProductContainer from '@components/FrisbuyProductContainer/Frisbuy
 import { breakpoints } from '@enums';
 import { phoneMaskOptions } from '@settings';
 import validationMixin, { required, email, minLength } from '@plugins/validation';
+import metaMixin from '@plugins/meta';
 
 import Univer1 from '@images/mock/Univer1.png';
 import Univer2 from '@images/mock/Univer2.png';
@@ -183,7 +184,7 @@ import './University.css';
 
 export default {
     name: 'university',
-    mixins: [validationMixin],
+    mixins: [metaMixin, validationMixin],
 
     components: {
         VButton,
@@ -196,6 +197,13 @@ export default {
         BreadcrumbItem,
         SeparatorSection,
         FrisbuyProductContainer,
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     validations: {
@@ -266,14 +274,6 @@ export default {
     }),
 
     computed: {
-        isTablet() {
-            return this.$mq.tablet;
-        },
-
-        isTabletLg() {
-            return this.$mq.tabletLg;
-        },
-
         mailTo() {
             const { form } = this;
             const subject = `${form.name}, ${form.city}, ${form.phone}, ${form.email}`;
@@ -310,6 +310,18 @@ export default {
             if (this.$v.form.body.$dirty && !this.$v.form.body.required) {
                 return this.$t('validation.errors.required');
             }
+        },
+
+        pageTitle() {
+            return 'Универститет';
+        },
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
         },
     },
 

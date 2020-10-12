@@ -16,7 +16,8 @@ export default {
     routes: [
         {
             name: 'Documents',
-            path: 'documents',
+            path: 'documents/',
+            pathToRegexpOptions: { strict: true },
             component: DocumentsAsync,
 
             meta: {

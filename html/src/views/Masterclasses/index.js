@@ -18,6 +18,7 @@ export default {
         {
             name: 'CatalogMasterclasses',
             path: '/masterclasses/',
+            pathToRegexpOptions: { strict: true },
             component: MasterclassesAsync,
 
             meta: {

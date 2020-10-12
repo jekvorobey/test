@@ -17,6 +17,7 @@ export default {
         {
             name: 'Favorites',
             path: '/favorites/',
+            pathToRegexpOptions: { strict: true },
             component: FavoritesAsync,
 
             meta: {

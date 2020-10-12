@@ -7,7 +7,7 @@
                     <span v-else>Главная</span>
                 </breadcrumb-item>
                 <breadcrumb-item key="sets" :to="rootUrl" :disabled="rootUrl === $route.fullPath"
-                    >{{ $t(`productGroups.title.${type || 'catalog'}`) }}
+                    >{{ catalogTitle }}
                 </breadcrumb-item>
             </breadcrumbs>
         </div>
@@ -20,7 +20,7 @@
             <section class="section product-groups-view__section">
                 <div class="container">
                     <h1 class="product-groups-view__section-hl">
-                        {{ $t(`productGroups.title.${type || 'catalog'}`) }}
+                        {{ catalogTitle }}
                     </h1>
                     <group-list class="product-groups-view__brands" :items="brandsCatalog" :columns="columns" />
                 </div>
@@ -30,7 +30,7 @@
         <template v-else>
             <section class="section product-groups-view__section product-groups-view__sets">
                 <h1 class="container product-groups-view__section-hl" v-if="activePage === 1 || isMounted">
-                    {{ $t(`productGroups.title.${type || 'catalog'}`) }}
+                    {{ catalogTitle }}
                 </h1>
                 <div class="container product-groups-view__sets-container">
                     <template v-if="items && items.length > 0">
@@ -174,8 +174,7 @@ export default {
     },
 
     metaInfo() {
-        const { type, activePage } = this;
-        const catalogTitle = this.$t(`productGroups.title.${type || 'catalog'}`);
+        const { catalogTitle, activePage } = this;
         return {
             title: activePage > 1 ? `${catalogTitle} – страница ${activePage}` : catalogTitle,
         };
@@ -213,6 +212,11 @@ export default {
 
         sliderOptions() {
             return sliderOptions;
+        },
+
+        catalogTitle(){
+            const { type } = this;
+            return this.$t(`productGroups.title.${type || 'catalog'}`);
         },
 
         rootUrl() {

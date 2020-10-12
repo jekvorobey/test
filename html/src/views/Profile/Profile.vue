@@ -17,7 +17,11 @@
                         :disabled="$route.path === $route.fullPath"
                         >{{ routeTitle }}
                     </breadcrumb-item>
-                    <breadcrumb-item v-for="breadcrumb in breadcrumbs" :key="breadcrumb.name" :to="breadcrumb.to"
+                    <breadcrumb-item
+                        v-for="breadcrumb in breadcrumbs"
+                        :key="breadcrumb.name"
+                        :to="breadcrumb.to"
+                        :disabled="breadcrumb.to === $route.fullPath"
                         >{{ breadcrumb.name }}
                     </breadcrumb-item>
                 </breadcrumbs>

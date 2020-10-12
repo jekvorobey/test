@@ -5,7 +5,11 @@
                 <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад к
                 реферальным заказам
             </v-link>
-            <h2 class="referal-order-details-view__hl">{{ $t('profile.format.referal', { id: referalId }) }}</h2>
+
+            <h2 class="referal-order-details-view__hl">
+                {{ pageTitle }}
+            </h2>
+
             <section class="referal-order-details-view__details">
                 <div class="referal-order-details-view__details-info">
                     <info-row
@@ -180,16 +184,27 @@ import { DEFAULT_PAGE } from '@constants';
 import { digit2DateSettings, monthLongDateSettings } from '@settings';
 import { getDate } from '@util';
 import { generatePictureSourcePath } from '@util/file';
-
+import { generateProductUrl } from '@util/catalog';
+import metaMixin from '@plugins/meta';
 import '@images/sprites/logo.svg';
 import '@images/sprites/arrow-small.svg';
 import './ReferalOrderDetails.css';
-import { generateProductUrl } from '@util/catalog';
 
 const REFERRAL_MODULE_PATH = `${PROFILE_MODULE}/${REFERRAL_MODULE}`;
 
+function updateBreadcrumbs(vm, name, params, number) {
+    const { href: rootHref } = vm.$router.resolve({ name: 'Referal' });
+    const { href: currentHref } = vm.$router.resolve({ name, params });
+
+    vm[UPDATE_BREADCRUMB]([
+        { name: vm.$t('profile.routes.Referal'), to: rootHref },
+        { name: vm.$t('profile.format.referal', { id: params.referalId }), to: currentHref },
+    ]);
+}
+
 export default {
     name: 'referal-order-details',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -200,6 +215,13 @@ export default {
         InfoRow,
         FilterButton,
         Price,
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     data() {
@@ -216,12 +238,12 @@ export default {
     computed: {
         ...mapState(REFERRAL_MODULE_PATH, [REFERRAL_ORDER_DETAILS]),
         ...mapState('route', {
-            referalId: state => state.params && state.params.referalId,
+            referalId: (state) => state.params && state.params.referalId,
         }),
 
         orders() {
             const { orders } = this[REFERRAL_ORDER_DETAILS] || {};
-            return orders.map(i => {
+            return orders.map((i) => {
                 const desktopImage = i.image && generatePictureSourcePath(40, 40, i.image.id, fileExtension.image.WEBP);
                 const defaultImage = i.image && generatePictureSourcePath(40, 40, i.image.id);
                 const date = i.order_date && getDate(i.order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
@@ -242,7 +264,7 @@ export default {
 
         filteredOrders() {
             const { referralSource, orders } = this;
-            return orders.filter(o => !referralSource || o.source === referralSource);
+            return orders.filter((o) => !referralSource || o.source === referralSource);
         },
 
         registerDate() {
@@ -252,6 +274,11 @@ export default {
 
         backUrl() {
             return { name: 'Referal' };
+        },
+
+        pageTitle() {
+            const { referalId } = this;
+            return this.$t('profile.format.referal', { id: referalId })
         },
 
         isTabletLg() {
@@ -272,26 +299,21 @@ export default {
         if (referralId === params.referalId) next();
         else {
             $progress.start();
-            $store.dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRER_ORDER_DETAILS}`, params.referalId).then(() =>
-                next(vm => {
-                    $progress.finish();
-                    vm[UPDATE_BREADCRUMB]([
-                        { name: vm.$t('profile.routes.Referal'), to: { name: 'Referal' } },
-                        { name: vm.$t('profile.format.referal', { id: params.referalId }), to: { name, params } },
-                    ]);
-                })
-            );
+            $store
+                .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRER_ORDER_DETAILS}`, params.referalId)
+                .then(() =>
+                    next((vm) => {
+                        $progress.finish();
+                        updateBreadcrumbs(vm, name, params, params.referalId);
+                    })
+                )
+                .catch((error) =>
+                    next((vm) => {
+                        $progress.fail();
+                        updateBreadcrumbs(vm, name, params);
+                    })
+                );
         }
-    },
-
-    beforeRouteUpdate(to, from, next) {
-        const { name, params } = to;
-
-        this[UPDATE_BREADCRUMB]([
-            { name: vm.$t('profile.routes.Referal'), to: { name: 'Referal' } },
-            { name: vm.$t('profile.format.referal', { id: params.referalId }), to: { name, params } },
-        ]);
-        next();
     },
 
     beforeRouteLeave(to, from, next) {

@@ -2,7 +2,7 @@
     <section class="info-pages-block">
         <div class="container">
             <h1 class="info-pages-block__title">
-                Возврат товара
+                {{ pageTitle }}
             </h1>
 
             <div class="info-pages-block__content">
@@ -80,10 +80,27 @@
 <script>
 import VLink from '@controls/VLink/VLink.vue';
 
+import metaMixin from '@plugins/meta'
+    
 export default {
     name: 'info-pages-feedback',
+    mixins: [metaMixin],
+
     components: {
         VLink,
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
+    },
+
+    computed: {
+        pageTitle(){
+            return 'Возврат товара';
+        },
     },
 };
 </script>

@@ -16,13 +16,15 @@ export default {
     routes: [
         {
             name: 'Preferences',
-            path: 'preferences',
+            path: 'preferences/',
+            pathToRegexpOptions: { strict: true },
             component: PreferencesAsync,
         },
 
         {
             name: 'ProPreferences',
-            path: 'pro-preferences',
+            path: 'pro-preferences/',
+            pathToRegexpOptions: { strict: true },
             component: PreferencesAsync,
 
             meta: {

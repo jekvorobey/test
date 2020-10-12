@@ -14,7 +14,8 @@ export default {
     routes: [
         {
             name: 'ReturnPage',
-            path: 'return',
+            path: 'return/',
+            pathToRegexpOptions: { strict: true },
             component: ReturnAsync,
         },
     ],

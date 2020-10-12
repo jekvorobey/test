@@ -1,7 +1,7 @@
 <template>
     <section class="section info-pages-block">
         <h1 class="container info-pages-block__title">
-            Оплата и доставка
+            {{ pageTitle }}
         </h1>
 
         <br />
@@ -18,28 +18,28 @@
                     Вы можете сделать предоплату любым удобным способом:
                 </p>
                 
-                <p>
-                    <ul class="list">
-                        <li>
-                            Банковской картой (Visa, Mastercard, МИР)
-                        </li>
-                        <li>
-                            Apple Pay (доступен в браузере Safari)
-                        </li>
-                        <li>
-                            Google Pay
-                        </li>
-                        <li>
-                            Яндекс.Деньгами
-                        </li>
-                        <li>
-                            Через личный кабинет банка: Сбербанк ОнЛ@йн, Альфа-Клик, Тинькофф Банк
-                        </li>
-                        <li>
-                            QIWI Wallet
-                        </li>
-                    </ul>
-                </p>
+                <ul class="list">
+                    <li>
+                        Банковской картой (Visa, Mastercard, МИР)
+                    </li>
+                    <li>
+                        Apple Pay (доступен в браузере Safari)
+                    </li>
+                    <li>
+                        Google Pay
+                    </li>
+                    <li>
+                        Яндекс.Деньгами
+                    </li>
+                    <li>
+                        Через личный кабинет банка: Сбербанк ОнЛ@йн, Альфа-Клик, Тинькофф Банк
+                    </li>
+                    <li>
+                        QIWI Wallet
+                    </li>
+                </ul>
+
+                <br />
 
                 <p>
                     Оплата на сайте производится с помощью сервиса Яндекс.Касса по защищенному SSL-соединению, что
@@ -222,12 +222,22 @@
 import VTable from '@controls/VTable/VTable.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 
+import metaMixin from '@plugins/meta'
+
 export default {
     name: 'delivery-and-payment',
+    mixins: [metaMixin],
 
     components: {
         VTable,
         InfoRow,
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     data() {
@@ -306,6 +316,10 @@ export default {
     },
 
     computed: {
+        pageTitle(){
+            return 'Оплата и доставка';
+        },
+
         isTablet() {
             return this.$mq.tablet;
         },

@@ -13,7 +13,8 @@ export default {
      */
     routes: [
         {
-            path: '/about-us',
+            path: '/about-us/',
+            pathToRegexpOptions: { strict: true },
             component: AboutUsAsync,
         },
     ],

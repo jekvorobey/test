@@ -15,6 +15,7 @@ import { CLOSE_ALL } from '@store/modules/Modal/actions';
 import setGeolocation from './middleware/setGeolocation';
 import registration from './middleware/registration';
 import referalLink from './middleware/referalLink';
+import routeResolve from './middleware/routeResolve';
 import pipeline from './pipeline';
 
 /*
@@ -92,7 +93,7 @@ export default function createRouter(container) {
     router.beforeEach((to, from, next) => {
         const { matched } = to;
 
-        const middlewares = [referalLink, registration, setGeolocation];
+        const middlewares = [routeResolve, referalLink, registration, setGeolocation];
 
         for (let i = 0; i < matched.length; i++) {
             const {

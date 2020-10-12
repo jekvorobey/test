@@ -14,7 +14,8 @@ export default {
     routes: [
         {
             name: 'GuideDetails',
-            path: 'guides/:guideId',
+            path: 'guides/:guideId/',
+            pathToRegexpOptions: { strict: true },
             component: GuideDetailsAsync,
         },
     ],

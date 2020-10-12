@@ -14,7 +14,8 @@ export default {
     routes: [
         {
             name: 'Payment',
-            path: 'payment',
+            path: 'payment/',
+            pathToRegexpOptions: { strict: true },
             component: PaymentAsync,
         },
     ],

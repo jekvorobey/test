@@ -1,14 +1,14 @@
 <template>
     <div class="container agreements-block">
         <h1 class="agreements-block__title">
-            Правила начисления и использования Баллов
+            {{ pageTitle }}
         </h1>
 
         <p>
             Настоящие Правила устанавливают порядок начисления и использования Баллов на cайте
-            <strong>
+            <b>
                 <router-link to="/">{{ baseURL }}</router-link>
-            </strong>
+            </b>
             (далее – «Сайт») и являются неотъемлемой частью Условий продажи товаров на Сайте.
         </p>
         <br />
@@ -136,13 +136,26 @@
 </template>
 <script>
 import { $context } from '@services';
+import metaMixin from '@plugins/meta';
 
 export default {
     name: 'bonus-program',
+    mixins: [metaMixin],
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
+    },
 
     computed: {
         baseURL() {
             return $context.baseURL;
+        },
+
+        pageTitle() {
+            return 'Правила начисления и использования Баллов';
         },
     },
 };

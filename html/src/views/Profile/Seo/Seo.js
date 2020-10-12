@@ -16,7 +16,8 @@ export default {
     routes: [
         {
             name: 'Seo',
-            path: 'seo',
+            path: 'seo/',
+            pathToRegexpOptions: { strict: true },
             component: SeoAsync,
 
             meta: {

@@ -68,6 +68,7 @@ import { NAME as AUTH_MODULE, USER } from '@store/modules/Auth';
 import { $store, $progress } from '@services';
 import { getDate } from '@util';
 import { modalName } from '@enums';
+import metaMixin from '@plugins/meta';
 import '@images/sprites/arrow-small.svg';
 import './MessageDetails.css';
 
@@ -75,6 +76,7 @@ const MESSAGES_MODULE_PATH = `${PROFILE_MODULE}/${MESSAGES_MODULE}`;
 
 export default {
     name: 'message-details',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -83,6 +85,13 @@ export default {
         VInput,
 
         MessageCard,
+    },
+
+    metaInfo() {
+        const { title } = this;
+        return {
+            title,
+        };
     },
 
     data() {

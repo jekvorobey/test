@@ -21,7 +21,8 @@ export default {
     routes: [
         {
             name: 'Checkout',
-            path: `/checkout/:type(${cartItemTypes.PRODUCT}|${cartItemTypes.MASTERCLASS})`,
+            path: `/checkout/:type(${cartItemTypes.PRODUCT}|${cartItemTypes.MASTERCLASS})/`,
+            pathToRegexpOptions: { strict: true },
             component: CheckoutAsync,
 
             meta: {

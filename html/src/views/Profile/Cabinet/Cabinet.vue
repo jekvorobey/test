@@ -1,7 +1,10 @@
 <template>
     <section class="section cabinet-view">
         <div class="container container--tablet-lg">
-            <h2 class="cabinet-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+            <h2 class="cabinet-view__hl">
+                {{ pageTitle }}
+            </h2>
+
             <image-picker
                 class="cabinet-view__avatar"
                 :image="avatar"
@@ -172,6 +175,7 @@ import {
 } from '@store/modules/Profile/modules/Cabinet/actions';
 import { FULL_NAME } from '@store/modules/Profile/modules/Cabinet/getters';
 
+import metaMixin from '@plugins/meta';
 import { socials, httpCodes, modalName, mimeType } from '@enums';
 import { cancelRoute } from '@settings';
 import '@images/sprites/edit.svg';
@@ -190,6 +194,7 @@ const panelScrollOffset = 24;
 
 export default {
     name: 'cabinet',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -208,6 +213,13 @@ export default {
 
         PasswordEditModal,
         PortfolioEditModal,
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     data() {
@@ -267,6 +279,10 @@ export default {
 
         hasPhone() {
             return !!this[PHONE];
+        },
+
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
         },
 
         isTablet() {

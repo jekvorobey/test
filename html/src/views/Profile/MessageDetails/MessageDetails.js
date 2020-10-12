@@ -14,7 +14,8 @@ export default {
     routes: [
         {
             name: 'MessageDetails',
-            path: 'messages/:chatId',
+            path: 'messages/:chatId/',
+            pathToRegexpOptions: { strict: true },
             component: MessageDetailsAsync,
         },
     ],

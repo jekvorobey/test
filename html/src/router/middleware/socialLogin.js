@@ -4,7 +4,7 @@ import { breakMiddleware } from '@util/router';
 import { NAME as AUTH_MODULE } from '@store/modules/Auth';
 import { LOGIN_BY_SOCIAL } from '@store/modules/Auth/actions';
 
-export default async function socialLogin({ from, to, next, container }) {
+export default async function socialLogin({ to, next, container }) {
     const { dispatch } = container.get(injectionType.STORE);
     const appContext = container.get(injectionType.APPLICATION_CONTEXT);
 

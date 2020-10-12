@@ -16,7 +16,8 @@ export default {
     routes: [
         {
             name: 'Promopage',
-            path: 'promopage',
+            path: 'promopage/',
+            pathToRegexpOptions: { strict: true },
             component: PromopageAsync,
 
             meta: {

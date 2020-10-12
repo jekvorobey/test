@@ -14,7 +14,8 @@ export default {
     routes: [
         {
             name: 'Certificates',
-            path: 'certificates',
+            path: 'certificates/',
+            pathToRegexpOptions: { strict: true },
             component: CertificatesAsync,
         },
     ],

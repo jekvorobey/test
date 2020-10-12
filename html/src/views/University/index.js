@@ -13,7 +13,8 @@ export default {
      */
     routes: [
         {
-            path: '/university',
+            path: '/university/',
+            pathToRegexpOptions: { strict: true },
             component: UniversityAsync,
         },
     ],

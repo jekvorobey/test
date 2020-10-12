@@ -16,7 +16,8 @@ export default {
     routes: [
         {
             name: 'InfoPages',
-            path: `/:page(${types.join('|')})`,
+            path: `/:page(${types.join('|')})/`,
+            pathToRegexpOptions: { strict: true },
             component: InfoPages,
         },
     ],

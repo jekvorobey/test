@@ -2,7 +2,10 @@
     <section class="section documents-view">
         <div class="container container--tablet-lg">
             <div class="documents-view__header">
-                <h2 class="documents-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+                <h2 class="documents-view__hl">
+                    {{ pageTitle }}
+                </h2>
+
                 <v-select
                     class="documents-view__sort"
                     label="title"
@@ -44,17 +47,26 @@ import { SET_LOAD_PATH, FETCH_DOCUMENTS, FETCH_DOCUMENTS_DATA } from '@store/mod
 
 import { generateFileOriginalPath, formatFileSize } from '@util/file';
 import { documentsTypes } from '@enums/documents';
+import metaMixin from '@plugins/meta';
 import './Documents.css';
 
 const DOCUMENTS_MODULE_PATH = `${PROFILE_MODULE}/${DOCUMENTS_MODULE}`;
 
 export default {
     name: 'documents',
-
+    mixins: [metaMixin],
+    
     components: {
         VSelect,
 
         DocumentCard,
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     data() {
@@ -85,6 +97,10 @@ export default {
                     href: generateFileOriginalPath(item.file_id),
                 };
             });
+        },
+
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
         },
     },
 

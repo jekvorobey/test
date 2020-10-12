@@ -40,14 +40,17 @@ export default {
         }
     },
 
-    async [FETCH_ORDERS]({ commit }, { page = DEFAULT_PAGE, orderField, orderDirection, showMore, orderFilterField, date }) {
+    async [FETCH_ORDERS](
+        { commit },
+        { page = DEFAULT_PAGE, orderField, orderDirection, showMore, orderFilterField, date }
+    ) {
         try {
             const { orders: items, count: range } = await getReferralOrders(
                 page,
                 REFERRAL_ORDERS_PAGE_SIZE,
                 orderField,
                 orderDirection,
-                date,
+                date
             );
 
             commit(SET_QUERY_PARAMS, {
@@ -64,7 +67,10 @@ export default {
         }
     },
 
-    async [FETCH_REFERRAL_DATA]({ dispatch, commit }, { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField, date }) {
+    async [FETCH_REFERRAL_DATA](
+        { dispatch },
+        { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField, date }
+    ) {
         try {
             await Promise.all([
                 dispatch(FETCH_STATISTICS),

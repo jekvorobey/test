@@ -3,7 +3,9 @@
         <v-cart-header />
 
         <div class="container">
-            <h1 class="cart-view__section-hl">Моя корзина</h1>
+            <h1 class="cart-view__section-hl">
+                {{ pageTitle }}
+            </h1>
         </div>
 
         <section class="section cart-view__main">
@@ -274,6 +276,7 @@ import { NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER } from '@store
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
+import metaMixin from '@plugins/meta';
 import { cancelRoute } from '@settings';
 import { breakpoints, modalName, httpCodes, requestStatus } from '@enums';
 import { discountType } from '@enums/checkout';
@@ -319,6 +322,7 @@ const sliderOptions = {
 
 export default {
     name: 'cart',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -340,6 +344,13 @@ export default {
         CartMasterclassPanel,
 
         RetailRocketContainer,
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     data() {
@@ -380,6 +391,11 @@ export default {
         warningStrings() {
             const warnings = this[WARNINGS] || [];
             return warnings.map((e) => this.$t(`validation.cart.${e}`));
+        },
+        
+        pageTitle() {
+            const { activeTabItem } = this;
+            return activeTabItem ? `Моя корзина - ${this.$t(`cart.title.${activeTabItem.type}`)}` : 'Моя корзина';
         },
 
         isProduct() {

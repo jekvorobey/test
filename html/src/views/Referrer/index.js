@@ -17,7 +17,8 @@ export default {
     routes: [
         {
             name: 'Referrer',
-            path: '/referrer/:code',
+            path: '/referrer/:code/',
+            pathToRegexpOptions: { strict: true },
             component: ReferrerAsync,
 
             meta: {

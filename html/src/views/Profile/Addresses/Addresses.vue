@@ -1,6 +1,9 @@
 <template>
     <section class="section addresses-view">
-        <h2 class="addresses-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+        <h2 class="addresses-view__hl">
+            {{ pageTitle }}
+        </h2>
+
         <info-panel class="addresses-view__panel" header="Сохраненные адреса">
             <template v-slot:controls>
                 <v-link class="addresses-view__panel-link" tag="button" @click="onAddAddress">
@@ -8,6 +11,7 @@
                     <span>&nbsp;&nbsp;Добавить новый адрес</span>
                 </v-link>
             </template>
+
             <div class="container container--tablet-lg" v-if="addresses && addresses.length > 0">
                 <ul class="addresses-view__panel-list">
                     <checkout-option-card
@@ -102,7 +106,7 @@ import _isEqual from 'lodash/isEqual';
 import { modalName } from '@enums';
 import { $store, $progress, $logger } from '@services';
 import { getRandomIntInclusive } from '@util';
-
+import metaMixin from '@plugins/meta';
 import '@images/sprites/plus-small.svg';
 import '@images/sprites/info-middle.svg';
 import '@images/sprites/edit.svg';
@@ -112,6 +116,7 @@ const ADDRESSES_MODULE_PATH = `${PROFILE_MODULE}/${ADDRESSES_MODULE}`;
 
 export default {
     name: 'addresses',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -125,6 +130,13 @@ export default {
         ConfirmationModal,
     },
 
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
+    },
+
     computed: {
         ...mapState(ADDRESSES_MODULE_PATH, [ADDRESSES]),
         ...mapState(MODAL_MODULE, {
@@ -133,6 +145,10 @@ export default {
             isConfirmationModalOpen: state =>
                 state[MODALS][modalName.profile.CONFIRMATION] && state[MODALS][modalName.profile.CONFIRMATION].open,
         }),
+
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
+        },
 
         isTablet() {
             return this.$mq.tablet;

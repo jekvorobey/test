@@ -77,7 +77,7 @@
             </section>
 
             <div class="container container--tablet-lg">
-                <section class="referal-view__section">
+                <section class="referal-view__section referal-view__graph-table">
                     <div class="referal-view__section-header">
                         <h3 class="referal-view__section-hl">История заказов рефералов</h3>
                         <v-select
@@ -694,6 +694,7 @@ export default {
                     date,
                 })
                 .then(() => {
+                    $store.dispatch(`${REFERRAL_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
                     next((vm) => {
                         $progress.finish();
                         vm.setOrderFilterValue(orderFilterField);

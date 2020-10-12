@@ -1,7 +1,9 @@
 <template>
     <section class="section promocodes-view">
         <div class="container container--tablet-lg promocodes-view__header">
-            <h2 class="promocodes-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+            <h2 class="promocodes-view__hl">
+                {{ pageTitle }}
+            </h2>
 
             <div class="promocodes-view__header-controls">
                 <radio-switch
@@ -326,6 +328,7 @@ import { promocodeType, promocodeDiscountType } from '@enums/checkout';
 import { digit2DateSettings } from '@settings';
 import { saveToClipboard } from '@util';
 import { $store, $progress, $logger, $context } from '@services';
+import metaMixin from '@plugins/meta';
 import '@images/sprites/copy.svg';
 import '@images/sprites/arrow-down.svg';
 import '@images/sprites/info-middle.svg';
@@ -335,6 +338,7 @@ const PROMOCODES_MODULE_PATH = `${PROFILE_MODULE}/${PROMOCODES_MODULE}`;
 
 export default {
     name: 'promocodes',
+    mixins: [metaMixin],
 
     components: {
         VSvg,
@@ -346,6 +350,13 @@ export default {
         EmptyPlaceholderPanel,
 
         MessageModal,
+    },
+
+    metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     data() {
@@ -379,6 +390,10 @@ export default {
         showSwitch() {
             const { isArchive, items = [] } = this;
             return (!isArchive && items && items.length > 0) || isArchive;
+        },
+
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
         },
 
         isArchive() {

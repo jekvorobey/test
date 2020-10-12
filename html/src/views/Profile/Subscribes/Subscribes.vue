@@ -1,8 +1,11 @@
 <template>
     <section class="section subscribes-view">
         <div class="container container--tablet-lg">
-            <h2 class="subscribes-view__hl">{{ $t(`profile.routes.${$route.name}`) }}</h2>
+            <h2 class="subscribes-view__hl">
+                {{ pageTitle }}
+            </h2>
         </div>
+
         <info-panel class="subscribes-view__panel" header="Что вас интересует?">
             <div class="container container--tablet-lg">
                 <v-check
@@ -96,13 +99,14 @@ import _cloneDeep from 'lodash/cloneDeep';
 import { $store, $progress, $logger, $context } from '@services';
 import { modalName, httpCodes } from '@enums';
 import validationMixin, { required, minLength, email } from '@plugins/validation';
+import metaMixin from '@plugins/meta';
 import './Subscribes.css';
 
 const SUBSCRIBES_MODULE_PATH = `${PROFILE_MODULE}/${SUBSCRIBES_MODULE}`;
 
 export default {
     name: 'subscribes',
-    mixins: [validationMixin],
+    mixins: [metaMixin, validationMixin],
 
     components: {
         VButton,
@@ -110,6 +114,13 @@ export default {
         VSpinner,
 
         InfoPanel,
+    },
+
+     metaInfo() {
+        const { pageTitle } = this;
+        return {
+            title: pageTitle,
+        };
     },
 
     validations: {
@@ -129,6 +140,10 @@ export default {
 
     computed: {
         ...mapState(SUBSCRIBES_MODULE_PATH, [CONTENT, SUBSCRIBES]),
+
+        pageTitle() {
+            return this.$t(`profile.routes.${this.$route.name}`);
+        },
 
         isDirty() {
             return this.$v.$anyDirty;
