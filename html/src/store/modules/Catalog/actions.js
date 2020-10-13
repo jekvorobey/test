@@ -85,7 +85,7 @@ export default {
             routeSegments,
             filterSegments,
 
-            searchString,
+            searchString = null,
             page,
             orderField,
             orderDirection,

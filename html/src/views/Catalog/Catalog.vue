@@ -650,7 +650,7 @@ export default {
                         page = DEFAULT_PAGE,
                         orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.POPULARITY,
                         orderDirection = sortDirections.DESC,
-                        search_string = null,
+                        search_string: toSearchString,
                     },
                 } = to;
 
@@ -659,8 +659,6 @@ export default {
                     query: { page: fromPage = DEFAULT_PAGE },
                 } = from;
 
-                const searchString =
-                    search_string && toType === productGroupTypes.SEARCH ? encodeURI(search_string) : undefined;
                 const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
 
                 if (!showMore && page !== fromPage)
@@ -679,7 +677,7 @@ export default {
                     routeSegments,
                     filterSegments,
 
-                    searchString,
+                    searchString: toSearchString,
                     page,
                     orderField,
                     orderDirection,
