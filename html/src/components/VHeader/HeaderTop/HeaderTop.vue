@@ -7,9 +7,9 @@
             </button>
 
             <div class="header-top__middle">
-                <router-link class="header-top__middle-item" v-for="link in links" :key="link.id" :to="link.to">
+                <self-router-link class="header-top__middle-item" v-for="link in links" :key="link.id" :to="link.to" same-disabled>
                     <v-svg :name="link.icon" width="16" height="16" />{{ link.name }}
-                </router-link>
+                </self-router-link>
             </div>
 
             <help-panel class="header-top__help">
@@ -23,6 +23,7 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VClamp from 'vue-clamp';
+import SelfRouterLink from '@controls/VLink/SelfRouterLink.vue';
 
 import HelpPanel from '@components/HelpPanel/HelpPanel.vue';
 
@@ -43,12 +44,14 @@ import '@images/sprites/arrow-down.svg';
 import './HeaderTop.critical.css';
 import { productGroupTypes } from '@enums/product';
 
+
 export default {
     name: 'header-top',
 
     components: {
         VSvg,
         VClamp,
+        SelfRouterLink,
 
         HelpPanel,
     },

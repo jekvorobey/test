@@ -161,7 +161,10 @@ export default {
             routeSegments = routeSegments.filter(s => s === value);
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path, query: { ...this.$route.query, page: undefined } });
+            const query = { ...this.$route.query };
+            delete query.page;
+
+            this.$router.replace({ path, query });
         },
 
         onCheckChange(e, value) {
@@ -179,7 +182,10 @@ export default {
             }
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path, query: { ...this.$route.query, page: undefined } });
+            const query = { ...this.$route.query };
+            delete query.page;
+
+            this.$router.replace({ path, query });
         },
 
         onShowMoreClick({ name }) {
@@ -217,13 +223,10 @@ export default {
             } else routeSegments.push(segment);
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({
-                path,
-                query: {
-                    ...this.$route.query,
-                    page: undefined,
-                },
-            });
+            const query = { ...this.$route.query };
+            delete query.page;
+
+            this.$router.replace({ path, query });
         }, 500);
     },
 };

@@ -6,9 +6,10 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span></breadcrumb-item
                 >
-                <breadcrumb-item key="Referrer" :to="rootUrl" :disabled="rootUrl === $route.fullPath"
-                    >{{ $route.params.code }}
-                </breadcrumb-item>
+                <breadcrumb-item 
+                    key="Referrer" 
+                    :to="$route.path"
+                >{{ $route.params.code }}</breadcrumb-item>
             </breadcrumbs>
         </div>
 
@@ -138,11 +139,6 @@ export default {
 
         productName() {
             return pluralize(this[RANGE], ['продукт', 'продукта', 'продуктов']);
-        },
-
-        rootUrl() {
-            const { code } = this;
-            return generateReferrerUrl(code);
         },
 
         isTablet() {

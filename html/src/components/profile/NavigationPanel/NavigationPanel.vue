@@ -9,6 +9,8 @@
                         class="navigation-panel__group-link"
                         :to="{ name: route.name }"
                         :exact="route.exact"
+                        :same-disabled="disableLinks"
+                        @click="onLinkClick"
                     >
                         {{ route.displayName || $t(`profile.routes.${route.name}`) }}
                     </v-link>
@@ -44,6 +46,11 @@ export default {
     },
 
     props: {
+        disableLinks: {
+            type: Boolean,
+            default: false,
+        },
+
         groups: {
             type: Array,
             default() {
@@ -61,6 +68,10 @@ export default {
             } catch (error) {
                 $logger.error(error);
             }
+        },
+
+        onLinkClick(){
+            this.$emit('link-click');
         },
     },
 };

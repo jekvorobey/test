@@ -10,7 +10,7 @@
             <span />
         </template>
         <template v-slot:body>
-            <navigation-panel class="profile-navigation-panel__navigation" :groups="groups" />
+            <navigation-panel class="profile-navigation-panel__navigation" :groups="groups" disable-links />
         </template>
     </general-popup-panel>
 </template>

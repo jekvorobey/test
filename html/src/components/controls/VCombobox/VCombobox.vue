@@ -39,11 +39,12 @@
                 tabindex="-1"
                 class="btn--transparent v-combobox__btn"
                 :class="{ 'is-open': shown }"
-                icon-name="arrow-down"
                 :disabled="disabled"
                 @click="onBtnClick"
                 @mousedown.prevent
-            />
+            > 
+                <v-svg name="arrow-down" />
+            </v-button>
             <transition :name="animation">
                 <div class="v-combobox__popup" v-show="shown" :class="{ 'is-invalid': error }">
                     <transition name="fade" mode="out-in">

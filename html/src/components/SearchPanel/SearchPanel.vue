@@ -17,14 +17,14 @@
                 <ul class="search-panel__categories-list">
                     <template v-if="!isEmpty && categories && categories.length > 0">
                         <li class="search-panel__categories-item" :key="category.name" v-for="category in categories">
-                            <v-link class="search-panel__categories-link" :to="category.url">
+                            <v-link class="search-panel__categories-link" :to="category.url" @click="onSetSearch(false)">
                                 {{ category.name }}
                             </v-link>
                         </li>
                     </template>
                     <template v-else>
                         <li class="search-panel__categories-item" :key="request.name" v-for="request in requests">
-                            <v-link class="search-panel__categories-link" :to="request.url">
+                            <v-link class="search-panel__categories-link" :to="request.url" @click="onSetSearch(false)">
                                 {{ request.name }}
                             </v-link>
                         </li>
@@ -198,7 +198,7 @@ export default {
             this.$router.replace({
                 path: `/${productGroupTypes.SEARCH}/?search_string=${this.searchString}`,
             });
-            this[SET_SEARCH](false);
+            this.onSetSearch(false);
         },
 
         onAddToCart(item) {
@@ -221,8 +221,12 @@ export default {
             });
         },
 
+        onSetSearch(value){
+            this[SET_SEARCH](value);
+        },
+
         onKeyUp(e) {
-            if (e.key === 'Escape') this[SET_SEARCH](false);
+            if (e.key === 'Escape') this.onSetSearch(false);
         },
     },
 

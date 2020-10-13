@@ -2,13 +2,13 @@ import { breakpoints } from '@enums';
 import widgetImage from '@images/mock/widgetImage.jpg';
 
 const pagesData = {
-    '/text-page': {
+    '/text-page/': {
         breadcrumbs: [
             {
                 id: 1,
                 component: 'breadcrumbs-widget',
                 data: {
-                    url: '/text-page',
+                    url: '/text-page/',
                     name: 'Текстовая страница',
                 },
             },
@@ -19,11 +19,11 @@ const pagesData = {
                 component: 'nav-widget',
                 data: {
                     items: [
-                        { url: '/text-page', name: 'Текстовая страница' },
-                        { url: '/text-page-with-images', name: 'Текстовая страница с картинками' },
-                        { url: '/text-page-with-table', name: 'Текстовая страница с таблицей' },
-                        { url: '/text-page-without-menu', name: 'Текстовая страница без меню' },
-                        { url: '/undefined-page', name: 'Несуществующая страница' },
+                        { url: '/text-page/', name: 'Текстовая страница' },
+                        { url: '/text-page-with-images/', name: 'Текстовая страница с картинками' },
+                        { url: '/text-page-with-table/', name: 'Текстовая страница с таблицей' },
+                        { url: '/text-page-without-menu/', name: 'Текстовая страница без меню' },
+                        { url: '/undefined-page/', name: 'Несуществующая страница' },
                     ],
                 },
             },
@@ -168,13 +168,13 @@ const pagesData = {
         ],
     },
 
-    '/text-page-with-images': {
+    '/text-page-with-images/': {
         breadcrumbs: [
             {
                 id: 1,
                 component: 'breadcrumbs-widget',
                 data: {
-                    url: '/text-page-with-images',
+                    url: '/text-page-with-images/',
                     name: 'Текстовая страница с картинками',
                 },
             },
@@ -185,11 +185,11 @@ const pagesData = {
                 component: 'nav-widget',
                 data: {
                     items: [
-                        { url: '/text-page', name: 'Текстовая страница' },
-                        { url: '/text-page-with-images', name: 'Текстовая страница с картинками' },
-                        { url: '/text-page-with-table', name: 'Текстовая страница с таблицей' },
-                        { url: '/text-page-without-menu', name: 'Текстовая страница без меню' },
-                        { url: '/undefined-page', name: 'Несуществующая страница' },
+                        { url: '/text-page/', name: 'Текстовая страница' },
+                        { url: '/text-page-with-images/', name: 'Текстовая страница с картинками' },
+                        { url: '/text-page-with-table/', name: 'Текстовая страница с таблицей' },
+                        { url: '/text-page-without-menu/', name: 'Текстовая страница без меню' },
+                        { url: '/undefined-page/', name: 'Несуществующая страница' },
                     ],
                 },
             },
@@ -419,13 +419,13 @@ const pagesData = {
         ],
     },
 
-    '/text-page-with-table': {
+    '/text-page-with-table/': {
         breadcrumbs: [
             {
                 id: 1,
                 component: 'breadcrumbs-widget',
                 data: {
-                    url: '/text-page-with-table',
+                    url: '/text-page-with-table/',
                     name: 'Текстовая страница с таблицей',
                 },
             },
@@ -436,11 +436,11 @@ const pagesData = {
                 component: 'nav-widget',
                 data: {
                     items: [
-                        { url: '/text-page', name: 'Текстовая страница' },
-                        { url: '/text-page-with-images', name: 'Текстовая страница с картинками' },
-                        { url: '/text-page-with-table', name: 'Текстовая страница с таблицей' },
-                        { url: '/text-page-without-menu', name: 'Текстовая страница без меню' },
-                        { url: '/undefined-page', name: 'Несуществующая страница' },
+                        { url: '/text-page/', name: 'Текстовая страница' },
+                        { url: '/text-page-with-images/', name: 'Текстовая страница с картинками' },
+                        { url: '/text-page-with-table/', name: 'Текстовая страница с таблицей' },
+                        { url: '/text-page-without-menu/', name: 'Текстовая страница без меню' },
+                        { url: '/undefined-page/', name: 'Несуществующая страница' },
                     ],
                 },
             },
@@ -544,13 +544,13 @@ const pagesData = {
         ],
     },
 
-    '/text-page-without-menu': {
+    '/text-page-without-menu/': {
         breadcrumbs: [
             {
                 id: 1,
                 component: 'breadcrumbs-widget',
                 data: {
-                    url: '/text-page-without-menu',
+                    url: '/text-page-without-menu/',
                     name: 'Текстовая страница без меню',
                 },
             },

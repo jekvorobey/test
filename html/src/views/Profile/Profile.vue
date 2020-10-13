@@ -14,14 +14,12 @@
                         v-if="$route.name !== 'Cabinet' && breadcrumbs && breadcrumbs.length === 0"
                         :key="$route.name"
                         :to="$route.path"
-                        :disabled="$route.path === $route.fullPath"
                         >{{ routeTitle }}
                     </breadcrumb-item>
                     <breadcrumb-item
                         v-for="breadcrumb in breadcrumbs"
                         :key="breadcrumb.name"
                         :to="breadcrumb.to"
-                        :disabled="breadcrumb.to === $route.fullPath"
                         >{{ breadcrumb.name }}
                     </breadcrumb-item>
                 </breadcrumbs>
@@ -42,7 +40,7 @@
             <v-sticky v-else class="profile-view__panel profile-view__container--mobile">
                 <template v-slot:sticky>
                     <v-button class="profile-view__panel-btn" @click="onOpenNavigation">
-                        {{ $t(`profile.routes.${$route.name}`) }}<v-svg name="arrow-updown" width="16" height="16" />
+                        {{ routeTitle }}<v-svg name="arrow-updown" width="16" height="16" />
                     </v-button>
                 </template>
                 <breadcrumbs class="container">
@@ -50,19 +48,20 @@
                         <v-svg v-if="isTablet" name="home" width="10" height="10" />
                         <span v-else>Главная</span></breadcrumb-item
                     >
-                    <breadcrumb-item key="Cabinet" :to="{ name: 'Cabinet' }">
-                        {{ $t('profile.routes.Cabinet') }}
-                    </breadcrumb-item>
+                    <breadcrumb-item 
+                        key="Cabinet" 
+                        :to="{ name: 'Cabinet' }"
+                    >{{ $t('profile.routes.Cabinet') }}</breadcrumb-item>
                     <breadcrumb-item
                         v-if="$route.name !== 'Cabinet' && breadcrumbs && breadcrumbs.length === 0"
                         :key="$route.name"
                         :to="$route.path"
-                    >
-                        {{ $t(`profile.routes.${$route.name}`) }}
-                    </breadcrumb-item>
-                    <breadcrumb-item v-for="breadcrumb in breadcrumbs" :key="breadcrumb.name" :to="breadcrumb.to">
-                        {{ breadcrumb.name }}
-                    </breadcrumb-item>
+                    >{{ routeTitle }}</breadcrumb-item>
+                    <breadcrumb-item 
+                        v-for="breadcrumb in breadcrumbs" 
+                        :key="breadcrumb.name" 
+                        :to="breadcrumb.to"
+                    >{{ breadcrumb.name }}</breadcrumb-item>
                 </breadcrumbs>
                 <div class="profile-view__main">
                     <transition name="fade-absolute">

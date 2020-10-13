@@ -1,52 +1,39 @@
 <template>
-    <router-link class="link" v-if="to" :to="to" :tag="tag" v-on="handlers" :exact="exact">
-        <v-svg v-if="iconName && placement === 'before'" :name="iconName" :modifier="iconModifier" />
+    <self-router-link class="link" v-if="to" :to="to" :exact="exact" :same-disabled="sameDisabled" v-on="handlers">
         <slot />
-        <v-svg v-if="iconName && placement === 'after'" :name="iconName" :modifier="iconModifier" />
-    </router-link>
+    </self-router-link>
     <a class="link" v-else-if="tag === 'a'" v-on="handlers">
-        <v-svg v-if="iconName && placement === 'before'" :name="iconName" :modifier="iconModifier" />
         <slot />
-        <v-svg v-if="iconName && placement === 'after'" :name="iconName" :modifier="iconModifier" />
     </a>
     <button class="link" v-else :type="type" v-on="handlers">
-        <v-svg v-if="iconName && placement === 'before'" :name="iconName" :modifier="iconModifier" />
         <slot />
-        <v-svg v-if="iconName && placement === 'after'" :name="iconName" :modifier="iconModifier" />
     </button>
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue';
-
-const placements = ['before', 'after'];
-const validTags = ['a', 'button'];
+import SelfRouterLink from './SelfRouterLink.vue';
 
 import './VLink.critical.css';
 import './VLink.css';
+
+const validTags = ['a', 'button'];
 
 /**
  * Базовый класс для линка, поддерживает SVG
  */
 export default {
     name: 'v-link',
+
     components: {
-        VSvg,
+        SelfRouterLink,
     },
+
     props: {
-        iconName: String,
-        iconModifier: String,
-        placement: {
-            type: String,
-            default: 'before',
-            validator(value) {
-                return placements.indexOf(value) !== -1;
-            },
-        },
         type: {
             type: String,
             default: 'button',
         },
+
         tag: {
             type: String,
             default: 'a',
@@ -54,11 +41,17 @@ export default {
                 return validTags.indexOf(value) !== -1;
             },
         },
+
         to: {
             type: [String, Object],
         },
 
         exact: {
+            type: Boolean,
+            default: false,
+        },
+
+        sameDisabled: {
             type: Boolean,
             default: false,
         },

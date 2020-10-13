@@ -1,18 +1,20 @@
 <template>
     <li class="breadcrumb-item">
-        <span class="breadcrumb-item__link" v-if="disabled">
+        <self-router-link class="breadcrumb-item__link" :to="to" :disabled="disabled" same-disabled>
             <slot />
-        </span>
-        <router-link class="breadcrumb-item__link" v-else :to="to">
-            <slot />
-        </router-link>
+        </self-router-link>
     </li>
 </template>
 <script>
+import SelfRouterLink from '@controls/VLink/SelfRouterLink.vue';
 import './BreadcrumbItem.css';
 
 export default {
     name: 'breadcrumb-item',
+
+    components: {
+        SelfRouterLink,
+    },
 
     props: {
         to: {

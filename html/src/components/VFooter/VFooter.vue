@@ -8,14 +8,14 @@
                     </v-link>
                 </div>
                 <div class="v-footer__col" :key="col.title" v-for="col in links">
-                    <router-link v-if="col.url" class="v-footer__col-title" :to="col.url">{{ col.title }}</router-link>
+                    <self-router-link class="v-footer__col-title" v-if="col.url" :to="col.url" same-disabled>{{ col.title }}</self-router-link>
                     <a v-else class="v-footer__col-title">{{ col.title }}</a>
 
                     <ul class="v-footer__links">
                         <li class="v-footer__links-item" :key="link.name" v-for="link in col.items" :title="link.name">
-                            <router-link v-if="link.url" class="v-footer__link" :to="link.url">
+                            <self-router-link class="v-footer__link" v-if="link.url" :to="link.url" same-disabled>
                                 {{ link.name }}
-                            </router-link>
+                            </self-router-link>
                             <a v-else class="v-footer__link">{{ col.title }}</a>
                         </li>
                     </ul>
@@ -39,18 +39,22 @@
             <hr />
             <div class="v-footer__row v-footer__bottom-links">
                 <p class="v-footer__rights" v-html="$t('footer.rights')" />
-                <router-link
+                <self-router-link
                     class="v-footer__link"
                     :to="{ name: 'Agreements', params: { type: agreementTypes.PERSONAL_POLICY } }"
+                    target="_blank"
+                    same-disabled
                 >
                     {{ $t('footer.terms_of_use') }}
-                </router-link>
-                <router-link
+                </self-router-link>
+                <self-router-link
                     class="v-footer__link"
                     :to="{ name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER } }"
+                    target="_blank"
+                    same-disabled
                 >
                     {{ $t('footer.offer') }}
-                </router-link>
+                </self-router-link>
             </div>
         </div>
 
@@ -64,9 +68,9 @@
             <template v-slot:content="{ item }">
                 <ul class="v-footer__links">
                     <li class="v-footer__links-item" :key="link.name" v-for="link in item.items" :title="link.name">
-                        <router-link v-if="link.url" class="v-footer__link" :to="link.url">
+                        <self-router-link class="v-footer__link" v-if="link.url" :to="link.url" same-disabled>
                             {{ link.name }}
-                        </router-link>
+                        </self-router-link>
                     </li>
                 </ul>
             </template>
@@ -88,20 +92,22 @@
         </div>
 
         <div class="v-footer__container v-footer__container--mobile v-footer__col v-footer__mobile-links">
-            <v-link
+            <self-router-link
                 class="v-footer__link"
                 :to="{ name: 'Agreements', params: { type: agreementTypes.PERSONAL_POLICY } }"
                 target="_blank"
+                same-disabled
             >
                 {{ $t('footer.terms_of_use') }}
-            </v-link>
-            <v-link
+            </self-router-link>
+            <self-router-link
                 class="v-footer__link"
                 :to="{ name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER } }"
                 target="_blank"
+                same-disabled
             >
                 {{ $t('footer.offer') }}
-            </v-link>
+            </self-router-link>
             <p class="v-footer__rights" v-html="$t('footer.rights')" />
         </div>
     </footer>
@@ -111,6 +117,7 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VAccordion from '@controls/VAccordion/VAccordion.vue';
+import SelfRouterLink from '@controls/VLink/SelfRouterLink.vue';
 
 import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/instagram-bw.svg';
@@ -133,6 +140,7 @@ export default {
         VSvg,
         VLink,
         VAccordion,
+        SelfRouterLink,
     },
 
     computed: {

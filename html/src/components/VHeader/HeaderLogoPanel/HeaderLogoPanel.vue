@@ -1,8 +1,8 @@
 <template>
     <div class="header-logo-panel">
-        <router-link v-if="hasRouter" class="header-logo-panel__link" to="/">
+        <self-router-link v-if="hasRouter" class="header-logo-panel__link" to="/" same-disabled>
             <v-svg name="logo-text" width="340" height="35" />
-        </router-link>
+        </self-router-link>
         <a v-else class="header-logo-panel__link" href="/">
             <v-svg name="logo-text" width="340" height="35" />
         </a>
@@ -14,6 +14,7 @@
 
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
+import SelfRouterLink from '@controls/VLink/SelfRouterLink.vue';
 
 import '@images/sprites/logo.svg';
 import '@images/sprites/logo-text.svg';
@@ -25,6 +26,7 @@ export default {
 
     components: {
         VSvg,
+        SelfRouterLink,
     },
 
     computed: {

@@ -671,13 +671,15 @@ export default {
         onChangeFilter(name, value) {
             const { code } = value;
 
+            const query = {
+                ...this.$route.query,
+                [name]: code,
+            };
+            delete query.page;
+
             this.$router.replace({
                 path: this.$route.path,
-                query: {
-                    ...this.$route.query,
-                    [name]: code,
-                    page: undefined,
-                },
+                query,
             });
         },
     },

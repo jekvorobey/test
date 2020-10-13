@@ -6,7 +6,7 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="no-main" disabled>{{ pageTitle }}</breadcrumb-item>
+                <breadcrumb-item key="no-main" :to="$route.path">{{ pageTitle }}</breadcrumb-item>
             </breadcrumbs>
         </div>
 
@@ -40,11 +40,13 @@
 
                             <v-button
                                 class="partners-view__top-content-action-btn btn--transparent"
-                                icon-name="download"
-                                icon-modifier="partners-view__top-content-action-btn--icon"
                                 :href="pdfFile"
                                 download
                             >
+                                <v-svg
+                                    name="download"
+                                    modifier="partners-view__top-content-action-btn--icon"
+                                />
                                 <span>Скачать презентацию</span>
                             </v-button>
                         </div>
@@ -171,11 +173,13 @@
                     </p>
                     <v-button
                         class="partners-view__feedback-content--action-btn btn--transparent"
-                        icon-name="download"
-                        icon-modifier="partners-view__feedback-content--action-btn--icon"
                         :href="pdfFile"
                         download
                     >
+                        <v-svg
+                            name="download"
+                            modifier="partners-view__feedback-content--action-btn--icon"
+                        />
                         <span>Скачать презентацию</span>
                     </v-button>
                 </div>
