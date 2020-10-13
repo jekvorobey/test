@@ -6,9 +6,7 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="sets" :to="rootUrl" :disabled="rootUrl === $route.fullPath"
-                    >{{ catalogTitle }}
-                </breadcrumb-item>
+                <breadcrumb-item key="sets" :to="$route.path">{{ catalogTitle }}</breadcrumb-item>
             </breadcrumbs>
         </div>
 
@@ -217,11 +215,6 @@ export default {
         catalogTitle(){
             const { type } = this;
             return this.$t(`productGroups.title.${type || 'catalog'}`);
-        },
-
-        rootUrl() {
-            const { type } = this;
-            return generateProductGroupUrl(type);
         },
 
         isTablet() {

@@ -8,10 +8,10 @@
 
                 <header-navigation-panel class="header-bottom__bottom-nav" />
 
-                <router-link class="header-bottom__bottom-logo-middle" to="/">
+                <self-router-link class="header-bottom__bottom-logo-middle" to="/" same-disabled>
                     <v-svg name="logo-text" width="278" height="28" />
                     <v-svg name="logo" width="30" height="30" />
-                </router-link>
+                </self-router-link>
 
                 <div class="header-bottom__bottom-menu" v-if="scroll || isTabletLg">
                     <search-filter class="header-bottom__bottom-search" input-id="bottom-filter" />
@@ -39,6 +39,7 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VBurger from '@controls/VBurger/VBurger.vue';
+import SelfRouterLink from '@controls/VLink/SelfRouterLink.vue';
 
 import HeaderUserPanel from '@components/VHeader/HeaderUserPanel/HeaderUserPanel.vue';
 import HeaderLogoPanel from '@components/VHeader/HeaderLogoPanel/HeaderLogoPanel.vue';
@@ -75,6 +76,7 @@ export default {
         VSvg,
         VLink,
         VBurger,
+        SelfRouterLink,
 
         SearchPanel,
         SearchFilter,

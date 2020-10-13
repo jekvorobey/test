@@ -6,16 +6,26 @@
             btn-text="Меню"
             @isOpenChanged="SET_MENU_OPEN($event)"
         ></v-burger>
-        <v-link
-            v-for="item in headerMenu.items"
-            :key="item.name"
-            class="header-navigation-panel__item"
-            :to="item.url !== '/catalog' ? item.url : null"
-            :tag="item.url === '/catalog' ? 'button' : 'a'"
-            @click.native="item.url === '/catalog' && SET_MENU_OPEN(!isMenuOpen)"
-        >
-            {{ item.name }}
-        </v-link>
+        <template v-for="item in headerMenu.items">
+            <v-link
+                v-if="item.url === '/catalog/'"
+                class="header-navigation-panel__item"
+                tag="button"
+                :key="item.name"
+                @click="onToggleMenu"
+            >
+                {{ item.name }}
+            </v-link>
+            <v-link
+                class="header-navigation-panel__item"
+                v-else
+                :key="item.name"
+                :to="item.url"
+                same-disabled
+            >
+                {{ item.name }}
+            </v-link>
+        </template>
     </nav>
 </template>
 
@@ -62,6 +72,11 @@ export default {
     methods: {
         ...mapActions([SET_MENU_OPEN]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        onToggleMenu(){
+            const isMenuOpen = this[IS_MENU_OPEN];
+            this[SET_MENU_OPEN](!isMenuOpen);
+        },
     },
 };
 </script>

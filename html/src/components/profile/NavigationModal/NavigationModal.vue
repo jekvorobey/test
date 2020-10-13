@@ -2,7 +2,7 @@
     <general-modal class="navigation-modal" type="fullscreen" @close="onClose" :is-mobile="isTabletLg">
         <template v-slot:content>
             <div class="container navigation-modal__container">
-                <navigation-panel class="navigation-modal__panel" :groups="groups" />
+                <navigation-panel class="navigation-modal__panel" :groups="groups" @link-click="onClose" />
             </div>
         </template>
     </general-modal>

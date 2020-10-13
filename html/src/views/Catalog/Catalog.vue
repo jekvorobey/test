@@ -9,21 +9,19 @@
                 <breadcrumb-item
                     :key="type"
                     :to="breadcrumbRootUrl"
-                    :disabled="breadcrumbRootUrl === $route.fullPath"
                     >{{ $t(`productGroups.title.${type || 'catalog'}`) }}</breadcrumb-item
                 >
                 <breadcrumb-item
                     v-if="entityCode"
                     :key="entityCode"
                     :to="breadcrumbEntityUrl"
-                    :disabled="breadcrumbEntityUrl === $route.fullPath"
                     >{{ productGroup && productGroup.name }}</breadcrumb-item
                 >
                 <breadcrumb-item
                     v-for="category in categoriesBreadcrumbs"
                     :key="category.id"
                     :to="category.url"
-                    :disabled="category.disabled || category.url === $route.fullPath"
+                    :disabled="category.disabled"
                     >{{ category.name }}</breadcrumb-item
                 >
             </breadcrumbs>
@@ -483,9 +481,12 @@ export default {
 
         clearFilterUrl() {
             const { type, entityCode, code } = this;
+            const query = { ...this.$route.query };
+            delete query.page;
+
             return {
                 path: generateCategoryUrl(type, entityCode, code),
-                query: { ...this.$route.query, page: undefined },
+                query,
             };
         },
 
@@ -605,11 +606,15 @@ export default {
 
                 const { field, direction } = value;
 
-                if (field !== orderField || direction !== orderDirection)
+                if (field !== orderField || direction !== orderDirection){
+                    const query = { ...this.$route.query, orderField: field, orderDirection: direction };
+                    delete query.page;
+
                     this.$router.replace({
                         path: this.$route.path,
-                        query: { ...this.$route.query, orderField: field, orderDirection: direction, page: undefined },
+                        query,
                     });
+                }  
             }
         },
 
@@ -623,7 +628,10 @@ export default {
             }
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
-            this.$router.replace({ path, query: { ...this.$route.query, page: undefined } });
+            const query = { ...this.$route.query };
+            delete query.page;
+
+            this.$router.replace({ path, query });
         },
 
         onShowMore() {

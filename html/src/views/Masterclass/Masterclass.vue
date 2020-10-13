@@ -6,12 +6,8 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="root" :to="rootUrl">
-                    {{ rootTitle }}
-                </breadcrumb-item>
-                <breadcrumb-item :key="code" :to="masterclassUrl" :disabled="masterclassUrl === $route.fullPath">
-                    {{ masterClass && masterClass.title }}
-                </breadcrumb-item>
+                <breadcrumb-item key="root" :to="rootUrl">{{ rootTitle }}</breadcrumb-item>
+                <breadcrumb-item :key="code" :to="$route.path">{{ masterClass && masterClass.title }}</breadcrumb-item>
             </breadcrumbs>
 
             <master-class-banner-card

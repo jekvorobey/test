@@ -10,17 +10,14 @@
         @mouseleave="onMouseOver(false)"
     >
         <div class="category-tree-item__label">
-            <router-link
+            <self-router-link
                 class="category-tree-item__link"
-                v-if="isInteractive && !sameRoute"
                 :to="url"
-                :exact="item.code === ''"
+                :disabled="!isInteractive"
+                same-disabled
             >
                 {{ item.name }}
-            </router-link>
-            <span class="category-tree-item__link" v-else>
-                {{ item.name }}
-            </span>
+            </self-router-link>
         </div>
         <transition name="slide-right">
             <ul class="category-tree-item__list" v-if="hasChildren && (!isInteractive || isHover || isActive)">
@@ -37,6 +34,8 @@
 </template>
 
 <script>
+import SelfRouterLink from '@controls/VLink/SelfRouterLink.vue';
+
 import { mapState, mapGetters } from 'vuex';
 import { NAME as CATALOG_MODULE } from '@store/modules/Catalog';
 import { ROOT_CATEGORY, ACTIVE_CATEGORIES } from '@store/modules/Catalog/getters';
@@ -46,6 +45,10 @@ import './CategoryTreeItem.css';
 
 export default {
     name: 'category-tree-item',
+
+    components: {
+        SelfRouterLink
+    },
 
     props: {
         item: {
@@ -110,16 +113,13 @@ export default {
                 rootCategory,
             } = this;
 
+            const query = { ...this.$route.query };
+            delete query.page;
+
             return {
                 path: generateCategoryUrl(type, entityCode, rootCategory ? !isRoot && code : code),
-                query: { ...this.$route.query, page: undefined },
+                query,
             };
-        },
-
-        sameRoute() {
-            const { url, $router, $route } = this;
-            const { href } = $router.resolve(url);
-            return href === $route.fullPath;
         },
 
         hasChildren() {

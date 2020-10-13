@@ -6,7 +6,7 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="no-main" disabled>{{ pageTitle }}</breadcrumb-item>
+                <breadcrumb-item key="no-main" :to="$route.path">{{ pageTitle }}</breadcrumb-item>
             </breadcrumbs>
         </div>
 

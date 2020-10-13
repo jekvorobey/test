@@ -6,9 +6,7 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="masterclasses" :to="rootUrl" :disabled="rootUrl === $route.fullPath">{{
-                    catalogTitle
-                }}</breadcrumb-item>
+                <breadcrumb-item key="masterclasses" :to="{ name: 'CatalogMasterclasses' }" >{{ catalogTitle }}</breadcrumb-item>
             </breadcrumbs>
 
             <!-- <section class="section masterclasses-view__banners">
@@ -499,10 +497,6 @@ export default {
 
         catalogTitle() {
             return this.$t('masterclasses.title');
-        },
-
-        rootUrl() {
-            return '/masterclasses/';
         },
 
         isTablet() {

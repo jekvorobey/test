@@ -2,7 +2,7 @@
     <div class="nav-panel" v-scroll-lock="isMenuOpen">
         <div class="container">
             <div class="nav-panel__main">
-                <group-list class="nav-panel__main-list" :items="categoriesCatalog" />
+                <group-list class="nav-panel__main-list" :items="categoriesCatalog" @link-click="onHandleClick"/>
                 <!-- <catalog-banner-card class="nav-panel__main-banner" :item="banner" /> -->
             </div>
         </div>
@@ -18,8 +18,8 @@ import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.v
 
 import { BANNER, IS_MENU_OPEN } from '@store';
 import { CATEGORIES_CATALOG } from '@store/getters';
-import { mapState, mapGetters } from 'vuex';
-
+import { SET_MENU_OPEN } from '@store/actions';
+import { mapState, mapGetters, mapActions } from 'vuex';
 import './NavPanel.css';
 
 export default {
@@ -33,6 +33,14 @@ export default {
     computed: {
         ...mapState([BANNER, IS_MENU_OPEN]),
         ...mapGetters([CATEGORIES_CATALOG]),
+    },
+
+    methods: {
+        ...mapActions([SET_MENU_OPEN]),
+
+        onHandleClick(){
+            this[SET_MENU_OPEN](false);
+        },
     },
 };
 </script>

@@ -5,15 +5,9 @@
                 <v-svg v-if="isTablet" name="home" width="10" height="10" />
                 <span v-else>Главная</span></breadcrumb-item
             >
-            <breadcrumb-item key="Catalog" :to="rootUrl">
-                Каталог
-            </breadcrumb-item>
-            <breadcrumb-item v-for="category in categoryBreadcrumbs" :key="category.code" :to="category.url">{{
-                category.name
-            }}</breadcrumb-item>
-            <breadcrumb-item :key="product.id" disabled>
-                {{ product.title }}
-            </breadcrumb-item>
+            <breadcrumb-item key="Catalog" :to="rootUrl">Каталог</breadcrumb-item>
+            <breadcrumb-item v-for="category in categoryBreadcrumbs" :key="category.code" :to="category.url">{{category.name}}</breadcrumb-item>
+            <breadcrumb-item :key="product.id" :to="$route.path">{{ product.title }}</breadcrumb-item>
         </breadcrumbs>
 
         <section class="section">

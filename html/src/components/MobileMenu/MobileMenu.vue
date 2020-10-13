@@ -38,6 +38,7 @@
                                 class="mobile-menu__menu-link"
                                 :to="category.url"
                                 :class="{ 'mobile-menu__menu-link--final': !(category.items && category.items.length) }"
+                                @click="onSetMenu(false)"
                             >
                                 {{ category.name }}
                             </v-link>
@@ -45,7 +46,7 @@
                     </ul>
                     <ul class="mobile-menu__list mobile-menu__panel-part">
                         <li class="mobile-menu__menu-item" v-for="item in headerMenuItems" :key="item.name">
-                            <v-link class="mobile-menu__menu-link" :to="item.url">
+                            <v-link class="mobile-menu__menu-link" :to="item.url" @click="onSetMenu(false)">
                                 {{ item.name }}
                             </v-link>
                         </li>
@@ -69,7 +70,7 @@
                                 </v-link>
                             </li>
                             <li class="mobile-menu__menu-item" v-if="hasSession">
-                                <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" to="/favorites">
+                                <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" to="/favorites/" @click="onSetMenu(false)">
                                     <span class="mobile-menu__menu-link-container">
                                         <v-svg :name="favoriteItemsIcon" width="24" height="24" />
                                         <span class="mobile-menu__menu-link-count" v-if="hasFavoriteItems">
@@ -91,7 +92,7 @@
                                 </v-link>
                             </li>
                             <li class="mobile-menu__menu-item" v-for="item in helpMenu.items" :key="item.name">
-                                <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" :to="item.url">
+                                <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" :to="item.url" @click="onSetMenu(false)">
                                     {{ item.name }}
                                 </v-link>
                             </li>
@@ -135,11 +136,20 @@
                             :key="item.name"
                         >
                             <v-link
+                                v-if="index === 0"
                                 class="mobile-menu__menu-link"
-                                :to="index !== 0 ? item.url : null"
-                                :tag="index !== 0 ? 'a' : 'button'"
                                 :class="{ 'mobile-menu__menu-link--full': index !== 0 }"
-                                @click.prevent="index === 0 ? (showCategories = true) : null"
+                                tag="button"
+                                @click="showCategories = true"
+                            >
+                                {{ item.name }}
+                            </v-link>
+                            <v-link
+                                v-else
+                                class="mobile-menu__menu-link"
+                                :to="item.url"
+                                :class="{ 'mobile-menu__menu-link--full': index !== 0 }"
+                                @click="onSetMenu(false)"
                             >
                                 {{ item.name }}
                             </v-link>
@@ -167,7 +177,11 @@
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item" v-if="hasSession">
-                            <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" to="/favorites">
+                            <v-link 
+                                class="mobile-menu__menu-link mobile-menu__menu-link--full" 
+                                :to="{ name: 'Favorites' }" 
+                                @click="onSetMenu(false)"
+                            >
                                 <span class="mobile-menu__menu-link-container">
                                     <v-svg :name="favoriteItemsIcon" width="24" height="24" />
                                     <span class="mobile-menu__menu-link-count" v-if="hasFavoriteItems">
@@ -193,7 +207,11 @@
                             v-for="(item, index) in helpMenu.items"
                             :key="item.name"
                         >
-                            <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" :to="item.url">
+                            <v-link 
+                                class="mobile-menu__menu-link mobile-menu__menu-link--full" 
+                                :to="item.url" 
+                                @click="onSetMenu(false)"
+                            >
                                 {{ item.name }}
                             </v-link>
                         </li>
@@ -233,6 +251,7 @@
                             class="mobile-menu__menu-link"
                             :to="category.url"
                             :class="{ 'mobile-menu__menu-link--final': !(category.items && category.items.length) }"
+                            @click="onSetMenu(false)"
                         >
                             {{ category.name }}
                         </v-link>
@@ -430,9 +449,14 @@ export default {
         },
 
         onRegister() {
-            if (this[HAS_SESSION]) this.$router.push({ name: 'Cabinet' });
+            if (this[HAS_SESSION]){
+                const profileRoute = { name: 'Cabinet' };
+                const { href } = this.$router.resolve(profileRoute);
+                if(href !== this.$route.fullPath) this.$router.push(profileRoute);
+                else this.onSetMenu(false);
+            }
             else {
-                this[SET_MENU_OPEN](false);
+                this.onSetMenu(false);
                 this[CHANGE_MODAL_STATE]({
                     name: modalName.general.AUTH,
                     open: true,
@@ -440,7 +464,7 @@ export default {
                         activeTab: authMode.LOGIN,
                     },
                 });
-            }
+            }  
         },
     },
 };

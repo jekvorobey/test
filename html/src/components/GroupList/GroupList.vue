@@ -6,7 +6,7 @@
             :key="id"
             :style="{ width: columnWidth }"
         >
-            <v-link v-if="to" class="group-list__link group-list__title" :to="to">
+            <v-link v-if="to" class="group-list__link group-list__title" :to="to" @click="onClick">
                 {{ name }}
             </v-link>
             <div v-else class="group-list__title">
@@ -20,7 +20,7 @@
             >
                 <ul>
                     <li v-for="{ name, id, to } in children" :key="id">
-                        <v-link class="group-list__link" :to="to">
+                        <v-link class="group-list__link" :to="to" @click="onClick">
                             {{ name }}
                         </v-link>
                     </li>
@@ -32,7 +32,7 @@
             </v-expander>
             <ul v-else>
                 <li v-for="{ name, id, to } in children" :key="id">
-                    <v-link class="group-list__link" :to="to">
+                    <v-link class="group-list__link" :to="to" @click="onClick">
                         {{ name }}
                     </v-link>
                 </li>
@@ -80,6 +80,12 @@ export default {
 
         maxCount() {
             return Number(this.count);
+        },
+    },
+
+    methods: {
+        onClick(e){
+            this.$emit('link-click', e);
         },
     },
 };
