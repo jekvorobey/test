@@ -5,6 +5,7 @@
                 <banner-card
                     class="list-banners-section__list-item"
                     v-for="banner in banners"
+                    tag="router-link"
                     :key="banner.id"
                     :image="banner.image"
                     :title="banner.title"
