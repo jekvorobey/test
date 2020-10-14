@@ -51,7 +51,7 @@ import HeaderLogoPanel from '@components/VHeader/HeaderLogoPanel/HeaderLogoPanel
 import CartHeaderUserPanel from '@components/VCartHeader/CartHeaderUserPanel/CartHeaderUserPanel.vue';
 import CartHeaderRegionPanel from '@components/VCartHeader/CartHeaderRegionPanel/CartHeaderRegionPanel.vue';
 
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import { IS_MENU_OPEN } from '@store';
 
 import '@images/sprites/logo.svg';

@@ -145,7 +145,7 @@ export default {
         },
 
         onToFavorites() {
-            this.$router.push({ path: '/favorites' });
+            this.$router.push({ name: 'Favorites' });
         },
     },
 };

@@ -9,18 +9,22 @@
         </div>
 
         <template v-if="hasSession">
-            <router-link class="header-user-panel__item header-user-panel__item--wishlist" to="/favorites">
+            <self-router-link
+                class="header-user-panel__item header-user-panel__item--wishlist"
+                :to="{ name: 'Favorites' }"
+                same-disabled
+            >
                 <v-svg :name="favoriteItemsIcon" width="24" height="24" />
                 <span class="text-bold header-user-panel__item-count" v-if="hasFavoriteItems">
                     {{ favoriteItemsCount }}
                 </span>
-            </router-link>
+            </self-router-link>
 
-            <div v-if="canBuy" class="header-user-panel__item header-user-panel__item-cart-controls" @click="onToCart">
+            <div v-if="canBuy" class="header-user-panel__item header-user-panel__item-cart-controls">
                 <cart-header-panel class="header-user-panel__item-cart">
                     <price class="text-medium header-user-panel__item-sum" v-bind="productItemsSum" always-number />
                     &nbsp;&nbsp;
-                    <button class="header-user-panel__cart-btn">
+                    <button class="header-user-panel__cart-btn" @click="onToCart">
                         <v-svg name="cart-middle" width="24" height="24" />
                         <span class="text-bold header-user-panel__item-count">{{ cartItemsCount }}</span>
                     </button>
@@ -32,6 +36,7 @@
 
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
+import SelfRouterLink from '@controls/VLink/SelfRouterLink.vue';
 
 import Price from '@components/Price/Price.vue';
 
@@ -62,6 +67,7 @@ export default {
 
     components: {
         VSvg,
+        SelfRouterLink,
 
         Price,
 
