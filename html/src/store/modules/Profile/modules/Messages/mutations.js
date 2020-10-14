@@ -1,12 +1,12 @@
-export const SET_LOAD_PATH = 'SET_LOAD_PATH';
+export const SET_LOAD = 'SET_LOAD';
 export const SET_CHATS = 'SET_CHATS';
 export const SET_CHAT_MESSAGES = 'SET_CHAT_MESSAGES ';
 export const PUSH_NEW_MESSAGE = 'PUSH_NEW_MESSAGE';
 export const SET_THEMES = 'SET_THEMES';
 
 export default {
-    [SET_LOAD_PATH](state, payload = '') {
-        state.loadPath = payload;
+    [SET_LOAD](state, payload = false) {
+        state.load = payload;
     },
 
     [SET_CHATS](state, payload = []) {

@@ -1,11 +1,9 @@
-import { DEFAULT_PAGE } from '@constants';
-
 import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
 
 export const NAME = 'messages';
-export const LOAD_PATH = 'loadPath';
+export const LOAD = 'load';
 
 export const CHAT_ID = 'chatId';
 export const TITLE = 'title';
@@ -19,7 +17,7 @@ export default function createModule() {
         namespaced: true,
 
         state: {
-            [LOAD_PATH]: '',
+            [LOAD]: false,
 
             [TITLE]: '',
             [CHAT_ID]: null,

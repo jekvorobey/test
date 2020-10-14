@@ -62,13 +62,12 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as MESSAGES_MODULE, ITEMS } from '@store/modules/Profile/modules/Messages';
+import { FETCH_CHATS, SET_LOAD } from '@store/modules/Profile/modules/Messages/actions';
 
 import { NAME as AUTH_MODULE } from '@store/modules/Auth';
 import { FETCH_UNREAD_MESSAGES } from '@store/modules/Auth/actions';
 
-import { FETCH_CHATS } from '@store/modules/Profile/modules/Messages/actions';
-
-import { $store, $progress } from '@services';
+import { $store, $progress, $context } from '@services';
 import { getDate } from '@util';
 import { modalName } from '@enums';
 import { numericYearDateSettings } from '@settings';
@@ -145,10 +144,20 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
+        const { load } = $store.state[PROFILE_MODULE][MESSAGES_MODULE];
+
+        if(load){
+            $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, false);
+            return next();
+        }
+
         $progress.start();
         $store
             .dispatch(`${MESSAGES_MODULE_PATH}/${FETCH_CHATS}`)
-            .then(() => next(vm => $progress.finish()))
+            .then(() => {
+                $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, $context.isServer);
+                next(vm => $progress.finish());
+            })
             .catch(error => next(vm => $progress.fail()));
     },
 };
