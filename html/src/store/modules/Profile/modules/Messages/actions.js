@@ -15,11 +15,11 @@ export const FETCH_THEMES = 'FETCH_THEMES';
 
 export const CREATE_CHAT = 'CREATE_CHAT';
 export const CREATE_CHAT_MESSAGE = 'CREATE_CHAT_MESSAGE';
-export const SET_LOAD_PATH = 'SET_LOAD_PATH';
+export const SET_LOAD = 'SET_LOAD';
 
 export default {
-    [SET_LOAD_PATH]({ commit }, payload) {
-        commit(SET_LOAD_PATH, payload);
+    [SET_LOAD]({ commit }, payload) {
+        commit(SET_LOAD, payload);
     },
 
     async [FETCH_CHATS]({ state, commit }) {

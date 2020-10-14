@@ -34,7 +34,7 @@
 
                 <!-- <input type="file" name="files[]" /> -->
 
-                <v-button class="message-modal__submit-btn" @click="onSubmit">
+                <v-button class="message-modal__submit-btn" @click="onSubmit" :disabled="inProcess">
                     Отправить сообщение
                 </v-button>
             </form>
@@ -83,6 +83,7 @@ export default {
 
     data() {
         return {
+            inProcess: false,
             theme: '',
             message: '',
             readonlyTheme: false,
@@ -106,16 +107,17 @@ export default {
         ...mapActions(MESSAGES_MODULE_PATH, [CREATE_CHAT, FETCH_THEMES]),
 
         async onSubmit() {
-            if (this.$v.$invalid) return;
+            if (this.$v.$invalid || this.inProcess) return;
 
             try {
+                this.inProcess = true;
                 const { form } = this.$refs;
                 const formData = new FormData(form);
                 await this[CREATE_CHAT](formData);
                 this.$emit('created');
                 this.onClose();
             } catch (error) {
-                this.onClose();
+                this.inProcess = false;
             }
         },
 
