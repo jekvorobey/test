@@ -99,7 +99,7 @@ export default {
         ...mapState(FAVORITES_MODULE, [FAVORITES]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
+            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
         }),
 
         favoriteItemsIcon() {

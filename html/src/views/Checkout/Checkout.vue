@@ -108,9 +108,7 @@
                                     @click="onAddPromocode"
                                     :disabled="isCommit || isPromocodePending || !inputPromocode"
                                 >
-                                    <template v-if="!isPromocodePending">
-                                        Применить
-                                    </template>
+                                    <template v-if="!isPromocodePending">Применить</template>
                                     <v-spinner v-else show height="24" width="24" />
                                 </v-button>
                             </div>
@@ -170,7 +168,6 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER } from '@store/modules/Auth';
 
 import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
-import { CART_ITEMS_COUNT } from '@store/modules/Cart/getters';
 
 import { NAME as CHECKOUT_MODULE, CHECKOUT_TYPE, CHECKOUT_DATA } from '@store/modules/Checkout';
 import {
@@ -181,14 +178,7 @@ import {
     CLEAR_CHECKOUT_DATA,
     FETCH_PROFESSIONS,
 } from '@store/modules/Checkout/actions';
-import {
-    CHECKOUT,
-    PROMO_CODE,
-    SUMMARY,
-    RECEIVE_METHODS,
-    BONUS_PAYMENT,
-    PROMOCODE_STATUS,
-} from '@store/modules/Checkout/getters';
+import { PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT, PROMOCODE_STATUS } from '@store/modules/Checkout/getters';
 
 import metaMixin from '@plugins/meta';
 import { httpCodes, requestStatus } from '@enums';
@@ -204,7 +194,7 @@ import './Checkout.css';
 export default {
     name: 'checkout',
     mixins: [metaMixin],
-    
+
     components: {
         VSvg,
         VLink,
@@ -248,7 +238,6 @@ export default {
 
         ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT, PROMOCODE_STATUS]),
 
-
         canDeliver() {
             const receiveMethods = this[RECEIVE_METHODS];
             return !this.isProduct || (this.isProduct && receiveMethods && receiveMethods.length > 0);
@@ -262,7 +251,7 @@ export default {
                 case cartItemTypes.MASTERCLASS:
                     return CheckoutMasterClassPanel;
                 default:
-                    'div';
+                    return 'div';
             }
         },
 
@@ -360,8 +349,8 @@ export default {
                 $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type),
                 $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_PROFESSIONS}`),
             ])
-                .then(() => next((vm) => $progress.finish()))
-                .catch(() => next((vm) => $progress.fail()));
+                .then(() => next(() => $progress.finish()))
+                .catch(() => next(() => $progress.fail()));
         }
     },
 

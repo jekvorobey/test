@@ -84,7 +84,7 @@ export default {
     },
 
     methods: {
-        onClick(e){
+        onClick(e) {
             this.$emit('link-click', e);
         },
     },

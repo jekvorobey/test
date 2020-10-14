@@ -1,11 +1,7 @@
 <template>
     <section class="section ui-kit-section ui-kit-tabs">
-        <h2 class="ui-kit-section__hl">
-            Табы
-        </h2>
-        <p class="text-grey">
-            Мастер Табы
-        </p>
+        <h2 class="ui-kit-section__hl">Табы</h2>
+        <p class="text-grey">Мастер Табы</p>
         <v-tabs :items="items" key-field="id" :activeTab.sync="activeTab">
             <template v-slot:header="{ item }">
                 {{ item.title }}
@@ -37,9 +33,7 @@
                 </div>
                 <div v-if="item.id == 3">
                     <form>
-                        <v-input name="input">
-                            Введите имя
-                        </v-input>
+                        <v-input name="input"> Введите имя </v-input>
                         <v-button type="submit">Отправить</v-button>
                     </form>
                 </div>

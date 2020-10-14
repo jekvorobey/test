@@ -8,8 +8,8 @@
                 class="qna-view__accordion"
                 key-field="id"
                 :items="topic.items"
-                :item-expanded="item => item.isExpanded && !item.isDisabled"
-                :item-toggled="item => (item.isExpanded = !item.isExpanded)"
+                :item-expanded="(item) => item.isExpanded && !item.isDisabled"
+                :item-toggled="(item) => (item.isExpanded = !item.isExpanded)"
                 :is-single="false"
             >
                 <template v-slot:content="{ item }">

@@ -59,31 +59,23 @@
         </info-panel>
 
         <div class="container payment-view__submit">
-            <v-button class="payment-view__submit-btn" @click="onSave">
-                Сохранить
-            </v-button>
+            <v-button class="payment-view__submit-btn" @click="onSave">Сохранить</v-button>
         </div>
     </section>
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue';
-import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
-import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
 import { mapActions, mapState } from 'vuex';
-import { $store } from '@services';
 
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { maskCardNumber } from '@util';
-import _cloneDeep from 'lodash/cloneDeep';
-import _isEqual from 'lodash/isEqual';
 import metaMixin from '@plugins/meta';
 import '@images/sprites/payment/visa.svg';
 import '@images/sprites/payment/mastercard.svg';
@@ -98,13 +90,10 @@ export default {
     mixins: [metaMixin],
 
     components: {
-        VSvg,
-        VLink,
         VButton,
         VCheck,
 
         InfoPanel,
-        CheckoutOptionCard,
     },
 
     metaInfo() {
@@ -188,7 +177,7 @@ export default {
             this.selectedCard = card;
         },
 
-        onChangeCard(card) {},
+        onChangeCard() {},
 
         onSave() {},
     },

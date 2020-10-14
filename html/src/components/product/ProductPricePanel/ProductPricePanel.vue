@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import Price from '@components/Price/Price.vue';
@@ -51,7 +50,6 @@ export default {
     name: 'product-price-panel',
 
     components: {
-        VSvg,
         VPicture,
 
         Price,
@@ -93,8 +91,7 @@ export default {
         },
 
         defaultImage() {
-            if (this.image && this.image.id)
-                return generatePictureSourcePath(56, 56, this.image.id);
+            if (this.image && this.image.id) return generatePictureSourcePath(56, 56, this.image.id);
             return this.image;
         },
 

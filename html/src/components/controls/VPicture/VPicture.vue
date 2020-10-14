@@ -1,4 +1,3 @@
-
 <template>
     <picture class="v-picture" v-if="!image">
         <slot />

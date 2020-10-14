@@ -126,11 +126,11 @@ export default {
         handlers() {
             const keys = Object.keys(this.$listeners);
             const handlers = {};
-            keys.forEach(k => {
-                handlers[k] = e => this.$emit(k, e);
+            keys.forEach((k) => {
+                handlers[k] = (e) => this.$emit(k, e);
             });
-            handlers.input = e => {
-                let value = e.target.value;
+            handlers.input = (e) => {
+                let { value } = e.target;
                 const maxLength = Number(e.target.maxLength);
                 if (!Number.isNaN(maxLength) && maxLength > -1 && e.target.value.length > maxLength) {
                     e.target.value = e.target.value.slice(0, maxLength);

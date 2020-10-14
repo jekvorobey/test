@@ -38,9 +38,6 @@ import Cleave from 'cleave.js';
 import inputMixin from './inputMixin';
 import './VInput.css';
 
-const inputTypes = { text: 'text', number: 'number' };
-const validTags = ['input'];
-
 export default {
     name: 'v-input',
     inheritAttrs: false,
@@ -111,8 +108,8 @@ export default {
         handlers() {
             const keys = Object.keys(this.$listeners);
             const handlers = {};
-            keys.forEach(k => {
-                handlers[k] = e => this.$emit(k, e);
+            keys.forEach((k) => {
+                handlers[k] = (e) => this.$emit(k, e);
             });
             handlers.input = this.input;
             return handlers;

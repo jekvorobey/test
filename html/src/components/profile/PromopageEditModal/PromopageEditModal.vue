@@ -19,9 +19,7 @@
             </form>
 
             <div class="promopage-edit-modal__submit">
-                <v-button class="promopage-edit-modal__submit-btn" @click="onSubmit">
-                    Сохранить
-                </v-button>
+                <v-button class="promopage-edit-modal__submit-btn" @click="onSubmit">Сохранить</v-button>
             </div>
         </template>
     </general-modal>
@@ -71,7 +69,7 @@ export default {
     computed: {
         ...mapState(PROMOPAGE_MODULE_PATH, [TITLE]),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+            isOpen: (state) => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
         }),
 
         isTablet() {

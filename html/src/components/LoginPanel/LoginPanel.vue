@@ -14,9 +14,7 @@
             </v-password>
 
             <div class="login-panel__form-submit">
-                <v-button class="login-panel__form-submit-btn" type="submit">
-                    Войти
-                </v-button>
+                <v-button class="login-panel__form-submit-btn" type="submit">Войти</v-button>
 
                 <v-link class="login-panel__form-submit-link" tag="button" @click.stop="onRestore">
                     Забыли пароль?
@@ -50,9 +48,7 @@
                 </v-input-mask>
             </form>
 
-            <v-link class="login-panel__form-submit-link" tag="button" @click.stop="onCancelRestore">
-                Отмена
-            </v-link>
+            <v-link class="login-panel__form-submit-link" tag="button" @click.stop="onCancelRestore"> Отмена </v-link>
         </template>
 
         <template v-else-if="!accepted">
@@ -74,9 +70,7 @@
                 >
                     Код из СМС
                     <template v-slot:after>
-                        <v-button class="login-panel__form-btn" type="submit">
-                            Подтвердить
-                        </v-button>
+                        <v-button class="login-panel__form-btn" type="submit"> Подтвердить </v-button>
                     </template>
                     <template v-slot:error="{ error }">
                         <transition name="slide-in-bottom" mode="out-in">
@@ -131,9 +125,7 @@
                         </transition>
                     </template>
                 </v-password>
-                <v-button class="login-panel__form-submit-btn" type="submit">
-                    Сменить пароль
-                </v-button>
+                <v-button class="login-panel__form-submit-btn" type="submit"> Сменить пароль </v-button>
             </form>
         </template>
 
@@ -166,23 +158,13 @@ import VInput from '@controls/VInput/VInput.vue';
 import VInputMask from '@controls/VInput/VInputMask.vue';
 import VPassword from '@controls/VPassword/VPassword.vue';
 
-import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
+import { mapActions } from 'vuex';
 
-import _cloneDeep from 'lodash/cloneDeep';
-import { mapState, mapActions } from 'vuex';
-
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as AUTH_MODULE } from '@store/modules/Auth';
-import {
-    LOGIN_BY_PASSWORD,
-    GET_SOCIAL_LINK,
-    SEND_RESET_SMS,
-    SEND_SMS,
-    RESET_PASSWORD,
-    CHECK_CODE,
-} from '@store/modules/Auth/actions';
+import { LOGIN_BY_PASSWORD, GET_SOCIAL_LINK, SEND_SMS, RESET_PASSWORD, CHECK_CODE } from '@store/modules/Auth/actions';
 
 import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
 import { rawPhone } from '@util';
@@ -205,7 +187,6 @@ export default {
         VInput,
         VInputMask,
         VPassword,
-        GeneralModal,
     },
 
     validations: {
@@ -242,15 +223,15 @@ export default {
         },
 
         fail: {
-            valid: value => value !== true,
+            valid: (value) => value !== true,
         },
 
         accepted: {
-            valid: value => value === true,
+            valid: (value) => value === true,
         },
 
         restoreFail: {
-            valid: value => value !== true,
+            valid: (value) => value !== true,
         },
     },
 

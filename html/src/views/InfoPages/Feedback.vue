@@ -12,7 +12,7 @@
     </div>
 </template>
 <script>
-import metaMixin from '@plugins/meta'
+import metaMixin from '@plugins/meta';
 
 export default {
     name: 'info-pages-feedback',
@@ -26,7 +26,7 @@ export default {
     },
 
     computed: {
-        pageTitle(){
+        pageTitle() {
             return 'Обратная связь';
         },
     },

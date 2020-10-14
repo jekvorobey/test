@@ -7,7 +7,13 @@
             </button>
 
             <div class="header-top__middle">
-                <self-router-link class="header-top__middle-item" v-for="link in links" :key="link.id" :to="link.to" same-disabled>
+                <self-router-link
+                    class="header-top__middle-item"
+                    v-for="link in links"
+                    :key="link.id"
+                    :to="link.to"
+                    same-disabled
+                >
                     <v-svg :name="link.icon" width="16" height="16" />{{ link.name }}
                 </self-router-link>
             </div>
@@ -27,8 +33,8 @@ import SelfRouterLink from '@controls/VLink/SelfRouterLink.vue';
 
 import HelpPanel from '@components/HelpPanel/HelpPanel.vue';
 
-import { mapState, mapActions, mapGetters } from 'vuex';
-import { SCROLL, IS_CITY_CONFIRMATION_OPEN } from '@store';
+import { mapState, mapActions } from 'vuex';
+import { SCROLL } from '@store';
 import { NAME as SEARCH_MODULE, SEARCH } from '@store/modules/Search';
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
@@ -43,7 +49,6 @@ import '@images/sprites/pin.svg';
 import '@images/sprites/arrow-down.svg';
 import './HeaderTop.critical.css';
 import { productGroupTypes } from '@enums/product';
-
 
 export default {
     name: 'header-top',
@@ -60,7 +65,7 @@ export default {
         ...mapState([SCROLL]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
         ...mapState(GEO_MODULE, {
-            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
 
         links() {

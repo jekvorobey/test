@@ -42,7 +42,7 @@ export default {
             } = this.$route;
 
             const { items = [] } = this;
-            const currentItem = items && items.find(i => i.url === pathMatch);
+            const currentItem = items && items.find((i) => i.url === pathMatch);
             return currentItem && currentItem.name;
         },
     },

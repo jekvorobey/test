@@ -1,8 +1,6 @@
 <template>
     <div class="create-review-panel">
-        <h2 class="create-review-panel__title">
-            Отзывы
-        </h2>
+        <h2 class="create-review-panel__title">Отзывы</h2>
         <form class="create-review-panel__form" enctype="multipart/form-data" @submit.prevent="onSubmit">
             <input type="hidden" :value="code" name="object_code" />
             <input type="hidden" :value="type" name="object_type" />
@@ -63,13 +61,9 @@
                 </div>
 
                 <div class="create-review-panel__form-cell">
-                    <h3 class="create-review-panel__form-title">
-                        Фото и видео товара
-                    </h3>
+                    <h3 class="create-review-panel__form-title">Фото и видео товара</h3>
 
-                    <span class="create-review-panel__form-subtitle">
-                        Не более 10 файлов, jpeg, png, mp4, mov
-                    </span>
+                    <span class="create-review-panel__form-subtitle">Не более 10 файлов, jpeg, png, mp4, mov</span>
 
                     <v-file
                         class="create-review-panel__form-files"
@@ -77,9 +71,7 @@
                         :accepted-types="fileAcceptedTypes"
                         :max-file-size="5242880"
                     >
-                        <span class="create-review-panel__form-files-desc">
-                            Выберите фото
-                        </span>
+                        <span class="create-review-panel__form-files-desc">Выберите фото</span>
                     </v-file>
                 </div>
 
@@ -116,7 +108,7 @@ export default {
 
     validations: {
         rating: {
-            valid: value => value > 0,
+            valid: (value) => value > 0,
         },
 
         body: {

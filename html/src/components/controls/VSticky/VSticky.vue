@@ -1,4 +1,4 @@
-<template >
+<template>
     <div class="v-sticky">
         <div class="v-sticky__container">
             <slot name="sticky" />

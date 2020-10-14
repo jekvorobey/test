@@ -87,7 +87,6 @@ import '@images/sprites/like.svg';
 import '@images/sprites/dislike.svg';
 import './ReviewCard.css';
 
-
 export default {
     name: 'review-card',
 
@@ -179,7 +178,7 @@ export default {
 
         reviewImages() {
             const images = this.images || [];
-            return images.map(i => ({
+            return images.map((i) => ({
                 id: i,
                 defaultImg: generatePictureSourcePath(null, null, i),
             }));
@@ -227,4 +226,3 @@ export default {
     },
 };
 </script>
-

@@ -11,9 +11,7 @@
                     товар можно обменять или вернуть.
                 </p>
 
-                <h3 class="info-pages-block__subtitle">
-                    Что можно вернуть?
-                </h3>
+                <h3 class="info-pages-block__subtitle">Что можно вернуть?</h3>
                 <p>
                     Товар надлежащего качества, который не был в употреблении, сохранил первоначальный вид, фабричные
                     ярлыки и оригинальную упаковку можно обменять или вернуть. Исключение составляют
@@ -25,9 +23,7 @@
                     использовании товара решаются в установленном порядке с проведением независимой товарной экспертизы.
                 </p>
 
-                <h3 class="info-pages-block__subtitle">
-                    Оформление возврата
-                </h3>
+                <h3 class="info-pages-block__subtitle">Оформление возврата</h3>
                 <ol class="list">
                     <li>
                         <span
@@ -61,9 +57,7 @@
                     </li>
                 </ol>
 
-                <h3 class="info-pages-block__subtitle">
-                    Отправка товаров
-                </h3>
+                <h3 class="info-pages-block__subtitle">Отправка товаров</h3>
                 <p>
                     Полный комплект товаров на возврат и подписанное заявление или заявления передай курьеру или
                     сотруднику ПВЗ
@@ -78,17 +72,11 @@
 </template>
 
 <script>
-import VLink from '@controls/VLink/VLink.vue';
+import metaMixin from '@plugins/meta';
 
-import metaMixin from '@plugins/meta'
-    
 export default {
     name: 'info-pages-feedback',
     mixins: [metaMixin],
-
-    components: {
-        VLink,
-    },
 
     metaInfo() {
         const { pageTitle } = this;
@@ -98,7 +86,7 @@ export default {
     },
 
     computed: {
-        pageTitle(){
+        pageTitle() {
             return 'Возврат товара';
         },
     },

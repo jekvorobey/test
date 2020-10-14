@@ -30,7 +30,6 @@
 
 <script>
 import VPicture from '@controls/VPicture/VPicture.vue';
-import VLink from '@controls/VLink/VLink.vue';
 
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
@@ -41,7 +40,6 @@ export default {
 
     components: {
         VPicture,
-        VLink,
     },
 
     props: {
@@ -61,8 +59,8 @@ export default {
 
     computed: {
         mostPopularBrands() {
-            const brands = this.items.filter(i => !!i.image);
-            return brands.map(b => {
+            const brands = this.items.filter((i) => !!i.image);
+            return brands.map((b) => {
                 const image = {
                     webp: generatePictureSourcePath(200, 80, b.image.id, fileExtension.image.WEBP),
                     orig: generatePictureSourcePath(200, 80, b.image.id),
@@ -77,7 +75,7 @@ export default {
         },
 
         restBrands() {
-            return this.items.filter(i => !i.image);
+            return this.items.filter((i) => !i.image);
         },
 
         restCount() {
@@ -101,4 +99,3 @@ export default {
     },
 };
 </script>
-

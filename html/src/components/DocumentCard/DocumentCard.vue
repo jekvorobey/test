@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import VLink from '@controls/VLink/VLink.vue';
 import './DocumentCard.css';
 
 export default {
@@ -45,16 +44,10 @@ export default {
         },
     },
 
-    components: {
-        VLink,
-    },
-
     computed: {
         abbreviatedTitle() {
-            let name = this.name;
-            if (name.length > 57) {
-                name = `${name.slice(0, 57)}...`;
-            }
+            let { name } = this;
+            if (name.length > 57) name = `${name.slice(0, 57)}...`;
             return name;
         },
     },

@@ -20,9 +20,7 @@
                     &nbsp;&nbsp;{{ !isDesktop ? 'Скопировать ссылку' : 'Скопировать' }}
                 </v-link>
 
-                <v-button class="btn--outline promopage-view__panel-btn" :to="previewUrl">
-                    Предпросмотр
-                </v-button>
+                <v-button class="btn--outline promopage-view__panel-btn" :to="previewUrl">Предпросмотр</v-button>
             </div>
         </div>
 
@@ -127,7 +125,7 @@ import PromopageEditModal from '@components/profile/PromopageEditModal/Promopage
 import PromopageAddModal from '@components/profile/PromopageAddModal/PromopageAddModal.vue';
 import PromopageAddByLinkModal from '@components/profile/PromopageAddByLinkModal/PromopageAddByLinkModal.vue';
 
-import { $store, $progress, $logger } from '@services';
+import { $store, $progress } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
@@ -147,7 +145,7 @@ import {
 
 import metaMixin from '@plugins/meta';
 import { saveToClipboard, pluralize } from '@util';
-import { generateProductUrl, generateRe, generateReferrerUrl } from '@util/catalog';
+import { generateProductUrl, generateReferrerUrl } from '@util/catalog';
 import { generateReferralPromopageLink } from '@util/profile';
 import { DEFAULT_PAGE } from '@constants';
 import { modalName } from '@enums';
@@ -323,10 +321,10 @@ export default {
                 .dispatch(`${PROMOPAGE_MODULE_PATH}/${FETCH_PROMOPAGE_DATA}`, { page })
                 .then(() => {
                     $store.dispatch(`${PROMOPAGE_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => $progress.finish());
+                    next(() => $progress.finish());
                 })
-                .catch((error) => {
-                    next((vm) => $progress.fail());
+                .catch(() => {
+                    next(() => $progress.fail());
                 });
         }
     },

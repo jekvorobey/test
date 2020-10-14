@@ -1,8 +1,6 @@
 <template>
     <div class="product-bundle-panel">
-        <h2 class="product-bundle-panel__title">
-            Выгодный комплект
-        </h2>
+        <h2 class="product-bundle-panel__title">Выгодный комплект</h2>
         <div class="product-bundle-panel__content">
             <template v-for="item in products">
                 <catalog-product-card
@@ -76,7 +74,6 @@
 </template>
 
 <script>
-import VButton from '@controls/VButton/VButton.vue';
 import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 
@@ -91,7 +88,6 @@ import './ProductBundlePanel.css';
 export default {
     name: 'product-bundle-panel',
     components: {
-        VButton,
         Price,
         BuyButton,
 
@@ -136,7 +132,7 @@ export default {
 
         products() {
             const { items = [] } = this;
-            return items.map(i => {
+            return items.map((i) => {
                 const { image } = i;
 
                 const defaultImg = image && generatePictureSourcePath(128, 128, image.id);

@@ -247,14 +247,14 @@ export default {
         ]),
         ...mapGetters(CABINET_MODULE_PATH, [FULL_NAME]),
         ...mapState({
-            datepickerLocale: state =>
+            datepickerLocale: (state) =>
                 state[LOCALIZATIONS][state[LOCALE]] && state[LOCALIZATIONS][state[LOCALE]].flatpickrLocale,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isEmailEditOpen: state =>
+            isEmailEditOpen: (state) =>
                 state[MODALS][modalName.profile.EMAIL_EDIT] && state[MODALS][modalName.profile.EMAIL_EDIT].open,
-            isPhoneEditOpen: state =>
+            isPhoneEditOpen: (state) =>
                 state[MODALS][modalName.profile.PHONE_EDIT] && state[MODALS][modalName.profile.PHONE_EDIT].open,
         }),
 
@@ -272,7 +272,7 @@ export default {
         ...mapActions(CABINET_MODULE_PATH, [UPDATE_PERSONAL, UPDATE_CREDENTIAL, UPDATE_ACTIVITIES, SEND_CODE]),
 
         isSelectedActivity(activity) {
-            return this.selectedActivities.some(a => a.id === activity.id);
+            return this.selectedActivities.some((a) => a.id === activity.id);
         },
 
         async updateActivities(activities) {

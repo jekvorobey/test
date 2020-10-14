@@ -144,9 +144,7 @@
                         с товарами
                     </li>
                     <li class="account-view__attention-list-item">
-                        <button class="account-view__attention-link" @click="onPromocodeRequest">
-                            запросить
-                        </button>
+                        <button class="account-view__attention-link" @click="onPromocodeRequest">запросить</button>
                         промо-код
                     </li>
                     <li class="account-view__attention-list-item">
@@ -217,10 +215,10 @@ import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { $store, $progress, $logger } from '@services';
+import { $store, $progress } from '@services';
 import { DEFAULT_PAGE } from '@constants';
 import { monthLongDateSettings } from '@settings';
-import { currencySymbol, modalName, themeCodes } from '@enums';
+import { modalName, themeCodes } from '@enums';
 import { cardIdentificationStatus } from '@enums/profile';
 import { preparePrice, saveToClipboard, getDate } from '@util';
 import { generateYandexCardAuthUrl, generateYandexCardAuthBackUrl, generateReferralLink } from '@util/profile';
@@ -442,15 +440,15 @@ export default {
                 .dispatch(`${BILLING_MODULE_PATH}/${FETCH_BILLING_DATA}`, {
                     page,
                 })
-                .then((data) => {
+                .then(() => {
                     $store.dispatch(`${BILLING_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
+                    next(() => {
                         $progress.finish();
                     });
                 })
                 .catch((thrown) => {
                     if (thrown && thrown.isCancel === true) return next();
-                    next((vm) => {
+                    next(() => {
                         $progress.fail();
                     });
                 });

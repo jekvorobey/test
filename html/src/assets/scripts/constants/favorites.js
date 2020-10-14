@@ -1,1 +1,3 @@
 export const FAVORITES_PAGE_SIZE = 12;
+
+export default { FAVORITES_PAGE_SIZE: FAVORITES_PAGE_SIZE };

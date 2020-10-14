@@ -1,9 +1,7 @@
 <template>
     <div class="return-form">
         <div class="return-form__header">
-            <h3 class="return-form__header-title">
-                Выберите способ возврата
-            </h3>
+            <h3 class="return-form__header-title">Выберите способ возврата</h3>
             <ul class="return-form__list">
                 <checkout-option-card
                     class="return-form__list-item"
@@ -20,12 +18,8 @@
         </div>
         <component :is="selectedReturnMethod" />
         <div class="return-form__controls">
-            <v-button class="return-form__submit" @click="onSubmit">
-                Оформить возврат
-            </v-button>
-            <v-button class="return-form__back-btn btn--transparent" @click="onBack">
-                Назад
-            </v-button>
+            <v-button class="return-form__submit" @click="onSubmit">Оформить возврат</v-button>
+            <v-button class="return-form__back-btn btn--transparent" @click="onBack">Назад</v-button>
         </div>
     </div>
 </template>
@@ -38,10 +32,10 @@ import ReturnCourierForm from './ReturnCourierForm.vue';
 import ReturnOutpostForm from './ReturnOutpostForm.vue';
 import ReturnPostForm from './ReturnPostForm.vue';
 
-import { mapState, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
-import { NAME as RETURN_MODULE, SELECTED_PRODUCTS } from '@store/modules/Profile/modules/ReturnPage';
+import { NAME as RETURN_MODULE } from '@store/modules/Profile/modules/ReturnPage';
 import { SET_STEP } from '@store/modules/Profile/modules/ReturnPage/actions';
 
 import { returnMethods, returnFormSteps } from '@enums/profile.js';

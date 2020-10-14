@@ -36,9 +36,7 @@
                     <!-- Ближайшая доставка 24 июня<br />
                     Ближайший самовывоз c 26 июня -->
                 </div>
-                <div class="status-color-error text-sm" v-else>
-                    Товар закончился
-                </div>
+                <div class="status-color-error text-sm" v-else>Товар закончился</div>
             </div>
             <div
                 class="text-grey cart-product-card__body-bonus"
@@ -74,7 +72,7 @@ import VCounter from '@controls/VCounter/VCounter.vue';
 import Price from '@components/Price/Price.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 
-import { mapGetters, mapActions, mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
@@ -179,7 +177,7 @@ export default {
     computed: {
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
         images() {

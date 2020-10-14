@@ -134,10 +134,9 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
-import { $logger, $retailRocket } from '@services';
-import { requestStatus, fileExtension, modalName } from '@enums';
+import { $retailRocket } from '@services';
+import { requestStatus, modalName } from '@enums';
 import { cartItemTypes } from '@enums/product';
-import { generatePictureSourcePath } from '@util/file';
 import { generateProductUrl, prepareProductImage } from '@util/catalog';
 import '@images/sprites/logo.svg';
 import './QuickViewModal.css';
@@ -175,8 +174,8 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         ...mapState(PREVIEW_MODULE, [PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS]),
@@ -198,7 +197,7 @@ export default {
 
         productImages() {
             const { media = [] } = this[PRODUCT_PREVIEW] || {};
-            return media.slice(0, 4).map(i => prepareProductImage(i, desktopSize, tabletSize));
+            return media.slice(0, 4).map((i) => prepareProductImage(i, desktopSize, tabletSize));
         },
 
         inCart() {

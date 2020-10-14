@@ -1,12 +1,8 @@
 <template>
     <section class="section ui-kit-section">
-        <h2 class="ui-kit-section__hl">
-            Таблицы
-        </h2>
-        <p class="text-grey">
-            Мастер таблица
-        </p>
-        <div style="width: 50%;">
+        <h2 class="ui-kit-section__hl">Таблицы</h2>
+        <p class="text-grey">Мастер таблица</p>
+        <div style="width: 50%">
             <v-table :items="items" :columns="columns">
                 <colgroup>
                     <col width="60%" />
@@ -14,15 +10,9 @@
                     <col width="20%" />
                 </colgroup>
 
-                <template v-slot:column-name>
-                    Акционный инструмент
-                </template>
-                <template v-slot:column-price>
-                    Новая цена
-                </template>
-                <template v-slot:column-old_price>
-                    Старая цена
-                </template>
+                <template v-slot:column-name> Акционный инструмент </template>
+                <template v-slot:column-price> Новая цена </template>
+                <template v-slot:column-old_price> Старая цена </template>
             </v-table>
         </div>
     </section>

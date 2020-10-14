@@ -185,7 +185,7 @@ export default {
     computed: {
         ...mapState(['scroll']),
         ...mapState('route', {
-            type: state => state.params.type,
+            type: (state) => state.params.type,
         }),
     },
 

@@ -59,9 +59,7 @@
                     </template>
                     <empty-placeholder-panel class="product-groups-view__sets-empty" v-else @btn-click="onToCatalog">
                         В данный момент нет активных акций
-                        <template v-slot:btn>
-                            В каталог
-                        </template>
+                        <template v-slot:btn>В каталог</template>
                     </empty-placeholder-panel>
                 </div>
             </section>
@@ -212,7 +210,7 @@ export default {
             return sliderOptions;
         },
 
-        catalogTitle(){
+        catalogTitle() {
             const { type } = this;
             return this.$t(`productGroups.title.${type || 'catalog'}`);
         },

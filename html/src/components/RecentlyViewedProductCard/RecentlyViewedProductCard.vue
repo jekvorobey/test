@@ -20,7 +20,6 @@
 
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
-import VLink from '@controls/VLink/VLink.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import { fileExtension } from '@enums';
@@ -33,7 +32,6 @@ export default {
     name: 'recently-viewed-product-card',
     components: {
         VSvg,
-        VLink,
         VPicture,
     },
 
@@ -78,6 +76,8 @@ export default {
 
                     default: generatePictureSourcePath(200, 200, image.id),
                 };
+
+            return null;
         },
     },
 };

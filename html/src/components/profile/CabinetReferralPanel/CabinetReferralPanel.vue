@@ -105,7 +105,7 @@ export default {
     computed: {
         ...mapState(CABINET_MODULE_PATH, [REFERRAL_PERSONAL_DISCOUNT, CAN_EDIT_REFERRAL_CODE]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_CODE]: state => (state[USER] && state[USER][REFERRAL_CODE]) || false,
+            [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || false,
         }),
 
         codeError() {

@@ -39,14 +39,11 @@
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue';
-import VLink from '@controls/VLink/VLink.vue';
-
 import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 
-import { mapGetters, mapActions, mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
@@ -60,9 +57,6 @@ export default {
     name: 'product-cart-panel',
 
     components: {
-        VSvg,
-        VLink,
-
         Price,
         BuyButton,
         FavoritesButton,
@@ -102,7 +96,7 @@ export default {
     computed: {
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
         favoritesBtnText() {

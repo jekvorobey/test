@@ -191,7 +191,6 @@ export default {
         },
 
         reinit() {
-            const config = Object.assign({}, this.engine.config);
             this.destroy();
             this.init();
         },
@@ -211,6 +210,7 @@ export default {
                 prevArrow: '<svg class="icon"><use xlink:href="#icon-arrow-small"></use></svg>',
                 monthSelectorType: this.monthSelectorType,
 
+                // eslint-disable-next-line no-unused-vars
                 onChange(selectedDates, dateStr, instance) {
                     that.internal_value = [...dateStr.split(', ')];
                 },

@@ -5,7 +5,7 @@
             :is-open="isMenuOpen"
             btn-text="Меню"
             @isOpenChanged="SET_MENU_OPEN($event)"
-        ></v-burger>
+        />
         <template v-for="item in headerMenu.items">
             <v-link
                 v-if="item.url === '/catalog/'"
@@ -16,13 +16,7 @@
             >
                 {{ item.name }}
             </v-link>
-            <v-link
-                class="header-navigation-panel__item"
-                v-else
-                :key="item.name"
-                :to="item.url"
-                same-disabled
-            >
+            <v-link class="header-navigation-panel__item" v-else :key="item.name" :to="item.url" same-disabled>
                 {{ item.name }}
             </v-link>
         </template>
@@ -66,14 +60,14 @@ export default {
 
         isTablet() {
             return this.$mq.isTablet;
-        }
+        },
     },
 
     methods: {
         ...mapActions([SET_MENU_OPEN]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
-        onToggleMenu(){
+        onToggleMenu() {
             const isMenuOpen = this[IS_MENU_OPEN];
             this[SET_MENU_OPEN](!isMenuOpen);
         },

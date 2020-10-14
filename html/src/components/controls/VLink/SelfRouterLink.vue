@@ -1,19 +1,15 @@
 <template>
-    <router-link 
-        :to="to" 
-        :exact="exact" 
-        v-slot="{ href, route, navigate, isActive, isExactActive }"
-    >
-        <a 
+    <router-link :to="to" :exact="exact" v-slot="{ href, navigate, isActive, isExactActive }">
+        <a
             v-bind="$attrs"
-            v-if="!isExactActive" 
-            :class="[{ 'router-link-active': isActive }, { 'router-link-exact-active': isExactActive }]" 
+            v-if="!isExactActive"
+            :class="[{ 'router-link-active': isActive }, { 'router-link-exact-active': isExactActive }]"
             :href="href"
             v-on="{ ...handlers, click: navigate }"
         >
             <slot />
         </a>
-        <a 
+        <a
             v-bind="$attrs"
             :class="[{ 'router-link-active': isActive }, { 'router-link-exact-active': isExactActive }]"
             :href="href"
@@ -22,10 +18,10 @@
         >
             <slot />
         </a>
-        <span 
-            v-bind="$attrs" 
-            :class="[{ 'router-link-active': isActive }, { 'router-link-exact-active': isExactActive }]"  
-            v-else-if="(isExactActive && sameDisabled) || disabled"  
+        <span
+            v-bind="$attrs"
+            :class="[{ 'router-link-active': isActive }, { 'router-link-exact-active': isExactActive }]"
+            v-else-if="(isExactActive && sameDisabled) || disabled"
         >
             <slot />
         </span>
@@ -60,7 +56,7 @@ export default {
     },
 
     computed: {
-        url(){
+        url() {
             const { $router, to } = this;
             const { href } = $router.resolve(to);
             return href;
@@ -69,20 +65,20 @@ export default {
         handlers() {
             const keys = Object.keys(this.$listeners);
             const handlers = {};
-            keys.forEach(k => {
-                handlers[k] = e => this.$emit(k, e)
+            keys.forEach((k) => {
+                handlers[k] = (e) => this.$emit(k, e);
             });
             return handlers;
         },
     },
 
     methods: {
-        onClick(e){
-            if(!e.shiftKey && !e.ctrlKey){
+        onClick(e) {
+            if (!e.shiftKey && !e.ctrlKey) {
                 e.preventDefault();
                 this.$emit('click', e);
             }
         },
     },
-}
+};
 </script>

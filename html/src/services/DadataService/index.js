@@ -36,7 +36,7 @@ export default class DaDataService {
                 from_bound: { value: type },
                 to_bound: { value: to },
             })
-            .then(result => {
+            .then((result) => {
                 return result.suggestions;
             });
     }

@@ -22,11 +22,6 @@
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue';
-import VLink from '@controls/VLink/VLink.vue';
-import VCheck from '@controls/VCheck/VCheck.vue';
-import VButton from '@controls/VButton/VButton.vue';
-
 import PreferenceEditModal from '@components/profile/PreferenceEditModal/PreferenceEditModal.vue';
 import PreferencesEntityPanel from '@components/profile/PreferencesEntityPanel/PreferencesEntityPanel.vue';
 
@@ -47,7 +42,6 @@ import {
     UPDATE_ENTITIES,
 } from '@store/modules/Profile/modules/Preferences/actions';
 
-import _debounce from 'lodash/debounce';
 import { $store, $progress, $logger, $context } from '@services';
 import { preferenceEntityTypes, preferenceType } from '@enums/profile';
 import { modalName } from '@enums';
@@ -96,7 +90,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isPreferencesOpen: state =>
+            isPreferencesOpen: (state) =>
                 state[MODALS][modalName.profile.PREFERENCE_EDIT] &&
                 state[MODALS][modalName.profile.PREFERENCE_EDIT].open,
         }),
@@ -158,7 +152,7 @@ export default {
             return actualEqual;
         },
 
-        async onChangeEqual(entityType, force = false) {
+        async onChangeEqual(entityType) {
             this.inProcess[entityType] = true;
             const items = [...this.toggleEqual(entityType)];
             await this[UPDATE_EQUAL_PREFERENCES](items);
@@ -204,13 +198,13 @@ export default {
         ])
             .then(() => {
                 $store.dispatch(`${PREFERENCES_MODULE_PATH}/${SET_TYPE}`, prefType);
-                next(vm => {
+                next(() => {
                     $progress.finish();
                 });
             })
-            .catch(thrown => {
+            .catch((thrown) => {
                 $logger.error(thrown);
-                next(vm => {
+                next(() => {
                     $progress.fail();
                 });
             });

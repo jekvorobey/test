@@ -57,9 +57,7 @@
             </div>
 
             <div class="preference-edit-modal__submit">
-                <v-button class="preference-edit-modal__submit-btn" @click="onSubmit">
-                    Добавить
-                </v-button>
+                <v-button class="preference-edit-modal__submit-btn" @click="onSubmit">Добавить</v-button>
             </div>
         </template>
     </general-modal>

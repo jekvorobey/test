@@ -28,9 +28,7 @@
                         >
                             Код из СМС
                             <template v-slot:after>
-                                <v-button class="phone-edit-modal__form-btn" type="submit">
-                                    Отправить
-                                </v-button>
+                                <v-button class="phone-edit-modal__form-btn" type="submit">Отправить</v-button>
                             </template>
 
                             <template v-slot:error="{ error }">
@@ -62,13 +60,10 @@
 </template>
 
 <script>
-import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
-import VInputMask from '@controls/VInput/VInputMask.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
-import _cloneDeep from 'lodash/cloneDeep';
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -78,8 +73,8 @@ import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { NAME as CABINET_MODULE } from '@store/modules/Profile/modules/Cabinet';
 import { SEND_CODE, UPDATE_CREDENTIAL } from '@store/modules/Profile/modules/Cabinet/actions';
 
-import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
-import { phoneMaskOptions } from '@settings';
+import validationMixin, { required, minLength } from '@plugins/validation';
+
 import { verificationCodeType } from '@enums/auth';
 import { modalName } from '@enums';
 import { formatPhoneNumber } from '@util';
@@ -96,7 +91,6 @@ export default {
     components: {
         VButton,
         VInput,
-        VInputMask,
         GeneralModal,
     },
 
@@ -107,7 +101,7 @@ export default {
         },
 
         error: {
-            valid: value => value === null,
+            valid: (value) => value === null,
         },
     },
 
@@ -128,7 +122,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         formatPhone() {

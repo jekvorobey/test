@@ -104,16 +104,12 @@
                 </div>
 
                 <div class="checkout-pickup-point-modal__details-desc" v-if="selectedPickupPoint.description">
-                    <div class="text-bold">
-                        Как добраться
-                    </div>
+                    <div class="text-bold">Как добраться</div>
                     {{ selectedPickupPoint.description }}
                 </div>
 
                 <div class="checkout-pickup-point-modal__details-payment">
-                    <div class="text-bold">
-                        Принимаются к оплате
-                    </div>
+                    <div class="text-bold">Принимаются к оплате</div>
                     {{ selectedPickupPoint.payment }}
                 </div>
 
@@ -196,7 +192,7 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { formatPhoneNumber } from '@util';
-import { receiveTypes, modalName } from '@enums';
+import { modalName } from '@enums';
 import { dayMonthLongDateSettings } from '@settings';
 import pin from '@images/icons/pin-filled.svg';
 import '@images/sprites/arrow-small.svg';
@@ -310,7 +306,7 @@ export default {
             this.activeTab = 1;
         },
 
-        onSelectPoint(point) {
+        onSelectPoint() {
             this[SET_PICKUP_POINT](this.selectedPickupPoint);
             this.selectedPickupPoint = null;
             this.onClose();
@@ -332,7 +328,6 @@ export default {
         },
 
         initHandler(e) {
-            const vm = this;
             e.geoObjects.events.add('click', (e) => {
                 // marker-4238 => 4238
                 // defaultPrevented === true if group of markers

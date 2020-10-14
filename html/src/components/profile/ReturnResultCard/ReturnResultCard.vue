@@ -3,10 +3,7 @@
         <router-link class="return-result-card__img" :to="href">
             <v-picture v-if="image" :image="image" alt>
                 <template v-slot:source="{ image }">
-                    <source
-                        :data-srcset="generateSourcePath(64, 64, image.id, 'webp')"
-                        type="image/webp"
-                    />
+                    <source :data-srcset="generateSourcePath(64, 64, image.id, 'webp')" type="image/webp" />
                 </template>
                 <template v-slot:fallback="{ image, alt }">
                     <img
@@ -71,9 +68,9 @@ export default {
     },
 
     methods: {
-        generateSourcePath (x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext)
+        generateSourcePath(x, y, id, ext) {
+            return generatePictureSourcePath(x, y, id, ext);
         },
     },
-}
+};
 </script>

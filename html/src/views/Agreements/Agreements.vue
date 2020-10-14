@@ -16,7 +16,7 @@ export default {
 
     computed: {
         ...mapState('route', {
-            type: state => state.params.type,
+            type: (state) => state.params.type,
         }),
 
         renderComponent() {

@@ -8,12 +8,12 @@ export default {
     },
 
     [SET_SELECTED_PRODUCTS](state, payload = []) {
-        payload = payload.map(p => ({...p, reason: null}));
+        payload = payload.map((p) => ({ ...p, reason: null }));
         state.selectedProducts = payload;
     },
 
-    [SET_REASON](state, {productId, reasonText }) {
+    [SET_REASON](state, { productId, reasonText }) {
         const product = state.selectedProducts.find((item) => item.id === productId);
         product.reason = reasonText;
-    }
+    },
 };

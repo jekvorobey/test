@@ -1,9 +1,7 @@
 <template>
     <section class="section ui-kit-section">
-        <h2 class="ui-kit-section__hl">
-            Селекты
-        </h2>
-        <div style="width: 50%;">
+        <h2 class="ui-kit-section__hl">Селекты</h2>
+        <div style="width: 50%">
             <v-select v-model="value" :options="items" :error="error" :searchable="false" :disabled="disabled">
                 Вид деятельности
                 <template v-slot:error="{ error }">
@@ -14,7 +12,7 @@
             </v-select>
         </div>
         <br />
-        <div style="width: 50%;">
+        <div style="width: 50%">
             <v-select v-model="value" :options="items" :error="error" placeholder="Найти..." :disabled="disabled">
                 Вид деятельности
                 <template v-slot:error="{ error }">
@@ -25,7 +23,7 @@
             </v-select>
         </div>
         <br />
-        <div style="width: 50%;">
+        <div style="width: 50%">
             <v-select
                 v-model="value2"
                 :options="items2"
@@ -48,7 +46,7 @@
             </v-select>
         </div>
         <br />
-        <div style="width: 50%;">
+        <div style="width: 50%">
             <v-select
                 id="select-3"
                 v-model="value3"

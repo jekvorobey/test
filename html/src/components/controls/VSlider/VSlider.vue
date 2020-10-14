@@ -30,7 +30,7 @@ export default {
         VSvg,
     },
 
-    serverCacheKey: props => props.name,
+    serverCacheKey: (props) => props.name,
 
     props: {
         name: {

@@ -117,9 +117,7 @@
                                         @click="onAddPromocode"
                                         :disabled="isLoad || isPromocodePending || !inputPromocode"
                                     >
-                                        <template v-if="!isPromocodePending">
-                                            Применить
-                                        </template>
+                                        <template v-if="!isPromocodePending">Применить</template>
                                         <v-spinner v-else show height="24" width="24" />
                                     </v-button>
                                 </template>
@@ -235,13 +233,12 @@ import CartProductPanel from '@components/cart/CartProductPanel/CartProductPanel
 import CartMasterclassPanel from '@components/cart/CartMasterclassPanel/CartMasterclassPanel.vue';
 
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
-import CartBundleProductCard from '@components/CartBundleProductCard/CartBundleProductCard.vue';
 import ClearCartModal from '@components/ClearCartModal/ClearCartModal.vue';
 import VTabs from '@controls/VTabs/VTabs.vue';
 
 import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
-import { $store, $logger, $progress } from '@services';
+import { $store, $progress, $logger } from '@services';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '@store/modules/Cart';
@@ -256,8 +253,6 @@ import {
     CHECK_CART_DATA,
 } from '@store/modules/Cart/actions';
 import {
-    PRODUCTS,
-    MASTER_CLASSES,
     IS_PRODUCT,
     IS_MASTER_CLASS,
     CART_ITEMS_COUNT,
@@ -281,8 +276,6 @@ import { cancelRoute } from '@settings';
 import { breakpoints, modalName, httpCodes, requestStatus } from '@enums';
 import { discountType } from '@enums/checkout';
 import { preparePrice } from '@util';
-import { generateProductUrl } from '@util/catalog';
-import { registerModuleIfNotExists } from '@util/store';
 import '@images/sprites/check.svg';
 import '@images/sprites/cart.svg';
 import './Cart.css';
@@ -392,7 +385,7 @@ export default {
             const warnings = this[WARNINGS] || [];
             return warnings.map((e) => this.$t(`validation.cart.${e}`));
         },
-        
+
         pageTitle() {
             const { activeTabItem } = this;
             return activeTabItem ? `Моя корзина - ${this.$t(`cart.title.${activeTabItem.type}`)}` : 'Моя корзина';
@@ -473,7 +466,7 @@ export default {
         },
 
         onAddToCart(item) {
-            const { code, type, stock, id, variantGroups } = item;
+            const { code, stock, id, variantGroups } = item;
 
             if (variantGroups) this.onPreview(code);
             else this[ADD_CART_ITEM]({ offerId: id, storeId: stock && stock.storeId });
@@ -513,7 +506,9 @@ export default {
     async serverPrefetch() {
         try {
             await this[FETCH_CART_DATA](this.$isServer);
-        } catch (error) {}
+        } catch (error) {
+            $logger.log(error);
+        }
     },
 
     beforeRouteEnter(to, from, next) {
@@ -527,8 +522,8 @@ export default {
         $progress.start();
         $store
             .dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`)
-            .then(() => next((vm) => $progress.finish()))
-            .catch(() => next((vm) => $progress.fail()));
+            .then(() => next(() => $progress.finish()))
+            .catch(() => next(() => $progress.fail()));
     },
 
     created() {

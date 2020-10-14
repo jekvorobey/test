@@ -22,9 +22,7 @@
             </div>
 
             <div class="container container--tablet author-modal__submit">
-                <v-button class="author-modal__submit-btn" @click.prevent="onClose">
-                    Закрыть
-                </v-button>
+                <v-button class="author-modal__submit-btn" @click.prevent="onClose">Закрыть</v-button>
             </div>
         </template>
     </general-modal>
@@ -58,8 +56,8 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isOpen: (state) => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         header() {

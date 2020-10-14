@@ -92,8 +92,9 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isOpen: (state) =>
+                state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
         ...mapState(MESSAGES_MODULE_PATH, [THEMES]),
 
@@ -125,7 +126,7 @@ export default {
             this.readonlyTheme = true;
 
             await this[FETCH_THEMES]();
-            const theme = this[THEMES].find(t => t.type === code);
+            const theme = this[THEMES].find((t) => t.type === code);
 
             if (theme) {
                 this.theme = theme.name;

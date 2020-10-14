@@ -8,7 +8,9 @@
                     </v-link>
                 </div>
                 <div class="v-footer__col" :key="col.title" v-for="col in links">
-                    <self-router-link class="v-footer__col-title" v-if="col.url" :to="col.url" same-disabled>{{ col.title }}</self-router-link>
+                    <self-router-link class="v-footer__col-title" v-if="col.url" :to="col.url" same-disabled>{{
+                        col.title
+                    }}</self-router-link>
                     <a v-else class="v-footer__col-title">{{ col.title }}</a>
 
                     <ul class="v-footer__links">
@@ -180,12 +182,12 @@ export default {
 
         links() {
             const menuItems = (this[FOOTER_MENU] && this[FOOTER_MENU].items) || [];
-            return menuItems.map(mi => {
+            return menuItems.map((mi) => {
                 return {
                     title: mi.name,
                     url: mi.url,
                     isExpanded: false,
-                    items: mi.children.map(i => {
+                    items: mi.children.map((i) => {
                         return {
                             id: i.id,
                             name: i.name,

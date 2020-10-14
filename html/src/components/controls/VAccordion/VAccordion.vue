@@ -114,7 +114,7 @@ export default {
     },
     data() {
         return {
-            internal_expanded: this.items.find(item => item.isExpanded),
+            internal_expanded: this.items.find((item) => item.isExpanded),
         };
     },
     methods: {

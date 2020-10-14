@@ -66,9 +66,7 @@
                     @click="onSave"
                 >
                     <v-spinner v-if="inProcess" height="24" width="24" show />
-                    <template v-else>
-                        Сохранить
-                    </template>
+                    <template v-else>Сохранить</template>
                 </v-button>
             </transition>
         </div>
@@ -87,7 +85,7 @@ import { mapState, mapActions } from 'vuex';
 import { NAME as AUTH_MODULE } from '@store/modules/Auth';
 import { CHECK_SESSION } from '@store/modules/Auth/actions';
 
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
@@ -96,9 +94,9 @@ import { NAME as SUBSCRIBES_MODULE, CONTENT, SUBSCRIBES } from '@store/modules/P
 import { SET_LOAD, FETCH_SUBSCRIBES_DATA, UPDATE_SUBSCRIBES } from '@store/modules/Profile/modules/Subscribes/actions';
 
 import _cloneDeep from 'lodash/cloneDeep';
-import { $store, $progress, $logger, $context } from '@services';
+import { $store, $progress, $context } from '@services';
 import { modalName, httpCodes } from '@enums';
-import validationMixin, { required, minLength, email } from '@plugins/validation';
+import validationMixin from '@plugins/validation';
 import metaMixin from '@plugins/meta';
 import './Subscribes.css';
 
@@ -116,7 +114,7 @@ export default {
         InfoPanel,
     },
 
-     metaInfo() {
+    metaInfo() {
         const { pageTitle } = this;
         return {
             title: pageTitle,
@@ -199,11 +197,11 @@ export default {
         $store
             .dispatch(`${SUBSCRIBES_MODULE_PATH}/${FETCH_SUBSCRIBES_DATA}`, isServer)
             .then(() => {
-                next(vm => {
+                next(() => {
                     $progress.finish();
                 });
             })
-            .catch(thrown => {
+            .catch((thrown) => {
                 $progress.fail();
                 if (thrown.status === httpCodes.FORBIDDEN) {
                     $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);

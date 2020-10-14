@@ -103,7 +103,6 @@ import { NAME as PREFERENCES_MODULE, AVAILABLE, TYPE } from '@store/modules/Prof
 import { GET_CUSTOMER_BY_TYPE } from '@store/modules/Profile/modules/Preferences/getters';
 
 import _debounce from 'lodash/debounce';
-import { $store, $progress, $logger, $context } from '@services';
 import { preferenceEntityTypes, preferenceType } from '@enums/profile';
 import { modalName } from '@enums';
 import '@images/sprites/cross.svg';
@@ -168,11 +167,11 @@ export default {
         entities() {
             const { entitiesMap, available, entityType } = this;
             const availableEntities = available[entityType];
-            return availableEntities.filter(e => !!entitiesMap[e.id]);
+            return availableEntities.filter((e) => !!entitiesMap[e.id]);
         },
 
         entitiesMap() {
-            const { prefType, entityType, isEqual } = this;
+            const { prefType, entityType } = this;
             const customer = this[GET_CUSTOMER_BY_TYPE](prefType);
             const entities = customer[entityType] || [];
 
@@ -182,7 +181,7 @@ export default {
         },
 
         entitiesList() {
-            return this.actualEntities && this.actualEntities.map(e => e.name).join(', ');
+            return this.actualEntities && this.actualEntities.map((e) => e.name).join(', ');
         },
 
         equalPreferencesMap() {
@@ -251,7 +250,7 @@ export default {
 
         onDeleteEntity(index) {
             this.actualEntities.splice(index, 1);
-            this.debounce_updateEntities(this.actualEntities.map(e => e.id));
+            this.debounce_updateEntities(this.actualEntities.map((e) => e.id));
         },
 
         onAddEntities() {
@@ -273,14 +272,14 @@ export default {
         },
 
         initCollections() {
-            const { entities = [], equalPreferences = [] } = this;
+            const { entities = [] } = this;
             this.actualEntities = [...entities];
         },
 
         initHandlers() {
             const { prefType, entityType } = this;
             this.debounce_updateEntities = _debounce(
-                items => this.$emit(eventNames.DELETE, { prefType, type: entityType, items }),
+                (items) => this.$emit(eventNames.DELETE, { prefType, type: entityType, items }),
                 1000
             );
         },

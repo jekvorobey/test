@@ -1,6 +1,6 @@
 <template>
     <section class="section ui-kit-section">
-        <form style="width: 50%;">
+        <form style="width: 50%">
             <v-datepicker
                 v-model="value"
                 :disable="disable"
@@ -55,7 +55,7 @@ export default {
 
     computed: {
         ...mapState({
-            datepickerLocale: state =>
+            datepickerLocale: (state) =>
                 state[LOCALIZATIONS][state[LOCALE]] && state[LOCALIZATIONS][state[LOCALE]].flatpickrLocale,
         }),
     },

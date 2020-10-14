@@ -23,7 +23,7 @@
         <section class="section">
             <div class="container university-view__main">
                 <h1 class="university-view__main-h1">
-                    Профессиональный образовательный проект с инновационным <br />
+                    Профессиональный образовательный проект с инновационным <br />
                     подходом для мастеров бьюти-индустрии
                 </h1>
 
@@ -38,7 +38,7 @@
                         <h2 class="university-view__main-row-h2">Университет Бессовестно Талантливый</h2>
                         <p class="university-view__main-content-row--text">
                             Образовательный проект для мастеров бьюти-индустрии, цель которого — поддерживать
-                            профессионалов в стремлении становиться сильнее в своем ремесле. Наша команда находит лучшие
+                            профессионалов в стремлении становиться сильнее в своем ремесле. Наша команда находит лучшие
                             решения для ежедневной работы, повышения уровня знаний и вдохновения. В специальном разделе
                             «Обучение» маркетплейса iBT.ru представлены собственные программы Университета и мероприятия
                             партнеров.
@@ -56,8 +56,8 @@
                     <div class="university-view__main-row--content">
                         <h2 class="university-view__main-row-h2">Коллаборации</h2>
                         <p class="university-view__main-content-row--text">
-                            Мы открыты для сотрудничества и совместных проектов с лучшими профессионалами индустрии
-                            России и мира. В качестве платформы для своих мастер-классов Университет Бессовестно
+                            Мы открыты для сотрудничества и совместных проектов с лучшими профессионалами индустрии
+                            России и мира. В качестве платформы для своих мастер-классов Университет Бессовестно
                             Талантливый выбирают такие значимые стилисты как: Владимир Сарбашев, Павел Шефф, Игорь
                             Хонин, Андрей Крупчинский, Максим Никиточкин, Алия Аскарова, Ричард Эшфорт, Питер Грей,
                             Шиничи Такахаши.
@@ -87,9 +87,9 @@
                     <div class="university-view__main-row--content">
                         <p class="university-view__main-content-row--text">
                             Кампус Университета — это 8 профессионально оснащенных студий в Москве общей площадью 800 м2
-                            на «Винзаводе» и «Арме», расположенных в пешей доступности от м. Курская. Все пространства
-                            многофункциональны и вмещают от 10 человек для камерных практических форматов до 150 человек
-                            для конференций и шоу-показов.
+                            на «Винзаводе» и «Арме», расположенных в пешей доступности от м. Курская. Все пространства
+                            многофункциональны и вмещают от 10 человек для камерных практических форматов до 150 человек
+                            для конференций и шоу-показов.
                         </p>
                     </div>
                 </div>
@@ -109,9 +109,7 @@
         <section class="section university-view__feedback-section">
             <div class="container university-view__feedback">
                 <div class="university-view__feedback-content">
-                    <h1 class="university-view__feedback-content-h1">
-                        Хотите провести у нас мероприятие?
-                    </h1>
+                    <h1 class="university-view__feedback-content-h1">Хотите провести у нас мероприятие?</h1>
 
                     <p class="university-view__feedback-content-text">
                         Заполните форму ниже — и мы с вами свяжемся asap.
@@ -119,17 +117,11 @@
                 </div>
 
                 <form class="university-view__feedback-form" enctype="multipart/form-data" @submit.prevent="onSubmit">
-                    <v-input v-model="form.name" placeholder="Вашe имя" :error="nameError">
-                        Имя и фамилия
-                    </v-input>
+                    <v-input v-model="form.name" placeholder="Вашe имя" :error="nameError"> Имя и фамилия </v-input>
 
-                    <v-input v-model="form.city" placeholder="Вашe город" :error="cityError">
-                        Город
-                    </v-input>
+                    <v-input v-model="form.city" placeholder="Вашe город" :error="cityError"> Город </v-input>
 
-                    <v-input v-model="form.email" placeholder="Ваш email" :error="emailError">
-                        Email
-                    </v-input>
+                    <v-input v-model="form.email" placeholder="Ваш email" :error="emailError"> Email </v-input>
 
                     <v-input-mask v-model="form.phone" :options="maskOptions" :raw="false" :error="phoneError">
                         Номер телефона

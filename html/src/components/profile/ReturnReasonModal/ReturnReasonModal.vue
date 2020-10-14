@@ -112,9 +112,7 @@
                 </li>
             </ul>
             <div class="return-reason-modal__section">
-                <h4 class="return-reason-modal__subtitle">
-                    Фото и видео товара
-                </h4>
+                <h4 class="return-reason-modal__subtitle">Фото и видео товара</h4>
                 <div class="return-reason-modal__description">
                     Не более 10 файлов, jpeg, png, mp4, mov.<br />
                     Фото не более 5Mb, видео до 15Mb
@@ -156,7 +154,6 @@ import { SET_REASON } from '@store/modules/Profile/modules/ReturnPage/actions';
 
 import { modalName, mimeType, returnReasons } from '@enums';
 import './ReturnReasonModal.css';
-import { returnFormSteps } from '@enums/profile';
 
 const NAME = modalName.profile.RETURN_REASON;
 const RETURN_MODULE_PATH = `${PROFILE_MODULE}/${RETURN_MODULE}`;
@@ -183,9 +180,9 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state =>
+            isOpen: (state) =>
                 state[MODALS][modalName.profile.RETURN_REASON] && state[MODALS][modalName.profile.RETURN_REASON].open,
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         isTablet() {

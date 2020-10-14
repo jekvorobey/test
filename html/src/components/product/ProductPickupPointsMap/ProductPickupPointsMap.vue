@@ -74,7 +74,7 @@ export default {
             const pickupPoints = this[FILTERED_PICKUP_POINTS] || [];
             const selectedPoint = this[SELECTED_PICKUP_POINT];
 
-            return pickupPoints.map(p => {
+            return pickupPoints.map((p) => {
                 const isSelected = selectedPoint && selectedPoint.id === p.id;
                 return {
                     entity: p,

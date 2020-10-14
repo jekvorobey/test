@@ -141,12 +141,8 @@
                                 <v-svg v-else class="icon--rotate-deg180" name="arrow-down" width="16" height="16" />
                             </v-link>
                         </th>
-                        <th class="orders-view__table-th">
-                            Сумма
-                        </th>
-                        <th class="orders-view__table-th">
-                            Статус заказа
-                        </th>
+                        <th class="orders-view__table-th">Сумма</th>
+                        <th class="orders-view__table-th">Статус заказа</th>
                         <th class="orders-view__table-th" />
                     </tr>
                 </thead>
@@ -287,9 +283,7 @@
         <div class="container container--tablet-lg orders-view__empty-container" v-else>
             <v-svg name="alert" width="24" height="24" />
 
-            <span class="orders-view__empty-text">
-                У вас еще нет заказов
-            </span>
+            <span class="orders-view__empty-text">У вас еще нет заказов</span>
 
             <v-button class="btn--outline" to="/catalog">перейти к покупкам</v-button>
         </div>
@@ -389,7 +383,6 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
-import VInput from '@controls/VInput/VInput.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
@@ -401,14 +394,14 @@ import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
-import { $store, $progress, $logger } from '@services';
+import { $store, $progress } from '@services';
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { LOCALE, SCROLL } from '@store';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
@@ -439,7 +432,7 @@ import {
 
 import { preparePrice, shortNumberFormat } from '@util';
 import { getOrderStatusColorClass, generateThankPageUrl } from '@util/order';
-import { orderStatus, orderPaymentStatus, sortFields, filterField } from '@enums/order';
+import { orderPaymentStatus, sortFields } from '@enums/order';
 import { orderDateLocaleOptions } from '@settings/profile';
 import { sortDirections, modalName } from '@enums';
 import { DEFAULT_PAGE } from '@constants';
@@ -463,7 +456,6 @@ export default {
         VSvg,
         VLink,
         VButton,
-        VInput,
         VSelect,
         VPagination,
         VArcCounter,
@@ -709,7 +701,7 @@ export default {
                     orderDirection,
                     filter,
                 })
-                .then((data) => {
+                .then(() => {
                     $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
                     next((vm) => {
                         $progress.finish();

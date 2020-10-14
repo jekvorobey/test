@@ -13,5 +13,5 @@ export default {
 
     [SET_REASON]({ commit }, { productId, reasonText }) {
         commit(SET_REASON, { productId, reasonText });
-    }
+    },
 };

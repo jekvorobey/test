@@ -26,9 +26,7 @@
                         >
                             Код из письма
                             <template v-slot:after>
-                                <v-button class="email-edit-modal__form-btn" type="submit">
-                                    Отправить
-                                </v-button>
+                                <v-button class="email-edit-modal__form-btn" type="submit"> Отправить </v-button>
                             </template>
                             <template v-slot:error="{ error }">
                                 <transition name="slide-in-bottom" mode="out-in">

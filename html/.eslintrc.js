@@ -15,6 +15,7 @@ module.exports = {
     },
     plugins: ['optimize-regex', 'import'],
     rules: {
+        'no-var': 'error',
         /* Чтобы можно было работать с битовыми операциями (например преобразования HEX в RGB) */
         'no-bitwise': 'off',
         /* Чтобы можно было ничего не возвращать в async функции */

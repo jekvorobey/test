@@ -25,14 +25,14 @@ export default {
     computed: {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
-            [STATUS]: state => (state[USER] && state[USER][STATUS]) || false,
+            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
+            [STATUS]: (state) => (state[USER] && state[USER][STATUS]) || false,
         }),
 
         handlers() {
             const keys = Object.keys(this.$listeners);
             const handlers = {};
-            keys.forEach(k => (handlers[k] = e => this.$emit(k, e)));
+            keys.forEach((k) => (handlers[k] = (e) => this.$emit(k, e)));
             handlers.click = this.onBtnClick;
             return handlers;
         },

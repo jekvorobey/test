@@ -10,14 +10,16 @@
             />
 
             <div class="container search-panel__request">
-                <h2 class="text-grey text-medium search-panel__hl" v-if="isTablet">
-                    Популярные запросы
-                </h2>
+                <h2 class="text-grey text-medium search-panel__hl" v-if="isTablet">Популярные запросы</h2>
 
                 <ul class="search-panel__categories-list">
                     <template v-if="!isEmpty && categories && categories.length > 0">
                         <li class="search-panel__categories-item" :key="category.name" v-for="category in categories">
-                            <v-link class="search-panel__categories-link" :to="category.url" @click="onSetSearch(false)">
+                            <v-link
+                                class="search-panel__categories-link"
+                                :to="category.url"
+                                @click="onSetSearch(false)"
+                            >
                                 {{ category.name }}
                             </v-link>
                         </li>
@@ -75,10 +77,10 @@ import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCar
 import SearchFilter from '@components/SearchFilter/SearchFilter.vue';
 import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import { SCROLL } from '@store';
 
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import {
@@ -125,7 +127,7 @@ export default {
             const popularProducts = this[POPULAR_PRODUCTS];
             const collection = (!isEmpty && products) || popularProducts || [];
 
-            return collection.map(i => ({
+            return collection.map((i) => ({
                 ...i,
                 url: generateProductUrl(i.categoryCodes[i.categoryCodes.length - 1], i.code),
                 image: this.generateImageObject(i.image),
@@ -134,12 +136,12 @@ export default {
 
         requests() {
             const requests = this[POPULAR_REQUESTS] || [];
-            return requests.map(r => ({ name: r, url: generateSearchUrl(r) }));
+            return requests.map((r) => ({ name: r, url: generateSearchUrl(r) }));
         },
 
         categories() {
             const { suggestions = [] } = this[SUGGESTIONS] || {};
-            return suggestions.map(s => ({ name: s, url: generateSearchUrl(s) }));
+            return suggestions.map((s) => ({ name: s, url: generateSearchUrl(s) }));
         },
 
         range() {
@@ -221,7 +223,7 @@ export default {
             });
         },
 
-        onSetSearch(value){
+        onSetSearch(value) {
             this[SET_SEARCH](value);
         },
 

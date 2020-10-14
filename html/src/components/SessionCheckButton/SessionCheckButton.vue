@@ -36,7 +36,7 @@ export default {
         handlers() {
             const keys = Object.keys(this.$listeners);
             const handlers = {};
-            keys.forEach(k => (handlers[k] = e => this.$emit(k, e)));
+            keys.forEach((k) => (handlers[k] = (e) => this.$emit(k, e)));
             handlers.click = this.onBtnClick;
             return handlers;
         },

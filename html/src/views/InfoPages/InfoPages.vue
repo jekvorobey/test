@@ -18,7 +18,7 @@ export default {
 
     computed: {
         ...mapState('route', {
-            page: state => state.params.page,
+            page: (state) => state.params.page,
         }),
 
         renderComponent() {

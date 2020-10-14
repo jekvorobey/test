@@ -57,7 +57,7 @@ import { LOCALE } from '@store';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modules/Profile';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
 import { NAME as MESSAGES_MODULE, MESSAGES, TITLE } from '@store/modules/Profile/modules/Messages';
@@ -106,12 +106,12 @@ export default {
         ...mapState(AUTH_MODULE, [USER]),
         ...mapState(MESSAGES_MODULE_PATH, [TITLE, MESSAGES]),
         ...mapState('route', {
-            chatId: state => state.params && state.params.chatId,
+            chatId: (state) => state.params && state.params.chatId,
         }),
 
         items() {
             const messages = this[MESSAGES] || [];
-            return messages.map(m => ({ ...m, date: this.formatDate(m.date) }));
+            return messages.map((m) => ({ ...m, date: this.formatDate(m.date) }));
         },
 
         backUrl() {
@@ -122,6 +122,7 @@ export default {
     methods: {
         ...mapActions(PROFILE_MODULE, [UPDATE_BREADCRUMB]),
         ...mapActions(MESSAGES_MODULE_PATH, [CREATE_CHAT_MESSAGE]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         formatDate(date) {
             return date && getDate(date).toLocaleDateString(this[LOCALE]);
@@ -163,7 +164,7 @@ export default {
         $store
             .dispatch(`${MESSAGES_MODULE_PATH}/${FETCH_CHAT_MESSAGES}`, params.chatId)
             .then(() =>
-                next(vm => {
+                next((vm) => {
                     $progress.finish();
                     vm[UPDATE_BREADCRUMB]([
                         { name: vm.$t('profile.routes.Messages'), to: { name: 'Messages' } },
@@ -171,7 +172,7 @@ export default {
                     ]);
                 })
             )
-            .catch(error => next(vm => $progress.fail()));
+            .catch(() => next(() => $progress.fail()));
     },
 
     beforeRouteLeave(to, from, next) {

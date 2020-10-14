@@ -15,5 +15,5 @@ const root = document.getElementById('app');
 
 window.vue = new Vue({
     i18n,
-    render: h => h(Page502),
+    render: (h) => h(Page502),
 }).$mount(root);

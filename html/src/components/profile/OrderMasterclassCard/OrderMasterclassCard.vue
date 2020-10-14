@@ -32,14 +32,10 @@
                             <span>Скачать</span>
                         </v-link>
 
-                        <div v-if="isComplete">
-                            Завершен
-                        </div>
+                        <div v-if="isComplete">Завершен</div>
                         <div v-else-if="qtyReturned > 0">
                             <template v-if="qtyReturned < qty"> Оформлен возврат {{ qtyReturned }} шт </template>
-                            <template v-else>
-                                Оформлен возврат
-                            </template>
+                            <template v-else>Оформлен возврат</template>
                         </div>
                     </div>
 
@@ -73,9 +69,7 @@
                     <span>Скачать</span>
                 </v-link>
 
-                <div v-if="isComplete">
-                    Завершен
-                </div>
+                <div v-if="isComplete">Завершен</div>
             </div>
 
             <div class="order-masterclass-card__bottom-info">
@@ -92,9 +86,7 @@
 
                 <div class="order-masterclass-card__body-return" v-if="qtyReturned > 0">
                     <template v-if="qtyReturned < qty"> Оформлен возврат {{ qtyReturned }} шт. </template>
-                    <template v-else>
-                        Оформлен возврат
-                    </template>
+                    <template v-else>Оформлен возврат</template>
                 </div>
             </div>
         </div>

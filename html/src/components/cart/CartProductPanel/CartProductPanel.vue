@@ -75,9 +75,7 @@ import { ADD_CART_ITEM, DELETE_CART_ITEM, DELETE_CART_BUNDLE, ADD_CART_BUNDLE } 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
-import { fileExtension } from '@enums';
 import { cartItemTypes } from '@enums/product';
-import { generatePictureSourcePath } from '@util/file';
 import { generateProductUrl } from '@util/catalog';
 import './CartProductPanel.css';
 
@@ -108,7 +106,7 @@ export default {
         ...mapGetters(CART_MODULE, [DELIVERY_INFO]),
 
         products() {
-            return this.items.map(i => ({ ...i, p: { ...i.p, url: this.generateItemProductUrl(i.p) } }));
+            return this.items.map((i) => ({ ...i, p: { ...i.p, url: this.generateItemProductUrl(i.p) } }));
         },
     },
 
@@ -188,4 +186,3 @@ export default {
     },
 };
 </script>
-

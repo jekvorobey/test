@@ -32,7 +32,7 @@ export default {
     },
 
     computed: {
-        pageTitle(){
+        pageTitle() {
             return 'Вакансии';
         },
     },

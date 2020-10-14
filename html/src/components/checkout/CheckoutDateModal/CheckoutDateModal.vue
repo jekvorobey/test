@@ -41,9 +41,7 @@
                 </v-select>
             </div>
             <div class="checkout-date-modal__submit">
-                <v-button class="checkout-date-modal__submit-btn" @click="onChanged">
-                    Подтвердить доставку
-                </v-button>
+                <v-button class="checkout-date-modal__submit-btn" @click="onChanged">Подтвердить доставку</v-button>
             </div>
         </template>
     </general-modal>
@@ -57,7 +55,6 @@ import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapState, mapActions } from 'vuex';
 import { LOCALE, LOCALIZATIONS } from '@store';
-import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -132,7 +129,7 @@ export default {
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
-        onSelectPoint(point) {
+        onSelectPoint() {
             this.onClose();
         },
 

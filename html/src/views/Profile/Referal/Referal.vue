@@ -16,9 +16,7 @@
                         v-if="levelData.nextLevelName || (!levelData.nextLevelName && isTabletLg && !isTablet)"
                         :style="{ visibility: levelData.nextLevelName ? 'visible' : 'hidden' }"
                     >
-                        <div class="text-grey referal-view__panel-name">
-                            Следующий уровень
-                        </div>
+                        <div class="text-grey referal-view__panel-name">Следующий уровень</div>
                         <div class="text-grey referal-view__panel-level">{{ levelData.nextLevelName }}</div>
                     </div>
                 </div>
@@ -235,9 +233,7 @@
                         с товарами
                     </li>
                     <li class="referal-view__attention-list-item">
-                        <button class="referal-view__attention-link" @click="onPromocodeRequest">
-                            запросить
-                        </button>
+                        <button class="referal-view__attention-link" @click="onPromocodeRequest">запросить</button>
                         промо-код
                     </li>
                     <li class="referal-view__attention-list-item">
@@ -336,9 +332,6 @@ import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 
 import MessageModal from '@components/profile/MessageModal/MessageModal.vue';
 
-import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
-import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
-
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { LOCALE } from '@store';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
@@ -358,12 +351,12 @@ import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { $store, $progress, $logger } from '@services';
+import { $store, $progress } from '@services';
 import { fileExtension, sortDirections, modalName, themeCodes } from '@enums';
 import { referralOrderSortFields } from '@enums/profile';
 import { filterField } from '@enums/order';
 import { DEFAULT_PAGE } from '@constants';
-import { digit2DateSettings, numericYearDateSettings } from '@settings';
+import { digit2DateSettings } from '@settings';
 import { baseChartOptions } from '@settings/profile';
 import { preparePrice, shortNumberFormat, saveToClipboard, getDate, calculateStepSize } from '@util';
 import { generateProductUrl } from '@util/catalog';
@@ -658,20 +651,6 @@ export default {
         },
     },
 
-    async serverPrefetch() {
-        try {
-            const {
-                fullPath,
-                query: { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField },
-            } = this.$route;
-
-            // await this[FETCH_REFERRAL_DATA]({ page, orderField, orderDirection });
-            // this[SET_LOAD_PATH](fullPath);
-        } catch (error) {
-            $logger.error(error);
-        }
-    },
-
     beforeRouteEnter(to, from, next) {
         const {
             fullPath,
@@ -701,7 +680,7 @@ export default {
                         vm.setSortValue(orderField);
                     });
                 })
-                .catch((thrown) => {
+                .catch(() => {
                     $progress.fail();
                     next();
                 });
@@ -717,7 +696,6 @@ export default {
         // Также имеется доступ в `this` к экземпляру компонента.
 
         const {
-            fullPath,
             query: { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField },
         } = to;
 

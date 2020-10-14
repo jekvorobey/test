@@ -3,9 +3,7 @@
         <div class="container not-found-view__main">
             <div class="not-found-view__main-body">
                 <h1 class="not-found-view__hl">404</h1>
-                <p>
-                    К сожалению, неправильно набран адрес, или такой страницы больше не существует.
-                </p>
+                <p>К сожалению, неправильно набран адрес, или такой страницы больше не существует.</p>
                 <div class="not-found-view__main-info">
                     <p>Если у вас возникли вопросы, обратитесь в службу поддержки:</p>
                     <p>

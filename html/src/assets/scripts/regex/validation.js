@@ -1,22 +1,22 @@
 /**
  * Имена (латинские и русские буквы, тире и пробелы).
  */
-export const nameAll = /^[ \-A-Za-zA-Яа-яё]*$/i;
+export const nameAll = /^[ A-яё-]*$/i;
 
 /**
  * Русские имена (русские буквы, тире и пробелы).
  */
-export const nameRu = /^[ \-а-яё]*$/i;
+export const nameRu = /^[ а-яё-]*$/i;
 
 /**
  * Английские имена (латинские буквы, тире и пробелы).
  */
-export const nameEn = /^[ \-a-z]*$/i;
+export const nameEn = /^[ a-z-]*$/i;
 
 /**
  * Код реферала (латинские буквы, цифры, тире и подчеркивание).
  */
-export const referrerCode = /^[_\-A-Za-z0-9]*$/i;
+export const referrerCode = /^[\w-]*$/i;
 
 /**
  * Пароль (как минимум 1 заглавная и строчная латинские буквы и 1 цифра).

@@ -90,14 +90,14 @@ export default {
         ...mapState(RETURN_PAGE_PATH, [SELECTED_PRODUCTS]),
 
         ...mapState(MODAL_MODULE, {
-            isModalOpen: state =>
+            isModalOpen: (state) =>
                 state[MODALS][modalName.profile.RETURN_REASON] && state[MODALS][modalName.profile.RETURN_REASON].open,
         }),
 
         totalPrice() {
             let summary = 0;
 
-            this.selectedProducts.map(item => {
+            this.selectedProducts.map((item) => {
                 summary += item.quantity * item.price.value;
             });
 
@@ -108,7 +108,7 @@ export default {
         },
 
         isBtnDisabled() {
-            return !this.selectedProducts.every(item => {
+            return !this.selectedProducts.every((item) => {
                 return !!item.reason;
             });
         },
@@ -141,7 +141,7 @@ export default {
 
         onNextPage() {
             this[SET_STEP](returnFormSteps.DOCUMENTS);
-        }
+        },
     },
 };
 </script>

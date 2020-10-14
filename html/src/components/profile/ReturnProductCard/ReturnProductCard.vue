@@ -3,10 +3,7 @@
         <router-link class="return-product-card__img" :to="href">
             <v-picture v-if="image" :image="image" alt>
                 <template v-slot:source="{ image }">
-                    <source
-                        :data-srcset="generateSourcePath(64, 64, image.id, 'webp')"
-                        type="image/webp"
-                    />
+                    <source :data-srcset="generateSourcePath(64, 64, image.id, 'webp')" type="image/webp" />
                 </template>
                 <template v-slot:fallback="{ image, alt }">
                     <img
@@ -22,17 +19,11 @@
             <div class="return-product-card__title">
                 <v-link class="return-product-card__body-name" :to="href">{{ name }}</v-link>
                 <template v-if="!reason">
-                    <a
-                        class="return-product-card__link-btn"
-                        @click="onSelectReason"
-                    >Укажите причину возврата</a>
+                    <a class="return-product-card__link-btn" @click="onSelectReason">Укажите причину возврата</a>
                 </template>
                 <template v-else>
                     <p class="return-product-card__reason">
-                        <a
-                            class="return-product-card__link-btn"
-                            @click="onSelectReason"
-                        >Причина возврата:</a>
+                        <a class="return-product-card__link-btn" @click="onSelectReason">Причина возврата:</a>
                         {{ reason }}
                     </p>
                 </template>
@@ -120,13 +111,13 @@ export default {
     },
 
     methods: {
-        generateSourcePath (x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext)
+        generateSourcePath(x, y, id, ext) {
+            return generatePictureSourcePath(x, y, id, ext);
         },
 
         onSelectReason() {
             this.$emit('select-reason', this.id);
-        }
+        },
     },
-}
+};
 </script>

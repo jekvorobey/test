@@ -51,9 +51,7 @@
             </div>
 
             <div class="password-edit-modal__submit">
-                <v-button class="password-edit-modal__submit-btn" @click="onSubmit">
-                    Принять
-                </v-button>
+                <v-button class="password-edit-modal__submit-btn" @click="onSubmit">Принять</v-button>
             </div>
         </template>
     </general-modal>
@@ -125,7 +123,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
         ...mapState(CABINET_MODULE_PATH, [PHONE, HAS_PASSWORD]),
 

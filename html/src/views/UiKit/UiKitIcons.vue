@@ -1,33 +1,27 @@
 <template>
     <section class="section ui-kit-section ui-kit-icons">
-        <h2 class="ui-kit-section__hl">
-            Иконки
-        </h2>
+        <h2 class="ui-kit-section__hl">Иконки</h2>
 
-        <p class="text-grey">
-            Logo
-        </p>
+        <p class="text-grey">Logo</p>
         <p>
-            <span style="padding: 0 8px; background: orange;">
+            <span style="padding: 0 8px; background: orange">
                 <v-svg name="logo-text" width="128" height="48" />
             </span>
-            <span style="padding: 0 8px; background: orange;">
+            <span style="padding: 0 8px; background: orange">
                 <v-svg name="logo" width="32" height="32" />
             </span>
-            <span style="padding: 0 8px; background: orange; fill: white;">
+            <span style="padding: 0 8px; background: orange; fill: white">
                 <v-svg name="logo-text" width="128" height="48" />
             </span>
-            <span style="padding: 0 8px; background: orange; fill: white;">
+            <span style="padding: 0 8px; background: orange; fill: white">
                 <v-svg name="logo" width="32" height="32" />
             </span>
-            <span style="padding: 0 8px; background: orange;">
+            <span style="padding: 0 8px; background: orange">
                 <v-svg name="logo-w" width="32" height="32" />
             </span>
         </p>
 
-        <p class="text-grey">
-            Обычные
-        </p>
+        <p class="text-grey">Обычные</p>
         <p>
             <v-svg name="plus" width="24" height="24" />
             <v-svg name="minus" width="24" height="24" />
@@ -42,9 +36,7 @@
             <v-svg name="mark" width="24" height="24" />
         </p>
 
-        <p class="text-grey">
-            Маленькие
-        </p>
+        <p class="text-grey">Маленькие</p>
         <p>
             <v-svg name="cross-small" width="24" height="24" />
             <v-svg name="arrow-down-small" width="24" height="24" />
@@ -58,9 +50,7 @@
             <v-svg name="add-to-cart-small" width="27" height="18" />
         </p>
 
-        <p class="text-grey">
-            Средние
-        </p>
+        <p class="text-grey">Средние</p>
         <p>
             <v-svg name="search-middle" width="20" height="20" />
             <v-svg name="account-middle" width="20" height="20" />
@@ -74,18 +64,14 @@
             <v-svg name="check-middle" width="20" height="20" />
         </p>
 
-        <p class="text-grey">
-            Специальные
-        </p>
+        <p class="text-grey">Специальные</p>
         <p>
             <v-svg name="pin-special" width="32" height="32" />
             <v-svg name="play-special" width="32" height="32" />
             <v-svg name="play-special" width="80" height="80" />
         </p>
 
-        <p class="text-grey">
-            Соцсети
-        </p>
+        <p class="text-grey">Соцсети</p>
         <p>
             <v-svg name="youtube" width="32" height="32" />
             <v-svg name="twitter" width="32" height="32" />
@@ -128,18 +114,14 @@
             <v-svg name="viber-color" width="24" height="24" />
         </p>
 
-        <p class="text-grey">
-            Платежные системы
-        </p>
+        <p class="text-grey">Платежные системы</p>
         <p>
             <v-svg name="visa" width="50" height="18" />
             <v-svg name="mastercard" width="53" height="34" />
             <v-svg name="mir" width="56" height="15" />
         </p>
 
-        <p class="text-grey">
-            Приложения
-        </p>
+        <p class="text-grey">Приложения</p>
         <p class="app">
             <v-svg name="app-store" width="120" height="40" />
             <v-svg name="google-play" width="135" height="40" />

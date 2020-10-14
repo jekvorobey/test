@@ -74,11 +74,9 @@
 </template>
 
 <script>
-import VButton from '@controls/VButton/VButton.vue';
 import VRange from '@controls/VRange/VRange.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 import VAccordion from '@controls/VAccordion/VAccordion.vue';
-import VLink from '@controls/VLink/VLink.vue';
 
 import ColorCheckBox from '@components/ColorCheckBox/ColorCheckBox.vue';
 
@@ -87,7 +85,7 @@ import { CHANGE_FILTER_STATE } from '@store/modules/Catalog/actions';
 import { FILTER_SEGMENTS, ROUTE_SEGMENTS } from '@store/modules/Catalog/getters';
 
 import _debounce from 'lodash/debounce';
-import { concatCatalogRoutePath, generateCategoryUrl } from '@util/catalog';
+import { concatCatalogRoutePath } from '@util/catalog';
 import { mapState, mapGetters, mapActions } from 'vuex';
 import './CatalogFilter.css';
 
@@ -95,11 +93,9 @@ export default {
     name: 'catalog-filter',
 
     components: {
-        VButton,
         VCheck,
         VRange,
         VAccordion,
-        VLink,
 
         ColorCheckBox,
     },
@@ -125,19 +121,18 @@ export default {
         ...mapGetters(CATALOG_MODULE, [FILTER_SEGMENTS, ROUTE_SEGMENTS]),
         ...mapState(CATALOG_MODULE, [FILTERS, FILTERS_STATE_MAP]),
         ...mapState('route', {
-            type: state => state.params.type,
-            code: state => state.params.code,
-            entityCode: state => state.params.entityCode,
+            type: (state) => state.params.type,
+            code: (state) => state.params.code,
+            entityCode: (state) => state.params.entityCode,
         }),
 
         accordionFilters() {
             const filters = this[FILTERS] || [];
             const map = this[FILTERS_STATE_MAP] || {};
 
-            return filters.map(f => {
+            return filters.map((f) => {
                 const isOverflow = f.items ? f.items.length > this.maxCountFilters : false;
-                const isExpanded = map[f.name]['isExpanded'];
-                const showMore = map[f.name]['showMore'];
+                const { isExpanded, showMore } = map[f.name];
                 const items = isOverflow && !showMore ? [...f.items.slice(0, this.maxCountFilters)] : f.items;
 
                 return {
@@ -155,10 +150,11 @@ export default {
         ...mapActions(CATALOG_MODULE, [CHANGE_FILTER_STATE]),
 
         onRadioChange(e, value) {
-            const { type, entityCode, code, routeSegments } = this;
+            const { type, entityCode, code } = this;
+            let { routeSegments } = this;
 
             if (!routeSegments.includes(value)) routeSegments.push(value);
-            routeSegments = routeSegments.filter(s => s === value);
+            routeSegments = routeSegments.filter((s) => s === value);
 
             const path = concatCatalogRoutePath(type, entityCode, code, routeSegments);
             const query = { ...this.$route.query };

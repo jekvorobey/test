@@ -1,8 +1,6 @@
 <template>
     <section class="section ui-kit-section">
-        <h2 class="ui-kit-section__hl">
-            Формы
-        </h2>
+        <h2 class="ui-kit-section__hl">Формы</h2>
         <form @submit.prevent="submit">
             <v-input v-model="form.name" :error="name_error">
                 Имя <span>*</span>
@@ -31,9 +29,7 @@
                 </template>
             </v-input>
             <br />
-            <v-input v-model="form.description" tag="textarea">
-                Description
-            </v-input>
+            <v-input v-model="form.description" tag="textarea"> Description </v-input>
             <br />
             <v-button type="submit">submit</v-button>
         </form>

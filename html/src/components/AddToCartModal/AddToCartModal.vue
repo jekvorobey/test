@@ -28,9 +28,7 @@
                         <v-button class="btn--outline add-to-cart-modal__panel-btn" @click="onClose">
                             Продолжить покупки
                         </v-button>
-                        <v-button class="add-to-cart-modal__panel-btn" to="/cart">
-                            Перейти в корзину
-                        </v-button>
+                        <v-button class="add-to-cart-modal__panel-btn" to="/cart"> Перейти в корзину </v-button>
                     </div>
                 </template>
                 <v-spinner class="add-to-cart-modal__spinner" :show="!product" />
@@ -76,12 +74,8 @@
                     В корзине {{ $tc('cart.items', cartItemsCount) }} на сумму
                     <price v-bind="productItemsSum" />
                 </div>
-                <v-link class="btn--outline add-to-cart-modal__panel-link" @click="onClose">
-                    Продолжить
-                </v-link>
-                <v-button class="add-to-cart-modal__panel-btn" to="/cart">
-                    Перейти в корзину
-                </v-button>
+                <v-link class="btn--outline add-to-cart-modal__panel-link" @click="onClose">Продолжить</v-link>
+                <v-button class="add-to-cart-modal__panel-btn" to="/cart">Перейти в корзину</v-button>
             </div>
         </template>
     </general-modal>
@@ -114,7 +108,6 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { modalName } from '@enums';
 import { getRandomIntInclusive } from '@util';
-import { generatePictureSourcePath } from '@util/file';
 import './AddToCartModal.css';
 
 const NAME = modalName.general.ADD_TO_CART;
@@ -143,7 +136,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
         ...mapState(CART_MODULE, [CART_DATA, RELATIVE_PRODUCTS]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
@@ -168,7 +161,7 @@ export default {
     watch: {
         [CART_DATA]() {
             const data = this[CART_DATA][this.modalState.type];
-            this.cartItem = data ? data.items.find(i => i.p.id === this.modalState.offerId) : null;
+            this.cartItem = data ? data.items.find((i) => i.p.id === this.modalState.offerId) : null;
         },
 
         modalState() {
@@ -216,7 +209,7 @@ export default {
             const { offerId, storeId, referralCode, type, cookieName } = this.modalState;
             const data = this[CART_DATA][type];
 
-            this.cartItem = data ? data.items.find(i => i.p.id === offerId) : null;
+            this.cartItem = data ? data.items.find((i) => i.p.id === offerId) : null;
             if (!this.cartItem) this[ADD_CART_ITEM]({ offerId, storeId, referrerCode: referralCode, cookieName });
             this[FETCH_RELATIVE_PRODUCTS]({ page: getRandomIntInclusive(1, 4) });
         },

@@ -29,7 +29,7 @@ import VSelect from '@controls/VSelect/VSelect.vue';
 import { mapGetters } from 'vuex';
 
 import { NAME as MASTERCLASSES_MODULE } from '@store/modules/Masterclass';
-import { ROUTE_SEGMENTS, FILTER_SEGMENTS, NULLABLE_FILTERS, ACTIVE_TAGS } from '@store/modules/Masterclass/getters';
+import { ROUTE_SEGMENTS, FILTER_SEGMENTS, NULLABLE_FILTERS } from '@store/modules/Masterclass/getters';
 
 import { concatMasterclassesRoutePath } from '@util/catalog';
 import './MasterclassCatalogFilter.css';
@@ -64,9 +64,9 @@ export default {
             const map = {};
 
             for (const key in filterSegments) {
-                const filter = this[NULLABLE_FILTERS].find(f => f.name === key);
+                const filter = this[NULLABLE_FILTERS].find((f) => f.name === key);
                 const keys = Object.keys(filterSegments[key]);
-                map[key] = filter.items.find(i => i.code === filterSegments[key][keys[0]]) || filter.items[0];
+                map[key] = filter.items.find((i) => i.code === filterSegments[key][keys[0]]) || filter.items[0];
             }
             return map;
         },

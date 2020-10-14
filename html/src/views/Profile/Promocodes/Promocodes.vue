@@ -57,12 +57,8 @@
                             <td class="promocodes-view__table-td">
                                 <template v-if="!promocode.endDate && promocode.startDate">c</template>
                                 {{ promocode.startDate }}
-                                <template v-if="promocode.startDate && promocode.endDate">
-                                    -
-                                </template>
-                                <template v-else-if="!promocode.startDate && !promocode.endDate">
-                                    Бессрочный
-                                </template>
+                                <template v-if="promocode.startDate && promocode.endDate"> - </template>
+                                <template v-else-if="!promocode.startDate && !promocode.endDate">Бессрочный</template>
                                 <template v-if="!promocode.startDate && promocode.endDate">по</template>
                                 {{ promocode.endDate }}
                             </td>
@@ -76,12 +72,8 @@
                                 <template v-if="promocode.type === promocodeType.DELIVERY">
                                     Бесплатная доставка
                                 </template>
-                                <template v-if="promocode.type === promocodeType.GIFT">
-                                    Подарок
-                                </template>
-                                <template v-else-if="promocode.type === promocodeType.BONUS">
-                                    Бонусы
-                                </template>
+                                <template v-if="promocode.type === promocodeType.GIFT"> Подарок </template>
+                                <template v-else-if="promocode.type === promocodeType.BONUS"> Бонусы </template>
                                 <template v-else-if="promocode.type === promocodeType.PRODUCT">
                                     <template v-if="promocode.discountType === promocodeDiscountType.DELIVERY">
                                         Скидка на доставку
@@ -193,15 +185,9 @@
                     </info-row>
                     <info-row class="promocodes-view__list-item-row" name="Скидка" :value="promocode.discount" />
                     <info-row class="promocodes-view__list-item-row" name="Категория товаров/услуг">
-                        <template v-if="promocode.type === promocodeType.DELIVERY">
-                            Бесплатная доставка
-                        </template>
-                        <template v-if="promocode.type === promocodeType.GIFT">
-                            Подарок
-                        </template>
-                        <template v-else-if="promocode.type === promocodeType.BONUS">
-                            Бонусы
-                        </template>
+                        <template v-if="promocode.type === promocodeType.DELIVERY"> Бесплатная доставка </template>
+                        <template v-if="promocode.type === promocodeType.GIFT"> Подарок </template>
+                        <template v-else-if="promocode.type === promocodeType.BONUS"> Бонусы </template>
                         <template v-else-if="promocode.type === promocodeType.PRODUCT">
                             <template v-if="promocode.discountType === promocodeDiscountType.DELIVERY">
                                 Скидка на доставку
@@ -284,13 +270,9 @@
                 Воспользуйтесь функцией «Запросить промо-код» для привлечения аудитории к определенным продуктам или
                 категориям товаров.
             </template>
-            <template v-else>
-                Архив ваших промо-кодов пуст.
-            </template>
+            <template v-else>Архив ваших промо-кодов пуст.</template>
 
-            <template v-slot:btn>
-                Запрос промокода
-            </template>
+            <template v-slot:btn>Запрос промокода</template>
         </empty-placeholder-panel>
 
         <transition name="fade">
@@ -301,8 +283,6 @@
 
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
-import VLink from '@controls/VLink/VLink.vue';
-import VButton from '@controls/VButton/VButton.vue';
 
 import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
@@ -318,16 +298,15 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
-import { NAME as PROMOCODES_MODULE, ITEMS } from '@store/modules/Profile/modules/Promocodes';
+import { NAME as PROMOCODES_MODULE } from '@store/modules/Profile/modules/Promocodes';
 
 import { PROMOCODES } from '@store/modules/Profile/modules/Promocodes/getters';
 import { FETCH_PROMOCODES_DATA, SET_LOAD } from '@store/modules/Profile/modules/Promocodes/actions';
 
 import { modalName, themeCodes } from '@enums';
 import { promocodeType, promocodeDiscountType } from '@enums/checkout';
-import { digit2DateSettings } from '@settings';
 import { saveToClipboard } from '@util';
-import { $store, $progress, $logger, $context } from '@services';
+import { $store, $progress, $context } from '@services';
 import metaMixin from '@plugins/meta';
 import '@images/sprites/copy.svg';
 import '@images/sprites/arrow-down.svg';
@@ -342,8 +321,6 @@ export default {
 
     components: {
         VSvg,
-        VLink,
-        VButton,
 
         RadioSwitch,
         InfoRow,
@@ -466,7 +443,6 @@ export default {
 
     beforeRouteEnter(to, from, next) {
         const {
-            fullPath,
             query: { isArchive = 0 },
         } = to;
 
@@ -489,8 +465,8 @@ export default {
                     $progress.finish();
                 });
             })
-            .catch((error) =>
-                next((vm) => {
+            .catch(() =>
+                next(() => {
                     $progress.fail();
                 })
             );

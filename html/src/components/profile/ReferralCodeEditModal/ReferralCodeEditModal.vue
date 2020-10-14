@@ -30,9 +30,7 @@
             </attention-panel>
 
             <div class="referral-code-edit-modal__submit">
-                <v-button class="referral-code-edit-modal__submit-btn" @click="onSubmit">
-                    Принять
-                </v-button>
+                <v-button class="referral-code-edit-modal__submit-btn" @click="onSubmit">Принять</v-button>
             </div>
         </template>
     </general-modal>
@@ -88,7 +86,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
         header() {

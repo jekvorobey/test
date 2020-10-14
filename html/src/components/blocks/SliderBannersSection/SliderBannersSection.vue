@@ -50,11 +50,11 @@
 </template>
 
 <script>
-import VPicture from '@controls/VPicture/VPicture.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 // import LandingBannerCard from '@components/LandingBannerCard/LandingBannerCard.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 
+import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 import './SliderBannersSection.css';
 
@@ -81,7 +81,6 @@ export default {
     name: 'slider-banners-section',
 
     components: {
-        VPicture,
         VSlider,
         CatalogBannerCard,
     },
@@ -106,7 +105,7 @@ export default {
         },
 
         items() {
-            return this.banners.map(b => ({
+            return this.banners.map((b) => ({
                 ...b,
                 mobileImage: this.mobileImage(b),
                 tabletImage: this.tabletImage(b),

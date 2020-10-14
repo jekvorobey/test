@@ -8,18 +8,14 @@
                         {{ item.title }}
                     </h4>
                     <div class="return-result-package__header-info">
-                        <span class="return-result-package__address">
-                            г. Москва, ул. Стратонавтов, д. 11
-                        </span>
-                        <span class="return-result-package__date">
-                            24 июня (пн), с 10:00 до 18:00
-                        </span>
+                        <span class="return-result-package__address">г. Москва, ул. Стратонавтов, д. 11</span>
+                        <span class="return-result-package__date">24 июня (пн), с 10:00 до 18:00</span>
                     </div>
                 </div>
                 <ul class="return-result-package__content return-result-package__list">
                     <li class="return-result-package__list-item" v-for="product in item.products" :key="product.id">
                         <return-result-card
-                            :id="product.id" 
+                            :id="product.id"
                             :href="generateItemProductUrl(product)"
                             :image="product.image"
                             :name="product.name"
@@ -36,7 +32,7 @@
                     <span class="return-result__list-item-title">Коробка {{ index + 1 }}</span>
                     <div class="return-result__list-item-product" v-for="product in item.products" :key="product.id">
                         <return-result-card
-                            :id="product.id" 
+                            :id="product.id"
                             :href="generateItemProductUrl(product)"
                             :image="product.image"
                             :name="product.name"
@@ -44,8 +40,12 @@
                     </div>
                 </li>
             </ul>
-            <span class="return-result__description">2. На ваш адрес ya@gmail.ru придет заявление на возврат. Распечатайте заявление в каждую коробку.</span>
-            <span class="return-result__description">3. Заполните и подпишите заявления. Приложите их в соответствующие коробки.</span>
+            <span class="return-result__description"
+                >2. На ваш адрес ya@gmail.ru придет заявление на возврат. Распечатайте заявление в каждую коробку.</span
+            >
+            <span class="return-result__description"
+                >3. Заполните и подпишите заявления. Приложите их в соответствующие коробки.</span
+            >
         </div>
         <div class="return-result__controls">
             <v-button class="return-result__subit">Готово</v-button>
@@ -90,6 +90,6 @@ export default {
                 return generateProductUrl(categoryCode, product.code);
             }
         },
-    }
-}
+    },
+};
 </script>

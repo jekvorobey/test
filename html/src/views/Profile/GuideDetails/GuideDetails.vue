@@ -42,7 +42,7 @@ import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCar
 import { mapState, mapActions } from 'vuex';
 import { LOCALE } from '@store';
 
-import { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modules/Profile';
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
 import '@images/sprites/arrow-small.svg';
@@ -105,7 +105,7 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState('route', {
-            guideId: state => state.params && state.params.guideId,
+            guideId: (state) => state.params && state.params.guideId,
         }),
 
         backUrl() {
@@ -123,7 +123,7 @@ export default {
 
     beforeRouteEnter(to, from, next) {
         const { name, params } = to;
-        next(vm => {
+        next((vm) => {
             vm[UPDATE_BREADCRUMB]([
                 { name: vm.$t('profile.routes.Guides'), to: { name: 'Guides' } },
                 { name: 'ШАМПУНИ И КОНДИЦИОНЕРЫ AVEDA ДЛЯ ВЬЮЩИХСЯ ВОЛОС', to: { name, params } },
@@ -135,7 +135,7 @@ export default {
         const { name, params } = to;
 
         this[UPDATE_BREADCRUMB]([
-            { name: vm.$t('profile.routes.Guides'), to: { name: 'Guides' } },
+            { name: this.$t('profile.routes.Guides'), to: { name: 'Guides' } },
             { name: 'ШАМПУНИ И КОНДИЦИОНЕРЫ AVEDA ДЛЯ ВЬЮЩИХСЯ ВОЛОС', to: { name, params } },
         ]);
         next();

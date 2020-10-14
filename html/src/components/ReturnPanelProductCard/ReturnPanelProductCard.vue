@@ -38,15 +38,15 @@
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue'
-import VLink from '@controls/VLink/VLink.vue'
-import VPicture from '@controls/VPicture/VPicture.vue'
-import VCounter from '@controls/VCounter/VCounter.vue'
+import VSvg from '@controls/VSvg/VSvg.vue';
+import VLink from '@controls/VLink/VLink.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
+import VCounter from '@controls/VCounter/VCounter.vue';
 
-import Price from '@components/Price/Price.vue'
+import Price from '@components/Price/Price.vue';
 
-import { generatePictureSourcePath } from '@util/file'
-import './ReturnPanelProductCard.css'
+import { generatePictureSourcePath } from '@util/file';
+import './ReturnPanelProductCard.css';
 
 export default {
     name: 'return-panel-product-card',
@@ -86,20 +86,20 @@ export default {
         },
     },
 
-    data () {
+    data() {
         return {
             quantity: null,
-        }
+        };
     },
 
     methods: {
-        generateSourcePath (x, y, id, ext) {
-            return generatePictureSourcePath(x, y, id, ext)
+        generateSourcePath(x, y, id, ext) {
+            return generatePictureSourcePath(x, y, id, ext);
         },
     },
 
-    beforeMount () {
-        this.quantity = this.product.stock.qty
+    beforeMount() {
+        this.quantity = this.product.stock.qty;
     },
-}
+};
 </script>

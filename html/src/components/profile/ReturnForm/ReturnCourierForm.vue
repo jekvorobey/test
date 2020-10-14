@@ -7,34 +7,36 @@
                     <span class="return-courier-form__delivery-time">{{ item.time }}</span>
                 </div>
                 <div class="return-courier-form__block-controls">
-                    <v-link class="return-courier-form__edit-btn"><v-svg name="edit" width="14" height="14" /> Изменить дату и время</v-link>
+                    <v-link class="return-courier-form__edit-btn"
+                        ><v-svg name="edit" width="14" height="14" /> Изменить дату и время</v-link
+                    >
                 </div>
             </div>
             <ul class="return-courier-form__block-list" v-for="product in item.products" :key="product.id">
                 <li class="return-courier-form__block-list-item">
                     <return-product-card
-                    :href="generateItemProductUrl(product)"
-                    :type="product.type"
-                    :id="product.id"
-                    :quantity="product.quantity"
-                    :image="product.image"
-                    :name="product.name"
-                    :price="product.price"
-                    :old-price="product.oldPrice"
-                    :reason="product.reason"
-                />
+                        :href="generateItemProductUrl(product)"
+                        :type="product.type"
+                        :id="product.id"
+                        :quantity="product.quantity"
+                        :image="product.image"
+                        :name="product.name"
+                        :price="product.price"
+                        :old-price="product.oldPrice"
+                        :reason="product.reason"
+                    />
                 </li>
             </ul>
             <div class="return-courier-form__address-panel">
                 <div class="return-courier-form__address-panel-header">
-                    <div class="return-courier-form__address-panel-title">
-                        Адресс для приезда курьера
-                    </div>
+                    <div class="return-courier-form__address-panel-title">Адресс для приезда курьера</div>
                     <div class="return-courier-form__adress-panel-controls">
-                        <v-link class="return-courier-form__edit-btn"><v-svg name="plus-small" width="14" height="14" /> Добавить новый адрес</v-link>
+                        <v-link class="return-courier-form__edit-btn"
+                            ><v-svg name="plus-small" width="14" height="14" /> Добавить новый адрес</v-link
+                        >
                     </div>
                 </div>
-                 <ul class="return-courier-form__address-panel-list">
+                <ul class="return-courier-form__address-panel-list">
                     <checkout-option-card
                         class="return-courier-form__address-panel-item"
                         v-for="(address, index) in item.addresses"
@@ -77,7 +79,7 @@ const RETURN_MODULE_PATH = `${PROFILE_MODULE}/${RETURN_MODULE}`;
 
 export default {
     name: 'return-courier-form',
-    
+
     components: {
         VSvg,
         VLink,
@@ -112,21 +114,20 @@ export default {
             item.selectedAddress = address;
         },
 
-        onChangeAddress() {
-        },
+        onChangeAddress() {},
 
         init() {
-            this.courierItems = this[COURIER_DELIVERY].map(item => {
+            this.courierItems = this[COURIER_DELIVERY].map((item) => {
                 return {
                     ...item,
-                    addresses: this[ADDRESSES].map(a => ({...a}))
-                }
-            })
-        }
+                    addresses: this[ADDRESSES].map((a) => ({ ...a })),
+                };
+            });
+        },
     },
 
     beforeMount() {
         this.init();
-    }
-}
+    },
+};
 </script>

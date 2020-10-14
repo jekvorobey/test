@@ -71,7 +71,6 @@ import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapState, mapActions } from 'vuex';
-import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -129,8 +128,8 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         isTablet() {

@@ -31,9 +31,7 @@
             <v-button class="return-documents-page__btn" @click="onClickNext" :disabled="isBtnDisabled">
                 Выбрать способ возврата
             </v-button>
-            <v-button class="return-documents-page__btn btn--transparent" @click="onClickBack">
-                Назад
-            </v-button>
+            <v-button class="return-documents-page__btn btn--transparent" @click="onClickBack">Назад</v-button>
         </div>
     </div>
 </template>

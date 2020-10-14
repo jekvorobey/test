@@ -45,19 +45,19 @@ import SocialSharing from 'vue-social-sharing';
 // Часто используемые(и маленькие) компоненты лучше добавить сразу в основной бандл,
 // ибо они используются повсеместно на всех страницах, и смысла выносить их в отдельный бандл и грузить отдельно нет
 import VSvg from '@controls/VSvg/VSvg.vue';
-import VLink from '@controls/VLink/VLink.vue';
-import VButton from '@controls/VButton/VButton.vue';
-import VInput from '@controls/VInput/VInput.vue';
-import VCheck from '@controls/VCheck/VCheck.vue';
-import VSticky from '@controls/VSticky/VSticky.vue';
-import VPicture from '@controls/VPicture/VPicture.vue';
-import VSelect from '@controls/VSelect/VSelect.vue';
+import '@controls/VLink/VLink.vue';
+import '@controls/VButton/VButton.vue';
+import '@controls/VInput/VInput.vue';
+import '@controls/VCheck/VCheck.vue';
+import '@controls/VSticky/VSticky.vue';
+import '@controls/VPicture/VPicture.vue';
+import '@controls/VSelect/VSelect.vue';
 
-import ProgressBar from '@components/ProgressBar/ProgressBar.vue';
-import FilterButton from '@components/FilterButton/FilterButton.vue';
-import Price from '@components/Price/Price.vue';
-import TagItem from '@components/TagItem/TagItem.vue';
-import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
+import '@components/ProgressBar/ProgressBar.vue';
+import '@components/FilterButton/FilterButton.vue';
+import '@components/Price/Price.vue';
+import '@components/TagItem/TagItem.vue';
+import '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
 import VHeader from '@components/VHeader/VHeader.vue';
 import VFooter from '@components/VFooter/VFooter.vue';
@@ -68,12 +68,11 @@ import AddToCartModal from '@components/AddToCartModal/AddToCartModal.vue';
 import NotificationModal from '@components/NotificationModal/NotificationModal.vue';
 import AuthModal from '@components/AuthModal/AuthModal.vue';
 
-import _debounce from 'lodash/debounce';
 import { mapState, mapActions } from 'vuex';
 
 import { SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN } from '@store/actions';
 
-import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { FETCH_CART_DATA, CLEAR_CART_DATA } from '@store/modules/Cart/actions';
 
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
@@ -90,7 +89,6 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { $cookie } from '@services';
 import { eventName, interval, modalName, cookieNames } from '@enums';
-import { MIN_SCROLL_VALUE, SCROLL_DEBOUNCE_TIME } from '@constants';
 import { SCROLL, IS_MENU_OPEN } from '@store';
 
 Vue.use(SocialSharing);
@@ -120,23 +118,23 @@ export default {
         ...mapState([SCROLL, IS_MENU_OPEN]),
         ...mapState(AUTH_MODULE, [HAS_SESSION, USER]),
         ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
+            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
         }),
 
         ...mapState('route', {
-            hideDefaultHeader: state => state.meta.hideDefaultHeader,
+            hideDefaultHeader: (state) => state.meta.hideDefaultHeader,
         }),
 
         ...mapState(MODAL_MODULE, {
-            isCitySelectionOpen: state =>
+            isCitySelectionOpen: (state) =>
                 state[MODALS][modalName.general.CITY_SELECTION] && state[MODALS][modalName.general.CITY_SELECTION].open,
-            isQuickViewOpen: state =>
+            isQuickViewOpen: (state) =>
                 state[MODALS][modalName.general.QUICK_VIEW] && state[MODALS][modalName.general.QUICK_VIEW].open,
-            isAddToCartOpen: state =>
+            isAddToCartOpen: (state) =>
                 state[MODALS][modalName.general.ADD_TO_CART] && state[MODALS][modalName.general.ADD_TO_CART].open,
-            isNotificationOpen: state =>
+            isNotificationOpen: (state) =>
                 state[MODALS][modalName.general.NOTIFICATION] && state[MODALS][modalName.general.NOTIFICATION].open,
-            isAuthOpen: state => state[MODALS][modalName.general.AUTH] && state[MODALS][modalName.general.AUTH].open,
+            isAuthOpen: (state) => state[MODALS][modalName.general.AUTH] && state[MODALS][modalName.general.AUTH].open,
         }),
 
         isTabletLg() {
@@ -237,9 +235,6 @@ export default {
 
     beforeDestroy() {
         this.stopSessionTimer();
-    },
-
-    beforeDestroy() {
         window.removeEventListener(eventName.SCROLL, this.onScroll);
     },
 };

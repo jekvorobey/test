@@ -32,9 +32,7 @@
                     </ul>
                 </v-scroll>
 
-                <div class="favorites-panel__total" v-else>
-                    Раздел "Избранное" пуст
-                </div>
+                <div class="favorites-panel__total" v-else>Раздел "Избранное" пуст</div>
             </div>
         </template>
     </general-popup-panel>

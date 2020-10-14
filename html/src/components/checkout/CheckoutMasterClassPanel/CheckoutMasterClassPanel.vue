@@ -37,9 +37,7 @@
             <span class="status-color-error" v-if="!selectedRecipient || !selectedRecipient.email">
                 Укажите адрес электронной почты получателя для получения билетов
             </span>
-            <span v-else>
-                На указанный адрес электронной почты мы вышлем вам копии билетов
-            </span>
+            <span v-else>На указанный адрес электронной почты мы вышлем вам копии билетов</span>
         </attention-panel>
 
         <template v-if="selectedRecipient && selectedRecipient.email">
@@ -258,8 +256,6 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
-import VInput from '@controls/VInput/VInput.vue';
-import VButton from '@controls/VButton/VButton.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
@@ -272,7 +268,7 @@ import CheckoutTicketModal from '@components/checkout/CheckoutTicketModal/Checko
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
 
-import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '@store/modules/Checkout';
+import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import {
     SET_RECIPIENT,
     ADD_PROMOCODE,
@@ -326,8 +322,6 @@ import '@images/sprites/payment/yandex.svg';
 import '@images/sprites/plus.svg';
 import './CheckoutMasterClassPanel.css';
 
-import profileMasterClassImg1 from '@images/mock/profileMasterClass1.png';
-
 export default {
     name: 'checkout-master-class-panel',
     mixins: [validationMixin],
@@ -335,8 +329,6 @@ export default {
     components: {
         VSvg,
         VLink,
-        VButton,
-        VInput,
         VCheck,
         VSpinner,
 
@@ -434,8 +426,8 @@ export default {
         masterClasses() {
             const publicEvents = this[PUBLIC_EVENTS] || [];
 
-            return this.publicEvents.map((i) => {
-                const p = i.cartItem.p;
+            return publicEvents.map((i) => {
+                const { p } = i.cartItem;
                 const dateObj = getDate(`${p.nearestDate} ${p.nearestTimeFrom}`);
                 const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);

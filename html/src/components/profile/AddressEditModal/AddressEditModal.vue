@@ -308,7 +308,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
         ...mapGetters(GEO_MODULE, [SELECTED_CITY_COORDS]),
 
@@ -485,7 +485,7 @@ export default {
                 radius_meters: 1000,
             });
 
-            const selected = suggestions.find(s => s.data.house);
+            const selected = suggestions.find((s) => s.data.house);
             this.applyAddress(null, selected);
         },
 
@@ -668,7 +668,7 @@ export default {
     mounted() {
         setTimeout(() => {
             const { citySuggestion } = this.$refs;
-            const input = citySuggestion.$refs.input;
+            const { input } = citySuggestion.$refs;
             input && input.focus();
             this.showMap = true;
         }, 300);

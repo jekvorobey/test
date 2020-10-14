@@ -33,9 +33,7 @@
             @btn-click="onCreateMessage"
         >
             У Вас пока нет ни одного сообщения.
-            <template v-slot:btn>
-                Написать сообщение
-            </template>
+            <template v-slot:btn>Написать сообщение</template>
         </empty-placeholder-panel>
 
         <transition name="fade">
@@ -45,17 +43,14 @@
 </template>
 
 <script>
-import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
-import VInput from '@controls/VInput/VInput.vue';
-import VPagination from '@controls/VPagination/VPagination.vue';
 
 import EmptyPlaceholderPanel from '@components/EmptyPlaceholderPanel/EmptyPlaceholderPanel.vue';
 
 import MessageCard from '@components/MessageCard/MessageCard.vue';
 import MessageModal from '@components/profile/MessageModal/MessageModal.vue';
 
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import { LOCALE } from '@store';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -79,10 +74,9 @@ const MESSAGES_MODULE_PATH = `${PROFILE_MODULE}/${MESSAGES_MODULE}`;
 export default {
     name: 'messages',
     mixins: [metaMixin],
-    
+
     components: {
         VButton,
-        VInput,
 
         MessageCard,
         MessageModal,
@@ -102,13 +96,13 @@ export default {
         ...mapState(MESSAGES_MODULE_PATH, [ITEMS]),
 
         ...mapState(MODAL_MODULE, {
-            isMessageOpen: state =>
+            isMessageOpen: (state) =>
                 state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
         }),
 
         chats() {
             const chats = this[ITEMS] || [];
-            return chats.map(c => ({
+            return chats.map((c) => ({
                 ...c,
                 date: this.formatDate(c.date),
             }));
@@ -135,10 +129,8 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: modalName.profile.MESSAGE, open: true });
         },
 
-        onOpenMessage({id, isRead}) {
-            if (!isRead) {
-                this[FETCH_UNREAD_MESSAGES]();
-            }
+        onOpenMessage({ id, isRead }) {
+            if (!isRead) this[FETCH_UNREAD_MESSAGES]();
             this.$router.push({ name: 'MessageDetails', params: { chatId: id } });
         },
     },
@@ -146,7 +138,7 @@ export default {
     beforeRouteEnter(to, from, next) {
         const { load } = $store.state[PROFILE_MODULE][MESSAGES_MODULE];
 
-        if(load){
+        if (load) {
             $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, false);
             return next();
         }
@@ -156,9 +148,9 @@ export default {
             .dispatch(`${MESSAGES_MODULE_PATH}/${FETCH_CHATS}`)
             .then(() => {
                 $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, $context.isServer);
-                next(vm => $progress.finish());
+                next(() => $progress.finish());
             })
-            .catch(error => next(vm => $progress.fail()));
+            .catch(() => next(() => $progress.fail()));
     },
 };
 </script>

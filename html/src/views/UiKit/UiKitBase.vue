@@ -1,8 +1,6 @@
 <template>
     <section class="section ui-kit-section">
-        <h2 class="ui-kit-section__hl">
-            Базовые стили и элементы
-        </h2>
+        <h2 class="ui-kit-section__hl">Базовые стили и элементы</h2>
 
         <p class="ui-kit-section__desc">Futura PT <br />переменная var(--base-font) <br /></p>
 

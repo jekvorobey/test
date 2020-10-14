@@ -95,13 +95,13 @@ export default {
         ...mapState(PROMOPAGE_MODULE_PATH, [SEARCH_ITEMS]),
         ...mapGetters(PROMOPAGE_MODULE_PATH, [ITEMS_IDS_MAP]),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
+            isOpen: (state) => (state[MODALS][NAME] && state[MODALS][NAME].open) || false,
         }),
 
         filteredSearchItems() {
             const searchItems = this[SEARCH_ITEMS] || [];
             const itemsIdsMap = this[ITEMS_IDS_MAP] || {};
-            return searchItems.filter(i => !itemsIdsMap[i.productId]);
+            return searchItems.filter((i) => !itemsIdsMap[i.productId]);
         },
 
         isTablet() {

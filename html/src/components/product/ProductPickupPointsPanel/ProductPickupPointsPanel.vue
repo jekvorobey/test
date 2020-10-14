@@ -62,7 +62,6 @@ import {
     NAME as PRODUCT_MODULE,
     SELECTED_PICKUP_POINT,
     SELECTED_INDEX,
-    PRODUCT,
     SELECTED_PICKUP_POINT_TYPE,
     PICKUP_POINT_TYPES,
 } from '@store/modules/Product';
@@ -101,12 +100,12 @@ export default {
         points() {
             const points = this[FILTERED_PICKUP_POINTS] || [];
 
-            return points.map(p => {
+            return points.map((p) => {
                 const dateObj = new Date(p.startDate);
                 const startDate = p.startDate && dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings);
                 const startDateDay = p.startDate && dateObj.getDay();
                 const phones = p.phone && p.phone.split(', ');
-                const phone = phones && phones.map(p => formatPhoneNumber(p)).join(', ');
+                const phone = phones && phones.map((p) => formatPhoneNumber(p)).join(', ');
 
                 return {
                     ...p,
@@ -127,7 +126,7 @@ export default {
             }
         },
 
-        [SET_SELECTED_PICKUP_POINT_TYPE](value) {
+        [SET_SELECTED_PICKUP_POINT_TYPE]() {
             this.resetIndex();
         },
     },

@@ -135,9 +135,7 @@
                                         @click="onChangeDate(chunkItem.id)"
                                     >
                                         <v-svg name="edit" width="16" height="16" />
-                                        <template v-if="!isTablet">
-                                            &nbsp;&nbsp;Изменить дату и время
-                                        </template>
+                                        <template v-if="!isTablet">&nbsp;&nbsp;Изменить дату и время</template>
                                     </v-link>
                                 </div>
                                 <ul class="checkout-product-panel__item-list">
@@ -416,18 +414,16 @@ import AddressEditModal from '@components/profile/AddressEditModal/AddressEditMo
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
 
-import { NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, REFERRAL_PARTNER, USER } from '@store/modules/Auth';
 
-import { NAME as CHECKOUT_MODULE, CHECKOUT_STATUS } from '@store/modules/Checkout';
+import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import {
-    SET_DATA_PROP,
     SET_RECIPIENT,
     SET_RECEIVE_METHOD,
     SET_ADDRESS,
     SET_DELIVERY_TYPE,
     CHANGE_CHUNK_DATE,
     ADD_BONUS,
-    ADD_SERTIFICATE,
     ADD_CERTIFICATE,
     ADD_PROMOCODE,
     DELETE_BONUS,
@@ -455,7 +451,6 @@ import {
     PAYMENT_METHODS,
     SELECTED_PAYMENT_METHOD_ID,
     CONFIRMATION_TYPES,
-    CONFIRMATION_TYPE_ID,
     BONUS,
     CERTIFICATES,
     AGREEMENT,
@@ -477,11 +472,10 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import validationMixin, { required } from '@plugins/validation';
 import { formatPhoneNumber, getPosition, getDate } from '@util';
-import { deliveryMethods, receiveTypes, deliveryTypes, receiveMethods } from '@enums/checkout';
-import { requestStatus, modalName, weekDays, agreementTypes, httpCodes } from '@enums';
+import { deliveryTypes, receiveMethods } from '@enums/checkout';
+import { requestStatus, modalName, agreementTypes, httpCodes } from '@enums';
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
 
-import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 import _debounce from 'lodash/debounce';
 import { orderBy as _orderBy } from 'lodash/collection';
@@ -511,7 +505,7 @@ function prepareChunkItem(chunkItem) {
 }
 
 function prepareDeliveryType(deliveryType) {
-    const items = deliveryType.items;
+    const { items } = deliveryType;
 
     const type = {
         ...deliveryType,
@@ -801,7 +795,6 @@ export default {
                 return `Доставим всё ${date.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}`;
             }
 
-            const note = 'Доставим';
             const uniqueDates = Array.from(new Set(deliveryType.items.map((i) => i.selectedDate)));
             return uniqueDates.reduce(
                 (accum, current, index) =>

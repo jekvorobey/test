@@ -155,14 +155,12 @@
                                 </span>
                             </li>
                         </template>
-                        <li v-show="showNoResults && (filteredOptions.length === 0 && search && !loading)">
+                        <li v-show="showNoResults && filteredOptions.length === 0 && search && !loading">
                             <span class="multiselect__option">
-                                <slot name="noResult" :search="search">
-                                    Ничего не найдено.
-                                </slot>
+                                <slot name="noResult" :search="search">Ничего не найдено.</slot>
                             </span>
                         </li>
-                        <li v-show="showNoOptions && (options.length === 0 && !search && !loading)">
+                        <li v-show="showNoOptions && options.length === 0 && !search && !loading">
                             <span class="multiselect__option">
                                 <slot name="noOptions">Список пуст.</slot>
                             </span>

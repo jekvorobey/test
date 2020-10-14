@@ -6,8 +6,8 @@
             class="how-it-works-view__accordion"
             key-field="id"
             :items="topics"
-            :item-expanded="item => item.isExpanded && !item.isDisabled"
-            :item-toggled="item => (item.isExpanded = !item.isExpanded)"
+            :item-expanded="(item) => item.isExpanded && !item.isDisabled"
+            :item-toggled="(item) => (item.isExpanded = !item.isExpanded)"
             :is-single="false"
         >
             <template v-slot:content="{ item, index }">

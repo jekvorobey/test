@@ -13,6 +13,6 @@ export default {
             default: '',
         },
     },
-    serverCacheKey: props => props.text,
+    serverCacheKey: (props) => props.text,
 };
 </script>

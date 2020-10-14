@@ -1,12 +1,10 @@
 <template>
     <section id="colors" class="section ui-kit-section">
-        <h2 class="ui-kit-section__hl">
-            Основные цвета
-        </h2>
+        <h2 class="ui-kit-section__hl">Основные цвета</h2>
         <p class="ui-kit-section__desc">Настройка: customProperties.css</p>
         <div class="ui-kit-colors">
             <div class="ui-kit-colors__col">
-                <div class="ui-kit-colors__name" style="background-color: #f12828;" />
+                <div class="ui-kit-colors__name" style="background-color: #f12828" />
                 <p class="ui-kit-colors__desc">
                     Красный (ошибки и иконки)<br />#f12828 <br />
                     var(--cl-red)
@@ -20,14 +18,14 @@
                 </p>
             </div>
             <div class="ui-kit-colors__col">
-                <div class="ui-kit-colors__name" style="background-color: #999999;" />
+                <div class="ui-kit-colors__name" style="background-color: #999999" />
                 <p class="ui-kit-colors__desc">
                     Cерый (Дополнительный текст, задизейбленные элементы)<br />#999999 <br />
                     var(--cl-grey)
                 </p>
             </div>
             <div class="ui-kit-colors__col">
-                <div class="ui-kit-colors__name" style="background-color: #CCCCCC;" />
+                <div class="ui-kit-colors__name" style="background-color: #cccccc" />
                 <p class="ui-kit-colors__desc">
                     Светло-серый (разделители и фоны)<br />#CCCCCC <br />
                     var(--cl-divider-grey)
@@ -41,7 +39,7 @@
                 </p>
             </div>
             <div class="ui-kit-colors__col">
-                <div class="ui-kit-colors__name" style="background-color:  #ffd338;" />
+                <div class="ui-kit-colors__name" style="background-color: #ffd338" />
                 <p class="ui-kit-colors__desc">
                     Золотой<br />
                     #ffd338 <br />
@@ -49,7 +47,7 @@
                 </p>
             </div>
             <div class="ui-kit-colors__col">
-                <div class="ui-kit-colors__name" style="background-color:  #0f41c3;" />
+                <div class="ui-kit-colors__name" style="background-color: #0f41c3" />
                 <p class="ui-kit-colors__desc">
                     Тёмно-синий<br />
                     #0f41c3 <br />

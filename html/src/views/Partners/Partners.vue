@@ -20,13 +20,11 @@
                     </v-picture>
 
                     <div class="container container--tablet partners-view__top-content">
-                        <h1 class="partners-view__top-content-h1">
-                            Хотите стать продавцом?
-                        </h1>
+                        <h1 class="partners-view__top-content-h1">Хотите стать продавцом?</h1>
 
                         <p class="partners-view__top-content-text">
-                            Мы формируем  уникальную для российского рынка коллекцию бьюти-брендов и афишу мероприятий
-                            на платформе первого в России маркетплейса только для профессионалов.
+                            Мы формируем уникальную для российского рынка коллекцию бьюти-брендов и афишу мероприятий на
+                            платформе первого в России маркетплейса только для профессионалов.
                         </p>
 
                         <p v-if="!isDesktop || isTabletLg" class="partners-view__top-content-text">
@@ -43,10 +41,7 @@
                                 :href="pdfFile"
                                 download
                             >
-                                <v-svg
-                                    name="download"
-                                    modifier="partners-view__top-content-action-btn--icon"
-                                />
+                                <v-svg name="download" modifier="partners-view__top-content-action-btn--icon" />
                                 <span>Скачать презентацию</span>
                             </v-button>
                         </div>
@@ -57,9 +52,7 @@
 
         <section class="section">
             <div class="container partners-view__category">
-                <h2 v-if="!isTabletLg" class="partners-view__category-h2">
-                    Какие категории товаров можно продавать?
-                </h2>
+                <h2 v-if="!isTabletLg" class="partners-view__category-h2">Какие категории товаров можно продавать?</h2>
                 <div class="partners-view__category-list">
                     <div class="partners-view__category-list--item" v-for="category in categories" :key="category.img">
                         <v-svg
@@ -88,14 +81,14 @@
                         С НАМИ – ЭТО:
                     </h1>
                     <ul class="partners-view__cooperation-content--list">
-                        <li>База 250 000 мастеров, реферальная система и влияние на спрос клиентов</li>
-                        <li>Контроль  ассортимента, цен и маркетинговых кампаний</li>
+                        <li>База 250 000 мастеров, реферальная система и влияние на спрос клиентов</li>
+                        <li>Контроль ассортимента, цен и маркетинговых кампаний</li>
                         <li>
-                            Онлайн-витрина, объединяющая самый полезный контент официальных производителей
-                            и бьюти-профессионалов
+                            Онлайн-витрина, объединяющая самый полезный контент официальных производителей и
+                            бьюти-профессионалов
                         </li>
                         <li>Доставка в 16 000 населенных пунктов</li>
-                        <li>Партнерство с первым в России маркетплейсом для профессионалов индустрии красоты</li>
+                        <li>Партнерство с первым в России маркетплейсом для профессионалов индустрии красоты</li>
                     </ul>
                 </div>
                 <div class="partners-view__cooperation-image">
@@ -116,9 +109,7 @@
 
         <section class="section">
             <div class="container partners-view__work">
-                <h2 class="partners-view__work-h2">
-                    Как мы работаем
-                </h2>
+                <h2 class="partners-view__work-h2">Как мы работаем</h2>
                 <div class="partners-view__work-list">
                     <div class="partners-view__work-list--item" v-for="work in works" :key="work.img">
                         <v-svg
@@ -141,9 +132,7 @@
 
         <section class="section">
             <div class="container partners-view__sales">
-                <h2 class="partners-view__sales-h2">
-                    Что нужно для продажи товаров
-                </h2>
+                <h2 class="partners-view__sales-h2">Что нужно для продажи товаров</h2>
                 <div class="partners-view__sales-list">
                     <div class="partners-view__sales-list--item" v-for="sale in sales" :key="sale.img">
                         <picture class="partners-view__sales-image--img">
@@ -165,9 +154,7 @@
         <section ref="feedback" class="section partners-view__feedback-section">
             <div class="container partners-view__feedback">
                 <div class="partners-view__feedback-content">
-                    <h1 class="partners-view__feedback-content-h1">
-                        Заполнить заявку и стать продавцом
-                    </h1>
+                    <h1 class="partners-view__feedback-content-h1">Заполнить заявку и стать продавцом</h1>
                     <p class="partners-view__feedback-content-text">
                         Мы рассмотрим запрос и свяжемся с вами в течение 3-х рабочих дней.
                     </p>
@@ -176,31 +163,24 @@
                         :href="pdfFile"
                         download
                     >
-                        <v-svg
-                            name="download"
-                            modifier="partners-view__feedback-content--action-btn--icon"
-                        />
+                        <v-svg name="download" modifier="partners-view__feedback-content--action-btn--icon" />
                         <span>Скачать презентацию</span>
                     </v-button>
                 </div>
 
                 <form class="partners-view__feedback-form" @submit.prevent="onSubmit">
-                    <v-input v-model="form.name" placeholder="Вашe имя" :error="nameError">
-                        Имя и фамилия
-                    </v-input>
+                    <v-input v-model="form.name" placeholder="Вашe имя" :error="nameError">Имя и фамилия</v-input>
 
                     <v-input-mask v-model="form.phone" :options="maskOptions" :raw="false" :error="phoneError">
                         Номер телефона
                     </v-input-mask>
 
-                    <v-input v-model="form.email" placeholder="Ваш email" :error="emailError">
-                        Email
-                    </v-input>
+                    <v-input v-model="form.email" placeholder="Ваш email" :error="emailError">Email</v-input>
 
                     <v-input
                         class="partners-view__feedback-form-message"
                         tag="textarea"
-                        placeholder="Укажите информацию о вашей компании и предложении (бренде, мастер-классе и т.д.)"
+                        placeholder="Укажите информацию о вашей компании и предложении (бренде, мастер-классе и т.д.)"
                         v-model="form.body"
                         :error="bodyError"
                     >
@@ -348,12 +328,12 @@ export default {
             {
                 img: 'ParthenerWork1',
                 link: '#',
-                linkTitle: 'Вы размещаете товары и/или мероприятия',
+                linkTitle: 'Вы размещаете товары и/или мероприятия',
             },
             {
                 img: 'ParthenerWork2',
                 link: '#',
-                linkTitle: 'Получаете уведомление, когда  покупатель оформил заказ',
+                linkTitle: 'Получаете уведомление, когда  покупатель оформил заказ',
             },
             {
                 img: 'ParthenerWork3',
@@ -375,18 +355,18 @@ export default {
             {
                 img: ParthnerSales1,
                 title: 'Склад с товарами',
-                subTitle: 'Возможность поштучной отгрузки товаров со склада в радиусе до 50 км от Москвы',
+                subTitle: 'Возможность поштучной отгрузки товаров со склада в радиусе до 50 км от Москвы',
             },
             {
                 img: ParthnerSales2,
                 title: 'Автоматический обмен данными',
-                subTitle: 'Мы поможем вам настроить интеграцию по остаткам и ценам в автоматическом режиме (API)',
+                subTitle: 'Мы поможем вам настроить интеграцию по остаткам и ценам в автоматическом режиме (API)',
             },
             {
                 img: ParthnerSales3,
                 title: 'ИП или юридическое лицо',
                 subTitle:
-                    'Мы работаем с индивидуальными предпринимателями, обществами с ограниченной ответственностью и бизнесом других форм',
+                    'Мы работаем с индивидуальными предпринимателями, обществами с ограниченной ответственностью и бизнесом других форм',
             },
         ],
 

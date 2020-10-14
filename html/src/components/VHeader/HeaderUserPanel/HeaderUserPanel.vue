@@ -32,7 +32,6 @@
 
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
-import VLink from '@controls/VLink/VLink.vue';
 
 import Price from '@components/Price/Price.vue';
 
@@ -42,7 +41,7 @@ import ProfileNavigationPanel from '@components/ProfileNavigationPanel/ProfileNa
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY } from '@store/modules/Auth';
 
-import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
@@ -63,7 +62,6 @@ export default {
 
     components: {
         VSvg,
-        VLink,
 
         Price,
 
@@ -76,7 +74,7 @@ export default {
         ...mapGetters(FAVORITES_MODULE, [FAVORITE_ITEMS_COUNT]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: state => (state[USER] && state[USER][CAN_BUY]) || false,
+            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
         }),
 
         favoriteItemsIcon() {

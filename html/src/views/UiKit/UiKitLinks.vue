@@ -1,8 +1,6 @@
 <template>
     <section class="section ui-kit-section">
-        <h2 class="ui-kit-section__hl">
-            Ссылки
-        </h2>
+        <h2 class="ui-kit-section__hl">Ссылки</h2>
 
         <p class="text-grey">Обычная ссылка</p>
         <a href="#">Обычная ссылка</a>

@@ -6,10 +6,7 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span></breadcrumb-item
                 >
-                <breadcrumb-item 
-                    key="Referrer" 
-                    :to="$route.path"
-                >{{ $route.params.code }}</breadcrumb-item>
+                <breadcrumb-item key="Referrer" :to="$route.path">{{ $route.params.code }}</breadcrumb-item>
             </breadcrumbs>
         </div>
 
@@ -68,9 +65,8 @@
 
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
-import VButton from '@controls/VButton/VButton.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
-import VExpander from '@controls/VExpander/VExpander.vue';
+// import VExpander from '@controls/VExpander/VExpander.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
@@ -79,23 +75,18 @@ import CatalogProductList from '@components/CatalogProductList/CatalogProductLis
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { $store, $progress, $logger } from '@services';
+import { $store, $progress } from '@services';
 
 import { NAME as AUTH_MODULE } from '@store/modules/Auth';
 import { SET_SESSION_REFERRAL_CODE } from '@store/modules/Auth/actions';
 
 import { NAME as REFERRER_MODULE, ITEMS, ACTIVE_PAGE, TITLE, RANGE } from '@store/modules/Referrer';
 import { PAGES_COUNT } from '@store/modules/Referrer/getters';
-import { FETCH_REFERRER_DATA, FETCH_ITEMS, SET_LOAD_PATH } from '@store/modules/Referrer/actions';
-
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+import { FETCH_REFERRER_DATA, SET_LOAD_PATH } from '@store/modules/Referrer/actions';
 
 import metaMixin from '@plugins/meta';
 import { DEFAULT_PAGE } from '@constants';
-import { modalName, sortDirections } from '@enums';
 import { pluralize } from '@util';
-import { generateReferrerUrl } from '@util/catalog';
 import '@images/sprites/home.svg';
 import './Referrer.css';
 
@@ -105,9 +96,8 @@ export default {
 
     components: {
         VSvg,
-        VButton,
         VPagination,
-        VExpander,
+        //VExpander,
 
         CatalogProductList,
         ShowMoreButton,
@@ -181,15 +171,15 @@ export default {
             $progress.start();
             $store
                 .dispatch(`${REFERRER_MODULE}/${FETCH_REFERRER_DATA}`, { code, page })
-                .then((data) => {
+                .then(() => {
                     $store.dispatch(`${REFERRER_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
+                    next(() => {
                         $progress.finish();
                     });
                 })
                 .catch((thrown) => {
                     if (thrown && thrown.isCancel === true) return true;
-                    next((vm) => {
+                    next(() => {
                         $progress.fail();
                     });
                 });

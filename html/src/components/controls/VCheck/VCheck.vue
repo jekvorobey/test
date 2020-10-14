@@ -23,7 +23,7 @@ import './VCheck.css';
 const validTypes = ['checkbox', 'radio'];
 
 export default {
-    serverCacheKey: props => `${props.id}-${props.type}-${props.name}-${props.value}`,
+    serverCacheKey: (props) => `${props.id}-${props.type}-${props.name}-${props.value}`,
     name: 'v-check',
     inheritAttrs: false,
     model: {

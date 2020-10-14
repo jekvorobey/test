@@ -38,7 +38,7 @@ import VSelect from '@controls/VSelect/VSelect.vue';
 import DocumentCard from '@components/DocumentCard/DocumentCard.vue';
 
 import { $store, $progress, $logger } from '@services';
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 
@@ -55,7 +55,7 @@ const DOCUMENTS_MODULE_PATH = `${PROFILE_MODULE}/${DOCUMENTS_MODULE}`;
 export default {
     name: 'documents',
     mixins: [metaMixin],
-    
+
     components: {
         VSelect,
 
@@ -87,11 +87,12 @@ export default {
         ...mapState(DOCUMENTS_MODULE_PATH, [ITEMS, FILTERS]),
 
         documents() {
-            return this.items.map(item => {
+            const items = this[ITEMS] || [];
+            return items.map((item) => {
                 return {
                     id: item.id,
                     type: this.filters.types[item.type],
-                    name: item.name.replace(/\.[0-9a-z]{1,6}/g, ''),
+                    name: item.name.replace(/\.[\da-z]{1,6}/g, ''),
                     ext: item.ext,
                     size: formatFileSize(item.size),
                     href: generateFileOriginalPath(item.file_id),
@@ -120,7 +121,7 @@ export default {
 
         setSortType(field) {
             const fieldCode = Number(field);
-            this.selectedSortType = this.sortTypes.find(o => o.field === fieldCode) || this.sortTypes[0];
+            this.selectedSortType = this.sortTypes.find((o) => o.field === fieldCode) || this.sortTypes[0];
         },
     },
 
@@ -133,20 +134,20 @@ export default {
         const { loadPath } = $store.state[PROFILE_MODULE][DOCUMENTS_MODULE];
 
         // если все загружено, пропускаем
-        if (fullPath === loadPath) next(vm => vm.setSortType(sortType));
+        if (fullPath === loadPath) next((vm) => vm.setSortType(sortType));
         else {
             $progress.start();
             $store
                 .dispatch(`${DOCUMENTS_MODULE_PATH}/${FETCH_DOCUMENTS_DATA}`, { type: sortType })
                 .then(() => {
                     $store.dispatch(`${DOCUMENTS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next(vm => {
+                    next((vm) => {
                         vm.setSortType(sortType);
                         $progress.finish();
                     });
                 })
-                .catch(error => {
-                    next(vm => $progress.fail());
+                .catch((error) => {
+                    next(() => $progress.fail());
                     $logger.error(error);
                 });
         }

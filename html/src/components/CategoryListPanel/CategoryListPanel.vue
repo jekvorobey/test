@@ -48,7 +48,7 @@ export default {
         },
 
         subcategories() {
-            return this.items.map(item => {
+            return this.items.map((item) => {
                 return {
                     ...item,
                     href: generateCategoryUrl(productGroupTypes.CATALOG, null, item.code),

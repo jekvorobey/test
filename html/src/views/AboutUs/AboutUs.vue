@@ -22,13 +22,13 @@
                     <h1 class="about-us-view__top-content-h1">О нас</h1>
                     <p class="about-us-view__top-content-text">
                         Бессовестно Талантливый — масштабная инициатива, цель которой поддерживать мастеров индустрии
-                        красоты в стремлении становиться сильнее в своем ремесле. Для ее достижения мы находим и
+                        красоты в стремлении становиться сильнее в своем ремесле. Для ее достижения мы находим и
                         предлагаем лучшие решения для ежедневной работы, образования и вдохновения.
                     </p>
                     <p class="about-us-view__top-content-text">
                         Хештег #БессовестноТалантливый стал основой дружного быстрорастущего комьюнити — более 100 000
-                        упоминаний в Инстаграм медиаканала @bessovestnotalantlivy, одноименного университета и бутика
-                        в Москве, где представлена часть нашей коллекции товаров.
+                        упоминаний в Инстаграм медиаканала @bessovestnotalantlivy, одноименного университета и бутика в
+                        Москве, где представлена часть нашей коллекции товаров.
                     </p>
                     <p class="about-us-view__top-content-text">
                         Наш новый проект — первый в России маркетплейс товаров и событий бьюти-индустрии,
@@ -65,18 +65,16 @@
         <section class="section">
             <div class="container about-us-view__brands">
                 <div class="about-us-view__brands-content">
-                    <h1 class="about-us-view__brands-content-h1">
-                        Выбор профессионалов
-                    </h1>
+                    <h1 class="about-us-view__brands-content-h1">Выбор профессионалов</h1>
 
                     <p class="about-us-view__brands-content-text">
-                        Запросы покупателей меняются. Искать товары и цены в разных магазинах становится все сложнее.
+                        Запросы покупателей меняются. Искать товары и цены в разных магазинах становится все сложнее.
                     </p>
 
                     <p class="about-us-view__brands-content-text">
-                        Маркетплейс Бессовестно Талантливый — это онлайн-площадка, которая объединяет выгодные
-                        предложения от официальных представителей брендов для бьюти-профессионалов и персонализированные
-                        рекомендации, отзывы профессионального сообщества и систему бонусов, удобную оплату и логистику.
+                        Маркетплейс Бессовестно Талантливый — это онлайн-площадка, которая объединяет выгодные
+                        предложения от официальных представителей брендов для бьюти-профессионалов и персонализированные
+                        рекомендации, отзывы профессионального сообщества и систему бонусов, удобную оплату и логистику.
                     </p>
 
                     <router-link class="about-us-view__brands-content-link" to="/catalog">
@@ -114,7 +112,7 @@
                     </p>
 
                     <p class="about-us-view__mclass-content-text">
-                        Делайте свой выбор, изучив полную информацию о событии: описание и фото, видео и
+                        Делайте свой выбор, изучив полную информацию о событии: описание и фото, видео и
                         пользовательский контент, включая публикации из Инстаграм и отзывы покупателей на iBT.ru.
                     </p>
 
@@ -128,9 +126,7 @@
         <section class="section about-us-view__feedback-section">
             <div class="container about-us-view__feedback">
                 <div class="about-us-view__feedback-content">
-                    <h1 class="about-us-view__feedback-content-h1">
-                        Напишите нам
-                    </h1>
+                    <h1 class="about-us-view__feedback-content-h1">Напишите нам</h1>
 
                     <p class="about-us-view__feedback-content-text">
                         Мы делаем все, чтобы процесс покупки на маркетплейсе всегда оставался легким и комфортным.
@@ -194,11 +190,9 @@ import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
-import VSlider from '@controls/VSlider/VSlider.vue';
 
 import FrisbuyProductContainer from '@components/FrisbuyProductContainer/FrisbuyProductContainer.vue';
 
-import { breakpoints } from '@enums';
 import validationMixin, { required, email } from '@plugins/validation';
 import metaMixin from '@plugins/meta';
 import '@images/sprites/home.svg';
@@ -223,12 +217,11 @@ import './AboutUs.css';
 export default {
     name: 'about-us',
     mixins: [metaMixin, validationMixin],
-     
+
     components: {
         VPicture,
         VInput,
         VButton,
-        VSlider,
         Breadcrumbs,
         BreadcrumbItem,
         SeparatorSection,
@@ -279,13 +272,13 @@ export default {
                 },
                 {
                     img: 'About1',
-                    subTitle: 'Специальные цены для профессионалов от официальных поставщиков',
+                    subTitle: 'Специальные цены для профессионалов от официальных поставщиков',
                     link: '/promo',
                     linkTitle: 'Смотреть акции',
                 },
                 {
                     img: 'About3',
-                    subTitle: 'Доставка заказов по всей России. Более 16 000 населенных пунктов',
+                    subTitle: 'Доставка заказов по всей России. Более 16 000 населенных пунктов',
                     link: '/info-pages/delivery-and-payment',
                     linkTitle: 'Подробнее о доставке',
                 },

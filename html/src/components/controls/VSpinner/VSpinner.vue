@@ -39,6 +39,6 @@ export default {
         },
     },
 
-    serverCacheKey: props => `${props.show}-${props.width}-${props.height}`,
+    serverCacheKey: (props) => `${props.show}-${props.width}-${props.height}`,
 };
 </script>

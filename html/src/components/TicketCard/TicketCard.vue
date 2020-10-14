@@ -8,9 +8,7 @@
             <div class="ticket-card__remain">
                 <template v-if="showCount">
                     <template v-if="isAvaliable"> Осталось {{ max }} мест </template>
-                    <template v-else>
-                        Нет в наличии
-                    </template>
+                    <template v-else>Нет в наличии</template>
                 </template>
             </div>
             <div class="ticket-card__count">

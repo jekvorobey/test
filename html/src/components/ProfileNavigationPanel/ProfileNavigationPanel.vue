@@ -16,13 +16,10 @@
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue';
-import VLink from '@controls/VLink/VLink.vue';
-
 import GeneralPopupPanel from '@components/GeneralPopupPanel/GeneralPopupPanel.vue';
 import NavigationPanel from '@components/profile/NavigationPanel/NavigationPanel.vue';
 
-import { mapActions, mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import { NAME as AUTH_MODULE, HAS_SESSION, USER, REFERRAL_PARTNER, UNREAD_MESSAGES } from '@store/modules/Auth';
 
 import './ProfileNavigationPanel.css';
@@ -31,9 +28,6 @@ export default {
     name: 'profile-navigation-panel',
 
     components: {
-        VSvg,
-        VLink,
-
         GeneralPopupPanel,
         NavigationPanel,
     },
@@ -41,7 +35,7 @@ export default {
     computed: {
         ...mapState(AUTH_MODULE, [HAS_SESSION, UNREAD_MESSAGES]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
         isTabletLg() {

@@ -28,9 +28,7 @@
             <div class="cabinet-view__attention-inner">
                 <div class="cabinet-view__attention-inner-info">
                     <strong>Профессиональный статус: не подтвержден</strong><br />
-                    <template
-                        v-if="((portfolio && portfolio.length === 0) && (certificates && certificates.length === 0))"
-                    >
+                    <template v-if="portfolio && portfolio.length === 0 && certificates && certificates.length === 0">
                         Укажи ссылку на свой аккаунт бьюти-профессионала в соцсетях или загрузи скан профильного диплома
                         либо другого подтверждающего документа.
                     </template>
@@ -40,7 +38,7 @@
                     </template>
                 </div>
                 <v-button
-                    v-if="((portfolio && portfolio.length === 0) && (certificates && certificates.length === 0))"
+                    v-if="portfolio && portfolio.length === 0 && certificates && certificates.length === 0"
                     class="btn--outline cabinet-view__attention-inner-btn"
                     @click="onOpenPortfoliosModal"
                 >
@@ -145,7 +143,7 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { LOCALE } from '@store';
 
-import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY, REFERRAL_PARTNER, REFERRAL_CODE } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, USER, CAN_BUY, REFERRAL_PARTNER, REFERRAL_CODE } from '@store/modules/Auth';
 import { GET_SOCIAL_LINK, CHECK_SESSION, FETCH_USER } from '@store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -169,15 +167,11 @@ import {
     UPDATE_AVATAR,
     DELETE_AVATAR,
     DELETE_SOCIAL,
-    UPLOAD_CERTIFICATE,
-    DELETE_CERTIFICATE,
-    LOAD_CERTIFICATE,
 } from '@store/modules/Profile/modules/Cabinet/actions';
 import { FULL_NAME } from '@store/modules/Profile/modules/Cabinet/getters';
 
 import metaMixin from '@plugins/meta';
 import { socials, httpCodes, modalName, mimeType } from '@enums';
-import { cancelRoute } from '@settings';
 import '@images/sprites/edit.svg';
 import '@images/sprites/link.svg';
 import '@images/sprites/account-middle.svg';
@@ -189,8 +183,6 @@ const avatarAcceptedTypes = {
     [mimeType.image.JPEG]: '.jpg',
     [mimeType.image.PNG]: '.png',
 };
-
-const panelScrollOffset = 24;
 
 export default {
     name: 'cabinet',
@@ -264,10 +256,6 @@ export default {
 
         avatarAcceptedTypes() {
             return avatarAcceptedTypes;
-        },
-
-        expectedTypesMap() {
-            return acceptedTypes;
         },
 
         socialMap() {
@@ -373,7 +361,7 @@ export default {
         $store
             .dispatch(`${CABINET_MODULE_PATH}/${FETCH_CABINET_DATA}`)
             .then(() => {
-                next((vm) => {
+                next(() => {
                     $progress.finish();
                 });
             })

@@ -21,5 +21,5 @@ export default {
         if (payload >= 0) {
             state.unreadMessages = payload;
         }
-    }
+    },
 };

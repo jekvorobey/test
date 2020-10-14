@@ -70,7 +70,11 @@
                                 </v-link>
                             </li>
                             <li class="mobile-menu__menu-item" v-if="hasSession">
-                                <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" to="/favorites/" @click="onSetMenu(false)">
+                                <v-link
+                                    class="mobile-menu__menu-link mobile-menu__menu-link--full"
+                                    :to="{ name: 'Favorites' }"
+                                    @click="onSetMenu(false)"
+                                >
                                     <span class="mobile-menu__menu-link-container">
                                         <v-svg :name="favoriteItemsIcon" width="24" height="24" />
                                         <span class="mobile-menu__menu-link-count" v-if="hasFavoriteItems">
@@ -92,7 +96,11 @@
                                 </v-link>
                             </li>
                             <li class="mobile-menu__menu-item" v-for="item in helpMenu.items" :key="item.name">
-                                <v-link class="mobile-menu__menu-link mobile-menu__menu-link--full" :to="item.url" @click="onSetMenu(false)">
+                                <v-link
+                                    class="mobile-menu__menu-link mobile-menu__menu-link--full"
+                                    :to="item.url"
+                                    @click="onSetMenu(false)"
+                                >
                                     {{ item.name }}
                                 </v-link>
                             </li>
@@ -177,9 +185,9 @@
                             </v-link>
                         </li>
                         <li class="container mobile-menu__menu-item" v-if="hasSession">
-                            <v-link 
-                                class="mobile-menu__menu-link mobile-menu__menu-link--full" 
-                                :to="{ name: 'Favorites' }" 
+                            <v-link
+                                class="mobile-menu__menu-link mobile-menu__menu-link--full"
+                                :to="{ name: 'Favorites' }"
                                 @click="onSetMenu(false)"
                             >
                                 <span class="mobile-menu__menu-link-container">
@@ -207,9 +215,9 @@
                             v-for="(item, index) in helpMenu.items"
                             :key="item.name"
                         >
-                            <v-link 
-                                class="mobile-menu__menu-link mobile-menu__menu-link--full" 
-                                :to="item.url" 
+                            <v-link
+                                class="mobile-menu__menu-link mobile-menu__menu-link--full"
+                                :to="item.url"
                                 @click="onSetMenu(false)"
                             >
                                 {{ item.name }}
@@ -273,10 +281,9 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
-import VSticky from '@controls/VSticky/VSticky.vue';
 import VClamp from 'vue-clamp';
 
-import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
+//import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import HeaderUserPanel from '@components/VHeader/HeaderUserPanel/HeaderUserPanel.vue';
 import SearchFilter from '@components/SearchFilter/SearchFilter.vue';
@@ -324,11 +331,10 @@ export default {
     components: {
         VSvg,
         VLink,
-        VSticky,
         VClamp,
 
         GeneralModal,
-        CatalogBannerCard,
+        //CatalogBannerCard,
         HeaderUserPanel,
         SearchFilter,
     },
@@ -449,13 +455,12 @@ export default {
         },
 
         onRegister() {
-            if (this[HAS_SESSION]){
+            if (this[HAS_SESSION]) {
                 const profileRoute = { name: 'Cabinet' };
                 const { href } = this.$router.resolve(profileRoute);
-                if(href !== this.$route.fullPath) this.$router.push(profileRoute);
+                if (href !== this.$route.fullPath) this.$router.push(profileRoute);
                 else this.onSetMenu(false);
-            }
-            else {
+            } else {
                 this.onSetMenu(false);
                 this[CHANGE_MODAL_STATE]({
                     name: modalName.general.AUTH,
@@ -464,7 +469,7 @@ export default {
                         activeTab: authMode.LOGIN,
                     },
                 });
-            }  
+            }
         },
     },
 };

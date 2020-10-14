@@ -1,8 +1,6 @@
 <template>
     <section class="section ui-kit-section">
-        <h2 class="ui-kit-section__hl">
-            Дропзоны
-        </h2>
+        <h2 class="ui-kit-section__hl">Дропзоны</h2>
 
         <!-- <h3>
             Dropzone
@@ -30,9 +28,7 @@
             Сканы паспортов
         </v-dropzone> -->
 
-        <h3>
-            Filepound
-        </h3>
+        <h3>Filepound</h3>
         <p class="text-grey">
             vue-filepond адаптер
             <a
@@ -58,10 +54,10 @@
         </p>
 
         <v-filepond
-            style="width: 400px;"
+            style="width: 400px"
             :files="myFiles"
             :allow-multiple="true"
-            label-idle="<span class='filepond--label-action'>Выберите файл</span> или перетащите его сюда"
+            label-idle="<span class='filepond--label-action'>Выберите файл</span> или перетащите его сюда"
         >
             Сканы паспортов
         </v-filepond>

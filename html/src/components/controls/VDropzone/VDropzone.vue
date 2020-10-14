@@ -4,7 +4,7 @@
         <dropzone v-on="$listeners" v-bind="$attrs">
             <div class="dropzone-custom-content">
                 <label class="dropzone-custom-title">
-                    <span class="v-dropzone__label">Выберите файл</span> или перетащите его сюда
+                    <span class="v-dropzone__label">Выберите файл</span> или перетащите его сюда
                 </label>
             </div>
         </dropzone>
@@ -23,5 +23,3 @@ export default {
     },
 };
 </script>
-
-

@@ -86,7 +86,7 @@ export default {
         ...mapState([LOCALE]),
 
         masterclasses() {
-            return this.items.map(i => {
+            return this.items.map((i) => {
                 const { p } = i;
                 const dateObj = getDate(`${p.nearestDate} ${p.nearestTimeFrom}`);
                 const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
@@ -177,4 +177,3 @@ export default {
     },
 };
 </script>
-

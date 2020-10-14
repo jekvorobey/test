@@ -87,8 +87,8 @@ export default {
         onSearch() {
             if (!this.searchString) return;
 
-            const searchRoute = { 
-                name: 'Catalog', 
+            const searchRoute = {
+                name: 'Catalog',
                 params: { type: productGroupTypes.SEARCH },
                 query: {
                     search_string: this.searchString,
@@ -96,11 +96,7 @@ export default {
             };
 
             const { href } = this.$router.resolve(searchRoute);
-            if(href !== this.$route.fullPath)
-                this.$router.push(
-                    searchRoute,
-                    this.onClearClick
-                );
+            if (href !== this.$route.fullPath) this.$router.push(searchRoute, this.onClearClick);
             else this.onClearClick();
         },
 
@@ -110,4 +106,3 @@ export default {
     },
 };
 </script>
-

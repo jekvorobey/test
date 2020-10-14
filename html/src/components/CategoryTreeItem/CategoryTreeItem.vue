@@ -10,12 +10,7 @@
         @mouseleave="onMouseOver(false)"
     >
         <div class="category-tree-item__label">
-            <self-router-link
-                class="category-tree-item__link"
-                :to="url"
-                :disabled="!isInteractive"
-                same-disabled
-            >
+            <self-router-link class="category-tree-item__link" :to="url" :disabled="!isInteractive" same-disabled>
                 {{ item.name }}
             </self-router-link>
         </div>
@@ -47,7 +42,7 @@ export default {
     name: 'category-tree-item',
 
     components: {
-        SelfRouterLink
+        SelfRouterLink,
     },
 
     props: {
@@ -76,14 +71,14 @@ export default {
 
     computed: {
         ...mapState('route', {
-            type: state => state.params.type,
-            entityCode: state => state.params.entityCode,
+            type: (state) => state.params.type,
+            entityCode: (state) => state.params.entityCode,
         }),
         ...mapGetters(CATALOG_MODULE, [ROOT_CATEGORY, ACTIVE_CATEGORIES]),
 
         isActive() {
             const activeCategories = this[ACTIVE_CATEGORIES] || [];
-            return activeCategories.some(c => c.code === this.item.code);
+            return activeCategories.some((c) => c.code === this.item.code);
         },
 
         isRoot() {
@@ -109,7 +104,6 @@ export default {
                 type,
                 item: { code },
                 isRoot,
-                disabled,
                 rootCategory,
             } = this;
 
@@ -124,11 +118,9 @@ export default {
 
         hasChildren() {
             const {
-                entityCode,
-                type,
                 item: { items },
             } = this;
-            return Array.isArray(this.item.items);
+            return Array.isArray(items);
         },
     },
 

@@ -12,7 +12,6 @@
 
 <script>
 import VButton from '@controls/VButton/VButton.vue';
-import VLink from '@controls/VLink/VLink.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
@@ -36,7 +35,7 @@ export default {
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         isTablet() {

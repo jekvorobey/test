@@ -26,22 +26,17 @@
             </v-scroll>
         </template>
         <template v-slot:bottom>
-            <v-button class="btn--outline cart-header-panel__controls-btn" @click="onToCart">
-                Оформить заказ
-            </v-button>
+            <v-button class="btn--outline cart-header-panel__controls-btn" @click="onToCart">Оформить заказ</v-button>
             <div class="cart-header-panel__total" v-if="cartItemsCount > 0">
                 {{ productCount }} на сумму
                 <price tag="div" class="text-bold" v-bind="productItemsSum" />
             </div>
-            <div class="cart-header-panel__total" v-else>
-                Ваша корзина пуста
-            </div>
+            <div class="cart-header-panel__total" v-else>Ваша корзина пуста</div>
         </template>
     </general-popup-panel>
 </template>
 
 <script>
-import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VScroll from '@controls/VScroll/VScroll.vue';
 
@@ -50,16 +45,15 @@ import Price from '@components/Price/Price.vue';
 import GeneralPopupPanel from '@components/GeneralPopupPanel/GeneralPopupPanel.vue';
 import CartPanelProductCard from '@components/CartPanelProductCard/CartPanelProductCard.vue';
 
-import { mapActions, mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import { SCROLL } from '@store';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
-import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
-import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM, CART_TYPES, CART_ITEMS } from '@store/modules/Cart/getters';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM, CART_ITEMS } from '@store/modules/Cart/getters';
 
 import { pluralize } from '@util';
-import { generateProductUrl } from '@util/catalog';
 import '@images/sprites/cross.svg';
 import './CartHeaderPanel.css';
 
@@ -67,7 +61,6 @@ export default {
     name: 'cart-header-panel',
 
     components: {
-        VLink,
         VButton,
         VScroll,
 

@@ -15,9 +15,7 @@
                     <template v-if="info.next_debit_date">
                         {{ nextDebDate }}
                     </template>
-                    <template v-else>
-                        нет
-                    </template>
+                    <template v-else>нет</template>
                 </div>
                 <div class="text-medium bonuses-view__panel-burn" v-if="info.next_debit_sum">
                     {{ info.next_debit_sum }} бонусов
@@ -102,9 +100,6 @@
 </template>
 
 <script>
-import VLink from '@controls/VLink/VLink.vue';
-import VButton from '@controls/VButton/VButton.vue';
-import VInput from '@controls/VInput/VInput.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
@@ -113,14 +108,7 @@ import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { LOCALE } from '@store';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
-import {
-    NAME as BONUSES_MODULE,
-    ITEMS,
-    ACTIVE_PAGE,
-    RANGE,
-    BONUSES,
-    INFO,
-} from '@store/modules/Profile/modules/Bonuses';
+import { NAME as BONUSES_MODULE, ITEMS, ACTIVE_PAGE, BONUSES, INFO } from '@store/modules/Profile/modules/Bonuses';
 import { SET_LOAD_PATH, FETCH_BONUSES_DATA } from '@store/modules/Profile/modules/Bonuses/actions';
 import { PAGES_COUNT } from '@store/modules/Profile/modules/Bonuses/getters';
 
@@ -139,9 +127,6 @@ export default {
     mixins: [metaMixin],
 
     components: {
-        VLink,
-        VButton,
-        VInput,
         VPagination,
 
         InfoRow,
@@ -232,11 +217,11 @@ export default {
                 .dispatch(`${BONUSES_MODULE_PATH}/${FETCH_BONUSES_DATA}`, { page })
                 .then(() => {
                     $store.dispatch(`${BONUSES_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
+                    next(() => {
                         $progress.finish();
                     });
                 })
-                .catch((thrown) => {
+                .catch(() => {
                     $progress.fail();
                     next();
                 });

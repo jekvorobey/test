@@ -17,7 +17,7 @@ export default {
         name: { type: String, default: null },
         modifier: { type: String, default: null },
     },
-    serverCacheKey: props =>
+    serverCacheKey: (props) =>
         props.modifier ? `${props.id}-${props.name}-${props.modifier}` : `${props.id}-${props.name}`,
 };
 </script>

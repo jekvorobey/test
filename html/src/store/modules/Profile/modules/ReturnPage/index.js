@@ -1,19 +1,17 @@
-import actions from './actions'
-import mutations from './mutations'
-import getters from './getters'
+import actions from './actions';
+import mutations from './mutations';
+import getters from './getters';
 
-import { returnFormSteps } from '@enums/profile'
+export const NAME = 'returnPage';
 
-export const NAME = 'returnPage'
-
-export const PRODUCTS = 'products'
-export const SELECTED_PRODUCTS = 'selectedProducts'
-export const COURIER_DELIVERY = 'courierDelivery'
+export const PRODUCTS = 'products';
+export const SELECTED_PRODUCTS = 'selectedProducts';
+export const COURIER_DELIVERY = 'courierDelivery';
 export const ADDRESSES = 'addresses';
 
-export const STEP = 'step'
+export const STEP = 'step';
 
-export default function createModule () {
+export default function createModule() {
     return {
         name: NAME,
         namespaced: true,
@@ -192,5 +190,5 @@ export default function createModule () {
         actions,
         mutations,
         getters,
-    }
+    };
 }

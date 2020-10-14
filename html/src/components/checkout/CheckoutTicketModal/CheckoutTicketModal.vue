@@ -67,9 +67,7 @@
                 </form>
             </div>
             <div class="checkout-ticket-modal__submit">
-                <v-button class="checkout-ticket-modal__submit-btn" @click="onSubmit">
-                    Добавить участника
-                </v-button>
+                <v-button class="checkout-ticket-modal__submit-btn" @click="onSubmit">Добавить участника</v-button>
             </div>
         </template>
     </general-modal>
@@ -81,12 +79,10 @@ import VInput from '@controls/VInput/VInput.vue';
 import VInputMask from '@controls/VInput/VInputMask.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
 
-import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import { mapState, mapActions } from 'vuex';
 import { NAME as CHECKOUT_MODULE, PROFESSIONS } from '@store/modules/Checkout';
-import { FETCH_PROFESSIONS } from '@store/modules/Checkout/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -110,7 +106,6 @@ export default {
         VSelect,
 
         GeneralModal,
-        AttentionPanel,
     },
 
     validations: {
@@ -170,8 +165,8 @@ export default {
     computed: {
         ...mapState(CHECKOUT_MODULE, [PROFESSIONS]),
         ...mapState(MODAL_MODULE, {
-            isOpen: state => state[MODALS][NAME] && state[MODALS][NAME].open,
-            modalState: state => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
+            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
         isTablet() {
@@ -214,7 +209,7 @@ export default {
         name(value) {
             const fullName = (value && value.trim().replace(/\s\s+/g, ' ')) || '';
             const parts = fullName.split(' ', 3);
-            parts.forEach(p => p && p.trim());
+            parts.forEach((p) => p && p.trim());
             this.form.lastName = parts[0] || null;
             this.form.firstName = parts[1] || null;
             this.form.middleName = parts[2] || null;

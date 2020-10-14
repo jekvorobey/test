@@ -16,10 +16,7 @@
                         :to="$route.path"
                         >{{ routeTitle }}
                     </breadcrumb-item>
-                    <breadcrumb-item
-                        v-for="breadcrumb in breadcrumbs"
-                        :key="breadcrumb.name"
-                        :to="breadcrumb.to"
+                    <breadcrumb-item v-for="breadcrumb in breadcrumbs" :key="breadcrumb.name" :to="breadcrumb.to"
                         >{{ breadcrumb.name }}
                     </breadcrumb-item>
                 </breadcrumbs>
@@ -48,20 +45,18 @@
                         <v-svg v-if="isTablet" name="home" width="10" height="10" />
                         <span v-else>Главная</span></breadcrumb-item
                     >
-                    <breadcrumb-item 
-                        key="Cabinet" 
-                        :to="{ name: 'Cabinet' }"
-                    >{{ $t('profile.routes.Cabinet') }}</breadcrumb-item>
+                    <breadcrumb-item key="Cabinet" :to="{ name: 'Cabinet' }">{{
+                        $t('profile.routes.Cabinet')
+                    }}</breadcrumb-item>
                     <breadcrumb-item
                         v-if="$route.name !== 'Cabinet' && breadcrumbs && breadcrumbs.length === 0"
                         :key="$route.name"
                         :to="$route.path"
-                    >{{ routeTitle }}</breadcrumb-item>
-                    <breadcrumb-item 
-                        v-for="breadcrumb in breadcrumbs" 
-                        :key="breadcrumb.name" 
-                        :to="breadcrumb.to"
-                    >{{ breadcrumb.name }}</breadcrumb-item>
+                        >{{ routeTitle }}</breadcrumb-item
+                    >
+                    <breadcrumb-item v-for="breadcrumb in breadcrumbs" :key="breadcrumb.name" :to="breadcrumb.to">{{
+                        breadcrumb.name
+                    }}</breadcrumb-item>
                 </breadcrumbs>
                 <div class="profile-view__main">
                     <transition name="fade-absolute">
@@ -82,8 +77,8 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
 
-import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
-import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+import '@components/profile/InfoPanel/InfoPanel.vue';
+import '@components/profile/InfoRow/InfoRow.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
@@ -91,7 +86,7 @@ import NavigationPanel from '@components/profile/NavigationPanel/NavigationPanel
 import NavigationModal from '@components/profile/NavigationModal/NavigationModal.vue';
 
 import { mapState, mapActions } from 'vuex';
-import profileModule, { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modules/Profile';
+import { NAME as PROFILE_MODULE, BREADCRUMBS } from '@store/modules/Profile';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -99,9 +94,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as AUTH_MODULE, HAS_SESSION, USER, REFERRAL_PARTNER, UNREAD_MESSAGES } from '@store/modules/Auth';
 
 import { cancelRoute } from '@settings';
-import { $store } from '@services';
 import { modalName } from '@enums';
-import { registerModuleIfNotExists } from '@util/store';
 import '@images/sprites/arrow-updown.svg';
 import '@images/sprites/home.svg';
 import './Profile.css';

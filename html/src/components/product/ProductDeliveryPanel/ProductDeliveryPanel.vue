@@ -53,7 +53,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { getDate } from '@util';
 import { dayMonthLongDateSettings } from '@settings';
-import { modalName, weekDays } from '@enums';
+import { modalName } from '@enums';
 import { receiveMethods } from '@enums/checkout';
 import '@images/sprites/arrow-down.svg';
 import './ProductDeliveryPanel.css';
@@ -87,8 +87,8 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(GEO_MODULE, {
-            city: state => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
-            cityType: state => (state[SELECTED_CITY] && state[SELECTED_CITY].type) || null,
+            city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+            cityType: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].type) || null,
         }),
     },
 
@@ -104,8 +104,9 @@ export default {
             else if (today + 1 === dateObj.getDate()) additionalText = `завтра`;
             else additionalText = dateObj && this.$t(`weekdays.short.${dateObj.getDay()}`);
 
-            return `c ${dateObj &&
-                dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)} (${additionalText})`;
+            return `c ${
+                dateObj && dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)
+            } (${additionalText})`;
         },
 
         onOpenCitySelection() {

@@ -28,5 +28,5 @@ export default {
 
     [SET_PRELOADER](state, payload) {
         state.preloader = payload;
-    }
+    },
 };

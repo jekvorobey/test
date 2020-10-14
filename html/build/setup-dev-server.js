@@ -24,7 +24,7 @@ module.exports = function setupDevServer(app, templatePath, cb) {
     let clientManifest;
 
     let ready;
-    const readyPromise = new Promise(r => {
+    const readyPromise = new Promise((r) => {
         ready = r;
     });
     const update = () => {
@@ -65,10 +65,10 @@ module.exports = function setupDevServer(app, templatePath, cb) {
         noInfo: true,
     });
     app.use(devMiddleware);
-    clientCompiler.hooks.done.tap('BuildStatsPlugin', stats => {
+    clientCompiler.hooks.done.tap('BuildStatsPlugin', (stats) => {
         stats = stats.toJson();
-        stats.errors.forEach(err => logger.error(err));
-        stats.warnings.forEach(err => logger.warn(err));
+        stats.errors.forEach((err) => logger.error(err));
+        stats.warnings.forEach((err) => logger.warn(err));
         if (stats.errors.length) return;
         clientManifest = JSON.parse(readFile(devMiddleware.fileSystem, 'vue-ssr-client-manifest.json'));
         update();

@@ -20,9 +20,7 @@
         <div class="navigation-panel__group" key="logout">
             <ul class="navigation-panel__group-list">
                 <li class="navigation-panel__group-item">
-                    <v-link tag="button" class="navigation-panel__group-link" @click.prevent="onLogout">
-                        Выйти
-                    </v-link>
+                    <v-link tag="button" class="navigation-panel__group-link" @click.prevent="onLogout">Выйти</v-link>
                 </li>
             </ul>
         </div>
@@ -62,15 +60,11 @@ export default {
     methods: {
         ...mapActions(AUTH_MODULE, [LOGOUT]),
 
-        async onLogout() {
-            try {
-                await this[LOGOUT]();
-            } catch (error) {
-                $logger.error(error);
-            }
+        onLogout() {
+            this[LOGOUT]();
         },
 
-        onLinkClick(){
+        onLinkClick() {
             this.$emit('link-click');
         },
     },

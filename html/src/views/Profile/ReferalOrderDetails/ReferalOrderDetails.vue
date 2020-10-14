@@ -165,10 +165,10 @@ import VCheck from '@controls/VCheck/VCheck.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import Price from '@components/Price/Price.vue';
-import FilterButton from '@components/FilterButton/FilterButton.vue';
+//import FilterButton from '@components/FilterButton/FilterButton.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { LOCALE } from '@store';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
@@ -177,10 +177,9 @@ import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 import { NAME as REFERRAL_MODULE, REFERRAL_ORDER_DETAILS } from '@store/modules/Profile/modules/Referral';
 import { FETCH_REFERRER_ORDER_DETAILS } from '@store/modules/Profile/modules/Referral/actions';
 
-import { $store, $progress, $logger } from '@services';
-import { fileExtension, sortDirections } from '@enums';
+import { $store, $progress } from '@services';
+import { fileExtension } from '@enums';
 import { referralSource } from '@enums/profile';
-import { DEFAULT_PAGE } from '@constants';
 import { digit2DateSettings, monthLongDateSettings } from '@settings';
 import { getDate } from '@util';
 import { generatePictureSourcePath } from '@util/file';
@@ -192,7 +191,7 @@ import './ReferalOrderDetails.css';
 
 const REFERRAL_MODULE_PATH = `${PROFILE_MODULE}/${REFERRAL_MODULE}`;
 
-function updateBreadcrumbs(vm, name, params, number) {
+function updateBreadcrumbs(vm, name, params) {
     const { href: rootHref } = vm.$router.resolve({ name: 'Referal' });
     const { href: currentHref } = vm.$router.resolve({ name, params });
 
@@ -213,7 +212,7 @@ export default {
         VPicture,
 
         InfoRow,
-        FilterButton,
+        //FilterButton,
         Price,
     },
 
@@ -278,7 +277,7 @@ export default {
 
         pageTitle() {
             const { referalId } = this;
-            return this.$t('profile.format.referal', { id: referalId })
+            return this.$t('profile.format.referal', { id: referalId });
         },
 
         isTabletLg() {
@@ -304,10 +303,10 @@ export default {
                 .then(() =>
                     next((vm) => {
                         $progress.finish();
-                        updateBreadcrumbs(vm, name, params, params.referalId);
+                        updateBreadcrumbs(vm, name, params);
                     })
                 )
-                .catch((error) =>
+                .catch(() =>
                     next((vm) => {
                         $progress.fail();
                         updateBreadcrumbs(vm, name, params);

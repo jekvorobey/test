@@ -101,11 +101,9 @@ import {
     SET_DEFAULT_ADDRESS,
 } from '@store/modules/Profile/modules/Addresses/actions';
 
-import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 import { modalName } from '@enums';
 import { $store, $progress, $logger } from '@services';
-import { getRandomIntInclusive } from '@util';
 import metaMixin from '@plugins/meta';
 import '@images/sprites/plus-small.svg';
 import '@images/sprites/info-middle.svg';
@@ -140,9 +138,9 @@ export default {
     computed: {
         ...mapState(ADDRESSES_MODULE_PATH, [ADDRESSES]),
         ...mapState(MODAL_MODULE, {
-            isAddressEditOpen: state =>
+            isAddressEditOpen: (state) =>
                 state[MODALS][modalName.profile.ADDRESS_EDIT] && state[MODALS][modalName.profile.ADDRESS_EDIT].open,
-            isConfirmationModalOpen: state =>
+            isConfirmationModalOpen: (state) =>
                 state[MODALS][modalName.profile.CONFIRMATION] && state[MODALS][modalName.profile.CONFIRMATION].open,
         }),
 
@@ -236,11 +234,11 @@ export default {
         $store
             .dispatch(`${ADDRESSES_MODULE_PATH}/${FETCH_ADDRESSES_DATA}`)
             .then(() => {
-                next(vm => {
+                next(() => {
                     $progress.finish();
                 });
             })
-            .catch(thrown => {
+            .catch((thrown) => {
                 $progress.fail();
                 $logger.error('beforeRouteEnter', thrown.error);
                 $progress.finish();

@@ -42,7 +42,7 @@
                 :disabled="disabled"
                 @click="onBtnClick"
                 @mousedown.prevent
-            > 
+            >
                 <v-svg name="arrow-down" />
             </v-button>
             <transition :name="animation">
@@ -225,11 +225,11 @@ export default {
         },
 
         revert() {
-            if (isSyncronized) this.text = this.getValue(this.selectedItem_internal);
+            if (this.isSyncronized) this.text = this.getValue(this.selectedItem_internal);
         },
 
         onFilterKeyup(e) {
-            var key = e.which || e.keyCode;
+            let key = e.which || e.keyCode;
 
             switch (key) {
                 case keys.UP:
@@ -270,7 +270,7 @@ export default {
 
         setActiveItem(e) {
             let key = e.which || e.keyCode;
-            let activeIndex = this.activeIndex;
+            let { activeIndex } = this;
 
             let activeItem = null;
 
@@ -348,7 +348,7 @@ export default {
 
             const autocomplete = this.getDisplayValue(autocompletedItem);
             if (this.text !== autocomplete) {
-                const length = this.text.length;
+                const { length } = this.text;
                 this.text = autocomplete;
                 this.$refs.input.setSelectionRange(length, autocomplete.length);
             }

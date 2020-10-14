@@ -2,9 +2,7 @@
     <div class="checkout-pickup-point-panel">
         <div v-if="!selectedPickupPoint" class="checkout-pickup-point-panel__choice">
             <h3 class="checkout-pickup-point-panel__title">Выберите пункт выдачи заказов</h3>
-            <v-button class="btn--outline" @click="onChangePickupPoint">
-                Выбрать
-            </v-button>
+            <v-button class="btn--outline" @click="onChangePickupPoint">Выбрать</v-button>
         </div>
         <div v-else class="checkout-pickup-point-panel__address">
             <div class="checkout-pickup-point-panel__address-info">
@@ -30,15 +28,11 @@
                 </div>
             </div>
             <div class="checkout-pickup-point-panel__address-desc" v-if="selectedPickupPoint.description">
-                <div class="text-bold">
-                    Как добраться
-                </div>
+                <div class="text-bold">Как добраться</div>
                 {{ selectedPickupPoint.description }}
             </div>
             <div class="checkout-pickup-point-panel__address-payment">
-                <div class="text-bold">
-                    Принимаются к оплате
-                </div>
+                <div class="text-bold">Принимаются к оплате</div>
                 {{ selectedPickupPoint.payment }}
             </div>
             <div class="checkout-pickup-point-panel__address-map">
@@ -58,7 +52,7 @@
 import '@plugins/ya-maps';
 import VButton from '@controls/VButton/VButton.vue';
 
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import { SELECTED_PICKUP_POINT } from '@store/modules/Checkout/getters';
 

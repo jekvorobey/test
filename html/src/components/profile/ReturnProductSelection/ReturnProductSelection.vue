@@ -9,20 +9,12 @@
                 :checked="allChecked"
                 :indeterminate="indeterminate"
                 @change="onSelectAll"
-            >Выбрать все продукты</v-check>
+                >Выбрать все продукты</v-check
+            >
         </div>
         <ul class="return-product-selection__product-list">
-            <li
-                class="return-product-selection__product-item"
-                v-for="product in products"
-                :key="product.id"
-            >
-                <v-check
-                    :id="`${product.id}`"
-                    :value="`${product.id}`"
-                    name="product-checkbox"
-                    v-model="checkboxes"
-                />
+            <li class="return-product-selection__product-item" v-for="product in products" :key="product.id">
+                <v-check :id="`${product.id}`" :value="`${product.id}`" name="product-checkbox" v-model="checkboxes" />
                 <return-panel-product-card
                     :product="product"
                     :id="product.id"
@@ -34,11 +26,9 @@
         </ul>
         <div class="return-product-selection__bottom">
             <div class="return-product-selection__controls">
-                <v-button
-                    class="return-product-selection__next-btn"
-                    @click="onNextStep"
-                    :disabled="isBtnDisabled"
-                >Продолжить</v-button>
+                <v-button class="return-product-selection__next-btn" @click="onNextStep" :disabled="isBtnDisabled"
+                    >Продолжить</v-button
+                >
                 <v-button class="return-product-selection__back-btn btn--transparent">Назад</v-button>
             </div>
             <div class="return-product-selection__info">
@@ -59,7 +49,6 @@ import VButton from '@controls/VButton/VButton.vue';
 import Price from '@components/Price/Price.vue';
 
 import ReturnPanelProductCard from '@components/ReturnPanelProductCard/ReturnPanelProductCard.vue';
-import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
 
 import { mapState, mapActions } from 'vuex';
 
@@ -72,7 +61,7 @@ import { generateProductUrl } from '@util/catalog';
 import { returnFormSteps } from '@enums/profile';
 import './ReturnProductSelection.css';
 
-const RETURN_PAGE_PATH = `${PROFILE_MODULE}/${RETURN_MODULE}`
+const RETURN_PAGE_PATH = `${PROFILE_MODULE}/${RETURN_MODULE}`;
 
 export default {
     name: 'return-product-selection',
@@ -84,79 +73,78 @@ export default {
         Price,
 
         ReturnPanelProductCard,
-        PackageProductCard,
     },
 
-    data () {
+    data() {
         return {
             checkboxes: [],
-        }
+        };
     },
 
     computed: {
         ...mapState(RETURN_PAGE_PATH, [PRODUCTS]),
 
-        allChecked () {
-            return this.checkboxes.length > 0 && this.checkboxes.length === this.products.length
+        allChecked() {
+            return this.checkboxes.length > 0 && this.checkboxes.length === this.products.length;
         },
 
-        indeterminate () {
-            return this.checkboxes.length > 0 && this.checkboxes.length < this.products.length
+        indeterminate() {
+            return this.checkboxes.length > 0 && this.checkboxes.length < this.products.length;
         },
 
-        totalPrice () {
+        totalPrice() {
             if (this.checkboxes.length) {
                 let summary = 0;
-                this.checkedProducts.map(item => {
+                this.checkedProducts.map((item) => {
                     summary += item.quantity * item.price.value;
                 });
 
                 return {
                     value: summary,
                     currency: 'RUB',
-                }
+                };
             }
         },
 
-        checkedProducts () {
+        checkedProducts() {
             return this.$refs.products
-                .filter(el => this.isChecked(el.id))
-                .map(el => {
+                .filter((el) => this.isChecked(el.id))
+                .map((el) => {
                     return {
                         quantity: el.quantity,
                         ...el.product,
-                    }
+                    };
                 });
         },
 
         isBtnDisabled() {
             return this.checkboxes.length < 1;
-        }
+        },
     },
 
     methods: {
         ...mapActions(RETURN_PAGE_PATH, [SET_STEP, SET_SELECTED_PRODUCTS]),
 
-        generateItemProductUrl (product) {
+        generateItemProductUrl(product) {
             if (Array.isArray(product.categoryCodes)) {
-                const categoryCode = product.categoryCodes[product.categoryCodes.length - 1]
-                return generateProductUrl(categoryCode, product.code)
+                const categoryCode = product.categoryCodes[product.categoryCodes.length - 1];
+                return generateProductUrl(categoryCode, product.code);
             }
         },
 
-        onNextStep () {
-            this[SET_SELECTED_PRODUCTS](this.checkedProducts)
-            this[SET_STEP](returnFormSteps.CHECK)
+        onNextStep() {
+            this[SET_SELECTED_PRODUCTS](this.checkedProducts);
+            this[SET_STEP](returnFormSteps.CHECK);
         },
 
-        onSelectAll () {
-            if (this.checkboxes.length > 0) this.checkboxes = []
-            else this.checkboxes = [...Object.values(this.products.map(item => `${item.id}`))]
+        onSelectAll() {
+            if (this.checkboxes.length > 0) this.checkboxes = [];
+            else this.checkboxes = [...Object.values(this.products.map((item) => `${item.id}`))];
         },
 
-        isChecked (id) {
-            return this.checkboxes.includes(`${id}`)
+        isChecked(id) {
+            return this.checkboxes.includes(`${id}`);
         },
     },
-}
+};
 </script>

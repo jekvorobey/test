@@ -1,30 +1,24 @@
 <template>
     <section class="section ui-kit-section">
-        <h2 class="ui-kit-section__hl">
-            Чекбоксы
-        </h2>
-        <p class="text-grey">
-            Мастер чекбоксы
-        </p>
+        <h2 class="ui-kit-section__hl">Чекбоксы</h2>
+        <p class="text-grey">Мастер чекбоксы</p>
         <form>
             <v-check id="checkbox-1" v-model="checkbox_checked1" name="checkbox-1" value="1">По умолчанию</v-check>
             <v-check id="checkbox-2" v-model="checkbox_checked2" name="checkbox-2" value="2" disabled>Disabled</v-check>
-            <v-check id="checkbox-3" v-model="checkbox_checked3" name="checkbox-3" value="3">
-                Мастер чекбоксы
-            </v-check>
+            <v-check id="checkbox-3" v-model="checkbox_checked3" name="checkbox-3" value="3"> Мастер чекбоксы </v-check>
             <v-check
                 id="checkbox-4"
                 v-model="checkbox_checked4"
                 name="checkbox-4"
-                value="чекбокс с длинным текстом включен и не задизейблен"
+                value="чекбокс с длинным текстом включен и не задизейблен"
             >
-                чекбокс с длинным текстом включен и не задизейблен
+                чекбокс с длинным текстом включен и не задизейблен
             </v-check>
             <v-check
                 id="checkbox-5"
                 v-model="checkbox_checked5"
                 name="checkbox-5"
-                value="чекбокс с длинным текстом включен и не задизейблен"
+                value="чекбокс с длинным текстом включен и не задизейблен"
                 disabled
             >
                 чекбокс выбран, но задизеблен
@@ -32,7 +26,7 @@
             <p>Выбрано По умолчанию: {{ checkbox_checked1 }}</p>
             <p>Выбрано disabled: {{ checkbox_checked2 }}</p>
             <p>Выбрано Мастер чекбоксы: {{ checkbox_checked3 }}</p>
-            <p>Выбрано чекбокс с длинным текстом включен и не задизейблен: {{ checkbox_checked4 }}</p>
+            <p>Выбрано чекбокс с длинным текстом включен и не задизейблен: {{ checkbox_checked4 }}</p>
 
             <v-check id="checkbox-6" v-model="checkboxes_checked" name="checkboxes" :value="values.first">{{
                 values.first
@@ -88,7 +82,7 @@ export default {
             );
         },
         allChecked() {
-            return this.checkboxes_checked.length > 0 && this.checkboxes_checked.every(v => !!this.values[v]);
+            return this.checkboxes_checked.length > 0 && this.checkboxes_checked.every((v) => !!this.values[v]);
         },
     },
     methods: {

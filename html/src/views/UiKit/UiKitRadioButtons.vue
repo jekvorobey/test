@@ -1,11 +1,7 @@
 <template>
     <section class="section ui-kit-section">
-        <h2 class="ui-kit-section__hl">
-            Радиокнопки
-        </h2>
-        <p class="text-grey">
-            Мастер радиобаттоны
-        </p>
+        <h2 class="ui-kit-section__hl">Радиокнопки</h2>
+        <p class="text-grey">Мастер радиобаттоны</p>
         <form>
             <v-check id="radio-1" v-model="radio_checked" type="radio" name="radio-1" value="По умолчанию">
                 По умолчанию
@@ -21,9 +17,9 @@
                 v-model="radio_checked"
                 type="radio"
                 name="radio-1"
-                value="Радиобаттон с длинным текстом включен и не задизейблен"
+                value="Радиобаттон с длинным текстом включен и не задизейблен"
             >
-                Радиобаттон с длинным текстом включен и не задизейблен
+                Радиобаттон с длинным текстом включен и не задизейблен
             </v-check>
             <v-check id="radio-5" checked type="radio" name="radio-2" value="Выбран, но задизеблен" disabled>
                 Выбран, но задизеблен

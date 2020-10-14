@@ -20,7 +20,7 @@ export default {
     },
 
     [UPDATE_ADDRESS](state, payload) {
-        const address = state.addresses.find(a => a.id === payload.id);
+        const address = state.addresses.find((a) => a.id === payload.id);
         if (address) {
             const index = state.addresses.indexOf(address);
             state.addresses.splice(index, 1, payload);

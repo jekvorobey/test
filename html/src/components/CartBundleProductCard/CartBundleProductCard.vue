@@ -88,9 +88,7 @@
                     </li>
                 </ol>
 
-                <p class="status-color-error text-sm" v-if="!isActive">
-                    Товар закончился
-                </p>
+                <p class="status-color-error text-sm" v-if="!isActive">Товар закончился</p>
             </div>
 
             <div class="cart-bundle-product-card__body-count" v-if="showCount">
@@ -233,7 +231,7 @@ export default {
     computed: {
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
         ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: state => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
 
         favoritesBtnText() {
@@ -248,7 +246,7 @@ export default {
         },
 
         maxBundlesCount() {
-            return Math.min(...this.items.map(item => item.stock.qty));
+            return Math.min(...this.items.map((item) => item.stock.qty));
         },
 
         bonusLabel() {
@@ -258,7 +256,7 @@ export default {
 
         inFavorites() {
             const { items = [] } = this;
-            return items.every(i => this[IS_IN_FAVORITES](i.productId));
+            return items.every((i) => this[IS_IN_FAVORITES](i.productId));
         },
 
         isTablet() {

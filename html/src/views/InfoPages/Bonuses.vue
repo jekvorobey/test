@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import metaMixin from '@plugins/meta'
+import metaMixin from '@plugins/meta';
 import { agreementTypes } from '@enums';
 
 export default {
@@ -61,7 +61,7 @@ export default {
             return { name: 'Agreements', params: { type: agreementTypes.BONUS_PROGRAM } };
         },
 
-        pageTitle(){
+        pageTitle() {
             return 'Бонусы за покупки';
         },
     },
