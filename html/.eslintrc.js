@@ -1,24 +1,19 @@
 module.exports = {
+    root: true,
     /* Разрешённые глобальные переменные. */
     env: {
-        browser: true,
         es6: true,
+        browser: true,
         node: true,
     },
-    extends: [
-        /* Набор правил AirBnB: https://github.com/airbnb/javascript*/
-        'airbnb-base',
-        /* Отключает правила ESLint, конфликтующие с Prettier,
-        и позволяет использовать Prettier в качестве форматтера ESLint. */
-        'plugin:prettier/recommended',
-    ],
+    extends: ['eslint:recommended', 'plugin:vue/essential', 'plugin:prettier/recommended'],
     /* Меняем стандартный парсер, т.к. используем Babel. */
-    parser: 'babel-eslint',
+    parser: 'vue-eslint-parser',
     parserOptions: {
-        /* Проект использует ESM для подключения модулей. */
+        parser: 'babel-eslint',
         sourceType: 'module',
     },
-    plugins: ['optimize-regex'],
+    plugins: ['optimize-regex', 'import'],
     rules: {
         /* Чтобы можно было работать с битовыми операциями (например преобразования HEX в RGB) */
         'no-bitwise': 'off',
