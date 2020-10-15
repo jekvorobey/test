@@ -32,7 +32,7 @@
                     @mouseover="link.hover = true"
                     @mouseleave="link.hover = false"
                     target="_blank"
-                    rel="nofollow"
+                    rel="nofollow noreferrer noopener"
                 >
                     <v-svg :name="link.hover ? link.iconHover : link.icon" width="40" height="40" />
                 </v-link>

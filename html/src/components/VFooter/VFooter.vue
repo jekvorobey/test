@@ -3,7 +3,7 @@
         <div class="container v-footer__container v-footer__container--desktop">
             <div class="v-footer__row">
                 <div class="v-footer__col v-footer__col--rights">
-                    <v-link class="v-footer__logo" to="/">
+                    <v-link class="v-footer__logo" to="/" same-disabled>
                         <v-svg name="logo-default" width="128" height="48" />
                     </v-link>
                 </div>
@@ -31,7 +31,12 @@
                             v-for="link in socials.items"
                             :title="link.name"
                         >
-                            <a class="v-footer__link" :href="link.href" rel="nofollow" target="_blank">
+                            <a
+                                class="v-footer__link"
+                                :href="link.href"
+                                rel="nofollow noreferrer noopener"
+                                target="_blank"
+                            >
                                 <v-svg :name="link.icon" width="24" height="24" />
                             </a>
                         </li>
@@ -86,7 +91,7 @@
             <p class="v-footer__col-title v-footer__col-title--socials">{{ socials.name }}</p>
             <ul class="v-footer__socials">
                 <li class="v-footer__socials-item" :key="link.id" v-for="link in socials.items" :title="link.name">
-                    <a class="v-footer__link" :href="link.href" target="_blank">
+                    <a class="v-footer__link" :href="link.href" target="_blank" rel="nofollow noreferrer noopener">
                         <v-svg :name="link.icon" width="24" height="24" />
                     </a>
                 </li>
