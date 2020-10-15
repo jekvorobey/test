@@ -107,7 +107,7 @@
                                     class="referal-view__table-th"
                                     :class="[
                                         { 'is-active': item.field === sortValue.field },
-                                        { 'is-rotate': item.field === sortValue.field && sortDirection === 'desc' },
+                                        { 'is-rotate': item.field === sortValue.field && sortDirection === 'asc' },
                                     ]"
                                     v-for="item in sortFields"
                                     :key="item.id"
@@ -141,7 +141,8 @@
                                             <v-svg v-else name="logo" width="32" height="32" />
                                         </div>
                                         <div class="referal-view__table-title">
-                                            {{ order.name }}
+                                            <div>{{ order.name }}</div>
+                                            <div class="text-grey text-sm">{{ order.note }}</div>
                                         </div>
                                     </router-link>
                                 </td>
@@ -189,7 +190,8 @@
                                 <v-svg v-else name="logo" width="32" height="32" />
                             </div>
                             <div class="referal-view__table-title">
-                                {{ order.name }}
+                                <div>{{ order.name }}</div>
+                                <div class="text-grey text-sm">{{ order.note }}</div>
                             </div>
                         </router-link>
                     </info-row>
@@ -495,14 +497,29 @@ export default {
             const items = this[ITEMS] || [];
 
             return items.map((i) => {
-                const desktopImage = i.image && generatePictureSourcePath(40, 40, i.image.id, fileExtension.image.WEBP);
-                const defaultImage = i.image && generatePictureSourcePath(40, 40, i.image.id);
-                const date = i.order_date && getDate(i.order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
-                const sourceString = this.$t(`referralSource.${i.source}`);
-                const url = generateProductUrl(i.category_code, i.code);
+                const { image, order_date, source, category_code, code, variantGroup } = i;
+                const desktopImage = image && generatePictureSourcePath(40, 40, image.id, fileExtension.image.WEBP);
+                const defaultImage = image && generatePictureSourcePath(40, 40, image.id);
+                const date = order_date && getDate(order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
+                const sourceString = this.$t(`referralSource.${source}`);
+                const url = generateProductUrl(category_code, code);
+
+                let values = null;
+                if (variantGroup) {
+                    const { characteristics = [], combinations = [] } = variantGroup;
+                    const { props } = combinations.find((c) => c.code === code);
+                    const keys = Object.keys(props);
+                    values = keys.map((k) => {
+                        const { options, name } = characteristics.find((c) => c.code === k);
+                        const option = options.find((o) => o.value === props[k]);
+                        return `${name}: ${option.name}`;
+                    });
+                }
+                const note = values && values.join(', ');
 
                 return {
                     ...i,
+                    note,
                     qty: Number(i.qty),
                     url,
                     sourceString,
@@ -546,6 +563,7 @@ export default {
                     query: {
                         ...this.$route.query,
                         orderField: value.field,
+                        orderDirection: this.sortDirection,
                     },
                 });
             }
@@ -558,6 +576,7 @@ export default {
                     query: {
                         ...this.$route.query,
                         orderDirection: value,
+                        orderField: this.sortValue.field,
                     },
                 });
             }
@@ -634,14 +653,14 @@ export default {
             if (field === undefined) return;
             if (this.sortValue.field !== field) {
                 this.sortValue = this.sortFields.find((o) => o.field === field);
-                this.sortDirection = sortDirections.ASC;
+                this.sortDirection = sortDirections.DESC;
             } else this.setSortDirection();
         },
 
         setSortDirection() {
-            this.sortDirection === sortDirections.ASC
-                ? (this.sortDirection = sortDirections.DESC)
-                : (this.sortDirection = sortDirections.ASC);
+            this.sortDirection === sortDirections.DESC
+                ? (this.sortDirection = sortDirections.ASC)
+                : (this.sortDirection = sortDirections.DESC);
         },
 
         clearFilterUrl() {
@@ -654,7 +673,12 @@ export default {
     beforeRouteEnter(to, from, next) {
         const {
             fullPath,
-            query: { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField },
+            query: {
+                page = DEFAULT_PAGE,
+                orderField = referralOrderSortFields.NAME,
+                orderDirection = sortDirections.DESC,
+                orderFilterField,
+            },
         } = to;
 
         const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
@@ -696,7 +720,12 @@ export default {
         // Также имеется доступ в `this` к экземпляру компонента.
 
         const {
-            query: { page = DEFAULT_PAGE, orderField, orderDirection, orderFilterField },
+            query: {
+                page = DEFAULT_PAGE,
+                orderField = referralOrderSortFields.NAME,
+                orderDirection = sortDirections.DESC,
+                orderFilterField,
+            },
         } = to;
 
         const date = getOrderFilterDate(orderFilterField);

@@ -31,9 +31,9 @@ export default {
         }
     },
 
-    async [FETCH_REFERRER_ORDER_DETAILS]({ commit }, id) {
+    async [FETCH_REFERRER_ORDER_DETAILS]({ commit }, { id, orderField, orderDirection }) {
         try {
-            const data = await getReferralOrderDetails(id);
+            const data = await getReferralOrderDetails(id, orderField, orderDirection);
             commit(SET_REFERRAL_ORDER_DETAILS, data);
         } catch (error) {
             storeErrorHandler(FETCH_REFERRER_ORDER_DETAILS)(error);

@@ -100,7 +100,8 @@
                                         <v-svg v-else name="logo" width="32" height="32" />
                                     </div>
                                     <div class="referal-order-details-view__table-title">
-                                        {{ order.name }}
+                                        <div>{{ order.name }}</div>
+                                        <div class="text-grey text-sm">{{ order.note }}</div>
                                     </div>
                                 </router-link>
                             </td>
@@ -134,7 +135,8 @@
                             <v-svg v-else name="logo" width="32" height="32" />
                         </div>
                         <div class="referal-order-details-view__table-title">
-                            {{ order.name }}
+                            <div>{{ order.name }}</div>
+                            <div class="text-grey text-sm">{{ order.note }}</div>
                         </div>
                     </router-link>
                 </info-row>
@@ -175,11 +177,11 @@ import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
 import { NAME as REFERRAL_MODULE, REFERRAL_ORDER_DETAILS } from '@store/modules/Profile/modules/Referral';
-import { FETCH_REFERRER_ORDER_DETAILS } from '@store/modules/Profile/modules/Referral/actions';
+import { FETCH_REFERRER_ORDER_DETAILS, SET_LOAD_PATH } from '@store/modules/Profile/modules/Referral/actions';
 
 import { $store, $progress } from '@services';
-import { fileExtension } from '@enums';
-import { referralSource } from '@enums/profile';
+import { fileExtension, sortDirections } from '@enums';
+import { referralOrderSortFields, referralSource } from '@enums/profile';
 import { digit2DateSettings, monthLongDateSettings } from '@settings';
 import { getDate } from '@util';
 import { generatePictureSourcePath } from '@util/file';
@@ -241,16 +243,31 @@ export default {
         }),
 
         orders() {
-            const { orders } = this[REFERRAL_ORDER_DETAILS] || {};
+            const { orders = [] } = this[REFERRAL_ORDER_DETAILS] || {};
             return orders.map((i) => {
-                const desktopImage = i.image && generatePictureSourcePath(40, 40, i.image.id, fileExtension.image.WEBP);
-                const defaultImage = i.image && generatePictureSourcePath(40, 40, i.image.id);
-                const date = i.order_date && getDate(i.order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
-                const sourceString = this.$t(`referralSource.${i.source}`);
-                const url = generateProductUrl(i.category_code, i.code);
+                const { image, order_date, source, category_code, code, variantGroup } = i;
+                const desktopImage = image && generatePictureSourcePath(40, 40, image.id, fileExtension.image.WEBP);
+                const defaultImage = image && generatePictureSourcePath(40, 40, image.id);
+                const date = order_date && getDate(order_date).toLocaleDateString(this[LOCALE], digit2DateSettings);
+                const sourceString = this.$t(`referralSource.${source}`);
+                const url = generateProductUrl(category_code, code);
+
+                let values = null;
+                if (variantGroup) {
+                    const { characteristics = [], combinations = [] } = variantGroup;
+                    const { props } = combinations.find((c) => c.code === code);
+                    const keys = Object.keys(props);
+                    values = keys.map((k) => {
+                        const { options, name } = characteristics.find((c) => c.code === k);
+                        const option = options.find((o) => o.value === props[k]);
+                        return `${name}: ${option.name}`;
+                    });
+                }
+                const note = values && values.join(', ');
 
                 return {
                     ...i,
+                    note,
                     qty: Number(i.qty),
                     url,
                     sourceString,
@@ -291,21 +308,31 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
-        const { name, params } = to;
+        const {
+            fullPath,
+            name,
+            params,
+            query: { orderField = referralOrderSortFields.ORDER_DATE, orderDirection = sortDirections.DESC },
+        } = to;
 
-        const { referralId } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
+        const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
 
-        if (referralId === params.referalId) next();
+        if (fullPath === loadPath) next((vm) => updateBreadcrumbs(vm, name, params));
         else {
             $progress.start();
             $store
-                .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRER_ORDER_DETAILS}`, params.referalId)
-                .then(() =>
+                .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRER_ORDER_DETAILS}`, {
+                    id: params.referalId,
+                    orderField,
+                    orderDirection,
+                })
+                .then(() => {
+                    $store.dispatch(`${REFERRAL_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
                     next((vm) => {
                         $progress.finish();
                         updateBreadcrumbs(vm, name, params);
-                    })
-                )
+                    });
+                })
                 .catch(() =>
                     next((vm) => {
                         $progress.fail();
