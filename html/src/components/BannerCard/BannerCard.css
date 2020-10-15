@@ -22,16 +22,15 @@
     &__img {
         position: relative;
         display: flex;
-        height: 240px;
 
         &::after {
             content: '';
             display: block;
-            padding-bottom: 100%;
+            padding-bottom: 61%;
 
-            /* чинит padding-bottom: 100% в FireFox для распорки */
+            /* чинит padding-bottom: 61% в FireFox для распорки */
             @supports (-moz-user-select: none) {
-                margin-top: 100%;
+                margin-top: 61%;
                 padding-bottom: 0;
             }
         }
