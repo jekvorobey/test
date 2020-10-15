@@ -6,7 +6,7 @@
                 <h1 class="checkout-view__header-hl">
                     {{ pageTitle }}
                 </h1>
-                <v-link class="checkout-view__header-link" to="/cart">
+                <v-link class="checkout-view__header-link" :to="{ name: 'Cart' }">
                     <v-svg name="arrow-small" width="24" height="24" />&nbsp;&nbsp;Вернуться в корзину
                 </v-link>
             </div>
@@ -20,11 +20,11 @@
                 <v-sticky class="checkout-view__main-sticky" v-if="canDeliver">
                     <template v-slot:sticky>
                         <div class="checkout-view__main-panel">
-                            <p v-if="isProduct" class="text-grey checkout-view__main-panel-info">
-                                Внимание: мастер-классы можете оплатить после завершения оплаты продуктов
+                            <p class="text-grey checkout-view__main-panel-info" v-if="attentionMessage">
+                                {{ attentionMessage }}
                             </p>
                             <p class="checkout-view__main-panel-line">
-                                Сумма заказа: {{ $t(`cart.summary.type.${checkoutType}`) }}
+                                Сумма заказа: {{ checkoutType && $t(`cart.summary.type.${checkoutType}`) }}
                                 <price v-bind="summary.sum" />
                             </p>
 
@@ -168,6 +168,7 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER } from '@store/modules/Auth';
 
 import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
+import { CART_TYPES } from '@store/modules/Cart/getters';
 
 import { NAME as CHECKOUT_MODULE, CHECKOUT_TYPE, CHECKOUT_DATA } from '@store/modules/Checkout';
 import {
@@ -236,6 +237,7 @@ export default {
             checkoutType: (state) => state.params.type,
         }),
 
+        ...mapGetters(CART_MODULE, [CART_TYPES]),
         ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT, PROMOCODE_STATUS]),
 
         canDeliver() {
@@ -257,7 +259,21 @@ export default {
 
         pageTitle() {
             const { checkoutType } = this;
-            return `Оформление заказа: ${this.$t(`cart.summary.type.${checkoutType}`)}`;
+            return `Оформление заказа: ${checkoutType && this.$t(`cart.summary.type.${checkoutType}`)}`;
+        },
+
+        attentionMessage() {
+            const { checkoutType } = this;
+            const types = this[CART_TYPES] || [];
+            if (types.length > 1) {
+                switch (checkoutType) {
+                    case cartItemTypes.PRODUCT:
+                        return 'Внимание: мастер-классы можно оплатить после завершения оплаты продуктов';
+                    case cartItemTypes.MASTERCLASS:
+                        return 'Внимание: продукты можно оплатить после завершения оплаты мастер-классов';
+                }
+            }
+            return null;
         },
 
         isPromocodePending() {
