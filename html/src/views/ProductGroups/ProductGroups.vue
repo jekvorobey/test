@@ -93,68 +93,44 @@
 </template>
 
 <script>
-import VButton from '@controls/VButton/VButton.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
-import VExpander from '@controls/VExpander/VExpander.vue';
-import VSvg from '@controls/VSvg/VSvg.vue';
+//import VExpander from '@controls/VExpander/VExpander.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
 import GroupList from '@components/GroupList/GroupList.vue';
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
-import VSlider from '@controls/VSlider/VSlider.vue';
 import BannerCard from '@components/BannerCard/BannerCard.vue';
 import CategoriesSection from '@components/blocks/CategoriesSection/CategoriesSection.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import EmptyPlaceholderPanel from '@components/EmptyPlaceholderPanel/EmptyPlaceholderPanel.vue';
 
-import { $store, $progress, $logger } from '@services';
+import { $store, $progress } from '@services';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { CATEGORIES, SCROLL, FREQUENT_CATEGORIES } from '@store';
-import { NAME as PRODUCT_GROUPS_MODULE, ITEMS, LOAD_PATH, TYPE } from '@store/modules/ProductGroups';
+import { NAME as PRODUCT_GROUPS_MODULE, ITEMS, TYPE } from '@store/modules/ProductGroups';
 import { BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT } from '@store/modules/ProductGroups/getters';
-import { FETCH_ITEMS, SET_LOAD_PATH, SET_TYPE } from '@store/modules/ProductGroups/actions';
+import { FETCH_ITEMS, SET_LOAD_PATH } from '@store/modules/ProductGroups/actions';
 
 import _debounce from 'lodash/debounce';
 import { httpCodes, sortDirections } from '@enums';
 import { productGroupTypes, productGroupSortFields } from '@enums/product';
 import { MIN_SCROLL_VALUE, DEFAULT_PAGE } from '@constants';
 import { createNotFoundRoute } from '@util/router';
-import { generateCategoryUrl, generateProductGroupUrl } from '@util/catalog';
+import { generateCategoryUrl } from '@util/catalog';
 import metaMixin from '@plugins/meta';
 import '@images/sprites/home.svg';
 import './ProductGroups.css';
-
-const sliderOptions = {
-    slidesPerView: 1,
-    // grabCursor: true,
-    // loop: true,
-    // autoplay: {
-    //     delay: 10000,
-    // },
-
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-    },
-
-    pagination: {
-        el: '.swiper-pagination',
-        type: 'bullets',
-    },
-};
 
 export default {
     name: 'product-groups',
     mixins: [metaMixin],
 
     components: {
-        VButton,
         VPagination,
-        VExpander,
-        VSlider,
+        //VExpander,
 
         BannerCard,
 
@@ -206,10 +182,6 @@ export default {
             return this.isTabletLg ? 3 : 6;
         },
 
-        sliderOptions() {
-            return sliderOptions;
-        },
-
         catalogTitle() {
             const { type } = this;
             return this.$t(`productGroups.title.${type || 'catalog'}`);
@@ -255,7 +227,6 @@ export default {
         async fetchCatalog(to, from, next, showMore) {
             try {
                 const {
-                    fullPath,
                     params: { type: toType },
                     query: {
                         page = DEFAULT_PAGE,
