@@ -378,8 +378,13 @@ export function getReferralOrders(pageNum, perPage, sortKey = 'name', sortDirect
     });
 }
 
-export function getReferralOrderDetails(id) {
-    return $http.get(`/v1/lk/order-referral/${id}`);
+export function getReferralOrderDetails(id, sortKey = 'order_date', sortDirection = 'desc') {
+    return $http.get(`/v1/lk/order-referral/${id}`, {
+        params: {
+            sortKey,
+            sortDirection,
+        },
+    });
 }
 
 export function getBillingData() {

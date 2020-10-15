@@ -11,7 +11,11 @@
             <v-svg v-else id="package-product-card-empty" name="logo" width="48" height="48" />
         </router-link>
         <div class="package-product-card__body">
-            <v-link class="package-product-card__body-name" :to="href">{{ name }}</v-link>
+            <div class="package-product-card__body-info">
+                <v-link class="package-product-card__body-name" :to="href">{{ name }}</v-link>
+                <div class="text-grey text-sm" v-if="note">{{ note }}</div>
+            </div>
+
             <div class="package-product-card__body-count" v-if="showCount">{{ quantity }} шт</div>
             <div class="package-product-card__body-prices">
                 <price class="text-bold package-product-card__body-price" v-bind="price" />
@@ -51,6 +55,10 @@ export default {
         name: {
             type: String,
             required: true,
+        },
+
+        note: {
+            type: String,
         },
 
         href: {

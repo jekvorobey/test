@@ -5,7 +5,7 @@
                 <v-svg modifier="icon--rotate-deg90" name="arrow-small" width="24" height="24" />&nbsp;Назад ко всем
                 заказам
             </v-link>
-            
+
             <h2 class="order-details-view__hl">
                 {{ pageTitle }}
             </h2>
@@ -126,7 +126,7 @@
             :key="delivery.number"
             :header="`Доставка №${delivery.number}`"
         >
-            <div class="container container--tablet-lg">
+            <div :class="{ 'container container--tablet-lg': !isTablet }">
                 <template v-if="deliveries.length > 1">
                     <info-row class="order-details-view__panel-row" name="Способ доставки" :value="delivery.method" />
                     <info-row class="order-details-view__panel-row" name="Дата доставки" :value="delivery.deliveryAt" />
@@ -172,6 +172,7 @@
                         v-for="product in delivery.products"
                         :key="product.id"
                         :name="product.name"
+                        :note="product.note"
                         :image="product.image"
                         :price="product.price"
                         :old-price="product.cost"
@@ -219,7 +220,6 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
-import VInput from '@controls/VInput/VInput.vue';
 
 import Price from '@components/Price/Price.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
@@ -228,7 +228,7 @@ import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
 import OrderMasterclassCard from '@components/profile/OrderMasterclassCard/OrderMasterclassCard.vue';
 
-import { $store, $progress, $logger } from '@services';
+import { $store, $progress } from '@services';
 import { mapActions, mapState } from 'vuex';
 
 import { LOCALE } from '@store';
@@ -236,7 +236,7 @@ import { LOCALE } from '@store';
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 import { UPDATE_BREADCRUMB } from '@store/modules/Profile/actions';
 
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import {
@@ -255,7 +255,7 @@ import {
 
 import { fileExtension, modalName } from '@enums';
 import { receiveMethods } from '@enums/checkout';
-import { orderPaymentStatus, orderStatus, deliveryStatus } from '@enums/order';
+import { orderPaymentStatus } from '@enums/order';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { orderDateLocaleOptions } from '@settings/profile';
 import { toAddressString } from '@util/address';
@@ -281,12 +281,11 @@ function updateBreadcrumbs(vm, name, params, number) {
 export default {
     name: 'order-details',
     mixins: [metaMixin],
-    
+
     components: {
         VSvg,
         VLink,
         VButton,
-        VInput,
 
         Price,
         InfoPanel,
@@ -323,7 +322,6 @@ export default {
         },
 
         deliveryItems() {
-            const { id, payment_status } = this[ORDER] || {};
             const deliveries = this[DELIVERIES] || [];
 
             return deliveries.map((d) => {
@@ -335,9 +333,7 @@ export default {
                     status: this.formatDeliveryStatus(d.status),
                     address: this.formatAddress(d),
                     packageCount: this.formatPackageCount(d.package_count),
-                    products:
-                        d.products &&
-                        d.products.map((p) => ({ ...p, url: generateProductUrl(p.category_code, p.code) })),
+                    products: d.products && d.products.map(this.prepareProduct),
                 };
             });
         },
@@ -392,6 +388,7 @@ export default {
                 const { delivery_method } = deliveries[0];
                 return this.formatDeliveryMethod(delivery_method);
             }
+            return null;
         },
 
         deliveryMethodId() {
@@ -400,6 +397,7 @@ export default {
                 const { delivery_method } = deliveries[0];
                 return delivery_method;
             }
+            return null;
         },
 
         deliveryDate() {
@@ -408,6 +406,7 @@ export default {
                 const { delivery_at } = deliveries[0];
                 return this.formatDate(delivery_at);
             }
+            return null;
         },
 
         deliveryAddress() {
@@ -418,6 +417,7 @@ export default {
         deliveryPoint() {
             const deliveries = this[DELIVERIES] || [];
             if (deliveries.length === 1) return deliveries[0].point;
+            return null;
         },
 
         createDate() {
@@ -432,7 +432,7 @@ export default {
 
         pageTitle() {
             const { number } = this[ORDER] || {};
-            return this.$t('profile.format.order', { id: number || '000000' })
+            return this.$t('profile.format.order', { id: number || '000000' });
         },
 
         backUrl() {
@@ -456,7 +456,7 @@ export default {
         async onContinuePayment(orderId) {
             try {
                 const backUrl = generateThankPageUrl(orderId);
-                const { url } = await this[GET_ORDER_PAYMENT_LINK]({ orderId, paymentId, backUrl });
+                const { url } = await this[GET_ORDER_PAYMENT_LINK]({ orderId, backUrl });
 
                 // заменяем текущий роут на роут thank-you, чтобы при переходе по стрелке мы вернулись на страницу
                 // благодарности за заказ
@@ -526,6 +526,25 @@ export default {
         formatDeliveryMethod(deliveryMethodId) {
             return this.$t(`deliveryMethod.${deliveryMethodId}`);
         },
+
+        prepareProduct(p) {
+            const { category_code, code, variantGroup } = p;
+            let values = null;
+
+            if (variantGroup) {
+                const { characteristics = [], combinations = [] } = variantGroup;
+                const { props } = combinations.find((c) => c.code === code);
+                const keys = Object.keys(props);
+                values = keys.map((k) => {
+                    const { options, name } = characteristics.find((c) => c.code === k);
+                    const option = options.find((o) => o.value === props[k]);
+                    return `${name}: ${option.name}`;
+                });
+            }
+
+            const note = values && values.join(', ');
+            return { ...p, note, url: generateProductUrl(category_code, code) };
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -544,7 +563,7 @@ export default {
                         updateBreadcrumbs(vm, name, params, number);
                     });
                 })
-                .catch((error) =>
+                .catch(() =>
                     next((vm) => {
                         $progress.fail();
                         updateBreadcrumbs(vm, name, params);

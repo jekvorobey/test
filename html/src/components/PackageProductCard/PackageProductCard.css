@@ -64,14 +64,24 @@
             padding-right: calc(var(--gs) * 2);
         }
 
-        &-name {
-            text-transform: none;
-            font-weight: bold;
+        &-info {
             width: 60%;
 
             @media (--tablet) {
                 width: 100%;
                 margin-bottom: var(--gs);
+            }
+
+            .text-sm {
+                line-height: 24px;
+            }
+        }
+
+        &-name {
+            text-transform: none;
+            font-weight: bold;
+
+            @media (--tablet) {
                 font-size: 16px;
                 line-height: 24px;
                 font-weight: normal;
