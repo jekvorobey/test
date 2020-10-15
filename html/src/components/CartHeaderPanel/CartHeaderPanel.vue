@@ -26,7 +26,9 @@
             </v-scroll>
         </template>
         <template v-slot:bottom>
-            <v-button class="btn--outline cart-header-panel__controls-btn" @click="onToCart">Оформить заказ</v-button>
+            <v-button class="btn--outline cart-header-panel__controls-btn" :to="{ name: 'Cart' }"
+                >Оформить заказ</v-button
+            >
             <div class="cart-header-panel__total" v-if="cartItemsCount > 0">
                 {{ productCount }} на сумму
                 <price tag="div" class="text-bold" v-bind="productItemsSum" />
@@ -82,12 +84,6 @@ export default {
 
         isTabletLg() {
             return this.$mq.tabletLg;
-        },
-    },
-
-    methods: {
-        onToCart() {
-            this.$router.push({ path: '/cart' });
         },
     },
 };

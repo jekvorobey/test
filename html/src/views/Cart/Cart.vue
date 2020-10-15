@@ -50,15 +50,15 @@
                 <v-sticky class="cart-view__main-sticky">
                     <template v-slot:sticky>
                         <div class="cart-view__main-panel">
-                            <p class="text-grey cart-view__main-panel-info">
-                                Внимание: продукты и мастер-классы оплачиваются отдельно
+                            <p class="text-grey cart-view__main-panel-info" v-if="attentionMessage">
+                                {{ attentionMessage }}
                             </p>
 
                             <p class="cart-view__main-panel-line">
                                 <span>
                                     Сумма заказа:
                                     <span class="text-lowercase">
-                                        {{ $t(`cart.summary.type.${activeTabItem.type}`) }}
+                                        {{ activeTabItem && $t(`cart.summary.type.${activeTabItem.type}`) }}
                                     </span>
                                 </span>
                                 <price v-bind="activeTabItem.summary.sum" />
@@ -391,19 +391,6 @@ export default {
             return activeTabItem ? `Моя корзина - ${this.$t(`cart.title.${activeTabItem.type}`)}` : 'Моя корзина';
         },
 
-        isProduct() {
-            const { activeTabItem } = this;
-            return this[IS_PRODUCT](activeTabItem);
-        },
-
-        isPromocodePending() {
-            return this[PROMOCODE_STATUS] === requestStatus.PENDING;
-        },
-
-        isTabletLg() {
-            return this.$mq.tabletLg;
-        },
-
         sliderOptions() {
             return sliderOptions;
         },
@@ -416,6 +403,24 @@ export default {
             const { activeTabItem = {} } = this;
             const { items = [] } = activeTabItem;
             return items.map((i) => i.p.id).join(',');
+        },
+
+        attentionMessage() {
+            const types = this[CART_TYPES] || [];
+            return types.length === 2 && 'Внимание: продукты и мастер-классы оплачиваются отдельно';
+        },
+
+        isProduct() {
+            const { activeTabItem } = this;
+            return this[IS_PRODUCT](activeTabItem);
+        },
+
+        isPromocodePending() {
+            return this[PROMOCODE_STATUS] === requestStatus.PENDING;
+        },
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
         },
     },
 
@@ -496,7 +501,7 @@ export default {
             try {
                 this.isLoad = true;
                 await this[CHECK_CART_DATA]();
-                this.$router.push(`/checkout/${this.activeTabItem.type}`);
+                this.$router.push({ name: 'Checkout', params: { type: this.activeTabItem.type } });
             } catch (error) {
                 this.isLoad = false;
             }
