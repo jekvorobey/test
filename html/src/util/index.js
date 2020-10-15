@@ -259,7 +259,7 @@ export function saveToClipboard(text) {
     return successful;
 }
 
-export function formatPhoneNumber(str, code = 7) {
+export function formatPhoneNumber(str, code = 7, withCodeDivider = false) {
     const countryCode = Number(code);
     // Filter only numbers from the input
     const cleaned = `${str}`.replace(/\D/g, '');
@@ -271,7 +271,17 @@ export function formatPhoneNumber(str, code = 7) {
         // Remove the matched extension code
         // Change this to format for any country code.
         const intlCode = match[1] ? `+${countryCode} ` : '';
-        return [intlCode, ' ', match[2], ' ', match[3], '-', match[4], '-', match[5]].join('');
+        return [
+            intlCode,
+            ' ',
+            withCodeDivider ? `(${match[2]})` : match[2],
+            ' ',
+            match[3],
+            '-',
+            match[4],
+            '-',
+            match[5],
+        ].join('');
     }
 
     return null;

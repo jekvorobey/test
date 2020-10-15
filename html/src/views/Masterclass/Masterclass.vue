@@ -53,9 +53,7 @@
                     </div>
 
                     <div class="master-class-view__panel-middle">
-                        <p class="container container--tablet text-bold master-class-view__section-hl">
-                            Описание
-                        </p>
+                        <p class="container container--tablet text-bold master-class-view__section-hl">Описание</p>
 
                         <v-html
                             class="container container--tablet master-class-view__panel-middle-desc"
@@ -84,9 +82,7 @@
 
                     <div class="master-class-view__panel-right">
                         <div class="container container--tablet master-class-view__panel-right-section">
-                            <p class="text-bold master-class-view__panel-right-hl">
-                                Спикеры
-                            </p>
+                            <p class="text-bold master-class-view__panel-right-hl">Спикеры</p>
 
                             <v-expander v-if="speakers && speakers.length > 2" :min-height="160">
                                 <ul>
@@ -123,9 +119,7 @@
                         </div>
 
                         <div class="container container--tablet master-class-view__panel-right-section">
-                            <p class="text-bold master-class-view__panel-right-hl">
-                                Дата и время
-                            </p>
+                            <p class="text-bold master-class-view__panel-right-hl">Дата и время</p>
 
                             <ul>
                                 <li v-for="date in dates" :key="date">
@@ -143,9 +137,7 @@
                         </div>
 
                         <div class="container container--tablet master-class-view__panel-right-section">
-                            <p class="text-bold master-class-view__panel-right-hl">
-                                Место проведения
-                            </p>
+                            <p class="text-bold master-class-view__panel-right-hl">Место проведения</p>
 
                             <ol :class="{ list: places.length > 1 }">
                                 <li v-for="place in places" :key="place.id">
@@ -178,9 +170,7 @@
                             class="container container--tablet master-class-view__panel-right-section master-class-view__panel-right-social"
                             :class="{ 'master-class-view__panel-right-social--single': isSingleStage }"
                         >
-                            <p class="text-bold master-class-view__panel-right-hl">
-                                Поделиться
-                            </p>
+                            <p class="text-bold master-class-view__panel-right-hl">Поделиться</p>
 
                             <div class="master-class-view__panel-right-social-container">
                                 <social-sharing v-bind="socialSharing" inline-template>
@@ -328,16 +318,12 @@
                                     class="container container--tablet master-class-view__panel-body master-class-view__panel-body--accordion"
                                 >
                                     <div class="master-class-view__panel-middle">
-                                        <p class="text-bold master-class-view__section-hl">
-                                            Программа
-                                        </p>
+                                        <p class="text-bold master-class-view__section-hl">Программа</p>
                                         <v-html :style="{ order: 0 }" v-html="stages[0].description" />
                                     </div>
 
                                     <div class="master-class-view__panel-right" :style="{ order: 1 }">
-                                        <p class="text-bold master-class-view__panel-right-hl">
-                                            Что взять с собой
-                                        </p>
+                                        <p class="text-bold master-class-view__panel-right-hl">Что взять с собой</p>
                                         <v-html v-html="stages[0].raider" />
                                     </div>
                                 </div>
@@ -399,9 +385,7 @@
             v-if="isTablet"
             class="container container--tablet master-class-view__panel-right-section master-class-view__panel-right-social"
         >
-            <p class="text-bold master-class-view__panel-right-hl">
-                Поделиться
-            </p>
+            <p class="text-bold master-class-view__panel-right-hl">Поделиться</p>
 
             <div class="master-class-view__panel-right-social-container">
                 <social-sharing v-bind="socialSharing" inline-template>
@@ -444,9 +428,7 @@
             v-observe-visibility="onPanelVisibilityChanged"
         >
             <div class="container master-class-view__tickets-container">
-                <h2 class="container container--tablet master-class-view__section-hl">
-                    Билеты на мастер-класс
-                </h2>
+                <h2 class="container container--tablet master-class-view__section-hl">Билеты на мастер-класс</h2>
                 <ul class="master-class-view__tickets-list">
                     <ticket-card
                         class="master-class-view__tickets-item"
@@ -475,9 +457,7 @@
 
         <section ref="map" class="section master-class-view__section master-class-view__map">
             <div class="container master-class-view__map-container">
-                <h2 class="container container--tablet master-class-view__section-hl">
-                    Место проведения
-                </h2>
+                <h2 class="container container--tablet master-class-view__section-hl">Место проведения</h2>
 
                 <div
                     class="container container--tablet master-class-view__map-info"
@@ -543,9 +523,7 @@
             v-if="historyGallery && historyGallery.length > 0"
         >
             <div :class="[{ container: !isTabletLg }, 'master-class-view__history-container']">
-                <h2 class="master-class-view__section-hl master-class-view__history-hl">
-                    Как это было
-                </h2>
+                <h2 class="master-class-view__section-hl master-class-view__history-hl">Как это было</h2>
 
                 <v-slider
                     name="masterclass-history-slider"
@@ -571,51 +549,34 @@
             </div>
         </section>
 
-        <section
-            class="section master-class-view__section master-class-view__contacts"
-            ref="contacts"
-            v-if="masterClass.organizer"
-        >
+        <section class="section master-class-view__section master-class-view__contacts" ref="contacts" v-if="organizer">
             <div class="container master-class-view__contacts-container">
-                <h2 class="container container--tablet master-class-view__section-hl">
-                    Контакты организатора
-                </h2>
+                <h2 class="container container--tablet master-class-view__section-hl">Контакты организатора</h2>
                 <div class="master-class-view__contacts-panel">
                     <p class="master-class-view__contacts-panel-hl">
                         По всем вопросам и предложениям обращаться к организатору
                     </p>
                     <p class="text-bold master-class-view__contacts-panel-name">
-                        {{ masterClass.organizer.name }}
+                        {{ organizer.name }}
                     </p>
                     <p class="text-grey master-class-view__contacts-panel-desc">
-                        {{ masterClass.organizer.description }}
+                        {{ organizer.description }}
                     </p>
                     <div class="master-class-view__contacts-panel-bottom">
                         <info-row
                             class="master-class-view__contacts-panel-row"
                             name="Телефон"
-                            :value="masterClass.organizer.phone"
+                            :value="organizer.phone"
                         />
-                        <info-row
-                            class="master-class-view__contacts-panel-row"
-                            name="Email"
-                            :value="masterClass.organizer.email"
-                        />
+                        <info-row class="master-class-view__contacts-panel-row" name="Email" :value="organizer.email" />
                         <info-row
                             class="master-class-view__contacts-panel-row"
                             name="WhatsApp, Viber, Telegram"
-                            :value="masterClass.organizer.phone"
+                            :value="organizer.phone"
                         />
-                        <info-row
-                            class="master-class-view__contacts-panel-row"
-                            name="Сайт"
-                            :value="masterClass.organizer.site"
-                        />
+                        <info-row class="master-class-view__contacts-panel-row" name="Сайт" :value="organizer.site" />
 
-                        <v-button
-                            class="master-class-view__contacts-panel-btn"
-                            :href="`mailto:${masterClass.organizer.email}`"
-                        >
+                        <v-button class="master-class-view__contacts-panel-btn" :href="`mailto:${organizer.email}`">
                             Написать
                         </v-button>
                     </div>
@@ -710,18 +671,14 @@ import VHtml from '@controls/VHtml/VHtml.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VExpander from '@controls/VExpander/VExpander.vue';
-import VRating from '@controls/VRating/VRating.vue';
 import VAccordion from '@controls/VAccordion/VAccordion.vue';
 import VVideo from '@controls/VVideo/VVideo.vue';
 import VYoutube from '@controls/VYoutube/VYoutube.vue';
 
 import FrisbuyProductContainer from '@components/FrisbuyProductContainer/FrisbuyProductContainer.vue';
 
-import Price from '@components/Price/Price.vue';
 import TicketCard from '@components/TicketCard/TicketCard.vue';
 import AuthorCard from '@components/AuthorCard/AuthorCard.vue';
-import BannerCard from '@components/BannerCard/BannerCard.vue';
-import InstagramCard from '@components/InstagramCard/InstagramCard.vue';
 import MasterClassBannerCard from '@components/MasterClassBannerCard/MasterClassBannerCard.vue';
 
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
@@ -735,7 +692,7 @@ import MasterclassPricePanel from '@components/MasterclassPricePanel/Masterclass
 
 import AuthorModal from '@components/AuthorModal/AuthorModal.vue';
 
-import { $store, $progress, $logger } from '@services';
+import { $store, $progress } from '@services';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, LOCALE } from '@store';
@@ -754,15 +711,14 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
 import metaMixin from '@plugins/meta';
-import { saveToClipboard, getDate, pluralize } from '@util';
-import { registerModuleIfNotExists } from '@util/store';
+import { saveToClipboard, getDate, pluralize, formatPhoneNumber } from '@util';
 import { createNotFoundRoute } from '@util/router';
 import { generatePictureSourcePath, generateFileOriginalPath } from '@util/file';
 import { getInstagramUserNameFromUrl } from '@util/socials';
 import { generateAbsoluteMasterclassUrl, generateMasterclassUrl, prepareMasterclassSpeakers } from '@util/catalog';
 import { yaMapSettings, dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { breakpoints, fileExtension, modalName, mediaType, httpCodes } from '@enums';
-import { productGroupTypes, cartItemTypes } from '@enums/product';
+import { cartItemTypes } from '@enums/product';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/facebook-bw.svg';
@@ -780,11 +736,6 @@ import '@images/sprites/info-middle.svg';
 import '@images/sprites/home.svg';
 import pin from '@images/icons/pin-filled.svg';
 import './Masterclass.css';
-
-import profileMasterClassImg1 from '@images/mock/profileMasterClass1.png';
-import profileMasterClassImg2 from '@images/mock/profileMasterClass2.png';
-import profileMasterClassImg3 from '@images/mock/profileMasterClass3.png';
-import profileMasterClassImg4 from '@images/mock/profileMasterClass4.png';
 
 const sliderOptions = {
     spaceBetween: 24,
@@ -832,8 +783,6 @@ const historySliderOptions = {
 
     breakpoints: {
         [breakpoints.tablet - 1]: {
-            slidesOffsetBefore: 24,
-            slidesOffsetAfter: 24,
             slidesPerView: 1.2,
             spaceBetween: 16,
             slidesOffsetBefore: 16,
@@ -865,7 +814,6 @@ export default {
 
         Breadcrumbs,
         BreadcrumbItem,
-        Price,
 
         InfoRow,
         AttentionPanel,
@@ -874,9 +822,7 @@ export default {
         AuthorModal,
 
         TicketCard,
-        BannerCard,
         AuthorCard,
-        InstagramCard,
         MasterClassBannerCard,
 
         FrisbuyProductContainer,
@@ -971,8 +917,8 @@ export default {
         bannerImage() {
             const { detailImage } = this[MASTERCLASS] || {};
 
-            if (detailImage)
-                return {
+            return (
+                detailImage && {
                     desktopImg: {
                         webp: generatePictureSourcePath(1224, 360, detailImage.id, fileExtension.image.WEBP),
                         orig: generatePictureSourcePath(1224, 360, detailImage.id),
@@ -984,7 +930,8 @@ export default {
                     },
 
                     defaultImg: generatePictureSourcePath(1224, 360, detailImage.id),
-                };
+                }
+            );
         },
 
         descriptionGallery() {
@@ -995,10 +942,6 @@ export default {
             switch (gallery && gallery.type) {
                 case mediaType.IMAGE: {
                     const desktopImg = {
-                        webp: generatePictureSourcePath(600, 320, gallery.value.id, fileExtension.image.WEBP),
-                        orig: generatePictureSourcePath(600, 320, gallery.value.id),
-                    };
-                    const mobileImg = {
                         webp: generatePictureSourcePath(600, 320, gallery.value.id, fileExtension.image.WEBP),
                         orig: generatePictureSourcePath(600, 320, gallery.value.id),
                     };
@@ -1187,6 +1130,11 @@ export default {
             return [...new Set(cities)];
         },
 
+        organizer() {
+            const { organizer } = this[MASTERCLASS] || {};
+            return organizer && { ...organizer, phone: formatPhoneNumber(organizer.phone, undefined, true) };
+        },
+
         reviewsCount() {
             const { reviewsCount } = this[MASTERCLASS] || {};
             return reviewsCount || 0;
@@ -1310,7 +1258,7 @@ export default {
             $progress.start();
             $store
                 .dispatch(`${MASTERCLASS_MODULE}/${FETCH_MASTERCLASS_DATA}`, { code })
-                .then(() => next((vm) => $progress.finish()))
+                .then(() => next(() => $progress.finish()))
                 .catch((thrown) => {
                     if (thrown && thrown.isCancel === true) return next();
 
@@ -1329,11 +1277,7 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        const {
-            params: { code },
-        } = to;
-
-        this.debounce_fetchProduct(code, next);
+        this.debounce_fetchProduct(to, from, next);
     },
 
     created() {
@@ -1341,8 +1285,11 @@ export default {
     },
 
     beforeMount() {
-        this.debounce_fetchProduct = _debounce(async (code, next) => {
+        this.debounce_fetchProduct = _debounce(async (to, from, next) => {
             try {
+                const {
+                    params: { code },
+                } = to;
                 const { masterClassCode } = this;
 
                 if (masterClassCode !== code) {
