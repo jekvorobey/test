@@ -68,6 +68,15 @@ export default {
         referralCode: {
             type: String,
         },
+
+        position: {
+            type: Number,
+        },
+
+        itemProp: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {

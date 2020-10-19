@@ -6,12 +6,14 @@
                 <span v-else>Главная</span></breadcrumb-item
             >
             <breadcrumb-item key="Catalog" :to="rootUrl">Каталог</breadcrumb-item>
-            <breadcrumb-item v-for="category in categoryBreadcrumbs" :key="category.code" :to="category.url">{{category.name}}</breadcrumb-item>
+            <breadcrumb-item v-for="category in categoryBreadcrumbs" :key="category.code" :to="category.url">{{
+                category.name
+            }}</breadcrumb-item>
             <breadcrumb-item :key="product.id" :to="$route.path">{{ product.title }}</breadcrumb-item>
         </breadcrumbs>
 
         <section class="section">
-            <div class="container product-view__header">
+            <div class="container product-view__header" itemscope itemtype="https://schema.org/Product">
                 <div class="product-view__header-mobile-controls" v-if="isTablet">
                     <favorites-button
                         class="product-view__wishlist-btn"
@@ -32,7 +34,7 @@
                                 </div>
                                 <div
                                     class="product-view__header-gallery-item"
-                                    v-for="image in currentGalleryImages"
+                                    v-for="(image, index) in currentGalleryImages"
                                     :key="image.id"
                                 >
                                     <v-picture v-if="image && image.id">
@@ -48,7 +50,13 @@
                                             media="(max-width: 479px)"
                                         />
                                         <source :data-srcset="image.tablet.orig" media="(max-width: 479px)" />
-                                        <img class="blur-up lazyload v-picture__img" :data-src="image.default" alt="" />
+                                        <img
+                                            class="blur-up lazyload v-picture__img"
+                                            :itemprop="index === 0 ? 'image' : null"
+                                            :data-src="image.default"
+                                            :src="index === 0 ? image.default : null"
+                                            alt=""
+                                        />
                                     </v-picture>
                                 </div>
                             </div>
@@ -115,7 +123,12 @@
                             :vendor-code="product.vendorCode"
                             :rating="product.rating"
                             @rating-click="onScrollTo($refs.reviews, !isTabletLg ? 64 : isTablet ? -24 : -48)"
+                            item-prop
                         />
+
+                        <span v-if="product.description" v-show="false" itemprop="description">
+                            {{ product.description.content }}
+                        </span>
 
                         <product-option-panel
                             class="product-view__header-detail-section product-view__header-detail-options"
@@ -161,6 +174,7 @@
                             :old-price="product.oldPrice"
                             :bonus="product.bonus"
                             :disabled="!canBuy"
+                            item-prop
                             @cart="onBuyProduct"
                             @wishlist="onToggleFavorite(product.productId)"
                         >
@@ -181,9 +195,7 @@
                                 <v-clamp tag="p" :max-lines="maxDescriptionLines" :autoresize="true">
                                     {{ product.description.content }}
                                 </v-clamp>
-                                <a class="product-view__header-detail-brand-link" href="#description">
-                                    Подробнее
-                                </a>
+                                <a class="product-view__header-detail-brand-link" href="#description">Подробнее</a>
                             </template>
 
                             <div v-if="product.brand" class="product-view__header-detail-brand">
@@ -654,19 +666,12 @@
 <script>
 import VClamp from 'vue-clamp';
 import VSvg from '@controls/VSvg/VSvg.vue';
-import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
-import VHtml from '@controls/VHtml/VHtml.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
-import VSelect from '@controls/VSelect/VSelect.vue';
 
-import Price from '@components/Price/Price.vue';
-import BannerCard from '@components/BannerCard/BannerCard.vue';
-import InstagramCard from '@components/InstagramCard/InstagramCard.vue';
-import VRating from '@controls/VRating/VRating.vue';
 import Tag from '@components/Tag/Tag.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
@@ -676,7 +681,6 @@ import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 import FrisbuyProductContainer from '@components/FrisbuyProductContainer/FrisbuyProductContainer.vue';
 
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
-import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 
 import ProductTipCard from '@components/product/ProductTipCard/ProductTipCard.vue';
 import ProductFileCard from '@components/product/ProductFileCard/ProductFileCard.vue';
@@ -697,7 +701,7 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, RECENTLY_VIEWED_PRODUCTS } from '@store';
 import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
 
-import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE } from '@store/modules/Auth';
 import { SET_SESSION_REFERRAL_CODE } from '@store/modules/Auth/actions';
 
 import {
@@ -726,14 +730,14 @@ import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
 import _debounce from 'lodash/debounce';
 import metaMixin from '@plugins/meta';
-import { $store, $progress, $logger, $retailRocket } from '@services';
+import { $store, $progress, $retailRocket } from '@services';
 import {
     generatePictureSourcePath,
     generateYoutubeImagePlaceholderPath,
     generateYoutubeVideoSourcePath,
 } from '@util/file';
 import { createNotFoundRoute } from '@util/router';
-import { breakpoints, fileExtension, httpCodes, modalName, sortDirections } from '@enums';
+import { breakpoints, fileExtension, httpCodes, modalName } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
 import { generateCategoryUrl, generateProductUrl, prepareProductImage, generateProductGroupUrl } from '@util/catalog';
 
@@ -820,23 +824,16 @@ export default {
     components: {
         VSvg,
         VButton,
-        VLink,
         VClamp,
-        VRating,
         VSticky,
-        VHtml,
         VSlider,
         VPicture,
-        VSelect,
 
         Breadcrumbs,
         BreadcrumbItem,
 
         Tag,
-        Price,
         CatalogProductCard,
-        BannerCard,
-        InstagramCard,
 
         FavoritesButton,
 
@@ -909,7 +906,7 @@ export default {
 
                 return {
                     ...i,
-                    url: categoryCode && generateProductUrl(categoryCode, i.code),
+                    url: categoryCode && generateProductUrl(categoryCode, code),
                 };
             });
         },
@@ -1084,9 +1081,10 @@ export default {
 
     watch: {
         [PRODUCT](value) {
-            const product = this[PRODUCT] || {};
-            $retailRocket.addProductView([product.id]);
-            this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
+            if (value) {
+                $retailRocket.addProductView([value.id]);
+                this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
+            }
         },
 
         [SELECTED_CITY](value) {
@@ -1108,7 +1106,6 @@ export default {
 
         async fetchProduct(to, from, next) {
             const {
-                path,
                 params: { code },
                 query: { refCode: referrerCode },
             } = to;
@@ -1273,8 +1270,6 @@ export default {
         // так как к моменту вызова экземпляр ещё не создан!
 
         const {
-            path,
-            hash,
             params: { code },
             query: { refCode = null, modal },
         } = to;
@@ -1312,7 +1307,7 @@ export default {
 
         const {
             params: { code },
-            query: { refCode, modal },
+            query: { refCode },
         } = to;
 
         const {

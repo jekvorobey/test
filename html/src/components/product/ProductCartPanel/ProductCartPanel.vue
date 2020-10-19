@@ -1,18 +1,9 @@
 <template>
     <div class="product-cart-panel">
         <div class="product-cart-panel__info">
-            <div class="product-cart-panel__info-prices">
-                <price
-                    class="text-bold product-cart-panel__info-current"
-                    :value="price.value"
-                    :currency="price.currency"
-                />
-                <price
-                    v-if="oldPrice"
-                    class="text-grey text-strike product-cart-panel__info-old"
-                    :value="oldPrice.value"
-                    :currency="oldPrice.currency"
-                />
+            <div class="product-cart-panel__info-prices" v-bind="itemPropSettings">
+                <price class="text-bold product-cart-panel__info-current" v-bind="price" item-prop />
+                <price v-if="oldPrice" class="text-grey text-strike product-cart-panel__info-old" v-bind="oldPrice" />
             </div>
             <div v-if="!referralPartner && bonus > 0" class="text-grey product-cart-panel__info-bonus">
                 + {{ bonus }} {{ bonusLabel }}
@@ -110,6 +101,21 @@ export default {
 
         inFavorites() {
             return this[IS_IN_FAVORITES](this.productId);
+        },
+
+        itemPropSettings() {
+            const { price } = this;
+
+            return price
+                ? {
+                      itemprop: 'offers',
+                      itemscope: true,
+                      itemtype:
+                          price.value instanceof Object
+                              ? 'https://schema.org/AggregateOffer'
+                              : 'https://schema.org/Offer',
+                  }
+                : {};
         },
     },
 

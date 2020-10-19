@@ -188,8 +188,8 @@ const main = {
     },
 
     product: {
-        vendorCode: 'Vendor Code {code}',
-        review: '{n} Reviews',
+        vendorCode: 'Vendor Code',
+        review: 'Reviews',
         bonus: '{n} Bonuses',
         variants: 'No options | {n} Option | {n} Options',
         showAll: 'Show All',

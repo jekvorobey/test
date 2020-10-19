@@ -1,51 +1,59 @@
 <template>
-    <transition-group
-        v-if="animation"
-        tag="ul"
+    <div
         class="catalog-product-list"
         :class="{ 'catalog-product-list--fullscreen': fullscreen }"
-        name="catalog-item"
-        @before-enter="onBeforeEnterItems"
-        @enter="onEnterItems"
-        @after-enter="onAfterEnterItems"
-        @leave="onLeaveItems"
+        v-bind="itemPropSettings.itemList"
     >
-        <component
-            class="catalog-product-list__item"
-            v-for="item in items"
-            :key="item.id"
-            :class="getClass(item.type)"
-            :is="getComponent(item.type)"
-            :item="item"
-            :referral-code="referralCode"
-            @add-item="onAddToCart(item)"
-            @preview="onPreview(item.code)"
-            @toggle-favorite-item="onToggleFavorite(item.productId)"
-        />
-    </transition-group>
-    <ul v-else class="catalog-product-list">
-        <component
-            class="catalog-product-list__item"
-            v-for="item in items"
-            :key="item.id"
-            :class="getClass(item.type)"
-            :is="getComponent(item.type)"
-            :item="item"
-            :referral-code="referralCode"
-            @add-item="onAddToCart(item)"
-            @preview="onPreview(item.code)"
-            @toggle-favorite-item="onToggleFavorite(item.productId)"
-        />
-    </ul>
+        <meta v-if="itemProp" v-bind="itemPropSettings.numberOfItems" />
+        <transition-group
+            class="catalog-product-list__list"
+            v-if="animation"
+            tag="ul"
+            name="catalog-item"
+            @before-enter="onBeforeEnterItems"
+            @enter="onEnterItems"
+            @after-enter="onAfterEnterItems"
+            @leave="onLeaveItems"
+        >
+            <component
+                class="catalog-product-list__item"
+                v-for="(item, index) in items"
+                :key="item.id"
+                :class="getClass(item.type)"
+                :is="getComponent(item.type)"
+                :item="item"
+                :referral-code="referralCode"
+                :position="index + 1"
+                item-prop
+                @add-item="onAddToCart(item)"
+                @preview="onPreview(item.code)"
+                @toggle-favorite-item="onToggleFavorite(item.productId)"
+            />
+        </transition-group>
+        <ul class="catalog-product-list__list" v-else>
+            <component
+                class="catalog-product-list__item"
+                v-for="item in items"
+                :key="item.id"
+                :class="getClass(item.type)"
+                :is="getComponent(item.type)"
+                :item="item"
+                :referral-code="referralCode"
+                @add-item="onAddToCart(item)"
+                @preview="onPreview(item.code)"
+                @toggle-favorite-item="onToggleFavorite(item.productId)"
+            />
+        </ul>
+    </div>
 </template>
 
 <script>
 import CatalogBannerListCard from './CatalogBannerListCard/CatalogBannerListCard.vue';
 import CatalogProductListCard from './CatalogProductListCard/CatalogProductListCard.vue';
 
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
@@ -82,11 +90,38 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        itemProp: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     components: {
         CatalogBannerListCard,
         CatalogProductListCard,
+    },
+
+    computed: {
+        itemPropSettings() {
+            const { itemProp, items = [] } = this;
+
+            return itemProp
+                ? {
+                      itemList: {
+                          itemscope: true,
+                          itemtype: 'https://schema.org/ItemList',
+                      },
+                      numberOfItems: {
+                          itemprop: 'numberOfItems',
+                          content: items && items.length,
+                      },
+                  }
+                : {
+                      itemList: {},
+                      numberOfItems: {},
+                  };
+        },
     },
 
     methods: {

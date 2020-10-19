@@ -4,78 +4,94 @@
         class="catalog-product-list-card"
         :class="{ 'catalog-product-list-card--small': isSmall }"
         :to="href"
+        v-bind="itemPropSettings.itemListElement"
     >
-        <div class="catalog-product-list-card__img">
-            <v-picture :key="item.image.id" v-if="images">
-                <source :data-srcset="images.desktop.webp" type="image/webp" media="(min-width: 480px)" />
-                <source :data-srcset="images.desktop.orig" media="(min-width: 480px)" />
-                <source :data-srcset="images.mobile.webp" type="image/webp" media="(max-width: 479px)" />
-                <source :data-srcset="images.mobile.orig" media="(max-width: 479px)" />
-                <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" />
-            </v-picture>
-            <v-svg v-else id="catalog-product-list-card-empty" name="logo" width="48" height="48" />
+        <meta v-bind="itemPropSettings.position" />
+        <div v-bind="itemPropSettings.item">
+            <link v-bind="itemPropSettings.url" />
+            <div class="catalog-product-list-card__img">
+                <v-picture :key="item.image.id" v-if="images">
+                    <source :data-srcset="images.desktop.webp" type="image/webp" media="(min-width: 480px)" />
+                    <source :data-srcset="images.desktop.orig" media="(min-width: 480px)" />
+                    <source :data-srcset="images.mobile.webp" type="image/webp" media="(max-width: 479px)" />
+                    <source :data-srcset="images.mobile.orig" media="(max-width: 479px)" />
+                    <img
+                        class="blur-up lazyload v-picture__img"
+                        :data-src="images.default"
+                        :src="itemProp ? images.default : null"
+                        v-bind="itemPropSettings.image"
+                        alt=""
+                    />
+                </v-picture>
+                <v-svg v-else id="catalog-product-list-card-empty" name="logo" width="48" height="48" />
 
-            <div v-if="!isTabletLg" class="catalog-product-list-card__controls" v-once>
-                <buy-button
-                    v-if="showBuyBtn"
-                    class="btn--outline catalog-product-list-card__controls-btn"
-                    @click.prevent="onBuyButtonClick"
-                >
-                    Купить
-                </buy-button>
-                <v-link tag="button" class="catalog-product-list-card__controls-link" @click.prevent="onPreview">
-                    Быстрый&nbsp;просмотр
-                </v-link>
+                <div v-if="!isTabletLg" class="catalog-product-list-card__controls" v-once>
+                    <buy-button
+                        v-if="showBuyBtn"
+                        class="btn--outline catalog-product-list-card__controls-btn"
+                        @click.prevent="onBuyButtonClick"
+                    >
+                        Купить
+                    </buy-button>
+                    <v-link tag="button" class="catalog-product-list-card__controls-link" @click.prevent="onPreview">
+                        Быстрый&nbsp;просмотр
+                    </v-link>
+                </div>
             </div>
-        </div>
 
-        <div class="catalog-product-list-card__body" v-once>
-            <div class="catalog-product-list-card__prices">
-                <price
-                    class="text-bold catalog-product-list-card__price"
-                    v-if="item.price"
-                    v-bind="item.price"
-                    has-articles
+            <div class="catalog-product-list-card__body" v-once>
+                <div class="catalog-product-list-card__prices" v-bind="itemPropSettings.offers">
+                    <price
+                        class="text-bold catalog-product-list-card__price"
+                        v-if="item.price"
+                        v-bind="item.price"
+                        :item-prop="itemProp"
+                        has-articles
+                    />
+                    <price
+                        class="text-sm text-grey text-strike catalog-product-list-card__price"
+                        v-if="item.oldPrice"
+                        v-bind="item.oldPrice"
+                        has-articles
+                    />
+                </div>
+
+                <div class="link--sm catalog-product-list-card__link" v-bind="itemPropSettings.name">
+                    {{ item.name }}
+                </div>
+
+                <div class="catalog-product-list-card__rating" v-once>
+                    <span
+                        v-for="number in 5"
+                        class="catalog-product-list-card__rating-star"
+                        :class="{ 'catalog-product-list-card__rating-star--empty': number > item.rating }"
+                        :key="number"
+                    />
+                </div>
+            </div>
+
+            <div class="catalog-product-list-card__tags" v-once>
+                <tag
+                    class="catalog-product-list-card__tags-item"
+                    v-for="badge in item.badges"
+                    :key="badge"
+                    :text="badge"
                 />
-                <price
-                    class="text-sm text-grey text-strike catalog-product-list-card__price"
-                    v-if="item.oldPrice"
-                    v-bind="item.oldPrice"
-                    has-articles
-                />
             </div>
 
-            <div class="link--sm catalog-product-list-card__link">
-                {{ item.name }}
-            </div>
-
-            <div class="catalog-product-list-card__rating" v-once>
-                <span
-                    v-for="number in 5"
-                    class="catalog-product-list-card__rating-star"
-                    :class="{ 'catalog-product-list-card__rating-star--empty': number > item.rating }"
-                    :key="number"
-                />
-            </div>
+            <favorites-button
+                class="catalog-product-list-card__wishlist-btn"
+                :class="{ 'catalog-product-list-card__wishlist-btn--active': inFavorites }"
+                @click="onToggleFavorite"
+                :is-active="inFavorites"
+            />
         </div>
-
-        <div class="catalog-product-list-card__tags" v-once>
-            <tag class="catalog-product-list-card__tags-item" v-for="badge in item.badges" :key="badge" :text="badge" />
-        </div>
-
-        <favorites-button
-            class="catalog-product-list-card__wishlist-btn"
-            :class="{ 'catalog-product-list-card__wishlist-btn--active': inFavorites }"
-            @click="onToggleFavorite"
-            :is-active="inFavorites"
-        />
     </router-link>
 </template>
 
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
-import VRating from '@controls/VRating/VRating.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import Tag from '@components/Tag/Tag.vue';
@@ -89,7 +105,7 @@ import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
 import { fileExtension } from '@enums';
-import { generateProductUrl } from '@util/catalog';
+import { generateAbsoluteProductUrl, generateProductUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 
 import '@images/sprites/star-empty-small.svg';
@@ -103,7 +119,6 @@ export default {
     components: {
         VSvg,
         VLink,
-        VRating,
         VPicture,
 
         Tag,
@@ -129,14 +144,23 @@ export default {
             type: String,
         },
 
+        showWishlistBtn: {
+            type: Boolean,
+            default: true,
+        },
+
         isSmall: {
             type: Boolean,
             default: false,
         },
 
-        showWishlistBtn: {
+        position: {
+            type: Number,
+        },
+
+        itemProp: {
             type: Boolean,
-            default: true,
+            default: false,
         },
     },
 
@@ -154,8 +178,9 @@ export default {
 
         images() {
             const { image } = this.item;
-            if (image && image.id)
-                return {
+            return (
+                image &&
+                image.id && {
                     desktop: {
                         webp: `${generatePictureSourcePath(
                             380,
@@ -183,15 +208,77 @@ export default {
                         )} 2x`,
                     },
                     default: generatePictureSourcePath(760, 760, image.id),
-                };
+                }
+            );
         },
 
         href() {
-            return generateProductUrl(
-                this.item.categoryCodes[this.item.categoryCodes.length - 1],
-                this.item.code,
-                this.referralCode
+            const { item, referralCode } = this;
+            const { code, categoryCodes = [] } = item || {};
+
+            return (
+                categoryCodes &&
+                categoryCodes.length > 0 &&
+                generateProductUrl(categoryCodes[categoryCodes.length - 1], code, referralCode)
             );
+        },
+
+        absoluteHref() {
+            const { item } = this;
+            const { code, categoryCodes = [] } = item || {};
+
+            return (
+                categoryCodes &&
+                categoryCodes.length > 0 &&
+                generateAbsoluteProductUrl(categoryCodes[categoryCodes.length - 1], code)
+            );
+        },
+
+        itemPropSettings() {
+            const { itemProp, item, position, absoluteHref } = this;
+            const { price } = item || {};
+
+            return itemProp && item
+                ? {
+                      itemListElement: {
+                          itemprop: 'itemListElement',
+                          itemscope: true,
+                          itemtype: 'https://schema.org/ListItem',
+                      },
+                      item: {
+                          itemprop: 'item',
+                          itemscope: true,
+                          itemtype: 'https://schema.org/Product',
+                      },
+                      name: {
+                          itemprop: 'name',
+                      },
+                      url: {
+                          itemprop: 'url',
+                          href: absoluteHref,
+                      },
+                      image: {
+                          itemprop: 'image',
+                      },
+                      position: {
+                          itemprop: 'position',
+                          content: position,
+                      },
+                      offers: {
+                          itemprop: 'offers',
+                          itemscope: true,
+                          itemtype:
+                              price.value instanceof Object
+                                  ? 'https://schema.org/AggregateOffer'
+                                  : 'https://schema.org/Offer',
+                      },
+                  }
+                : {
+                      itemListElement: {},
+                      name: {},
+                      image: {},
+                      offers: {},
+                  };
         },
 
         isTabletLg() {
