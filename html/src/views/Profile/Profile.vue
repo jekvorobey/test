@@ -21,12 +21,20 @@
                     </breadcrumb-item>
                 </breadcrumbs>
 
-                <div class="profile-view__grid">
-                    <v-sticky class="profile-view__panel">
+                <div class="profile-view__grid" data-v-sticky-container>
+                    <v-sidebar
+                        class="profile-view__panel"
+                        v-if="!isTabletLg"
+                        container-selector=".profile-view__grid"
+                        top="64"
+                        bottom="0"
+                    >
                         <template v-slot:sticky>
                             <navigation-panel :groups="groups" />
+                            <br />
                         </template>
-                    </v-sticky>
+                    </v-sidebar>
+
                     <div class="profile-view__main">
                         <transition name="fade-absolute">
                             <router-view class="profile-view__main-view" />
@@ -76,6 +84,7 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
+import VSidebar from '@controls/VSidebar/VSidebar.vue';
 
 import '@components/profile/InfoPanel/InfoPanel.vue';
 import '@components/profile/InfoRow/InfoRow.vue';
@@ -106,6 +115,7 @@ export default {
         VSvg,
         VButton,
         VSticky,
+        VSidebar,
 
         Breadcrumbs,
         BreadcrumbItem,
