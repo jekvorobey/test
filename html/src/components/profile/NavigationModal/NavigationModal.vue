@@ -12,7 +12,7 @@ import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import NavigationPanel from '@components/profile/NavigationPanel/NavigationPanel.vue';
 
 import { mapActions } from 'vuex';
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { modalName } from '@enums';
