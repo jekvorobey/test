@@ -40,22 +40,27 @@ export default {
         shadowColor: { type: String, required: false, default: '#FF0' },
         hoverColor: { type: String, required: false, default: '#DD0' },
     },
+
     data() {
         return {
             notouch: true,
         };
     },
+
     computed: {
         valueInt() {
             return parseInt(this.value);
         },
+
         ratingChars() {
             return Array.from(this.char);
         },
+
         inactiveRatingChars() {
             /* Default to ratingChars if no inactive characters have been provided */
             return this.inactiveChar ? Array.from(this.inactiveChar) : this.ratingChars;
         },
+
         mapCssProps() {
             return {
                 '--active-color': this.activeColor,
@@ -65,14 +70,17 @@ export default {
             };
         },
     },
+
     methods: {
         updateInput(v) {
             this.$emit('input', parseInt(v, 10));
         },
+
         getActiveLabel(x) {
             const s = this.ratingChars;
             return s[Math.min(s.length - 1, x - 1)];
         },
+
         getInactiveLabel(x) {
             const s = this.inactiveRatingChars;
             return s[Math.min(s.length - 1, x - 1)];

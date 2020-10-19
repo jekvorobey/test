@@ -6,17 +6,12 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span></breadcrumb-item
                 >
-                <breadcrumb-item
-                    :key="type"
-                    :to="breadcrumbRootUrl"
-                    >{{ $t(`productGroups.title.${type || 'catalog'}`) }}</breadcrumb-item
-                >
-                <breadcrumb-item
-                    v-if="entityCode"
-                    :key="entityCode"
-                    :to="breadcrumbEntityUrl"
-                    >{{ productGroup && productGroup.name }}</breadcrumb-item
-                >
+                <breadcrumb-item :key="type" :to="breadcrumbRootUrl">{{
+                    $t(`productGroups.title.${type || 'catalog'}`)
+                }}</breadcrumb-item>
+                <breadcrumb-item v-if="entityCode" :key="entityCode" :to="breadcrumbEntityUrl">{{
+                    productGroup && productGroup.name
+                }}</breadcrumb-item>
                 <breadcrumb-item
                     v-for="category in categoriesBreadcrumbs"
                     :key="category.id"
@@ -124,6 +119,7 @@
                         :items="items"
                         :animation="!isTablet"
                         :fullscreen="categories && categories.length === 0"
+                        item-prop
                     />
 
                     <div class="container containet--tablet catalog-view__main-controls" v-if="pagesCount > 1">
@@ -259,14 +255,11 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VButton from '@controls/VButton/VButton.vue';
-import VCheck from '@controls/VCheck/VCheck.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
-import VRange from '@controls/VRange/VRange.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
-import VExpander from '@controls/VExpander/VExpander.vue';
+//import VExpander from '@controls/VExpander/VExpander.vue';
 import VSidebar from '@controls/VSidebar/VSidebar.vue';
-import VSlider from '@controls/VSlider/VSlider.vue';
 import Modal from '@controls/modal/modal.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
@@ -276,14 +269,13 @@ import FilterButton from '@components/FilterButton/FilterButton.vue';
 import TagItem from '@components/TagItem/TagItem.vue';
 import CategoryTreeItem from '@components/CategoryTreeItem/CategoryTreeItem.vue';
 import CatalogFilter from '@components/CatalogFilter/CatalogFilter.vue';
-import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import HistoryPanel from '@components/HistoryPanel/HistoryPanel.vue';
 
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { $store, $progress, $logger, $retailRocket } from '@services';
+import { $store, $progress, $retailRocket } from '@services';
 
 import { SCROLL, RECENTLY_VIEWED_PRODUCTS } from '@store';
 import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
@@ -291,18 +283,10 @@ import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import catalogModule, {
-    NAME as CATALOG_MODULE,
-    TYPE,
-    ITEMS,
-    BANNER,
-    CATEGORIES,
-    PRODUCT_GROUP,
-    RANGE,
-} from '@store/modules/Catalog';
+import { NAME as CATALOG_MODULE, TYPE, ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, RANGE } from '@store/modules/Catalog';
 import { SET_LOAD_PATH, FETCH_CATALOG_DATA } from '@store/modules/Catalog/actions';
 import {
     ACTIVE_TAGS,
@@ -317,14 +301,12 @@ import { pluralize } from '@util';
 import {
     concatCatalogRoutePath,
     generateCategoryUrl,
-    mapFilterSegments,
     computeFilterData,
     generateProductUrl,
     generateSearchUrl,
     generateProductGroupUrl,
 } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
-import { registerModuleIfNotExists } from '@util/store';
 import { createNotFoundRoute } from '@util/router';
 import { productGroupTypes } from '@enums/product';
 import { sortFields } from '@enums/catalog';
@@ -348,8 +330,7 @@ export default {
         VPagination,
         VSticky,
         VSidebar,
-        VSlider,
-        VExpander,
+        //VExpander,
         Modal,
 
         Breadcrumbs,
@@ -359,7 +340,6 @@ export default {
         CategoryTreeItem,
         CatalogFilter,
         CatalogProductList,
-        CatalogBannerCard,
         ShowMoreButton,
         HistoryPanel,
     },
@@ -438,7 +418,7 @@ export default {
 
                 return {
                     ...i,
-                    url: categoryCode && generateProductUrl(categoryCode, i.code),
+                    url: categoryCode && generateProductUrl(categoryCode, code),
                 };
             });
         },
@@ -446,37 +426,40 @@ export default {
         mobileImg() {
             const banner = this[PRODUCT_GROUP][BANNER] || {};
             const image = banner.mobileImage || banner.tabletImage || banner.desktopImage;
-            if (image)
-                return {
+            return (
+                image && {
                     webp: generatePictureSourcePath(320, 240, image.id, fileExtension.image.WEBP),
                     orig: generatePictureSourcePath(320, 240, image.id),
-                };
+                }
+            );
         },
 
         tabletImg() {
             const banner = this[PRODUCT_GROUP][BANNER] || {};
             const image = banner.tabletImage || banner.desktopImage;
-            if (image)
-                return {
+            return (
+                image && {
                     webp: generatePictureSourcePath(768, 240, image.id, fileExtension.image.WEBP),
                     orig: generatePictureSourcePath(768, 240, image.id),
-                };
+                }
+            );
         },
 
         desktopImg() {
             const banner = this[PRODUCT_GROUP][BANNER] || {};
             const image = banner.desktopImage || banner.tabletImage;
-            if (image)
-                return {
+            return (
+                image && {
                     webp: generatePictureSourcePath(1224, 240, image.id, fileExtension.image.WEBP),
                     orig: generatePictureSourcePath(1224, 240, image.id),
-                };
+                }
+            );
         },
 
-        defaultImg(item) {
+        defaultImg() {
             const banner = this[PRODUCT_GROUP][BANNER] || {};
             const image = banner.desktopImage || banner.tabletImage || banner.mobileImage;
-            if (image) return generatePictureSourcePath(1224, 240, image.id);
+            return image && generatePictureSourcePath(1224, 240, image.id);
         },
 
         clearFilterUrl() {
@@ -502,7 +485,7 @@ export default {
         },
 
         catalogTitle() {
-            const { type, entityCode, productGroup, activeCategory, searchTitle } = this;
+            const { type, productGroup, activeCategory, searchTitle } = this;
 
             switch (type) {
                 case productGroupTypes.SEARCH:
@@ -566,7 +549,7 @@ export default {
     },
 
     watch: {
-        code(value) {
+        code() {
             const category = this[ACTIVE_CATEGORY];
             if (category) $retailRocket.addCategoryView(category.id);
         },
@@ -606,7 +589,7 @@ export default {
 
                 const { field, direction } = value;
 
-                if (field !== orderField || direction !== orderDirection){
+                if (field !== orderField || direction !== orderDirection) {
                     const query = { ...this.$route.query, orderField: field, orderDirection: direction };
                     delete query.page;
 
@@ -614,7 +597,7 @@ export default {
                         path: this.$route.path,
                         query,
                     });
-                }  
+                }
             }
         },
 
@@ -663,7 +646,6 @@ export default {
                 } = to;
 
                 const {
-                    params: { code: fromCode, entityCode: fromEntityCode, type: fromType },
                     query: { page: fromPage = DEFAULT_PAGE },
                 } = from;
 
@@ -716,7 +698,7 @@ export default {
                 page = DEFAULT_PAGE,
                 orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.POPULARITY,
                 orderDirection = sortDirections.DESC,
-                search_string: toSearchString,
+                search_string: toSearchString = null,
             },
         } = to;
 
@@ -752,7 +734,7 @@ export default {
                     orderField,
                     orderDirection,
                 })
-                .then((data) => {
+                .then(() => {
                     $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
                     $progress.finish();
 
@@ -790,7 +772,7 @@ export default {
                 page: toPage = DEFAULT_PAGE,
                 orderField: toOrderField = sortFields.POPULARITY,
                 orderDirection: toOrderDirection = sortDirections.DESC,
-                search_string: to_search_string,
+                search_string: to_search_string = null,
             },
         } = to;
 
@@ -800,7 +782,7 @@ export default {
                 page: fromPage = DEFAULT_PAGE,
                 orderField: fromOrderField = sortFields.POPULARITY,
                 orderDirection: fromOrderDirection = sortDirections.DESC,
-                search_string: from_search_string,
+                search_string: from_search_string = null,
             },
         } = from;
 

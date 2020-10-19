@@ -23,7 +23,9 @@
                     v-if="items && items.length > 0"
                     :items="items"
                     :referral-code="code"
+                    :animation="!isTablet"
                     fullscreen
+                    item-prop
                 />
                 <p class="referrer-view__list-empty" v-else>Ничего не найдено</p>
             </div>

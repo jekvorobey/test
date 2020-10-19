@@ -1,12 +1,14 @@
 .catalog-product-list {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 calc(calc(var(--gs) * 6) / -4);
+    &__list {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 calc(calc(var(--gs) * 6) / -4);
 
-    @media (--tablet) {
-        justify-content: space-between;
-        margin: 0;
+        @media (--tablet) {
+            justify-content: space-between;
+            margin: 0;
+        }
     }
 
     &__item {
