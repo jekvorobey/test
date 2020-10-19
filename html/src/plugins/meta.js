@@ -5,15 +5,17 @@
 const VUE_META_KEY_NAME = 'metaInfo';
 const VUE_META_ATTRIBUTE = 'data-vue-meta-info';
 
-function _removeNode(parent) {
-    const childs = parent.querySelectorAll(`[${VUE_META_ATTRIBUTE}]`);
+function _insertAfter(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}
 
-    for (let i = childs.length - 1; i > -1; i--)
-        if (childs[i].getAttribute(VUE_META_ATTRIBUTE)) parent.removeChild(childs[i]);
+function _removeNode(parent) {
+    let childs = parent.querySelectorAll(`[${VUE_META_ATTRIBUTE}]`);
+    for (let i = childs.length - 1; i > -1; i--) parent.removeChild(childs[i]);
 }
 
 function _setAttr(el, opt) {
-    el.setAttribute(VUE_META_ATTRIBUTE, true);
+    el.setAttribute(VUE_META_ATTRIBUTE, '');
     // eslint-disable-next-line
     for (const key in opt) el.setAttribute(key, opt[key]);
 }
@@ -47,9 +49,12 @@ function renderServerMetaInfo(context, metaInfo) {
 
 function operate() {
     const _ndHead = document.getElementsByTagName('head')[0];
+    const _title = document.getElementsByTagName('title')[0];
 
     return {
         setMetaInfo(metaOpts) {
+            let afterTag = _title;
+
             // eslint-disable-next-line
             for (const key in metaOpts) {
                 if (key === 'title') {
@@ -63,7 +68,8 @@ function operate() {
                     metaOpts[key].forEach((opt) => {
                         const ndKey = document.createElement(key);
                         _setAttr(ndKey, opt);
-                        _ndHead.appendChild(ndKey);
+                        _insertAfter(ndKey, afterTag);
+                        afterTag = ndKey;
                     });
                 }
             }

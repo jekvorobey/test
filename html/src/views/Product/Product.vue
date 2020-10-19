@@ -229,27 +229,34 @@
         </section>
 
         <!-- #66085 -->
-        <!-- <section class="section product-view__section">
+        <section class="section product-view__section">
             <div class="container product-view__socials">
                 <div class="product-view__socials-inner">
                     <div class="product-view__socials-statistics">
-                        <div>
+                        <!-- <div>
                             <v-svg name="cart-empty" width="24" height="24" />
                         </div>
                         <div>
                             <div>32 человека уже купили это товар</div>
                             <div class="text-grey">за последние 2 месяца</div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="product-view__socials-share">
                         <span class="text-bold">Поделиться</span>&nbsp;
-                        <v-svg name="vkontakte-bw" width="24" height="24" />
-                        <v-svg name="facebook-bw" width="24" height="24" />
-                        <v-svg name="instagram-bw" width="24" height="24" />
+                        <social-sharing v-bind="socialSharing" inline-template>
+                            <div :style="{ display: 'flex' }">
+                                <network class="network" network="vk">
+                                    <v-svg name="vkontakte-bw" width="24" height="24" />
+                                </network>
+                                <network class="network" network="facebook">
+                                    <v-svg name="facebook-bw" width="24" height="24" />
+                                </network>
+                            </div>
+                        </social-sharing>
                     </div>
                 </div>
             </div>
-        </section> -->
+        </section>
 
         <section class="section product-view__section">
             <div class="container">
@@ -671,6 +678,7 @@ import VSticky from '@controls/VSticky/VSticky.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
+import SocialSharing from 'vue-social-sharing';
 
 import Tag from '@components/Tag/Tag.vue';
 
@@ -732,6 +740,7 @@ import _debounce from 'lodash/debounce';
 import metaMixin from '@plugins/meta';
 import { $store, $progress, $retailRocket } from '@services';
 import {
+    generateFileOriginalPath,
     generatePictureSourcePath,
     generateYoutubeImagePlaceholderPath,
     generateYoutubeVideoSourcePath,
@@ -739,7 +748,13 @@ import {
 import { createNotFoundRoute } from '@util/router';
 import { breakpoints, fileExtension, httpCodes, modalName } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
-import { generateCategoryUrl, generateProductUrl, prepareProductImage, generateProductGroupUrl } from '@util/catalog';
+import {
+    generateCategoryUrl,
+    generateProductUrl,
+    prepareProductImage,
+    generateProductGroupUrl,
+    generateAbsoluteProductUrl,
+} from '@util/catalog';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/facebook-bw.svg';
@@ -828,6 +843,7 @@ export default {
         VSticky,
         VSlider,
         VPicture,
+        SocialSharing,
 
         Breadcrumbs,
         BreadcrumbItem,
@@ -860,9 +876,33 @@ export default {
     },
 
     metaInfo() {
-        const { title } = this[PRODUCT] || {};
+        const { metaData } = this;
+        const { title, url, image } = metaData;
+
         return {
             title,
+            meta: [
+                {
+                    property: 'og:title',
+                    content: title,
+                },
+                {
+                    property: 'og:type',
+                    content: 'webpage',
+                },
+                {
+                    property: 'og:url',
+                    content: url,
+                },
+                {
+                    property: 'og:image',
+                    content: image,
+                },
+                {
+                    property: 'og:image:url',
+                    content: image,
+                },
+            ],
         };
     },
 
@@ -1058,6 +1098,32 @@ export default {
 
         canWriteReview() {
             return this[PRODUCT] && this[PRODUCT].canWriteReview;
+        },
+
+        metaData() {
+            const { title, code, categoryCodes = [], media } = this[PRODUCT] || {};
+            const url =
+                categoryCodes &&
+                categoryCodes.length > 0 &&
+                generateAbsoluteProductUrl(categoryCodes[categoryCodes.length - 1].code, code);
+
+            const image = Array.isArray(media) && media.length > 0 ? generateFileOriginalPath(media[0].id) : null;
+
+            return {
+                title,
+                url,
+                image,
+            };
+        },
+
+        socialSharing() {
+            const { metaData } = this;
+            const { title, url } = metaData;
+
+            return {
+                url,
+                title,
+            };
         },
 
         inCart() {
