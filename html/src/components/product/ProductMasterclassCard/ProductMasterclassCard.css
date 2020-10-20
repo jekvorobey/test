@@ -1,0 +1,105 @@
+.product-masterclass-card {
+    display: flex;
+    position: relative;
+    border-bottom: none;
+
+    &::before {
+        content: '';
+        position: absolute;
+        display: block;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--cl-black);
+        opacity: 0.5;
+    }
+
+    &::after {
+        content: '';
+        display: block;
+        padding-bottom: 53.3%;
+
+        @media (--tablet-lg) {
+            padding-bottom: 62%;
+        }
+
+        @media (--mobile-sm) {
+            padding-bottom: 53%;
+        }
+
+        /* чинит padding-bottom: 61% в FireFox для распорки */
+        @supports (-moz-user-select: none) {
+            margin-top: 53.3%;
+            padding-bottom: 0;
+
+            @media (--tablet-lg) {
+                margin-top: 62%;
+            }
+
+            @media (--mobile-sm) {
+                margin-top: 53%;
+            }
+        }
+    }
+
+    &__img {
+        width: 100%;
+        height: 100%;
+    }
+
+    &__panel {
+        position: absolute;
+        display: flex;
+        justify-content: space-between;
+        z-index: 2;
+        left: calc(var(--gs) * 5);
+        right: calc(var(--gs) * 5);
+        bottom: calc(var(--gs) * 5);
+
+        @media (--tablet-lg) {
+            display: block;
+            left: calc(var(--gs) * 3);
+            right: calc(var(--gs) * 3);
+            bottom: calc(var(--gs) * 3);
+        }
+
+        @media (--tablet) {
+            left: calc(var(--gs) * 2);
+            right: calc(var(--gs) * 2);
+            bottom: calc(var(--gs) * 2);
+        }
+
+        &-price,
+        &-name,
+        &-note,
+        &-description {
+            color: var(--cl-white);
+            line-height: 24px;
+        }
+
+        &-note,
+        &-description {
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        &-price {
+            font-size: 20px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        &-info {
+            @media (--tablet) {
+                margin-bottom: var(--gs);
+            }
+        }
+
+        &-name {
+            font-size: 20px;
+            margin-bottom: var(--gs);
+        }
+    }
+}

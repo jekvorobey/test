@@ -24,6 +24,7 @@ export const SET_REFERRER_CODE = 'SET_REFERRER_CODE';
 export const SET_PRODUCT = 'SET_PRODUCT';
 export const SET_PRODUCT_OPTIONS = 'SET_PRODUCT_OPTIONS';
 export const SET_PICKUP_POINTS = 'SET_PICKUP_POINTS';
+export const SET_MASTERCLASSES = 'SET_MASTERCLASSES';
 
 export const SET_BANNERS = 'SET_BANNERS';
 export const SET_FEATURED_PRODUCTS = 'SET_FEATURED_PRODUCTS';
@@ -37,6 +38,11 @@ export default {
     [SET_PRODUCT](state, payload = {}) {
         state.productCode = payload.code;
         state.product = payload;
+    },
+
+    [SET_MASTERCLASSES](state, payload) {
+        const { items = [] } = payload || {};
+        state.masterClasses = items;
     },
 
     [SET_PICKUP_POINTS](state, payload) {

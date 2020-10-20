@@ -10,7 +10,7 @@ export const REFERRER_CODE = 'referrerCode';
 
 export const FEATURED_PRODUCTS = 'featuredProducts';
 export const BANNERS = 'banners';
-
+export const MASTERCLASSES = 'masterClasses';
 export const PICKUP_POINTS = 'pickupPoints';
 export const SELECTED_PICKUP_POINT = 'selectedPickupPoint';
 export const SELECTED_INDEX = 'selectedIndex';
@@ -34,7 +34,7 @@ export default function createModule() {
 
             [FEATURED_PRODUCTS]: { items: [], range: 0 },
             [BANNERS]: [],
-
+            [MASTERCLASSES]: [],
             [PICKUP_POINTS]: [],
             [SELECTED_INDEX]: -1,
             [SELECTED_PICKUP_POINT]: null,

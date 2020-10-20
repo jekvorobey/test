@@ -5,6 +5,7 @@ import {
     getProducts,
     getProductOptions,
     getProductPickupPoints,
+    getProductMasterclasses,
     getProductBundles,
 } from '@api';
 
@@ -16,6 +17,7 @@ import {
     SET_REFERRER_CODE,
     SET_PICKUP_POINTS,
     SET_PRODUCT_BUNDLES,
+    SET_MASTERCLASSES,
 } from './mutations';
 
 export const FETCH_PRODUCT_DATA = 'FETCH_PRODUCT_DATA';
@@ -24,9 +26,9 @@ export const FETCH_FEATURED_PRODUCTS = 'FETCH_FEATURED_PRODUCTS';
 export const FETCH_PRODUCT = 'FETCH_PRODUCT';
 export const FETCH_PRODUCT_OPTIONS = 'FETCH_PRODUCT_OPTIONS';
 export const FETCH_PRODUCT_PICKUP_POINTS = 'FETCH_PRODUCT_PICKUP_POINTS';
+export const FETCH_PRODUCT_MASTERCLASSES = 'FETCH_PRODUCT_MASTERCLASSES ';
 
 export const FETCH_BANNERS = 'FETCH_BANNERS';
-export const FETCH_MASTERCLASSES = 'FETCH_MASTERCLASSES';
 
 export const SET_SELECTED_PICKUP_POINT = 'SET_SELECTED_PICKUP_POINT';
 export const SET_SELECTED_PICKUP_POINT_TYPE = 'SET_SELECTED_PICKUP_POINT_TYPE';
@@ -66,6 +68,16 @@ export default {
             commit(SET_PICKUP_POINTS, data);
         } catch (error) {
             storeErrorHandler(FETCH_PRODUCT_PICKUP_POINTS)(error);
+        }
+    },
+
+    async [FETCH_PRODUCT_MASTERCLASSES]({ commit }, code) {
+        try {
+            commit(SET_MASTERCLASSES, null);
+            const data = await getProductMasterclasses(code);
+            commit(SET_MASTERCLASSES, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_PRODUCT_MASTERCLASSES)(error);
         }
     },
 
