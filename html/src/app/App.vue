@@ -150,6 +150,11 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [FETCH_FAVORITES_ALL]),
 
+        onCheckUserData() {
+            this[FETCH_USER]();
+            this[FETCH_UNREAD_MESSAGES]();
+        },
+
         onCheckCitySelection() {
             const geoData = $cookie.get(cookieNames.IBT_GEOLOCATION);
             this[SET_CITY_CONFIRMATION_OPEN](!geoData);
@@ -174,13 +179,13 @@ export default {
             clearInterval(this.sessionTimer);
         },
 
-        startUnreadCheckTimer() {
-            this.stopUnreadCheckTimer();
-            this.unreadCheckTimer = setInterval(this[FETCH_UNREAD_MESSAGES], interval.FIVE_MINUTES);
+        startUserDataTimer() {
+            this.stopUserDataTimer();
+            this.userDataTimer = setInterval(this.onCheckUserData, interval.FIVE_MINUTES);
         },
 
-        stopUnreadCheckTimer() {
-            clearInterval(this.unreadCheckTimer);
+        stopUserDataTimer() {
+            clearInterval(this.userDataTimer);
         },
     },
 
@@ -190,11 +195,11 @@ export default {
                 await this[FETCH_USER]();
                 if (this[CAN_BUY]) this[FETCH_CART_DATA]();
                 await this[FETCH_FAVORITES_ALL]();
-                this.startUnreadCheckTimer();
+                this.startUserDataTimer();
             } else {
                 this[CLEAR_CART_DATA]();
                 this[CLEAR_CHECKOUT_DATA]();
-                this.stopUnreadCheckTimer();
+                this.stopUserDataTimer();
             }
             this.startSessionTimer();
         },
@@ -215,9 +220,10 @@ export default {
 
     beforeMount() {
         this.startSessionTimer();
+
         if (this[HAS_SESSION]) {
             this[FETCH_UNREAD_MESSAGES]();
-            this.startUnreadCheckTimer();
+            this.startUserDataTimer();
         }
     },
 
