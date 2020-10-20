@@ -2,9 +2,11 @@
     <component :is="tag" class="banner-card" :to="url">
         <div class="banner-card__img">
             <v-picture :key="image.id" v-if="images">
-                <source :data-srcset="images.desktop.webp" type="image/webp" />
-                <source :data-srcset="images.desktop.orig" />
-                <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" />
+                <slot>
+                    <source :data-srcset="images.desktop.webp" type="image/webp" />
+                    <source :data-srcset="images.desktop.orig" />
+                    <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" />
+                </slot>
             </v-picture>
             <v-picture v-else :image="image" />
             <v-button class="btn--outline banner-card__img-btn" v-if="isMounted" :to="to">
@@ -19,9 +21,10 @@
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VButton from '@controls/VButton/VButton.vue';
 
-import { generatePictureSourcePath } from '@util/file';
-import { fileExtension } from '@enums';
+import { prepareBannerImage } from '@util/catalog';
 import './BannerCard.css';
+
+const desktopSize = { width: 392, height: 240 };
 
 export default {
     name: 'banner-card',
@@ -75,14 +78,7 @@ export default {
         images() {
             const { image } = this;
 
-            if (image && image.id)
-                return {
-                    desktop: {
-                        webp: generatePictureSourcePath(392, 240, image.id, fileExtension.image.WEBP),
-                        orig: generatePictureSourcePath(392, 240, image.id),
-                    },
-                    default: generatePictureSourcePath(392, 240, image.id),
-                };
+            return image && image.id && prepareBannerImage(image, desktopSize);
         },
     },
 

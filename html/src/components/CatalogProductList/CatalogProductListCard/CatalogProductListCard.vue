@@ -104,9 +104,7 @@ import { mapGetters } from 'vuex';
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
-import { fileExtension } from '@enums';
-import { generateAbsoluteProductUrl, generateProductUrl } from '@util/catalog';
-import { generatePictureSourcePath } from '@util/file';
+import { generateAbsoluteProductUrl, generateProductUrl, prepareProductImage } from '@util/catalog';
 
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
@@ -178,38 +176,7 @@ export default {
 
         images() {
             const { image } = this.item;
-            return (
-                image &&
-                image.id && {
-                    desktop: {
-                        webp: `${generatePictureSourcePath(
-                            380,
-                            380,
-                            image.id,
-                            fileExtension.image.WEBP
-                        )}, ${generatePictureSourcePath(760, 760, image.id, fileExtension.image.WEBP)} 2x`,
-                        orig: `${generatePictureSourcePath(380, 380, image.id)}, ${generatePictureSourcePath(
-                            760,
-                            760,
-                            image.id
-                        )} 2x`,
-                    },
-                    mobile: {
-                        webp: `${generatePictureSourcePath(
-                            230,
-                            230,
-                            image.id,
-                            fileExtension.image.WEBP
-                        )} 1x, ${generatePictureSourcePath(460, 460, image.id, fileExtension.image.WEBP)} 2x`,
-                        orig: `${generatePictureSourcePath(230, 230, image.id)}, ${generatePictureSourcePath(
-                            460,
-                            460,
-                            image.id
-                        )} 2x`,
-                    },
-                    default: generatePictureSourcePath(760, 760, image.id),
-                }
-            );
+            return image && image.id && prepareProductImage(image, 380, null, 230);
         },
 
         href() {
