@@ -176,7 +176,68 @@ export function computeFilterMasterclassData(pathMatch) {
     return { filter, routeSegments, filterSegments };
 }
 
-export function prepareProductImage(image, desktopSize, tabletSize) {
+export function prepareBannerImage(image, desktopSize, tabletSize, mobileSize) {
+    return {
+        ...image,
+        desktop: desktopSize && {
+            webp: `${generatePictureSourcePath(
+                desktopSize.width,
+                desktopSize.height,
+                image.id,
+                fileExtension.image.WEBP
+            )}, ${generatePictureSourcePath(
+                desktopSize.width * 2,
+                desktopSize.height * 2,
+                image.id,
+                fileExtension.image.WEBP
+            )} 2x`,
+            orig: `${generatePictureSourcePath(
+                desktopSize.width,
+                desktopSize.height,
+                image.id
+            )}, ${generatePictureSourcePath(desktopSize.width * 2, desktopSize.height * 2, image.id)} 2x`,
+        },
+        tablet: tabletSize && {
+            webp: `${generatePictureSourcePath(
+                tabletSize.width,
+                tabletSize.height,
+                image.id,
+                fileExtension.image.WEBP
+            )}, ${generatePictureSourcePath(
+                tabletSize.width * 2,
+                tabletSize.height * 2,
+                image.id,
+                fileExtension.image.WEBP
+            )} 2x`,
+            orig: `${generatePictureSourcePath(
+                tabletSize.width,
+                tabletSize.height,
+                image.id
+            )}, ${generatePictureSourcePath(tabletSize.width * 2, tabletSize.height * 2, image.id)} 2x`,
+        },
+        mobile: mobileSize && {
+            webp: `${generatePictureSourcePath(
+                mobileSize.width,
+                mobileSize.height,
+                image.id,
+                fileExtension.image.WEBP
+            )}, ${generatePictureSourcePath(
+                mobileSize.width * 2,
+                mobileSize.height * 2,
+                image.id,
+                fileExtension.image.WEBP
+            )} 2x`,
+            orig: `${generatePictureSourcePath(
+                mobileSize.width,
+                mobileSize.height,
+                image.id
+            )}, ${generatePictureSourcePath(mobileSize.width * 2, mobileSize.height * 2, image.id)} 2x`,
+        },
+        default: generatePictureSourcePath(desktopSize.width, desktopSize.height, image.id),
+    };
+}
+
+export function prepareProductImage(image, desktopSize, tabletSize, mobileSize) {
     return {
         ...image,
         desktop: desktopSize && {
@@ -202,6 +263,19 @@ export function prepareProductImage(image, desktopSize, tabletSize) {
             orig: `${generatePictureSourcePath(tabletSize, tabletSize, image.id)}, ${generatePictureSourcePath(
                 tabletSize * 2,
                 tabletSize * 2,
+                image.id
+            )} 2x`,
+        },
+        mobile: mobileSize && {
+            webp: `${generatePictureSourcePath(
+                mobileSize,
+                mobileSize,
+                image.id,
+                fileExtension.image.WEBP
+            )}, ${generatePictureSourcePath(mobileSize * 2, mobileSize * 2, image.id, fileExtension.image.WEBP)} 2x`,
+            orig: `${generatePictureSourcePath(mobileSize, mobileSize, image.id)}, ${generatePictureSourcePath(
+                mobileSize * 2,
+                mobileSize * 2,
                 image.id
             )} 2x`,
         },
