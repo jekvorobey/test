@@ -499,39 +499,52 @@
         </section>
 
         <!-- #58437 -->
-        <!-- <section v-if="masterClasses && masterClasses.length > 0" class="section product-view__masterclass">
+        <section
+            v-if="productMasterclasses && productMasterclasses.length > 0"
+            class="section product-view__masterclass"
+        >
             <div class="container product-view__masterclass-container">
                 <h2 class="product-view__section-hl product-view__masterclass-hl">
                     {{ $t('product.title.masterClasses') }}
                 </h2>
                 <ul class="product-view__masterclass-list">
-                    <li class="product-view__masterclass-item" v-for="item in masterClasses" :key="item.id">
-                        <div class="product-view__masterclass-card">
-                            <v-picture class="product-view__masterclass-card-img" :image="item.image" />
-                            <div class="product-view__masterclass-card-panel">
-                                <div class="text-bold product-view__masterclass-card-info">
-                                    <div class="text-bold product-view__masterclass-card-name">
-                                        {{ item.name }}
-                                    </div>
-                                    <div class="product-view__masterclass-card-author" v-if="item.author">
-                                        {{ item.author }}
-                                    </div>
-                                    <div class="product-view__masterclass-card-description" v-if="item.description">
-                                        {{ item.description }}
-                                    </div>
-                                </div>
-                                <div class="text-bold product-view__masterclass-card-price" v-if="item.price">
-                                    {{ item.price }}
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                    <product-masterclass-card
+                        class="product-view__masterclass-item"
+                        v-for="item in productMasterclasses"
+                        :key="item.id"
+                        :name="item.name"
+                        :image="item.image"
+                        :note="item.speaker"
+                        :date="item.dateTime"
+                        :price="item.price"
+                        :href="item.url"
+                    >
+                        <template v-if="item.mobileImg">
+                            <source :data-srcset="item.mobileImg.webp" type="image/webp" media="(max-width: 425px)" />
+                            <source :data-srcset="item.mobileImg.orig" media="(max-width: 425px)" />
+                        </template>
+
+                        <template v-if="item.tabletImg">
+                            <source :data-srcset="item.tabletImg.webp" type="image/webp" media="(max-width: 768px)" />
+                            <source :data-srcset="item.tabletImg.orig" media="(max-width: 768px)" />
+                        </template>
+                        <template v-if="item.desktopImg">
+                            <source :data-srcset="item.desktopImg.webp" type="image/webp" />
+                            <source :data-srcset="item.desktopImg.orig" />
+                        </template>
+                        <img
+                            v-if="item.defaultImg"
+                            class="blur-up lazyload v-picture__img"
+                            :data-src="item.defaultImg"
+                            alt
+                        />
+                    </product-masterclass-card>
                 </ul>
                 <v-button class="btn--outline product-view__section-link product-view__masterclass-link">
                     {{ $t('product.showAll') }}
                 </v-button>
             </div>
-        </section> -->
+        </section>
 
         <!-- #58437 -->
         <section ref="reviews" class="section product-view__section product-view__reviews">
@@ -690,6 +703,7 @@ import FrisbuyProductContainer from '@components/FrisbuyProductContainer/Frisbuy
 
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 
+import ProductMasterclassCard from '@components/product/ProductMasterclassCard/ProductMasterclassCard.vue';
 import ProductTipCard from '@components/product/ProductTipCard/ProductTipCard.vue';
 import ProductFileCard from '@components/product/ProductFileCard/ProductFileCard.vue';
 import ProductCartPanel from '@components/product/ProductCartPanel/ProductCartPanel.vue';
@@ -706,7 +720,7 @@ import HistoryPanel from '@components/HistoryPanel/HistoryPanel.vue';
 import ReviewsPanel from '@components/reviews/ReviewsPanel/ReviewsPanel.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { SCROLL, RECENTLY_VIEWED_PRODUCTS } from '@store';
+import { SCROLL, RECENTLY_VIEWED_PRODUCTS, LOCALE } from '@store';
 import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
 
 import { NAME as AUTH_MODULE } from '@store/modules/Auth';
@@ -719,9 +733,14 @@ import {
     FEATURED_PRODUCTS,
     PRODUCT_OPTIONS,
     PRODUCT_BUNDLES,
+    MASTERCLASSES,
 } from '@store/modules/Product';
 import { COMBINATIONS, CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Product/getters';
-import { FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS } from '@store/modules/Product/actions';
+import {
+    FETCH_PRODUCT_DATA,
+    FETCH_PRODUCT_MASTERCLASSES,
+    FETCH_PRODUCT_PICKUP_POINTS,
+} from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { IS_IN_CART } from '@store/modules/Cart/getters';
@@ -754,6 +773,8 @@ import {
     prepareProductImage,
     generateProductGroupUrl,
     generateAbsoluteProductUrl,
+    generateMasterclassUrl,
+    prepareMasterclassSpeakers,
 } from '@util/catalog';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
@@ -769,6 +790,8 @@ import '@images/sprites/logo.svg';
 import '@images/sprites/home.svg';
 
 import './Product.css';
+import { getDate } from '@util';
+import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 
 const productGalleryOptions = {
     spaceBetween: 8,
@@ -862,6 +885,7 @@ export default {
         ProductDeliveryPanel,
         ProductOptionPanel,
         ProductBundlePanel,
+        ProductMasterclassCard,
 
         ProductColorTag,
         ProductOptionTag,
@@ -916,6 +940,7 @@ export default {
     },
 
     computed: {
+        ...mapState([LOCALE]),
         ...mapState([SCROLL, RECENTLY_VIEWED_PRODUCTS]),
 
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
@@ -923,7 +948,14 @@ export default {
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
 
         ...mapGetters(PRODUCT_MODULE, [CHARACTERISTICS, COMBINATIONS, GET_NEXT_COMBINATION]),
-        ...mapState(PRODUCT_MODULE, [PRODUCT, PRODUCT_OPTIONS, BANNERS, FEATURED_PRODUCTS, PRODUCT_BUNDLES]),
+        ...mapState(PRODUCT_MODULE, [
+            PRODUCT,
+            PRODUCT_OPTIONS,
+            BANNERS,
+            FEATURED_PRODUCTS,
+            PRODUCT_BUNDLES,
+            MASTERCLASSES,
+        ]),
 
         ...mapState(MODAL_MODULE, {
             isGalleryOpen: (state) =>
@@ -1003,6 +1035,47 @@ export default {
             }
 
             return videoMap;
+        },
+
+        productMasterclasses() {
+            const items = this[MASTERCLASSES] || [];
+
+            return items.map((i) => {
+                const { nearestDate, nearestTimeFrom, code, speakers, image } = i;
+                const dateObj = getDate(`${nearestDate} ${nearestTimeFrom}`);
+                const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
+                const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
+                const dateTime = `${date} (${this.$t(`weekdays.short.${dateObj.getDay()}`)}), ${time}`;
+                const url = generateMasterclassUrl(code);
+                const speaker = prepareMasterclassSpeakers(speakers);
+
+                const defaultImg = image && generatePictureSourcePath(784, 480, image.id);
+                const desktopImg = image && {
+                    webp: generatePictureSourcePath(784, 480, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(784, 480, image.id),
+                };
+
+                const tabletImg = image && {
+                    webp: generatePictureSourcePath(425, 320, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(425, 320, image.id),
+                };
+
+                const mobileImg = image && {
+                    webp: generatePictureSourcePath(320, 200, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(320, 200, image.id),
+                };
+
+                return {
+                    ...i,
+                    url,
+                    speaker,
+                    dateTime,
+                    desktopImg,
+                    tabletImg,
+                    mobileImg,
+                    defaultImg,
+                };
+            });
         },
 
         productImages() {
@@ -1148,8 +1221,10 @@ export default {
     watch: {
         [PRODUCT](value) {
             if (value) {
-                $retailRocket.addProductView([value.id]);
+                const { code, id } = value;
+                $retailRocket.addProductView([id]);
                 this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
+                this[FETCH_PRODUCT_MASTERCLASSES](code);
             }
         },
 
@@ -1165,7 +1240,7 @@ export default {
     methods: {
         ...mapActions([FETCH_RECENTLY_VIEWED_PRODUCTS]),
         ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE]),
-        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS]),
+        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS, FETCH_PRODUCT_MASTERCLASSES]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
@@ -1393,9 +1468,10 @@ export default {
 
     beforeMount() {
         this.debounce_fetchProduct = _debounce(this.fetchProduct, 500);
-        const product = this[PRODUCT] || {};
-        $retailRocket.addProductView([product.id]);
+        const { code, id } = this[PRODUCT] || {};
+        $retailRocket.addProductView([id]);
         this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
+        this[FETCH_PRODUCT_MASTERCLASSES](code);
     },
 
     mounted() {

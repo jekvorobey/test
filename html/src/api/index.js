@@ -701,6 +701,14 @@ export function getProductPickupPoints(code) {
     });
 }
 
+export function getProductMasterclasses(code) {
+    return $http.get('/v1/catalog/product-detail/masterclasses', {
+        params: {
+            code,
+        },
+    });
+}
+
 export function getProductOptions(groupId) {
     return $http.get('/v1/catalog/variants', {
         params: {
