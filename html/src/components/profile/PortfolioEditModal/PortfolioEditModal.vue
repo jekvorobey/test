@@ -82,7 +82,7 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
-import validationMixin, { required, minLength } from '@plugins/validation';
+import validationMixin, { required } from '@plugins/validation';
 
 import { mapState, mapActions } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -103,6 +103,7 @@ import {
 import { modalName, mimeType } from '@enums';
 import '@images/sprites/cross.svg';
 import './PortfolioEditModal.css';
+import { $logger } from '@services';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 const NAME = modalName.profile.PORTFOLIO_EDIT;
@@ -214,7 +215,7 @@ export default {
             this[UPDATE_FILES](files);
         },
 
-        onHandleError(files) {
+        onHandleError() {
             this.error = 'Не удалось загрузить файлы. Проверьте размер и формат файлов.';
             setTimeout(() => (this.error = null), 5000);
         },
@@ -238,7 +239,9 @@ export default {
 
             try {
                 this[FETCH_CABINET_DATA](this.$isServer);
-            } catch (error) {}
+            } catch (error) {
+                $logger.error(error);
+            }
 
             this.onClose();
             this[CHANGE_MODAL_STATE]({
