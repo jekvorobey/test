@@ -88,14 +88,13 @@ export default {
 
         documents() {
             const items = this[ITEMS] || [];
-            return items.map((item) => {
+            return items.map((i) => {
+                const { type, size, file_id } = i;
                 return {
-                    id: item.id,
-                    type: this.filters.types[item.type],
-                    name: item.name.replace(/\.[\da-z]{1,6}/g, ''),
-                    ext: item.ext,
-                    size: formatFileSize(item.size),
-                    href: generateFileOriginalPath(item.file_id),
+                    ...i,
+                    type: this.filters.types[type],
+                    size: formatFileSize(size),
+                    href: generateFileOriginalPath(file_id),
                 };
             });
         },
