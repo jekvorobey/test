@@ -17,9 +17,9 @@
                     name="topics"
                 >
                     {{ topic.name }}
-                    <!-- <div class="text-grey text-sm">
-                        {{ subscribe.description }}
-                    </div> -->
+                    <div class="text-grey text-sm">
+                        {{ topic.description }}
+                    </div>
                 </v-check>
             </div>
         </info-panel>
