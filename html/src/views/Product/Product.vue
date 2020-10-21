@@ -1049,10 +1049,10 @@ export default {
                 const url = generateMasterclassUrl(code);
                 const speaker = prepareMasterclassSpeakers(speakers);
 
-                const defaultImg = image && generatePictureSourcePath(784, 480, image.id);
+                const defaultImg = image && generatePictureSourcePath(null, null, image.id);
                 const desktopImg = image && {
-                    webp: generatePictureSourcePath(784, 480, image.id, fileExtension.image.WEBP),
-                    orig: generatePictureSourcePath(784, 480, image.id),
+                    webp: generatePictureSourcePath(null, null, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(null, null, image.id),
                 };
 
                 const tabletImg = image && {
