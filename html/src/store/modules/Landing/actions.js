@@ -200,11 +200,11 @@ export default {
                     id: 'newBanner',
                     name: '',
                     type: 'banner',
-                    url: '/sets/hair_20/',
+                    url: '/catalog/dlya_volos/filters/badge-novinki/',
 
                     button: {
                         id: 2,
-                        url: '/sets/hair_20/',
+                        url: '/catalog/dlya_volos/filters/badge-novinki/',
                         text: 'Посмотреть',
                         location: 'bottom',
                         type: 'white',
@@ -236,11 +236,11 @@ export default {
                     id: 'bestsellersBanner',
                     name: '',
                     type: 'banner',
-                    url: '/bestsellers',
+                    url: '/catalog/dlya_volos/filters/badge-bestsellery/',
 
                     button: {
                         id: 2,
-                        url: '/bestsellers',
+                        url: '/catalog/dlya_volos/filters/badge-bestsellery/',
                         text: 'Посмотреть',
                         location: 'bottom',
                         type: 'white',
