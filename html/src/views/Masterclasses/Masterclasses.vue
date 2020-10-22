@@ -6,7 +6,9 @@
                     <v-svg v-if="isTablet" name="home" width="10" height="10" />
                     <span v-else>Главная</span>
                 </breadcrumb-item>
-                <breadcrumb-item key="masterclasses" :to="{ name: 'CatalogMasterclasses' }" >{{ catalogTitle }}</breadcrumb-item>
+                <breadcrumb-item key="masterclasses" :to="{ name: 'CatalogMasterclasses' }">{{
+                    catalogTitle
+                }}</breadcrumb-item>
             </breadcrumbs>
 
             <!-- <section class="section masterclasses-view__banners">
@@ -546,6 +548,14 @@ export default {
             });
         },
 
+        scrollToTop(behavior) {
+            if (typeof window !== 'undefined')
+                window.scrollTo({
+                    top: MIN_SCROLL_VALUE + 1,
+                    behavior,
+                });
+        },
+
         async fetchCatalog(to, from, showMore) {
             try {
                 const {
@@ -560,11 +570,7 @@ export default {
 
                 const { filter, routeSegments, filterSegments } = computeFilterMasterclassData(pathMatch);
 
-                if (!showMore && this[SCROLL] && page !== fromPage)
-                    window.scrollTo({
-                        top: MIN_SCROLL_VALUE + 1,
-                        behavior: 'smooth',
-                    });
+                if (!showMore && this[SCROLL] && page !== fromPage) this.scrollToTop('smooth');
 
                 this.$progress.start();
                 await this[FETCH_MASTERCLASS_ITEMS]({ page, filter, showMore });
@@ -585,15 +591,15 @@ export default {
         const {
             fullPath,
             params: { pathMatch },
-            query: { page = DEFAULT_PAGE, orderField, orderDirection },
+            query: { page = DEFAULT_PAGE },
         } = to;
 
         const { loadPath } = $store.state[MASTERCLASSES_MODULE];
 
         // если все загружено, пропускаем
-        if (loadPath === fullPath) next();
+        if (loadPath === fullPath) next((vm) => vm.scrollToTop());
         else {
-            const { filter, routeSegments, filterSegments } = computeFilterMasterclassData(pathMatch);
+            const { filter } = computeFilterMasterclassData(pathMatch);
 
             $progress.start();
             $store
@@ -603,10 +609,13 @@ export default {
                 })
                 .then(() => {
                     $store.dispatch(`${MASTERCLASSES_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => $progress.finish());
-                })
-                .catch((error) => {
                     next((vm) => {
+                        $progress.finish();
+                        vm.scrollToTop();
+                    });
+                })
+                .catch(() => {
+                    next(() => {
                         $progress.fail();
                         $progress.finish();
                     });
