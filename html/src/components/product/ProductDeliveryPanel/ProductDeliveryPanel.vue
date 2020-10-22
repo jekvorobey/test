@@ -28,12 +28,7 @@
             </template>
 
             —
-            <price
-                class="product-delivery-panel__price"
-                v-if="method.cost && method.cost.value > 0"
-                v-bind="method.cost"
-            />
-            <span v-else> {{ $t('product.freeDelivery') }} </span>,
+            <price class="product-delivery-panel__price" v-bind="method.cost" />,
             <span class="text-grey">{{ formatDate(method.date) }}</span>
         </p>
     </div>
