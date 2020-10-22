@@ -1,7 +1,13 @@
 <template>
     <li class="author-card">
         <div class="author-card__img">
-            <v-picture v-if="image" :image="image" />
+            <v-picture v-if="images">
+                <slot>
+                    <source :data-srcset="images.desktop.webp" type="image/webp" />
+                    <source :data-srcset="images.desktop.orig" />
+                    <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" />
+                </slot>
+            </v-picture>
             <div class="text-medium author-card__img-empty" v-else>{{ iconText }}</div>
         </div>
         <div class="author-card__title">
@@ -26,6 +32,8 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 
 import '@images/sprites/info-middle.svg';
 import './AuthorCard.css';
+import { generatePictureSourcePath } from '@util/file';
+import { fileExtension } from '@enums';
 
 export default {
     name: 'author-card',
@@ -74,6 +82,20 @@ export default {
             return `${this.firstName ? this.firstName.slice(0, 1) : ''}${
                 this.lastName ? this.lastName.slice(0, 1) : ''
             }`;
+        },
+
+        images() {
+            const { image } = this;
+            return (
+                image &&
+                image.id && {
+                    desktop: {
+                        webp: generatePictureSourcePath(72, 72, image.id, fileExtension.image.WEBP),
+                        orig: generatePictureSourcePath(72, 72, image.id),
+                    },
+                    defaultImg: generatePictureSourcePath(72, 72, image.id),
+                }
+            );
         },
     },
 

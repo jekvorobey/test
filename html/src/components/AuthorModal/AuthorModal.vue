@@ -12,7 +12,7 @@
                         :first-name="author.firstName"
                         :last-name="author.lastName"
                         :nick-name="author.profession"
-                        :image="author.avatar.defaultImg"
+                        :image="author.avatar"
                     />
 
                     <div class="author-modal__desc">

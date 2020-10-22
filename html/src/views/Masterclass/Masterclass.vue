@@ -93,7 +93,7 @@
                                         :first-name="speaker.firstName"
                                         :last-name="speaker.lastName"
                                         :nick-name="speaker.profession"
-                                        :image="speaker.avatar.defaultImg"
+                                        :image="speaker.avatar"
                                         :description="speaker.description"
                                         @show="onShowSpeaker(speaker)"
                                     />
@@ -111,7 +111,7 @@
                                     :first-name="speaker.firstName"
                                     :last-name="speaker.lastName"
                                     :nick-name="speaker.profession"
-                                    :image="speaker.avatar.defaultImg"
+                                    :image="speaker.avatar"
                                     :description="speaker.description"
                                     @show="onShowSpeaker(speaker)"
                                 />
@@ -280,7 +280,7 @@
                                                     :first-name="speaker.firstName"
                                                     :last-name="speaker.lastName"
                                                     :nick-name="speaker.profession"
-                                                    :image="speaker.avatar.defaultImg"
+                                                    :image="speaker.avatar"
                                                 />
                                             </ul>
                                         </div>
@@ -1099,11 +1099,7 @@ export default {
 
         speakers() {
             const { speakers = [] } = this[MASTERCLASS] || {};
-
-            return speakers.map((s) => {
-                if (s.avatar) s.avatar.defaultImg = generatePictureSourcePath(null, null, s.avatar.id);
-                return s;
-            });
+            return speakers;
         },
 
         places() {
