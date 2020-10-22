@@ -1222,17 +1222,17 @@ export default {
     },
 
     watch: {
-        [PRODUCT](value) {
-            if (value) {
-                const { code, id } = value;
-                $retailRocket.addProductView([id]);
-                this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
-                this[FETCH_PRODUCT_MASTERCLASSES](code);
-            }
-        },
-
         [SELECTED_CITY](value) {
             this.onSelectedCityChanged(value);
+        },
+
+        code(value) {
+            if (value) {
+                const { id } = this[PRODUCT] || {};
+                if (id) $retailRocket.addProductView([id]);
+                this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
+                this[FETCH_PRODUCT_MASTERCLASSES](value);
+            }
         },
 
         modal(value) {
