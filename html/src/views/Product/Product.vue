@@ -540,7 +540,10 @@
                         />
                     </product-masterclass-card>
                 </ul>
-                <v-button class="btn--outline product-view__section-link product-view__masterclass-link">
+                <v-button
+                    class="btn--outline product-view__section-link product-view__masterclass-link"
+                    :to="{ name: 'CatalogMasterclasses' }"
+                >
                     {{ $t('product.showAll') }}
                 </v-button>
             </div>
