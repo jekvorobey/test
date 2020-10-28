@@ -35,7 +35,7 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import Price from '@components/Price/Price.vue';
 
 import '@images/sprites/logo.svg';
-import './CheckoutMasterClassCard.css';
+import './CheckoutMasterclassCard.css';
 
 export default {
     name: 'checkout-masterclass-card',
