@@ -2,7 +2,7 @@
  * @Module
  */
 
-const CertificatesAsync = () => import(/* webpackChunkName: "certificates-view" */ './Certificates.vue');
+const CertificatesAsync = () => import(/* webpackChunkName: "lk-certificates-view" */ './Certificates.vue');
 
 /**
  * Модуль компонента Certificates
