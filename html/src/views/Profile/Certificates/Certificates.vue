@@ -84,8 +84,22 @@ import VInput from '@controls/VInput/VInput.vue';
 import Price from '@components/Price/Price.vue';
 
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
-import { $http, $progress } from '@services';
 import './Certificates.css';
+
+import { mapState, mapActions, mapGetters } from 'vuex';
+
+import {
+    ACTIVATE_CERTIFICATE,
+    FETCH_CERTIFICATES,
+} from '@store/modules/Certificate/actions';
+
+import {
+    CERTIFICATES,
+    CERTIFICATE_STATUS,
+    RECEIVE_METHOD_STATUS,
+} from '@store/modules/Certificate/getters';
+
+import { NAME as CERTIFICATE_MODULE, CERTIFICATE_TYPE, CERTIFICATE_DATA } from '@store/modules/Certificate';
 
 export default {
     name: 'certificates',
@@ -101,33 +115,42 @@ export default {
     data() {
         return {
             loading: false,
-            cards: [],
             certificate: '',
             activateError: '',
         };
     },
 
     computed: {
+        ...mapState(CERTIFICATE_MODULE, [CERTIFICATE_TYPE, CERTIFICATE_DATA]),
+        ...mapGetters(CERTIFICATE_MODULE, [RECEIVE_METHOD_STATUS, CERTIFICATE_STATUS, CERTIFICATES]),
+
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        cards() {
+            return this[CERTIFICATES] ? this[CERTIFICATES] : []
         },
     },
 
     watch: {},
 
     methods: {
-        fetchCards() {
-            this.loading = true;
-            $http
-                .get('/v1/certificate')
-                .then((response) => {
-                    this.loading = false;
-                    this.cards = response.cards;
-                })
-                .catch(() => {
-                    this.loading = false;
-                });
+        ...mapActions(CERTIFICATE_MODULE, [
+            FETCH_CERTIFICATES,
+            ACTIVATE_CERTIFICATE,
+        ]),
+
+        async fetchCards() {
+            this.loading = true
+            try {
+                await this[FETCH_CERTIFICATES]()
+                this.loading = false
+            } catch (error) {
+                this.loading = false
+            }
         },
+
         ruDate(sqlDateTime) {
             if (!sqlDateTime) return '';
             const matches = sqlDateTime.match(/^(\d{4})-(\d{2})-(\d{2})/);
@@ -150,28 +173,27 @@ export default {
             ][month];
             return parseInt(matches[3]) + ' ' + n + ' ' + matches[1];
         },
-        activate() {
+
+        async activate() {
             if (!this.certificate || this.certificate.trim() === '') {
-                return;
+                return
             }
-            $progress.start();
-            $http
-                .post('/v1/certificate/activate', { pin: this.certificate })
-                .then(() => {
-                    $progress.finish();
-                    this.certificate = '';
-                    this.fetchCards();
-                })
-                .catch((e) => {
-                    this.activateError =
-                        e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат';
-                    $progress.fail();
-                    $progress.finish();
-                });
+            try {
+                this.$progress.start()
+                await this[ACTIVATE_CERTIFICATE](this.certificate)
+                this.$progress.finish()
+                this.certificate = ''
+                this.fetchCards()
+            } catch (e) {
+                this.activateError =
+                         e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат'
+                this.$progress.fail()
+                this.$progress.finish() // finish после fail точно необходим?
+            }
         },
     },
     mounted() {
-        this.fetchCards();
+        this.fetchCards()
     },
 };
 </script>

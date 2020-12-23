@@ -864,6 +864,14 @@ export function addCertificate(data) {
     return $http.post('/v1/checkout/add-certificate', data);
 }
 
+export function fetchCertificates(data) {
+    return $http.get('/v1/certificate', data);
+}
+
+export function activateCertificate(data) {
+    return $http.post('/v1/certificate/activate', data);
+}
+
 export function changeBonus(data) {
     return $http.post('/v1/checkout/bonus', data);
 }

@@ -13,6 +13,7 @@ import modal from './modules/Modal';
 import search from './modules/Search';
 import cart from './modules/Cart';
 import checkout from './modules/Checkout';
+import certificate from './modules/Certificate';
 import preview from './modules/Preview';
 import featured from './modules/Featured';
 import geolocation from './modules/Geolocation';
@@ -82,6 +83,7 @@ export default function createStore(container) {
             auth: auth(),
             cart: cart(),
             checkout: checkout(),
+            certificate: certificate(),
             geolocation: geolocation(),
             preview: preview(),
             featured: featured(),
