@@ -6,9 +6,14 @@
                 <v-input
                     class="certificates-view__panel-input"
                     v-model="certificate"
-                    placeholder="Введите сертификат"
+                    placeholder="Введите PIN сертификата"
+                    :error="activateError"
+                    :show-error="true"
+                    @input="activateError = ''"
                 />
-                <v-button>Активировать</v-button>
+                <div>
+                    <v-button @click="activate">Активировать</v-button>
+                </div>
             </div>
         </div>
 
@@ -25,7 +30,12 @@
         <section class="certificates-view__section">
             <div class="container container--tablet-lg">
                 <h3 class="certificates-view__section-hl">Активированные сертификаты</h3>
-                <table class="certificates-view__table">
+
+                <attention-panel v-if="!loading && !cards.length" class="certificates-view__attention">
+                    <div>У вас пока нет активированных сертификатов.</div>
+                </attention-panel>
+
+                <table class="certificates-view__table" v-if="cards.length">
                     <colgroup v-if="!isTablet">
                         <col width="35%" />
                         <col width="25%" />
@@ -46,17 +56,19 @@
                         </tr>
                     </thead>
                     <transition-group tag="tbody" name="fade-in" appear class="certificates-view__table-body">
-                        <tr class="certificates-view__table-tr" key="1">
-                            <td class="certificates-view__table-td">14-5889-66087</td>
-                            <td class="certificates-view__table-td">1 000 ₽</td>
-                            <td class="certificates-view__table-td">1 000 ₽</td>
-                            <td class="certificates-view__table-td">18 августа 2019</td>
-                        </tr>
-                        <tr class="certificates-view__table-tr" key="2">
-                            <td class="certificates-view__table-td">14-5889-67744</td>
-                            <td class="certificates-view__table-td">500 ₽</td>
-                            <td class="certificates-view__table-td">500 ₽</td>
-                            <td class="certificates-view__table-td">15 августа 2019</td>
+                        <tr v-for="card in cards" class="certificates-view__table-tr" :key="'card' + card.id">
+                            <td class="certificates-view__table-td text-underline">
+                                {{ card.order.order_number }}
+                            </td>
+                            <td class="certificates-view__table-td">
+                                <price :value="card.price" :currency="'RUB'" />
+                            </td>
+                            <td class="certificates-view__table-td">
+                                <price :value="card.balance" :currency="'RUB'" />
+                            </td>
+                            <td class="certificates-view__table-td">
+                                {{ ruDate(card.activated_at) }}
+                            </td>
                         </tr>
                     </transition-group>
                 </table>
@@ -69,9 +81,10 @@
 import VLink from '@controls/VLink/VLink.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
+import Price from '@components/Price/Price.vue';
 
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
-
+import { $http, $progress } from '@services';
 import './Certificates.css';
 
 export default {
@@ -81,13 +94,16 @@ export default {
         VLink,
         VButton,
         VInput,
-
+        Price,
         AttentionPanel,
     },
 
     data() {
         return {
+            loading: false,
+            cards: [],
             certificate: '',
+            activateError: '',
         };
     },
 
@@ -99,6 +115,63 @@ export default {
 
     watch: {},
 
-    methods: {},
+    methods: {
+        fetchCards() {
+            this.loading = true;
+            $http
+                .get('/v1/certificate')
+                .then((response) => {
+                    this.loading = false;
+                    this.cards = response.cards;
+                })
+                .catch(() => {
+                    this.loading = false;
+                });
+        },
+        ruDate(sqlDateTime) {
+            if (!sqlDateTime) return '';
+            const matches = sqlDateTime.match(/^(\d{4})-(\d{2})-(\d{2})/);
+            if (!matches) return '';
+            const month = parseInt(matches[2]);
+            const n = [
+                '',
+                'января',
+                'февраля',
+                'марта',
+                'апреля',
+                'мая',
+                'июня',
+                'июля',
+                'августа',
+                'сентября',
+                'октября',
+                'ноября',
+                'декабря',
+            ][month];
+            return parseInt(matches[3]) + ' ' + n + ' ' + matches[1];
+        },
+        activate() {
+            if (!this.certificate || this.certificate.trim() === '') {
+                return;
+            }
+            $progress.start();
+            $http
+                .post('/v1/certificate/activate', { pin: this.certificate })
+                .then(() => {
+                    $progress.finish();
+                    this.certificate = '';
+                    this.fetchCards();
+                })
+                .catch((e) => {
+                    this.activateError =
+                        e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат';
+                    $progress.fail();
+                    $progress.finish();
+                });
+        },
+    },
+    mounted() {
+        this.fetchCards();
+    },
 };
 </script>

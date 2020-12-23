@@ -298,6 +298,7 @@ const main = {
         productType: {
             [cartItemTypes.PRODUCT]: 'Товары',
             [cartItemTypes.MASTERCLASS]: 'Мастер-классы',
+            [cartItemTypes.CERTIFICATE]: 'Электронный подарочный сертификат',
         },
 
         routes: {

@@ -155,6 +155,7 @@ export default {
                         // { name: 'Certificates', exact: true },
                         { name: 'Bonuses', exact: true, hidden: this[REFERRAL_PARTNER] },
                         { name: 'Orders' },
+                        { name: 'Certificates' },
                     ],
                 },
             ];

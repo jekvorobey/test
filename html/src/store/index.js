@@ -17,6 +17,7 @@ import preview from './modules/Preview';
 import featured from './modules/Featured';
 import geolocation from './modules/Geolocation';
 import favorites from './modules/Favorites';
+import reviews from './modules/Reviews';
 
 import ruLocale from '../assets/localization/ru';
 import enLocale from '../assets/localization/en';
@@ -85,6 +86,7 @@ export default function createStore(container) {
             preview: preview(),
             featured: featured(),
             favorites: favorites(),
+            reviews: reviews(),
         },
     });
 
