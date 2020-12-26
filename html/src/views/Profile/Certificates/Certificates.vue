@@ -37,9 +37,10 @@
 
                 <table class="certificates-view__table" v-if="cards.length">
                     <colgroup v-if="!isTablet">
-                        <col width="35%" />
+                        <col width="20%" />
                         <col width="25%" />
-                        <col width="25%" />
+                        <col width="20%" />
+                        <col width="20%" />
                         <col width="15%" />
                     </colgroup>
                     <colgroup v-else>
@@ -50,6 +51,7 @@
                     <thead class="certificates-view__table-head">
                         <tr class="certificates-view__table-tr certificates-view__table-tr--header">
                             <th class="certificates-view__table-th">Заказ/событие</th>
+                            <th class="certificates-view__table-th">Название</th>
                             <th class="certificates-view__table-th">Номинал</th>
                             <th class="certificates-view__table-th">{{ isTablet ? 'Остаток' : 'Остаток суммы' }}</th>
                             <th class="certificates-view__table-th">Дата активации</th>
@@ -59,6 +61,9 @@
                         <tr v-for="card in cards" class="certificates-view__table-tr" :key="'card' + card.id">
                             <td class="certificates-view__table-td text-underline">
                                 {{ card.order.order_number }}
+                            </td>
+                            <td class="certificates-view__table-td">
+                                {{ card.name }}
                             </td>
                             <td class="certificates-view__table-td">
                                 <price :value="card.price" :currency="'RUB'" />
@@ -94,8 +99,8 @@ import {
 } from '@store/modules/Certificate/actions';
 
 import {
-    CERTIFICATES,
-    CERTIFICATE_STATUS,
+    ACTIVE_CERTIFICATES,
+    ACTIVE_CERTIFICATE_STATUS,
     RECEIVE_METHOD_STATUS,
 } from '@store/modules/Certificate/getters';
 
@@ -122,14 +127,15 @@ export default {
 
     computed: {
         ...mapState(CERTIFICATE_MODULE, [CERTIFICATE_TYPE, CERTIFICATE_DATA]),
-        ...mapGetters(CERTIFICATE_MODULE, [RECEIVE_METHOD_STATUS, CERTIFICATE_STATUS, CERTIFICATES]),
+        ...mapGetters(CERTIFICATE_MODULE, [RECEIVE_METHOD_STATUS, ACTIVE_CERTIFICATE_STATUS, ACTIVE_CERTIFICATES]),
 
         isTablet() {
             return this.$mq.tablet;
         },
 
         cards() {
-            return this[CERTIFICATES] ? this[CERTIFICATES] : []
+            console.log('CARDS: ', ACTIVE_CERTIFICATES, this[ACTIVE_CERTIFICATES])
+            return this[ACTIVE_CERTIFICATES] ? this[ACTIVE_CERTIFICATES] : []
         },
     },
 
@@ -192,6 +198,7 @@ export default {
             }
         },
     },
+
     mounted() {
         this.fetchCards()
     },

@@ -7,7 +7,7 @@ import {
 } from '@api';
 
 import {
-  CERTIFICATE_STATUS,
+  ACTIVE_CERTIFICATE_STATUS,
 } from './getters';
 
 import {
@@ -23,20 +23,20 @@ export const ACTIVATE_CERTIFICATE = 'ACTIVATE_CERTIFICATE';
 export default {
   async [ACTIVATE_CERTIFICATE]({ commit, state }, payload) {
     try {
-      commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.PENDING });
+      commit(SET_STATUS, { name: ACTIVE_CERTIFICATE_STATUS, value: requestStatus.PENDING });
       const data = await activateCertificate({ pin: payload/*, data: state.checkoutData*/ });
-      commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.SUCCESS });
+      commit(SET_STATUS, { name: ACTIVE_CERTIFICATE_STATUS, value: requestStatus.SUCCESS });
       commit(SET_DATA, data);
     } catch (error) {
-      commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.ERROR });
+      commit(SET_STATUS, { name: ACTIVE_CERTIFICATE_STATUS, value: requestStatus.ERROR });
       storeErrorHandler(ACTIVATE_CERTIFICATE, true)(error);
     }
   },
 
   async [FETCH_CERTIFICATES]({ commit }) {
     try {
-        const { items } = await fetchCertificates();
-        commit(SET_CERTIFICATES, items);
+        const { cards } = await fetchCertificates();
+        commit(SET_CERTIFICATES, cards);
     } catch (error) {
         storeErrorHandler(FETCH_CERTIFICATES)(error);
     }

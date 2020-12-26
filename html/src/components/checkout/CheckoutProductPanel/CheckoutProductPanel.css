@@ -1,3 +1,6 @@
+.checkout-activate-toggle {
+    margin-top: 24px;
+}
 .checkout-product-panel {
     counter-reset: item;
 
@@ -219,7 +222,8 @@
                 }
 
                 .v-input__error {
-                    display: none;
+                    /*display: none;*/
+                    position: absolute;
                 }
             }
 
