@@ -113,12 +113,13 @@
                             v-if="personTo.activeTab === 'email'"
                             :disabled="order.is_to_self"
                         ></v-input>
-                        <v-input
+                        <v-input-mask
                             v-model="order.to_phone"
                             placeholder="Телефон"
                             v-if="personTo.activeTab === 'phone'"
+                            :options="maskOptions"
                             :disabled="order.is_to_self"
-                        ></v-input>
+                        ></v-input-mask>
                     </div>
                 </div>
                 <v-check id="self" name="self" v-model="order.is_to_self" value="1">Отправить себе</v-check>
@@ -161,12 +162,13 @@
                             v-if="personFrom.activeTab === 'email'"
                             :disabled="order.is_to_self || order.is_anonymous"
                         ></v-input>
-                        <v-input
+                        <v-input-mask
                             v-model="order.from_phone"
                             placeholder="Телефон"
                             v-if="personFrom.activeTab === 'phone'"
+                            :options="maskOptions"
                             :disabled="order.is_to_self || order.is_anonymous"
-                        ></v-input>
+                        ></v-input-mask>
                     </div>
                 </div>
                 <v-check
@@ -186,7 +188,7 @@
                 <v-button
                     class="gift-card-modal__submit-btn"
                     @click="submitOrder()"
-                    :disabled="isLoading || !order.terms_accepted"
+                    :disabled="isLoading || !valid"
                 >
                     Перейти к оплате
                 </v-button>
@@ -207,6 +209,7 @@ import CardDesignTag from '@components/giftcard/CardDesignTag/CardDesignTag.vue'
 import VCounter from '@controls/VCounter/VCounter.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
 import VInput from '@controls/VInput/VInput.vue';
+import VInputMask from '@controls/VInput/VInputMask.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 import VDatepicker from '@controls/VDatepicker/VDatepicker.vue';
 import Price from '@components/Price/Price.vue';
@@ -223,6 +226,8 @@ import './GiftCardModal.css';
 const NAME = modalName.TICKET_EDIT;
 import FlatpickrI18n from 'flatpickr/dist/l10n/ru.js';
 import { dateToString, addDays } from '@util';
+
+import { phoneMaskOptions } from '@settings';
 
 function createGiftCertificate(order) {
     return $http.post('/v1/certificate/buy', order);
@@ -241,6 +246,7 @@ export default {
         VCounter,
         VSelect,
         VInput,
+        VInputMask,
         VCheck,
         VDatepicker,
         Price,
@@ -286,6 +292,8 @@ export default {
                 deliveryDate: this.isoDate(new Date()),
                 deliveryTime: { code: '10:00:00', label: 'В 10:00' },
             },
+
+            maskOptions: { ...phoneMaskOptions },
 
             personFrom: {
                 activeTab: 'email',
@@ -381,11 +389,62 @@ export default {
             });
             return options;
         },
+
+        valid() {
+            return this.order.terms_accepted
+                && this.isCommentValid(this.order.comment)
+                && (
+                    this.order.is_to_self || (
+                        this.isNameValid(this.order.to_name) && (
+                            this.isTabValid(
+                                this.personTo.activeTab,
+                                this.order['to_'+this.personTo.activeTab]
+                            )
+                        )
+                    )
+                )
+                && (
+                    this.order.is_anonymous || (
+                        this.isNameValid(this.order.from_name) && (
+                            this.isTabValid(
+                                this.personFrom.activeTab,
+                                this.order['from_'+this.personFrom.activeTab]
+                            )
+                        )
+                    )
+                )
+        }
     },
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(CART_MODULE, [DELETE_ALL_ITEMS]),
+
+        isCommentValid(comment) {
+            return true // не обязательное поле
+        },
+
+        isNameValid(name) {
+            return name.trim().length > 0
+        },
+
+        isPhoneValid(phone) {
+            return /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(phone.trim())
+        },
+
+        isEmailValid(email) {
+            return /^(.+)@(.+){1,}\.(.+){2,}$/.test(email.trim())
+        },
+
+        isTabValid(tab, value) {
+            switch (tab) {
+                case 'email':
+                    return this.isEmailValid(value)
+                case 'phone':
+                    return this.isPhoneValid(value)
+            }
+            return value.length > 0
+        },
 
         isoDate(day) {
             return dateToString(day).split('.').reverse().join('-');
