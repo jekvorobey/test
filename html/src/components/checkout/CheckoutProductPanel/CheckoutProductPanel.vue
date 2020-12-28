@@ -268,7 +268,7 @@
                     </div>
 
                     <div v-if="isСertAmountEdit" class="checkout-product-panel__item-controls checkout-product-panel__item">
-                        <template v-if="isCertificateEdit">
+                        <template v-if="isCertificateEdit || !certificatePayment">
                             <v-input
                                 class="checkout-product-panel__item-controls-input"
                                 type="number"
@@ -290,8 +290,8 @@
                         </template>
                         <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
                             <span class="checkout-product-panel__item-controls-text checkout-product-panel__item">
-                                Доступно для оплаты:&nbsp;
-                                <strong class="text-bold">{{ maxCertificateDiscount }}</strong> из {{ availableCertAmount }} ₽ с сертификатов
+                                Будет использовано&nbsp;
+                                <strong class="text-bold">{{ certificatePayment }}</strong> из {{ maxCertificateDiscount }} ₽ с сертификатов — {{ aggCertNames }}
                             </span>
                             <div class="checkout-product-panel__item-card-panel">
                                 <!-- <div v-if="isTablet" class="text-sm text-normal text-grey">
@@ -303,20 +303,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <ul class="checkout-product-panel__item-list" v-if="aggCertNames">
-                        <li class="checkout-product-panel__item-header-hl">
-                            <v-svg name="Union" width="24" height="24" />
-                            <span>
-                                &nbsp;&nbsp;Будет списано {{ certificatePayment }} из {{ maxCertificateDiscount }} ₽ с сертификатов — {{ aggCertNames }}
-                            </span>
-                            <!-- <v-link
-                                class="checkout-product-panel__item-card-link"
-                                tag="button"
-                                @click="DELETE_CERTIFICATE(certificate.code)"
-                            > -->
-                        </li>
-                    </ul>
                     <div v-if="isСertAmountEdit" @click="onToggleActivateCert" @mousedown.prevent class="checkout-activate-toggle checkout-product-panel__item-header-hl">
                         <span>Активировать ещё один сертификат</span>
                         <v-svg v-if="!isVisibleActivateCert" name="arrow-down" width="24" height="24" @click="onToggleActivateCert" />
