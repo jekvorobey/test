@@ -268,7 +268,7 @@
                     </div>
 
                     <div v-if="isСertAmountEdit" class="checkout-product-panel__item-controls checkout-product-panel__item">
-                        <template v-if="availableCertAmount > 0">
+                        <template v-if="isCertificateEdit">
                             <v-input
                                 class="checkout-product-panel__item-controls-input"
                                 type="number"
@@ -276,29 +276,39 @@
                                 placeholder="Сколько списать?"
                                 v-model="customCertAmount"
                                 v-focus
-                                :max="availableCertAmount"
+                                :max="maxCertificateDiscount"
                                 :disabled="isCertAmountPending"
                                 @keydown.enter.prevent="ADD_CERTIFICATE(customCertAmount)"
                             />
                             <v-button
                                 class="btn--outline checkout-product-panel__item-controls-btn"
-                                @click="ADD_CERTIFICATE(customCertAmount)"
+                                @click="ADD_CERTIFICATE(customCertAmount); isCertificateEdit = false"
                                 :disabled="isCertAmountPending"
                             >
                                 Применить
                             </v-button>
                         </template>
-                        <span class="checkout-product-panel__item-controls-text checkout-product-panel__item">
-                            Доступно для оплаты:&nbsp;
-                            <strong class="text-bold">{{ availableCertAmount }}</strong>
-                        </span>
+                        <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
+                            <span class="checkout-product-panel__item-controls-text checkout-product-panel__item">
+                                Доступно для оплаты:&nbsp;
+                                <strong class="text-bold">{{ maxCertificateDiscount }}</strong> из {{ availableCertAmount }} ₽ с сертификатов
+                            </span>
+                            <div class="checkout-product-panel__item-card-panel">
+                                <!-- <div v-if="isTablet" class="text-sm text-normal text-grey">
+                                    (1 бонус = {{ bonusPerRub }} рубль)
+                                </div> -->
+                                <v-link class="checkout-product-panel__item-card-link" tag="button" @click="onEditCertificate">
+                                    Изменить
+                                </v-link>
+                            </div>
+                        </div>
                     </div>
 
                     <ul class="checkout-product-panel__item-list" v-if="aggCertNames">
                         <li class="checkout-product-panel__item-header-hl">
                             <v-svg name="Union" width="24" height="24" />
                             <span>
-                                &nbsp;&nbsp;Будет списано {{ certificatePayment }} ₽ с сертификатов — {{ aggCertNames }}
+                                &nbsp;&nbsp;Будет списано {{ certificatePayment }} из {{ maxCertificateDiscount }} ₽ с сертификатов — {{ aggCertNames }}
                             </span>
                             <!-- <v-link
                                 class="checkout-product-panel__item-card-link"
@@ -510,6 +520,7 @@ import {
     CERTIFICATE_PAYMENT,
     AVAILABLE_BONUS,
     MAX_BONUS,
+    MAX_CERTIFICATE_DISCOUNT,
     ADDRESS_STATUS,
     BONUS_STATUS,
     CERTIFICATE_STATUS,
@@ -633,6 +644,7 @@ export default {
     data() {
         return {
             isBonusEdit: false,
+            isCertificateEdit: false,
             bonusAmount: null,
             certificateCode: null,
             recipientIndexToChange: null,
@@ -667,6 +679,7 @@ export default {
             BONUS_PER_RUB,
             AVAILABLE_BONUS,
             MAX_BONUS,
+            MAX_CERTIFICATE_DISCOUNT,
             RECIPIENTS,
             SELECTED_RECIPIENT,
 
@@ -822,6 +835,10 @@ export default {
         isBonusEdit(value) {
             if (value) this.bonusAmount = this[BONUS];
         },
+        // Не разобрался, что нужно добавить в тело метода чтобы по аналогии с бонусами сделать
+        // isCertificateEdit(value) {
+        //     if (value) this.certificateAmount = this[CERTIFICATE]; // ???
+        // },
     },
 
     methods: {
@@ -1023,6 +1040,11 @@ export default {
             this.isBonusEdit = true;
         },
 
+        onEditCertificate() {
+            this.isCertificateEdit = true;
+            // isСertAmountEdit
+        },
+
         async onAddBonus(value) {
             try {
                 await this[ADD_BONUS](value || 0);
@@ -1067,7 +1089,6 @@ export default {
                         this.activateError = e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат' // this.$t('validation.errors.promocodeNotExist');
                         break;
                 }
-                console.log('STATUS: ', status, httpCodes.BAD_REQUEST, httpCodes.NOT_FOUND, e.data.message, this.activateError)
 
                 setTimeout(() => (this.activateError = ''), 5000);
 
@@ -1117,7 +1138,6 @@ export default {
             }
         },
         onToggleActivateCert() {
-            console.log('!!! onToggleActivateCert: ', this.isVisibleActivateCert)
             this.isVisibleActivateCert = !this.isVisibleActivateCert
         },
     },
