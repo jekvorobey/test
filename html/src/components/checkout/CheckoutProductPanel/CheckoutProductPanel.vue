@@ -278,15 +278,19 @@
                                 v-focus
                                 :max="maxCertificateDiscount"
                                 :disabled="isCertAmountPending"
-                                @keydown.enter.prevent="ADD_CERTIFICATE(customCertAmount)"
+                                @keydown.enter.prevent="applyCertificate"
                             />
                             <v-button
                                 class="btn--outline checkout-product-panel__item-controls-btn"
-                                @click="ADD_CERTIFICATE(customCertAmount); isCertificateEdit = false"
+                                @click="applyCertificate"
                                 :disabled="isCertAmountPending"
                             >
                                 Применить
                             </v-button>
+                            <span class="checkout-product-panel__item-controls-text checkout-product-panel__item">
+                                Доступно для оплаты&nbsp;
+                                <strong class="text-bold">{{ maxCertificateDiscount }}</strong> ₽ из {{ availableCertAmount }} ₽
+                            </span>
                         </template>
                         <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
                             <span class="checkout-product-panel__item-controls-text checkout-product-panel__item">
@@ -1053,6 +1057,14 @@ export default {
             } catch (error) {
                 this.loading = false
             }
+        },
+
+        async applyCertificate() {
+            this.isCertificateEdit = false
+            if (this.customCertAmount == 0) {
+                this.customCertAmount = null
+            }
+            await this.ADD_CERTIFICATE(this.customCertAmount || 0)
         },
 
         async activateCertificate() {
