@@ -291,7 +291,7 @@
                         <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
                             <span class="checkout-product-panel__item-controls-text checkout-product-panel__item">
                                 Будет использовано&nbsp;
-                                <strong class="text-bold">{{ certificatePayment }}</strong> из {{ maxCertificateDiscount }} ₽ с сертификатов — {{ aggCertNames }}
+                                <strong class="text-bold">{{ certificatePayment }}</strong> ₽ с сертификатов — {{ aggCertNames }}
                             </span>
                             <div class="checkout-product-panel__item-card-panel">
                                 <!-- <div v-if="isTablet" class="text-sm text-normal text-grey">
