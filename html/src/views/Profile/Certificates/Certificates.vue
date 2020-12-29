@@ -134,7 +134,6 @@ export default {
         },
 
         cards() {
-            console.log('CARDS: ', ACTIVE_CERTIFICATES, this[ACTIVE_CERTIFICATES])
             return this[ACTIVE_CERTIFICATES] ? this[ACTIVE_CERTIFICATES] : []
         },
     },

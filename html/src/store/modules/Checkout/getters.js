@@ -138,12 +138,10 @@ export default {
     [BONUS_PAYMENT]: (state, getters) => {
         const { bonusSpent = 0 } = getters[SUMMARY];
         const bonusPerRub = getters[BONUS_PER_RUB]; // рубли за 1 бонус
-        console.log('BONUS!', getters[SUMMARY], bonusSpent * bonusPerRub)
         return bonusSpent * bonusPerRub;
     },
     [CERTIFICATE_PAYMENT]: (state, getters) => {
         const { certDiscount } = getters[SUMMARY];
-        console.log('CERT!', getters[SUMMARY], certDiscount ? Math.abs(certDiscount.value) : 0)
         return certDiscount ? Math.abs(certDiscount.value) : 0
     },
 
