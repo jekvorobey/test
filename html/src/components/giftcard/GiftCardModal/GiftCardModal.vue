@@ -83,7 +83,19 @@
 
                 <div class="gift-card-modal__person">
                     <div class="gift-card-modal__person-input">
-                        <v-input v-model="order.to_name" placeholder="Имя" :disabled="order.is_to_self">Кому</v-input>
+                        <v-input
+                            v-model="order.to_name"
+                            placeholder="Имя"
+                            :disabled="order.is_to_self"
+                            :error="errorNameTo"
+                        >
+                            Кому
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error" v-if="error">{{ error }}</div>
+                                </transition>
+                            </template>
+                        </v-input>
                     </div>
                     <div class="gift-card-modal__person-input">
                         <div class="gift-card-modal__input-title">
@@ -112,14 +124,28 @@
                             placeholder="Email"
                             v-if="personTo.activeTab === 'email'"
                             :disabled="order.is_to_self"
-                        ></v-input>
+                            :error="errorEmailTo"
+                        >
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error" v-if="error">{{ error }}</div>
+                                </transition>
+                            </template>
+                        </v-input>
                         <v-input-mask
                             v-model="order.to_phone"
                             placeholder="Телефон"
                             v-if="personTo.activeTab === 'phone'"
                             :options="maskOptions"
                             :disabled="order.is_to_self"
-                        ></v-input-mask>
+                            :error="errorPhoneTo"
+                        >
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error" v-if="error">{{ error }}</div>
+                                </transition>
+                            </template>
+                        </v-input-mask>
                     </div>
                 </div>
                 <v-check id="self" name="self" v-model="order.is_to_self" value="1">Отправить себе</v-check>
@@ -130,8 +156,14 @@
                             v-model="order.from_name"
                             placeholder="Имя"
                             :disabled="order.is_to_self || order.is_anonymous"
+                            :error="errorNameFrom"
                         >
                             От кого
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error" v-if="error">{{ error }}</div>
+                                </transition>
+                            </template>
                         </v-input>
                     </div>
                     <div class="gift-card-modal__person-input">
@@ -161,14 +193,28 @@
                             placeholder="Email"
                             v-if="personFrom.activeTab === 'email'"
                             :disabled="order.is_to_self || order.is_anonymous"
-                        ></v-input>
+                            :error="errorEmailFrom"
+                        >
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error" v-if="error">{{ error }}</div>
+                                </transition>
+                            </template>
+                        </v-input>
                         <v-input-mask
                             v-model="order.from_phone"
                             placeholder="Телефон"
                             v-if="personFrom.activeTab === 'phone'"
                             :options="maskOptions"
                             :disabled="order.is_to_self || order.is_anonymous"
-                        ></v-input-mask>
+                            :error="errorPhoneFrom"
+                        >
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error" v-if="error">{{ error }}</div>
+                                </transition>
+                            </template>
+                        </v-input-mask>
                     </div>
                 </div>
                 <v-check
@@ -413,6 +459,30 @@ export default {
                         )
                     )
                 )
+        },
+
+        errorNameTo() {
+            return !this.order.is_to_self && this.order.to_name && !this.isNameValid(this.order.to_name) ? "Имя не должно быть пустым" : null
+        },
+
+        errorNameFrom() {
+            return !this.order.is_anonymous && this.order.from_name && !this.isNameValid(this.order.from_name) ? "Имя не должно быть пустым" : null
+        },
+
+        errorEmailTo() {
+            return !this.order.is_to_self && this.order['to_email'] && !this.isTabValid('email',this.order['to_email']) ? this.$t('validation.errors.email') : null
+        },
+
+        errorEmailFrom() {
+            return !this.order.is_anonymous && this.order['from_email'] && !this.isTabValid('email',this.order['from_email']) ? this.$t('validation.errors.email') : null
+        },
+
+        errorPhoneTo() {
+            return !this.order.is_to_self && this.order['to_phone'] && !this.isTabValid('phone',this.order['to_phone']) ? "Формат +7 XXX XXX-XX-XX" : null
+        },
+
+        errorPhoneFrom() {
+            return !this.order.is_anonymous && this.order['from_phone'] && !this.isTabValid('phone',this.order['from_phone']) ? "Формат +7 XXX XXX-XX-XX" : null
         }
     },
 
