@@ -268,7 +268,7 @@
                     </div>
 
                     <div v-if="isСertAmountEdit" class="checkout-product-panel__item-controls checkout-product-panel__item">
-                        <template v-if="isCertificateEdit || !certificatePayment">
+                        <template v-if="isCertificateEdit">
                             <v-input
                                 class="checkout-product-panel__item-controls-input"
                                 type="number"
@@ -293,7 +293,11 @@
                             </span>
                         </template>
                         <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
-                            <span class="checkout-product-panel__item-controls-text checkout-product-panel__item">
+                            <span v-if="!certificatePayment" class="checkout-product-panel__item-controls-text checkout-product-panel__item">
+                                Доступно для оплаты&nbsp;
+                                <strong class="text-bold">{{ maxCertificateDiscount }}</strong> ₽ из {{ availableCertAmount }} ₽
+                            </span>
+                            <span v-if="certificatePayment" class="checkout-product-panel__item-controls-text checkout-product-panel__item">
                                 Будет использовано&nbsp;
                                 <strong class="text-bold">{{ certificatePayment }}</strong> ₽ с сертификатов — {{ aggCertNames }}
                             </span>
@@ -1040,6 +1044,7 @@ export default {
                 await this[ADD_BONUS](value || 0);
                 this.isBonusEdit = false;
                 this.isCertificateEdit = false;
+                this.customCertAmount = null;
             } catch (error) {
                 this.isBonusEdit = true;
             }
@@ -1061,12 +1066,16 @@ export default {
         },
 
         async applyCertificate() {
-            this.isCertificateEdit = false
-            this.isBonusEdit = false
             if (this.customCertAmount == 0) {
                 this.customCertAmount = null
             }
-            await this.ADD_CERTIFICATE(this.customCertAmount || 0)
+            try {
+                await this.ADD_CERTIFICATE(this.customCertAmount || 0)
+                this.isCertificateEdit = false
+                this.isBonusEdit = false
+            } catch (error) {
+                this.isCertificateEdit = true
+            }
         },
 
         async activateCertificate() {
