@@ -37,9 +37,10 @@
 
                 <table class="certificates-view__table" v-if="cards.length">
                     <colgroup v-if="!isTablet">
-                        <col width="35%" />
+                        <col width="20%" />
                         <col width="25%" />
-                        <col width="25%" />
+                        <col width="20%" />
+                        <col width="20%" />
                         <col width="15%" />
                     </colgroup>
                     <colgroup v-else>
@@ -50,6 +51,7 @@
                     <thead class="certificates-view__table-head">
                         <tr class="certificates-view__table-tr certificates-view__table-tr--header">
                             <th class="certificates-view__table-th">Заказ/событие</th>
+                            <th class="certificates-view__table-th">Название</th>
                             <th class="certificates-view__table-th">Номинал</th>
                             <th class="certificates-view__table-th">{{ isTablet ? 'Остаток' : 'Остаток суммы' }}</th>
                             <th class="certificates-view__table-th">Дата активации</th>
@@ -59,6 +61,9 @@
                         <tr v-for="card in cards" class="certificates-view__table-tr" :key="'card' + card.id">
                             <td class="certificates-view__table-td text-underline">
                                 {{ card.order.order_number }}
+                            </td>
+                            <td class="certificates-view__table-td">
+                                {{ card.name }}
                             </td>
                             <td class="certificates-view__table-td">
                                 <price :value="card.price" :currency="'RUB'" />
@@ -84,8 +89,22 @@ import VInput from '@controls/VInput/VInput.vue';
 import Price from '@components/Price/Price.vue';
 
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
-import { $http, $progress } from '@services';
 import './Certificates.css';
+
+import { mapState, mapActions, mapGetters } from 'vuex';
+
+import {
+    ACTIVATE_CERTIFICATE,
+    FETCH_CERTIFICATES,
+} from '@store/modules/Certificate/actions';
+
+import {
+    ACTIVE_CERTIFICATES,
+    ACTIVE_CERTIFICATE_STATUS,
+    RECEIVE_METHOD_STATUS,
+} from '@store/modules/Certificate/getters';
+
+import { NAME as CERTIFICATE_MODULE, CERTIFICATE_TYPE, CERTIFICATE_DATA } from '@store/modules/Certificate';
 
 export default {
     name: 'certificates',
@@ -101,33 +120,42 @@ export default {
     data() {
         return {
             loading: false,
-            cards: [],
             certificate: '',
             activateError: '',
         };
     },
 
     computed: {
+        ...mapState(CERTIFICATE_MODULE, [CERTIFICATE_TYPE, CERTIFICATE_DATA]),
+        ...mapGetters(CERTIFICATE_MODULE, [RECEIVE_METHOD_STATUS, ACTIVE_CERTIFICATE_STATUS, ACTIVE_CERTIFICATES]),
+
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        cards() {
+            return this[ACTIVE_CERTIFICATES] ? this[ACTIVE_CERTIFICATES] : []
         },
     },
 
     watch: {},
 
     methods: {
-        fetchCards() {
-            this.loading = true;
-            $http
-                .get('/v1/certificate')
-                .then((response) => {
-                    this.loading = false;
-                    this.cards = response.cards;
-                })
-                .catch(() => {
-                    this.loading = false;
-                });
+        ...mapActions(CERTIFICATE_MODULE, [
+            FETCH_CERTIFICATES,
+            ACTIVATE_CERTIFICATE,
+        ]),
+
+        async fetchCards() {
+            this.loading = true
+            try {
+                await this[FETCH_CERTIFICATES]()
+                this.loading = false
+            } catch (error) {
+                this.loading = false
+            }
         },
+
         ruDate(sqlDateTime) {
             if (!sqlDateTime) return '';
             const matches = sqlDateTime.match(/^(\d{4})-(\d{2})-(\d{2})/);
@@ -150,28 +178,28 @@ export default {
             ][month];
             return parseInt(matches[3]) + ' ' + n + ' ' + matches[1];
         },
-        activate() {
+
+        async activate() {
             if (!this.certificate || this.certificate.trim() === '') {
-                return;
+                return
             }
-            $progress.start();
-            $http
-                .post('/v1/certificate/activate', { pin: this.certificate })
-                .then(() => {
-                    $progress.finish();
-                    this.certificate = '';
-                    this.fetchCards();
-                })
-                .catch((e) => {
-                    this.activateError =
-                        e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат';
-                    $progress.fail();
-                    $progress.finish();
-                });
+            try {
+                this.$progress.start()
+                await this[ACTIVATE_CERTIFICATE](this.certificate)
+                this.$progress.finish()
+                this.certificate = ''
+                this.fetchCards()
+            } catch (e) {
+                this.activateError =
+                         e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат'
+                this.$progress.fail()
+                this.$progress.finish() // finish после fail точно необходим?
+            }
         },
     },
+
     mounted() {
-        this.fetchCards();
+        this.fetchCards()
     },
 };
 </script>

@@ -257,51 +257,91 @@
                     </div>
                 </div>
 
-                <!-- <div
+                <div
                     class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--sertificate"
                 >
                     <div class="checkout-product-panel__item-header">
                         <h3 class="checkout-product-panel__item-header-hl">
-                            <v-svg name="gift" width="24" height="24" />&nbsp;Оплата сертификатом&nbsp;
+                            <v-svg name="gift" width="24" height="24" />&nbsp;Оплата подарочным сертификатом&nbsp;
                             <v-spinner width="24" height="24" :show="isCertificatePending" />
                         </h3>
                     </div>
-                    <ul class="checkout-product-panel__item-list">
-                        <li
-                            class="checkout-product-panel__item-card"
-                            v-for="certificate in certificates"
-                            :key="certificate.code"
-                        >
-                            <span>
-                                Будет оплачено {{ certificate.amount }} подарочным сертификатом —
-                                {{ certificate.code }}
-                            </span>
-                            <v-link
-                                class="checkout-product-panel__item-card-link"
-                                tag="button"
-                                @click="DELETE_CERTIFICATE(certificate.code)"
+
+                    <div v-if="isСertAmountEdit" class="checkout-product-panel__item-controls checkout-product-panel__item">
+                        <template v-if="isCertificateEdit">
+                            <v-input
+                                class="checkout-product-panel__item-controls-input"
+                                type="number"
+                                min="0"
+                                placeholder="Сколько списать?"
+                                v-model="customCertAmount"
+                                v-focus
+                                :max="maxCertificateDiscount"
+                                :disabled="isCertAmountPending"
+                                @keydown.enter.prevent="applyCertificate"
+                            />
+                            <v-button
+                                class="btn--outline checkout-product-panel__item-controls-btn"
+                                @click="applyCertificate"
+                                :disabled="isCertAmountPending"
                             >
-                                Отменить
-                            </v-link>
-                        </li>
-                    </ul>
-                    <div class="checkout-product-panel__item-controls">
+                                Применить
+                            </v-button>
+                            <span class="checkout-product-panel__item-controls-text checkout-product-panel__item">
+                                Доступно для оплаты&nbsp;
+                                <strong class="text-bold">{{ maxCertificateDiscount }}</strong> ₽ из {{ availableCertAmount }} ₽
+                            </span>
+                        </template>
+                        <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
+                            <span v-if="!certificatePayment" class="checkout-product-panel__item-controls-text checkout-product-panel__item">
+                                Доступно для оплаты&nbsp;
+                                <strong class="text-bold">{{ maxCertificateDiscount }}</strong> ₽ из {{ availableCertAmount }} ₽
+                            </span>
+                            <span v-if="certificatePayment" class="checkout-product-panel__item-controls-text checkout-product-panel__item">
+                                Будет использовано&nbsp;
+                                <strong class="text-bold">{{ certificatePayment }}</strong> ₽ с сертификатов — {{ aggCertNames }}
+                            </span>
+                            <div class="checkout-product-panel__item-card-panel">
+                                <!-- <div v-if="isTablet" class="text-sm text-normal text-grey">
+                                    (1 бонус = {{ bonusPerRub }} рубль)
+                                </div> -->
+                                <v-link class="checkout-product-panel__item-card-link" tag="button" @click="onEditCertificate">
+                                    Изменить
+                                </v-link>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="isСertAmountEdit" @click="onToggleActivateCert" @mousedown.prevent class="checkout-activate-toggle checkout-product-panel__item-header-hl">
+                        <span>Активировать ещё один сертификат</span>
+                        <v-svg v-if="!isVisibleActivateCert" name="arrow-down" width="24" height="24" @click="onToggleActivateCert" />
+                        <v-svg v-if="isVisibleActivateCert" name="arrow-up" width="24" height="24" @click="onToggleActivateCert" />
+                    </div>
+                    <div v-if="isVisibleActivateCert || !isСertAmountEdit" class="checkout-product-panel__item-controls">
                         <v-input
                             v-model="certificateCode"
                             class="checkout-product-panel__item-controls-input"
                             placeholder="Введите номер сертификата"
-                            @keydown.enter.prevent="ADD_CERTIFICATE(certificateCode)"
-                        />
+                            @keydown.enter.prevent="activateCertificate"
+                            :error="activateError"
+                            :show-error="true"
+                            @input="activateError = ''"
+                        >
+                            <template v-slot:error="{ error }">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div :key="error">{{ error }}</div>
+                                </transition>
+                            </template>
+                        </v-input>
                         <v-button
                             class="btn--outline checkout-product-panel__item-controls-btn"
                             :disabled="!certificateCode"
-                            @click="ADD_CERTIFICATE(certificateCode)"
+                            @click="activateCertificate"
                             @mousedown.prevent
                         >
                             Активировать
                         </v-button>
                     </div>
-                </div> -->
+                </div>
 
                 <div
                     class="checkout-product-panel__item checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--settings"
@@ -411,10 +451,23 @@ import CheckoutAddressPanel from '@components/checkout/CheckoutAddressPanel/Chec
 import CheckoutRecipientModal from '@components/checkout/CheckoutRecipientModal/CheckoutRecipientModal.vue';
 import AddressEditModal from '@components/profile/AddressEditModal/AddressEditModal.vue';
 
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
 import { LOCALE } from '@store';
 
 import { NAME as AUTH_MODULE, REFERRAL_PARTNER, USER } from '@store/modules/Auth';
+
+import {
+    ACTIVATE_CERTIFICATE,
+    FETCH_CERTIFICATES,
+} from '@store/modules/Certificate/actions';
+
+import {
+    ACTIVE_CERTIFICATES,
+    ACTIVE_CERTIFICATE_STATUS,
+    // RECEIVE_METHOD_STATUS, // TODO: пофиксить название константы, а то конфликтует с аналогичным названием из модуля Checkout
+} from '@store/modules/Certificate/getters';
+
+import { NAME as CERTIFICATE_MODULE, CERTIFICATE_TYPE, CERTIFICATE_DATA } from '@store/modules/Certificate';
 
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import {
@@ -458,8 +511,10 @@ import {
     PROMO_CODE,
     SELECTED_CONFIRMATION_TYPE_ID,
     BONUS_PER_RUB,
+    CERTIFICATE_PAYMENT,
     AVAILABLE_BONUS,
     MAX_BONUS,
+    MAX_CERTIFICATE_DISCOUNT,
     ADDRESS_STATUS,
     BONUS_STATUS,
     CERTIFICATE_STATUS,
@@ -492,6 +547,9 @@ import '@images/sprites/payment/yandex.svg';
 import '@images/sprites/plus.svg';
 import '@images/sprites/edit.svg';
 import '@images/sprites/gift.svg';
+import '@images/sprites/arrow-down.svg';
+import '@images/sprites/arrow-up.svg';
+import '@images/sprites/Union.svg';
 import './CheckoutProductPanel.css';
 import { dayMonthLongDateSettings } from '@settings';
 
@@ -580,9 +638,14 @@ export default {
     data() {
         return {
             isBonusEdit: false,
+            isCertificateEdit: false,
             bonusAmount: null,
             certificateCode: null,
             recipientIndexToChange: null,
+            certPrices: [],
+            isVisibleActivateCert: false,
+            customCertAmount: null,
+            activateError: '',
         };
     },
 
@@ -603,10 +666,14 @@ export default {
                 state[MODALS][modalName.checkout.RECIPIENT_EDIT].open,
         }),
 
+        ...mapState(CERTIFICATE_MODULE, [CERTIFICATE_TYPE, CERTIFICATE_DATA]),
+        ...mapGetters(CERTIFICATE_MODULE, [RECEIVE_METHOD_STATUS, ACTIVE_CERTIFICATE_STATUS, ACTIVE_CERTIFICATES]),
+
         ...mapGetters(CHECKOUT_MODULE, [
             BONUS_PER_RUB,
             AVAILABLE_BONUS,
             MAX_BONUS,
+            MAX_CERTIFICATE_DISCOUNT,
             RECIPIENTS,
             SELECTED_RECIPIENT,
 
@@ -626,6 +693,8 @@ export default {
 
             DELIVERY_TYPES,
             SELECTED_DELIVERY_TYPE,
+
+            CERTIFICATE_PAYMENT,
 
             BONUS,
             CERTIFICATES,
@@ -668,6 +737,12 @@ export default {
         },
 
         isCertificatePending() {
+            return this[CERTIFICATE_STATUS] === requestStatus.PENDING;
+        },
+
+        isCertAmountPending() {
+            // isCertificatePending
+            // TODO: CERTIFICATE_STATUS -> CERT_AMOUNT_STATUS
             return this[CERTIFICATE_STATUS] === requestStatus.PENDING;
         },
 
@@ -722,12 +797,42 @@ export default {
         maxAmountBonus() {
             return this[MAX_BONUS] < this[AVAILABLE_BONUS] ? this[MAX_BONUS] : this[AVAILABLE_BONUS];
         },
+
+        // Общая сумма сертификатов
+        availableCertAmount() {
+            let am = this[ACTIVE_CERTIFICATES].map(c => c.balance)
+            return am.length > 0 ? am.reduce((a, b) => a+b) : 0
+        },
+
+        // Названия сертификатов через запятую
+        aggCertNames() {
+            let am = this.cards.map(c => c.code)
+            return am.length > 0 ? am.join(', ') : ''
+        },
+
+        isСertAmountEdit() {
+            return this.availableCertAmount > 0
+        },
+
+        // сертификаты, которые добавлены к оплате заказа
+        cards() {
+            return this[CERTIFICATES] ? this[CERTIFICATES] : []
+        },
+
+        // все активные сертификаты пользоватлея
+        activeCards() {
+            return this[ACTIVE_CERTIFICATES] ? this[ACTIVE_CERTIFICATES] : []
+        },
     },
 
     watch: {
         isBonusEdit(value) {
             if (value) this.bonusAmount = this[BONUS];
         },
+        // Не разобрался, что нужно добавить в тело метода чтобы по аналогии с бонусами сделать
+        // isCertificateEdit(value) {
+        //     if (value) this.certificateAmount = this[CERTIFICATE]; // ???
+        // },
     },
 
     methods: {
@@ -756,6 +861,10 @@ export default {
             SET_RECIPIENT,
             ADD_RECIPIENT,
             CHANGE_RECIPIENT,
+        ]),
+
+        ...mapActions(CERTIFICATE_MODULE, [
+            ACTIVATE_CERTIFICATE,
         ]),
 
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
@@ -925,14 +1034,106 @@ export default {
             this.isBonusEdit = true;
         },
 
+        onEditCertificate() {
+            this.isCertificateEdit = true;
+            // isСertAmountEdit
+        },
+
         async onAddBonus(value) {
             try {
                 await this[ADD_BONUS](value || 0);
                 this.isBonusEdit = false;
+                this.isCertificateEdit = false;
+                this.customCertAmount = null;
             } catch (error) {
                 this.isBonusEdit = true;
             }
         },
+
+        ...mapActions(CERTIFICATE_MODULE, [
+            FETCH_CERTIFICATES,
+            ACTIVATE_CERTIFICATE,
+        ]),
+
+        async fetchCards() {
+            this.loading = true
+            try {
+                await this[FETCH_CERTIFICATES]()
+                this.loading = false
+            } catch (error) {
+                this.loading = false
+            }
+        },
+
+        async applyCertificate() {
+            if (this.customCertAmount == 0) {
+                this.customCertAmount = null
+            }
+            try {
+                await this.ADD_CERTIFICATE(this.customCertAmount || 0)
+                this.isCertificateEdit = false
+                this.isBonusEdit = false
+            } catch (error) {
+                this.isCertificateEdit = true
+            }
+        },
+
+        async activateCertificate() {
+            if (!this.certificateCode || this.certificateCode.trim() === '') {
+                return
+            }
+            try {
+                this.$progress.start()
+                await this[ACTIVATE_CERTIFICATE](this.certificateCode)
+                this.$progress.finish()
+                this.certificateCode = ''
+                this.fetchCards()
+            } catch (e) {
+                const { status } = e;
+                switch (status) {
+                    case httpCodes.BAD_REQUEST:
+                        this.activateError = e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат' // this.$t('validation.errors.promocodeInvalid');
+                        break;
+                    case httpCodes.NOT_FOUND:
+                        this.activateError = e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат' // this.$t('validation.errors.promocodeNotExist');
+                        break;
+                }
+
+                setTimeout(() => (this.activateError = ''), 5000);
+
+
+                this.$progress.fail()
+                this.$progress.finish() // finish после fail точно необходим?
+            }
+        },
+
+        // async activate() {
+        //     if (!this.certificate || this.certificate.trim() === '') {
+        //         return
+        //     }
+        //     try {
+        //         this.$progress.start()
+        //         await this[ACTIVATE_CERTIFICATE](this.certificate)
+        //         this.$progress.finish()
+        //         this.certificate = ''
+        //         this.fetchCards()
+        //     } catch (e) {
+        //         this.activateError =
+        //                  e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат'
+        //         this.$progress.fail()
+        //         this.$progress.finish() // finish после fail точно необходим?
+        //     }
+        // },
+
+        // TODO: связать с беком
+        // async onAddCertAmount(value) {
+        //     // try {
+        //     //     await this[ADD_CERT_AMOUNT](value || 0);
+        //     //     this.isCertAmountEdit = false;
+        //     // } catch (error) {
+        //     //     this.isCertAmountEdit = true;
+        //     // }
+        // },
 
         scrollToError(element) {
             const panelScrollOffset = 24;
@@ -945,6 +1146,9 @@ export default {
                 return generateProductUrl(categoryCode, product.code);
             }
         },
+        onToggleActivateCert() {
+            this.isVisibleActivateCert = !this.isVisibleActivateCert
+        },
     },
 
     created() {
@@ -953,6 +1157,7 @@ export default {
 
     mounted() {
         this.debounce_scrollToError = _debounce(this.scrollToError, SCROLL_DEBOUNCE_TIME);
+        this.fetchCards()
     },
 };
 </script>
