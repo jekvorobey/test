@@ -1039,6 +1039,7 @@ export default {
             try {
                 await this[ADD_BONUS](value || 0);
                 this.isBonusEdit = false;
+                this.isCertificateEdit = false;
             } catch (error) {
                 this.isBonusEdit = true;
             }
@@ -1061,6 +1062,7 @@ export default {
 
         async applyCertificate() {
             this.isCertificateEdit = false
+            this.isBonusEdit = false
             if (this.customCertAmount == 0) {
                 this.customCertAmount = null
             }
