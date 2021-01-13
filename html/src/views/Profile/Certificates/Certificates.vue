@@ -66,10 +66,10 @@
                                 {{ card.name }}
                             </td>
                             <td class="certificates-view__table-td">
-                                <price :value="card.price" :currency="'RUB'" />
+                                <price :value="card.price" :currency="'RUB'" always-number />
                             </td>
                             <td class="certificates-view__table-td">
-                                <price :value="card.balance" :currency="'RUB'" />
+                                <price :value="card.balance" :currency="'RUB'" always-number />
                             </td>
                             <td class="certificates-view__table-td">
                                 {{ ruDate(card.activated_at) }}

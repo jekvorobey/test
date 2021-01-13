@@ -175,7 +175,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
-import {authMode, modalName} from '@enums';
+import { authMode, modalName } from '@enums';
 import { SCROLL } from '@store';
 
 import '@images/sprites/home.svg';

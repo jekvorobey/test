@@ -17,7 +17,7 @@
                     </div>
                     <div class="gift-card-modal__price">
                         <div class="gift-card-modal__amount">
-                            <v-counter v-model="order.amount" min="1" max="200" />
+                            <v-counter v-model="order.qty" min="1" max="200" />
                         </div>
                         <div class="gift-card-modal__price-value">
                             <price :value="orderSum" :currency="'RUB'" />
@@ -324,7 +324,7 @@ export default {
             isLoading: false,
             isShowDatePicker: false,
             order: {
-                amount: 1,
+                qty: 1,
                 is_to_self: false,
                 is_anonymous: false,
                 terms_accepted: false,
@@ -398,7 +398,7 @@ export default {
         }),
 
         orderSum() {
-            return this.order.amount * this.price;
+            return this.order.qty * this.price;
         },
 
         isTablet() {
@@ -420,7 +420,7 @@ export default {
         dateOptions() {
             const options = [];
             let date = new Date();
-            options.push({ label: 'Сегодня', value: this.isoDate(date) });
+            options.push({ label: 'Сейчас', value: this.isoDate(date) });
 
             for (let i = 0; i < 3; i++) {
                 date = addDays(date, 1);
@@ -491,29 +491,29 @@ export default {
         ...mapActions(CART_MODULE, [DELETE_ALL_ITEMS]),
 
         isCommentValid(comment) {
-            return true // не обязательное поле
+            return true; // не обязательное поле
         },
 
         isNameValid(name) {
-            return name.trim().length > 0
+            return name.trim().length > 0;
         },
 
         isPhoneValid(phone) {
-            return /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(phone.trim())
+            return /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(phone.trim());
         },
 
         isEmailValid(email) {
-            return /^(.+)@(.+){1,}\.(.+){2,}$/.test(email.trim())
+            return /^(.+)@(.+){1,}\.(.+){2,}$/.test(email.trim());
         },
 
         isTabValid(tab, value) {
             switch (tab) {
                 case 'email':
-                    return this.isEmailValid(value)
+                    return this.isEmailValid(value);
                 case 'phone':
-                    return this.isPhoneValid(value)
+                    return this.isPhoneValid(value);
             }
-            return value.length > 0
+            return value.length > 0;
         },
 
         isoDate(day) {
@@ -549,7 +549,7 @@ export default {
                 ...this.order,
                 nominal_id: this.nominalId,
                 design_id: this.designCode,
-                delivery_time: this.order.deliveryDate + ' ' + this.order.deliveryTime.code,
+                delivery_at: this.order.deliveryDate + ' ' + this.order.deliveryTime.code,
             };
 
             delete orderGenerated.deliveryDate;
