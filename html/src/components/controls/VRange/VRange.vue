@@ -111,6 +111,7 @@ export default {
         onInputChange(e, index) {
             this.value_internal[index] = Number(e.target.value);
             this.slider.set(this.value_internal);
+            this.$emit('input', this.value_internal);
         },
 
         onUpdate(values, handle, unencoded, tap, positions) {
