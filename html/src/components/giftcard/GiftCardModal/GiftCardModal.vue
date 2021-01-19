@@ -440,21 +440,36 @@ export default {
             return this.order.terms_accepted
                 && this.isCommentValid(this.order.comment)
                 && (
-                    this.order.is_to_self || (
-                        this.isNameValid(this.order.to_name) && (
-                            this.isTabValid(
-                                this.personTo.activeTab,
-                                this.order['to_'+this.personTo.activeTab]
+                    (
+                        this.order.is_to_self || (
+                            this.isNameValid(this.order.to_name) && (
+                                this.isTabValid(
+                                    this.personTo.activeTab,
+                                    this.order['to_'+this.personTo.activeTab]
+                                )
                             )
                         )
                     )
-                )
-                && (
-                    this.order.is_anonymous || (
-                        this.isNameValid(this.order.from_name) && (
-                            this.isTabValid(
-                                this.personFrom.activeTab,
-                                this.order['from_'+this.personFrom.activeTab]
+                    ||
+                    (
+                        (
+                            this.order.is_to_self || (
+                                this.isNameValid(this.order.to_name) && (
+                                    this.isTabValid(
+                                        this.personTo.activeTab,
+                                        this.order['to_'+this.personTo.activeTab]
+                                    )
+                                )
+                            )
+                        )
+                        && (
+                            this.order.is_anonymous || (
+                                this.isNameValid(this.order.from_name) && (
+                                    this.isTabValid(
+                                        this.personFrom.activeTab,
+                                        this.order['from_'+this.personFrom.activeTab]
+                                    )
+                                )
                             )
                         )
                     )
