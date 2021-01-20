@@ -1097,7 +1097,6 @@ export default {
                 }
                 this.$progress.finish()
                 this.certificateCode = ''
-                this.fetchCards()
             } catch (e) {
                 const { status } = e;
                 switch (status) {
@@ -1116,6 +1115,8 @@ export default {
                 this.activateSuccess = ''
                 this.isVisibleActivateCert = false
             }, 5000);
+
+            this.fetchCards()
         },
 
         // async activate() {
