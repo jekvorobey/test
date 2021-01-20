@@ -316,22 +316,18 @@
                         <v-svg v-if="!isVisibleActivateCert" name="arrow-down" width="24" height="24" @click="onToggleActivateCert" />
                         <v-svg v-if="isVisibleActivateCert" name="arrow-up" width="24" height="24" @click="onToggleActivateCert" />
                     </div>
-                    <div v-if="isVisibleActivateCert || !isСertAmountEdit" class="checkout-product-panel__item-controls">
+                    <div v-if="isVisibleActivateCert || !isСertAmountEdit" class="checkout-product-panel__item-controls checkout-activate-baseline">
                         <v-input
                             v-model="certificateCode"
                             class="checkout-product-panel__item-controls-input"
                             placeholder="Введите номер сертификата"
                             @keydown.enter.prevent="activateCertificate"
                             :error="activateError"
-                            :show-error="true"
-                            @input="activateError = ''"
-                        >
-                            <template v-slot:error="{ error }">
-                                <transition name="slide-in-bottom" mode="out-in">
-                                    <div :key="error">{{ error }}</div>
-                                </transition>
-                            </template>
-                        </v-input>
+                            :success="activateSuccess"
+                            :show-error="!!activateError"
+                            :show-success="!!activateSuccess"
+                            @input="onActivateInput"
+                        />
                         <v-button
                             class="btn--outline checkout-product-panel__item-controls-btn"
                             :disabled="!certificateCode"
@@ -646,6 +642,7 @@ export default {
             isVisibleActivateCert: false,
             customCertAmount: null,
             activateError: '',
+            activateSuccess: '',
         };
     },
 
@@ -1050,6 +1047,11 @@ export default {
             }
         },
 
+        onActivateInput () {
+            this.activateError = ''
+            this.activateSuccess = ''
+        },
+
         ...mapActions(CERTIFICATE_MODULE, [
             FETCH_CERTIFICATES,
             ACTIVATE_CERTIFICATE,
@@ -1085,6 +1087,14 @@ export default {
             try {
                 this.$progress.start()
                 await this[ACTIVATE_CERTIFICATE](this.certificateCode)
+                let repl = this[CERTIFICATE_DATA]
+                if (this[ACTIVE_CERTIFICATE_STATUS] == 'success') {
+                    this.activateSuccess =
+                        repl && repl.message ? repl.message : '' // Нужно решить, что вывести по умолчанию, если с сервера потлетел ответ с пустым сообщением
+                } else {
+                    this.activateError =
+                        repl && repl.message ? repl.message : 'Произошла неизвестная ошибка'
+                }
                 this.$progress.finish()
                 this.certificateCode = ''
                 this.fetchCards()
@@ -1098,13 +1108,14 @@ export default {
                         this.activateError = e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат' // this.$t('validation.errors.promocodeNotExist');
                         break;
                 }
-
-                setTimeout(() => (this.activateError = ''), 5000);
-
-
                 this.$progress.fail()
                 this.$progress.finish() // finish после fail точно необходим?
             }
+            setTimeout(() => {
+                this.activateError = ''
+                this.activateSuccess = ''
+                this.isVisibleActivateCert = false
+            }, 5000);
         },
 
         // async activate() {

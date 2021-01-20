@@ -1,6 +1,9 @@
 .checkout-activate-toggle {
     margin-top: 24px;
 }
+.checkout-activate-baseline {
+    align-items: baseline !important;
+}
 .checkout-product-panel {
     counter-reset: item;
 
