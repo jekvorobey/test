@@ -21,7 +21,7 @@
             <div>
                 <div>Потратить сертификат вы можете при оплате заказа.</div>
                 Ознакомиться&nbsp;с&nbsp;
-                <v-link class="certificates-view__attention-link">
+                <v-link class="certificates-view__attention-link" href="/agreements/public-offer/" target="_blank">
                     полными условиями оферты подарочных сертификатов.
                 </v-link>
             </div>
