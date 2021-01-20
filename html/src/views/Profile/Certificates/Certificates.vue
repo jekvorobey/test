@@ -201,7 +201,6 @@ export default {
                 this.certificate = ''
                 this.fetchCards()
             } catch (e) {
-                console.log('!!!e:', e)
                 this.activateError =
                     e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат'
                 this.$progress.fail()
