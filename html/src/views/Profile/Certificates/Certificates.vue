@@ -8,8 +8,10 @@
                     v-model="certificate"
                     placeholder="Введите PIN сертификата"
                     :error="activateError"
-                    :show-error="true"
-                    @input="activateError = ''"
+                    :success="activateSuccess"
+                    :show-error="activateError != ''"
+                    :show-success="activateSuccess != ''"
+                    @input="onInput"
                 />
                 <div>
                     <v-button @click="activate">Активировать</v-button>
@@ -122,6 +124,7 @@ export default {
             loading: false,
             certificate: '',
             activateError: '',
+            activateSuccess: ''
         };
     },
 
@@ -186,15 +189,29 @@ export default {
             try {
                 this.$progress.start()
                 await this[ACTIVATE_CERTIFICATE](this.certificate)
+                let repl = this[CERTIFICATE_DATA]
+                if (this[ACTIVE_CERTIFICATE_STATUS] == 'success') {
+                    this.activateSuccess =
+                        repl && repl.message ? repl.message : '' // Нужно решить, что вывести по умолчанию, если с сервера потлетел ответ с пустым сообщением
+                } else {
+                    this.activateError =
+                        repl && repl.message ? repl.message : 'Произошла неизвестная ошибка'
+                }
                 this.$progress.finish()
                 this.certificate = ''
                 this.fetchCards()
             } catch (e) {
+                console.log('!!!e:', e)
                 this.activateError =
-                         e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат'
+                    e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат'
                 this.$progress.fail()
                 this.$progress.finish() // finish после fail точно необходим?
             }
+        },
+
+        onInput () {
+            this.activateError = ''
+            this.activateSuccess = ''
         },
     },
 

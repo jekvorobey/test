@@ -47,6 +47,11 @@
                 {{ error }}
             </slot>
         </div>
+        <div v-if="showSuccess" :id="`${inputId}-success-alert`" class="success-message v-input__success" role="alert">
+            <slot name="success" :error="success">
+                {{ success }}
+            </slot>
+        </div>
     </div>
 </template>
 
@@ -98,7 +103,17 @@ export default {
             default: true,
         },
 
+        showSuccess: {
+            type: Boolean,
+            default: false,
+        },
+
         error: {
+            type: [String, Boolean],
+            default: null,
+        },
+
+        success: {
             type: [String, Boolean],
             default: null,
         },

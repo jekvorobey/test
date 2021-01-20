@@ -26,7 +26,7 @@
         line-height: 16px;
     }
 
-    &--float &__error {
+    &--float &__error &__success {
         padding: 0 16px;
         border: none;
         border-bottom: 1px solid var(--cl-grey);
@@ -94,6 +94,15 @@
         font-size: 12px;
         line-height: calc(var(--gs) * 3);
         color: var(--cl-red);
+        overflow: hidden;
+    }
+
+    &__success {
+        position: relative;
+        min-height: calc(var(--gs) * 3);
+        font-size: 12px;
+        line-height: calc(var(--gs) * 3);
+        color: var(--cl-green);
         overflow: hidden;
     }
 }
