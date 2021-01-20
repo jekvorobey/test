@@ -7,6 +7,7 @@ export const modalName = Object.freeze({
         CITY_SELECTION: 'city-selection-modal',
         NOTIFICATION: 'notification-modal',
         AUTH: 'auth-modal',
+        HOME_FIRST: 'home-first-modal',
     },
 
     product: {
