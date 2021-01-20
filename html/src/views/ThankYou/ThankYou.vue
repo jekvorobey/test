@@ -275,8 +275,8 @@ export default {
                 const weekday = this.$t(`weekdays.long.${dateObj.getDay()}`);
 
                 let dateTimeString = `${dateString}, ${weekday}${timeFrom || timeTo ? ',' : ''}`;
-                if (timeFrom) dateTimeString += ` c ${timeFrom}`;
-                if (timeTo) dateTimeString += ` по ${timeTo}`;
+                if (timeFrom) dateTimeString += (timeTo && timeFrom !== timeTo ? ' с ' : '') + `${timeFrom}`;
+                if (timeTo && timeFrom !== timeTo) dateTimeString += ` по ${timeTo}`;
                 return dateTimeString;
             });
         },
