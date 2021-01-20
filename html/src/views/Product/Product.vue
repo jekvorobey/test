@@ -1228,8 +1228,7 @@ export default {
 
         code(value) {
             if (value) {
-                const { id } = this[PRODUCT] || {};
-                if (id) $retailRocket.addProductView([id]);
+                this.setRetailRocketProductView();
                 this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
                 this[FETCH_PRODUCT_MASTERCLASSES](value);
             }
@@ -1406,6 +1405,17 @@ export default {
         onScrollTo(ref, offset = 0) {
             window.scrollTo({ top: ref.offsetTop + offset, behavior: 'smooth' });
         },
+
+        setRetailRocketProductView() {
+            const { productId } = this[PRODUCT] || {};
+            const productIds = [];
+            if (this[PRODUCT_OPTIONS] && this[PRODUCT_OPTIONS].combinations.length > 1) {
+                this[PRODUCT_OPTIONS].combinations.map((combination) => {
+                    productIds.push(combination.id);
+                });
+            } else productIds.push(productId);
+            $retailRocket.addProductView(productIds);
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -1471,8 +1481,9 @@ export default {
 
     beforeMount() {
         this.debounce_fetchProduct = _debounce(this.fetchProduct, 500);
-        const { code, id } = this[PRODUCT] || {};
-        $retailRocket.addProductView([id]);
+        const { code } = this[PRODUCT] || {};
+        this.setRetailRocketProductView();
+
         this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
         this[FETCH_PRODUCT_MASTERCLASSES](code);
     },

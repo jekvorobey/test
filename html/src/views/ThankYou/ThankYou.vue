@@ -199,7 +199,7 @@ import { FETCH_CHECKOUT_ORDER } from '@store/modules/Checkout/actions';
 
 import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
 
-import { $store, $progress } from '@services';
+import {$store, $progress, $retailRocket} from '@services';
 import { fileExtension, httpCodes } from '@enums';
 import { receiveMethods } from '@enums/checkout';
 import { orderPaymentStatus } from '@enums/order';
@@ -365,6 +365,7 @@ export default {
             } = this;
 
             const fullInfo = `${name}, ${formatPhoneNumber(phone)}`;
+            if (email) $retailRocket.setEmail(email);
             return email ? `${fullInfo}, ${email}` : fullInfo;
         },
 
