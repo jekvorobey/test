@@ -262,7 +262,7 @@
             <div class="container">
                 <div
                     data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
-                    :data-product-id="featuredProducts && featuredProducts.items.map((i) => i.id).join(',')"
+                    :data-product-id="featuredProducts && featuredProducts.items.map((i) => i.productId).join(',')"
                 ></div>
             </div>
         </section>
@@ -585,7 +585,7 @@
             <div class="container">
                 <div
                     data-retailrocket-markup-block="5efda11697a52833a0d006e6"
-                    :data-product-id="featuredProducts && featuredProducts.items.map((i) => i.id).join(',')"
+                    :data-product-id="featuredProducts && featuredProducts.items.map((i) => i.productId).join(',')"
                 ></div>
             </div>
         </section>
