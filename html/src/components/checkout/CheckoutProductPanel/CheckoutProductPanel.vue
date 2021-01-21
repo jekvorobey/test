@@ -505,6 +505,7 @@ import {
     CHANGE_ADDRESS,
     ADD_RECIPIENT,
     CHANGE_RECIPIENT,
+    FETCH_CHECKOUT_DATA,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -879,6 +880,8 @@ export default {
             SET_RECIPIENT,
             ADD_RECIPIENT,
             CHANGE_RECIPIENT,
+
+            FETCH_CHECKOUT_DATA,
         ]),
 
         ...mapActions(CERTIFICATE_MODULE, [
@@ -1143,6 +1146,7 @@ export default {
                 this.isVisibleActivateCert = false
             }, 5000);
 
+            await this[FETCH_CHECKOUT_DATA](1); // type = 1 - т.е. продукты
             this.fetchCards()
         },
 
