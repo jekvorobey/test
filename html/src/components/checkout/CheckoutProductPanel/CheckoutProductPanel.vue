@@ -204,14 +204,24 @@
                     class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--bonus"
                 >
                     <div class="checkout-product-panel__item-header">
-                        <h3 class="checkout-product-panel__item-header-hl">
-                            <v-svg name="bonus" width="24" height="24" />&nbsp;Оплата бонусами&nbsp;
-                            <span v-if="!isTablet" class="text-sm text-normal text-grey">
-                                (1 бонус = {{ bonusPerRub }} рубль)
-                            </span>
-                            &nbsp;
-                            <v-spinner width="24" height="24" :show="isBonusPending" />
-                        </h3>
+                        <v-check
+                            class="checkout-product-panel__item-panel-check checkout-paytype-container"
+                            type="radio"
+                            id="check-paytype-bonus"
+                            :model-value="selectedPayTypeID"
+                            :value="1"
+                            name="paytype"
+                            @change="onAddBonus(bonusAmount != 0 ? bonusAmount : maxAmountBonus)"
+                        >
+                            <h3 class="checkout-product-panel__item-header-hl checkout-paytype-content">
+                                <v-svg name="bonus" width="24" height="24" />&nbsp;Оплата бонусами&nbsp;
+                                <span v-if="!isTablet" class="text-sm text-normal text-grey">
+                                    (1 бонус = {{ bonusPerRub }} рубль)
+                                </span>
+                                &nbsp;
+                                <v-spinner width="24" height="24" :show="isBonusPending" />
+                            </h3>
+                        </v-check>
                     </div>
 
                     <div v-if="isBonusEdit" class="checkout-product-panel__item-controls">
@@ -261,10 +271,20 @@
                     class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--sertificate"
                 >
                     <div class="checkout-product-panel__item-header">
-                        <h3 class="checkout-product-panel__item-header-hl">
-                            <v-svg name="gift" width="24" height="24" />&nbsp;Оплата подарочным сертификатом&nbsp;
-                            <v-spinner width="24" height="24" :show="isCertificatePending" />
-                        </h3>
+                        <v-check
+                            class="checkout-product-panel__item-panel-check checkout-paytype-container"
+                            type="radio"
+                            id="check-paytype-certificate"
+                            :model-value="selectedPayTypeID"
+                            :value="2"
+                            name="paytype"
+                            @change="applyCertificate"
+                        >
+                            <h3 class="checkout-product-panel__item-header-hl checkout-paytype-content">
+                                <v-svg name="gift" width="24" height="24" />&nbsp;Оплата подарочным сертификатом&nbsp;
+                                <v-spinner width="24" height="24" :show="isCertificatePending" />
+                            </h3>
+                        </v-check>
                     </div>
 
                     <div v-if="isСertAmountEdit" class="checkout-product-panel__item-controls checkout-product-panel__item">
@@ -485,6 +505,7 @@ import {
     CHANGE_ADDRESS,
     ADD_RECIPIENT,
     CHANGE_RECIPIENT,
+    FETCH_CHECKOUT_DATA,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -643,6 +664,7 @@ export default {
             customCertAmount: null,
             activateError: '',
             activateSuccess: '',
+            selectedPayTypeID: null,
         };
     },
 
@@ -858,6 +880,8 @@ export default {
             SET_RECIPIENT,
             ADD_RECIPIENT,
             CHANGE_RECIPIENT,
+
+            FETCH_CHECKOUT_DATA,
         ]),
 
         ...mapActions(CERTIFICATE_MODULE, [
@@ -1037,11 +1061,15 @@ export default {
         },
 
         async onAddBonus(value) {
+            if (this.bonusAmount != value) {
+                this.bonusAmount = value
+            }
             try {
                 await this[ADD_BONUS](value || 0);
                 this.isBonusEdit = false;
                 this.isCertificateEdit = false;
                 this.customCertAmount = null;
+                this.selectedPayTypeID = 1; // bonus pay type - 1
             } catch (error) {
                 this.isBonusEdit = true;
             }
@@ -1068,13 +1096,15 @@ export default {
         },
 
         async applyCertificate() {
-            if (this.customCertAmount == 0) {
-                this.customCertAmount = null
+            // TODO: не выводится сообщение об ошибке, например "Не указана сумма операции"
+            if (this.customCertAmount == 0 || this.customCertAmount == null) {
+                this.customCertAmount = this.maxCertificateDiscount
             }
             try {
                 await this.ADD_CERTIFICATE(this.customCertAmount || 0)
                 this.isCertificateEdit = false
                 this.isBonusEdit = false
+                this.selectedPayTypeID = 2 // certificate pay type - 2
             } catch (error) {
                 this.isCertificateEdit = true
             }
@@ -1116,6 +1146,7 @@ export default {
                 this.isVisibleActivateCert = false
             }, 5000);
 
+            await this[FETCH_CHECKOUT_DATA](1); // type = 1 - т.е. продукты
             this.fetchCards()
         },
 
@@ -1170,6 +1201,8 @@ export default {
     mounted() {
         this.debounce_scrollToError = _debounce(this.scrollToError, SCROLL_DEBOUNCE_TIME);
         this.fetchCards()
+        this.bonusAmount = this.maxAmountBonus
+        this.customCertAmount = this.maxCertificateDiscount
     },
 };
 </script>

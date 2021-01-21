@@ -4,6 +4,12 @@
 .checkout-activate-baseline {
     align-items: baseline !important;
 }
+.checkout-paytype-container {
+    display: flex !important;
+}
+.checkout-paytype-content {
+    margin-top: -3px !important;
+}
 .checkout-product-panel {
     counter-reset: item;
 
