@@ -1,5 +1,5 @@
 <template>
-  <div class="hf-modal-overlay">
+  <div class="hf-modal-overlay" :class="{tablet: isTablet}">
     <general-modal
         type="sm"
         :is-mobile="isTablet"
@@ -9,9 +9,12 @@
         <template v-slot:content>
           <div class="modal-mask hf-modal-mask">
             <div class="modal-wrapper ft-modal-wrapper">
-              <div class="modal-container ft-modal-container">
+              <div class="modal-container ft-modal-container hf-modal-bg">
 
-                <img :src="homeFirstImg" class="modal-image hf-modal-image" />
+                <v-picture>
+                    <source :data-srcset="homeFirstImg" />
+                    <img class="modal-image hf-modal-image" :data-src="homeFirstImg" :src="homeFirstImg" />
+                </v-picture>
 
                 <div class="hf-modal-h2">Маркетплейс только для профессионалов бьюти-индустрии</div>
                 <div class="hf-modal-h4">Для покупок на сайте зарегистрируйтесь и подтвердите свой статус</div>
@@ -31,6 +34,7 @@
 <script>
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import VButton from '@controls/VButton/VButton.vue';
+import VPicture from '@controls/VPicture/VPicture.vue';
 
 import { mapState, mapActions } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -38,7 +42,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { modalName } from '@enums';
 
-import homeFirstImg from '@images/mock/home-first.png';
+import homeFirstImg from '@images/mock/home-first.svg';
 
 import './HomeFirstModal.css';
 
@@ -50,6 +54,7 @@ export default {
 
     components: {
       VButton,
+      VPicture,
       GeneralModal,
     },
 
