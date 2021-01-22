@@ -6,8 +6,8 @@
             { 'category-tree-item--active': isInteractive && isActive },
             { 'category-tree-item--disabled': !isInteractive },
         ]"
-        @mouseover="onMouseOver(true)"
-        @mouseleave="onMouseOver(false)"
+        @mouseover="depth > 0 ? onMouseOver(true) : ''"
+        @mouseleave="depth > 0 ? onMouseOver(false) : ''"
     >
         <div class="category-tree-item__label">
             <self-router-link class="category-tree-item__link" :to="url" :disabled="!isInteractive" same-disabled>
@@ -22,6 +22,7 @@
                     :key="item.id || index"
                     :item="item"
                     :depth="depth + 1"
+                    :isHover="false"
                 />
             </ul>
         </transition>
@@ -60,11 +61,15 @@ export default {
             type: Boolean,
             default: true,
         },
+
+        isHover: {
+            type: Boolean,
+            default: true
+        },
     },
 
     data() {
         return {
-            isHover: false,
             timer: null,
         };
     },
@@ -130,15 +135,20 @@ export default {
                 if (value) {
                     clearTimeout(this.timer);
                     this.timer = setTimeout(() => {
-                        this.isHover = true;
+                        this.changeHover(true);
                     }, 600);
                 } else {
                     clearTimeout(this.timer);
                     this.timer = null;
-                    this.isHover = false;
+                    this.changeHover(false);
                 }
             }
         },
+
+        changeHover(flag) {
+            // eslint-disable-next-line vue/no-mutating-props
+            this.isHover = flag;
+        }
     },
 };
 </script>
