@@ -60,6 +60,10 @@
                     {{ item.name }}
                 </div>
 
+                <div class="catalog-product-list-card__variant">
+                    {{ variantGroupsValue }}
+                </div>
+
                 <div class="catalog-product-list-card__rating" v-once>
                     <span
                         v-for="number in 5"
@@ -251,6 +255,15 @@ export default {
         isTabletLg() {
             return this.$mq.tabletLg;
         },
+
+        variantGroupsValue() {
+            if (!this.item.variantGroups) return;
+            const number = this.item.variantGroups.characteristics.reduce((acc, cur) => {
+                acc = acc + cur.values.length;
+                return acc;
+            }, 0);
+            return number ? number + ' ' + this.declension(number, ['оттенок', 'оттенка', 'оттенков']) : '';
+        },
     },
 
     methods: {
@@ -268,6 +281,10 @@ export default {
 
         onPreview() {
             this.$emit('preview', { id: this.item.id, type: this.item.type });
+        },
+
+        declension(number, txt, cases = [2, 0, 1, 1, 1, 2]) {
+            return txt[number % 100 > 4 && number % 100 < 20 ? 2 : cases[number % 10 < 5 ? number % 10 : 5]];
         },
     },
 };

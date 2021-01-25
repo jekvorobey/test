@@ -172,6 +172,23 @@
         transform: translateZ(0);
     }
 
+    &__variant {
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 12px;
+        line-height: 25px;
+        flex-grow: 1;
+        margin-bottom: var(--gs);
+        color: var(--cl-grey);
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        transform: translateZ(0);
+    }
+
     &__prices {
         display: flex;
         align-items: center;
