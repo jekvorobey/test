@@ -195,6 +195,7 @@ export default {
         },
 
         onRangeChange(e, name) {
+            this.debounce_rangeChange.cancel();
             this.debounce_rangeChange(e, name);
         },
     },
