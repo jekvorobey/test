@@ -19,6 +19,20 @@
   width: 100%;
 }
 
+.hf-modal-bg {
+  background-color: #000;
+}
+
+.tablet .hf-modal-bg {
+  position: relative;
+  height: 380px !important;
+  overflow: hidden;
+}
+
+.hf-modal-overlay.tablet .hf-modal-mask {
+  height: 340px;
+}
+
 .hf-modal-h2 {
   position: absolute;
   width: 289px;
@@ -40,6 +54,18 @@
   color: #FFFFFF;
 }
 
+.tablet .hf-modal-h2 {
+  position: relative;
+  float: left;
+  width: 220px;
+  height: 96px;
+  left: 0px;
+  top: 10px;
+
+  font-size: 18px;
+  line-height: 24px;
+}
+
 .hf-modal-h4 {
   position: absolute;
   width: 214px;
@@ -59,6 +85,17 @@
   color: #FFFFFF;
 }
 
+.tablet .hf-modal-h4 {
+  position: relative;
+  width: 214px;
+  height: 72px;
+  left: 0px;
+  top: 20px;
+
+  font-size: 18px;
+  line-height: 20px;
+}
+
 .hf-modal-default-button {
   position: absolute;
   width: 160px;
@@ -71,12 +108,22 @@
   color: var(--cl-global);
 }
 
+.tablet .hf-modal-default-button {
+  position: relative;
+  left: -142px;
+  top: 100px;
+}
+
 .hf-modal-image {
   position: absolute;
   width: 412px;
   height: 412px;
   top: 0;
   right: 0;
+}
+
+.tablet .hf-modal-image {
+  right: -90px;
 }
 
 .hf-modal-close {
@@ -87,6 +134,12 @@
   height: 13px;
   background-image: svg-load('modal-cross.svg', 'fill: #000');
   cursor: pointer;
+}
+
+.tablet .hf-modal-close {
+  position: absolute;
+  right: 10px;
+  top: 20px;
 }
 
 .hf-modal-overlay {
