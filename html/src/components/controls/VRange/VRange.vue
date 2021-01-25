@@ -11,7 +11,7 @@
                     type="number"
                     :value="value"
                     :name="name"
-                    @change="onInputChange($event, index)"
+                    @input="onInput($event, index)"
                 />
             </span>
         </div>
@@ -22,6 +22,9 @@
 import noUiSlider from 'nouislider';
 import './VRange.css';
 import { setTimeout } from 'timers';
+import _debounce from 'lodash/debounce';
+
+const INPUT_DEBOUNCE_TIME = 400; // 400 milliseconds
 
 export default {
     name: 'v-range',
@@ -108,10 +111,17 @@ export default {
         },
     },
     methods: {
-        onInputChange(e, index) {
-            this.value_internal[index] = Number(e.target.value);
-            this.slider.set(this.value_internal);
-            this.$emit('input', this.value_internal);
+        onInput(e, index) {
+            let last_value = Number(e.target.value)
+            if (this.debounce_onInput) {
+                this.debounce_onInput.cancel()
+            }
+            this.debounce_onInput = _debounce(function(e, index) {
+                this.value_internal[index] = last_value
+                this.slider.set(this.value_internal)
+                this.$emit('input', this.value_internal)
+            }, INPUT_DEBOUNCE_TIME)
+            this.debounce_onInput(e, index)
         },
 
         onUpdate(values, handle, unencoded, tap, positions) {
@@ -119,8 +129,14 @@ export default {
         },
 
         onChange(values, handle, unencoded, tap, positions) {
-            this.value_internal = values;
-            this.$emit('input', this.value_internal);
+            if (this.debounce_onInput) {
+                this.debounce_onInput.cancel()
+            }
+            this.debounce_onInput = _debounce(function(values) {
+                this.value_internal = values;
+                this.$emit('input', this.value_internal);
+            }, INPUT_DEBOUNCE_TIME)
+            this.debounce_onInput(values)
         },
     },
 
