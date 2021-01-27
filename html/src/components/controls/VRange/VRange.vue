@@ -11,6 +11,7 @@
                     type="number"
                     :value="value"
                     :name="name"
+                    @change="onInputChange($event, index)"
                     @input="onInput($event, index)"
                 />
             </span>
@@ -24,7 +25,7 @@ import './VRange.css';
 import { setTimeout } from 'timers';
 import _debounce from 'lodash/debounce';
 
-const INPUT_DEBOUNCE_TIME = 400; // 400 milliseconds
+const INPUT_DEBOUNCE_TIME = 500; // 0.5 seconds
 
 export default {
     name: 'v-range',
@@ -111,15 +112,41 @@ export default {
         },
     },
     methods: {
-        onInput(e, index) {
-            let last_value = Number(e.target.value)
+        maxLength (index) {
+            let vl = this.value[1].toString().length
+            let ml = this.max.toString().length
+            return index == 1 ? ml : Math.min(vl < this.min.toString().length ? ml : vl, ml)
+        },
+        isInputCompleted(e, index) {
+            let v = Number(e.target.value)
+            return v > this.min && (index == 1 ? (v >= this.value[0]) : true)
+        },
+        onInputChange(e, index) {
             if (this.debounce_onInput) {
                 this.debounce_onInput.cancel()
             }
+            this.value_internal[index] = Number(e.target.value);
+            this.slider.set(this.value_internal);
+            this.$emit('input', this.value_internal);
+        },
+        onInput(e, index) {
+            if (this.debounce_onInput) {
+                this.debounce_onInput.cancel()
+            }
+            if (index == 0 && this.value[1] >= this.min) {
+                // ограничение поля "от" в максимульную сторону значением из второго поля "до"
+                e.target.value = Math.min(Number(e.target.value), Math.min(this.value[1], this.max)).toString()
+            }
+            if (Number(e.target.value).toString().length > this.maxLength(index)) {
+                // ограничение по кол-ву символов вводимых в поле, т.к. maxlength у input-а в данном случае не работает
+                e.target.value = Number(e.target.value).toString().slice(0, this.maxLength(index))
+            }
             this.debounce_onInput = _debounce(function(e, index) {
-                this.value_internal[index] = last_value
-                this.slider.set(this.value_internal)
-                this.$emit('input', this.value_internal)
+                if (this.isInputCompleted(e, index)) {
+                    this.value_internal[index] = Number(e.target.value)
+                    this.slider.set(this.value_internal)
+                    this.$emit('input', this.value_internal)
+                }
             }, INPUT_DEBOUNCE_TIME)
             this.debounce_onInput(e, index)
         },
