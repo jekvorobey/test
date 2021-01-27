@@ -62,6 +62,7 @@ module.exports = class ServiceLocator {
     }
 
     static get $retailRocket() {
-        return ServiceLocator.instance()._container.get(injectionType.RETAIL_ROCKET);
+        const container = ServiceLocator.instance()._container;
+        return container.isBound(injectionType.RETAIL_ROCKET) ? container.get(injectionType.RETAIL_ROCKET) : null;
     }
 };
