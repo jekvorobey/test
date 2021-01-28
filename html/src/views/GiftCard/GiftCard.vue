@@ -109,13 +109,13 @@
             <div class="container product-view__socials">
                 <div class="product-view__socials-inner">
                     <div class="product-view__socials-statistics">
-                        <!-- <div>
-                        <v-svg name="cart-empty" width="24" height="24" />
-                    </div>
-                    <div>
-                        <div>1 человек уже купили этот товар</div>
-                        <div class="text-grey">за последние 2 месяца</div>
-                    </div> -->
+                        <div>
+                            <v-svg name="cart-empty" width="24" height="24" />
+                        </div>
+                        <div>
+                            <div>{{ buyPersonText }}</div>
+                            <div class="text-grey">за последние 2 месяца</div>
+                        </div>
                     </div>
                     <div class="product-view__socials-share">
                         <span class="text-bold">Поделиться</span>&nbsp;
@@ -246,6 +246,7 @@ export default {
             code: 'uplotnyayushchiy-muss-dlya-obema-oribe',
             canAdd: true,
         },
+        buyPersonAmount: 0,
     }),
 
     computed: {
@@ -266,6 +267,14 @@ export default {
 
         isTabletLg() {
             return this.$mq.tabletLg;
+        },
+        buyPersonText() {
+            if (this.buyPersonAmount === 0) {
+                return 'Пока никто не купил товар';
+            }
+            const man = this.declOfNum(this.buyPersonAmount, ['человек', 'человека', 'человек']);
+            const buy = this.buyPersonAmount > 1 ? 'купили' : 'купил';
+            return this.buyPersonAmount + ' ' + man + ' уже ' + buy + ' этот товар';
         },
     },
 
@@ -304,6 +313,12 @@ export default {
         onScrollTo(ref, offset = 0) {
             window.scrollTo({ top: ref.offsetTop + offset, behavior: 'smooth' });
         },
+
+        declOfNum(n, titles) {
+            return titles[
+                n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2
+            ];
+        },
     },
 
     beforeMount() {
@@ -313,6 +328,7 @@ export default {
             this.nominals = response.nominals;
             this.nominal = response.nominals[0];
             this.design = response.nominals[0].designs[0] || { preview: '' };
+            this.buyPersonAmount = response.buyPersonAmount || 0;
         });
     },
 };
