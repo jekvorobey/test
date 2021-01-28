@@ -44,14 +44,14 @@
                     <price
                         class="text-bold catalog-product-list-card__price"
                         v-if="item.price"
-                        v-bind="item.price"
+                        v-bind="item.oldPrice && isEqPrices(item.price, item.oldPrice) ? concretePrice(item.price) : item.price"
                         :item-prop="itemProp"
                         has-articles
                     />
                     <price
                         class="text-sm text-grey text-strike catalog-product-list-card__price"
-                        v-if="item.oldPrice"
-                        v-bind="item.oldPrice"
+                        v-if="item.oldPrice && !isEqPrices(item.price, item.oldPrice)"
+                        v-bind="concretePrice(item.oldPrice)"
                         has-articles
                     />
                 </div>
@@ -285,6 +285,27 @@ export default {
 
         declension(number, txt, cases = [2, 0, 1, 1, 1, 2]) {
             return txt[number % 100 > 4 && number % 100 < 20 ? 2 : cases[number % 10 < 5 ? number % 10 : 5]];
+        },
+
+        isEqPrices(price, oldPrice) {
+            if (typeof price.value === "object" && price.value.to !== null && price.value.from !== null) {
+                return false
+            }
+            if (typeof oldPrice.value === "object" && oldPrice.value.to !== null && oldPrice.value.from !== null) {
+                return false
+            }
+            let p1 = typeof price.value === "number" ? price.value : (price.value.from || price.value.to)
+            let p2 = typeof oldPrice.value === "number" ? oldPrice.value :(oldPrice.value.from || oldPrice.value.to)
+            return p1 === p2
+        },
+
+        concretePrice(price) {
+            if (typeof price.value === "object" && price.value.from !== null && price.value.to !== null) {
+                return price
+            }
+            return {
+                value: typeof price.value === "number" ? price.value : (price.value.from || price.value.to)
+            }
         },
     },
 };
