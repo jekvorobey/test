@@ -1097,7 +1097,7 @@ export default {
 
         async applyCertificate() {
             // TODO: не выводится сообщение об ошибке, например "Не указана сумма операции"
-            if (this.customCertAmount == 0 || this.customCertAmount == null) {
+            if (this.customCertAmount == null) {
                 this.customCertAmount = this.maxCertificateDiscount
             }
             try {
