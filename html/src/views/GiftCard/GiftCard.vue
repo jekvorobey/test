@@ -36,7 +36,7 @@
                         <!-- Title and ratings -->
                         <product-detail-panel
                             class="product-view__header-detail-info"
-                            :title="card.title"
+                            :title="cardTitle"
                             :reviews-count="card.reviewsCount"
                             :vendor-code="card.vendorCode"
                             :rating="card.rating"
@@ -201,6 +201,7 @@ import { mapActions, mapState } from 'vuex';
 import { $http } from '@services';
 import { cartItemTypes } from '@enums/product.js';
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import { preparePrice } from '@util';
 
 export default {
     name: 'GiftCard',
@@ -275,6 +276,10 @@ export default {
             const man = this.declOfNum(this.buyPersonAmount, ['человек', 'человека', 'человек']);
             const buy = this.buyPersonAmount > 1 ? 'купили' : 'купил';
             return this.buyPersonAmount + ' ' + man + ' уже ' + buy + ' этот товар';
+        },
+        cardTitle() {
+            const postfix = this.nominal.price ? ', ' + preparePrice(this.nominal.price) + ' ₽' : '';
+            return this.card.title + postfix;
         },
     },
 
