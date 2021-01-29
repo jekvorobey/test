@@ -60,8 +60,7 @@
                     {{ item.name }}
                 </div>
 
-                <div class="catalog-product-list-card__variant">
-                    {{ variantGroupsValue }}
+                <div class="catalog-product-list-card__variant" v-html="variantGroupsValue">
                 </div>
 
                 <div class="catalog-product-list-card__rating" v-once>
@@ -258,11 +257,40 @@ export default {
 
         variantGroupsValue() {
             if (!this.item.variantGroups) return;
-            const number = this.item.variantGroups.characteristics.reduce((acc, cur) => {
-                acc = acc + cur.values.length;
-                return acc;
-            }, 0);
-            return number ? number + ' ' + this.declension(number, ['оттенок', 'оттенка', 'оттенков']) : '';
+            const declensionVariants = {
+                Оттенок: ['оттенок', 'оттенка', 'оттенков'],
+                Цвет: ['цвет', 'цвета', 'цветов'],
+                Тон: ['тон', 'тона', 'тонов'],
+            };
+            const result = this.item.variantGroups.characteristics.reduce((accumulator, current) => {
+                const colorString = Object.keys(declensionVariants).reduce((acc, cur) => {
+                    return current.name.toLocaleLowerCase().includes(cur.toLocaleLowerCase()) ? current.name : acc;
+                }, '');
+                if (typeof current.values[0] === 'number') {
+                    current.values = current.values.sort((a, b) => a - b);
+                    if (current.values.length <= 3) {
+                        accumulator.push(current.name + ': ' + current.values.join(', '));
+                    } else {
+                        accumulator.push(
+                            current.name +
+                                ': ' +
+                                Math.min.apply(null, current.values) +
+                                '&ndash;' +
+                                Math.max.apply(null, current.values)
+                        );
+                    }
+                } else if (declensionVariants[colorString]) {
+                    accumulator.push(
+                        current.values.length +
+                            ' ' +
+                            this.declension(current.values.length, declensionVariants[colorString])
+                    );
+                } else {
+                    accumulator.push(current.name + ': ' + current.values.length);
+                }
+                return accumulator;
+            }, []);
+            return result.join('<br>');
         },
     },
 
