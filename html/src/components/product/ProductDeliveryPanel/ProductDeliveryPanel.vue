@@ -28,8 +28,8 @@
             </template>
 
             —
-            <price class="product-delivery-panel__price" v-bind="method.cost" />,
-            <span class="text-grey">{{ formatDate(method.date) }}</span>
+            <price class="product-delivery-panel__price" v-bind="method.cost" /><slot v-if="!method.date">,
+            <span class="text-grey">{{ formatDate(method.date) }}</span></slot>
         </p>
     </div>
 </template>
@@ -91,6 +91,7 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         formatDate(date) {
+            if (!date) return;
             const dateObj = date && getDate(date);
             const today = new Date().getDate();
             let additionalText = ``;
