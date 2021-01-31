@@ -30,7 +30,9 @@
 }
 
 .hf-modal-overlay.tablet .hf-modal-mask {
-  height: 340px;
+  width: 320px;
+  height: 380px;
+  overflow: hidden !important;
 }
 
 .hf-modal-h2 {
