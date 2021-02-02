@@ -309,13 +309,13 @@
                             </v-button>
                             <span class="checkout-product-panel__item-controls-text checkout-product-panel__item">
                                 Доступно для оплаты&nbsp;
-                                <strong class="text-bold">{{ maxCertificateDiscount }}</strong> ₽ из {{ availableCertAmount }} ₽
+                                <strong class="text-bold">{{ maxCertificateDiscount }}</strong> ₽
                             </span>
                         </template>
                         <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
                             <span v-if="!certificatePayment" class="checkout-product-panel__item-controls-text checkout-product-panel__item">
                                 Доступно для оплаты&nbsp;
-                                <strong class="text-bold">{{ maxCertificateDiscount }}</strong> ₽ из {{ availableCertAmount }} ₽
+                                <strong class="text-bold">{{ maxCertificateDiscount }}</strong> ₽
                             </span>
                             <span v-if="certificatePayment" class="checkout-product-panel__item-controls-text checkout-product-panel__item">
                                 Будет использовано&nbsp;
@@ -1069,7 +1069,7 @@ export default {
                 this.isBonusEdit = false;
                 this.isCertificateEdit = false;
                 this.customCertAmount = null;
-                this.selectedPayTypeID = 1; // bonus pay type - 1
+                this.selectedPayTypeID = (value || 0) === 0 ? null : 1; // bonus pay type - 1
             } catch (error) {
                 this.isBonusEdit = true;
             }
@@ -1104,7 +1104,7 @@ export default {
                 await this.ADD_CERTIFICATE(this.customCertAmount || 0)
                 this.isCertificateEdit = false
                 this.isBonusEdit = false
-                this.selectedPayTypeID = 2 // certificate pay type - 2
+                this.selectedPayTypeID = (Number(this.customCertAmount || 0) === 0) ? null : 2 // certificate pay type - 2
             } catch (error) {
                 this.isCertificateEdit = true
             }
