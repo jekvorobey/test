@@ -28,8 +28,7 @@
             </template>
 
             —
-            <price class="product-delivery-panel__price" v-bind="method.cost" /><slot v-if="!method.date">,
-            <span class="text-grey">{{ formatDate(method.date) }}</span></slot>
+            <price class="product-delivery-panel__price" v-bind="method.cost" /><span class="text-grey">{{ formatDate(method.date) }}</span>
         </p>
     </div>
 </template>
@@ -100,7 +99,7 @@ export default {
             else if (today + 1 === dateObj.getDate()) additionalText = `завтра`;
             else additionalText = dateObj && this.$t(`weekdays.short.${dateObj.getDay()}`);
 
-            return `c ${
+            return `, c ${
                 dateObj && dateObj.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)
             } (${additionalText})`;
         },
