@@ -126,7 +126,7 @@ export default {
                         typeof imageRetina === 'string'
                             ? imageRetina.substr(0, imageRetina.lastIndexOf('.')) + '.webp'
                             : undefined,
-                    retina: typeof imageRetina === 'string' ? imageRetina : undefined,
+                    retinaOrig: typeof imageRetina === 'string' ? imageRetina : undefined,
                 };
 
             if (image)
@@ -147,7 +147,7 @@ export default {
                         typeof imageRetina === 'string'
                             ? imageRetina.substr(0, imageRetina.lastIndexOf('.')) + '.webp'
                             : undefined,
-                    retina: typeof imageRetina === 'string' ? imageRetina : undefined,
+                    retinaOrig: typeof imageRetina === 'string' ? imageRetina : undefined,
                 };
 
             if (image)
@@ -197,7 +197,7 @@ export default {
                     break;
                 default:
                     imageOrig = image.orig;
-                    imageRetina = image.retina;
+                    imageRetina = image.retinaOrig;
             }
 
             result += `${imageOrig} 1x`;
