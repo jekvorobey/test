@@ -212,6 +212,7 @@ import { generatePictureSourcePath } from '@util/file';
 import { generateMasterclassUrl, generateProductUrl } from '@util/catalog';
 import metaMixin from '@plugins/meta';
 import './ThankYou.css';
+import {NAME as LANDING_MODULE} from "@store/modules/Landing";
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
 
@@ -427,25 +428,39 @@ export default {
             params: { id },
         } = to;
 
-        const { order } = $store.state[CHECKOUT_MODULE];
+        function proceed() {
+            if ($store.state[CHECKOUT_MODULE]) {
+                const { order } = $store.state[CHECKOUT_MODULE];
 
-        // если все загружено, пропускаем
-        if (order && order.id == id) next();
+                // если все загружено, пропускаем
+                if (order && order.id == id) next();
+                else {
+                    $progress.start();
+                    $store
+                        .dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_ORDER}`, id)
+                        .then(() => {
+                            next((vm) => {
+                                $progress.finish();
+                            });
+                        })
+                        .catch((error) => {
+                            $progress.fail();
+                            if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
+                            else next(new Error(error.message));
+                            $progress.finish();
+                        });
+                }
+            }
+        }
+
+        if ($store.state[CHECKOUT_MODULE]) proceed();
         else {
-            $progress.start();
-            $store
-                .dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_ORDER}`, id)
-                .then(() => {
-                    next((vm) => {
-                        $progress.finish();
-                    });
-                })
-                .catch((error) => {
-                    $progress.fail();
-                    if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
-                    else next(new Error(error.message));
-                    $progress.finish();
-                });
+            $store.watch(
+                (state) => state[CHECKOUT_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 

@@ -265,6 +265,7 @@ import { getOrderStatusColorClass, getDeliveryStatusColorClass, generateThankPag
 import metaMixin from '@plugins/meta';
 import '@images/sprites/arrow-small.svg';
 import './OrderDetails.css';
+import { NAME as LANDING_MODULE } from '@store/modules/Landing';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
 
@@ -548,27 +549,41 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
-        const { fullPath, name, params } = to;
-        const { loadPath, orderDetails } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
+        function proceed() {
+            if ($store.state[PROFILE_MODULE][ORDERS_MODULE]) {
+                const { fullPath, name, params } = to;
+                const { loadPath, orderDetails } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
 
-        if (loadPath === fullPath) next((vm) => updateBreadcrumbs(vm, name, params, orderDetails.order.number));
+                if (loadPath === fullPath) next((vm) => updateBreadcrumbs(vm, name, params, orderDetails.order.number));
+                else {
+                    $progress.start();
+                    $store
+                        .dispatch(`${ORDERS_MODULE_PATH}/${FETCH_ORDER_DETAILS}`, params.orderId)
+                        .then(({ number }) => {
+                            $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                            next((vm) => {
+                                $progress.finish();
+                                updateBreadcrumbs(vm, name, params, number);
+                            });
+                        })
+                        .catch(() =>
+                            next((vm) => {
+                                $progress.fail();
+                                updateBreadcrumbs(vm, name, params);
+                            })
+                        );
+                }
+            }
+        }
+
+        if ($store.state[PROFILE_MODULE][ORDERS_MODULE]) proceed();
         else {
-            $progress.start();
-            $store
-                .dispatch(`${ORDERS_MODULE_PATH}/${FETCH_ORDER_DETAILS}`, params.orderId)
-                .then(({ number }) => {
-                    $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
-                        $progress.finish();
-                        updateBreadcrumbs(vm, name, params, number);
-                    });
-                })
-                .catch(() =>
-                    next((vm) => {
-                        $progress.fail();
-                        updateBreadcrumbs(vm, name, params);
-                    })
-                );
+            $store.watch(
+                (state) => state[PROFILE_MODULE][ORDERS_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 
