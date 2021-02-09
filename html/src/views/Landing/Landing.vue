@@ -75,21 +75,35 @@ export default {
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
 
-        const { load } = $store.state[LANDING_MODULE];
+        function proceed() {
+            if ($store.state[LANDING_MODULE]) {
+                const { load } = $store.state[LANDING_MODULE];
 
-        if (load) next();
+                if (load) next();
+                else {
+                    $progress.start();
+                    $store
+                        .dispatch(`${LANDING_MODULE}/${FETCH_LANDING_DATA}`)
+                        .then(() => {
+                            $progress.finish();
+                            next();
+                        })
+                        .catch(() => {
+                            $progress.fail();
+                            next();
+                        });
+                }
+            }
+        }
+
+        if ($store.state[LANDING_MODULE]) proceed();
         else {
-            $progress.start();
-            $store
-                .dispatch(`${LANDING_MODULE}/${FETCH_LANDING_DATA}`)
-                .then(() => {
-                    $progress.finish();
-                    next();
-                })
-                .catch(() => {
-                    $progress.fail();
-                    next();
-                });
+            $store.watch(
+                (state) => state[LANDING_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 };
