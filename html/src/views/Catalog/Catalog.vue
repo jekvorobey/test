@@ -702,59 +702,73 @@ export default {
             },
         } = to;
 
-        const { loadPath, categoryCode, entityCode, type, searchString: stateSearchString } = $store.state[
-            CATALOG_MODULE
-        ];
+        function proceed() {
+            if ($store.state[CATALOG_MODULE]) {
+                const { loadPath, categoryCode, entityCode, type, searchString: stateSearchString } = $store.state[
+                    CATALOG_MODULE
+                ];
 
-        // если все загружено, пропускаем
-        if (
-            loadPath === fullPath &&
-            toType === type &&
-            toCode === categoryCode &&
-            toEntityCode === entityCode &&
-            toSearchString === stateSearchString
-        )
-            next((vm) => vm.setSortValue(orderField, orderDirection));
-        else {
-            const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
+                // если все загружено, пропускаем
+                if (
+                    loadPath === fullPath &&
+                    toType === type &&
+                    toCode === categoryCode &&
+                    toEntityCode === entityCode &&
+                    toSearchString === stateSearchString
+                )
+                    next((vm) => vm.setSortValue(orderField, orderDirection));
+                else {
+                    const { filter, routeSegments, filterSegments } = computeFilterData(pathMatch, toCode);
 
-            $progress.start();
-            $store
-                .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, {
-                    type: toType,
-                    entityCode: toEntityCode,
-                    code: toCode,
+                    $progress.start();
+                    $store
+                        .dispatch(`${CATALOG_MODULE}/${FETCH_CATALOG_DATA}`, {
+                            type: toType,
+                            entityCode: toEntityCode,
+                            code: toCode,
 
-                    filter,
-                    routeSegments,
-                    filterSegments,
+                            filter,
+                            routeSegments,
+                            filterSegments,
 
-                    searchString: toSearchString,
-                    page,
-                    orderField,
-                    orderDirection,
-                })
-                .then(() => {
-                    $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    $progress.finish();
+                            searchString: toSearchString,
+                            page,
+                            orderField,
+                            orderDirection,
+                        })
+                        .then(() => {
+                            $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);
+                            $progress.finish();
 
-                    next((vm) => {
-                        vm.setSortValue(orderField, orderDirection);
+                            next((vm) => {
+                                vm.setSortValue(orderField, orderDirection);
 
-                        if (vm[SCROLL])
-                            vm.scrollTo({
-                                top: MIN_SCROLL_VALUE + 1,
-                                behavior: 'smooth',
+                                if (vm[SCROLL])
+                                    vm.scrollTo({
+                                        top: MIN_SCROLL_VALUE + 1,
+                                        behavior: 'smooth',
+                                    });
                             });
-                    });
-                })
-                .catch((thrown) => {
-                    if (thrown && thrown.isCancel === true) return next();
+                        })
+                        .catch((thrown) => {
+                            if (thrown && thrown.isCancel === true) return next();
 
-                    $progress.fail();
-                    if (thrown && thrown.status === httpCodes.NOT_FOUND) return next(createNotFoundRoute(to));
-                    else next();
-                });
+                            $progress.fail();
+                            if (thrown && thrown.status === httpCodes.NOT_FOUND) return next(createNotFoundRoute(to));
+                            else next();
+                        });
+                }
+            }
+        }
+
+        if ($store.state[CATALOG_MODULE]) proceed();
+        else {
+            $store.watch(
+                (state) => state[CATALOG_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 

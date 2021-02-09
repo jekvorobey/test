@@ -97,22 +97,36 @@ export default {
             params: { pathMatch },
         } = to;
 
-        const { loadPath } = $store.state[CUSTOM_MODULE];
+        function proceed() {
+            if ($store.state[CUSTOM_MODULE]) {
+                const { loadPath } = $store.state[CUSTOM_MODULE];
 
-        if (loadPath === fullPath) next();
+                if (loadPath === fullPath) next();
+                else {
+                    $progress.start();
+                    $store
+                        .dispatch(`${CUSTOM_MODULE}/${FETCH_CUSTOM_PAGE_DATA}`, pathMatch)
+                        .then(() => {
+                            $store.dispatch(`${CUSTOM_MODULE}/${SET_LOAD_PATH}`, fullPath);
+                            $progress.finish();
+                            next();
+                        })
+                        .catch(() => {
+                            $progress.fail();
+                            next(createNotFoundRoute(to));
+                        });
+                }
+            }
+        }
+
+        if ($store.state[CUSTOM_MODULE]) proceed();
         else {
-            $progress.start();
-            $store
-                .dispatch(`${CUSTOM_MODULE}/${FETCH_CUSTOM_PAGE_DATA}`, pathMatch)
-                .then(() => {
-                    $store.dispatch(`${CUSTOM_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    $progress.finish();
-                    next();
-                })
-                .catch(() => {
-                    $progress.fail();
-                    next(createNotFoundRoute(to));
-                });
+            $store.watch(
+                (state) => state[CUSTOM_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 

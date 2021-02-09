@@ -184,7 +184,14 @@ import {
     CLEAR_CHECKOUT_DATA,
     FETCH_PROFESSIONS,
 } from '@store/modules/Checkout/actions';
-import { PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT, PROMOCODE_STATUS, CERTIFICATE_PAYMENT } from '@store/modules/Checkout/getters';
+import {
+    PROMO_CODE,
+    SUMMARY,
+    RECEIVE_METHODS,
+    BONUS_PAYMENT,
+    PROMOCODE_STATUS,
+    CERTIFICATE_PAYMENT,
+} from '@store/modules/Checkout/getters';
 
 import metaMixin from '@plugins/meta';
 import { httpCodes, requestStatus } from '@enums';
@@ -243,7 +250,14 @@ export default {
         }),
 
         ...mapGetters(CART_MODULE, [CART_TYPES]),
-        ...mapGetters(CHECKOUT_MODULE, [PROMO_CODE, SUMMARY, RECEIVE_METHODS, BONUS_PAYMENT, CERTIFICATE_PAYMENT, PROMOCODE_STATUS]),
+        ...mapGetters(CHECKOUT_MODULE, [
+            PROMO_CODE,
+            SUMMARY,
+            RECEIVE_METHODS,
+            BONUS_PAYMENT,
+            CERTIFICATE_PAYMENT,
+            PROMOCODE_STATUS,
+        ]),
 
         canDeliver() {
             const receiveMethods = this[RECEIVE_METHODS];
@@ -361,17 +375,31 @@ export default {
             params: { type },
         } = to;
 
-        const checkoutData = $store.state[CHECKOUT_MODULE][CHECKOUT_DATA];
+        function proceed() {
+            if ($store.state[CHECKOUT_MODULE] && $store.state[CHECKOUT_MODULE][CHECKOUT_DATA]) {
+                const checkoutData = $store.state[CHECKOUT_MODULE][CHECKOUT_DATA];
 
-        if (checkoutData) next();
+                if (checkoutData) next();
+                else {
+                    $progress.start();
+                    Promise.all([
+                        $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type),
+                        $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_PROFESSIONS}`),
+                    ])
+                        .then(() => next(() => $progress.finish()))
+                        .catch(() => next(() => $progress.fail()));
+                }
+            }
+        }
+
+        if ($store.state[CHECKOUT_MODULE] && $store.state[CHECKOUT_MODULE][CHECKOUT_DATA]) proceed();
         else {
-            $progress.start();
-            Promise.all([
-                $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type),
-                $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_PROFESSIONS}`),
-            ])
-                .then(() => next(() => $progress.finish()))
-                .catch(() => next(() => $progress.fail()));
+            $store.watch(
+                (state) => state[CHECKOUT_MODULE][CHECKOUT_DATA],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 
