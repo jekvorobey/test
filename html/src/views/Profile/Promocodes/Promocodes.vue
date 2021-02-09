@@ -444,7 +444,7 @@ export default {
 
     beforeRouteEnter(to, from, next) {
         function proceed() {
-            if ($store.state[PROFILE_MODULE][PROMOCODES_MODULE]) {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][PROMOCODES_MODULE]) {
                 const {
                     query: { isArchive = 0 },
                 } = to;
@@ -475,7 +475,7 @@ export default {
             }
         }
 
-        if ($store.state[PROFILE_MODULE][PROMOCODES_MODULE]) proceed();
+        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][PROMOCODES_MODULE]) proceed();
         else {
             $store.watch(
                 (state) => state[PROFILE_MODULE][PROMOCODES_MODULE],

@@ -308,7 +308,7 @@ export default {
 
     beforeRouteEnter(to, from, next) {
         function proceed() {
-            if ($store.state[PROFILE_MODULE][PROMOPAGE_MODULE]) {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][PROMOPAGE_MODULE]) {
                 const {
                     fullPath,
                     query: { page = DEFAULT_PAGE },
@@ -332,7 +332,7 @@ export default {
             }
         }
 
-        if ($store.state[PROFILE_MODULE][PROMOPAGE_MODULE]) proceed();
+        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][PROMOPAGE_MODULE]) proceed();
         else {
             $store.watch(
                 (state) => state[PROFILE_MODULE][PROMOPAGE_MODULE],

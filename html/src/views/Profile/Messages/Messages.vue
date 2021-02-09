@@ -138,7 +138,7 @@ export default {
 
     beforeRouteEnter(to, from, next) {
         function proceed() {
-            if ($store.state[PROFILE_MODULE][MESSAGES_MODULE]) {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][MESSAGES_MODULE]) {
                 const { load } = $store.state[PROFILE_MODULE][MESSAGES_MODULE];
 
                 if (load) {
@@ -157,7 +157,7 @@ export default {
             }
         }
 
-        if ($store.state[PROFILE_MODULE][MESSAGES_MODULE]) proceed();
+        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][MESSAGES_MODULE]) proceed();
         else {
             $store.watch(
                 (state) => state[PROFILE_MODULE][MESSAGES_MODULE],

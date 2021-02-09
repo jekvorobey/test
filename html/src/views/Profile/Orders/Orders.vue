@@ -683,7 +683,7 @@ export default {
         // так как к моменту вызова экземпляр ещё не создан!
 
         function proceed() {
-            if ($store.state[PROFILE_MODULE][ORDERS_MODULE]) {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][ORDERS_MODULE]) {
                 const { fullPath, query } = to;
                 const { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC } = query;
 
@@ -722,7 +722,7 @@ export default {
             }
         }
 
-        if ($store.state[PROFILE_MODULE][ORDERS_MODULE]) proceed();
+        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][ORDERS_MODULE]) proceed();
         else {
             $store.watch(
                 (state) => state[PROFILE_MODULE][ORDERS_MODULE],

@@ -550,7 +550,7 @@ export default {
 
     beforeRouteEnter(to, from, next) {
         function proceed() {
-            if ($store.state[PROFILE_MODULE][ORDERS_MODULE]) {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][ORDERS_MODULE]) {
                 const { fullPath, name, params } = to;
                 const { loadPath, orderDetails } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
 
@@ -576,7 +576,7 @@ export default {
             }
         }
 
-        if ($store.state[PROFILE_MODULE][ORDERS_MODULE]) proceed();
+        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][ORDERS_MODULE]) proceed();
         else {
             $store.watch(
                 (state) => state[PROFILE_MODULE][ORDERS_MODULE],

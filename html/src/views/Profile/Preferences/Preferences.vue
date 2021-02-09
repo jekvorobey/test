@@ -179,7 +179,7 @@ export default {
 
     beforeRouteEnter(to, from, next) {
         function proceed() {
-            if ($store.state[PROFILE_MODULE][PREFERENCES_MODULE]) {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][PREFERENCES_MODULE]) {
                 const { name } = to;
                 const { load } = $store.state[PROFILE_MODULE][PREFERENCES_MODULE];
 
@@ -214,7 +214,7 @@ export default {
             }
         }
 
-        if ($store.state[PROFILE_MODULE][PREFERENCES_MODULE]) proceed();
+        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][PREFERENCES_MODULE]) proceed();
         else {
             $store.watch(
                 (state) => state[PROFILE_MODULE][PREFERENCES_MODULE],

@@ -310,7 +310,7 @@ export default {
 
     beforeRouteEnter(to, from, next) {
         function proceed() {
-            if ($store.state[PROFILE_MODULE][REFERRAL_MODULE]) {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][REFERRAL_MODULE]) {
                 const {
                     fullPath,
                     name,
@@ -345,7 +345,7 @@ export default {
             }
         }
 
-        if ($store.state[PROFILE_MODULE][REFERRAL_MODULE]) proceed();
+        if ($store.state[PROFILE_MODULE] &&$store.state[PROFILE_MODULE][REFERRAL_MODULE]) proceed();
         else {
             $store.watch(
                 (state) => state[PROFILE_MODULE][REFERRAL_MODULE],
