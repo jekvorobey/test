@@ -594,32 +594,46 @@ export default {
             query: { page = DEFAULT_PAGE },
         } = to;
 
-        const { loadPath } = $store.state[MASTERCLASSES_MODULE];
+        function proceed() {
+            if ($store.state[MASTERCLASSES_MODULE]) {
+                const { loadPath } = $store.state[MASTERCLASSES_MODULE];
 
-        // если все загружено, пропускаем
-        if (loadPath === fullPath) next((vm) => vm.scrollToTop());
+                // если все загружено, пропускаем
+                if (loadPath === fullPath) next((vm) => vm.scrollToTop());
+                else {
+                    const { filter } = computeFilterMasterclassData(pathMatch);
+
+                    $progress.start();
+                    $store
+                        .dispatch(`${MASTERCLASSES_MODULE}/${FETCH_MASTERCLASS_CATALOG_DATA}`, {
+                            page,
+                            filter,
+                        })
+                        .then(() => {
+                            $store.dispatch(`${MASTERCLASSES_MODULE}/${SET_LOAD_PATH}`, fullPath);
+                            next((vm) => {
+                                $progress.finish();
+                                vm.scrollToTop();
+                            });
+                        })
+                        .catch(() => {
+                            next(() => {
+                                $progress.fail();
+                                $progress.finish();
+                            });
+                        });
+                }
+            }
+        }
+
+        if ($store.state[MASTERCLASSES_MODULE]) proceed();
         else {
-            const { filter } = computeFilterMasterclassData(pathMatch);
-
-            $progress.start();
-            $store
-                .dispatch(`${MASTERCLASSES_MODULE}/${FETCH_MASTERCLASS_CATALOG_DATA}`, {
-                    page,
-                    filter,
-                })
-                .then(() => {
-                    $store.dispatch(`${MASTERCLASSES_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
-                        $progress.finish();
-                        vm.scrollToTop();
-                    });
-                })
-                .catch(() => {
-                    next(() => {
-                        $progress.fail();
-                        $progress.finish();
-                    });
-                });
+            $store.watch(
+                (state) => state[MASTERCLASSES_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 
