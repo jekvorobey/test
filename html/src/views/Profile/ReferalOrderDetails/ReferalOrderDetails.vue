@@ -190,6 +190,7 @@ import metaMixin from '@plugins/meta';
 import '@images/sprites/logo.svg';
 import '@images/sprites/arrow-small.svg';
 import './ReferalOrderDetails.css';
+import { NAME as LANDING_MODULE } from '@store/modules/Landing';
 
 const REFERRAL_MODULE_PATH = `${PROFILE_MODULE}/${REFERRAL_MODULE}`;
 
@@ -308,37 +309,50 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
-        const {
-            fullPath,
-            name,
-            params,
-            query: { orderField = referralOrderSortFields.ORDER_DATE, orderDirection = sortDirections.DESC },
-        } = to;
+        function proceed() {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][REFERRAL_MODULE]) {
+                const {
+                    fullPath,
+                    name,
+                    params,
+                    query: { orderField = referralOrderSortFields.ORDER_DATE, orderDirection = sortDirections.DESC },
+                } = to;
+                const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
 
-        const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
+                if (fullPath === loadPath) next((vm) => updateBreadcrumbs(vm, name, params));
+                else {
+                    $progress.start();
+                    $store
+                        .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRER_ORDER_DETAILS}`, {
+                            id: params.referalId,
+                            orderField,
+                            orderDirection,
+                        })
+                        .then(() => {
+                            $store.dispatch(`${REFERRAL_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                            next((vm) => {
+                                $progress.finish();
+                                updateBreadcrumbs(vm, name, params);
+                            });
+                        })
+                        .catch(() =>
+                            next((vm) => {
+                                $progress.fail();
+                                updateBreadcrumbs(vm, name, params);
+                            })
+                        );
+                }
+            }
+        }
 
-        if (fullPath === loadPath) next((vm) => updateBreadcrumbs(vm, name, params));
+        if ($store.state[PROFILE_MODULE] &&$store.state[PROFILE_MODULE][REFERRAL_MODULE]) proceed();
         else {
-            $progress.start();
-            $store
-                .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRER_ORDER_DETAILS}`, {
-                    id: params.referalId,
-                    orderField,
-                    orderDirection,
-                })
-                .then(() => {
-                    $store.dispatch(`${REFERRAL_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
-                        $progress.finish();
-                        updateBreadcrumbs(vm, name, params);
-                    });
-                })
-                .catch(() =>
-                    next((vm) => {
-                        $progress.fail();
-                        updateBreadcrumbs(vm, name, params);
-                    })
-                );
+            $store.watch(
+                (state) => state[PROFILE_MODULE][REFERRAL_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 

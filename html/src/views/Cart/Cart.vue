@@ -517,18 +517,32 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
-        const { load } = $store.state[CART_MODULE];
+        function proceed() {
+            if ($store.state[CART_MODULE]) {
+                const { load } = $store.state[CART_MODULE];
 
-        if (load) {
-            $store.dispatch(`${CART_MODULE}/${SET_LOAD}`, false);
-            return next();
+                if (load) {
+                    $store.dispatch(`${CART_MODULE}/${SET_LOAD}`, false);
+                    return next();
+                }
+
+                $progress.start();
+                $store
+                    .dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`)
+                    .then(() => next(() => $progress.finish()))
+                    .catch(() => next(() => $progress.fail()));
+            }
         }
 
-        $progress.start();
-        $store
-            .dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`)
-            .then(() => next(() => $progress.finish()))
-            .catch(() => next(() => $progress.fail()));
+        if ($store.state[CART_MODULE]) proceed();
+        else {
+            $store.watch(
+                (state) => state[CART_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
+        }
     },
 
     created() {

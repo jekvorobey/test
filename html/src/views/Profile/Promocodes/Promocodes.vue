@@ -312,6 +312,7 @@ import '@images/sprites/copy.svg';
 import '@images/sprites/arrow-down.svg';
 import '@images/sprites/info-middle.svg';
 import './Promocodes.css';
+import { NAME as LANDING_MODULE } from '@store/modules/Landing';
 
 const PROMOCODES_MODULE_PATH = `${PROFILE_MODULE}/${PROMOCODES_MODULE}`;
 
@@ -442,34 +443,47 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
-        const {
-            query: { isArchive = 0 },
-        } = to;
+        function proceed() {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][PROMOCODES_MODULE]) {
+                const {
+                    query: { isArchive = 0 },
+                } = to;
+                const { load } = $store.state[PROFILE_MODULE][PROMOCODES_MODULE];
+                const { isServer } = $context;
 
-        const { load } = $store.state[PROFILE_MODULE][PROMOCODES_MODULE];
-        const { isServer } = $context;
+                // если все загружено, пропускаем
+                if (load) {
+                    $store.dispatch(`${PROMOCODES_MODULE_PATH}/${SET_LOAD}`, false);
+                    return next((vm) => vm.setFilterValue(isArchive));
+                }
 
-        // если все загружено, пропускаем
-        if (load) {
-            $store.dispatch(`${PROMOCODES_MODULE_PATH}/${SET_LOAD}`, false);
-            return next((vm) => vm.setFilterValue(isArchive));
+                $progress.start();
+                $store
+                    .dispatch(`${PROMOCODES_MODULE_PATH}/${FETCH_PROMOCODES_DATA}`, isArchive)
+                    .then(() => {
+                        $store.dispatch(`${PROMOCODES_MODULE_PATH}/${SET_LOAD}`, isServer);
+                        next((vm) => {
+                            vm.setFilterValue(isArchive);
+                            $progress.finish();
+                        });
+                    })
+                    .catch(() =>
+                        next(() => {
+                            $progress.fail();
+                        })
+                    );
+            }
         }
 
-        $progress.start();
-        $store
-            .dispatch(`${PROMOCODES_MODULE_PATH}/${FETCH_PROMOCODES_DATA}`, isArchive)
-            .then(() => {
-                $store.dispatch(`${PROMOCODES_MODULE_PATH}/${SET_LOAD}`, isServer);
-                next((vm) => {
-                    vm.setFilterValue(isArchive);
-                    $progress.finish();
-                });
-            })
-            .catch(() =>
-                next(() => {
-                    $progress.fail();
-                })
+        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][PROMOCODES_MODULE]) proceed();
+        else {
+            $store.watch(
+                (state) => state[PROFILE_MODULE][PROMOCODES_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
             );
+        }
     },
 
     async beforeRouteUpdate(to, from, next) {

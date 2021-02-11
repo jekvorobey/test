@@ -1428,26 +1428,40 @@ export default {
             query: { refCode = null, modal },
         } = to;
 
-        const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
+        function proceed() {
+            if ($store.state[PRODUCT_MODULE]) {
+                const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
 
-        // если все загружено, пропускаем
-        if (productCode === code && referrerCode === refCode) next((vm) => vm.handleModalQuery(modal));
+                // если все загружено, пропускаем
+                if (productCode === code && referrerCode === refCode) next((vm) => vm.handleModalQuery(modal));
+                else {
+                    $progress.start();
+                    $store
+                        .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
+                        .then(() => {
+                            next((vm) => {
+                                $progress.finish();
+                                vm.handleModalQuery(modal);
+                            });
+                        })
+                        .catch((error) => {
+                            $progress.fail();
+                            if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
+                            else next(new Error(error.message));
+                            $progress.finish();
+                        });
+                }
+            }
+        }
+
+        if ($store.state[PRODUCT_MODULE]) proceed();
         else {
-            $progress.start();
-            $store
-                .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
-                .then(() => {
-                    next((vm) => {
-                        $progress.finish();
-                        vm.handleModalQuery(modal);
-                    });
-                })
-                .catch((error) => {
-                    $progress.fail();
-                    if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
-                    else next(new Error(error.message));
-                    $progress.finish();
-                });
+            $store.watch(
+                (state) => state[PRODUCT_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 
