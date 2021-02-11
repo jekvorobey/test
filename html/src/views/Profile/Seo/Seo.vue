@@ -330,34 +330,20 @@ export default {
             query: { isActive = 1, page = DEFAULT_PAGE },
         } = to;
 
-        function proceed() {
-            if ($store.state[PROFILE_MODULE][SEO_MODULE]) {
-                const { loadPath } = $store.state[PROFILE_MODULE][SEO_MODULE];
+        const { loadPath } = $store.state[PROFILE_MODULE][SEO_MODULE];
 
-                if (loadPath === fullPath) next((vm) => vm.setStatus(isActive));
-                else {
-                    $store
-                        .dispatch(`${SEO_MODULE_PATH}/${FETCH_PRODUCTS}`, { page, isActive })
-                        .then(() => {
-                            $store.dispatch(`${SEO_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                            next((vm) => vm.setStatus(isActive));
-                        })
-                        .catch((error) => {
-                            $progress.fail();
-                            next();
-                        });
-                }
-            }
-        }
-
-        if ($store.state[PROFILE_MODULE][SEO_MODULE]) proceed();
+        if (loadPath === fullPath) next((vm) => vm.setStatus(isActive));
         else {
-            $store.watch(
-                (state) => state[PROFILE_MODULE][SEO_MODULE],
-                (value) => {
-                    if (value) proceed();
-                }
-            );
+            $store
+                .dispatch(`${SEO_MODULE_PATH}/${FETCH_PRODUCTS}`, { page, isActive })
+                .then(() => {
+                    $store.dispatch(`${SEO_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                    next((vm) => vm.setStatus(isActive));
+                })
+                .catch((error) => {
+                    $progress.fail();
+                    next();
+                });
         }
     },
 

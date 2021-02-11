@@ -244,12 +244,12 @@
                             </v-button>
                         </info-row>
 
-                        <!--
+                        <!-- 
                         <info-row class="orders-view__list-item-row">
                             <v-link tag="button" @click.stop>
                                     Отменить
                             </v-link>
-                        </info-row>
+                        </info-row> 
                         -->
                     </template>
 
@@ -441,7 +441,6 @@ import '@images/sprites/arrow-updown.svg';
 import '@images/sprites/arrow-down.svg';
 import '@images/sprites/alert.svg';
 import './Orders.css';
-import { NAME as LANDING_MODULE } from '@store/modules/Landing';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
 
@@ -682,54 +681,40 @@ export default {
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
 
-        function proceed() {
-            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][ORDERS_MODULE]) {
-                const { fullPath, query } = to;
-                const { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC } = query;
+        const { fullPath, query } = to;
+        const { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC } = query;
 
-                const { loadPath } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
-                const filter = { ...query, page: undefined, orderField: undefined, orderDirection: undefined };
+        const { loadPath } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
+        const filter = { ...query, page: undefined, orderField: undefined, orderDirection: undefined };
 
-                // если все загружено, пропускаем
-                if (loadPath === fullPath)
+        // если все загружено, пропускаем
+        if (loadPath === fullPath)
+            next((vm) => {
+                updateBreadcrumbs(vm);
+            });
+        else {
+            $progress.start();
+            $store
+                .dispatch(`${ORDERS_MODULE_PATH}/${FETCH_ORDERS_DATA}`, {
+                    page,
+                    orderField,
+                    orderDirection,
+                    filter,
+                })
+                .then(() => {
+                    $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
                     next((vm) => {
+                        $progress.finish();
                         updateBreadcrumbs(vm);
                     });
-                else {
-                    $progress.start();
-                    $store
-                        .dispatch(`${ORDERS_MODULE_PATH}/${FETCH_ORDERS_DATA}`, {
-                            page,
-                            orderField,
-                            orderDirection,
-                            filter,
-                        })
-                        .then(() => {
-                            $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                            next((vm) => {
-                                $progress.finish();
-                                updateBreadcrumbs(vm);
-                            });
-                        })
-                        .catch((thrown) => {
-                            if (thrown && thrown.isCancel === true) return next((vm) => updateBreadcrumbs(vm));
-                            next((vm) => {
-                                $progress.fail();
-                                updateBreadcrumbs(vm);
-                            });
-                        });
-                }
-            }
-        }
-
-        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][ORDERS_MODULE]) proceed();
-        else {
-            $store.watch(
-                (state) => state[PROFILE_MODULE][ORDERS_MODULE],
-                (value) => {
-                    if (value) proceed();
-                }
-            );
+                })
+                .catch((thrown) => {
+                    if (thrown && thrown.isCancel === true) return next((vm) => updateBreadcrumbs(vm));
+                    next((vm) => {
+                        $progress.fail();
+                        updateBreadcrumbs(vm);
+                    });
+                });
         }
     },
 

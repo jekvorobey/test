@@ -130,39 +130,25 @@ export default {
             query: { sortType },
         } = to;
 
-        function proceed() {
-            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][DOCUMENTS_MODULE]) {
-                const { loadPath } = $store.state[PROFILE_MODULE][DOCUMENTS_MODULE];
+        const { loadPath } = $store.state[PROFILE_MODULE][DOCUMENTS_MODULE];
 
-                // если все загружено, пропускаем
-                if (fullPath === loadPath) next((vm) => vm.setSortType(sortType));
-                else {
-                    $progress.start();
-                    $store
-                        .dispatch(`${DOCUMENTS_MODULE_PATH}/${FETCH_DOCUMENTS_DATA}`, { type: sortType })
-                        .then(() => {
-                            $store.dispatch(`${DOCUMENTS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                            next((vm) => {
-                                vm.setSortType(sortType);
-                                $progress.finish();
-                            });
-                        })
-                        .catch((error) => {
-                            next(() => $progress.fail());
-                            $logger.error(error);
-                        });
-                }
-            }
-        }
-
-        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][DOCUMENTS_MODULE]) proceed();
+        // если все загружено, пропускаем
+        if (fullPath === loadPath) next((vm) => vm.setSortType(sortType));
         else {
-            $store.watch(
-                (state) => state[PROFILE_MODULE][DOCUMENTS_MODULE],
-                (value) => {
-                    if (value) proceed();
-                }
-            );
+            $progress.start();
+            $store
+                .dispatch(`${DOCUMENTS_MODULE_PATH}/${FETCH_DOCUMENTS_DATA}`, { type: sortType })
+                .then(() => {
+                    $store.dispatch(`${DOCUMENTS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                    next((vm) => {
+                        vm.setSortType(sortType);
+                        $progress.finish();
+                    });
+                })
+                .catch((error) => {
+                    next(() => $progress.fail());
+                    $logger.error(error);
+                });
         }
     },
 
