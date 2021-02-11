@@ -68,7 +68,6 @@ import { modalName } from '@enums';
 import { numericYearDateSettings } from '@settings';
 import metaMixin from '@plugins/meta';
 import './Messages.css';
-import { NAME as LANDING_MODULE } from '@store/modules/Landing';
 
 const MESSAGES_MODULE_PATH = `${PROFILE_MODULE}/${MESSAGES_MODULE}`;
 
@@ -137,35 +136,21 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
-        function proceed() {
-            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][MESSAGES_MODULE]) {
-                const { load } = $store.state[PROFILE_MODULE][MESSAGES_MODULE];
+        const { load } = $store.state[PROFILE_MODULE][MESSAGES_MODULE];
 
-                if (load) {
-                    $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, false);
-                    return next();
-                }
-
-                $progress.start();
-                $store
-                    .dispatch(`${MESSAGES_MODULE_PATH}/${FETCH_CHATS}`)
-                    .then(() => {
-                        $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, $context.isServer);
-                        next(() => $progress.finish());
-                    })
-                    .catch(() => next(() => $progress.fail()));
-            }
+        if (load) {
+            $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, false);
+            return next();
         }
 
-        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][MESSAGES_MODULE]) proceed();
-        else {
-            $store.watch(
-                (state) => state[PROFILE_MODULE][MESSAGES_MODULE],
-                (value) => {
-                    if (value) proceed();
-                }
-            );
-        }
+        $progress.start();
+        $store
+            .dispatch(`${MESSAGES_MODULE_PATH}/${FETCH_CHATS}`)
+            .then(() => {
+                $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, $context.isServer);
+                next(() => $progress.finish());
+            })
+            .catch(() => next(() => $progress.fail()));
     },
 };
 </script>

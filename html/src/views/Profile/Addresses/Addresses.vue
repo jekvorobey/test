@@ -222,42 +222,28 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
-        function proceed() {
-            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][ADDRESSES_MODULE]) {
-                const { load } = $store.state[PROFILE_MODULE][ADDRESSES_MODULE];
+        const { load } = $store.state[PROFILE_MODULE][ADDRESSES_MODULE];
 
-                if (load) {
-                    next();
-                    $store.dispatch(`${ADDRESSES_MODULE_PATH}/${SET_LOAD}`, false);
-                    return;
-                }
-
-                $progress.start();
-                $store
-                    .dispatch(`${ADDRESSES_MODULE_PATH}/${FETCH_ADDRESSES_DATA}`)
-                    .then(() => {
-                        next(() => {
-                            $progress.finish();
-                        });
-                    })
-                    .catch((thrown) => {
-                        $progress.fail();
-                        $logger.error('beforeRouteEnter', thrown.error);
-                        $progress.finish();
-                        next();
-                    });
-            }
+        if (load) {
+            next();
+            $store.dispatch(`${ADDRESSES_MODULE_PATH}/${SET_LOAD}`, false);
+            return;
         }
 
-        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][ADDRESSES_MODULE]) proceed();
-        else {
-            $store.watch(
-                (state) => state[PROFILE_MODULE][ADDRESSES_MODULE],
-                (value) => {
-                    if (value) proceed();
-                }
-            );
-        }
+        $progress.start();
+        $store
+            .dispatch(`${ADDRESSES_MODULE_PATH}/${FETCH_ADDRESSES_DATA}`)
+            .then(() => {
+                next(() => {
+                    $progress.finish();
+                });
+            })
+            .catch((thrown) => {
+                $progress.fail();
+                $logger.error('beforeRouteEnter', thrown.error);
+                $progress.finish();
+                next();
+            });
     },
 };
 </script>

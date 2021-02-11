@@ -208,37 +208,23 @@ export default {
             query: { page = DEFAULT_PAGE },
         } = to;
 
-        function proceed() {
-            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][BONUSES_MODULE]) {
-                const { loadPath } = $store.state[PROFILE_MODULE][BONUSES_MODULE];
+        const { loadPath } = $store.state[PROFILE_MODULE][BONUSES_MODULE];
 
-                if (loadPath === fullPath) next();
-                else {
-                    $progress.start();
-                    $store
-                        .dispatch(`${BONUSES_MODULE_PATH}/${FETCH_BONUSES_DATA}`, { page })
-                        .then(() => {
-                            $store.dispatch(`${BONUSES_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                            next(() => {
-                                $progress.finish();
-                            });
-                        })
-                        .catch(() => {
-                            $progress.fail();
-                            next();
-                        });
-                }
-            }
-        }
-
-        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][BONUSES_MODULE]) proceed();
+        if (loadPath === fullPath) next();
         else {
-            $store.watch(
-                (state) => state[PROFILE_MODULE][BONUSES_MODULE],
-                (value) => {
-                    if (value) proceed();
-                }
-            );
+            $progress.start();
+            $store
+                .dispatch(`${BONUSES_MODULE_PATH}/${FETCH_BONUSES_DATA}`, { page })
+                .then(() => {
+                    $store.dispatch(`${BONUSES_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                    next(() => {
+                        $progress.finish();
+                    });
+                })
+                .catch(() => {
+                    $progress.fail();
+                    next();
+                });
         }
     },
 

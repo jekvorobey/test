@@ -1246,36 +1246,22 @@ export default {
             params: { code },
         } = to;
 
-        function proceed() {
-            if ($store.state[MASTERCLASS_MODULE]) {
-                const { masterClassCode } = $store.state[MASTERCLASS_MODULE];
+        const { masterClassCode } = $store.state[MASTERCLASS_MODULE];
 
-                // если все загружено, пропускаем
-                if (masterClassCode === code) next();
-                else {
-                    $progress.start();
-                    $store
-                        .dispatch(`${MASTERCLASS_MODULE}/${FETCH_MASTERCLASS_DATA}`, { code })
-                        .then(() => next(() => $progress.finish()))
-                        .catch((thrown) => {
-                            if (thrown && thrown.isCancel === true) return next();
-
-                            $progress.fail();
-                            if (thrown && thrown.status === httpCodes.NOT_FOUND) return next(createNotFoundRoute(to));
-                            else next();
-                        });
-                }
-            }
-        }
-
-        if ($store.state[MASTERCLASS_MODULE]) proceed();
+        // если все загружено, пропускаем
+        if (masterClassCode === code) next();
         else {
-            $store.watch(
-                (state) => state[MASTERCLASS_MODULE],
-                (value) => {
-                    if (value) proceed();
-                }
-            );
+            $progress.start();
+            $store
+                .dispatch(`${MASTERCLASS_MODULE}/${FETCH_MASTERCLASS_DATA}`, { code })
+                .then(() => next(() => $progress.finish()))
+                .catch((thrown) => {
+                    if (thrown && thrown.isCancel === true) return next();
+
+                    $progress.fail();
+                    if (thrown && thrown.status === httpCodes.NOT_FOUND) return next(createNotFoundRoute(to));
+                    else next();
+                });
         }
     },
 

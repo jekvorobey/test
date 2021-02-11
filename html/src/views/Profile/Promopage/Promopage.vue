@@ -157,7 +157,6 @@ import '@images/sprites/link-add.svg';
 import '@images/sprites/plus-small.svg';
 import '@images/sprites/info-middle.svg';
 import './Promopage.css';
-import { NAME as LANDING_MODULE } from '@store/modules/Landing';
 
 const PROMOPAGE_MODULE_PATH = `${PROFILE_MODULE}/${PROMOPAGE_MODULE}`;
 
@@ -307,39 +306,26 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
-        function proceed() {
-            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][PROMOPAGE_MODULE]) {
-                const {
-                    fullPath,
-                    query: { page = DEFAULT_PAGE },
-                } = to;
-                const { loadPath } = $store.state[PROFILE_MODULE][PROMOPAGE_MODULE];
+        const {
+            fullPath,
+            query: { page = DEFAULT_PAGE },
+        } = to;
 
-                // если все загружено, пропускаем
-                if (fullPath === loadPath) next();
-                else {
-                    $progress.start();
-                    $store
-                        .dispatch(`${PROMOPAGE_MODULE_PATH}/${FETCH_PROMOPAGE_DATA}`, { page })
-                        .then(() => {
-                            $store.dispatch(`${PROMOPAGE_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                            next(() => $progress.finish());
-                        })
-                        .catch(() => {
-                            next(() => $progress.fail());
-                        });
-                }
-            }
-        }
+        const { loadPath } = $store.state[PROFILE_MODULE][PROMOPAGE_MODULE];
 
-        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][PROMOPAGE_MODULE]) proceed();
+        // если все загружено, пропускаем
+        if (fullPath === loadPath) next();
         else {
-            $store.watch(
-                (state) => state[PROFILE_MODULE][PROMOPAGE_MODULE],
-                (value) => {
-                    if (value) proceed();
-                }
-            );
+            $progress.start();
+            $store
+                .dispatch(`${PROMOPAGE_MODULE_PATH}/${FETCH_PROMOPAGE_DATA}`, { page })
+                .then(() => {
+                    $store.dispatch(`${PROMOPAGE_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                    next(() => $progress.finish());
+                })
+                .catch(() => {
+                    next(() => $progress.fail());
+                });
         }
     },
 
