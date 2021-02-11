@@ -1022,7 +1022,7 @@ export function getCustomPageData(path) {
         setTimeout(() => {
             const data = getPageData(path);
             if (data) resolve(data);
-            else reject('not-found');
+            else reject('not-found: ' + path);
         }, 300);
     });
 }
