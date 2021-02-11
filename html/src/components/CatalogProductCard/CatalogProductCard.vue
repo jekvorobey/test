@@ -6,7 +6,7 @@
                 <source :data-srcset="images.desktop.orig" media="(min-width: 480px)" />
                 <source :data-srcset="images.mobile.webp" type="image/webp" media="(max-width: 479px)" />
                 <source :data-srcset="images.mobile.orig" media="(max-width: 479px)" />
-                <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" />
+                <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" loading="lazy" />
             </v-picture>
             <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
 

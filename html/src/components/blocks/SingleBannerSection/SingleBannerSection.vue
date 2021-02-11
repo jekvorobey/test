@@ -4,16 +4,28 @@
             <div class="single-banner-section__inner">
                 <catalog-banner-card class="single-banner-section__banner" :item="banner">
                     <template v-if="desktopImage">
-                        <source :data-srcset="getWebpImageWithRetina(desktopImage)" type="image/webp" media="(min-width: 1024px)" />
-                        <source :data-srcset="desktopImage.orig" media="(min-width: 1024px)" />
+                        <source
+                            :data-srcset="getImageWithRetina(desktopImage, 'webp')"
+                            type="image/webp"
+                            media="(min-width: 1024px)"
+                        />
+                        <source :data-srcset="getImageWithRetina(desktopImage)" media="(min-width: 1024px)" />
                     </template>
                     <template v-if="tabletImage">
-                        <source :data-srcset="getWebpImageWithRetina(tabletImage)" type="image/webp" media="(min-width: 768px)" />
-                        <source :data-srcset="tabletImage.orig" media="(min-width: 768px)" />
+                        <source
+                            :data-srcset="getImageWithRetina(tabletImage, 'webp')"
+                            type="image/webp"
+                            media="(min-width: 768px)"
+                        />
+                        <source :data-srcset="getImageWithRetina(tabletImage)" media="(min-width: 768px)" />
                     </template>
                     <template v-if="mobileImage">
-                        <source :data-srcset="getWebpImageWithRetina(mobileImage)" type="image/webp" media="(min-width: 320px)" />
-                        <source :data-srcset="mobileImage.orig" media="(min-width: 320px)" />
+                        <source
+                            :data-srcset="getImageWithRetina(mobileImage, 'webp')"
+                            type="image/webp"
+                            media="(min-width: 320px)"
+                        />
+                        <source :data-srcset="getImageWithRetina(mobileImage)" media="(min-width: 320px)" />
                     </template>
                     <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />
                 </catalog-banner-card>
@@ -48,13 +60,17 @@ export default {
     computed: {
         mobileImage() {
             const image = this.banner.mobileImage || this.banner.tabletImage || this.banner.desktopImage;
-            const imageRetina  = this.banner.mobileImageRetina || this.banner.tabletImage;
+            const imageRetina = this.banner.mobileImageRetina || this.banner.tabletImage;
 
             if (typeof image === 'string')
                 return {
-                    webp: image,
+                    webp: image.substr(0, image.lastIndexOf('.')) + '.webp',
                     orig: image,
-                    retina: imageRetina,
+                    retinaWebp:
+                        typeof imageRetina === 'string'
+                            ? imageRetina.substr(0, imageRetina.lastIndexOf('.')) + '.webp'
+                            : undefined,
+                    retinaOrig: typeof imageRetina === 'string' ? imageRetina : undefined,
                 };
 
             if (image)
@@ -66,13 +82,17 @@ export default {
 
         tabletImage() {
             const image = this.banner.tabletImage || this.banner.desktopImage;
-            const imageRetina  = this.banner.desktopImageRetina || this.banner.tabletImage;
+            const imageRetina = this.banner.desktopImageRetina || this.banner.tabletImage;
 
             if (typeof image === 'string')
                 return {
-                    webp: image,
+                    webp: image.substr(0, image.lastIndexOf('.')) + '.webp',
                     orig: image,
-                    retina: imageRetina,
+                    retinaWebp:
+                        typeof imageRetina === 'string'
+                            ? imageRetina.substr(0, imageRetina.lastIndexOf('.')) + '.webp'
+                            : undefined,
+                    retinaOrig: typeof imageRetina === 'string' ? imageRetina : undefined,
                 };
 
             if (image)
@@ -84,13 +104,17 @@ export default {
 
         desktopImage() {
             const image = this.banner.desktopImage || this.banner.tabletImage;
-            const imageRetina  = this.banner.desktopImageRetina || this.banner.tabletImage;
+            const imageRetina = this.banner.desktopImageRetina || this.banner.tabletImage;
 
             if (typeof image === 'string')
                 return {
-                    webp: image,
+                    webp: image.substr(0, image.lastIndexOf('.')) + '.webp',
                     orig: image,
-                    retina: imageRetina,
+                    retinaWebp:
+                        typeof imageRetina === 'string'
+                            ? imageRetina.substr(0, imageRetina.lastIndexOf('.')) + '.webp'
+                            : undefined,
+                    retinaOrig: typeof imageRetina === 'string' ? imageRetina : undefined,
                 };
 
             if (image)
@@ -108,14 +132,27 @@ export default {
     },
 
     methods: {
-        getWebpImageWithRetina(image) {
+        getImageWithRetina(image, type = 'jpg') {
             let result = '';
-            result += `${image.webp} 1x`;
-            if (image.retina) {
-                result += `, ${image.retina} 2x`;
+            let imageOrig = '';
+            let imageRetina = '';
+
+            switch (type) {
+                case 'webp':
+                    imageOrig = image.webp;
+                    imageRetina = image.retinaWebp;
+                    break;
+                default:
+                    imageOrig = image.orig;
+                    imageRetina = image.retinaOrig;
+            }
+
+            result += `${imageOrig} 1x`;
+            if (imageRetina) {
+                result += `, ${imageRetina} 2x`;
             }
             return result;
-        }
-    }
+        },
+    },
 };
 </script>
