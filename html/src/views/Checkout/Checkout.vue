@@ -375,31 +375,15 @@ export default {
             params: { type },
         } = to;
 
-        function proceed() {
-            if ($store.state[CHECKOUT_MODULE] && $store.state[CHECKOUT_MODULE][CHECKOUT_DATA]) {
-                const checkoutData = $store.state[CHECKOUT_MODULE][CHECKOUT_DATA];
-
-                if (checkoutData) next();
-                else {
-                    $progress.start();
-                    Promise.all([
-                        $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type),
-                        $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_PROFESSIONS}`),
-                    ])
-                        .then(() => next(() => $progress.finish()))
-                        .catch(() => next(() => $progress.fail()));
-                }
-            }
-        }
-
-        if ($store.state[CHECKOUT_MODULE] && $store.state[CHECKOUT_MODULE][CHECKOUT_DATA]) proceed();
+        if ($store.state[CHECKOUT_MODULE] && $store.state[CHECKOUT_MODULE][CHECKOUT_DATA]) next();
         else {
-            $store.watch(
-                (state) => state[CHECKOUT_MODULE][CHECKOUT_DATA],
-                (value) => {
-                    if (value) proceed();
-                }
-            );
+            $progress.start();
+            Promise.all([
+                $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_DATA}`, type),
+                $store.dispatch(`${CHECKOUT_MODULE}/${FETCH_PROFESSIONS}`),
+            ])
+                .then(() => next(() => $progress.finish()))
+                .catch(() => next(() => $progress.fail()));
         }
     },
 
