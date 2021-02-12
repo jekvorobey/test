@@ -166,25 +166,39 @@ export default {
             query: { page = DEFAULT_PAGE },
         } = to;
 
-        const { loadPath } = $store.state[REFERRER_MODULE];
+        function proceed() {
+            if ($store.state[REFERRER_MODULE]) {
+                const { loadPath } = $store.state[REFERRER_MODULE];
 
-        if (loadPath === fullPath) next();
+                if (loadPath === fullPath) next();
+                else {
+                    $progress.start();
+                    $store
+                        .dispatch(`${REFERRER_MODULE}/${FETCH_REFERRER_DATA}`, { code, page })
+                        .then(() => {
+                            $store.dispatch(`${REFERRER_MODULE}/${SET_LOAD_PATH}`, fullPath);
+                            next(() => {
+                                $progress.finish();
+                            });
+                        })
+                        .catch((thrown) => {
+                            if (thrown && thrown.isCancel === true) return true;
+                            next(() => {
+                                $progress.fail();
+                            });
+                        });
+                }
+            }
+        }
+
+        if ($store.state[REFERRER_MODULE]) proceed();
         else {
-            $progress.start();
-            $store
-                .dispatch(`${REFERRER_MODULE}/${FETCH_REFERRER_DATA}`, { code, page })
-                .then(() => {
-                    $store.dispatch(`${REFERRER_MODULE}/${SET_LOAD_PATH}`, fullPath);
-                    next(() => {
-                        $progress.finish();
-                    });
-                })
-                .catch((thrown) => {
-                    if (thrown && thrown.isCancel === true) return true;
-                    next(() => {
-                        $progress.fail();
-                    });
-                });
+            $store.watch(
+                (state) => state[REFERRER_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 

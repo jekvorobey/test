@@ -684,37 +684,51 @@ export default {
         const { fullPath, query } = to;
         const { page = DEFAULT_PAGE, orderField = sortFields.NUMBER, orderDirection = sortDirections.DESC } = query;
 
-        const { loadPath } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
-        const filter = { ...query, page: undefined, orderField: undefined, orderDirection: undefined };
+        function proceed() {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][ORDERS_MODULE]) {
+                const { loadPath } = $store.state[PROFILE_MODULE][ORDERS_MODULE];
+                const filter = { ...query, page: undefined, orderField: undefined, orderDirection: undefined };
 
-        // если все загружено, пропускаем
-        if (loadPath === fullPath)
-            next((vm) => {
-                updateBreadcrumbs(vm);
-            });
+                // если все загружено, пропускаем
+                if (loadPath === fullPath)
+                    next((vm) => {
+                        updateBreadcrumbs(vm);
+                    });
+                else {
+                    $progress.start();
+                    $store
+                        .dispatch(`${ORDERS_MODULE_PATH}/${FETCH_ORDERS_DATA}`, {
+                            page,
+                            orderField,
+                            orderDirection,
+                            filter,
+                        })
+                        .then(() => {
+                            $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                            next((vm) => {
+                                $progress.finish();
+                                updateBreadcrumbs(vm);
+                            });
+                        })
+                        .catch((thrown) => {
+                            if (thrown && thrown.isCancel === true) return next((vm) => updateBreadcrumbs(vm));
+                            next((vm) => {
+                                $progress.fail();
+                                updateBreadcrumbs(vm);
+                            });
+                        });
+                }
+            }
+        }
+
+        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][ORDERS_MODULE]) proceed();
         else {
-            $progress.start();
-            $store
-                .dispatch(`${ORDERS_MODULE_PATH}/${FETCH_ORDERS_DATA}`, {
-                    page,
-                    orderField,
-                    orderDirection,
-                    filter,
-                })
-                .then(() => {
-                    $store.dispatch(`${ORDERS_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next((vm) => {
-                        $progress.finish();
-                        updateBreadcrumbs(vm);
-                    });
-                })
-                .catch((thrown) => {
-                    if (thrown && thrown.isCancel === true) return next((vm) => updateBreadcrumbs(vm));
-                    next((vm) => {
-                        $progress.fail();
-                        updateBreadcrumbs(vm);
-                    });
-                });
+            $store.watch(
+                (state) => state[PROFILE_MODULE][ORDERS_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 

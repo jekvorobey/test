@@ -282,44 +282,58 @@ export default {
             },
         } = to;
 
-        const { loadPath, type } = $store.state[PRODUCT_GROUPS_MODULE];
+        function proceed() {
+            if ($store.state[PRODUCT_GROUPS_MODULE]) {
+                const { loadPath, type } = $store.state[PRODUCT_GROUPS_MODULE];
 
-        // если все загружено, пропускаем
-        if (loadPath === fullPath && type === toType)
-            next((vm) => {
-                if (!vm.$isServer && vm[SCROLL]) {
-                    window.scrollTo({
-                        top: 0,
-                    });
-                }
-            });
-        else {
-            // для брендов нам нужны сразу все страницы
-            const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
-            $progress.start();
-            $store
-                .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, {
-                    type: toType,
-                    page: fetchPage,
-                    orderField,
-                    orderDirection,
-                })
-                .then(() => {
-                    $store.dispatch(`${PRODUCT_GROUPS_MODULE}/${SET_LOAD_PATH}`, fullPath);
+                // если все загружено, пропускаем
+                if (loadPath === fullPath && type === toType)
                     next((vm) => {
-                        $progress.finish();
                         if (!vm.$isServer && vm[SCROLL]) {
                             window.scrollTo({
                                 top: 0,
                             });
                         }
                     });
-                })
-                .catch((error) => {
-                    $progress.fail();
-                    if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
-                    else next(new Error(error.message));
-                });
+                else {
+                    // для брендов нам нужны сразу все страницы
+                    const fetchPage = toType === productGroupTypes.BRANDS ? undefined : page;
+                    $progress.start();
+                    $store
+                        .dispatch(`${PRODUCT_GROUPS_MODULE}/${FETCH_ITEMS}`, {
+                            type: toType,
+                            page: fetchPage,
+                            orderField,
+                            orderDirection,
+                        })
+                        .then(() => {
+                            $store.dispatch(`${PRODUCT_GROUPS_MODULE}/${SET_LOAD_PATH}`, fullPath);
+                            next((vm) => {
+                                $progress.finish();
+                                if (!vm.$isServer && vm[SCROLL]) {
+                                    window.scrollTo({
+                                        top: 0,
+                                    });
+                                }
+                            });
+                        })
+                        .catch((error) => {
+                            $progress.fail();
+                            if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
+                            else next(new Error(error.message));
+                        });
+                }
+            }
+        }
+
+        if ($store.state[PRODUCT_GROUPS_MODULE]) proceed();
+        else {
+            $store.watch(
+                (state) => state[PRODUCT_GROUPS_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 

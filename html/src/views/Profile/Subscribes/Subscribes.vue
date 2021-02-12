@@ -185,30 +185,44 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
-        const { isServer } = $context;
-        const { load } = $store.state[PROFILE_MODULE][SUBSCRIBES_MODULE];
+        function proceed() {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][SUBSCRIBES_MODULE]) {
+                const { isServer } = $context;
+                const { load } = $store.state[PROFILE_MODULE][SUBSCRIBES_MODULE];
 
-        if (load) {
-            $store.dispatch(`${SUBSCRIBES_MODULE_PATH}/${SET_LOAD}`, false);
-            return next();
+                if (load) {
+                    $store.dispatch(`${SUBSCRIBES_MODULE_PATH}/${SET_LOAD}`, false);
+                    return next();
+                }
+
+                $progress.start();
+                $store
+                    .dispatch(`${SUBSCRIBES_MODULE_PATH}/${FETCH_SUBSCRIBES_DATA}`, isServer)
+                    .then(() => {
+                        next(() => {
+                            $progress.finish();
+                        });
+                    })
+                    .catch((thrown) => {
+                        $progress.fail();
+                        if (thrown.status === httpCodes.FORBIDDEN) {
+                            $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);
+                            return next(false);
+                        }
+                        next();
+                    });
+            }
         }
 
-        $progress.start();
-        $store
-            .dispatch(`${SUBSCRIBES_MODULE_PATH}/${FETCH_SUBSCRIBES_DATA}`, isServer)
-            .then(() => {
-                next(() => {
-                    $progress.finish();
-                });
-            })
-            .catch((thrown) => {
-                $progress.fail();
-                if (thrown.status === httpCodes.FORBIDDEN) {
-                    $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);
-                    return next(false);
+        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][SUBSCRIBES_MODULE]) proceed();
+        else {
+            $store.watch(
+                (state) => state[PROFILE_MODULE][SUBSCRIBES_MODULE],
+                (value) => {
+                    if (value) proceed();
                 }
-                next();
-            });
+            );
+        }
     },
 
     created() {
