@@ -10,38 +10,37 @@
                     >
                         <template v-if="banner.desktopImage">
                             <source
-                                :data-srcset="getWebpImageWithRetina(banner.desktopImage)"
+                                :data-srcset="getImageWithRetina(banner.desktopImage)"
                                 media="(min-width: 1024px)"
                             />
                             <source
-                                :data-srcset="banner.desktopImage.webp"
+                                :data-srcset="getImageWithRetina(banner.desktopImage, 'webp')"
                                 type="image/webp"
                                 media="(min-width: 1024px)"
                             />
                         </template>
                         <template v-if="banner.tabletImage">
+                            <source :data-srcset="getImageWithRetina(banner.tabletImage)" media="(min-width: 768px)" />
                             <source
-                                :data-srcset="getWebpImageWithRetina(banner.tabletImage)"
-                                media="(min-width: 768px)"
-                            />
-                            <source
-                                :data-srcset="banner.tabletImage.webp"
+                                :data-srcset="getImageWithRetina(banner.tabletImage, 'webp')"
                                 type="image/webp"
                                 media="(min-width: 768px)"
                             />
                         </template>
                         <template v-if="banner.mobileImage">
+                            <source :data-srcset="getImageWithRetina(banner.mobileImage)" media="(min-width: 320px)" />
                             <source
-                                :data-srcset="getWebpImageWithRetina(banner.mobileImage)"
-                                media="(min-width: 320px)"
-                            />
-                            <source
-                                :data-srcset="banner.mobileImage.webp"
+                                :data-srcset="getImageWithRetina(banner.mobileImage, 'webp')"
                                 type="image/webp"
                                 media="(min-width: 320px)"
                             />
                         </template>
-                        <img class="blur-up lazyload v-picture__img" :data-src="banner.defaultImage" alt="" />
+                        <img
+                            class="blur-up lazyload v-picture__img"
+                            :data-src="banner.defaultImage"
+                            alt=""
+                            loading="lazy"
+                        />
                     </catalog-banner-card>
                 </slot>
             </template>
@@ -121,9 +120,13 @@ export default {
             const imageRetina = banner.mobileImageRetina || banner.tabletImageRetina;
             if (typeof image === 'string')
                 return {
-                    webp: image,
+                    webp: image.substr(0, image.lastIndexOf('.')) + '.webp',
                     orig: image,
-                    retina: typeof imageRetina === 'string' ? imageRetina : undefined,
+                    retinaWebp:
+                        typeof imageRetina === 'string'
+                            ? imageRetina.substr(0, imageRetina.lastIndexOf('.')) + '.webp'
+                            : undefined,
+                    retinaOrig: typeof imageRetina === 'string' ? imageRetina : undefined,
                 };
 
             if (image)
@@ -138,9 +141,13 @@ export default {
             const imageRetina = banner.tabletImageRetina || banner.desktopImageRetina;
             if (typeof image === 'string')
                 return {
-                    webp: image,
+                    webp: image.substr(0, image.lastIndexOf('.')) + '.webp',
                     orig: image,
-                    retina: typeof imageRetina === 'string' ? imageRetina : undefined,
+                    retinaWebp:
+                        typeof imageRetina === 'string'
+                            ? imageRetina.substr(0, imageRetina.lastIndexOf('.')) + '.webp'
+                            : undefined,
+                    retinaOrig: typeof imageRetina === 'string' ? imageRetina : undefined,
                 };
 
             if (image)
@@ -156,9 +163,13 @@ export default {
 
             if (typeof image === 'string')
                 return {
-                    webp: image,
+                    webp: image.substr(0, image.lastIndexOf('.')) + '.webp',
                     orig: image,
-                    retina: typeof imageRetina === 'string' ? imageRetina : undefined,
+                    retinaWebp:
+                        typeof imageRetina === 'string'
+                            ? imageRetina.substr(0, imageRetina.lastIndexOf('.')) + '.webp'
+                            : undefined,
+                    retinaOrig: typeof imageRetina === 'string' ? imageRetina : undefined,
                 };
 
             if (image)
@@ -174,11 +185,24 @@ export default {
             if (image) return generatePictureSourcePath(600, 888, image.id);
         },
 
-        getWebpImageWithRetina(image) {
+        getImageWithRetina(image, type = 'jpg') {
             let result = '';
-            result += `${image.orig} 1x`;
-            if (image.retina) {
-                result += `, ${image.retina} 2x`;
+            let imageOrig = '';
+            let imageRetina = '';
+
+            switch (type) {
+                case 'webp':
+                    imageOrig = image.webp;
+                    imageRetina = image.retinaWebp;
+                    break;
+                default:
+                    imageOrig = image.orig;
+                    imageRetina = image.retinaOrig;
+            }
+
+            result += `${imageOrig} 1x`;
+            if (imageRetina) {
+                result += `, ${imageRetina} 2x`;
             }
             return result;
         },

@@ -99,7 +99,6 @@ import { modalName, httpCodes } from '@enums';
 import validationMixin from '@plugins/validation';
 import metaMixin from '@plugins/meta';
 import './Subscribes.css';
-import {NAME as LANDING_MODULE} from "@store/modules/Landing";
 
 const SUBSCRIBES_MODULE_PATH = `${PROFILE_MODULE}/${SUBSCRIBES_MODULE}`;
 
@@ -186,45 +185,30 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
+        const { isServer } = $context;
+        const { load } = $store.state[PROFILE_MODULE][SUBSCRIBES_MODULE];
 
-        function proceed() {
-            if ($store.state[PROFILE_MODULE][SUBSCRIBES_MODULE]) {
-                const { isServer } = $context;
-                const { load } = $store.state[PROFILE_MODULE][SUBSCRIBES_MODULE];
-
-                if (load) {
-                    $store.dispatch(`${SUBSCRIBES_MODULE_PATH}/${SET_LOAD}`, false);
-                    return next();
-                }
-
-                $progress.start();
-                $store
-                    .dispatch(`${SUBSCRIBES_MODULE_PATH}/${FETCH_SUBSCRIBES_DATA}`, isServer)
-                    .then(() => {
-                        next(() => {
-                            $progress.finish();
-                        });
-                    })
-                    .catch((thrown) => {
-                        $progress.fail();
-                        if (thrown.status === httpCodes.FORBIDDEN) {
-                            $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);
-                            return next(false);
-                        }
-                        next();
-                    });
-            }
+        if (load) {
+            $store.dispatch(`${SUBSCRIBES_MODULE_PATH}/${SET_LOAD}`, false);
+            return next();
         }
 
-        if ($store.state[PROFILE_MODULE][SUBSCRIBES_MODULE]) proceed();
-        else {
-            $store.watch(
-                (state) => state[PROFILE_MODULE][SUBSCRIBES_MODULE],
-                (value) => {
-                    if (value) proceed();
+        $progress.start();
+        $store
+            .dispatch(`${SUBSCRIBES_MODULE_PATH}/${FETCH_SUBSCRIBES_DATA}`, isServer)
+            .then(() => {
+                next(() => {
+                    $progress.finish();
+                });
+            })
+            .catch((thrown) => {
+                $progress.fail();
+                if (thrown.status === httpCodes.FORBIDDEN) {
+                    $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);
+                    return next(false);
                 }
-            );
-        }
+                next();
+            });
     },
 
     created() {

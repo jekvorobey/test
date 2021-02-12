@@ -671,56 +671,43 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
-        function proceed() {
-            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][REFERRAL_MODULE]) {
-                const {
-                    fullPath,
-                    query: {
-                        page = DEFAULT_PAGE,
-                        orderField = referralOrderSortFields.NAME,
-                        orderDirection = sortDirections.DESC,
-                        orderFilterField,
-                    },
-                } = to;
-                const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
+        const {
+            fullPath,
+            query: {
+                page = DEFAULT_PAGE,
+                orderField = referralOrderSortFields.NAME,
+                orderDirection = sortDirections.DESC,
+                orderFilterField,
+            },
+        } = to;
 
-                const date = getOrderFilterDate(orderFilterField);
+        const { loadPath } = $store.state[PROFILE_MODULE][REFERRAL_MODULE];
 
-                if (loadPath === fullPath) next();
-                else {
-                    $progress.start();
-                    $store
-                        .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`, {
-                            page,
-                            orderField,
-                            orderDirection,
-                            orderFilterField,
-                            date,
-                        })
-                        .then(() => {
-                            $store.dispatch(`${REFERRAL_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                            next((vm) => {
-                                $progress.finish();
-                                vm.setOrderFilterValue(orderFilterField);
-                                vm.setSortValue(orderField);
-                            });
-                        })
-                        .catch(() => {
-                            $progress.fail();
-                            next();
-                        });
-                }
-            }
-        }
+        const date = getOrderFilterDate(orderFilterField);
 
-        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][REFERRAL_MODULE]) proceed();
+        if (loadPath === fullPath) next();
         else {
-            $store.watch(
-                (state) => state[PROFILE_MODULE][REFERRAL_MODULE],
-                (value) => {
-                    if (value) proceed();
-                }
-            );
+            $progress.start();
+            $store
+                .dispatch(`${REFERRAL_MODULE_PATH}/${FETCH_REFERRAL_DATA}`, {
+                    page,
+                    orderField,
+                    orderDirection,
+                    orderFilterField,
+                    date,
+                })
+                .then(() => {
+                    $store.dispatch(`${REFERRAL_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                    next((vm) => {
+                        $progress.finish();
+                        vm.setOrderFilterValue(orderFilterField);
+                        vm.setSortValue(orderField);
+                    });
+                })
+                .catch(() => {
+                    $progress.fail();
+                    next();
+                });
         }
     },
 

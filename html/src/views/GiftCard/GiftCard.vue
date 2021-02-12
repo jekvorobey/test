@@ -37,9 +37,9 @@
                         <product-detail-panel
                             class="product-view__header-detail-info"
                             :title="cardTitle"
-                            :reviews-count="card.reviewsCount"
+                            :reviews-count="reviewsCount"
                             :vendor-code="card.vendorCode"
-                            :rating="card.rating"
+                            :rating="rating"
                             @rating-click="onScrollTo($refs.reviews, !isTabletLg ? 64 : isTablet ? -24 : -48)"
                         />
 
@@ -149,7 +149,7 @@
 
         <section ref="reviews" class="section product-view__section product-view__reviews">
             <div class="container">
-                <reviews-panel class="product-view__reviews-panel" v-bind="reviewData" />
+                <reviews-panel class="product-view__reviews-panel" v-bind="reviewData" ref="reviewPanel" />
             </div>
         </section>
 
@@ -234,17 +234,15 @@ export default {
         },
         card: {
             title: 'Электронный подарочный сертификат',
-            reviewsCount: 14,
             vendorCode: '',
-            rating: 4,
             nominals: [],
             designs: [],
         },
         socialSharing: {},
         isLoading: false,
         reviewData: {
-            type: 'product',
-            code: 'uplotnyayushchiy-muss-dlya-obema-oribe',
+            type: 'certificate',
+            code: '1c',
             canAdd: true,
         },
         buyPersonAmount: 0,
@@ -280,6 +278,12 @@ export default {
         cardTitle() {
             const postfix = this.nominal.price ? ', ' + preparePrice(this.nominal.price) + ' ₽' : '';
             return this.card.title + postfix;
+        },
+        reviewsCount() {
+            return this.$refs['reviewPanel'] ? this.$refs['reviewPanel'].range : 0;
+        },
+        rating() {
+            return this.$refs['reviewPanel'] ? this.$refs['reviewPanel'].rating : 0;
         },
     },
 

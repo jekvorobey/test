@@ -6,7 +6,13 @@
                     <source v-if="desktopImg" :data-srcset="desktopImg" type="image/webp" media="(min-width: 1024px)" />
                     <source v-if="tabletImg" :data-srcset="tabletImg" type="image/webp" media="(min-width: 480px)" />
                     <source v-if="mobileImg" :data-srcset="mobileImg" type="image/webp" media="(max-width: 479px)" />
-                    <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
+                    <img
+                        v-if="defaultImg"
+                        class="blur-up lazyload v-picture__img"
+                        :data-src="defaultImg"
+                        alt=""
+                        loading="lazy"
+                    />
                 </slot>
             </v-picture>
         </div>
