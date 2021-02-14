@@ -28,6 +28,9 @@ const setupDevServer = require('./build/setup-dev-server');
 const resolve = (file) => path.resolve(__dirname, file);
 const urlRegex = /\/$/;
 
+const os = require('os');
+const cluster = require('cluster');
+
 const serve = (resourcePath, cache) =>
     express.static(resolve(resourcePath), {
         maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 365 : 0,
@@ -253,7 +256,24 @@ app.get('*', (req, res) => {
     if (isProd) return render(req, res, env);
     return readyPromise.then(() => render(req, res, env));
 });
-app.listen(port, host, () => logger.success(`server started at ${host}:${port}`));
+
+const clusterWorkerSize = os.cpus().length;
+if (clusterWorkerSize > 1) {
+    if (cluster.isMaster) {
+        for (let i = 0; i < clusterWorkerSize; i++) {
+            cluster.fork();
+        }
+
+        cluster.on("exit", function(worker) {
+            console.log("Worker", worker.id, " has exitted.")
+        });
+    } else {
+        app.listen(port, host, () => logger.success(`server started at ${host}:${port}`));
+    }
+} else {
+    app.listen(port, host, () => logger.success(`server started at ${host}:${port}`));
+}
+//app.listen(port, host, () => logger.success(`server started at ${host}:${port}`));
 
 function onCleanup(signal) {
     return new Promise((resolve) => {
