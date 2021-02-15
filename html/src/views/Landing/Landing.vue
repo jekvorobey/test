@@ -29,7 +29,7 @@ import { $store, $progress, $logger } from '@services';
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as LANDING_MODULE, RENDER_DATA } from '@store/modules/Landing';
-import { FETCH_LANDING_DATA } from '@store/modules/Landing/actions';
+import { FETCH_LANDING_DATA,  } from '@store/modules/Landing/actions';
 
 import metaMixin from '@plugins/meta';
 import './Landing.css';
@@ -70,41 +70,54 @@ export default {
         ...mapActions(LANDING_MODULE, [FETCH_LANDING_DATA]),
     },
 
-    beforeRouteEnter(to, from, next) {
-        // вызывается до подтверждения пути, соответствующего этому компоненту.
-        // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
-        // так как к моменту вызова экземпляр ещё не создан!
+    // beforeRouteEnter(to, from, next) {
+    //     // вызывается до подтверждения пути, соответствующего этому компоненту.
+    //     // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
+    //     // так как к моменту вызова экземпляр ещё не создан!
+    //
+    //     function proceed() {
+    //         if ($store.state[LANDING_MODULE]) {
+    //             const { load } = $store.state[LANDING_MODULE];
+    //
+    //             // if (load) next();
+    //             // else {
+    //             //     $progress.start();
+    //             //     $store
+    //             //         .dispatch(`${LANDING_MODULE}/${FETCH_LANDING_DATA}`)
+    //             //         .then(() => {
+    //             //             $progress.finish();
+    //             //             next();
+    //             //         })
+    //             //         .catch(() => {
+    //             //             $progress.fail();
+    //             //             next();
+    //             //         });
+    //             // }
+    //             next();
+    //         }
+    //     }
+    //
+    //     if ($store.state[LANDING_MODULE]) proceed();
+    //     else {
+    //         $store.watch(
+    //             (state) => state[LANDING_MODULE],
+    //             (value) => {
+    //                 if (value) proceed();
+    //             }
+    //         );
+    //     }
+    // },
 
-        function proceed() {
-            if ($store.state[LANDING_MODULE]) {
-                const { load } = $store.state[LANDING_MODULE];
-
-                if (load) next();
-                else {
-                    $progress.start();
-                    $store
-                        .dispatch(`${LANDING_MODULE}/${FETCH_LANDING_DATA}`)
-                        .then(() => {
-                            $progress.finish();
-                            next();
-                        })
-                        .catch(() => {
-                            $progress.fail();
-                            next();
-                        });
-                }
-            }
-        }
-
-        if ($store.state[LANDING_MODULE]) proceed();
-        else {
-            $store.watch(
-                (state) => state[LANDING_MODULE],
-                (value) => {
-                    if (value) proceed();
-                }
-            );
-        }
-    },
+    mounted() {
+        $progress.start();
+        $store
+            .dispatch(`${LANDING_MODULE}/${FETCH_LANDING_DATA}`)
+            .then(() => {
+                $progress.finish();
+            })
+            .catch(() => {
+                $progress.fail();
+            });
+    }
 };
 </script>
