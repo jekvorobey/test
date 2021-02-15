@@ -140,7 +140,7 @@
                     </div>
                 </div>
 
-                <v-scroll v-if="filteredPickupPoints && filteredPickupPoints.length > 0" :scroll-lock="isOpen">
+                <v-scroll v-if="!isTabletLg && filteredPickupPoints && filteredPickupPoints.length > 0" :scroll-lock="isOpen">
                     <ul class="checkout-pickup-point-modal__filter-list">
                         <checkout-option-card
                             class="checkout-pickup-point-modal__filter-list-item"
@@ -157,6 +157,22 @@
                         </checkout-option-card>
                     </ul>
                 </v-scroll>
+                <ul v-else-if="filteredPickupPoints && filteredPickupPoints.length > 0" class="checkout-pickup-point-modal__filter-list">
+                    <checkout-option-card
+                        class="checkout-pickup-point-modal__filter-list-item"
+                        v-for="point in filteredPickupPoints"
+                        :key="point.id"
+                        readonly
+                        @cardClick="onShowPoint(point)"
+                    >
+                        <div class="text-bold">{{ point.title }}</div>
+                        <div class="checkout-pickup-point-modal__filter-list-item-name">{{ point.name }}</div>
+                        <div class="text-grey text-sm" v-if="point.startDate">
+                            Можно забрать с {{ point.startDate }}, {{ point.startDateDay }}
+                        </div>
+                    </checkout-option-card>
+                </ul>
+                
                 <div class="checkout-pickup-point-modal__filter" v-else>
                     <span class="checkout-pickup-point-modal__filter-empty-text">
                         Не найдено ни одного пункта самовывоза.
