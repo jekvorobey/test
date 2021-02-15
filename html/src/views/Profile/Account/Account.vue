@@ -430,28 +430,42 @@ export default {
             query: { page = DEFAULT_PAGE },
         } = to;
 
-        const { loadPath } = $store.state[PROFILE_MODULE][BILLING_MODULE];
+        function proceed() {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][BILLING_MODULE]) {
+                const { loadPath } = $store.state[PROFILE_MODULE][BILLING_MODULE];
 
-        // если все загружено, пропускаем
-        if (loadPath === fullPath) next();
+                // если все загружено, пропускаем
+                if (loadPath === fullPath) next();
+                else {
+                    $progress.start();
+                    $store
+                        .dispatch(`${BILLING_MODULE_PATH}/${FETCH_BILLING_DATA}`, {
+                            page,
+                        })
+                        .then(() => {
+                            $store.dispatch(`${BILLING_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
+                            next(() => {
+                                $progress.finish();
+                            });
+                        })
+                        .catch((thrown) => {
+                            if (thrown && thrown.isCancel === true) return next();
+                            next(() => {
+                                $progress.fail();
+                            });
+                        });
+                }
+            }
+        }
+
+        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][BILLING_MODULE]) proceed();
         else {
-            $progress.start();
-            $store
-                .dispatch(`${BILLING_MODULE_PATH}/${FETCH_BILLING_DATA}`, {
-                    page,
-                })
-                .then(() => {
-                    $store.dispatch(`${BILLING_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                    next(() => {
-                        $progress.finish();
-                    });
-                })
-                .catch((thrown) => {
-                    if (thrown && thrown.isCancel === true) return next();
-                    next(() => {
-                        $progress.fail();
-                    });
-                });
+            $store.watch(
+                (state) => state[PROFILE_MODULE][BILLING_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 

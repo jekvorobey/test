@@ -427,25 +427,39 @@ export default {
             params: { id },
         } = to;
 
-        const { order } = $store.state[CHECKOUT_MODULE];
+        function proceed() {
+            if ($store.state[CHECKOUT_MODULE]) {
+                const { order } = $store.state[CHECKOUT_MODULE];
 
-        // если все загружено, пропускаем
-        if (order && order.id == id) next();
+                // если все загружено, пропускаем
+                if (order && order.id == id) next();
+                else {
+                    $progress.start();
+                    $store
+                        .dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_ORDER}`, id)
+                        .then(() => {
+                            next((vm) => {
+                                $progress.finish();
+                            });
+                        })
+                        .catch((error) => {
+                            $progress.fail();
+                            if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
+                            else next(new Error(error.message));
+                            $progress.finish();
+                        });
+                }
+            }
+        }
+
+        if ($store.state[CHECKOUT_MODULE]) proceed();
         else {
-            $progress.start();
-            $store
-                .dispatch(`${CHECKOUT_MODULE}/${FETCH_CHECKOUT_ORDER}`, id)
-                .then(() => {
-                    next((vm) => {
-                        $progress.finish();
-                    });
-                })
-                .catch((error) => {
-                    $progress.fail();
-                    if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
-                    else next(new Error(error.message));
-                    $progress.finish();
-                });
+            $store.watch(
+                (state) => state[CHECKOUT_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
         }
     },
 

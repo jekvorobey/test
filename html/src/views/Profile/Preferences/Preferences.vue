@@ -177,37 +177,51 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
-        const { name } = to;
-        const { load } = $store.state[PROFILE_MODULE][PREFERENCES_MODULE];
+        function proceed() {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][PREFERENCES_MODULE]) {
+                const { name } = to;
+                const { load } = $store.state[PROFILE_MODULE][PREFERENCES_MODULE];
 
-        if (load) {
-            next();
-            $store.dispatch(`${PREFERENCES_MODULE_PATH}/${SET_LOAD}`, false);
-            return;
+                if (load) {
+                    next();
+                    $store.dispatch(`${PREFERENCES_MODULE_PATH}/${SET_LOAD}`, false);
+                    return;
+                }
+
+                const prefType = getPreferenceType(name);
+
+                $progress.start();
+                Promise.all([
+                    $store.dispatch(`${PREFERENCES_MODULE_PATH}/${FETCH_ALL_PREFERENCES_DATA}`),
+                    $store.dispatch(`${PREFERENCES_MODULE_PATH}/${FETCH_PREFERENCES_DATA}`, {
+                        prefType,
+                        isServer: $context.isServer,
+                    }),
+                ])
+                    .then(() => {
+                        $store.dispatch(`${PREFERENCES_MODULE_PATH}/${SET_TYPE}`, prefType);
+                        next(() => {
+                            $progress.finish();
+                        });
+                    })
+                    .catch((thrown) => {
+                        $logger.error(thrown);
+                        next(() => {
+                            $progress.fail();
+                        });
+                    });
+            }
         }
 
-        const prefType = getPreferenceType(name);
-
-        $progress.start();
-        Promise.all([
-            $store.dispatch(`${PREFERENCES_MODULE_PATH}/${FETCH_ALL_PREFERENCES_DATA}`),
-            $store.dispatch(`${PREFERENCES_MODULE_PATH}/${FETCH_PREFERENCES_DATA}`, {
-                prefType,
-                isServer: $context.isServer,
-            }),
-        ])
-            .then(() => {
-                $store.dispatch(`${PREFERENCES_MODULE_PATH}/${SET_TYPE}`, prefType);
-                next(() => {
-                    $progress.finish();
-                });
-            })
-            .catch((thrown) => {
-                $logger.error(thrown);
-                next(() => {
-                    $progress.fail();
-                });
-            });
+        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][PREFERENCES_MODULE]) proceed();
+        else {
+            $store.watch(
+                (state) => state[PROFILE_MODULE][PREFERENCES_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
+        }
     },
 
     created() {
