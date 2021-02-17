@@ -516,40 +516,53 @@ export default {
         }
     },
 
-    beforeRouteEnter(to, from, next) {
-        function proceed() {
-            if ($store.state[CART_MODULE]) {
-                const { load } = $store.state[CART_MODULE];
-
-                if (load) {
-                    $store.dispatch(`${CART_MODULE}/${SET_LOAD}`, false);
-                    return next();
-                }
-
-                $progress.start();
-                $store
-                    .dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`)
-                    .then(() => next(() => $progress.finish()))
-                    .catch(() => next(() => $progress.fail()));
-            }
-        }
-
-        if ($store.state[CART_MODULE]) proceed();
-        else {
-            $store.watch(
-                (state) => state[CART_MODULE],
-                (value) => {
-                    if (value) proceed();
-                }
-            );
-        }
-    },
+    // beforeRouteEnter(to, from, next) {
+    //     function proceed() {
+    //         if ($store.state[CART_MODULE]) {
+    //             const { load } = $store.state[CART_MODULE];
+    //
+    //             if (load) {
+    //                 $store.dispatch(`${CART_MODULE}/${SET_LOAD}`, false);
+    //                 return next();
+    //             }
+    //
+    //             $progress.start();
+    //             $store
+    //                 .dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`)
+    //                 .then(() => next(() => $progress.finish()))
+    //                 .catch(() => next(() => $progress.fail()));
+    //         }
+    //     }
+    //
+    //     if ($store.state[CART_MODULE]) proceed();
+    //     else {
+    //         $store.watch(
+    //             (state) => state[CART_MODULE],
+    //             (value) => {
+    //                 if (value) proceed();
+    //             }
+    //         );
+    //     }
+    // },
 
     created() {
         this.discountType = discountType;
     },
 
     mounted() {
+        const { load } = $store.state[CART_MODULE];
+
+        if (load) {
+            $store.dispatch(`${CART_MODULE}/${SET_LOAD}`, false);
+            return;
+        }
+
+        $progress.start();
+        $store
+            .dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`)
+            .then(() => () => $progress.finish())
+            .catch(() => () => $progress.fail());
+
         this[FETCH_FEATURED_PRODUCTS]();
     },
 };

@@ -56,6 +56,7 @@ import {
 } from './mutations';
 
 export const FETCH_LANDING_DATA = 'FETCH_LANDING_DATA';
+export const FETCH_LANDING_DATA_2 = 'FETCH_LANDING_DATA_2';
 export const FETCH_NEW_PRODUCTS = 'FETCH_NEW_PRODUCTS';
 export const FETCH_BESTSELLER_PRODUCTS = 'FETCH_BESTSELLER_PRODUCTS';
 export const FETCH_FEATURED_PRODUCTS = 'FETCH_FEATURED_PRODUCTS';
@@ -301,14 +302,19 @@ export default {
 
     [FETCH_LANDING_DATA]({ dispatch, commit }) {
         return Promise.all([
+            dispatch(FETCH_BANNERS),
+            dispatch(FETCH_BANNERS_SET),
+            dispatch(FETCH_FREQUENT_CATEGOIRES),
+        ]).then(() => commit(SET_LOAD, true));
+    },
+
+    [FETCH_LANDING_DATA_2]({ dispatch, commit }) {
+        return Promise.all([
             dispatch(FETCH_NEW_PRODUCTS),
             dispatch(FETCH_BESTSELLER_PRODUCTS),
             // dispatch(FETCH_FEATURED_PRODUCTS),
             dispatch(FETCH_CATEGORIES),
-            dispatch(FETCH_BANNERS),
             dispatch(FETCH_BRANDS),
-            dispatch(FETCH_BANNERS_SET),
-            dispatch(FETCH_FREQUENT_CATEGOIRES),
             dispatch(FETCH_CATALOG_LATEST_SETS),
         ]).then(() => commit(SET_LOAD, true));
     },
