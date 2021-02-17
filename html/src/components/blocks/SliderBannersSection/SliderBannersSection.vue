@@ -10,30 +10,30 @@
                     >
                         <template v-if="banner.desktopImage">
                             <source
-                                :data-srcset="getImageWithRetina(banner.desktopImage)"
-                                media="(min-width: 1024px)"
-                            />
-                            <source
                                 :data-srcset="getImageWithRetina(banner.desktopImage, 'webp')"
                                 type="image/webp"
                                 media="(min-width: 1024px)"
                             />
+                            <source
+                                :data-srcset="getImageWithRetina(banner.desktopImage)"
+                                media="(min-width: 1024px)"
+                            />
                         </template>
                         <template v-if="banner.tabletImage">
-                            <source :data-srcset="getImageWithRetina(banner.tabletImage)" media="(min-width: 768px)" />
                             <source
                                 :data-srcset="getImageWithRetina(banner.tabletImage, 'webp')"
                                 type="image/webp"
                                 media="(min-width: 768px)"
                             />
+                            <source :data-srcset="getImageWithRetina(banner.tabletImage)" media="(min-width: 768px)" />
                         </template>
                         <template v-if="banner.mobileImage">
-                            <source :data-srcset="getImageWithRetina(banner.mobileImage)" media="(min-width: 320px)" />
                             <source
                                 :data-srcset="getImageWithRetina(banner.mobileImage, 'webp')"
                                 type="image/webp"
                                 media="(min-width: 320px)"
                             />
+                            <source :data-srcset="getImageWithRetina(banner.mobileImage)" media="(min-width: 320px)" />
                         </template>
                         <img
                             class="blur-up lazyload v-picture__img"
