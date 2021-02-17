@@ -1201,7 +1201,11 @@ export default {
     mounted() {
         this.debounce_scrollToError = _debounce(this.scrollToError, SCROLL_DEBOUNCE_TIME);
         this.fetchCards()
-        this.bonusAmount = this.maxAmountBonus
+        if (this.maxAmountBonus > 0) {
+            this.onAddBonus(this.maxAmountBonus)
+        } else {
+            this.bonusAmount = this.maxAmountBonus
+        }
         this.customCertAmount = this.maxCertificateDiscount
     },
 };
