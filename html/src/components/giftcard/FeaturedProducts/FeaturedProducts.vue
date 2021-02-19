@@ -4,13 +4,13 @@
             <h2 class="product-view__section-hl product-view__like-hl">{{ $t('product.title.like') }}</h2>
             <v-slider class="product-view__like-slider" name="also-like" :options="sliderOptions">
                 <catalog-product-card
-                    class="swiper-slide product-view__like-card"
-                    v-for="item in featuredProducts.items"
+                    class="swiper-slide not-found-view__featured-card"
+                    v-for="item in featuredProducts"
                     :key="item.id"
                     :offer-id="item.id"
                     :product-id="item.productId"
-                    :name="item.name"
                     :type="item.type"
+                    :name="item.name"
                     :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
                     :image="item.image"
                     :price="item.price"
@@ -20,7 +20,7 @@
                     :show-buy-btn="item.stock.qty > 0"
                     @add-item="onAddToCart(item)"
                     @preview="onPreview(item.code)"
-                    @toggle-favorite-item="onToggleFavorite(item.productId)"
+                    @toggle-favorite-item="onToggleFavorite(item)"
                 />
             </v-slider>
         </div>
@@ -28,9 +28,24 @@
 </template>
 
 <script>
+import VButton from '@controls/VButton/VButton.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
+
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
-import { breakpoints } from '@enums';
+
+import { mapState, mapActions } from 'vuex';
+
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
+import { NAME as FEATURED_MODULE, FEATURED_PRODUCTS } from '@store/modules/Featured';
+import { FETCH_FEATURED_PRODUCTS } from '@store/modules/Featured/actions';
+
+import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
+import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
+
+import metaMixin from '@plugins/meta';
+import { breakpoints, modalName } from '@enums';
 
 const sliderOptions = {
     spaceBetween: 24,
@@ -50,7 +65,8 @@ const sliderOptions = {
 
     breakpoints: {
         [breakpoints.tabletLg - 1]: {
-            slidesPerView: 3.5,
+            slidesPerView: 2.5,
+            spaceBetween: 24,
             slidesOffsetBefore: 24,
             slidesOffsetAfter: 24,
         },
@@ -66,139 +82,57 @@ const sliderOptions = {
 
 export default {
     name: 'featured-products',
-    components: { VSlider, CatalogProductCard },
-    data: () => ({
-        /* Test data */
-        featuredProducts: {
-            items: [
-                {
-                    id: 54,
-                    name: 'Фен для волос IKOO, жёлтый',
-                    code: 'fen-dlya-volos-ikoo-zheltyy',
-                    categoryCodes: ['dlya_makiyazha', 'lico_1', 'tonalnye_sredstva'],
-                    type: 'product',
-                    rating: 0,
-                    bonus: 0,
-                    bundleId: 0,
-                    variantGroups: null,
-                    active: true,
-                    stock: { qty: 8, storeId: 3 },
-                    price: { value: 2835, currency: 'RUB' },
-                    image: { id: 5162, sourceExt: 'jpg' },
-                    productId: 402,
-                    badges: ['Новинки', 'Хит продаж'],
-                },
-                {
-                    id: 2318,
-                    name: 'Брелок ILMH',
-                    code: 'brelok-ilmh',
-                    categoryCodes: ['promo_aksessuary'],
-                    type: 'product',
-                    rating: 0,
-                    bonus: 0,
-                    bundleId: 0,
-                    variantGroups: null,
-                    active: true,
-                    stock: { qty: 358, storeId: 51 },
-                    price: { value: 250, currency: 'RUB' },
-                    image: { id: 18214, sourceExt: 'jpg' },
-                    productId: 2115,
-                },
-                {
-                    id: 44,
-                    name: 'Фен для волос La Ric, тон 11',
-                    code: 'fen-dlya-volos-la-ric-ton-11',
-                    categoryCodes: ['dlya_volos', 'okrashivanie', 'okisliteli'],
-                    type: 'product',
-                    rating: 0,
-                    bonus: 0,
-                    bundleId: 0,
-                    variantGroups: null,
-                    active: true,
-                    stock: { qty: 3, storeId: 3 },
-                    price: { value: 3208, currency: 'RUB' },
-                    image: { id: 60, sourceExt: 'jpg' },
-                    productId: 470,
-                },
-                {
-                    id: 102,
-                    name: 'Щетка круглая зелёный 76 мм',
-                    code: 'shchetka-kruglaya-zelenyy-76-mm',
-                    categoryCodes: ['dlya_volos', 'instrumenty', 'nozhnicy'],
-                    type: 'product',
-                    rating: 0,
-                    bonus: 0,
-                    bundleId: 0,
-                    variantGroups: null,
-                    active: true,
-                    stock: { qty: 3, storeId: 5 },
-                    price: { value: 6776, currency: 'RUB' },
-                    image: { id: 5747, sourceExt: 'jpg' },
-                    productId: 51,
-                    badges: ['Новинки'],
-                },
-                {
-                    id: 2096,
-                    name: 'Лак для ногтей',
-                    code: 'lak-dlya-nogtey-10-ml-chernyy',
-                    categoryCodes: ['dlya_ruk_i_nog', 'dizayn_i_okrashivanie_nogtey'],
-                    type: 'product',
-                    rating: 0,
-                    bonus: 0,
-                    bundleId: 0,
-                    variantGroups: {
-                        id: 12,
-                        characteristics: [
-                            { code: 'obem', name: 'Объем', isColor: false, values: [10, 20] },
-                            {
-                                code: 'cvet_sredstva_dlya_nogtey',
-                                name: 'Цвет',
-                                isColor: true,
-                                values: ['Зеленый', 'Красный', 'Черный'],
-                            },
-                        ],
-                    },
-                    active: true,
-                    stock: { qty: 100, storeId: 1 },
-                    price: { value: { from: 100, to: null }, currency: 'RUB' },
-                    image: { id: 15706, sourceExt: 'jpg' },
-                    productId: 1891,
-                },
-                {
-                    id: 140,
-                    name: 'Щетка круглая Dajuja #5 жёлтый 53 мм',
-                    code: 'shchetka-kruglaya-dajuja-5-zheltyy-53-mm',
-                    categoryCodes: ['dlya_volos', 'okrashivanie', 'ottenochnye_i'],
-                    type: 'product',
-                    rating: 0,
-                    bonus: 0,
-                    bundleId: 0,
-                    variantGroups: null,
-                    active: true,
-                    stock: { qty: 8, storeId: 8 },
-                    price: { value: 3572, currency: 'RUB' },
-                    image: { id: 3, sourceExt: 'jpg' },
-                    productId: 416,
-                },
-            ],
-            range: 68,
-        },
-    }),
+    components: {
+        VButton,
+        VSlider,
+
+        CatalogProductCard,
+    },
+    mixins: [metaMixin],
     computed: {
+        ...mapState(FEATURED_MODULE, [FEATURED_PRODUCTS]),
+
+        isTabletLg() {
+            return this.$mq.tabletLg;
+        },
+
         sliderOptions() {
             return sliderOptions;
         },
     },
+
     methods: {
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(FEATURED_MODULE, [FETCH_FEATURED_PRODUCTS]),
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
+
+        onToggleFavorite({ productId }) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
+        },
+
         onAddToCart(item) {
-            console.log('onAddToCart', item);
+            const { code, type, stock, id, variantGroups } = item;
+
+            if (variantGroups) this.onPreview(code);
+            else
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.ADD_TO_CART,
+                    open: true,
+                    state: { offerId: id, storeId: stock && stock.storeId, type },
+                });
         },
+
         onPreview(code) {
-            console.log('onPreview', code);
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.QUICK_VIEW,
+                open: true,
+                state: { code },
+            });
         },
-        onToggleFavorite(productId) {
-            console.log('onToggleFavorite', productId);
-        },
+    },
+
+    beforeMount() {
+        this[FETCH_FEATURED_PRODUCTS]();
     },
 };
 </script>
