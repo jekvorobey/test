@@ -67,9 +67,11 @@
 
     &__filter {
         width: 440px;
+        height: 100%;
         display: flex;
         flex-direction: column;
         padding-top: calc(var(--gs) * 3);
+        overflow: hidden;
 
         @media (--tablet-lg) {
             width: 100%;

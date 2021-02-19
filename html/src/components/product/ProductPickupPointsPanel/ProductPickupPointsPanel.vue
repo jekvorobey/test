@@ -21,8 +21,6 @@
             :class="{
                 'product-pickup-points-panel__list--selected': selectedPickupPoint,
             }"
-            v-scroll-lock="mounted"
-            v-observe-visibility="onVisibilityChanged"
         >
             <checkout-option-card
                 class="product-pickup-points-panel__list-item"
