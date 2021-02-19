@@ -247,7 +247,6 @@
 <script>
 import { $http } from '@services';
 import VButton from '@controls/VButton/VButton.vue';
-import VLink from '@controls/VLink/VLink.vue';
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
@@ -259,12 +258,12 @@ import VInputMask from '@controls/VInput/VInputMask.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 import VDatepicker from '@controls/VDatepicker/VDatepicker.vue';
 import Price from '@components/Price/Price.vue';
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { DELETE_ALL_ITEMS } from '@store/modules/Cart/actions';
-import { NAME as CART_MODULE, CART_DATA, RELATIVE_PRODUCTS } from '@store/modules/Cart';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
 
 import { modalName } from '@enums';
 import './GiftCardModal.css';
@@ -285,7 +284,6 @@ export default {
     components: {
         CardDesignTag,
         VButton,
-        VLink,
         VSpinner,
 
         GeneralModal,
@@ -336,7 +334,7 @@ export default {
                 to_email: '',
                 to_phone: '',
                 deliveryDate: this.isoDate(new Date()),
-                deliveryTime: { code: '10:00:00', label: '10:00' },
+                deliveryTime: {},
             },
 
             maskOptions: { ...phoneMaskOptions },
@@ -349,44 +347,8 @@ export default {
                 activeTab: 'email',
             },
 
-            deliveryTimeOptions: [
-                { code: '00:00:00', label: '00:00' },
-                { code: '01:00:00', label: '01:00' },
-                { code: '02:00:00', label: '02:00' },
-                { code: '03:00:00', label: '03:00' },
-                { code: '04:00:00', label: '04:00' },
-                { code: '05:00:00', label: '05:00' },
-                { code: '06:00:00', label: '06:00' },
-                { code: '07:00:00', label: '07:00' },
-                { code: '08:00:00', label: '08:00' },
-                { code: '09:00:00', label: '09:00' },
-                { code: '10:00:00', label: '10:00' },
-                { code: '11:00:00', label: '11:00' },
-                { code: '12:00:00', label: '12:00' },
-                { code: '13:00:00', label: '13:00' },
-                { code: '14:00:00', label: '14:00' },
-                { code: '15:00:00', label: '15:00' },
-                { code: '16:00:00', label: '16:00' },
-                { code: '17:00:00', label: '17:00' },
-                { code: '18:00:00', label: '18:00' },
-                { code: '19:00:00', label: '19:00' },
-                { code: '20:00:00', label: '20:00' },
-                { code: '21:00:00', label: '21:00' },
-                { code: '22:00:00', label: '22:00' },
-                { code: '23:00:00', label: '23:00' },
-                // {
-                //     code: '10:00:00',
-                //     label: 'С 10:00 до 18:00',
-                // },
-                // {
-                //     code: '12:00:00',
-                //     label: 'С 12:00 до 14:00',
-                // },
-                // {
-                //     code: '13:00:00',
-                //     label: 'С 13:00 до 16:00',
-                // },
-            ],
+            deliveryTimeOptions: this.shortTimeList(),
+            todayLabel: 'Сейчас',
         };
     },
 
@@ -420,7 +382,7 @@ export default {
         dateOptions() {
             const options = [];
             let date = new Date();
-            options.push({ label: 'Сейчас', value: this.isoDate(date) });
+            options.push({ label: this.todayLabel, value: this.isoDate(date) });
 
             for (let i = 0; i < 3; i++) {
                 date = addDays(date, 1);
@@ -498,7 +460,7 @@ export default {
 
         errorPhoneFrom() {
             return !this.order.is_anonymous && this.order['from_phone'] && !this.isTabValid('phone',this.order['from_phone']) ? "Формат +7 XXX XXX-XX-XX" : null
-        }
+        },
     },
 
     methods: {
@@ -564,7 +526,7 @@ export default {
                 ...this.order,
                 nominal_id: this.nominalId,
                 design_id: this.designCode,
-                delivery_at: this.order.deliveryDate + ' ' + this.order.deliveryTime.code,
+                delivery_at: this.order.deliveryDate + ' ' + (this.order.deliveryTime.code || '00:00:00'),
             };
 
             delete orderGenerated.deliveryDate;
@@ -589,6 +551,64 @@ export default {
             await this[DELETE_ALL_ITEMS](cartType);
             this.isLoading = false;
             this.onClose();
+        },
+
+        minutesNow() {
+            const d = new Date();
+            return `0${d.getHours()}`.slice(-2) + ':' + `0${d.getMinutes()}`.slice(-2);
+        },
+
+        dateNow() {
+            return this.isoDate(new Date());
+        },
+
+        fullTimeList() {
+            let response = [];
+            [...Array(24).keys()].forEach((h) => {
+                const hh = h > 9 ? h : '0' + h;
+                response.push({ code: hh + ':00:00', label: hh + ':00' });
+            });
+            return response;
+        },
+
+        shortTimeList() {
+            const minTime = this.minutesNow();
+            return this.fullTimeList().filter((item) => item.label > minTime);
+        },
+    },
+    watch: {
+        'order.deliveryTime'(v, v1) {
+            const prevTime = v1 ? v1.code || null : null;
+            const newTime = v ? v.code || null : null;
+            if (prevTime === newTime) {
+                return;
+            }
+            const isToday = this.order.deliveryDate === this.dateNow();
+            if (newTime === null) {
+                this.todayLabel = 'Сейчас';
+                this.order.deliveryDate = this.dateNow();
+                this.deliveryTimeOptions = this.shortTimeList();
+                this.order.deliveryTime = {};
+            } else if (isToday) {
+                this.todayLabel = 'Сегодня';
+                this.deliveryTimeOptions = this.shortTimeList();
+                this.order.deliveryTime = this.deliveryTimeOptions.find((item) => item.code === newTime) || {};
+            }
+        },
+        'order.deliveryDate'(v, v1) {
+            if (v === v1) {
+                return;
+            }
+            if (v === this.dateNow()) {
+                this.deliveryTimeOptions = this.shortTimeList();
+                this.order.deliveryTime = {};
+                this.todayLabel = 'Сейчас';
+            } else {
+                this.deliveryTimeOptions = this.fullTimeList();
+                const newTime = this.order.deliveryTime.code || '10:00:00';
+                this.order.deliveryTime = this.deliveryTimeOptions.find((item) => item.code === newTime) || {};
+                this.todayLabel = 'Сейчас';
+            }
         },
     },
 };
