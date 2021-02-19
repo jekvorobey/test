@@ -60,8 +60,7 @@
                     {{ item.name }}
                 </div>
 
-                <div class="catalog-product-list-card__variant" v-html="variantGroupsValue">
-                </div>
+                <div class="catalog-product-list-card__variant" v-html="variantGroupsValue"></div>
 
                 <div class="catalog-product-list-card__rating" v-once>
                     <span
@@ -269,7 +268,10 @@ export default {
                 if (typeof current.values[0] === 'number') {
                     const currentValuesSorted = current.values.sort((a, b) => a - b);
                     if (currentValuesSorted.length <= 3) {
-                        accumulator.push(currentValuesSorted.join('/'));
+                        accumulator.push(
+                            currentValuesSorted.join('/') +
+                                (current.measurement_unit ? ' ' + current.measurement_unit : '')
+                        );
                     } else {
                         accumulator.push(
                             Math.min.apply(null, currentValuesSorted) +

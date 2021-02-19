@@ -136,6 +136,7 @@
                             v-for="char in characteristics"
                             :header="char.name"
                             :selected-option="char.selectedOption && char.selectedOption.name"
+                            :measurement="char.measurement_unit"
                             :note="char.note"
                         >
                             <div class="product-view__header-detail-options-tags" v-if="char.type === 'radio'">
@@ -147,7 +148,7 @@
                                     :disabled="option.isDisabled"
                                     @click="onSelectOption(char.code, option.value)"
                                 >
-                                    {{ option.name }}
+                                    {{ option.name }} {{ char.measurement_unit ? char.measurement_unit : '' }}
                                 </product-option-tag>
                             </div>
 
