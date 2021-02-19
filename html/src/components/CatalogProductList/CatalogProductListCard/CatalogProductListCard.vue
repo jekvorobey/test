@@ -60,8 +60,7 @@
                     {{ item.name }}
                 </div>
 
-                <div class="catalog-product-list-card__variant" v-html="variantGroupsValue">
-                </div>
+                <div class="catalog-product-list-card__variant" v-html="variantGroupsValue"></div>
 
                 <div class="catalog-product-list-card__rating" v-once>
                     <span
@@ -267,16 +266,17 @@ export default {
                     return current.name.toLocaleLowerCase().includes(cur.toLocaleLowerCase()) ? current.name : acc;
                 }, '');
                 if (typeof current.values[0] === 'number') {
-                    current.values = current.values.sort((a, b) => a - b);
-                    if (current.values.length <= 3) {
-                        accumulator.push(current.name + ': ' + current.values.join(', '));
+                    const currentValuesSorted = current.values.sort((a, b) => a - b);
+                    if (currentValuesSorted.length <= 3) {
+                        accumulator.push(
+                            currentValuesSorted.join('/') +
+                                (current.measurement_unit ? ' ' + current.measurement_unit : '')
+                        );
                     } else {
                         accumulator.push(
-                            current.name +
-                                ': ' +
-                                Math.min.apply(null, current.values) +
+                            Math.min.apply(null, currentValuesSorted) +
                                 '&ndash;' +
-                                Math.max.apply(null, current.values)
+                                Math.max.apply(null, currentValuesSorted)
                         );
                     }
                 } else if (declensionVariants[colorString]) {
@@ -286,7 +286,7 @@ export default {
                             this.declension(current.values.length, declensionVariants[colorString])
                     );
                 } else {
-                    accumulator.push(current.name + ': ' + current.values.length);
+                    accumulator.push(current.values.join(' / '));
                 }
                 return accumulator;
             }, []);
