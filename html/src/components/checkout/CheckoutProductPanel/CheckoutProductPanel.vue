@@ -548,6 +548,8 @@ import { deliveryTypes, receiveMethods } from '@enums/checkout';
 import { requestStatus, modalName, agreementTypes, httpCodes } from '@enums';
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
 
+import { cartItemTypes } from '@enums/product';
+
 import _isEqual from 'lodash/isEqual';
 import _debounce from 'lodash/debounce';
 import { orderBy as _orderBy } from 'lodash/collection';
@@ -1146,7 +1148,7 @@ export default {
                 this.isVisibleActivateCert = false
             }, 5000);
 
-            await this[FETCH_CHECKOUT_DATA](1); // type = 1 - т.е. продукты
+            await this[FETCH_CHECKOUT_DATA](cartItemTypes.PRODUCT);
             this.fetchCards()
         },
 
