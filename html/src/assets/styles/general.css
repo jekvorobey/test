@@ -1,0 +1,38 @@
+.link {
+    font-size: 16px;
+    line-height: 24px;
+    text-decoration: none;
+    transition: all var(--time) var(--timing-function);
+    border-bottom: none;
+    text-transform: uppercase;
+
+    &--sm {
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 20px;
+    
+
+    &--grey {
+        fill: var(--cl-grey);
+        color: var(--cl-grey);
+    }
+}
+
+.progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    width: 0%;
+    transition: width var(--time), opacity var(--animation-time), color var(--animation-time);
+    opacity: 1;
+    background-color: var(--cl-grey);
+    z-index: 999999;
+
+    &--fail {
+        background-color: var(--cl-red);
+    }
+}
+
+

@@ -13,7 +13,7 @@
 <script>
 import SelfRouterLink from './SelfRouterLink.vue';
 
-import './VLink.critical.css';
+// import './VLink.critical.css';
 import './VLink.css';
 
 const validTags = ['a', 'button'];
