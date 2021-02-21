@@ -48,7 +48,7 @@
                                     name="Способ получения"
                                     :value="orderDelivery"
                                 />
-                                <info-row
+                                <info-row v-if="!isOrderCertificate"
                                     class="thank-you-view__panel-item"
                                     name="Адрес доставки"
                                     :value="deliveryAddress"
@@ -354,6 +354,14 @@ export default {
         },
 
         orderDelivery() {
+            if (this.isOrderCertificate) {
+                const {
+                    order: {
+                        user: { email },
+                    },
+                } = this;
+                return email ? 'E-mail' : 'SMS';
+            }
             return this.$t(`deliveryMethod.${this.order.delivery.deliveryMethod}`);
         },
 
@@ -364,7 +372,7 @@ export default {
                 },
             } = this;
 
-            const fullInfo = `${name}, ${formatPhoneNumber(phone)}`;
+            const fullInfo = phone ? `${name}, ${formatPhoneNumber(phone)}` : `${name}`;
             if (email && $retailRocket) {
                 $retailRocket.setEmail(email);
             }
@@ -391,6 +399,11 @@ export default {
         isMasterClass() {
             const { order } = this;
             return order && order.type === cartItemTypes.MASTERCLASS;
+        },
+
+        isOrderCertificate() {
+            const { order } = this;
+            return order && order.type === cartItemTypes.CERTIFICATE;
         },
 
         isTabletLg() {
