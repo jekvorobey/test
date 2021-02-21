@@ -58,7 +58,7 @@
 
                 <div class="account-view__panel-attention">
                     Нажимая кнопку «оформить вывод», я согласен с условиями
-                    <a href="https://money.yandex.ru/pay/page?id=526623">оферты Яндекс.Денег</a>
+                    <a href="https://yoomoney.ru/pay/page?id=526623">оферты ЮMoney</a>
                 </div>
             </div>
         </div>
