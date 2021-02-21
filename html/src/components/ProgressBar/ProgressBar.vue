@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import './ProgressBar.critical.css';
+// import './ProgressBar.critical.css';
 
 export default {
     data() {
