@@ -1,12 +1,22 @@
-import { requestStatus } from '@enums';
+import {modalName, requestStatus} from '@enums';
 import { $store } from '@services';
 
-import actions, { ADD_CART_ITEM } from './actions';
+import actions from './actions';
 import mutations from './mutations';
 import getters, { PROMOCODE_STATUS } from './getters';
 
-function rrAddToBasket(offerId, count) {
-    $store.dispatch(`${NAME}/${ADD_CART_ITEM}`, { offerId, count });
+import { checkPermissions } from '@components/BuyButton/BuyButton.vue';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions.js';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+
+function rrAddToBasket(offerId) {
+    if (checkPermissions()) {
+        $store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
+            name: modalName.general.ADD_TO_CART,
+            open: true,
+            state: { offerId, type: 'product' },
+        });
+    }
 }
 
 if (process.env.VUE_ENV === 'client') {
