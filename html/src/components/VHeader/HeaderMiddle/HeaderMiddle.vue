@@ -25,7 +25,7 @@ import SearchFilter from '@components/SearchFilter/SearchFilter.vue';
 import { mapState } from 'vuex';
 import { NAME as SEARCH_MODULE, SEARCH } from '@store/modules/Search';
 
-import './HeaderMiddle.critical.css';
+// import './HeaderMiddle.critical.css';
 
 export default {
     name: 'header-middle',
