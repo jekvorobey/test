@@ -768,7 +768,7 @@ import {
     generateYoutubeImagePlaceholderPath,
     generateYoutubeVideoSourcePath,
 } from '@util/file';
-import { createNotFoundRoute } from '@util/router';
+import { createNotFoundRoute, createNotFoundProductRoute } from '@util/router';
 import { breakpoints, fileExtension, httpCodes, modalName } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
 import {
@@ -1447,7 +1447,7 @@ export default {
                         })
                         .catch((error) => {
                             $progress.fail();
-                            if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
+                            if (error.status === httpCodes.NOT_FOUND) next(createNotFoundProductRoute(to));
                             else next(new Error(error.message));
                             $progress.finish();
                         });
