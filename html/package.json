@@ -25,10 +25,11 @@
         "dev:inspect": "cross-env NODE_ENV=development NODE_ICU_DATA=node_modules/full-icu node --inspect server-local",
         "start": "cross-env NODE_ENV=production NODE_ICU_DATA=node_modules/full-icu node server-local",
         "start:remote": "cross-env NODE_ENV=production NODE_ICU_DATA=node_modules/full-icu CONFIG=.env.remote.json node server-local",
-        "rebuild": "rimraf ../public && yarn build:client && yarn build:server && yarn build:pages",
+        "rebuild": "rimraf ../public && yarn build:client && yarn build:server && yarn build:pages && yarn copy:files",
         "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.client.config.js --progress --hide-modules",
         "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.config.js --progress --hide-modules",
         "build:pages": "cross-env NODE_ENV=production webpack --config build/webpack.pages.config.js --progress --hide-modules",
+        "copy:files": "cp -r ./src/assets/files/* ../public/assets/files/",
         "analyze": "cross-env NODE_ENV=production ANALYZE=true webpack --config build/webpack.client.config.js --progress --hide-modules",
         "eslint": "eslint **/*.js **/*.vue --fix",
         "stylelint": "stylelint '**/*.css' --fix"
