@@ -18,6 +18,15 @@ export function createNotFoundRoute(route) {
     };
 }
 
+export function createNotFoundProductRoute(route) {
+    return {
+        name: 'NotFoundProduct',
+        params: [route.path],
+        query: { ...route.query },
+        hash: route.hash,
+    };
+}
+
 export function isSelectorValid(selector) {
     try {
         document.querySelector(selector);
