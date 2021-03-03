@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import './VButton.css';
+// import './VButton.css';
 
 const types = ['button', 'reset', 'submit'];
 

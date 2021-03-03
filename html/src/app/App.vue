@@ -39,10 +39,11 @@
 import '../assets/styles/normalize.css';
 import '../assets/styles/animation.css';
 import '../assets/styles/container.css';
-import '../assets/styles/general.css';
 
 import './App.critical.css';
 import './App.css';
+
+import '../assets/styles/general.css';
 
 /**
  * Базовые компоненты страницы
