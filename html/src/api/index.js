@@ -404,6 +404,10 @@ export function postCashOut(card_id, value) {
     return $http.post('/v1/lk/bill/cash-out', { card_id, value });
 }
 
+export function postCashOutRequisites(customer_id, value) {
+    return $http.post('/v1/lk/bill/cash-out-requisites', { customer_id, value });
+}
+
 export function createYaCard(card_panmask, card_synonim, card_country_code, card_type, account_number) {
     return $http.post('/v1/lk/bill/ya-card', {
         card_panmask,
