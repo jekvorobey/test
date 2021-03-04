@@ -47,6 +47,14 @@
                         disabled
                     />
                 </info-row>
+                <info-row class="cabinet-requisites-panel__item" name="Город, в котором находится отделение банка">
+                    <v-input
+                        class="cabinet-requisites-panel__item-input"
+                        :value="form.payment_city"
+                        :show-error="false"
+                        disabled
+                    />
+                </info-row>
                 <info-row class="cabinet-requisites-panel__item" name="Корреспондентский счет банка">
                     <v-input
                         class="cabinet-requisites-panel__item-input"
@@ -115,6 +123,10 @@ export default {
                 required,
             },
 
+            payment_city: {
+                required,
+            },
+
             inn: {
                 required,
                 inn,
@@ -150,6 +162,7 @@ export default {
                 bank: null,
                 bik: null,
                 correspondentAccount: null,
+                payment_city: null,
             },
 
             existBank: false,
@@ -180,6 +193,7 @@ export default {
         resetBank() {
             this.form.correspondentAccount = null;
             this.form.address = null;
+            this.form.payment_city = null;
             this.form.b = null;
         },
 
@@ -206,6 +220,7 @@ export default {
                 this.form.bank = suggestion.data.name.short;
                 this.form.correspondentAccount = suggestion.data.correspondent_account;
                 this.form.address = suggestion.data.address.unrestricted_value;
+                this.form.payment_city = suggestion.data.payment_city;
             } catch (error) {
                 $logger.error(error);
             }
