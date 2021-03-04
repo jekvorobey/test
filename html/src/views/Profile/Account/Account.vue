@@ -203,7 +203,7 @@
                         </li>
                         <li>
                             Адрес регистрации:
-                            <v-input class="" v-model="billingData.passport.address" type="text" disabled />
+                            <v-input class="" v-model="req.address" type="text" disabled />
                         </li>
                         <v-button @click="onApplyModal">Принять</v-button>
                     </ul>
@@ -250,6 +250,7 @@ import {
     SET_CARD_CREATION_STATUS,
 } from '@store/modules/Profile/modules/Billing/actions';
 
+import { NAME as CABINET_MODULE, REQUISITES } from '@store/modules/Profile/modules/Cabinet';
 import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -266,9 +267,9 @@ import metaMixin from '@plugins/meta';
 import './Account.css';
 import Modal from '@controls/modal/modal.vue';
 import { FETCH_CABINET_DATA } from '@store/modules/Profile/modules/Cabinet/actions';
-import { CHECK_SESSION } from '@store/modules/Auth/actions';
 
 const BILLING_MODULE_PATH = `${PROFILE_MODULE}/${BILLING_MODULE}`;
+const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 
 export default {
     name: 'account',
@@ -302,6 +303,7 @@ export default {
             amount: null,
             isDisabledBtn: false,
             reqModal: false,
+            req: {},
         };
     },
 
@@ -315,6 +317,7 @@ export default {
             isMessageOpen: (state) =>
                 state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
         }),
+        ...mapState(CABINET_MODULE_PATH, [REQUISITES]),
 
         ...mapGetters(BILLING_MODULE_PATH, [PAGES_COUNT, HAS_PAYMENT_INFO]),
 
@@ -517,9 +520,11 @@ export default {
                             page,
                         })
                         .then(() => {
-                            $store.dispatch(`${BILLING_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                            next(() => {
-                                $progress.finish();
+                            $store.dispatch(`${BILLING_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath).then(() => {
+                                $store.dispatch(`${CABINET_MODULE_PATH}/${FETCH_CABINET_DATA}`);
+                                next(() => {
+                                    $progress.finish();
+                                });
                             });
                         })
                         .catch((thrown) => {
@@ -578,6 +583,8 @@ export default {
 
     created() {
         this.cardStatus = cardIdentificationStatus;
+        const requisites = this[REQUISITES] || {};
+        this.req = { ...requisites };
     },
 };
 </script>
