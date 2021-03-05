@@ -35,7 +35,7 @@
                     <template v-slot:sticky>
                         <!-- Title and ratings -->
                         <product-detail-panel
-                            class="product-view__header-detail-info"
+                            class="product-view__header-detail-info gift-card-header-detail"
                             :title="cardTitle"
                             :reviews-count="reviewsCount"
                             :vendor-code="card.vendorCode"
