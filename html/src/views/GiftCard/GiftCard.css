@@ -1269,13 +1269,3 @@ ul.list>li:before {
     height: 8px;
     margin-right: 8px;
 }
-
-.product-cart-panel__controls {
-    margin-bottom: 25px;
-    padding-top: 25px;
-    border-top: 1px solid #eff1f3;
-
-    @media (--tablet) {
-        margin-left: 16px;
-    }
-}

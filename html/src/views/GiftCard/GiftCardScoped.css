@@ -1,0 +1,25 @@
+.product-cart-panel__controls {
+    margin-bottom: 25px;
+    padding-top: 25px;
+    border-top: 1px solid #eff1f3;
+
+    @media (--tablet) {
+        margin-left: 16px;
+    }
+}
+
+.product-cart-panel__info-prices {
+    justify-content: center;
+}
+
+.product-view__header-detail-brand-link {
+    margin-left: 23px;
+}
+
+.product-detail-panel__info-code {
+    display: none;
+}
+
+.university-view__breadcrumbs .breadcrumb-item {
+    color: #7d7d7d !important;
+}
