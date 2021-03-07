@@ -3,7 +3,7 @@ import { BILLING_OPERATIONS_PAGE_SIZE } from '@constants/profile';
 import { cardIdentificationStatus } from '@enums/profile';
 import { storeErrorHandler } from '@util/store';
 
-import { getBillingData, getBillingOperations, postCashOut, createYaCard } from '@api';
+import { getBillingData, getBillingOperations, postCashOut, postCashOutRequisites, createYaCard } from '@api';
 import { SET_QUERY_PARAMS, SET_OPERATIONS, SET_OPERATIONS_MORE, SET_BILLING_DATA } from './mutations';
 
 export const FETCH_OPERATIONS = 'FETCH_OPERATIONS';
@@ -12,6 +12,7 @@ export const FETCH_BILLING_DATA = 'FETCH_BILLING_DATA';
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 export const SET_SELECTED_CARD = 'SET_SELECTED_CARD';
 export const POST_CASH_OUT = 'POST_CASH_OUT';
+export const POST_CASH_OUT_REQUISITES = 'POST_CASH_OUT_REQUISITES';
 export const CREATE_CARD = 'CREATE_CARD';
 export const SET_CARD_CREATION_STATUS = 'SET_CARD_CREATION_STATUS';
 
@@ -46,6 +47,14 @@ export default {
             await postCashOut(cardId, value);
         } catch (error) {
             storeErrorHandler(POST_CASH_OUT, true)(error);
+        }
+    },
+
+    async [POST_CASH_OUT_REQUISITES]({ dispatch }, { customerId, value }) {
+        try {
+            await postCashOutRequisites(customerId, value);
+        } catch (error) {
+            storeErrorHandler(POST_CASH_OUT_REQUISITES, true)(error);
         }
     },
 

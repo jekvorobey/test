@@ -171,6 +171,45 @@
         <transition name="fade">
             <message-modal v-if="$isServer || isMessageOpen" @created="onChatCreated" />
         </transition>
+
+        <transition name="fade-in">
+            <modal class="" v-if="reqModal" :show-close-btn="true" @close="onCloseModal">
+                <template v-slot:body>
+                    <h3 class="account-view__section-hl">Подтверждение перевода с использованием паспортных данных:</h3>
+                    <ul>
+                        <li>
+                            Фамилия:
+                            <v-input class="" v-model="billingData.passport.surname" type="text" disabled />
+                        </li>
+                        <li>
+                            Имя:
+                            <v-input class="" v-model="billingData.passport.name" type="text" disabled />
+                        </li>
+                        <li>
+                            Отчество:
+                            <v-input class="" v-model="billingData.passport.patronymic" type="text" disabled />
+                        </li>
+                        <li>
+                            Серия паспорта:
+                            <v-input class="" v-model="billingData.passport.serial" type="text" disabled />
+                        </li>
+                        <li>
+                            Номер паспорта:
+                            <v-input class="" v-model="billingData.passport.no" type="text" disabled />
+                        </li>
+                        <li>
+                            Дата выдачи паспорта:
+                            <v-input class="" v-model="billingData.passport.issue_date" type="text" disabled />
+                        </li>
+                        <li>
+                            Адрес регистрации:
+                            <v-input class="" v-model="req.address" type="text" disabled />
+                        </li>
+                        <v-button @click="onApplyModal">Принять</v-button>
+                    </ul>
+                </template>
+            </modal>
+        </transition>
     </section>
 </template>
 
@@ -207,9 +246,11 @@ import {
     FETCH_OPERATIONS,
     SET_SELECTED_CARD,
     POST_CASH_OUT,
+    POST_CASH_OUT_REQUISITES,
     SET_CARD_CREATION_STATUS,
 } from '@store/modules/Profile/modules/Billing/actions';
 
+import { NAME as CABINET_MODULE, REQUISITES } from '@store/modules/Profile/modules/Cabinet';
 import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -224,14 +265,18 @@ import { preparePrice, saveToClipboard, getDate } from '@util';
 import { generateYandexCardAuthUrl, generateYandexCardAuthBackUrl, generateReferralLink } from '@util/profile';
 import metaMixin from '@plugins/meta';
 import './Account.css';
+import Modal from '@controls/modal/modal.vue';
+import { FETCH_CABINET_DATA } from '@store/modules/Profile/modules/Cabinet/actions';
 
 const BILLING_MODULE_PATH = `${PROFILE_MODULE}/${BILLING_MODULE}`;
+const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 
 export default {
     name: 'account',
     mixins: [metaMixin],
 
     components: {
+        Modal,
         VLink,
         VButton,
         VInput,
@@ -257,6 +302,8 @@ export default {
             showMore: false,
             amount: null,
             isDisabledBtn: false,
+            reqModal: false,
+            req: {},
         };
     },
 
@@ -270,6 +317,7 @@ export default {
             isMessageOpen: (state) =>
                 state[MODALS][modalName.profile.MESSAGE] && state[MODALS][modalName.profile.MESSAGE].open,
         }),
+        ...mapState(CABINET_MODULE_PATH, [REQUISITES]),
 
         ...mapGetters(BILLING_MODULE_PATH, [PAGES_COUNT, HAS_PAYMENT_INFO]),
 
@@ -279,6 +327,13 @@ export default {
                 id: 'add',
                 label: 'Добавить новую карту',
                 url: generateYandexCardAuthUrl(backUrl, backUrl),
+            };
+        },
+
+        requisitesOption() {
+            return {
+                id: 'requisites',
+                label: 'Перевод по реквизитам',
             };
         },
 
@@ -296,6 +351,9 @@ export default {
             }));
 
             cardList.push(this.newCardOption);
+            if (this.billingData.passport.no) {
+                cardList.push(this.requisitesOption);
+            }
             return cardList;
         },
 
@@ -344,6 +402,7 @@ export default {
         ...mapActions(BILLING_MODULE_PATH, [
             SET_SELECTED_CARD,
             POST_CASH_OUT,
+            POST_CASH_OUT_REQUISITES,
             SET_CARD_CREATION_STATUS,
             FETCH_BILLING_DATA,
             FETCH_OPERATIONS,
@@ -352,16 +411,34 @@ export default {
 
         onChangeSelectedCard(card) {
             this[SET_SELECTED_CARD](card);
+            if (card.id === 'requisites') {
+                this.reqModal = true;
+            }
+        },
+
+        onApplyModal() {
+            this.reqModal = false;
+        },
+
+        onCloseModal() {
+            this.reqModal = false;
+            this.selectedCard = 0;
         },
 
         async onClickCashOut() {
             try {
                 const { id } = this[SELECTED_CARD] || {};
                 const message = 'Ваш перевод оформлен, ждите поступления средств в срок до 10 календарных дней';
-
                 this.isDisabledBtn = true;
 
-                await this[POST_CASH_OUT]({ cardId: id, value: this.amount });
+                if (id === 'requisites') {
+                    await this[POST_CASH_OUT_REQUISITES]({
+                        customerId: this.billingData.passport.customer_id,
+                        value: this.amount,
+                    });
+                } else {
+                    await this[POST_CASH_OUT]({ cardId: id, value: this.amount });
+                }
                 await this[FETCH_BILLING_DATA]({});
                 this.$router.replace({ path: this.$route.path });
                 this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
@@ -443,9 +520,11 @@ export default {
                             page,
                         })
                         .then(() => {
-                            $store.dispatch(`${BILLING_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath);
-                            next(() => {
-                                $progress.finish();
+                            $store.dispatch(`${BILLING_MODULE_PATH}/${SET_LOAD_PATH}`, fullPath).then(() => {
+                                $store.dispatch(`${CABINET_MODULE_PATH}/${FETCH_CABINET_DATA}`);
+                                next(() => {
+                                    $progress.finish();
+                                });
                             });
                         })
                         .catch((thrown) => {
@@ -504,6 +583,8 @@ export default {
 
     created() {
         this.cardStatus = cardIdentificationStatus;
+        const requisites = this[REQUISITES] || {};
+        this.req = { ...requisites };
     },
 };
 </script>
