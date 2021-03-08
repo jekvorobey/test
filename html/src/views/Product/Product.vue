@@ -476,6 +476,7 @@
             <div class="container">
                 <template v-if="productCharacteristics && productCharacteristics.length > 0">
                     <h2 class="product-view__section-hl">{{ $t('product.title.characteristics') }}</h2>
+
                     <ul class="product-view__characteristics-list">
                         <li
                             class="product-view__characteristics-item"
@@ -484,7 +485,7 @@
                         >
                             <div class="product-view__characteristics-item-title">{{ item.title }}</div>
                             <div class="product-view__characteristics-item-value">
-                                {{ Array.isArray(item.value) ? item.value.join(', ') : item.value }}
+                                {{ Array.isArray(item.value) ? item.value.join(', ') : item.value }} {{ item.measurement }}
                             </div>
                         </li>
                     </ul>
@@ -1010,7 +1011,13 @@ export default {
 
         productCharacteristics() {
             const { characteristics = [] } = this[PRODUCT] || {};
-            return characteristics && characteristics.filter((c) => !!c.value);
+            const char = characteristics.reduce((acc, cur) => {
+                const curChar = this.characteristics.find((item) => item.name === cur.title);
+                if (curChar) cur.measurement = curChar.measurement_unit;
+                acc.push(cur);
+                return acc;
+            },[]);
+            return char && char.filter((c) => !!c.value);
         },
 
         productIngredients() {
