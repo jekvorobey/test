@@ -1,6 +1,6 @@
 .cabinet-requisites-panel {
     &__item {
-        align-items: baseline;
+        align-items: center;
 
         & + & {
             margin-top: calc(var(--gs) * 2);

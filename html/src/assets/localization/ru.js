@@ -105,8 +105,9 @@ const main = {
         [billingOperationType.EARNING]: 'Начисление',
         [billingOperationType.PAYMENT]: 'Оплата',
         [billingOperationType.REFUND]: 'Возврат',
-        [billingOperationType.WITHDRAW]: 'Вывод средств',
+        [billingOperationType.WITHDRAWTOCARD]: 'Вывод средств на карту',
         [billingOperationType.ADJUSTMENT]: 'Корректировка',
+        [billingOperationType.WITHDRAWTOACCOUNT]: 'Вывод средств на счёт',
     },
 
     orderStatus: {

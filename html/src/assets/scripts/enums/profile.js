@@ -17,8 +17,9 @@ export const billingOperationType = Object.freeze({
     EARNING: 1, // начисление
     PAYMENT: 2, // оплата заказа
     REFUND: 3, // возврат
-    WITHDRAW: 4, // вывод средств
+    WITHDRAWTOCARD: 4, // вывод средств на карту
     ADJUSTMENT: 5, // корректировка
+    WITHDRAWTOACCOUNT: 6, // вывод средств на счёт
 });
 
 export const cardIdentificationStatus = Object.freeze({
