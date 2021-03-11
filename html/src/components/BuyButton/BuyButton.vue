@@ -15,7 +15,7 @@ import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY, STATUS } from '@store/
 import { modalName, authMode } from '@enums';
 import { userStatus } from '@enums/profile';
 
-export const checkPermissions = () => {
+export const checkSession = () => {
     const hasSession = $store.state[AUTH_MODULE][HAS_SESSION];
     if (!hasSession) {
         $store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
@@ -25,6 +25,13 @@ export const checkPermissions = () => {
                 activeTab: authMode.LOGIN,
             },
         });
+        return false;
+    }
+    return true;
+};
+
+export const checkPermissions = () => {
+    if (!checkSession()) {
         return false;
     }
 
@@ -56,7 +63,7 @@ export const checkPermissions = () => {
         }
         return false;
     }
-    return hasSession && canBuy;
+    return true;
 };
 
 export default {
