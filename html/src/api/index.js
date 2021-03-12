@@ -864,8 +864,15 @@ export function deleteCertificate(data) {
     return $http.post('/v1/checkout/remove-certificate', data);
 }
 
-export function addCertificate(data) {
-    return $http.post('/v1/checkout/add-certificate', data);
+export function addCertificate(type, data) {
+    switch (type) {
+        case cartItemTypes.MASTERCLASS:
+            return $http.post('/v1/checkout-public-events/add-certificate', data);
+        case cartItemTypes.PRODUCT:
+            return $http.post('/v1/checkout/add-certificate', data);
+        default:
+            return Promise.reject('Wrong cart type');
+    }
 }
 
 export function fetchCertificates(data) {

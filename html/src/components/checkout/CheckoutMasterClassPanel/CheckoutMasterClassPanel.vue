@@ -172,6 +172,8 @@
                     </checkout-option-card>
                 </ul>
 
+                <button @click="applyCertificate">Использовать 200 сертификатный рублей</button>
+
                 <div
                     class="checkout-master-class-panel__item checkout-master-class-panel__item checkout-master-class-panel__item--child checkout-master-class-panel__item--settings"
                 >
@@ -280,6 +282,7 @@ import {
     ADD_RECIPIENT,
     ADD_TICKET,
     CHANGE_TICKET,
+    ADD_CERTIFICATE,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -495,6 +498,8 @@ export default {
             SET_SUBSCRIBE,
             SET_CONFIRMATION_TYPE,
 
+            ADD_CERTIFICATE,
+
             ADD_PROMOCODE,
             DELETE_PROMOCODE,
         ]),
@@ -568,6 +573,14 @@ export default {
         scrollToError(element) {
             const panelScrollOffset = 24;
             window.scrollTo({ top: getPosition(element).y - panelScrollOffset, behavior: 'smooth' });
+        },
+
+        async applyCertificate() {
+            try {
+                const response = await this.ADD_CERTIFICATE(200);
+            } catch (error) {
+                // todo
+            }
         },
 
         validate() {

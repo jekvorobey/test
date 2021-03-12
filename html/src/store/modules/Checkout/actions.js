@@ -166,8 +166,9 @@ export default {
 
     async [ADD_CERTIFICATE]({ commit, state }, payload) {
         try {
+            const { checkoutType } = state;
             commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.PENDING });
-            const data = await addCertificate({ price: payload , data: state.checkoutData });
+            const data = await addCertificate(checkoutType, { price: payload , data: state.checkoutData });
             commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.SUCCESS });
             commit(SET_DATA, data);
         } catch (error) {
