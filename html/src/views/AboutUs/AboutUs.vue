@@ -12,27 +12,26 @@
 
         <section class="section">
             <div class="container about-us-view__top">
-                <picture class="about-us-view__top-img">
-                    <source media="(max-width: 479px)" :srcset="AboutManMd" />
-                    <source media="(min-width: 480px)" :srcset="AboutManLg" />
-                    <img class="about-us-view__top-img" :src="AboutManLg" alt="Men" />
-                </picture>
+                <video class="about-us-view__top-img" autoplay="autoplay" loop="loop" muted="muted">
+                    <source :src="AboutIBT" type="video/mp4" />
+                    <img class="about-us-view__top-img" :src="AboutIBTStatic" alt="About IBT" />
+                </video>
 
                 <div class="about-us-view__top-content">
                     <h1 class="about-us-view__top-content-h1">О нас</h1>
                     <p class="about-us-view__top-content-text">
                         Бессовестно Талантливый — масштабная инициатива, цель которой поддерживать мастеров индустрии
-                        красоты в стремлении становиться сильнее в своем ремесле. Для ее достижения мы находим и
-                        предлагаем лучшие решения для ежедневной работы, образования и вдохновения.
+                        красоты в&nbsp;стремлении становиться сильнее в своем ремесле. Для ее&nbsp;достижения мы находим
+                        и предлагаем лучшие решения для ежедневной работы, образования и вдохновения.
                     </p>
                     <p class="about-us-view__top-content-text">
                         Хештег #БессовестноТалантливый стал основой дружного быстрорастущего комьюнити — более 100 000
-                        упоминаний в Инстаграм медиаканала @bessovestnotalantlivy, одноименного университета и бутика в
-                        Москве, где представлена часть нашей коллекции товаров.
+                        упоминаний в&nbsp;Инстаграм медиаканала @bessovestnotalantlivy, одноименного университета
+                        и&nbsp;флагманского бутика в&nbsp;Москве, где&nbsp;также представлена часть партнерских брендов.
                     </p>
                     <p class="about-us-view__top-content-text">
-                        Наш новый проект — первый в России маркетплейс товаров и событий бьюти-индустрии,
-                        предназначенный только для профессионалов.
+                        Новый Бессовестно Талантливый проект — первый в России маркетплейс товаров и событий
+                        бьюти-индустрии, предназначенный только для профессионалов.
                     </p>
                 </div>
             </div>
@@ -68,13 +67,15 @@
                     <h1 class="about-us-view__brands-content-h1">Выбор профессионалов</h1>
 
                     <p class="about-us-view__brands-content-text">
-                        Запросы покупателей меняются. Искать товары и цены в разных магазинах становится все сложнее.
+                        Запросы покупателей меняются. Искать товары и цены в&nbsp;разных магазинах становится все
+                        сложнее.
                     </p>
 
                     <p class="about-us-view__brands-content-text">
-                        Маркетплейс Бессовестно Талантливый — это онлайн-площадка, которая объединяет выгодные
-                        предложения от официальных представителей брендов для бьюти-профессионалов и персонализированные
-                        рекомендации, отзывы профессионального сообщества и систему бонусов, удобную оплату и логистику.
+                        Маркетплейс Бессовестно Талантливый — это&nbsp;онлайн-площадка, которая объединяет выгодные
+                        предложения от официальных представителей брендов для&nbsp;бьюти-профессионалов и
+                        персонализированные рекомендации, отзывы профессионального сообщества и&nbsp;систему бонусов,
+                        удобную оплату и логистику.
                     </p>
 
                     <router-link class="about-us-view__brands-content-link" to="/catalog">
@@ -82,11 +83,17 @@
                     </router-link>
                 </div>
 
-                <div class="about-us-view__brands-list">
-                    <div class="about-us-view__brands-list-card" v-for="brand in brands" :key="brand.img">
-                        <v-svg :name="brand.img" :height="isTabletLg ? 30 : 50" width="100%" />
-                    </div>
-                </div>
+                <!--                <div class="about-us-view__brands-list">-->
+                <!--                    <div class="about-us-view__brands-list-card" v-for="brand in brands" :key="brand.img">-->
+                <!--                        <v-svg :name="brand.img" :height="isTabletLg ? 30 : 50" width="100%" />-->
+                <!--                    </div>-->
+                <!--                </div>-->
+
+                <picture class="about-us-view__top-img">
+                    <source media="(max-width: 479px)" :srcset="AboutChoiseMd" />
+                    <source media="(min-width: 480px)" :srcset="AboutChoiseLg" />
+                    <img class="about-us-view__top-img" :src="AboutChoiseLg" alt="Choise" />
+                </picture>
             </div>
         </section>
 
@@ -94,11 +101,11 @@
 
         <section class="section">
             <div class="container about-us-view__mclass">
-                <div class="about-us-view__mclass-list">
-                    <div class="about-us-view__mclass-list-mentor" v-for="mentor in mentors" :key="mentor.img">
-                        <v-picture v-if="mentor.img" :image="mentor.img" />
-                    </div>
-                </div>
+                <picture class="about-us-view__top-img">
+                    <source media="(max-width: 479px)" :srcset="AboutLearningMd" />
+                    <source media="(min-width: 480px)" :srcset="AboutLearningLg" />
+                    <img class="about-us-view__top-img" :src="AboutLearningLg" alt="Larning" />
+                </picture>
 
                 <div class="about-us-view__mclass-content">
                     <h1 class="about-us-view__mclass-content-h1">
@@ -112,7 +119,7 @@
                     </p>
 
                     <p class="about-us-view__mclass-content-text">
-                        Делайте свой выбор, изучив полную информацию о событии: описание и фото, видео и
+                        Делайте свой выбор, изучив полную информацию о&nbsp;событии: описание и фото, видео и
                         пользовательский контент, включая публикации из Инстаграм и отзывы покупателей на iBT.ru.
                     </p>
 
@@ -182,7 +189,7 @@
 </template>
 
 <script>
-import VPicture from '@controls/VPicture/VPicture.vue';
+// import VPicture from '@controls/VPicture/VPicture.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VButton from '@controls/VButton/VButton.vue';
 
@@ -205,8 +212,15 @@ import '@images/sprites/AboutBrand2.svg';
 import '@images/sprites/AboutBrand3.svg';
 import '@images/sprites/AboutBrand4.svg';
 
-import AboutManLg from '@images/mock/AboutManLg.png';
-import AboutManMd from '@images/mock/AboutManMd.png';
+// import AboutManLg from '@images/mock/AboutManLg.png';
+// import AboutManMd from '@images/mock/AboutManMd.png';
+import AboutChoiseLg from '@images/mock/AboutChoiseLg.png';
+import AboutChoiseMd from '@images/mock/AboutChoiseMd.png';
+import AboutLearningLg from '@images/mock/AboutLearningLg.png';
+import AboutLearningMd from '@images/mock/AboutLearningMd.png';
+
+import AboutIBT from '@videos/AboutIBT.mp4';
+import AboutIBTStatic from '@images/mock/AboutIBTStatic.png';
 
 import AboutMk1 from '@images/mock/AboutMk1.png';
 import AboutMk2 from '@images/mock/AboutMk2.png';
@@ -219,7 +233,7 @@ export default {
     mixins: [metaMixin, validationMixin],
 
     components: {
-        VPicture,
+        // VPicture,
         VInput,
         VButton,
         Breadcrumbs,
@@ -254,8 +268,14 @@ export default {
 
     data() {
         return {
-            AboutManLg,
-            AboutManMd,
+            // AboutManLg,
+            // AboutManMd,
+            AboutChoiseLg,
+            AboutChoiseMd,
+            AboutLearningLg,
+            AboutLearningMd,
+            AboutIBT,
+            AboutIBTStatic,
 
             form: {
                 name: '',

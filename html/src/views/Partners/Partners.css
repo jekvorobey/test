@@ -22,6 +22,11 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
+        background: url('/assets/images/PartnersTopLg.png') center center no-repeat;
+
+        @media (min-width: 480px) {
+            min-height: 380px;
+        }
 
         @media (--tablet-lg) {
             background: var(--cl-white);
@@ -46,6 +51,12 @@
             @media (--tablet) {
                 margin-bottom: calc(var(--gs) * 3);
             }
+
+            &__img {
+                @media (min-width: 1024px) {
+                    display: none;
+                }
+            }
         }
 
         &-container {
@@ -57,6 +68,10 @@
 
         &-content {
             flex: 0 0 50%;
+
+            @media (--tablet-lg-min) {
+                color: #FFFFFF;
+            }
 
             @media (--tablet-lg-min) {
                 padding-right: 5%;
@@ -91,6 +106,20 @@
                 &-btn {
                     display: flex;
 
+                    @media (--tablet-lg-min) {
+                        background-color: #fff;
+                        color: #000;
+                        border-color: #fff;
+                    }
+
+                    &:hover {
+                        @media (--tablet-lg-min) {
+                            background-color: #000;
+                            color: #fff;
+                            border-color: #fff;
+                        }
+                    }
+
                     @media (--desktop) {
                         justify-content: center;
                         width: 100%;
@@ -108,9 +137,26 @@
                     }
 
                     &--icon {
+                        @media (--tablet-lg-min) {
+                            fill: #fff;
+                        }
                         width: 18px;
                         height: 20px;
                         margin-right: 10px;
+                    }
+
+                    &.btn--transparent {
+                        background: transparent;
+                        border-color: transparent;
+                        @media (--tablet-lg-min) {
+                            color: #fff;
+                        }
+
+                        &:hover {
+                            @media (--tablet-lg-min) {
+                                color: #000;
+                            }
+                        }
                     }
                 }
             }

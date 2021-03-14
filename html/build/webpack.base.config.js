@@ -20,6 +20,7 @@ module.exports = {
             '@controls': path.resolve(__dirname, '../src/components/controls'),
 
             '@images': path.resolve(__dirname, '../src/assets/images'),
+            '@videos': path.resolve(__dirname, '../src/assets/videos'),
             '@files': path.resolve(__dirname, '../src/assets/files'),
             '@styles': path.resolve(__dirname, '../src/assets/styles'),
 
@@ -80,6 +81,19 @@ module.exports = {
                         loader: 'url-loader',
                         options: {
                             name: isProd ? 'images/[name].[hash:20].[ext]' : 'images/[name].[ext]',
+                            limit: 1024,
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.(mov|mp4)$/,
+                include: path.resolve(__dirname, '../src/assets/videos'),
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: isProd ? 'videos/[name].[hash:20].[ext]' : 'videos/[name].[ext]',
                             limit: 1024,
                         },
                     },
