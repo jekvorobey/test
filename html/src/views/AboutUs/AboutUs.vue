@@ -83,12 +83,6 @@
                     </router-link>
                 </div>
 
-                <!--                <div class="about-us-view__brands-list">-->
-                <!--                    <div class="about-us-view__brands-list-card" v-for="brand in brands" :key="brand.img">-->
-                <!--                        <v-svg :name="brand.img" :height="isTabletLg ? 30 : 50" width="100%" />-->
-                <!--                    </div>-->
-                <!--                </div>-->
-
                 <picture class="about-us-view__top-img">
                     <source media="(max-width: 479px)" :srcset="AboutChoiseMd" />
                     <source media="(min-width: 480px)" :srcset="AboutChoiseLg" />
@@ -189,7 +183,6 @@
 </template>
 
 <script>
-// import VPicture from '@controls/VPicture/VPicture.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VButton from '@controls/VButton/VButton.vue';
 
@@ -212,8 +205,6 @@ import '@images/sprites/AboutBrand2.svg';
 import '@images/sprites/AboutBrand3.svg';
 import '@images/sprites/AboutBrand4.svg';
 
-// import AboutManLg from '@images/mock/AboutManLg.png';
-// import AboutManMd from '@images/mock/AboutManMd.png';
 import AboutChoiseLg from '@images/mock/AboutChoiseLg.png';
 import AboutChoiseMd from '@images/mock/AboutChoiseMd.png';
 import AboutLearningLg from '@images/mock/AboutLearningLg.png';
@@ -233,7 +224,6 @@ export default {
     mixins: [metaMixin, validationMixin],
 
     components: {
-        // VPicture,
         VInput,
         VButton,
         Breadcrumbs,
@@ -268,8 +258,6 @@ export default {
 
     data() {
         return {
-            // AboutManLg,
-            // AboutManMd,
             AboutChoiseLg,
             AboutChoiseMd,
             AboutLearningLg,

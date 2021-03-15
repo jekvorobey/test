@@ -21,33 +21,6 @@
                 <div data-retailrocket-markup-block="5efda11c97a52833a0d006e7"></div>
             </div>
         </section>
-
-        <section class="section not-found-view__featured" v-if="featuredProducts && featuredProducts.length > 0">
-            <div class="container not-found-view__featured-container">
-                <h2 class="not-found-view__section-hl not-found-view__featured-hl">{{ $t('cart.title.like') }}</h2>
-                <v-slider class="not-found-view__featured-slider" name="404-featured" :options="sliderOptions">
-                    <catalog-product-card
-                        class="swiper-slide not-found-view__featured-card"
-                        v-for="item in featuredProducts"
-                        :key="item.id"
-                        :offer-id="item.id"
-                        :product-id="item.productId"
-                        :type="item.type"
-                        :name="item.name"
-                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                        :image="item.image"
-                        :price="item.price"
-                        :old-price="item.oldPrice"
-                        :badges="item.badges"
-                        :rating="item.rating"
-                        :show-buy-btn="item.stock.qty > 0"
-                        @add-item="onAddToCart(item)"
-                        @preview="onPreview(item.code)"
-                        @toggle-favorite-item="onToggleFavorite(item)"
-                    />
-                </v-slider>
-            </div>
-        </section>
     </section>
 </template>
 
