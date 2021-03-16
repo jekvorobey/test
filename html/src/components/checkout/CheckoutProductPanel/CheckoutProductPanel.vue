@@ -117,10 +117,11 @@
                         <transition-group v-if="selectedDeliveryType" tag="ul" name="chunk-item">
                             <li
                                 class="checkout-product-panel__item checkout-product-panel__item--child"
-                                v-for="chunkItem in computedSelectedDeliveryType.items"
+                                v-for="(chunkItem, index) in computedSelectedDeliveryType.items"
                                 :key="chunkItem.id"
                             >
-                                <div class="checkout-product-panel__item-header">
+                                <div class="checkout-product-panel__item-header"
+                                     v-if="isNewSplitDate(chunkItem, (index - 1 >= 0 ? computedSelectedDeliveryType.items[index-1] : null))">
                                     <h3 class="checkout-product-panel__item-header-hl">
                                         {{ generateChunkNote(chunkItem) }}
                                     </h3>
@@ -132,7 +133,7 @@
                                         "
                                         class="checkout-product-panel__item-header-link"
                                         tag="button"
-                                        @click="onChangeDate(chunkItem.id)"
+                                        @click="onChangeDate(chunkItem.id, computedSelectedDeliveryType.items)"
                                     >
                                         <v-svg name="edit" width="16" height="16" />
                                         <template v-if="!isTablet">&nbsp;&nbsp;Изменить дату и время</template>
@@ -583,7 +584,6 @@ function prepareChunkItem(chunkItem) {
 
 function prepareDeliveryType(deliveryType) {
     const { items } = deliveryType;
-
     const type = {
         ...deliveryType,
         items: _orderBy(items.map(prepareChunkItem), ['selectedDate'], ['asc']),
@@ -927,14 +927,19 @@ export default {
                 return `Доставим всё ${date.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}`;
             }
 
-            const uniqueDates = Array.from(new Set(deliveryType.items.map((i) => i.selectedDate)));
+            const uniqueDates = Array.from(
+                new Set(
+                    deliveryType.items.map((i) => new Date(i.selectedDate).toLocaleDateString(
+                            this[LOCALE],
+                            dayMonthLongDateSettings
+                        )
+                    )
+                )
+            );
             return uniqueDates.reduce(
                 (accum, current, index) =>
                     accum +
-                    `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(
-                        this[LOCALE],
-                        dayMonthLongDateSettings
-                    )}`,
+                    `${index > 0 ? ', ' : ' '}${current}`,
                 'Доставим'
             );
         },
@@ -957,16 +962,21 @@ export default {
         },
 
         onDateChanged(state) {
-            const { id, selectedDate, selectedTime } = state;
-
-            this[CHANGE_CHUNK_DATE]({
-                id,
-                selectedDate,
-                selectedTime,
+            const { selectedDate, selectedTime, items, oldSelectedDate, oldSelectedTimeCode } = state;
+            const oldDate = new Date(oldSelectedDate).toDateString();
+            items.forEach((item) => {
+                const itemSelectedDate = item.selectedDate.toDateString();
+                if (itemSelectedDate === oldDate && oldSelectedTimeCode === item.selectedTime.code) {
+                    this[CHANGE_CHUNK_DATE]({
+                        id: item.id,
+                        selectedDate,
+                        selectedTime,
+                    });
+                }
             });
         },
 
-        onChangeDate(chunkItemId) {
+        onChangeDate(chunkItemId, items) {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
             const chunkItem = deliveryType.items.find((i) => i.id === chunkItemId);
 
@@ -976,6 +986,7 @@ export default {
                 selectedTime: chunkItem.selectedTime,
                 availableDates: [...chunkItem.availableDates],
                 availableDateTimes: { ...chunkItem.availableDateTimes },
+                items: items,
             };
 
             this[CHANGE_MODAL_STATE]({
@@ -1193,6 +1204,17 @@ export default {
         },
         onToggleActivateCert() {
             this.isVisibleActivateCert = !this.isVisibleActivateCert
+        },
+
+        isNewSplitDate(item, prevItem) {
+            if (!prevItem) {
+                return true;
+            }
+            const itemDate = item.selectedDate.toString();
+            const prevDate = prevItem.selectedDate.toString();
+            console.log(itemDate, prevDate, item.selectedTime.code, prevItem.selectedTime.code);
+
+            return (itemDate !== prevDate) || (item.selectedTime.code !== prevItem.selectedTime.code);
         },
     },
 
