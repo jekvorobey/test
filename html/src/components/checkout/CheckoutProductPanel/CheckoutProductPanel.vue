@@ -1212,9 +1212,15 @@ export default {
             }
             const itemDate = item.selectedDate.toString();
             const prevDate = prevItem.selectedDate.toString();
-            console.log(itemDate, prevDate, item.selectedTime.code, prevItem.selectedTime.code);
+            if (!item.selectedTime && !prevItem.selectedTime) {
+                return itemDate !== prevDate;
+            }
 
-            return (itemDate !== prevDate) || (item.selectedTime.code !== prevItem.selectedTime.code);
+            if (!item.selectedTime || !prevItem.selectedTime) {
+                return true;
+            }
+
+            return itemDate !== prevDate || item.selectedTime.code !== prevItem.selectedTime.code;
         },
     },
 
