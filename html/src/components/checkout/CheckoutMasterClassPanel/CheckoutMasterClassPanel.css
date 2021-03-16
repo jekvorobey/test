@@ -46,6 +46,10 @@
                 padding: 0;
             }
 
+            &-hl {
+                text-transform: none;
+            }
+
             & + & {
                 margin-top: calc(var(--gs) * 5);
 
@@ -318,6 +322,24 @@
             .text-bold,
             .text-medium {
                 font-size: 20px;
+            }
+
+            &--bonus {
+                flex-wrap: wrap;
+
+                .text-bold,
+                .text-medium {
+                    font-size: 16px;
+                }
+            }
+
+            &--masterclass {
+                flex-wrap: wrap;
+
+                .text-bold,
+                .text-medium {
+                    font-size: 16px;
+                }
             }
 
             &--invalid {

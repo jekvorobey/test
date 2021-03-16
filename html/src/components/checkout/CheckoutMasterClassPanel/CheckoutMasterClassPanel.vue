@@ -177,7 +177,7 @@
                 <div
                     class="checkout-master-class-panel__item checkout-master-class-panel__item--child checkout-master-class-panel__item--sertificate"
                 >
-                    <h3 class="checkout-product-panel__item-header-hl checkout-paytype-content">
+                    <h3 class="checkout-master-class-panel__item-header-hl checkout-paytype-content">
                         <v-svg name="gift" width="24" height="24" />&nbsp;Оплата подарочным сертификатом&nbsp;
                         <v-spinner width="24" height="24" :show="isCertificatePending" />
                     </h3>
@@ -243,7 +243,7 @@
                             @input="onActivateInput"
                         />
                         <v-button
-                            class="btn--outline checkout-product-panel__item-controls-btn"
+                            class="btn--outline checkout-master-class-panel__item-controls-btn"
                             :disabled="!certificateCode"
                             @click="activateCertificate"
                             @mousedown.prevent
