@@ -63,7 +63,7 @@
                         disabled
                     />
                 </info-row>
-                <info-row class="cabinet-requisites-panel__item" name="Юридический адрес">
+                <info-row v-if="displayRow" class="cabinet-requisites-panel__item" name="Юридический адрес">
                     <v-input
                         class="cabinet-requisites-panel__item-textarea"
                         tag="textarea"
@@ -72,6 +72,9 @@
                         disabled
                     />
                 </info-row>
+                {{
+                    form.address
+                }}
             </ul>
         </div>
     </info-panel>
@@ -119,9 +122,9 @@ export default {
                 required,
             },
 
-            address: {
-                required,
-            },
+            // address: {
+            //     required,
+            // },
 
             payment_city: {
                 required,
@@ -167,6 +170,8 @@ export default {
 
             existBank: false,
             existInn: false,
+
+            displayRow: false,
         };
     },
 
@@ -192,7 +197,7 @@ export default {
 
         resetBank() {
             this.form.correspondentAccount = null;
-            this.form.address = null;
+            // this.form.address = null;
             this.form.payment_city = null;
             this.form.b = null;
         },
@@ -219,7 +224,7 @@ export default {
                 const suggestion = suggestions[0];
                 this.form.bank = suggestion.data.name.short;
                 this.form.correspondentAccount = suggestion.data.correspondent_account;
-                this.form.address = suggestion.data.address.unrestricted_value;
+                // this.form.address = suggestion.data.address.unrestricted_value;
                 this.form.payment_city = suggestion.data.payment_city;
             } catch (error) {
                 $logger.error(error);
