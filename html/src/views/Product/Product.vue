@@ -591,6 +591,12 @@
             </div>
         </section>
 
+        <section class="section product-view__section product-view__instagram">
+            <div class="container product-view__instagram-container">
+                <frisbuy-product-container v-if="product && product.id" :key="product.id" :script="frisbuyUrl" />
+            </div>
+        </section>
+
         <section class="section product-view__section product-view__like">
             <div class="container product-view__like-container">
                 <h2 class="product-view__section-hl product-view__like-hl">{{ $t('product.title.like') }}</h2>
@@ -615,12 +621,6 @@
                         @toggle-favorite-item="onToggleFavorite(item.productId)"
                     />
                 </v-slider>
-            </div>
-        </section>
-
-        <section class="section product-view__section product-view__instagram">
-            <div class="container product-view__instagram-container">
-                <frisbuy-product-container v-if="product && product.id" :key="product.id" :script="frisbuyUrl" />
             </div>
         </section>
 

@@ -14,17 +14,17 @@
             <div class="container partners-view__top-container">
                 <div class="partners-view__top">
                     <v-picture>
-                        <source media="(max-width: 479px)" :data-srcset="ParghnerTop" />
-                        <source media="(min-width: 480px)" :data-srcset="ParghnerTop" />
-                        <img class="v-picture__img lazyload blur-up" :data-src="ParghnerTop" alt="Girl" />
+                        <source media="(max-width: 479px)" :data-srcset="PartnersTopMd" />
+                        <source media="(min-width: 480px)" :data-srcset="PartnersTopLg" />
+                        <img class="v-picture__img lazyload blur-up" :data-src="PartnersTopLg" alt="Girl" />
                     </v-picture>
 
                     <div class="container container--tablet partners-view__top-content">
                         <h1 class="partners-view__top-content-h1">Хотите стать продавцом?</h1>
 
                         <p class="partners-view__top-content-text">
-                            Мы формируем уникальную для российского рынка коллекцию бьюти-брендов и афишу мероприятий на
-                            платформе первого в России маркетплейса только для профессионалов.
+                            Первый в России маркетплейс только для профессионалов формирует&nbsp;на&nbsp;своей платформе
+                            уникальную для российского рынка коллекцию партнерских бьюти-брендов и афишу мероприятий.
                         </p>
 
                         <p v-if="!isDesktop || isTabletLg" class="partners-view__top-content-text">
@@ -81,25 +81,21 @@
                         С НАМИ – ЭТО:
                     </h1>
                     <ul class="partners-view__cooperation-content--list">
-                        <li>База 250 000 мастеров, реферальная система и влияние на спрос клиентов</li>
+                        <li>База 250 000 мастеров, реферальная система и&nbsp;влияние на спрос клиентов</li>
                         <li>Контроль ассортимента, цен и маркетинговых кампаний</li>
                         <li>
-                            Онлайн-витрина, объединяющая самый полезный контент официальных производителей и
-                            бьюти-профессионалов
+                            Онлайн-витрина, объединяющая самый полезный контент официальных производителей
+                            и&nbsp;бьюти-профессионалов
                         </li>
                         <li>Доставка в 16 000 населенных пунктов</li>
-                        <li>Партнерство с первым в России маркетплейсом для профессионалов индустрии красоты</li>
+                        <li>Партнерство с первым в России маркетплейсом для&nbsp;профессионалов индустрии красоты</li>
                     </ul>
                 </div>
                 <div class="partners-view__cooperation-image">
                     <picture class="partners-view__cooperation-image--img">
-                        <source media="(max-width: 479px)" :srcset="ParthnerСooperationMd" />
-                        <source media="(min-width: 480px)" :srcset="ParthnerСooperationLg" />
-                        <img
-                            class="partners-view__cooperation-image--img"
-                            :src="ParthnerСooperationMd"
-                            alt="cooperation"
-                        />
+                        <source media="(max-width: 479px)" :srcset="PartnersWithUsMd" />
+                        <source media="(min-width: 480px)" :srcset="PartnersWithUsLg" />
+                        <img class="partners-view__cooperation-image--img" :src="PartnersWithUsLg" alt="cooperation" />
                     </picture>
                 </div>
             </div>
@@ -212,9 +208,12 @@ import { phoneMaskOptions } from '@settings';
 import metaMixin from '@plugins/meta';
 import validationMixin, { required, email, minLength } from '@plugins/validation';
 
-import ParghnerTop from '@images/mock/ParghnerTop.png';
+import PartnersTopLg from '@images/mock/PartnersTopLg.png';
+import PartnersTopMd from '@images/mock/PartnersTopMd.png';
 import ParthnerСooperationMd from '@images/mock/ParthnerСooperationMd.png';
 import ParthnerСooperationLg from '@images/mock/ParthnerСooperationLg.png';
+import PartnersWithUsMd from '@images/mock/PartnersWithUsMd.png';
+import PartnersWithUsLg from '@images/mock/PartnersWithUsLg.png';
 
 import ParthnerSales1 from '@images/mock/ParthnerSales1.png';
 import ParthnerSales2 from '@images/mock/ParthnerSales2.png';
@@ -286,7 +285,10 @@ export default {
 
     data: () => ({
         pdfFile,
-        ParghnerTop,
+        PartnersTopLg,
+        PartnersTopMd,
+        PartnersWithUsMd,
+        PartnersWithUsLg,
         ParthnerСooperationMd,
         ParthnerСooperationLg,
         ParthnerSales1,
