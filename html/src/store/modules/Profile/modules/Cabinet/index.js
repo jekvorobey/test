@@ -63,6 +63,7 @@ export default function createModule() {
                 bank: null,
                 bik: null,
                 correspondentAccount: null,
+                payment_city: null,
             },
 
             [EDITABLE_PORTFOLIO]: [{ id: 0, name: null, link: null }],
