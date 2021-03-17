@@ -72,9 +72,6 @@
                         disabled
                     />
                 </info-row>
-                {{
-                    form.address
-                }}
             </ul>
         </div>
     </info-panel>
