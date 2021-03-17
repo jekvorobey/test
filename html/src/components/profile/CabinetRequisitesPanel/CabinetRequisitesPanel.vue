@@ -63,7 +63,7 @@
                         disabled
                     />
                 </info-row>
-                <info-row class="cabinet-requisites-panel__item" name="Юридический адрес">
+                <info-row v-if="displayRow" class="cabinet-requisites-panel__item" name="Юридический адрес">
                     <v-input
                         class="cabinet-requisites-panel__item-textarea"
                         tag="textarea"
@@ -167,6 +167,8 @@ export default {
 
             existBank: false,
             existInn: false,
+
+            displayRow: false,
         };
     },
 
