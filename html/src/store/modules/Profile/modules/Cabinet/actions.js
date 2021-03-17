@@ -146,9 +146,10 @@ export default {
                 bank = null,
                 bik = null,
                 correspondentAccount = null,
+                payment_city = null,
             } = payload;
 
-            await changeProfileRequisites(name, address, inn, account, bank, bik, correspondentAccount);
+            await changeProfileRequisites(name, address, inn, account, bank, bik, correspondentAccount, payment_city);
             commit(UPDATE_REQUISITES, payload);
         } catch (error) {
             storeErrorHandler(UPDATE_REQUISITES, true)(error);

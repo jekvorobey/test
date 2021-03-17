@@ -59,6 +59,7 @@ export default {
             legal_info_bik,
             legal_info_bank,
             legal_info_bank_correspondent_account,
+            payment_city,
         } = payload;
 
         state.canEditReferralCode = can_edit_referral_code || false;
@@ -89,6 +90,7 @@ export default {
             bik: legal_info_bik || null,
             bank: legal_info_bank || null,
             correspondentAccount: legal_info_bank_correspondent_account || null,
+            payment_city: payment_city || null,
         };
     },
 
