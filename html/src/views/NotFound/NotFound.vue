@@ -18,7 +18,7 @@
 
         <section class="section">
             <div class="container">
-                <div data-retailrocket-markup-block="5efda11c97a52833a0d006e7"></div>
+                <div data-retailrocket-markup-block="5efda11c97a52833a0d006e7" :data-auth="hasSession"></div>
             </div>
         </section>
     </section>
@@ -44,6 +44,7 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 import metaMixin from '@plugins/meta';
 import { breakpoints, modalName } from '@enums';
 import './NotFound.css';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
 const sliderOptions = {
     spaceBetween: 24,
@@ -96,6 +97,7 @@ export default {
 
     computed: {
         ...mapState(FEATURED_MODULE, [FEATURED_PRODUCTS]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
 
         isTabletLg() {
             return this.$mq.tabletLg;
@@ -134,6 +136,7 @@ export default {
                 state: { code },
             });
         },
+
     },
 
     beforeMount() {

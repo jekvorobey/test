@@ -17,7 +17,7 @@
 
         <section class="section">
             <div class="container">
-                <div data-retailrocket-markup-block="5efda11c97a52833a0d006e7"></div>
+                <div data-retailrocket-markup-block="5efda11c97a52833a0d006e7" :data-auth="hasSession"></div>
             </div>
         </section>
 
@@ -71,6 +71,8 @@ import metaMixin from '@plugins/meta';
 import { breakpoints, modalName } from '@enums';
 import './NotFoundProduct.css';
 
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+
 const sliderOptions = {
     spaceBetween: 24,
     slidesPerView: 4,
@@ -122,6 +124,7 @@ export default {
 
     computed: {
         ...mapState(FEATURED_MODULE, [FEATURED_PRODUCTS]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
 
         isTabletLg() {
             return this.$mq.tabletLg;
@@ -160,6 +163,7 @@ export default {
                 state: { code },
             });
         },
+
     },
 
     beforeMount() {
