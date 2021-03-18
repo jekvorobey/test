@@ -45,6 +45,8 @@
                                     :selected="option.isSelected"
                                     :disabled="option.isDisabled"
                                     @click.stop="onSelectOption(char.code, option.value)"
+                                    @mouseover="onShowOption(char.code, !option.isSelected ? option.value : null)"
+                                    @mouseleave="onHideOption"
                                 >
                                     {{ option.name }}
                                 </product-option-tag>
@@ -169,6 +171,7 @@ export default {
     data() {
         return {
             optionImage: null,
+            optionImages: [],
         };
     },
 
@@ -196,7 +199,10 @@ export default {
         },
 
         productImages() {
-            const { media = [] } = this[PRODUCT_PREVIEW] || {};
+            let media = [];
+            if (this.optionImages && this.optionImages.length) {
+                media = this.optionImages;
+            } else media = this[PRODUCT_PREVIEW] ? this[PRODUCT_PREVIEW].media : [];
             return media.slice(0, 4).map((i) => prepareProductImage(i, desktopSize, tabletSize));
         },
 
@@ -242,13 +248,28 @@ export default {
         },
 
         onShowOption(charCode, optValue) {
-            const { image } = this[GET_NEXT_COMBINATION](charCode, optValue);
-            this.optionImage = image;
+            if (!optValue) {
+                return;
+            }
+
+            const { images } = this[GET_NEXT_COMBINATION](charCode, optValue);
+            this.optionImages = [];
+            if (Array.isArray(images) && images.length) {
+                this.optionImage = images[0];
+                this.optionImages = images.map((image) => prepareProductImage(image, desktopSize, tabletSize));
+            }
+            else {
+                this.optionImage = null;
+                this.optionImages = [];
+            }
         },
 
         onHideOption() {
             const { isPending } = this;
-            if (!isPending) this.optionImage = null;
+            if (!isPending) {
+                this.optionImage = null;
+                this.optionImages = [];
+            }
         },
 
         onPickupPoints() {
