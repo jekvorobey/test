@@ -12,7 +12,13 @@
 
         <section class="section">
             <div class="container about-us-view__top">
-                <video class="about-us-view__top-img" autoplay="autoplay" loop="loop" muted="muted">
+                <video
+                    class="about-us-view__top-video"
+                    autoplay="autoplay"
+                    loop="loop"
+                    muted="muted"
+                    playsinline="playsinline"
+                >
                     <source :src="AboutIBT" type="video/mp4" />
                     <img class="about-us-view__top-img" :src="AboutIBTStatic" alt="About IBT" />
                 </video>

@@ -229,6 +229,12 @@
             </div>
         </section>
 
+        <section class="section product-view__section product-view__instagram">
+            <div class="container product-view__instagram-container">
+                <frisbuy-product-container v-if="product && product.id" :key="product.id" :script="frisbuyUrl" />
+            </div>
+        </section>
+
         <!-- #66085 -->
         <section class="section product-view__section">
             <div class="container product-view__socials">
@@ -588,12 +594,6 @@
                     data-retailrocket-markup-block="5efda11697a52833a0d006e6"
                     :data-product-id="featuredProducts && featuredProducts.items.map((i) => i.productId).join(',')"
                 ></div>
-            </div>
-        </section>
-
-        <section class="section product-view__section product-view__instagram">
-            <div class="container product-view__instagram-container">
-                <frisbuy-product-container v-if="product && product.id" :key="product.id" :script="frisbuyUrl" />
             </div>
         </section>
 
