@@ -178,8 +178,10 @@
         font-size: 12px;
         line-height: 25px;
         flex-grow: 1;
-        margin-bottom: var(--gs);
         color: var(--cl-grey);
+        margin: 0 0 var(--gs);
+        padding: 0;
+        list-style: none;
 
         overflow: hidden;
         text-overflow: ellipsis;
@@ -187,6 +189,14 @@
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         transform: translateZ(0);
+
+        &--item {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
     }
 
     &__prices {

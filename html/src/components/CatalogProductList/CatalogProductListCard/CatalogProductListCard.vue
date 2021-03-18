@@ -44,7 +44,11 @@
                     <price
                         class="text-bold catalog-product-list-card__price"
                         v-if="item.price"
-                        v-bind="item.oldPrice && isEqPrices(item.price, item.oldPrice) ? concretePrice(item.price) : item.price"
+                        v-bind="
+                            item.oldPrice && isEqPrices(item.price, item.oldPrice)
+                                ? concretePrice(item.price)
+                                : item.price
+                        "
                         :item-prop="itemProp"
                         has-articles
                     />
@@ -60,8 +64,11 @@
                     {{ item.name }}
                 </div>
 
-                <div class="catalog-product-list-card__variant" v-html="variantGroupsValue">
-                </div>
+                <ul class="catalog-product-list-card__variant">
+                    <li v-for="variant in variantGroupsValue" class="catalog-product-list-card__variant--item">
+                        {{ variant }}
+                    </li>
+                </ul>
 
                 <div class="catalog-product-list-card__rating" v-once>
                     <span
@@ -290,7 +297,7 @@ export default {
                 }
                 return accumulator;
             }, []);
-            return result.join('<br>');
+            return result;
         },
     },
 
@@ -316,24 +323,24 @@ export default {
         },
 
         isEqPrices(price, oldPrice) {
-            if (typeof price.value === "object" && price.value.to !== null && price.value.from !== null) {
-                return false
+            if (typeof price.value === 'object' && price.value.to !== null && price.value.from !== null) {
+                return false;
             }
-            if (typeof oldPrice.value === "object" && oldPrice.value.to !== null && oldPrice.value.from !== null) {
-                return false
+            if (typeof oldPrice.value === 'object' && oldPrice.value.to !== null && oldPrice.value.from !== null) {
+                return false;
             }
-            let p1 = typeof price.value === "number" ? price.value : (price.value.from || price.value.to)
-            let p2 = typeof oldPrice.value === "number" ? oldPrice.value :(oldPrice.value.from || oldPrice.value.to)
-            return p1 === p2
+            let p1 = typeof price.value === 'number' ? price.value : price.value.from || price.value.to;
+            let p2 = typeof oldPrice.value === 'number' ? oldPrice.value : oldPrice.value.from || oldPrice.value.to;
+            return p1 === p2;
         },
 
         concretePrice(price) {
-            if (typeof price.value === "object" && price.value.from !== null && price.value.to !== null) {
-                return price
+            if (typeof price.value === 'object' && price.value.from !== null && price.value.to !== null) {
+                return price;
             }
             return {
-                value: typeof price.value === "number" ? price.value : (price.value.from || price.value.to)
-            }
+                value: typeof price.value === 'number' ? price.value : price.value.from || price.value.to,
+            };
         },
     },
 };

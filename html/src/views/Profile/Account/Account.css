@@ -19,6 +19,13 @@
             line-height: 24px;
             margin-bottom: calc(var(--gs) * 3);
         }
+
+        &-subtitle {
+            font-size: .75rem;
+            line-height: 1rem;
+            display: inline-block;
+            margin-left: 20px;
+        }
     }
 
     &__panels {
@@ -237,6 +244,11 @@
         &-btn {
             width: 100%;
         }
+    }
+
+    &__form-controls {
+        text-align: center;
+        margin-top: 20px;
     }
 
     &__attention {

@@ -25,7 +25,7 @@
                             class="account-view__panel-bottom-select"
                             label="label"
                             track-by="id"
-                            placeholder="Выберите карту"
+                            placeholder="Выберите способ"
                             :value="selectedCard"
                             :options="cards"
                             :searchable="false"
@@ -173,9 +173,21 @@
         </transition>
 
         <transition name="fade-in">
-            <modal class="" v-if="reqModal" :show-close-btn="true" @close="onCloseModal">
+            <modal class="" v-if="callModal" :show-close-btn="true" @close="onCloseCallModal">
                 <template v-slot:body>
-                    <h3 class="account-view__section-hl">Подтверждение перевода с использованием паспортных данных:</h3>
+                    <h3 class="account-view__section-hl">Ошибка</h3>
+                    Требуется уточнение паспортных данных. Свяжитесь с вашим персональным менеджером или колл-центром.
+                    <div class="account-view__form-controls">
+                        <v-button @click="onCloseCallModal">Закрыть</v-button>
+                    </div>
+                </template>
+            </modal>
+        </transition>
+
+        <transition name="fade-in">
+            <modal class="" v-if="reqModal" :show-close-btn="true" @close="onCloseReqModal">
+                <template v-slot:body>
+                    <h3 class="account-view__section-hl">Подтверждение перевода с использованием паспортных данных*</h3>
                     <ul>
                         <li>
                             Фамилия:
@@ -205,8 +217,11 @@
                             Адрес регистрации:
                             <v-input class="" v-model="req.address" type="text" disabled />
                         </li>
-                        <v-button @click="onApplyModal">Принять</v-button>
                     </ul>
+                    <v-button @click="onApplyModal">Принять</v-button>
+                    <span class="text-grey account-view__section-subtitle">
+                        *Если нашли ошибку, свяжитесь с вашим персональным менеджером.
+                    </span>
                 </template>
             </modal>
         </transition>
@@ -303,6 +318,7 @@ export default {
             amount: null,
             isDisabledBtn: false,
             reqModal: false,
+            callModal: false,
             req: {},
         };
     },
@@ -321,14 +337,14 @@ export default {
 
         ...mapGetters(BILLING_MODULE_PATH, [PAGES_COUNT, HAS_PAYMENT_INFO]),
 
-        newCardOption() {
-            const backUrl = generateYandexCardAuthBackUrl();
-            return {
-                id: 'add',
-                label: 'Добавить новую карту',
-                url: generateYandexCardAuthUrl(backUrl, backUrl),
-            };
-        },
+        // newCardOption() { // Вывод на карту
+        //     const backUrl = generateYandexCardAuthBackUrl();
+        //     return {
+        //         id: 'add',
+        //         label: 'Добавить новую карту',
+        //         url: generateYandexCardAuthUrl(backUrl, backUrl),
+        //     };
+        // },
 
         requisitesOption() {
             return {
@@ -350,7 +366,8 @@ export default {
                 label: `${c.card_type} ${c.card_panmask}`,
             }));
 
-            cardList.push(this.newCardOption);
+            // cardList.push(this.newCardOption); // Вывод на карту
+
             if (this.billingData.passport.no) {
                 cardList.push(this.requisitesOption);
             }
@@ -390,6 +407,18 @@ export default {
         isTabletLg() {
             return this.$mq.tabletLg;
         },
+
+        isFullPassport() {
+            return !!(
+                this.billingData.passport.surname &&
+                this.billingData.passport.name &&
+                this.billingData.passport.patronymic &&
+                this.billingData.passport.serial &&
+                this.billingData.passport.no &&
+                this.billingData.passport.issue_date &&
+                this.req.address
+            );
+        },
     },
 
     watch: {
@@ -412,17 +441,28 @@ export default {
         onChangeSelectedCard(card) {
             this[SET_SELECTED_CARD](card);
             if (card.id === 'requisites') {
-                this.reqModal = true;
+                if (this.isFullPassport) {
+                    this.reqModal = true;
+                } else {
+                    this.callModal = true;
+                }
+                this.isDisabledBtn = true;
             }
         },
 
         onApplyModal() {
             this.reqModal = false;
+            this.isDisabledBtn = false;
         },
 
-        onCloseModal() {
+        onCloseReqModal() {
             this.reqModal = false;
-            this.selectedCard = 0;
+            this[SET_SELECTED_CARD](null);
+        },
+
+        onCloseCallModal() {
+            this.callModal = false;
+            this[SET_SELECTED_CARD](null);
         },
 
         async onClickCashOut() {
