@@ -34,7 +34,7 @@
                                 </div>
                                 <div
                                     class="product-view__header-gallery-item"
-                                    v-for="(image, index) in currentGalleryImages"
+                                    v-for="(image) in currentGalleryImages"
                                     :key="image.id"
                                 >
                                     <v-picture v-if="image && image.id">
@@ -51,10 +51,10 @@
                                         />
                                         <source :data-srcset="image.tablet.orig" media="(max-width: 479px)" />
                                         <img
-                                            class="blur-up lazyload v-picture__img"
-                                            :itemprop="index === 0 ? 'image' : null"
+                                            class="v-picture__img"
+                                            :itemprop="image"
                                             :data-src="image.default"
-                                            :src="index === 0 ? image.default : null"
+                                            :src="image.default"
                                             alt=""
                                         />
                                     </v-picture>
@@ -82,22 +82,22 @@
                                         productImages.media.length == 1
                                             ? 'product-view__header-gallery-item--alone'
                                             : ''
-                                    "
-                                >
+                                    ">
+
                                     <v-picture>
                                         <source
                                             :data-srcset="image.desktop.webp"
                                             type="image/webp"
                                             media="(min-width: 480px)"
                                         />
-                                        <source :data-srcset="image.desktop.orig" media="(min-width: 480px)" />
+                                        <source :data-srcset="image.desktop.orig" media="(min-width: 480px)"/>
                                         <source
                                             :data-srcset="image.tablet.webp"
                                             type="image/webp"
                                             media="(max-width: 479px)"
                                         />
                                         <source :data-srcset="image.tablet.orig" media="(max-width: 479px)" />
-                                        <img class="blur-up lazyload v-picture__img" :data-src="image.default" alt="" />
+                                        <img class="v-picture__img" :data-src="image.default" alt="" />
                                     </v-picture>
                                 </div>
                             </v-slider>
@@ -143,10 +143,12 @@
                                 <product-option-tag
                                     class="product-view__header-detail-options-item"
                                     v-for="option in char.options"
-                                    :key="`${char.code}-${option.value}`"
+                                    :key="`radio_${char.code}-${option.value}`"
                                     :selected="option.isSelected"
                                     :disabled="option.isDisabled"
                                     @click="onSelectOption(char.code, option.value)"
+                                    @mouseover="onShowOption(char.code, !option.isSelected ? option.value : null)"
+                                    @mouseleave="onHideOption"
                                 >
                                     {{ option.name }} {{ char.measurement_unit ? char.measurement_unit : '' }}
                                 </product-option-tag>
@@ -207,6 +209,7 @@
                                         class="product-view__header-detail-brand-img"
                                     >
                                         <source :data-src="productImages.brand.desktop" type="image/webp" />
+
                                         <img
                                             class="blur-up lazyload v-picture__img"
                                             :data-src="productImages.brand.default"
@@ -1386,12 +1389,33 @@ export default {
         },
 
         onShowOption(charCode, optValue) {
-            const { image } = this[GET_NEXT_COMBINATION](charCode, optValue);
-            this.optionImage = image;
+            if (!optValue) {
+                return;
+            }
+
+            const { images } = this[GET_NEXT_COMBINATION](charCode, optValue);
+            this.productImages.media = [];
+            if (Array.isArray(images) && images.length) {
+                this.optionImage = images[0];
+                this.productImages.media = images.map((image) => prepareProductImage(image, desktopSize, tabletSize));
+            }
+            else {
+                this.optionImage = null;
+                this.productImages.media = [];
+            }
         },
 
         onHideOption() {
             this.optionImage = null;
+            const { media } = this[PRODUCT] || {};
+            this.productImages.media = [];
+            if (Array.isArray(media) && media.length > 0) {
+                this.productImages.media = media.map((image) => prepareProductImage(image, desktopSize, tabletSize));
+                this.productImages.gallery = media.map((image) => prepareProductImage(image, gallerySize));
+            } else {
+                this.productImages.media = [];
+                this.productImages.gallery = [];
+            }
         },
 
         onPriceVisibilityChanged(isVisible) {
