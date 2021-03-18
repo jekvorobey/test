@@ -117,10 +117,11 @@
                         <transition-group v-if="selectedDeliveryType" tag="ul" name="chunk-item">
                             <li
                                 class="checkout-product-panel__item checkout-product-panel__item--child"
-                                v-for="chunkItem in computedSelectedDeliveryType.items"
+                                v-for="(chunkItem, index) in computedSelectedDeliveryType.items"
                                 :key="chunkItem.id"
                             >
-                                <div class="checkout-product-panel__item-header">
+                                <div class="checkout-product-panel__item-header"
+                                     v-if="isNewSplitDate(chunkItem, (index - 1 >= 0 ? computedSelectedDeliveryType.items[index-1] : null))">
                                     <h3 class="checkout-product-panel__item-header-hl">
                                         {{ generateChunkNote(chunkItem) }}
                                     </h3>
@@ -132,7 +133,7 @@
                                         "
                                         class="checkout-product-panel__item-header-link"
                                         tag="button"
-                                        @click="onChangeDate(chunkItem.id)"
+                                        @click="onChangeDate(chunkItem.id, computedSelectedDeliveryType.items)"
                                     >
                                         <v-svg name="edit" width="16" height="16" />
                                         <template v-if="!isTablet">&nbsp;&nbsp;Изменить дату и время</template>
@@ -548,6 +549,8 @@ import { deliveryTypes, receiveMethods } from '@enums/checkout';
 import { requestStatus, modalName, agreementTypes, httpCodes } from '@enums';
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
 
+import { cartItemTypes } from '@enums/product';
+
 import _isEqual from 'lodash/isEqual';
 import _debounce from 'lodash/debounce';
 import { orderBy as _orderBy } from 'lodash/collection';
@@ -581,7 +584,6 @@ function prepareChunkItem(chunkItem) {
 
 function prepareDeliveryType(deliveryType) {
     const { items } = deliveryType;
-
     const type = {
         ...deliveryType,
         items: _orderBy(items.map(prepareChunkItem), ['selectedDate'], ['asc']),
@@ -925,14 +927,19 @@ export default {
                 return `Доставим всё ${date.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}`;
             }
 
-            const uniqueDates = Array.from(new Set(deliveryType.items.map((i) => i.selectedDate)));
+            const uniqueDates = Array.from(
+                new Set(
+                    deliveryType.items.map((i) => new Date(i.selectedDate).toLocaleDateString(
+                            this[LOCALE],
+                            dayMonthLongDateSettings
+                        )
+                    )
+                )
+            );
             return uniqueDates.reduce(
                 (accum, current, index) =>
                     accum +
-                    `${index > 0 ? ', ' : ' '}${new Date(current).toLocaleDateString(
-                        this[LOCALE],
-                        dayMonthLongDateSettings
-                    )}`,
+                    `${index > 0 ? ', ' : ' '}${current}`,
                 'Доставим'
             );
         },
@@ -955,16 +962,21 @@ export default {
         },
 
         onDateChanged(state) {
-            const { id, selectedDate, selectedTime } = state;
-
-            this[CHANGE_CHUNK_DATE]({
-                id,
-                selectedDate,
-                selectedTime,
+            const { selectedDate, selectedTime, items, oldSelectedDate, oldSelectedTimeCode } = state;
+            const oldDate = new Date(oldSelectedDate).toDateString();
+            items.forEach((item) => {
+                const itemSelectedDate = item.selectedDate.toDateString();
+                if (itemSelectedDate === oldDate && oldSelectedTimeCode === item.selectedTime.code) {
+                    this[CHANGE_CHUNK_DATE]({
+                        id: item.id,
+                        selectedDate,
+                        selectedTime,
+                    });
+                }
             });
         },
 
-        onChangeDate(chunkItemId) {
+        onChangeDate(chunkItemId, items) {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
             const chunkItem = deliveryType.items.find((i) => i.id === chunkItemId);
 
@@ -974,6 +986,7 @@ export default {
                 selectedTime: chunkItem.selectedTime,
                 availableDates: [...chunkItem.availableDates],
                 availableDateTimes: { ...chunkItem.availableDateTimes },
+                items: items,
             };
 
             this[CHANGE_MODAL_STATE]({
@@ -1146,7 +1159,7 @@ export default {
                 this.isVisibleActivateCert = false
             }, 5000);
 
-            await this[FETCH_CHECKOUT_DATA](1); // type = 1 - т.е. продукты
+            await this[FETCH_CHECKOUT_DATA](cartItemTypes.PRODUCT);
             this.fetchCards()
         },
 
@@ -1192,6 +1205,23 @@ export default {
         onToggleActivateCert() {
             this.isVisibleActivateCert = !this.isVisibleActivateCert
         },
+
+        isNewSplitDate(item, prevItem) {
+            if (!prevItem) {
+                return true;
+            }
+            const itemDate = item.selectedDate.toString();
+            const prevDate = prevItem.selectedDate.toString();
+            if (!item.selectedTime && !prevItem.selectedTime) {
+                return itemDate !== prevDate;
+            }
+
+            if (!item.selectedTime || !prevItem.selectedTime) {
+                return true;
+            }
+
+            return itemDate !== prevDate || item.selectedTime.code !== prevItem.selectedTime.code;
+        },
     },
 
     created() {
@@ -1201,7 +1231,11 @@ export default {
     mounted() {
         this.debounce_scrollToError = _debounce(this.scrollToError, SCROLL_DEBOUNCE_TIME);
         this.fetchCards()
-        this.bonusAmount = this.maxAmountBonus
+        if (this.maxAmountBonus > 0) {
+            this.onAddBonus(this.maxAmountBonus)
+        } else {
+            this.bonusAmount = this.maxAmountBonus
+        }
         this.customCertAmount = this.maxCertificateDiscount
     },
 };

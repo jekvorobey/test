@@ -1,0 +1,217 @@
+.view {
+    margin: 0 auto;
+    position: relative;
+}
+
+.link {
+    font-size: 16px;
+    line-height: 24px;
+    text-decoration: none;
+    transition: all var(--time) var(--timing-function);
+    border-bottom: none;
+    text-transform: uppercase;
+
+    &--sm {
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 20px;
+    }
+
+    &--grey {
+        fill: var(--cl-grey);
+        color: var(--cl-grey);
+    }
+}
+
+.progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    width: 0%;
+    transition: width var(--time), opacity var(--animation-time), color var(--animation-time);
+    opacity: 1;
+    background-color: var(--cl-grey);
+    z-index: 999999;
+
+    &--fail {
+        background-color: var(--cl-red);
+    }
+}
+
+.header-middle {
+    background-color: var(--cl-white);
+    overflow: hidden;
+
+    @media (--tablet-lg) {
+        padding: 0;
+        display: none;
+    }
+
+    &__container {
+        padding-top: calc(var(--gs) * 2);
+        padding-bottom: calc(var(--gs) * 2);
+    }
+
+    &__search {
+        min-width: 288px;
+
+        &--active {
+            width: 100%;
+
+            @media (--tablet-lg-min) {
+                padding-top: calc(var(--gs) * 5);
+                padding-bottom: var(--gs);
+            }
+        }
+    }
+
+    &__user {
+        @media (--tablet-lg-min) {
+            min-width: 288px;
+        }
+
+        .header-user-panel__item {
+            &:first-child {
+                margin-left: calc(var(--gs) * 3);
+
+                @media (--desktop) {
+                    margin-left: calc(var(--gs) * 2);
+                }
+            }
+        }
+
+        .header-user-panel__item-sum {
+            @media (--desktop) {
+                display: none;
+            }
+        }
+    }
+}
+
+.btn {
+    display: inline-block;
+    position: relative;
+    font-size: 14px;
+    line-height: 24px;
+    padding: 6px calc(var(--gs) * 2);
+    clear: both;
+    transition: all var(--time) var(--timing-function);
+    border: 2px solid var(--cl-global);
+    background: var(--cl-global);
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: var(--cl-white);
+    fill: var(--cl-white);
+
+    &:hover {
+        background-color: var(--cl-white);
+        fill: var(--cl-global);
+        color: var(--cl-global);
+    }
+
+    &--big {
+        height: calc(var(--gs) * 6);
+    }
+
+    &.is-disabled,
+    &:disabled {
+        background-color: var(--cl-grey);
+        border-color: var(--cl-grey);
+        color: var(--cl-white);
+        fill: var(--cl-white);
+        pointer-events: none;
+    }
+
+    .icon--right {
+        margin: -3px 0 0 6px;
+    }
+
+    .icon--left {
+        margin: -3px 6px 0 0;
+    }
+
+    &--transparent {
+        border-color: transparent;
+        background-color: transparent;
+        color: var(--cl-global);
+        fill: var(--cl-global);
+
+        &:hover {
+            border-color: transparent;
+            background-color: transparent;
+            color: var(--cl-dk-blue);
+            fill: var(--cl-dk-blue);
+        }
+
+        &.is-disabled,
+        &:disabled {
+            background-color: transparent;
+            border-color: transparent;
+            color: var(--cl-divider-grey);
+            fill: var(--cl-divider-grey);
+        }
+    }
+
+    &--outline {
+        border-color: var(--cl-global);
+        background-color: transparent;
+        color: var(--cl-global);
+        fill: var(--cl-global);
+
+        &:hover {
+            background-color: var(--cl-global);
+            color: var(--cl-white);
+            fill: var(--cl-white);
+        }
+
+        &.is-disabled,
+        &:disabled {
+            background-color: transparent;
+            border-color: var(--cl-grey);
+            color: var(--cl-grey);
+            fill: var(--cl-grey);
+        }
+    }
+
+    &--white {
+        border-color: var(--cl-white);
+        background-color: var(--cl-white);
+        color: var(--cl-global);
+        fill: var(--cl-global);
+
+        &:hover {
+            background-color: var(--cl-global);
+            border-color: var(--cl-global);
+            color: var(--cl-white);
+            fill: var(--cl-white);
+        }
+
+        &.btn--outline {
+            background-color: transparent;
+            color: var(--cl-white);
+            fill: var(--cl-white);
+
+            &:hover {
+                border-color: var(--cl-white);
+                background-color: var(--cl-white);
+                color: var(--cl-global);
+                fill: var(--cl-global);
+            }
+        }
+
+        &.is-disabled,
+        &:disabled {
+            background-color: transparent;
+            border-color: var(--cl-divider-grey);
+            color: var(--cl-divider-grey);
+            fill: var(--cl-divider-grey);
+        }
+    }
+}
+
+
+
+

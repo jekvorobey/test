@@ -1,3 +1,15 @@
+.checkout-activate-toggle {
+    margin-top: 24px;
+}
+.checkout-activate-baseline {
+    align-items: baseline !important;
+}
+.checkout-paytype-container {
+    display: flex !important;
+}
+.checkout-paytype-content {
+    margin-top: -3px !important;
+}
 .checkout-master-class-panel {
     counter-reset: item;
 
@@ -32,6 +44,10 @@
         &--child {
             @media (--tablet) {
                 padding: 0;
+            }
+
+            &-hl {
+                text-transform: none;
             }
 
             & + & {
@@ -134,6 +150,91 @@
             }
         }
 
+        &--sertificate &-list {
+            margin-bottom: 0;
+        }
+
+        &--sertificate &-card {
+            &-btn {
+                margin-right: auto;
+            }
+        }
+
+        &--sertificate &-controls {
+            display: flex;
+            align-items: center;
+            margin-top: calc(var(--gs) * 2);
+
+            @media (--desktop) {
+                flex-wrap: wrap;
+            }
+
+            @media (--tablet) {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-top: 0;
+            }
+
+            &-btn {
+                margin-right: calc(var(--gs) * 3);
+
+                @media (--tablet) {
+                    width: 100%;
+                    margin-right: 0;
+                    margin-top: calc(var(--gs) * 2);
+                }
+            }
+
+            &-input {
+                width: 30%;
+                margin-right: calc(var(--gs) * 2);
+
+                @media (--desktop) {
+                    width: 50%;
+                }
+
+                @media (--tablet) {
+                    width: 100%;
+                    margin-right: 0;
+                    margin-top: calc(var(--gs) * 2);
+                }
+
+                .v-input__input {
+                    text-align: left;
+                }
+
+                .v-input__error {
+                    /*display: none;*/
+                    position: absolute;
+                }
+            }
+
+            &-text {
+                @media (--desktop) {
+                    margin-top: calc(var(--gs) * 2);
+                }
+            }
+        }
+
+        &--sertificate &-card {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: calc(var(--gs) * 2);
+
+            &-link {
+                font-size: 14px;
+                text-transform: none;
+                font-weight: normal;
+                color: var(--cl-grey);
+            }
+
+            @media (--tablet) {
+                align-items: baseline;
+            }
+        }
+
         &-container {
             border-bottom: 1px solid var(--cl-divider-grey);
         }
@@ -221,6 +322,24 @@
             .text-bold,
             .text-medium {
                 font-size: 20px;
+            }
+
+            &--bonus {
+                flex-wrap: wrap;
+
+                .text-bold,
+                .text-medium {
+                    font-size: 16px;
+                }
+            }
+
+            &--masterclass {
+                flex-wrap: wrap;
+
+                .text-bold,
+                .text-medium {
+                    font-size: 16px;
+                }
             }
 
             &--invalid {

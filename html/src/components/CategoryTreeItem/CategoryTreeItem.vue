@@ -6,8 +6,8 @@
             { 'category-tree-item--active': isInteractive && isActive },
             { 'category-tree-item--disabled': !isInteractive },
         ]"
-        @mouseover="depth > 0 ? onMouseOver(true) : ''"
-        @mouseleave="depth > 0 ? onMouseOver(false) : ''"
+        @mouseover="!isRoot || $route.path === '/catalog/' ? onMouseOver(true) : ''"
+        @mouseleave="!isRoot || $route.path === '/catalog/' ? onMouseOver(false) : ''"
     >
         <div class="category-tree-item__label">
             <self-router-link class="category-tree-item__link" :to="url" :disabled="!isInteractive" same-disabled>
@@ -22,7 +22,6 @@
                     :key="item.id || index"
                     :item="item"
                     :depth="depth + 1"
-                    :isHover="false"
                 />
             </ul>
         </transition>
@@ -61,16 +60,12 @@ export default {
             type: Boolean,
             default: true,
         },
-
-        isHover: {
-            type: Boolean,
-            default: true
-        },
     },
 
     data() {
         return {
             timer: null,
+            isHover: false
         };
     },
 
@@ -127,6 +122,15 @@ export default {
             } = this;
             return Array.isArray(items);
         },
+    },
+    watch: {
+        $route(to) {
+            if (to.path !== '/catalog/' && this.isRoot) {
+                this.isHover = true;
+            } else {
+                this.isHover = false;
+            }
+        }
     },
 
     methods: {

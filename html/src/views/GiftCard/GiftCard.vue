@@ -35,7 +35,7 @@
                     <template v-slot:sticky>
                         <!-- Title and ratings -->
                         <product-detail-panel
-                            class="product-view__header-detail-info"
+                            class="product-view__header-detail-info gift-card-header-detail"
                             :title="cardTitle"
                             :reviews-count="reviewsCount"
                             :vendor-code="card.vendorCode"
@@ -180,8 +180,8 @@ import { SCROLL } from '@store';
 
 import '@images/sprites/home.svg';
 import '@images/sprites/cart-empty.svg';
-import './GiftCard.css';
 import './ProductCartPanel.css';
+import './GiftCard.css';
 
 import VSticky from '@controls/VSticky/VSticky.vue';
 import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDetailPanel.vue';
@@ -343,16 +343,6 @@ export default {
 };
 </script>
 
-<style>
-.product-detail-panel__info-code {
-    display: none;
-}
-
-.product-view__header-detail-brand-link {
-    margin-left: 23px;
-}
-
-.university-view__breadcrumbs .breadcrumb-item {
-    color: #7d7d7d !important;
-}
+<style scoped>
+@import 'GiftCardScoped.css';
 </style>

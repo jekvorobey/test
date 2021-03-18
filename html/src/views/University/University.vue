@@ -29,19 +29,19 @@
 
                 <div class="university-view__main-row">
                     <v-picture class="university-view__main-row--img">
-                        <source media="(max-width: 479px)" :srcset="Univer1" />
-                        <source media="(min-width: 480px)" :srcset="Univer1" />
-                        <img class="university-view__main-img" :src="Univer1" alt="Men" />
+                        <source media="(max-width: 479px)" :srcset="Univesity1Md" />
+                        <source media="(min-width: 480px)" :srcset="Univesity1Lg" />
+                        <img class="university-view__main-img" :src="Univesity1Lg" alt="University1" />
                     </v-picture>
 
                     <div class="university-view__main-row--content">
                         <h2 class="university-view__main-row-h2">Университет Бессовестно Талантливый</h2>
                         <p class="university-view__main-content-row--text">
-                            Образовательный проект для мастеров бьюти-индустрии, цель которого — поддерживать
-                            профессионалов в стремлении становиться сильнее в своем ремесле. Наша команда находит лучшие
-                            решения для ежедневной работы, повышения уровня знаний и вдохновения. В специальном разделе
-                            «Обучение» маркетплейса iBT.ru представлены собственные программы Университета и мероприятия
-                            партнеров.
+                            Флагманский образовательный проект для мастеров бьюти-индустрии, цель которого —
+                            поддерживать профессионалов в&nbsp;стремлении становиться сильнее в своем ремесле. Команда
+                            университета находит лучшие решения для ежедневной работы, повышения уровня знаний
+                            и&nbsp;вдохновения. В специальном разделе «Мастер-классы» маркетплейса iBT.ru представлены
+                            собственные программы Университета и мероприятия партнеров.
                         </p>
                     </div>
                 </div>
@@ -56,18 +56,18 @@
                     <div class="university-view__main-row--content">
                         <h2 class="university-view__main-row-h2">Коллаборации</h2>
                         <p class="university-view__main-content-row--text">
-                            Мы открыты для сотрудничества и совместных проектов с лучшими профессионалами индустрии
-                            России и мира. В качестве платформы для своих мастер-классов Университет Бессовестно
-                            Талантливый выбирают такие значимые стилисты как: Владимир Сарбашев, Павел Шефф, Игорь
-                            Хонин, Андрей Крупчинский, Максим Никиточкин, Алия Аскарова, Ричард Эшфорт, Питер Грей,
-                            Шиничи Такахаши.
+                            Двери Университета открыты для сотрудничества и&nbsp;совместных проектов с&nbsp;лучшими
+                            профессионалами индустрии России и мира. В&nbsp;качестве платформы для своих мастер-классов
+                            Университет Бессовестно Талантливый выбирают такие значимые стилисты как: Владимир Сарбашев,
+                            Павел Шефф, Игорь Хонин, Андрей Крупчинский, Максим Никиточкин, Алия Аскарова, Ричард
+                            Эшфорт, Питер Грей, Шиничи Такахаши.
                         </p>
                     </div>
 
                     <v-picture class="university-view__main-row--img">
-                        <source media="(max-width: 479px)" :srcset="Univer2" />
-                        <source media="(min-width: 480px)" :srcset="Univer2" />
-                        <img class="university-view__main-img" :src="Univer2" alt="Men" />
+                        <source media="(max-width: 479px)" :srcset="Univesity2Md" />
+                        <source media="(min-width: 480px)" :srcset="Univesity2Lg" />
+                        <img class="university-view__main-img" :src="Univesity2Lg" alt="University2" />
                     </v-picture>
                 </div>
             </div>
@@ -79,17 +79,18 @@
             <div class="container university-view__main">
                 <div class="university-view__main-row">
                     <v-picture class="university-view__main-row--img">
-                        <source media="(max-width: 479px)" :srcset="Univer3" />
+                        <source media="(max-width: 479px)" :srcset="Univesity3Md" />
                         <source media="(min-width: 480px)" :srcset="Univer3" />
                         <img class="university-view__main-img" :src="Univer3" alt="Men" />
                     </v-picture>
 
                     <div class="university-view__main-row--content">
                         <p class="university-view__main-content-row--text">
-                            Кампус Университета — это 8 профессионально оснащенных студий в Москве общей площадью 800 м2
-                            на «Винзаводе» и «Арме», расположенных в пешей доступности от м. Курская. Все пространства
-                            многофункциональны и вмещают от 10 человек для камерных практических форматов до 150 человек
-                            для конференций и шоу-показов.
+                            Кампус Университета — это профессионально оснащенные студии в Москве общей площадью более
+                            460 м2, расположенные в бизнес-квартале Арма в пешей доступности от м. Курская.
+                            Многофункциональные пространства позволяют комфортно разместить от 10 до 150 человек.
+                            Техническое оснащение подходит для проведения различных форматов: от практических и
+                            креативных мероприятий в бьюти-сфере до шоу-показов и конференций.
                         </p>
                     </div>
                 </div>
@@ -166,10 +167,14 @@ import { phoneMaskOptions } from '@settings';
 import validationMixin, { required, email, minLength } from '@plugins/validation';
 import metaMixin from '@plugins/meta';
 
-import Univer1 from '@images/mock/Univer1.png';
-import Univer2 from '@images/mock/Univer2.png';
 import Univer3 from '@images/mock/Univer3.png';
 import UniverSlide from '@images/mock/UniverSlide.png';
+
+import Univesity1Lg from '@images/mock/Univesity1Lg.png';
+import Univesity1Md from '@images/mock/Univesity1Md.png';
+import Univesity2Lg from '@images/mock/Univesity2Lg.png';
+import Univesity2Md from '@images/mock/Univesity2Md.png';
+import Univesity3Md from '@images/mock/Univesity3Md.png';
 
 import '@images/sprites/home.svg';
 import './University.css';
@@ -227,10 +232,13 @@ export default {
     data: () => ({
         UniverMain,
         UniverMainMd,
-        Univer1,
-        Univer2,
         Univer3,
         UniverSlide,
+        Univesity1Lg,
+        Univesity1Md,
+        Univesity2Lg,
+        Univesity2Md,
+        Univesity3Md,
         univerSlider: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }],
         univerSliderOptions: {
             spaceBetween: 8,

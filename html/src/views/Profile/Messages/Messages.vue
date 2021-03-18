@@ -135,36 +135,54 @@ export default {
         },
     },
 
-    beforeRouteEnter(to, from, next) {
-        function proceed() {
-            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][MESSAGES_MODULE]) {
-                const { load } = $store.state[PROFILE_MODULE][MESSAGES_MODULE];
+    // beforeRouteEnter(to, from, next) {
+    //     function proceed() {
+    //         if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][MESSAGES_MODULE]) {
+    //             const { load } = $store.state[PROFILE_MODULE][MESSAGES_MODULE];
+    //
+    //             if (load) {
+    //                 $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, false);
+    //                 return next();
+    //             }
+    //
+    //             $progress.start();
+    //             $store
+    //                 .dispatch(`${MESSAGES_MODULE_PATH}/${FETCH_CHATS}`)
+    //                 .then(() => {
+    //                     $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, $context.isServer);
+    //                     next(() => $progress.finish());
+    //                 })
+    //                 .catch(() => next(() => $progress.fail()));
+    //         }
+    //     }
+    //
+    //     if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][MESSAGES_MODULE]) proceed();
+    //     else {
+    //         $store.watch(
+    //             (state) => state[PROFILE_MODULE][MESSAGES_MODULE],
+    //             (value) => {
+    //                 if (value) proceed();
+    //             }
+    //         );
+    //     }
+    // },
 
-                if (load) {
-                    $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, false);
-                    return next();
-                }
+    mounted() {
+        const { load } = $store.state[PROFILE_MODULE][MESSAGES_MODULE];
 
-                $progress.start();
-                $store
-                    .dispatch(`${MESSAGES_MODULE_PATH}/${FETCH_CHATS}`)
-                    .then(() => {
-                        $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, $context.isServer);
-                        next(() => $progress.finish());
-                    })
-                    .catch(() => next(() => $progress.fail()));
-            }
+        if (load) {
+            $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, false);
+            return;
         }
 
-        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][MESSAGES_MODULE]) proceed();
-        else {
-            $store.watch(
-                (state) => state[PROFILE_MODULE][MESSAGES_MODULE],
-                (value) => {
-                    if (value) proceed();
-                }
-            );
-        }
-    },
+        $progress.start();
+        $store
+            .dispatch(`${MESSAGES_MODULE_PATH}/${FETCH_CHATS}`)
+            .then(() => {
+                $store.dispatch(`${MESSAGES_MODULE_PATH}/${SET_LOAD}`, $context.isServer);
+                $progress.finish()
+            })
+            .catch(() => $progress.fail());
+    }
 };
 </script>

@@ -172,6 +172,87 @@
                     </checkout-option-card>
                 </ul>
 
+                <!-- <button @click="applyCertificate">Использовать 200 сертификатный рублей</button> -->
+
+                <div
+                    class="checkout-master-class-panel__item checkout-master-class-panel__item--child checkout-master-class-panel__item--sertificate"
+                >
+                    <h3 class="checkout-master-class-panel__item-header-hl checkout-paytype-content">
+                        <v-svg name="gift" width="24" height="24" />&nbsp;Оплата подарочным сертификатом&nbsp;
+                        <v-spinner width="24" height="24" :show="isCertificatePending" />
+                    </h3>
+                    <div v-if="isСertAmountEdit" class="checkout-master-class-panel__item-controls checkout-master-class-panel__item">
+                        <template v-if="isCertificateEdit">
+                            <v-input
+                                class="checkout-master-class-panel__item-controls-input"
+                                type="number"
+                                min="0"
+                                placeholder="Сколько списать?"
+                                v-model="customCertAmount"
+                                v-focus
+                                :max="maxCertificateDiscount"
+                                :disabled="isCertAmountPending"
+                                @keydown.enter.prevent="applyCertificate"
+                            />
+                            <v-button
+                                class="btn--outline checkout-master-class-panel__item-controls-btn"
+                                @click="applyCertificate"
+                                :disabled="isCertAmountPending"
+                            >
+                                Применить
+                            </v-button>
+                            <span class="checkout-master-class-panel__item-controls-text checkout-master-class-panel__item">
+                                Доступно для оплаты&nbsp;
+                                <strong class="text-bold">{{ maxCertificateDiscount }}</strong> ₽
+                            </span>
+                        </template>
+                        <div v-else class="checkout-master-class-panel__item-card checkout-master-class-panel__item-card--bonus">
+                            <span v-if="!certificatePayment" class="checkout-master-class-panel__item-controls-text checkout-master-class-panel__item">
+                                Доступно для оплаты&nbsp;
+                                <strong class="text-bold">{{ maxCertificateDiscount }}</strong> ₽
+                            </span>
+                            <span v-if="certificatePayment" class="checkout-master-class-panel__item-controls-text checkout-master-class-panel__item">
+                                Будет использовано&nbsp;
+                                <strong class="text-bold">{{ certificatePayment }}</strong> ₽ с сертификатов — {{ aggCertNames }}
+                            </span>
+                            <div class="checkout-master-class-panel__item-card-panel">
+                                <!-- <div v-if="isTablet" class="text-sm text-normal text-grey">
+                                    (1 бонус = {{ bonusPerRub }} рубль)
+                                </div> -->
+                                <v-link class="checkout-master-class-panel__item-card-link" tag="button" @click="onEditCertificate">
+                                    Изменить
+                                </v-link>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="isСertAmountEdit" @click="onToggleActivateCert" @mousedown.prevent class="checkout-activate-toggle checkout-master-class-panel__item-header-hl">
+                        <span>Активировать ещё один сертификат</span>
+                        <v-svg v-if="!isVisibleActivateCert" name="arrow-down" width="24" height="24" @click="onToggleActivateCert" />
+                        <v-svg v-if="isVisibleActivateCert" name="arrow-up" width="24" height="24" @click="onToggleActivateCert" />
+                    </div>
+                    <div v-if="isVisibleActivateCert || !isСertAmountEdit" class="checkout-master-class-panel__item-controls checkout-activate-baseline">
+                        <v-input
+                            v-model="certificateCode"
+                            class="checkout-master-class-panel__item-controls-input"
+                            placeholder="Введите номер сертификата"
+                            @keydown.enter.prevent="activateCertificate"
+                            :error="activateError"
+                            :success="activateSuccess"
+                            :show-error="!!activateError"
+                            :show-success="!!activateSuccess"
+                            @input="onActivateInput"
+                        />
+                        <v-button
+                            class="btn--outline checkout-master-class-panel__item-controls-btn"
+                            :disabled="!certificateCode"
+                            @click="activateCertificate"
+                            @mousedown.prevent
+                        >
+                            Активировать
+                        </v-button>
+                    </div>
+                </div>
+
                 <div
                     class="checkout-master-class-panel__item checkout-master-class-panel__item checkout-master-class-panel__item--child checkout-master-class-panel__item--settings"
                 >
@@ -256,6 +337,8 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
+import VInput from '@controls/VInput/VInput.vue';
+import VButton from '@controls/VButton/VButton.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
@@ -280,6 +363,8 @@ import {
     ADD_RECIPIENT,
     ADD_TICKET,
     CHANGE_TICKET,
+    ADD_CERTIFICATE,
+    FETCH_CHECKOUT_DATA,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -293,16 +378,35 @@ import {
     SUBSCRIBE,
     PROMO_CODE,
     PROMOCODE_STATUS,
+    MAX_CERTIFICATE_DISCOUNT,
+    CERTIFICATE_PAYMENT,
     PUBLIC_EVENTS,
     TICKET_STATUS,
     PROFESSIONS_MAP,
+    CERTIFICATE_STATUS,
+    CERTIFICATES,
+    RECEIVE_METHOD_STATUS,
 } from '@store/modules/Checkout/getters';
+
+import { NAME as CERTIFICATE_MODULE, CERTIFICATE_TYPE, CERTIFICATE_DATA } from '@store/modules/Certificate';
+import {
+    ACTIVATE_CERTIFICATE,
+    FETCH_CERTIFICATES,
+} from '@store/modules/Certificate/actions';
+
+import {
+    ACTIVE_CERTIFICATES,
+    ACTIVE_CERTIFICATE_STATUS,
+    // RECEIVE_METHOD_STATUS, // TODO: пофиксить название константы, а то конфликтует с аналогичным названием из модуля Checkout
+} from '@store/modules/Certificate/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import _isEqual from 'lodash/isEqual';
 import _debounce from 'lodash/debounce';
+
+import { cartItemTypes } from '@enums/product';
 
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
 import { requestStatus, agreementTypes, fileExtension, modalName } from '@enums';
@@ -329,6 +433,8 @@ export default {
     components: {
         VSvg,
         VLink,
+        VInput,
+        VButton,
         VCheck,
         VSpinner,
 
@@ -386,8 +492,15 @@ export default {
 
     data() {
         return {
+            isCertificateEdit: false,
+            certificateCode: null,
+            customCertAmount: null,
             recipientIndexToChange: null,
             ticketIndexToChange: null,
+            certPrices: [],
+            isVisibleActivateCert: false,
+            activateError: '',
+            activateSuccess: '',
         };
     },
 
@@ -419,9 +532,17 @@ export default {
             SUBSCRIBE,
             PROMO_CODE,
 
+            MAX_CERTIFICATE_DISCOUNT,
+            CERTIFICATE_PAYMENT,
+            CERTIFICATE_STATUS,
+
             PROMOCODE_STATUS,
             TICKET_STATUS,
+            CERTIFICATES,
         ]),
+
+        ...mapState(CERTIFICATE_MODULE, [CERTIFICATE_TYPE, CERTIFICATE_DATA]),
+        ...mapGetters(CERTIFICATE_MODULE, [RECEIVE_METHOD_STATUS, ACTIVE_CERTIFICATE_STATUS, ACTIVE_CERTIFICATES]),
 
         masterClasses() {
             const publicEvents = this[PUBLIC_EVENTS] || [];
@@ -472,6 +593,42 @@ export default {
             }
         },
 
+        isCertificatePending() {
+            return this[CERTIFICATE_STATUS] === requestStatus.PENDING;
+        },
+
+        isCertAmountPending() {
+            // isCertificatePending
+            // TODO: CERTIFICATE_STATUS -> CERT_AMOUNT_STATUS
+            return this[CERTIFICATE_STATUS] === requestStatus.PENDING;
+        },
+
+        // Общая сумма сертификатов
+        availableCertAmount() {
+            let am = this[ACTIVE_CERTIFICATES].map(c => c.balance)
+            return am.length > 0 ? am.reduce((a, b) => a+b) : 0
+        },
+
+        // сертификаты, которые добавлены к оплате заказа
+        cards() {
+            return this[CERTIFICATES] ? this[CERTIFICATES] : []
+        },
+
+        // все активные сертификаты пользоватлея
+        activeCards() {
+            return this[ACTIVE_CERTIFICATES] ? this[ACTIVE_CERTIFICATES] : []
+        },
+
+        // Названия сертификатов через запятую
+        aggCertNames() {
+            let am = this.cards.map(c => c.code)
+            return am.length > 0 ? am.join(', ') : ''
+        },
+
+        isСertAmountEdit() {
+            return this.availableCertAmount > 0
+        },
+
         isTablet() {
             return this.$mq.tablet;
         },
@@ -495,8 +652,16 @@ export default {
             SET_SUBSCRIBE,
             SET_CONFIRMATION_TYPE,
 
+            ADD_CERTIFICATE,
+
             ADD_PROMOCODE,
             DELETE_PROMOCODE,
+            FETCH_CHECKOUT_DATA,
+        ]),
+
+        ...mapActions(CERTIFICATE_MODULE, [
+            FETCH_CERTIFICATES,
+            ACTIVATE_CERTIFICATE,
         ]),
 
         formatPhoneNumber(phone) {
@@ -570,6 +735,91 @@ export default {
             window.scrollTo({ top: getPosition(element).y - panelScrollOffset, behavior: 'smooth' });
         },
 
+        // async applyCertificate() {
+        //     try {
+        //         const response = await this.ADD_CERTIFICATE(200);
+        //     } catch (error) {
+        //         // todo
+        //     }
+        // },
+
+        onActivateInput () {
+            this.activateError = ''
+            this.activateSuccess = ''
+        },
+
+        async fetchCards() {
+            this.loading = true
+            try {
+                await this[FETCH_CERTIFICATES]()
+                this.loading = false
+            } catch (error) {
+                this.loading = false
+            }
+        },
+
+        async applyCertificate() {
+            // TODO: не выводится сообщение об ошибке, например "Не указана сумма операции"
+            if (this.customCertAmount == null) {
+                this.customCertAmount = this.maxCertificateDiscount
+            }
+            try {
+                await this.ADD_CERTIFICATE(this.customCertAmount || 0)
+                this.isCertificateEdit = false
+            } catch (error) {
+                this.isCertificateEdit = true
+            }
+        },
+
+        async activateCertificate() {
+            if (!this.certificateCode || this.certificateCode.trim() === '') {
+                return
+            }
+            try {
+                this.$progress.start()
+                await this[ACTIVATE_CERTIFICATE](this.certificateCode)
+                let repl = this[CERTIFICATE_DATA]
+                if (this[ACTIVE_CERTIFICATE_STATUS] == 'success') {
+                    this.activateSuccess =
+                        repl && repl.message ? repl.message : '' // Нужно решить, что вывести по умолчанию, если с сервера потлетел ответ с пустым сообщением
+                } else {
+                    this.activateError =
+                        repl && repl.message ? repl.message : 'Произошла неизвестная ошибка'
+                }
+                this.$progress.finish()
+                this.certificateCode = ''
+            } catch (e) {
+                const { status } = e;
+                switch (status) {
+                    case httpCodes.BAD_REQUEST:
+                        this.activateError = e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат' // this.$t('validation.errors.promocodeInvalid');
+                        break;
+                    case httpCodes.NOT_FOUND:
+                        this.activateError = e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат' // this.$t('validation.errors.promocodeNotExist');
+                        break;
+                }
+                this.$progress.fail()
+                this.$progress.finish() // finish после fail точно необходим?
+            }
+            setTimeout(() => {
+                this.activateError = ''
+                this.activateSuccess = ''
+                this.isVisibleActivateCert = false
+            }, 5000);
+
+            await this[FETCH_CHECKOUT_DATA](cartItemTypes.MASTERCLASS);
+            this.fetchCards()
+        },
+
+        onEditCertificate() {
+            this.isCertificateEdit = true;
+            // isСertAmountEdit
+        },
+
+        onToggleActivateCert() {
+            this.isVisibleActivateCert = !this.isVisibleActivateCert
+        },
+
         validate() {
             this.$v.$touch();
             return !this.$v.$invalid;
@@ -582,6 +832,8 @@ export default {
 
     mounted() {
         this.debounce_scrollToError = _debounce(this.scrollToError, SCROLL_DEBOUNCE_TIME);
+        this.fetchCards();
+        this.customCertAmount = this.maxCertificateDiscount;
     },
 };
 </script>

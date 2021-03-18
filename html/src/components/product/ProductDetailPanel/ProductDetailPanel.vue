@@ -136,3 +136,9 @@ export default {
     },
 };
 </script>
+
+<style>
+    .gift-card-header-detail .product-detail-panel__info-code {
+        display: none;
+    }
+</style>

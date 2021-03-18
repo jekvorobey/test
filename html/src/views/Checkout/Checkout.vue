@@ -43,11 +43,12 @@
                                     <span> -<price :value="bonusPayment" currency="RUB" /> </span>
                                 </p>
 
-                                <p class="checkout-view__main-panel-line" v-if="certificatePayment > 0">
-                                    Оплата подарочным сертификатом
-                                    <span> -<price :value="certificatePayment" currency="RUB" /> </span>
-                                </p>
                             </template>
+
+                            <p class="checkout-view__main-panel-line" v-if="certificatePayment > 0">
+                                Оплата подарочным сертификатом
+                                <span> -<price :value="certificatePayment" currency="RUB" /> </span>
+                            </p>
 
                             <p
                                 class="checkout-view__main-panel-line"

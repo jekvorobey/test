@@ -3,6 +3,7 @@ import { sortFields } from '@enums/favorites';
 import { DEFAULT_PAGE } from '@constants';
 import { $store } from '@services';
 
+import { checkSession } from '@components/BuyButton/BuyButton.vue';
 import actions, { ADD_FAVORITES_ITEM_BY_OFFER } from './actions';
 import mutations from './mutations';
 import getters from './getters';
@@ -18,11 +19,13 @@ export const FAVORITES_FIELD = 'orderField';
 export const ACTIVE_PAGE = 'activePage';
 export const RANGE = 'range';
 
-if (process.env.VUE_ENV === 'client') {
-    function rrAddToFavourite(offerId) {
+function rrAddToFavourite(offerId) {
+    if (checkSession()) {
         $store.dispatch(`${NAME}/${ADD_FAVORITES_ITEM_BY_OFFER}`, offerId);
     }
+}
 
+if (process.env.VUE_ENV === 'client') {
     window.rrAddToFavourite = rrAddToFavourite;
 }
 

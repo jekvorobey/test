@@ -9,6 +9,7 @@
 
             "@images/*": ["assets/images/*"],
             "@files/*": ["assets/files/*"],
+            "@videos/*": ["assets/videos/*"],
 
             "@styles": ["assets/styles/index.css"],
             "@styles/*": ["assets/styles/*"],

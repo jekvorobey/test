@@ -13,5 +13,5 @@ export function generateYandexCardAuthBackUrl() {
 }
 
 export function generateYandexCardAuthUrl(url_error, url_success, identify = true) {
-    return `https://money.yandex.ru/cardauth/payout?url_error=${url_error}&url_success=${url_success}&identify=${identify}`;
+    return `https://yoomoney.ru/cardauth/payout?url_error=${url_error}&url_success=${url_success}&identify=${identify}`;
 }

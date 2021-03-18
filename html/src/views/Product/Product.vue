@@ -136,6 +136,7 @@
                             v-for="char in characteristics"
                             :header="char.name"
                             :selected-option="char.selectedOption && char.selectedOption.name"
+                            :measurement="char.measurement_unit"
                             :note="char.note"
                         >
                             <div class="product-view__header-detail-options-tags" v-if="char.type === 'radio'">
@@ -147,7 +148,7 @@
                                     :disabled="option.isDisabled"
                                     @click="onSelectOption(char.code, option.value)"
                                 >
-                                    {{ option.name }}
+                                    {{ option.name }} {{ char.measurement_unit ? char.measurement_unit : '' }}
                                 </product-option-tag>
                             </div>
 
@@ -590,6 +591,12 @@
             </div>
         </section>
 
+        <section class="section product-view__section product-view__instagram">
+            <div class="container product-view__instagram-container">
+                <frisbuy-product-container v-if="product && product.id" :key="product.id" :script="frisbuyUrl" />
+            </div>
+        </section>
+
         <section class="section product-view__section product-view__like">
             <div class="container product-view__like-container">
                 <h2 class="product-view__section-hl product-view__like-hl">{{ $t('product.title.like') }}</h2>
@@ -614,12 +621,6 @@
                         @toggle-favorite-item="onToggleFavorite(item.productId)"
                     />
                 </v-slider>
-            </div>
-        </section>
-
-        <section class="section product-view__section product-view__instagram">
-            <div class="container product-view__instagram-container">
-                <frisbuy-product-container v-if="product && product.id" :key="product.id" :script="frisbuyUrl" />
             </div>
         </section>
 
@@ -767,7 +768,7 @@ import {
     generateYoutubeImagePlaceholderPath,
     generateYoutubeVideoSourcePath,
 } from '@util/file';
-import { createNotFoundRoute } from '@util/router';
+import { createNotFoundRoute, createNotFoundProductRoute } from '@util/router';
 import { breakpoints, fileExtension, httpCodes, modalName } from '@enums';
 import { productGroupTypes, cartItemTypes } from '@enums/product';
 import {
@@ -1446,7 +1447,7 @@ export default {
                         })
                         .catch((error) => {
                             $progress.fail();
-                            if (error.status === httpCodes.NOT_FOUND) next(createNotFoundRoute(to));
+                            if (error.status === httpCodes.NOT_FOUND) next(createNotFoundProductRoute(to));
                             else next(new Error(error.message));
                             $progress.finish();
                         });
