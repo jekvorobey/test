@@ -23,7 +23,7 @@
         }
 
         &-nav {
-            max-width: 700px;
+            /*max-width: 700px;*/
             margin-right: auto;
 
             @media (--tablet) {
@@ -70,7 +70,7 @@
             &::after {
                 content: '';
                 display: block;
-                margin: 0 calc(var(--gs) * 4);
+                margin: 0 calc(var(--gs) * 2.5);
                 border-left: 1px solid var(--cl-white);
                 opacity: 0.3;
             }
@@ -175,5 +175,9 @@
         .search-panel__container {
             padding-top: 0;
         }
+    }
+
+    &--scroll button.header-navigation-panel__item {
+        margin-left: 5px;
     }
 }
