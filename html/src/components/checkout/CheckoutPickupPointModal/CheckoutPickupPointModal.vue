@@ -128,7 +128,13 @@
                     </h3>
 
                     <div class="checkout-pickup-point-modal__filter-header-controls">
-                        <!-- <v-select placeholder="Станция метро" :options="[]" /> -->
+                         <v-select
+                                 v-model="selectedMetro"
+                                 track-by="id"
+                                 label="title"
+                                 placeholder="Станция метро"
+                                 :options="metroOptions"
+                         />
                         <v-select
                             v-model="selectedType"
                             placeholder="Тип пункта выдачи"
@@ -150,7 +156,9 @@
                             @cardClick="onShowPoint(point)"
                         >
                             <div class="text-bold">{{ point.title }}</div>
-                            <div class="checkout-pickup-point-modal__filter-list-item-name">{{ point.name }}</div>
+                            <div class="checkout-pickup-point-modal__filter-list-item-name">
+                                {{ point.name }}
+                            </div>
                             <div class="text-grey text-sm" v-if="point.startDate">
                                 Можно забрать с {{ point.startDate }}, {{ point.startDateDay }}
                             </div>
@@ -202,7 +210,7 @@ import { SELECTED_CITY_COORDS } from '@store/modules/Geolocation/getters';
 
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import { SET_PICKUP_POINT } from '@store/modules/Checkout/actions';
-import { PICKUP_POINTS, PICKUP_POINT_TYPES } from '@store/modules/Checkout/getters';
+import { PICKUP_POINTS, PICKUP_POINT_TYPES, METRO_STATIONS } from '@store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -213,6 +221,7 @@ import { dayMonthLongDateSettings } from '@settings';
 import pin from '@images/icons/pin-filled.svg';
 import '@images/sprites/arrow-small.svg';
 import './CheckoutPickupPointModal.css';
+import {pointType} from "@enums/checkout";
 
 const NAME = modalName.checkout.PICKUP_POINT;
 
@@ -233,6 +242,7 @@ export default {
     data() {
         return {
             selectedType: null,
+            selectedMetro: null,
             selectedPickupPoint: null,
             showMap: false,
             // coords: [55.755814, 37.617635],
@@ -268,7 +278,7 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapGetters(GEO_MODULE, [SELECTED_CITY_COORDS]),
-        ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, PICKUP_POINT_TYPES]),
+        ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, PICKUP_POINT_TYPES, METRO_STATIONS]),
         ...mapState(MODAL_MODULE, {
             isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
@@ -282,7 +292,22 @@ export default {
 
         filteredPickupPoints() {
             const points = this[PICKUP_POINTS] || [];
-            const filteredPoints = points.filter((p) => !this.selectedType || p.methodID === this.selectedType.id);
+            const filteredPoints = points.filter((p) => {
+                if (!this.selectedType && !this.selectedMetro)
+                    return true;
+
+                let isMetro = false;
+                if (this.selectedMetro) {
+                    p.pointMetroStationLinks.forEach((pointMetroStationLink) => {
+                        if (pointMetroStationLink.metro_station_id === this.selectedMetro.id) {
+                            isMetro = true;
+                        }
+                    });
+                }
+
+                return (!this.selectedType && isMetro) || (!this.selectedMetro && p.methodID === this.selectedType.id)
+                    || (isMetro && p.methodID === this.selectedType.id);
+            });
 
             return filteredPoints.map((p) => {
                 const dateObj = new Date(p.startDate);
@@ -298,6 +323,10 @@ export default {
                     startDateDay: this.$t(`weekdays.long.${startDateDay}`),
                 };
             });
+        },
+
+        metroOptions() {
+            return this[METRO_STATIONS] || [];
         },
 
         clusterOptions() {
