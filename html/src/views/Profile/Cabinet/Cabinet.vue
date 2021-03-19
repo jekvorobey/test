@@ -348,67 +348,45 @@ export default {
         }
     },
 
-    // beforeRouteEnter(to, from, next) {
-    //     function proceed() {
-    //         if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][CABINET_MODULE]) {
-    //             const { load } = $store.state[PROFILE_MODULE][CABINET_MODULE];
-    //
-    //             if (load) {
-    //                 next();
-    //                 $store.dispatch(`${CABINET_MODULE_PATH}/${SET_LOAD}`, false);
-    //                 return;
-    //             }
-    //
-    //             $progress.start();
-    //             $store
-    //                 .dispatch(`${CABINET_MODULE_PATH}/${FETCH_CABINET_DATA}`)
-    //                 .then(() => {
-    //                     next(() => {
-    //                         $progress.finish();
-    //                     });
-    //                 })
-    //                 .catch((thrown) => {
-    //                     $progress.fail();
-    //                     if (thrown.status === httpCodes.FORBIDDEN) {
-    //                         $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);
-    //                         return next(false);
-    //                     }
-    //                     next();
-    //                 });
-    //         }
-    //     }
-    //
-    //     if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][CABINET_MODULE]) proceed();
-    //     else {
-    //         $store.watch(
-    //             (state) => state[PROFILE_MODULE][CABINET_MODULE],
-    //             (value) => {
-    //                 if (value) proceed();
-    //             }
-    //         );
-    //     }
-    // },
+    beforeRouteEnter(to, from, next) {
+        function proceed() {
+            if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][CABINET_MODULE]) {
+                const { load } = $store.state[PROFILE_MODULE][CABINET_MODULE];
 
-    mounted() {
-        const { load } = $store.state[PROFILE_MODULE][CABINET_MODULE];
+                if (load) {
+                    next();
+                    $store.dispatch(`${CABINET_MODULE_PATH}/${SET_LOAD}`, false);
+                    return;
+                }
 
-        if (load) {
-            $store.dispatch(`${CABINET_MODULE_PATH}/${SET_LOAD}`, false);
-            return;
+                $progress.start();
+                $store
+                    .dispatch(`${CABINET_MODULE_PATH}/${FETCH_CABINET_DATA}`)
+                    .then(() => {
+                        next(() => {
+                            $progress.finish();
+                        });
+                    })
+                    .catch((thrown) => {
+                        $progress.fail();
+                        if (thrown.status === httpCodes.FORBIDDEN) {
+                            $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);
+                            return next(false);
+                        }
+                        next();
+                    });
+            }
         }
 
-        $progress.start();
-        $store
-            .dispatch(`${CABINET_MODULE_PATH}/${FETCH_CABINET_DATA}`)
-            .then(() => {
-                $progress.finish();
-            })
-            .catch((thrown) => {
-                $progress.fail();
-                if (thrown.status === httpCodes.FORBIDDEN) {
-                    $store.dispatch(`${AUTH_MODULE}/${CHECK_SESSION}`, true);
+        if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][CABINET_MODULE]) proceed();
+        else {
+            $store.watch(
+                (state) => state[PROFILE_MODULE][CABINET_MODULE],
+                (value) => {
+                    if (value) proceed();
                 }
-            });
+            );
+        }
     },
 };
 </script>
