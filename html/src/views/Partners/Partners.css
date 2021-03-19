@@ -22,7 +22,6 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        background: url('/assets/images/PartnersTopLg.png') center center no-repeat;
 
         @media (min-width: 480px) {
             min-height: 380px;
@@ -30,6 +29,7 @@
 
         @media (--tablet-lg) {
             background: var(--cl-white);
+            background-image: none !important;
         }
 
         @media (--tablet) {
@@ -37,6 +37,7 @@
             margin-top: calc(var(--gs) * -5);
             background: var(--cl-white);
             z-index: 0;
+            background-image: none !important;
         }
 
         .v-picture {

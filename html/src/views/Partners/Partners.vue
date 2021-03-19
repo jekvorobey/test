@@ -12,7 +12,10 @@
 
         <section class="section">
             <div class="container partners-view__top-container">
-                <div class="partners-view__top">
+                <div
+                    class="partners-view__top"
+                    :style="{ background: 'url(' + PartnersTopLg + ') center center no-repeat' }"
+                >
                     <v-picture>
                         <source media="(max-width: 479px)" :data-srcset="PartnersTopMd" />
                         <source media="(min-width: 480px)" :data-srcset="PartnersTopLg" />
@@ -210,8 +213,8 @@ import validationMixin, { required, email, minLength } from '@plugins/validation
 
 import PartnersTopLg from '@images/mock/PartnersTopLg.png';
 import PartnersTopMd from '@images/mock/PartnersTopMd.png';
-import ParthnerСooperationMd from '@images/mock/ParthnerСooperationMd.png';
-import ParthnerСooperationLg from '@images/mock/ParthnerСooperationLg.png';
+import ParthnerCooperationMd from '@images/mock/ParthnerСooperationMd.png';
+import ParthnerCooperationLg from '@images/mock/ParthnerСooperationLg.png';
 import PartnersWithUsMd from '@images/mock/PartnersWithUsMd.png';
 import PartnersWithUsLg from '@images/mock/PartnersWithUsLg.png';
 
@@ -289,8 +292,8 @@ export default {
         PartnersTopMd,
         PartnersWithUsMd,
         PartnersWithUsLg,
-        ParthnerСooperationMd,
-        ParthnerСooperationLg,
+        ParthnerCooperationMd,
+        ParthnerCooperationLg,
         ParthnerSales1,
         ParthnerSales2,
         ParthnerSales3,
