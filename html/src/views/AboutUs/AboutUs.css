@@ -37,6 +37,15 @@
             }
         }
 
+        &-video {
+            flex: 1 0 50%;
+            width: 100%;
+
+            img {
+                width: 100%;
+            }
+        }
+
         &-content {
             flex: 1 0 50%;
             padding: 0 calc(var(--gs) * 13) 0 calc(var(--gs) * 15);
