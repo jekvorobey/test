@@ -104,7 +104,7 @@
                 <picture class="about-us-view__top-img">
                     <source media="(max-width: 479px)" :srcset="AboutLearningMd" />
                     <source media="(min-width: 480px)" :srcset="AboutLearningLg" />
-                    <img class="about-us-view__top-img" :src="AboutLearningLg" alt="Larning" />
+                    <img class="about-us-view__top-img" :src="AboutLearningLg" alt="Learning" />
                 </picture>
 
                 <div class="about-us-view__mclass-content">
