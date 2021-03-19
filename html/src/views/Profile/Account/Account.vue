@@ -218,10 +218,13 @@
                             <v-input class="" v-model="req.address" type="text" disabled />
                         </li>
                     </ul>
-                    <v-button @click="onApplyModal">Принять</v-button>
                     <span class="text-grey account-view__section-subtitle">
                         *Если нашли ошибку, свяжитесь с вашим персональным менеджером.
                     </span>
+                    <div class="account-view__form-controls">
+                        <v-button @click="onApplyModal">Принять</v-button>
+                        <v-button @click="onCloseReqModal">Отмена</v-button>
+                    </div>
                 </template>
             </modal>
         </transition>
@@ -370,6 +373,7 @@ export default {
 
             if (this.billingData.passport.no) {
                 cardList.push(this.requisitesOption);
+                this[SET_SELECTED_CARD](this.requisitesOption);
             }
             return cardList;
         },
@@ -440,24 +444,32 @@ export default {
 
         onChangeSelectedCard(card) {
             this[SET_SELECTED_CARD](card);
-            if (card.id === 'requisites') {
-                if (this.isFullPassport) {
-                    this.reqModal = true;
-                } else {
-                    this.callModal = true;
-                }
-                this.isDisabledBtn = true;
-            }
         },
 
-        onApplyModal() {
+        async onApplyModal() {
             this.reqModal = false;
-            this.isDisabledBtn = false;
+            this.isDisabledBtn = true;
+            const message = 'Ваш перевод оформлен, ждите поступления средств в срок до 10 календарных дней';
+            try {
+                await this[POST_CASH_OUT_REQUISITES]({
+                    customerId: this.billingData.passport.customer_id,
+                    value: this.amount,
+                });
+                await this[FETCH_BILLING_DATA]({});
+                this.$router.replace({ path: this.$route.path });
+                this[CHANGE_MODAL_STATE]({ name: modalName.general.NOTIFICATION, open: true, state: { message } });
+
+                this.amount = null;
+                this.isDisabledBtn = false;
+            } catch (error) {
+                alert('Произошла ошибка при переводе денег');
+                this.isDisabledBtn = false;
+            }
         },
 
         onCloseReqModal() {
             this.reqModal = false;
-            this[SET_SELECTED_CARD](null);
+            this.isDisabledBtn = false;
         },
 
         onCloseCallModal() {
@@ -472,10 +484,13 @@ export default {
                 this.isDisabledBtn = true;
 
                 if (id === 'requisites') {
-                    await this[POST_CASH_OUT_REQUISITES]({
-                        customerId: this.billingData.passport.customer_id,
-                        value: this.amount,
-                    });
+                    if (this.isFullPassport) {
+                        this.reqModal = true;
+                    } else {
+                        this.callModal = true;
+                    }
+                    this.isDisabledBtn = true;
+                    return;
                 } else {
                     await this[POST_CASH_OUT]({ cardId: id, value: this.amount });
                 }
