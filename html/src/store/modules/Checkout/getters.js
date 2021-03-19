@@ -38,6 +38,7 @@ export const BONUS_PAYMENT = 'bonusPayment';
 export const BONUS_PER_RUB = 'bonusPerRub';
 export const AVAILABLE_BONUS = 'availableBonus';
 export const MAX_BONUS = 'maxBonus';
+export const METRO_STATIONS = 'metroStations';
 export const MAX_CERTIFICATE_DISCOUNT = 'maxCertificateDiscount';
 export const RECIPIENTS = 'recipients';
 export const ADDRESSES = 'addresses';
@@ -94,6 +95,7 @@ export default {
     [BONUS_PER_RUB]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][BONUS_PER_RUB]) || 0,
     [AVAILABLE_BONUS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][AVAILABLE_BONUS]) || 0,
     [MAX_BONUS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][MAX_BONUS]) || 0,
+    [METRO_STATIONS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][METRO_STATIONS]) || 0,
     [MAX_CERTIFICATE_DISCOUNT]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][MAX_CERTIFICATE_DISCOUNT]) || 0,
 
     [RECIPIENTS]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][RECIPIENTS]) || [],
