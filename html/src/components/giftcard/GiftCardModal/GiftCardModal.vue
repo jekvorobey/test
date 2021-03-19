@@ -325,7 +325,7 @@ export default {
                 qty: 1,
                 is_to_self: false,
                 is_anonymous: false,
-                terms_accepted: false,
+                terms_accepted: true,
                 comment: '',
                 from_name: '',
                 from_email: '',
