@@ -371,10 +371,9 @@ export default {
 
             // cardList.push(this.newCardOption); // Вывод на карту
 
-            if (this.billingData.passport.no) {
-                cardList.push(this.requisitesOption);
-                this[SET_SELECTED_CARD](this.requisitesOption);
-            }
+            cardList.push(this.requisitesOption); // Вывод по реквизитам
+            this[SET_SELECTED_CARD](this.requisitesOption);
+
             return cardList;
         },
 
