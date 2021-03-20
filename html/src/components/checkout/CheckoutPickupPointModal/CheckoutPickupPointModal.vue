@@ -210,7 +210,7 @@ import { SELECTED_CITY_COORDS } from '@store/modules/Geolocation/getters';
 
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import { SET_PICKUP_POINT } from '@store/modules/Checkout/actions';
-import { PICKUP_POINTS, PICKUP_POINT_TYPES, METRO_STATIONS } from '@store/modules/Checkout/getters';
+import { PICKUP_POINTS, PICKUP_POINT_TYPES, METRO_STATIONS, METRO_LINES } from '@store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -278,7 +278,7 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapGetters(GEO_MODULE, [SELECTED_CITY_COORDS]),
-        ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, PICKUP_POINT_TYPES, METRO_STATIONS]),
+        ...mapGetters(CHECKOUT_MODULE, [PICKUP_POINTS, PICKUP_POINT_TYPES, METRO_STATIONS, METRO_LINES]),
         ...mapState(MODAL_MODULE, {
             isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
@@ -292,17 +292,21 @@ export default {
 
         filteredPickupPoints() {
             const points = this[PICKUP_POINTS] || [];
+            const metroLines = this[METRO_LINES] || [];
             const filteredPoints = points.filter((p) => {
                 if (!this.selectedType && !this.selectedMetro)
                     return true;
 
                 let isMetro = false;
                 if (this.selectedMetro) {
-                    p.pointMetroStationLinks.forEach((pointMetroStationLink) => {
-                        if (pointMetroStationLink.metro_station_id === this.selectedMetro.id) {
-                            isMetro = true;
-                        }
-                    });
+                    const metroIds = metroLines[this.selectedMetro.id];
+                    if (metroIds) {
+                        p.pointMetroStationLinks.forEach((pointMetroStationLink) => {
+                            if (metroIds.includes(pointMetroStationLink.metro_station_id)) {
+                                isMetro = true;
+                            }
+                        });
+                    }
                 }
 
                 return (!this.selectedType && isMetro) || (!this.selectedMetro && p.methodID === this.selectedType.id)
