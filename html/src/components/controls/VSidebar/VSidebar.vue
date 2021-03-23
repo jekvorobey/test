@@ -24,6 +24,11 @@ export default {
             type: [Number, String],
             default: 0,
         },
+
+        routeTitle: {
+            type: String,
+            default: ''
+        },
     },
 
     data() {
@@ -48,28 +53,40 @@ export default {
         },
     },
 
-    mounted() {
-        const { sidebar, inner } = this.$refs;
+    watch: {
+        routeTitle() {
+            this.sidebarСalc();
+        },
+    },
 
-        const handler = _debounce((entries) => {
-            for (const entry of entries) {
-                if (entry.contentRect) {
-                    if (sidebar.parentNode && sidebar.parentNode.offsetHeight >= sidebar.offsetHeight)
-                        this.sHeight = sidebar.parentNode.offsetHeight;
-                    else if (entry.contentRect.height >= sidebar.offsetHeight) this.sHeight = entry.contentRect.height;
-                    else this.sHeight = sidebar.offsetHeight;
-                    this.iHeight = entry.contentRect.height;
+    methods: {
+        sidebarСalc() {
+            const { sidebar, inner } = this.$refs;
+
+            const handler = _debounce((entries) => {
+                for (const entry of entries) {
+                    if (entry.contentRect) {
+                        if (sidebar.parentNode && sidebar.parentNode.offsetHeight >= sidebar.offsetHeight)
+                            this.sHeight = sidebar.parentNode.offsetHeight;
+                        else if (entry.contentRect.height >= sidebar.offsetHeight) this.sHeight = entry.contentRect.height;
+                        else this.sHeight = sidebar.offsetHeight;
+                        this.iHeight = entry.contentRect.height;
+                    }
                 }
-            }
-        }, 100);
+            }, 100);
 
-        this.observer = new ResizeObserver(handler);
-        this.observer.observe(inner);
+            this.observer = new ResizeObserver(handler);
+            this.observer.observe(inner);
 
-        this.$nextTick(() => {
-            this.sHeight = sidebar.offsetHeight;
-            this.iHeight = inner.offsetHeight;
-        });
+            this.$nextTick(() => {
+                this.sHeight = sidebar.offsetHeight;
+                this.iHeight = inner.offsetHeight;
+            });
+        }
+    },
+
+    mounted() {
+        this.sidebarСalc();
     },
 
     beforeDestroy() {
