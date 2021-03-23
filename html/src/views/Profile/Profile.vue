@@ -28,6 +28,7 @@
                         container-selector=".profile-view__grid"
                         top="64"
                         bottom="0"
+                        :routeTitle="routeTitle"
                     >
                         <template v-slot:sticky>
                             <navigation-panel :groups="groups" />
