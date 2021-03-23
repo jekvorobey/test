@@ -20,6 +20,11 @@
     &__top {
         &-img {
             width: 100%;
+            display: block;
+            img {
+                width: 100%;
+                display: block;
+            }
         }
 
         @media (--tablet) {
@@ -85,8 +90,21 @@
             }
 
             &--img {
-                flex: 1 0 50%;
+                width: 100%;
                 text-align: center;
+                display: inline;
+            }
+
+            &--image {
+                 flex: 0 0 50%;
+
+                @media (--tablet-lg) {
+                    flex: 0 0 100%;
+                }
+
+                &--img {
+                     width: 100%;
+                }
             }
 
             &--content {

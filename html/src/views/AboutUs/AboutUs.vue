@@ -43,7 +43,7 @@
             </div>
         </section>
 
-        <separator-section class="about-us-view__separator" />
+        <separator-section class="about-us-view__separator about-us-view__separator-p0" />
 
         <section class="section">
             <div class="container about-us-view__edge">
@@ -73,12 +73,12 @@
                     <h1 class="about-us-view__brands-content-h1">Выбор профессионалов</h1>
 
                     <p class="about-us-view__brands-content-text">
-                        Запросы покупателей меняются. Искать товары и цены в&nbsp;разных магазинах становится все
+                        Запросы покупателей меняются. Искать товары и цены в&nbsp;разных магазинах становится все
                         сложнее.
                     </p>
 
                     <p class="about-us-view__brands-content-text">
-                        Маркетплейс Бессовестно Талантливый — это&nbsp;онлайн-площадка, которая объединяет выгодные
+                        Маркетплейс Бессовестно Талантливый — это&nbsp;онлайн-площадка, которая объединяет выгодные
                         предложения от официальных представителей брендов для&nbsp;бьюти-профессионалов и
                         персонализированные рекомендации, отзывы профессионального сообщества и&nbsp;систему бонусов,
                         удобную оплату и логистику.
@@ -280,26 +280,26 @@ export default {
             edges: [
                 {
                     img: 'About2',
-                    subTitle: 'Коллекция культовых брендов и экспертная подборка профильных событий',
-                    link: '/catalog',
+                    subTitle: 'Коллекция культовых брендов и экспертная подборка профильных событий',
+                    link: '/catalog/',
                     linkTitle: 'Перейти к покупкам',
                 },
                 {
                     img: 'About1',
                     subTitle: 'Специальные цены для профессионалов от официальных поставщиков',
-                    link: '/promo',
+                    link: '/promo/',
                     linkTitle: 'Смотреть акции',
                 },
                 {
                     img: 'About3',
                     subTitle: 'Доставка заказов по всей России. Более 16 000 населенных пунктов',
-                    link: '/info-pages/delivery-and-payment',
+                    link: '/delivery-and-payment/',
                     linkTitle: 'Подробнее о доставке',
                 },
                 {
                     img: 'About4',
                     subTitle: 'Система накопления бонусов',
-                    link: '/404',
+                    link: '/bonuses/',
                     linkTitle: 'Подробнее о бонусах',
                 },
             ],

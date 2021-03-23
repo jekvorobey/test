@@ -403,4 +403,20 @@
             }
         }
     }
+
+    &__separator {
+        @media (--tablet) {
+            padding: 40px 0;
+        }
+        .separator-section__container:after {
+            @media (--tablet) {
+                border: 1px solid #eff1f3;
+            }
+        }
+        &-p0 {
+            @media (--tablet) {
+                padding: 0;
+            }
+        }
+    }
 }
