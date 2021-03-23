@@ -29,7 +29,7 @@
 
                 <div class="university-view__main-row">
                     <v-picture class="university-view__main-row--img">
-                        <source media="(max-width: 479px)" :srcset="Univesity1Md" />
+                        <source media="(max-width: 479px)" :srcset="Univesity1Lg" />
                         <source media="(min-width: 480px)" :srcset="Univesity1Lg" />
                         <img class="university-view__main-img" :src="Univesity1Lg" alt="University1" />
                     </v-picture>
@@ -48,7 +48,7 @@
             </div>
         </section>
 
-        <separator-section class="partners-view__separator" />
+        <separator-section class="university-view__separator" />
 
         <section class="section">
             <div class="container university-view__main">
@@ -65,7 +65,7 @@
                     </div>
 
                     <v-picture class="university-view__main-row--img">
-                        <source media="(max-width: 479px)" :srcset="Univesity2Md" />
+                        <source media="(max-width: 479px)" :srcset="Univesity2Lg" />
                         <source media="(min-width: 480px)" :srcset="Univesity2Lg" />
                         <img class="university-view__main-img" :src="Univesity2Lg" alt="University2" />
                     </v-picture>
@@ -73,13 +73,13 @@
             </div>
         </section>
 
-        <separator-section class="partners-view__separator" />
+        <separator-section class="university-view__separator" />
 
         <section class="section">
             <div class="container university-view__main">
                 <div class="university-view__main-row">
                     <v-picture class="university-view__main-row--img">
-                        <source media="(max-width: 479px)" :srcset="Univesity3Md" />
+                        <source media="(max-width: 479px)" :srcset="Univer3" />
                         <source media="(min-width: 480px)" :srcset="Univer3" />
                         <img class="university-view__main-img" :src="Univer3" alt="Men" />
                     </v-picture>
@@ -87,7 +87,7 @@
                     <div class="university-view__main-row--content">
                         <p class="university-view__main-content-row--text">
                             Кампус Университета — это профессионально оснащенные студии в Москве общей площадью более
-                            460 м2, расположенные в бизнес-квартале Арма в пешей доступности от м. Курская.
+                            460&nbsp;м<sup>2</sup>, расположенные в бизнес-квартале Арма в пешей доступности от м. Курская.
                             Многофункциональные пространства позволяют комфортно разместить от 10 до 150 человек.
                             Техническое оснащение подходит для проведения различных форматов: от практических и
                             креативных мероприятий в бьюти-сфере до шоу-показов и конференций.
@@ -97,7 +97,7 @@
             </div>
         </section>
 
-        <separator-section class="partners-view__separator" />
+        <separator-section class="university-view__separator" />
 
         <section class="section">
             <div class="container">

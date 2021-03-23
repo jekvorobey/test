@@ -43,7 +43,7 @@
             </div>
         </section>
 
-        <separator-section class="about-us-view__separator" />
+        <separator-section class="about-us-view__separator about-us-view__separator-p0" />
 
         <section class="section">
             <div class="container about-us-view__edge">
@@ -281,25 +281,25 @@ export default {
                 {
                     img: 'About2',
                     subTitle: 'Коллекция культовых брендов и экспертная подборка профильных событий',
-                    link: '/catalog',
+                    link: '/catalog/',
                     linkTitle: 'Перейти к покупкам',
                 },
                 {
                     img: 'About1',
                     subTitle: 'Специальные цены для профессионалов от официальных поставщиков',
-                    link: '/promo',
+                    link: '/promo/',
                     linkTitle: 'Смотреть акции',
                 },
                 {
                     img: 'About3',
                     subTitle: 'Доставка заказов по всей России. Более 16 000 населенных пунктов',
-                    link: '/info-pages/delivery-and-payment',
+                    link: '/delivery-and-payment/',
                     linkTitle: 'Подробнее о доставке',
                 },
                 {
                     img: 'About4',
                     subTitle: 'Система накопления бонусов',
-                    link: '/404',
+                    link: '/bonuses/',
                     linkTitle: 'Подробнее о бонусах',
                 },
             ],
