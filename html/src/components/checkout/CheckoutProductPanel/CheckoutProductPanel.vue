@@ -120,8 +120,7 @@
                                 v-for="(chunkItem, index) in computedSelectedDeliveryType.items"
                                 :key="chunkItem.id"
                             >
-                                <div class="checkout-product-panel__item-header"
-                                     v-if="isNewSplitDate(chunkItem, (index - 1 >= 0 ? computedSelectedDeliveryType.items[index-1] : null))">
+                                <div class="checkout-product-panel__item-header">
                                     <h3 class="checkout-product-panel__item-header-hl">
                                         {{ generateChunkNote(chunkItem) }}
                                     </h3>
@@ -133,7 +132,7 @@
                                         "
                                         class="checkout-product-panel__item-header-link"
                                         tag="button"
-                                        @click="onChangeDate(chunkItem.id, computedSelectedDeliveryType.items)"
+                                        @click="onChangeDate(chunkItem.id)"
                                     >
                                         <v-svg name="edit" width="16" height="16" />
                                         <template v-if="!isTablet">&nbsp;&nbsp;Изменить дату и время</template>
@@ -962,21 +961,15 @@ export default {
         },
 
         onDateChanged(state) {
-            const { selectedDate, selectedTime, items, oldSelectedDate, oldSelectedTimeCode } = state;
-            const oldDate = new Date(oldSelectedDate).toDateString();
-            items.forEach((item) => {
-                const itemSelectedDate = item.selectedDate.toDateString();
-                if (itemSelectedDate === oldDate && oldSelectedTimeCode === item.selectedTime.code) {
-                    this[CHANGE_CHUNK_DATE]({
-                        id: item.id,
-                        selectedDate,
-                        selectedTime,
-                    });
-                }
+            const { id, selectedDate, selectedTime } = state;
+            this[CHANGE_CHUNK_DATE]({
+                    id,
+                    selectedDate,
+                    selectedTime
             });
         },
 
-        onChangeDate(chunkItemId, items) {
+        onChangeDate(chunkItemId) {
             const deliveryType = this[SELECTED_DELIVERY_TYPE];
             const chunkItem = deliveryType.items.find((i) => i.id === chunkItemId);
 
@@ -986,7 +979,6 @@ export default {
                 selectedTime: chunkItem.selectedTime,
                 availableDates: [...chunkItem.availableDates],
                 availableDateTimes: { ...chunkItem.availableDateTimes },
-                items: items,
             };
 
             this[CHANGE_MODAL_STATE]({
@@ -1204,23 +1196,6 @@ export default {
         },
         onToggleActivateCert() {
             this.isVisibleActivateCert = !this.isVisibleActivateCert
-        },
-
-        isNewSplitDate(item, prevItem) {
-            if (!prevItem) {
-                return true;
-            }
-            const itemDate = item.selectedDate.toString();
-            const prevDate = prevItem.selectedDate.toString();
-            if (!item.selectedTime && !prevItem.selectedTime) {
-                return itemDate !== prevDate;
-            }
-
-            if (!item.selectedTime || !prevItem.selectedTime) {
-                return true;
-            }
-
-            return itemDate !== prevDate || item.selectedTime.code !== prevItem.selectedTime.code;
         },
     },
 
