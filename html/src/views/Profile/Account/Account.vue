@@ -639,6 +639,7 @@ export default {
         this.cardStatus = cardIdentificationStatus;
         const requisites = this[REQUISITES] || {};
         this.req = { ...requisites };
+        window.scrollTo(0,0);
     },
 };
 </script>
