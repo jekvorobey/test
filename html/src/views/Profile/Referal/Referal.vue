@@ -776,9 +776,5 @@ export default {
     mounted() {
         this.isMounted = true;
     },
-
-    created() {
-        window.scrollTo(0,0);
-    }
 };
 </script>
