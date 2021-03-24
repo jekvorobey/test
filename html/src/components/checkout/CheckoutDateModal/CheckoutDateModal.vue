@@ -76,8 +76,6 @@ export default {
 
     data() {
         return {
-            oldSelectedDate: null,
-            oldSelectedTimeCode: null,
             selectedDate: null,
             selectedTime: null,
             availableDates: [],
@@ -119,10 +117,7 @@ export default {
                 this.availableDates = value.availableDates || [];
                 this.availableDateTimes = value.availableDateTimes || {};
                 this.selectedDate = value.selectedDate;
-                this.oldSelectedDate = value.selectedDate[0];
-                this.oldSelectedTimeCode = value.oldSelectedTimeCode.code;
                 this.selectedTime = value.selectedTime;
-                this.items = value.items;
             }
         },
 
@@ -139,14 +134,12 @@ export default {
         },
 
         onChanged() {
-            const { selectedDate, selectedTime, oldSelectedDate, oldSelectedTimeCode } = this;
+            const { selectedDate, selectedTime } = this;
 
             this.$emit('changed', {
                 ...this.state,
                 selectedTime,
                 selectedDate: selectedDate[0],
-                oldSelectedDate,
-                oldSelectedTimeCode,
             });
             this.onClose();
         },
@@ -163,8 +156,6 @@ export default {
         this.availableDates = availableDates || [];
         this.availableDateTimes = availableDateTimes || {};
         this.selectedDate = selectedDate || [];
-        this.oldSelectedDate = selectedDate[0] || null;
-        this.oldSelectedTimeCode = selectedTime.code || null;
         this.selectedTime = selectedTime || null;
     },
 };
