@@ -296,7 +296,7 @@ span.flatpickr-weekday {
     max-width: 100%;
 }
 
-.flatpickr-day {
+.flatpickr-day, .checkout-product-panel .flatpickr-day.nextMonthDay {
     flex-basis: var(--flatpickr-day-width);
     width: var(--flatpickr-day-width);
     max-width: var(--flatpickr-day-width);
@@ -325,8 +325,7 @@ span.flatpickr-weekday {
     }
 
     &,
-    &.prevMonthDay,
-    &.nextMonthDay {
+    &.prevMonthDay {
         &.inRange,
         &.today.inRange {
             color: var(--flatpickr-range-cl);
@@ -362,8 +361,7 @@ span.flatpickr-weekday {
         &.inRange,
         &:focus,
         &:hover,
-        &.prevMonthDay,
-        &.nextMonthDay {
+        &.prevMonthDay {
             color: var(--flatpickr-selected-cl);
             background: var(--flatpickr-selected-bg);
             border-color: var(--flatpickr-selected-bg);
@@ -389,10 +387,8 @@ span.flatpickr-weekday {
     &.disabled,
     &.disabled:hover,
     &.prevMonthDay,
-    &.nextMonthDay,
     &.notAllowed,
-    &.notAllowed.prevMonthDay,
-    &.notAllowed.nextMonthDay {
+    &.notAllowed.prevMonthDay {
         font-weight: normal;
         color: var(--flatpickr-disabled-cl);
         background-color: var(--flatpickr-disabled-bg);
