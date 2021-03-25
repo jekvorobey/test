@@ -31,7 +31,7 @@
                         :routeTitle="routeTitle"
                     >
                         <template v-slot:sticky>
-                            <navigation-panel :groups="groups" />
+                            <navigation-panel :groups="groups" @link-click="scrollToTop" />
                             <br />
                         </template>
                     </v-sidebar>
@@ -208,6 +208,9 @@ export default {
         [HAS_SESSION](value) {
             if (!value) this.$router.replace(cancelRoute.path);
         },
+        routeTitle() {
+            window.scrollTo(0,0);
+        },
     },
 
     methods: {
@@ -215,6 +218,10 @@ export default {
 
         onOpenNavigation() {
             this[CHANGE_MODAL_STATE]({ name: modalName.profile.NAVIGATION, open: true });
+        },
+
+        scrollToTop() {
+            window.scrollTo(0,0);
         },
     },
 };
