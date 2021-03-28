@@ -147,7 +147,7 @@
             </div>
         </section>
 
-        <section ref="reviews" class="section product-view__section product-view__reviews">
+        <section id="reviews" ref="reviews" class="section product-view__section product-view__reviews">
             <div class="container">
                 <reviews-panel class="product-view__reviews-panel" v-bind="reviewData" ref="reviewPanel" />
             </div>
