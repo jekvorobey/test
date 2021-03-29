@@ -16,7 +16,11 @@
                 <span class="text-sm text-grey message-card__body-top-date">{{ date }}</span>
             </div>
             <div class="message-card__body-bottom">
-                <v-clamp v-if="useClamp" :max-lines="1" autoresize>{{ message }}</v-clamp>
+                <v-clamp v-if="useClamp" :max-lines="1" autoresize>
+                    <template #before>
+                        <span v-html="message" />
+                    </template>
+                </v-clamp>
                 <v-html v-else v-html="messageHtml" />
             </div>
             <span class="text-sm text-grey message-card__body-date-mobile">{{ date }}</span>
