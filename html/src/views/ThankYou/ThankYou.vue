@@ -55,8 +55,8 @@
                                 />
                                 <info-row class="thank-you-view__panel-item" name="Даты доставки">
                                     <ul>
-                                        <li v-for="date in dates" :key="date">
-                                            {{ date }}
+                                        <li v-for="date in dates" v-if="date" :key="date.date" >
+                                            {{ date.date }} ({{date.count}} {{date.suffix}} )
                                         </li>
                                     </ul>
                                 </info-row>
@@ -264,7 +264,10 @@ export default {
             } = this;
 
             const { dates = [] } = delivery;
-            return dates.map(({ date, time }) => {
+            const dateRow = [];
+            const eqDateRow = [];
+
+            const result = dates.map(({ date, time }) => {
                 const dateObj = getDate(date);
                 const timeFromObj = time && time.from && getDate(`${date} ${time.from}`);
                 const timeToObj = time && time.to && getDate(`${date} ${time.to}`);
@@ -279,6 +282,24 @@ export default {
                 if (timeTo && timeFrom !== timeTo) dateTimeString += ` по ${timeTo}`;
                 return dateTimeString;
             });
+
+            for (let i = 0; i < result.length; i++) {
+                const dateTimeString = result[i];
+                if (!eqDateRow[dateTimeString] && eqDateRow[dateTimeString] !== 0) {
+                    const key = Object.keys(eqDateRow).length;
+                    dateRow[key] = {
+                        date: dateTimeString,
+                        count: 1,
+                        suffix: 'доставка',
+                    };
+                    eqDateRow[dateTimeString] = key;
+                } else {
+                    const key = eqDateRow[dateTimeString];
+                    dateRow[key].count += 1;
+                    dateRow[key].suffix = this.getSuffixDelivery(dateRow[key].count);
+                }
+            }
+            return dateRow;
         },
 
         items() {
@@ -428,6 +449,21 @@ export default {
             const { order } = this;
             const { id } = order;
             await this[GET_ORDER_PAYMENT_LINK]();
+        },
+        getSuffixDelivery(delivery) {
+            let n = Math.abs(delivery);
+            n %= 100;
+            if (n >= 5 && n <= 20) {
+                return 'доставок';
+            }
+            n %= 10;
+            if (n === 1) {
+                return 'доставка';
+            }
+            if (n >= 2 && n <= 4) {
+                return 'доставки';
+            }
+            return 'доставок';
         },
     },
 
