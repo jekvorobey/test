@@ -145,8 +145,8 @@ export default {
 
     data() {
         const sortOptions = [
-            { id: 1, title: 'Сначала дороже', field: sortFields.PRICE, direction: sortDirections.DESC },
-            { id: 2, title: 'Сначала дешевле', field: sortFields.PRICE, direction: sortDirections.ASC },
+            { id: 1, title: 'Сначала подороже', field: sortFields.PRICE, direction: sortDirections.DESC },
+            { id: 2, title: 'Сначала подешевле', field: sortFields.PRICE, direction: sortDirections.ASC },
         ];
         return {
             sortValue: sortOptions[0],

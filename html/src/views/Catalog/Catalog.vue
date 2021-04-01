@@ -360,8 +360,8 @@ export default {
                 direction: sortDirections.DESC,
             },
             { id: 2, title: 'Популярное', field: sortFields.POPULARITY, direction: sortDirections.DESC },
-            { id: 3, title: 'Сначала дороже', field: sortFields.PRICE, direction: sortDirections.DESC },
-            { id: 4, title: 'Сначала дешевле', field: sortFields.PRICE, direction: sortDirections.ASC },
+            { id: 3, title: 'Сначала подороже', field: sortFields.PRICE, direction: sortDirections.DESC },
+            { id: 4, title: 'Сначала подешевле', field: sortFields.PRICE, direction: sortDirections.ASC },
             { id: 5, title: 'Новинки', field: sortFields.NEW, direction: sortDirections.DESC },
             {
                 id: 6,
