@@ -97,7 +97,7 @@
                                             media="(max-width: 479px)"
                                         />
                                         <source :data-srcset="image.tablet.orig" media="(max-width: 479px)" />
-                                        <img class="v-picture__img" :data-src="image.default" alt="" />
+                                        <img class="v-picture__img" :data-src="image.default" :src="image.default" alt="" />
                                     </v-picture>
                                 </div>
                             </v-slider>
