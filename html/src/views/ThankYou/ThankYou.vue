@@ -54,7 +54,12 @@
                                     :value="deliveryAddress"
                                 />
                                 <info-row class="thank-you-view__panel-item" name="Даты доставки">
-                                    <ul>
+                                    <ul v-if="isOrderCertificate || isMasterClass">
+                                        <li v-for="date in dates" :key="date" >
+                                            {{ date }}
+                                        </li>
+                                    </ul>
+                                    <ul v-else>
                                         <li v-for="date in dates" v-if="date" :key="date.date" >
                                             {{ date.date }} ({{date.count}} {{date.suffix}} )
                                         </li>
@@ -282,6 +287,9 @@ export default {
                 if (timeTo && timeFrom !== timeTo) dateTimeString += ` по ${timeTo}`;
                 return dateTimeString;
             });
+            if (this.isOrderCertificate || this.isMasterClass) {
+                return result;
+            }
 
             for (let i = 0; i < result.length; i++) {
                 const dateTimeString = result[i];
