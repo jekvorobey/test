@@ -127,13 +127,13 @@
                                 </li>
                             </ul>
 
-                            <v-link
+                            <!-- <v-link
                                 class="master-class-view__panel-right-link"
                                 tag="button"
                                 @click="onScrollTo($refs.contacts)"
                             >
                                 Задать вопрос организатору
-                            </v-link>
+                            </v-link> -->
                         </div>
 
                         <div class="container container--tablet master-class-view__panel-right-section">
@@ -549,7 +549,7 @@
             </div>
         </section>
 
-        <section class="section master-class-view__section master-class-view__contacts" ref="contacts" v-if="organizer">
+        <!-- <section class="section master-class-view__section master-class-view__contacts" ref="contacts" v-if="organizer">
             <div class="container master-class-view__contacts-container">
                 <h2 class="container container--tablet master-class-view__section-hl">Контакты организатора</h2>
                 <div class="master-class-view__contacts-panel">
@@ -582,7 +582,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <section
             v-if="recommendations && recommendations.length > 0"
