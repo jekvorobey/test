@@ -184,33 +184,6 @@
             </div>
         </section>
 
-        <section class="section cart-view__section cart-view__featured">
-            <div class="container cart-view__featured-container">
-                <h2 class="cart-view__section-hl cart-view__featured-hl">{{ $t('cart.title.like') }}</h2>
-                <v-slider class="cart-view__featured-slider" name="cart-featured" :options="sliderOptions">
-                    <catalog-product-card
-                        class="swiper-slide cart-view__featured-card"
-                        v-for="item in featuredProducts"
-                        :key="item.id"
-                        :offer-id="item.id"
-                        :product-id="item.productId"
-                        :type="item.type"
-                        :name="item.name"
-                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                        :image="item.image"
-                        :price="item.price"
-                        :old-price="item.oldPrice"
-                        :badges="item.badges"
-                        :rating="item.rating"
-                        :show-buy-btn="item.stock.qty > 0"
-                        @add-item="onAddToCart(item)"
-                        @preview="onPreview(item.code)"
-                        @toggle-favorite-item="onToggleFavorite(item)"
-                    />
-                </v-slider>
-            </div>
-        </section>
-
         <transition name="fade">
             <clear-cart-modal v-if="isModalOpen" />
         </transition>

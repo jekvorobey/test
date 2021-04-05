@@ -234,7 +234,7 @@
 
         <section class="section product-view__section product-view__instagram">
             <div class="container product-view__instagram-container">
-                <frisbuy-product-container v-if="product && product.id" :key="product.id" :script="frisbuyUrl" />
+                <frisbuy-product-container v-if="product && product.id" :key="product.id" :script="frisbuyUrl" :skuId="product.id" />
             </div>
         </section>
 
@@ -362,7 +362,7 @@
                         <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
                         <p class="product-view__info-text">{{ product.description.content }}</p>
                     </div>
-                    <div class="product-view__info-media" v-if="productImages.description || productVideos.description">
+                    <div class="product-view__info-media product-view__info-media-mt60" v-if="productImages.description || productVideos.description">
                         <v-picture
                             class="product-view__info-media-item product-view__info-media-item--img"
                             :key="productImages.description.id"
@@ -380,15 +380,17 @@
                                 alt=""
                             />
                         </v-picture>
-                        <iframe
-                            v-if="productVideos.description"
-                            class="lazyload product-view__info-media-item product-view__info-media-item--video"
-                            :data-src="productVideos.description.videoUrl"
-                            :key="productVideos.description.id"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
-                            allowfullscreen="false"
-                        />
+                        <div class="video-container">
+                            <iframe
+                                v-if="productVideos.description"
+                                class="lazyload"
+                                :data-src="productVideos.description.videoUrl + '&controls=0&showinfo=0'"
+                                :key="productVideos.description.id"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
+                                allowfullscreen="false"
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -411,7 +413,7 @@
                             </li>
                         </ol>
                     </div>
-                    <div class="product-view__info-media" v-if="productImages.howto || productVideos.howto">
+                    <div class="product-view__info-media product-view__info-media-mt60" v-if="productImages.howto || productVideos.howto">
                         <v-picture
                             class="product-view__info-media-item product-view__info-media-item--img"
                             :key="productImages.howto.id"
@@ -1241,6 +1243,11 @@ export default {
         modal(value) {
             this.handleModalQuery(value);
         },
+
+        // [PRODUCT](value) {
+        //     const { id } = value;
+        //     window.frisbuy.updateGalleryData({ sku:id }, 'e9575241-9f3d-11ea-ba01-0242ac150002')
+        // },
     },
 
     methods: {
