@@ -407,11 +407,12 @@
                 >
                     <div class="product-view__info-header">
                         <h2 class="product-view__section-hl">{{ $t('product.title.method') }}</h2>
-                        <ol class="list">
+                        <ol class="list" v-if="howToList.length > 1">
                             <li v-for="(item, index) in howToList" :key="index">
                                 {{ item }}
                             </li>
                         </ol>
+                        <span v-else >{{ howToList[0] }}</span>
                     </div>
                     <div class="product-view__info-media product-view__info-media-mt60" v-if="productImages.howto || productVideos.howto">
                         <v-picture
@@ -1243,11 +1244,6 @@ export default {
         modal(value) {
             this.handleModalQuery(value);
         },
-
-        // [PRODUCT](value) {
-        //     const { id } = value;
-        //     window.frisbuy.updateGalleryData({ sku:id }, 'e9575241-9f3d-11ea-ba01-0242ac150002')
-        // },
     },
 
     methods: {

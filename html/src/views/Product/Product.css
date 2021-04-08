@@ -209,7 +209,8 @@
                     @media (--tablet-lg-min) {
                         &:nth-last-child(3) {
                             width: 100%;
-                            padding: calc(var(--gs) * 4) calc(var(--gs) * 29);
+                            /*padding: calc(var(--gs) * 4) calc(var(--gs) * 29);*/
+                            padding: calc(var(--gs) * 12);
 
                             @media (--desktop) {
                                 padding: calc(var(--gs) * 2) calc(var(--gs) * 20.5);
@@ -218,7 +219,7 @@
 
                         &:last-child {
                             width: 100%;
-                            padding: calc(var(--gs) * 18);
+                            padding: calc(var(--gs) * 12);
 
                             @media (--desktop) {
                                 padding: calc(var(--gs) * 4);
