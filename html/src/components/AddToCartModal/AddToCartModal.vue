@@ -42,33 +42,6 @@
                 force-render
             />
 
-            <div class="add-to-cart-modal__relative">
-                <h3 class="add-to-cart-modal__relative-hl">С этим продуктом покупают</h3>
-                <transition name="fade-in">
-                    <ul class="add-to-cart-modal__relative-list" v-if="products && products.length > 0">
-                        <li class="add-to-cart-modal__relative-item" v-for="item in products" :key="item.id">
-                            <catalog-product-card
-                                class="add-to-cart-modal__relative-card"
-                                :offer-id="item.id"
-                                :product-id="item.productId"
-                                :name="item.name"
-                                :type="item.type"
-                                :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                                :image="item.image"
-                                :price="item.price"
-                                :old-price="item.oldPrice"
-                                :badges="item.badges"
-                                :rating="item.rating"
-                                :show-buy-btn="item.stock.qty > 0"
-                                @add-item="onAddToCart(item)"
-                                @preview="onPreview(item.code)"
-                                @toggle-favorite-item="onToggleFavorite(item)"
-                            />
-                        </li>
-                    </ul>
-                </transition>
-            </div>
-
             <div class="add-to-cart-modal__panel" v-if="isTablet">
                 <div class="add-to-cart-modal__panel-info">
                     В корзине {{ $tc('cart.items', cartItemsCount) }} на сумму

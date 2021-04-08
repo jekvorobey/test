@@ -7,7 +7,7 @@
 
     &__square {
         width: calc(var(--gs) * 11.5);
-        height: calc(var(--gs) * 8.25);
+        height: calc(var(--gs) * 7);
         border-radius: 8px;
         background-repeat: no-repeat;
         background-size: cover;

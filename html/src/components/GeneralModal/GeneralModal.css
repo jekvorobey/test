@@ -1,5 +1,5 @@
 .general-modal {
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: calc(var(--gs) * 2) 0;
     -webkit-overflow-scrolling: touch;
 
