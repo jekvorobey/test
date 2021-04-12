@@ -83,7 +83,7 @@
             <div class="catalog-product-list-card__tags" v-once>
                 <tag
                     class="catalog-product-list-card__tags-item"
-                    v-for="badge in item.badges"
+                    v-for="badge in badgesUnique(item.badges)"
                     :key="badge"
                     :text="badge"
                 />
@@ -343,6 +343,10 @@ export default {
                 value: typeof price.value === 'number' ? price.value : price.value.from || price.value.to,
             };
         },
+
+        badgesUnique(badges) {
+            return badges.filter((v, i, a) => a.indexOf(v) === i)
+        }
     },
 };
 </script>
