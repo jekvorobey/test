@@ -51,7 +51,7 @@
         </div>
 
         <div class="catalog-product-card__tags">
-            <tag class="catalog-product-card__tags-item" v-for="badge in badges" :key="badge" :text="badge" />
+            <tag class="catalog-product-card__tags-item" v-for="badge in badgesUnique" :key="badge" :text="badge" />
         </div>
 
         <favorites-button
@@ -187,6 +187,10 @@ export default {
         isTabletLg() {
             return this.$mq.tabletLg;
         },
+
+        badgesUnique() {
+            return this.badges.filter((v, i, a) => a.indexOf(v) === i)
+        }
     },
 
     methods: {
