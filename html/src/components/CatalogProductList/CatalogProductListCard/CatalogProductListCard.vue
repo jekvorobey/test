@@ -345,7 +345,7 @@ export default {
         },
 
         badgesUnique(badges) {
-            return badges.filter((v, i, a) => a.indexOf(v) === i)
+            return badges ? badges.filter((v, i, a) => a.indexOf(v) === i) : []
         }
     },
 };
