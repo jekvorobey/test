@@ -189,7 +189,7 @@ export default {
         },
 
         badgesUnique() {
-            return this.badges.filter((v, i, a) => a.indexOf(v) === i)
+            return this.badges ? this.badges.filter((v, i, a) => a.indexOf(v) === i) : []
         }
     },
 
