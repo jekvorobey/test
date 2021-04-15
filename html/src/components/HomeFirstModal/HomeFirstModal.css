@@ -24,7 +24,6 @@
 }
 
 .tablet .hf-modal-bg {
-  position: relative;
   height: 380px !important;
   overflow: hidden;
 }
@@ -40,7 +39,7 @@
   width: 289px;
   height: 96px;
   left: 40px;
-  top: 128px;
+  top: 80px;
 
   font-family: Futura PT;
   font-style: normal;
@@ -73,7 +72,7 @@
   width: 214px;
   height: 72px;
   left: 40px;
-  top: 240px;
+  top: 200px;
 
   font-family: Futura PT;
   font-style: normal;
@@ -102,7 +101,7 @@
   position: absolute;
   width: 160px;
   height: 48px;
-  top: 352px;
+  top: 330px;
   left: 40px;
 
   background-color: var(--cl-white);
@@ -118,14 +117,10 @@
 
 .hf-modal-image {
   position: absolute;
-  width: 412px;
-  height: 412px;
+  width: 648px;
+  /*height: 440px;*/
   top: 0;
   right: 0;
-}
-
-.tablet .hf-modal-image {
-  right: -90px;
 }
 
 .hf-modal-close {
@@ -140,7 +135,7 @@
 
 .tablet .hf-modal-close {
   position: absolute;
-  right: 10px;
+  right: 20px;
   top: 20px;
 }
 

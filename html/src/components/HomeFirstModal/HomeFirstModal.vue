@@ -5,6 +5,7 @@
         :is-mobile="isTablet"
         @close="onClose"
         class="modal-mask hf-modal-mask"
+        :showCloseBtn="false"
     >
         <template v-slot:content>
           <div class="modal-mask hf-modal-mask">
@@ -12,12 +13,15 @@
               <div class="modal-container ft-modal-container hf-modal-bg">
 
                 <v-picture>
-                    <source :data-srcset="homeFirstImg" />
-                    <img class="modal-image hf-modal-image" :data-src="homeFirstImg" :src="homeFirstImg" />
+                  <source :srcset="homeFirstNewMobile" media="(max-width: 479px)" />
+                  <source :srcset="homeFirstNew" media="(min-width: 480px)" />
+                  <source :srcset="homeFirstNew2x" media="(min-width: 1024px)" />
+
+                  <img class="modal-image hf-modal-image" :src="homeFirstNew" />
                 </v-picture>
 
                 <div class="hf-modal-h2">Маркетплейс только для профессионалов бьюти-индустрии</div>
-                <div class="hf-modal-h4">Для покупок на сайте зарегистрируйтесь и подтвердите свой статус</div>
+                <div class="hf-modal-h4">Для совершения покупок подтверди статус профессионала</div>
 
                 <v-button class="modal-default-button hf-modal-default-button" @click="onRegistration">регистрация</v-button>
 
@@ -42,6 +46,9 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { modalName } from '@enums';
 
+import homeFirstNew from '@images/mock/homeFirstNew.png';
+import homeFirstNew2x from '@images/mock/homeFirstNew@2x.png';
+import homeFirstNewMobile from '@images/mock/homeFirstNewMobile.png';
 import homeFirstImg from '@images/mock/home-first.svg';
 
 import './HomeFirstModal.css';
@@ -60,7 +67,10 @@ export default {
 
     data() {
       return {
-        homeFirstImg
+        homeFirstImg,
+        homeFirstNew,
+        homeFirstNew2x,
+        homeFirstNewMobile,
       }
     },
 
