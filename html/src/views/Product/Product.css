@@ -791,7 +791,6 @@
 
         &-text {
             margin-right: calc(var(--gs) * 3);
-            width: 48%;
 
             @media (--tablet-lg) {
                 margin-right: 0;
