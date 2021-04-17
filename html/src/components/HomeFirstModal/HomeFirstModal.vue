@@ -13,8 +13,8 @@
               <div class="modal-container ft-modal-container hf-modal-bg">
 
                 <v-picture>
-                  <source :srcset="homeFirstNewMobile" media="(max-width: 479px)" />
-                  <source :srcset="homeFirstNew" media="(min-width: 480px)" />
+                  <source :srcset="homeFirstNewMobile" media="(max-width: 767px)" />
+                  <source :srcset="homeFirstNew" media="(min-width: 768px)" />
                   <source :srcset="homeFirstNew2x" media="(min-width: 1024px)" />
 
                   <img class="modal-image hf-modal-image" :src="homeFirstNew" />
