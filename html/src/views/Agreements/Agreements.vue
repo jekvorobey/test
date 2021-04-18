@@ -6,6 +6,7 @@
 import PublicOffer from './PublicOffer.vue';
 import PersonalPolicy from './PersonalPolicy.vue';
 import BonusProgram from './BonusProgram.vue';
+import RulesGiftcard from './RulesGiftcard.vue';
 
 import { mapState } from 'vuex';
 import { agreementTypes } from '@enums';
@@ -27,6 +28,8 @@ export default {
                     return BonusProgram;
                 case agreementTypes.PERSONAL_POLICY:
                     return PersonalPolicy;
+                case agreementTypes.RULES_GIFTCARD:
+                    return RulesGiftcard;
                 case agreementTypes.PUBLIC_OFFER:
                 default:
                     return PublicOffer;
