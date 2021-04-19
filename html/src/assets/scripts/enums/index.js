@@ -297,6 +297,7 @@ export const agreementTypes = Object.freeze({
     PUBLIC_OFFER: 'public-offer',
     PERSONAL_POLICY: 'personal-policy',
     BONUS_PROGRAM: 'bonus-program',
+    RULES_GIFTCARD: 'rules-giftcard',
 });
 
 export const infoPages = Object.freeze({
