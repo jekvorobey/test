@@ -27,5 +27,9 @@ export default {
     components: {
         FrisbuyProductContainer,
     },
+
+    mounted() {
+        if (this.script) window.frisbuy.loadScript(this.script);
+    }
 };
 </script>
