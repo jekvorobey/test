@@ -1537,7 +1537,7 @@ export default {
     },
 
     mounted() {
-        window.frisbuy.loadScript(this.frisbuyUrl)
+        window.frisbuy.loadScript(this.frisbuyUrl);
         this.$nextTick(() => (this.isMounted = true));
     },
 };
