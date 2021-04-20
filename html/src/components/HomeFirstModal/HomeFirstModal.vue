@@ -12,11 +12,13 @@
                     <div class="modal-wrapper ft-modal-wrapper">
                         <div class="modal-container ft-modal-container hf-modal-bg">
                             <v-picture>
-                                <source :srcset="homeFirstNewMobile" media="(max-width: 479px)" />
-                                <source :srcset="homeFirstNew" media="(min-width: 480px)" />
-                                <source :srcset="homeFirstNew2x" media="(min-width: 1024px)" />
+                                <source
+                                    :srcset="`${homeFirstNewMobile} 1x, ${homeFirstNewMobile2x} 2x`"
+                                    media="(max-width: 479px)"
+                                />
+                                <source :srcset="`${homeFirstNew} 1x, ${homeFirstNew2x} 2x`" />
 
-                                <img class="modal-image hf-modal-image" :src="homeFirstNew" />
+                                <img class="modal-image hf-modal-image" />
                             </v-picture>
 
                             <div class="hf-modal-h2">Маркетплейс только для профессионалов бьюти-индустрии</div>
@@ -49,6 +51,7 @@ import { modalName } from '@enums';
 import homeFirstNew from '@images/mock/homeFirstNew.jpg';
 import homeFirstNew2x from '@images/mock/homeFirstNew@2x.jpg';
 import homeFirstNewMobile from '@images/mock/homeFirstNewMobile.jpg';
+import homeFirstNewMobile2x from '@images/mock/homeFirstNewMobile@2x.jpg';
 import homeFirstImg from '@images/mock/home-first.svg';
 
 import './HomeFirstModal.css';
@@ -71,6 +74,7 @@ export default {
             homeFirstNew,
             homeFirstNew2x,
             homeFirstNewMobile,
+            homeFirstNewMobile2x,
         };
     },
 
