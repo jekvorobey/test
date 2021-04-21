@@ -34,6 +34,36 @@
                 </ul>
 
                 <retail-rocket-container data-retailrocket-markup-block="5f21670297a5282edc07d7cc" force-render />
+
+                <template v-if="!isTablet && products && products.length > 0">
+                    <div class="search-panel__products">
+                        <p class="text-bold search-panel__hl" v-if="isEmpty">Популярные товары</p>
+                        <ul class="search-panel__products-list" :class="{ 'has-preloader': preloader }">
+                            <li class="search-panel__products-card" v-for="item in products" :key="item.id">
+                                <catalog-product-card
+                                    :offer-id="item.id"
+                                    :product-id="item.productId"
+                                    :name="item.name"
+                                    :type="item.type"
+                                    :href="item.url"
+                                    :image="item.image"
+                                    :price="item.price"
+                                    :old-price="item.oldPrice"
+                                    :badges="item.badges"
+                                    :rating="item.rating"
+                                    :show-buy-btn="item.stock.qty > 0"
+                                    @add-item="onAddToCart(item)"
+                                    @preview="onPreview(item.code)"
+                                    @toggle-favorite-item="onToggleFavorite(item)"
+                                />
+                            </li>
+                        </ul>
+                    </div>
+
+                    <v-button class="btn--outline search-panel__btn" v-if="showSubmitBtn" @click="onSearch">
+                        {{ searchBtnText }}
+                    </v-button>
+                </template>
             </div>
         </div>
     </div>
