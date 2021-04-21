@@ -18,12 +18,20 @@ export default {
         skuId: {
             type: Number,
         },
+
+        author: {
+            type: String,
+        },
     },
 
     mounted() {
-        if (this.script) window.frisbuy.loadScript(this.script);
-        if (this.skuId && typeof window.frisbuy.updateGalleryData === 'function')
-            window.frisbuy.updateGalleryData({ sku: this.skuId }, 'e9575241-9f3d-11ea-ba01-0242ac150002');
+        if (typeof window.frisbuy.updateGalleryData === 'function') {
+            if (this.skuId) {
+                window.frisbuy.updateGalleryData({ sku: this.skuId }, 'e9575241-9f3d-11ea-ba01-0242ac150002');
+            } else if (this.author) {
+                window.frisbuy.updateGalleryData({ author: this.author }, 'aebd8bf5-9f42-11ea-ba01-0242ac150002');
+            }
+        }
     },
 };
 </script>

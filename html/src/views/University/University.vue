@@ -28,7 +28,6 @@
                 </h1>
 
                 <div class="university-view__main-row">
-
                     <div class="university-view__main-row--image">
                         <v-picture class="university-view__main-row--img">
                             <source media="(max-width: 479px)" :srcset="Univesity1Md" />
@@ -94,9 +93,9 @@
                     <div class="university-view__main-row--content">
                         <p class="university-view__main-content-row--text">
                             Кампус Университета — это профессионально оснащенные студии в Москве общей площадью более
-                            460&nbsp;м<sup>2</sup>, расположенные в бизнес-квартале Арма в пешей доступности от м. Курская.
-                            Многофункциональные пространства позволяют комфортно разместить от 10 до 150 человек.
-                            Техническое оснащение подходит для проведения различных форматов: от практических и
+                            460&nbsp;м<sup>2</sup>, расположенные в бизнес-квартале Арма в пешей доступности от м.
+                            Курская. Многофункциональные пространства позволяют комфортно разместить от 10 до 150
+                            человек. Техническое оснащение подходит для проведения различных форматов: от практических и
                             креативных мероприятий в бьюти-сфере до шоу-показов и конференций.
                         </p>
                     </div>
@@ -337,6 +336,10 @@ export default {
             this.$v.$touch();
             if (this.$v.$invalid) e.preventDefault();
         },
+    },
+
+    mounted() {
+        window.frisbuy.loadScript('https://www.frisbuy.ru/fb/widget?embed_id=e6718e5b-de39-11ea-ba01-0242ac150002');
     },
 };
 </script>
