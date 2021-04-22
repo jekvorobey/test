@@ -270,9 +270,10 @@
 
         <section class="section product-view__section">
             <div class="container">
+<!--                featuredProducts && featuredProducts.items.map((i) => i.productId).join(',')-->
                 <div
                     data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
-                    :data-product-id="featuredProducts && featuredProducts.items.map((i) => i.productId).join(',')"
+                    :data-product-id="getProductIdList()"
                 ></div>
             </div>
         </section>
@@ -602,9 +603,10 @@
 
         <section class="section product-view__section">
             <div class="container">
+<!--                featuredProducts && featuredProducts.items.map((i) => i.productId).join(',')-->
                 <div
                     data-retailrocket-markup-block="5efda11697a52833a0d006e6"
-                    :data-product-id="featuredProducts && featuredProducts.items.map((i) => i.productId).join(',')"
+                    :data-product-id="getProductIdList()"
                 ></div>
             </div>
         </section>
@@ -1450,6 +1452,16 @@ export default {
             } else productIds.push(productId);
             $retailRocket.addProductView(productIds);
         },
+        getProductIdList() {
+            const { productId } = this[PRODUCT] || {};
+            const productIds = [];
+            if (this[PRODUCT_OPTIONS] && this[PRODUCT_OPTIONS].combinations.length > 1) {
+                this[PRODUCT_OPTIONS].combinations.map((combination) => {
+                    productIds.push(combination.id);
+                });
+            } else productIds.push(productId);
+            return productIds;
+        }
     },
 
     beforeRouteEnter(to, from, next) {

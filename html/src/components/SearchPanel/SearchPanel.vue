@@ -33,7 +33,7 @@
                     </template>
                 </ul>
 
-                <retail-rocket-container data-retailrocket-markup-block="5f21670297a5282edc07d7cc" force-render />
+                <retail-rocket-container data-retailrocket-markup-block="5f21670297a5282edc07d7cc" force-render v-bind:data-auth="hasSession"/>
 
                 <template v-if="!isTablet && products && products.length > 0">
                     <div class="search-panel__products">
@@ -82,6 +82,7 @@ import { SCROLL } from '@store';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
 import {
     NAME as SEARCH_MODULE,
@@ -120,6 +121,7 @@ export default {
     computed: {
         ...mapState([SCROLL]),
         ...mapState(SEARCH_MODULE, [SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS, POPULAR_REQUESTS, PRELOADER]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
 
         products() {
             const { isEmpty } = this;
