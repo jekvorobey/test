@@ -40,6 +40,7 @@
                 :key="product.id"
                 :data-product-id="product.id"
                 force-render
+                v-bind:data-auth="hasSession"
             />
 
             <div class="add-to-cart-modal__panel" v-if="isTablet">
@@ -78,6 +79,7 @@ import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
 import { modalName } from '@enums';
 import { getRandomIntInclusive } from '@util';
@@ -113,6 +115,7 @@ export default {
         }),
         ...mapState(CART_MODULE, [CART_DATA, RELATIVE_PRODUCTS]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
 
         product() {
             return this.cartItem ? this.cartItem.p : null;

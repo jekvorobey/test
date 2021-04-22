@@ -17,7 +17,8 @@
 
         <section class="section">
             <div class="container">
-                <div data-retailrocket-markup-block="5efda11c97a52833a0d006e7" :data-auth="hasSession"></div>
+                <div data-retailrocket-markup-block="5efda11c97a52833a0d006e7" v-if="hasSession" data-auth="true"></div>
+                <div data-retailrocket-markup-block="5efda11c97a52833a0d006e7" v-else data-auth="false"></div>
             </div>
         </section>
     </section>
