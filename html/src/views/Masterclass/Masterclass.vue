@@ -635,7 +635,7 @@
 
         <section class="section master-class-view__section master-class-view__instagram">
             <div class="container master-class-view__instagram-container">
-                <frisbuy-product-container :script="frisbuyScript" />
+                <frisbuy-product-container :script="frisbuyScript" :author="authorInstagram" />
             </div>
         </section>
 
@@ -897,15 +897,20 @@ export default {
             return this.isTablet ? 'Купить билет' : 'Купить';
         },
 
+        authorInstagram() {
+            const { speakers = [] } = this[MASTERCLASS] || {};
+            const instagramSpeaker = speakers.find((s) => !!s.instagram);
+
+            return getInstagramUserNameFromUrl(instagramSpeaker.instagram);
+        },
+
         frisbuyScript() {
             const { speakers = [] } = this[MASTERCLASS] || {};
             const instagramSpeaker = speakers.find((s) => !!s.instagram);
 
             return (
                 instagramSpeaker &&
-                `https://www.frisbuy.ru/fb/widget?embed_id=aebd8bf5-9f42-11ea-ba01-0242ac150002&author=${getInstagramUserNameFromUrl(
-                    instagramSpeaker.instagram
-                )}`
+                `https://www.frisbuy.ru/fb/widget?embed_id=aebd8bf5-9f42-11ea-ba01-0242ac150002&author=${this.authorInstagram}`
             );
         },
 
@@ -1319,6 +1324,7 @@ export default {
     },
 
     mounted() {
+        window.frisbuy.loadScript(this.frisbuyScript);
         setTimeout(() => (this.showMap = true), 300);
     },
 };

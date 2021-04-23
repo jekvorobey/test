@@ -145,22 +145,26 @@
                             v-if="range > 0"
                             data-retailrocket-markup-block="5f21668797a5282edc07d7c8"
                             :data-search-phrase="$route.query.search_string"
+                            v-bind:data-auth="hasSession"
                         />
                         <div
                             v-else
                             data-retailrocket-markup-block="5f21669197a5282edc07d7c9"
                             :data-search-phrase="$route.query.search_string"
+                            v-bind:data-auth="hasSession"
                         />
                     </template>
                     <div
                         v-else-if="isBrandPage"
                         data-retailrocket-markup-block="5efdc55a97a52833a0d00baa"
                         :data-vendor="entityCode"
+                        v-bind:data-auth="hasSession"
                     />
                     <div
                         v-else
                         data-retailrocket-markup-block="5efda10697a52833a0d006df"
                         :data-category-id="activeCategory && activeCategory.id"
+                        v-bind:data-auth="hasSession"
                     />
                 </div>
             </div>
@@ -288,6 +292,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as CATALOG_MODULE, TYPE, ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, RANGE } from '@store/modules/Catalog';
 import { SET_LOAD_PATH, FETCH_CATALOG_DATA } from '@store/modules/Catalog/actions';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 import {
     ACTIVE_TAGS,
     ACTIVE_CATEGORY,
@@ -382,6 +387,7 @@ export default {
 
     computed: {
         ...mapState([SCROLL, RECENTLY_VIEWED_PRODUCTS]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(CATALOG_MODULE, [
             ACTIVE_TAGS,
             ACTIVE_CATEGORY,

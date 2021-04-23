@@ -144,7 +144,7 @@
     }
 
     &--wide {
-        width: 75%;
+        width: 900px;
 
         @media (--tablet) {
             width: 100%;

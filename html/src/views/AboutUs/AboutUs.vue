@@ -383,5 +383,9 @@ export default {
             if (this.$v.$invalid) e.preventDefault();
         },
     },
+
+    mounted() {
+        window.frisbuy.loadScript(this.frisbuyScript);
+    },
 };
 </script>

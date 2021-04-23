@@ -270,9 +270,10 @@
 
         <section class="section product-view__section">
             <div class="container">
+<!--                featuredProducts && featuredProducts.items.map((i) => i.productId).join(',')-->
                 <div
                     data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
-                    :data-product-id="featuredProducts && featuredProducts.items.map((i) => i.productId).join(',')"
+                    :data-product-id="getProductIdList()"
                 ></div>
             </div>
         </section>
@@ -360,36 +361,38 @@
                 >
                     <div class="product-view__info-header">
                         <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
-                        <p class="product-view__info-text">{{ product.description.content }}</p>
-                    </div>
-                    <div class="product-view__info-media product-view__info-media-mt60" v-if="productImages.description || productVideos.description">
-                        <v-picture
-                            class="product-view__info-media-item product-view__info-media-item--img"
-                            :key="productImages.description.id"
-                            v-if="productImages.description"
-                        >
-                            <source
-                                :data-srcset="productImages.description.tablet"
-                                type="image/webp"
-                                media="(max-width: 479px)"
-                            />
-                            <source :data-srcset="productImages.description.desktop" type="image/webp" />
-                            <img
-                                class="blur-up lazyload v-picture__img"
-                                :data-src="productImages.description.default"
-                                alt=""
-                            />
-                        </v-picture>
-                        <div class="video-container">
-                            <iframe
-                                v-if="productVideos.description"
-                                class="lazyload"
-                                :data-src="productVideos.description.videoUrl + '&controls=0&showinfo=0'"
-                                :key="productVideos.description.id"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
-                                allowfullscreen="false"
-                            />
+                        <div class="product-view__info-content">
+                          <p class="product-view__info-text">{{ product.description.content }}</p>
+                          <div class="product-view__info-media" v-if="productImages.description || productVideos.description">
+                                <v-picture
+                                class="product-view__info-media-item product-view__info-media-item--img"
+                                :key="productImages.description.id"
+                                v-if="productImages.description"
+                            >
+                              <source
+                                  :data-srcset="productImages.description.tablet"
+                                  type="image/webp"
+                                  media="(max-width: 479px)"
+                              />
+                              <source :data-srcset="productImages.description.desktop" type="image/webp" />
+                              <img
+                                  class="blur-up lazyload v-picture__img"
+                                  :data-src="productImages.description.default"
+                                  alt=""
+                              />
+                            </v-picture>
+                            <div class="video-container">
+                              <iframe
+                                  v-if="productVideos.description"
+                                  class="lazyload"
+                                  :data-src="productVideos.description.videoUrl + '&controls=0&showinfo=0'"
+                                  :key="productVideos.description.id"
+                                  frameborder="0"
+                                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
+                                  allowfullscreen="false"
+                              />
+                            </div>
+                          </div>
                         </div>
                     </div>
                 </div>
@@ -407,40 +410,44 @@
                 >
                     <div class="product-view__info-header">
                         <h2 class="product-view__section-hl">{{ $t('product.title.method') }}</h2>
-                        <ol class="list" v-if="howToList.length > 1">
-                            <li v-for="(item, index) in howToList" :key="index">
+                        <div class="product-view__info-content">
+                          <p class="product-view__info-text">
+                            <ol class="list" v-if="howToList.length > 1">
+                              <li v-for="(item, index) in howToList" :key="index">
                                 {{ item }}
-                            </li>
-                        </ol>
-                        <span v-else >{{ howToList[0] }}</span>
-                    </div>
-                    <div class="product-view__info-media product-view__info-media-mt60" v-if="productImages.howto || productVideos.howto">
-                        <v-picture
-                            class="product-view__info-media-item product-view__info-media-item--img"
-                            :key="productImages.howto.id"
-                            v-if="productImages.howto"
-                        >
-                            <source
-                                :data-srcset="productImages.howto.tablet"
-                                type="image/webp"
-                                media="(max-width: 479px)"
+                              </li>
+                            </ol>
+                            <span v-else >{{ howToList[0] }}</span>
+                          </p>
+                          <div class="product-view__info-media" v-if="productImages.howto || productVideos.howto">
+                            <v-picture
+                                class="product-view__info-media-item product-view__info-media-item--img"
+                                :key="productImages.howto.id"
+                                v-if="productImages.howto"
+                            >
+                              <source
+                                  :data-srcset="productImages.howto.tablet"
+                                  type="image/webp"
+                                  media="(max-width: 479px)"
+                              />
+                              <source :data-srcset="productImages.howto.desktop" type="image/webp" />
+                              <img
+                                  class="blur-up lazyload v-picture__img"
+                                  :data-src="productImages.howto.default"
+                                  alt=""
+                              />
+                            </v-picture>
+                            <iframe
+                                v-if="productVideos.howto"
+                                class="lazyload product-view__info-media-item product-view__info-media-item--video"
+                                :data-src="productVideos.howto.videoUrl"
+                                :key="productVideos.howto.id"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
+                                allowfullscreen="false"
                             />
-                            <source :data-srcset="productImages.howto.desktop" type="image/webp" />
-                            <img
-                                class="blur-up lazyload v-picture__img"
-                                :data-src="productImages.howto.default"
-                                alt=""
-                            />
-                        </v-picture>
-                        <iframe
-                            v-if="productVideos.howto"
-                            class="lazyload product-view__info-media-item product-view__info-media-item--video"
-                            :data-src="productVideos.howto.videoUrl"
-                            :key="productVideos.howto.id"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay"
-                            allowfullscreen="false"
-                        />
+                          </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -596,9 +603,10 @@
 
         <section class="section product-view__section">
             <div class="container">
+<!--                featuredProducts && featuredProducts.items.map((i) => i.productId).join(',')-->
                 <div
                     data-retailrocket-markup-block="5efda11697a52833a0d006e6"
-                    :data-product-id="featuredProducts && featuredProducts.items.map((i) => i.productId).join(',')"
+                    :data-product-id="getProductIdList()"
                 ></div>
             </div>
         </section>
@@ -1444,6 +1452,16 @@ export default {
             } else productIds.push(productId);
             $retailRocket.addProductView(productIds);
         },
+        getProductIdList() {
+            const { productId } = this[PRODUCT] || {};
+            const productIds = [];
+            if (this[PRODUCT_OPTIONS] && this[PRODUCT_OPTIONS].combinations.length > 1) {
+                this[PRODUCT_OPTIONS].combinations.map((combination) => {
+                    productIds.push(combination.id);
+                });
+            } else productIds.push(productId);
+            return productIds;
+        }
     },
 
     beforeRouteEnter(to, from, next) {
@@ -1531,7 +1549,11 @@ export default {
     },
 
     mounted() {
+        window.frisbuy.loadScript(this.frisbuyUrl);
         this.$nextTick(() => (this.isMounted = true));
+        this.$nextTick(() => {
+            if (typeof retailrocket !== 'undefined') retailrocket.markup.render();
+        });
     },
 };
 </script>

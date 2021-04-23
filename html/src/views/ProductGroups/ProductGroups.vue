@@ -67,7 +67,7 @@
 
         <section class="section product-groups-view__section">
             <div class="container">
-                <div data-retailrocket-markup-block="5efdc56097a52833a0d00bab"></div>
+                <div data-retailrocket-markup-block="5efdc56097a52833a0d00bab" v-bind:data-auth="hasSession"></div>
             </div>
         </section>
 
@@ -113,6 +113,7 @@ import { CATEGORIES, SCROLL, FREQUENT_CATEGORIES } from '@store';
 import { NAME as PRODUCT_GROUPS_MODULE, ITEMS, TYPE } from '@store/modules/ProductGroups';
 import { BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT } from '@store/modules/ProductGroups/getters';
 import { FETCH_ITEMS, SET_LOAD_PATH } from '@store/modules/ProductGroups/actions';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
 import _debounce from 'lodash/debounce';
 import { httpCodes, sortDirections } from '@enums';
@@ -163,6 +164,7 @@ export default {
         ...mapState([CATEGORIES, FREQUENT_CATEGORIES, SCROLL]),
         ...mapState(PRODUCT_GROUPS_MODULE, [ITEMS, TYPE]),
         ...mapGetters(PRODUCT_GROUPS_MODULE, [BRANDS_CATALOG, ACTIVE_PAGE, PAGES_COUNT]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
 
         showList() {
             return this[TYPE] === productGroupTypes.BRANDS;
