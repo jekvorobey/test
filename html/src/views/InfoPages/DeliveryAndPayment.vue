@@ -85,14 +85,14 @@
                         </colgroup>
                         <template v-slot:column-region>Регион</template>
                         <template v-slot:column-delivery>Доставка</template>
-                        <template v-slot:column-pickup>Стоимость самовывоза</template>
+                        <template v-slot:column-pickup>Самовывоз</template>
                         <template v-slot:column-timing>Сроки</template>
                     </v-table>
                     <template v-else>
                         <div class="info-pages-block__card" v-for="item in items" :key="item.region">
                             <info-row name="Регион" :value="item.region" />
                             <info-row name="Стоимость доставки" :value="item.delivery" />
-                            <info-row name="Стоимость самовывоза" :value="item.pickup" />
+                            <info-row name="Самовывоз" :value="item.pickup" />
                             <info-row name="Сроки" :value="item.timing" />
                         </div>
                     </template>
