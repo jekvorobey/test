@@ -1551,6 +1551,9 @@ export default {
     mounted() {
         window.frisbuy.loadScript(this.frisbuyUrl);
         this.$nextTick(() => (this.isMounted = true));
+        this.$nextTick(() => {
+            if (typeof retailrocket !== 'undefined') retailrocket.markup.render();
+        });
     },
 };
 </script>
