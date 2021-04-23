@@ -298,6 +298,8 @@ export const agreementTypes = Object.freeze({
     PERSONAL_POLICY: 'personal-policy',
     BONUS_PROGRAM: 'bonus-program',
     RULES_GIFTCARD: 'rules-giftcard',
+    PRIVACY_POLICY: 'privacy-policy',
+    PERSONAL_DATA: 'personal-data',
 });
 
 export const infoPages = Object.freeze({
