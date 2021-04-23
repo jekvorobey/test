@@ -283,7 +283,7 @@ export default {
                     } else {
                         accumulator.push(
                             Math.min.apply(null, currentValuesSorted) +
-                                '&ndash;' +
+                                '–' +
                                 Math.max.apply(null, currentValuesSorted)
                         );
                     }
