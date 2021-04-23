@@ -70,5 +70,15 @@ ol {
             margin: var(--gs) 0;
             padding-left: calc(var(--gs) * 2.5);
         }
+
+        &.list--lower-alpha {
+            & > li,
+            ol > li {
+                list-style-type: lower-alpha;
+                &::before {
+                    content: none;
+                }
+            }
+        }
     }
 }
