@@ -67,13 +67,9 @@
                 <ol class="list">
                     <li>
                         Выбрать, скачать и заполнить
-                        <a href="/assets/files/zayavlenie_na_vozvrat.docx" target="_blank" rel="nofollow noopener"
-                            >заявление на возврат</a
-                        >
+                        <a href="/assets/files/zayavlenie_na_vozvrat.docx" download>заявление на возврат</a>
                         или
-                        <a href="/assets/files/zayavlenie_na_obmen.docx" target="_blank" rel="nofollow noopener"
-                            >обмен</a
-                        >
+                        <a href="/assets/files/zayavlenie_na_obmen.docx" download>обмен</a>
                     </li>
                     <li>Распечатать и подписать заявление</li>
                     <li>Отправить фото или скан заявления на <a href="mailto:support@ibt.ru">support@ibt.ru</a></li>
