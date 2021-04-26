@@ -100,7 +100,7 @@ export function mapFilterSegments(urlSegments) {
     for (let i = 0; i < urlSegments.length; i++) {
         const segment = urlSegments[i];
         const name = segment.split('-')[0];
-        const value = segment.split('-')[1];
+        const value = segment.replace(name + '-', '');
         if (rangeRegx.test(segment)) {
             const numbers = segment.match(numberRegx);
             segments[name] = numbers.map((n) => +n);
@@ -156,7 +156,7 @@ export function computeFilterData(pathMatch, code = null) {
         if (Array.isArray(segment)) filter[filterName] = segment;
         else filter[filterName] = Object.keys(segment);
     }
-
+    
     return { filter, routeSegments, filterSegments };
 }
 
