@@ -270,11 +270,10 @@
 
         <section class="section product-view__section">
             <div class="container">
-<!--                featuredProducts && featuredProducts.items.map((i) => i.productId).join(',')-->
-                <div
-                    data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
-                    :data-product-id="getProductIdList()"
-                ></div>
+                <retail-rocket-container
+                        data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
+                        :data-product-id="getProductIdList"
+                        :data-auth="hasSession"/>
             </div>
         </section>
 
@@ -603,11 +602,11 @@
 
         <section class="section product-view__section">
             <div class="container">
-<!--                featuredProducts && featuredProducts.items.map((i) => i.productId).join(',')-->
-                <div
-                    data-retailrocket-markup-block="5efda11697a52833a0d006e6"
-                    :data-product-id="getProductIdList()"
-                ></div>
+                <retail-rocket-container
+                        data-retailrocket-markup-block="5efda11697a52833a0d006e6"
+                        :data-product-id="getProductIdList"
+                        :data-auth="hasSession"
+                />
             </div>
         </section>
 
@@ -736,12 +735,13 @@ import ProductMapModal, { NAME as MAP_MODAL_NAME } from '@components/product/Pro
 
 import HistoryPanel from '@components/HistoryPanel/HistoryPanel.vue';
 import ReviewsPanel from '@components/reviews/ReviewsPanel/ReviewsPanel.vue';
+import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, RECENTLY_VIEWED_PRODUCTS, LOCALE } from '@store';
 import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
 
-import { NAME as AUTH_MODULE } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 import { SET_SESSION_REFERRAL_CODE } from '@store/modules/Auth/actions';
 
 import {
@@ -915,6 +915,7 @@ export default {
 
         ReviewsPanel,
         HistoryPanel,
+        RetailRocketContainer,
     },
 
     metaInfo() {
@@ -1234,6 +1235,16 @@ export default {
         isTablet() {
             return this.$mq.tablet;
         },
+        getProductIdList() {
+            const { productId } = this[PRODUCT] || {};
+            const productIds = [];
+            if (this[PRODUCT_OPTIONS] && this[PRODUCT_OPTIONS].combinations.length > 1) {
+                this[PRODUCT_OPTIONS].combinations.map((combination) => {
+                    productIds.push(combination.id);
+                });
+            } else productIds.push(productId);
+            return productIds;
+        }
     },
 
     watch: {
@@ -1256,7 +1267,7 @@ export default {
 
     methods: {
         ...mapActions([FETCH_RECENTLY_VIEWED_PRODUCTS]),
-        ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE]),
+        ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE, HAS_SESSION]),
         ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS, FETCH_PRODUCT_MASTERCLASSES]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
@@ -1452,16 +1463,6 @@ export default {
             } else productIds.push(productId);
             $retailRocket.addProductView(productIds);
         },
-        getProductIdList() {
-            const { productId } = this[PRODUCT] || {};
-            const productIds = [];
-            if (this[PRODUCT_OPTIONS] && this[PRODUCT_OPTIONS].combinations.length > 1) {
-                this[PRODUCT_OPTIONS].combinations.map((combination) => {
-                    productIds.push(combination.id);
-                });
-            } else productIds.push(productId);
-            return productIds;
-        }
     },
 
     beforeRouteEnter(to, from, next) {
