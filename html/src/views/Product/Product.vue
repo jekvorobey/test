@@ -361,7 +361,7 @@
                     <div class="product-view__info-header">
                         <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
                         <div class="product-view__info-content">
-                          <p class="product-view__info-text">{{ product.description.content }}</p>
+                          <p :class="{ 'product-view__info-text': productImages.description || productVideos.description }">{{ product.description.content }}</p>
                           <div class="product-view__info-media" v-if="productImages.description || productVideos.description">
                                 <v-picture
                                 class="product-view__info-media-item product-view__info-media-item--img"
@@ -410,7 +410,7 @@
                     <div class="product-view__info-header">
                         <h2 class="product-view__section-hl">{{ $t('product.title.method') }}</h2>
                         <div class="product-view__info-content">
-                          <p class="product-view__info-text">
+                          <p :class="{ 'product-view__info-text': productImages.description || productVideos.description }" >
                             <ol class="list" v-if="howToList.length > 1">
                               <li v-for="(item, index) in howToList" :key="index">
                                 {{ item }}
