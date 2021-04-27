@@ -142,6 +142,7 @@
                             label="title"
                             :options="pickupPointTypes"
                             :searchable="false"
+                            :disabled="pickupPointTypes.length === 1"
                         />
                     </div>
                 </div>
@@ -391,6 +392,9 @@ export default {
 
     mounted() {
         setTimeout(() => (this.showMap = true), 400);
+        if (this.pickupPointTypes.length === 1) {
+            this.selectedType = this.pickupPointTypes[0];
+        }
     },
 };
 </script>
