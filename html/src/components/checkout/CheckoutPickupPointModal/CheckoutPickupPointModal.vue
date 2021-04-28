@@ -134,6 +134,7 @@
                                  label="title"
                                  placeholder="Станция метро"
                                  :options="metroOptions"
+                                 :disabled="!metroOptions.length"
                          />
                         <v-select
                             v-model="selectedType"
