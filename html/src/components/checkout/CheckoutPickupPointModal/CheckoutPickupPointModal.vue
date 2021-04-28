@@ -129,6 +129,7 @@
 
                     <div class="checkout-pickup-point-modal__filter-header-controls">
                          <v-select
+                                 v-if="metroOptions.length"
                                  v-model="selectedMetro"
                                  track-by="id"
                                  label="title"
