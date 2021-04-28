@@ -273,7 +273,7 @@
                 <retail-rocket-container
                         data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
                         :data-product-id="getProductIdList"
-                        :data-auth="hasSession"/>
+                        :data-auth="hasSession" force-render/>
             </div>
         </section>
 
@@ -606,6 +606,7 @@
                         data-retailrocket-markup-block="5efda11697a52833a0d006e6"
                         :data-product-id="getProductIdList"
                         :data-auth="hasSession"
+                        force-render
                 />
             </div>
         </section>
