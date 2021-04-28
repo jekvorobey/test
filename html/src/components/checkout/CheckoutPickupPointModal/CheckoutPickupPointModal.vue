@@ -129,12 +129,12 @@
 
                     <div class="checkout-pickup-point-modal__filter-header-controls">
                          <v-select
+                                 v-if="metroOptions.length"
                                  v-model="selectedMetro"
                                  track-by="id"
                                  label="title"
                                  placeholder="Станция метро"
                                  :options="metroOptions"
-                                 :disabled="!metroOptions.length"
                          />
                         <v-select
                             v-model="selectedType"
