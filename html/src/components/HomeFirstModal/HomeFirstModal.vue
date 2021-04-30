@@ -22,7 +22,13 @@
                             </v-picture>
 
                             <div class="hf-modal-h2">Маркетплейс только для профессионалов бьюти-индустрии</div>
-                            <div class="hf-modal-h4">Для совершения покупок подтверди статус профессионала</div>
+
+                            <div class="hf-modal-h4">
+                                <br>
+                                ТЕСТОВЫЙ РЕЖИМ
+                                <br><br>
+                                Заявки на регистрацию проверим после 10 мая
+                            </div>
 
                             <v-button class="modal-default-button hf-modal-default-button" @click="onRegistration"
                                 >регистрация</v-button
