@@ -1,23 +1,23 @@
-import bestsellerDesktopImg from '@images/mock/bestsellers/bDesktop6.jpg';
-import bestsellerTabletImg from '@images/mock/bestsellers/bTablet6.jpg';
-import bestsellerMobileImg from '@images/mock/bestsellers/bMobile6.jpg';
-import bestsellerDesktopImgRetina from '@images/mock/bestsellers/bDesktop6@2x.jpg';
-import bestsellerTabletImgRetina from '@images/mock/bestsellers/bTablet6@2x.jpg';
-import bestsellerMobileImgRetina from '@images/mock/bestsellers/bMobile6@2x.jpg';
+import bestsellerDesktopImg from '@images/mock/bestsellers/bDesktop5.jpg';
+import bestsellerTabletImg from '@images/mock/bestsellers/bTablet5.jpg';
+import bestsellerMobileImg from '@images/mock/bestsellers/bMobile5.jpg';
+import bestsellerDesktopImgRetina from '@images/mock/bestsellers/bDesktop5@2x.jpg';
+import bestsellerTabletImgRetina from '@images/mock/bestsellers/bTablet5@2x.jpg';
+import bestsellerMobileImgRetina from '@images/mock/bestsellers/bMobile5@2x.jpg';
 
 import newDesktopImg from '@images/mock/new/newDesktop6.jpg';
 import newTabletImg from '@images/mock/new/newTablet6.jpg';
 import newMobileImg from '@images/mock/new/newMobile6.jpg';
-import newDesktopImgRetina from '@images/mock/new/newDesktop6@2x.jpg';
-import newTabletImgRetina from '@images/mock/new/newTablet6@2x.jpg';
-import newMobileImgRetina from '@images/mock/new/newMobile6@2x.jpg';
+import newDesktopImgRetina from '@images/mock/new/newDesktop5@2x.jpg';
+import newTabletImgRetina from '@images/mock/new/newTablet5@2x.jpg';
+import newMobileImgRetina from '@images/mock/new/newMobile5@2x.jpg';
 
-import middleDesktopImg from '@images/mock/middle/middleDesktop6.jpg';
-import middleTabletImg from '@images/mock/middle/middleTablet6.jpg';
-import middleMobileImg from '@images/mock/middle/middleMobile6.jpg';
-import middleDesktopImgRetina from '@images/mock/middle/middleDesktop6@2x.jpg';
-import middleTabletImgRetina from '@images/mock/middle/middleTablet6@2x.jpg';
-import middleMobileImgRetina from '@images/mock/middle/middleMobile6@2x.jpg';
+import middleDesktopImg from '@images/mock/middle/middleDesktop5.jpg';
+import middleTabletImg from '@images/mock/middle/middleTablet5.jpg';
+import middleMobileImg from '@images/mock/middle/middleMobile5.jpg';
+import middleDesktopImgRetina from '@images/mock/middle/middleDesktop5@2x.jpg';
+import middleTabletImgRetina from '@images/mock/middle/middleTablet5@2x.jpg';
+import middleMobileImgRetina from '@images/mock/middle/middleMobile5@2x.jpg';
 
 import mainDesktopImg from '@images/mock/landing-banner/mainDesktop.jpg';
 import mainTabletImg from '@images/mock/landing-banner/mainTablet.jpg';
@@ -85,13 +85,13 @@ export default {
                     name: '',
                     type: 'banner',
                     url: 'https://www.instagram.com/bessovestnotalantlivy/',
-                    button: {
-                        id: 2,
-                        url: 'https://www.instagram.com/bessovestnotalantlivy/',
-                        text: 'Подписаться',
-                        location: 'bottom_left',
-                        type: 'white',
-                    },
+                    // button: {
+                    //     id: 2,
+                    //     url: 'https://www.instagram.com/bessovestnotalantlivy/',
+                    //     text: 'Подписаться',
+                    //     location: 'bottom_left',
+                    //     type: 'white',
+                    // },
                     desktopImage: middleDesktopImg,
                     desktopImageRetina: middleDesktopImgRetina,
                     tabletImage: middleTabletImg,
@@ -157,13 +157,13 @@ export default {
                         id: 'middleBanner',
                         name: '',
                         type: 'banner',
-                        button: {
-                            id: 2,
-                            url: '/404',
-                            text: 'Подписаться',
-                            location: 'bottom',
-                            type: 'white',
-                        },
+                        // button: {
+                        //     id: 2,
+                        //     url: '/404',
+                        //     text: 'Подписаться',
+                        //     location: 'bottom',
+                        //     type: 'white',
+                        // },
                         desktopImage: middleDesktopImg,
                         desktopImageRetina: middleDesktopImgRetina,
                         tabletImage: middleTabletImg,
@@ -203,13 +203,13 @@ export default {
                     type: 'banner',
                     url: '/catalog/dlya_volos/filters/badge-novinki/',
 
-                    button: {
-                        id: 2,
-                        url: '/catalog/dlya_volos/filters/badge-novinki/',
-                        text: 'Посмотреть',
-                        location: 'bottom',
-                        type: 'white',
-                    },
+                    // button: {
+                    //     id: 2,
+                    //     url: '/catalog/dlya_volos/filters/badge-novinki/',
+                    //     text: 'Посмотреть',
+                    //     location: 'bottom',
+                    //     type: 'white',
+                    // },
 
                     desktopImage: newDesktopImg,
                     desktopImageRetina: newDesktopImgRetina,
@@ -239,13 +239,13 @@ export default {
                     type: 'banner',
                     url: '/catalog/dlya_volos/filters/badge-bestsellery/',
 
-                    button: {
-                        id: 2,
-                        url: '/catalog/dlya_volos/filters/badge-bestsellery/',
-                        text: 'Посмотреть',
-                        location: 'bottom',
-                        type: 'white',
-                    },
+                    // button: {
+                    //     id: 2,
+                    //     url: '/catalog/dlya_volos/filters/badge-bestsellery/',
+                    //     text: 'Посмотреть',
+                    //     location: 'bottom',
+                    //     type: 'white',
+                    // },
 
                     desktopImage: bestsellerDesktopImg,
                     desktopImageRetina: bestsellerDesktopImgRetina,
