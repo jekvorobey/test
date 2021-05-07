@@ -421,7 +421,6 @@ export default {
                     deliveryAddress = toAddressString(address);
                     break;
             }
-console.log(delivery);
             return deliveryAddress;
         },
 
