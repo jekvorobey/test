@@ -105,7 +105,7 @@ import { suggestionTypes } from '@enums/suggestions';
 import '@images/sprites/search-middle.svg';
 import './CitySelectionModal.css';
 import {NAME as CHECKOUT_MODULE} from "@store/modules/Checkout";
-import {SET_ADDRESS, SET_CITY_FIAS} from "@store/modules/Checkout/actions";
+import {SET_ADDRESS_NO_LK, SET_CITY_FIAS} from "@store/modules/Checkout/actions";
 
 const NAME = modalName.general.CITY_SELECTION;
 
@@ -156,7 +156,7 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(GEO_MODULE, [SET_SELECTED_CITY]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
-        ...mapActions(CHECKOUT_MODULE, [SET_ADDRESS, SET_CITY_FIAS]),
+        ...mapActions(CHECKOUT_MODULE, [SET_ADDRESS_NO_LK, SET_CITY_FIAS]),
 
         async onCityInputChange(query = '') {
             try {
@@ -238,7 +238,7 @@ export default {
                         region_guid: region_fias_id
                     });
 
-                    await this[SET_ADDRESS]({
+                    await this[SET_ADDRESS_NO_LK]({
                         city: settlement || city,
                         city_guid: settlement_fias_id || city_fias_id,
                         country_code: "RU",

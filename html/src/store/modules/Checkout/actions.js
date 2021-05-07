@@ -71,6 +71,7 @@ export const ADD_RECIPIENT = 'ADD_RECIPIENT';
 export const CHANGE_RECIPIENT = 'CHANGE_RECIPIENT';
 
 export const SET_ADDRESS = 'SET_ADDRESS';
+export const SET_ADDRESS_NO_LK = 'SET_ADDRESS_NO_LK';
 export const ADD_ADDRESS = 'ADD_ADDRESS';
 export const CHANGE_ADDRESS = 'CHANGE_ADDRESS';
 
@@ -127,6 +128,18 @@ export default {
         } catch (error) {
             commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
             storeErrorHandler(SET_ADDRESS, true)(error);
+        }
+    },
+
+    async [SET_ADDRESS_NO_LK]({ commit, state }, payload) {
+        try {
+            commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
+            const data = await setAddress({ save2Lk: false, address: payload, data: state.checkoutData });
+            commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
+            commit(SET_DATA, data);
+        } catch (error) {
+            commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(SET_ADDRESS_NO_LK, true)(error);
         }
     },
 
