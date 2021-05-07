@@ -489,7 +489,7 @@ import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import {
     SET_RECIPIENT,
     SET_RECEIVE_METHOD,
-    SET_ADDRESS,
+    SET_ADDRESS_NO_LK,
     SET_DELIVERY_TYPE,
     CHANGE_CHUNK_DATE,
     ADD_BONUS,
@@ -868,7 +868,7 @@ export default {
             SET_SUBSCRIBE,
             SET_CONFIRMATION_TYPE,
 
-            SET_ADDRESS,
+            SET_ADDRESS_NO_LK,
             ADD_ADDRESS,
             CHANGE_ADDRESS,
 
@@ -1204,8 +1204,6 @@ export default {
 
     created() {
         this.agreementTypes = agreementTypes;
-
-        if (this[CITY_FIAS]) this[SET_ADDRESS](this[CITY_FIAS]);
     },
 
     mounted() {
@@ -1217,6 +1215,8 @@ export default {
             this.bonusAmount = this.maxAmountBonus
         }
         this.customCertAmount = this.maxCertificateDiscount;
+
+        if (this[CITY_FIAS]) this[SET_ADDRESS_NO_LK](this[CITY_FIAS]);
     },
 };
 </script>
