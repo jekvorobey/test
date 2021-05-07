@@ -1204,6 +1204,8 @@ export default {
 
     created() {
         this.agreementTypes = agreementTypes;
+
+        if (this[CITY_FIAS]) this[SET_ADDRESS](this[CITY_FIAS]);
     },
 
     mounted() {
@@ -1215,8 +1217,6 @@ export default {
             this.bonusAmount = this.maxAmountBonus
         }
         this.customCertAmount = this.maxCertificateDiscount;
-
-        if (this[CITY_FIAS]) this[SET_ADDRESS](this[CITY_FIAS]);
     },
 };
 </script>
