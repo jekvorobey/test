@@ -43,6 +43,7 @@ import {
     CHANGE_ADDRESS as M_CHANGE_ADDRESS,
     ADD_RECIPIENT as M_ADD_RECIPIENT,
     CHANGE_RECIPIENT as M_CHANGE_RECIPIENT,
+    SET_CITY_FIAS as M_SET_CITY_FIAS,
 } from './mutations';
 
 export const FETCH_PROFESSIONS = 'FETCH_PROFESSIONS';
@@ -54,6 +55,7 @@ export const SET_AGREEMENT = 'SET_AGREEMENT';
 export const SET_SUBSCRIBE = 'SET_SUBSCRIBE';
 export const SET_CONFIRMATION_TYPE = 'SET_CONFIRMATION_TYPE';
 export const CHANGE_CITY = 'CHANGE_CITY';
+export const SET_CITY_FIAS = 'SET_CITY_FIAS';
 
 export const ADD_BONUS = 'ADD_BONUS';
 export const DELETE_BONUS = 'DELETE_BONUS';
@@ -117,16 +119,14 @@ export default {
     },
 
     async [SET_ADDRESS]({ commit, state }, payload) {
-        if (payload) {
-            try {
-                commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
-                const data = await setAddress({ save2Lk: true, address: payload, data: state.checkoutData });
-                commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
-                commit(SET_DATA, data);
-            } catch (error) {
-                commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
-                storeErrorHandler(SET_ADDRESS, true)(error);
-            }
+        try {
+            commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
+            const data = await setAddress({ save2Lk: true, address: payload, data: state.checkoutData });
+            commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
+            commit(SET_DATA, data);
+        } catch (error) {
+            commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(SET_ADDRESS, true)(error);
         }
     },
 
@@ -332,5 +332,9 @@ export default {
         } catch (error) {
             storeErrorHandler(FETCH_CHECKOUT_DATA)(error);
         }
+    },
+
+    [SET_CITY_FIAS]({ commit }, payload) {
+        commit(M_SET_CITY_FIAS, payload);
     },
 };

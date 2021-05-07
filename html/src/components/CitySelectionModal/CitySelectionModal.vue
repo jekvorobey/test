@@ -105,7 +105,7 @@ import { suggestionTypes } from '@enums/suggestions';
 import '@images/sprites/search-middle.svg';
 import './CitySelectionModal.css';
 import {NAME as CHECKOUT_MODULE} from "@store/modules/Checkout";
-import {SET_ADDRESS} from "@store/modules/Checkout/actions";
+import { SET_CITY_FIAS } from "@store/modules/Checkout/actions";
 
 const NAME = modalName.general.CITY_SELECTION;
 
@@ -156,7 +156,7 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(GEO_MODULE, [SET_SELECTED_CITY]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
-        ...mapActions(CHECKOUT_MODULE, [SET_ADDRESS]),
+        ...mapActions(CHECKOUT_MODULE, [SET_CITY_FIAS]),
 
         async onCityInputChange(query = '') {
             try {
@@ -229,14 +229,14 @@ export default {
                         setCookie: true,
                     });
 
-                    await this[SET_ADDRESS]({
-                          city: settlement || city,
-                          city_guid: settlement_fias_id || city_fias_id,
-                          country_code: "RU",
-                          post_index: postal_code,
-                          region: region,
-                          region_guid: region_fias_id
-                        });
+                    this[SET_CITY_FIAS]({
+                        city: settlement || city,
+                        city_guid: settlement_fias_id || city_fias_id,
+                        country_code: "RU",
+                        post_index: postal_code,
+                        region: region,
+                        region_guid: region_fias_id
+                    });
 
                     // перезагружаем, если находимся в сессии
                     if (this[HAS_SESSION]) await this[FETCH_CART_DATA]();

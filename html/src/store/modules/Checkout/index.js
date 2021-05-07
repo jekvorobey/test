@@ -19,6 +19,7 @@ export const CHECKOUT_STATUS = 'checkoutStatus';
 
 export const PROFESSIONS = 'professions';
 export const ORDER = 'order';
+export const CITY_FIAS = 'cityFias';
 
 export default function createModule() {
     return {
@@ -37,6 +38,7 @@ export default function createModule() {
             [CHECKOUT_TYPE]: null,
             [ORDER]: null,
             [PROFESSIONS]: [],
+            [CITY_FIAS]: null,
         },
         actions,
         mutations,

@@ -106,13 +106,13 @@ module.exports = merge(base, {
                   gifsicle: null,
                   /* Под web нет смысла задавать высокое качество, но если будет слишком низко, то можно поднять. */
                   pngquant: {
-                      quality: '65-80',
+                      quality: '95-100',
                       /* Выставлено максимальное качество сжатия, т.к. на проде мы никуда не спешим. */
                       speed: 1,
                   },
                   plugins: [
                       imageminMozJpeg({
-                          quality: 65,
+                          quality: 90,
                       }),
                   ],
               }),
@@ -121,7 +121,7 @@ module.exports = merge(base, {
                       {
                           test: /\.(jpe?g|png)$/i,
                           options: {
-                              quality: 65,
+                              quality: 90,
                               method: 6,
                           },
                       },

@@ -537,6 +537,7 @@ import {
     CERTIFICATE_STATUS,
     PROMOCODE_STATUS,
     RECEIVE_METHOD_STATUS,
+    CITY_FIAS,
 } from '@store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -727,6 +728,8 @@ export default {
             CERTIFICATE_STATUS,
             PROMOCODE_STATUS,
             RECEIVE_METHOD_STATUS,
+
+            CITY_FIAS,
         ]),
 
         computedDeliveryTypes() {
@@ -1211,7 +1214,9 @@ export default {
         } else {
             this.bonusAmount = this.maxAmountBonus
         }
-        this.customCertAmount = this.maxCertificateDiscount
+        this.customCertAmount = this.maxCertificateDiscount;
+
+        if (this[CITY_FIAS]) this[SET_ADDRESS](this[CITY_FIAS]);
     },
 };
 </script>
