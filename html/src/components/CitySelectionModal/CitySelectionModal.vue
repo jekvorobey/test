@@ -9,10 +9,7 @@
     >
         <template v-slot:content>
             <div class="city-selection-modal__body">
-                <h3 class="city-selection-modal__hl">
-                  {{ header }}
-                  <v-spinner width="18" height="18" :show="isAddressPending" />
-                </h3>
+                <h3 class="city-selection-modal__hl">{{ header }}</h3>
                 <v-input
                     class="city-selection-modal__input"
                     :class="{ 'city-selection-modal__input--empty': !focus && !searchString }"
@@ -82,7 +79,6 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VScroll from '@controls/VScroll/VScroll.vue';
-import VSpinner from "@controls/VSpinner/VSpinner.vue";
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
@@ -104,8 +100,6 @@ import { modalName } from '@enums';
 import { suggestionTypes } from '@enums/suggestions';
 import '@images/sprites/search-middle.svg';
 import './CitySelectionModal.css';
-import {NAME as CHECKOUT_MODULE} from "@store/modules/Checkout";
-import {SET_ADDRESS_NO_LK, SET_CITY_FIAS} from "@store/modules/Checkout/actions";
 
 const NAME = modalName.general.CITY_SELECTION;
 
@@ -113,7 +107,6 @@ export default {
     name: NAME,
 
     components: {
-        VSpinner,
         VSvg,
         VInput,
         VScroll,
@@ -126,7 +119,6 @@ export default {
             focus: false,
             searchString: null,
             suggestions: [],
-            isAddressPending: false,
         };
     },
 
@@ -156,7 +148,6 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(GEO_MODULE, [SET_SELECTED_CITY]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
-        ...mapActions(CHECKOUT_MODULE, [SET_ADDRESS_NO_LK, SET_CITY_FIAS]),
 
         async onCityInputChange(query = '') {
             try {
@@ -197,12 +188,10 @@ export default {
         },
 
         async onSubmit(suggestion) {
-          if (this.isAddressPending) return;
-          try {
+            try {
                 const { suggestions } = await this.findAddress(suggestionTypes.CITY, suggestion.value, 1);
                 const selectedCitySuggestion = suggestions[0];
                 if (selectedCitySuggestion) {
-                    this.isAddressPending = true;
                     const {
                         city,
                         city_type,
@@ -213,8 +202,6 @@ export default {
                         geo_lat,
                         geo_lon,
                         region_fias_id,
-                        region,
-                        postal_code,
                     } = selectedCitySuggestion.data;
 
                     await this[SET_SELECTED_CITY]({
@@ -229,24 +216,6 @@ export default {
                         setCookie: true,
                     });
 
-                    await this[SET_CITY_FIAS]({
-                        city: settlement || city,
-                        city_guid: settlement_fias_id || city_fias_id,
-                        country_code: "RU",
-                        post_index: postal_code,
-                        region: region,
-                        region_guid: region_fias_id
-                    });
-
-                    await this[SET_ADDRESS_NO_LK]({
-                        city: settlement || city,
-                        city_guid: settlement_fias_id || city_fias_id,
-                        country_code: "RU",
-                        post_index: postal_code,
-                        region: region,
-                        region_guid: region_fias_id
-                    });
-
                     // перезагружаем, если находимся в сессии
                     if (this[HAS_SESSION]) await this[FETCH_CART_DATA]();
                 }
@@ -254,15 +223,12 @@ export default {
                 $logger.log(error);
             }
 
-            this.isAddressPending = false;
             this.onClose();
         },
 
         onClose() {
-            if (!this.isAddressPending) {
-                this.$emit('close');
-                this[CHANGE_MODAL_STATE]({name: NAME, open: false});
-            }
+            this.$emit('close');
+            this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
         },
     },
 

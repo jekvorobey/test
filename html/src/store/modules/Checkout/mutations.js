@@ -19,8 +19,6 @@ export const CHANGE_RECIPIENT = 'CHANGE_RECIPIENT';
 export const SET_PROFESSIONS = 'SET_PROFESSIONS';
 export const SET_CHECKOUT_ORDER = 'SET_CHECKOUT_ORDER';
 
-export const SET_CITY_FIAS = 'SET_CITY_FIAS';
-
 export default {
     [SET_STATUS](state, payload = {}) {
         state.checkoutStatus[payload.name] = payload.value;
@@ -87,9 +85,5 @@ export default {
 
     [SET_CHECKOUT_ORDER](state, payload) {
         state.order = payload;
-    },
-
-    [SET_CITY_FIAS](state, payload) {
-        state.cityFias = payload;
     },
 };

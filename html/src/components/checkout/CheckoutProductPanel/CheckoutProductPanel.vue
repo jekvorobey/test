@@ -489,7 +489,7 @@ import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import {
     SET_RECIPIENT,
     SET_RECEIVE_METHOD,
-    SET_ADDRESS_NO_LK,
+    SET_ADDRESS,
     SET_DELIVERY_TYPE,
     CHANGE_CHUNK_DATE,
     ADD_BONUS,
@@ -537,7 +537,6 @@ import {
     CERTIFICATE_STATUS,
     PROMOCODE_STATUS,
     RECEIVE_METHOD_STATUS,
-    CITY_FIAS,
 } from '@store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -728,8 +727,6 @@ export default {
             CERTIFICATE_STATUS,
             PROMOCODE_STATUS,
             RECEIVE_METHOD_STATUS,
-
-            CITY_FIAS,
         ]),
 
         computedDeliveryTypes() {
@@ -868,7 +865,7 @@ export default {
             SET_SUBSCRIBE,
             SET_CONFIRMATION_TYPE,
 
-            SET_ADDRESS_NO_LK,
+            SET_ADDRESS,
             ADD_ADDRESS,
             CHANGE_ADDRESS,
 
@@ -1214,9 +1211,7 @@ export default {
         } else {
             this.bonusAmount = this.maxAmountBonus
         }
-        this.customCertAmount = this.maxCertificateDiscount;
-
-        if (this[CITY_FIAS]) this[SET_ADDRESS_NO_LK](this[CITY_FIAS]);
+        this.customCertAmount = this.maxCertificateDiscount
     },
 };
 </script>

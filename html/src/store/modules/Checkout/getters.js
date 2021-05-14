@@ -77,8 +77,6 @@ export const TICKET_STATUS = 'ticketStatus';
 
 export const SUMMARY = 'summary';
 
-export const CITY_FIAS = 'cityFias';
-
 export default {
     [PROFESSIONS_MAP]: (state) => {
         const professions = state[PROFESSIONS] || [];
@@ -140,8 +138,6 @@ export default {
     [CERTIFICATES]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][INPUT].certificates) || [],
 
     [SUMMARY]: (state) => (state[CHECKOUT_DATA] && state[CHECKOUT_DATA][SUMMARY]) || {},
-
-    [CITY_FIAS]: (state) => (state[CITY_FIAS]) || {},
 
     [BONUS_PAYMENT]: (state, getters) => {
         const { bonusSpent = 0 } = getters[SUMMARY];

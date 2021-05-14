@@ -485,7 +485,6 @@
         </section>
 
         <section
-            id="characteristics"
             v-if="
                 (productCharacteristics && productCharacteristics.length > 0) ||
                 (productIngredients && productIngredients.length > 0)
@@ -570,7 +569,7 @@
         </section>
 
         <!-- #58437 -->
-        <section ref="reviews" id="reviews" class="section product-view__section product-view__reviews">
+        <section ref="reviews" class="section product-view__section product-view__reviews">
             <div class="container">
                 <reviews-panel
                     class="product-view__reviews-panel"
