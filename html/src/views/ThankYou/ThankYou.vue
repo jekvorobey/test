@@ -212,7 +212,7 @@ import { cartItemTypes } from '@enums/product';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings, cancelRoute } from '@settings';
 import { formatPhoneNumber, getDate } from '@util';
 import { createNotFoundRoute } from '@util/router';
-import { toAddressString } from '@util/address';
+import { toAddressString, toPointAddressString } from '@util/address';
 import { generatePictureSourcePath } from '@util/file';
 import { generateMasterclassUrl, generateProductUrl } from '@util/catalog';
 import metaMixin from '@plugins/meta';
@@ -415,14 +415,13 @@ export default {
 
             switch (deliveryMethod) {
                 case receiveMethods.PICKUP:
-                    deliveryAddress = point.address;
+                    deliveryAddress = toPointAddressString(point.address);
                     break;
                 default:
-                    deliveryAddress = address;
+                    deliveryAddress = toAddressString(address);
                     break;
             }
-
-            return deliveryAddress && toAddressString(deliveryAddress);
+            return deliveryAddress;
         },
 
         isMasterClass() {
