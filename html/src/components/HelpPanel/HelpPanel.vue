@@ -11,7 +11,7 @@
         </div>
         <template v-slot:header>
             <div class="help-panel__top">
-                <div class="text-grey">Каждый день с 9:00 до 21:00</div>
+                <div class="text-grey">В будни с 10:00 до 19:00</div>
                 <div class="text-bold help-panel__phone">
                     <a href="tel:88007079070" class="help-panel__phone-link">8 800 707-90-70</a>
                 </div>
