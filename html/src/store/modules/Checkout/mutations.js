@@ -21,6 +21,8 @@ export const SET_CHECKOUT_ORDER = 'SET_CHECKOUT_ORDER';
 
 export const SET_CITY_FIAS = 'SET_CITY_FIAS';
 
+export const SET_SELECTED_PICKUP_POINT = 'SET_SELECTED_PICKUP_POINT';
+
 export default {
     [SET_STATUS](state, payload = {}) {
         state.checkoutStatus[payload.name] = payload.value;
@@ -91,5 +93,9 @@ export default {
 
     [SET_CITY_FIAS](state, payload) {
         state.cityFias = payload;
+    },
+
+    [SET_SELECTED_PICKUP_POINT](state, payload) {
+        state.checkoutData.input.pickupPoint = payload;
     },
 };

@@ -287,7 +287,10 @@
                         </v-check>
                     </div>
 
-                    <div v-if="isСertAmountEdit" class="checkout-product-panel__item-controls checkout-product-panel__item">
+                    <div
+                        v-if="isСertAmountEdit"
+                        class="checkout-product-panel__item-controls checkout-product-panel__item"
+                    >
                         <template v-if="isCertificateEdit">
                             <v-input
                                 class="checkout-product-panel__item-controls-input"
@@ -313,30 +316,61 @@
                             </span>
                         </template>
                         <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
-                            <span v-if="!certificatePayment" class="checkout-product-panel__item-controls-text checkout-product-panel__item">
+                            <span
+                                v-if="!certificatePayment"
+                                class="checkout-product-panel__item-controls-text checkout-product-panel__item"
+                            >
                                 Доступно для оплаты&nbsp;
                                 <strong class="text-bold">{{ maxCertificateDiscount }}</strong> ₽
                             </span>
-                            <span v-if="certificatePayment" class="checkout-product-panel__item-controls-text checkout-product-panel__item">
+                            <span
+                                v-if="certificatePayment"
+                                class="checkout-product-panel__item-controls-text checkout-product-panel__item"
+                            >
                                 Будет использовано&nbsp;
-                                <strong class="text-bold">{{ certificatePayment }}</strong> ₽ с сертификатов — {{ aggCertNames }}
+                                <strong class="text-bold">{{ certificatePayment }}</strong> ₽ с сертификатов —
+                                {{ aggCertNames }}
                             </span>
                             <div class="checkout-product-panel__item-card-panel">
                                 <!-- <div v-if="isTablet" class="text-sm text-normal text-grey">
                                     (1 бонус = {{ bonusPerRub }} рубль)
                                 </div> -->
-                                <v-link class="checkout-product-panel__item-card-link" tag="button" @click="onEditCertificate">
+                                <v-link
+                                    class="checkout-product-panel__item-card-link"
+                                    tag="button"
+                                    @click="onEditCertificate"
+                                >
                                     Изменить
                                 </v-link>
                             </div>
                         </div>
                     </div>
-                    <div v-if="isСertAmountEdit" @click="onToggleActivateCert" @mousedown.prevent class="checkout-activate-toggle checkout-product-panel__item-header-hl">
+                    <div
+                        v-if="isСertAmountEdit"
+                        @click="onToggleActivateCert"
+                        @mousedown.prevent
+                        class="checkout-activate-toggle checkout-product-panel__item-header-hl"
+                    >
                         <span>Активировать ещё один сертификат</span>
-                        <v-svg v-if="!isVisibleActivateCert" name="arrow-down" width="24" height="24" @click="onToggleActivateCert" />
-                        <v-svg v-if="isVisibleActivateCert" name="arrow-up" width="24" height="24" @click="onToggleActivateCert" />
+                        <v-svg
+                            v-if="!isVisibleActivateCert"
+                            name="arrow-down"
+                            width="24"
+                            height="24"
+                            @click="onToggleActivateCert"
+                        />
+                        <v-svg
+                            v-if="isVisibleActivateCert"
+                            name="arrow-up"
+                            width="24"
+                            height="24"
+                            @click="onToggleActivateCert"
+                        />
                     </div>
-                    <div v-if="isVisibleActivateCert || !isСertAmountEdit" class="checkout-product-panel__item-controls checkout-activate-baseline">
+                    <div
+                        v-if="isVisibleActivateCert || !isСertAmountEdit"
+                        class="checkout-product-panel__item-controls checkout-activate-baseline"
+                    >
                         <v-input
                             v-model="certificateCode"
                             class="checkout-product-panel__item-controls-input"
@@ -470,12 +504,12 @@ import AddressEditModal from '@components/profile/AddressEditModal/AddressEditMo
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
 import { LOCALE } from '@store';
 
-import { NAME as AUTH_MODULE, REFERRAL_PARTNER, USER } from '@store/modules/Auth';
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { NAME as AUTH_MODULE, REFERRAL_PARTNER, USER, HAS_SESSION } from '@store/modules/Auth';
+import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
+import { FETCH_CART_DATA } from '@store/modules/Cart/actions';
 
-import {
-    ACTIVATE_CERTIFICATE,
-    FETCH_CERTIFICATES,
-} from '@store/modules/Certificate/actions';
+import { ACTIVATE_CERTIFICATE, FETCH_CERTIFICATES } from '@store/modules/Certificate/actions';
 
 import {
     ACTIVE_CERTIFICATES,
@@ -506,6 +540,8 @@ import {
     ADD_RECIPIENT,
     CHANGE_RECIPIENT,
     FETCH_CHECKOUT_DATA,
+    SET_CITY_FIAS,
+    SET_SELECTED_PICKUP_POINT,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -556,6 +592,9 @@ import _debounce from 'lodash/debounce';
 import { orderBy as _orderBy } from 'lodash/collection';
 
 import { generateProductUrl } from '@util/catalog';
+
+import { $dadata } from '@services';
+import { suggestionTypes } from '@enums/suggestions';
 
 import '@images/sprites/payment/bonus.svg';
 import '@images/sprites/payment/visa.svg';
@@ -674,6 +713,7 @@ export default {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
+            HAS_SESSION,
         }),
         ...mapState(MODAL_MODULE, {
             isPickupPointModalOpen: (state) =>
@@ -731,6 +771,8 @@ export default {
 
             CITY_FIAS,
         ]),
+
+        ...mapState(GEO_MODULE, [SELECTED_CITY]),
 
         computedDeliveryTypes() {
             const deliveryTypes = this[DELIVERY_TYPES];
@@ -823,34 +865,37 @@ export default {
 
         // Общая сумма сертификатов
         availableCertAmount() {
-            let am = this[ACTIVE_CERTIFICATES].map(c => c.balance)
-            return am.length > 0 ? am.reduce((a, b) => a+b) : 0
+            let am = this[ACTIVE_CERTIFICATES].map((c) => c.balance);
+            return am.length > 0 ? am.reduce((a, b) => a + b) : 0;
         },
 
         // Названия сертификатов через запятую
         aggCertNames() {
-            let am = this.cards.map(c => c.code)
-            return am.length > 0 ? am.join(', ') : ''
+            let am = this.cards.map((c) => c.code);
+            return am.length > 0 ? am.join(', ') : '';
         },
 
         isСertAmountEdit() {
-            return this.availableCertAmount > 0
+            return this.availableCertAmount > 0;
         },
 
         // сертификаты, которые добавлены к оплате заказа
         cards() {
-            return this[CERTIFICATES] ? this[CERTIFICATES] : []
+            return this[CERTIFICATES] ? this[CERTIFICATES] : [];
         },
 
         // все активные сертификаты пользоватлея
         activeCards() {
-            return this[ACTIVE_CERTIFICATES] ? this[ACTIVE_CERTIFICATES] : []
+            return this[ACTIVE_CERTIFICATES] ? this[ACTIVE_CERTIFICATES] : [];
         },
     },
 
     watch: {
         isBonusEdit(value) {
             if (value) this.bonusAmount = this[BONUS];
+        },
+        [SELECTED_CITY]() {
+            this[SET_SELECTED_PICKUP_POINT](null);
         },
         // Не разобрался, что нужно добавить в тело метода чтобы по аналогии с бонусами сделать
         // isCertificateEdit(value) {
@@ -886,13 +931,17 @@ export default {
             CHANGE_RECIPIENT,
 
             FETCH_CHECKOUT_DATA,
+
+            SET_CITY_FIAS,
+
+            SET_SELECTED_PICKUP_POINT,
         ]),
 
-        ...mapActions(CERTIFICATE_MODULE, [
-            ACTIVATE_CERTIFICATE,
-        ]),
+        ...mapActions(CERTIFICATE_MODULE, [ACTIVATE_CERTIFICATE]),
 
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
 
         validate() {
             this.$v.$touch();
@@ -931,17 +980,13 @@ export default {
 
             const uniqueDates = Array.from(
                 new Set(
-                    deliveryType.items.map((i) => new Date(i.selectedDate).toLocaleDateString(
-                            this[LOCALE],
-                            dayMonthLongDateSettings
-                        )
+                    deliveryType.items.map((i) =>
+                        new Date(i.selectedDate).toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)
                     )
                 )
             );
             return uniqueDates.reduce(
-                (accum, current, index) =>
-                    accum +
-                    `${index > 0 ? ', ' : ' '}${current}`,
+                (accum, current, index) => accum + `${index > 0 ? ', ' : ' '}${current}`,
                 'Доставим'
             );
         },
@@ -966,9 +1011,9 @@ export default {
         onDateChanged(state) {
             const { id, selectedDate, selectedTime } = state;
             this[CHANGE_CHUNK_DATE]({
-                    id,
-                    selectedDate,
-                    selectedTime
+                id,
+                selectedDate,
+                selectedTime,
             });
         },
 
@@ -1070,7 +1115,7 @@ export default {
 
         async onAddBonus(value) {
             if (this.bonusAmount != value) {
-                this.bonusAmount = value
+                this.bonusAmount = value;
             }
             try {
                 await this[ADD_BONUS](value || 0);
@@ -1083,79 +1128,76 @@ export default {
             }
         },
 
-        onActivateInput () {
-            this.activateError = ''
-            this.activateSuccess = ''
+        onActivateInput() {
+            this.activateError = '';
+            this.activateSuccess = '';
         },
 
-        ...mapActions(CERTIFICATE_MODULE, [
-            FETCH_CERTIFICATES,
-            ACTIVATE_CERTIFICATE,
-        ]),
+        ...mapActions(CERTIFICATE_MODULE, [FETCH_CERTIFICATES, ACTIVATE_CERTIFICATE]),
 
         async fetchCards() {
-            this.loading = true
+            this.loading = true;
             try {
-                await this[FETCH_CERTIFICATES]()
-                this.loading = false
+                await this[FETCH_CERTIFICATES]();
+                this.loading = false;
             } catch (error) {
-                this.loading = false
+                this.loading = false;
             }
         },
 
         async applyCertificate() {
             // TODO: не выводится сообщение об ошибке, например "Не указана сумма операции"
             if (this.customCertAmount == null) {
-                this.customCertAmount = this.maxCertificateDiscount
+                this.customCertAmount = this.maxCertificateDiscount;
             }
             try {
-                await this.ADD_CERTIFICATE(this.customCertAmount || 0)
-                this.isCertificateEdit = false
-                this.isBonusEdit = false
-                this.selectedPayTypeID = (Number(this.customCertAmount || 0) === 0) ? null : 2 // certificate pay type - 2
+                await this.ADD_CERTIFICATE(this.customCertAmount || 0);
+                this.isCertificateEdit = false;
+                this.isBonusEdit = false;
+                this.selectedPayTypeID = Number(this.customCertAmount || 0) === 0 ? null : 2; // certificate pay type - 2
             } catch (error) {
-                this.isCertificateEdit = true
+                this.isCertificateEdit = true;
             }
         },
 
         async activateCertificate() {
             if (!this.certificateCode || this.certificateCode.trim() === '') {
-                return
+                return;
             }
             try {
-                this.$progress.start()
-                await this[ACTIVATE_CERTIFICATE](this.certificateCode)
-                let repl = this[CERTIFICATE_DATA]
+                this.$progress.start();
+                await this[ACTIVATE_CERTIFICATE](this.certificateCode);
+                let repl = this[CERTIFICATE_DATA];
                 if (this[ACTIVE_CERTIFICATE_STATUS] == 'success') {
-                    this.activateSuccess =
-                        repl && repl.message ? repl.message : '' // Нужно решить, что вывести по умолчанию, если с сервера потлетел ответ с пустым сообщением
+                    this.activateSuccess = repl && repl.message ? repl.message : ''; // Нужно решить, что вывести по умолчанию, если с сервера потлетел ответ с пустым сообщением
                 } else {
-                    this.activateError =
-                        repl && repl.message ? repl.message : 'Произошла неизвестная ошибка'
+                    this.activateError = repl && repl.message ? repl.message : 'Произошла неизвестная ошибка';
                 }
-                this.$progress.finish()
-                this.certificateCode = ''
+                this.$progress.finish();
+                this.certificateCode = '';
             } catch (e) {
                 const { status } = e;
                 switch (status) {
                     case httpCodes.BAD_REQUEST:
-                        this.activateError = e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат' // this.$t('validation.errors.promocodeInvalid');
+                        this.activateError =
+                            e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат'; // this.$t('validation.errors.promocodeInvalid');
                         break;
                     case httpCodes.NOT_FOUND:
-                        this.activateError = e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат' // this.$t('validation.errors.promocodeNotExist');
+                        this.activateError =
+                            e.data && e.data.message ? e.data.message : 'Не удалось активировать сертификат'; // this.$t('validation.errors.promocodeNotExist');
                         break;
                 }
-                this.$progress.fail()
-                this.$progress.finish() // finish после fail точно необходим?
+                this.$progress.fail();
+                this.$progress.finish(); // finish после fail точно необходим?
             }
             setTimeout(() => {
-                this.activateError = ''
-                this.activateSuccess = ''
-                this.isVisibleActivateCert = false
+                this.activateError = '';
+                this.activateSuccess = '';
+                this.isVisibleActivateCert = false;
             }, 5000);
 
             await this[FETCH_CHECKOUT_DATA](cartItemTypes.PRODUCT);
-            this.fetchCards()
+            this.fetchCards();
         },
 
         // async activate() {
@@ -1198,7 +1240,7 @@ export default {
             }
         },
         onToggleActivateCert() {
-            this.isVisibleActivateCert = !this.isVisibleActivateCert
+            this.isVisibleActivateCert = !this.isVisibleActivateCert;
         },
     },
 
@@ -1206,17 +1248,61 @@ export default {
         this.agreementTypes = agreementTypes;
     },
 
-    mounted() {
+    async mounted() {
         this.debounce_scrollToError = _debounce(this.scrollToError, SCROLL_DEBOUNCE_TIME);
-        this.fetchCards()
+        this.fetchCards();
         if (this.maxAmountBonus > 0) {
-            this.onAddBonus(this.maxAmountBonus)
+            await this.onAddBonus(this.maxAmountBonus);
         } else {
-            this.bonusAmount = this.maxAmountBonus
+            this.bonusAmount = this.maxAmountBonus;
         }
         this.customCertAmount = this.maxCertificateDiscount;
 
-        if (this[CITY_FIAS]) this[SET_ADDRESS_NO_LK](this[CITY_FIAS]);
+        const { suggestions } = await $dadata.post('/suggest/address', {
+            query: this[SELECTED_CITY].name,
+            count: 1,
+            from_bound: {
+                value: suggestionTypes.CITY,
+            },
+            to_bound: {
+                value: suggestionTypes.SETTLEMENT,
+            },
+        });
+
+        const selectedCitySuggestion = suggestions[0];
+
+        if (selectedCitySuggestion) {
+            const {
+                city,
+                city_fias_id,
+                settlement,
+                settlement_fias_id,
+                region_fias_id,
+                region,
+                postal_code,
+            } = selectedCitySuggestion.data;
+
+            await this[SET_CITY_FIAS]({
+                city: settlement || city,
+                city_guid: settlement_fias_id || city_fias_id,
+                country_code: 'RU',
+                post_index: postal_code,
+                region: region,
+                region_guid: region_fias_id,
+            });
+
+            await this[SET_ADDRESS_NO_LK]({
+                city: settlement || city,
+                city_guid: settlement_fias_id || city_fias_id,
+                country_code: 'RU',
+                post_index: postal_code,
+                region: region,
+                region_guid: region_fias_id,
+            });
+
+            // перезагружаем, если находимся в сессии
+            if (this[HAS_SESSION]) await this[FETCH_CART_DATA]();
+        }
     },
 };
 </script>

@@ -44,6 +44,7 @@ import {
     ADD_RECIPIENT as M_ADD_RECIPIENT,
     CHANGE_RECIPIENT as M_CHANGE_RECIPIENT,
     SET_CITY_FIAS as M_SET_CITY_FIAS,
+    SET_SELECTED_PICKUP_POINT as M_SET_SELECTED_PICKUP_POINT,
 } from './mutations';
 
 export const FETCH_PROFESSIONS = 'FETCH_PROFESSIONS';
@@ -56,6 +57,7 @@ export const SET_SUBSCRIBE = 'SET_SUBSCRIBE';
 export const SET_CONFIRMATION_TYPE = 'SET_CONFIRMATION_TYPE';
 export const CHANGE_CITY = 'CHANGE_CITY';
 export const SET_CITY_FIAS = 'SET_CITY_FIAS';
+export const SET_SELECTED_PICKUP_POINT = 'SET_SELECTED_PICKUP_POINT';
 
 export const ADD_BONUS = 'ADD_BONUS';
 export const DELETE_BONUS = 'DELETE_BONUS';
@@ -122,7 +124,8 @@ export default {
     async [SET_ADDRESS]({ commit, state }, payload) {
         try {
             commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
-            const data = await setAddress({ save2Lk: true, address: payload, data: state.checkoutData });
+            let data = await setAddress({ save2Lk: true, address: payload, data: state.checkoutData });
+
             commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
             commit(SET_DATA, data);
         } catch (error) {
@@ -135,6 +138,9 @@ export default {
         try {
             commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.PENDING });
             const data = await setAddress({ save2Lk: false, address: payload, data: state.checkoutData });
+            data.addresses = data.addresses.filter((item) => {
+                return item.geo_lat && item.geo_lon;
+            });
             commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.SUCCESS });
             commit(SET_DATA, data);
         } catch (error) {
@@ -183,7 +189,7 @@ export default {
         try {
             const { checkoutType } = state;
             commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.PENDING });
-            const data = await addCertificate(checkoutType, { price: payload , data: state.checkoutData });
+            const data = await addCertificate(checkoutType, { price: payload, data: state.checkoutData });
             commit(SET_STATUS, { name: CERTIFICATE_STATUS, value: requestStatus.SUCCESS });
             commit(SET_DATA, data);
         } catch (error) {
@@ -262,8 +268,7 @@ export default {
             if (event) {
                 const existTicket = event.tickets[index];
                 Object.assign(existTicket, ticket);
-                const data = await changeCheckoutMasterclassTickets(
-                    { offerId: event.offerId, tickets: event.tickets },
+                const data = await changeCheckoutMasterclassTickets({ offerId: event.offerId, tickets: event.tickets },
                     state.checkoutData
                 );
                 commit(SET_DATA, data);
@@ -282,8 +287,7 @@ export default {
             const { publicEvents = [] } = state.checkoutData;
             const event = publicEvents.find((e) => e.offerId === offerId);
             if (event) {
-                const data = await changeCheckoutMasterclassTickets(
-                    { offerId: event.offerId, tickets: [...event.tickets, ticket] },
+                const data = await changeCheckoutMasterclassTickets({ offerId: event.offerId, tickets: [...event.tickets, ticket] },
                     state.checkoutData
                 );
                 commit(SET_DATA, data);
@@ -349,5 +353,9 @@ export default {
 
     [SET_CITY_FIAS]({ commit }, payload) {
         commit(M_SET_CITY_FIAS, payload);
+    },
+
+    [SET_SELECTED_PICKUP_POINT]({ commit }, payload) {
+        commit(M_SET_SELECTED_PICKUP_POINT, payload);
     },
 };
