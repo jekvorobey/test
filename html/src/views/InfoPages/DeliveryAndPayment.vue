@@ -67,7 +67,7 @@
             <section class="section">
                 <div :class="{ container: !isTablet }">
                     <h3 class="container container--tablet info-pages-block__subtitle">
-                        Сроки и стоимость доставки в зависимости от региона
+                        Сроки и стоимость доставки в зависимости от региона и суммы заказа
                     </h3>
 
                     <v-table
@@ -78,21 +78,27 @@
                         :columns="columns"
                     >
                         <colgroup>
-                            <col width="55%" />
-                            <col width="15%" />
-                            <col width="15%" />
-                            <col width="15%" />
+                            <col width="50%" />
+                            <col width="10%" />
+                            <col width="10%" />
+                            <col width="10%" />
+                            <col width="10%" />
+                            <col width="10%" />
                         </colgroup>
                         <template v-slot:column-region>Регион</template>
-                        <template v-slot:column-delivery>Доставка</template>
-                        <template v-slot:column-pickup>Самовывоз</template>
+                        <template v-slot:column-deliverydo>Доставка заказа до 3500 руб</template>
+                        <template v-slot:column-deliveryot>Доставка заказа от 3500 руб</template>
+                        <template v-slot:column-pickupdo>Самовывоз заказа до 3500 руб</template>
+                        <template v-slot:column-pickupot>Самовывоз заказа от 3500 руб</template>
                         <template v-slot:column-timing>Сроки</template>
                     </v-table>
                     <template v-else>
                         <div class="info-pages-block__card" v-for="item in items" :key="item.region">
                             <info-row name="Регион" :value="item.region" />
-                            <info-row name="Стоимость доставки" :value="item.delivery" />
-                            <info-row name="Самовывоз" :value="item.pickup" />
+                            <info-row name="Доставка заказа до 3500 руб" :value="item.deliverydo" />
+                            <info-row name="Доставка заказа от 3500 руб" :value="item.deliveryot" />
+                            <info-row name="Самовывоз заказа до 3500 руб" :value="item.pickupdo" />
+                            <info-row name="Самовывоз заказа от 3500 руб" :value="item.pickupot" />
                             <info-row name="Сроки" :value="item.timing" />
                         </div>
                     </template>
@@ -196,69 +202,91 @@ export default {
             items: [
                 {
                     region: 'Москва',
-                    delivery: 350,
-                    pickup: 99,
+                    deliverydo: 500,
+                    deliveryot: 350,
+                    pickupdo: 199,
+                    pickupot: 99,
                     timing: '1-2 дня',
                 },
                 {
                     region: 'Московская область',
-                    delivery: 350,
-                    pickup: 99,
+                    deliverydo: 500,
+                    deliveryot: 350,
+                    pickupdo: 199,
+                    pickupot: 99,
                     timing: '1-3 дня',
                 },
                 {
                     region: 'Санкт-Петербург и Ленинградская область',
-                    delivery: 350,
-                    pickup: 99,
+                    deliverydo: 500,
+                    deliveryot: 350,
+                    pickupdo: 199,
+                    pickupot:  99,
                     timing: '2-3 дня',
                 },
                 {
                     region: 'Центральный федеральный округ',
-                    delivery: 400,
-                    pickup: 149,
+                    deliverydo: 550,
+                    deliveryot: 400,
+                    pickupdo: 249,
+                    pickupot: 149,
                     timing: '2-4 дня',
                 },
                 {
                     region:
                         'Северо-Западный федеральный округ, за исключением Санкт-Петербурга и Ленинградской области',
-                    delivery: 500,
-                    pickup: 199,
+                    deliverydo: 600,
+                    deliveryot: 500,
+                    pickupdo: 299,
+                    pickupot: 199,
                     timing: '4-7 дней',
                 },
                 {
                     region: 'Южный федеральный округ',
-                    delivery: 500,
-                    pickup: 199,
+                    deliverydo: 600,
+                    deliveryot: 500,
+                    pickupdo: 299,
+                    pickupot: 199,
                     timing: '3-5 дня',
                 },
                 {
                     region: 'Приволжский федеральный округ',
-                    delivery: 500,
-                    pickup: 149,
+                    deliverydo: 600,
+                    deliveryot: 500,
+                    pickupdo: 249,
+                    pickupot: 149,
                     timing: '3-5 дня',
                 },
                 {
                     region: 'Северо-Кавказский федеральный округ',
-                    delivery: 550,
-                    pickup: 199,
+                    deliverydo: 650,
+                    deliveryot: 550,
+                    pickupdo: 299,
+                    pickupot: 199,
                     timing: '4-6 дней',
                 },
                 {
                     region: 'Уральский федеральный округ',
-                    delivery: 550,
-                    pickup: 249,
+                    deliverydo: 650,
+                    deliveryot: 550,
+                    pickupdo: 349,
+                    pickupot: 249,
                     timing: '5-7  дней',
                 },
                 {
                     region: 'Сибирский федеральный округ',
-                    delivery: 600,
-                    pickup: 299,
+                    deliverydo: 700,
+                    deliveryot: 600,
+                    pickupdo: 399,
+                    pickupot: 299,
                     timing: '7-14 дней',
                 },
                 {
                     region: 'Дальневосточный федеральный округ',
-                    delivery: 800,
-                    pickup: 549,
+                    deliverydo: 900,
+                    deliveryot: 800,
+                    pickupdo: 649,
+                    pickupot: 549,
                     timing: '7-14 дней',
                 },
             ],
