@@ -198,7 +198,7 @@ export default {
 
     data() {
         return {
-            columns: ['region', 'delivery', 'pickup', 'timing'],
+            columns: ['region', 'deliverydo', 'deliveryot', 'pickupdo', 'pickupot', 'timing'],
             items: [
                 {
                     region: 'Москва',
