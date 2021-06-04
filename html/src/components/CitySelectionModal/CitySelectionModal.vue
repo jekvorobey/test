@@ -10,8 +10,8 @@
         <template v-slot:content>
             <div class="city-selection-modal__body">
                 <h3 class="city-selection-modal__hl">
-                  {{ header }}
-                  <v-spinner width="18" height="18" :show="isAddressPending" />
+                    {{ header }}
+                    <v-spinner width="18" height="18" :show="isAddressPending" />
                 </h3>
                 <v-input
                     class="city-selection-modal__input"
@@ -82,12 +82,12 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VScroll from '@controls/VScroll/VScroll.vue';
-import VSpinner from "@controls/VSpinner/VSpinner.vue";
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import _debounce from 'lodash/debounce';
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 
@@ -104,8 +104,12 @@ import { modalName } from '@enums';
 import { suggestionTypes } from '@enums/suggestions';
 import '@images/sprites/search-middle.svg';
 import './CitySelectionModal.css';
-import {NAME as CHECKOUT_MODULE} from "@store/modules/Checkout";
-import {SET_ADDRESS_NO_LK, SET_CITY_FIAS} from "@store/modules/Checkout/actions";
+import { NAME as CHECKOUT_MODULE, CHECKOUT_DATA } from '@store/modules/Checkout';
+import { SET_ADDRESS, SET_ADDRESS_NO_LK, SET_CITY_FIAS } from '@store/modules/Checkout/actions';
+
+import { ADDRESSES } from '@store/modules/Checkout/getters';
+
+import { $store } from '@services';
 
 const NAME = modalName.general.CITY_SELECTION;
 
@@ -137,6 +141,8 @@ export default {
             isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
+        ...mapGetters(CHECKOUT_MODULE, [ADDRESSES]),
+
         header() {
             return 'Выберите город';
         },
@@ -156,7 +162,7 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(GEO_MODULE, [SET_SELECTED_CITY]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
-        ...mapActions(CHECKOUT_MODULE, [SET_ADDRESS_NO_LK, SET_CITY_FIAS]),
+        ...mapActions(CHECKOUT_MODULE, [SET_ADDRESS, SET_ADDRESS_NO_LK, SET_CITY_FIAS]),
 
         async onCityInputChange(query = '') {
             try {
@@ -197,8 +203,8 @@ export default {
         },
 
         async onSubmit(suggestion) {
-          if (this.isAddressPending) return;
-          try {
+            if (this.isAddressPending) return;
+            try {
                 const { suggestions } = await this.findAddress(suggestionTypes.CITY, suggestion.value, 1);
                 const selectedCitySuggestion = suggestions[0];
                 if (selectedCitySuggestion) {
@@ -232,20 +238,30 @@ export default {
                     await this[SET_CITY_FIAS]({
                         city: settlement || city,
                         city_guid: settlement_fias_id || city_fias_id,
-                        country_code: "RU",
+                        country_code: 'RU',
                         post_index: postal_code,
                         region: region,
-                        region_guid: region_fias_id
+                        region_guid: region_fias_id,
                     });
 
-                    await this[SET_ADDRESS_NO_LK]({
-                        city: settlement || city,
-                        city_guid: settlement_fias_id || city_fias_id,
-                        country_code: "RU",
-                        post_index: postal_code,
-                        region: region,
-                        region_guid: region_fias_id
-                    });
+                    if ($store.state[CHECKOUT_MODULE][CHECKOUT_DATA]) {
+                        const addressByCity = this[ADDRESSES].find((item) => {
+                            return item.city_guid === settlement_fias_id || item.city_guid === city_fias_id;
+                        });
+
+                        if (addressByCity !== undefined) {
+                            await this[SET_ADDRESS](addressByCity);
+                        } else {
+                            await this[SET_ADDRESS_NO_LK]({
+                                city: settlement || city,
+                                city_guid: settlement_fias_id || city_fias_id,
+                                country_code: 'RU',
+                                post_index: postal_code,
+                                region: region,
+                                region_guid: region_fias_id,
+                            });
+                        }
+                    }
 
                     // перезагружаем, если находимся в сессии
                     if (this[HAS_SESSION]) await this[FETCH_CART_DATA]();
@@ -261,7 +277,7 @@ export default {
         onClose() {
             if (!this.isAddressPending) {
                 this.$emit('close');
-                this[CHANGE_MODAL_STATE]({name: NAME, open: false});
+                this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
             }
         },
     },
