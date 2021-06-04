@@ -1283,9 +1283,13 @@ export default {
         if (selectedCitySuggestion) {
             const {
                 city,
+                city_type,
                 city_fias_id,
                 settlement,
+                settlement_type,
                 settlement_fias_id,
+                geo_lat,
+                geo_lon,
                 region_fias_id,
                 region,
                 postal_code,
