@@ -1,5 +1,4 @@
 node_modules
 .env.json
-/public/robots.txt
 .vscode
 .idea

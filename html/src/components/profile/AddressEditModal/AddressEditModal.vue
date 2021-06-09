@@ -88,6 +88,7 @@
                         @input="onStreetInputChange"
                         @selected="onStreetSelected"
                         :disabled="!address.city"
+                        :error="streetError"
                     >
                         Улица
 
@@ -245,6 +246,10 @@ export default {
                 required,
             },
 
+            street: {
+                required,
+            },
+
             house: {
                 required,
             },
@@ -327,6 +332,11 @@ export default {
 
         cityError() {
             if (this.$v.address.city.$dirty && !this.$v.address.city.required)
+                return this.$t('validation.errors.required');
+        },
+
+        streetError() {
+            if (this.$v.address.street.$dirty && !this.$v.address.street.required)
                 return this.$t('validation.errors.required');
         },
 

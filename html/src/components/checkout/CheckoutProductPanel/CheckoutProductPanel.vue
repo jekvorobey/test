@@ -507,6 +507,7 @@ import { LOCALE } from '@store';
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { NAME as AUTH_MODULE, REFERRAL_PARTNER, USER, HAS_SESSION } from '@store/modules/Auth';
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
+import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 import { FETCH_CART_DATA } from '@store/modules/Cart/actions';
 
 import { ACTIVATE_CERTIFICATE, FETCH_CERTIFICATES } from '@store/modules/Certificate/actions';
@@ -523,6 +524,7 @@ import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import {
     SET_RECIPIENT,
     SET_RECEIVE_METHOD,
+    SET_ADDRESS,
     SET_ADDRESS_NO_LK,
     SET_DELIVERY_TYPE,
     CHANGE_CHUNK_DATE,
@@ -688,6 +690,7 @@ export default {
 
                     [SELECTED_ADDRESS]: {
                         required,
+                        valid: (value) => value.geo_lat !== undefined && value.geo_lon !== undefined,
                     },
                 };
         }
@@ -851,7 +854,10 @@ export default {
                 case receiveMethods.DELIVERY:
                 case receiveMethods.EXPRESS:
                 default:
-                    if (this.$v.selectedAddress.$dirty && !this.$v.selectedAddress.required) {
+                    if (
+                        this.$v.selectedAddress.$dirty &&
+                        (!this.$v.selectedAddress.required || !this.$v.selectedAddress.valid)
+                    ) {
                         this.debounce_scrollToError(this.$refs.address);
                         return 'Укажите адрес доставки';
                     }
@@ -913,6 +919,7 @@ export default {
             SET_SUBSCRIBE,
             SET_CONFIRMATION_TYPE,
 
+            SET_ADDRESS,
             SET_ADDRESS_NO_LK,
             ADD_ADDRESS,
             CHANGE_ADDRESS,
@@ -942,6 +949,8 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
+
+        ...mapActions(GEO_MODULE, [SET_SELECTED_CITY]),
 
         validate() {
             this.$v.$touch();
@@ -1274,13 +1283,29 @@ export default {
         if (selectedCitySuggestion) {
             const {
                 city,
+                city_type,
                 city_fias_id,
                 settlement,
+                settlement_type,
                 settlement_fias_id,
+                geo_lat,
+                geo_lon,
                 region_fias_id,
                 region,
                 postal_code,
             } = selectedCitySuggestion.data;
+
+            await this[SET_SELECTED_CITY]({
+                city: {
+                    name: settlement || city,
+                    type: settlement_type || city_type,
+                    fias_id: settlement_fias_id || city_fias_id,
+                    geo_lat: geo_lat,
+                    geo_lon: geo_lon,
+                    region_fias_id,
+                },
+                setCookie: true,
+            });
 
             await this[SET_CITY_FIAS]({
                 city: settlement || city,
@@ -1291,14 +1316,22 @@ export default {
                 region_guid: region_fias_id,
             });
 
-            await this[SET_ADDRESS_NO_LK]({
-                city: settlement || city,
-                city_guid: settlement_fias_id || city_fias_id,
-                country_code: 'RU',
-                post_index: postal_code,
-                region: region,
-                region_guid: region_fias_id,
+            const addressByCity = this[ADDRESSES].find((item) => {
+                return item.city_guid === settlement_fias_id || item.city_guid === city_fias_id;
             });
+
+            if (addressByCity !== undefined) {
+                await this[SET_ADDRESS](addressByCity);
+            } else {
+                await this[SET_ADDRESS_NO_LK]({
+                    city: settlement || city,
+                    city_guid: settlement_fias_id || city_fias_id,
+                    country_code: 'RU',
+                    post_index: postal_code,
+                    region: region,
+                    region_guid: region_fias_id,
+                });
+            }
 
             // перезагружаем, если находимся в сессии
             if (this[HAS_SESSION]) await this[FETCH_CART_DATA]();
