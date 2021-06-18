@@ -70,10 +70,10 @@ export default {
         try {
             let city = $cookie.get(cookieNames.IBT_GEOLOCATION);
             if (!city) {
-                const ip = req.headers['x-forwarded-for'].split(',').pop() ||
-                    req.connection.remoteAddress ||
+                const ip = $context.req.headers['x-forwarded-for'].split(',').pop() ||
+                    $context.req.connection.remoteAddress ||
                     $context.req.ip;
-                console.log($context.req, ip);
+                console.info($context, $context.req, ip);
                 city = await dispatch(GET_SELECTED_CITY_BY_IP, ip);
             }
 
