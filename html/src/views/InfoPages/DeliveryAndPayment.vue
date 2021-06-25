@@ -86,19 +86,19 @@
                             <col width="10%" />
                         </colgroup>
                         <template v-slot:column-region>Регион</template>
-                        <template v-slot:column-deliverydo>Доставка заказа до 3500 руб</template>
-                        <template v-slot:column-deliveryot>Доставка заказа от 3500 руб</template>
-                        <template v-slot:column-pickupdo>Самовывоз заказа до 3500 руб</template>
-                        <template v-slot:column-pickupot>Самовывоз заказа от 3500 руб</template>
+                        <template v-slot:column-deliverydo>Доставка до 3500 руб</template>
+                        <template v-slot:column-deliveryot>Доставка от 3500 руб</template>
+                        <template v-slot:column-pickupdo>Самовывоз до 3500 руб</template>
+                        <template v-slot:column-pickupot>Самовывоз от 3500 руб</template>
                         <template v-slot:column-timing>Сроки</template>
                     </v-table>
                     <template v-else>
                         <div class="info-pages-block__card" v-for="item in items" :key="item.region">
                             <info-row name="Регион" :value="item.region" />
-                            <info-row name="Доставка заказа до 3500 руб" :value="item.deliverydo" />
-                            <info-row name="Доставка заказа от 3500 руб" :value="item.deliveryot" />
-                            <info-row name="Самовывоз заказа до 3500 руб" :value="item.pickupdo" />
-                            <info-row name="Самовывоз заказа от 3500 руб" :value="item.pickupot" />
+                            <info-row name="Доставка до 3500 руб" :value="item.deliverydo" />
+                            <info-row name="Доставка от 3500 руб" :value="item.deliveryot" />
+                            <info-row name="Самовывоз до 3500 руб" :value="item.pickupdo" />
+                            <info-row name="Самовывоз от 3500 руб" :value="item.pickupot" />
                             <info-row name="Сроки" :value="item.timing" />
                         </div>
                     </template>
