@@ -18,8 +18,7 @@
 
         <section class="section">
             <div class="container">
-                <div data-retailrocket-markup-block="5efda11c97a52833a0d006e7" v-if="hasSession" data-auth="true"></div>
-                <div data-retailrocket-markup-block="5efda11c97a52833a0d006e7" v-else data-auth="false"></div>
+                <retail-rocket-container data-retailrocket-markup-block="5efda11c97a52833a0d006e7" v-bind:data-auth="hasSession" />
             </div>
         </section>
     </section>
@@ -46,6 +45,7 @@ import metaMixin from '@plugins/meta';
 import { breakpoints, modalName } from '@enums';
 import './NotFound.css';
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
 const sliderOptions = {
     spaceBetween: 24,
@@ -84,6 +84,7 @@ export default {
     mixins: [metaMixin],
 
     components: {
+        RetailRocketContainer,
         VButton,
         VSlider,
 

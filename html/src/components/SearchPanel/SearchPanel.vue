@@ -33,7 +33,10 @@
                     </template>
                 </ul>
 
-                <retail-rocket-container data-retailrocket-markup-block="5f21670297a5282edc07d7cc" force-render v-bind:data-auth="hasSession"/>
+                <retail-rocket-container
+                    data-retailrocket-markup-block="5f21670297a5282edc07d7cc"
+                    v-bind:data-auth="hasSession"
+                />
 
                 <template v-if="!isTablet && products && products.length > 0">
                     <div class="search-panel__products">

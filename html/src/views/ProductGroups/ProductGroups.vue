@@ -67,7 +67,7 @@
 
         <section class="section product-groups-view__section">
             <div class="container">
-                <div data-retailrocket-markup-block="5efdc56097a52833a0d00bab" v-bind:data-auth="hasSession"></div>
+                <retail-rocket-container data-retailrocket-markup-block="5efdc56097a52833a0d00bab" v-bind:data-auth="hasSession" />
             </div>
         </section>
 
@@ -124,12 +124,14 @@ import { generateCategoryUrl } from '@util/catalog';
 import metaMixin from '@plugins/meta';
 import '@images/sprites/home.svg';
 import './ProductGroups.css';
+import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
 export default {
     name: 'product-groups',
     mixins: [metaMixin],
 
     components: {
+        RetailRocketContainer,
         VPagination,
         //VExpander,
 

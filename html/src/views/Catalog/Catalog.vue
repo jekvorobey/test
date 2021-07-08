@@ -141,26 +141,26 @@
                     </div>
 
                     <template v-if="isSearchPage">
-                        <div
+                        <retail-rocket-container
                             v-if="range > 0"
                             data-retailrocket-markup-block="5f21668797a5282edc07d7c8"
                             :data-search-phrase="$route.query.search_string"
                             v-bind:data-auth="hasSession"
                         />
-                        <div
+                        <retail-rocket-container
                             v-else
                             data-retailrocket-markup-block="5f21669197a5282edc07d7c9"
                             :data-search-phrase="$route.query.search_string"
                             v-bind:data-auth="hasSession"
                         />
                     </template>
-                    <div
+                    <retail-rocket-container
                         v-else-if="isBrandPage"
                         data-retailrocket-markup-block="5efdc55a97a52833a0d00baa"
                         :data-vendor="entityCode"
                         v-bind:data-auth="hasSession"
                     />
-                    <div
+                    <retail-rocket-container
                         v-else
                         data-retailrocket-markup-block="5efda10697a52833a0d006df"
                         :data-category-id="activeCategory && activeCategory.id"
@@ -323,12 +323,14 @@ import '@plugins/sticky';
 import '@images/sprites/cross-small.svg';
 import '@images/sprites/home.svg';
 import './Catalog.css';
+import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
 export default {
     name: 'catalog',
     mixins: [metaMixin],
 
     components: {
+        RetailRocketContainer,
         VSvg,
         VButton,
         VSelect,
