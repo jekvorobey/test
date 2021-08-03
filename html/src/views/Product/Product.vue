@@ -273,7 +273,8 @@
                 <retail-rocket-container
                         data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
                         :data-product-id="getProductIdList"
-                        :data-auth="hasSession" force-render/>
+                        v-bind:data-auth="hasSession"
+                />
             </div>
         </section>
 
@@ -606,8 +607,7 @@
                 <retail-rocket-container
                         data-retailrocket-markup-block="5efda11697a52833a0d006e6"
                         :data-product-id="getProductIdList"
-                        :data-auth="hasSession"
-                        force-render
+                        v-bind:data-auth="hasSession"
                 />
             </div>
         </section>
@@ -1537,7 +1537,7 @@ export default {
     },
 
     created() {
-        // Если перезошел переход со страницы реферального партнера,
+        // Если произошел переход со страницы реферального партнера,
         // записываем его код в сессию для регистрации
         if (this.refCode) this[SET_SESSION_REFERRAL_CODE](this.refCode);
     },
@@ -1554,9 +1554,6 @@ export default {
     mounted() {
         window.frisbuy.loadScript(this.frisbuyUrl);
         this.$nextTick(() => (this.isMounted = true));
-        this.$nextTick(() => {
-            if (typeof retailrocket !== 'undefined') retailrocket.markup.render();
-        });
     },
 };
 </script>

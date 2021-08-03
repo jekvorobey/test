@@ -181,7 +181,11 @@
                     :data-products="activeItemIds"
                     v-bind:data-auth="hasSession"
                 />
-                <retail-rocket-container v-else data-retailrocket-markup-block="5f21671697a5282edc07d7ce" v-bind:data-auth="hasSession"/>
+                <retail-rocket-container
+                    v-else
+                    data-retailrocket-markup-block="5f21671697a5282edc07d7ce"
+                    v-bind:data-auth="hasSession"
+                />
             </div>
         </section>
 

@@ -6,7 +6,7 @@
                     <v-svg name="logo" width="30" height="30" />
                 </a>
                 <header-logo-panel class="page-502__header-panel">
-                    Mаркетплейс только для мастеров бьюти-индустрии
+                    Mаркетплейс для мастеров бьюти-индустрии
                 </header-logo-panel>
             </div>
         </header>

@@ -39,7 +39,6 @@
                 data-retailrocket-markup-block="5f21672797a5282edc07d7cf"
                 :key="product.id"
                 :data-product-id="product.id"
-                force-render
                 v-bind:data-auth="hasSession"
             />
 
