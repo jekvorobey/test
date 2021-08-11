@@ -962,6 +962,7 @@ export default {
 
     computed: {
         ...mapState([LOCALE]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState([SCROLL, RECENTLY_VIEWED_PRODUCTS]),
 
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
