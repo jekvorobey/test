@@ -11,12 +11,11 @@
             <div class="text-medium product-price-panel__name">{{ name }}</div>
 
             <div>
-                <price class="text-bold product-price-panel__price" :value="price.value" :currency="price.currency" />
+                <price class="text-bold product-price-panel__price" v-bind="modifiedPrice" />
                 <price
                     v-if="oldPrice"
                     class="text-grey text-sm text-strike product-price-panel__price"
-                    :value="oldPrice.value"
-                    :currency="oldPrice.currency"
+                    v-bind="modifiedOldPrice"
                 />
                 <div v-if="bonus" class="text-grey text-sm product-price-panel__bonus">
                     + {{ computedBonus }} бонусов
@@ -81,6 +80,11 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        isPriceHidden: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
@@ -97,6 +101,16 @@ export default {
 
         computedBonus() {
             return preparePrice(this.bonus);
+        },
+
+        modifiedPrice() {
+            return this.price
+                ? Object.assign(this.price, { isPriceHidden: this.isPriceHidden })
+                : { isPriceHidden: this.isPriceHidden };
+        },
+
+        modifiedOldPrice() {
+            return this.oldPrice ?? Object.assign(this.oldPrice, { isPriceHidden: this.isPriceHidden });
         },
 
         isTablet() {
