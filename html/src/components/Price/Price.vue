@@ -86,7 +86,7 @@ export default {
 
         currencySymbol() {
             const { isObject, alwaysNumber, value, currency } = this;
-            if (!isObject) return value === 0 && !alwaysNumber ? null : currencySymbol[currency];
+            if (!isObject) return (value === 0 || value === null) && !alwaysNumber ? null : currencySymbol[currency];
             else return currencySymbol[currency];
         },
 
@@ -101,7 +101,7 @@ export default {
         },
 
         showHiddenPriceLabel() {
-            return this.isPriceHidden && this.value === 0;
+            return this.isPriceHidden && (this.value === 0 || this.value === null);
         },
 
         itemPropSettings() {
