@@ -45,17 +45,17 @@
                         class="text-bold catalog-product-list-card__price"
                         v-if="item.price"
                         v-bind="
-                            item.oldPrice && isEqPrices(item.price, item.oldPrice)
-                                ? concretePrice(item.price)
-                                : item.price
+                            item.oldPrice && isEqPrices(modifiedPrice, modifiedOldPrice)
+                                ? concretePrice(modifiedPrice)
+                                : modifiedPrice
                         "
                         :item-prop="itemProp"
                         has-articles
                     />
                     <price
                         class="text-sm text-grey text-strike catalog-product-list-card__price"
-                        v-if="item.oldPrice && !isEqPrices(item.price, item.oldPrice)"
-                        v-bind="concretePrice(item.oldPrice)"
+                        v-if="item.oldPrice && !isEqPrices(modifiedPrice, modifiedOldPrice)"
+                        v-bind="concretePrice(modifiedOldPrice)"
                         has-articles
                     />
                 </div>
@@ -245,7 +245,7 @@ export default {
                           itemprop: 'offers',
                           itemscope: true,
                           itemtype:
-                              price.value instanceof Object
+                              price && price.value instanceof Object
                                   ? 'https://schema.org/AggregateOffer'
                                   : 'https://schema.org/Offer',
                       },
@@ -282,9 +282,7 @@ export default {
                         );
                     } else {
                         accumulator.push(
-                            Math.min.apply(null, currentValuesSorted) +
-                                '–' +
-                                Math.max.apply(null, currentValuesSorted)
+                            Math.min.apply(null, currentValuesSorted) + '–' + Math.max.apply(null, currentValuesSorted)
                         );
                     }
                 } else if (declensionVariants[colorString]) {
@@ -299,6 +297,18 @@ export default {
                 return accumulator;
             }, []);
             return result;
+        },
+
+        modifiedPrice() {
+            return this.item.price
+                ? Object.assign(this.item.price, { isPriceHidden: this.item.isPriceHidden })
+                : { isPriceHidden: this.item.isPriceHidden };
+        },
+
+        modifiedOldPrice() {
+            return this.item.oldPrice
+                ? Object.assign(this.item.oldPrice, { isPriceHidden: this.item.isPriceHidden })
+                : { isPriceHidden: this.item.isPriceHidden };
         },
     },
 
@@ -324,29 +334,60 @@ export default {
         },
 
         isEqPrices(price, oldPrice) {
-            if (typeof price.value === 'object' && price.value.to !== null && price.value.from !== null) {
+            if (
+                price.value &&
+                typeof price.value === 'object' &&
+                price.value.to !== null &&
+                price.value.from !== null
+            ) {
                 return false;
             }
-            if (typeof oldPrice.value === 'object' && oldPrice.value.to !== null && oldPrice.value.from !== null) {
+            if (
+                oldPrice.value &&
+                typeof oldPrice.value === 'object' &&
+                oldPrice.value.to !== null &&
+                oldPrice.value.from !== null
+            ) {
                 return false;
             }
-            let p1 = typeof price.value === 'number' ? price.value : price.value.from || price.value.to;
-            let p2 = typeof oldPrice.value === 'number' ? oldPrice.value : oldPrice.value.from || oldPrice.value.to;
+
+            let p1,
+                p2 = null;
+
+            if (price.value) {
+                p1 = typeof price.value === 'number' ? price.value : price.value.from || price.value.to;
+            }
+
+            if (oldPrice.value) {
+                p2 = typeof oldPrice.value === 'number' ? oldPrice.value : oldPrice.value.from || oldPrice.value.to;
+            }
+
             return p1 === p2;
         },
 
         concretePrice(price) {
-            if (typeof price.value === 'object' && price.value.from !== null && price.value.to !== null) {
+            if (
+                price.value &&
+                typeof price.value === 'object' &&
+                price.value.from !== null &&
+                price.value.to !== null
+            ) {
                 return price;
             }
             return {
-                value: typeof price.value === 'number' ? price.value : price.value.from || price.value.to,
+                value:
+                    typeof price.value === 'number'
+                        ? price.value
+                        : price.value
+                        ? price.value.from || price.value.to
+                        : null,
+                isPriceHidden: price.isPriceHidden,
             };
         },
 
         badgesUnique(badges) {
-            return badges ? badges.filter((v, i, a) => a.indexOf(v) === i) : []
-        }
+            return badges ? badges.filter((v, i, a) => a.indexOf(v) === i) : [];
+        },
     },
 };
 </script>

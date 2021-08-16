@@ -176,6 +176,7 @@
                             :price="product.price"
                             :old-price="product.oldPrice"
                             :bonus="product.bonus"
+                            :isPriceHidden="product.isPriceHidden"
                             :disabled="!canBuy"
                             item-prop
                             @cart="onBuyProduct"
@@ -662,6 +663,7 @@
                     :price="product.price"
                     :old-price="product.oldPrice"
                     :bonus="product.bonus"
+                    :isPriceHidden="product.isPriceHidden"
                     :disabled="!canBuy"
                     @add-item="onBuyProduct"
                 >
@@ -677,6 +679,7 @@
                     :price="product.price"
                     :old-price="product.oldPrice"
                     :bonus="product.bonus"
+                    :isPriceHidden="product.isPriceHidden"
                     :disabled="!canBuy"
                     @add-item="onBuyProduct"
                 >
