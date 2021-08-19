@@ -134,6 +134,13 @@ export function setSessionReferralCode(referral_code) {
     });
 }
 
+export function activateCustomer(customerId, signature) {
+    return $http.put('/v1/auth/activate-customer/', {
+        customerId,
+        signature,
+    });
+}
+
 // profile
 
 export function getProfile() {
