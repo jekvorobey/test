@@ -10,7 +10,7 @@
                 />
             </div>
             <div
-                v-if="!referralPartner && bonus > 0 && !isPriceHidden"
+                v-if="!referralPartner && bonus > 0 && !isPriceHidden && (price || oldPrice)"
                 class="text-grey product-cart-panel__info-bonus"
             >
                 + {{ bonus }} {{ bonusLabel }}
