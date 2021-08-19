@@ -54,6 +54,7 @@
                                     :old-price="item.oldPrice"
                                     :badges="item.badges"
                                     :rating="item.rating"
+                                    :is-price-hidden="item.isPriceHidden"
                                     :show-buy-btn="item.stock.qty > 0"
                                     @add-item="onAddToCart(item)"
                                     @preview="onPreview(item.code)"

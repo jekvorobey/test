@@ -9,7 +9,10 @@
                     v-bind="modifiedOldPrice"
                 />
             </div>
-            <div v-if="!referralPartner && bonus > 0" class="text-grey product-cart-panel__info-bonus">
+            <div
+                v-if="!referralPartner && bonus > 0 && !isPriceHidden"
+                class="text-grey product-cart-panel__info-bonus"
+            >
                 + {{ bonus }} {{ bonusLabel }}
             </div>
         </div>
