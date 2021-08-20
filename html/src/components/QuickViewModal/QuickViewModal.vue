@@ -73,6 +73,7 @@
                             :price="productPreview.price"
                             :old-price="productPreview.oldPrice"
                             :bonus="productPreview.bonus"
+                            :is-price-hidden="productPreview.isPriceHidden"
                             :disabled="!canBuy"
                             @cart="onCartStateChange"
                             @wishlist="onToggleFavorite(productPreview.productId)"

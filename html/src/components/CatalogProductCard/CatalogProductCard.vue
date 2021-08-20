@@ -27,11 +27,11 @@
 
         <div class="catalog-product-card__body">
             <div class="catalog-product-card__prices">
-                <price class="text-bold catalog-product-card__price" v-if="price" v-bind="price" has-articles />
+                <price class="text-bold catalog-product-card__price" v-bind="modifiedPrice" has-articles />
                 <price
                     class="text-sm text-grey text-strike catalog-product-card__price"
                     v-if="oldPrice"
-                    v-bind="oldPrice"
+                    v-bind="modifiedOldPrice"
                     has-articles
                 />
             </div>
@@ -151,6 +151,10 @@ export default {
             type: [Object, String],
         },
 
+        isPriceHidden: {
+            type: Boolean,
+        },
+
         isSmall: {
             type: Boolean,
             default: false,
@@ -189,8 +193,18 @@ export default {
         },
 
         badgesUnique() {
-            return this.badges ? this.badges.filter((v, i, a) => a.indexOf(v) === i) : []
-        }
+            return this.badges ? this.badges.filter((v, i, a) => a.indexOf(v) === i) : [];
+        },
+
+        modifiedPrice() {
+            return this.price
+                ? Object.assign(this.price, { isPriceHidden: this.isPriceHidden })
+                : { isPriceHidden: this.isPriceHidden };
+        },
+
+        modifiedOldPrice() {
+            return this.oldPrice ?? Object.assign(this.oldPrice, { isPriceHidden: this.isPriceHidden });
+        },
     },
 
     methods: {
