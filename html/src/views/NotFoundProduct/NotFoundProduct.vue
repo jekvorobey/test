@@ -17,7 +17,11 @@
 
         <section class="section">
             <div class="container">
-                <retail-rocket-container data-retailrocket-markup-block="5efda11c97a52833a0d006e7" v-bind:data-auth="hasSession"/>
+                <retail-rocket-container
+                    data-retailrocket-markup-block="5efda11c97a52833a0d006e7"
+                    :data-auth="hasSession ? 'true' : 'false'"
+                    :data-user-moderation="canBuy ? 'true' : 'false'"
+                />
             </div>
         </section>
     </section>
@@ -44,7 +48,7 @@ import metaMixin from '@plugins/meta';
 import { breakpoints, modalName } from '@enums';
 import './NotFoundProduct.css';
 
-import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import {NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER} from '@store/modules/Auth';
 import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
 const sliderOptions = {
@@ -100,6 +104,9 @@ export default {
     computed: {
         ...mapState(FEATURED_MODULE, [FEATURED_PRODUCTS]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapState(AUTH_MODULE, {
+            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
+        }),
 
         isTabletLg() {
             return this.$mq.tabletLg;
