@@ -179,12 +179,14 @@
                     v-if="cartItemsCount > 0"
                     data-retailrocket-markup-block="5f21670e97a5282edc07d7cd"
                     :data-products="activeItemIds"
-                    v-bind:data-auth="hasSession"
+                    :data-auth="hasSession ? 'true' : 'false'"
+                    :data-user-moderation="canBuy ? 'true' : 'false'"
                 />
                 <retail-rocket-container
                     v-else
                     data-retailrocket-markup-block="5f21671697a5282edc07d7ce"
-                    v-bind:data-auth="hasSession"
+                    :data-auth="hasSession ? 'true' : 'false'"
+                    :data-user-moderation="canBuy ? 'true' : 'false'"
                 />
             </div>
         </section>
@@ -244,7 +246,7 @@ import {
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER } from '@store/modules/Auth';
+import {NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER, CAN_BUY} from '@store/modules/Auth';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
@@ -346,6 +348,9 @@ export default {
             WARNINGS,
         ]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapState(AUTH_MODULE, {
+            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
+        }),
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
