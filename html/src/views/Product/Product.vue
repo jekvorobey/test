@@ -176,6 +176,7 @@
                             :price="product.price"
                             :old-price="product.oldPrice"
                             :bonus="product.bonus"
+                            :isPriceHidden="product.isPriceHidden"
                             :disabled="!canBuy"
                             item-prop
                             @cart="onBuyProduct"
@@ -273,7 +274,8 @@
                 <retail-rocket-container
                         data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
                         :data-product-id="getProductIdList"
-                        v-bind:data-auth="hasSession"
+                        :data-auth="hasSession ? 'true' : 'false'"
+                        :data-user-moderation="canUserBuy ? 'true' : 'false'"
                 />
             </div>
         </section>
@@ -607,7 +609,8 @@
                 <retail-rocket-container
                         data-retailrocket-markup-block="5efda11697a52833a0d006e6"
                         :data-product-id="getProductIdList"
-                        v-bind:data-auth="hasSession"
+                        :data-auth="hasSession ? 'true' : 'false'"
+                        :data-user-moderation="canUserBuy ? 'true' : 'false'"
                 />
             </div>
         </section>
@@ -662,6 +665,7 @@
                     :price="product.price"
                     :old-price="product.oldPrice"
                     :bonus="product.bonus"
+                    :isPriceHidden="product.isPriceHidden"
                     :disabled="!canBuy"
                     @add-item="onBuyProduct"
                 >
@@ -677,6 +681,7 @@
                     :price="product.price"
                     :old-price="product.oldPrice"
                     :bonus="product.bonus"
+                    :isPriceHidden="product.isPriceHidden"
                     :disabled="!canBuy"
                     @add-item="onBuyProduct"
                 >
@@ -743,7 +748,7 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, RECENTLY_VIEWED_PRODUCTS, LOCALE } from '@store';
 import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
 
-import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY as CAN_USER_BUY } from '@store/modules/Auth';
 import { SET_SESSION_REFERRAL_CODE } from '@store/modules/Auth/actions';
 
 import {
@@ -962,6 +967,9 @@ export default {
 
     computed: {
         ...mapState([LOCALE]),
+        ...mapState(AUTH_MODULE, {
+          [CAN_USER_BUY]: (state) => (state[USER] && state[USER][CAN_USER_BUY]) || false,
+        }),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState([SCROLL, RECENTLY_VIEWED_PRODUCTS]),
 
@@ -1270,7 +1278,7 @@ export default {
 
     methods: {
         ...mapActions([FETCH_RECENTLY_VIEWED_PRODUCTS]),
-        ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE, HAS_SESSION]),
+        ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE]),
         ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS, FETCH_PRODUCT_MASTERCLASSES]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
