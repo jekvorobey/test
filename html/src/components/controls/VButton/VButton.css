@@ -5,7 +5,7 @@
     line-height: 24px;
     padding: 6px calc(var(--gs) * 2);
     clear: both;
-    transition: all var(--time) var(--timing-function);
+    transition: all var(--time) var(--timing-function), outline-width 0s;
     border: 2px solid var(--cl-global);
     background: var(--cl-global);
     text-align: center;

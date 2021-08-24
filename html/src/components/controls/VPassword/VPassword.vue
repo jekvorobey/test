@@ -18,6 +18,7 @@
             <button
                 v-if="!$attrs.disabled"
                 class="v-password__btn-show"
+                type="button"
                 @mousedown.prevent
                 @click.prevent="changePasswordState"
             >
