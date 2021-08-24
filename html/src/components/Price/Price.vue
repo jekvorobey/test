@@ -13,8 +13,8 @@
         <v-svg
             v-else-if="showHiddenPriceLabel"
             name="no-price"
-            :width="isTablet ? 120 : 180"
-            :height="isTablet ? 32 : 48"
+            :width="isTablet ? 120 : 144"
+            :height="isTablet ? 32 : 38"
         />
         <span v-else v-bind="itemPropSettings.value">{{ valueLabel }}</span
         ><template v-if="currencySymbol"

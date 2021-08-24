@@ -17,7 +17,10 @@
                     class="text-grey text-sm text-strike product-price-panel__price"
                     v-bind="modifiedOldPrice"
                 />
-                <div v-if="bonus" class="text-grey text-sm product-price-panel__bonus">
+                <div
+                    v-if="bonus && (!isPriceHidden || price || oldPrice)"
+                    class="text-grey text-sm product-price-panel__bonus"
+                >
                     + {{ computedBonus }} бонусов
                 </div>
             </div>
