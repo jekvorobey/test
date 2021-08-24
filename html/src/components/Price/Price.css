@@ -4,8 +4,25 @@
     vertical-align: middle;
 }
 
-@media (--tablet-lg-min) {
-    .price {
+.price__no-price {
+    width: 180px;
+    height: 48px;
+
+    @media (--tablet) {
+        width: 120px;
+        height: 32px;
+    }
+
+    .catalog-product-card__price &,
+    .catalog-product-list-card__price & {
+        width: 144px;
+        height: 38px;
         margin-left: 30px;
+
+        @media (--tablet) {
+            width: 102px;
+            height: 29px;
+            margin-left: 0;
+        }
     }
 }

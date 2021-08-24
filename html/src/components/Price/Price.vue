@@ -13,8 +13,7 @@
         <v-svg
             v-else-if="showHiddenPriceLabel"
             name="no-price"
-            :width="isTablet ? 120 : 144"
-            :height="isTablet ? 32 : 38"
+            class="price__no-price"
         />
         <span v-else v-bind="itemPropSettings.value">{{ valueLabel }}</span
         ><template v-if="currencySymbol"
@@ -141,10 +140,6 @@ export default {
                           : {},
                       currency: {},
                   };
-        },
-
-        isTablet() {
-            return this.$mq.tablet;
         },
     },
 };
