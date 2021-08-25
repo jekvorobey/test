@@ -15,7 +15,10 @@
             </self-router-link>
         </div>
         <transition name="slide-right">
-            <ul class="category-tree-item__list" v-if="hasChildren && (!isInteractive || isHover || isActive)">
+            <ul
+                class="category-tree-item__list"
+                v-if="hasChildren && (!isInteractive || alwaysExpanded || isHover || isActive)"
+            >
                 <category-tree-item
                     class="category-tree-item__item"
                     v-for="(item, index) in item.items"
@@ -61,7 +64,7 @@ export default {
             default: true,
         },
 
-        alwaysExpaned: {
+        alwaysExpanded: {
             type: Boolean,
             default: false,
         },
@@ -127,15 +130,6 @@ export default {
             } = this;
             return Array.isArray(items);
         },
-    },
-    watch: {
-        $route(to) {
-            if (to.path !== '/catalog/' && this.isRoot) {
-                this.isHover = true;
-            } else {
-                this.isHover = false;
-            }
-        }
     },
 
     methods: {
