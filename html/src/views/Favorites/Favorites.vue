@@ -51,6 +51,7 @@
                         :image="product.image"
                         :price="product.price"
                         :old-price="product.oldPrice"
+                        :is-price-hidden="product.isPriceHidden"
                         :badges="product.badges"
                         :rating="product.rating"
                         :show-buy-btn="product.stock.qty > 0"

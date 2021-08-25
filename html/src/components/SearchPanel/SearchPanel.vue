@@ -35,7 +35,8 @@
 
                 <retail-rocket-container
                     data-retailrocket-markup-block="5f21670297a5282edc07d7cc"
-                    v-bind:data-auth="hasSession"
+                    :data-auth="hasSession ? 'true' : 'false'"
+                    :data-user-moderation="canBuy ? 'true' : 'false'"
                 />
 
                 <template v-if="!isTablet && products && products.length > 0">
@@ -54,6 +55,7 @@
                                     :old-price="item.oldPrice"
                                     :badges="item.badges"
                                     :rating="item.rating"
+                                    :is-price-hidden="item.isPriceHidden"
                                     :show-buy-btn="item.stock.qty > 0"
                                     @add-item="onAddToCart(item)"
                                     @preview="onPreview(item.code)"
@@ -85,7 +87,7 @@ import { SCROLL } from '@store';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
-import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import {NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER} from '@store/modules/Auth';
 
 import {
     NAME as SEARCH_MODULE,
@@ -125,6 +127,9 @@ export default {
         ...mapState([SCROLL]),
         ...mapState(SEARCH_MODULE, [SEARCH, SEARCH_STRING, POPULAR_PRODUCTS, SUGGESTIONS, POPULAR_REQUESTS, PRELOADER]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapState(AUTH_MODULE, {
+            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
+        }),
 
         products() {
             const { isEmpty } = this;

@@ -363,11 +363,13 @@ export default {
         },
 
         cards() {
-            const { cards = [] } = this[BILLING_DATA] || {};
-            const cardList = cards.map((c) => ({
-                ...c,
-                label: `${c.card_type} ${c.card_panmask}`,
-            }));
+            // IBT-460: убрать возможность вывода на карту
+            // const { cards = [] } = this[BILLING_DATA] || {};
+            // const cardList = cards.map((c) => ({
+            //     ...c,
+            //     label: `${c.card_type} ${c.card_panmask}`,
+            // }));
+            const cardList = [];
 
             // cardList.push(this.newCardOption); // Вывод на карту
 

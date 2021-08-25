@@ -1,10 +1,7 @@
-import { $logger } from '@services';
-import { responseStatus } from '@enums';
-import store, { storeErrorHandler } from '@util/store';
+import { storeErrorHandler } from '@util/store';
 
 import {
     checkSession,
-    login,
     loginByPassword,
     loginBySocial,
     logout,
@@ -17,6 +14,7 @@ import {
     setSessionReferralCode,
     getUserInfo,
     getUnreadMesagesCount,
+    activateCustomer,
 } from '@api';
 import { SET_HAS_SESSION, SET_USER, SET_UNREAD_MESSAGES } from './mutations';
 
@@ -37,6 +35,8 @@ export const FETCH_UNREAD_MESSAGES = 'FETCH_UNREAD_MESSAGES';
 
 export const SET_REFERRER_CODE = 'SET_REFERRER_CODE';
 export const SET_SESSION_REFERRAL_CODE = 'SET_SESSION_REFERRAL_CODE';
+
+export const ACTIVATE_CUSTOMER = 'ACTIVATE_CUSTOMER';
 
 export default {
     [SET_REFERRER_CODE]({ commit }, code) {
@@ -164,6 +164,15 @@ export default {
             commit(SET_UNREAD_MESSAGES, count);
         } catch (error) {
             storeErrorHandler(FETCH_UNREAD_MESSAGES)(error);
+        }
+    },
+
+    async [ACTIVATE_CUSTOMER]({ dispatch }, { customerId, signature }) {
+        try {
+            await activateCustomer(customerId, signature);
+            dispatch(CHECK_SESSION, true);
+        } catch (error) {
+            storeErrorHandler(ACTIVATE_CUSTOMER, true)(error);
         }
     },
 };

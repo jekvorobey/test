@@ -2,10 +2,17 @@
     <div class="product-cart-panel">
         <div class="product-cart-panel__info">
             <div class="product-cart-panel__info-prices" v-bind="itemPropSettings">
-                <price class="text-bold product-cart-panel__info-current" v-bind="price" item-prop />
-                <price v-if="oldPrice" class="text-grey text-strike product-cart-panel__info-old" v-bind="oldPrice" />
+                <price class="text-bold product-cart-panel__info-current" v-bind="modifiedPrice" item-prop />
+                <price
+                    v-if="oldPrice"
+                    class="text-grey text-strike product-cart-panel__info-old"
+                    v-bind="modifiedOldPrice"
+                />
             </div>
-            <div v-if="!referralPartner && bonus > 0" class="text-grey product-cart-panel__info-bonus">
+            <div
+                v-if="!referralPartner && bonus > 0 && (!isPriceHidden || price || oldPrice)"
+                class="text-grey product-cart-panel__info-bonus"
+            >
                 + {{ bonus }} {{ bonusLabel }}
             </div>
         </div>
@@ -82,6 +89,11 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        isPriceHidden: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
@@ -101,6 +113,16 @@ export default {
 
         inFavorites() {
             return this[IS_IN_FAVORITES](this.productId);
+        },
+
+        modifiedPrice() {
+            return this.price
+                ? Object.assign(this.price, { isPriceHidden: this.isPriceHidden })
+                : { isPriceHidden: this.isPriceHidden };
+        },
+
+        modifiedOldPrice() {
+            return this.oldPrice ?? Object.assign(this.oldPrice, { isPriceHidden: this.isPriceHidden });
         },
 
         itemPropSettings() {

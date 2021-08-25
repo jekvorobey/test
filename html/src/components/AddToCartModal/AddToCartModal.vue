@@ -39,7 +39,8 @@
                 data-retailrocket-markup-block="5f21672797a5282edc07d7cf"
                 :key="product.id"
                 :data-product-id="product.id"
-                v-bind:data-auth="hasSession"
+                :data-auth="hasSession ? 'true' : 'false'"
+                :data-user-moderation="canBuy ? 'true' : 'false'"
             />
 
             <div class="add-to-cart-modal__panel" v-if="isTablet">
@@ -78,7 +79,7 @@ import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
-import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import {NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER} from '@store/modules/Auth';
 
 import { modalName } from '@enums';
 import { getRandomIntInclusive } from '@util';
@@ -115,6 +116,9 @@ export default {
         ...mapState(CART_MODULE, [CART_DATA, RELATIVE_PRODUCTS]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapState(AUTH_MODULE, {
+            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
+        }),
 
         product() {
             return this.cartItem ? this.cartItem.p : null;

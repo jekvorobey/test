@@ -10,6 +10,11 @@
                 ><span v-bind="itemPropSettings.value.to">{{ valueLabel.to }}</span>
             </template>
         </template>
+        <v-svg
+            v-else-if="showHiddenPriceLabel"
+            name="no-price"
+            class="price__no-price"
+        />
         <span v-else v-bind="itemPropSettings.value">{{ valueLabel }}</span
         ><template v-if="currencySymbol"
             >&nbsp;<span v-html="currencySymbol" v-bind="itemPropSettings.currency"
@@ -18,11 +23,18 @@
 </template>
 
 <script>
+import VSvg from '@controls/VSvg/VSvg.vue';
+
 import { preparePrice } from '@util';
 import { currencySymbol } from '@enums';
 import './Price.css';
 
+import '@images/sprites/no-price.svg';
+
 export default {
+    components: {
+        VSvg,
+    },
     name: 'price',
 
     props: {
@@ -59,6 +71,11 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        isPriceHidden: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
@@ -68,7 +85,7 @@ export default {
 
         currencySymbol() {
             const { isObject, alwaysNumber, value, currency } = this;
-            if (!isObject) return value === 0 && !alwaysNumber ? null : currencySymbol[currency];
+            if (!isObject) return (value === 0 || value === null) && !alwaysNumber ? null : currencySymbol[currency];
             else return currencySymbol[currency];
         },
 
@@ -80,6 +97,10 @@ export default {
                 to: value.to && preparePrice(value.to),
                 from: value.from && preparePrice(value.from),
             };
+        },
+
+        showHiddenPriceLabel() {
+            return this.isPriceHidden && (this.value === 0 || this.value === null);
         },
 
         itemPropSettings() {
