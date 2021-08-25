@@ -60,12 +60,17 @@ export default {
             type: Boolean,
             default: true,
         },
+
+        alwaysExpaned: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
         return {
             timer: null,
-            isHover: false
+            isHover: false,
         };
     },
 
@@ -150,9 +155,8 @@ export default {
         },
 
         changeHover(flag) {
-            // eslint-disable-next-line vue/no-mutating-props
             this.isHover = flag;
-        }
+        },
     },
 };
 </script>
