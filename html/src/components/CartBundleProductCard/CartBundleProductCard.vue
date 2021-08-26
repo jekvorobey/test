@@ -69,7 +69,7 @@
                                 v-bind="selectedItem.price"
                             />
                             <price
-                                class="text-sm text-grey cart-bundle-product-card__panel-body-info-price"
+                                class="text-sm text-grey text-strike cart-bundle-product-card__panel-body-info-price"
                                 v-if="selectedItem.oldPrice"
                                 v-bind="selectedItem.oldPrice"
                             />
@@ -81,7 +81,7 @@
 
         <div class="cart-bundle-product-card__body">
             <div class="cart-bundle-product-card__body-bundle-info">
-                <v-link class="cart-bundle-product-card__body-name">{{ name }}</v-link>
+                <v-link class="cart-bundle-product-card__body-name">{{ bundleName }}</v-link>
                 <ol class="cart-bundle-product-card__list">
                     <li class="cart-bundle-product-card__list-item" v-for="item in items" :key="item.id">
                         {{ item.name }};
@@ -233,6 +233,10 @@ export default {
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
+
+        bundleName() {
+            return `Выгодный комплект из ${this.items.length} товаров`
+        },
 
         favoritesBtnText() {
             if (this.isTablet) return '';
