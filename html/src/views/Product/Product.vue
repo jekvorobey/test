@@ -506,7 +506,7 @@
                         >
                             <div class="product-view__characteristics-item-title">{{ item.title }}</div>
                             <div class="product-view__characteristics-item-value">
-                                {{ Array.isArray(item.value) ? item.value.join(', ') : item.value }}
+                                {{ Array.isArray(item.value) ? item.value.filter(n => !!n).join(', ') : item.value }}
                             </div>
                         </li>
                     </ul>
