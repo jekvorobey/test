@@ -748,7 +748,7 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, RECENTLY_VIEWED_PRODUCTS, LOCALE } from '@store';
 import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
 
-import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY as CAN_USER_BUY } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY } from '@store/modules/Auth';
 import { SET_SESSION_REFERRAL_CODE } from '@store/modules/Auth/actions';
 
 import {
@@ -968,7 +968,7 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, {
-          [CAN_USER_BUY]: (state) => (state[USER] && state[USER][CAN_USER_BUY]) || false,
+          canUserBuy: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
         }),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState([SCROLL, RECENTLY_VIEWED_PRODUCTS]),
@@ -1031,7 +1031,8 @@ export default {
 
         frisbuyUrl() {
             const { id } = this[PRODUCT];
-            return `https://www.frisbuy.ru/fb/widget?embed_id=e9575241-9f3d-11ea-ba01-0242ac150002&sku=${id}`;
+
+            return `https://www.frisbuy.ru/fb/widget?embed_id=e9575241-9f3d-11ea-ba01-0242ac150002&sku=${id}&custom_param_is_auth=${this.hasSession ? '1' : '0'}&custom_param_is_user_moderated=${this.canUserBuy ? '1' : '0'}`;
         },
 
         productCharacteristics() {
