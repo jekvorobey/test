@@ -48,7 +48,7 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 import metaMixin from '@plugins/meta';
 import { breakpoints, modalName } from '@enums';
 import './NotFound.css';
-import {NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER} from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
 import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
 const sliderOptions = {
