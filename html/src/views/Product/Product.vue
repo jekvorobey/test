@@ -871,7 +871,7 @@ const sliderOptions = {
     },
 };
 
-const gallerySize = 800;
+const gallerySize = 1060;
 const desktopSize = 600;
 const tabletSize = 400;
 
