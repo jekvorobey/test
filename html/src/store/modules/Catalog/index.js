@@ -25,6 +25,8 @@ export const FILTER_SEGMENTS = 'filterSegments';
 
 export const FILTERS_STATE_MAP = 'filtersStateMap';
 
+export const PREVIOUS_CATALOG_FETCH_PAYLOAD = 'previousCatalogFetchPayload';
+
 export default function createModule() {
     return {
         name: NAME,
@@ -54,6 +56,8 @@ export default function createModule() {
 
             [ROUTE_SEGMENTS]: [],
             [FILTER_SEGMENTS]: {},
+
+            [PREVIOUS_CATALOG_FETCH_PAYLOAD]: {},
         },
         actions,
         mutations,

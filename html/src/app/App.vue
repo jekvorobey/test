@@ -98,6 +98,9 @@ import { CHECK_SESSION, FETCH_USER, FETCH_UNREAD_MESSAGES } from '@store/modules
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
+import { NAME as CATALOG_MODULE } from '@store/modules/Catalog';
+import { REFRESH_CATALOG_DATA } from '@store/modules/Catalog/actions';
+
 import { $cookie } from '@services';
 import { eventName, interval, modalName, cookieNames } from '@enums';
 import { SCROLL, IS_MENU_OPEN } from '@store';
@@ -162,6 +165,7 @@ export default {
         ...mapActions(CHECKOUT_MODULE, [CLEAR_CHECKOUT_DATA]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [FETCH_FAVORITES_ALL]),
+        ...mapActions(CATALOG_MODULE, [REFRESH_CATALOG_DATA]),
 
         onCheckUserData() {
             this[FETCH_USER]();
@@ -214,6 +218,9 @@ export default {
                 this[CLEAR_CHECKOUT_DATA]();
                 this.stopUserDataTimer();
             }
+
+            await this[REFRESH_CATALOG_DATA]();
+
             this.startSessionTimer();
         },
     },
