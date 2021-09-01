@@ -672,7 +672,7 @@
                     {{ buyBtnText }}
                 </product-price-panel>
             </transition>
-            <section class="section" :style="{ height: isTablet ? '56px' : 0 }" v-else>
+            <section class="section" :style="{ height: isTablet ? '78px' : 0 }" v-else>
                 <product-price-panel
                     class="product-view__top-panel"
                     :class="{ 'product-view__top-panel--static': !isPanelSticky }"
