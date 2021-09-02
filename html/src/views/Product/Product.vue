@@ -1263,6 +1263,10 @@ export default {
             this.onSelectedCityChanged(value);
         },
 
+        [HAS_SESSION]() {
+            this.refetchProduct();
+        },
+
         code(value) {
             if (value) {
                 this.setRetailRocketProductView();
@@ -1303,6 +1307,17 @@ export default {
             }
         },
 
+        async refetchProduct() {
+            try {
+                const { code, refCode: referrerCode } = this;
+                this.$progress.start();
+                await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
+                this.$progress.finish();
+            } catch (error) {
+                this.$progress.fail();
+            }
+        },
+
         handleModalQuery(value) {
             if (!value) return;
 
@@ -1326,14 +1341,7 @@ export default {
         },
 
         async onSelectedCityChanged() {
-            try {
-                const { code, refCode: referrerCode } = this;
-                this.$progress.start();
-                await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
-                this.$progress.finish();
-            } catch (error) {
-                this.$progress.fail();
-            }
+            await this.refetchProduct();
         },
 
         onToggleFavorite(productId) {
