@@ -4,7 +4,8 @@ import { productGroupBase } from '@enums/product';
 import { storeErrorHandler } from '@util/store';
 
 import { getCatalogItems, getCategories, getBanners, getFilters, getProductGroup } from '@api';
-import { SET_LOAD_PATH as M_SET_LOAD_PATH, APPLY_DATA } from './mutations';
+import { SET_LOAD_PATH as M_SET_LOAD_PATH, APPLY_DATA, SET_PREVIOUS_CATALOG_FETCH_PAYLOAD } from './mutations';
+import { PREVIOUS_CATALOG_FETCH_PAYLOAD } from './index';
 
 function mergeFunction(objValue, srcValue) {
     if (Array.isArray(objValue)) return objValue.concat(srcValue);
@@ -19,6 +20,7 @@ const FETCH_PRODUCT_GROUP = 'FETCH_PRODUCT_GROUP';
 
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 export const FETCH_CATALOG_DATA = 'FETCH_CATALOG_DATA';
+export const REFRESH_CATALOG_DATA = 'REFRESH_CATALOG_DATA';
 export const CHANGE_FILTER_STATE = 'CHANGE_FILTER_STATE';
 
 export default {
@@ -76,6 +78,10 @@ export default {
         }
     },
 
+    async [REFRESH_CATALOG_DATA]({ state, dispatch }) {
+        return dispatch(FETCH_CATALOG_DATA, state[PREVIOUS_CATALOG_FETCH_PAYLOAD]);
+    },
+
     async [FETCH_CATALOG_DATA]({ state, dispatch, commit }, payload) {
         const {
             type = null,
@@ -92,6 +98,8 @@ export default {
 
             showMore,
         } = payload;
+
+        commit(SET_PREVIOUS_CATALOG_FETCH_PAYLOAD, payload);
 
         const data = {};
         const fetchList = [];

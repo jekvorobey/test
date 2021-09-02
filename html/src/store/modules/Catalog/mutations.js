@@ -1,5 +1,8 @@
+import { PREVIOUS_CATALOG_FETCH_PAYLOAD } from './index';
+
 export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 export const APPLY_DATA = 'APPLY_DATA';
+export const SET_PREVIOUS_CATALOG_FETCH_PAYLOAD = 'SET_PREVIOUS_CATALOG_FETCH_PAYLOAD';
 const CHANGE_FILTER_STATE = 'CHANGE_FILTER_STATE';
 
 export default {
@@ -16,5 +19,9 @@ export default {
             ...state.filtersStateMap,
             [name]: value,
         };
+    },
+
+    [SET_PREVIOUS_CATALOG_FETCH_PAYLOAD](state, payload) {
+        state[PREVIOUS_CATALOG_FETCH_PAYLOAD] = payload;
     },
 };

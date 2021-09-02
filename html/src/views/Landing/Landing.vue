@@ -31,6 +31,8 @@ import { mapState, mapActions } from 'vuex';
 import { NAME as LANDING_MODULE, RENDER_DATA } from '@store/modules/Landing';
 import { FETCH_LANDING_DATA, FETCH_LANDING_DATA_2 } from '@store/modules/Landing/actions';
 
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+
 import metaMixin from '@plugins/meta';
 import './Landing.css';
 
@@ -60,14 +62,33 @@ export default {
 
     computed: {
         ...mapState(LANDING_MODULE, [RENDER_DATA]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
 
         isTabletLg() {
             return this.$mq.tabletLg;
         },
     },
 
+    watch: {
+        [HAS_SESSION]() {
+            this.fetchData();
+        },
+    },
+
     methods: {
         ...mapActions(LANDING_MODULE, [FETCH_LANDING_DATA]),
+
+        fetchData() {
+            $progress.start();
+            $store
+                .dispatch(`${LANDING_MODULE}/${FETCH_LANDING_DATA_2}`)
+                .then(() => {
+                    $progress.finish();
+                })
+                .catch(() => {
+                    $progress.fail();
+                });
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -108,15 +129,7 @@ export default {
     },
 
     mounted() {
-        $progress.start();
-        $store
-            .dispatch(`${LANDING_MODULE}/${FETCH_LANDING_DATA_2}`)
-            .then(() => {
-                $progress.finish();
-            })
-            .catch(() => {
-                $progress.fail();
-            });
-    }
+        this.fetchData();
+    },
 };
 </script>

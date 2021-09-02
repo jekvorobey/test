@@ -296,7 +296,7 @@ import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as CATALOG_MODULE, TYPE, ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, RANGE } from '@store/modules/Catalog';
-import { SET_LOAD_PATH, FETCH_CATALOG_DATA } from '@store/modules/Catalog/actions';
+import { SET_LOAD_PATH, FETCH_CATALOG_DATA, REFRESH_CATALOG_DATA } from '@store/modules/Catalog/actions';
 import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
 import {
     ACTIVE_TAGS,
@@ -569,11 +569,15 @@ export default {
             const category = this[ACTIVE_CATEGORY];
             if (category) $retailRocket.addCategoryView(category.id);
         },
+
+        [HAS_SESSION]() {
+            this[REFRESH_CATALOG_DATA]();
+        },
     },
 
     methods: {
         ...mapActions([FETCH_RECENTLY_VIEWED_PRODUCTS]),
-        ...mapActions(CATALOG_MODULE, [FETCH_CATALOG_DATA, SET_LOAD_PATH]),
+        ...mapActions(CATALOG_MODULE, [FETCH_CATALOG_DATA, SET_LOAD_PATH, REFRESH_CATALOG_DATA]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
