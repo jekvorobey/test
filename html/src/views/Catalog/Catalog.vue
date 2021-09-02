@@ -54,7 +54,7 @@
                                 v-for="category in categories"
                                 :item="category"
                                 :key="category.id"
-                                :always-expanded="categories.length === 1"
+                                :always-expanded="Array.isArray(category.items) && category.items.length === 1"
                             />
                         </ul>
 
