@@ -1,5 +1,12 @@
 <template>
-    <li class="checkout-option-card" :class="{ 'checkout-option-card--selected': selected }" @click.stop="onCardClick">
+    <li
+        class="checkout-option-card"
+        :class="{
+            'checkout-option-card--selected': selected,
+            'checkout-option-card--error': error,
+        }"
+        @click.stop="onCardClick"
+    >
         <div class="checkout-option-card__left">
             <slot />
         </div>
@@ -53,6 +60,11 @@ export default {
         showCheck: {
             type: Boolean,
             default: true,
+        },
+
+        error: {
+            type: Boolean,
+            default: false,
         },
     },
 
