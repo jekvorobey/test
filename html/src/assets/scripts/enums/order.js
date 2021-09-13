@@ -34,6 +34,9 @@ export const orderStatus = Object.freeze({
 
     // реально НЕ СУЩЕСТВУЕТ в системе, вместо него флаг в ордере
     CANCELED: 100,
+
+    // Частично возвращен - реально не существует в системе, вместо него флаг в заказе is_partially_cancelled
+    PARTIALLY_CANCELED: 110,
 });
 
 export const orderPaymentStatus = Object.freeze({

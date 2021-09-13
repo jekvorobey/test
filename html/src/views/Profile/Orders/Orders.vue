@@ -178,7 +178,7 @@
                                 </v-button>
                             </template>
                             <span :class="getOrderStatusClass(order)" v-else>
-                                {{ $t(`orderStatus.${order.status}`) }}
+                                {{ getStatusName(order) }}
                             </span>
                         </td>
                         <td class="orders-view__table-td">
@@ -413,7 +413,7 @@ import {
     ORDER_FIELD,
     ACTIVE_PAGE,
     REFERRAL_DATA,
-    FILTERS,
+    FILTERS, ORDER,
 } from '@store/modules/Profile/modules/Orders';
 import {
     REFERRAL_ARC_DATA,
@@ -432,7 +432,7 @@ import {
 
 import { preparePrice, shortNumberFormat } from '@util';
 import { getOrderStatusColorClass, generateThankPageUrl } from '@util/order';
-import { orderPaymentStatus, sortFields } from '@enums/order';
+import {orderPaymentStatus, orderStatus as orderStatusNames, sortFields} from '@enums/order';
 import { orderDateLocaleOptions } from '@settings/profile';
 import { sortDirections, modalName } from '@enums';
 import { DEFAULT_PAGE } from '@constants';
@@ -571,7 +571,7 @@ export default {
         },
 
         getOrderStatusClass(order) {
-            return getOrderStatusColorClass(order.status, order.canceled);
+            return getOrderStatusColorClass(order.status, order.is_canceled, order.is_partially_cancelled);
         },
 
         async onContinuePayment(orderId, paymentId) {
@@ -674,6 +674,18 @@ export default {
                 query,
             });
         },
+
+        getStatusName(order) {
+            const { status } = order || {};
+
+            // Вывод статуса Частично отменён и отменён
+            if (order['is_partially_cancelled'] && !order['is_canceled']) {
+                return this.$t(`orderStatus.${orderStatusNames.PARTIALLY_CANCELED}`);
+            } else if (order['is_canceled']) {
+                return this.$t(`orderStatus.${orderStatusNames.CANCELED}`);
+            }
+            return this.$t(`orderStatus.${status}`);
+        }
     },
 
     beforeRouteEnter(to, from, next) {
