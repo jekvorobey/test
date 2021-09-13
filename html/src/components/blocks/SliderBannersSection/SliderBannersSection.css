@@ -78,8 +78,8 @@
 
     &__slider {
         width: 100%;
-         max-width: 1224px;
-         padding: 0;
+        max-width: 1224px;
+        padding: 0;
 
         .v-slider__controls {
             left: 50%;
