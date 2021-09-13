@@ -26,6 +26,13 @@ import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg
 import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
 import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
+import hairdresserDayDesktopImg from '@images/mock/landing-hairdresser-day/desktop.jpg';
+import hairdresserDayDesktopRetina from '@images/mock/landing-hairdresser-day/desktop@2x.jpg';
+import hairdresserDayTabletImg from '@images/mock/landing-hairdresser-day/tablet.jpg';
+import hairdresserDayTabletRetina from '@images/mock/landing-hairdresser-day/tablet@2x.jpg';
+import hairdresserDayMobileImg from '@images/mock/landing-hairdresser-day/mobile.jpg';
+import hairdresserDayMobileRetina from '@images/mock/landing-hairdresser-day/mobile@2x.jpg';
+
 import { $logger } from '@services';
 import {
     getProducts,
@@ -117,6 +124,18 @@ export default {
                     tabletImageRetina: mainTabletImgRetina,
                     mobileImage: mainMobileImg,
                     mobileImageRetina: mainMobileImgRetina,
+                },
+                {
+                    id: 'hairdresserDay',
+                    name: '',
+                    type: 'banner',
+                    url: '/catalog/',
+                    desktopImage: hairdresserDayDesktopImg,
+                    desktopImageRetina: hairdresserDayDesktopRetina,
+                    tabletImage: hairdresserDayTabletImg,
+                    tabletImageRetina: hairdresserDayTabletRetina,
+                    mobileImage: hairdresserDayMobileImg,
+                    mobileImageRetina: hairdresserDayMobileRetina,
                 },
             ]);
         } catch (error) {
