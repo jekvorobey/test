@@ -78,34 +78,13 @@
 
     &__slider {
         width: 100%;
-        padding: 0 calc(var(--gs) * 13.5);
-
-        @media (--desktop) {
-            padding: 0 calc(var(--gs) * 5);
-        }
-
-        @media (--tablet-lg) {
-            padding: 0;
-        }
+         max-width: 1224px;
+         padding: 0;
 
         .v-slider__controls {
-            display: none;
-            left: calc(var(--gs) * 12);
-            bottom: calc(var(--gs) * 4);
-
-            @media (--desktop) {
-                bottom: calc(var(--gs) * 2);
-            }
-
-            @media (--tablet-lg) {
-                left: 50%;
-                bottom: calc(var(--gs) * 3);
-                transform: translateX(-50%);
-            }
-
-            @media (--tablet) {
-                bottom: calc(var(--gs) * 2);
-            }
+            left: 50%;
+            bottom: var(--gs);
+            transform: translateX(-50%);
 
             .swiper-pagination {
                 position: relative;
@@ -115,19 +94,19 @@
             }
 
             .swiper-pagination-bullet {
-                background-color: var(--cl-white);
-                opacity: 0.3;
+                background-color: var(--cl-black);
+                opacity: 1;
                 margin: 0 var(--gs);
 
                 &-active {
                     opacity: 1;
-                    background-color: var(--cl-white);
+                    background-color: var(--cl-black);
                 }
             }
 
             .swiper-button-next,
             .swiper-button-prev {
-                fill: var(--cl-white);
+                fill: var(--cl-black);
                 height: 44px;
                 width: 44px;
                 border-radius: 50%;
