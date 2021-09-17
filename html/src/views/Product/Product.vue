@@ -615,33 +615,6 @@
             </div>
         </section>
 
-        <section class="section product-view__section product-view__like">
-            <div class="container product-view__like-container">
-                <h2 class="product-view__section-hl product-view__like-hl">{{ $t('product.title.like') }}</h2>
-                <v-slider class="product-view__like-slider" name="also-like" :options="sliderOptions">
-                    <catalog-product-card
-                        class="swiper-slide product-view__like-card"
-                        v-for="item in featuredProducts.items"
-                        :key="item.id"
-                        :offer-id="item.id"
-                        :product-id="item.productId"
-                        :name="item.name"
-                        :type="item.type"
-                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                        :image="item.image"
-                        :price="item.price"
-                        :old-price="item.oldPrice"
-                        :badges="item.badges"
-                        :rating="item.rating"
-                        :show-buy-btn="item.stock.qty > 0"
-                        @add-item="onAddToCart(item)"
-                        @preview="onPreview(item.code)"
-                        @toggle-favorite-item="onToggleFavorite(item.productId)"
-                    />
-                </v-slider>
-            </div>
-        </section>
-
         <section
             class="section product-view__section product-view__history"
             v-if="recentlyViewed && recentlyViewed.length > 0"
