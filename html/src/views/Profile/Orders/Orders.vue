@@ -182,7 +182,7 @@
                             </span>
                             <br />
                             <span v-if="order.is_partially_cancelled && !order.is_canceled" class="status-color-error">
-                                Частично отменен
+                                {{ partiallyCancelledStatus }}
                             </span>
                         </td>
                         <td class="orders-view__table-td">
@@ -266,7 +266,7 @@
                             class="orders-view__list-item-row"
                             v-if="order.is_partially_cancelled && !order.is_canceled"
                         >
-                            Частично отменен
+                            {{ partiallyCancelledStatus }}
                         </info-row>
 
                         <info-row class="orders-view__list-item-row">
@@ -559,6 +559,10 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        partiallyCancelledStatus() {
+            return this.$t(`orderStatus.${orderStatusNames.PARTIALLY_CANCELED}`);
         },
     },
 

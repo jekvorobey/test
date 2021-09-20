@@ -32,7 +32,7 @@
                         class="order-details-view__details-row"
                         :class="'status-color-error'"
                         name=" "
-                        :value="'Частично отменен'"
+                        :value="partiallyCancelledStatus"
                     />
 
                     <info-row
@@ -463,6 +463,10 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        partiallyCancelledStatus() {
+            return this.$t(`orderStatus.${orderStatusNames.PARTIALLY_CANCELED}`);
         },
     },
 
