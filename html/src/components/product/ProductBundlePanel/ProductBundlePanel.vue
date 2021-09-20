@@ -1,6 +1,5 @@
 <template>
     <div class="product-bundle-panel">
-        <h2 class="product-bundle-panel__title">Выгодный комплект</h2>
         <div class="product-bundle-panel__content">
             <template v-for="item in products">
                 <catalog-product-card

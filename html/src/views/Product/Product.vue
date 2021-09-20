@@ -329,6 +329,8 @@
 
         <section class="product-view__section product-view__bundles" v-if="productBundles">
             <div class="container product-view__bundles">
+                <h2 class="product-bundle-panel__title" v-if="productBundles.length === 1">Выгодный комплект</h2>
+                <h2 class="product-bundle-panel__title" v-if="productBundles.length > 1">Выгодные комплекты</h2>
                 <product-bundle-panel
                     v-for="bundle in productBundles"
                     :key="bundle.id"
@@ -801,6 +803,7 @@ import {
     generateMasterclassUrl,
     prepareMasterclassSpeakers,
 } from '@util/catalog';
+import { pluralize } from '@util';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/facebook-bw.svg';
