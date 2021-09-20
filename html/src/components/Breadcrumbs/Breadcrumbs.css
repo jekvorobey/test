@@ -8,4 +8,8 @@
         padding-top: var(--gs);
         padding-bottom: var(--gs);
     }
+
+    @media (--tablet-lg-min) {
+        flex-wrap: wrap;
+    }
 }
