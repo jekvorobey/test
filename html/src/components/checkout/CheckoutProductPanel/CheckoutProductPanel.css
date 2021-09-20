@@ -319,7 +319,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            margin-bottom: calc(var(--gs) * 5);
+            margin-bottom: calc(var(--gs) * 3);
 
             @media (--tablet) {
                 margin-bottom: 0;
@@ -399,6 +399,11 @@
                     }
                 }
             }
+        }
+
+        &-error {
+          display: block;
+          margin-bottom: calc(var(--gs) * 3);
         }
     }
 

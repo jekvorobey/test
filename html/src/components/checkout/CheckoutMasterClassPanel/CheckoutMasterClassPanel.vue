@@ -31,16 +31,24 @@
         <attention-panel
             class="checkout-master-class-panel__attention"
             :class="{
-                'checkout-master-class-panel__attention--no-email': !selectedRecipient || !selectedRecipient.email,
+                'checkout-master-class-panel__attention--no-email':
+                    !selectedRecipient || !selectedRecipient.email || !selectedRecipient.name,
             }"
         >
-            <span class="status-color-error" v-if="!selectedRecipient || !selectedRecipient.email">
-                Укажите адрес электронной почты получателя для получения билетов
+            <span
+                v-if="!selectedRecipient || !selectedRecipient.email || !selectedRecipient.name"
+                class="status-color-error"
+            >
+                <template v-if="!selectedRecipient">Укажите получателя</template>
+                <template v-else-if="!selectedRecipient.email">
+                    Укажите адрес электронной почты получателя для получения билетов
+                </template>
+                <template v-else-if="!selectedRecipient.name">Укажите ФИО получателя</template>
             </span>
             <span v-else>На указанный адрес электронной почты мы вышлем вам копии билетов</span>
         </attention-panel>
 
-        <template v-if="selectedRecipient && selectedRecipient.email">
+        <template v-if="selectedRecipient && selectedRecipient.email && selectedRecipient.name">
             <div class="checkout-master-class-panel__item">
                 <div class="container container--tablet checkout-master-class-panel__item-container">
                     <div class="checkout-master-class-panel__item-header" ref="events">
@@ -455,6 +463,7 @@ export default {
         [SELECTED_RECIPIENT]: {
             required,
             hasEmail: (value) => value && !!value.email,
+            hasName: (value) => value && !!value.name,
         },
 
         [PUBLIC_EVENTS]: {
