@@ -28,6 +28,14 @@
                     />
 
                     <info-row
+                        v-if="order.is_partially_cancelled && !order.is_canceled"
+                        class="order-details-view__details-row"
+                        :class="'status-color-error'"
+                        name=" "
+                        :value="'Частично отменен'"
+                    />
+
+                    <info-row
                         v-if="deliveryMethod"
                         class="order-details-view__details-row"
                         name="Способ доставки"
@@ -433,10 +441,8 @@ export default {
         orderStatus() {
             const { status } = this[ORDER] || {};
 
-            // Вывод статуса Частично отменён и отменён
-            if (this[ORDER]['is_partially_cancelled'] && !this[ORDER]['is_canceled']) {
-                return this.$t(`orderStatus.${orderStatusNames.PARTIALLY_CANCELED}`);
-            } else if (this[ORDER]['is_canceled']) {
+            // Вывод статуса Отменён
+            if (this[ORDER]['is_canceled']) {
                 return this.$t(`orderStatus.${orderStatusNames.CANCELED}`);
             }
             return this.$t(`orderStatus.${status}`);

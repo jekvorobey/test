@@ -180,6 +180,10 @@
                             <span :class="getOrderStatusClass(order)" v-else>
                                 {{ getStatusName(order) }}
                             </span>
+                            <br />
+                            <span v-if="order.is_partially_cancelled && !order.is_canceled" class="status-color-error">
+                                Частично отменен
+                            </span>
                         </td>
                         <td class="orders-view__table-td">
                             <v-link
@@ -256,6 +260,13 @@
                     <template v-else>
                         <info-row class="orders-view__list-item-row" name="Cтатус">
                             {{ $t(`orderStatus.${order.status}`) }}
+                        </info-row>
+
+                        <info-row
+                            class="orders-view__list-item-row"
+                            v-if="order.is_partially_cancelled && !order.is_canceled"
+                        >
+                            Частично отменен
                         </info-row>
 
                         <info-row class="orders-view__list-item-row">
@@ -571,7 +582,7 @@ export default {
         },
 
         getOrderStatusClass(order) {
-            return getOrderStatusColorClass(order.status, order.is_canceled, order.is_partially_cancelled);
+            return getOrderStatusColorClass(order.status, order.is_canceled);
         },
 
         async onContinuePayment(orderId, paymentId) {
@@ -678,14 +689,12 @@ export default {
         getStatusName(order) {
             const { status } = order || {};
 
-            // Вывод статуса Частично отменён и отменён
-            if (order['is_partially_cancelled'] && !order['is_canceled']) {
-                return this.$t(`orderStatus.${orderStatusNames.PARTIALLY_CANCELED}`);
-            } else if (order['is_canceled']) {
+            // Вывод статуса Отменён
+            if (order['is_canceled']) {
                 return this.$t(`orderStatus.${orderStatusNames.CANCELED}`);
             }
             return this.$t(`orderStatus.${status}`);
-        }
+        },
     },
 
     beforeRouteEnter(to, from, next) {

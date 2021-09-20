@@ -7,8 +7,8 @@ export function getDeliveryStatusColorClass(status) {
     if (status >= deliveryStatus.STATUS_LOST) return 'status-color-error';
 }
 
-export function getOrderStatusColorClass(status, isCanceled = false, isPartiallyCancelled = false) {
-    if (isCanceled || isPartiallyCancelled) return 'status-color-error';
+export function getOrderStatusColorClass(status, isCanceled = false) {
+    if (isCanceled) return 'status-color-error';
     switch (status) {
         case orderStatus.DONE:
             return 'status-color-success';
