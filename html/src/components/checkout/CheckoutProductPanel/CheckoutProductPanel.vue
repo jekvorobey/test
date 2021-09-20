@@ -2,7 +2,13 @@
     <div class="checkout-product-panel">
         <template v-if="canDeliver">
             <div class="checkout-product-panel__item checkout-product-panel__item--recipient">
-                <div class="checkout-product-panel__item-header">
+                <div
+                    ref="recipient"
+                    class="checkout-product-panel__item-header"
+                    :class="{
+                        'checkout-product-panel__item-header--error': recipientError && recipientError.length > 0,
+                    }"
+                >
                     <h2 class="checkout-product-panel__item-header-hl">Получатель</h2>
                 </div>
 
@@ -13,6 +19,12 @@
                         :key="recipient.id"
                         :selected="selectedRecipient && isEqualObject(recipient, selectedRecipient)"
                         :show-check="recipients.length > 1"
+                        :error="
+                            selectedRecipient &&
+                            isEqualObject(recipient, selectedRecipient) &&
+                            recipientError &&
+                            recipientError.length > 0
+                        "
                         @cardClick="onSetRecipient(recipient)"
                         @btnClick="onChangeRecipient(recipient, index)"
                     >
@@ -25,6 +37,10 @@
                 <v-link class="checkout-product-panel__item-header-link" tag="button" @click="onAddRecipient">
                     <v-svg name="plus" width="24" height="24" />&nbsp;Добавить нового получателя
                 </v-link>
+
+                <div v-if="recipientError" class="checkout-product-panel__item-error">
+                    <span class="status-color-error">{{ recipientError }}</span>
+                </div>
             </div>
 
             <div class="checkout-product-panel__item checkout-product-panel__item--receive-method">
@@ -669,6 +685,7 @@ export default {
 
                     [SELECTED_RECIPIENT]: {
                         required,
+                        hasName: (value) => value && !!value.name,
                     },
 
                     [SELECTED_PICKUP_POINT]: {
@@ -686,6 +703,7 @@ export default {
 
                     [SELECTED_RECIPIENT]: {
                         required,
+                        hasName: (value) => value && !!value.name,
                     },
 
                     [SELECTED_ADDRESS]: {
@@ -863,6 +881,30 @@ export default {
                     }
                     break;
             }
+        },
+
+        recipientError() {
+            if (!this.$v.selectedRecipient.$dirty) {
+                return null;
+            }
+
+            let message = '';
+
+            if (!this.$v.selectedRecipient.required) {
+                message = 'Пожалуйста, укажите получателя';
+            }
+
+            if (!this.$v.selectedRecipient.hasName) {
+                message = 'Пожалуйста, укажите ФИО получателя';
+            }
+
+            if (message.length > 0) {
+                this.debounce_scrollToError(this.$refs.recipient);
+
+                return message;
+            }
+
+            return null;
         },
 
         maxAmountBonus() {

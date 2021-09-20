@@ -275,7 +275,7 @@
                         data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
                         :data-product-id="getProductIdList"
                         :data-auth="hasSession ? 'true' : 'false'"
-                        :data-user-moderation="canUserBuy ? 'true' : 'false'"
+                        :data-user-moderation="[CAN_USER_BUY] ? 'true' : 'false'"
                 />
             </div>
         </section>
@@ -329,6 +329,8 @@
 
         <section class="product-view__section product-view__bundles" v-if="productBundles">
             <div class="container product-view__bundles">
+                <h2 class="product-bundle-panel__title" v-if="productBundles.length === 1">Выгодный комплект</h2>
+                <h2 class="product-bundle-panel__title" v-if="productBundles.length > 1">Выгодные комплекты</h2>
                 <product-bundle-panel
                     v-for="bundle in productBundles"
                     :key="bundle.id"
@@ -610,35 +612,8 @@
                         data-retailrocket-markup-block="5efda11697a52833a0d006e6"
                         :data-product-id="getProductIdList"
                         :data-auth="hasSession ? 'true' : 'false'"
-                        :data-user-moderation="canUserBuy ? 'true' : 'false'"
+                        :data-user-moderation="[CAN_USER_BUY] ? 'true' : 'false'"
                 />
-            </div>
-        </section>
-
-        <section class="section product-view__section product-view__like">
-            <div class="container product-view__like-container">
-                <h2 class="product-view__section-hl product-view__like-hl">{{ $t('product.title.like') }}</h2>
-                <v-slider class="product-view__like-slider" name="also-like" :options="sliderOptions">
-                    <catalog-product-card
-                        class="swiper-slide product-view__like-card"
-                        v-for="item in featuredProducts.items"
-                        :key="item.id"
-                        :offer-id="item.id"
-                        :product-id="item.productId"
-                        :name="item.name"
-                        :type="item.type"
-                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                        :image="item.image"
-                        :price="item.price"
-                        :old-price="item.oldPrice"
-                        :badges="item.badges"
-                        :rating="item.rating"
-                        :show-buy-btn="item.stock.qty > 0"
-                        @add-item="onAddToCart(item)"
-                        @preview="onPreview(item.code)"
-                        @toggle-favorite-item="onToggleFavorite(item.productId)"
-                    />
-                </v-slider>
             </div>
         </section>
 
@@ -748,7 +723,7 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, RECENTLY_VIEWED_PRODUCTS, LOCALE } from '@store';
 import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
 
-import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY as CAN_USER_BUY } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY } from '@store/modules/Auth';
 import { SET_SESSION_REFERRAL_CODE } from '@store/modules/Auth/actions';
 
 import {
@@ -801,6 +776,7 @@ import {
     generateMasterclassUrl,
     prepareMasterclassSpeakers,
 } from '@util/catalog';
+import { pluralize } from '@util';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/facebook-bw.svg';
@@ -968,7 +944,7 @@ export default {
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, {
-          [CAN_USER_BUY]: (state) => (state[USER] && state[USER][CAN_USER_BUY]) || false,
+          canUserBuy: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
         }),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState([SCROLL, RECENTLY_VIEWED_PRODUCTS]),
@@ -1031,7 +1007,8 @@ export default {
 
         frisbuyUrl() {
             const { id } = this[PRODUCT];
-            return `https://www.frisbuy.ru/fb/widget?embed_id=e9575241-9f3d-11ea-ba01-0242ac150002&sku=${id}`;
+
+            return `https://www.frisbuy.ru/fb/widget?embed_id=e9575241-9f3d-11ea-ba01-0242ac150002&sku=${id}&custom_param_is_auth=${this.hasSession ? '1' : '0'}&custom_param_is_user_moderated=${this.canUserBuy ? '1' : '0'}`;
         },
 
         productCharacteristics() {

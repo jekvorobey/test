@@ -33,27 +33,23 @@
             <div class="container mobile-menu__container" v-if="!isTablet">
                 <div class="mobile-menu__panel">
                     <ul class="mobile-menu__list mobile-menu__panel-part">
-                        <li class="mobile-menu__menu-item" v-for="category in currentCategories" :key="category.id">
-                            <v-link
-                                class="mobile-menu__menu-link"
-                                :to="category.url"
-                                :class="{ 'mobile-menu__menu-link--final': !(category.items && category.items.length) }"
-                                @click="onSetMenu(false)"
-                            >
-                                {{ category.name }}
-                            </v-link>
-                        </li>
-                    </ul>
-                    <ul class="mobile-menu__list mobile-menu__panel-part">
-                        <li class="mobile-menu__menu-item" v-for="item in headerMenuItems" :key="item.name">
-                            <v-link class="mobile-menu__menu-link" :to="item.url" @click="onSetMenu(false)">
-                                {{ item.name }}
-                            </v-link>
-                        </li>
+                        <group-list
+                            class="nav-panel__main-list"
+                            :items="categoriesCatalog"
+                            :columns="3"
+                            @link-click="onHandleClick"
+                        />
                     </ul>
                 </div>
                 <div class="mobile-menu__panel">
                     <div class="mobile-menu__panel-part">
+                        <ul class="mobile-menu__list">
+                            <li class="mobile-menu__menu-item" v-for="item in headerMenuItems" :key="item.name">
+                                <v-link class="mobile-menu__menu-link" :to="item.url" @click="onSetMenu(false)">
+                                    {{ item.name }}
+                                </v-link>
+                            </li>
+                        </ul>
                         <ul class="mobile-menu__list">
                             <li class="mobile-menu__menu-item">
                                 <v-link
@@ -128,10 +124,6 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
-
-                    <div class="mobile-menu__panel-part">
-                        <!-- <catalog-banner-card /> -->
                     </div>
                 </div>
             </div>
@@ -287,10 +279,11 @@ import VClamp from 'vue-clamp';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import HeaderUserPanel from '@components/VHeader/HeaderUserPanel/HeaderUserPanel.vue';
 import SearchFilter from '@components/SearchFilter/SearchFilter.vue';
+import GroupList from '@components/GroupList/GroupList.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { CATEGORIES } from '@store';
-import { HEADER_MENU, HELP_MENU } from '@store/getters';
+import { HEADER_MENU, HELP_MENU, CATEGORIES_CATALOG } from '@store/getters';
 import { SET_MENU_OPEN } from '@store/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
@@ -337,6 +330,7 @@ export default {
         //CatalogBannerCard,
         HeaderUserPanel,
         SearchFilter,
+        GroupList,
     },
 
     data() {
@@ -389,6 +383,7 @@ export default {
         ...mapGetters([HEADER_MENU, HELP_MENU]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(FAVORITES_MODULE, [FAVORITE_ITEMS_COUNT]),
+        ...mapGetters([CATEGORIES_CATALOG]),
         ...mapState(GEO_MODULE, {
             city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
         }),
@@ -452,6 +447,10 @@ export default {
         onBackClick() {
             if (this.selectedCategories.length > 0) this.selectedCategories.pop();
             else this.showCategories = false;
+        },
+
+        onHandleClick() {
+            this[SET_MENU_OPEN](false);
         },
 
         onRegister() {
