@@ -25,7 +25,6 @@
                     :key="item.id || index"
                     :item="item"
                     :depth="depth + 1"
-                    :always-expanded="Array.isArray(item.items) && item.items.length === 1"
                 />
             </ul>
         </transition>

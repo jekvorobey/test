@@ -54,7 +54,7 @@
                                 v-for="category in categories"
                                 :item="category"
                                 :key="category.id"
-                                :always-expanded="Array.isArray(category.items) && category.items.length === 1"
+                                :always-expanded="autoExpandCategoryMenu"
                             />
                         </ul>
 
@@ -562,6 +562,14 @@ export default {
         isTablet() {
             return this.$mq.tablet;
         },
+
+        autoExpandCategoryMenu() {
+            if (typeof this.$route.params.type !== 'undefined' && this.$route.params.type === 'brands') {
+                return true;
+            }
+
+            return false;
+        }
     },
 
     watch: {
