@@ -14,6 +14,7 @@
         @media (--tablet) {
             max-width: calc(var(--gs) * 9);
             margin-right: calc(var(--gs) * 2);
+            margin-left: calc(var(--gs) * 2);
         }
 
         .v-picture {
