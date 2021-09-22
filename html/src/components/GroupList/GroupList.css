@@ -3,7 +3,7 @@
     flex-wrap: wrap;
 
     &__link {
-        line-height: 32px;
+        line-height: 1.5em;
         font-weight: 400;
         border-bottom: 1px solid transparent;
         text-transform: none;
@@ -14,18 +14,19 @@
     }
 
     &__title {
+        display: inline-block;
         text-transform: uppercase;
         font-weight: bold;
+        padding-bottom: calc(32px - 1.5em);
     }
 
     &__item {
         padding-right: calc(var(--gs) * 3);
         margin-bottom: calc(var(--gs) * 5);
-    }
 
-    &__item {
-        padding-right: calc(var(--gs) * 3);
-        margin-bottom: calc(var(--gs) * 5);
+        &__li {
+            padding-bottom: calc(32px - 1.5em);
+        }
     }
 
     &__expander {
