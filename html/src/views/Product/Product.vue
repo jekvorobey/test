@@ -196,9 +196,10 @@
                                 <p class="text-bold product-view__header-detail-section-hl">
                                     Описание и характеристики
                                 </p>
-                                <v-clamp tag="p" :max-lines="maxDescriptionLines" :autoresize="true">
-                                    {{ product.description.content }}
-                                </v-clamp>
+                                <div class="product-view__header-detail-section-html-clamp" :style="{maxHeight: htmlClampHeight}">
+                                    <v-html v-html="product.description.content" />
+                                </div>
+                                
                                 <a class="product-view__header-detail-brand-link" href="#description">Подробнее</a>
                             </template>
 
@@ -366,7 +367,10 @@
                     <div class="product-view__info-header">
                         <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
                         <div class="product-view__info-content">
-                          <p :class="{ 'product-view__info-text': productImages.description || productVideos.description }">{{ product.description.content }}</p>
+                          <v-html
+                                :class="{ 'product-view__info-text': productImages.description || productVideos.description }"
+                                v-html="product.description.content"
+                            />
                           <div class="product-view__info-media" v-if="productImages.description || productVideos.description">
                                 <v-picture
                                 class="product-view__info-media-item product-view__info-media-item--img"
@@ -691,6 +695,7 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 import SocialSharing from 'vue-social-sharing';
+import VHtml from '@controls/VHtml/VHtml.vue';
 
 import Tag from '@components/Tag/Tag.vue';
 
@@ -1149,6 +1154,10 @@ export default {
 
         maxDescriptionLines() {
             return 5;
+        },
+
+        htmlClampHeight() {
+            return `${this.maxDescriptionLines * 1.5}rem`;
         },
 
         buyBtnText() {

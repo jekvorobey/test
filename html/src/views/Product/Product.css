@@ -290,6 +290,10 @@
                     line-height: 24px;
                     text-transform: uppercase;
                 }
+
+                &-html-clamp {
+                    overflow: hidden;
+                }
             }
 
             &-brand {
