@@ -873,6 +873,7 @@ export default {
         VSlider,
         VPicture,
         SocialSharing,
+        VHtml,
 
         Breadcrumbs,
         BreadcrumbItem,
