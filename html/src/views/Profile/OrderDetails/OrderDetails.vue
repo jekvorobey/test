@@ -126,7 +126,7 @@
             :key="delivery.number"
             :header="`Доставка №${delivery.number}`"
         >
-            <div :class="{ 'container container--tablet-lg': !isTablet }">
+            <div class="order-details-view__panel-container" :class="{ 'container container--tablet-lg': !isTablet }">
                 <template v-if="deliveries.length > 1">
                     <info-row class="order-details-view__panel-row" name="Способ доставки" :value="delivery.method" />
                     <info-row class="order-details-view__panel-row" name="Дата доставки" :value="delivery.deliveryAt" />
