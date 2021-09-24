@@ -66,10 +66,6 @@
             & + & {
                 margin-top: var(--gs);
             }
-
-            @media (--tablet) {
-                margin-left: calc(var(--gs) * 2);
-            }
         }
 
         &-controls {
