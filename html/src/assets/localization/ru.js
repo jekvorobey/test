@@ -127,7 +127,15 @@ const main = {
     },
 
     deliveryStatus: {
+        [deliveryStatus.STATUS_WAITING_TO_ARRIVE]: 'Предзаказ: ожидаем поступления товара',
+
         [deliveryStatus.STATUS_CREATED]: 'Оформляется',
+        [deliveryStatus.STATUS_WAITING_AOZ_INSPECTION]: 'Ожидает проверки АОЗ',
+        [deliveryStatus.STATUS_AOZ_INSPECTION]: 'Проверка АОЗ',
+        [deliveryStatus.STATUS_WAITING_MERCHANT_CONFIRM]: 'Ожидает подтверждения мерчантом',
+        [deliveryStatus.STATUS_PACKAGE]: 'На комплектации',
+        [deliveryStatus.STATUS_READY_TO_SHIP]: 'Готова к отгрузке',
+        [deliveryStatus.STATUS_AT_LOGISTIC_OPERATOR]: 'Передана логистическому оператору',
 
         [deliveryStatus.STATUS_ON_POINT_IN]: 'Принят на склад в пункте отправления',
         [deliveryStatus.STATUS_ON_WAY]: 'В пути',
