@@ -19,7 +19,7 @@
                 :min-height="160"
             >
                 <ul>
-                    <li v-for="{ name, id, to } in children" :key="id">
+                    <li class="group-list__item__li" v-for="{ name, id, to } in children" :key="id">
                         <v-link class="group-list__link" :to="to" @click="onClick">
                             {{ name }}
                         </v-link>
@@ -31,7 +31,7 @@
                 </template>
             </v-expander>
             <ul v-else>
-                <li v-for="{ name, id, to } in children" :key="id">
+                <li class="group-list__item__li" v-for="{ name, id, to } in children" :key="id">
                     <v-link class="group-list__link" :to="to" @click="onClick">
                         {{ name }}
                     </v-link>
