@@ -163,14 +163,15 @@ export default {
 
         searchBtnText() {
             const { range, isTabletLg } = this;
-            const words = (number) => pluralize(number, ['товар','товара','товаров']);
+            const productWords = (number) => pluralize(number, ['товар','товара','товаров']);
+            const foundWords = (number) => pluralize(number, ['Найден','Найдено','Найдено']);
 
             if(range > this.products.length && !isTabletLg) {
                 const hiddenGoods = range - this.products.length;
-                return `Показать ещё ${hiddenGoods} ${words(hiddenGoods)}`;
+                return `Показать ещё ${hiddenGoods} ${productWords(hiddenGoods)}`;
             } 
-            if (!isTabletLg) return `Показать ${range} ${words(range)}`;
-            return `Найдено ${range} ${words(range)}`;
+            if (!isTabletLg) return `Показать ${range} ${productWords(range)}`;
+            return `${foundWords(range)} ${range} ${productWords(range)}`;
         },
 
         showSubmitBtn() {
