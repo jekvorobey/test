@@ -129,9 +129,9 @@ const main = {
         [deliveryStatus.STATUS_WAITING_TO_ARRIVE]: 'Preorder',
 
         [deliveryStatus.STATUS_CREATED]: 'Created',
-        [deliveryStatus.STATUS_WAITING_AOZ_INSPECTION]: 'Awaiting verification by AOZ',
-        [deliveryStatus.STATUS_AOZ_INSPECTION]: 'Verification by AOZ',
-        [deliveryStatus.STATUS_WAITING_MERCHANT_CONFIRM]: 'Awaiting confirmation by the merchant',
+        [deliveryStatus.STATUS_WAITING_AOZ_INSPECTION]: 'In processing',
+        [deliveryStatus.STATUS_AOZ_INSPECTION]: 'In processing',
+        [deliveryStatus.STATUS_WAITING_MERCHANT_CONFIRM]: 'In processing',
         [deliveryStatus.STATUS_PACKAGE]: 'On the package',
         [deliveryStatus.STATUS_READY_TO_SHIP]: 'Ready to ship',
         [deliveryStatus.STATUS_AT_LOGISTIC_OPERATOR]: 'Transferred to a logistics operator',

@@ -130,9 +130,9 @@ const main = {
         [deliveryStatus.STATUS_WAITING_TO_ARRIVE]: 'Предзаказ: ожидаем поступления товара',
 
         [deliveryStatus.STATUS_CREATED]: 'Оформляется',
-        [deliveryStatus.STATUS_WAITING_AOZ_INSPECTION]: 'Ожидает проверки АОЗ',
-        [deliveryStatus.STATUS_AOZ_INSPECTION]: 'Проверка АОЗ',
-        [deliveryStatus.STATUS_WAITING_MERCHANT_CONFIRM]: 'Ожидает подтверждения мерчантом',
+        [deliveryStatus.STATUS_WAITING_AOZ_INSPECTION]: 'В обработке',
+        [deliveryStatus.STATUS_AOZ_INSPECTION]: 'В обработке',
+        [deliveryStatus.STATUS_WAITING_MERCHANT_CONFIRM]: 'В обработке',
         [deliveryStatus.STATUS_PACKAGE]: 'На комплектации',
         [deliveryStatus.STATUS_READY_TO_SHIP]: 'Готова к отгрузке',
         [deliveryStatus.STATUS_AT_LOGISTIC_OPERATOR]: 'Передана логистическому оператору',
@@ -144,7 +144,7 @@ const main = {
         [deliveryStatus.STATUS_READY_FOR_RECIPIENT]: 'Готов к выдаче в пункте назначения',
         [deliveryStatus.STATUS_DONE]: 'Доставлено',
 
-        [deliveryStatus.STATUS_RETURNED_FROM_DELIVERY]: 'Возвращен с доставки',
+        [deliveryStatus.STATUS_RETURNED_FROM_DELIVERY]: 'Возвращена с доставки',
         [deliveryStatus.STATUS_PARTIAL_RETURN]: 'Частичный возврат',
         [deliveryStatus.STATUS_RETURN_READY]: 'Подготовлен возврат',
         [deliveryStatus.STATUS_RETURNING]: 'Возвращается отправителю',
