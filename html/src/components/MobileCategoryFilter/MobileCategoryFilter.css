@@ -1,0 +1,47 @@
+.mobile-category-filter {
+    &__item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: calc(var(--gs) * 6);
+    }
+
+    &__item-link {
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+        text-align: left;
+        flex-shrink: 0;
+    }
+
+    &__item-button {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        justify-content: flex-end;
+        align-items: center;
+        text-align: left;
+
+        .icon {
+            flex: none;
+            transform: rotate(270deg);
+        }
+    }
+
+    &__back-button {
+        display: flex;
+        justify-content: flex-start;
+        flex-shrink: 0;
+        align-items: center;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 24px;
+
+        .icon {
+            margin-right: var(--gs);
+            transform: rotate(90deg);
+        }
+    }
+}

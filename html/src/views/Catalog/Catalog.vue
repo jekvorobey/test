@@ -224,6 +224,12 @@
                             </ul>
                         </div>
 
+                        <mobile-category-filter
+                            v-if="filterCategories"
+                            class="catalog-view__modal-category-filter"
+                            :categories="filterCategories"
+                        />
+
                         <catalog-filter class="catalog-view__modal-filter-panel" />
 
                         <div class="catalog-view__modal-filter-controls">
@@ -278,6 +284,7 @@ import FilterButton from '@components/FilterButton/FilterButton.vue';
 import TagItem from '@components/TagItem/TagItem.vue';
 import CategoryTreeItem from '@components/CategoryTreeItem/CategoryTreeItem.vue';
 import CatalogFilter from '@components/CatalogFilter/CatalogFilter.vue';
+import MobileCategoryFilter from '@components/MobileCategoryFilter/MobileCategoryFilter.vue';
 import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import HistoryPanel from '@components/HistoryPanel/HistoryPanel.vue';
@@ -335,6 +342,7 @@ export default {
     mixins: [metaMixin],
 
     components: {
+        MobileCategoryFilter,
         RetailRocketContainer,
         VSvg,
         VButton,
@@ -541,6 +549,18 @@ export default {
             return sortOptions.filter((o) => type === productGroupTypes.SEARCH || o.field !== sortFields.RELEVANCE);
         },
 
+        filterCategories() {
+            if (!this[ACTIVE_CATEGORY]) {
+                return this[CATEGORIES];
+            }
+
+            if (this[ACTIVE_CATEGORY] && Array.isArray(this[ACTIVE_CATEGORY].items)) {
+                return this[ACTIVE_CATEGORY].items;
+            }
+
+            return null;
+        },
+
         isBrandPage() {
             const { type } = this;
             return type === productGroupTypes.BRANDS;
@@ -569,7 +589,7 @@ export default {
             }
 
             return false;
-        }
+        },
     },
 
     watch: {
@@ -807,6 +827,8 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
+
+        this.filterModal = false;
 
         const {
             params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },
