@@ -125,18 +125,6 @@ export default {
                     mobileImage: mainMobileImg,
                     mobileImageRetina: mainMobileImgRetina,
                 },
-                {
-                    id: 'hairdresserDay',
-                    name: '',
-                    type: 'banner',
-                    url: '/catalog/',
-                    desktopImage: hairdresserDayDesktopImg,
-                    desktopImageRetina: hairdresserDayDesktopRetina,
-                    tabletImage: hairdresserDayTabletImg,
-                    tabletImageRetina: hairdresserDayTabletRetina,
-                    mobileImage: hairdresserDayMobileImg,
-                    mobileImageRetina: hairdresserDayMobileRetina,
-                },
             ]);
         } catch (error) {
             storeErrorHandler(FETCH_BANNERS)(error);
