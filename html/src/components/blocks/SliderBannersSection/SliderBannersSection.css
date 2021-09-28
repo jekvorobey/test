@@ -82,6 +82,7 @@
         padding: 0;
 
         .v-slider__controls {
+            display: none;
             left: 50%;
             bottom: var(--gs);
             transform: translateX(-50%);
