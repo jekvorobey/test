@@ -178,7 +178,11 @@
                                 </v-button>
                             </template>
                             <span :class="getOrderStatusClass(order)" v-else>
-                                {{ $t(`orderStatus.${order.status}`) }}
+                                {{ getStatusName(order) }}
+                            </span>
+                            <br />
+                            <span v-if="order.is_partially_cancelled && !order.is_canceled" class="status-color-error">
+                                {{ partiallyCancelledStatus }}
                             </span>
                         </td>
                         <td class="orders-view__table-td">
@@ -256,6 +260,13 @@
                     <template v-else>
                         <info-row class="orders-view__list-item-row" name="Cтатус">
                             {{ $t(`orderStatus.${order.status}`) }}
+                        </info-row>
+
+                        <info-row
+                            class="orders-view__list-item-row"
+                            v-if="order.is_partially_cancelled && !order.is_canceled"
+                        >
+                            {{ partiallyCancelledStatus }}
                         </info-row>
 
                         <info-row class="orders-view__list-item-row">
@@ -413,7 +424,7 @@ import {
     ORDER_FIELD,
     ACTIVE_PAGE,
     REFERRAL_DATA,
-    FILTERS,
+    FILTERS, ORDER,
 } from '@store/modules/Profile/modules/Orders';
 import {
     REFERRAL_ARC_DATA,
@@ -432,7 +443,7 @@ import {
 
 import { preparePrice, shortNumberFormat } from '@util';
 import { getOrderStatusColorClass, generateThankPageUrl } from '@util/order';
-import { orderPaymentStatus, sortFields } from '@enums/order';
+import {orderPaymentStatus, orderStatus as orderStatusNames, sortFields} from '@enums/order';
 import { orderDateLocaleOptions } from '@settings/profile';
 import { sortDirections, modalName } from '@enums';
 import { DEFAULT_PAGE } from '@constants';
@@ -549,6 +560,10 @@ export default {
         isTablet() {
             return this.$mq.tablet;
         },
+
+        partiallyCancelledStatus() {
+            return this.$t(`orderStatus.${orderStatusNames.PARTIALLY_CANCELED}`);
+        },
     },
 
     methods: {
@@ -571,7 +586,7 @@ export default {
         },
 
         getOrderStatusClass(order) {
-            return getOrderStatusColorClass(order.status, order.canceled);
+            return getOrderStatusColorClass(order.status, order.is_canceled);
         },
 
         async onContinuePayment(orderId, paymentId) {
@@ -673,6 +688,16 @@ export default {
                 path: this.$route.path,
                 query,
             });
+        },
+
+        getStatusName(order) {
+            const { status } = order || {};
+
+            // Вывод статуса Отменён
+            if (order['is_canceled']) {
+                return this.$t(`orderStatus.${orderStatusNames.CANCELED}`);
+            }
+            return this.$t(`orderStatus.${status}`);
         },
     },
 

@@ -121,6 +121,8 @@ const main = {
         [orderStatus.READY_FOR_RECIPIENT]: 'Ready for Recipient',
         [orderStatus.DONE]: 'Done',
         [orderStatus.RETURNED]: 'Returned',
+        [orderStatus.CANCELED]: 'Canceled',
+        [orderStatus.PARTIALLY_CANCELED]: 'Partially canceled',
     },
 
     deliveryStatus: {

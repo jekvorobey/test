@@ -122,6 +122,8 @@ const main = {
         [orderStatus.READY_FOR_RECIPIENT]: 'В пункте выдачи',
         [orderStatus.DONE]: 'Доставлен',
         [orderStatus.RETURNED]: 'Возвращен',
+        [orderStatus.CANCELED]: 'Отменен',
+        [orderStatus.PARTIALLY_CANCELED]: 'Частично отменен',
     },
 
     deliveryStatus: {
