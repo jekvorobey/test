@@ -82,7 +82,7 @@
                                 class="text-grey catalog-view__main-header-text"
                                 v-if="type !== productGroupTypes.SEARCH"
                             >
-                                {{ range }} {{ productName }}
+                                {{ rangeWithoutUnion }} {{ productName }}
                             </p>
                         </div>
 
@@ -243,7 +243,7 @@
                                 Очистить
                             </v-button>
                             <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal">
-                                Показать {{ range }}
+                                Показать {{ rangeWithoutUnion }}
                             </v-button>
                         </div>
                     </v-sticky>
@@ -304,7 +304,16 @@ import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as CATALOG_MODULE, TYPE, ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, RANGE } from '@store/modules/Catalog';
+import {
+    NAME as CATALOG_MODULE,
+    TYPE,
+    ITEMS,
+    BANNER,
+    CATEGORIES,
+    PRODUCT_GROUP,
+    RANGE,
+    RANGE_WITHOUT_UNION,
+} from '@store/modules/Catalog';
 import { SET_LOAD_PATH, FETCH_CATALOG_DATA, REFRESH_CATALOG_DATA } from '@store/modules/Catalog/actions';
 import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
 import {
@@ -416,7 +425,7 @@ export default {
             ROUTE_SEGMENTS,
             BREADCRUMBS,
         ]),
-        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE, RANGE]),
+        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE, RANGE, RANGE_WITHOUT_UNION]),
         ...mapState('route', {
             code: (state) => state.params.code,
             entityCode: (state) => state.params.entityCode,
@@ -500,13 +509,14 @@ export default {
         },
 
         productName() {
-            return pluralize(this[RANGE], ['продукт', 'продукта', 'продуктов']);
+            return pluralize(this[RANGE_WITHOUT_UNION], ['продукт', 'продукта', 'продуктов']);
         },
 
         searchTitle() {
-            const { range, searchQuery } = this;
-            if (range && searchQuery) return `По запросу «${searchQuery}» найдено ${range} продуктов`;
-            else if (range && !searchQuery) return `По запросу найдено ${range} продуктов`;
+            const { rangeWithoutUnion, searchQuery } = this;
+            if (rangeWithoutUnion && searchQuery)
+                return `По запросу «${searchQuery}» найдено ${rangeWithoutUnion} продуктов`;
+            else if (rangeWithoutUnion && !searchQuery) return `По запросу найдено ${rangeWithoutUnion} продуктов`;
             else return `По запросу «${searchQuery}» ничего не найдено`;
         },
 
