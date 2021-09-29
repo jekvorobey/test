@@ -87,12 +87,20 @@ export default {
                 return galleryOptions;
             },
         },
+        STATE_ALIAS: {
+            type: String,
+            default: NAME,
+        },
     },
 
     computed: {
         ...mapState(MODAL_MODULE, {
-            isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
-            modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isOpen(state) {
+                return state[MODALS][this.STATE_ALIAS] && state[MODALS][this.STATE_ALIAS].open;
+            },
+            modalState(state) {
+                return (state[MODALS][this.STATE_ALIAS] && state[MODALS][this.STATE_ALIAS].state) || {};
+            },
         }),
     },
 
@@ -104,7 +112,7 @@ export default {
         },
 
         onClose() {
-            this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
+            this[CHANGE_MODAL_STATE]({ name: this.STATE_ALIAS, open: false });
         },
     },
 };

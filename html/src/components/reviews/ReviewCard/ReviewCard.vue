@@ -33,8 +33,13 @@
             <div v-if="images && images.length > 0" class="review-card__body-item">
                 <div class="text-bold review-card__body-item-title">Фото</div>
                 <div class="review-card__body-item-value review-card__body-item-value--media">
-                    <div class="review-card__body-item-img" v-for="item in reviewImages" :key="item.id">
-                        <v-picture>
+                    <div
+                        class="review-card__body-item-img"
+                        v-for="item in reviewImages"
+                        :key="item.id"
+                        @click="onShowReviewModal(item.id)"
+                    >
+                        <v-picture class="v-picture">
                             <img class="blur-up lazyload v-picture__img" :data-src="item.defaultImg" />
                         </v-picture>
                     </div>
@@ -61,6 +66,21 @@
                 &nbsp;{{ computedDislikes }}
             </session-check-button>
         </div>
+        <div class="review-card__answer" v-if="answer">
+            <div class="review-card__answer-container">
+                <div class="review-card__answer-title">
+                    <div class="review-card__answer-title-icon">
+                        <v-svg name="bonus" width="24" height="24" />
+                    </div>
+                    <div class="review-card__answer-title-text">Бессовестно Талантливый</div>
+                    <div class="review-card__answer-title-date">{{ answerDate }}</div>
+                </div>
+                <div class="review-card__body-item-value">{{ answer }}</div>
+            </div>
+        </div>
+        <transition name="fade-in">
+            <gallery-modal :STATE_ALIAS="modalStateAlias" :images="reviewImages" />
+        </transition>
     </component>
 </template>
 
@@ -71,20 +91,24 @@ import VRating from '@controls/VRating/VRating.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import SessionCheckButton from '@components/SessionCheckButton/SessionCheckButton.vue';
+import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 
 import { mapActions, mapState } from 'vuex';
 import { LOCALE } from '@store';
 import { NAME as REVIEWS_MODULE } from '@store/modules/Reviews';
 import { CHANGE_REVIEW_VOTE } from '@store/modules/Reviews/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { getDate } from '@util';
-import { reviewOpinion } from '@enums';
+import { reviewOpinion, modalName } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 import { monthLongDateSettings } from '@settings';
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/like.svg';
 import '@images/sprites/dislike.svg';
+import '@images/sprites/payment/bonus.svg';
 import './ReviewCard.css';
 
 export default {
@@ -95,6 +119,7 @@ export default {
         VLink,
         VRating,
         VPicture,
+        GalleryModal,
 
         SessionCheckButton,
     },
@@ -159,29 +184,56 @@ export default {
                 return [];
             },
         },
+
+        answer: {
+            type: String,
+            default: `Добрый день, Екатерина! 
+                Мы рады, что вы остались довольны. 
+                Благодарим, что нашли время и оставиили отзыв. 
+                Ваш Бессовестно Талантливый.`,
+        },
+
+        answerDate: {
+            type: String,
+            default: '15 мая 2019',
+        },
     },
 
     data() {
         return {
             disableVote: false,
             vote: null,
+            imagesArray: this.images,
         };
     },
 
     computed: {
         ...mapState([LOCALE]),
 
+        ...mapState(MODAL_MODULE, {
+            reviewModalIsOpen: (state) => {
+                return state[MODALS][modalName.product.REVIEW] && state[MODALS][modalName.product.REVIEW].open
+                    ? state[MODALS][modalName.product.REVIEW].open
+                    : false;
+            },
+        }),
+
         computedDate() {
             const { date } = this;
             return date && getDate(date).toLocaleString(this[LOCALE], monthLongDateSettings);
         },
 
-        reviewImages() {
-            const images = this.images || [];
-            return images.map((i) => ({
-                id: i,
-                defaultImg: generatePictureSourcePath(null, null, i),
-            }));
+        reviewImages: {
+            get: function () {
+                const images = this.imagesArray || [];
+                return images.map((i) => ({
+                    id: i,
+                    defaultImg: generatePictureSourcePath(null, null, i),
+                }));
+            },
+            set: function (shiftedArray) {
+                this.imagesArray = shiftedArray;
+            },
         },
 
         computedLikes() {
@@ -201,10 +253,27 @@ export default {
                     return this.dislikes;
             }
         },
+
+        modalStateAlias() {
+            return modalName.product.REVIEW;
+        },
     },
 
     methods: {
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
         ...mapActions(REVIEWS_MODULE, [CHANGE_REVIEW_VOTE]),
+
+        onShowReviewModal(id) {
+            this.imagesArray = this.shiftArrayToCurrentItem(this.imagesArray, id);
+            this[CHANGE_MODAL_STATE]({ name: this.modalStateAlias, open: true });
+        },
+
+        shiftArrayToCurrentItem(arr, currValue) {
+            const shiftCnt = arr.findIndex((item) => item === currValue);
+            if (shiftCnt && shiftCnt !== -1) return arr.slice(shiftCnt).concat(arr.slice(0, shiftCnt));
+            return arr;
+        },
 
         async onChangeVote(opinion) {
             if (this.vote || this.disableVote) return;
@@ -223,6 +292,12 @@ export default {
 
     created() {
         this.reviewOpinion = reviewOpinion;
+    },
+
+    watch: {
+        reviewModalIsOpen() {
+            if (!this.reviewModalIsOpen) this.imagesArray = this.images;
+        },
     },
 };
 </script>
