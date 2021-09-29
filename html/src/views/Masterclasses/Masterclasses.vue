@@ -130,6 +130,7 @@
                         :key="item.id"
                         :name="item.name"
                         :speaker="item.speaker"
+                        :speakers="item.speakers"
                         :date="item.dateTime"
                         :price="item.price"
                         :old-price="item.oldPrice"

@@ -10,7 +10,9 @@
             <div class="master-class-card__body-top">
                 <v-link class="master-class-card__body-link" :to="to">
                     <div class="master-class-card__body-link-name">{{ name }}</div>
-                    <div class="master-class-card__body-link-speaker">{{ speaker }}</div>
+                    <div class="master-class-card__body-link-speaker" v-if="speakersData.length === 1">{{ speaker }}</div>
+                    <div class="master-class-card__body-link-speaker" v-if="speakersData.length === 2">{{ displaySpeakers.join(', ') }}</div>
+                    <div class="master-class-card__body-link-speaker" v-if="speakersData.length > 2">{{ displaySpeakers.join(', ') }} и др.</div>
                 </v-link>
                 <div class="master-class-card__body-prices">
                     <price
@@ -68,6 +70,11 @@ export default {
             type: String,
         },
 
+        speakers: {
+            type: Array,
+            required: true,
+        },
+
         image: {
             type: [String, Object],
         },
@@ -103,5 +110,23 @@ export default {
             default: false,
         },
     },
+
+    data() {
+        return {
+            speakersData: this.speakers
+        }
+    },
+
+    computed: {
+        displaySpeakers() {
+            let speakerBundle
+            if(this.speakersData.length === 2) {
+                speakerBundle = this.speakersData.map(item => {
+                    return [item.firstName, item.lastName].join(' ').split(',')
+                })
+            } 
+            return speakerBundle.flat()
+        }
+    }
 };
 </script>
