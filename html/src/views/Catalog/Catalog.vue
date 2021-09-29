@@ -225,9 +225,11 @@
                         </div>
 
                         <mobile-category-filter
-                            v-if="filterCategories"
+                            v-if="filterCategories && filterCategories.length > 1"
                             class="catalog-view__modal-category-filter"
                             :categories="filterCategories"
+                            :product-group-type="type"
+                            :product-entity-code="entityCode"
                         />
 
                         <catalog-filter class="catalog-view__modal-filter-panel" />

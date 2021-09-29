@@ -370,7 +370,7 @@
                 display: flex;
                 bottom: 0;
                 z-index: 1;
-                padding: calc(var(--gs) * 1.5) calc(var(--gs) * 2);
+                padding: calc(var(--gs) * 2) calc(var(--gs) * 2);
                 background-color: var(--cl-global-invert);
                 box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             }

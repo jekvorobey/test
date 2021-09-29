@@ -48,6 +48,16 @@ export default {
             type: Array,
             required: true,
         },
+
+        productGroupType: {
+            type: String,
+            default: productGroupTypes.CATALOG,
+        },
+
+        productEntityCode: {
+            type: String,
+            default: '',
+        },
     },
 
     data() {
@@ -76,7 +86,11 @@ export default {
 
             return categories.map((c) => ({
                 ...c,
-                url: generateCategoryUrl(productGroupTypes.CATALOG, null, c.code),
+                url: generateCategoryUrl(
+                    this.productGroupType,
+                    this.productEntityCode.length > 0 ? this.productEntityCode : null,
+                    c.code
+                ),
             }));
         },
     },
