@@ -854,17 +854,18 @@ export default {
 
         agreementError() {
             if (this.$v.agreement.$dirty && !this.$v.agreement.valid) {
-                this.debounce_scrollToError(this.$refs.agreement);
                 return 'Подтвердите согласие с условиями заказа и доставки';
             }
+
+            return null;
         },
 
         addressError() {
             const selectedId = this[SELECTED_RECEIVE_METHOD_ID];
+
             switch (selectedId) {
                 case receiveMethods.PICKUP:
                     if (this.$v.selectedPickupPoint.$dirty && !this.$v.selectedPickupPoint.required) {
-                        this.debounce_scrollToError(this.$refs.address);
                         return 'Укажите пункт самовывоза';
                     }
                     break;
@@ -876,11 +877,12 @@ export default {
                         this.$v.selectedAddress.$dirty &&
                         (!this.$v.selectedAddress.required || !this.$v.selectedAddress.valid)
                     ) {
-                        this.debounce_scrollToError(this.$refs.address);
                         return 'Укажите адрес доставки';
                     }
                     break;
             }
+
+            return null;
         },
 
         recipientError() {
@@ -899,8 +901,6 @@ export default {
             }
 
             if (message.length > 0) {
-                this.debounce_scrollToError(this.$refs.recipient);
-
                 return message;
             }
 
@@ -996,7 +996,22 @@ export default {
 
         validate() {
             this.$v.$touch();
+
+            if (this.$v.$invalid) {
+                this.scrollToErrorField();
+            }
+
             return !this.$v.$invalid;
+        },
+
+        scrollToErrorField() {
+            if (this.recipientError) {
+                this.debounce_scrollToError(this.$refs.recipient);
+            } else if (this.addressError) {
+                this.debounce_scrollToError(this.$refs.address);
+            } else if (this.agreementError) {
+                this.debounce_scrollToError(this.$refs.agreement);
+            }
         },
 
         formatPhoneNumber(phone) {
