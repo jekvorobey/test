@@ -209,10 +209,15 @@ export default {
                     break;
                 case FETCH_ITEMS:
                     {
-                        const { items = [], range = 0 } = fetchItem;
+                        const { items = [], range = 0, total = 0 } = fetchItem;
                         if (showMore) data.items = [...state.items, ...items];
                         else data.items = items;
                         data.range = range;
+                        data.rangeWithoutUnion = total;
+
+                        if (data.rangeWithoutUnion < data.range) {
+                            data.rangeWithoutUnion = data.range;
+                        }
                     }
                     break;
                 default:

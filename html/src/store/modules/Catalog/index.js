@@ -18,6 +18,7 @@ export const FILTERS = 'filters';
 export const BANNER = 'banner';
 export const ITEMS = 'items';
 export const RANGE = 'range';
+export const RANGE_WITHOUT_UNION = 'rangeWithoutUnion';
 export const PRODUCT_GROUP = 'productGroup';
 
 export const ROUTE_SEGMENTS = 'routeSegments';
@@ -53,6 +54,7 @@ export default function createModule() {
 
             [ITEMS]: [],
             [RANGE]: 0,
+            [RANGE_WITHOUT_UNION]: 0,
 
             [ROUTE_SEGMENTS]: [],
             [FILTER_SEGMENTS]: {},
