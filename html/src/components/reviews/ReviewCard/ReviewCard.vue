@@ -79,7 +79,7 @@
             </div>
         </div>
         <transition name="fade-in">
-            <gallery-modal :STATE_ALIAS="modalStateAlias" :images="reviewImages" />
+            <gallery-modal :name="reviewModalName" :images="galleryImages" />
         </transition>
     </component>
 </template>
@@ -223,7 +223,15 @@ export default {
             return date && getDate(date).toLocaleString(this[LOCALE], monthLongDateSettings);
         },
 
-        reviewImages: {
+        reviewImages() {
+            const images = this.images || [];
+            return images.map((i) => ({
+                id: i,
+                defaultImg: generatePictureSourcePath(null, null, i),
+            }));
+        },
+
+        galleryImages: {
             get: function () {
                 const images = this.imagesArray || [];
                 return images.map((i) => ({
@@ -254,7 +262,7 @@ export default {
             }
         },
 
-        modalStateAlias() {
+        reviewModalName() {
             return modalName.product.REVIEW;
         },
     },
@@ -266,7 +274,7 @@ export default {
 
         onShowReviewModal(id) {
             this.imagesArray = this.shiftArrayToCurrentItem(this.imagesArray, id);
-            this[CHANGE_MODAL_STATE]({ name: this.modalStateAlias, open: true });
+            this[CHANGE_MODAL_STATE]({ name: this.reviewModalName, open: true });
         },
 
         shiftArrayToCurrentItem(arr, currValue) {

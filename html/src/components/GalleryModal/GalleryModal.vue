@@ -8,7 +8,12 @@
                     :options="galleryOptions"
                     :controls="images.length > 1"
                 >
-                    <div class="swiper-slide gallery-modal__gallery-item" v-for="image in images" :key="image.id">
+                    <div
+                        class="swiper-slide gallery-modal__gallery-item"
+                        :class="hasBackdrop"
+                        v-for="image in images"
+                        :key="image.id"
+                    >
                         <v-picture :key="image.id" v-if="image && image.id">
                             <slot name="image" :image="image">
                                 <source
@@ -87,7 +92,7 @@ export default {
                 return galleryOptions;
             },
         },
-        STATE_ALIAS: {
+        name: {
             type: String,
             default: NAME,
         },
@@ -96,12 +101,16 @@ export default {
     computed: {
         ...mapState(MODAL_MODULE, {
             isOpen(state) {
-                return state[MODALS][this.STATE_ALIAS] && state[MODALS][this.STATE_ALIAS].open;
+                return state[MODALS][this.name] && state[MODALS][this.name].open;
             },
             modalState(state) {
-                return (state[MODALS][this.STATE_ALIAS] && state[MODALS][this.STATE_ALIAS].state) || {};
+                return (state[MODALS][this.name] && state[MODALS][this.name].state) || {};
             },
         }),
+
+        hasBackdrop() {
+            return galleryOptions.effect === 'fade' ? 'img-backdrop' : '';
+        },
     },
 
     methods: {
@@ -112,7 +121,7 @@ export default {
         },
 
         onClose() {
-            this[CHANGE_MODAL_STATE]({ name: this.STATE_ALIAS, open: false });
+            this[CHANGE_MODAL_STATE]({ name: this.name, open: false });
         },
     },
 };
