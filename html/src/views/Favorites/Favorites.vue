@@ -94,6 +94,8 @@ import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbIte
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $logger } from '@services';
 
+import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+
 import {
     NAME as FAVORITES_MODULE,
     FAVORITES,
@@ -157,6 +159,7 @@ export default {
     },
 
     computed: {
+        ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(FAVORITES_MODULE, [FAVORITES, FAVORITES_ALL, FAVORITES_DIRECTION, FAVORITES_FIELD, ACTIVE_PAGE]),
         ...mapGetters(FAVORITES_MODULE, [PAGES_COUNT]),
 
@@ -180,6 +183,12 @@ export default {
                     path: this.$route.path,
                     query: { orderField: value.field, orderDirection: value.direction },
                 });
+            }
+        },
+
+        [HAS_SESSION](loggedIn) {
+            if (!loggedIn) {
+                this.$router.push('/');
             }
         },
     },

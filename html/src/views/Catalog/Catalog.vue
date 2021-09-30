@@ -54,6 +54,7 @@
                                 v-for="category in categories"
                                 :item="category"
                                 :key="category.id"
+                                :always-expanded="autoExpandCategoryMenu"
                             />
                         </ul>
 
@@ -81,7 +82,7 @@
                                 class="text-grey catalog-view__main-header-text"
                                 v-if="type !== productGroupTypes.SEARCH"
                             >
-                                {{ range }} {{ productName }}
+                                {{ rangeWithoutUnion }} {{ productName }}
                             </p>
                         </div>
 
@@ -223,6 +224,14 @@
                             </ul>
                         </div>
 
+                        <mobile-category-filter
+                            v-if="filterCategories && filterCategories.length > 1"
+                            class="catalog-view__modal-category-filter"
+                            :categories="filterCategories"
+                            :product-group-type="type"
+                            :product-entity-code="entityCode"
+                        />
+
                         <catalog-filter class="catalog-view__modal-filter-panel" />
 
                         <div class="catalog-view__modal-filter-controls">
@@ -234,7 +243,7 @@
                                 Очистить
                             </v-button>
                             <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal">
-                                Показать {{ range }}
+                                Показать {{ rangeWithoutUnion }}
                             </v-button>
                         </div>
                     </v-sticky>
@@ -277,6 +286,7 @@ import FilterButton from '@components/FilterButton/FilterButton.vue';
 import TagItem from '@components/TagItem/TagItem.vue';
 import CategoryTreeItem from '@components/CategoryTreeItem/CategoryTreeItem.vue';
 import CatalogFilter from '@components/CatalogFilter/CatalogFilter.vue';
+import MobileCategoryFilter from '@components/MobileCategoryFilter/MobileCategoryFilter.vue';
 import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import HistoryPanel from '@components/HistoryPanel/HistoryPanel.vue';
@@ -294,8 +304,17 @@ import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as CATALOG_MODULE, TYPE, ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, RANGE } from '@store/modules/Catalog';
-import { SET_LOAD_PATH, FETCH_CATALOG_DATA } from '@store/modules/Catalog/actions';
+import {
+    NAME as CATALOG_MODULE,
+    TYPE,
+    ITEMS,
+    BANNER,
+    CATEGORIES,
+    PRODUCT_GROUP,
+    RANGE,
+    RANGE_WITHOUT_UNION,
+} from '@store/modules/Catalog';
+import { SET_LOAD_PATH, FETCH_CATALOG_DATA, REFRESH_CATALOG_DATA } from '@store/modules/Catalog/actions';
 import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
 import {
     ACTIVE_TAGS,
@@ -334,6 +353,7 @@ export default {
     mixins: [metaMixin],
 
     components: {
+        MobileCategoryFilter,
         RetailRocketContainer,
         VSvg,
         VButton,
@@ -405,7 +425,7 @@ export default {
             ROUTE_SEGMENTS,
             BREADCRUMBS,
         ]),
-        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE, RANGE]),
+        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE, RANGE, RANGE_WITHOUT_UNION]),
         ...mapState('route', {
             code: (state) => state.params.code,
             entityCode: (state) => state.params.entityCode,
@@ -489,13 +509,14 @@ export default {
         },
 
         productName() {
-            return pluralize(this[RANGE], ['продукт', 'продукта', 'продуктов']);
+            return pluralize(this[RANGE_WITHOUT_UNION], ['продукт', 'продукта', 'продуктов']);
         },
 
         searchTitle() {
-            const { range, searchQuery } = this;
-            if (range && searchQuery) return `По запросу «${searchQuery}» найдено ${range} продуктов`;
-            else if (range && !searchQuery) return `По запросу найдено ${range} продуктов`;
+            const { rangeWithoutUnion, searchQuery } = this;
+            if (rangeWithoutUnion && searchQuery)
+                return `По запросу «${searchQuery}» найдено ${rangeWithoutUnion} продуктов`;
+            else if (rangeWithoutUnion && !searchQuery) return `По запросу найдено ${rangeWithoutUnion} продуктов`;
             else return `По запросу «${searchQuery}» ничего не найдено`;
         },
 
@@ -540,6 +561,18 @@ export default {
             return sortOptions.filter((o) => type === productGroupTypes.SEARCH || o.field !== sortFields.RELEVANCE);
         },
 
+        filterCategories() {
+            if (!this[ACTIVE_CATEGORY]) {
+                return this[CATEGORIES];
+            }
+
+            if (this[ACTIVE_CATEGORY] && Array.isArray(this[ACTIVE_CATEGORY].items)) {
+                return this[ACTIVE_CATEGORY].items;
+            }
+
+            return null;
+        },
+
         isBrandPage() {
             const { type } = this;
             return type === productGroupTypes.BRANDS;
@@ -561,6 +594,14 @@ export default {
         isTablet() {
             return this.$mq.tablet;
         },
+
+        autoExpandCategoryMenu() {
+            if (typeof this.$route.params.type !== 'undefined' && this.$route.params.type === 'brands') {
+                return true;
+            }
+
+            return false;
+        },
     },
 
     watch: {
@@ -568,11 +609,15 @@ export default {
             const category = this[ACTIVE_CATEGORY];
             if (category) $retailRocket.addCategoryView(category.id);
         },
+
+        [HAS_SESSION]() {
+            this[REFRESH_CATALOG_DATA]();
+        },
     },
 
     methods: {
         ...mapActions([FETCH_RECENTLY_VIEWED_PRODUCTS]),
-        ...mapActions(CATALOG_MODULE, [FETCH_CATALOG_DATA, SET_LOAD_PATH]),
+        ...mapActions(CATALOG_MODULE, [FETCH_CATALOG_DATA, SET_LOAD_PATH, REFRESH_CATALOG_DATA]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
@@ -794,6 +839,8 @@ export default {
         // перемещаемся между `/foo/1` и `/foo/2`, экземпляр того же компонента `Foo`
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
+
+        this.filterModal = false;
 
         const {
             params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },

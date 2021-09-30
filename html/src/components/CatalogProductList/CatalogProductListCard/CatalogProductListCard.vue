@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <div class="catalog-product-list-card__body" v-once>
+            <div class="catalog-product-list-card__body">
                 <div class="catalog-product-list-card__prices" v-bind="itemPropSettings.offers">
                     <price
                         class="text-bold catalog-product-list-card__price"

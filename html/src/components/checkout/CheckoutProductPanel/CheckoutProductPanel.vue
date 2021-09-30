@@ -2,7 +2,13 @@
     <div class="checkout-product-panel">
         <template v-if="canDeliver">
             <div class="checkout-product-panel__item checkout-product-panel__item--recipient">
-                <div class="checkout-product-panel__item-header">
+                <div
+                    ref="recipient"
+                    class="checkout-product-panel__item-header"
+                    :class="{
+                        'checkout-product-panel__item-header--error': recipientError && recipientError.length > 0,
+                    }"
+                >
                     <h2 class="checkout-product-panel__item-header-hl">Получатель</h2>
                 </div>
 
@@ -13,6 +19,12 @@
                         :key="recipient.id"
                         :selected="selectedRecipient && isEqualObject(recipient, selectedRecipient)"
                         :show-check="recipients.length > 1"
+                        :error="
+                            selectedRecipient &&
+                            isEqualObject(recipient, selectedRecipient) &&
+                            recipientError &&
+                            recipientError.length > 0
+                        "
                         @cardClick="onSetRecipient(recipient)"
                         @btnClick="onChangeRecipient(recipient, index)"
                     >
@@ -25,6 +37,10 @@
                 <v-link class="checkout-product-panel__item-header-link" tag="button" @click="onAddRecipient">
                     <v-svg name="plus" width="24" height="24" />&nbsp;Добавить нового получателя
                 </v-link>
+
+                <div v-if="recipientError" class="checkout-product-panel__item-error">
+                    <span class="status-color-error">{{ recipientError }}</span>
+                </div>
             </div>
 
             <div class="checkout-product-panel__item checkout-product-panel__item--receive-method">
@@ -669,6 +685,7 @@ export default {
 
                     [SELECTED_RECIPIENT]: {
                         required,
+                        hasName: (value) => value && !!value.name,
                     },
 
                     [SELECTED_PICKUP_POINT]: {
@@ -686,6 +703,7 @@ export default {
 
                     [SELECTED_RECIPIENT]: {
                         required,
+                        hasName: (value) => value && !!value.name,
                     },
 
                     [SELECTED_ADDRESS]: {
@@ -836,17 +854,18 @@ export default {
 
         agreementError() {
             if (this.$v.agreement.$dirty && !this.$v.agreement.valid) {
-                this.debounce_scrollToError(this.$refs.agreement);
                 return 'Подтвердите согласие с условиями заказа и доставки';
             }
+
+            return null;
         },
 
         addressError() {
             const selectedId = this[SELECTED_RECEIVE_METHOD_ID];
+
             switch (selectedId) {
                 case receiveMethods.PICKUP:
                     if (this.$v.selectedPickupPoint.$dirty && !this.$v.selectedPickupPoint.required) {
-                        this.debounce_scrollToError(this.$refs.address);
                         return 'Укажите пункт самовывоза';
                     }
                     break;
@@ -858,11 +877,34 @@ export default {
                         this.$v.selectedAddress.$dirty &&
                         (!this.$v.selectedAddress.required || !this.$v.selectedAddress.valid)
                     ) {
-                        this.debounce_scrollToError(this.$refs.address);
                         return 'Укажите адрес доставки';
                     }
                     break;
             }
+
+            return null;
+        },
+
+        recipientError() {
+            if (!this.$v.selectedRecipient.$dirty) {
+                return null;
+            }
+
+            let message = '';
+
+            if (!this.$v.selectedRecipient.required) {
+                message = 'Пожалуйста, укажите получателя';
+            }
+
+            if (!this.$v.selectedRecipient.hasName) {
+                message = 'Пожалуйста, укажите ФИО получателя';
+            }
+
+            if (message.length > 0) {
+                return message;
+            }
+
+            return null;
         },
 
         maxAmountBonus() {
@@ -954,7 +996,22 @@ export default {
 
         validate() {
             this.$v.$touch();
+
+            if (this.$v.$invalid) {
+                this.scrollToErrorField();
+            }
+
             return !this.$v.$invalid;
+        },
+
+        scrollToErrorField() {
+            if (this.recipientError) {
+                this.debounce_scrollToError(this.$refs.recipient);
+            } else if (this.addressError) {
+                this.debounce_scrollToError(this.$refs.address);
+            } else if (this.agreementError) {
+                this.debounce_scrollToError(this.$refs.agreement);
+            }
         },
 
         formatPhoneNumber(phone) {

@@ -196,9 +196,10 @@
                                 <p class="text-bold product-view__header-detail-section-hl">
                                     Описание и характеристики
                                 </p>
-                                <v-clamp tag="p" :max-lines="maxDescriptionLines" :autoresize="true">
-                                    {{ product.description.content }}
-                                </v-clamp>
+                                <div class="product-view__header-detail-section-html-clamp" :style="{maxHeight: htmlClampHeight}">
+                                    <v-html v-html="product.description.content" />
+                                </div>
+                                
                                 <a class="product-view__header-detail-brand-link" href="#description">Подробнее</a>
                             </template>
 
@@ -275,7 +276,7 @@
                         data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
                         :data-product-id="getProductIdList"
                         :data-auth="hasSession ? 'true' : 'false'"
-                        :data-user-moderation="canUserBuy ? 'true' : 'false'"
+                        :data-user-moderation="[CAN_USER_BUY] ? 'true' : 'false'"
                 />
             </div>
         </section>
@@ -329,6 +330,8 @@
 
         <section class="product-view__section product-view__bundles" v-if="productBundles">
             <div class="container product-view__bundles">
+                <h2 class="product-bundle-panel__title" v-if="productBundles.length === 1">Выгодный комплект</h2>
+                <h2 class="product-bundle-panel__title" v-if="productBundles.length > 1">Выгодные комплекты</h2>
                 <product-bundle-panel
                     v-for="bundle in productBundles"
                     :key="bundle.id"
@@ -364,7 +367,10 @@
                     <div class="product-view__info-header">
                         <h2 class="product-view__section-hl">{{ $t('product.title.description') }}</h2>
                         <div class="product-view__info-content">
-                          <p :class="{ 'product-view__info-text': productImages.description || productVideos.description }">{{ product.description.content }}</p>
+                          <v-html
+                                :class="{ 'product-view__info-text': productImages.description || productVideos.description }"
+                                v-html="product.description.content"
+                            />
                           <div class="product-view__info-media" v-if="productImages.description || productVideos.description">
                                 <v-picture
                                 class="product-view__info-media-item product-view__info-media-item--img"
@@ -506,7 +512,7 @@
                         >
                             <div class="product-view__characteristics-item-title">{{ item.title }}</div>
                             <div class="product-view__characteristics-item-value">
-                                {{ Array.isArray(item.value) ? item.value.join(', ') : item.value }}
+                                {{ Array.isArray(item.value) ? item.value.filter(n => !!n).join(', ') : item.value }}
                             </div>
                         </li>
                     </ul>
@@ -610,35 +616,8 @@
                         data-retailrocket-markup-block="5efda11697a52833a0d006e6"
                         :data-product-id="getProductIdList"
                         :data-auth="hasSession ? 'true' : 'false'"
-                        :data-user-moderation="canUserBuy ? 'true' : 'false'"
+                        :data-user-moderation="[CAN_USER_BUY] ? 'true' : 'false'"
                 />
-            </div>
-        </section>
-
-        <section class="section product-view__section product-view__like">
-            <div class="container product-view__like-container">
-                <h2 class="product-view__section-hl product-view__like-hl">{{ $t('product.title.like') }}</h2>
-                <v-slider class="product-view__like-slider" name="also-like" :options="sliderOptions">
-                    <catalog-product-card
-                        class="swiper-slide product-view__like-card"
-                        v-for="item in featuredProducts.items"
-                        :key="item.id"
-                        :offer-id="item.id"
-                        :product-id="item.productId"
-                        :name="item.name"
-                        :type="item.type"
-                        :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
-                        :image="item.image"
-                        :price="item.price"
-                        :old-price="item.oldPrice"
-                        :badges="item.badges"
-                        :rating="item.rating"
-                        :show-buy-btn="item.stock.qty > 0"
-                        @add-item="onAddToCart(item)"
-                        @preview="onPreview(item.code)"
-                        @toggle-favorite-item="onToggleFavorite(item.productId)"
-                    />
-                </v-slider>
             </div>
         </section>
 
@@ -672,7 +651,7 @@
                     {{ buyBtnText }}
                 </product-price-panel>
             </transition>
-            <section class="section" :style="{ height: isTablet ? '56px' : 0 }" v-else>
+            <section class="section" :style="{ height: isTablet ? '78px' : 0 }" v-else>
                 <product-price-panel
                     class="product-view__top-panel"
                     :class="{ 'product-view__top-panel--static': !isPanelSticky }"
@@ -716,6 +695,7 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 import SocialSharing from 'vue-social-sharing';
+import VHtml from '@controls/VHtml/VHtml.vue';
 
 import Tag from '@components/Tag/Tag.vue';
 
@@ -801,6 +781,7 @@ import {
     generateMasterclassUrl,
     prepareMasterclassSpeakers,
 } from '@util/catalog';
+import { pluralize } from '@util';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/facebook-bw.svg';
@@ -876,7 +857,7 @@ const sliderOptions = {
     },
 };
 
-const gallerySize = 800;
+const gallerySize = 1060;
 const desktopSize = 600;
 const tabletSize = 400;
 
@@ -892,6 +873,7 @@ export default {
         VSlider,
         VPicture,
         SocialSharing,
+        VHtml,
 
         Breadcrumbs,
         BreadcrumbItem,
@@ -1175,6 +1157,10 @@ export default {
             return 5;
         },
 
+        htmlClampHeight() {
+            return `${this.maxDescriptionLines * 1.5}rem`;
+        },
+
         buyBtnText() {
             if (!this.canBuy) return 'Нет в наличии';
             return this.inCart ? 'В корзине' : 'Купить';
@@ -1264,6 +1250,10 @@ export default {
             this.onSelectedCityChanged(value);
         },
 
+        [HAS_SESSION]() {
+            this.refetchProduct();
+        },
+
         code(value) {
             if (value) {
                 this.setRetailRocketProductView();
@@ -1304,6 +1294,17 @@ export default {
             }
         },
 
+        async refetchProduct() {
+            try {
+                const { code, refCode: referrerCode } = this;
+                this.$progress.start();
+                await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
+                this.$progress.finish();
+            } catch (error) {
+                this.$progress.fail();
+            }
+        },
+
         handleModalQuery(value) {
             if (!value) return;
 
@@ -1327,14 +1328,7 @@ export default {
         },
 
         async onSelectedCityChanged() {
-            try {
-                const { code, refCode: referrerCode } = this;
-                this.$progress.start();
-                await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
-                this.$progress.finish();
-            } catch (error) {
-                this.$progress.fail();
-            }
+            await this.refetchProduct();
         },
 
         onToggleFavorite(productId) {

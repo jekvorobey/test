@@ -12,15 +12,16 @@
                 <ul class="cart-header-panel__list">
                     <cart-panel-product-card
                         class="cart-header-panel__list-item"
-                        v-for="{ p: product, type } in cartItems"
-                        :key="product.id"
-                        :type="type"
-                        :name="product.name"
-                        :note="product.note"
-                        :image="product.image"
-                        :price="product.price"
-                        :old-price="product.oldPrice"
-                        :href="product.url"
+                        v-for="(item, index) in basketItems"
+                        :index="index"
+                        :key="item.id"
+                        :type="item.type"
+                        :name="item.name"
+                        :note="item.note"
+                        :image="item.image"
+                        :price="item.price"
+                        :old-price="item.oldPrice"
+                        :href="item.url"
                     />
                 </ul>
             </v-scroll>
@@ -78,8 +79,26 @@ export default {
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, CART_ITEMS, PRODUCT_ITEMS_SUM]),
 
         productCount() {
-            const { cartItemsCount } = this;
-            return `${cartItemsCount} ${pluralize(cartItemsCount, ['продукт', 'продукта', 'продуктов'])}`;
+            return `${this.basketItems.length} ${pluralize(this.basketItems.length, [
+                'продукт',
+                'продукта',
+                'продуктов',
+            ])}`;
+        },
+
+        basketItems() {
+            const { cartItems } = this;
+            const basketItems = [];
+            for (let item of cartItems) {
+                if (item.type === 'product') {
+                    basketItems.push(item.p);
+                } else if (item.type === 'bundle_product') {
+                    item.p.items.forEach((product) => {
+                        basketItems.push(product);
+                    });
+                }
+            }
+            return basketItems;
         },
 
         isTabletLg() {

@@ -105,6 +105,12 @@
             margin-top: calc(var(--gs) * 5);
         }
 
+        &-container {
+            @media (--tablet) {
+                margin-left: calc(var(--gs) * 2);
+            }
+        }
+
         &-row {
             width: 70%;
             padding: 0;

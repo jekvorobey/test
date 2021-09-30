@@ -48,6 +48,7 @@ const galleryOptions = {
     slidesPerView: 1,
     effect: 'fade',
     grabCursor: true,
+    keyboard: true,
 
     navigation: {
         nextEl: '.swiper-button-next',

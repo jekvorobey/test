@@ -18,12 +18,15 @@ export const FILTERS = 'filters';
 export const BANNER = 'banner';
 export const ITEMS = 'items';
 export const RANGE = 'range';
+export const RANGE_WITHOUT_UNION = 'rangeWithoutUnion';
 export const PRODUCT_GROUP = 'productGroup';
 
 export const ROUTE_SEGMENTS = 'routeSegments';
 export const FILTER_SEGMENTS = 'filterSegments';
 
 export const FILTERS_STATE_MAP = 'filtersStateMap';
+
+export const PREVIOUS_CATALOG_FETCH_PAYLOAD = 'previousCatalogFetchPayload';
 
 export default function createModule() {
     return {
@@ -51,9 +54,12 @@ export default function createModule() {
 
             [ITEMS]: [],
             [RANGE]: 0,
+            [RANGE_WITHOUT_UNION]: 0,
 
             [ROUTE_SEGMENTS]: [],
             [FILTER_SEGMENTS]: {},
+
+            [PREVIOUS_CATALOG_FETCH_PAYLOAD]: {},
         },
         actions,
         mutations,

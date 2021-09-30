@@ -111,6 +111,8 @@ import { generateProductUrl, generateSearchUrl } from '@util/catalog';
 import { modalName, eventName } from '@enums';
 import './SearchPanel.css';
 
+import { pluralize } from '@util';
+
 export default {
     name: 'search-panel',
 
@@ -161,9 +163,15 @@ export default {
 
         searchBtnText() {
             const { range, isTabletLg } = this;
+            const productWords = (number) => pluralize(number, ['товар','товара','товаров']);
+            const foundWords = (number) => pluralize(number, ['Найден','Найдено','Найдено']);
 
-            if (!isTabletLg) return `Показать ещё ${range} товаров`;
-            return `Найдено ${range} товаров`;
+            if(range > this.products.length && !isTabletLg) {
+                const hiddenGoods = range - this.products.length;
+                return `Показать ещё ${hiddenGoods} ${productWords(hiddenGoods)}`;
+            } 
+            if (!isTabletLg) return `Показать ${range} ${productWords(range)}`;
+            return `${foundWords(range)} ${range} ${productWords(range)}`;
         },
 
         showSubmitBtn() {

@@ -28,6 +28,14 @@
                     />
 
                     <info-row
+                        v-if="order.is_partially_cancelled && !order.is_canceled"
+                        class="order-details-view__details-row"
+                        :class="'status-color-error'"
+                        name=" "
+                        :value="partiallyCancelledStatus"
+                    />
+
+                    <info-row
                         v-if="deliveryMethod"
                         class="order-details-view__details-row"
                         name="Способ доставки"
@@ -126,7 +134,7 @@
             :key="delivery.number"
             :header="`Доставка №${delivery.number}`"
         >
-            <div :class="{ 'container container--tablet-lg': !isTablet }">
+            <div class="order-details-view__panel-container" :class="{ 'container container--tablet-lg': !isTablet }">
                 <template v-if="deliveries.length > 1">
                     <info-row class="order-details-view__panel-row" name="Способ доставки" :value="delivery.method" />
                     <info-row class="order-details-view__panel-row" name="Дата доставки" :value="delivery.deliveryAt" />
@@ -262,6 +270,7 @@ import { toAddressString } from '@util/address';
 import { generateMasterclassUrl, generateTicketDownloadUrl, generateProductUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { getOrderStatusColorClass, getDeliveryStatusColorClass, generateThankPageUrl } from '@util/order';
+import { orderStatus as orderStatusNames } from '@enums/order';
 import metaMixin from '@plugins/meta';
 import '@images/sprites/arrow-small.svg';
 import './OrderDetails.css';
@@ -379,7 +388,11 @@ export default {
         },
 
         orderStatusClass() {
-            return getOrderStatusColorClass(this.order.status, this.order.canceled);
+            return getOrderStatusColorClass(
+                this.order.status,
+                this.order.is_canceled,
+                this.order.is_partially_cancelled
+            );
         },
 
         deliveryMethod() {
@@ -427,6 +440,11 @@ export default {
 
         orderStatus() {
             const { status } = this[ORDER] || {};
+
+            // Вывод статуса Отменён
+            if (this[ORDER]['is_canceled']) {
+                return this.$t(`orderStatus.${orderStatusNames.CANCELED}`);
+            }
             return this.$t(`orderStatus.${status}`);
         },
 
@@ -445,6 +463,10 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        partiallyCancelledStatus() {
+            return this.$t(`orderStatus.${orderStatusNames.PARTIALLY_CANCELED}`);
         },
     },
 

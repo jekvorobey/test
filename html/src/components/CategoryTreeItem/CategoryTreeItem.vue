@@ -15,7 +15,10 @@
             </self-router-link>
         </div>
         <transition name="slide-right">
-            <ul class="category-tree-item__list" v-if="hasChildren && (!isInteractive || isHover || isActive)">
+            <ul
+                class="category-tree-item__list"
+                v-if="hasChildren && (!isInteractive || alwaysExpanded || isHover || isActive)"
+            >
                 <category-tree-item
                     class="category-tree-item__item"
                     v-for="(item, index) in item.items"
@@ -60,12 +63,17 @@ export default {
             type: Boolean,
             default: true,
         },
+
+        alwaysExpanded: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
         return {
             timer: null,
-            isHover: false
+            isHover: false,
         };
     },
 
@@ -123,15 +131,6 @@ export default {
             return Array.isArray(items);
         },
     },
-    watch: {
-        $route(to) {
-            if (to.path !== '/catalog/' && this.isRoot) {
-                this.isHover = true;
-            } else {
-                this.isHover = false;
-            }
-        }
-    },
 
     methods: {
         onMouseOver(value, oldValue) {
@@ -150,9 +149,8 @@ export default {
         },
 
         changeHover(flag) {
-            // eslint-disable-next-line vue/no-mutating-props
             this.isHover = flag;
-        }
+        },
     },
 };
 </script>
