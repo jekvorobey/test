@@ -93,48 +93,44 @@
                             </div>
 
                             <div v-if="!promocode" class="cart-view__main-panel-promo">
-                                <template v-if="isProduct">
-                                    <v-input
-                                        class="cart-view__main-panel-promo-input"
-                                        placeholder="Ваш промокод"
-                                        v-model="inputPromocode"
-                                        :error="promocodeError"
-                                    >
-                                        <template v-slot:error="{ error }">
-                                            <transition name="slide-in-bottom" mode="out-in">
-                                                <div :key="error" v-if="error">{{ error }}</div>
-                                            </transition>
-                                        </template>
-                                    </v-input>
+                                <v-input
+                                    class="cart-view__main-panel-promo-input"
+                                    placeholder="Ваш промокод"
+                                    v-model="inputPromocode"
+                                    :error="promocodeError"
+                                >
+                                    <template v-slot:error="{ error }">
+                                        <transition name="slide-in-bottom" mode="out-in">
+                                            <div :key="error" v-if="error">{{ error }}</div>
+                                        </transition>
+                                    </template>
+                                </v-input>
 
-                                    <v-button
-                                        class="btn--outline cart-view__main-panel-promo-btn"
-                                        @click="onAddPromocode"
-                                        :disabled="isLoad || isPromocodePending || !inputPromocode"
-                                    >
-                                        <template v-if="!isPromocodePending">Применить</template>
-                                        <v-spinner v-else show height="24" width="24" />
-                                    </v-button>
-                                </template>
+                                <v-button
+                                    class="btn--outline cart-view__main-panel-promo-btn"
+                                    @click="onAddPromocode"
+                                    :disabled="isLoad || isPromocodePending || !inputPromocode"
+                                >
+                                    <template v-if="!isPromocodePending">Применить</template>
+                                    <v-spinner v-else show height="24" width="24" />
+                                </v-button>
                             </div>
                             <div v-else class="cart-view__main-panel-promo cart-view__main-panel-promo--success">
-                                <template v-if="isProduct">
-                                    <div class="cart-view__main-panel-promo-icon">
-                                        <v-svg name="check" width="16" height="16" />
-                                    </div>
+                                <div class="cart-view__main-panel-promo-icon">
+                                    <v-svg name="check" width="16" height="16" />
+                                </div>
 
-                                    <div>
-                                        Промокод&nbsp;{{ promocode }}&nbsp;применён
-                                        <v-link
-                                            tag="button"
-                                            class="cart-view__main-panel-promo-link"
-                                            @click="onDeletePromocode"
-                                            :disabled="isLoad || isPromocodePending"
-                                        >
-                                            Отменить
-                                        </v-link>
-                                    </div>
-                                </template>
+                                <div>
+                                    Промокод&nbsp;{{ promocode }}&nbsp;применён
+                                    <v-link
+                                        tag="button"
+                                        class="cart-view__main-panel-promo-link"
+                                        @click="onDeletePromocode"
+                                        :disabled="isLoad || isPromocodePending"
+                                    >
+                                        Отменить
+                                    </v-link>
+                                </div>
                             </div>
 
                             <v-button
