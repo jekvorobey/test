@@ -42,7 +42,6 @@
                                     Оплата бонусами
                                     <span> -<price :value="bonusPayment" currency="RUB" /> </span>
                                 </p>
-
                             </template>
 
                             <p class="checkout-view__main-panel-line" v-if="certificatePayment > 0">
@@ -68,16 +67,9 @@
                                 <p class="text-bold checkout-view__main-panel-line">
                                     Итого <price v-bind="summary.total" />
                                 </p>
-                                <p v-if="!referralPartner" class="text-grey text-sm checkout-view__main-panel-line">
+                                <p v-if="showBonus" class="text-grey text-sm checkout-view__main-panel-line">
                                     Будет начислено
-                                    <span>
-                                        {{
-                                            summary.bonusGet > 0
-                                                ? `+ ${prepareBonus(summary.bonusGet)}`
-                                                : prepareBonus(summary.bonusGet)
-                                        }}
-                                        &nbsp;бонусов
-                                    </span>
+                                    <span> {{ `+ ${prepareBonus(summary.bonusGet)}` }}&nbsp;бонусов </span>
                                 </p>
                                 <p
                                     v-if="isProduct && summary.bonusSpent"
@@ -302,6 +294,10 @@ export default {
 
         isProduct() {
             return this.checkoutType === cartItemTypes.PRODUCT;
+        },
+
+        showBonus() {
+            return !this.referralPartner && this.summary.bonusGet > 0;
         },
     },
 

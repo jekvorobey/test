@@ -84,15 +84,10 @@
                                     Итого <price v-bind="activeTabItem.summary.total" />
                                 </p>
 
-                                <p v-if="!referralPartner" class="text-grey text-sm cart-view__main-panel-line">
+                                <p v-if="showBonus" class="text-grey text-sm cart-view__main-panel-line">
                                     Будет начислено
                                     <span>
-                                        {{
-                                            activeTabItem.summary.bonusGet > 0
-                                                ? `+ ${prepareBonus(activeTabItem.summary.bonusGet)}`
-                                                : prepareBonus(activeTabItem.summary.bonusGet)
-                                        }}
-                                        бонусов
+                                        {{ `+ ${prepareBonus(activeTabItem.summary.bonusGet)}` }}&nbsp;бонусов
                                     </span>
                                 </p>
                             </div>
@@ -408,6 +403,10 @@ export default {
 
         isTabletLg() {
             return this.$mq.tabletLg;
+        },
+
+        showBonus() {
+            return !this.referralPartner && this.activeTabItem.summary.bonusGet > 0;
         },
     },
 
