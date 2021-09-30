@@ -115,21 +115,33 @@
                                     <v-spinner v-else show height="24" width="24" />
                                 </v-button>
                             </div>
-                            <div v-else class="cart-view__main-panel-promo cart-view__main-panel-promo--success">
-                                <div class="cart-view__main-panel-promo-icon">
-                                    <v-svg name="check" width="16" height="16" />
-                                </div>
+                            <div v-else class="cart-view__main-panel-success-promo-wrapper">
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div v-if="!promoConditionsMet" class="cart-view__main-panel-promo--atention">
+                                        {{ promoCondition }}
+                                    </div>
+                                </transition>
+                                <div class="cart-view__main-panel-promo cart-view__main-panel-promo--success">
+                                    <div class="cart-view__main-panel-promo-icon">
+                                        <v-svg name="check" width="16" height="16" />
+                                    </div>
 
-                                <div>
-                                    Промокод&nbsp;{{ promocode }}&nbsp;применён
-                                    <v-link
-                                        tag="button"
-                                        class="cart-view__main-panel-promo-link"
-                                        @click="onDeletePromocode"
-                                        :disabled="isLoad || isPromocodePending"
-                                    >
-                                        Отменить
-                                    </v-link>
+                                    <div>
+                                        <template v-if="promoConditionsMet">
+                                            Промокод&nbsp;{{ promocode }}&nbsp;применён
+                                        </template>
+                                        <template v-else>
+                                            Промокод&nbsp;{{ promocode }}&nbsp;принят, но скидка не применилась
+                                        </template>
+                                        <v-link
+                                            tag="button"
+                                            class="cart-view__main-panel-promo-link"
+                                            @click="onDeletePromocode"
+                                            :disabled="isLoad || isPromocodePending"
+                                        >
+                                            Отменить
+                                        </v-link>
+                                    </div>
                                 </div>
                             </div>
 
@@ -323,6 +335,8 @@ export default {
             promocodeError: null,
             inputPromocode: null,
             isLoad: false,
+            promoConditionsMet: false,
+            promoCondition: 'Минимальная сумма заказа для применения скидки по промокоду — 5 000 Р',
         };
     },
 

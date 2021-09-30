@@ -164,11 +164,19 @@
                 align-items: flex-end;
                 margin-bottom: calc(var(--gs) * 2);
 
+                &--atention {
+                    position: relative;
+                    font-size: 12px;
+                    line-height: calc(var(--gs) * 2);
+                    color: var(--cl-red);
+                    overflow: hidden;
+                    margin-bottom: calc(var(--gs) * 2);
+                }
+
                 &--success {
                     align-items: flex-start;
                     background-color: var(--cl-divider-grey);
                     padding: var(--gs) calc(var(--gs) * 2);
-                    margin-top: calc(var(--gs) * 3);
                 }
 
                 &--success &-icon {
@@ -204,6 +212,10 @@
                         left: 0;
                     }
                 }
+            }
+
+            &-success-promo-wrapper {
+                margin-top: calc(var(--gs) * 3);
             }
 
             &-submit {
