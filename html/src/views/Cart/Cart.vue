@@ -57,7 +57,7 @@
                             <p class="cart-view__main-panel-line">
                                 <span>
                                     Сумма заказа:
-                                    <span class="text-lowercase">
+                                    <span v-if="showCartType" class="text-lowercase">
                                         {{ activeTabItem && $t(`cart.summary.type.${activeTabItem.type}`) }}
                                     </span>
                                 </span>
@@ -246,7 +246,7 @@ import {
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import {NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER, CAN_BUY} from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER, CAN_BUY } from '@store/modules/Auth';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
@@ -391,6 +391,10 @@ export default {
         attentionMessage() {
             const types = this[CART_TYPES] || [];
             return types.length === 2 && 'Внимание: продукты и мастер-классы оплачиваются отдельно';
+        },
+
+        showCartType() {
+            return this[CART_TYPES] && this[CART_TYPES].length === 2;
         },
 
         isProduct() {
