@@ -59,21 +59,21 @@ import './SliderBannersSection.css';
 
 const sliderOptions = {
     slidesPerView: 1,
-    // grabCursor: true,
+    grabCursor: true,
     // loop: true,
-    // autoplay: {
-    //     delay: 10000,
-    // },
-    //
-    // navigation: {
-    //     nextEl: '.swiper-button-next',
-    //     prevEl: '.swiper-button-prev',
-    // },
-    //
-    // pagination: {
-    //     el: '.swiper-pagination',
-    //     type: 'bullets',
-    // },
+    autoplay: {
+        delay: 10000,
+    },
+
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+
+    pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
+    },
 };
 
 export default {
