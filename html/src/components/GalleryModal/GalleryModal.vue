@@ -10,7 +10,7 @@
                 >
                     <div
                         class="swiper-slide gallery-modal__gallery-item"
-                        :class="hasBackdrop"
+                        :class="{ 'gallery-modal__gallery-item--backdrop': hasBackdrop }"
                         v-for="image in images"
                         :key="image.id"
                     >
@@ -109,7 +109,7 @@ export default {
         }),
 
         hasBackdrop() {
-            return galleryOptions.effect === 'fade' ? 'img-backdrop' : '';
+            return galleryOptions.effect === 'fade';
         },
     },
 

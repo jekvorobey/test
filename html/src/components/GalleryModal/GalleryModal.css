@@ -57,6 +57,10 @@
         &-item {
             min-height: 600px;
 
+            &--backdrop {
+                background-color: #ffffff;
+            }
+
             @media (--tablet-lg-min) {
                 display: flex;
                 flex-flow: column;
@@ -69,8 +73,4 @@
             }
         }
     }
-}
-
-.img-backdrop {
-    background-color: #ffffff;
 }
