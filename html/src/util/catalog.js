@@ -284,7 +284,8 @@ export function prepareProductImage(image, desktopSize, tabletSize, mobileSize) 
 }
 
 export function prepareMasterclassSpeakers(speakers = []) {
-    if (speakers.length > 0 && speakers.length <= 2) return getSpeakerString(speakers[0], true);
+    if (speakers.length === 1) return getSpeakerString(speakers[0], true);
+    if (speakers.length === 2) return `${getSpeakerString(speakers[0])}, ${getSpeakerString(speakers[1])}}`;
     if (speakers.length > 2) return `${getSpeakerString(speakers[0])}, ${getSpeakerString(speakers[1])} и др.`;
 }
 

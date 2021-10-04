@@ -33,7 +33,10 @@
             <div class="container masterclasses-view__sets-header">
                 <div class="masterclasses-view__sets-header-top">
                     <h1
-                        class="container container--tablet masterclasses-view__section-hl masterclasses-view__sets-header-hl"
+                        class="
+                            container container--tablet
+                            masterclasses-view__section-hl masterclasses-view__sets-header-hl
+                        "
                         v-if="activePage === 1 || isMounted"
                     >
                         <span>{{ catalogTitle }}</span>
@@ -130,7 +133,6 @@
                         :key="item.id"
                         :name="item.name"
                         :speaker="item.speaker"
-                        :speakers="item.speakers"
                         :date="item.dateTime"
                         :price="item.price"
                         :old-price="item.oldPrice"
