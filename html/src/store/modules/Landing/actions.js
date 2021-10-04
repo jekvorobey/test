@@ -26,6 +26,13 @@ import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg
 import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
 import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
+import termixDiscountDesktopImg from '@images/mock/landing-termix-discount/termixDiscountDesktop.jpg';
+import termixDiscountDesktopRetina from '@images/mock/landing-termix-discount/termixDiscountDesktop@2x.jpg';
+import termixDiscountTabletImg from '@images/mock/landing-termix-discount/termixDiscountTablet.jpg';
+import termixDiscountTabletRetina from '@images/mock/landing-termix-discount/termixDiscountTablet@2x.jpg';
+import termixDiscountMobileImg from '@images/mock/landing-termix-discount/termixDiscountMobile.jpg';
+import termixDiscountMobileRetina from '@images/mock/landing-termix-discount/termixDiscountMobile@2x.jpg';
+
 import { $logger } from '@services';
 import {
     getProducts,
@@ -80,6 +87,19 @@ export default {
     [FETCH_BANNERS]({ commit }) {
         try {
             commit(SET_BANNERS, [
+                {
+                    id: 'termixDiscount',
+                    name: '',
+                    type: 'banner',
+                    url:
+                        '/catalog/rascheski_shchetki_brashi/termix-nabor-termobrashingov-evolution-special-care-4-sht/',
+                    desktopImage: termixDiscountDesktopImg,
+                    desktopImageRetina: termixDiscountDesktopRetina,
+                    tabletImage: termixDiscountTabletImg,
+                    tabletImageRetina: termixDiscountTabletRetina,
+                    mobileImage: termixDiscountMobileImg,
+                    mobileImageRetina: termixDiscountMobileRetina,
+                },
                 {
                     id: 'middleBanner',
                     name: '',
