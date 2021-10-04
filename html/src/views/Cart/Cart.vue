@@ -246,7 +246,7 @@ import {
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import {NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER, CAN_BUY} from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER, CAN_BUY } from '@store/modules/Auth';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
@@ -499,34 +499,29 @@ export default {
         }
     },
 
-    // beforeRouteEnter(to, from, next) {
-    //     function proceed() {
-    //         if ($store.state[CART_MODULE]) {
-    //             const { load } = $store.state[CART_MODULE];
-    //
-    //             if (load) {
-    //                 $store.dispatch(`${CART_MODULE}/${SET_LOAD}`, false);
-    //                 return next();
-    //             }
-    //
-    //             $progress.start();
-    //             $store
-    //                 .dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`)
-    //                 .then(() => next(() => $progress.finish()))
-    //                 .catch(() => next(() => $progress.fail()));
-    //         }
-    //     }
-    //
-    //     if ($store.state[CART_MODULE]) proceed();
-    //     else {
-    //         $store.watch(
-    //             (state) => state[CART_MODULE],
-    //             (value) => {
-    //                 if (value) proceed();
-    //             }
-    //         );
-    //     }
-    // },
+    beforeRouteEnter(to, from, next) {
+        function proceed() {
+            if ($store.state[CART_MODULE]) {
+                const { load } = $store.state[CART_MODULE];
+                if (load) $store.dispatch(`${CART_MODULE}/${SET_LOAD}`, false);
+
+                $progress.start();
+                $store
+                    .dispatch(`${CART_MODULE}/${FETCH_CART_DATA}`)
+                    .then(() => next(() => $progress.finish()))
+                    .catch(() => next(() => $progress.fail()));
+            }
+        }
+        if ($store.state[CART_MODULE]) proceed();
+        else {
+            $store.watch(
+                (state) => state[CART_MODULE],
+                (value) => {
+                    if (value) proceed();
+                }
+            );
+        }
+    },
 
     created() {
         this.discountType = discountType;
