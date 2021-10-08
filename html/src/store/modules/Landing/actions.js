@@ -26,12 +26,12 @@ import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg
 import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
 import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
-import termixDiscountDesktopImg from '@images/mock/landing-termix-discount/termixDiscountDesktop.jpg';
-import termixDiscountDesktopRetina from '@images/mock/landing-termix-discount/termixDiscountDesktop@2x.jpg';
-import termixDiscountTabletImg from '@images/mock/landing-termix-discount/termixDiscountTablet.jpg';
-import termixDiscountTabletRetina from '@images/mock/landing-termix-discount/termixDiscountTablet@2x.jpg';
-import termixDiscountMobileImg from '@images/mock/landing-termix-discount/termixDiscountMobile.jpg';
-import termixDiscountMobileRetina from '@images/mock/landing-termix-discount/termixDiscountMobile@2x.jpg';
+import napuraDiscountDesktopImg from '@images/mock/landing-napura-discount/napuraDiscountDesktop.jpg';
+import napuraDiscountDesktopRetina from '@images/mock/landing-napura-discount/napuraDiscountDesktop@2x.jpg';
+import napuraDiscountTabletImg from '@images/mock/landing-napura-discount/napuraDiscountTablet.jpg';
+import napuraDiscountTabletRetina from '@images/mock/landing-napura-discount/napuraDiscountTablet@2x.jpg';
+import napuraDiscountMobileImg from '@images/mock/landing-napura-discount/napuraDiscountMobile.jpg';
+import napuraDiscountMobileRetina from '@images/mock/landing-napura-discount/napuraDiscountMobile@2x.jpg';
 
 import { $logger } from '@services';
 import {
@@ -88,17 +88,16 @@ export default {
         try {
             commit(SET_BANNERS, [
                 {
-                    id: 'termixDiscount',
+                    id: 'napuraDiscount',
                     name: '',
                     type: 'banner',
-                    url:
-                        '/catalog/rascheski_shchetki_brashi/termix-nabor-termobrashingov-evolution-special-care-4-sht/',
-                    desktopImage: termixDiscountDesktopImg,
-                    desktopImageRetina: termixDiscountDesktopRetina,
-                    tabletImage: termixDiscountTabletImg,
-                    tabletImageRetina: termixDiscountTabletRetina,
-                    mobileImage: termixDiscountMobileImg,
-                    mobileImageRetina: termixDiscountMobileRetina,
+                    url: '/catalog/nabory_1/napura_set_dlya_okrashennyh_volos_m10_s10_c10/',
+                    desktopImage: napuraDiscountDesktopImg,
+                    desktopImageRetina: napuraDiscountDesktopRetina,
+                    tabletImage: napuraDiscountTabletImg,
+                    tabletImageRetina: napuraDiscountTabletRetina,
+                    mobileImage: napuraDiscountMobileImg,
+                    mobileImageRetina: napuraDiscountMobileRetina,
                 },
                 {
                     id: 'middleBanner',
