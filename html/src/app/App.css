@@ -12,3 +12,7 @@
     filter: blur(0);
     transition: filter 400ms, -webkit-filter 400ms;
 }
+
+.no-js {
+    filter: blur(0) !important;
+}
