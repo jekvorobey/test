@@ -79,7 +79,7 @@
             </div>
         </div>
         <transition name="fade-in">
-            <gallery-modal :name="reviewModalName" :images="galleryImages" />
+            <review-modal :image="openedImage" />
         </transition>
     </component>
 </template>
@@ -91,7 +91,7 @@ import VRating from '@controls/VRating/VRating.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import SessionCheckButton from '@components/SessionCheckButton/SessionCheckButton.vue';
-import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
+import ReviewModal from '@components/reviews/ReviewModal/ReviewModal.vue';
 
 import { mapActions, mapState } from 'vuex';
 import { LOCALE } from '@store';
@@ -119,7 +119,7 @@ export default {
         VLink,
         VRating,
         VPicture,
-        GalleryModal,
+        ReviewModal,
 
         SessionCheckButton,
     },
@@ -203,7 +203,7 @@ export default {
         return {
             disableVote: false,
             vote: null,
-            imagesArray: this.images,
+            openedImage: {},
         };
     },
 
@@ -229,19 +229,6 @@ export default {
                 id: i,
                 defaultImg: generatePictureSourcePath(null, null, i),
             }));
-        },
-
-        galleryImages: {
-            get: function () {
-                const images = this.imagesArray || [];
-                return images.map((i) => ({
-                    id: i,
-                    defaultImg: generatePictureSourcePath(null, null, i),
-                }));
-            },
-            set: function (shiftedArray) {
-                this.imagesArray = shiftedArray;
-            },
         },
 
         computedLikes() {
@@ -273,14 +260,8 @@ export default {
         ...mapActions(REVIEWS_MODULE, [CHANGE_REVIEW_VOTE]),
 
         onShowReviewModal(id) {
-            this.imagesArray = this.shiftArrayToCurrentItem(this.imagesArray, id);
+            this.openedImage = this.reviewImages.find((image) => image.id === id);
             this[CHANGE_MODAL_STATE]({ name: this.reviewModalName, open: true });
-        },
-
-        shiftArrayToCurrentItem(arr, currValue) {
-            const shiftCnt = arr.findIndex((item) => item === currValue);
-            if (shiftCnt && shiftCnt !== -1) return arr.slice(shiftCnt).concat(arr.slice(0, shiftCnt));
-            return arr;
         },
 
         async onChangeVote(opinion) {
@@ -300,12 +281,6 @@ export default {
 
     created() {
         this.reviewOpinion = reviewOpinion;
-    },
-
-    watch: {
-        reviewModalIsOpen() {
-            if (!this.reviewModalIsOpen) this.imagesArray = this.images;
-        },
     },
 };
 </script>

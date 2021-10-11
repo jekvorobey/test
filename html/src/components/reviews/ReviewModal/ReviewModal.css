@@ -1,0 +1,61 @@
+.review-modal {
+    .popup--wide {
+        @media (--desktop-min) {
+            width: 1100px;
+            height: calc(100vh - (var(--gs) * 4));
+        }
+
+        @media (--desktop-lg-min) {
+            width: 1300px;
+        }
+    }
+
+    .modal-wrapper {
+        outline: none !important;
+    }
+
+    .modal-body {
+        position: relative;
+        height: 100%;
+        padding: 20px calc(var(--gs) * 15);        
+        
+        @media (--tablet) {
+            padding: 20px calc(var(--gs) * 8);  
+        }
+    }
+
+    & .v-picture {
+        width: auto;
+        max-height: 100%;
+
+        .v-picture__img {
+            object-fit: contain;
+        }
+    }
+
+    &__body {
+        position: relative;
+        display: flex;
+    }
+
+    &__container {
+        display: flex;
+        flex: 1;
+        height: 100%;
+
+        &-item {
+            min-height: 600px;
+
+            @media (--tablet-lg-min) {
+                display: flex;
+                flex-flow: column;
+                align-content: center;
+                justify-content: center;
+            }
+
+            @media (--desktop-lg) {
+                min-height: 400px;
+            }
+        }
+    }
+}
