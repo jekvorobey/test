@@ -17,7 +17,6 @@
                     <source :data-srcset="images.mobile.orig" media="(max-width: 479px)" />
                     <img
                         class="blur-up lazyload v-picture__img"
-                        :class="{ 'no-js': noJS }"
                         :data-src="images.default"
                         :src="itemProp ? images.default : null"
                         v-bind="itemPropSettings.image"
@@ -171,12 +170,6 @@ export default {
             type: Boolean,
             default: false,
         },
-    },
-
-    data() {
-        return {
-            noJS: true,
-        };
     },
 
     computed: {
@@ -395,10 +388,6 @@ export default {
         badgesUnique(badges) {
             return badges ? badges.filter((v, i, a) => a.indexOf(v) === i) : [];
         },
-    },
-
-    mounted() {
-        this.noJS = false;
     },
 };
 </script>
