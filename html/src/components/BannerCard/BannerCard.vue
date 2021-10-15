@@ -24,7 +24,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import { prepareBannerImage } from '@util/catalog';
 import './BannerCard.css';
 
-const desktopSize = { width: 392, height: 240 };
+const desktopSize = { width: 784, height: 480 };
 
 export default {
     name: 'banner-card',
