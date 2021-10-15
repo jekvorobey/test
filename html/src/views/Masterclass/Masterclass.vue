@@ -715,7 +715,12 @@ import { saveToClipboard, getDate, pluralize, formatPhoneNumber } from '@util';
 import { createNotFoundRoute } from '@util/router';
 import { generatePictureSourcePath, generateFileOriginalPath } from '@util/file';
 import { getInstagramUserNameFromUrl } from '@util/socials';
-import { generateAbsoluteMasterclassUrl, generateMasterclassUrl, prepareMasterclassSpeakers } from '@util/catalog';
+import {
+    generateAbsoluteMasterclassUrl,
+    generateMasterclassUrl,
+    prepareMasterclassSpeakers,
+    prepareBannerImage,
+} from '@util/catalog';
 import { yaMapSettings, dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { breakpoints, fileExtension, modalName, mediaType, httpCodes } from '@enums';
 import { cartItemTypes } from '@enums/product';
@@ -921,22 +926,17 @@ export default {
 
         bannerImage() {
             const { detailImage } = this[MASTERCLASS] || {};
+            const desktopSize = { width: 1224, height: 360 };
+            const tabletSize = desktopSize;
+            const mobileSize = { width: 320, height: 240 };
 
-            return (
-                detailImage && {
-                    desktopImg: {
-                        webp: generatePictureSourcePath(1224, 360, detailImage.id, fileExtension.image.WEBP),
-                        orig: generatePictureSourcePath(1224, 360, detailImage.id),
-                    },
-
-                    mobileImg: {
-                        webp: generatePictureSourcePath(320, 240, detailImage.id, fileExtension.image.WEBP),
-                        orig: generatePictureSourcePath(320, 240, detailImage.id),
-                    },
-
-                    defaultImg: generatePictureSourcePath(1224, 360, detailImage.id),
-                }
+            let { desktop: desktopImg, mobile: mobileImg, default: defaultImg } = prepareBannerImage(
+                detailImage,
+                desktopSize,
+                tabletSize,
+                mobileSize
             );
+            return { desktopImg, mobileImg, defaultImg };
         },
 
         descriptionGallery() {
