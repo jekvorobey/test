@@ -91,7 +91,8 @@ export default {
                     id: 'napuraDiscount',
                     name: '',
                     type: 'banner',
-                    url: '/catalog/nabory_1/napura_set_dlya_okrashennyh_volos_m10_s10_c10/',
+                    url:
+                        'catalog/specializirovannye_uhody/k18_professionalnaya_maska_dlya_molekulyarnogo_vosstanovleniya_volos_professional_molecular_repair_hair_mask_150_ml/',
                     desktopImage: napuraDiscountDesktopImg,
                     desktopImageRetina: napuraDiscountDesktopRetina,
                     tabletImage: napuraDiscountTabletImg,

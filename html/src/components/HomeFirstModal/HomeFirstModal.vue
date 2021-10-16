@@ -21,7 +21,7 @@
                                 <img class="modal-image hf-modal-image" />
                             </v-picture>
 
-                            <div class="hf-modal-h2">Маркетплейс только для профессионалов бьюти-индустрии</div>
+                            <div class="hf-modal-h2">Маркетплейс для мастеров бьюти-индустрии</div>
                             <div class="hf-modal-h4">Для совершения покупок подтверди статус профессионала</div>
 
                             <v-button class="modal-default-button hf-modal-default-button" @click="onRegistration"
