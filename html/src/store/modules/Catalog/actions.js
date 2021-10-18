@@ -1,3 +1,10 @@
+import bBDesktopBannerImg from '@images/mock/catalog-banners/bottleBlondeDesktopBanner.jpg';
+import bBDesktopBannerImgRetina from '@images/mock/catalog-banners/bottleBlondeDesktopBanner@2x.jpg';
+import bBMobileBannerImg from '@images/mock/catalog-banners/bottleBlondeMobileBanner.jpg';
+import bBMobileBannerImgRetina from '@images/mock/catalog-banners/bottleBlondeMobileBanner@2x.jpg';
+import bBTabletBannerImg from '@images/mock/catalog-banners/bottleBlondeTabletBanner.jpg';
+import bBTabletBannerImgRetina from '@images/mock/catalog-banners/bottleBlondeTabletBanner@2x.jpg';
+
 import _mergeWith from 'lodash/mergeWith';
 
 import { productGroupBase } from '@enums/product';
@@ -15,6 +22,7 @@ function mergeFunction(objValue, srcValue) {
 const FETCH_FILTERS = 'FETCH_FILTERS';
 const FETCH_ITEMS = 'FETCH_ITEMS';
 const FETCH_BANNER = 'FETCH_BANNER';
+const FETCH_MOCK_BANNER = 'FETCH_MOCK_BANNER';
 const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 const FETCH_PRODUCT_GROUP = 'FETCH_PRODUCT_GROUP';
 
@@ -42,6 +50,26 @@ export default {
         }
     },
 
+    async [FETCH_MOCK_BANNER]() {
+        try {
+            const data = {
+                id: 'bottleBlondeCatalogBanner',
+                name: '',
+                type: 'catalog-banner',
+                url: '/brands/bottle_blonde/',
+                desktopImage: bBDesktopBannerImg,
+                desktopImageRetina: bBDesktopBannerImgRetina,
+                tabletImage: bBTabletBannerImg,
+                tabletImageRetina: bBTabletBannerImgRetina,
+                mobileImage: bBMobileBannerImg,
+                mobileImageRetina: bBMobileBannerImgRetina,
+            };
+            return data;
+        } catch (error) {
+            storeErrorHandler(FETCH_MOCK_BANNER, true)(error);
+        }
+    },
+
     async [FETCH_CATEGORIES](context, { categories, filter }) {
         try {
             return await getCategories(categories, null, filter);
@@ -62,6 +90,7 @@ export default {
 
     async [FETCH_ITEMS](context, payload) {
         try {
+            // here get banner
             return await getCatalogItems(payload);
         } catch (error) {
             storeErrorHandler(FETCH_ITEMS)(error);
@@ -125,6 +154,10 @@ export default {
 
             data.entityCode = entityCode;
             data.type = type;
+
+            if (data.type === 'brands' && (data.entityCode === 'framar' || data.entityCode === 'olaplex')) {
+                data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, {});
+            }
 
             // eslint-disable-next-line prefer-destructuring
             based = data.productGroup.based;

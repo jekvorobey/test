@@ -36,6 +36,43 @@
                 </template>
                 <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt />
             </catalog-banner-card> -->
+
+            <catalog-banner-card
+                class="catalog-view__banner"
+                v-if="productGroup.mockBanner"
+                :item="productGroup.mockBanner"
+            >
+                <template v-if="mockBannerImages && mockBannerImages.desktopImg">
+                    <source
+                        :data-srcset="mockBannerImages.desktopImg.webp"
+                        type="image/webp"
+                        media="(min-width: 1024px)"
+                    />
+                    <source :data-srcset="mockBannerImages.desktopImg.orig" media="(min-width: 1024px)" />
+                </template>
+                <template v-if="mockBannerImages && mockBannerImages.tabletImg">
+                    <source
+                        :data-srcset="mockBannerImages.tabletImg.webp"
+                        type="image/webp"
+                        media="(min-width: 768px)"
+                    />
+                    <source :data-srcset="mockBannerImages.tabletImg.orig" media="(min-width: 768px)" />
+                </template>
+                <template v-if="mockBannerImages && mockBannerImages.mobileImg">
+                    <source
+                        :data-srcset="mockBannerImages.mobileImg.webp"
+                        type="image/webp"
+                        media="(min-width: 320px)"
+                    />
+                    <source :data-srcset="mockBannerImages.mobileImg.orig" media="(min-width: 320px)" />
+                </template>
+                <img
+                    v-if="mockBannerImages && mockBannerImages.defaultImg"
+                    class="blur-up lazyload v-picture__img"
+                    :data-src="mockBannerImages.defaultImg"
+                    alt
+                />
+            </catalog-banner-card>
         </div>
 
         <section class="section catalog-view__section--grid">
@@ -282,6 +319,8 @@ import Modal from '@controls/modal/modal.vue';
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
+import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
+
 import FilterButton from '@components/FilterButton/FilterButton.vue';
 import TagItem from '@components/TagItem/TagItem.vue';
 import CategoryTreeItem from '@components/CategoryTreeItem/CategoryTreeItem.vue';
@@ -309,6 +348,7 @@ import {
     TYPE,
     ITEMS,
     BANNER,
+    MOCK_BANNER,
     CATEGORIES,
     PRODUCT_GROUP,
     RANGE,
@@ -366,6 +406,7 @@ export default {
 
         Breadcrumbs,
         BreadcrumbItem,
+        CatalogBannerCard,
         FilterButton,
         TagItem,
         CategoryTreeItem,
@@ -425,7 +466,16 @@ export default {
             ROUTE_SEGMENTS,
             BREADCRUMBS,
         ]),
-        ...mapState(CATALOG_MODULE, [ITEMS, BANNER, CATEGORIES, PRODUCT_GROUP, TYPE, RANGE, RANGE_WITHOUT_UNION]),
+        ...mapState(CATALOG_MODULE, [
+            ITEMS,
+            BANNER,
+            MOCK_BANNER,
+            CATEGORIES,
+            PRODUCT_GROUP,
+            TYPE,
+            RANGE,
+            RANGE_WITHOUT_UNION,
+        ]),
         ...mapState('route', {
             code: (state) => state.params.code,
             entityCode: (state) => state.params.entityCode,
@@ -495,6 +545,58 @@ export default {
             const banner = this[PRODUCT_GROUP][BANNER] || {};
             const image = banner.desktopImage || banner.tabletImage || banner.mobileImage;
             return image && generatePictureSourcePath(1224, 240, image.id);
+        },
+
+        mockBannerImages() {
+            const banner = this[PRODUCT_GROUP][MOCK_BANNER] || {};
+
+            function getImageWithRetina(image, type = 'jpg') {
+                let result = '';
+                let imageOrig = '';
+                let imageRetina = '';
+
+                switch (type) {
+                    case 'webp':
+                        imageOrig = image.webp || image.orig.substr(0, image.orig.lastIndexOf('.')) + '.webp';
+                        imageRetina =
+                            image.retinaWebp || image.retinaOrig.substr(0, image.retinaOrig.lastIndexOf('.')) + '.webp';
+                        break;
+                    default:
+                        imageOrig = image.orig;
+                        imageRetina = image.retinaOrig;
+                }
+
+                result += `${imageOrig} 1x`;
+                if (imageRetina) {
+                    result += `, ${imageRetina} 2x`;
+                }
+                return result;
+            }
+
+            return {
+                desktopImg: {
+                    webp: getImageWithRetina(
+                        { orig: banner.desktopImage, retinaOrig: banner.desktopImageRetina },
+                        'webp'
+                    ),
+                    orig: getImageWithRetina({ orig: banner.desktopImage, retinaOrig: banner.desktopImageRetina }),
+                },
+                tabletImg: {
+                    webp: getImageWithRetina(
+                        { orig: banner.tabletImage, retinaOrig: banner.tabletImageRetina },
+                        'webp'
+                    ),
+                    orig: getImageWithRetina({ orig: banner.tabletImage, retinaOrig: banner.tabletImageRetina }),
+                },
+                mobileImg: {
+                    webp: getImageWithRetina(
+                        { orig: banner.mobileImage, retinaOrig: banner.mobileImageRetina },
+                        'webp'
+                    ),
+                    orig: getImageWithRetina({ orig: banner.mobileImage, retinaOrig: banner.mobileImageRetina }),
+                },
+                defaultImg: banner.desktopImage,
+            };
         },
 
         clearFilterUrl() {

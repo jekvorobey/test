@@ -60,6 +60,7 @@
     &__banner {
         order: 1;
         height: 240px;
+        cursor: pointer;
 
         @media (--tablet-lg) {
             order: 0;
