@@ -602,8 +602,8 @@ export function getCatalogItems({
     } else catalogItemsCancelSource = axios.CancelToken.source();
 
     // пока скрыли баннеры /catalog/items - выдача с баннерами
-    // return $http.get('/v1/catalog/items', {
-    return $http.get('/v1/catalog/products', {
+    return $http.get('/v1/catalog/items', {
+        // return $http.get('/v1/catalog/products', {
         cancelToken: catalogItemsCancelSource.token,
         params: {
             filter,
