@@ -42,7 +42,7 @@
                 v-if="productGroup.mockBanner"
                 :item="productGroup.mockBanner"
             >
-                <template v-if="mockBannerImages && mockBannerImages.desktopImg">
+                <template v-if="mockBannerImages.desktopImg">
                     <source
                         :data-srcset="mockBannerImages.desktopImg.webp"
                         type="image/webp"
@@ -50,7 +50,7 @@
                     />
                     <source :data-srcset="mockBannerImages.desktopImg.orig" media="(min-width: 1024px)" />
                 </template>
-                <template v-if="mockBannerImages && mockBannerImages.tabletImg">
+                <template v-if="mockBannerImages.tabletImg">
                     <source
                         :data-srcset="mockBannerImages.tabletImg.webp"
                         type="image/webp"
@@ -58,7 +58,7 @@
                     />
                     <source :data-srcset="mockBannerImages.tabletImg.orig" media="(min-width: 768px)" />
                 </template>
-                <template v-if="mockBannerImages && mockBannerImages.mobileImg">
+                <template v-if="mockBannerImages.mobileImg">
                     <source
                         :data-srcset="mockBannerImages.mobileImg.webp"
                         type="image/webp"
@@ -67,7 +67,7 @@
                     <source :data-srcset="mockBannerImages.mobileImg.orig" media="(min-width: 320px)" />
                 </template>
                 <img
-                    v-if="mockBannerImages && mockBannerImages.defaultImg"
+                    v-if="mockBannerImages.defaultImg"
                     class="blur-up lazyload v-picture__img"
                     :data-src="mockBannerImages.defaultImg"
                     alt
@@ -550,50 +550,50 @@ export default {
         mockBannerImages() {
             const banner = this[PRODUCT_GROUP][MOCK_BANNER] || {};
 
-            function getImageWithRetina(image, type = 'jpg') {
-                let result = '';
-                let imageOrig = '';
-                let imageRetina = '';
+            function getImageWithRetina(images, type = 'jpg') {
+                let { image, imageRetina } = images;
 
-                switch (type) {
-                    case 'webp':
-                        imageOrig = image.webp || image.orig.substr(0, image.orig.lastIndexOf('.')) + '.webp';
-                        imageRetina =
-                            image.retinaWebp || image.retinaOrig.substr(0, image.retinaOrig.lastIndexOf('.')) + '.webp';
-                        break;
-                    default:
-                        imageOrig = image.orig;
-                        imageRetina = image.retinaOrig;
+                function getWebp(image) {
+                    return image.substring(image.lastIndexOf('.')) === '.webp'
+                        ? image
+                        : image.substring(0, image.lastIndexOf('.')) + '.webp';
                 }
 
-                result += `${imageOrig} 1x`;
-                if (imageRetina) {
-                    result += `, ${imageRetina} 2x`;
+                if (type === 'webp') {
+                    image = getWebp(image);
+                    imageRetina = getWebp(imageRetina);
                 }
-                return result;
+
+                return `${image} 1x, ${imageRetina} 2x`;
             }
 
             return {
                 desktopImg: {
                     webp: getImageWithRetina(
-                        { orig: banner.desktopImage, retinaOrig: banner.desktopImageRetina },
+                        {
+                            image: banner.desktopWebp || banner.desktopImage,
+                            imageRetina: banner.desktopWebpRetina || banner.desktopImageRetina,
+                        },
                         'webp'
                     ),
-                    orig: getImageWithRetina({ orig: banner.desktopImage, retinaOrig: banner.desktopImageRetina }),
+                    orig: getImageWithRetina({ image: banner.desktopImage, imageRetina: banner.desktopImageRetina }),
                 },
                 tabletImg: {
                     webp: getImageWithRetina(
-                        { orig: banner.tabletImage, retinaOrig: banner.tabletImageRetina },
+                        {
+                            image: banner.tabletWebp || banner.tabletImage,
+                            imageRetina: banner.tabletWEbpRetina || banner.tabletImageRetina,
+                        },
                         'webp'
                     ),
-                    orig: getImageWithRetina({ orig: banner.tabletImage, retinaOrig: banner.tabletImageRetina }),
+                    orig: getImageWithRetina({ image: banner.tabletImage, imageRetina: banner.tabletImageRetina }),
                 },
                 mobileImg: {
                     webp: getImageWithRetina(
-                        { orig: banner.mobileImage, retinaOrig: banner.mobileImageRetina },
+                        { image: banner.mobileImage, imageRetina: banner.mobileImageRetina },
                         'webp'
                     ),
-                    orig: getImageWithRetina({ orig: banner.mobileImage, retinaOrig: banner.mobileImageRetina }),
+                    orig: getImageWithRetina({ image: banner.mobileImage, imageRetina: banner.mobileImageRetina }),
                 },
                 defaultImg: banner.desktopImage,
             };
