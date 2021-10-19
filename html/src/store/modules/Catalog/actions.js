@@ -90,7 +90,6 @@ export default {
 
     async [FETCH_ITEMS](context, payload) {
         try {
-            // here get banner
             return await getCatalogItems(payload);
         } catch (error) {
             storeErrorHandler(FETCH_ITEMS)(error);

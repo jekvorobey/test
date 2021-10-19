@@ -1,15 +1,17 @@
 <template>
     <li class="catalog-banner-list-card">
         <div class="catalog-banner-list-card__img" v-once>
-            <v-picture>
-                <source :data-srcset="desktopImg.webp" type="image/webp" media="(min-width: 1024px)" />
-                <source :data-srcset="desktopImg.orig" media="(min-width: 1024px)" />
-                <source :data-srcset="tabletImg.webp" type="image/webp" media="(min-width: 768px)" />
-                <source :data-srcset="tabletImg.orig" media="(min-width: 768px)" />
-                <source :data-srcset="mobileImg.webp" type="image/webp" media="(min-width: 320px)" />
-                <source :data-srcset="mobileImg.orig" media="(min-width: 320px)" />
-                <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
-            </v-picture>
+            <router-link tag="div" :to="href" :class="{ 'catalog-banner-list-card__img__link': href }">
+                <v-picture>
+                    <source :data-srcset="desktopImg.webp" type="image/webp" media="(min-width: 1024px)" />
+                    <source :data-srcset="desktopImg.orig" media="(min-width: 1024px)" />
+                    <source :data-srcset="tabletImg.webp" type="image/webp" media="(min-width: 768px)" />
+                    <source :data-srcset="tabletImg.orig" media="(min-width: 768px)" />
+                    <source :data-srcset="mobileImg.webp" type="image/webp" media="(min-width: 320px)" />
+                    <source :data-srcset="mobileImg.orig" media="(min-width: 320px)" />
+                    <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
+                </v-picture>
+            </router-link>
         </div>
 
         <div v-if="item.button" class="catalog-banner-list-card__panel" :class="panelClasses" v-once>
@@ -161,6 +163,10 @@ export default {
                     break;
             }
             return classes;
+        },
+
+        href() {
+            return this.item.url || '';
         },
     },
 };

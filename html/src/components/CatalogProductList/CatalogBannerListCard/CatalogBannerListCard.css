@@ -33,6 +33,10 @@
             opacity: 0.03;
         }
 
+        &__link {
+            cursor: pointer;
+        }
+
         .v-picture {
             width: 100%;
             height: 100%;
