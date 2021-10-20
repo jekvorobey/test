@@ -59,11 +59,16 @@
 
     &__banner {
         order: 1;
-        height: 240px;
+        max-height: 240px;
         cursor: pointer;
 
         @media (--tablet-lg) {
             order: 0;
+            max-height: 305px;
+        }
+
+        @media (--tablet) {
+            max-height: 575px;
         }
     }
 

@@ -5,9 +5,19 @@
     border-bottom: none;
 
     &__img {
+        position: relative;
         display: flex;
         height: 100%;
         width: 100%;
+        max-height: 16vw;
+
+        @media (--tablet-lg) {
+            max-height: 30vw;
+        }
+
+        @media (--tablet) {
+            max-height: 75vw;
+        }
 
         &::after {
             content: '';
@@ -21,7 +31,7 @@
             }
         }
 
-        &::before {
+        /*&::before {
             pointer-events: none;
             content: '';
             position: absolute;
@@ -33,7 +43,7 @@
             height: 100%;
             background-color: var(--cl-global);
             opacity: 0.03;
-        }
+        }*/
 
         .v-picture {
             width: 100%;
