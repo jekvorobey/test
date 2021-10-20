@@ -12,6 +12,7 @@ export const modalName = Object.freeze({
 
     product: {
         GALLERY: 'gallery-modal',
+        REVIEW: 'review-modal',
     },
 
     masterclass: {
