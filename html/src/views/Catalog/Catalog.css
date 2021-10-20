@@ -62,13 +62,21 @@
         max-height: 240px;
         cursor: pointer;
 
+        @media (max-width: 1440px) {
+            max-height: 16vw;
+        }
+
+        @media (max-width: 1280px) {
+            max-height: 18vw;
+        }
+
         @media (--tablet-lg) {
             order: 0;
-            max-height: 305px;
+            max-height: 31vw;
         }
 
         @media (--tablet) {
-            max-height: 575px;
+            max-height: 73vw;
         }
     }
 
