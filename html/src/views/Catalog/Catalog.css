@@ -66,7 +66,7 @@
             max-height: 16vw;
         }
 
-        @media (max-width: 1280px) {
+        @media (--desktop) {
             max-height: 18vw;
         }
 
