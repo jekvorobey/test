@@ -595,6 +595,7 @@ export function getCatalogItems({
     orderField = sortFields.POPULARITY,
     orderDirection = sortDirections.DESC,
     page = 1,
+    pagePath,
 }) {
     if (catalogItemsCancelSource) {
         catalogItemsCancelSource.cancel(REQUEST_CANCEL_MESSAGE);
@@ -602,14 +603,15 @@ export function getCatalogItems({
     } else catalogItemsCancelSource = axios.CancelToken.source();
 
     // пока скрыли баннеры /catalog/items - выдача с баннерами
-    return $http.get('/v1/catalog/items', {
-        // return $http.get('/v1/catalog/products', {
+    // return $http.get('/v1/catalog/items', {
+    return $http.get('/v1/catalog/products', {
         cancelToken: catalogItemsCancelSource.token,
         params: {
             filter,
             page,
             orderField,
             orderDirection,
+            pagePath,
         },
         paramsSerializer(params) {
             return qs.stringify(params, {

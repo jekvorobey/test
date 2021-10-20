@@ -897,6 +897,7 @@ export default {
                             page,
                             orderField,
                             orderDirection,
+                            pagePath: fullPath,
                         })
                         .then(() => {
                             $store.dispatch(`${CATALOG_MODULE}/${SET_LOAD_PATH}`, fullPath);

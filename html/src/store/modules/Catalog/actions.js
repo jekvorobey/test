@@ -125,6 +125,8 @@ export default {
             orderDirection,
 
             showMore,
+
+            pagePath,
         } = payload;
 
         commit(SET_PREVIOUS_CATALOG_FETCH_PAYLOAD, payload);
@@ -216,6 +218,7 @@ export default {
                 page,
                 orderField,
                 orderDirection,
+                pagePath,
             },
         });
 
