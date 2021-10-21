@@ -1,11 +1,11 @@
 <template>
-    <div class="select-panel">
+    <div class="links-switch">
         <div
-            class="select-panel__link"
-            :class="{ 'select-panel__link--checked': item.code === internalValue }"
+            class="links-switch__link"
+            :class="{ 'links-switch__link--checked': item.code === internalValue }"
             v-for="(item, index) in items"
-            :id="`select-panel-${id}-${index}`"
-            :key="item.code"
+            :id="`links-switch-${id}-${index}`"
+            :key="item[keyField]"
         >
             <v-link :to="generateHref(item.code)" @click.stop.prevent="onSelect(item.code)">
                 <slot name="content" :item="item" :index="index">
@@ -15,13 +15,12 @@
         </div>
     </div>
 </template>
-
 <script>
 import VLink from '@controls/VLink/VLink.vue';
-import './SelectPanel.css';
+import './LinksSwitch.css';
 
 export default {
-    name: 'select-panel',
+    name: 'links-switch',
 
     components: {
         VLink,
@@ -32,13 +31,18 @@ export default {
             type: [String, Number],
         },
 
+        keyField: {
+            type: String,
+            default: 'value',
+        },
+
         value: {
             type: [String, Number, Boolean],
         },
 
         name: {
             type: String,
-            default: 'select-panel',
+            default: 'links-switch',
             required: true,
         },
 
@@ -69,8 +73,7 @@ export default {
         },
 
         generateHref(value) {
-            const { noFilters, filters } = this.linkSegments;
-            if (!value) return noFilters ? noFilters : '';
+            const { filters } = this.linkSegments;
             return filters ? filters + `${value}/` : '';
         },
     },
