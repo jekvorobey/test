@@ -44,6 +44,7 @@
             >
                 <template v-if="mockBannerImages.desktopImg">
                     <source
+                        v-if="mockBannerImages.desktopImg.webp"
                         :data-srcset="mockBannerImages.desktopImg.webp"
                         type="image/webp"
                         media="(min-width: 1024px)"
@@ -52,6 +53,7 @@
                 </template>
                 <template v-if="mockBannerImages.tabletImg">
                     <source
+                        v-if="mockBannerImages.tabletImg.webp"
                         :data-srcset="mockBannerImages.tabletImg.webp"
                         type="image/webp"
                         media="(min-width: 768px)"
@@ -60,6 +62,7 @@
                 </template>
                 <template v-if="mockBannerImages.mobileImg">
                     <source
+                        v-if="mockBannerImages.mobileImg.webp"
                         :data-srcset="mockBannerImages.mobileImg.webp"
                         type="image/webp"
                         media="(min-width: 320px)"
@@ -552,38 +555,24 @@ export default {
 
             function getImageWithRetina(images, type = 'jpg') {
                 let { image, imageRetina } = images;
+                const isWebp = (image) => image.substring(image.lastIndexOf('.')) === '.webp';
 
-                function getWebp(image) {
-                    return image.substring(image.lastIndexOf('.')) === '.webp'
-                        ? image
-                        : image.substring(0, image.lastIndexOf('.')) + '.webp';
-                }
-
-                if (type === 'webp') {
-                    image = getWebp(image);
-                    imageRetina = getWebp(imageRetina);
-                }
-
+                if (!image || !imageRetina) return undefined;
+                if (type === 'webp' && (!isWebp(image) || !isWebp(imageRetina))) return undefined;
                 return `${image} 1x, ${imageRetina} 2x`;
             }
 
             return {
                 desktopImg: {
                     webp: getImageWithRetina(
-                        {
-                            image: banner.desktopWebp || banner.desktopImage,
-                            imageRetina: banner.desktopWebpRetina || banner.desktopImageRetina,
-                        },
+                        { image: banner.desktopWebp, imageRetina: banner.desktopWebpRetina },
                         'webp'
                     ),
                     orig: getImageWithRetina({ image: banner.desktopImage, imageRetina: banner.desktopImageRetina }),
                 },
                 tabletImg: {
                     webp: getImageWithRetina(
-                        {
-                            image: banner.tabletWebp || banner.tabletImage,
-                            imageRetina: banner.tabletWEbpRetina || banner.tabletImageRetina,
-                        },
+                        { image: banner.tabletWebp, imageRetina: banner.tabletWEbpRetina },
                         'webp'
                     ),
                     orig: getImageWithRetina({ image: banner.tabletImage, imageRetina: banner.tabletImageRetina }),

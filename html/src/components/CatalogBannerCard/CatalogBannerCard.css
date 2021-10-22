@@ -7,7 +7,7 @@
     &__img {
 
         display: flex;
-        height: 100%;
+        height: auto;
         width: 100%;
 
         &::after {
