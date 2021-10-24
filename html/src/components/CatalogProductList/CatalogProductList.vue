@@ -40,7 +40,7 @@
                 :is="getComponent(item.type)"
                 :item="item"
                 :referral-code="referralCode"
-                :mobileOrder="calcMobileOrder(index, item.type)"
+                :mobileOrder="calcMobileOrder(item)"
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"

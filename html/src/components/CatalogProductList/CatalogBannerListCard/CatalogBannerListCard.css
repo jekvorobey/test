@@ -4,20 +4,20 @@
 
     &__img {
         display: flex;
-        height: 100%;
+        height: auto;
         width: 100%;
 
-        &::after {
+        /*&::after {
             content: '';
-            display: block;
-            padding-bottom: 100%;
+            display: block;*/
+            /*padding-bottom: 100%;*/
 
             /* чинит padding-bottom: 100% в FireFox для распорки */
-            @supports (-moz-user-select: none) {
+            /*@supports (-moz-user-select: none) {
                 margin-top: 100%;
                 padding-bottom: 0;
             }
-        }
+        }*/
 
         &::before {
             pointer-events: none;
@@ -35,11 +35,12 @@
 
         &__link {
             cursor: pointer;
+            height: auto;
         }
 
         .v-picture {
             width: 100%;
-            height: 100%;
+            height: auto;
         }
     }
 
