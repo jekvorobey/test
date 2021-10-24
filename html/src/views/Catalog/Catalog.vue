@@ -787,6 +787,7 @@ export default {
         async fetchCatalog(to, from, next, showMore) {
             try {
                 const {
+                    path,
                     params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
                     query: {
                         page = DEFAULT_PAGE,
@@ -823,6 +824,7 @@ export default {
                     orderField,
                     orderDirection,
                     showMore,
+                    pagePath: path,
                 });
 
                 next();
