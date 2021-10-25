@@ -218,10 +218,13 @@ export default {
 
         calcMobileOrder(item) {
             const { items = [] } = this;
-            if (item.id === items[1].id && item.type === catalogItemTypes.BANNER) {
+            if (items[1] && item.id === items[1].id && item.type === catalogItemTypes.BANNER) {
                 return 2;
             }
-            if (item.id === items[0].id || (item.id === items[2].id && items[1].type === catalogItemTypes.BANNER)) {
+            if (
+                (items[0] && item.id === items[0].id) ||
+                (items[2] && items[1] && item.id === items[2].id && items[1].type === catalogItemTypes.BANNER)
+            ) {
                 return 1;
             }
             return 3;
