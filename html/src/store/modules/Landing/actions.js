@@ -26,12 +26,12 @@ import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg
 import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
 import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
-import napuraDiscountDesktopImg from '@images/mock/landing-napura-discount/napuraDiscountDesktop.jpg';
-import napuraDiscountDesktopRetina from '@images/mock/landing-napura-discount/napuraDiscountDesktop@2x.jpg';
-import napuraDiscountTabletImg from '@images/mock/landing-napura-discount/napuraDiscountTablet.jpg';
-import napuraDiscountTabletRetina from '@images/mock/landing-napura-discount/napuraDiscountTablet@2x.jpg';
-import napuraDiscountMobileImg from '@images/mock/landing-napura-discount/napuraDiscountMobile.jpg';
-import napuraDiscountMobileRetina from '@images/mock/landing-napura-discount/napuraDiscountMobile@2x.jpg';
+import kashoDiscountDesktopImg from '@images/mock/landing-kasho-discount/kashoDiscountDesktop.jpg';
+import kashoDiscountDesktopRetina from '@images/mock/landing-kasho-discount/kashoDiscountDesktop@2x.jpg';
+import kashoDiscountTabletImg from '@images/mock/landing-kasho-discount/kashoDiscountTablet.jpg';
+import kashoDiscountTabletRetina from '@images/mock/landing-kasho-discount/kashoDiscountTablet@2x.jpg';
+import kashoDiscountMobileImg from '@images/mock/landing-kasho-discount/kashoDiscountMobile.jpg';
+import kashoDiscountMobileRetina from '@images/mock/landing-kasho-discount/kashoDiscountMobile@2x.jpg';
 
 import { $logger } from '@services';
 import {
@@ -88,17 +88,16 @@ export default {
         try {
             commit(SET_BANNERS, [
                 {
-                    id: 'napuraDiscount',
+                    id: 'kashoDiscount',
                     name: '',
                     type: 'banner',
-                    url:
-                        'catalog/specializirovannye_uhody/k18_professionalnaya_maska_dlya_molekulyarnogo_vosstanovleniya_volos_professional_molecular_repair_hair_mask_150_ml/',
-                    desktopImage: napuraDiscountDesktopImg,
-                    desktopImageRetina: napuraDiscountDesktopRetina,
-                    tabletImage: napuraDiscountTabletImg,
-                    tabletImageRetina: napuraDiscountTabletRetina,
-                    mobileImage: napuraDiscountMobileImg,
-                    mobileImageRetina: napuraDiscountMobileRetina,
+                    url: 'catalog/nozhnicy/kasho_nozhnicy_parikmaherskie_pryamye_v_chehle_impression_5_5/',
+                    desktopImage: kashoDiscountDesktopImg,
+                    desktopImageRetina: kashoDiscountDesktopRetina,
+                    tabletImage: kashoDiscountTabletImg,
+                    tabletImageRetina: kashoDiscountTabletRetina,
+                    mobileImage: kashoDiscountMobileImg,
+                    mobileImageRetina: kashoDiscountMobileRetina,
                 },
                 {
                     id: 'middleBanner',
