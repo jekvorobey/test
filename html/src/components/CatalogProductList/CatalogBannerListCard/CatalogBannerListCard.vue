@@ -1,15 +1,32 @@
 <template>
-    <li class="catalog-banner-list-card">
+    <li class="catalog-banner-list-card" :class="mobileOrderClass">
         <div class="catalog-banner-list-card__img" v-once>
-            <v-picture>
-                <source :data-srcset="desktopImg.webp" type="image/webp" media="(min-width: 1024px)" />
-                <source :data-srcset="desktopImg.orig" media="(min-width: 1024px)" />
-                <source :data-srcset="tabletImg.webp" type="image/webp" media="(min-width: 768px)" />
-                <source :data-srcset="tabletImg.orig" media="(min-width: 768px)" />
-                <source :data-srcset="mobileImg.webp" type="image/webp" media="(min-width: 320px)" />
-                <source :data-srcset="mobileImg.orig" media="(min-width: 320px)" />
-                <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
-            </v-picture>
+            <router-link tag="div" :to="href" :class="{ 'catalog-banner-list-card__img__link': href }">
+                <v-picture>
+                    <source
+                        v-if="desktopImg.webp"
+                        :data-srcset="desktopImg.webp"
+                        type="image/webp"
+                        media="(min-width: 1024px)"
+                    />
+                    <source :data-srcset="desktopImg.orig" media="(min-width: 1024px)" />
+                    <source
+                        v-if="tabletImg.webp"
+                        :data-srcset="tabletImg.webp"
+                        type="image/webp"
+                        media="(min-width: 768px)"
+                    />
+                    <source :data-srcset="tabletImg.orig" media="(min-width: 768px)" />
+                    <source
+                        v-if="mobileImg.webp"
+                        :data-srcset="mobileImg.webp"
+                        type="image/webp"
+                        media="(min-width: 320px)"
+                    />
+                    <source :data-srcset="mobileImg.orig" media="(min-width: 320px)" />
+                    <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
+                </v-picture>
+            </router-link>
         </div>
 
         <div v-if="item.button" class="catalog-banner-list-card__panel" :class="panelClasses" v-once>
@@ -77,36 +94,103 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        mobileOrder: {
+            type: Number,
+        },
+    },
+
+    data() {
+        return {
+            desktopSize: { w: 1200, h: 864 },
+            tabletSize: { w: 944, h: 704 },
+            mobileSize: { w: 640, h: 640 },
+        };
     },
 
     computed: {
         mobileImg() {
+            const { mobileSize } = this;
             const image = this.item.mobileImage || this.item.tabletImage || this.item.desktopImage;
             return {
-                webp: generatePictureSourcePath(320, 320, image.id, fileExtension.image.WEBP),
-                orig: generatePictureSourcePath(320, 320, image.id),
+                webp:
+                    image.sourceExt === 'webp'
+                        ? `${generatePictureSourcePath(
+                              mobileSize.w,
+                              mobileSize.h,
+                              image.id,
+                              fileExtension.image.WEBP
+                          )} 1x, ${generatePictureSourcePath(
+                              2 * mobileSize.w,
+                              2 * mobileSize.h,
+                              image.id,
+                              fileExtension.image.WEBP
+                          )} 2x`
+                        : undefined,
+                orig: `${generatePictureSourcePath(
+                    mobileSize.w,
+                    mobileSize.h,
+                    image.id
+                )} 1x, ${generatePictureSourcePath(2 * mobileSize.w, 2 * mobileSize.h, image.id)} 2x`,
             };
         },
 
         tabletImg() {
+            const { tabletSize } = this;
             const image = this.item.tabletImage || this.item.desktopImage;
             return {
-                webp: generatePictureSourcePath(472, 352, image.id, fileExtension.image.WEBP),
-                orig: generatePictureSourcePath(472, 352, image.id),
+                webp:
+                    image.sourceExt === 'webp'
+                        ? `${generatePictureSourcePath(
+                              tabletSize.w,
+                              tabletSize.h,
+                              image.id,
+                              fileExtension.image.WEBP
+                          )} 1x, ${generatePictureSourcePath(
+                              2 * tabletSize.w,
+                              2 * tabletSize.h,
+                              image.id,
+                              fileExtension.image.WEBP
+                          )} 2x`
+                        : undefined,
+                orig: `${generatePictureSourcePath(
+                    tabletSize.w,
+                    tabletSize.h,
+                    image.id
+                )} 1x, ${generatePictureSourcePath(2 * tabletSize.w, 2 * tabletSize.h, image.id)} 2x`,
             };
         },
 
         desktopImg() {
+            const { desktopSize } = this;
             const image = this.item.desktopImage || this.item.tabletImage;
             return {
-                webp: generatePictureSourcePath(600, 432, image.id, fileExtension.image.WEBP),
-                orig: generatePictureSourcePath(600, 432, image.id),
+                webp:
+                    image.sourceExt === 'webp'
+                        ? `${generatePictureSourcePath(
+                              desktopSize.w,
+                              desktopSize.h,
+                              image.id,
+                              fileExtension.image.WEBP
+                          )} 1x, ${generatePictureSourcePath(
+                              2 * desktopSize.w,
+                              2 * desktopSize.h,
+                              image.id,
+                              fileExtension.image.WEBP
+                          )} 2x`
+                        : undefined,
+                orig: `${generatePictureSourcePath(
+                    desktopSize.w,
+                    desktopSize.h,
+                    image.id
+                )} 1x, ${generatePictureSourcePath(2 * desktopSize.w, 2 * desktopSize.h, image.id)} 2x`,
             };
         },
 
         defaultImg() {
+            const { desktopSize } = this;
             const image = this.item.desktopImage || this.item.tabletImage || this.item.mobileImage.id;
-            return generatePictureSourcePath(600, 432, image.id);
+            return generatePictureSourcePath(desktopSize.w, desktopSize.h, image.id);
         },
 
         btnClasses() {
@@ -161,6 +245,14 @@ export default {
                     break;
             }
             return classes;
+        },
+
+        href() {
+            return this.item.url || '';
+        },
+
+        mobileOrderClass() {
+            return `catalog-product-list__item--order-${this.mobileOrder}`;
         },
     },
 };

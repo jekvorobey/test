@@ -595,6 +595,7 @@ export function getCatalogItems({
     orderField = sortFields.POPULARITY,
     orderDirection = sortDirections.DESC,
     page = 1,
+    pagePath,
 }) {
     if (catalogItemsCancelSource) {
         catalogItemsCancelSource.cancel(REQUEST_CANCEL_MESSAGE);
@@ -610,6 +611,7 @@ export function getCatalogItems({
             page,
             orderField,
             orderDirection,
+            pagePath,
         },
         paramsSerializer(params) {
             return qs.stringify(params, {

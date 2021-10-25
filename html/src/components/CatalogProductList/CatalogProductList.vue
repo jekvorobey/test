@@ -24,6 +24,7 @@
                 :item="item"
                 :referral-code="referralCode"
                 :position="index + 1"
+                :mobileOrder="calcMobileOrder(item)"
                 item-prop
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
@@ -39,6 +40,7 @@
                 :is="getComponent(item.type)"
                 :item="item"
                 :referral-code="referralCode"
+                :mobileOrder="calcMobileOrder(item)"
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
@@ -212,6 +214,17 @@ export default {
                         referralCode,
                     },
                 });
+        },
+
+        calcMobileOrder(item) {
+            const { items = [] } = this;
+            if (item.id === items[1].id && item.type === catalogItemTypes.BANNER) {
+                return 2;
+            }
+            if (item.id === items[0].id || (item.id === items[2].id && items[1].type === catalogItemTypes.BANNER)) {
+                return 1;
+            }
+            return 3;
         },
     },
 };
