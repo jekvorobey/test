@@ -11,8 +11,9 @@
             </breadcrumbs>
 
             <master-class-banner-card
-                class="master-class-view__banner"
                 v-if="masterClass"
+                :key="masterClass.id"
+                class="master-class-view__banner"
                 :image="bannerImage"
                 :name="masterClass.title"
                 :price="masterClass.price"
