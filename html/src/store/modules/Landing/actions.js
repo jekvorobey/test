@@ -26,12 +26,12 @@ import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg
 import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
 import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
-import kashoDiscountDesktopImg from '@images/mock/landing-kasho-discount/kashoDiscountDesktop.jpg';
-import kashoDiscountDesktopRetina from '@images/mock/landing-kasho-discount/kashoDiscountDesktop@2x.jpg';
-import kashoDiscountTabletImg from '@images/mock/landing-kasho-discount/kashoDiscountTablet.jpg';
-import kashoDiscountTabletRetina from '@images/mock/landing-kasho-discount/kashoDiscountTablet@2x.jpg';
-import kashoDiscountMobileImg from '@images/mock/landing-kasho-discount/kashoDiscountMobile.jpg';
-import kashoDiscountMobileRetina from '@images/mock/landing-kasho-discount/kashoDiscountMobile@2x.jpg';
+import lockdownDesktopImg from '@images/mock/landing-lockdown-discount/lockdownDesktop.jpg';
+import lockdownDesktopRetina from '@images/mock/landing-lockdown-discount/lockdownDesktop@2x.jpg';
+import lockdownTabletImg from '@images/mock/landing-lockdown-discount/lockdownTablet.jpg';
+import lockdownTabletRetina from '@images/mock/landing-lockdown-discount/lockdownTablet@2x.jpg';
+import lockdownMobileImg from '@images/mock/landing-lockdown-discount/lockdownMobile.jpg';
+import lockdownMobileRetina from '@images/mock/landing-lockdown-discount/lockdownMobile@2x.jpg';
 
 import { $logger } from '@services';
 import {
@@ -88,16 +88,16 @@ export default {
         try {
             commit(SET_BANNERS, [
                 {
-                    id: 'kashoDiscount',
+                    id: 'lockdown',
                     name: '',
                     type: 'banner',
-                    url: 'catalog/nozhnicy/kasho_nozhnicy_parikmaherskie_pryamye_v_chehle_impression_5_5/',
-                    desktopImage: kashoDiscountDesktopImg,
-                    desktopImageRetina: kashoDiscountDesktopRetina,
-                    tabletImage: kashoDiscountTabletImg,
-                    tabletImageRetina: kashoDiscountTabletRetina,
-                    mobileImage: kashoDiscountMobileImg,
-                    mobileImageRetina: kashoDiscountMobileRetina,
+                    url: 'catalog/',
+                    desktopImage: lockdownDesktopImg,
+                    desktopImageRetina: lockdownDesktopRetina,
+                    tabletImage: lockdownTabletImg,
+                    tabletImageRetina: lockdownTabletRetina,
+                    mobileImage: lockdownMobileImg,
+                    mobileImageRetina: lockdownMobileRetina,
                 },
                 {
                     id: 'middleBanner',
