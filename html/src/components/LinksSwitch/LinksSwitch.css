@@ -1,0 +1,29 @@
+.links-switch {
+    display: flex;
+    flex-wrap: wrap;
+
+    &__link {
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--gs) calc(var(--gs) * 2);
+        background-color: var(--cl-elem-grey);
+        margin-bottom: 0;
+        font-weight: bold;
+        border-radius: 1px;
+
+        a {
+            font-size: 12px;
+            line-height: 24px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        &--checked {
+            background-color: var(--cl-global);
+            color: var(--cl-white);
+        }
+    }
+}

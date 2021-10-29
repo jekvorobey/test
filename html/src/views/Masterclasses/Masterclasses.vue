@@ -80,16 +80,16 @@
                 </div>
 
                 <div class="masterclasses-view__sets-header-bottom" v-if="!isTablet">
-                    <radio-switch
+                    <links-switch
                         v-if="times"
                         class="masterclasses-view__sets-header-switch"
                         :value="
                             (selectedValueMap[times.name] && selectedValueMap[times.name].code) || times.items[0].code
                         "
-                        name="status"
                         id="status"
-                        key-field="code"
+                        name="status"
                         :items="times.items"
+                        :linkSegments="getLinkSegments('time')"
                         @input="
                             onChangeFilter(
                                 times,
@@ -101,7 +101,7 @@
                         <template v-slot:content="{ item }">
                             {{ item.name }}
                         </template>
-                    </radio-switch>
+                    </links-switch>
 
                     <select-panel
                         v-if="professions"
@@ -110,6 +110,7 @@
                         id="topic"
                         :value="(selectedValueMap[professions.name] && selectedValueMap[professions.name].code) || null"
                         :items="professions.items"
+                        :linkSegments="getLinkSegments('profession')"
                         @input="
                             onChangeFilter(
                                 professions,
@@ -254,7 +255,7 @@ import VSticky from '@controls/VSticky/VSticky.vue';
 import Modal from '@controls/modal/modal.vue';
 
 import SelectPanel from '@components/SelectPanel/SelectPanel.vue';
-import RadioSwitch from '@components/RadioSwitch/RadioSwitch.vue';
+import LinksSwitch from '@components/LinksSwitch/LinksSwitch.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 import MasterClassCard from '@components/MasterClassCard/MasterClassCard.vue';
 import MasterClassBannerCard from '@components/MasterClassBannerCard/MasterClassBannerCard.vue';
@@ -340,7 +341,7 @@ export default {
         VSticky,
         Modal,
 
-        RadioSwitch,
+        LinksSwitch,
         SelectPanel,
         ShowMoreButton,
         FilterButton,
@@ -583,6 +584,14 @@ export default {
             } catch (error) {
                 this.$progress.fail();
             }
+        },
+
+        getLinkSegments(filterId) {
+            const { filters } = $store.state[MASTERCLASSES_MODULE];
+            return {
+                filters: `/masterclasses/filters/${filters.find((filter) => filter.id === filterId).name}-`,
+                noFilters: '/masterclasses/',
+            };
         },
     },
 

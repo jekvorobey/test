@@ -12,6 +12,7 @@
                     <source :data-srcset="brand.image.orig" />
                     <img class="blur-up lazyload v-picture__img" :data-src="brand.image.default" alt="" />
                 </v-picture>
+                <noscript>{{ brand.name }}</noscript>
             </router-link>
         </div>
 
