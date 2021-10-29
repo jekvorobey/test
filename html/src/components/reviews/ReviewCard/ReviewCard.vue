@@ -18,11 +18,11 @@
             </div> -->
         </div>
         <div class="review-card__body">
-            <div class="review-card__body-item">
+            <div v-if="advantage" class="review-card__body-item">
                 <div class="text-bold review-card__body-item-title">Достоинства</div>
                 <div class="review-card__body-item-value">{{ advantage }}</div>
             </div>
-            <div class="review-card__body-item">
+            <div v-if="disadvantage" class="review-card__body-item">
                 <div class="text-bold review-card__body-item-title">Недостатки</div>
                 <div class="review-card__body-item-value">{{ disadvantage }}</div>
             </div>
@@ -66,16 +66,16 @@
                 &nbsp;{{ computedDislikes }}
             </session-check-button>
         </div>
-        <div class="review-card__answer" v-if="answer">
+        <div class="review-card__answer" v-if="false">
             <div class="review-card__answer-container">
                 <div class="review-card__answer-title">
                     <div class="review-card__answer-title-icon">
                         <v-svg name="bonus" width="24" height="24" />
                     </div>
                     <div class="review-card__answer-title-text">Бессовестно Талантливый</div>
-                    <div class="review-card__answer-title-date">{{ answerDate }}</div>
+                    <div class="review-card__answer-title-date">{{ answer.date }}</div>
                 </div>
-                <div class="review-card__body-item-value">{{ answer }}</div>
+                <div class="review-card__body-item-value">{{ answer.content }}</div>
             </div>
         </div>
         <transition name="fade-in">
@@ -186,16 +186,10 @@ export default {
         },
 
         answer: {
-            type: String,
-            default: `Добрый день, Екатерина! 
-                Мы рады, что вы остались довольны. 
-                Благодарим, что нашли время и оставиили отзыв. 
-                Ваш Бессовестно Талантливый.`,
-        },
-
-        answerDate: {
-            type: String,
-            default: '15 мая 2019',
+            type: Object,
+            default() {
+                return {};
+            },
         },
     },
 
