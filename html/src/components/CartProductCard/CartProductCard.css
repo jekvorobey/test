@@ -222,14 +222,14 @@
     }
 
     &--inactive &__img {
-        opacity: 0.3;
+        opacity: 0.2;
     }
 
     &--inactive &__body {
         &-count,
         &-name,
         &-prices {
-            opacity: 0.3;
+            opacity: 0.2;
         }
     }
 }
