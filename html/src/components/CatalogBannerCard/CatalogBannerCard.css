@@ -5,8 +5,9 @@
     border-bottom: none;
 
     &__img {
+
         display: flex;
-        height: 100%;
+        height: auto;
         width: 100%;
 
         &::after {

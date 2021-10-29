@@ -2,7 +2,7 @@
     <router-link
         tag="a"
         class="catalog-product-list-card"
-        :class="{ 'catalog-product-list-card--small': isSmall }"
+        :class="[{ 'catalog-product-list-card--small': isSmall }, mobileOrderClass]"
         :to="href"
         v-bind="itemPropSettings.itemListElement"
     >
@@ -170,6 +170,10 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        mobileOrder: {
+            type: Number,
+        },
     },
 
     computed: {
@@ -309,6 +313,10 @@ export default {
             return this.item.oldPrice
                 ? Object.assign(this.item.oldPrice, { isPriceHidden: this.item.isPriceHidden })
                 : { isPriceHidden: this.item.isPriceHidden };
+        },
+
+        mobileOrderClass() {
+            return `catalog-product-list__item--order-${this.mobileOrder}`;
         },
     },
 
