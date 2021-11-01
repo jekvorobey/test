@@ -273,12 +273,12 @@ const main = {
 
             discount: {
                 [discountType.PRODUCT]: {
-                    [cartItemTypes.PRODUCT]: 'Скидка на товар',
+                    [cartItemTypes.PRODUCT]: 'Скидка маркетплейса',
                     [cartItemTypes.MASTERCLASS]: 'Скидка на мастер-класс',
                 },
                 [discountType.DELIVERY]: 'Скидка на доставку',
                 [discountType.CART]: 'Скидка на корзину',
-                [discountType.CUSTOM]: 'Скидка для Вас',
+                [discountType.CUSTOM]: 'Персональная скидка',
                 [discountType.PROMOCODE]: 'Скидка по промокоду',
             },
         },
