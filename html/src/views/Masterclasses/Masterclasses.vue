@@ -156,6 +156,7 @@
                             v-if="item.defaultImg"
                             class="blur-up lazyload v-picture__img"
                             :data-src="item.defaultImg"
+                            :srcset="item.placeholderImg"
                             alt
                         />
                     </master-class-card>
@@ -490,7 +491,9 @@ export default {
                     orig: generatePictureSourcePath(425, 320, i.image.id),
                 };
 
-                return { ...i, url, speaker, dateTime, desktopImg, mobileImg, defaultImg };
+                const placeholderImg = i.image && generatePictureSourcePath(40, 24, i.image.id);
+
+                return { ...i, url, speaker, dateTime, desktopImg, mobileImg, defaultImg, placeholderImg };
             });
         },
 

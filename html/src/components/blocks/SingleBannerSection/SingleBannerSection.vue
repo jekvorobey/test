@@ -124,7 +124,7 @@ export default {
                 };
         },
 
-        defaultImage(item) {
+        defaultImage() {
             const image = this.banner.desktopImage || this.banner.tabletImage || this.banner.mobileImage;
             if (typeof image === 'string') return image;
             if (image) return generatePictureSourcePath(1224, 240, image.id);

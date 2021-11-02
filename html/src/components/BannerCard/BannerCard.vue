@@ -5,7 +5,12 @@
                 <slot>
                     <source :data-srcset="images.desktop.webp" type="image/webp" />
                     <source :data-srcset="images.desktop.orig" />
-                    <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" />
+                    <img
+                        class="blur-up lazyload v-picture__img"
+                        :src="images.default"
+                        :srcset="images.placeholder"
+                        alt=""
+                    />
                 </slot>
             </v-picture>
             <v-picture v-else :image="image" />
