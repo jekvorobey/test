@@ -9,7 +9,8 @@
                     <img
                         v-if="defaultImg"
                         class="blur-up lazyload v-picture__img"
-                        :data-src="defaultImg"
+                        :src="defaultImg"
+                        :srcset="placeholderImg"
                         alt=""
                         loading="lazy"
                     />
@@ -156,6 +157,11 @@ export default {
         defaultImg() {
             const image = this.item.desktopImage || this.item.tabletImage || this.item.mobileImage;
             if (image) return generatePictureSourcePath(400, 600, image.id);
+        },
+
+        placeholderImg() {
+            const image = this.item.desktopImage || this.item.tabletImage || this.item.mobileImage;
+            if (image) return generatePictureSourcePath(40, 60, image.id);
         },
 
         btnClasses() {
