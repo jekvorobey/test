@@ -156,7 +156,7 @@ export function computeFilterData(pathMatch, code = null) {
         if (Array.isArray(segment)) filter[filterName] = segment;
         else filter[filterName] = Object.keys(segment);
     }
-    
+
     return { filter, routeSegments, filterSegments };
 }
 
@@ -285,7 +285,7 @@ export function prepareProductImage(image, desktopSize, tabletSize, mobileSize) 
 
 export function prepareMasterclassSpeakers(speakers = []) {
     if (speakers.length === 1) return getSpeakerString(speakers[0], true);
-    if (speakers.length === 2) return `${getSpeakerString(speakers[0])}, ${getSpeakerString(speakers[1])}}`;
+    if (speakers.length === 2) return `${getSpeakerString(speakers[0])}, ${getSpeakerString(speakers[1])}`;
     if (speakers.length > 2) return `${getSpeakerString(speakers[0])}, ${getSpeakerString(speakers[1])} и др.`;
 }
 
