@@ -234,6 +234,7 @@ export function prepareBannerImage(image, desktopSize, tabletSize, mobileSize) {
             )}, ${generatePictureSourcePath(mobileSize.width * 2, mobileSize.height * 2, image.id)} 2x`,
         },
         default: generatePictureSourcePath(desktopSize.width, desktopSize.height, image.id),
+        placeholder: generatePictureSourcePath(desktopSize.width / 10, desktopSize.height / 10, image.id),
     };
 }
 
@@ -280,6 +281,7 @@ export function prepareProductImage(image, desktopSize, tabletSize, mobileSize) 
             )} 2x`,
         },
         default: generatePictureSourcePath(desktopSize, desktopSize, image.id),
+        placeholder: generatePictureSourcePath(desktopSize / 10, desktopSize / 10, image.id),
     };
 }
 
