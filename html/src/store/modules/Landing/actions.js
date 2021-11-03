@@ -324,6 +324,15 @@ export default {
             dispatch(FETCH_BANNERS),
             dispatch(FETCH_BANNERS_SET),
             dispatch(FETCH_FREQUENT_CATEGOIRES),
+            /*
+             * no JS content loading
+             */
+            dispatch(FETCH_BRANDS),
+            dispatch(FETCH_NEW_PRODUCTS),
+            dispatch(FETCH_BESTSELLER_PRODUCTS),
+            /*
+             *
+             */
         ]).then(() => commit(SET_LOAD, true));
     },
 

@@ -116,11 +116,14 @@
         var LiveTex = {
             onLiveTexReady: function() {
                 if ((window.location.pathname == '/') || (isDisabled(pagesForExclude) == 0)) {
-                    $('.lt-label-mobile').hide();
-                    $('.lt-label').hide();
-                    $('.lt-widget-wrap').hide();
-                    $('.lt-xbutton-main-wrapper').hide();
-                    $('.lt-xbutton').hide();
+                    setTimeout(() => {
+                        let selectors = ['.lt-label-mobile', '.lt-label', '.lt-widget-wrap', '.lt-xbutton-main-wrapper', '.lt-xbutton']
+                        selectors.forEach(selector => {
+                            if(document.querySelector(selector)) {
+                                document.querySelector(selector).setAttribute('style', 'display: block');
+                            }
+                        })
+                    }, 1000)
                 }
             }
         };

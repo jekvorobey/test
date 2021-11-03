@@ -1176,6 +1176,10 @@ export default {
 
         onEditCertificate() {
             this.isCertificateEdit = true;
+            this.customCertAmount =
+                this.customCertAmount && this.customCertAmount > this.maxCertificateDiscount
+                    ? this.maxCertificateDiscount
+                    : this.customCertAmount;
             // isСertAmountEdit
         },
 

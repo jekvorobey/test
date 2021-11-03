@@ -13,7 +13,7 @@
         <v-svg v-else-if="showHiddenPriceLabel" name="no-price" class="price__no-price" />
         <span v-else v-bind="itemPropSettings.value">{{ valueLabel }}</span
         ><template v-if="currencySymbol"
-            >&nbsp;<span v-html="currencySymbol" v-bind="itemPropSettings.currency"
+            >&nbsp;<span class="price__currency" v-html="currencySymbol" v-bind="itemPropSettings.currency"
         /></template>
     </component>
 </template>

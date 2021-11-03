@@ -18,11 +18,11 @@
             </div> -->
         </div>
         <div class="review-card__body">
-            <div class="review-card__body-item">
+            <div v-if="advantage" class="review-card__body-item">
                 <div class="text-bold review-card__body-item-title">Достоинства</div>
                 <div class="review-card__body-item-value">{{ advantage }}</div>
             </div>
-            <div class="review-card__body-item">
+            <div v-if="disadvantage" class="review-card__body-item">
                 <div class="text-bold review-card__body-item-title">Недостатки</div>
                 <div class="review-card__body-item-value">{{ disadvantage }}</div>
             </div>
@@ -33,8 +33,13 @@
             <div v-if="images && images.length > 0" class="review-card__body-item">
                 <div class="text-bold review-card__body-item-title">Фото</div>
                 <div class="review-card__body-item-value review-card__body-item-value--media">
-                    <div class="review-card__body-item-img" v-for="item in reviewImages" :key="item.id">
-                        <v-picture>
+                    <div
+                        class="review-card__body-item-img"
+                        v-for="item in reviewImages"
+                        :key="item.id"
+                        @click="onShowReviewModal(item.id)"
+                    >
+                        <v-picture class="v-picture">
                             <img class="blur-up lazyload v-picture__img" :data-src="item.defaultImg" />
                         </v-picture>
                     </div>
@@ -61,6 +66,21 @@
                 &nbsp;{{ computedDislikes }}
             </session-check-button>
         </div>
+        <div class="review-card__answer" v-if="false">
+            <div class="review-card__answer-container">
+                <div class="review-card__answer-title">
+                    <div class="review-card__answer-title-icon">
+                        <v-svg name="bonus" width="24" height="24" />
+                    </div>
+                    <div class="review-card__answer-title-text">Бессовестно Талантливый</div>
+                    <div class="review-card__answer-title-date">{{ answer.date }}</div>
+                </div>
+                <div class="review-card__body-item-value">{{ answer.content }}</div>
+            </div>
+        </div>
+        <transition name="fade-in">
+            <review-modal :image="openedImage" />
+        </transition>
     </component>
 </template>
 
@@ -71,20 +91,24 @@ import VRating from '@controls/VRating/VRating.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import SessionCheckButton from '@components/SessionCheckButton/SessionCheckButton.vue';
+import ReviewModal from '@components/reviews/ReviewModal/ReviewModal.vue';
 
 import { mapActions, mapState } from 'vuex';
 import { LOCALE } from '@store';
 import { NAME as REVIEWS_MODULE } from '@store/modules/Reviews';
 import { CHANGE_REVIEW_VOTE } from '@store/modules/Reviews/actions';
+import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { getDate } from '@util';
-import { reviewOpinion } from '@enums';
+import { reviewOpinion, modalName } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 import { monthLongDateSettings } from '@settings';
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/like.svg';
 import '@images/sprites/dislike.svg';
+import '@images/sprites/payment/bonus.svg';
 import './ReviewCard.css';
 
 export default {
@@ -95,6 +119,7 @@ export default {
         VLink,
         VRating,
         VPicture,
+        ReviewModal,
 
         SessionCheckButton,
     },
@@ -159,17 +184,33 @@ export default {
                 return [];
             },
         },
+
+        answer: {
+            type: Object,
+            default() {
+                return {};
+            },
+        },
     },
 
     data() {
         return {
             disableVote: false,
             vote: null,
+            openedImage: {},
         };
     },
 
     computed: {
         ...mapState([LOCALE]),
+
+        ...mapState(MODAL_MODULE, {
+            reviewModalIsOpen: (state) => {
+                return state[MODALS][modalName.product.REVIEW] && state[MODALS][modalName.product.REVIEW].open
+                    ? state[MODALS][modalName.product.REVIEW].open
+                    : false;
+            },
+        }),
 
         computedDate() {
             const { date } = this;
@@ -201,10 +242,21 @@ export default {
                     return this.dislikes;
             }
         },
+
+        reviewModalName() {
+            return modalName.product.REVIEW;
+        },
     },
 
     methods: {
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
         ...mapActions(REVIEWS_MODULE, [CHANGE_REVIEW_VOTE]),
+
+        onShowReviewModal(id) {
+            this.openedImage = this.reviewImages.find((image) => image.id === id);
+            this[CHANGE_MODAL_STATE]({ name: this.reviewModalName, open: true });
+        },
 
         async onChangeVote(opinion) {
             if (this.vote || this.disableVote) return;

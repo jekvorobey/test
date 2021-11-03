@@ -36,6 +36,7 @@
                                     class="product-view__header-gallery-item"
                                     v-for="(image) in currentGalleryImages"
                                     :key="image.id"
+                                    @click.prevent="onImageClick(image.id)"
                                 >
                                     <v-picture v-if="image && image.id">
                                         <source
@@ -670,7 +671,7 @@
             </section>
 
             <transition name="fade-in">
-                <gallery-modal v-if="!isTabletLg && isGalleryOpen" :images="productImages.gallery">
+                <gallery-modal v-if="!isTabletLg && isGalleryOpen" :images="shiftedGalleryImages">
                     <template v-slot:image="{ image }">
                         <source :data-srcset="image.desktop.webp" type="image/webp" />
                         <source :data-srcset="image.desktop.orig" />
@@ -944,6 +945,7 @@ export default {
             isPriceVisible: true,
             isPanelSticky: true,
             optionImage: null,
+            openedIMageId: null,
         };
     },
 
@@ -1139,6 +1141,16 @@ export default {
 
             const mainImage = optionImage && prepareProductImage(optionImage, desktopSize, tabletSize);
             return mainImage ? [mainImage, ...media.slice(1)] : media;
+        },
+
+        shiftedGalleryImages() {
+            const imagesArr = this.productImages.gallery;
+            const currId = this.openedIMageId;
+            if(!imagesArr || !imagesArr.length || !currId || currId === imagesArr[0].id) return imagesArr;
+
+            const shiftCnt = imagesArr.findIndex((image) => image.id === currId);
+            if (shiftCnt && shiftCnt !== -1) return imagesArr.slice(shiftCnt).concat(imagesArr.slice(0, shiftCnt));
+            return imagesArr;
         },
 
         categoryBreadcrumbs() {
@@ -1339,6 +1351,10 @@ export default {
             const { gallery } = this.productImages;
             if (!gallery || !gallery.length) return;
             this[CHANGE_MODAL_STATE]({ name: modalName.product.GALLERY, open: true });
+        },
+
+        onImageClick(id) {
+            this.openedIMageId = id;
         },
 
         onBuyProduct() {

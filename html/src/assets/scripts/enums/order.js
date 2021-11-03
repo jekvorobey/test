@@ -62,9 +62,24 @@ export const sortFields = Object.freeze({
 });
 
 export const deliveryStatus = Object.freeze({
+    /** Предзаказ: ожидаем поступления товара*/
+    STATUS_WAITING_TO_ARRIVE: 0,
+    
     // внутренние статусы [1, 20]
     /** создан */
     STATUS_CREATED: 1,
+    /** Ожидает проверки АОЗ*/
+    STATUS_WAITING_AOZ_INSPECTION: 2,
+    /** Проверка АОЗ*/
+    STATUS_AOZ_INSPECTION: 3,
+    /** Ожидает подтверждения Мерчантом*/
+    STATUS_WAITING_MERCHANT_CONFIRM: 4,
+    /** На комплектации*/
+    STATUS_PACKAGE: 5,
+    /** Готова к отгрузке*/
+    STATUS_READY_TO_SHIP: 6,
+    /** Передана Логистическому Оператору*/
+    STATUS_AT_LOGISTIC_OPERATOR: 7,
 
     // статусы доставки в случае "нормального" процесса доставки [21, 40]
     /** принят на склад в пункте отправления */

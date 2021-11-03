@@ -2,6 +2,10 @@
     position: relative;
     white-space: nowrap;
     vertical-align: middle;
+    
+    &__currency {
+        font-size: 0.7em;
+    }
 }
 
 .price__no-price {
@@ -29,3 +33,5 @@
         }
     }
 }
+
+

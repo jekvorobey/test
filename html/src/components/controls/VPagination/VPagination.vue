@@ -41,10 +41,11 @@
             <a v-else-if="page.disabled" :class="pageLinkClass" tabindex="0">{{ page.content }}</a>
             <a
                 v-else
-                @click="handlePageSelected(page.index + 1)"
-                @keyup.enter="handlePageSelected(page.index + 1)"
+                @click.prevent="handlePageSelected(page.index + 1)"
+                @keyup.enter.prevent="handlePageSelected(page.index + 1)"
                 :class="pageLinkClass"
                 tabindex="0"
+                :href="createPageURL(page.index + 1)"
             >
                 {{ page.content }}
             </a>
@@ -261,7 +262,7 @@ export default {
                 }
             } else {
                 const halfPageRange = Math.floor(this.pageRange / 2);
-                let setPageItem = index => {
+                let setPageItem = (index) => {
                     let page = {
                         index: index,
                         content: index + 1,
@@ -269,7 +270,7 @@ export default {
                     };
                     items[index] = page;
                 };
-                let setBreakView = index => {
+                let setBreakView = (index) => {
                     let breakView = {
                         disabled: true,
                         breakView: true,
@@ -342,6 +343,9 @@ export default {
         selectLastPage() {
             if (this.selected >= this.pageCount) return;
             this.handlePageSelected(this.pageCount);
+        },
+        createPageURL(page) {
+            return `${this.$route.path}?page=${page}`;
         },
     },
 };

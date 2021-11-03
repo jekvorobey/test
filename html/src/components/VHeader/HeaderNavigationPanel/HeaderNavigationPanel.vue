@@ -10,11 +10,10 @@
             <v-link
                 v-if="item.url === '/catalog/'"
                 class="header-navigation-panel__item"
-                tag="button"
+                :to="item.url"
                 :key="item.name"
-                @click="onToggleMenu"
             >
-                {{ item.name }}
+                <span @click.stop.prevent="onToggleMenu">{{ item.name }}</span>
             </v-link>
             <v-link class="header-navigation-panel__item" v-else :key="item.name" :to="item.url" same-disabled>
                 {{ item.name }}

@@ -156,7 +156,7 @@ export function computeFilterData(pathMatch, code = null) {
         if (Array.isArray(segment)) filter[filterName] = segment;
         else filter[filterName] = Object.keys(segment);
     }
-    
+
     return { filter, routeSegments, filterSegments };
 }
 
@@ -234,6 +234,7 @@ export function prepareBannerImage(image, desktopSize, tabletSize, mobileSize) {
             )}, ${generatePictureSourcePath(mobileSize.width * 2, mobileSize.height * 2, image.id)} 2x`,
         },
         default: generatePictureSourcePath(desktopSize.width, desktopSize.height, image.id),
+        placeholder: generatePictureSourcePath(desktopSize.width / 10, desktopSize.height / 10, image.id),
     };
 }
 
@@ -280,11 +281,13 @@ export function prepareProductImage(image, desktopSize, tabletSize, mobileSize) 
             )} 2x`,
         },
         default: generatePictureSourcePath(desktopSize, desktopSize, image.id),
+        placeholder: generatePictureSourcePath(desktopSize / 10, desktopSize / 10, image.id),
     };
 }
 
 export function prepareMasterclassSpeakers(speakers = []) {
-    if (speakers.length > 0 && speakers.length <= 2) return getSpeakerString(speakers[0], true);
+    if (speakers.length === 1) return getSpeakerString(speakers[0], true);
+    if (speakers.length === 2) return `${getSpeakerString(speakers[0])}, ${getSpeakerString(speakers[1])}`;
     if (speakers.length > 2) return `${getSpeakerString(speakers[0])}, ${getSpeakerString(speakers[1])} и др.`;
 }
 

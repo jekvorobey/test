@@ -263,7 +263,7 @@ import {
 
 import { fileExtension, modalName } from '@enums';
 import { receiveMethods } from '@enums/checkout';
-import { orderPaymentStatus } from '@enums/order';
+import { deliveryStatus, orderPaymentStatus } from '@enums/order';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { orderDateLocaleOptions } from '@settings/profile';
 import { toAddressString } from '@util/address';
@@ -334,7 +334,7 @@ export default {
             const deliveries = this[DELIVERIES] || [];
 
             return deliveries.map((d) => {
-                return {
+                let item = {
                     ...d,
                     method: this.formatDeliveryMethod(d.delivery_method),
                     deliveryAt: this.formatDate(d.delivery_at),
@@ -344,6 +344,13 @@ export default {
                     packageCount: this.formatPackageCount(d.package_count),
                     products: d.products && d.products.map(this.prepareProduct),
                 };
+
+                if (typeof d.is_canceled !== 'undefined' && d.is_canceled === 1) {
+                    item.statusClass = this.getDeliveryStatusClass(deliveryStatus.STATUS_CANCEL);
+                    item.status = this.formatDeliveryStatus(deliveryStatus.STATUS_CANCEL);
+                }
+
+                return item;
             });
         },
 

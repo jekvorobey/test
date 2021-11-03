@@ -5,7 +5,12 @@
                 <slot>
                     <source :data-srcset="images.desktop.webp" type="image/webp" />
                     <source :data-srcset="images.desktop.orig" />
-                    <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" />
+                    <img
+                        class="blur-up lazyload v-picture__img"
+                        :src="images.default"
+                        :srcset="images.placeholder"
+                        alt=""
+                    />
                 </slot>
             </v-picture>
             <v-picture v-else :image="image" />
@@ -24,7 +29,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import { prepareBannerImage } from '@util/catalog';
 import './BannerCard.css';
 
-const desktopSize = { width: 392, height: 240 };
+const desktopSize = { width: 784, height: 480 };
 
 export default {
     name: 'banner-card',

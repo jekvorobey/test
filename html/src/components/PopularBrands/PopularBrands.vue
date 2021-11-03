@@ -10,8 +10,14 @@
                 <v-picture v-if="brand.image">
                     <source :data-srcset="brand.image.webp" type="image/webp" />
                     <source :data-srcset="brand.image.orig" />
-                    <img class="blur-up lazyload v-picture__img" :data-src="brand.image.default" alt="" />
+                    <img
+                        class="blur-up lazyload v-picture__img"
+                        :src="brand.image.default"
+                        :srcset="brand.image.placeholder"
+                        alt=""
+                    />
                 </v-picture>
+                <noscript>{{ brand.name }}</noscript>
             </router-link>
         </div>
 
@@ -65,6 +71,7 @@ export default {
                     webp: generatePictureSourcePath(200, 80, b.image.id, fileExtension.image.WEBP),
                     orig: generatePictureSourcePath(200, 80, b.image.id),
                     default: generatePictureSourcePath(200, 80, b.image.id),
+                    placeholder: generatePictureSourcePath(20, 8, b.image.id),
                 };
 
                 return {
