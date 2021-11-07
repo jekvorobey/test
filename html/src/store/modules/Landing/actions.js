@@ -26,12 +26,12 @@ import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg
 import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
 import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
-import lockdownDesktopImg from '@images/mock/landing-lockdown-discount/lockdownDesktop.jpg';
-import lockdownDesktopRetina from '@images/mock/landing-lockdown-discount/lockdownDesktop@2x.jpg';
-import lockdownTabletImg from '@images/mock/landing-lockdown-discount/lockdownTablet.jpg';
-import lockdownTabletRetina from '@images/mock/landing-lockdown-discount/lockdownTablet@2x.jpg';
-import lockdownMobileImg from '@images/mock/landing-lockdown-discount/lockdownMobile.jpg';
-import lockdownMobileRetina from '@images/mock/landing-lockdown-discount/lockdownMobile@2x.jpg';
+import evaDiscountDesktopImg from '@images/mock/landing-eva-discount/evaDiscountDesktop.jpg';
+import evaDiscountDesktopRetina from '@images/mock/landing-eva-discount/evaDiscountDesktop@2x.jpg';
+import evaDiscountTabletImg from '@images/mock/landing-eva-discount/evaDiscountTablet.jpg';
+import evaDiscountTabletRetina from '@images/mock/landing-eva-discount/evaDiscountTablet@2x.jpg';
+import evaDiscountMobileImg from '@images/mock/landing-eva-discount/evaDiscountMobile.jpg';
+import evaDiscountMobileRetina from '@images/mock/landing-eva-discount/evaDiscountMobile@2x.jpg';
 
 import { $logger } from '@services';
 import {
@@ -88,16 +88,16 @@ export default {
         try {
             commit(SET_BANNERS, [
                 {
-                    id: 'lockdown',
+                    id: 'evaDiscount',
                     name: '',
                     type: 'banner',
-                    url: 'catalog/',
-                    desktopImage: lockdownDesktopImg,
-                    desktopImageRetina: lockdownDesktopRetina,
-                    tabletImage: lockdownTabletImg,
-                    tabletImageRetina: lockdownTabletRetina,
-                    mobileImage: lockdownMobileImg,
-                    mobileImageRetina: lockdownMobileRetina,
+                    url: 'catalog/nabory_1/eva_professional_nabor_dlya_okrashivaniya_divina_xl_pack/',
+                    desktopImage: evaDiscountDesktopImg,
+                    desktopImageRetina: evaDiscountDesktopRetina,
+                    tabletImage: evaDiscountTabletImg,
+                    tabletImageRetina: evaDiscountTabletRetina,
+                    mobileImage: evaDiscountMobileImg,
+                    mobileImageRetina: evaDiscountMobileRetina,
                 },
                 {
                     id: 'middleBanner',
