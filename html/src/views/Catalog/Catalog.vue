@@ -39,6 +39,7 @@
 
             <catalog-banner-card
                 class="catalog-view__banner"
+                :class="{ 'catalog-view__banner--no-link': productGroup.mockBanner.noLink }"
                 v-if="productGroup.mockBanner"
                 :item="productGroup.mockBanner"
             >
