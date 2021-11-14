@@ -137,7 +137,7 @@
                             </v-link> -->
                         </div>
 
-                        <div class="container container--tablet master-class-view__panel-right-section">
+                        <div v-if="places.length > 0" class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">Место проведения</p>
 
                             <ol :class="{ list: places.length > 1 }">

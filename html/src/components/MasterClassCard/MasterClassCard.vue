@@ -28,11 +28,11 @@
                 <template v-if="isSmall">
                     <span>{{ date }}</span>
                     <span>&nbsp; • &nbsp;</span>
-                    <span>{{ address }}</span>
+                    <span v-if="address">{{ address }}</span>
                 </template>
                 <template v-else>
                     <div>{{ date }}</div>
-                    <div>{{ address }}</div>
+                    <div v-if="address">{{ address }}</div>
                 </template>
             </div>
         </div>
