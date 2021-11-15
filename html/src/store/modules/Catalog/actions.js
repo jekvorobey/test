@@ -5,6 +5,13 @@ import bBMobileBannerImgRetina from '@images/mock/catalog-banners/bottleBlondeMo
 import bBTabletBannerImg from '@images/mock/catalog-banners/bottleBlondeTabletBanner.jpg';
 import bBTabletBannerImgRetina from '@images/mock/catalog-banners/bottleBlondeTabletBanner@2x.jpg';
 
+import macLoveDesktopBannerImg from '@images/mock/catalog-banners/macLoveBannerDesktop.jpg';
+import macLoveDesktopBannerImgRetina from '@images/mock/catalog-banners/macLoveBannerDesktop@2x.jpg';
+import macLoveMobileBannerImg from '@images/mock/catalog-banners/macLoveBannerMobile.jpg';
+import macLoveMobileBannerImgRetina from '@images/mock/catalog-banners/macLoveBannerMobile@2x.jpg';
+import macLoveTabletBannerImg from '@images/mock/catalog-banners/macLoveBannerTablet.jpg';
+import macLoveTabletBannerImgRetina from '@images/mock/catalog-banners/macLoveBannerTablet@2x.jpg';
+
 import _mergeWith from 'lodash/mergeWith';
 
 import { productGroupBase } from '@enums/product';
@@ -50,9 +57,9 @@ export default {
         }
     },
 
-    async [FETCH_MOCK_BANNER]() {
-        try {
-            const data = {
+    async [FETCH_MOCK_BANNER]({ commit }, banner) {
+        const mockBannersData = {
+            bottleBlondeCatalogBanner: {
                 id: 'bottleBlondeCatalogBanner',
                 name: '',
                 type: 'catalog-banner',
@@ -63,8 +70,25 @@ export default {
                 tabletImageRetina: bBTabletBannerImgRetina,
                 mobileImage: bBMobileBannerImg,
                 mobileImageRetina: bBMobileBannerImgRetina,
-            };
-            return data;
+            },
+
+            macLoveCatalogBanner: {
+                id: 'macLoveCatalogBanner',
+                name: '',
+                type: 'catalog-banner',
+                url: undefined,
+                noLink: true,
+                desktopImage: macLoveDesktopBannerImg,
+                desktopImageRetina: macLoveDesktopBannerImgRetina,
+                tabletImage: macLoveTabletBannerImg,
+                tabletImageRetina: macLoveTabletBannerImgRetina,
+                mobileImage: macLoveMobileBannerImg,
+                mobileImageRetina: macLoveMobileBannerImgRetina,
+            },
+        };
+
+        try {
+            return mockBannersData[banner.name];
         } catch (error) {
             storeErrorHandler(FETCH_MOCK_BANNER, true)(error);
         }
@@ -157,7 +181,11 @@ export default {
             data.type = type;
 
             if (data.type === 'brands' && (data.entityCode === 'framar' || data.entityCode === 'olaplex')) {
-                data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, {});
+                const banner = { name: 'bottleBlondeCatalogBanner' };
+                data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
+            } else if (data.type === 'promo' && data.entityCode === 'lovebmac') {
+                const banner = { name: 'macLoveCatalogBanner' };
+                data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
             }
 
             // eslint-disable-next-line prefer-destructuring

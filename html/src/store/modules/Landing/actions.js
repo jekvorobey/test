@@ -33,12 +33,12 @@ import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg
 import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
 import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
-import evaDiscountDesktopImg from '@images/mock/landing-eva-discount/evaDiscountDesktop.jpg';
-import evaDiscountDesktopRetina from '@images/mock/landing-eva-discount/evaDiscountDesktop@2x.jpg';
-import evaDiscountTabletImg from '@images/mock/landing-eva-discount/evaDiscountTablet.jpg';
-import evaDiscountTabletRetina from '@images/mock/landing-eva-discount/evaDiscountTablet@2x.jpg';
-import evaDiscountMobileImg from '@images/mock/landing-eva-discount/evaDiscountMobile.jpg';
-import evaDiscountMobileRetina from '@images/mock/landing-eva-discount/evaDiscountMobile@2x.jpg';
+import macLoveDesktopImg from '@images/mock/landing-mac-love-discount/macLoveDiscountDesktop.jpg';
+import macLoveDesktopRetina from '@images/mock/landing-mac-love-discount/macLoveDiscountDesktop@2x.jpg';
+import macLoveTabletImg from '@images/mock/landing-mac-love-discount/macLoveDiscountTablet.jpg';
+import macLoveTabletRetina from '@images/mock/landing-mac-love-discount/macLoveDiscountTablet@2x.jpg';
+import macLoveMobileImg from '@images/mock/landing-mac-love-discount/macLoveDiscountMobile.jpg';
+import macLoveMobileRetina from '@images/mock/landing-mac-love-discount/macLoveDiscountMobile@2x.jpg';
 
 import { $logger } from '@services';
 import {
@@ -95,16 +95,16 @@ export default {
         try {
             commit(SET_BANNERS, [
                 {
-                    id: 'evaDiscount',
+                    id: 'macLove',
                     name: '',
                     type: 'banner',
-                    url: 'catalog/nabory_1/eva_professional_nabor_dlya_okrashivaniya_divina_xl_pack/',
-                    desktopImage: evaDiscountDesktopImg,
-                    desktopImageRetina: evaDiscountDesktopRetina,
-                    tabletImage: evaDiscountTabletImg,
-                    tabletImageRetina: evaDiscountTabletRetina,
-                    mobileImage: evaDiscountMobileImg,
-                    mobileImageRetina: evaDiscountMobileRetina,
+                    url: '/promo/lovebmac/',
+                    desktopImage: macLoveDesktopImg,
+                    desktopImageRetina: macLoveDesktopRetina,
+                    tabletImage: macLoveTabletImg,
+                    tabletImageRetina: macLoveTabletRetina,
+                    mobileImage: macLoveMobileImg,
+                    mobileImageRetina: macLoveMobileRetina,
                 },
                 {
                     id: 'middleBanner',
