@@ -5,19 +5,12 @@ import bestsellerDesktopImgRetina from '@images/mock/bestsellers/bDesktop6@2x.jp
 import bestsellerTabletImgRetina from '@images/mock/bestsellers/bTablet6@2x.jpg';
 import bestsellerMobileImgRetina from '@images/mock/bestsellers/bMobile6@2x.jpg';
 
-// import newDesktopImg from '@images/mock/new/newDesktop6.jpg';
-// import newTabletImg from '@images/mock/new/newTablet6.jpg';
-// import newMobileImg from '@images/mock/new/newMobile6.jpg';
-// import newDesktopImgRetina from '@images/mock/new/newDesktop6@2x.jpg';
-// import newTabletImgRetina from '@images/mock/new/newTablet6@2x.jpg';
-// import newMobileImgRetina from '@images/mock/new/newMobile6@2x.jpg';
-
-import newDesktopImg from '@images/mock/new/newFreeShippingDesktop.jpg';
-import newTabletImg from '@images/mock/new/newFreeShippingTablet.jpg';
-import newMobileImg from '@images/mock/new/newFreeShippingMobile.jpg';
-import newDesktopImgRetina from '@images/mock/new/newFreeShippingDesktop@2x.jpg';
-import newTabletImgRetina from '@images/mock/new/newFreeShippingTablet@2x.jpg';
-import newMobileImgRetina from '@images/mock/new/newFreeShippingMobile@2x.jpg';
+import newDesktopImg from '@images/mock/new/newDesktop6.jpg';
+import newTabletImg from '@images/mock/new/newTablet6.jpg';
+import newMobileImg from '@images/mock/new/newMobile6.jpg';
+import newDesktopImgRetina from '@images/mock/new/newDesktop6@2x.jpg';
+import newTabletImgRetina from '@images/mock/new/newTablet6@2x.jpg';
+import newMobileImgRetina from '@images/mock/new/newMobile6@2x.jpg';
 
 import middleDesktopImg from '@images/mock/middle/middleDesktop6.jpg';
 import middleTabletImg from '@images/mock/middle/middleTablet6.jpg';
@@ -227,8 +220,7 @@ export default {
                     id: 'newBanner',
                     name: '',
                     type: 'banner',
-                    url: '/catalog/',
-                    //url: '/catalog/dlya_volos/filters/badge-novinki/',
+                    url: '/catalog/dlya_volos/filters/badge-novinki/',
 
                     // button: {
                     //     id: 2,
