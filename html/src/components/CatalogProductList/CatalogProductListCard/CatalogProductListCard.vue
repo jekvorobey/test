@@ -5,6 +5,7 @@
         :class="[{ 'catalog-product-list-card--small': isSmall }, mobileOrderClass]"
         :to="href"
         v-bind="itemPropSettings.itemListElement"
+        @click.native.capture="onClick($event)"
     >
         <meta v-bind="itemPropSettings.position" />
         <div v-bind="itemPropSettings.item">
@@ -395,6 +396,10 @@ export default {
 
         badgesUnique(badges) {
             return badges ? badges.filter((v, i, a) => a.indexOf(v) === i) : [];
+        },
+
+        onClick(event) {
+            if (event.target.nodeName !== 'BUTTON') this.$emit('click-event-triggered');
         },
     },
 };

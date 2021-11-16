@@ -2,6 +2,7 @@ import { cookieNames, requestStatus, httpCodes } from '@enums';
 import { $cookie, $retailRocket } from '@services';
 import { getRandomIntInclusive } from '@util';
 import { storeErrorHandler } from '@util/store';
+import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 
 import {
     getProducts,
@@ -74,22 +75,45 @@ export default {
 
     async [DELETE_ALL_ITEMS]({ state, commit }, type) {
         try {
+            const params = state.cartData.product.items.map((item) => ({ quantity: item.count, ...item.p }));
+            const products = new ProductsBuilder().createForCart(params);
+
             await deleteAllItems(type);
             const data = { ...state.cartData, [type]: undefined };
             commit(SET_CART_DATA, data);
+
+            seoEvents.remove(products);
         } catch (error) {
             storeErrorHandler(DELETE_ALL_ITEMS)(error);
         }
     },
 
     async [ADD_CART_ITEM](
-        { commit },
+        { state, commit },
         { offerId, storeId, count, referrerCode, cookieName = cookieNames.REFERRAL } = {}
     ) {
         try {
             $retailRocket.addProductToBasket(offerId);
             const code = referrerCode || (cookieName && $cookie.get(cookieName));
             const data = await addCartItem(offerId, storeId, count, code);
+
+            let addedItem;
+            if (state.cartData && state.cartData.product && state.cartData.product.items.length) {
+                addedItem = state.cartData.product.items.find((item) => item.p.id === offerId);
+            }
+
+            if (addedItem) {
+                const difference = count - addedItem.count;
+                const params = [{ quantity: Math.abs(difference), ...addedItem.p }];
+                const products = new ProductsBuilder().createForCart(params);
+                difference > 0 ? seoEvents.add(products) : seoEvents.remove(products);
+            } else {
+                const item = data.product.items.find((item) => item.p.id === offerId);
+                const params = [{ quantity: item.count, ...item.p }];
+                const products = new ProductsBuilder().createForCart(params);
+                seoEvents.add(products);
+            }
+
             commit(SET_CART_DATA, data);
         } catch (error) {
             storeErrorHandler(ADD_CART_ITEM)(error);
@@ -114,10 +138,16 @@ export default {
         }
     },
 
-    async [DELETE_CART_ITEM]({ commit }, { offerId, storeId } = {}) {
+    async [DELETE_CART_ITEM]({ state, commit }, { offerId, storeId } = {}) {
         try {
+            const allItems = state.cartData.product.items.map((item) => ({ quantity: item.count, ...item.p }));
+            const params = allItems.filter((item) => item.id === offerId);
+            const products = new ProductsBuilder().createForCart(params);
+
             const data = await deleteCartItem(offerId, storeId);
             commit(SET_CART_DATA, data);
+
+            seoEvents.remove(products);
         } catch (error) {
             storeErrorHandler(DELETE_CART_ITEM)(error);
         }

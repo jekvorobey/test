@@ -161,6 +161,7 @@ import CheckoutProductPanel from '@components/checkout/CheckoutProductPanel/Chec
 import CheckoutMasterClassPanel from '@components/checkout/CheckoutMasterClassPanel/CheckoutMasterClassPanel.vue';
 
 import { $store, $logger, $progress, $retailRocket } from '@services';
+import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as AUTH_MODULE, HAS_SESSION, REFERRAL_PARTNER, USER } from '@store/modules/Auth';
@@ -409,6 +410,11 @@ export default {
 
     created() {
         this.discountType = discountType;
+    },
+
+    mounted() {
+        const products = new ProductsBuilder().createForCheckout(this.cartData.product.items);
+        seoEvents.checkout(products, 2);
     },
 
     beforeDestroy() {

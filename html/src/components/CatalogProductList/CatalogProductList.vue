@@ -29,6 +29,7 @@
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
+                @click-event-triggered="registerSeoEvent(item, index)"
             />
         </transition-group>
         <ul class="catalog-product-list__list" v-else>
@@ -44,6 +45,7 @@
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
+                @click-event-triggered="registerSeoEvent(item, index)"
             />
         </ul>
     </div>
@@ -63,6 +65,7 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { modalName } from '@enums';
 import { catalogItemTypes } from '@enums/product';
+import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 import './CatalogProductList.css';
 
 const itemAnimationDelayDelta = 100;
@@ -228,6 +231,12 @@ export default {
                 return 1;
             }
             return 3;
+        },
+
+        registerSeoEvent(item, index) {
+            const params = { ...item, position: index + 1 };
+            const products = new ProductsBuilder().createForCatalogCardClick(params);
+            seoEvents.click(products, 'Category');
         },
     },
 };

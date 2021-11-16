@@ -336,6 +336,7 @@ import HistoryPanel from '@components/HistoryPanel/HistoryPanel.vue';
 import _debounce from 'lodash/debounce';
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { $store, $progress, $retailRocket } from '@services';
+import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 
 import { SCROLL, RECENTLY_VIEWED_PRODUCTS } from '@store';
 import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
@@ -703,6 +704,17 @@ export default {
 
         [HAS_SESSION]() {
             this[REFRESH_CATALOG_DATA]();
+        },
+
+        [ITEMS]: {
+            immediate: true,
+            handler(newItems, oldItems) {
+                const items = oldItems ? newItems.filter((item) => !oldItems.includes(item)) : newItems;
+                if (items.length) {
+                    const impressions = new ProductsBuilder().createForCatalogImpressions(items);
+                    seoEvents.impressions(impressions);
+                }
+            },
         },
     },
 

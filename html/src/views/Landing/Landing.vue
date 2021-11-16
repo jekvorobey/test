@@ -26,6 +26,7 @@ import RetailRocketHitsSection from '@components/blocks/RetailRocketHitsSection/
 import RetailRocketRecomSection from '@components/blocks/RetailRocketRecomSection/RetailRocketRecomSection.vue';
 
 import { $store, $progress, $logger } from '@services';
+import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 import { mapState, mapActions } from 'vuex';
 
 import { NAME as LANDING_MODULE, RENDER_DATA } from '@store/modules/Landing';
@@ -67,6 +68,12 @@ export default {
         isTabletLg() {
             return this.$mq.tabletLg;
         },
+
+        landingProducts() {
+            const newProducts = $store.state[LANDING_MODULE].newProducts.items;
+            const bestsellerProducts = $store.state[LANDING_MODULE].bestsellerProducts.items;
+            return [...newProducts, ...bestsellerProducts];
+        },
     },
 
     watch: {
@@ -78,7 +85,7 @@ export default {
     methods: {
         ...mapActions(LANDING_MODULE, [FETCH_LANDING_DATA]),
 
-        fetchData() {
+        async fetchData() {
             $progress.start();
             $store
                 .dispatch(`${LANDING_MODULE}/${FETCH_LANDING_DATA_2}`)
@@ -128,8 +135,10 @@ export default {
         }
     },
 
-    mounted() {
-        this.fetchData();
+    async mounted() {
+        await this.fetchData();
+        const impressions = new ProductsBuilder().createForLandingImpressions(this.landingProducts);
+        seoEvents.impressions(impressions);
     },
 };
 </script>
