@@ -27,27 +27,27 @@
 
                 <catalog-banner-card class="products-section__banner" :item="banner">
                     <template v-if="desktopImage">
-                        <source
+                        <!-- <source
                             :data-srcset="getImageWithRetina(desktopImage, 'webp')"
                             type="image/webp"
                             media="(min-width: 1024px)"
-                        />
+                        /> -->
                         <source :data-srcset="getImageWithRetina(desktopImage)" media="(min-width: 1024px)" />
                     </template>
                     <template v-if="tabletImage">
-                        <source
+                        <!-- <source
                             :data-srcset="getImageWithRetina(tabletImage, 'webp')"
                             type="image/webp"
                             media="(min-width: 768px)"
-                        />
+                        /> -->
                         <source :data-srcset="getImageWithRetina(tabletImage)" media="(min-width: 768px)" />
                     </template>
                     <template v-if="mobileImage">
-                        <source
+                        <!-- <source
                             :data-srcset="getImageWithRetina(mobileImage, 'webp')"
                             type="image/webp"
                             media="(min-width: 320px)"
-                        />
+                        /> -->
                         <source :data-srcset="getImageWithRetina(mobileImage)" media="(min-width: 320px)" />
                     </template>
                     <img class="blur-up lazyload v-picture__img" :data-src="defaultImage" alt="" />

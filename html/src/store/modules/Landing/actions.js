@@ -26,12 +26,12 @@ import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg
 import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
 import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
-import lockdownDesktopImg from '@images/mock/landing-lockdown-discount/lockdownDesktop.jpg';
-import lockdownDesktopRetina from '@images/mock/landing-lockdown-discount/lockdownDesktop@2x.jpg';
-import lockdownTabletImg from '@images/mock/landing-lockdown-discount/lockdownTablet.jpg';
-import lockdownTabletRetina from '@images/mock/landing-lockdown-discount/lockdownTablet@2x.jpg';
-import lockdownMobileImg from '@images/mock/landing-lockdown-discount/lockdownMobile.jpg';
-import lockdownMobileRetina from '@images/mock/landing-lockdown-discount/lockdownMobile@2x.jpg';
+import macLoveDesktopImg from '@images/mock/landing-mac-love-discount/macLoveDiscountDesktop.jpg';
+import macLoveDesktopRetina from '@images/mock/landing-mac-love-discount/macLoveDiscountDesktop@2x.jpg';
+import macLoveTabletImg from '@images/mock/landing-mac-love-discount/macLoveDiscountTablet.jpg';
+import macLoveTabletRetina from '@images/mock/landing-mac-love-discount/macLoveDiscountTablet@2x.jpg';
+import macLoveMobileImg from '@images/mock/landing-mac-love-discount/macLoveDiscountMobile.jpg';
+import macLoveMobileRetina from '@images/mock/landing-mac-love-discount/macLoveDiscountMobile@2x.jpg';
 
 import { $logger } from '@services';
 import {
@@ -88,16 +88,16 @@ export default {
         try {
             commit(SET_BANNERS, [
                 {
-                    id: 'lockdown',
+                    id: 'macLove',
                     name: '',
                     type: 'banner',
-                    url: 'catalog/',
-                    desktopImage: lockdownDesktopImg,
-                    desktopImageRetina: lockdownDesktopRetina,
-                    tabletImage: lockdownTabletImg,
-                    tabletImageRetina: lockdownTabletRetina,
-                    mobileImage: lockdownMobileImg,
-                    mobileImageRetina: lockdownMobileRetina,
+                    url: '/promo/lovebmac/',
+                    desktopImage: macLoveDesktopImg,
+                    desktopImageRetina: macLoveDesktopRetina,
+                    tabletImage: macLoveTabletImg,
+                    tabletImageRetina: macLoveTabletRetina,
+                    mobileImage: macLoveMobileImg,
+                    mobileImageRetina: macLoveMobileRetina,
                 },
                 {
                     id: 'middleBanner',
