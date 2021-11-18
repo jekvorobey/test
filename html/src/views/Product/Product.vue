@@ -764,6 +764,7 @@ import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 import _debounce from 'lodash/debounce';
 import metaMixin from '@plugins/meta';
 import { $store, $progress, $retailRocket } from '@services';
+import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 import {
     generateFileOriginalPath,
     generatePictureSourcePath,
@@ -861,6 +862,8 @@ const sliderOptions = {
 const gallerySize = 1060;
 const desktopSize = 600;
 const tabletSize = 400;
+
+let previousRouteName;
 
 export default {
     name: 'product',
@@ -1492,6 +1495,8 @@ export default {
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
 
+        previousRouteName = from.name;
+
         const {
             params: { code },
             query: { refCode = null, modal },
@@ -1574,6 +1579,11 @@ export default {
     mounted() {
         window.frisbuy.loadScript(this.frisbuyUrl);
         this.$nextTick(() => (this.isMounted = true));
+
+        const products = new ProductsBuilder().createForProductDetail(this.product);
+        const actionField = previousRouteName === 'Landing' ? 'Homepage' : 'Category';
+        seoEvents.detail(products, actionField);            
+
     },
 };
 </script>

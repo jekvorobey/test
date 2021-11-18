@@ -79,7 +79,7 @@ import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
-import {NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER} from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
 
 import { modalName } from '@enums';
 import { getRandomIntInclusive } from '@util';

@@ -1,5 +1,11 @@
 <template>
-    <router-link tag="a" class="catalog-product-card" :class="{ 'catalog-product-card--small': isSmall }" :to="href">
+    <router-link
+        tag="a"
+        class="catalog-product-card"
+        :class="{ 'catalog-product-card--small': isSmall }"
+        :to="href"
+        @click.native.capture="onClick($event)"
+    >
         <div class="catalog-product-card__img">
             <v-picture :key="image.id" v-if="images">
                 <source :data-srcset="images.desktop.webp" type="image/webp" media="(min-width: 480px)" />
@@ -224,6 +230,10 @@ export default {
 
         onPreview() {
             this.$emit('preview', { id: this.productId, type: this.type });
+        },
+
+        onClick(event) {
+            if (event.target.nodeName !== 'BUTTON') this.$emit('click-event-triggered');
         },
     },
 };
