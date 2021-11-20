@@ -104,18 +104,18 @@
                     </links-switch>
 
                     <select-panel
-                        v-if="professions"
+                        v-if="specialties"
                         class="masterclasses-view__sets-header-panel"
                         name="topic"
                         id="topic"
-                        :value="(selectedValueMap[professions.name] && selectedValueMap[professions.name].code) || null"
-                        :items="professions.items"
-                        :linkSegments="getLinkSegments('profession')"
+                        :value="(selectedValueMap[specialties.name] && selectedValueMap[specialties.name].code) || null"
+                        :items="specialties.items"
+                        :linkSegments="getLinkSegments('specialty')"
                         @input="
                             onChangeFilter(
-                                professions,
+                                specialties,
                                 $event,
-                                selectedValueMap[professions.name] && selectedValueMap[professions.name].code
+                                selectedValueMap[specialties.name] && selectedValueMap[specialties.name].code
                             )
                         "
                     >
@@ -457,9 +457,9 @@ export default {
             return map;
         },
 
-        professions() {
+        specialties() {
             const filters = this[NULLABLE_FILTERS] || [];
-            return filters.find((f) => f.name === 'profession');
+            return filters.find((f) => f.name === 'specialty');
         },
 
         times() {
@@ -469,7 +469,7 @@ export default {
 
         filters() {
             const filters = this[NULLABLE_FILTERS] || [];
-            return filters.filter((f) => this.isTabletLg || (f.name !== 'profession' && f.name !== 'time'));
+            return filters.filter((f) => this.isTabletLg || (f.name !== 'specialty' && f.name !== 'time'));
         },
 
         masterclasses() {
