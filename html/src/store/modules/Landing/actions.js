@@ -26,12 +26,12 @@ import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg
 import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
 import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
-import macLoveDesktopImg from '@images/mock/landing-mac-love-discount/macLoveDiscountDesktop.jpg';
-import macLoveDesktopRetina from '@images/mock/landing-mac-love-discount/macLoveDiscountDesktop@2x.jpg';
-import macLoveTabletImg from '@images/mock/landing-mac-love-discount/macLoveDiscountTablet.jpg';
-import macLoveTabletRetina from '@images/mock/landing-mac-love-discount/macLoveDiscountTablet@2x.jpg';
-import macLoveMobileImg from '@images/mock/landing-mac-love-discount/macLoveDiscountMobile.jpg';
-import macLoveMobileRetina from '@images/mock/landing-mac-love-discount/macLoveDiscountMobile@2x.jpg';
+import TLabDesktopImg from '@images/mock/landing-t-lab-discount/T-LabDiscountDesktop.jpg';
+import TLabDesktopRetina from '@images/mock/landing-t-lab-discount/T-LabDiscountDesktop@2x.jpg';
+import TLabTabletImg from '@images/mock/landing-t-lab-discount/T-LabDiscountTablet.jpg';
+import TLabTabletRetina from '@images/mock/landing-t-lab-discount/T-LabDiscountTablet@2x.jpg';
+import TLabMobileImg from '@images/mock/landing-t-lab-discount/T-LabDiscountMobile.jpg';
+import TLabMobileRetina from '@images/mock/landing-t-lab-discount/T-LabDiscountMobile@2x.jpg';
 
 import { $logger } from '@services';
 import {
@@ -88,16 +88,17 @@ export default {
         try {
             commit(SET_BANNERS, [
                 {
-                    id: 'macLove',
+                    id: 'T-Lab',
                     name: '',
                     type: 'banner',
-                    url: '/promo/lovebmac/',
-                    desktopImage: macLoveDesktopImg,
-                    desktopImageRetina: macLoveDesktopRetina,
-                    tabletImage: macLoveTabletImg,
-                    tabletImageRetina: macLoveTabletRetina,
-                    mobileImage: macLoveMobileImg,
-                    mobileImageRetina: macLoveMobileRetina,
+                    url:
+                        '/catalog/nabory_1/t_lab_professional_kompleks_dlya_volos_dlya_vosstanovleniya_gladkosti_i_shelkovistosti/',
+                    desktopImage: TLabDesktopImg,
+                    desktopImageRetina: TLabDesktopRetina,
+                    tabletImage: TLabTabletImg,
+                    tabletImageRetina: TLabTabletRetina,
+                    mobileImage: TLabMobileImg,
+                    mobileImageRetina: TLabMobileRetina,
                 },
                 {
                     id: 'middleBanner',
