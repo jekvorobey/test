@@ -210,6 +210,7 @@ import VTabs from '@controls/VTabs/VTabs.vue';
 import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
 import { $store, $progress, $logger } from '@services';
+import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as CART_MODULE, FEATURED_PRODUCTS, CART_DATA } from '@store/modules/Cart';
@@ -541,6 +542,11 @@ export default {
             .catch(() => () => $progress.fail());
 
         this[FETCH_FEATURED_PRODUCTS]();
+
+        if (this.cartData.product) {
+            const products = new ProductsBuilder().createForCheckout(this.cartData.product.items);
+            seoEvents.checkout(products, 1);
+        }
     },
 };
 </script>

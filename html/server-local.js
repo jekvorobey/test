@@ -36,17 +36,75 @@ const serve = (resourcePath, cache) =>
         maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 365 : 0,
     });
 
-const proxy = (hostname, originalPath) =>
-    httpProxy(hostname, {
+const proxy = (proxyConfig) => {
+    let rewriteRules = [];
+
+    if (typeof proxyConfig.rewrite !== 'undefined' && isValidRewriteConfig(proxyConfig.rewrite)) {
+        rewriteRules = parsePathRewriteRules(proxyConfig.rewrite);
+    }
+
+    if (typeof proxyConfig.originalPath !== 'undefined') {
+        logger.warn('"originalPath" is deprecated. Use "rewrite" instead');
+    }
+
+    return httpProxy(proxyConfig.host, {
         proxyReqPathResolver: (req) => {
-            if (originalPath) {
+            if (typeof proxyConfig.originalPath !== 'undefined') {
                 const parts = req.url.split('?');
                 const queryString = parts[1];
-                return `${originalPath}?${queryString}`;
+
+                return `${proxyConfig.originalPath}?${queryString}`;
             }
+
+            if (rewriteRules.length > 0) {
+                let result = null;
+
+                for (const rule of rewriteRules) {
+                    if (rule.regex.test(req.originalUrl)) {
+                        result = req.originalUrl.replace(rule.regex, rule.value);
+                        break;
+                    }
+                }
+
+                if (result !== null) {
+                    logger.info('Rewriting path from "%s" to "%s"', req.originalUrl, result);
+                    return result;
+                }
+            }
+
             return req.originalUrl;
         },
     });
+};
+
+function isValidRewriteConfig(rewriteConfig) {
+    if (typeof rewriteConfig === 'function') {
+        return false;
+    } else if (Object.prototype.toString.call(rewriteConfig) == '[object Object]') {
+        return Object.keys(rewriteConfig).length !== 0;
+    } else if (rewriteConfig === undefined || rewriteConfig === null) {
+        return false;
+    } else {
+        throw new Error('Wrong rewrite config');
+    }
+}
+
+function parsePathRewriteRules(rewriteConfig) {
+    const rules = [];
+
+    if (Object.prototype.toString.call(rewriteConfig) == '[object Object]') {
+        for (const [key] of Object.entries(rewriteConfig)) {
+            rules.push({
+                regex: new RegExp(key),
+                value: rewriteConfig[key],
+            });
+
+            logger.info('Proxy rewrite rule created: "%s" ~> "%s"', key, rewriteConfig[key]);
+        }
+    }
+
+    return rules;
+}
 
 const app = express();
 
@@ -206,7 +264,7 @@ for (let i = 0; i < enable.length; i++) {
 for (let i = 0; i < proxies.length; i++) {
     const entry = proxies[i];
     logger.info('proxy', `path: ${entry.path}, host: ${entry.host}`);
-    app.use(entry.path, proxy(entry.host, entry.originalPath));
+    app.use(entry.path, proxy(entry));
 }
 
 if (isProd) {

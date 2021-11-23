@@ -1,8 +1,8 @@
 export const discountType = Object.freeze({
-    PRODUCT: 1, // Скидка на товар
+    PRODUCT: 1, // Скидка маркетплейса,
     DELIVERY: 2, // Скидка на доставку,
     CART: 3, // Скидка на корзину,
-    CUSTOM: 4, // Скидка для Вас,
+    CUSTOM: 4, // Персональная скидка,
     PROMOCODE: 5, // Скидка по промокоду,
 });
 

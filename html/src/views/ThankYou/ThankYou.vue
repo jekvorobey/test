@@ -48,20 +48,21 @@
                                     name="Способ получения"
                                     :value="orderDelivery"
                                 />
-                                <info-row v-if="!isOrderCertificate"
+                                <info-row
+                                    v-if="!isOrderCertificate"
                                     class="thank-you-view__panel-item"
                                     name="Адрес доставки"
                                     :value="deliveryAddress"
                                 />
                                 <info-row class="thank-you-view__panel-item" name="Даты доставки">
                                     <ul v-if="isOrderCertificate || isMasterClass">
-                                        <li v-for="date in dates" :key="date" >
+                                        <li v-for="date in dates" :key="date">
                                             {{ date }}
                                         </li>
                                     </ul>
                                     <ul v-else>
-                                        <li v-for="date in dates" v-if="date" :key="date.date" >
-                                            {{ date.date }} ({{date.count}} {{date.suffix}} )
+                                        <li v-for="date in dates" v-if="date" :key="date.date">
+                                            {{ date.date }} ({{ date.count }} {{ date.suffix }} )
                                         </li>
                                     </ul>
                                 </info-row>
@@ -204,7 +205,12 @@ import { FETCH_CHECKOUT_ORDER } from '@store/modules/Checkout/actions';
 
 import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
 
+import { NAME as THANKYOU_MODULE, COMPLETED_ORDERS } from '@store/modules/ThankYou';
+import { GET_COMPLETED_ORDERS, SET_COMPLETED_ORDERS } from '@store/modules/ThankYou/actions';
+
 import { $store, $progress, $retailRocket } from '@services';
+import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
+import { getProfileOrder } from '@api';
 import { fileExtension, httpCodes } from '@enums';
 import { receiveMethods } from '@enums/checkout';
 import { orderPaymentStatus } from '@enums/order';
@@ -252,6 +258,7 @@ export default {
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(CART_MODULE, [CART_DATA]),
         ...mapState(CHECKOUT_MODULE, [ORDER]),
+        ...mapState(THANKYOU_MODULE, [COMPLETED_ORDERS]),
         ...mapState('route', {
             id: (state) => state.params.id,
         }),
@@ -441,6 +448,10 @@ export default {
         isTablet() {
             return this.$mq.tablet;
         },
+
+        wasShown() {
+            return this[COMPLETED_ORDERS].includes(this.id);
+        },
     },
 
     watch: {
@@ -451,6 +462,7 @@ export default {
 
     methods: {
         ...mapActions(ORDERS_MODULE_PATH, [GET_ORDER_PAYMENT_LINK]),
+        ...mapActions([GET_COMPLETED_ORDERS], [SET_COMPLETED_ORDERS]),
 
         async onContinuePayment() {
             const { order } = this;
@@ -521,6 +533,24 @@ export default {
 
     beforeCreate() {
         this.cartItemTypes = cartItemTypes;
+    },
+
+    async mounted() {
+        $store.dispatch(`${THANKYOU_MODULE}/${GET_COMPLETED_ORDERS}`);
+
+        async function createSeoEventPurchase() {
+            const orderData = await getProfileOrder(this.id);
+            if (orderData.order.type !== 'product' || !orderData.deliveries) return;
+            const { products, actionField } = new ProductsBuilder().createForPurchase(orderData);
+            seoEvents.purchase(products, actionField);
+        }
+
+        const purchase = createSeoEventPurchase.bind(this);
+
+        if (!this.wasShown) {
+            await purchase();
+            $store.dispatch(`${THANKYOU_MODULE}/${SET_COMPLETED_ORDERS}`, this.id);
+        }
     },
 };
 </script>

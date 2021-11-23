@@ -6,7 +6,7 @@
             <div class="products-section__grid">
                 <catalog-product-card
                     class="products-section__card"
-                    v-for="item in items"
+                    v-for="(item, index) in items"
                     :key="item.id"
                     :offer-id="item.id"
                     :product-id="item.productId"
@@ -23,6 +23,7 @@
                     @add-item="onAddToCart(item)"
                     @preview="onPreview(item.code)"
                     @toggle-favorite-item="onToggleFavorite(item)"
+                    @click-event-triggered="registerSeoEvent(item, index)"
                 />
 
                 <catalog-banner-card class="products-section__banner" :item="banner">
@@ -79,6 +80,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { fileExtension, modalName } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
+import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 import './ProductsSection.css';
 
 export default {
@@ -248,6 +250,12 @@ export default {
                 result += `, ${imageRetina} 2x`;
             }
             return result;
+        },
+
+        registerSeoEvent(item, index) {
+            const params = { ...item, position: index + 1 };
+            const products = new ProductsBuilder().createForCatalogCardClick(params);
+            seoEvents.click(products, 'Homepage');
         },
     },
 };
