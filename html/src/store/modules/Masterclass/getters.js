@@ -13,8 +13,8 @@ function getNullItem(filter) {
     let name = null;
 
     switch (filter.name) {
-        case 'profession':
-            name = 'Все темы';
+        case 'specialty':
+            name = 'Все направления';
             break;
         case 'place_city':
             name = 'Все города';
