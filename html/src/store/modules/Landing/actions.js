@@ -26,12 +26,12 @@ import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg
 import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
 import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
-import TLabDesktopImg from '@images/mock/landing-t-lab-discount/T-LabDiscountDesktop.jpg';
-import TLabDesktopRetina from '@images/mock/landing-t-lab-discount/T-LabDiscountDesktop@2x.jpg';
-import TLabTabletImg from '@images/mock/landing-t-lab-discount/T-LabDiscountTablet.jpg';
-import TLabTabletRetina from '@images/mock/landing-t-lab-discount/T-LabDiscountTablet@2x.jpg';
-import TLabMobileImg from '@images/mock/landing-t-lab-discount/T-LabDiscountMobile.jpg';
-import TLabMobileRetina from '@images/mock/landing-t-lab-discount/T-LabDiscountMobile@2x.jpg';
+import blackFridayDesktopImg from '@images/mock/landing-black-friday-discount/blackFridayDiscountDesktop.gif';
+import blackFridayDesktopRetina from '@images/mock/landing-black-friday-discount/blackFridayDiscountDesktop@2x.gif';
+import blackFridayTabletImg from '@images/mock/landing-black-friday-discount/blackFridayDiscountTablet.gif';
+import blackFridayTabletRetina from '@images/mock/landing-black-friday-discount/blackFridayDiscountTablet@2x.gif';
+import blackFridayMobileImg from '@images/mock/landing-black-friday-discount/blackFridayDiscountMobile.gif';
+import blackFridayMobileRetina from '@images/mock/landing-black-friday-discount/blackFridayDiscountMobile@2x.gif';
 
 import { $logger } from '@services';
 import {
@@ -88,17 +88,16 @@ export default {
         try {
             commit(SET_BANNERS, [
                 {
-                    id: 'T-Lab',
+                    id: 'blackFriday',
                     name: '',
                     type: 'banner',
-                    url:
-                        '/catalog/nabory_1/t_lab_professional_kompleks_dlya_volos_dlya_vosstanovleniya_gladkosti_i_shelkovistosti/',
-                    desktopImage: TLabDesktopImg,
-                    desktopImageRetina: TLabDesktopRetina,
-                    tabletImage: TLabTabletImg,
-                    tabletImageRetina: TLabTabletRetina,
-                    mobileImage: TLabMobileImg,
-                    mobileImageRetina: TLabMobileRetina,
+                    url: '/promo/chernayapyatnitsa/',
+                    desktopImage: blackFridayDesktopImg,
+                    desktopImageRetina: blackFridayDesktopRetina,
+                    tabletImage: blackFridayTabletImg,
+                    tabletImageRetina: blackFridayTabletRetina,
+                    mobileImage: blackFridayMobileImg,
+                    mobileImageRetina: blackFridayMobileRetina,
                 },
                 {
                     id: 'middleBanner',
