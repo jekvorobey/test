@@ -97,7 +97,7 @@ module.exports = merge(base, {
               }),
               /* imagemin-webpack-plugin выполняет все работы по сжатию изображений. */
               new ImageminPlugin({
-                  test: /\.(jpe?g|png)$/i,
+                  test: /\.(jpe?g|png|gif)$/i,
                   /* Для jpeg используется lossy сжатие через mozJpeg. */
                   jpegtran: null,
                   /* Для png используется lossy сжатие через pngQuant. */

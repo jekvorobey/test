@@ -73,7 +73,7 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(jpe?g|png|svg)$/,
+                test: /\.(jpe?g|png|svg|gif)$/,
                 include: path.resolve(__dirname, '../src/assets/images'),
                 exclude: [path.resolve(__dirname, '../src/assets/images/sprites')],
                 use: [
