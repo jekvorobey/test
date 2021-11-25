@@ -992,24 +992,13 @@ export default {
             const { stages = [] } = this[MASTERCLASS] || {};
 
             return stages.map((s) => {
-                const dateObjFrom = getDate(s.date_from);
-                const dateObjTo = getDate(s.date_to);
-                const dateFrom = getDate(`${s.date} ${s.timeFrom}`);
-                const dateTo = getDate(`${s.date} ${s.timeTo}`);
+                const dateFrom = getDate(s.date_from);
+                const dateTo = getDate(s.date_to);
 
-                return `${dateObjFrom.toLocaleDateString(
-                    this[LOCALE],
-                    dayMonthLongDateSettings
-                )} - ${dateObjTo.toLocaleDateString(
-                    this[LOCALE],
-                    dayMonthLongDateSettings
-                )}, ${dateFrom.toLocaleTimeString(
-                    this[LOCALE],
-                    hourMinuteTimeSettings
-                )} - ${dateTo.toLocaleTimeString(
-                    this[LOCALE],
-                    hourMinuteTimeSettings
-                )}`;
+                return `${dateFrom.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}
+                - ${dateTo.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)},
+                ${s.timeFrom.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)}
+                - ${s.timeTo.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)}`;
             });
         },
 
