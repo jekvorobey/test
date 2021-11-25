@@ -12,6 +12,13 @@ import macLoveMobileBannerImgRetina from '@images/mock/catalog-banners/macLoveBa
 import macLoveTabletBannerImg from '@images/mock/catalog-banners/macLoveBannerTablet.jpg';
 import macLoveTabletBannerImgRetina from '@images/mock/catalog-banners/macLoveBannerTablet@2x.jpg';
 
+import blackFridayDesktopBannerImg from '@images/mock/catalog-banners/blackFridayDesktopBanner.gif';
+import blackFridayDesktopBannerImgRetina from '@images/mock/catalog-banners/blackFridayDesktopBanner@2x.gif';
+import blackFridayMobileBannerImg from '@images/mock/catalog-banners/blackFridayMobileBanner.gif';
+import blackFridayMobileBannerImgRetina from '@images/mock/catalog-banners/blackFridayMobileBanner@2x.gif';
+import blackFridayTabletBannerImg from '@images/mock/catalog-banners/blackFridayTabletBanner.gif';
+import blackFridayTabletBannerImgRetina from '@images/mock/catalog-banners/blackFridayTabletBanner@2x.gif';
+
 import _mergeWith from 'lodash/mergeWith';
 
 import { productGroupBase } from '@enums/product';
@@ -84,6 +91,20 @@ export default {
                 tabletImageRetina: macLoveTabletBannerImgRetina,
                 mobileImage: macLoveMobileBannerImg,
                 mobileImageRetina: macLoveMobileBannerImgRetina,
+            },
+
+            blackFridayCatalogBanner: {
+                id: 'blackFridayCatalogBanner',
+                name: '',
+                type: 'catalog-banner',
+                url: undefined,
+                noLink: true,
+                desktopImage: blackFridayDesktopBannerImg,
+                desktopImageRetina: blackFridayDesktopBannerImgRetina,
+                tabletImage: blackFridayTabletBannerImg,
+                tabletImageRetina: blackFridayTabletBannerImgRetina,
+                mobileImage: blackFridayMobileBannerImg,
+                mobileImageRetina: blackFridayMobileBannerImgRetina,
             },
         };
 
@@ -185,6 +206,9 @@ export default {
                 data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
             } else if (data.type === 'promo' && data.entityCode === 'lovebmac') {
                 const banner = { name: 'macLoveCatalogBanner' };
+                data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
+            } else if (data.type === 'promo' && data.entityCode === 'chernayapyatnitsa') {
+                const banner = { name: 'blackFridayCatalogBanner' };
                 data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
             }
 
