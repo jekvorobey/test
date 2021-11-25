@@ -994,11 +994,13 @@ export default {
             return stages.map((s) => {
                 const dateFrom = getDate(s.date_from);
                 const dateTo = getDate(s.date_to);
+                const timeFrom = getDate(`${s.date_from} ${s.timeFrom}`);
+                const timeTo = getDate(`${s.date_to} ${s.timeTo}`);
 
                 return `${dateFrom.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}
                 - ${dateTo.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)},
-                ${s.timeFrom.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)}
-                - ${s.timeTo.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)}`;
+                ${timeFrom.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)}
+                - ${timeTo.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)}`;
             });
         },
 
