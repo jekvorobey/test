@@ -137,7 +137,7 @@
                             </v-link> -->
                         </div>
 
-                        <div v-if="places.length > 0" class="container container--tablet master-class-view__panel-right-section">
+                        <div v-if="places" class="container container--tablet master-class-view__panel-right-section">
                             <p class="text-bold master-class-view__panel-right-hl">Место проведения</p>
 
                             <ol :class="{ list: places.length > 1 }">
@@ -456,7 +456,7 @@
             </div>
         </section>
 
-        <section ref="map" class="section master-class-view__section master-class-view__map">
+        <section v-if="places" ref="map" class="section master-class-view__section master-class-view__map">
             <div class="container master-class-view__map-container">
                 <h2 class="container container--tablet master-class-view__section-hl">Место проведения</h2>
 
@@ -996,9 +996,13 @@ export default {
                 const dateTo = getDate(s.date_to);
                 const timeFrom = getDate(`${s.date_from} ${s.timeFrom}`);
                 const timeTo = getDate(`${s.date_to} ${s.timeTo}`);
+                const dateString =
+                    dateFrom !== dateTo
+                        ? `${dateFrom.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}
+                        - ${dateTo.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}`
+                        : `${dateFrom.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}`;
 
-                return `${dateFrom.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}
-                - ${dateTo.toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)},
+                return `${dateString},
                 ${timeFrom.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)}
                 - ${timeTo.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)}`;
             });
