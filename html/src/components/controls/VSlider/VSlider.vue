@@ -1,5 +1,5 @@
 <template>
-    <div class="v-slider" :class="{ 'v-slider--disabled': !controls }" v-swiper:slider="options">
+    <div class="v-slider" :class="{ 'v-slider--disabled': !controls }" v-swiper:slider="sliderOptions">
         <div class="swiper-wrapper">
             <slot />
         </div>
@@ -33,6 +33,11 @@ export default {
     serverCacheKey: (props) => props.name,
 
     props: {
+        value: {
+            type: Number,
+            default: 0,
+        },
+
         name: {
             type: String,
             required: true,
@@ -40,6 +45,19 @@ export default {
 
         options: {
             type: Object,
+
+            validator(value) {
+                if (typeof value !== 'object' || Array.isArray(value) || value === null) {
+                    return false;
+                }
+
+                if (typeof value.initialSlide !== 'undefined') {
+                    console.error(`[V-Slider]: 'initialSlider' option is not supported. Please, use v-model instead`);
+                }
+
+                return true;
+            },
+
             default() {
                 return {
                     init: false,
@@ -67,6 +85,21 @@ export default {
         shouldInitialize(value) {
             if (value && !this.initialized) this.slider.init();
         },
+
+        value(index) {
+            if (this.slider.realIndex !== index) {
+                this.slider.slideTo(index);
+            }
+        },
+    },
+
+    computed: {
+        sliderOptions() {
+            return {
+                ...this.options,
+                initialSlide: this.value,
+            };
+        },
     },
 
     methods: {
@@ -77,6 +110,10 @@ export default {
 
     mounted() {
         if (this.slider) {
+            this.slider.on('activeIndexChange', () => {
+                this.$emit('input', this.slider.realIndex);
+            });
+
             this.slider.on('reachEnd', this.onEndReached);
             if (this.shouldInitialize) this.slider.init();
         }
