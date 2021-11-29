@@ -137,7 +137,10 @@
                             </v-link> -->
                         </div>
 
-                        <div class="container container--tablet master-class-view__panel-right-section">
+                        <div
+                            v-if="places && places.length > 0"
+                            class="container container--tablet master-class-view__panel-right-section"
+                        >
                             <p class="text-bold master-class-view__panel-right-hl">Место проведения</p>
 
                             <ol :class="{ list: places.length > 1 }">
@@ -456,7 +459,11 @@
             </div>
         </section>
 
-        <section ref="map" class="section master-class-view__section master-class-view__map">
+        <section
+            v-if="places && places.length > 0"
+            ref="map"
+            class="section master-class-view__section master-class-view__map"
+        >
             <div class="container master-class-view__map-container">
                 <h2 class="container container--tablet master-class-view__section-hl">Место проведения</h2>
 
@@ -481,7 +488,7 @@
                                 <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
                                 {{ place.address }}
                             </div>
-                            <div>{{ place.description }}</div>
+                            <div v-if="place.description">{{ place.description }}</div>
                         </div>
 
                         <ul class="master-class-view__map-gallery">
@@ -922,7 +929,7 @@ export default {
 
         mapCoords() {
             const { places } = this;
-            return places.length > 1 ? [0, 0] : (places[0] && places[0].coords) || null;
+            return places && places.length > 1 ? [0, 0] : (places[0] && places[0].coords) || null;
         },
 
         bannerImage() {
@@ -992,17 +999,15 @@ export default {
             const { stages = [] } = this[MASTERCLASS] || {};
 
             return stages.map((s) => {
-                const dateObj = getDate(s.date);
-                const dateFrom = getDate(`${s.date} ${s.timeFrom}`);
-                const dateTo = getDate(`${s.date} ${s.timeTo}`);
+                const dateFrom = `${getDate(s.date_from).toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}`;
+                const dateTo = `${getDate(s.date_to).toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}`;
+                const timeFrom = getDate(`${s.date_from} ${s.timeFrom}`);
+                const timeTo = getDate(`${s.date_to} ${s.timeTo}`);
+                const dateString = dateFrom !== dateTo ? dateFrom + `-` + dateTo : dateFrom;
 
-                return `${dateObj.toLocaleDateString(
-                    this[LOCALE],
-                    dayMonthLongDateSettings
-                )}, ${dateFrom.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)} - ${dateTo.toLocaleTimeString(
-                    this[LOCALE],
-                    hourMinuteTimeSettings
-                )}`;
+                return `${dateString},
+                ${timeFrom.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)}
+                - ${timeTo.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)}`;
             });
         },
 
