@@ -145,7 +145,7 @@
 
                             <ol :class="{ list: places.length > 1 }">
                                 <li v-for="place in places" :key="place.id">
-                                    <span>{{ place.name }}, {{ place.address }}</span>
+                                    <span>{{ place.name }}, {{ place.address ?? '' }}</span>
                                 </li>
                             </ol>
 
@@ -475,7 +475,7 @@
                     <div v-if="isTabletLg" class="master-class-view__map-desc">
                         <div>
                             <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
-                            {{ place.address }}
+                            {{ place.address ?? '' }}
                         </div>
                     </div>
                     <template v-else>
@@ -486,7 +486,7 @@
                                 }"
                             >
                                 <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
-                                {{ place.address }}
+                                {{ place.address ?? '' }}
                             </div>
                             <div v-if="place.description">{{ place.description }}</div>
                         </div>
@@ -989,7 +989,7 @@ export default {
 
             return stages.map((s, index) => {
                 const stageSpeakers = speakers.filter((sp) => s.speakerIds && s.speakerIds.includes(sp.id));
-                const place = places.find((p) => p.id === s.placeId);
+                const place = places ? places.find((p) => p.id === s.placeId) : [];
                 const date = dates[index];
                 return { ...s, stageSpeakers, date, address: place && place.address };
             });
