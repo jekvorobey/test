@@ -150,6 +150,7 @@
                             </ol>
 
                             <v-link
+                                v-if="places[0].coords"
                                 class="master-class-view__panel-right-link"
                                 tag="button"
                                 @click="onScrollTo($refs.map)"
@@ -929,7 +930,7 @@ export default {
 
         mapCoords() {
             const { places } = this;
-            return places && places.length > 1 ? [0, 0] : (places[0] && places[0].coords) || null;
+            return places && places.length > 1 && places[0].coords ? [0, 0] : (places[0] && places[0].coords) || null;
         },
 
         bannerImage() {
@@ -1133,7 +1134,10 @@ export default {
         anotherCities() {
             const selectedCity = this[SELECTED_CITY] || {};
             const { places = [] } = this[MASTERCLASS] || {};
-            const cities = places ? places.filter((p) => p.fiasId !== selectedCity.fias_id).map((p) => p.cityName) : [];
+            const cities =
+                places && places[0].address
+                    ? places.filter((p) => p.fiasId !== selectedCity.fias_id).map((p) => p.cityName)
+                    : [];
             return [...new Set(cities)];
         },
 
