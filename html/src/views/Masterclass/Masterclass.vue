@@ -145,12 +145,12 @@
 
                             <ol :class="{ list: places.length > 1 }">
                                 <li v-for="place in places" :key="place.id">
-                                    <span>{{ place.name }}, {{ place.address ? place.address : '' }}</span>
+                                    <span>{{ place.name }}{{ place.address ? ', ' + place.address : '' }}</span>
                                 </li>
                             </ol>
 
                             <v-link
-                                v-if="places[0].coords"
+                                v-if="places[0].address"
                                 class="master-class-view__panel-right-link"
                                 tag="button"
                                 @click="onScrollTo($refs.map)"
@@ -475,8 +475,8 @@
                 >
                     <div v-if="isTabletLg" class="master-class-view__map-desc">
                         <div>
-                            <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
-                            {{ place.address ? place.address : '' }}
+                            <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }}
+                            {{ place.address ? ', ' + place.address : '' }}
                         </div>
                     </div>
                     <template v-else>
@@ -930,7 +930,7 @@ export default {
 
         mapCoords() {
             const { places } = this;
-            return places && places.length > 1 && places[0].coords ? [0, 0] : (places[0] && places[0].coords) || null;
+            return places && places.length > 1 && places[0].address ? [0, 0] : (places[0] && places[0].coords) || null;
         },
 
         bannerImage() {
