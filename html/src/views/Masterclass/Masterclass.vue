@@ -150,7 +150,7 @@
                             </ol>
 
                             <v-link
-                                v-if="places && checkPlaceAddress()"
+                                v-if="places && checkPlaceAddress"
                                 class="master-class-view__panel-right-link"
                                 tag="button"
                                 @click="onScrollTo($refs.map)"
@@ -930,7 +930,7 @@ export default {
 
         mapCoords() {
             const { places = [] } = this;
-            if (!this.checkPlaceAddress()) {
+            if (!this.checkPlaceAddress) {
                 return null;
             }
 
@@ -1145,7 +1145,7 @@ export default {
             const selectedCity = this[SELECTED_CITY] || {};
             const { places = [] } = this[MASTERCLASS] || {};
             const cities =
-                places && this.checkPlaceAddress()
+                places && this.checkPlaceAddress
                     ? places.filter((p) => p.fiasId !== selectedCity.fias_id).map((p) => p.cityName)
                     : [];
             return [...new Set(cities)];
