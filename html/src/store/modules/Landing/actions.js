@@ -1,17 +1,3 @@
-import bestsellerDesktopImg from '@images/mock/bestsellers/bDesktop6.jpg';
-import bestsellerTabletImg from '@images/mock/bestsellers/bTablet6.jpg';
-import bestsellerMobileImg from '@images/mock/bestsellers/bMobile6.jpg';
-import bestsellerDesktopImgRetina from '@images/mock/bestsellers/bDesktop6@2x.jpg';
-import bestsellerTabletImgRetina from '@images/mock/bestsellers/bTablet6@2x.jpg';
-import bestsellerMobileImgRetina from '@images/mock/bestsellers/bMobile6@2x.jpg';
-
-import newDesktopImg from '@images/mock/new/newDesktop6.jpg';
-import newTabletImg from '@images/mock/new/newTablet6.jpg';
-import newMobileImg from '@images/mock/new/newMobile6.jpg';
-import newDesktopImgRetina from '@images/mock/new/newDesktop6@2x.jpg';
-import newTabletImgRetina from '@images/mock/new/newTablet6@2x.jpg';
-import newMobileImgRetina from '@images/mock/new/newMobile6@2x.jpg';
-
 import middleDesktopImg from '@images/mock/middle/middleDesktop6.jpg';
 import middleTabletImg from '@images/mock/middle/middleTablet6.jpg';
 import middleMobileImg from '@images/mock/middle/middleMobile6.jpg';
@@ -26,12 +12,40 @@ import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg
 import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
 import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
-import blackFridayDesktopImg from '@images/mock/landing-black-friday-discount/blackFridayDiscountDesktop.gif';
-import blackFridayDesktopRetina from '@images/mock/landing-black-friday-discount/blackFridayDiscountDesktop@2x.gif';
-import blackFridayTabletImg from '@images/mock/landing-black-friday-discount/blackFridayDiscountTablet.gif';
-import blackFridayTabletRetina from '@images/mock/landing-black-friday-discount/blackFridayDiscountTablet@2x.gif';
-import blackFridayMobileImg from '@images/mock/landing-black-friday-discount/blackFridayDiscountMobile.gif';
-import blackFridayMobileRetina from '@images/mock/landing-black-friday-discount/blackFridayDiscountMobile@2x.gif';
+import TLabDesktopImg from '@images/mock/landing-t-lab-discount/T-LabDiscountDesktop.jpg';
+import TLabDesktopRetina from '@images/mock/landing-t-lab-discount/T-LabDiscountDesktop@2x.jpg';
+import TLabTabletImg from '@images/mock/landing-t-lab-discount/T-LabDiscountTablet.jpg';
+import TLabTabletRetina from '@images/mock/landing-t-lab-discount/T-LabDiscountTablet@2x.jpg';
+import TLabMobileImg from '@images/mock/landing-t-lab-discount/T-LabDiscountMobile.jpg';
+import TLabMobileRetina from '@images/mock/landing-t-lab-discount/T-LabDiscountMobile@2x.jpg';
+
+import fabyDesktopImg from '@images/mock/landing-faby/fabyDesktop.jpg';
+import fabyDesktopRetina from '@images/mock/landing-faby/fabyDesktop@x2.jpg';
+import fabyTabletImg from '@images/mock/landing-faby/fabyTablet.jpg';
+import fabyTabletRetina from '@images/mock/landing-faby/fabyTablet@x2.jpg';
+import fabyMobileImg from '@images/mock/landing-faby/fabyMobile.jpg';
+import fabyMobileRetina from '@images/mock/landing-faby/fabyMobile.jpg';
+
+import merchDesktopImg from '@images/mock/landing-merch/merchDesktop.jpg';
+import merchDesktopRetina from '@images/mock/landing-merch/merchDesktop@x2.jpg';
+import merchTabletImg from '@images/mock/landing-merch/merchTablet.jpg';
+import merchTabletRetina from '@images/mock/landing-merch/merchTablet@x2.jpg';
+import merchMobileImg from '@images/mock/landing-merch/merchMobile.jpg';
+import merchMobileRetina from '@images/mock/landing-merch/merchMobile@x2.jpg';
+
+import giftCertsDesktopImg from '@images/mock/gift-certs/giftDesktop.jpg';
+import giftCertsDesktopRetina from '@images/mock/gift-certs/giftDesktop@x2.jpg';
+import giftCertsTabletImg from '@images/mock/gift-certs/giftTablet.jpg';
+import giftCertsTabletRetina from '@images/mock/gift-certs/giftTablet@x2.jpg';
+import giftCertsMobileImg from '@images/mock/gift-certs/giftMobile.jpg';
+import giftCertsMobileRetina from '@images/mock/gift-certs/giftMobile@x2.jpg';
+
+import promo12DesktopImg from '@images/mock/promo12/promo12Desktop.jpg';
+import promo12DesktopRetina from '@images/mock/promo12/promo12Desktop@x2.jpg';
+import promo12TabletImg from '@images/mock/promo12/promo12Tablet.jpg';
+import promo12TabletRetina from '@images/mock/promo12/promo12Tablet@x2.jpg';
+import promo12MobileImg from '@images/mock/promo12/promo12Mobile.jpg';
+import promo12MobileRetina from '@images/mock/promo12/promo12Mobile@x2.jpg';
 
 import { $logger } from '@services';
 import {
@@ -88,22 +102,35 @@ export default {
         try {
             commit(SET_BANNERS, [
                 {
-                    id: 'blackFriday',
+                    id: 'faby',
                     name: '',
                     type: 'banner',
-                    url: '/promo/chernayapyatnitsa/',
-                    desktopImage: blackFridayDesktopImg,
-                    desktopImageRetina: blackFridayDesktopRetina,
-                    tabletImage: blackFridayTabletImg,
-                    tabletImageRetina: blackFridayTabletRetina,
-                    mobileImage: blackFridayMobileImg,
-                    mobileImageRetina: blackFridayMobileRetina,
+                    url: '/catalog/laki/faby_nabor_lakov_collection_party_9_x_15_ml_v_pakete/',
+                    desktopImage: fabyDesktopImg,
+                    desktopImageRetina: fabyDesktopRetina,
+                    tabletImage: fabyTabletImg,
+                    tabletImageRetina: fabyTabletRetina,
+                    mobileImage: fabyMobileImg,
+                    mobileImageRetina: fabyMobileRetina,
+                },
+                {
+                    id: 'T-Lab',
+                    name: '',
+                    type: 'banner',
+                    url:
+                        '/catalog/nabory_1/t_lab_professional_kompleks_dlya_volos_dlya_vosstanovleniya_gladkosti_i_shelkovistosti/',
+                    desktopImage: TLabDesktopImg,
+                    desktopImageRetina: TLabDesktopRetina,
+                    tabletImage: TLabTabletImg,
+                    tabletImageRetina: TLabTabletRetina,
+                    mobileImage: TLabMobileImg,
+                    mobileImageRetina: TLabMobileRetina,
                 },
                 {
                     id: 'middleBanner',
                     name: '',
                     type: 'banner',
-                    url: 'https://www.instagram.com/bessovestnotalantlivy/',
+                    url: '/promo/dekabr12/',
                     // button: {
                     //     id: 2,
                     //     url: 'https://www.instagram.com/bessovestnotalantlivy/',
@@ -111,12 +138,12 @@ export default {
                     //     location: 'bottom_left',
                     //     type: 'white',
                     // },
-                    desktopImage: middleDesktopImg,
-                    desktopImageRetina: middleDesktopImgRetina,
-                    tabletImage: middleTabletImg,
-                    tabletImageRetina: middleTabletImgRetina,
-                    mobileImage: middleMobileImg,
-                    mobileImageRetina: middleMobileImgRetina,
+                    desktopImage: promo12DesktopImg,
+                    desktopImageRetina: promo12DesktopRetina,
+                    tabletImage: promo12TabletImg,
+                    tabletImageRetina: promo12TabletRetina,
+                    mobileImage: promo12MobileImg,
+                    mobileImageRetina: promo12MobileRetina,
                 },
                 {
                     id: 'mainBanner',
@@ -220,7 +247,7 @@ export default {
                     id: 'newBanner',
                     name: '',
                     type: 'banner',
-                    url: '/catalog/dlya_volos/filters/badge-novinki/',
+                    url: '/promo/umenshaidostavku/',
 
                     // button: {
                     //     id: 2,
@@ -230,12 +257,12 @@ export default {
                     //     type: 'white',
                     // },
 
-                    desktopImage: newDesktopImg,
-                    desktopImageRetina: newDesktopImgRetina,
-                    tabletImage: newTabletImg,
-                    tabletImageRetina: newTabletImgRetina,
-                    mobileImage: newMobileImg,
-                    mobileImageRetina: newMobileImgRetina,
+                    desktopImage: merchDesktopImg,
+                    desktopImageRetina: merchDesktopRetina,
+                    tabletImage: merchTabletImg,
+                    tabletImageRetina: merchTabletRetina,
+                    mobileImage: merchMobileImg,
+                    mobileImageRetina: merchMobileRetina,
                 },
                 btnText: 'Смотреть все',
                 btnLink: '/new',
@@ -256,7 +283,7 @@ export default {
                     id: 'bestsellersBanner',
                     name: '',
                     type: 'banner',
-                    url: '/catalog/dlya_volos/filters/badge-bestsellery/',
+                    url: '/giftcard/',
 
                     // button: {
                     //     id: 2,
@@ -266,12 +293,12 @@ export default {
                     //     type: 'white',
                     // },
 
-                    desktopImage: bestsellerDesktopImg,
-                    desktopImageRetina: bestsellerDesktopImgRetina,
-                    tabletImage: bestsellerTabletImg,
-                    tabletImageRetina: bestsellerTabletImgRetina,
-                    mobileImage: bestsellerMobileImg,
-                    mobileImageRetina: bestsellerMobileImgRetina,
+                    desktopImage: giftCertsDesktopImg,
+                    desktopImageRetina: giftCertsDesktopRetina,
+                    tabletImage: giftCertsTabletImg,
+                    tabletImageRetina: giftCertsTabletRetina,
+                    mobileImage: giftCertsMobileImg,
+                    mobileImageRetina: giftCertsMobileRetina,
                 },
                 btnText: 'Смотреть все',
                 btnLink: '/bestsellers',

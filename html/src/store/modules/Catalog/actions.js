@@ -12,12 +12,12 @@ import macLoveMobileBannerImgRetina from '@images/mock/catalog-banners/macLoveBa
 import macLoveTabletBannerImg from '@images/mock/catalog-banners/macLoveBannerTablet.jpg';
 import macLoveTabletBannerImgRetina from '@images/mock/catalog-banners/macLoveBannerTablet@2x.jpg';
 
-import blackFridayDesktopBannerImg from '@images/mock/catalog-banners/blackFridayDesktopBanner.gif';
-import blackFridayDesktopBannerImgRetina from '@images/mock/catalog-banners/blackFridayDesktopBanner@2x.gif';
-import blackFridayMobileBannerImg from '@images/mock/catalog-banners/blackFridayMobileBanner.gif';
-import blackFridayMobileBannerImgRetina from '@images/mock/catalog-banners/blackFridayMobileBanner@2x.gif';
-import blackFridayTabletBannerImg from '@images/mock/catalog-banners/blackFridayTabletBanner.gif';
-import blackFridayTabletBannerImgRetina from '@images/mock/catalog-banners/blackFridayTabletBanner@2x.gif';
+import promo12DesktopImg from '@images/mock/promo12/promo12Desktop.jpg';
+import promo12DesktopRetina from '@images/mock/promo12/promo12Desktop@x2.jpg';
+import promo12TabletImg from '@images/mock/promo12/promo12Tablet.jpg';
+import promo12TabletRetina from '@images/mock/promo12/promo12Tablet@x2.jpg';
+import promo12MobileImg from '@images/mock/promo12/promo12Mobile.jpg';
+import promo12MobileRetina from '@images/mock/promo12/promo12Mobile@x2.jpg';
 
 import _mergeWith from 'lodash/mergeWith';
 
@@ -93,18 +93,18 @@ export default {
                 mobileImageRetina: macLoveMobileBannerImgRetina,
             },
 
-            blackFridayCatalogBanner: {
-                id: 'blackFridayCatalogBanner',
+            promo12CatalogBanner: {
+                id: 'promo12CatalogBanner',
                 name: '',
                 type: 'catalog-banner',
                 url: undefined,
                 noLink: true,
-                desktopImage: blackFridayDesktopBannerImg,
-                desktopImageRetina: blackFridayDesktopBannerImgRetina,
-                tabletImage: blackFridayTabletBannerImg,
-                tabletImageRetina: blackFridayTabletBannerImgRetina,
-                mobileImage: blackFridayMobileBannerImg,
-                mobileImageRetina: blackFridayMobileBannerImgRetina,
+                desktopImage: promo12DesktopImg,
+                desktopImageRetina: promo12DesktopRetina,
+                tabletImage: promo12TabletImg,
+                tabletImageRetina: promo12TabletRetina,
+                mobileImage: promo12MobileImg,
+                mobileImageRetina: promo12MobileRetina,
             },
         };
 
@@ -207,8 +207,8 @@ export default {
             } else if (data.type === 'promo' && data.entityCode === 'lovebmac') {
                 const banner = { name: 'macLoveCatalogBanner' };
                 data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
-            } else if (data.type === 'promo' && data.entityCode === 'chernayapyatnitsa') {
-                const banner = { name: 'blackFridayCatalogBanner' };
+            } else if (data.type === 'promo' && data.entityCode === 'dekabr12') {
+                const banner = { name: 'promo12CatalogBanner' };
                 data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
             }
 
