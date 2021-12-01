@@ -145,7 +145,7 @@
 
                             <ol :class="{ list: places.length > 1 }">
                                 <li v-for="place in places" :key="place.id">
-                                    <span>{{ place.name }}, {{ place.address ?? '' }}</span>
+                                    <span>{{ place.name }}, {{ place.address ? place.address : '' }}</span>
                                 </li>
                             </ol>
 
@@ -475,7 +475,7 @@
                     <div v-if="isTabletLg" class="master-class-view__map-desc">
                         <div>
                             <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
-                            {{ place.address ?? '' }}
+                            {{ place.address ? place.address : '' }}
                         </div>
                     </div>
                     <template v-else>
@@ -486,7 +486,7 @@
                                 }"
                             >
                                 <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
-                                {{ place.address ?? '' }}
+                                {{ place.address ? place.address : '' }}
                             </div>
                             <div v-if="place.description">{{ place.description }}</div>
                         </div>
@@ -1133,7 +1133,7 @@ export default {
         anotherCities() {
             const selectedCity = this[SELECTED_CITY] || {};
             const { places = [] } = this[MASTERCLASS] || {};
-            const cities = places.filter((p) => p.fiasId !== selectedCity.fias_id).map((p) => p.cityName);
+            const cities = places ? places.filter((p) => p.fiasId !== selectedCity.fias_id).map((p) => p.cityName) : [];
             return [...new Set(cities)];
         },
 
