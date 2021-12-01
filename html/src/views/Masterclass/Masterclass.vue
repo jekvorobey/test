@@ -486,8 +486,8 @@
                                     'text-bold': places.length > 1 || (!!place.address && place.gallery.length > 0),
                                 }"
                             >
-                                <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
-                                {{ place.address ? place.address : '' }}
+                                <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }}
+                                {{ place.address ? ', ' + place.address : '' }}
                             </div>
                             <div v-if="place.description">{{ place.description }}</div>
                         </div>
@@ -929,8 +929,13 @@ export default {
         },
 
         mapCoords() {
-            const { places } = this;
-            return places && places.length > 1 && places[0].address ? [0, 0] : (places[0] && places[0].coords) || null;
+            const { places = [] } = this;
+            let address = places.find((place) => place.address !== null);
+            if (!address) {
+                return null;
+            }
+
+            return places.length > 1 ? [0, 0] : (places[0] && places[0].coords) || null;
         },
 
         bannerImage() {
