@@ -3,13 +3,12 @@
         <div class="container">
             <div class="nav-panel__main">
                 <group-list class="nav-panel__main-list" :items="categoriesCatalog" @link-click="onHandleClick" />
-                <banner-placement
+                <remote-banner-placement
                     class="nav-panel__main-banner"
                     :type="bannerType.MENU"
                     :desktop-size="[392, 502]"
                     :tablet-size="[515, 512]"
                     :mobile-size="[515, 512]"
-                    watch-router
                 />
             </div>
         </div>
@@ -18,7 +17,6 @@
 
 <script>
 import GroupList from '@components/GroupList/GroupList.vue';
-import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 
 import { BANNER, IS_MENU_OPEN } from '@store';
 import { CATEGORIES_CATALOG } from '@store/getters';
@@ -26,15 +24,14 @@ import { SET_MENU_OPEN } from '@store/actions';
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { bannerType } from '@enums';
 import './NavPanel.css';
-import BannerPlacement from '@components/BannerPlacement/BannerPlacement.vue';
+import RemoteBannerPlacement from '@components/RemoteBanner/RemoteBannerPlacement.vue';
 
 export default {
     name: 'nav-panel',
 
     components: {
-        BannerPlacement,
+        RemoteBannerPlacement,
         GroupList,
-        CatalogBannerCard,
     },
 
     data() {

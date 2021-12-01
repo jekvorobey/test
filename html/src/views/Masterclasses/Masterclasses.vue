@@ -12,7 +12,7 @@
             </breadcrumbs>
 
             <transition name="fade" mode="out-in">
-                <banner-placement
+                <remote-banner-placement
                     :type="bannerType.MK_TOP"
                     :desktop-size="[1224, 240]"
                     :tablet-size="[975, 305]"
@@ -199,8 +199,8 @@
                             <remote-banner
                                 :banner="item"
                                 :desktop-size="[808, 415]"
-                                :tablet-size="[415, 415]"
-                                :mobile-size="[415, 415]"
+                                :tablet-size="[475, 424]"
+                                :mobile-size="[640, 640]"
                             />
                         </li>
                     </template>
@@ -296,8 +296,8 @@ import VSelect from '@controls/VSelect/VSelect.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
 import Modal from '@controls/modal/modal.vue';
 
-import RemoteBanner from '@components/BannerPlacement/RemoteBanner.vue';
-import BannerPlacement from '@components/BannerPlacement/BannerPlacement.vue';
+import RemoteBanner from '@components/RemoteBanner/RemoteBanner.vue';
+import RemoteBannerPlacement from '@components/RemoteBanner/RemoteBannerPlacement.vue';
 
 import SelectPanel from '@components/SelectPanel/SelectPanel.vue';
 import LinksSwitch from '@components/LinksSwitch/LinksSwitch.vue';
@@ -377,7 +377,7 @@ export default {
     mixins: [metaMixin],
 
     components: {
-        BannerPlacement,
+        RemoteBannerPlacement,
         RemoteBanner,
         VSvg,
         VButton,

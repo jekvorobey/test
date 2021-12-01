@@ -38,7 +38,7 @@
             </catalog-banner-card> -->
 
             <transition name="fade" mode="out-in">
-                <banner-placement
+                <remote-banner-placement
                     :type="bannerType.CATALOG_TOP"
                     :desktop-size="[1224, 240]"
                     :tablet-size="[975, 305]"
@@ -361,14 +361,14 @@ import '@images/sprites/cross-small.svg';
 import '@images/sprites/home.svg';
 import './Catalog.css';
 import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
-import BannerPlacement from '@components/BannerPlacement/BannerPlacement.vue';
+import RemoteBannerPlacement from '@components/RemoteBanner/RemoteBannerPlacement.vue';
 
 export default {
     name: 'catalog',
     mixins: [metaMixin],
 
     components: {
-        BannerPlacement,
+        RemoteBannerPlacement,
         MobileCategoryFilter,
         RetailRocketContainer,
         VSvg,

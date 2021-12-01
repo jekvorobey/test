@@ -984,7 +984,6 @@ export function getCatalogMasterclasses(page, orderField, orderDirection, filter
             page,
             orderField,
             orderDirection,
-            pagePath: '/masterclasses/',
         },
         paramsSerializer(params) {
             return qs.stringify(params, {
