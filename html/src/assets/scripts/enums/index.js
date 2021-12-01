@@ -315,3 +315,15 @@ export const reviewOpinion = Object.freeze({
     LIKE: 'like',
     DISLIKE: 'dislike',
 });
+
+export const bannerType = Object.freeze({
+    MAIN_TOP: 'main_top',
+    MAIN_NEW: 'main_new',
+    MAIN_MIDDLE: 'main_middle',
+    MAIN_BEST: 'main_best',
+    MENU: 'menu',
+    MK_TOP: 'mk_top',
+    MK_ITEM: 'mk_item',
+    CATALOG_TOP: 'catalog_top',
+    CATALOG_ITEM: 'catalog',
+});

@@ -52,7 +52,7 @@ export default {
                 id: 1,
                 component: 'slider-banners-section',
                 data: {
-                    banners: state.banners.filter((b) => b.id === 'mainBanner' || b.id === 'macLove'),
+                    banners: state.banners.filter((b) => b.type === 'main_top'),
                 },
             },
             {

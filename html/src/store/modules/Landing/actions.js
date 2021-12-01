@@ -26,13 +26,6 @@ import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg
 import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
 import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
-import macLoveDesktopImg from '@images/mock/landing-mac-love-discount/macLoveDiscountDesktop.jpg';
-import macLoveDesktopRetina from '@images/mock/landing-mac-love-discount/macLoveDiscountDesktop@2x.jpg';
-import macLoveTabletImg from '@images/mock/landing-mac-love-discount/macLoveDiscountTablet.jpg';
-import macLoveTabletRetina from '@images/mock/landing-mac-love-discount/macLoveDiscountTablet@2x.jpg';
-import macLoveMobileImg from '@images/mock/landing-mac-love-discount/macLoveDiscountMobile.jpg';
-import macLoveMobileRetina from '@images/mock/landing-mac-love-discount/macLoveDiscountMobile@2x.jpg';
-
 import { $logger } from '@services';
 import {
     getProducts,
@@ -49,6 +42,7 @@ import { storeErrorHandler } from '@util/store';
 import { generatePictureSourcePath } from '@util/file';
 import { generateCategoryUrl } from '@util/catalog';
 import { productGroupTypes, productBadges } from '@enums/product';
+import { bannerType } from '@enums';
 import {
     SET_BESTSELLER_PRODUCTS,
     SET_NEW_PRODUCTS,
@@ -84,44 +78,56 @@ export default {
         }
     },
 
-    [FETCH_BANNERS]({ commit }) {
+    async [FETCH_BANNERS]({ commit }) {
+        const [sliderBanners, middleBanners] = await Promise.all([
+            getBannersByCode(bannerType.MAIN_TOP, false, '/'),
+            getBannersByCode(bannerType.MAIN_MIDDLE, false, '/'),
+        ]);
+
+        let middleBanner = {
+            id: 'middleBanner',
+            name: '',
+            type: 'banner',
+            url: 'https://www.instagram.com/bessovestnotalantlivy/',
+            desktopImage: middleDesktopImg,
+            desktopImageRetina: middleDesktopImgRetina,
+            tabletImage: middleTabletImg,
+            tabletImageRetina: middleTabletImgRetina,
+            mobileImage: middleMobileImg,
+            mobileImageRetina: middleMobileImgRetina,
+        };
+
+        if (Array.isArray(middleBanners) && middleBanners.length > 0) {
+            middleBanner = {
+                id: 'middleBanner',
+                name: 'middleBanner',
+                type: bannerType.MAIN_MIDDLE,
+                url: middleBanners[0].url,
+                desktopImage: middleBanners[0].desktopImage,
+                tabletImage: middleBanners[0].tabletImage,
+                mobileImage: middleBanners[0].mobileImage,
+            };
+        }
+
         try {
             commit(SET_BANNERS, [
-                {
-                    id: 'macLove',
-                    name: '',
-                    type: 'banner',
-                    url: '/promo/lovebmac/',
-                    desktopImage: macLoveDesktopImg,
-                    desktopImageRetina: macLoveDesktopRetina,
-                    tabletImage: macLoveTabletImg,
-                    tabletImageRetina: macLoveTabletRetina,
-                    mobileImage: macLoveMobileImg,
-                    mobileImageRetina: macLoveMobileRetina,
-                },
-                {
-                    id: 'middleBanner',
-                    name: '',
-                    type: 'banner',
-                    url: 'https://www.instagram.com/bessovestnotalantlivy/',
-                    // button: {
-                    //     id: 2,
-                    //     url: 'https://www.instagram.com/bessovestnotalantlivy/',
-                    //     text: 'Подписаться',
-                    //     location: 'bottom_left',
-                    //     type: 'white',
-                    // },
-                    desktopImage: middleDesktopImg,
-                    desktopImageRetina: middleDesktopImgRetina,
-                    tabletImage: middleTabletImg,
-                    tabletImageRetina: middleTabletImgRetina,
-                    mobileImage: middleMobileImg,
-                    mobileImageRetina: middleMobileImgRetina,
-                },
+                ...sliderBanners.map((banner) => {
+                    return {
+                        id: banner.id,
+                        name: '',
+                        type: bannerType.MAIN_TOP,
+                        url: banner.url,
+                        color: banner.color,
+                        desktopImage: banner.desktopImage,
+                        tabletImage: banner.tabletImage,
+                        mobileImage: banner.mobileImage,
+                    };
+                }),
+                middleBanner,
                 {
                     id: 'mainBanner',
                     name: '',
-                    type: 'banner',
+                    type: 'main_top',
                     url: '/?registration=true',
                     // button: {
                     //     id: 2,
@@ -212,14 +218,17 @@ export default {
 
     async [FETCH_NEW_PRODUCTS]({ commit }) {
         try {
-            const { items } = await getProductsHot(productBadges.NEW, 4);
+            const [{ items }, banners] = await Promise.all([
+                getProductsHot(productBadges.NEW, 4),
+                getBannersByCode(bannerType.MAIN_NEW, false, '/'),
+            ]);
 
-            commit(SET_NEW_PRODUCTS, {
+            let commitObject = {
                 items,
                 banner: {
                     id: 'newBanner',
                     name: '',
-                    type: 'banner',
+                    type: bannerType.MAIN_TOP,
                     url: '/catalog/dlya_volos/filters/badge-novinki/',
 
                     // button: {
@@ -239,7 +248,54 @@ export default {
                 },
                 btnText: 'Смотреть все',
                 btnLink: '/new',
-            });
+            };
+
+            if (Array.isArray(banners) && banners.length > 0) {
+                commitObject.banner = {
+                    id: 'newBanner',
+                    name: 'newBanner',
+                    type: bannerType.MAIN_TOP,
+                    url: banners[0].url,
+                    desktopImage: generatePictureSourcePath(
+                        600,
+                        890,
+                        banners[0].desktopImage.id,
+                        banners[0].desktopImage.sourceExt
+                    ),
+                    desktopImageRetina: generatePictureSourcePath(
+                        1200,
+                        1780,
+                        banners[0].desktopImage.id,
+                        banners[0].desktopImage.sourceExt
+                    ),
+                    tabletImage: generatePictureSourcePath(
+                        642,
+                        480,
+                        banners[0].tabletImage.id,
+                        banners[0].tabletImage.sourceExt
+                    ),
+                    tabletImageRetina: generatePictureSourcePath(
+                        1284,
+                        960,
+                        banners[0].tabletImage.id,
+                        banners[0].tabletImage.sourceExt
+                    ),
+                    mobileImage: generatePictureSourcePath(
+                        768,
+                        768,
+                        banners[0].mobileImage.id,
+                        banners[0].mobileImage.sourceExt
+                    ),
+                    mobileImageRetina: generatePictureSourcePath(
+                        1536,
+                        1536,
+                        banners[0].mobileImage.id,
+                        banners[0].mobileImage.sourceExt
+                    ),
+                };
+            }
+
+            commit(SET_NEW_PRODUCTS, commitObject);
         } catch (error) {
             storeErrorHandler(FETCH_NEW_PRODUCTS)(error);
             return [];
@@ -248,24 +304,18 @@ export default {
 
     async [FETCH_BESTSELLER_PRODUCTS]({ commit }, payload = {}) {
         try {
-            const { items } = await getProductsHot(productBadges.BESTSELLERS, 4);
+            const [{ items }, banners] = await Promise.all([
+                getProductsHot(productBadges.BESTSELLERS, 4),
+                getBannersByCode(bannerType.MAIN_BEST, false, '/'),
+            ]);
 
-            commit(SET_BESTSELLER_PRODUCTS, {
+            let commitObject = {
                 items,
                 banner: {
                     id: 'bestsellersBanner',
                     name: '',
                     type: 'banner',
                     url: '/catalog/dlya_volos/filters/badge-bestsellery/',
-
-                    // button: {
-                    //     id: 2,
-                    //     url: '/catalog/dlya_volos/filters/badge-bestsellery/',
-                    //     text: 'Посмотреть',
-                    //     location: 'bottom',
-                    //     type: 'white',
-                    // },
-
                     desktopImage: bestsellerDesktopImg,
                     desktopImageRetina: bestsellerDesktopImgRetina,
                     tabletImage: bestsellerTabletImg,
@@ -275,7 +325,54 @@ export default {
                 },
                 btnText: 'Смотреть все',
                 btnLink: '/bestsellers',
-            });
+            };
+
+            if (Array.isArray(banners) && banners.length > 0) {
+                commitObject.banner = {
+                    id: 'bestsellersBanner',
+                    name: 'bestsellersBanner',
+                    type: bannerType.MAIN_BEST,
+                    url: banners[0].url,
+                    desktopImage: generatePictureSourcePath(
+                        600,
+                        890,
+                        banners[0].desktopImage.id,
+                        banners[0].desktopImage.sourceExt
+                    ),
+                    desktopImageRetina: generatePictureSourcePath(
+                        1200,
+                        1780,
+                        banners[0].desktopImage.id,
+                        banners[0].desktopImage.sourceExt
+                    ),
+                    tabletImage: generatePictureSourcePath(
+                        642,
+                        480,
+                        banners[0].tabletImage.id,
+                        banners[0].tabletImage.sourceExt
+                    ),
+                    tabletImageRetina: generatePictureSourcePath(
+                        1284,
+                        960,
+                        banners[0].tabletImage.id,
+                        banners[0].tabletImage.sourceExt
+                    ),
+                    mobileImage: generatePictureSourcePath(
+                        768,
+                        768,
+                        banners[0].mobileImage.id,
+                        banners[0].mobileImage.sourceExt
+                    ),
+                    mobileImageRetina: generatePictureSourcePath(
+                        1536,
+                        1536,
+                        banners[0].mobileImage.id,
+                        banners[0].mobileImage.sourceExt
+                    ),
+                };
+            }
+
+            commit(SET_BESTSELLER_PRODUCTS, commitObject);
         } catch (error) {
             storeErrorHandler(FETCH_BESTSELLER_PRODUCTS)(error);
             return [];
