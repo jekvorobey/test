@@ -2,7 +2,8 @@ import { DEFAULT_PAGE } from '@constants';
 import { masterclassFilterName } from '@enums/catalog';
 import { storeErrorHandler } from '@util/store';
 
-import { getMasterclass, getCatalogMasterclasses, getMasterclassFilters } from '@api';
+import { getMasterclass, getCatalogMasterclasses, getMasterclassFilters, getBannersByCode } from '@api';
+import { bannerType } from '@enums';
 import { SET_MASTERCLASS, SET_ITEMS, SET_ITEMS_MORE, SET_QUERY_PARAMS, SET_FILTERS } from './mutations';
 
 export const FETCH_MASTERCLASS_CATALOG_DATA = 'FETCH_MASTERCLASS_CATALOG_DATA';
@@ -21,7 +22,7 @@ export default {
 
     async [FETCH_MASTERCLASS_ITEMS](
         { commit, state },
-        { page = DEFAULT_PAGE, sortDirection, sortField, filter, showMore }
+        { page = DEFAULT_PAGE, sortDirection, sortField, filter, showMore, pagePath = '/masterclasses/' }
     ) {
         try {
             // Если фильтр не указан, значит берем первое дефолтное значение в фильтре
@@ -39,7 +40,50 @@ export default {
                 }
             }
 
-            const data = await getCatalogMasterclasses(page, sortDirection, sortField, filter);
+            let data = await getCatalogMasterclasses(page, sortDirection, sortField, filter);
+
+            data.items = data.items.map((item) => {
+                return {
+                    ...item,
+                    type: 'masterclass',
+                };
+            });
+
+            if (data.items.length > 1) {
+                try {
+                    let banners = await getBannersByCode(bannerType.MK_ITEM, false, pagePath);
+
+                    banners = banners
+                        .sort((a, b) => {
+                            if (a.sort > b.sort) {
+                                return 1;
+                            }
+
+                            if (a.sort < b.sort) {
+                                return -1;
+                            }
+
+                            return 0;
+                        })
+                        .filter((banner) => {
+                            return (
+                                state.items.findIndex((item) => {
+                                    return item.type === 'banner' && item.id === banner.id;
+                                }) === -1
+                            );
+                        });
+
+                    if (banners.length > 0) {
+                        data.items.splice(1, 0, {
+                            ...banners[0],
+                            type: 'banner',
+                        });
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
             commit(SET_QUERY_PARAMS, { page });
             if (showMore) commit(SET_ITEMS_MORE, data);
             else commit(SET_ITEMS, data);

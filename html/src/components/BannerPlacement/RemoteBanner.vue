@@ -1,6 +1,6 @@
 <template>
-    <component v-if="banner" :is="bannerComponent" class="banner-placement" v-bind="bannerProperties">
-        <div class="banner-placement__img">
+    <component v-if="banner" :is="bannerComponent" class="remote-banner" v-bind="bannerProperties">
+        <div class="remote-banner__img">
             <v-picture :key="banner.id">
                 <template v-if="desktopImage">
                     <source
@@ -36,26 +36,25 @@
 </template>
 
 <script>
-import { getBannersByCode } from '@api';
 import { generatePictureSourcePath } from '@util/file';
 import { isExternalUrl } from '@util/router';
 import { fileExtension } from '@enums';
 
 import VPicture from '@controls/VPicture/VPicture.vue';
 
-import './BannerPlacement.css';
+import './RemoteBanner.css';
 
 export default {
-    name: 'banner-placement',
+    name: 'remote-banner',
 
     components: {
         VPicture,
     },
 
     props: {
-        type: {
+        banner: {
+            type: Object,
             required: true,
-            type: String,
         },
 
         desktopSize: {
@@ -72,20 +71,12 @@ export default {
             type: Array,
             required: true,
         },
-
-        watchRouter: {
-            type: Boolean,
-            default: false,
-        },
     },
 
     data() {
         return {
             isMounted: false,
-            banner: null,
-
             fileExtension,
-            debounce: null,
         };
     },
 
@@ -142,56 +133,11 @@ export default {
         },
     },
 
-    watch: {
-        $route: {
-            immediate: false,
-            handler() {
-                if (this.watchRouter) {
-                    clearTimeout(this.debounce);
-
-                    this.debounce = setTimeout(() => {
-                        this.fetchBanner();
-                    }, 100);
-                }
-            },
-        },
-    },
-
     mounted() {
         this.isMounted = true;
     },
 
-    created() {
-        this.fetchBanner();
-    },
-
     methods: {
-        async fetchBanner() {
-            const banners = await getBannersByCode(this.type, false, this.$route.fullPath);
-
-            if (Array.isArray(banners) && banners.length > 0) {
-                let banner = banners
-                    .sort((a, b) => {
-                        if (a.sort > b.sort) {
-                            return 1;
-                        }
-
-                        if (a.sort < b.sort) {
-                            return -1;
-                        }
-
-                        return 0;
-                    })
-                    .slice(0, 1)[0];
-
-                if (!this.banner || banner.id !== this.banner.id) {
-                    this.banner = banner;
-                }
-            } else {
-                this.banner = null;
-            }
-        },
-
         getImageWithRetina(image, type = 'jpg') {
             let result = '';
             let imageOrig = '';
