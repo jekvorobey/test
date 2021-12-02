@@ -139,6 +139,16 @@ export default {
         mobileImage(banner) {
             const image = banner.mobileImage || banner.tabletImage || banner.desktopImage;
             const imageRetina = banner.mobileImageRetina || banner.tabletImageRetina;
+
+            if (typeof image === 'string' && image.slice(-3) === 'gif') {
+                return {
+                    webp: image,
+                    orig: image,
+                    retinaWebp: typeof imageRetina === 'string' ? imageRetina : undefined,
+                    retinaOrig: typeof imageRetina === 'string' ? imageRetina : undefined,
+                };
+            }
+
             if (typeof image === 'string')
                 return {
                     webp: image.substr(0, image.lastIndexOf('.')) + '.webp',
@@ -162,6 +172,16 @@ export default {
         tabletImage(banner) {
             const image = banner.tabletImage || banner.desktopImage;
             const imageRetina = banner.tabletImageRetina || banner.desktopImageRetina;
+
+            if (typeof image === 'string' && image.slice(-3) === 'gif') {
+                return {
+                    webp: image,
+                    orig: image,
+                    retinaWebp: typeof imageRetina === 'string' ? imageRetina : undefined,
+                    retinaOrig: typeof imageRetina === 'string' ? imageRetina : undefined,
+                };
+            }
+
             if (typeof image === 'string')
                 return {
                     webp: image.substr(0, image.lastIndexOf('.')) + '.webp',
@@ -185,6 +205,15 @@ export default {
         desktopImage(banner) {
             const image = banner.desktopImage || banner.tabletImage;
             const imageRetina = banner.desktopImageRetina || banner.tabletImageRetina;
+
+            if (typeof image === 'string' && image.slice(-3) === 'gif') {
+                return {
+                    webp: image,
+                    orig: image,
+                    retinaWebp: typeof imageRetina === 'string' ? imageRetina : undefined,
+                    retinaOrig: typeof imageRetina === 'string' ? imageRetina : undefined,
+                };
+            }
 
             if (typeof image === 'string')
                 return {

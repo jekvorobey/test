@@ -1,10 +1,3 @@
-import macLoveDesktopBannerImg from '@images/mock/catalog-banners/macLoveBannerDesktop.jpg';
-import macLoveDesktopBannerImgRetina from '@images/mock/catalog-banners/macLoveBannerDesktop@2x.jpg';
-import macLoveMobileBannerImg from '@images/mock/catalog-banners/macLoveBannerMobile.jpg';
-import macLoveMobileBannerImgRetina from '@images/mock/catalog-banners/macLoveBannerMobile@2x.jpg';
-import macLoveTabletBannerImg from '@images/mock/catalog-banners/macLoveBannerTablet.jpg';
-import macLoveTabletBannerImgRetina from '@images/mock/catalog-banners/macLoveBannerTablet@2x.jpg';
-
 import _mergeWith from 'lodash/mergeWith';
 
 import { productGroupBase } from '@enums/product';
