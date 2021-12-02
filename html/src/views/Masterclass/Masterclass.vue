@@ -145,11 +145,12 @@
 
                             <ol :class="{ list: places.length > 1 }">
                                 <li v-for="place in places" :key="place.id">
-                                    <span>{{ place.name }}, {{ place.address }}</span>
+                                    <span>{{ place.name }}{{ place.address ? ', ' + place.address : '' }}</span>
                                 </li>
                             </ol>
 
                             <v-link
+                                v-if="places && checkPlaceAddress"
                                 class="master-class-view__panel-right-link"
                                 tag="button"
                                 @click="onScrollTo($refs.map)"
@@ -474,8 +475,8 @@
                 >
                     <div v-if="isTabletLg" class="master-class-view__map-desc">
                         <div>
-                            <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
-                            {{ place.address }}
+                            <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }}
+                            {{ place.address ? ', ' + place.address : '' }}
                         </div>
                     </div>
                     <template v-else>
@@ -485,8 +486,8 @@
                                     'text-bold': places.length > 1 || (!!place.address && place.gallery.length > 0),
                                 }"
                             >
-                                <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
-                                {{ place.address }}
+                                <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }}
+                                {{ place.address ? ', ' + place.address : '' }}
                             </div>
                             <div v-if="place.description">{{ place.description }}</div>
                         </div>
@@ -928,8 +929,18 @@ export default {
         },
 
         mapCoords() {
-            const { places } = this;
+            const { places = [] } = this;
+            if (!this.checkPlaceAddress) {
+                return null;
+            }
+
             return places && places.length > 1 ? [0, 0] : (places[0] && places[0].coords) || null;
+        },
+
+        checkPlaceAddress() {
+            const { places = [] } = this;
+
+            return places ? places.find((place) => place.address !== null) : null;
         },
 
         bannerImage() {
@@ -989,7 +1000,7 @@ export default {
 
             return stages.map((s, index) => {
                 const stageSpeakers = speakers.filter((sp) => s.speakerIds && s.speakerIds.includes(sp.id));
-                const place = places.find((p) => p.id === s.placeId);
+                const place = places ? places.find((p) => p.id === s.placeId) : [];
                 const date = dates[index];
                 return { ...s, stageSpeakers, date, address: place && place.address };
             });
@@ -1133,7 +1144,10 @@ export default {
         anotherCities() {
             const selectedCity = this[SELECTED_CITY] || {};
             const { places = [] } = this[MASTERCLASS] || {};
-            const cities = places.filter((p) => p.fiasId !== selectedCity.fias_id).map((p) => p.cityName);
+            const cities =
+                places && this.checkPlaceAddress
+                    ? places.filter((p) => p.fiasId !== selectedCity.fias_id).map((p) => p.cityName)
+                    : [];
             return [...new Set(cities)];
         },
 
