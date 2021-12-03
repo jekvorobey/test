@@ -246,6 +246,8 @@ export default {
             canAdd: true,
         },
         buyPersonAmount: 0,
+        reviewsCount: 0,
+        rating: 0,
     }),
 
     computed: {
@@ -278,12 +280,6 @@ export default {
         cardTitle() {
             const postfix = this.nominal.price ? ', ' + preparePrice(this.nominal.price) + ' ₽' : '';
             return this.card.title + postfix;
-        },
-        reviewsCount() {
-            return this.$refs['reviewPanel'] ? this.$refs['reviewPanel'].range : 0;
-        },
-        rating() {
-            return this.$refs['reviewPanel'] ? this.$refs['reviewPanel'].rating : 0;
         },
     },
 
@@ -338,6 +334,16 @@ export default {
             this.nominal = response.nominals[0];
             this.design = response.nominals[0].designs[0] || { preview: '' };
             this.buyPersonAmount = response.buyPersonAmount || 0;
+        });
+    },
+
+    mounted() {
+        this.$watch('$refs.reviewPanel.range', (value) => {
+            this.reviewsCount = value;
+        });
+
+        this.$watch('$refs.reviewPanel.rating', (value) => {
+            this.rating = value;
         });
     },
 };
