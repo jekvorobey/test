@@ -1,7 +1,7 @@
 import { injectionType } from '@enums';
 import { REDIRECTS } from '@store/getters';
 import { FETCH_REDIRECTS } from '@store/actions';
-// import { slashUrl } from '@regex';
+import { slashUrl } from '@regex';
 
 export default async function redirectResolve({ to, next, container, nextMiddleware }) {
     const { path, params, query, hash } = to;
@@ -16,8 +16,10 @@ export default async function redirectResolve({ to, next, container, nextMiddlew
     const redirect = state[REDIRECTS].find((el) => el.from === uri.toLowerCase());
 
     if (redirect) {
-        if (logger) logger.warn(`Redirect from ${path} to ${redirect.to}`);
-        return next({ path: `${path}`, params, query, hash });
+        let target = redirect.to;
+        if (!slashUrl.test(path)) target = `${target}/`;
+        if (logger) logger.warn(`Redirect from ${path} to ${target}`);
+        return next({ path: target, params, query, hash });
     }
     nextMiddleware();
 }
