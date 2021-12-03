@@ -1,6 +1,11 @@
 <template>
-    <section class="section slider-banners-section" :style="{ 'background-color': backgroundColor }">
-        <v-slider class="container slider-banners-section__slider" name="banners" :options="sliderOptions">
+    <section class="section slider-banners-section" :style="{ 'background-color': sectionBackgroundColor }">
+        <v-slider
+            v-model="currentSlideIndex"
+            class="container slider-banners-section__slider"
+            name="banners"
+            :options="sliderOptions"
+        >
             <template v-for="banner in items">
                 <slot name="item" :item="banner">
                     <catalog-banner-card
@@ -50,7 +55,6 @@
 
 <script>
 import VSlider from '@controls/VSlider/VSlider.vue';
-// import LandingBannerCard from '@components/LandingBannerCard/LandingBannerCard.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 
 import { fileExtension } from '@enums';
@@ -91,11 +95,12 @@ export default {
                 return [];
             },
         },
+    },
 
-        backgroundColor: {
-            type: String,
-            default: '#E6E6F0',
-        },
+    data() {
+        return {
+            currentSlideIndex: 0,
+        };
     },
 
     computed: {
@@ -111,6 +116,22 @@ export default {
                 desktopImage: this.desktopImage(b),
                 defaultImage: this.defaultImage(b),
             }));
+        },
+
+        currentImage() {
+            return this.items[this.currentSlideIndex];
+        },
+
+        sectionBackgroundColor() {
+            if (
+                this.currentImage &&
+                typeof this.currentImage.color !== 'undefined' &&
+                this.currentImage.color !== null
+            ) {
+                return this.currentImage.color;
+            }
+
+            return '#E6E6F0';
         },
     },
 
@@ -141,8 +162,10 @@ export default {
 
             if (image)
                 return {
-                    webp: generatePictureSourcePath(320, 320, image.id, fileExtension.image.WEBP),
-                    orig: generatePictureSourcePath(320, 320, image.id),
+                    webp: generatePictureSourcePath(768, 653, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(768, 653, image.id),
+                    retinaWebp: generatePictureSourcePath(1536, 1306, image.id, fileExtension.image.WEBP),
+                    retinaOrig: generatePictureSourcePath(1536, 1306, image.id, image.sourceExt),
                 };
         },
 
@@ -172,8 +195,10 @@ export default {
 
             if (image)
                 return {
-                    webp: generatePictureSourcePath(472, 352, image.id, fileExtension.image.WEBP),
-                    orig: generatePictureSourcePath(472, 352, image.id),
+                    webp: generatePictureSourcePath(1024, 533, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(1024, 533, image.id),
+                    retinaWebp: generatePictureSourcePath(2048, 1066, image.id, fileExtension.image.WEBP),
+                    retinaOrig: generatePictureSourcePath(2048, 1066, image.id, image.sourceExt),
                 };
         },
 
@@ -203,15 +228,17 @@ export default {
 
             if (image)
                 return {
-                    webp: generatePictureSourcePath(600, 888, image.id, fileExtension.image.WEBP),
-                    orig: generatePictureSourcePath(600, 888, image.id),
+                    webp: generatePictureSourcePath(1224, 420, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(1224, 420, image.id, image.sourceExt),
+                    retinaWebp: generatePictureSourcePath(2448, 840, image.id, fileExtension.image.WEBP),
+                    retinaOrig: generatePictureSourcePath(2448, 840, image.id, image.sourceExt),
                 };
         },
 
         defaultImage(banner) {
             const image = banner.desktopImage || banner.tabletImage || banner.mobileImage;
             if (typeof image === 'string') return image;
-            if (image) return generatePictureSourcePath(600, 888, image.id);
+            if (image) return generatePictureSourcePath(1224, 420, image.id);
         },
 
         getImageWithRetina(image, type = 'jpg') {

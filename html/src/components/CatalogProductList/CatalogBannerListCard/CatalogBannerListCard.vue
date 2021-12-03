@@ -1,7 +1,11 @@
 <template>
     <li class="catalog-banner-list-card" :class="mobileOrderClass">
         <div class="catalog-banner-list-card__img" v-once>
-            <router-link tag="div" :to="href" :class="{ 'catalog-banner-list-card__img__link': href }">
+            <component
+                :is="bannerComponent"
+                v-bind="bannerProperties"
+                :class="{ 'catalog-banner-list-card__img__link': href }"
+            >
                 <v-picture>
                     <source
                         v-if="desktopImg.webp"
@@ -26,13 +30,7 @@
                     <source :data-srcset="mobileImg.orig" media="(min-width: 320px)" />
                     <img class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt="" />
                 </v-picture>
-            </router-link>
-        </div>
-
-        <div v-if="item.button" class="catalog-banner-list-card__panel" :class="panelClasses" v-once>
-            <v-button class="catalog-banner-list-card__panel-btn" :class="btnClasses" :to="item.button.url || '/'">
-                {{ item.button.text }}
-            </v-button>
+            </component>
         </div>
     </li>
 </template>
@@ -41,6 +39,7 @@
 import VButton from '@controls/VButton/VButton.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
+import { isExternalUrl } from '@util/router';
 import { generatePictureSourcePath } from '@util/file';
 import { fileExtension } from '@enums';
 import './CatalogBannerListCard.css';
@@ -109,6 +108,29 @@ export default {
     },
 
     computed: {
+        isExternal() {
+            return isExternalUrl(this.href);
+        },
+
+        bannerComponent() {
+            return this.isExternal ? 'a' : 'router-link';
+        },
+
+        bannerProperties() {
+            if (this.isExternal) {
+                return {
+                    href: this.href,
+                    target: '_blank',
+                    rel: 'noopener noreferrer',
+                };
+            }
+
+            return {
+                tag: 'a',
+                to: this.href || this.$route.fullPath,
+            };
+        },
+
         mobileImg() {
             const { mobileSize } = this;
             const image = this.item.mobileImage || this.item.tabletImage || this.item.desktopImage;

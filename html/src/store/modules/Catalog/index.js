@@ -16,7 +16,6 @@ export const SEARCH_STRING = 'searchString';
 export const CATEGORIES = 'categories';
 export const FILTERS = 'filters';
 export const BANNER = 'banner';
-export const MOCK_BANNER = 'mockBanner';
 export const ITEMS = 'items';
 export const RANGE = 'range';
 export const RANGE_WITHOUT_UNION = 'rangeWithoutUnion';
@@ -47,7 +46,6 @@ export default function createModule() {
                 excluded_filters: [],
                 filters: {},
                 [BANNER]: {},
-                [MOCK_BANNER]: {},
             },
 
             [CATEGORIES]: [],

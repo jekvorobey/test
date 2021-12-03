@@ -75,9 +75,13 @@ export default {
 
             if (image)
                 return {
-                    webp: generatePictureSourcePath(320, 240, image.id, fileExtension.image.WEBP),
-                    orig: generatePictureSourcePath(320, 240, image.id),
+                    webp: generatePictureSourcePath(768, 576, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(768, 576, image.id),
+                    retinaWebp: generatePictureSourcePath(1536, 1152, image.id, fileExtension.image.WEBP),
+                    retinaOrig: generatePictureSourcePath(1536, 1152, image.id, image.sourceExt),
                 };
+
+            return null;
         },
 
         tabletImage() {
@@ -97,9 +101,13 @@ export default {
 
             if (image)
                 return {
-                    webp: generatePictureSourcePath(768, 240, image.id, fileExtension.image.WEBP),
-                    orig: generatePictureSourcePath(768, 240, image.id),
+                    webp: generatePictureSourcePath(976, 306, image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(976, 306, image.id),
+                    retinaWebp: generatePictureSourcePath(1952, 612, image.id, fileExtension.image.WEBP),
+                    retinaOrig: generatePictureSourcePath(1952, 612, image.id, image.sourceExt),
                 };
+
+            return null;
         },
 
         desktopImage() {
@@ -121,13 +129,18 @@ export default {
                 return {
                     webp: generatePictureSourcePath(1224, 240, image.id, fileExtension.image.WEBP),
                     orig: generatePictureSourcePath(1224, 240, image.id),
+                    retinaWebp: generatePictureSourcePath(2448, 480, image.id, fileExtension.image.WEBP),
+                    retinaOrig: generatePictureSourcePath(2448, 480, image.id, image.sourceExt),
                 };
+
+            return null;
         },
 
         defaultImage() {
             const image = this.banner.desktopImage || this.banner.tabletImage || this.banner.mobileImage;
             if (typeof image === 'string') return image;
             if (image) return generatePictureSourcePath(1224, 240, image.id);
+            return null;
         },
     },
 

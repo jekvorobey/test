@@ -11,6 +11,17 @@
                 }}</breadcrumb-item>
             </breadcrumbs>
 
+            <transition name="fade" mode="out-in">
+                <remote-banner-placement
+                    :type="bannerType.MK_TOP"
+                    :desktop-size="[1224, 240]"
+                    :tablet-size="[975, 305]"
+                    :mobile-size="[767, 575]"
+                    class="masterclasses-view__banner"
+                    watch-router
+                />
+            </transition>
+
             <!-- <section class="section masterclasses-view__banners">
                 <v-slider class="masterclasses-view__banners-slider" name="masterClasses" :options="sliderOptions">
                     <master-class-banner-card
@@ -128,41 +139,71 @@
 
             <div class="container masterclasses-view__sets-container" v-if="pagesCount > 0">
                 <ul class="masterclasses-view__sets-list">
-                    <master-class-card
-                        class="masterclasses-view__sets-list-item"
-                        v-for="item in masterclasses"
-                        :key="item.id"
-                        :name="item.name"
-                        :speaker="item.speaker"
-                        :date="item.dateTime"
-                        :price="item.price"
-                        :old-price="item.oldPrice"
-                        :address="item.nearestPlaceName"
-                        :image="item.image"
-                        :to="item.url"
-                        has-articles
-                        is-small
-                    >
-                        <template v-if="item.desktopImg">
-                            <source :data-srcset="item.desktopImg.webp" type="image/webp" media="(min-width: 1024px)" />
-                            <source :data-srcset="item.desktopImg.orig" media="(min-width: 1024px)" />
-                        </template>
-                        <template v-if="item.tabletImg">
-                            <source :data-srcset="item.tabletImg.webp" type="image/webp" media="(min-width: 768px)" />
-                            <source :data-srcset="item.tabletImg.orig" media="(min-width: 768px)" />
-                        </template>
-                        <template v-if="item.mobileImg">
-                            <source :data-srcset="item.mobileImg.webp" type="image/webp" media="(min-width: 320px)" />
-                            <source :data-srcset="item.mobileImg.orig" media="(min-width: 320px)" />
-                        </template>
-                        <img
-                            v-if="item.defaultImg"
-                            class="blur-up lazyload v-picture__img"
-                            :data-src="item.defaultImg"
-                            :srcset="item.placeholderImg"
-                            alt
-                        />
-                    </master-class-card>
+                    <template v-for="item in masterclasses">
+                        <master-class-card
+                            v-if="item.type === 'masterclass'"
+                            :key="item.id"
+                            class="masterclasses-view__sets-list-item"
+                            :name="item.name"
+                            :speaker="item.speaker"
+                            :date="item.dateTime"
+                            :price="item.price"
+                            :old-price="item.oldPrice"
+                            :address="item.nearestPlaceName"
+                            :image="item.image"
+                            :to="item.url"
+                            has-articles
+                            is-small
+                        >
+                            <template v-if="item.desktopImg">
+                                <source
+                                    :data-srcset="item.desktopImg.webp"
+                                    type="image/webp"
+                                    media="(min-width: 1024px)"
+                                />
+                                <source :data-srcset="item.desktopImg.orig" media="(min-width: 1024px)" />
+                            </template>
+
+                            <template v-if="item.tabletImg">
+                                <source
+                                    :data-srcset="item.tabletImg.webp"
+                                    type="image/webp"
+                                    media="(min-width: 768px)"
+                                />
+                                <source :data-srcset="item.tabletImg.orig" media="(min-width: 768px)" />
+                            </template>
+
+                            <template v-if="item.mobileImg">
+                                <source
+                                    :data-srcset="item.mobileImg.webp"
+                                    type="image/webp"
+                                    media="(min-width: 320px)"
+                                />
+                                <source :data-srcset="item.mobileImg.orig" media="(min-width: 320px)" />
+                            </template>
+
+                            <img
+                                v-if="item.defaultImg"
+                                class="blur-up lazyload v-picture__img"
+                                :data-src="item.defaultImg"
+                                :srcset="item.placeholderImg"
+                                alt
+                            />
+                        </master-class-card>
+
+                        <li
+                            v-if="item.type === 'banner'"
+                            :key="item.id"
+                            class="masterclasses-view__sets-list-item masterclasses-view__sets-list-item--banner"
+                        >
+                            <remote-banner
+                                :banner="item"
+                                :desktop-size="[808, 415]"
+                                :tablet-size="[475, 424]"
+                                :mobile-size="[640, 640]"
+                            />
+                        </li>
+                    </template>
                 </ul>
 
                 <div class="masterclasses-view__sets-controls" v-if="pagesCount > 1">
@@ -255,6 +296,9 @@ import VSelect from '@controls/VSelect/VSelect.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
 import Modal from '@controls/modal/modal.vue';
 
+import RemoteBanner from '@components/RemoteBanner/RemoteBanner.vue';
+import RemoteBannerPlacement from '@components/RemoteBanner/RemoteBannerPlacement.vue';
+
 import SelectPanel from '@components/SelectPanel/SelectPanel.vue';
 import LinksSwitch from '@components/LinksSwitch/LinksSwitch.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
@@ -290,7 +334,7 @@ import _debounce from 'lodash/debounce';
 import metaMixin from '@plugins/meta';
 import { $store, $progress, $logger } from '@services';
 import { MIN_SCROLL_VALUE, DEFAULT_PAGE } from '@constants';
-import { fileExtension } from '@enums';
+import { bannerType, fileExtension} from '@enums';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { pluralize, getDate } from '@util';
 import { generatePictureSourcePath } from '@util/file';
@@ -333,6 +377,8 @@ export default {
     mixins: [metaMixin],
 
     components: {
+        RemoteBannerPlacement,
+        RemoteBanner,
         VSvg,
         VButton,
         VPagination,
@@ -370,6 +416,8 @@ export default {
             isMounted: false,
             showMore: false,
             filterModal: false,
+
+            bannerType,
 
             masterclassBanners: [
                 {
@@ -476,6 +524,10 @@ export default {
             const items = this[ITEMS] || [];
 
             return items.map((i) => {
+                if (i.type === 'banner') {
+                    return i;
+                }
+
                 const dateObj = getDate(`${i.nearestDate} ${i.nearestTimeFrom}`);
                 const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
                 const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
@@ -580,7 +632,7 @@ export default {
                 if (!showMore && this[SCROLL] && page !== fromPage) this.scrollToTop('smooth');
 
                 this.$progress.start();
-                await this[FETCH_MASTERCLASS_ITEMS]({ page, filter, showMore });
+                await this[FETCH_MASTERCLASS_ITEMS]({ page, filter, showMore, pagePath: this.$route.fullPath });
                 this.$progress.finish();
 
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
