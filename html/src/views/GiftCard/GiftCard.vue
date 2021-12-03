@@ -108,15 +108,7 @@
         <section class="section product-view__section">
             <div class="container product-view__socials">
                 <div class="product-view__socials-inner">
-                    <div class="product-view__socials-statistics">
-                        <div>
-                            <v-svg name="cart-empty" width="24" height="24" />
-                        </div>
-                        <div>
-                            <div>{{ buyPersonText }}</div>
-                            <div class="text-grey">за последние 2 месяца</div>
-                        </div>
-                    </div>
+                    <div class="f-spacer" />
                     <div class="product-view__socials-share">
                         <span class="text-bold">Поделиться</span>&nbsp;
 
@@ -153,7 +145,15 @@
             </div>
         </section>
 
-        <featured-products />
+        <div class="section product-view__section">
+            <div class="container">
+                <retail-rocket-container
+                    data-retailrocket-markup-block="5efda11c97a52833a0d006e7"
+                    :data-auth="hasSession ? 'true' : 'false'"
+                    :data-user-moderation="canBuy ? 'true' : 'false'"
+                />
+            </div>
+        </div>
 
         <recently-viewed-products />
 
@@ -188,11 +188,11 @@ import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDe
 import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOptionPanel.vue';
 import CardDesignTag from '@components/giftcard/CardDesignTag/CardDesignTag.vue';
 import RecentlyViewedProducts from '@components/giftcard/RecentlyViewedProducts/RecentlyViewedProducts.vue';
-import FeaturedProducts from '@components/giftcard/FeaturedProducts/FeaturedProducts.vue';
 import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
 import Price from '@components/Price/Price.vue';
 import ReviewsPanel from '@components/reviews/ReviewsPanel/ReviewsPanel.vue';
 import GiftCardModal from '@components/giftcard/GiftCardModal/GiftCardModal.vue';
+import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -200,7 +200,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { mapActions, mapState } from 'vuex';
 import { $http } from '@services';
 import { cartItemTypes } from '@enums/product.js';
-import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY } from '@store/modules/Auth';
 import { preparePrice } from '@util';
 
 export default {
@@ -219,7 +219,7 @@ export default {
         GiftCardModal,
         ReviewsPanel,
         RecentlyViewedProducts,
-        FeaturedProducts,
+        RetailRocketContainer,
     },
 
     data: () => ({
@@ -256,7 +256,7 @@ export default {
         ...mapState(MODAL_MODULE, {
             isModalOpen: (state) => state[MODALS][modalName.TICKET_EDIT] && state[MODALS][modalName.TICKET_EDIT].open,
         }),
-        ...mapState(AUTH_MODULE, [HAS_SESSION]),
+        ...mapState(AUTH_MODULE, [HAS_SESSION, CAN_BUY]),
 
         productType() {
             return cartItemTypes.CERTIFICATE;
