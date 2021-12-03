@@ -1,5 +1,12 @@
 import axios from 'axios';
-import { getMenu, getCategories, getBannersByCode, getFrequentCategories, getRecentlyViewedProducts } from '@api';
+import {
+    getMenu,
+    getCategories,
+    getBannersByCode,
+    getFrequentCategories,
+    getRecentlyViewedProducts,
+    getRedirects,
+} from '@api';
 import { $logger, $locale } from '@services';
 import { storeErrorHandler } from '@util/store';
 
@@ -9,6 +16,7 @@ import {
     SET_BANNER,
     SET_FREQUENT_CATEGOIRES,
     SET_RECENTLY_VIEWED_PRODUCTS,
+    SET_REDIRECTS,
 } from './mutations';
 
 const FETCH_BANNER = 'FETCH_BANNER';
@@ -18,6 +26,7 @@ const FETCH_FREQUENT_CATEGORIES = 'FETCH_FREQUENT_CATEGOIRES';
 
 export const FETCH_COMMON_DATA = 'FETCH_COMMON_DATA';
 export const FETCH_RECENTLY_VIEWED_PRODUCTS = 'FETCH_RECENTLY_VIEWED_PRODUCTS';
+export const FETCH_REDIRECTS = 'FETCH_REDIRECTS';
 
 export const SET_LOCALE = 'SET_LOCALE';
 export const ADD_LOCALIZATION = 'ADD_LOCALIZATION';
@@ -90,6 +99,15 @@ export default {
             commit(SET_MENU, data);
         } catch (error) {
             storeErrorHandler(FETCH_MENU)(error);
+        }
+    },
+
+    async [FETCH_REDIRECTS]({ commit }) {
+        try {
+            const data = await getRedirects();
+            commit(SET_REDIRECTS, data);
+        } catch (error) {
+            storeErrorHandler(FETCH_REDIRECTS)(error);
         }
     },
 
