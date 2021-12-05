@@ -19,6 +19,13 @@ import promo12TabletRetina from '@images/mock/promo12/promo12Tablet@x2.jpg';
 import promo12MobileImg from '@images/mock/promo12/promo12Mobile.jpg';
 import promo12MobileRetina from '@images/mock/promo12/promo12Mobile@x2.jpg';
 
+import kentPromoDesktopImg from '@images/mock/kent-promo/kentPromoDesktop1x.gif';
+import kentPromoDesktopRetina from '@images/mock/kent-promo/kentPromoDesktop2x.gif';
+import kentPromoTabletImg from '@images/mock/kent-promo/kentPromoIpad1x.gif';
+import kentPromoTabletRetina from '@images/mock/kent-promo/kentPromoIpad2x.gif';
+import kentPromoMobileImg from '@images/mock/kent-promo/kentPromoMobile1x.gif';
+import kentPromoMobileRetina from '@images/mock/kent-promo/kentPromoMobile2x.gif';
+
 import _mergeWith from 'lodash/mergeWith';
 
 import { productGroupBase } from '@enums/product';
@@ -105,6 +112,20 @@ export default {
                 tabletImageRetina: promo12TabletRetina,
                 mobileImage: promo12MobileImg,
                 mobileImageRetina: promo12MobileRetina,
+            },
+
+            kent_salon: {
+                id: 'kent_salon',
+                name: '',
+                type: 'catalog-banner',
+                url: undefined,
+                noLink: true,
+                desktopImage: kentPromoDesktopImg,
+                desktopImageRetina: kentPromoDesktopRetina,
+                tabletImage: kentPromoTabletImg,
+                tabletImageRetina: kentPromoTabletRetina,
+                mobileImage: kentPromoMobileImg,
+                mobileImageRetina: kentPromoMobileRetina,
             },
         };
 
@@ -209,6 +230,9 @@ export default {
                 data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
             } else if (data.type === 'promo' && data.entityCode === 'dekabr12') {
                 const banner = { name: 'promo12CatalogBanner' };
+                data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
+            } else if (data.type === 'promo' && data.entityCode === 'kent_salon') {
+                const banner = { name: 'kent_salon' };
                 data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
             }
 
