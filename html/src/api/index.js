@@ -675,11 +675,12 @@ export function getFrequentCategories(node_code, max_depth) {
     });
 }
 
-export function getBannersByCode(typeCode, random = false) {
+export function getBannersByCode(typeCode, random = false, pagePath = '') {
     return $http.get('/v1/content/banners', {
         params: {
             typeCode,
             random: Number(random),
+            pagePath,
         },
     });
 }

@@ -9,6 +9,7 @@ import {
 } from '@api';
 import { $logger, $locale } from '@services';
 import { storeErrorHandler } from '@util/store';
+import { bannerType } from '@enums';
 
 import {
     SET_CATEGORIES,
@@ -68,7 +69,7 @@ export default {
 
     async [FETCH_BANNER]({ commit }) {
         try {
-            const data = await getBannersByCode('header', true);
+            const data = await getBannersByCode(bannerType.MENU, true, '/');
             commit(SET_BANNER, data || {});
         } catch (error) {
             storeErrorHandler(FETCH_BANNER)(error);

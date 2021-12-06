@@ -27,7 +27,7 @@ export default {
 
         routeTitle: {
             type: String,
-            default: ''
+            default: '',
         },
     },
 
@@ -35,6 +35,8 @@ export default {
         return {
             sHeight: 0,
             iHeight: 0,
+
+            observer: null,
         };
     },
 
@@ -77,12 +79,13 @@ export default {
 
             this.observer = new ResizeObserver(handler);
             this.observer.observe(inner);
+            this.observer.observe(sidebar);
 
             this.$nextTick(() => {
                 this.sHeight = sidebar.offsetHeight;
                 this.iHeight = inner.offsetHeight;
             });
-        }
+        },
     },
 
     mounted() {
