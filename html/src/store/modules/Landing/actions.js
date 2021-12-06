@@ -12,12 +12,12 @@ import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg
 import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
 import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
 
-import fabyDesktopImg from '@images/mock/landing-faby/fabyDesktop.jpg';
-import fabyDesktopRetina from '@images/mock/landing-faby/fabyDesktop@x2.jpg';
-import fabyTabletImg from '@images/mock/landing-faby/fabyTablet.jpg';
-import fabyTabletRetina from '@images/mock/landing-faby/fabyTablet@x2.jpg';
-import fabyMobileImg from '@images/mock/landing-faby/fabyMobile.jpg';
-import fabyMobileRetina from '@images/mock/landing-faby/fabyMobile.jpg';
+import kentDesktopImg from '@images/mock/kent/desktop1x.gif';
+import kentDesktopRetina from '@images/mock/kent/desktop2x.gif';
+import kentTabletImg from '@images/mock/kent/ipad1x.gif';
+import kentTabletRetina from '@images/mock/kent/ipad2x.gif';
+import kentMobileImg from '@images/mock/kent/mobile1x.gif';
+import kentMobileRetina from '@images/mock/kent/mobile2x.gif';
 
 import merchDesktopImg from '@images/mock/landing-merch/merchDesktop.jpg';
 import merchDesktopRetina from '@images/mock/landing-merch/merchDesktop@x2.jpg';
@@ -98,13 +98,13 @@ export default {
                     id: 'faby',
                     name: '',
                     type: 'banner',
-                    url: '/catalog/laki/faby_nabor_lakov_collection_party_9_x_15_ml_v_pakete/',
-                    desktopImage: fabyDesktopImg,
-                    desktopImageRetina: fabyDesktopRetina,
-                    tabletImage: fabyTabletImg,
-                    tabletImageRetina: fabyTabletRetina,
-                    mobileImage: fabyMobileImg,
-                    mobileImageRetina: fabyMobileRetina,
+                    url: '/promo/kent_salon/',
+                    desktopImage: kentDesktopImg,
+                    desktopImageRetina: kentDesktopRetina,
+                    tabletImage: kentTabletImg,
+                    tabletImageRetina: kentTabletRetina,
+                    mobileImage: kentMobileImg,
+                    mobileImageRetina: kentMobileRetina,
                 },
                 {
                     id: 'middleBanner',
