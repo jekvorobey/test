@@ -50,7 +50,7 @@ import NavPanel from '@components/NavPanel/NavPanel.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { SCROLL, IS_MENU_OPEN, CATEGORIES } from '@store';
-import { SET_MENU_OPEN } from '@store/actions';
+import { SET_MENU_OPEN, FETCH_BANNER } from '@store/actions';
 
 import { NAME as CART_MODULE, CART_ITEMS } from '@store/modules/Cart';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
@@ -108,10 +108,14 @@ export default {
         search(value) {
             if (value) this[SET_MENU_OPEN](false);
         },
+
+        $route() {
+            this[FETCH_BANNER]();
+        },
     },
 
     methods: {
-        ...mapActions([SET_MENU_OPEN]),
+        ...mapActions([SET_MENU_OPEN, FETCH_BANNER]),
         ...mapActions(SEARCH_MODULE, [SET_SEARCH]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
