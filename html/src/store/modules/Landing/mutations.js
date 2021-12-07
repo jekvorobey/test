@@ -1,5 +1,6 @@
 import { generateCategoryUrl } from '@util/catalog';
 import { productGroupTypes } from '@enums/product';
+import { bannerType } from '@enums';
 
 export const SET_NEW_PRODUCTS = 'SET_NEW_PRODUCTS';
 export const SET_BESTSELLER_PRODUCTS = 'SET_BESTSELLER_PRODUCTS';
@@ -11,6 +12,21 @@ export const SET_LOAD = 'SET_LOAD';
 export const SET_BRANDS_SET = 'SET_BRANDS_SET';
 export const SET_FREQUENT_CATEGORIES = 'SET_FREQUENT_CATEGORIES';
 export const SET_CATALOG_LATEST_SETS = 'SET_CATALOG_LATEST_SETS';
+
+function generateUniqueId(existsIds = []) {
+    const min = Math.ceil(1);
+    const max = Math.floor(1000);
+
+    for (let i = 1; i <= max; i++) {
+        const id = Math.floor(Math.random() * (max - min)) + min;
+
+        if (existsIds.indexOf(id) === -1) {
+            return id;
+        }
+    }
+
+    throw new Error('Can not generate unique id');
+}
 
 export default {
     [SET_BRANDS](state, payload) {
@@ -47,103 +63,105 @@ export default {
 
     [SET_LOAD](state, payload) {
         state.load = payload;
-        state.renderData = [
-            {
-                id: 1,
+
+        const sections = [];
+
+        if (state.banners.filter((b) => b.type === bannerType.MAIN_TOP).length > 0) {
+            sections.push({
                 component: 'slider-banners-section',
                 data: {
-                    banners: state.banners.filter((b) => b.type === 'main_top'),
+                    banners: state.banners.filter((b) => b.type === bannerType.MAIN_TOP),
                 },
+            });
+        }
+
+        sections.push({
+            component: 'categories-section',
+            data: {
+                categories: state.frequentCategories,
             },
-            {
-                id: 2,
-                component: 'categories-section',
-                data: {
-                    categories: state.frequentCategories,
-                },
+        });
+
+        sections.push({
+            component: 'separator-section',
+        });
+
+        sections.push({
+            component: 'retail-rocket-recom-section',
+        });
+
+        sections.push({
+            component: 'retail-rocket-hits-section',
+        });
+
+        sections.push({
+            component: 'products-section',
+            data: {
+                titleText: 'Новинки',
+                inverse: true,
+                ...state.newProducts,
             },
-            {
-                id: 3,
+        });
+
+        if (state.banners.filter((b) => b.id === 'middleBanner').length > 0) {
+            sections.push({
                 component: 'separator-section',
-            },
-            {
-                id: 4,
-                component: 'retail-rocket-recom-section',
-            },
-            {
-                id: 5,
-                component: 'retail-rocket-hits-section',
-            },
-            {
-                id: 6,
-                component: 'products-section',
-                data: {
-                    titleText: 'Новинки',
-                    inverse: true,
-                    ...state.newProducts,
-                },
-            },
-            {
-                id: 7,
-                component: 'separator-section',
-            },
-            {
-                id: 8,
+            });
+
+            sections.push({
                 component: 'single-banner-section',
                 data: {
                     banner: state.banners.find((b) => b.id === 'middleBanner'),
                 },
+            });
+        }
+
+        sections.push({
+            component: 'separator-section',
+        });
+
+        sections.push({
+            component: 'products-section',
+            data: {
+                titleText: 'Бестселлеры',
+                ...state.bestsellerProducts,
             },
-            {
-                id: 9,
-                component: 'separator-section',
+        });
+
+        sections.push({
+            component: 'separator-section',
+        });
+
+        sections.push({
+            component: 'list-banners-section',
+            data: {
+                banners: state.catalogLatestSets,
             },
-            {
-                id: 10,
-                component: 'products-section',
-                data: {
-                    titleText: 'Бестселлеры',
-                    ...state.bestsellerProducts,
-                },
+        });
+
+        sections.push({
+            component: 'brands-section',
+            data: {
+                titleText: 'Популярные бренды',
+                items: state.brands,
+                restCount: 16,
+                btnText: `Показать все ${state.brands.length} брендов`,
             },
-            {
-                id: 11,
-                component: 'separator-section',
+        });
+
+        sections.push({
+            component: 'instagram-section',
+            data: {
+                id: 'frisbuy-widget2',
+                script: 'https://www.frisbuy.ru/fb/widget?embed_id=ee1f1d2e-9f30-11ea-ba01-0242ac150002',
             },
-            {
-                id: 12,
-                component: 'list-banners-section',
-                data: {
-                    banners: state.catalogLatestSets,
-                },
-            },
-            // {
-            //     id: 14,
-            //     component: 'products-section',
-            //     data: {
-            //         titleText: 'Смотрят на сайте сейчас',
-            //         ...state.featuredProducts,
-            //     },
-            // },
-            {
-                id: 15,
-                component: 'brands-section',
-                data: {
-                    titleText: 'Популярные бренды',
-                    items: state.brands,
-                    restCount: 16,
-                    btnText: `Показать все ${state.brands.length} брендов`,
-                },
-            },
-            {
-                id: 16,
-                component: 'instagram-section',
-                data: {
-                    id: 'frisbuy-widget2',
-                    script: 'https://www.frisbuy.ru/fb/widget?embed_id=ee1f1d2e-9f30-11ea-ba01-0242ac150002',
-                },
-            },
-        ];
+        });
+
+        state.renderData = sections.map((section) => {
+            return Object.assign(section, {
+                id: generateUniqueId(state.renderData.map((renderDataItem) => renderDataItem.id)),
+            });
+        });
     },
 
     [SET_BRANDS_SET](state, payload) {
