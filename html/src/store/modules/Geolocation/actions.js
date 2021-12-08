@@ -4,6 +4,7 @@ import { storeErrorHandler } from '@util/store';
 
 import { setCity } from '@api';
 import { MUTATE_SELECTED_CITY } from './mutations';
+import { SELECTED_CITY } from '@store/modules/Geolocation/index';
 
 const GET_SELECTED_CITY_BY_IP = 'GET_SELECTED_CITY_BY_IP';
 
@@ -19,8 +20,13 @@ const defaultCity = {
 };
 
 export default {
-    async [SET_SELECTED_CITY]({ commit }, { city, setCookie = true }) {
+    async [SET_SELECTED_CITY]({ commit, state }, { city, setCookie = true }) {
         try {
+            const currentSelectedCity = state[SELECTED_CITY];
+            if (currentSelectedCity && currentSelectedCity === city) {
+                return;
+            }
+
             await setCity(city);
             commit(MUTATE_SELECTED_CITY, city);
             if (setCookie)
