@@ -1,5 +1,9 @@
 <template>
-    <section class="section slider-banners-section" :style="{ 'background-color': sectionBackgroundColor }">
+    <section
+        v-if="banners.length > 0"
+        class="section slider-banners-section"
+        :style="{ 'background-color': sectionBackgroundColor }"
+    >
         <v-slider
             v-model="currentSlideIndex"
             class="container slider-banners-section__slider"

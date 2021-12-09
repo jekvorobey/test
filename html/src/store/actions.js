@@ -12,7 +12,6 @@ import {
     SET_RECENTLY_VIEWED_PRODUCTS,
 } from './mutations';
 
-const FETCH_BANNER = 'FETCH_BANNER';
 const FETCH_MENU = 'FETCH_MENU';
 const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 const FETCH_FREQUENT_CATEGORIES = 'FETCH_FREQUENT_CATEGOIRES';
@@ -20,6 +19,7 @@ const FETCH_FREQUENT_CATEGORIES = 'FETCH_FREQUENT_CATEGOIRES';
 export const FETCH_COMMON_DATA = 'FETCH_COMMON_DATA';
 export const FETCH_RECENTLY_VIEWED_PRODUCTS = 'FETCH_RECENTLY_VIEWED_PRODUCTS';
 
+export const FETCH_BANNER = 'FETCH_BANNER';
 export const SET_LOCALE = 'SET_LOCALE';
 export const ADD_LOCALIZATION = 'ADD_LOCALIZATION';
 export const SET_SCROLL = 'SET_SCROLL';
@@ -58,10 +58,10 @@ export default {
         commit(SET_MENU_OPEN, payload);
     },
 
-    async [FETCH_BANNER]({ commit }) {
+    async [FETCH_BANNER]({ commit }, pagePath = '/') {
         try {
-            const data = await getBannersByCode(bannerType.MENU, true, '/');
-            commit(SET_BANNER, data || {});
+            const banner = await getBannersByCode(bannerType.MENU, true, pagePath);
+            commit(SET_BANNER, banner || null);
         } catch (error) {
             storeErrorHandler(FETCH_BANNER)(error);
         }

@@ -19,13 +19,6 @@ import middleDesktopImgRetina from '@images/mock/middle/middleDesktop6@2x.jpg';
 import middleTabletImgRetina from '@images/mock/middle/middleTablet6@2x.jpg';
 import middleMobileImgRetina from '@images/mock/middle/middleMobile6@2x.jpg';
 
-import mainDesktopImg from '@images/mock/landing-banner/mainDesktop.jpg';
-import mainTabletImg from '@images/mock/landing-banner/mainTablet.jpg';
-import mainMobileImg from '@images/mock/landing-banner/mainMobile.jpg';
-import mainDesktopImgRetina from '@images/mock/landing-banner/mainDesktop@2x.jpg';
-import mainTabletImgRetina from '@images/mock/landing-banner/mainTablet@2x.jpg';
-import mainMobileImgRetina from '@images/mock/landing-banner/mainMobile@2x.jpg';
-
 import { $logger } from '@services';
 import {
     getProducts,
@@ -84,35 +77,12 @@ export default {
             getBannersByCode(bannerType.MAIN_MIDDLE, false, '/'),
         ]);
 
-        let middleBanner = {
-            id: 'middleBanner',
-            name: '',
-            type: 'banner',
-            url: 'https://www.instagram.com/bessovestnotalantlivy/',
-            desktopImage: middleDesktopImg,
-            desktopImageRetina: middleDesktopImgRetina,
-            tabletImage: middleTabletImg,
-            tabletImageRetina: middleTabletImgRetina,
-            mobileImage: middleMobileImg,
-            mobileImageRetina: middleMobileImgRetina,
-        };
-
-        if (Array.isArray(middleBanners) && middleBanners.length > 0) {
-            middleBanner = {
-                id: 'middleBanner',
-                name: 'middleBanner',
-                type: bannerType.MAIN_MIDDLE,
-                url: middleBanners[0].url,
-                desktopImage: middleBanners[0].desktopImage,
-                tabletImage: middleBanners[0].tabletImage,
-                mobileImage: middleBanners[0].mobileImage,
-            };
-        }
-
         try {
-            commit(SET_BANNERS, [
-                ...sliderBanners.map((banner) => {
-                    return {
+            const banners = [];
+
+            if (Array.isArray(sliderBanners) && sliderBanners.length > 0) {
+                for (const banner of sliderBanners) {
+                    banners.push({
                         id: banner.id,
                         name: '',
                         type: bannerType.MAIN_TOP,
@@ -121,29 +91,23 @@ export default {
                         desktopImage: banner.desktopImage,
                         tabletImage: banner.tabletImage,
                         mobileImage: banner.mobileImage,
-                    };
-                }),
-                middleBanner,
-                {
-                    id: 'mainBanner',
-                    name: '',
-                    type: 'main_top',
-                    url: '/?registration=true',
-                    // button: {
-                    //     id: 2,
-                    //     url: '/?registration=true',
-                    //     text: 'Присоединиться',
-                    //     location: 'bottom_right',
-                    //     type: 'white',
-                    // },
-                    desktopImage: mainDesktopImg,
-                    desktopImageRetina: mainDesktopImgRetina,
-                    tabletImage: mainTabletImg,
-                    tabletImageRetina: mainTabletImgRetina,
-                    mobileImage: mainMobileImg,
-                    mobileImageRetina: mainMobileImgRetina,
-                },
-            ]);
+                    });
+                }
+            }
+
+            if (Array.isArray(middleBanners) && middleBanners.length > 0) {
+                banners.push({
+                    id: 'middleBanner',
+                    name: 'middleBanner',
+                    type: bannerType.MAIN_MIDDLE,
+                    url: middleBanners[0].url,
+                    desktopImage: middleBanners[0].desktopImage,
+                    tabletImage: middleBanners[0].tabletImage,
+                    mobileImage: middleBanners[0].mobileImage,
+                });
+            }
+
+            commit(SET_BANNERS, banners);
         } catch (error) {
             storeErrorHandler(FETCH_BANNERS)(error);
             return [];
