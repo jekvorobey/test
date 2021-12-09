@@ -37,46 +37,16 @@
                 <img v-if="defaultImg" class="blur-up lazyload v-picture__img" :data-src="defaultImg" alt />
             </catalog-banner-card> -->
 
-            <catalog-banner-card
-                class="catalog-view__banner"
-                :class="{ 'catalog-view__banner--no-link': productGroup.mockBanner.noLink }"
-                v-if="productGroup.mockBanner"
-                :item="productGroup.mockBanner"
-            >
-                <template v-if="mockBannerImages.desktopImg">
-                    <source
-                        v-if="mockBannerImages.desktopImg.webp"
-                        :data-srcset="mockBannerImages.desktopImg.webp"
-                        type="image/webp"
-                        media="(min-width: 1024px)"
-                    />
-                    <source :data-srcset="mockBannerImages.desktopImg.orig" media="(min-width: 1024px)" />
-                </template>
-                <template v-if="mockBannerImages.tabletImg">
-                    <source
-                        v-if="mockBannerImages.tabletImg.webp"
-                        :data-srcset="mockBannerImages.tabletImg.webp"
-                        type="image/webp"
-                        media="(min-width: 768px)"
-                    />
-                    <source :data-srcset="mockBannerImages.tabletImg.orig" media="(min-width: 768px)" />
-                </template>
-                <template v-if="mockBannerImages.mobileImg">
-                    <source
-                        v-if="mockBannerImages.mobileImg.webp"
-                        :data-srcset="mockBannerImages.mobileImg.webp"
-                        type="image/webp"
-                        media="(min-width: 320px)"
-                    />
-                    <source :data-srcset="mockBannerImages.mobileImg.orig" media="(min-width: 320px)" />
-                </template>
-                <img
-                    v-if="mockBannerImages.defaultImg"
-                    class="blur-up lazyload v-picture__img"
-                    :data-src="mockBannerImages.defaultImg"
-                    alt
+            <transition name="fade" mode="out-in">
+                <remote-banner-placement
+                    :type="bannerType.CATALOG_TOP"
+                    :desktop-size="[1224, 240]"
+                    :tablet-size="[975, 305]"
+                    :mobile-size="[767, 575]"
+                    class="catalog-view__banner"
+                    watch-router
                 />
-            </catalog-banner-card>
+            </transition>
         </div>
 
         <section class="section catalog-view__section--grid">
@@ -353,7 +323,6 @@ import {
     TYPE,
     ITEMS,
     BANNER,
-    MOCK_BANNER,
     CATEGORIES,
     PRODUCT_GROUP,
     RANGE,
@@ -383,7 +352,7 @@ import { generatePictureSourcePath } from '@util/file';
 import { createNotFoundRoute } from '@util/router';
 import { productGroupTypes } from '@enums/product';
 import { sortFields } from '@enums/catalog';
-import { sortDirections, fileExtension, httpCodes } from '@enums';
+import { sortDirections, fileExtension, httpCodes, bannerType } from '@enums';
 import { MIN_SCROLL_VALUE, DEFAULT_PAGE } from '@constants';
 import metaMixin from '@plugins/meta';
 
@@ -392,12 +361,14 @@ import '@images/sprites/cross-small.svg';
 import '@images/sprites/home.svg';
 import './Catalog.css';
 import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
+import RemoteBannerPlacement from '@components/RemoteBanner/RemoteBannerPlacement.vue';
 
 export default {
     name: 'catalog',
     mixins: [metaMixin],
 
     components: {
+        RemoteBannerPlacement,
         MobileCategoryFilter,
         RetailRocketContainer,
         VSvg,
@@ -454,6 +425,8 @@ export default {
             sortOptions: sortOptions,
             filterModal: false,
             showMore: false,
+
+            bannerType: bannerType,
         };
     },
 
@@ -474,7 +447,6 @@ export default {
         ...mapState(CATALOG_MODULE, [
             ITEMS,
             BANNER,
-            MOCK_BANNER,
             CATEGORIES,
             PRODUCT_GROUP,
             TYPE,
@@ -550,44 +522,6 @@ export default {
             const banner = this[PRODUCT_GROUP][BANNER] || {};
             const image = banner.desktopImage || banner.tabletImage || banner.mobileImage;
             return image && generatePictureSourcePath(1224, 240, image.id);
-        },
-
-        mockBannerImages() {
-            const banner = this[PRODUCT_GROUP][MOCK_BANNER] || {};
-
-            function getImageWithRetina(images, type = 'jpg') {
-                let { image, imageRetina } = images;
-                const isWebp = (image) => image.substring(image.lastIndexOf('.')) === '.webp';
-
-                if (!image || !imageRetina) return undefined;
-                if (type === 'webp' && (!isWebp(image) || !isWebp(imageRetina))) return undefined;
-                return `${image} 1x, ${imageRetina} 2x`;
-            }
-
-            return {
-                desktopImg: {
-                    webp: getImageWithRetina(
-                        { image: banner.desktopWebp, imageRetina: banner.desktopWebpRetina },
-                        'webp'
-                    ),
-                    orig: getImageWithRetina({ image: banner.desktopImage, imageRetina: banner.desktopImageRetina }),
-                },
-                tabletImg: {
-                    webp: getImageWithRetina(
-                        { image: banner.tabletWebp, imageRetina: banner.tabletWEbpRetina },
-                        'webp'
-                    ),
-                    orig: getImageWithRetina({ image: banner.tabletImage, imageRetina: banner.tabletImageRetina }),
-                },
-                mobileImg: {
-                    webp: getImageWithRetina(
-                        { image: banner.mobileImage, imageRetina: banner.mobileImageRetina },
-                        'webp'
-                    ),
-                    orig: getImageWithRetina({ image: banner.mobileImage, imageRetina: banner.mobileImageRetina }),
-                },
-                defaultImg: banner.desktopImage,
-            };
         },
 
         clearFilterUrl() {

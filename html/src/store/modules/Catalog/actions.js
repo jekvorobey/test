@@ -1,31 +1,3 @@
-import bBDesktopBannerImg from '@images/mock/catalog-banners/bottleBlondeDesktopBanner.jpg';
-import bBDesktopBannerImgRetina from '@images/mock/catalog-banners/bottleBlondeDesktopBanner@2x.jpg';
-import bBMobileBannerImg from '@images/mock/catalog-banners/bottleBlondeMobileBanner.jpg';
-import bBMobileBannerImgRetina from '@images/mock/catalog-banners/bottleBlondeMobileBanner@2x.jpg';
-import bBTabletBannerImg from '@images/mock/catalog-banners/bottleBlondeTabletBanner.jpg';
-import bBTabletBannerImgRetina from '@images/mock/catalog-banners/bottleBlondeTabletBanner@2x.jpg';
-
-import macLoveDesktopBannerImg from '@images/mock/catalog-banners/macLoveBannerDesktop.jpg';
-import macLoveDesktopBannerImgRetina from '@images/mock/catalog-banners/macLoveBannerDesktop@2x.jpg';
-import macLoveMobileBannerImg from '@images/mock/catalog-banners/macLoveBannerMobile.jpg';
-import macLoveMobileBannerImgRetina from '@images/mock/catalog-banners/macLoveBannerMobile@2x.jpg';
-import macLoveTabletBannerImg from '@images/mock/catalog-banners/macLoveBannerTablet.jpg';
-import macLoveTabletBannerImgRetina from '@images/mock/catalog-banners/macLoveBannerTablet@2x.jpg';
-
-import promo12DesktopImg from '@images/mock/promo12/promo12Desktop.jpg';
-import promo12DesktopRetina from '@images/mock/promo12/promo12Desktop@x2.jpg';
-import promo12TabletImg from '@images/mock/promo12/promo12Tablet.jpg';
-import promo12TabletRetina from '@images/mock/promo12/promo12Tablet@x2.jpg';
-import promo12MobileImg from '@images/mock/promo12/promo12Mobile.jpg';
-import promo12MobileRetina from '@images/mock/promo12/promo12Mobile@x2.jpg';
-
-import kentPromoDesktopImg from '@images/mock/kent-promo/kentPromoDesktop1x.gif';
-import kentPromoDesktopRetina from '@images/mock/kent-promo/kentPromoDesktop2x.gif';
-import kentPromoTabletImg from '@images/mock/kent-promo/kentPromoIpad1x.gif';
-import kentPromoTabletRetina from '@images/mock/kent-promo/kentPromoIpad2x.gif';
-import kentPromoMobileImg from '@images/mock/kent-promo/kentPromoMobile1x.gif';
-import kentPromoMobileRetina from '@images/mock/kent-promo/kentPromoMobile2x.gif';
-
 import _mergeWith from 'lodash/mergeWith';
 
 import { productGroupBase } from '@enums/product';
@@ -43,7 +15,6 @@ function mergeFunction(objValue, srcValue) {
 const FETCH_FILTERS = 'FETCH_FILTERS';
 const FETCH_ITEMS = 'FETCH_ITEMS';
 const FETCH_BANNER = 'FETCH_BANNER';
-const FETCH_MOCK_BANNER = 'FETCH_MOCK_BANNER';
 const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 const FETCH_PRODUCT_GROUP = 'FETCH_PRODUCT_GROUP';
 
@@ -68,71 +39,6 @@ export default {
             return data[6];
         } catch (error) {
             storeErrorHandler(FETCH_BANNER, true)(error);
-        }
-    },
-
-    async [FETCH_MOCK_BANNER]({ commit }, banner) {
-        const mockBannersData = {
-            bottleBlondeCatalogBanner: {
-                id: 'bottleBlondeCatalogBanner',
-                name: '',
-                type: 'catalog-banner',
-                url: '/brands/bottle_blonde/',
-                desktopImage: bBDesktopBannerImg,
-                desktopImageRetina: bBDesktopBannerImgRetina,
-                tabletImage: bBTabletBannerImg,
-                tabletImageRetina: bBTabletBannerImgRetina,
-                mobileImage: bBMobileBannerImg,
-                mobileImageRetina: bBMobileBannerImgRetina,
-            },
-
-            macLoveCatalogBanner: {
-                id: 'macLoveCatalogBanner',
-                name: '',
-                type: 'catalog-banner',
-                url: undefined,
-                noLink: true,
-                desktopImage: macLoveDesktopBannerImg,
-                desktopImageRetina: macLoveDesktopBannerImgRetina,
-                tabletImage: macLoveTabletBannerImg,
-                tabletImageRetina: macLoveTabletBannerImgRetina,
-                mobileImage: macLoveMobileBannerImg,
-                mobileImageRetina: macLoveMobileBannerImgRetina,
-            },
-
-            promo12CatalogBanner: {
-                id: 'promo12CatalogBanner',
-                name: '',
-                type: 'catalog-banner',
-                url: undefined,
-                noLink: true,
-                desktopImage: promo12DesktopImg,
-                desktopImageRetina: promo12DesktopRetina,
-                tabletImage: promo12TabletImg,
-                tabletImageRetina: promo12TabletRetina,
-                mobileImage: promo12MobileImg,
-                mobileImageRetina: promo12MobileRetina,
-            },
-
-            kent_salon: {
-                id: 'kent_salon',
-                name: '',
-                type: 'catalog-banner',
-                url: undefined,
-                noLink: true,
-                desktopImage: kentPromoDesktopImg,
-                desktopImageRetina: kentPromoDesktopRetina,
-                tabletImage: kentPromoTabletImg,
-                tabletImageRetina: kentPromoTabletRetina,
-                mobileImage: kentPromoMobileImg,
-                mobileImageRetina: kentPromoMobileRetina,
-            },
-        };
-
-        try {
-            return mockBannersData[banner.name];
-        } catch (error) {
-            storeErrorHandler(FETCH_MOCK_BANNER, true)(error);
         }
     },
 
@@ -221,20 +127,6 @@ export default {
 
             data.entityCode = entityCode;
             data.type = type;
-
-            if (data.type === 'brands' && (data.entityCode === 'framar' || data.entityCode === 'olaplex')) {
-                const banner = { name: 'bottleBlondeCatalogBanner' };
-                data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
-            } else if (data.type === 'promo' && data.entityCode === 'lovebmac') {
-                const banner = { name: 'macLoveCatalogBanner' };
-                data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
-            } else if (data.type === 'promo' && data.entityCode === 'dekabr12') {
-                const banner = { name: 'promo12CatalogBanner' };
-                data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
-            } else if (data.type === 'promo' && data.entityCode === 'kent_salon') {
-                const banner = { name: 'kent_salon' };
-                data.productGroup.mockBanner = await dispatch(FETCH_MOCK_BANNER, banner);
-            }
 
             // eslint-disable-next-line prefer-destructuring
             based = data.productGroup.based;

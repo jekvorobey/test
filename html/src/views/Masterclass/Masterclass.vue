@@ -137,16 +137,20 @@
                             </v-link> -->
                         </div>
 
-                        <div class="container container--tablet master-class-view__panel-right-section">
+                        <div
+                            v-if="places && places.length > 0"
+                            class="container container--tablet master-class-view__panel-right-section"
+                        >
                             <p class="text-bold master-class-view__panel-right-hl">Место проведения</p>
 
                             <ol :class="{ list: places.length > 1 }">
                                 <li v-for="place in places" :key="place.id">
-                                    <span>{{ place.name }}, {{ place.address }}</span>
+                                    <span>{{ place.name }}{{ place.address ? ', ' + place.address : '' }}</span>
                                 </li>
                             </ol>
 
                             <v-link
+                                v-if="places && checkPlaceAddress"
                                 class="master-class-view__panel-right-link"
                                 tag="button"
                                 @click="onScrollTo($refs.map)"
@@ -456,7 +460,11 @@
             </div>
         </section>
 
-        <section ref="map" class="section master-class-view__section master-class-view__map">
+        <section
+            v-if="places && places.length > 0"
+            ref="map"
+            class="section master-class-view__section master-class-view__map"
+        >
             <div class="container master-class-view__map-container">
                 <h2 class="container container--tablet master-class-view__section-hl">Место проведения</h2>
 
@@ -467,8 +475,8 @@
                 >
                     <div v-if="isTabletLg" class="master-class-view__map-desc">
                         <div>
-                            <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
-                            {{ place.address }}
+                            <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }}
+                            {{ place.address ? ', ' + place.address : '' }}
                         </div>
                     </div>
                     <template v-else>
@@ -478,10 +486,10 @@
                                     'text-bold': places.length > 1 || (!!place.address && place.gallery.length > 0),
                                 }"
                             >
-                                <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }},
-                                {{ place.address }}
+                                <template v-if="places.length > 1">{{ index + 1 }}.</template> {{ place.name }}
+                                {{ place.address ? ', ' + place.address : '' }}
                             </div>
-                            <div>{{ place.description }}</div>
+                            <div v-if="place.description">{{ place.description }}</div>
                         </div>
 
                         <ul class="master-class-view__map-gallery">
@@ -921,8 +929,18 @@ export default {
         },
 
         mapCoords() {
-            const { places } = this;
-            return places.length > 1 ? [0, 0] : (places[0] && places[0].coords) || null;
+            const { places = [] } = this;
+            if (!this.checkPlaceAddress) {
+                return null;
+            }
+
+            return places && places.length > 1 ? [0, 0] : (places[0] && places[0].coords) || null;
+        },
+
+        checkPlaceAddress() {
+            const { places = [] } = this;
+
+            return places ? places.find((place) => place.address !== null) : null;
         },
 
         bannerImage() {
@@ -982,7 +1000,7 @@ export default {
 
             return stages.map((s, index) => {
                 const stageSpeakers = speakers.filter((sp) => s.speakerIds && s.speakerIds.includes(sp.id));
-                const place = places.find((p) => p.id === s.placeId);
+                const place = places ? places.find((p) => p.id === s.placeId) : [];
                 const date = dates[index];
                 return { ...s, stageSpeakers, date, address: place && place.address };
             });
@@ -992,17 +1010,15 @@ export default {
             const { stages = [] } = this[MASTERCLASS] || {};
 
             return stages.map((s) => {
-                const dateObj = getDate(s.date);
-                const dateFrom = getDate(`${s.date} ${s.timeFrom}`);
-                const dateTo = getDate(`${s.date} ${s.timeTo}`);
+                const dateFrom = `${getDate(s.date_from).toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}`;
+                const dateTo = `${getDate(s.date_to).toLocaleDateString(this[LOCALE], dayMonthLongDateSettings)}`;
+                const timeFrom = getDate(`${s.date_from} ${s.timeFrom}`);
+                const timeTo = getDate(`${s.date_to} ${s.timeTo}`);
+                const dateString = dateFrom !== dateTo ? dateFrom + `-` + dateTo : dateFrom;
 
-                return `${dateObj.toLocaleDateString(
-                    this[LOCALE],
-                    dayMonthLongDateSettings
-                )}, ${dateFrom.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)} - ${dateTo.toLocaleTimeString(
-                    this[LOCALE],
-                    hourMinuteTimeSettings
-                )}`;
+                return `${dateString},
+                ${timeFrom.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)}
+                - ${timeTo.toLocaleTimeString(this[LOCALE], hourMinuteTimeSettings)}`;
             });
         },
 
@@ -1128,7 +1144,10 @@ export default {
         anotherCities() {
             const selectedCity = this[SELECTED_CITY] || {};
             const { places = [] } = this[MASTERCLASS] || {};
-            const cities = places.filter((p) => p.fiasId !== selectedCity.fias_id).map((p) => p.cityName);
+            const cities =
+                places && this.checkPlaceAddress
+                    ? places.filter((p) => p.fiasId !== selectedCity.fias_id).map((p) => p.cityName)
+                    : [];
             return [...new Set(cities)];
         },
 
