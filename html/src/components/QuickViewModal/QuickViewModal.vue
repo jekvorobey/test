@@ -121,7 +121,12 @@ import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag
 import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOptionPanel.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as PREVIEW_MODULE, PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS } from '@store/modules/Preview';
+import {
+    NAME as PREVIEW_MODULE,
+    PRODUCT_PREVIEW,
+    PRODUCT_PREVIEW_STATUS,
+    PRODUCT_OPTIONS,
+} from '@store/modules/Preview';
 import { CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Preview/getters';
 import { FETCH_PRODUCT_PREVIEW } from '@store/modules/Preview/actions';
 
@@ -182,7 +187,7 @@ export default {
             modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
-        ...mapState(PREVIEW_MODULE, [PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS]),
+        ...mapState(PREVIEW_MODULE, [PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS, PRODUCT_OPTIONS]),
         ...mapGetters(PREVIEW_MODULE, [CHARACTERISTICS, GET_NEXT_COMBINATION]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
@@ -233,7 +238,7 @@ export default {
         },
 
         [PRODUCT_PREVIEW](value) {
-            if (value) $retailRocket.addProductView([value.id]);
+            if (value) this.setRetailRocketProductView();
         },
     },
 
@@ -310,6 +315,19 @@ export default {
 
         onClose() {
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
+        },
+
+        setRetailRocketProductView() {
+            const { productId } = this[PRODUCT_PREVIEW] || {};
+            const productIds = [];
+
+            if (this[PRODUCT_OPTIONS] && this[PRODUCT_OPTIONS].combinations.length > 1) {
+                this[PRODUCT_OPTIONS].combinations.map((combination) => {
+                    productIds.push(combination.id);
+                });
+            } else productIds.push(productId);
+
+            $retailRocket.addProductView(productIds);
         },
     },
 
