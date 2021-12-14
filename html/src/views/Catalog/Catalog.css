@@ -59,27 +59,13 @@
 
     &__banner {
         order: 1;
-        max-height: 240px;
 
         &--no-link {
             cursor: auto;
         }
 
-        @media (max-width: 1440px) {
-            max-height: 16vw;
-        }
-
-        @media (--desktop) {
-            max-height: 18vw;
-        }
-
         @media (--tablet-lg) {
             order: 0;
-            max-height: 31vw;
-        }
-
-        @media (--tablet) {
-            max-height: 73vw;
         }
     }
 

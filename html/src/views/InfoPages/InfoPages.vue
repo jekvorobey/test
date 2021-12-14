@@ -8,6 +8,7 @@ import Feedback from './Feedback.vue';
 import DeliveryAndPayment from './DeliveryAndPayment.vue';
 import PurchaseReturns from './PurchaseReturns.vue';
 import Bonuses from './Bonuses.vue';
+import CertificateRules from './CertificateRules.vue';
 
 import { mapState } from 'vuex';
 import { infoPages } from '@enums';
@@ -33,6 +34,8 @@ export default {
                     return PurchaseReturns;
                 case infoPages.BONUSES:
                     return Bonuses;
+                case infoPages.CERTIFICATE_RULES:
+                    return CertificateRules;
                 case infoPages.VACANCIES:
                 default:
                     return Vacancies;
