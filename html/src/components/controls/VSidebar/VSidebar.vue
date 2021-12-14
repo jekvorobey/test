@@ -37,6 +37,7 @@ export default {
             iHeight: 0,
 
             observer: null,
+            documentObserver: null,
         };
     },
 
@@ -79,7 +80,16 @@ export default {
 
             this.observer = new ResizeObserver(handler);
             this.observer.observe(inner);
-            this.observer.observe(sidebar);
+
+            this.documentObserver = new ResizeObserver(
+                _debounce(() => {
+                    if (typeof this.$refs.sidebar._stickySidebar !== 'undefined') {
+                        this.$refs.sidebar._stickySidebar.updateSticky();
+                    }
+                }, 100)
+            );
+
+            this.documentObserver.observe(document.documentElement);
 
             this.$nextTick(() => {
                 this.sHeight = sidebar.offsetHeight;
@@ -96,6 +106,11 @@ export default {
         if (this.observer) {
             this.observer.disconnect();
             this.observer = null;
+        }
+
+        if (this.documentObserver) {
+            this.documentObserver.disconnect();
+            this.documentObserver = null;
         }
     },
 };
