@@ -142,6 +142,7 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
+import { getProduct } from '@api';
 import { $retailRocket } from '@services';
 import { requestStatus, modalName } from '@enums';
 import { cartItemTypes } from '@enums/product';
@@ -317,17 +318,30 @@ export default {
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
         },
 
-        setRetailRocketProductView() {
-            const { productId } = this[PRODUCT_PREVIEW] || {};
-            const productIds = [];
+        async setRetailRocketProductView() {
+            const { id } = this[PRODUCT_PREVIEW] || {};
+
+            const offerIds = [];
 
             if (this[PRODUCT_OPTIONS] && this[PRODUCT_OPTIONS].combinations.length > 1) {
-                this[PRODUCT_OPTIONS].combinations.map((combination) => {
-                    productIds.push(combination.id);
-                });
-            } else productIds.push(productId);
+                const variantsCodes = [];
 
-            $retailRocket.addProductView(productIds);
+                this[PRODUCT_OPTIONS].combinations.map((combination) => {
+                    variantsCodes.push(combination.code);
+                });
+
+                for (const variantCode of variantsCodes) {
+                    const product = await getProduct(variantCode);
+
+                    if (product) {
+                        offerIds.push(product.id);
+                    }
+                }
+            } else {
+                offerIds.push(id);
+            }
+
+            $retailRocket.addProductView(offerIds);
         },
     },
 

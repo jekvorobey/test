@@ -200,7 +200,7 @@
                                 <div class="product-view__header-detail-section-html-clamp" :style="{maxHeight: htmlClampHeight}">
                                     <v-html v-html="product.description.content" />
                                 </div>
-                                
+
                                 <a class="product-view__header-detail-brand-link" href="#description">Подробнее</a>
                             </template>
 
@@ -761,6 +761,7 @@ import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
+import { getProduct } from '@api';
 import _debounce from 'lodash/debounce';
 import metaMixin from '@plugins/meta';
 import { $store, $progress, $retailRocket } from '@services';
@@ -1478,15 +1479,30 @@ export default {
             window.scrollTo({ top: ref.offsetTop + offset, behavior: 'smooth' });
         },
 
-        setRetailRocketProductView() {
-            const { productId } = this[PRODUCT] || {};
-            const productIds = [];
+        async setRetailRocketProductView() {
+            const { id } = this[PRODUCT] || {};
+
+            const offerIds = [];
+
             if (this[PRODUCT_OPTIONS] && this[PRODUCT_OPTIONS].combinations.length > 1) {
+                const variantsCodes = [];
+
                 this[PRODUCT_OPTIONS].combinations.map((combination) => {
-                    productIds.push(combination.id);
+                    variantsCodes.push(combination.code);
                 });
-            } else productIds.push(productId);
-            $retailRocket.addProductView(productIds);
+
+                for (const variantCode of variantsCodes) {
+                    const product = await getProduct(variantCode);
+
+                    if (product) {
+                        offerIds.push(product.id);
+                    }
+                }
+            } else {
+                offerIds.push(id);
+            }
+
+            $retailRocket.addProductView(offerIds);
         },
     },
 
@@ -1582,7 +1598,7 @@ export default {
 
         const products = new ProductsBuilder().createForProductDetail(this.product);
         const actionField = previousRouteName === 'Landing' ? 'Homepage' : 'Category';
-        seoEvents.detail(products, actionField);            
+        seoEvents.detail(products, actionField);
 
     },
 };
