@@ -12,9 +12,9 @@ export default async function redirectResolve({ to, next, container, nextMiddlew
         await dispatch(FETCH_REDIRECTS);
     }
 
-    const uri = path.replace(new RegExp('[/]+$'), '');
-    console.log(`URI: ${uri}`);
-    const redirect = state[REDIRECTS].find((el) => el.from === uri.toLowerCase());
+    const rightTrimSlashes = (uri) => uri.replace(new RegExp('[/]+$'), '');
+    const uri = rightTrimSlashes(path);
+    const redirect = state[REDIRECTS].find((el) => rightTrimSlashes(el.from) === uri.toLowerCase());
 
     if (redirect) {
         let target = redirect.to;
