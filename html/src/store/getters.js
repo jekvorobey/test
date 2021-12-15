@@ -1,6 +1,7 @@
 import { generateCategoryUrl } from '@util/catalog';
 import { productGroupTypes } from '@enums/product';
 import { menuCode } from '@enums';
+import {$cookie} from '@services';
 
 function prepareCategory({ id, name, code, items = [] }) {
     return {
