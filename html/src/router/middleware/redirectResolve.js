@@ -9,10 +9,11 @@ export default async function redirectResolve({ to, next, container, nextMiddlew
     const { dispatch, state } = container.get(injectionType.STORE);
 
     if (!state[REDIRECTS].length) {
-        dispatch(FETCH_REDIRECTS);
+        await dispatch(FETCH_REDIRECTS);
     }
 
     const uri = path.replace(new RegExp('[/]+$'), '');
+    console.log(`URI: ${uri}`);
     const redirect = state[REDIRECTS].find((el) => el.from === uri.toLowerCase());
 
     if (redirect) {
