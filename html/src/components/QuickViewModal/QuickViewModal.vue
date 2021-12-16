@@ -142,13 +142,13 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 
-import { getProduct } from '@api';
 import { $retailRocket } from '@services';
 import { requestStatus, modalName } from '@enums';
 import { cartItemTypes } from '@enums/product';
 import { generateProductUrl, prepareProductImage } from '@util/catalog';
 import '@images/sprites/logo.svg';
 import './QuickViewModal.css';
+import { RetailRocketHelper } from '@services/RetailRocketService';
 
 const NAME = modalName.general.QUICK_VIEW;
 
@@ -264,8 +264,7 @@ export default {
             if (Array.isArray(images) && images.length) {
                 this.optionImage = images[0];
                 this.optionImages = images.map((image) => prepareProductImage(image, desktopSize, tabletSize));
-            }
-            else {
+            } else {
                 this.optionImage = null;
                 this.optionImages = [];
             }
@@ -319,29 +318,11 @@ export default {
         },
 
         async setRetailRocketProductView() {
-            const { id } = this[PRODUCT_PREVIEW] || {};
+            const ids = await RetailRocketHelper.collectIdsForProductView(this[PRODUCT_PREVIEW], this[PRODUCT_OPTIONS]);
 
-            const offerIds = [];
-
-            if (this[PRODUCT_OPTIONS] && this[PRODUCT_OPTIONS].combinations.length > 1) {
-                const variantsCodes = [];
-
-                this[PRODUCT_OPTIONS].combinations.map((combination) => {
-                    variantsCodes.push(combination.code);
-                });
-
-                for (const variantCode of variantsCodes) {
-                    const product = await getProduct(variantCode);
-
-                    if (product) {
-                        offerIds.push(product.id);
-                    }
-                }
-            } else {
-                offerIds.push(id);
+            if (ids.length > 0) {
+                $retailRocket.addProductView(ids);
             }
-
-            $retailRocket.addProductView(offerIds);
         },
     },
 

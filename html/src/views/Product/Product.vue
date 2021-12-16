@@ -761,7 +761,7 @@ import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
-import { getProduct } from '@api';
+import { RetailRocketHelper } from '@services/RetailRocketService';
 import _debounce from 'lodash/debounce';
 import metaMixin from '@plugins/meta';
 import { $store, $progress, $retailRocket } from '@services';
@@ -1480,29 +1480,11 @@ export default {
         },
 
         async setRetailRocketProductView() {
-            const { id } = this[PRODUCT] || {};
+            const ids = await RetailRocketHelper.collectIdsForProductView(this[PRODUCT], this[PRODUCT_OPTIONS]);
 
-            const offerIds = [];
-
-            if (this[PRODUCT_OPTIONS] && this[PRODUCT_OPTIONS].combinations.length > 1) {
-                const variantsCodes = [];
-
-                this[PRODUCT_OPTIONS].combinations.map((combination) => {
-                    variantsCodes.push(combination.code);
-                });
-
-                for (const variantCode of variantsCodes) {
-                    const product = await getProduct(variantCode);
-
-                    if (product) {
-                        offerIds.push(product.id);
-                    }
-                }
-            } else {
-                offerIds.push(id);
+            if (ids.length > 0) {
+                $retailRocket.addProductView(ids);
             }
-
-            $retailRocket.addProductView(offerIds);
         },
     },
 
