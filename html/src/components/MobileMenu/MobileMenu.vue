@@ -102,7 +102,7 @@
                             </li>
                         </ul>
                         <div class="mobile-menu__menu-socials">
-                            <p class="text-grey">В будни с 9:00 до 21:00</p>
+                            <p class="text-grey">Ежедневно с 9:00 до 21:00</p>
                             <v-link class="mobile-menu__menu-socials-phone" href="tel:88007079070">
                                 8 800 707-90-70
                             </v-link>
@@ -217,7 +217,7 @@
                         </li>
                     </ul>
                     <div class="container mobile-menu__menu-socials">
-                        <p class="text-grey">В будни с 9:00 до 21:00</p>
+                        <p class="text-grey">Ежедневно с 9:00 до 21:00</p>
                         <v-link class="mobile-menu__menu-socials-phone" href="tel:88007079070">
                             8 800 707-90-70
                         </v-link>
