@@ -121,7 +121,12 @@ import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag
 import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOptionPanel.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { NAME as PREVIEW_MODULE, PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS } from '@store/modules/Preview';
+import {
+    NAME as PREVIEW_MODULE,
+    PRODUCT_PREVIEW,
+    PRODUCT_PREVIEW_STATUS,
+    PRODUCT_OPTIONS,
+} from '@store/modules/Preview';
 import { CHARACTERISTICS, GET_NEXT_COMBINATION } from '@store/modules/Preview/getters';
 import { FETCH_PRODUCT_PREVIEW } from '@store/modules/Preview/actions';
 
@@ -143,6 +148,7 @@ import { cartItemTypes } from '@enums/product';
 import { generateProductUrl, prepareProductImage } from '@util/catalog';
 import '@images/sprites/logo.svg';
 import './QuickViewModal.css';
+import { RetailRocketHelper } from '@services/RetailRocketService';
 
 const NAME = modalName.general.QUICK_VIEW;
 
@@ -182,7 +188,7 @@ export default {
             modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
 
-        ...mapState(PREVIEW_MODULE, [PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS]),
+        ...mapState(PREVIEW_MODULE, [PRODUCT_PREVIEW, PRODUCT_PREVIEW_STATUS, PRODUCT_OPTIONS]),
         ...mapGetters(PREVIEW_MODULE, [CHARACTERISTICS, GET_NEXT_COMBINATION]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
@@ -233,7 +239,7 @@ export default {
         },
 
         [PRODUCT_PREVIEW](value) {
-            if (value) $retailRocket.addProductView([value.id]);
+            if (value) this.setRetailRocketProductView();
         },
     },
 
@@ -258,8 +264,7 @@ export default {
             if (Array.isArray(images) && images.length) {
                 this.optionImage = images[0];
                 this.optionImages = images.map((image) => prepareProductImage(image, desktopSize, tabletSize));
-            }
-            else {
+            } else {
                 this.optionImage = null;
                 this.optionImages = [];
             }
@@ -310,6 +315,14 @@ export default {
 
         onClose() {
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
+        },
+
+        async setRetailRocketProductView() {
+            const ids = await RetailRocketHelper.collectIdsForProductView(this[PRODUCT_PREVIEW], this[PRODUCT_OPTIONS]);
+
+            if (ids.length > 0) {
+                $retailRocket.addProductView(ids);
+            }
         },
     },
 

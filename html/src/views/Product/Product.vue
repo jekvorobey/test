@@ -200,7 +200,7 @@
                                 <div class="product-view__header-detail-section-html-clamp" :style="{maxHeight: htmlClampHeight}">
                                     <v-html v-html="product.description.content" />
                                 </div>
-                                
+
                                 <a class="product-view__header-detail-brand-link" href="#description">Подробнее</a>
                             </template>
 
@@ -761,6 +761,7 @@ import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
+import { RetailRocketHelper } from '@services/RetailRocketService';
 import _debounce from 'lodash/debounce';
 import metaMixin from '@plugins/meta';
 import { $store, $progress, $retailRocket } from '@services';
@@ -1478,15 +1479,12 @@ export default {
             window.scrollTo({ top: ref.offsetTop + offset, behavior: 'smooth' });
         },
 
-        setRetailRocketProductView() {
-            const { productId } = this[PRODUCT] || {};
-            const productIds = [];
-            if (this[PRODUCT_OPTIONS] && this[PRODUCT_OPTIONS].combinations.length > 1) {
-                this[PRODUCT_OPTIONS].combinations.map((combination) => {
-                    productIds.push(combination.id);
-                });
-            } else productIds.push(productId);
-            $retailRocket.addProductView(productIds);
+        async setRetailRocketProductView() {
+            const ids = await RetailRocketHelper.collectIdsForProductView(this[PRODUCT], this[PRODUCT_OPTIONS]);
+
+            if (ids.length > 0) {
+                $retailRocket.addProductView(ids);
+            }
         },
     },
 
@@ -1582,7 +1580,7 @@ export default {
 
         const products = new ProductsBuilder().createForProductDetail(this.product);
         const actionField = previousRouteName === 'Landing' ? 'Homepage' : 'Category';
-        seoEvents.detail(products, actionField);            
+        seoEvents.detail(products, actionField);
 
     },
 };
