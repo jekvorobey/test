@@ -6,7 +6,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import actions from './actions';
 import mutations from './mutations';
-import getters from './getters';
+import getters, {REDIRECTS} from './getters';
 
 import auth from './modules/Auth';
 import modal from './modules/Modal';
@@ -72,6 +72,7 @@ export default function createStore(container) {
                 [ruLocale.LOCALE]: ruLocale,
                 [enLocale.LOCALE]: enLocale,
             },
+            [REDIRECTS]: [],
         },
 
         getters,

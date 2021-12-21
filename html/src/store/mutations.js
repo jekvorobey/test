@@ -8,6 +8,7 @@ export const SET_BANNER = 'SET_BANNER';
 export const SET_MENU = 'SET_MENU';
 export const SET_FREQUENT_CATEGOIRES = 'SET_FREQUENT_CATEGOIRES';
 export const SET_RECENTLY_VIEWED_PRODUCTS = 'SET_RECENTLY_VIEWED_PRODUCTS';
+export const SET_REDIRECTS = 'SET_REDIRECTS';
 
 export default {
     [SET_LOCALE](state, payload) {
@@ -48,5 +49,8 @@ export default {
 
     [SET_MENU](state, payload) {
         state.menu = payload;
+    },
+    [SET_REDIRECTS](state, payload) {
+        state.redirects = payload;
     },
 };
