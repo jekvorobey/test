@@ -210,8 +210,60 @@
             fill: var(--cl-divider-grey);
         }
     }
+
+    &__slot {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: inherit;
+        text-align: inherit;
+
+        opacity: 1;
+        transition: opacity 0.2s;
+    }
+
+    &--loading &__slot {
+        opacity: 0;
+    }
+
+    &__loader {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        svg {
+            width: 25px;
+            height: 25px;
+
+            animation: polyhedron-rotate 1000ms linear infinite normal forwards;
+            transition: all .2s;
+
+            path {
+                stroke: none;
+                fill: currentColor;
+                fill-rule: evenodd;
+                clip-rule: evenodd;
+                stroke-width: 1;
+            }
+        }
+    }
 }
 
-
-
-
+@keyframes polyhedron-rotate {
+    0% {
+        transform: rotate(0deg);
+        animation-timing-function: cubic-bezier(0.420000, 0, 0.580000, 1)
+    }
+    80% {
+        transform: rotate(180deg)
+    }
+    100% {
+        transform: rotate(180deg)
+    }
+}
