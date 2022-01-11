@@ -21,6 +21,7 @@
                 class="product-cart-panel__btn product-cart-panel__controls-btn"
                 @click="onAddToCart"
                 :disabled="disabled"
+                :loading="toCardAdding"
             >
                 <slot />
             </buy-button>
@@ -91,6 +92,11 @@ export default {
         },
 
         isPriceHidden: {
+            type: Boolean,
+            default: false,
+        },
+
+        toCardAdding: {
             type: Boolean,
             default: false,
         },

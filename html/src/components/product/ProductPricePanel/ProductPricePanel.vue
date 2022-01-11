@@ -30,6 +30,7 @@
                 :class="{ 'btn--outline': !isTablet }"
                 @click.prevent="onBuyBtnClick"
                 :disabled="disabled"
+                :loading="toCardAdding"
             >
                 <slot />
             </buy-button>
@@ -85,6 +86,11 @@ export default {
         },
 
         isPriceHidden: {
+            type: Boolean,
+            default: false,
+        },
+
+        toCardAdding: {
             type: Boolean,
             default: false,
         },
