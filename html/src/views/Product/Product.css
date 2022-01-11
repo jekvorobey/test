@@ -271,10 +271,6 @@
                 max-width: 100%;
             }
 
-            .v-sticky__container {
-                position: static;
-            }
-
             &-section {
                 padding: calc(var(--gs) * 3) 0;
                 border-top: 1px solid var(--cl-divider-grey);

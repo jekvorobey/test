@@ -115,123 +115,121 @@
                     </template>
                 </v-sticky>
 
-                <v-sticky class="product-view__header-detail">
-                    <template v-slot:sticky>
-                        <product-detail-panel
-                            class="product-view__header-detail-info"
-                            :title="product.title"
-                            :reviews-count="product.reviewsCount"
-                            :vendor-code="product.vendorCode"
-                            :rating="product.rating"
-                            @rating-click="onScrollTo($refs.reviews, !isTabletLg ? 64 : isTablet ? -24 : -48)"
-                            item-prop
-                        />
+                <div class="product-view__header-detail">
+                    <product-detail-panel
+                        class="product-view__header-detail-info"
+                        :title="product.title"
+                        :reviews-count="product.reviewsCount"
+                        :vendor-code="product.vendorCode"
+                        :rating="product.rating"
+                        @rating-click="onScrollTo($refs.reviews, !isTabletLg ? 64 : isTablet ? -24 : -48)"
+                        item-prop
+                    />
 
-                        <span v-if="product.description" v-show="false" itemprop="description">
-                            {{ product.description.content }}
-                        </span>
+                    <span v-if="product.description" v-show="false" itemprop="description">
+                        {{ product.description.content }}
+                    </span>
 
-                        <product-option-panel
-                            class="product-view__header-detail-section product-view__header-detail-options"
-                            :key="char.code"
-                            v-for="char in characteristics"
-                            :header="char.name"
-                            :selected-option="char.selectedOption && char.selectedOption.name"
-                            :measurement="char.measurement_unit"
-                            :note="char.note"
-                        >
-                            <div class="product-view__header-detail-options-tags" v-if="char.type === 'radio'">
-                                <product-option-tag
-                                    class="product-view__header-detail-options-item"
-                                    v-for="option in char.options"
-                                    :key="`radio_${char.code}-${option.value}`"
-                                    :selected="option.isSelected"
-                                    :disabled="option.isDisabled"
-                                    @click="onSelectOption(char.code, option.value)"
-                                    @mouseover="onShowOption(char.code, !option.isSelected ? option.value : null)"
-                                    @mouseleave="onHideOption"
-                                >
-                                    {{ option.name }} {{ char.measurement_unit ? char.measurement_unit : '' }}
-                                </product-option-tag>
-                            </div>
-
-                            <div class="product-view__header-detail-options-colors" v-if="char.type === 'color'">
-                                <product-color-tag
-                                    class="product-view__header-detail-options-item"
-                                    v-for="option in char.options"
-                                    :key="`${char.code}-${option.value}`"
-                                    :color="option.value"
-                                    :selected="option.isSelected"
-                                    :disabled="option.isDisabled"
-                                    @click="onSelectOption(char.code, option.value)"
-                                    @mouseover="onShowOption(char.code, option.value)"
-                                    @mouseleave="onHideOption"
-                                />
-                            </div>
-                        </product-option-panel>
-
-                        <product-cart-panel
-                            v-observe-visibility="onPriceVisibilityChanged"
-                            class="product-view__header-detail-section product-view__header-detail-cart product-view__header-detail-panels"
-                            :product-id="product.productId"
-                            :price="product.price"
-                            :old-price="product.oldPrice"
-                            :bonus="product.bonus"
-                            :isPriceHidden="product.isPriceHidden"
-                            :disabled="!canBuy"
-                            item-prop
-                            @cart="onBuyProduct"
-                            @wishlist="onToggleFavorite(product.productId)"
-                        >
-                            {{ buyBtnText }}
-                        </product-cart-panel>
-
-                        <product-delivery-panel
-                            class="product-view__header-detail-section"
-                            :delivery-methods="product.deliveryMethods"
-                            @pickup-points="onShowPickupPoints"
-                        />
-
-                        <div class="product-view__header-detail-section" v-if="product.description || product.brand">
-                            <template v-if="product.description && product.description.content">
-                                <p class="text-bold product-view__header-detail-section-hl">
-                                    Описание и характеристики
-                                </p>
-                                <div class="product-view__header-detail-section-html-clamp" :style="{maxHeight: htmlClampHeight}">
-                                    <v-html v-html="product.description.content" />
-                                </div>
-
-                                <a class="product-view__header-detail-brand-link" href="#description">Подробнее</a>
-                            </template>
-
-                            <div v-if="product.brand" class="product-view__header-detail-brand">
-                                <router-link :to="brandUrl || null" class="link">
-                                    <v-picture
-                                        v-if="productImages.brand"
-                                        :key="productImages.brand.id"
-                                        class="product-view__header-detail-brand-img"
-                                    >
-                                        <source :data-src="productImages.brand.desktop" type="image/webp" />
-
-                                        <img
-                                            class="blur-up lazyload v-picture__img"
-                                            :data-src="productImages.brand.default"
-                                            :alt="productImages.brand.alt"
-                                        />
-                                    </v-picture>
-                                </router-link>
-
-                                <router-link
-                                    v-if="product.brand.hasDetail"
-                                    class="product-view__header-detail-brand-link"
-                                    :to="brandUrl"
-                                >
-                                    На страницу бренда
-                                </router-link>
-                            </div>
+                    <product-option-panel
+                        class="product-view__header-detail-section product-view__header-detail-options"
+                        :key="char.code"
+                        v-for="char in characteristics"
+                        :header="char.name"
+                        :selected-option="char.selectedOption && char.selectedOption.name"
+                        :measurement="char.measurement_unit"
+                        :note="char.note"
+                    >
+                        <div class="product-view__header-detail-options-tags" v-if="char.type === 'radio'">
+                            <product-option-tag
+                                class="product-view__header-detail-options-item"
+                                v-for="option in char.options"
+                                :key="`radio_${char.code}-${option.value}`"
+                                :selected="option.isSelected"
+                                :disabled="option.isDisabled"
+                                @click="onSelectOption(char.code, option.value)"
+                                @mouseover="onShowOption(char.code, !option.isSelected ? option.value : null)"
+                                @mouseleave="onHideOption"
+                            >
+                                {{ option.name }} {{ char.measurement_unit ? char.measurement_unit : '' }}
+                            </product-option-tag>
                         </div>
-                    </template>
-                </v-sticky>
+
+                        <div class="product-view__header-detail-options-colors" v-if="char.type === 'color'">
+                            <product-color-tag
+                                class="product-view__header-detail-options-item"
+                                v-for="option in char.options"
+                                :key="`${char.code}-${option.value}`"
+                                :color="option.value"
+                                :selected="option.isSelected"
+                                :disabled="option.isDisabled"
+                                @click="onSelectOption(char.code, option.value)"
+                                @mouseover="onShowOption(char.code, option.value)"
+                                @mouseleave="onHideOption"
+                            />
+                        </div>
+                    </product-option-panel>
+
+                    <product-cart-panel
+                        v-observe-visibility="onPriceVisibilityChanged"
+                        class="product-view__header-detail-section product-view__header-detail-cart product-view__header-detail-panels"
+                        :product-id="product.productId"
+                        :price="product.price"
+                        :old-price="product.oldPrice"
+                        :bonus="product.bonus"
+                        :isPriceHidden="product.isPriceHidden"
+                        :disabled="!canBuy"
+                        item-prop
+                        @cart="onBuyProduct"
+                        @wishlist="onToggleFavorite(product.productId)"
+                    >
+                        {{ buyBtnText }}
+                    </product-cart-panel>
+
+                    <product-delivery-panel
+                        class="product-view__header-detail-section"
+                        :delivery-methods="product.deliveryMethods"
+                        @pickup-points="onShowPickupPoints"
+                    />
+
+                    <div class="product-view__header-detail-section" v-if="product.description || product.brand">
+                        <template v-if="product.description && product.description.content">
+                            <p class="text-bold product-view__header-detail-section-hl">
+                                Описание и характеристики
+                            </p>
+                            <div class="product-view__header-detail-section-html-clamp" :style="{maxHeight: htmlClampHeight}">
+                                <v-html v-html="product.description.content" />
+                            </div>
+
+                            <a class="product-view__header-detail-brand-link" href="#description">Подробнее</a>
+                        </template>
+
+                        <div v-if="product.brand" class="product-view__header-detail-brand">
+                            <router-link :to="brandUrl || null" class="link">
+                                <v-picture
+                                    v-if="productImages.brand"
+                                    :key="productImages.brand.id"
+                                    class="product-view__header-detail-brand-img"
+                                >
+                                    <source :data-src="productImages.brand.desktop" type="image/webp" />
+
+                                    <img
+                                        class="blur-up lazyload v-picture__img"
+                                        :data-src="productImages.brand.default"
+                                        :alt="productImages.brand.alt"
+                                    />
+                                </v-picture>
+                            </router-link>
+
+                            <router-link
+                                v-if="product.brand.hasDetail"
+                                class="product-view__header-detail-brand-link"
+                                :to="brandUrl"
+                            >
+                                На страницу бренда
+                            </router-link>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
