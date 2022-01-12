@@ -926,7 +926,13 @@ export default {
     },
 
     created() {
+        const { type } = this;
+
         this.productGroupTypes = productGroupTypes;
+
+        if (type && type === 'new') {
+            this.setSortValue(sortFields.NEW, sortDirections.DESC);
+        }
     },
 
     beforeMount() {
