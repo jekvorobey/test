@@ -11,6 +11,13 @@
         &:hover {
             border-bottom: 1px solid var(--cl-global);
         }
+
+        &--selected {
+            line-height: 1.5em;
+            font-weight: 400;
+            border-bottom: 1px solid transparent;
+            text-transform: none;
+        }
     }
 
     &__title {

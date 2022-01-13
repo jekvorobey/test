@@ -6,7 +6,12 @@
             :key="id"
             :style="{ width: columnWidth }"
         >
-            <v-link v-if="to" class="group-list__link group-list__title" :to="to" @click="onClick">
+            <v-link
+                v-if="to && to !== currentPath"
+                class="group-list__link group-list__title"
+                :to="to"
+                @click="onClick"
+            >
                 {{ name }}
             </v-link>
             <div v-else class="group-list__title">
@@ -20,9 +25,12 @@
             >
                 <ul>
                     <li class="group-list__item__li" v-for="{ name, id, to } in children" :key="id">
-                        <v-link class="group-list__link" :to="to" @click="onClick">
+                        <v-link v-if="to !== currentPath" class="group-list__link" :to="to" @click="onClick">
                             {{ name }}
                         </v-link>
+                        <div v-else class="group-list__link--selected">
+                            {{ name }}
+                        </div>
                     </li>
                 </ul>
 
@@ -32,9 +40,12 @@
             </v-expander>
             <ul v-else>
                 <li class="group-list__item__li" v-for="{ name, id, to } in children" :key="id">
-                    <v-link class="group-list__link" :to="to" @click="onClick">
+                    <v-link v-if="to !== currentPath" class="group-list__link" :to="to" @click="onClick">
                         {{ name }}
                     </v-link>
+                    <div v-else class="group-list__link--selected">
+                        {{ name }}
+                    </div>
                 </li>
             </ul>
         </li>
@@ -80,6 +91,10 @@ export default {
 
         maxCount() {
             return Number(this.count);
+        },
+
+        currentPath() {
+            return this.$route.path;
         },
     },
 
