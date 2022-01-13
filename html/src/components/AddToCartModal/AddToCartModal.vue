@@ -17,7 +17,7 @@
                         :count="cartItem.count"
                         :max-count="product.stock && product.stock.qty"
                         show-count
-                        href="/catalog"
+                        :href="href"
                         @countChange="onCountChange($event.count, product)"
                     />
                     <div class="add-to-cart-modal__panel" v-if="!isTablet">
@@ -134,6 +134,12 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        href() {
+            const categories = this.product.categoryCodes;
+            const name = this.product.code;
+            return categories && name ? `/catalog/${categories[categories.length - 1]}/${name}` : '/catalog';
         },
     },
 
