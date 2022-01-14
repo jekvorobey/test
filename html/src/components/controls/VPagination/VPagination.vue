@@ -345,7 +345,7 @@ export default {
             this.handlePageSelected(this.pageCount);
         },
         createPageURL(page) {
-            return `${this.$route.path}?page=${page}`;
+            return page === 1 ? this.$route.path : `${this.$route.path}?page=${page}`;
         },
     },
 };
