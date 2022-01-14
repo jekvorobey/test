@@ -1,1 +1,1 @@
-export const MASTERCLASSES_PAGE_SIZE = 12;
+export const MASTERCLASSES_PAGE_SIZE = 21;

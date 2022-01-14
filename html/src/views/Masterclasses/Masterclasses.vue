@@ -44,7 +44,10 @@
             <div class="container masterclasses-view__sets-header">
                 <div class="masterclasses-view__sets-header-top">
                     <h1
-                        class="container container--tablet masterclasses-view__section-hl masterclasses-view__sets-header-hl"
+                        class="
+                            container container--tablet
+                            masterclasses-view__section-hl masterclasses-view__sets-header-hl
+                        "
                         v-if="activePage === 1 || isMounted"
                     >
                         <span>{{ catalogTitle }}</span>
@@ -331,7 +334,7 @@ import _debounce from 'lodash/debounce';
 import metaMixin from '@plugins/meta';
 import { $store, $progress, $logger } from '@services';
 import { MIN_SCROLL_VALUE, DEFAULT_PAGE } from '@constants';
-import { bannerType, fileExtension } from '@enums';
+import { bannerType, fileExtension} from '@enums';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { pluralize, getDate } from '@util';
 import { generatePictureSourcePath } from '@util/file';
@@ -520,52 +523,33 @@ export default {
         masterclasses() {
             const items = this[ITEMS] || [];
 
-            const sortedItems = items
-                .map((i, index) => {
-                    if (i.type === 'banner') {
-                        return { ...i, nearestDate: items[index - 1].nearestDate, defaultIndex: index };
-                    }
-
-                    const dateObj = getDate(`${i.nearestDate} ${i.nearestTimeFrom}`);
-                    const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
-                    const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
-                    const dateTime = `${date} (${this.$t(`weekdays.short.${dateObj.getDay()}`)}), ${time}`;
-                    const url = generateMasterclassUrl(i.code);
-                    const speaker = prepareMasterclassSpeakers(i.speakers);
-
-                    const defaultImg = i.image && generatePictureSourcePath(400, 240, i.image.id);
-                    const desktopImg = i.image && {
-                        webp: generatePictureSourcePath(400, 240, i.image.id, fileExtension.image.WEBP),
-                        orig: generatePictureSourcePath(400, 240, i.image.id),
-                    };
-
-                    const mobileImg = i.image && {
-                        webp: generatePictureSourcePath(425, 320, i.image.id, fileExtension.image.WEBP),
-                        orig: generatePictureSourcePath(425, 320, i.image.id),
-                    };
-
-                    const placeholderImg = i.image && generatePictureSourcePath(40, 24, i.image.id);
-
-                    return { ...i, url, speaker, dateTime, desktopImg, mobileImg, defaultImg, placeholderImg };
-                })
-                .sort((a, b) => {
-                    if (!a.nearestDate || !b.nearestDate) return 0;
-
-                    const aDate = new Date(a.nearestDate);
-                    const bDate = new Date(b.nearestDate);
-
-                    if (aDate > bDate) return 1;
-                    if (aDate < bDate) return -1;
-                });
-
-            sortedItems.forEach((item, index) => {
-                if (item.type === 'banner') {
-                    sortedItems.splice(item.defaultIndex, 0, sortedItems.splice(index, 1)[0]);
-                    delete item.nearestDate;
-                    delete item.defaultIndex;
+            return items.map((i) => {
+                if (i.type === 'banner') {
+                    return i;
                 }
+
+                const dateObj = getDate(`${i.nearestDate} ${i.nearestTimeFrom}`);
+                const date = dateObj.toLocaleString(this[LOCALE], dayMonthLongDateSettings);
+                const time = dateObj.toLocaleString(this[LOCALE], hourMinuteTimeSettings);
+                const dateTime = `${date} (${this.$t(`weekdays.short.${dateObj.getDay()}`)}), ${time}`;
+                const url = generateMasterclassUrl(i.code);
+                const speaker = prepareMasterclassSpeakers(i.speakers);
+
+                const defaultImg = i.image && generatePictureSourcePath(400, 240, i.image.id);
+                const desktopImg = i.image && {
+                    webp: generatePictureSourcePath(400, 240, i.image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(400, 240, i.image.id),
+                };
+
+                const mobileImg = i.image && {
+                    webp: generatePictureSourcePath(425, 320, i.image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(425, 320, i.image.id),
+                };
+
+                const placeholderImg = i.image && generatePictureSourcePath(40, 24, i.image.id);
+
+                return { ...i, url, speaker, dateTime, desktopImg, mobileImg, defaultImg, placeholderImg };
             });
-            return sortedItems;
         },
 
         sliderOptions() {
@@ -648,7 +632,16 @@ export default {
                 if (!showMore && this[SCROLL] && page !== fromPage) this.scrollToTop('smooth');
 
                 this.$progress.start();
-                await this[FETCH_MASTERCLASS_ITEMS]({ page, filter, showMore, pagePath: this.$route.fullPath });
+
+                await this[FETCH_MASTERCLASS_ITEMS]({
+                    page,
+                    filter,
+                    sortField: 'date_from',
+                    sortDirection: 'desc',
+                    showMore,
+                    pagePath: this.$route.fullPath,
+                });
+
                 this.$progress.finish();
 
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
@@ -691,6 +684,8 @@ export default {
                         .dispatch(`${MASTERCLASSES_MODULE}/${FETCH_MASTERCLASS_CATALOG_DATA}`, {
                             page,
                             filter,
+                            sortField: 'date_from',
+                            sortDirection: 'asc',
                         })
                         .then(() => {
                             $store.dispatch(`${MASTERCLASSES_MODULE}/${SET_LOAD_PATH}`, fullPath);
