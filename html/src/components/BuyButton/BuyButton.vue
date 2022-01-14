@@ -1,5 +1,5 @@
 <template>
-    <v-button v-on="handlers">
+    <v-button :disabled="disabled" :loading="loading" v-on="handlers">
         <slot />
     </v-button>
 </template>
@@ -71,6 +71,18 @@ export default {
 
     components: {
         VButton,
+    },
+
+    props: {
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
+
+        loading: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {

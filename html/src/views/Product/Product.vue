@@ -177,7 +177,8 @@
                         :old-price="product.oldPrice"
                         :bonus="product.bonus"
                         :isPriceHidden="product.isPriceHidden"
-                        :disabled="!canBuy"
+                        :disabled="!canBuy || isProductToCartAdding"
+                        :to-card-adding="isProductToCartAdding"
                         item-prop
                         @cart="onBuyProduct"
                         @wishlist="onToggleFavorite(product.productId)"
@@ -644,7 +645,8 @@
                     :old-price="product.oldPrice"
                     :bonus="product.bonus"
                     :isPriceHidden="product.isPriceHidden"
-                    :disabled="!canBuy"
+                    :disabled="!canBuy || isProductToCartAdding"
+                    :to-card-adding="isProductToCartAdding"
                     @add-item="onBuyProduct"
                 >
                     {{ buyBtnText }}
@@ -660,7 +662,8 @@
                     :old-price="product.oldPrice"
                     :bonus="product.bonus"
                     :isPriceHidden="product.isPriceHidden"
-                    :disabled="!canBuy"
+                    :disabled="!canBuy || isProductToCartAdding"
+                    :to-card-adding="isProductToCartAdding"
                     @add-item="onBuyProduct"
                 >
                     {{ buyBtnText }}
@@ -946,6 +949,7 @@ export default {
             isMounted: false,
             isPriceVisible: true,
             isPanelSticky: true,
+            isProductToCartAdding: false,
             optionImage: null,
             openedIMageId: null,
         };
@@ -1359,7 +1363,7 @@ export default {
             this.openedIMageId = id;
         },
 
-        onBuyProduct() {
+        async onBuyProduct() {
             if (this.inCart) {
                 this.$router.push({ name: 'Cart' });
                 return;
@@ -1374,10 +1378,24 @@ export default {
                 },
             } = this;
 
-            if (referrerCode)
-                if (referralCodeAllowed) this[ADD_CART_ITEM]({ offerId, storeId, referrerCode, cookieName: null });
-                else this[ADD_CART_ITEM]({ offerId, storeId, cookieName: null });
-            else this[ADD_CART_ITEM]({ offerId, storeId });
+            this.isProductToCartAdding = true;
+
+            try {
+                if (referrerCode) {
+                    if (referralCodeAllowed) {
+                        await this[ADD_CART_ITEM]({ offerId, storeId, referrerCode, cookieName: null });
+                    } else {
+                        await this[ADD_CART_ITEM]({ offerId, storeId, cookieName: null });
+                    }
+                } else {
+                    await this[ADD_CART_ITEM]({ offerId, storeId });
+                }
+
+                this.isProductToCartAdding = false;
+            } catch (error) {
+                this.isProductToCartAdding = false;
+                console.log(error);
+            }
         },
 
         onAddToCart(item) {
