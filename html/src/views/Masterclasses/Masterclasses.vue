@@ -632,7 +632,16 @@ export default {
                 if (!showMore && this[SCROLL] && page !== fromPage) this.scrollToTop('smooth');
 
                 this.$progress.start();
-                await this[FETCH_MASTERCLASS_ITEMS]({ page, filter, showMore, pagePath: this.$route.fullPath });
+
+                await this[FETCH_MASTERCLASS_ITEMS]({
+                    page,
+                    filter,
+                    sortField: 'date_from',
+                    sortDirection: 'desc',
+                    showMore,
+                    pagePath: this.$route.fullPath,
+                });
+
                 this.$progress.finish();
 
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
@@ -675,6 +684,8 @@ export default {
                         .dispatch(`${MASTERCLASSES_MODULE}/${FETCH_MASTERCLASS_CATALOG_DATA}`, {
                             page,
                             filter,
+                            sortField: 'date_from',
+                            sortDirection: 'asc',
                         })
                         .then(() => {
                             $store.dispatch(`${MASTERCLASSES_MODULE}/${SET_LOAD_PATH}`, fullPath);

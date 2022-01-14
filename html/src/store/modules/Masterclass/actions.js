@@ -40,7 +40,7 @@ export default {
                 }
             }
 
-            let data = await getCatalogMasterclasses(page, sortDirection, sortField, filter);
+            let data = await getCatalogMasterclasses(page, sortField, sortDirection, filter);
 
             data.items = data.items.map((item) => {
                 return {
