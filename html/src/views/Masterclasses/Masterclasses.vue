@@ -372,6 +372,20 @@ const sliderOptions = {
     },
 };
 
+function computeSort(filter) {
+    if (typeof filter.time !== 'undefined' && Array.isArray(filter.time) && filter.time.indexOf('past') >= 0) {
+        return {
+            field: 'date_from',
+            direction: 'desc',
+        };
+    }
+
+    return {
+        field: 'date_from',
+        direction: 'asc',
+    };
+}
+
 export default {
     name: 'masterclasses',
     mixins: [metaMixin],
@@ -520,6 +534,11 @@ export default {
             return filters.filter((f) => this.isTabletLg || (f.name !== 'specialty' && f.name !== 'time'));
         },
 
+        howSort() {
+            const { filter } = computeFilterMasterclassData(this.$route.fullPath);
+            return computeSort(filter);
+        },
+
         masterclasses() {
             const items = this[ITEMS] || [];
 
@@ -636,8 +655,8 @@ export default {
                 await this[FETCH_MASTERCLASS_ITEMS]({
                     page,
                     filter,
-                    sortField: 'date_from',
-                    sortDirection: 'desc',
+                    sortField: this.howSort.field,
+                    sortDirection: this.howSort.direction,
                     showMore,
                     pagePath: this.$route.fullPath,
                 });
@@ -678,14 +697,15 @@ export default {
                 if (loadPath === fullPath) next((vm) => vm.scrollToTop());
                 else {
                     const { filter } = computeFilterMasterclassData(pathMatch);
+                    const sort = computeSort(filter);
 
                     $progress.start();
                     $store
                         .dispatch(`${MASTERCLASSES_MODULE}/${FETCH_MASTERCLASS_CATALOG_DATA}`, {
                             page,
                             filter,
-                            sortField: 'date_from',
-                            sortDirection: 'asc',
+                            sortField: sort.field,
+                            sortDirection: sort.direction,
                         })
                         .then(() => {
                             $store.dispatch(`${MASTERCLASSES_MODULE}/${SET_LOAD_PATH}`, fullPath);
