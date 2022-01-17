@@ -284,6 +284,7 @@ if (isProd) {
 }
 
 app.use(publicPath, serve(outputPath, true));
+app.use(serve(__dirname, true));
 app.use(cookieParser());
 
 app.get('*', (req, res) => {
