@@ -59,6 +59,7 @@
                         v-model="code"
                         v-focus
                         :error="codeError"
+                        @input="onInputCode"
                     >
                         Код из СМС
                         <template v-if="!isTablet" v-slot:after>
@@ -432,6 +433,10 @@ export default {
                 this.$v.phone.$touch();
                 if (!this.$v.phone.$invalid) this.sendSms();
             }
+        },
+
+        onInputCode(code) {
+            if (code.length === 4) this.onSubmit();
         },
 
         onChangeNumber() {

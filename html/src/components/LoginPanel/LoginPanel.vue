@@ -62,11 +62,11 @@
                 <v-input
                     class="login-panel__form-input"
                     key="sms-code"
-                    type="number"
                     v-model="code"
                     v-focus
                     maxLength="4"
                     :error="codeError"
+                    @input="onInputCode"
                 >
                     Код из СМС
                     <template v-slot:after>
@@ -284,6 +284,7 @@ export default {
             if (this.$v.code.$dirty) {
                 if (!this.$v.code.required) return this.$t('validation.errors.required');
                 if (!this.$v.code.minLength) return 'Неверно введен код';
+                if (!this.$v.accepted.valid) return 'Неверный код';
             }
         },
 
@@ -391,6 +392,10 @@ export default {
                 )
                     this.resetPassword();
             }
+        },
+
+        onInputCode(code) {
+            if (code.toString().length === 4) this.onSubmit();
         },
 
         async sendSms() {
