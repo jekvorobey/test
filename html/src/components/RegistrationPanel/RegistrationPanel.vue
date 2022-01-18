@@ -245,6 +245,13 @@ export default {
         },
     },
 
+    props: {
+        enteredPhone: {
+            type: [String, null],
+            default: null,
+        },
+    },
+
     data() {
         return {
             mounted: false,
@@ -254,7 +261,7 @@ export default {
 
             isDisabledGetCodeBtn: false,
 
-            rawPhone: null,
+            rawPhone: this.enteredPhone,
             phoneExists: false,
 
             code: null,
@@ -322,9 +329,10 @@ export default {
     },
 
     watch: {
-        phone() {
+        phone(value) {
             if (this.$v.phoneExists.$dirty) this.$v.phoneExists.$reset();
             if (this.$v.phone.$dirty) this.$v.phone.$reset();
+            this.$emit('input-phone', value);
         },
 
         code() {

@@ -235,12 +235,19 @@ export default {
         },
     },
 
+    props: {
+        enteredPhone: {
+            type: [String, null],
+            default: null,
+        },
+    },
+
     data() {
         return {
             fail: true,
             restoreFail: true,
 
-            phone: null,
+            phone: this.enteredPhone,
             password: null,
 
             rawRestorePhone: null,
@@ -339,6 +346,7 @@ export default {
 
         phone(value) {
             this.resetLoginValidation();
+            this.$emit('input-phone', value);
         },
 
         password(value) {
