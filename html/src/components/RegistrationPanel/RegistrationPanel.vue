@@ -47,6 +47,10 @@
             </div>
 
             <template v-else-if="!accepted">
+                <div class="registration-panel__desc">
+                    Мы отправили код на {{ rawPhone }}, введите его для регистрации.
+                    <a @click.stop="onChangeNumber">Изменить</a>
+                </div>
                 <div class="registration-panel__form-confirmation">
                     <v-input
                         class="registration-panel__form-input"
