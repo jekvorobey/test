@@ -14,12 +14,17 @@ function prepareCategory({ id, name, code, items = [] }) {
 const CATEGORIES = 'categories';
 const MENU = 'menu';
 
+export const REDIRECTS = 'redirects';
 export const CATEGORIES_CATALOG = 'categoriesCatalog';
 export const HEADER_MENU = 'headerMenu';
 export const HELP_MENU = 'helpMenu';
 export const FOOTER_MENU = 'footerMenu';
 
 export default {
+    [REDIRECTS](state) {
+        return state[REDIRECTS];
+    },
+
     [CATEGORIES_CATALOG](state) {
         const categories = state[CATEGORIES] || [];
         return categories.map((c) => prepareCategory(c));

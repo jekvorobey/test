@@ -21,6 +21,10 @@ export function getMenu() {
     return $http.get('/v1/content/menus');
 }
 
+export function getRedirects() {
+    return $http.get('/v1/content/redirects');
+}
+
 // auth
 
 export function checkSession(force = false) {

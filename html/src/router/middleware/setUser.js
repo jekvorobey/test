@@ -1,7 +1,7 @@
 import { httpCodes, injectionType } from '@enums';
 import { breakMiddleware } from '@util/router';
 
-import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, USER } from '@store/modules/Auth';
 import { FETCH_USER } from '@store/modules/Auth/actions';
 
 export default async function setUser({ next, container, nextMiddleware }) {

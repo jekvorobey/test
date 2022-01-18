@@ -680,7 +680,7 @@ export default {
                 const {
                     params: { type },
                     query: {
-                        orderField = type === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.POPULARITY,
+                        orderField = type === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.NEW,
                         orderDirection = sortDirections.DESC,
                     },
                 } = this.$route;
@@ -738,7 +738,7 @@ export default {
                     params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
                     query: {
                         page = DEFAULT_PAGE,
-                        orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.POPULARITY,
+                        orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.NEW,
                         orderDirection = sortDirections.DESC,
                         search_string: toSearchString,
                     },
@@ -796,7 +796,7 @@ export default {
             params: { code: toCode = null, entityCode: toEntityCode = null, type: toType, pathMatch },
             query: {
                 page = DEFAULT_PAGE,
-                orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.POPULARITY,
+                orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.NEW,
                 orderDirection = sortDirections.DESC,
                 search_string: toSearchString = null,
             },
@@ -887,7 +887,7 @@ export default {
             params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },
             query: {
                 page: toPage = DEFAULT_PAGE,
-                orderField: toOrderField = sortFields.POPULARITY,
+                orderField: toOrderField = sortFields.NEW,
                 orderDirection: toOrderDirection = sortDirections.DESC,
                 search_string: to_search_string = null,
             },
@@ -897,7 +897,7 @@ export default {
             params: { code: fromCode, entityCode: fromEntityCode, type: fromType, pathMatch: fromPathMatch },
             query: {
                 page: fromPage = DEFAULT_PAGE,
-                orderField: fromOrderField = sortFields.POPULARITY,
+                orderField: fromOrderField = sortFields.NEW,
                 orderDirection: fromOrderDirection = sortDirections.DESC,
                 search_string: from_search_string = null,
             },
