@@ -119,10 +119,6 @@
                         <span>{{ tooltip.text }}</span>
                     </div>
                 </div>
-                <!-- <p class="registration-panel__form-password-text">
-                    Придумайте пароль для входа в Личный кабинет.<br />
-                    Он должен состоять из латинских букв, содержать как минимум одну цифру, заглавную и строчную буквы.
-                </p> -->
 
                 <v-password
                     class="registration-panel__form-input"

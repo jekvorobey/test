@@ -53,11 +53,6 @@
         &-icon {
             margin-right: 8px;
         }
-
-        &-text {
-            font-size: 16px;
-            line-height: 24px;
-        }
     }
 
     &__form {
@@ -139,13 +134,6 @@
                 &:last-of-type {
                     margin-bottom: calc(var(--gs) * 2);
                 }
-            }
-        }
-
-        &-password {
-            &-text {
-                display: block;
-                margin-bottom: calc(var(--gs) * 1.5);
             }
         }
     }
