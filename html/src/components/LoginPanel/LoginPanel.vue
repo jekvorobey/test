@@ -41,14 +41,33 @@
                 >
                     Номер телефона
                     <template v-slot:after>
-                        <v-button class="login-panel__form-btn" type="submit" :disabled="isDisabledGetCodeBtn">
+                        <v-button
+                            v-if="!isTablet"
+                            class="login-panel__form-btn"
+                            type="submit"
+                            :disabled="isDisabledGetCodeBtn"
+                        >
                             Получить код
                         </v-button>
+                        <div v-else>
+                            <v-button class="login-panel__form-btn" type="submit" :disabled="isDisabledGetCodeBtn">
+                                Получить код
+                            </v-button>
+                            <v-link
+                                class="login-panel__form-submit-link--tablet"
+                                tag="button"
+                                @click.stop="onCancelRestore"
+                            >
+                                Отмена
+                            </v-link>
+                        </div>
                     </template>
                 </v-input-mask>
             </form>
 
-            <v-link class="login-panel__form-submit-link" tag="button" @click.stop="onCancelRestore"> Отмена </v-link>
+            <v-link v-if="!isTablet" class="login-panel__form-submit-link" tag="button" @click.stop="onCancelRestore">
+                Отмена
+            </v-link>
         </template>
 
         <template v-else-if="!accepted">
@@ -143,8 +162,7 @@
             </div>
             <span class="login-panel__socials-text">Войти через соцсеть</span>
         </div>
-
-        <div class="login-panel__footer" v-if="!restore">
+        <div class="login-panel__footer">
             <v-button class="btn--outline login-panel__footer-btn" @click.stop="onRegister">Зарегистрируйтесь</v-button>
             <span class="login-panel__no-account">Нет аккаунта?</span>
         </div>
@@ -273,7 +291,7 @@ export default {
         },
 
         header() {
-            return this.restore ? 'Получить новый пароль' : 'Войти';
+            return this.restore ? 'Установить новый пароль' : 'Войти';
         },
 
         restorePhone() {
