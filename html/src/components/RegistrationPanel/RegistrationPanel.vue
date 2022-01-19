@@ -100,11 +100,29 @@
 
             <div v-else class="registration-panel__form-password">
                 <h4 class="registration-panel__hl" v-if="!isTablet">Создание пароля</h4>
-
-                <p class="registration-panel__form-password-text">
+                <div class="registration-panel__tooltip">
+                    <div
+                        v-for="tooltip in visualTooltips"
+                        :key="tooltip.validator"
+                        class="registration-panel__tooltip-item"
+                        :class="{
+                            'registration-panel__tooltip-item--disabled':
+                                tooltipStatuses[tooltip.validator] === 'status-disabled',
+                        }"
+                    >
+                        <v-svg
+                            class="registration-panel__tooltip-icon"
+                            :name="tooltipStatuses[tooltip.validator]"
+                            width="16"
+                            height="16"
+                        />
+                        <span>{{ tooltip.text }}</span>
+                    </div>
+                </div>
+                <!-- <p class="registration-panel__form-password-text">
                     Придумайте пароль для входа в Личный кабинет.<br />
                     Он должен состоять из латинских букв, содержать как минимум одну цифру, заглавную и строчную буквы.
-                </p>
+                </p> -->
 
                 <v-password
                     class="registration-panel__form-input"
@@ -191,7 +209,15 @@ import { SEND_SMS, CHECK_CODE, REGISTER_BY_PASSWORD, GET_SOCIAL_LINK } from '@st
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
+import validationMixin, {
+    required,
+    minLength,
+    password,
+    sameAs,
+    hasUpperCase,
+    hasLowerCase,
+    hasNumbers,
+} from '@plugins/validation';
 import { rawPhone } from '@util';
 import { phoneMaskOptions } from '@settings';
 import { modalName, authMode } from '@enums';
@@ -199,6 +225,9 @@ import { verificationCodeType } from '@enums/auth';
 import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/google-bw.svg';
+import '@images/sprites/status-disabled.svg';
+import '@images/sprites/status-alert.svg';
+import '@images/sprites/status-check.svg';
 import './RegistrationPanel.css';
 
 export default {
@@ -221,6 +250,9 @@ export default {
             required,
             password,
             minLength: minLength(8),
+            hasUpperCase,
+            hasLowerCase,
+            hasNumbers,
         },
 
         passwordRepeat: {
@@ -275,6 +307,25 @@ export default {
             maskOptions: {
                 ...phoneMaskOptions,
             },
+
+            visualTooltips: [
+                {
+                    text: '8 символов',
+                    validator: 'minLength',
+                },
+                {
+                    text: 'A-Z',
+                    validator: 'hasUpperCase',
+                },
+                {
+                    text: 'a-z',
+                    validator: 'hasLowerCase',
+                },
+                {
+                    text: '0-9',
+                    validator: 'hasNumbers',
+                },
+            ],
         };
     },
 
@@ -326,6 +377,17 @@ export default {
 
         isVisibleTabs() {
             return !this.accepted;
+        },
+
+        tooltipStatuses() {
+            const d = 'status-disabled';
+            const statuses = { minLength: d, hasUpperCase: d, hasLowerCase: d, hasNumbers: d };
+            if (this.password) {
+                for (let key in statuses) {
+                    statuses[key] = this.$v.password[key] ? 'status-check' : 'status-alert';
+                }
+            }
+            return statuses;
         },
     },
 
