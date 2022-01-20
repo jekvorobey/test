@@ -61,18 +61,6 @@
             </div>
         </attention-panel>
 
-        <attention-panel v-if="!fullName || !hasPhone" class="cabinet-view__attention">
-            <div class="cabinet-view__attention-inner">
-                <div class="cabinet-view__attention-inner-info">
-                    <strong>Заполни профиль для совершения покупок</strong><br />
-                    Чтобы получить доступ к покупкам, укажи свои ФИО и номер телефона
-                </div>
-                <v-button class="btn--outline cabinet-view__attention-inner-btn" @click="onScrollToPrivate">
-                    Заполнить данные
-                </v-button>
-            </div>
-        </attention-panel>
-
         <cabinet-info-panel ref="personal" class="cabinet-view__panel" />
 
         <cabinet-referral-panel v-if="referralPartner" class="cabinet-view__panel" />
