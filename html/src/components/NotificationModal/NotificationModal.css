@@ -34,8 +34,26 @@
         word-wrap: break-word;
     }
 
+    &__actions {
+        display: flex;
+        margin-top: auto;
+
+        @media (--tablet) {
+            flex-direction: column;
+        }
+    }
+
     &__btn {
         margin-top: auto;
+
+        &:first-child {
+            margin-right: 24px;
+
+            @media (--tablet) {
+                margin-right: 0;
+                margin-bottom: 16px;
+            }
+        }
 
         @media (--tablet-min) {
             align-self: flex-start;

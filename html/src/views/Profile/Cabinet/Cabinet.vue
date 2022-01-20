@@ -343,6 +343,10 @@ export default {
                 state: {
                     title: 'Уведомление',
                     message: 'Данные профиля обновлены',
+                    altBtn: {
+                        message: 'Перейти к покупкам',
+                        action: '/catalog',
+                    },
                 },
             });
         },
