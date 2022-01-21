@@ -63,7 +63,7 @@
 
             @media (--tablet) {
                 margin-left: 0;
-                width: 100%;
+            
             }
         }
 
@@ -87,6 +87,11 @@
 
             &-link {
                 font-weight: bold;
+
+                &--tablet {
+                    font-weight: bold;
+                    margin-left: 24px;
+                }
             }
         }
     }

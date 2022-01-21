@@ -66,8 +66,13 @@ function rsWithParams(prop) {
 function bikValidation(bik) {
     if (!bik) bik = '';
     if (bik instanceof Number) bik = bik.toString();
-    return bik.length === 9 && !/[^0-9]/.test(bik);
+    return bik.length === 9 && !/\D/.test(bik);
 }
+
+// Создание пароля
+export const hasUpperCase = (password) => /[A-Z]/.test(password);
+export const hasLowerCase = (password) => /[a-z]/.test(password);
+export const hasNumbers = (password) => /\d/.test(password);
 
 export const nameRu = helpers.regex('nameRu', nameRuRegx);
 export const referrerCode = helpers.regex('referrerCode', referrerCodeRegx);
