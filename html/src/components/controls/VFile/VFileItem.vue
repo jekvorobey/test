@@ -48,6 +48,12 @@ export default {
         },
     },
 
+    watch: {
+        load(value) {
+            this.$emit('load', value);
+        },
+    },
+
     beforeMount() {
         const reader = new FileReader();
         if (this.file.type === mimeType.image.JPEG || this.file.type === mimeType.image.PNG) {
@@ -61,6 +67,10 @@ export default {
             this.name = this.file.name;
             setTimeout(() => (this.load = true), interval.SECOND);
         }
+    },
+
+    beforeDestroy() {
+        this.$emit('load', false);
     },
 };
 </script>

@@ -136,8 +136,8 @@ export default {
         if (payload) state.editablePortfolio.push(payload);
     },
 
-    [DELETE_PORTFOLIO](state, index) {
-        state.editablePortfolio.splice(index, 1);
+    [DELETE_PORTFOLIO](state) {
+        state.editablePortfolio[0].link = null;
     },
 
     [CLEAR_PORTFOLIO_DATA](state) {
