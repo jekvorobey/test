@@ -24,7 +24,7 @@
                 </v-link>
             </div>
             <div class="text-grey image-picker__body-note">
-                <template v-if="typeLabels">В формате {{ typeLabels }},</template> до 1 Мб
+                <template v-if="typeLabels">В формате {{ typeLabels }}</template>
             </div>
             <button style="display: none" ref="submitBtn" type="submit" />
             <input

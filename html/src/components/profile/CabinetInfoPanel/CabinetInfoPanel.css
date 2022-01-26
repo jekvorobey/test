@@ -81,4 +81,19 @@
             }
         }
     }
+
+    &__required-footnote {
+        display: flex; 
+        margin-top: 8px;
+
+        &-spacer {
+            width: calc(100% / 3); 
+            margin-right: 24px;
+
+            @media (--tablet) {
+                width: 0; 
+                margin-right: 0;
+            }
+        }
+    }
 }
