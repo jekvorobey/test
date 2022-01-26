@@ -15,13 +15,17 @@
                 <template v-slot:panel="{ item }">
                     <login-panel
                         v-if="item.type === authMode.LOGIN"
+                        :enteredPhone="enteredPhone"
                         @set-title="onSetTitle"
                         @change-tab="onChangeTab"
+                        @input-phone="onInputPhone"
                     />
                     <registration-panel
                         v-else-if="item.type === authMode.REGISTRATION"
+                        :enteredPhone="enteredPhone"
                         @set-title="onSetTitle"
                         @change-tab="onChangeTab"
+                        @input-phone="onInputPhone"
                     />
                 </template>
             </v-tabs>
@@ -74,6 +78,7 @@ export default {
             ],
             title: null,
             showTabs: true,
+            enteredPhone: null,
         };
     },
 
@@ -110,6 +115,10 @@ export default {
 
         onChangeTab(tab) {
             this.activeTab = tab;
+        },
+
+        onInputPhone(phone) {
+            this.enteredPhone = phone;
         },
     },
 

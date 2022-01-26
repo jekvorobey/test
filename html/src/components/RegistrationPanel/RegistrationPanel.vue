@@ -47,6 +47,10 @@
             </div>
 
             <template v-else-if="!accepted">
+                <div class="registration-panel__desc">
+                    Мы отправили код на {{ rawPhone }}, введите его для регистрации.
+                    <a @click.stop="onChangeNumber">Изменить</a>
+                </div>
                 <div class="registration-panel__form-confirmation">
                     <v-input
                         class="registration-panel__form-input"
@@ -55,6 +59,7 @@
                         v-model="code"
                         v-focus
                         :error="codeError"
+                        @input="onInputCode"
                     >
                         Код из СМС
                         <template v-if="!isTablet" v-slot:after>
@@ -95,11 +100,25 @@
 
             <div v-else class="registration-panel__form-password">
                 <h4 class="registration-panel__hl" v-if="!isTablet">Создание пароля</h4>
-
-                <p class="registration-panel__form-password-text">
-                    Придумайте пароль для входа в Личный кабинет.<br />
-                    Он должен состоять из латинских букв, содержать как минимум одну цифру, заглавную и строчную буквы.
-                </p>
+                <div class="registration-panel__tooltip">
+                    <div
+                        v-for="tooltip in visualTooltips"
+                        :key="tooltip.validator"
+                        class="registration-panel__tooltip-item"
+                        :class="{
+                            'registration-panel__tooltip-item--disabled':
+                                tooltipStatuses[tooltip.validator] === 'status-disabled',
+                        }"
+                    >
+                        <v-svg
+                            class="registration-panel__tooltip-icon"
+                            :name="tooltipStatuses[tooltip.validator]"
+                            width="16"
+                            height="16"
+                        />
+                        <span>{{ tooltip.text }}</span>
+                    </div>
+                </div>
 
                 <v-password
                     class="registration-panel__form-input"
@@ -186,7 +205,15 @@ import { SEND_SMS, CHECK_CODE, REGISTER_BY_PASSWORD, GET_SOCIAL_LINK } from '@st
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
+import validationMixin, {
+    required,
+    minLength,
+    password,
+    sameAs,
+    hasUpperCase,
+    hasLowerCase,
+    hasNumbers,
+} from '@plugins/validation';
 import { rawPhone } from '@util';
 import { phoneMaskOptions } from '@settings';
 import { modalName, authMode } from '@enums';
@@ -194,6 +221,9 @@ import { verificationCodeType } from '@enums/auth';
 import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/google-bw.svg';
+import '@images/sprites/status-disabled.svg';
+import '@images/sprites/status-alert.svg';
+import '@images/sprites/status-check.svg';
 import './RegistrationPanel.css';
 
 export default {
@@ -216,6 +246,9 @@ export default {
             required,
             password,
             minLength: minLength(8),
+            hasUpperCase,
+            hasLowerCase,
+            hasNumbers,
         },
 
         passwordRepeat: {
@@ -241,6 +274,13 @@ export default {
         },
     },
 
+    props: {
+        enteredPhone: {
+            type: [String, null],
+            default: null,
+        },
+    },
+
     data() {
         return {
             mounted: false,
@@ -250,7 +290,7 @@ export default {
 
             isDisabledGetCodeBtn: false,
 
-            rawPhone: null,
+            rawPhone: this.enteredPhone,
             phoneExists: false,
 
             code: null,
@@ -263,6 +303,25 @@ export default {
             maskOptions: {
                 ...phoneMaskOptions,
             },
+
+            visualTooltips: [
+                {
+                    text: '8 символов',
+                    validator: 'minLength',
+                },
+                {
+                    text: 'A-Z',
+                    validator: 'hasUpperCase',
+                },
+                {
+                    text: 'a-z',
+                    validator: 'hasLowerCase',
+                },
+                {
+                    text: '0-9',
+                    validator: 'hasNumbers',
+                },
+            ],
         };
     },
 
@@ -315,12 +374,24 @@ export default {
         isVisibleTabs() {
             return !this.accepted;
         },
+
+        tooltipStatuses() {
+            const d = 'status-disabled';
+            const statuses = { minLength: d, hasUpperCase: d, hasLowerCase: d, hasNumbers: d };
+            if (this.password) {
+                for (let key in statuses) {
+                    statuses[key] = this.$v.password[key] ? 'status-check' : 'status-alert';
+                }
+            }
+            return statuses;
+        },
     },
 
     watch: {
-        phone() {
+        phone(value) {
             if (this.$v.phoneExists.$dirty) this.$v.phoneExists.$reset();
             if (this.$v.phone.$dirty) this.$v.phone.$reset();
+            this.$emit('input-phone', value);
         },
 
         code() {
@@ -420,6 +491,10 @@ export default {
                 this.$v.phone.$touch();
                 if (!this.$v.phone.$invalid) this.sendSms();
             }
+        },
+
+        onInputCode(code) {
+            if (code.length === 4) this.onSubmit();
         },
 
         onChangeNumber() {

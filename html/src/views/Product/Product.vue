@@ -53,7 +53,7 @@
                                         <source :data-srcset="image.tablet.orig" media="(max-width: 479px)" />
                                         <img
                                             class="v-picture__img"
-                                            :itemprop="image"
+                                            :itemprop="image.default"
                                             :data-src="image.default"
                                             :src="image.default"
                                             alt=""
