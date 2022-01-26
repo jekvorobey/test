@@ -1,5 +1,11 @@
 <template>
-    <transition-group tag="ol" class="breadcrumbs" name="fade-in">
+    <transition-group
+        tag="ol"
+        class="breadcrumbs"
+        name="fade-in"
+        itemscope
+        itemtype="https://schema.org/BreadcrumbList"
+    >
         <slot />
     </transition-group>
 </template>
