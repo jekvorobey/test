@@ -330,7 +330,7 @@ export default {
         $http.get('/v1/certificate/dictionary').then((response) => {
             this.rules = response.content.rules;
             this.description = response.content.description;
-            this.nominals = response.nominals;
+            this.nominals = response.nominals.sort((a, b) => a.price - b.price);
             this.nominal = response.nominals[0];
             this.design = response.nominals[0].designs[0] || { preview: '' };
             this.buyPersonAmount = response.buyPersonAmount || 0;
