@@ -164,7 +164,7 @@
         </div>
         <div class="login-panel__footer">
             <v-button class="btn--outline login-panel__footer-btn" @click.stop="onRegister">Зарегистрируйтесь</v-button>
-            <span class="login-panel__no-account">Нет аккаунта?</span>
+            <span class="login-panel__no-account" @click.stop="onRegister">Нет аккаунта?</span>
         </div>
     </div>
 </template>

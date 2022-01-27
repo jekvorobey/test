@@ -26,6 +26,7 @@
     &__no-account {
         display: block;
         margin: 0 auto;
+        cursor: pointer;
     }
 
     &__password-text {

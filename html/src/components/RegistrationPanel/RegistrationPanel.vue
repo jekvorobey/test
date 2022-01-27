@@ -182,7 +182,7 @@
 
         <div v-if="!accepted" class="registration-panel__footer">
             <v-button class="btn--outline registration-panel__footer-btn" @click.stop="onLogin">Войти</v-button>
-            <span class="registration-panel__has-account">Есть аккаунт?</span>
+            <span class="registration-panel__has-account" @click.stop="onLogin">Есть аккаунт?</span>
         </div>
     </div>
 </template>
