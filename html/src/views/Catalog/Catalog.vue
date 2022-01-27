@@ -350,7 +350,7 @@ import {
     generateSearchUrl,
     generateProductGroupUrl,
 } from '@util/catalog';
-import { generatePictureSourcePath, generateFileOriginalPath } from '@util/file';
+import { generatePictureSourcePath, generateFileOriginalPath, getImageType } from '@util/file';
 import { createNotFoundRoute } from '@util/router';
 import { productGroupTypes } from '@enums/product';
 import { sortFields } from '@enums/catalog';
@@ -500,21 +500,6 @@ export default {
         }),
 
         metaData() {
-            function getImageType(ext) {
-                switch (ext) {
-                    case 'jpg':
-                        return 'image/jpeg';
-                    case 'jpeg':
-                        return 'image/jpeg';
-                    case 'gif':
-                        return 'image/gif';
-                    case 'png':
-                        return 'image/png';
-                    default:
-                        return 'image/jpeg';
-                }
-            }
-
             const title = this.catalogTitle;
             const url = generateCategoryUrl(this.type, this.entityCode, this.categoryCode, true);
             const image =

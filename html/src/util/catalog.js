@@ -18,7 +18,12 @@ export function generateAbsoluteProductUrl(categoryCode, code, refCode) {
 
 export function generateAbsoluteMasterclassUrl(code, refCode) {
     if (refCode) return `${$context.baseURL}/masterclasses/${code}/?refCode=${refCode}`;
-    return `${$context.baseURL}/masterclasses/${code}/`;
+    if (code) return `${$context.baseURL}/masterclasses/${code}/`;
+    return `${$context.baseURL}/masterclasses/`;
+}
+
+export function generateAbsoluteGiftCardUrl() {
+    return `${$context.baseURL}/giftcard/`;
 }
 
 export function generateProductUrl(categoryCode, code, refCode) {

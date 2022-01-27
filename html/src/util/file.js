@@ -34,10 +34,26 @@ export function formatFileSize(size, si = true) {
     return `${size.toFixed(1)} ${units[u]}`;
 }
 
+export function getImageType(ext) {
+    switch (ext) {
+        case 'jpg':
+            return 'image/jpeg';
+        case 'jpeg':
+            return 'image/jpeg';
+        case 'gif':
+            return 'image/gif';
+        case 'png':
+            return 'image/png';
+        default:
+            return 'image/jpeg';
+    }
+}
+
 export default {
     generatePictureSourcePath,
     generateYoutubeImagePlaceholderPath,
     generateYoutubeVideoSourcePath,
     generateFileOriginalPath,
     formatFileSize,
+    getImageType,
 };

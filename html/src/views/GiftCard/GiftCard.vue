@@ -199,12 +199,15 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { mapActions, mapState } from 'vuex';
 import { $http } from '@services';
+import metaMixin from '@plugins/meta';
 import { cartItemTypes } from '@enums/product.js';
 import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY } from '@store/modules/Auth';
 import { preparePrice } from '@util';
+import { generateAbsoluteGiftCardUrl } from '@util/catalog';
 
 export default {
     name: 'GiftCard',
+    mixins: [metaMixin],
 
     components: {
         VButton,
@@ -220,6 +223,35 @@ export default {
         ReviewsPanel,
         RecentlyViewedProducts,
         RetailRocketContainer,
+    },
+
+    metaInfo() {
+        const { title, url } = this.metaData;
+
+        return {
+            meta: [
+                {
+                    property: 'og:title',
+                    content: title,
+                },
+                {
+                    property: 'og:type',
+                    content: 'webpage',
+                },
+                {
+                    property: 'og:url',
+                    content: url,
+                },
+                {
+                    property: 'og:site_name',
+                    content: 'Бессовестно талантливый',
+                },
+                {
+                    property: 'og:description',
+                    content: 'Mаркетплейс для мастеров бьюти-индустрии',
+                },
+            ],
+        };
     },
 
     data: () => ({
@@ -257,6 +289,16 @@ export default {
             isModalOpen: (state) => state[MODALS][modalName.TICKET_EDIT] && state[MODALS][modalName.TICKET_EDIT].open,
         }),
         ...mapState(AUTH_MODULE, [HAS_SESSION, CAN_BUY]),
+
+        metaData() {
+            const title = 'Подарочные сертификаты';
+            const url = generateAbsoluteGiftCardUrl();
+
+            return {
+                title,
+                url,
+            };
+        },
 
         productType() {
             return cartItemTypes.CERTIFICATE;
