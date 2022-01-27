@@ -268,7 +268,7 @@ export default {
             phone: this.enteredPhone,
             password: null,
 
-            rawRestorePhone: null,
+            rawRestorePhone: this.enteredPhone,
             code: null,
 
             restorePassword: null,
@@ -359,8 +359,9 @@ export default {
             if (!value) this.sent = false;
         },
 
-        restorePhone() {
+        restorePhone(value) {
             this.resetRestoreValidation();
+            this.$emit('input-phone', value);
         },
 
         phone(value) {
@@ -493,10 +494,12 @@ export default {
         },
 
         onRestore() {
+            this.rawRestorePhone = this.enteredPhone;
             this.restore = true;
         },
 
         onCancelRestore() {
+            this.phone = this.enteredPhone;
             this.restore = false;
             this.stopCounter();
         },
