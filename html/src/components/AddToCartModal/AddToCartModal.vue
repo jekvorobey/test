@@ -28,7 +28,9 @@
                         <v-button class="btn--outline add-to-cart-modal__panel-btn" @click="onClose">
                             Продолжить покупки
                         </v-button>
-                        <v-button class="add-to-cart-modal__panel-btn" to="/cart"> Перейти в корзину </v-button>
+                        <v-button v-if="!isCart" class="add-to-cart-modal__panel-btn" to="/cart">
+                            Перейти в корзину
+                        </v-button>
                     </div>
                 </template>
                 <v-spinner class="add-to-cart-modal__spinner" :show="!product" />
@@ -49,7 +51,7 @@
                     <price v-bind="productItemsSum" />
                 </div>
                 <v-link class="btn--outline add-to-cart-modal__panel-link" @click="onClose">Продолжить</v-link>
-                <v-button class="add-to-cart-modal__panel-btn" to="/cart">Перейти в корзину</v-button>
+                <v-button v-if="!isCart" class="add-to-cart-modal__panel-btn" to="/cart">Перейти в корзину</v-button>
             </div>
         </template>
     </general-modal>
@@ -140,6 +142,10 @@ export default {
             const categories = this.product.categoryCodes;
             const name = this.product.code;
             return categories && name ? `/catalog/${categories[categories.length - 1]}/${name}` : '/catalog';
+        },
+
+        isCart() {
+            return this.$route.name === 'Cart';
         },
     },
 
