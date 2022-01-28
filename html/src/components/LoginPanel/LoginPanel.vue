@@ -40,16 +40,8 @@
                     :error="restorePhoneError"
                 >
                     Номер телефона
-                    <template v-slot:after>
-                        <v-button
-                            v-if="!isTablet"
-                            class="login-panel__form-btn"
-                            type="submit"
-                            :disabled="isDisabledGetCodeBtn"
-                        >
-                            Получить код
-                        </v-button>
-                        <div v-else>
+                    <template v-slot:after-error>
+                        <div>
                             <v-button class="login-panel__form-btn" type="submit" :disabled="isDisabledGetCodeBtn">
                                 Получить код
                             </v-button>
@@ -64,10 +56,14 @@
                     </template>
                 </v-input-mask>
             </form>
-
-            <v-link v-if="!isTablet" class="login-panel__form-submit-link" tag="button" @click.stop="onCancelRestore">
-                Отмена
-            </v-link>
+            <div class="login-panel__modal-footer">
+                <v-button class="btn--outline login-panel__modal-footer-btn" @click.stop="onRegisterFromRestore"
+                    >Зарегистрируйтесь</v-button
+                >
+                <span class="login-panel__modal-footer-no-account" @click.stop="onRegisterFromRestore"
+                    >Нет аккаунта?</span
+                >
+            </div>
         </template>
 
         <template v-else-if="!accepted">
@@ -164,7 +160,7 @@
         </div>
         <div class="login-panel__footer">
             <v-button class="btn--outline login-panel__footer-btn" @click.stop="onRegister">Зарегистрируйтесь</v-button>
-            <span class="login-panel__no-account">Нет аккаунта?</span>
+            <span class="login-panel__no-account" @click.stop="onRegister">Нет аккаунта?</span>
         </div>
     </div>
 </template>
@@ -268,7 +264,7 @@ export default {
             phone: this.enteredPhone,
             password: null,
 
-            rawRestorePhone: null,
+            rawRestorePhone: this.enteredPhone,
             code: null,
 
             restorePassword: null,
@@ -359,8 +355,9 @@ export default {
             if (!value) this.sent = false;
         },
 
-        restorePhone() {
+        restorePhone(value) {
             this.resetRestoreValidation();
+            this.$emit('input-phone', value);
         },
 
         phone(value) {
@@ -493,16 +490,27 @@ export default {
         },
 
         onRestore() {
+            this.rawRestorePhone = this.enteredPhone;
             this.restore = true;
         },
 
         onCancelRestore() {
+            this.phone = this.enteredPhone;
             this.restore = false;
             this.stopCounter();
         },
 
         onRegister() {
             this.$emit('change-tab', authMode.REGISTRATION);
+        },
+
+        onRegisterFromRestore() {
+            this.onCancelRestore();
+            this.onRegister();
+            this.$emit('set-title', {
+                title: this.header,
+                payload: this.isVisibleTabs,
+            });
         },
 
         startCounter() {
