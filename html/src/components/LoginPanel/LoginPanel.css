@@ -38,17 +38,12 @@
             flex: 1;
 
             .v-input__container {
-                @media (--tablet) {
-                    display: flex;
-                    flex-direction: column;
-                }
+                display: flex;
+                flex-direction: column;
             }
 
             .v-input__input {
                 text-align: left;
-                @media (--tablet) {
-                    margin-bottom: calc(var(--gs) * 2);
-                }
             }
 
             @media (--tablet) {
@@ -59,13 +54,7 @@
 
         &-input &-btn {
             flex: none;
-            margin-left: var(--gs);
             padding: 6px calc(var(--gs) * 2);
-
-            @media (--tablet) {
-                margin-left: 0;
-            
-            }
         }
 
         &-password &-input {
@@ -146,6 +135,31 @@
         &-btn {
             padding: 6px calc(var(--gs) * 2);
             margin-right: auto;
+        }
+    }
+
+    &__modal-footer {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        border-top: 1px solid var(--cl-divider-grey);
+        background-color: var(--cl-white);
+        padding-top: calc(var(--gs) * 3);
+        margin-top: calc(var(--gs) * 4);
+
+        @media (--tablet) {
+            display: none;
+        }
+
+        &-btn {
+            padding: 6px calc(var(--gs) * 2);
+            margin-right: calc(var(--gs) * 3);
+        }
+
+        &-no-account {
+            display: block;
+            margin: 0;
+            cursor: pointer;
         }
     }
 

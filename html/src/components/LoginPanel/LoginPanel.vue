@@ -40,16 +40,8 @@
                     :error="restorePhoneError"
                 >
                     Номер телефона
-                    <template v-slot:after>
-                        <v-button
-                            v-if="!isTablet"
-                            class="login-panel__form-btn"
-                            type="submit"
-                            :disabled="isDisabledGetCodeBtn"
-                        >
-                            Получить код
-                        </v-button>
-                        <div v-else>
+                    <template v-slot:after-error>
+                        <div>
                             <v-button class="login-panel__form-btn" type="submit" :disabled="isDisabledGetCodeBtn">
                                 Получить код
                             </v-button>
@@ -64,10 +56,14 @@
                     </template>
                 </v-input-mask>
             </form>
-
-            <v-link v-if="!isTablet" class="login-panel__form-submit-link" tag="button" @click.stop="onCancelRestore">
-                Отмена
-            </v-link>
+            <div class="login-panel__modal-footer">
+                <v-button class="btn--outline login-panel__modal-footer-btn" @click.stop="onRegisterFromRestore"
+                    >Зарегистрируйтесь</v-button
+                >
+                <span class="login-panel__modal-footer-no-account" @click.stop="onRegisterFromRestore"
+                    >Нет аккаунта?</span
+                >
+            </div>
         </template>
 
         <template v-else-if="!accepted">
@@ -506,6 +502,15 @@ export default {
 
         onRegister() {
             this.$emit('change-tab', authMode.REGISTRATION);
+        },
+
+        onRegisterFromRestore() {
+            this.onCancelRestore();
+            this.onRegister();
+            this.$emit('set-title', {
+                title: this.header,
+                payload: this.isVisibleTabs,
+            });
         },
 
         startCounter() {

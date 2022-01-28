@@ -30,6 +30,7 @@
                 {{ error }}
             </slot>
         </div>
+        <slot name="after-error" />
     </div>
 </template>
 
