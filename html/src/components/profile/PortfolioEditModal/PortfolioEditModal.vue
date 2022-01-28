@@ -1,67 +1,85 @@
 <template>
     <general-modal class="portfolio-edit-modal" v-if="isOpen" :header="header" @close="onClose" :is-mobile="isTablet">
         <template v-slot:content>
-            <div class="containet container--tablet portfolio-edit-modal__section">
-                <h4 class="portfolio-edit-modal__hl">{{ header }}</h4>
-                <p class="portfolio-edit-modal__info">
-                    Укажи ссылку на свой аккаунт бьюти-профессионала в соцсетях или загрузи скан профильного диплома,
-                    либо другого подтверждающего документа.
-                </p>
-
-                <ul v-if="editablePortfolio && editablePortfolio.length > 0" class="portfolio-edit-modal__list">
-                    <li class="portfolio-edit-modal__list-row" v-for="(v, index) in computedItems" :key="index">
-                        <v-input
-                            class="portfolio-edit-modal__list-column"
-                            v-model="v.link.$model"
-                            placeholder="Добавить ссылку"
-                            :show-error="false"
-                            :error="linkError(v.link)"
-                        >
-                            {{ index == 0 ? 'Ссылка' : null }}
-                            <template v-slot:after>
-                                <button
-                                    v-if="editablePortfolio && editablePortfolio.length > 1"
-                                    class="portfolio-edit-modal__list-row-btn"
-                                    type="button"
-                                    @click.stop="onDeletePortfolio(index)"
-                                >
-                                    <v-svg name="cross" width="24" height="24" />
-                                </button>
-                            </template>
-                        </v-input>
-
-                        <v-input
-                            class="portfolio-edit-modal__list-column"
-                            v-model="v.name.$model"
-                            placeholder="Введите описание"
-                            :show-error="false"
-                            :error="nameError(v.name)"
-                        >
-                            {{ index == 0 ? 'Описание ссылки' : null }}
-                        </v-input>
-                    </li>
-                </ul>
-
-                <v-button class="btn--outline portfolio-edit-modal__list-btn" @click="onAddPortfolio">
-                    Добавить поле
-                </v-button>
-            </div>
-            <div class="portfolio-edit-modal__section">
-                <p class="text-grey">Файлы форматов jpeg, png, pdf, doc, docx, не более 5Mb каждый</p>
-                <v-file
-                    class="portfolio-edit-modal__files"
-                    :files="files"
-                    :accepted-types="fileAcceptedTypes"
-                    :max-file-size="5242880"
-                    @change="onFilesChanged"
-                    @error="onHandleError"
-                />
-                <div class="status-color-error">
-                    <transition name="slide-in-bottom">
-                        <span v-if="error" key="error">{{ error }}</span>
-                    </transition>
+            <h4 class="portfolio-edit-modal__hl">{{ header }}</h4>
+            <transition name="fade" mode="out-in">
+                <div
+                    v-if="!files.length && editablePortfolio && editablePortfolio.length > 0"
+                    class="containet container--tablet portfolio-edit-modal__section"
+                >
+                    <p class="portfolio-edit-modal__info">
+                        Укажи ссылку на свой аккаунт бьюти-профессионала в соцсетях
+                    </p>
+                    <v-input
+                        class="portfolio-edit-modal__input"
+                        v-model="computedItems[0].link.$model"
+                        placeholder="Добавить ссылку"
+                        :show-error="false"
+                        :error="linkError(computedItems[0].link)"
+                    >
+                        <span class="text-grey">Ссылка</span>
+                        <template v-slot:after>
+                            <button
+                                v-if="editablePortfolio && editablePortfolio.length > 0 && editablePortfolio[0].link"
+                                class="portfolio-edit-modal__input-close-btn"
+                                type="button"
+                                @click.stop="onDeletePortfolio"
+                            >
+                                <v-svg name="cross" width="24" height="24" />
+                            </button>
+                        </template>
+                    </v-input>
                 </div>
-            </div>
+            </transition>
+            <transition name="fade" mode="out-in">
+                <div v-if="!editablePortfolio[0].link && !files.length" class="portfolio-edit-modal__divider">
+                    <div class="portfolio-edit-modal__divider-line"></div>
+                    <span class="portfolio-edit-modal__divider-text">или</span>
+                    <div class="portfolio-edit-modal__divider-line"></div>
+                </div>
+            </transition>
+            <transition name="fade" mode="out-in">
+                <div v-if="!editablePortfolio[0].link" class="portfolio-edit-modal__section">
+                    <p class="portfolio-edit-modal__info--no-margin">
+                        Загрузи скан профильного диплома, либо другого подтверждающего документа
+                    </p>
+                    <p class="text-grey portfolio-edit-modal__info-formats">Файлы форматов jpeg, png, pdf, doc, docx</p>
+                    <v-file
+                        class="portfolio-edit-modal__files"
+                        :files="files"
+                        :accepted-types="fileAcceptedTypes"
+                        :max-file-size="5242880"
+                        :max-files="1"
+                        @change="onFilesChanged"
+                        @error="onHandleError"
+                    >
+                        <template v-slot:file="{ file }">
+                            <v-file-item
+                                ref="fileItem"
+                                class="v-file__item portfolio-edit-modal__file-item"
+                                :class="{ 'portfolio-edit-modal__file-item--loaded': fileLoaded }"
+                                :key="file.name"
+                                :file="file"
+                                @load="onFileLoad"
+                            />
+                            <div class="portfolio-edit-modal__files-info">
+                                <span>{{ file.name }}</span>
+                                <span
+                                    class="text-grey portfolio-edit-modal__files-info-delete"
+                                    @click.stop="onDeleteFile"
+                                >
+                                    Удалить
+                                </span>
+                            </div>
+                        </template>
+                    </v-file>
+                    <div class="status-color-error">
+                        <transition name="slide-in-bottom">
+                            <span v-if="error" key="error">{{ error }}</span>
+                        </transition>
+                    </div>
+                </div>
+            </transition>
 
             <div class="portfolio-edit-modal__submit">
                 <v-button
@@ -78,6 +96,7 @@
 
 <script>
 import VFile from '@controls/VFile/VFile.vue';
+import VFileItem from '@controls/VFile/VFileItem.vue';
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
@@ -115,6 +134,7 @@ export default {
     components: {
         VSvg,
         VFile,
+        VFileItem,
         VButton,
         VInput,
         GeneralModal,
@@ -125,10 +145,6 @@ export default {
             oneOrMore: (value) => value && value.length > 0,
 
             $each: {
-                name: {
-                    required,
-                },
-
                 link: {
                     required,
                 },
@@ -145,6 +161,7 @@ export default {
             error: null,
             inProcess: false,
             index: 0,
+            fileLoaded: false,
         };
     },
 
@@ -207,8 +224,8 @@ export default {
             this[ADD_PORTFOLIO]({ id: this.index, name: null, link: null });
         },
 
-        onDeletePortfolio(index) {
-            this[DELETE_PORTFOLIO](index);
+        onDeletePortfolio() {
+            this[DELETE_PORTFOLIO]();
         },
 
         onFilesChanged(files) {
@@ -218,6 +235,14 @@ export default {
         onHandleError() {
             this.error = 'Не удалось загрузить файлы. Проверьте размер и формат файлов.';
             setTimeout(() => (this.error = null), 5000);
+        },
+
+        onFileLoad(isLoaded) {
+            this.fileLoaded = isLoaded;
+        },
+
+        onDeleteFile() {
+            this.$refs.fileItem.onDeleteItem();
         },
 
         async onSubmit() {

@@ -1,6 +1,7 @@
 export const genderType = Object.freeze({
     FEMALE: 1,
     MALE: 2,
+    NOT_SPECIFIED: 3,
 });
 
 export const referralOrderSortFields = Object.freeze({
