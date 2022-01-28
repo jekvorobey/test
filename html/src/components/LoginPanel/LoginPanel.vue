@@ -85,7 +85,9 @@
                 >
                     Код из СМС
                     <template v-slot:after>
-                        <v-button class="login-panel__form-btn" type="submit"> Подтвердить </v-button>
+                        <v-button class="login-panel__form-btn login-panel__form-btn--restore" type="submit">
+                            Подтвердить
+                        </v-button>
                     </template>
                     <template v-slot:error="{ error }">
                         <transition name="slide-in-bottom" mode="out-in">

@@ -57,6 +57,10 @@
             padding: 6px calc(var(--gs) * 2);
         }
 
+        &-btn--restore {
+            margin-top: 25px;
+        }
+
         &-password &-input {
             margin-right: 0;
 
