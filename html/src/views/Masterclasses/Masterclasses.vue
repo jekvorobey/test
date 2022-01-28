@@ -428,7 +428,7 @@ export default {
                 },
                 {
                     property: 'og:type',
-                    content: 'webpage',
+                    content: 'website',
                 },
                 {
                     property: 'og:url',
