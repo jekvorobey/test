@@ -57,12 +57,10 @@
                 </v-input-mask>
             </form>
             <div class="login-panel__modal-footer">
-                <v-button class="btn--outline login-panel__modal-footer-btn" @click.stop="onRegisterFromRestore"
+                <v-button class="btn--outline login-panel__modal-footer-btn" @click.stop="onRegister"
                     >Зарегистрируйтесь</v-button
                 >
-                <span class="login-panel__modal-footer-no-account" @click.stop="onRegisterFromRestore"
-                    >Нет аккаунта?</span
-                >
+                <span class="login-panel__modal-footer-no-account" @click.stop="onRegister">Нет аккаунта?</span>
             </div>
         </template>
 
@@ -503,16 +501,14 @@ export default {
         },
 
         onRegister() {
-            this.$emit('change-tab', authMode.REGISTRATION);
-        },
-
-        onRegisterFromRestore() {
-            this.onCancelRestore();
-            this.onRegister();
+            this.phone = this.enteredPhone;
+            if (this.restore) this.stopCounter();
+            this.restore = false;
             this.$emit('set-title', {
                 title: this.header,
                 payload: this.isVisibleTabs,
             });
+            this.$emit('change-tab', authMode.REGISTRATION);
         },
 
         startCounter() {
@@ -536,6 +532,13 @@ export default {
                 open: false,
             });
         },
+    },
+
+    mounted() {
+        this.$emit('set-title', {
+            title: this.header,
+            payload: this.isVisibleTabs,
+        });
     },
 
     beforeUpdate() {
