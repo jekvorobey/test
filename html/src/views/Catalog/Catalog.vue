@@ -327,6 +327,8 @@ import {
     PRODUCT_GROUP,
     RANGE,
     RANGE_WITHOUT_UNION,
+    ENTITY_CODE,
+    CATEGORY_CODE,
 } from '@store/modules/Catalog';
 import { SET_LOAD_PATH, FETCH_CATALOG_DATA, REFRESH_CATALOG_DATA } from '@store/modules/Catalog/actions';
 import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
@@ -348,7 +350,7 @@ import {
     generateSearchUrl,
     generateProductGroupUrl,
 } from '@util/catalog';
-import { generatePictureSourcePath } from '@util/file';
+import { generatePictureSourcePath, generateFileOriginalPath, getImageType } from '@util/file';
 import { createNotFoundRoute } from '@util/router';
 import { productGroupTypes } from '@enums/product';
 import { sortFields } from '@enums/catalog';
@@ -393,9 +395,45 @@ export default {
     },
 
     metaInfo() {
-        const { catalogTitle, activePage } = this;
+        const { catalogTitle, activePage, metaData } = this;
+        const { title, url, image, imageType } = metaData;
         return {
             title: activePage > 1 ? `${catalogTitle} – страница ${activePage}` : catalogTitle,
+            meta: [
+                {
+                    property: 'og:title',
+                    content: title,
+                },
+                {
+                    property: 'og:type',
+                    content: 'website',
+                },
+                {
+                    property: 'og:url',
+                    content: url,
+                },
+                {
+                    property: 'og:image',
+                    content: image,
+                },
+                {
+                    property: 'og:image:url',
+                    content: image,
+                },
+
+                {
+                    property: 'og:image:type',
+                    content: imageType,
+                },
+                {
+                    property: 'og:site_name',
+                    content: 'Бессовестно талантливый',
+                },
+                {
+                    property: 'og:description',
+                    content: 'Mаркетплейс для мастеров бьюти-индустрии',
+                },
+            ],
         };
     },
 
@@ -452,12 +490,32 @@ export default {
             TYPE,
             RANGE,
             RANGE_WITHOUT_UNION,
+            ENTITY_CODE,
+            CATEGORY_CODE,
         ]),
         ...mapState('route', {
             code: (state) => state.params.code,
             entityCode: (state) => state.params.entityCode,
             searchQuery: (state) => state.query.search_string,
         }),
+
+        metaData() {
+            const title = this.catalogTitle;
+            const url = generateCategoryUrl(this.type, this.entityCode, this.categoryCode, true);
+            const image =
+                Array.isArray(this.items) && this.items.length > 0
+                    ? generateFileOriginalPath(this.items[0].image.id)
+                    : null;
+            const imageType =
+                Array.isArray(this.items) && this.items.length > 0 ? getImageType(this.items[0].image.sourceExt) : null;
+
+            return {
+                title,
+                url,
+                image,
+                imageType,
+            };
+        },
 
         showRecentlyViewed() {
             const { type } = this;

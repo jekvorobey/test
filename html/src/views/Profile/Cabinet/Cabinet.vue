@@ -27,34 +27,36 @@
         <attention-panel v-if="!canBuy" class="cabinet-view__attention">
             <div class="cabinet-view__attention-inner">
                 <div class="cabinet-view__attention-inner-info">
-                    <strong>Профессиональный статус: не подтвержден</strong><br />
-                    <template v-if="portfolio && portfolio.length === 0 && certificates && certificates.length === 0">
-                        Укажи ссылку на свой аккаунт бьюти-профессионала в соцсетях или загрузи скан профильного диплома
-                        либо другого подтверждающего документа.
+                    <template v-if="status === userStatus.REJECTED">
+                        <strong>Профессиональный статус: отклонен</strong><br />
+                        <template>
+                            Если вы считаете, что отказ ошибочный, отправьте другое портфолио, указав дополнительную
+                            информацию.
+                        </template>
                     </template>
                     <template v-else>
-                        В данный момент наши эксперты изучают Ваше портфолио. Как только мы подтвердим Ваш статус
-                        Профессионала, Вы получите от нас SMS-оповещение и сразу сможете совершать покупки.
+                        <strong>Профессиональный статус: не подтвержден</strong><br />
+                        <template
+                            v-if="portfolio && portfolio.length === 0 && certificates && certificates.length === 0"
+                        >
+                            Укажи ссылку на свой аккаунт бьюти-профессионала в соцсетях или загрузи скан профильного
+                            диплома либо другого подтверждающего документа.
+                        </template>
+                        <template v-else>
+                            В данный момент наши эксперты изучают Ваше портфолио. Как только мы подтвердим Ваш статус
+                            Профессионала, Вы получите от нас SMS-оповещение и сразу сможете совершать покупки.
+                        </template>
                     </template>
                 </div>
                 <v-button
-                    v-if="portfolio && portfolio.length === 0 && certificates && certificates.length === 0"
+                    v-if="
+                        (portfolio && portfolio.length === 0 && certificates && certificates.length === 0) ||
+                        status === userStatus.REJECTED
+                    "
                     class="btn--outline cabinet-view__attention-inner-btn"
                     @click="onOpenPortfoliosModal"
                 >
                     Подтвердить статус
-                </v-button>
-            </div>
-        </attention-panel>
-
-        <attention-panel v-if="!fullName || !hasPhone" class="cabinet-view__attention">
-            <div class="cabinet-view__attention-inner">
-                <div class="cabinet-view__attention-inner-info">
-                    <strong>Заполни профиль для совершения покупок</strong><br />
-                    Чтобы получить доступ к покупкам, укажи свои ФИО и номер телефона
-                </div>
-                <v-button class="btn--outline cabinet-view__attention-inner-btn" @click="onScrollToPrivate">
-                    Заполнить данные
                 </v-button>
             </div>
         </attention-panel>
@@ -143,7 +145,7 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 
 import { LOCALE } from '@store';
 
-import { NAME as AUTH_MODULE, USER, CAN_BUY, REFERRAL_PARTNER, REFERRAL_CODE } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, USER, CAN_BUY, REFERRAL_PARTNER, REFERRAL_CODE, STATUS } from '@store/modules/Auth';
 import { GET_SOCIAL_LINK, CHECK_SESSION, FETCH_USER } from '@store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -172,6 +174,7 @@ import { FULL_NAME } from '@store/modules/Profile/modules/Cabinet/getters';
 
 import metaMixin from '@plugins/meta';
 import { socials, httpCodes, modalName, mimeType } from '@enums';
+import { userStatus } from '@enums/profile';
 import '@images/sprites/edit.svg';
 import '@images/sprites/link.svg';
 import '@images/sprites/account-middle.svg';
@@ -227,6 +230,7 @@ export default {
             [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
             [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
             [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || false,
+            [STATUS]: (state) => (state[USER] && state[USER][STATUS]) || 1,
         }),
 
         ...mapState(MODAL_MODULE, {
@@ -279,6 +283,10 @@ export default {
 
         iconSize() {
             return this.$mq.tablet ? 24 : 16;
+        },
+
+        userStatus() {
+            return userStatus;
         },
     },
 
@@ -335,6 +343,10 @@ export default {
                 state: {
                     title: 'Уведомление',
                     message: 'Данные профиля обновлены',
+                    altBtn: {
+                        message: 'Перейти к покупкам',
+                        action: '/catalog',
+                    },
                 },
             });
         },

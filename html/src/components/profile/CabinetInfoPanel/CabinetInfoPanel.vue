@@ -2,7 +2,7 @@
     <info-panel class="cabinet-info-panel" header="Личные данные">
         <div class="container container--tablet-lg">
             <ul class="cabinet-view__panel-list">
-                <info-row class="cabinet-info-panel__item" name="ФИО">
+                <info-row class="cabinet-info-panel__item" name="Фамилия и имя*">
                     <v-input
                         class="cabinet-info-panel__item-input"
                         v-model="personal.fullName"
@@ -42,7 +42,7 @@
                         </v-check>
                     </div>
                 </info-row>
-                <info-row class="cabinet-info-panel__item" name="Номер телефона">
+                <info-row class="cabinet-info-panel__item" name="Номер телефона*">
                     <v-input-mask
                         class="cabinet-info-panel__item-input"
                         v-model="$v.credential.phone.$model"
@@ -77,7 +77,7 @@
                         Подтвердить
                     </v-button>
                 </info-row>
-                <info-row class="cabinet-info-panel__item" name="Профессиональная специализация">
+                <!-- <info-row class="cabinet-info-panel__item" name="Профессиональная специализация">
                     <v-select
                         class="cabinet-info-panel__item-select"
                         v-model="selectedActivities"
@@ -101,8 +101,12 @@
                             </v-check>
                         </template>
                     </v-select>
-                </info-row>
+                </info-row> -->
             </ul>
+            <div class="cabinet-info-panel__required-footnote">
+                <div class="cabinet-info-panel__required-footnote-spacer"></div>
+                <span class="text-grey">*Обязательные поля</span>
+            </div>
         </div>
 
         <transition name="fade">

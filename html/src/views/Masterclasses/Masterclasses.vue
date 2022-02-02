@@ -44,10 +44,7 @@
             <div class="container masterclasses-view__sets-header">
                 <div class="masterclasses-view__sets-header-top">
                     <h1
-                        class="
-                            container container--tablet
-                            masterclasses-view__section-hl masterclasses-view__sets-header-hl
-                        "
+                        class="container container--tablet masterclasses-view__section-hl masterclasses-view__sets-header-hl"
                         v-if="activePage === 1 || isMounted"
                     >
                         <span>{{ catalogTitle }}</span>
@@ -334,10 +331,11 @@ import _debounce from 'lodash/debounce';
 import metaMixin from '@plugins/meta';
 import { $store, $progress, $logger } from '@services';
 import { MIN_SCROLL_VALUE, DEFAULT_PAGE } from '@constants';
-import { bannerType, fileExtension} from '@enums';
+import { bannerType, fileExtension } from '@enums';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { pluralize, getDate } from '@util';
-import { generatePictureSourcePath } from '@util/file';
+import { generatePictureSourcePath, generateFileOriginalPath, getImageType } from '@util/file';
+import { generateAbsoluteMasterclassUrl } from '@util/catalog';
 import { registerModuleIfNotExists } from '@util/store';
 import {
     generateMasterclassUrl,
@@ -419,9 +417,45 @@ export default {
     },
 
     metaInfo() {
-        const { catalogTitle, activePage } = this;
+        const { catalogTitle, activePage, metaData } = this;
+        const { title, url, image, imageType } = metaData;
         return {
             title: activePage > 1 ? `${catalogTitle} – страница ${activePage}` : catalogTitle,
+            meta: [
+                {
+                    property: 'og:title',
+                    content: title,
+                },
+                {
+                    property: 'og:type',
+                    content: 'website',
+                },
+                {
+                    property: 'og:url',
+                    content: url,
+                },
+                {
+                    property: 'og:image',
+                    content: image,
+                },
+                {
+                    property: 'og:image:url',
+                    content: image,
+                },
+
+                {
+                    property: 'og:image:type',
+                    content: imageType,
+                },
+                {
+                    property: 'og:site_name',
+                    content: 'Бессовестно талантливый',
+                },
+                {
+                    property: 'og:description',
+                    content: 'Mаркетплейс для мастеров бьюти-индустрии',
+                },
+            ],
         };
     },
 
@@ -497,6 +531,24 @@ export default {
             NULLABLE_FILTERS,
             ACTIVE_TAGS,
         ]),
+
+        metaData() {
+            const title = this.catalogTitle;
+            const url = generateAbsoluteMasterclassUrl();
+            const image =
+                Array.isArray(this.items) && this.items.length > 0
+                    ? generateFileOriginalPath(this.items[0].image.id)
+                    : null;
+            const imageType =
+                Array.isArray(this.items) && this.items.length > 0 ? getImageType(this.items[0].image.sourceExt) : null;
+
+            return {
+                title,
+                url,
+                image,
+                imageType,
+            };
+        },
 
         clearFilterUrl() {
             return { name: 'CatalogMasterclasses' };

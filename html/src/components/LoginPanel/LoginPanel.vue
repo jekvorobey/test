@@ -40,15 +40,28 @@
                     :error="restorePhoneError"
                 >
                     Номер телефона
-                    <template v-slot:after>
-                        <v-button class="login-panel__form-btn" type="submit" :disabled="isDisabledGetCodeBtn">
-                            Получить код
-                        </v-button>
+                    <template v-slot:after-error>
+                        <div>
+                            <v-button class="login-panel__form-btn" type="submit" :disabled="isDisabledGetCodeBtn">
+                                Получить код
+                            </v-button>
+                            <v-link
+                                class="login-panel__form-submit-link--tablet"
+                                tag="button"
+                                @click.stop="onCancelRestore"
+                            >
+                                Отмена
+                            </v-link>
+                        </div>
                     </template>
                 </v-input-mask>
             </form>
-
-            <v-link class="login-panel__form-submit-link" tag="button" @click.stop="onCancelRestore"> Отмена </v-link>
+            <div class="login-panel__modal-footer">
+                <v-button class="btn--outline login-panel__modal-footer-btn" @click.stop="onRegister"
+                    >Зарегистрируйтесь</v-button
+                >
+                <span class="login-panel__modal-footer-no-account" @click.stop="onRegister">Нет аккаунта?</span>
+            </div>
         </template>
 
         <template v-else-if="!accepted">
@@ -62,15 +75,17 @@
                 <v-input
                     class="login-panel__form-input"
                     key="sms-code"
-                    type="number"
                     v-model="code"
                     v-focus
                     maxLength="4"
                     :error="codeError"
+                    @input="onInputCode"
                 >
                     Код из СМС
                     <template v-slot:after>
-                        <v-button class="login-panel__form-btn" type="submit"> Подтвердить </v-button>
+                        <v-button class="login-panel__form-btn login-panel__form-btn--restore" type="submit">
+                            Подтвердить
+                        </v-button>
                     </template>
                     <template v-slot:error="{ error }">
                         <transition name="slide-in-bottom" mode="out-in">
@@ -143,10 +158,9 @@
             </div>
             <span class="login-panel__socials-text">Войти через соцсеть</span>
         </div>
-
-        <div class="login-panel__footer" v-if="!restore">
+        <div class="login-panel__footer">
             <v-button class="btn--outline login-panel__footer-btn" @click.stop="onRegister">Зарегистрируйтесь</v-button>
-            <span class="login-panel__no-account">Нет аккаунта?</span>
+            <span class="login-panel__no-account" @click.stop="onRegister">Нет аккаунта?</span>
         </div>
     </div>
 </template>
@@ -235,15 +249,22 @@ export default {
         },
     },
 
+    props: {
+        enteredPhone: {
+            type: [String, null],
+            default: null,
+        },
+    },
+
     data() {
         return {
             fail: true,
             restoreFail: true,
 
-            phone: null,
+            phone: this.enteredPhone,
             password: null,
 
-            rawRestorePhone: null,
+            rawRestorePhone: this.enteredPhone,
             code: null,
 
             restorePassword: null,
@@ -266,7 +287,7 @@ export default {
         },
 
         header() {
-            return this.restore ? 'Получить новый пароль' : 'Войти';
+            return this.restore ? 'Установить новый пароль' : 'Войти';
         },
 
         restorePhone() {
@@ -277,6 +298,7 @@ export default {
             if (this.$v.code.$dirty) {
                 if (!this.$v.code.required) return this.$t('validation.errors.required');
                 if (!this.$v.code.minLength) return 'Неверно введен код';
+                if (!this.$v.accepted.valid) return 'Неверный код';
             }
         },
 
@@ -333,12 +355,14 @@ export default {
             if (!value) this.sent = false;
         },
 
-        restorePhone() {
+        restorePhone(value) {
             this.resetRestoreValidation();
+            this.$emit('input-phone', value);
         },
 
         phone(value) {
             this.resetLoginValidation();
+            this.$emit('input-phone', value);
         },
 
         password(value) {
@@ -383,6 +407,10 @@ export default {
                 )
                     this.resetPassword();
             }
+        },
+
+        onInputCode(code) {
+            if (code.toString().length === 4) this.onSubmit();
         },
 
         async sendSms() {
@@ -462,15 +490,24 @@ export default {
         },
 
         onRestore() {
+            this.rawRestorePhone = this.enteredPhone;
             this.restore = true;
         },
 
         onCancelRestore() {
+            this.phone = this.enteredPhone;
             this.restore = false;
             this.stopCounter();
         },
 
         onRegister() {
+            this.phone = this.enteredPhone;
+            if (this.restore) this.stopCounter();
+            this.restore = false;
+            this.$emit('set-title', {
+                title: this.header,
+                payload: this.isVisibleTabs,
+            });
             this.$emit('change-tab', authMode.REGISTRATION);
         },
 
@@ -495,6 +532,13 @@ export default {
                 open: false,
             });
         },
+    },
+
+    mounted() {
+        this.$emit('set-title', {
+            title: this.header,
+            payload: this.isVisibleTabs,
+        });
     },
 
     beforeUpdate() {

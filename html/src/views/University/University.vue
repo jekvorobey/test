@@ -319,7 +319,7 @@ export default {
         },
 
         pageTitle() {
-            return 'Универститет';
+            return 'Университет';
         },
 
         isTabletLg() {

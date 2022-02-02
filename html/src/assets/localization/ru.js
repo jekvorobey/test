@@ -172,6 +172,7 @@ const main = {
     genderType: {
         [genderType.FEMALE]: 'Женский',
         [genderType.MALE]: 'Мужской',
+        [genderType.NOT_SPECIFIED]: 'Не скажу',
     },
 
     bonusStatus: {

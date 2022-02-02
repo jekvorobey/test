@@ -24,10 +24,36 @@
     &__has-account {
         display: block;
         margin: 0 auto;
+        cursor: pointer;
     }
 
     &__password-text {
         margin-bottom: calc(var(--gs) * 2);
+    }
+
+    &__tooltip {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: calc(var(--gs) * 1.5);
+
+        &-item {
+            display: flex; 
+            align-items: center;
+            margin-right: 16px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+            &--disabled {
+                color: #7D7D7D;
+            }
+        }
+
+        &-icon {
+            margin-right: 8px;
+        }
     }
 
     &__form {
@@ -109,13 +135,6 @@
                 &:last-of-type {
                     margin-bottom: calc(var(--gs) * 2);
                 }
-            }
-        }
-
-        &-password {
-            &-text {
-                display: block;
-                margin-bottom: calc(var(--gs) * 1.5);
             }
         }
     }
