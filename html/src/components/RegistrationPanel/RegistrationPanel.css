@@ -126,15 +126,18 @@
             }
         }
 
+        &-password {
+            @media (--tablet) {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
         &-password &-input {
             margin-right: 0;
 
             @media (--tablet) {
                 margin-bottom: 0;
-
-                &:last-of-type {
-                    margin-bottom: calc(var(--gs) * 2);
-                }
             }
         }
     }
