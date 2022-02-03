@@ -6,7 +6,7 @@
                     <v-input
                         class="cabinet-info-panel__item-input"
                         v-model="personal.fullName"
-                        placeholder="Введите свое ФИО"
+                        placeholder="Введите свою фамилию и имя"
                         :show-error="false"
                         :error="$v.personal.fullName.$dirty && $v.personal.fullName.$invalid"
                         @keydown="onKeyDown"
