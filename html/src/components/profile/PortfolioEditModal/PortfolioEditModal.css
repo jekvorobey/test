@@ -77,7 +77,7 @@
 
             .portfolio-edit-modal__file-item--loaded {
                 width: auto;
-                margin-right: 24px;
+                margin: 0 24px 0 0;
             }
         }
 
@@ -121,12 +121,10 @@
         padding: 0 calc(var(--gs) * 3) calc(var(--gs) * 3);
 
         @media (--tablet) {
-            margin-top: auto;
             position: sticky;
             justify-content: space-between;
             bottom: 0;
             padding: var(--gs) calc(var(--gs) * 2);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             background-color: var(--cl-white);
         }
 
