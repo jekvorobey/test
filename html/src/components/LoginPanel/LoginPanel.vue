@@ -82,13 +82,13 @@
                     @input="onInputCode"
                 >
                     Код из СМС
-                    <template v-slot:after>
-                        <v-button class="login-panel__form-btn" type="submit"> Подтвердить </v-button>
-                    </template>
                     <template v-slot:error="{ error }">
                         <transition name="slide-in-bottom" mode="out-in">
                             <div :key="error" v-if="error">{{ error }}</div>
                         </transition>
+                    </template>
+                    <template v-slot:after-error>
+                        <v-button class="login-panel__form-btn" type="submit"> Подтвердить </v-button>
                     </template>
                 </v-input>
             </form>

@@ -36,6 +36,7 @@
     &__form {
         &-input {
             flex: 1;
+            margin-bottom: calc(var(--gs) * 2);
 
             .v-input__container {
                 display: flex;
@@ -48,7 +49,6 @@
 
             @media (--tablet) {
                 margin-right: 0;
-                margin-bottom: calc(var(--gs) * 2);
             }
         }
 

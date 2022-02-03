@@ -41,16 +41,22 @@
                 @blur="focus = false"
             />
             <slot name="after" />
-        </div>
-        <div v-if="showError" :id="`${inputId}-alert`" class="error-message v-input__error" role="alert">
-            <slot name="error" :error="error">
-                {{ error }}
-            </slot>
-        </div>
-        <div v-if="showSuccess" :id="`${inputId}-success-alert`" class="success-message v-input__success" role="alert">
-            <slot name="success" :error="success">
-                {{ success }}
-            </slot>
+            <div v-if="showError" :id="`${inputId}-alert`" class="error-message v-input__error" role="alert">
+                <slot name="error" :error="error">
+                    {{ error }}
+                </slot>
+            </div>
+            <div
+                v-if="showSuccess"
+                :id="`${inputId}-success-alert`"
+                class="success-message v-input__success"
+                role="alert"
+            >
+                <slot name="success" :error="success">
+                    {{ success }}
+                </slot>
+            </div>
+            <slot name="after-error" />
         </div>
     </div>
 </template>
