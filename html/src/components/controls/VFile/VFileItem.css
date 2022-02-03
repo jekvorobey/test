@@ -1,10 +1,13 @@
 .v-file-item {
     position: relative;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+
+    &--has-mask {
+        cursor: pointer;
+    }
 
     &__container {
         word-break: break-word;

@@ -60,6 +60,7 @@
                                 :class="{ 'portfolio-edit-modal__file-item--loaded': fileLoaded }"
                                 :key="file.name"
                                 :file="file"
+                                :has-mask="false"
                                 @load="onFileLoad"
                             />
                             <div class="portfolio-edit-modal__files-info">
