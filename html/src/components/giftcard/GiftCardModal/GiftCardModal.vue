@@ -227,7 +227,7 @@
                 >
 
                 <v-check id="termsAccepted" name="termsAccepted" v-model="order.terms_accepted" value="1"
-                    >Я согласен с <a href="/agreements/public-offer/" target="_blank">условиями оферты</a> и <a href="/agreements/personal-policy/" target="_blank">политикой конфиденциальности</a></v-check
+                    >Я согласен с <a href="/soglasheniya/oferta/" target="_blank">условиями оферты</a> и <a href="/soglasheniya/polzovatelskoe-soglasenie/" target="_blank">политикой конфиденциальности</a></v-check
                 >
             </div>
             <div class="gift-card-modal__submit">

@@ -14,7 +14,7 @@ export default {
     routes: [
         {
             name: 'Bonuses',
-            path: 'bonuses/',
+            path: 'bonusy/',
             pathToRegexpOptions: { strict: true },
             component: BonusesAsync,
 

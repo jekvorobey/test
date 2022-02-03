@@ -13,7 +13,7 @@ export default {
      */
     routes: [
         {
-            path: '/partners/',
+            path: '/partneram/',
             pathToRegexpOptions: { strict: true },
             component: PartnersAsync,
         },

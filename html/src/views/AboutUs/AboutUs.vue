@@ -293,13 +293,13 @@ export default {
                 {
                     img: 'About3',
                     subTitle: 'Доставка заказов по всей России. Более 16 000 населенных пунктов',
-                    link: '/delivery-and-payment/',
+                    link: '/oplata-i-dostavka/',
                     linkTitle: 'Подробнее о доставке',
                 },
                 {
                     img: 'About4',
                     subTitle: 'Система накопления бонусов',
-                    link: '/bonuses/',
+                    link: '/bonusy/',
                     linkTitle: 'Подробнее о бонусах',
                 },
             ],

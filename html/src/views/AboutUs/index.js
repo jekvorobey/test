@@ -13,7 +13,7 @@ export default {
      */
     routes: [
         {
-            path: '/about-us/',
+            path: '/o-nas/',
             pathToRegexpOptions: { strict: true },
             component: AboutUsAsync,
         },

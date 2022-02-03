@@ -19,7 +19,7 @@ export default {
     routes: [
         {
             name: 'Product',
-            path: `/:type(${productGroupTypes.CATALOG})/:categoryCode/:code/`,
+            path: `/:type(${productGroupTypes.CATALOG})/:categoryCode/product/:code/`,
             pathToRegexpOptions: { strict: true },
             component: ProductAsync,
 

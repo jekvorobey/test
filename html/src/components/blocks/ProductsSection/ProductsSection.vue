@@ -12,7 +12,7 @@
                     :product-id="item.productId"
                     :name="item.name"
                     :type="item.type"
-                    :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                    :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/product/${item.code}`"
                     :image="item.image"
                     :price="item.price"
                     :old-price="item.oldPrice"
