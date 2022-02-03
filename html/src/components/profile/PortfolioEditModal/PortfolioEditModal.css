@@ -1,8 +1,3 @@
-@keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
 .portfolio-edit-modal {
     .popup {
         width: 648px;
@@ -76,6 +71,16 @@
     }
 
     &__files {
+        @media (--tablet) {
+            display: flex;
+            justify-content: center;
+
+            .portfolio-edit-modal__file-item--loaded {
+                width: auto;
+                margin-right: 24px;
+            }
+        }
+
         .v-file__form {
             height: 120px;
         }
@@ -100,22 +105,11 @@
         overflow: visible;
 
         &--loaded {
-            transition: 2s;
             &::before {
                 content: svg-load('status-check.svg');
                 position: absolute;
                 top: -4px;
                 right: -4px;
-                animation: fadein .5s;
-                opacity: 1;
-                transition: opacity .1s;
-            }
-            
-            &:hover {
-                &::before {
-                    opacity: 0;
-                    transition: opacity .1s;
-                }
             }
         }
     }
