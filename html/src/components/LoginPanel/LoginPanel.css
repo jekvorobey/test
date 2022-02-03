@@ -34,6 +34,13 @@
     }
 
     &__form {
+        &-container {
+            @media (--tablet) {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
         &-input {
             flex: 1;
             margin-bottom: calc(var(--gs) * 2);
@@ -73,6 +80,10 @@
             &-btn {
                 min-width: 120px;
                 margin-right: calc(var(--gs) * 2);
+
+                &:last-of-type {
+                    margin-right: 0;
+                }
             }
 
             &-link {
