@@ -4,7 +4,12 @@
             <div class="notification-modal__body">
                 <h4 v-if="!isTablet" class="notification-modal__hl">{{ title }}</h4>
                 <p class="notification-modal__message">{{ message }}</p>
-                <v-button class="notification-modal__btn" @click="onClose">{{ btnText }}</v-button>
+                <div class="notification-modal__actions">
+                    <v-button class="notification-modal__btn" @click="onClose">{{ btnText }}</v-button>
+                    <v-button v-if="altBtn" class="notification-modal__btn" :to="altBtn.action">{{
+                        altBtn.message
+                    }}</v-button>
+                </div>
             </div>
         </template>
     </general-modal>
@@ -52,6 +57,10 @@ export default {
 
         btnText() {
             return this.modalState.btnMessage || 'Закрыть';
+        },
+
+        altBtn() {
+            return this.modalState.altBtn || null;
         },
 
         href() {

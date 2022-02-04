@@ -520,6 +520,13 @@ export default {
         },
     },
 
+    mounted() {
+        this.$emit('set-title', {
+            title: this.header,
+            payload: this.isVisibleTabs,
+        });
+    },
+
     beforeUpdate() {
         this.$emit('set-title', {
             title: this.header,

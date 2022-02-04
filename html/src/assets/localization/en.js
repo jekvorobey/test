@@ -171,6 +171,7 @@ const main = {
     genderType: {
         [genderType.MALE]: 'Male',
         [genderType.FEMALE]: 'Female',
+        [genderType.NOT_SPECIFIED]: 'Not specified',
     },
 
     bonusStatus: {

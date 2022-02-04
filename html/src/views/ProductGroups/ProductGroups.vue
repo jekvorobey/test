@@ -125,6 +125,7 @@ import { productGroupTypes, productGroupSortFields } from '@enums/product';
 import { MIN_SCROLL_VALUE, DEFAULT_PAGE } from '@constants';
 import { createNotFoundRoute } from '@util/router';
 import { generateCategoryUrl } from '@util/catalog';
+import { generateFileOriginalPath, getImageType } from '@util/file';
 import metaMixin from '@plugins/meta';
 import '@images/sprites/home.svg';
 import './ProductGroups.css';
@@ -153,9 +154,45 @@ export default {
     },
 
     metaInfo() {
-        const { catalogTitle, activePage } = this;
+        const { catalogTitle, activePage, metaData } = this;
+        const { title, url, image, imageType } = metaData;
+
         return {
             title: activePage > 1 ? `${catalogTitle} – страница ${activePage}` : catalogTitle,
+            meta: [
+                {
+                    property: 'og:title',
+                    content: title,
+                },
+                {
+                    property: 'og:type',
+                    content: 'website',
+                },
+                {
+                    property: 'og:url',
+                    content: url,
+                },
+                {
+                    property: 'og:image',
+                    content: image,
+                },
+                {
+                    property: 'og:image:url',
+                    content: image,
+                },
+                {
+                    property: 'og:image:type',
+                    content: imageType,
+                },
+                {
+                    property: 'og:site_name',
+                    content: 'Бессовестно талантливый',
+                },
+                {
+                    property: 'og:description',
+                    content: 'Mаркетплейс для мастеров бьюти-индустрии',
+                },
+            ],
         };
     },
 
@@ -174,6 +211,26 @@ export default {
         ...mapState(AUTH_MODULE, {
             [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
         }),
+
+        metaData() {
+            const title = this.catalogTitle;
+            const url = generateCategoryUrl(this.type, null, null, true);
+            const image =
+                Array.isArray(this.items) && this.items.length > 0
+                    ? generateFileOriginalPath(this.items[0].preview_photo.id)
+                    : null;
+            const imageType =
+                Array.isArray(this.items) && this.items.length > 0
+                    ? getImageType(this.items[0].preview_photo.sourceExt)
+                    : null;
+
+            return {
+                title,
+                url,
+                image,
+                imageType,
+            };
+        },
 
         showList() {
             return this[TYPE] === productGroupTypes.BRANDS;

@@ -66,18 +66,20 @@
                 &nbsp;{{ computedDislikes }}
             </session-check-button>
         </div>
-        <div class="review-card__answer" v-if="false">
-            <div class="review-card__answer-container">
-                <div class="review-card__answer-title">
-                    <div class="review-card__answer-title-icon">
-                        <v-svg name="bonus" width="24" height="24" />
+        <template v-if="answers.length > 0">
+            <div class="review-card__answer" :key="answer.id" v-for="answer in answers">
+                <div class="review-card__answer-container">
+                    <div class="review-card__answer-title">
+                        <div class="review-card__answer-title-icon">
+                            <v-svg name="bonus" width="24" height="24" />
+                        </div>
+                        <div class="review-card__answer-title-text">{{ answer.authorName }}</div>
+                        <div class="review-card__answer-title-date">{{ getAnswerDate(answer.createdAt) }}</div>
                     </div>
-                    <div class="review-card__answer-title-text">Бессовестно Талантливый</div>
-                    <div class="review-card__answer-title-date">{{ answer.date }}</div>
+                    <div class="review-card__body-item-value">{{ answer.text }}</div>
                 </div>
-                <div class="review-card__body-item-value">{{ answer.content }}</div>
             </div>
-        </div>
+        </template>
         <transition name="fade-in">
             <review-modal :image="openedImage" />
         </transition>
@@ -185,10 +187,10 @@ export default {
             },
         },
 
-        answer: {
-            type: Object,
+        answers: {
+            type: Array,
             default() {
-                return {};
+                return [];
             },
         },
     },
@@ -270,6 +272,10 @@ export default {
             } catch (error) {
                 this.disableVote = false;
             }
+        },
+
+        getAnswerDate(date) {
+            return date && getDate(date).toLocaleString(this[LOCALE], monthLongDateSettings);
         },
     },
 

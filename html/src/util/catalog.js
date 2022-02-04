@@ -18,7 +18,12 @@ export function generateAbsoluteProductUrl(categoryCode, code, refCode) {
 
 export function generateAbsoluteMasterclassUrl(code, refCode) {
     if (refCode) return `${$context.baseURL}/masterclasses/${code}/?refCode=${refCode}`;
-    return `${$context.baseURL}/masterclasses/${code}/`;
+    if (code) return `${$context.baseURL}/masterclasses/${code}/`;
+    return `${$context.baseURL}/masterclasses/`;
+}
+
+export function generateAbsoluteGiftCardUrl() {
+    return `${$context.baseURL}/giftcard/`;
 }
 
 export function generateProductUrl(categoryCode, code, refCode) {
@@ -43,23 +48,25 @@ export function generateTicketDownloadUrl(orderId, basketItemId) {
     return orderId && basketItemId && `/v1/lk/order/${orderId}/tickets/?basket_item_id=${basketItemId}`;
 }
 
-export function generateCategoryUrl(type, entityCode, categoryCode) {
+export function generateCategoryUrl(type, entityCode, categoryCode, isAbsolute = false) {
+    const base = isAbsolute ? $context.baseURL : '';
+
     switch (type) {
         case productGroupTypes.CATALOG:
         case productGroupTypes.NEW:
         case productGroupTypes.BESTSELLERS:
         case productGroupTypes.SEARCH:
-            return categoryCode ? `/${type}/${categoryCode}/` : `/${type}/`;
+            return categoryCode ? `${base}/${type}/${categoryCode}/` : `${base}/${type}/`;
 
         case productGroupTypes.PROMO:
         case productGroupTypes.SETS:
         case productGroupTypes.BRANDS:
             return categoryCode
-                ? `${generateProductGroupUrl(type, entityCode)}${categoryCode}/`
-                : generateProductGroupUrl(type, entityCode);
+                ? `${base}${generateProductGroupUrl(type, entityCode)}${categoryCode}/`
+                : `${base}${generateProductGroupUrl(type, entityCode)}`;
 
         default:
-            return '/';
+            return `${base}/`;
     }
 }
 
