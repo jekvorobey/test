@@ -73,7 +73,7 @@
     &__files {
         @media (--tablet) {
             display: flex;
-            justify-content: center;
+            flex-wrap: nowrap;
 
             .portfolio-edit-modal__file-item--loaded {
                 width: auto;
@@ -93,6 +93,10 @@
 
             @media (--tablet) {
                 margin-left: 0;
+            }
+
+            &-name {
+                word-break: break-all;
             }
 
             &-delete {
