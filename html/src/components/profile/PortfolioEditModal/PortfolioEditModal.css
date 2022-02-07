@@ -71,14 +71,11 @@
     }
 
     &__files {
+        flex-wrap: nowrap;
+
         @media (--tablet) {
             display: flex;
-            flex-wrap: nowrap;
-
-            .portfolio-edit-modal__file-item--loaded {
-                width: auto;
-                margin: 0 24px 0 0;
-            }
+            margin: 0;
         }
 
         .v-file__form {
@@ -90,10 +87,6 @@
             flex-direction: column;
             justify-content: center;
             margin-left: 24px;
-
-            @media (--tablet) {
-                margin-left: 0;
-            }
 
             &-name {
                 word-break: break-all;
@@ -108,7 +101,12 @@
 
     &__file-item {
         overflow: visible;
-        flex-shrink: 0;
+
+        @media (--tablet) {
+            max-width: 107px;
+            flex-basis: 40%;
+            flex-shrink: 0;
+        }
 
         &--loaded {
             &::before {
