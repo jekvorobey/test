@@ -295,20 +295,20 @@ export const weekDays = Object.freeze({
 });
 
 export const agreementTypes = Object.freeze({
-    PUBLIC_OFFER: 'oferta',
-    PERSONAL_POLICY: 'polzovatelskoe-soglasenie',
-    BONUS_PROGRAM: 'pravila-nacisleniya-i-ispolzovaniya-bonusnyx-ballov',
-    RULES_GIFTCARD: 'pravila-ispolzovaniya-elektronnogo-podarocnogo-sertifikata',
-    PRIVACY_POLICY: 'politika-konfidencialnosti',
-    PERSONAL_DATA: 'soglasie-na-obrabotku-personalnyx-dannyx',
+    PUBLIC_OFFER: 'public-offer',
+    PERSONAL_POLICY: 'personal-policy',
+    BONUS_PROGRAM: 'bonus-program',
+    RULES_GIFTCARD: 'rules-giftcard',
+    PRIVACY_POLICY: 'privacy-policy',
+    PERSONAL_DATA: 'personal-data',
 });
 
 export const infoPages = Object.freeze({
-    VACANCIES: 'vakansii',
-    DELIVERY_AND_PAYMENT: 'oplata-i-dostavka',
-    PURCHASE_RETURNS: 'vozvrat-tovara',
-    FEEDBACK: 'obratnaya-svyaz',
-    BONUSES: 'bonusy',
+    VACANCIES: 'vacancies',
+    DELIVERY_AND_PAYMENT: 'delivery-and-payment',
+    PURCHASE_RETURNS: 'purchase-returns',
+    FEEDBACK: 'feedback',
+    BONUSES: 'bonuses',
     CERTIFICATE_RULES: 'razygryvaemcertificat-rules',
 });
 

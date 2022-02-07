@@ -88,11 +88,11 @@
 
                 <span class="text-grey registration-panel__form-info">
                     Нажимая кнопку «Регистрация», вы соглашаетесь с условиями
-                    <a class="registration-panel__form-info-link" href="/soglasheniya/oferta" target="_blank"
+                    <a class="registration-panel__form-info-link" href="/agreements/public-offer" target="_blank"
                         >оферты</a
                     >
                     и
-                    <a class="registration-panel__form-info-link" href="/soglasheniya/polzovatelskoe-soglasenie" target="_blank">
+                    <a class="registration-panel__form-info-link" href="/agreements/personal-policy" target="_blank">
                         политикой конфиденциальности
                     </a>
                 </span>

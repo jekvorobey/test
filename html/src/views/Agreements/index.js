@@ -17,14 +17,14 @@ export default {
     routes: [
         {
             name: 'Agreements',
-            path: `/soglasheniya/:type(${types.join('|')})/`,
+            path: `/agreements/:type(${types.join('|')})/`,
             pathToRegexpOptions: { strict: true },
             component: Agreements,
         },
         {
-            path: '/soglasheniya/',
+            path: '/agreements/',
             pathToRegexpOptions: { strict: true },
-            redirect: `/soglasheniya/${agreementTypes.PERSONAL_POLICY}/`,
+            redirect: `/agreements/${agreementTypes.PERSONAL_POLICY}/`,
         },
     ],
 };

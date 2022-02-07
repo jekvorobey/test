@@ -141,7 +141,7 @@ export default {
         href() {
             const categories = this.product.categoryCodes;
             const name = this.product.code;
-            return categories && name ? `/catalog/${categories[categories.length - 1]}/${name}` : '/catalog';
+            return categories && name ? `/catalog/${categories[categories.length - 1]}/product/${name}` : '/catalog';
         },
 
         isCart() {

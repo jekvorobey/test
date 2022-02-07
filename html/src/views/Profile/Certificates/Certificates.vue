@@ -23,7 +23,7 @@
             <div>
                 <div>Потратить сертификат вы можете при оплате заказа.</div>
                 Ознакомиться&nbsp;с&nbsp;
-                <v-link class="certificates-view__attention-link" href="/soglasheniya/pravila-ispolzovaniya-elektronnogo-podarocnogo-sertifikata/" target="_blank">
+                <v-link class="certificates-view__attention-link" href="/agreements/rules-giftcard/" target="_blank">
                     правилами использования электронных подарочных сертификатов
                 </v-link>.
             </div>

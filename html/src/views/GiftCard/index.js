@@ -14,11 +14,11 @@ export default {
      */
     routes: [
         {
-            path: '/podarocnye-sertifikaty',
+            path: '/giftcard',
             component: GiftCardAsync,
         },
         {
-            path: '/podarocnye-sertifikaty/test',
+            path: '/giftcard/test',
             component: GiftCardTestAsync,
         },
     ],

@@ -5,7 +5,7 @@
                 <v-svg v-if="isTablet" name="home" width="10" height="10" />
                 <span v-else>Главная</span>
             </breadcrumb-item>
-            <breadcrumb-item key="no-main" to="/podarocnye-sertifikaty">Подарочные сертификаты</breadcrumb-item>
+            <breadcrumb-item key="no-main" to="/giftcard">Подарочные сертификаты</breadcrumb-item>
         </breadcrumbs>
 
         <section class="section">
