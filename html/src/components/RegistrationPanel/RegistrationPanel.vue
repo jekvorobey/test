@@ -148,7 +148,9 @@
                     </template>
                 </v-password>
 
-                <v-button class="registration-panel__form-btn" type="submit">Сохранить</v-button>
+                <v-button :disabled="!isPasswordCorrect" class="registration-panel__form-btn" type="submit"
+                    >Сохранить</v-button
+                >
             </div>
         </form>
 
@@ -384,6 +386,16 @@ export default {
                 }
             }
             return statuses;
+        },
+
+        isPasswordCorrect() {
+            return (
+                this.password === this.passwordRepeat &&
+                this.$v.password.minLength &&
+                this.$v.password.hasUpperCase &&
+                this.$v.password.hasLowerCase &&
+                this.$v.password.hasNumbers
+            );
         },
     },
 
