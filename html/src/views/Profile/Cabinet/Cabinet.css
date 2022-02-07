@@ -162,4 +162,11 @@
             justify-content: center;
         }
     }
+
+    &__save-btn {
+        @media (--tablet) {
+            width: 100%;
+            margin: 0 calc(var(--gs) * 2);
+        }
+    }
 }

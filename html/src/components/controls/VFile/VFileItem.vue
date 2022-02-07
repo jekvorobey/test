@@ -1,11 +1,11 @@
 <template>
-    <div class="v-file-item" @click.stop="onDeleteItem">
+    <div class="v-file-item" :class="{ 'v-file-item--has-mask': hasMask }" @click.stop="onMaskClick">
         <transition name="fade" mode="out-in">
             <img v-if="!load" key="preloader" :src="preloader" width="30" height="30" />
             <img v-else-if="src" key="img" class="v-file-item__img" :src="src" />
             <div v-else key="name" class="v-file-item__container">{{ name }}</div>
         </transition>
-        <div class="v-file-item__mask">
+        <div v-if="hasMask" class="v-file-item__mask">
             <div class="v-file-item__mask-inner" />
             <v-svg class="v-file-item__mask-icon" name="trash" width="24" height="24" />
         </div>
@@ -31,6 +31,11 @@ export default {
         file: {
             default: null,
         },
+
+        hasMask: {
+            type: Boolean,
+            default: true,
+        },
     },
 
     data() {
@@ -43,6 +48,10 @@ export default {
     },
 
     methods: {
+        onMaskClick() {
+            if (this.hasMask) this.deleteFile(this.file);
+        },
+
         onDeleteItem() {
             this.deleteFile(this.file);
         },
