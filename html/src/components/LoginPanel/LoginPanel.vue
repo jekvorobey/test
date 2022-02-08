@@ -82,15 +82,13 @@
                     @input="onInputCode"
                 >
                     Код из СМС
-                    <template v-slot:after>
-                        <v-button class="login-panel__form-btn login-panel__form-btn--restore" type="submit">
-                            Подтвердить
-                        </v-button>
-                    </template>
                     <template v-slot:error="{ error }">
                         <transition name="slide-in-bottom" mode="out-in">
                             <div :key="error" v-if="error">{{ error }}</div>
                         </transition>
+                    </template>
+                    <template v-slot:after-error>
+                        <v-button class="login-panel__form-btn" type="submit"> Подтвердить </v-button>
                     </template>
                 </v-input>
             </form>
@@ -114,33 +112,35 @@
             </p>
 
             <form class="login-panel__form" @submit.prevent="onSubmit">
-                <v-password
-                    class="login-panel__form-input"
-                    key="change-password"
-                    v-model="restorePassword"
-                    v-focus
-                    :error="restorePasswordError"
-                >
-                    Пароль
-                    <template v-slot:error="{ error }">
-                        <transition name="slide-in-bottom" mode="out-in">
-                            <div :key="error" v-if="error">{{ error }}</div>
-                        </transition>
-                    </template>
-                </v-password>
-                <v-password
-                    class="login-panel__form-input"
-                    v-model="restorePasswordRepeat"
-                    :error="restorePasswordRepeatError"
-                >
-                    Пароль ещё раз
-                    <template v-slot:error="{ error }">
-                        <transition name="slide-in-bottom" mode="out-in">
-                            <div :key="error" v-if="error">{{ error }}</div>
-                        </transition>
-                    </template>
-                </v-password>
-                <v-button class="login-panel__form-submit-btn" type="submit"> Сменить пароль </v-button>
+                <div class="login-panel__form-container">
+                    <v-password
+                        class="login-panel__form-input"
+                        key="change-password"
+                        v-model="restorePassword"
+                        v-focus
+                        :error="restorePasswordError"
+                    >
+                        Пароль
+                        <template v-slot:error="{ error }">
+                            <transition name="slide-in-bottom" mode="out-in">
+                                <div :key="error" v-if="error">{{ error }}</div>
+                            </transition>
+                        </template>
+                    </v-password>
+                    <v-password
+                        class="login-panel__form-input"
+                        v-model="restorePasswordRepeat"
+                        :error="restorePasswordRepeatError"
+                    >
+                        Пароль ещё раз
+                        <template v-slot:error="{ error }">
+                            <transition name="slide-in-bottom" mode="out-in">
+                                <div :key="error" v-if="error">{{ error }}</div>
+                            </transition>
+                        </template>
+                    </v-password>
+                    <v-button class="login-panel__form-submit-btn" type="submit"> Сменить пароль </v-button>
+                </div>
             </form>
         </template>
 

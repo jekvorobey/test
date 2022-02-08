@@ -60,10 +60,11 @@
                                 :class="{ 'portfolio-edit-modal__file-item--loaded': fileLoaded }"
                                 :key="file.name"
                                 :file="file"
+                                :has-mask="false"
                                 @load="onFileLoad"
                             />
                             <div class="portfolio-edit-modal__files-info">
-                                <span>{{ file.name }}</span>
+                                <span class="portfolio-edit-modal__files-info-name">{{ file.name }}</span>
                                 <span
                                     class="text-grey portfolio-edit-modal__files-info-delete"
                                     @click.stop="onDeleteFile"

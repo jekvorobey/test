@@ -1,8 +1,3 @@
-@keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
 .portfolio-edit-modal {
     .popup {
         width: 648px;
@@ -76,6 +71,13 @@
     }
 
     &__files {
+        flex-wrap: nowrap;
+
+        @media (--tablet) {
+            display: flex;
+            margin: 0;
+        }
+
         .v-file__form {
             height: 120px;
         }
@@ -86,8 +88,9 @@
             justify-content: center;
             margin-left: 24px;
 
-            @media (--tablet) {
-                margin-left: 0;
+            &-name {
+                word-break: break-all;
+                text-overflow: clip;
             }
 
             &-delete {
@@ -99,23 +102,18 @@
     &__file-item {
         overflow: visible;
 
+        @media (--tablet) {
+            max-width: 107px;
+            flex-basis: 40%;
+            flex-shrink: 0;
+        }
+
         &--loaded {
-            transition: 2s;
             &::before {
                 content: svg-load('status-check-2.svg');
                 position: absolute;
                 top: -4px;
                 right: -4px;
-                animation: fadein .5s;
-                opacity: 1;
-                transition: opacity .1s;
-            }
-            
-            &:hover {
-                &::before {
-                    opacity: 0;
-                    transition: opacity .1s;
-                }
             }
         }
     }
@@ -127,12 +125,10 @@
         padding: 0 calc(var(--gs) * 3) calc(var(--gs) * 3);
 
         @media (--tablet) {
-            margin-top: auto;
             position: sticky;
             justify-content: space-between;
             bottom: 0;
             padding: var(--gs) calc(var(--gs) * 2);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             background-color: var(--cl-white);
         }
 
