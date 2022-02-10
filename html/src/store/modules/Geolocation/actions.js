@@ -23,7 +23,7 @@ export default {
     async [SET_SELECTED_CITY]({ commit, state }, { city, setCookie = true }) {
         try {
             const currentSelectedCity = state[SELECTED_CITY];
-            if (currentSelectedCity && currentSelectedCity === city) {
+            if (!setCookie && currentSelectedCity && currentSelectedCity === city) {
                 return;
             }
 
