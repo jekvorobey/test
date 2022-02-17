@@ -298,7 +298,7 @@
                                 :offer-id="item.id"
                                 :product-id="item.productId"
                                 :name="item.name"
-                                :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
+                                :href="`/product/${item.code}`"
                                 :image="item.image"
                                 :price="item.price"
                                 :old-price="item.oldPrice"
