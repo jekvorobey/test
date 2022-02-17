@@ -47,7 +47,7 @@
                         :product-id="product.productId"
                         :name="product.name"
                         :type="product.type"
-                        :href="`/product/${product.code}`"
+                        :href="`/catalog/${product.categoryCodes[product.categoryCodes.length - 1]}/${product.code}`"
                         :image="product.image"
                         :price="product.price"
                         :old-price="product.oldPrice"

@@ -11,7 +11,7 @@
                     :product-id="item.productId"
                     :type="item.type"
                     :name="item.name"
-                    :href="`/product/${item.code}`"
+                    :href="`/catalog/${item.categoryCodes[item.categoryCodes.length - 1]}/${item.code}`"
                     :image="item.image"
                     :price="item.price"
                     :old-price="item.oldPrice"

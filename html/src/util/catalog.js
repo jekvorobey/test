@@ -27,8 +27,8 @@ export function generateAbsoluteGiftCardUrl() {
 }
 
 export function generateProductUrl(categoryCode, code, refCode) {
-    if (refCode) return `/${productGroupTypes.PRODUCT}/${code}/?refCode=${refCode}`;
-    return `/${productGroupTypes.PRODUCT}/${code}/`;
+    if (refCode) return `/${productGroupTypes.CATALOG}/${categoryCode}/${code}/?refCode=${refCode}`;
+    return `/${productGroupTypes.CATALOG}/${categoryCode}/${code}/`;
 }
 
 export function generateSearchUrl(search_string) {
