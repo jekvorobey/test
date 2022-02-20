@@ -34,6 +34,7 @@
         </div>
 
         <transition
+            v-if="hasAdditionalText"
             name="expand"
             @enter="expandAnimationEnter"
             @after-enter="expandAnimationAfterEnter"
@@ -87,7 +88,7 @@ export default {
     data() {
         return {
             isMounted: false,
-            isDescriptionOpen: this.hasAdditionalText,
+            isDescriptionOpen: false,
             fileExtension,
         };
     },
@@ -145,7 +146,7 @@ export default {
         },
 
         hasAdditionalText() {
-            return this.banner.additional_text ? true : false;
+            return Boolean(this.banner.additional_text);
         },
     },
 
