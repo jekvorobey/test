@@ -1,5 +1,5 @@
 <template>
-    <li class="catalog-banner-list-card" :class="mobileOrderClass">
+    <li class="catalog-banner-list-card" :class="orderClass">
         <div class="catalog-banner-list-card__img" v-once>
             <component
                 :is="bannerComponent"
@@ -273,7 +273,7 @@ export default {
             return this.item.url || '';
         },
 
-        mobileOrderClass() {
+        orderClass() {
             return `catalog-product-list__item--order-${this.mobileOrder}`;
         },
     },
