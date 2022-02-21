@@ -1,7 +1,6 @@
 <template>
     <div v-if="banner" class="remote-banner-placement">
         <remote-banner
-            v-else
             :banner="banner"
             :desktop-size="desktopSize"
             :tablet-size="tabletSize"
