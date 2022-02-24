@@ -447,6 +447,7 @@
                         :disabled="isInCart(ticket.offerId) || inProcess[ticket.offerId]"
                         :in-process="!!inProcess[ticket.offerId]"
                         :show-count="!masterClass.hideTicketTypesQtyFree"
+                        :freeBuy="freeBuy"
                         @btnClick="onAddToCart(ticket.offerId, $event)"
                     >
                         <template v-if="!isTablet">
@@ -656,6 +657,7 @@
                     v-if="(scroll && !isPanelVisible) || isTablet"
                     :name="masterClass.title"
                     :price="masterClass.price"
+                    :freeBuy="freeBuy"
                     @add-item="onScrollTo($refs.panel)"
                 >
                     {{ buyBtnText }}
@@ -862,6 +864,8 @@ export default {
                 imageSize: [24, 24],
                 imageOffset: [0, 0],
             },
+
+            freeBuy: true,
         };
     },
 

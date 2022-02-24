@@ -37,6 +37,7 @@
             :class="{ 'cart-panel-product-card__btn--loader': isLoadButton }"
             @click.prevent="onBuyButtonClick"
             :disabled="insideBasket"
+            :freeBuy="freeBuy"
         >
             {{ insideBasket ? 'В корзине' : 'В корзину' }}
         </buy-button>
@@ -117,6 +118,11 @@ export default {
 
         insideBasket: {
             type: Boolean,
+        },
+
+        freeBuy: {
+            type: Boolean,
+            default: false,
         },
     },
 
