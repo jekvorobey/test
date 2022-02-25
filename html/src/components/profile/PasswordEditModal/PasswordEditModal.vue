@@ -33,7 +33,11 @@
                             </transition>
                         </template>
                     </v-password>
-
+                    <validation-tooltip
+                        :tooltips="visualTooltips"
+                        :validatedValue="newPassword"
+                        :validations="$v.newPassword"
+                    ></validation-tooltip>
                     <v-password
                         class="password-edit-modal__form-row"
                         v-model="newPassword"
@@ -61,7 +65,15 @@ import VButton from '@controls/VButton/VButton.vue';
 import VPassword from '@controls/VPassword/VPassword.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
-import validationMixin, { required, password, minLength } from '@plugins/validation';
+import ValidationTooltip from '@components/ValidationTooltip/ValidationTooltip.vue';
+import validationMixin, {
+    required,
+    password,
+    minLength,
+    hasUpperCase,
+    hasLowerCase,
+    hasNumbers,
+} from '@plugins/validation';
 
 import { mapActions, mapState } from 'vuex';
 
@@ -85,8 +97,8 @@ export default {
     components: {
         VButton,
         VPassword,
-
         GeneralModal,
+        ValidationTooltip,
     },
 
     validations() {
@@ -102,6 +114,9 @@ export default {
                     required,
                     password,
                     minLength: minLength(8),
+                    hasUpperCase,
+                    hasLowerCase,
+                    hasNumbers,
                 },
             };
         } else
@@ -110,6 +125,9 @@ export default {
                     required,
                     password,
                     minLength: minLength(8),
+                    hasUpperCase,
+                    hasLowerCase,
+                    hasNumbers,
                 },
             };
     },
@@ -118,6 +136,24 @@ export default {
         return {
             oldPassword: null,
             newPassword: null,
+            visualTooltips: [
+                {
+                    text: '8 символов',
+                    validator: 'minLength',
+                },
+                {
+                    text: 'A-Z',
+                    validator: 'hasUpperCase',
+                },
+                {
+                    text: 'a-z',
+                    validator: 'hasLowerCase',
+                },
+                {
+                    text: '0-9',
+                    validator: 'hasNumbers',
+                },
+            ],
         };
     },
 

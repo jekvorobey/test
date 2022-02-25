@@ -112,6 +112,11 @@
             </p>
 
             <form class="login-panel__form" @submit.prevent="onSubmit">
+                <validation-tooltip
+                    :tooltips="visualTooltips"
+                    :validatedValue="restorePassword"
+                    :validations="$v.restorePassword"
+                ></validation-tooltip>
                 <div class="login-panel__form-container">
                     <v-password
                         class="login-panel__form-input"
@@ -171,6 +176,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VInputMask from '@controls/VInput/VInputMask.vue';
 import VPassword from '@controls/VPassword/VPassword.vue';
+import ValidationTooltip from '@components/ValidationTooltip/ValidationTooltip.vue';
 
 import { mapActions } from 'vuex';
 
@@ -180,7 +186,16 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { NAME as AUTH_MODULE } from '@store/modules/Auth';
 import { LOGIN_BY_PASSWORD, GET_SOCIAL_LINK, SEND_SMS, RESET_PASSWORD, CHECK_CODE } from '@store/modules/Auth/actions';
 
-import validationMixin, { required, minLength, password, sameAs } from '@plugins/validation';
+import validationMixin, {
+    required,
+    minLength,
+    password,
+    sameAs,
+    hasUpperCase,
+    hasLowerCase,
+    hasNumbers,
+} from '@plugins/validation';
+
 import { rawPhone } from '@util';
 import { phoneMaskOptions } from '@settings';
 import { modalName, authMode } from '@enums';
@@ -201,6 +216,7 @@ export default {
         VInput,
         VInputMask,
         VPassword,
+        ValidationTooltip,
     },
 
     validations: {
@@ -229,6 +245,9 @@ export default {
             required,
             password,
             minLength: minLength(8),
+            hasUpperCase,
+            hasLowerCase,
+            hasNumbers,
         },
 
         restorePasswordRepeat: {
@@ -278,6 +297,25 @@ export default {
             counter: 59,
 
             maskOptions: { ...phoneMaskOptions },
+
+            visualTooltips: [
+                {
+                    text: '8 символов',
+                    validator: 'minLength',
+                },
+                {
+                    text: 'A-Z',
+                    validator: 'hasUpperCase',
+                },
+                {
+                    text: 'a-z',
+                    validator: 'hasLowerCase',
+                },
+                {
+                    text: '0-9',
+                    validator: 'hasNumbers',
+                },
+            ],
         };
     },
 

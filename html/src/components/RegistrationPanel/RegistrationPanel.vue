@@ -100,26 +100,11 @@
 
             <div v-else class="registration-panel__form-password">
                 <h4 class="registration-panel__hl" v-if="!isTablet">Создание пароля</h4>
-                <div class="registration-panel__tooltip">
-                    <div
-                        v-for="tooltip in visualTooltips"
-                        :key="tooltip.validator"
-                        class="registration-panel__tooltip-item"
-                        :class="{
-                            'registration-panel__tooltip-item--disabled':
-                                tooltipStatuses[tooltip.validator] === 'status-disabled',
-                        }"
-                    >
-                        <v-svg
-                            class="registration-panel__tooltip-icon"
-                            :name="tooltipStatuses[tooltip.validator]"
-                            width="16"
-                            height="16"
-                        />
-                        <span>{{ tooltip.text }}</span>
-                    </div>
-                </div>
-
+                <validation-tooltip
+                    :tooltips="visualTooltips"
+                    :validatedValue="password"
+                    :validations="$v.password"
+                ></validation-tooltip>
                 <v-password
                     class="registration-panel__form-input"
                     key="new-password"
@@ -196,6 +181,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VPassword from '@controls/VPassword/VPassword.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VInputMask from '@controls/VInput/VInputMask.vue';
+import ValidationTooltip from '@components/ValidationTooltip/ValidationTooltip.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
@@ -223,9 +209,7 @@ import { verificationCodeType } from '@enums/auth';
 import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/google-bw.svg';
-import '@images/sprites/status-disabled.svg';
-import '@images/sprites/status-alert.svg';
-import '@images/sprites/status-check.svg';
+
 import './RegistrationPanel.css';
 
 export default {
@@ -240,6 +224,7 @@ export default {
         VPassword,
         VInput,
         VInputMask,
+        ValidationTooltip,
         GeneralModal,
     },
 
@@ -375,17 +360,6 @@ export default {
 
         isVisibleTabs() {
             return !this.accepted;
-        },
-
-        tooltipStatuses() {
-            const d = 'status-disabled';
-            const statuses = { minLength: d, hasUpperCase: d, hasLowerCase: d, hasNumbers: d };
-            if (this.password) {
-                for (let key in statuses) {
-                    statuses[key] = this.$v.password[key] ? 'status-check' : 'status-alert';
-                }
-            }
-            return statuses;
         },
 
         isPasswordCorrect() {
