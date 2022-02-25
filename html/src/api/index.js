@@ -749,6 +749,14 @@ export function getCatalogLatestSets() {
     return $http.get('/v1/catalog/latest-sets');
 }
 
+export function getLanding({ url }) {
+    return $http.get('/v1/content/pages', {
+        params: {
+            url,
+        },
+    });
+}
+
 // cart
 
 export function getCartData() {
