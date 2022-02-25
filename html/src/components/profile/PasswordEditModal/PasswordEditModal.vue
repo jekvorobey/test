@@ -13,11 +13,6 @@
             </h4>
 
             <div class="container container--tablet">
-                <p class="password-edit-modal__password-text">
-                    Придумайте пароль для входа в Личный кабинет.<br />
-                    Он должен состоять из латинских букв, содержать как минимум одну цифру, заглавную и строчную буквы.
-                </p>
-
                 <form class="password-edit-modal__form" @submit.prevent="onSubmit">
                     <v-password
                         v-if="hasPassword"

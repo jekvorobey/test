@@ -106,11 +106,6 @@
         <template v-else>
             <h4 class="login-panel__hl" v-if="!isTablet">Смена пароля</h4>
 
-            <p class="login-panel__password-text">
-                Придумайте пароль для входа в Личный кабинет.<br />
-                Он должен состоять из латинских букв, содержать как минимум одну цифру, заглавную и строчную буквы.
-            </p>
-
             <form class="login-panel__form" @submit.prevent="onSubmit">
                 <validation-tooltip
                     :tooltips="visualTooltips"
