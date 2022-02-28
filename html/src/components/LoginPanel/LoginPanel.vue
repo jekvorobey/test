@@ -5,11 +5,23 @@
         </p>
 
         <form v-if="!restore" class="login-panel__form" @submit.prevent="onSubmit">
-            <v-input-mask key="login-phone" v-model="phone" v-focus :options="maskOptions" :error="phoneError">
+            <v-input-mask
+                key="login-phone"
+                v-model="phone"
+                name="phone"
+                v-focus
+                :options="maskOptions"
+                :error="phoneError"
+            >
                 Номер телефона
             </v-input-mask>
 
-            <v-password v-model="password" :error="passwordError" class="login-panel__form-password-input">
+            <v-password
+                v-model="password"
+                :error="passwordError"
+                name="password"
+                class="login-panel__form-password-input"
+            >
                 Пароль
             </v-password>
 

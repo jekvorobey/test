@@ -1,15 +1,6 @@
 <template>
     <div v-if="banner" class="remote-banner-placement">
-        <remote-banner-certificate
-            v-if="banner.id === 34"
-            :banner="banner"
-            :desktop-size="desktopSize"
-            :tablet-size="tabletSize"
-            :mobile-size="mobileSize"
-        />
-
         <remote-banner
-            v-else
             :banner="banner"
             :desktop-size="desktopSize"
             :tablet-size="tabletSize"
@@ -22,7 +13,6 @@
 import { getBannersByCode } from '@api';
 
 import RemoteBanner from './RemoteBanner.vue';
-import RemoteBannerCertificate from '@components/RemoteBanner/RemoteBannerCertificate.vue';
 import './BannerPlacement.css';
 
 export default {
@@ -30,7 +20,6 @@ export default {
 
     components: {
         RemoteBanner,
-        RemoteBannerCertificate,
     },
 
     props: {
