@@ -1,6 +1,6 @@
 <template>
     <component v-if="banner" :is="bannerComponent" class="remote-banner" v-bind="bannerProperties">
-        <div class="remote-banner__img">
+        <div class="remote-banner__img" @click="isDescriptionOpen = !isDescriptionOpen">
             <v-picture :key="banner.id">
                 <template v-if="desktopImage">
                     <source
@@ -32,6 +32,18 @@
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImage.original" alt="" />
             </v-picture>
         </div>
+
+        <transition
+            v-if="hasAdditionalText"
+            name="expand"
+            @enter="expandAnimationEnter"
+            @after-enter="expandAnimationAfterEnter"
+            @leave="expandAnimationLeave"
+        >
+            <div v-if="isDescriptionOpen">
+                {{ banner.additional_text }}
+            </div>
+        </transition>
     </component>
 </template>
 
@@ -76,6 +88,7 @@ export default {
     data() {
         return {
             isMounted: false,
+            isDescriptionOpen: false,
             fileExtension,
         };
     },
@@ -131,6 +144,10 @@ export default {
         defaultImage() {
             return this.desktopImage;
         },
+
+        hasAdditionalText() {
+            return Boolean(this.banner.additional_text);
+        },
     },
 
     mounted() {
@@ -168,6 +185,68 @@ export default {
                 retinaWebp: generatePictureSourcePath(sizes[0] * 2, sizes[1] * 2, image.id, fileExtension.image.WEBP),
             };
         },
+
+        expandAnimationEnter(element) {
+            const width = getComputedStyle(element).width;
+
+            element.style.width = width;
+            element.style.position = 'absolute';
+            element.style.visibility = 'hidden';
+            element.style.height = 'auto';
+
+            const height = getComputedStyle(element).height;
+
+            element.style.width = null;
+            element.style.position = null;
+            element.style.visibility = null;
+            element.style.height = 0;
+
+            getComputedStyle(element).height;
+
+            requestAnimationFrame(() => {
+                element.style.height = height;
+            });
+        },
+
+        expandAnimationAfterEnter(element) {
+            element.style.height = 'auto';
+        },
+
+        expandAnimationLeave(element) {
+            const height = getComputedStyle(element).height;
+
+            element.style.height = height;
+
+            getComputedStyle(element).height;
+
+            requestAnimationFrame(() => {
+                element.style.height = 0;
+            });
+        },
     },
 };
 </script>
+
+<style scoped>
+.remote-banner {
+  flex-flow: column;
+  cursor: auto;
+}
+
+.remote-banner .remote-banner__img {
+  cursor: pointer;
+}
+
+.expand-enter-active,
+.expand-leave-active {
+  transition: height 500ms ease-in-out;
+  overflow: hidden;
+  transition-property: opacity, height;
+}
+
+.expand-enter,
+.expand-leave-to {
+  height: 0;
+  opacity: 0;
+}
+</style>
