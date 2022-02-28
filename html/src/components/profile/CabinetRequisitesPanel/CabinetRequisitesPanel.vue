@@ -253,7 +253,7 @@ export default {
     },
 
     beforeMount() {
-        this.$watch('form', this.debounce_submit, {
+        this.$watch('form', () => this.debounce_submit(), {
             deep: true,
         });
     },
