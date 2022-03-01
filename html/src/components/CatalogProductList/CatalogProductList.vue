@@ -24,7 +24,7 @@
                 :item="item"
                 :referral-code="referralCode"
                 :position="index + 1"
-                :mobileOrder="calcMobileOrder(item)"
+                :mobileOrder="calcMobileOrder(item, index)"
                 item-prop
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
@@ -35,13 +35,13 @@
         <ul class="catalog-product-list__list" v-else>
             <component
                 class="catalog-product-list__item"
-                v-for="item in items"
+                v-for="(item, index) in items"
                 :key="item.id"
                 :class="getClass(item.type)"
                 :is="getComponent(item.type)"
                 :item="item"
                 :referral-code="referralCode"
-                :mobileOrder="calcMobileOrder(item)"
+                :mobileOrder="calcMobileOrder(item, index)"
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
@@ -219,18 +219,22 @@ export default {
                 });
         },
 
-        calcMobileOrder(item) {
-            const { items = [] } = this;
-            if (items[1] && item.id === items[1].id && item.type === catalogItemTypes.BANNER) {
-                return 2;
-            }
+        calcMobileOrder(item, index) {
+            let order = index + 1;
+
             if (
-                (items[0] && item.id === items[0].id) ||
-                (items[2] && items[1] && item.id === items[2].id && items[1].type === catalogItemTypes.BANNER)
+                typeof this.items[index + 1] !== 'undefined' &&
+                this.items[index + 1].type === catalogItemTypes.BANNER &&
+                order % 2 !== 0
             ) {
-                return 1;
+                order += 1;
             }
-            return 3;
+
+            if (item.type === catalogItemTypes.BANNER && order % 2 === 0) {
+                order -= 1;
+            }
+
+            return order;
         },
 
         registerSeoEvent(item, index) {
