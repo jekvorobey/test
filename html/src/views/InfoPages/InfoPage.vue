@@ -1,10 +1,12 @@
 <template>
     <div class="container info-pages-block">
         <h1 class="info-pages-block__title">
-            {{ landing.title }}
+            {{ landing.name }}
         </h1>
 
-        <div v-html="landing.widgets"></div>
+        <div class="info-pages-block__content">
+            <div v-html="landing.widgets"></div>
+        </div>
     </div>
 </template>
 

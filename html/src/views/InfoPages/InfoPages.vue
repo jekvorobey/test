@@ -14,10 +14,12 @@ export default {
     components: {
         InfoPage,
     },
-
+    props: {
+        page: String,
+    },
     data() {
         return {
-            landing: this.getLanding,
+            landing: {},
         };
     },
 
@@ -25,16 +27,17 @@ export default {
         ...mapState('route', {
             page: (state) => state.params.page,
         }),
-
-        getLanding() {
-            const { page } = this;
-
-            return $http.get('/v1/content/pages', {
+    },
+    beforeMount() {
+        $http
+            .get('/v1/content/pages', {
                 params: {
-                    page,
+                    url: this.page,
                 },
+            })
+            .then((response) => {
+                this.landing = response;
             });
-        },
     },
 };
 </script>
