@@ -743,18 +743,18 @@ export function getMasterclass(code) {
     });
 }
 
+export function getLanding(page) {
+    return $http.get('/v1/content/pages', {
+        params: {
+            url: page,
+        },
+    });
+}
+
 // Last 3 sets for landing page
 
 export function getCatalogLatestSets() {
     return $http.get('/v1/catalog/latest-sets');
-}
-
-export function getLanding({ url }) {
-    return $http.get('/v1/content/pages', {
-        params: {
-            url,
-        },
-    });
 }
 
 // cart

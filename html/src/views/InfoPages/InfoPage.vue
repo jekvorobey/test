@@ -5,7 +5,7 @@
         </h1>
 
         <div class="info-pages-block__content">
-            <div v-html="landing.widgets"></div>
+            <div v-html="landing.content"></div>
         </div>
     </div>
 </template>

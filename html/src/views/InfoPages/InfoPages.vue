@@ -7,7 +7,7 @@ import InfoPage from './InfoPage.vue';
 
 import { mapState } from 'vuex';
 import './InfoPages.css';
-import { $http } from '@services';
+import { getLanding } from '@api';
 
 export default {
     name: 'agreements',
@@ -29,15 +29,9 @@ export default {
         }),
     },
     beforeMount() {
-        $http
-            .get('/v1/content/pages', {
-                params: {
-                    url: this.page,
-                },
-            })
-            .then((response) => {
-                this.landing = response;
-            });
+        getLanding(this.page).then((response) => {
+            this.landing = response;
+        });
     },
 };
 </script>
