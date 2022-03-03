@@ -144,7 +144,7 @@
                     </p>
                 </div>
 
-                <form class="about-us-view__feedback-form" @submit.prevent>
+                <form v-if="!formSent" class="about-us-view__feedback-form" @submit.prevent>
                     <v-input
                         class="about-us-view__feedback-form-name"
                         placeholder="Вашe имя"
@@ -173,10 +173,13 @@
                         Сообщение
                     </v-input>
 
-                    <v-button class="about-us-view__feedback-form-submit-btn" :href="mailTo" @click="onSubmit">
+                    <v-button class="about-us-view__feedback-form-submit-btn" @click="onSubmit">
                         Напишите нам
                     </v-button>
                 </form>
+                <div v-else>
+                    Сообщение отправлено
+                </div>
             </div>
         </section>
 
@@ -224,6 +227,7 @@ import AboutMk2 from '@images/mock/AboutMk2.png';
 import AboutMk3 from '@images/mock/AboutMk3.png';
 import AboutMk4 from '@images/mock/AboutMk4.png';
 import './AboutUs.css';
+import { sendFeedback } from '@api';
 
 export default {
     name: 'about-us',
@@ -270,7 +274,7 @@ export default {
             AboutLearningMd,
             AboutIBT,
             AboutIBTStatic,
-
+            formSent: false,
             form: {
                 name: '',
                 email: '',
@@ -339,12 +343,6 @@ export default {
     },
 
     computed: {
-        mailTo() {
-            const { form } = this;
-            const subject = `${form.name}, ${form.email}`;
-            return `mailto:support@ibt.ru?subject=${subject}&body=${form.body}`;
-        },
-
         nameError() {
             if (this.$v.form.name.$dirty && !this.$v.form.name.required) {
                 return this.$t('validation.errors.required');
@@ -381,6 +379,16 @@ export default {
         onSubmit(e) {
             this.$v.$touch();
             if (this.$v.$invalid) e.preventDefault();
+            this.sendFeedback();
+        },
+
+        sendFeedback() {
+            return sendFeedback({
+                page: location.pathname.replaceAll('/', ''),
+                ...this.form,
+            }).then(() => {
+                this.formSent = true;
+            });
         },
     },
 

@@ -123,7 +123,7 @@
                     </p>
                 </div>
 
-                <form class="university-view__feedback-form" enctype="multipart/form-data" @submit.prevent="onSubmit">
+                <form v-if="!formSent" class="university-view__feedback-form" enctype="multipart/form-data" @submit.prevent="onSubmit">
                     <v-input v-model="form.name" placeholder="Вашe имя" :error="nameError"> Имя и фамилия </v-input>
 
                     <v-input v-model="form.city" placeholder="Вашe город" :error="cityError"> Город </v-input>
@@ -144,10 +144,13 @@
                         Сообщение
                     </v-input>
 
-                    <v-button class="partners-view__feedback-form-submit-btn" :href="mailTo" @click="onSubmit">
+                    <v-button class="partners-view__feedback-form-submit-btn" @click="onSubmit">
                         Заполнить заявку
                     </v-button>
                 </form>
+                <div v-else>
+                    Сообщение отправлено
+                </div>
             </div>
         </section>
     </section>
@@ -184,6 +187,7 @@ import Univesity3Md from '@images/mock/Univesity3Md.png';
 
 import '@images/sprites/home.svg';
 import './University.css';
+import { sendFeedback } from '@api';
 
 export default {
     name: 'university',
@@ -245,6 +249,7 @@ export default {
         Univesity2Lg,
         Univesity2Md,
         Univesity3Md,
+        formSent: false,
         univerSlider: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }],
         univerSliderOptions: {
             spaceBetween: 8,
@@ -335,6 +340,16 @@ export default {
         onSubmit(e) {
             this.$v.$touch();
             if (this.$v.$invalid) e.preventDefault();
+            this.sendFeedback();
+        },
+
+        sendFeedback() {
+            return sendFeedback({
+                page: location.pathname.replaceAll('/', ''),
+                ...this.form,
+            }).then(() => {
+                this.formSent = true;
+            });
         },
     },
 

@@ -25,6 +25,10 @@ export function getRedirects() {
     return $http.get('/v1/content/redirects');
 }
 
+export function sendFeedback(data) {
+    return $http.post('/v1/content/contacts/feedback', data);
+}
+
 // auth
 
 export function checkSession(force = false) {
