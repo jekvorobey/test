@@ -57,7 +57,6 @@
                                     :rating="item.rating"
                                     :is-price-hidden="item.isPriceHidden"
                                     :show-buy-btn="item.stock.qty > 0"
-                                    :freeBuy="item.freeBuy"
                                     @add-item="onAddToCart(item)"
                                     @preview="onPreview(item.code)"
                                     @toggle-favorite-item="onToggleFavorite(item)"
@@ -88,7 +87,7 @@ import { SCROLL } from '@store';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
-import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
+import {NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER} from '@store/modules/Auth';
 
 import {
     NAME as SEARCH_MODULE,
@@ -164,13 +163,13 @@ export default {
 
         searchBtnText() {
             const { range, isTabletLg } = this;
-            const productWords = (number) => pluralize(number, ['товар', 'товара', 'товаров']);
-            const foundWords = (number) => pluralize(number, ['Найден', 'Найдено', 'Найдено']);
+            const productWords = (number) => pluralize(number, ['товар','товара','товаров']);
+            const foundWords = (number) => pluralize(number, ['Найден','Найдено','Найдено']);
 
-            if (range > this.products.length && !isTabletLg) {
+            if(range > this.products.length && !isTabletLg) {
                 const hiddenGoods = range - this.products.length;
                 return `Показать ещё ${hiddenGoods} ${productWords(hiddenGoods)}`;
-            }
+            } 
             if (!isTabletLg) return `Показать ${range} ${productWords(range)}`;
             return `${foundWords(range)} ${range} ${productWords(range)}`;
         },

@@ -30,7 +30,6 @@
                     <buy-button
                         v-if="showBuyBtn"
                         class="btn--outline catalog-product-list-card__controls-btn"
-                        :freeBuy="freeBuy"
                         @click.prevent="onBuyButtonClick"
                     >
                         Купить
@@ -319,10 +318,6 @@ export default {
 
         orderClass() {
             return `catalog-product-list__item--order-${this.mobileOrder}`;
-        },
-
-        freeBuy() {
-            return this.item.freeBuy;
         },
     },
 
