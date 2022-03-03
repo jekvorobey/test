@@ -10,34 +10,16 @@ import { $store } from '@services';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
-import { NAME as AUTH_MODULE, HAS_SESSION, USER, CAN_BUY, STATUS } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, USER, CAN_BUY, STATUS } from '@store/modules/Auth';
 
-import { modalName, authMode } from '@enums';
+import { modalName } from '@enums';
 import { userStatus } from '@enums/profile';
 
-export const checkSession = () => {
-    const hasSession = $store.state[AUTH_MODULE][HAS_SESSION];
-    if (!hasSession) {
-        $store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
-            name: modalName.general.AUTH,
-            open: true,
-            state: {
-                activeTab: authMode.LOGIN,
-            },
-        });
-        return false;
-    }
-    return true;
-};
-
-export const checkPermissions = (freeBuy) => {
-    // if (!checkSession()) {
-    //     return false;
-    // }
-
+export const checkPermissions = () => {
     const user = $store.state[AUTH_MODULE][USER];
     const canBuy = user && user[CAN_BUY];
     const status = user && user[STATUS];
+    // флага freeBuy нет, меняем условие перед тестированием
     if (!canBuy) {
         if (status === userStatus.CREATED || status === userStatus.NEW) {
             $store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
