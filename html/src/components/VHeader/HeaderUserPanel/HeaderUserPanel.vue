@@ -19,8 +19,6 @@
                     {{ favoriteItemsCount }}
                 </span>
             </self-router-link>
-            <<<<<<< HEAD =======
-
             <div v-if="canBuy" class="header-user-panel__item header-user-panel__item-cart-controls" @click="onToCart">
                 <cart-header-panel class="header-user-panel__item-cart">
                     <price class="text-medium header-user-panel__item-sum" v-bind="productItemsSum" always-number />
@@ -31,7 +29,6 @@
                     </button>
                 </cart-header-panel>
             </div>
-            >>>>>>> parent of 0119a3ef3 (IBT-558: cherry-pick allow purchases without prof status from IBT-719)
         </template>
         <div class="header-user-panel__item header-user-panel__item-cart-controls" @click="onToCart">
             <cart-header-panel class="header-user-panel__item-cart">
