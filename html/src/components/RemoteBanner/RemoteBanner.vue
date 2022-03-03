@@ -41,7 +41,7 @@
             @leave="expandAnimationLeave"
         >
             <div v-if="isDescriptionOpen">
-                {{ banner.additional_text }}
+                <div v-html="banner.additional_text"></div>
             </div>
         </transition>
     </component>
@@ -95,10 +95,18 @@ export default {
 
     computed: {
         bannerComponent() {
+            if (this.hasAdditionalText) {
+                return '';
+            }
+
             return this.isExternal ? 'a' : 'router-link';
         },
 
         bannerProperties() {
+            if (this.hasAdditionalText) {
+                return {};
+            }
+
             if (this.isExternal) {
                 return {
                     href: this.banner.url,
@@ -187,14 +195,12 @@ export default {
         },
 
         expandAnimationEnter(element) {
-            const width = getComputedStyle(element).width;
-
-            element.style.width = width;
+            element.style.width = getComputedStyle(element).width;
             element.style.position = 'absolute';
             element.style.visibility = 'hidden';
             element.style.height = 'auto';
 
-            const height = getComputedStyle(element).height;
+            const { height } = getComputedStyle(element);
 
             element.style.width = null;
             element.style.position = null;
@@ -213,9 +219,7 @@ export default {
         },
 
         expandAnimationLeave(element) {
-            const height = getComputedStyle(element).height;
-
-            element.style.height = height;
+            element.style.height = getComputedStyle(element).height;
 
             getComputedStyle(element).height;
 
