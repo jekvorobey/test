@@ -31,9 +31,9 @@ export const checkSession = () => {
 };
 
 export const checkPermissions = (freeBuy) => {
-    if (!checkSession()) {
-        return false;
-    }
+    // if (!checkSession()) {
+    //     return false;
+    // }
 
     const user = $store.state[AUTH_MODULE][USER];
     const canBuy = user && user[CAN_BUY];
