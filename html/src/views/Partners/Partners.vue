@@ -447,7 +447,7 @@ export default {
 
         sendFeedback() {
             return sendFeedback({
-                page: location.pathname.replaceAll('/', ''),
+                page: 'partners',
                 ...this.form,
             }).then(() => {
                 this.formSent = true;

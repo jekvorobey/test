@@ -345,7 +345,7 @@ export default {
 
         sendFeedback() {
             return sendFeedback({
-                page: location.pathname.replaceAll('/', ''),
+                page: 'university',
                 ...this.form,
             }).then(() => {
                 this.formSent = true;
