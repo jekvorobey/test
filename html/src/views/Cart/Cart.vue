@@ -245,7 +245,7 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import metaMixin from '@plugins/meta';
 import { cancelRoute } from '@settings';
-import { breakpoints, modalName, httpCodes, requestStatus } from '@enums';
+import { breakpoints, modalName, httpCodes, requestStatus, authMode } from '@enums';
 import { discountType } from '@enums/checkout';
 import { preparePrice } from '@util';
 import '@images/sprites/check.svg';
@@ -482,9 +482,21 @@ export default {
 
         async loadCheckout() {
             try {
-                this.isLoad = true;
-                await this[CHECK_CART_DATA]();
-                this.$router.push({ name: 'Checkout', params: { type: this.activeTabItem.type } });
+                const hasSession = this.$store.state[AUTH_MODULE][HAS_SESSION];
+
+                if (hasSession) {
+                    this.isLoad = true;
+                    await this[CHECK_CART_DATA]();
+                    this.$router.push({ name: 'Checkout', params: { type: this.activeTabItem.type } });
+                } else {
+                    this.$store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
+                        name: modalName.general.AUTH,
+                        open: true,
+                        state: {
+                            activeTab: authMode.LOGIN,
+                        },
+                    });
+                }
             } catch (error) {
                 this.isLoad = false;
             }
