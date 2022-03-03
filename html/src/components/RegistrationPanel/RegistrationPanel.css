@@ -31,31 +31,6 @@
         margin-bottom: calc(var(--gs) * 2);
     }
 
-    &__tooltip {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        margin-bottom: calc(var(--gs) * 1.5);
-
-        &-item {
-            display: flex; 
-            align-items: center;
-            margin-right: 16px;
-
-            &:last-child {
-                margin-right: 0;
-            }
-
-            &--disabled {
-                color: #7D7D7D;
-            }
-        }
-
-        &-icon {
-            margin-right: 8px;
-        }
-    }
-
     &__form {
         &-confirmation,
         &-phone {
