@@ -20,6 +20,7 @@
                     :rating="item.rating"
                     :is-price-hidden="item.isPriceHidden"
                     :show-buy-btn="item.stock.qty > 0"
+                    :freeBuy="item.freeBuy"
                     @add-item="onAddToCart(item)"
                     @preview="onPreview(item.code)"
                     @toggle-favorite-item="onToggleFavorite(item)"

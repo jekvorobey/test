@@ -75,6 +75,7 @@
                             :bonus="productPreview.bonus"
                             :is-price-hidden="productPreview.isPriceHidden"
                             :disabled="!canBuy"
+                            :freeBuy="freeBuy"
                             @cart="onCartStateChange"
                             @wishlist="onToggleFavorite(productPreview.productId)"
                         >
@@ -221,6 +222,10 @@ export default {
         canBuy() {
             const { stock } = this[PRODUCT_PREVIEW];
             return stock && stock.qty > 0;
+        },
+
+        freeBuy() {
+            return this[PRODUCT_PREVIEW].freeBuy;
         },
 
         buyBtnText() {
