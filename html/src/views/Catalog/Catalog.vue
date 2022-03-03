@@ -854,7 +854,7 @@ export default {
             params: { code: toCode = null, entityCode: toEntityCode = null, type: toType, pathMatch },
             query: {
                 page = DEFAULT_PAGE,
-                orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.NEW,
+                orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.POPULARITY,
                 orderDirection = sortDirections.DESC,
                 search_string: toSearchString = null,
             },
