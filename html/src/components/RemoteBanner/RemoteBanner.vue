@@ -96,7 +96,7 @@ export default {
     computed: {
         bannerComponent() {
             if (this.hasAdditionalText) {
-                return '';
+                return 'div';
             }
 
             return this.isExternal ? 'a' : 'router-link';
