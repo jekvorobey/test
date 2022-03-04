@@ -796,7 +796,7 @@ export default {
                     params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch },
                     query: {
                         page = DEFAULT_PAGE,
-                        orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.NEW,
+                        orderField = this.setDefaultOrderField(toType),
                         orderDirection = sortDirections.DESC,
                         search_string: toSearchString,
                     },
@@ -842,6 +842,12 @@ export default {
                 this.$progress.fail();
             }
         },
+
+        setDefaultOrderField(type) {
+            if (type === productGroupTypes.SEARCH) return sortFields.RELEVANCE;
+            else if (type === productGroupTypes.NEW) return sortFields.NEW;
+            return sortFields.POPULARITY;
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -849,12 +855,18 @@ export default {
         // НЕ ИМЕЕТ доступа к контексту экземпляра компонента `this`,
         // так как к моменту вызова экземпляр ещё не создан!
 
+        function setDefaultOrderField(type) {
+            if (type === productGroupTypes.SEARCH) return sortFields.RELEVANCE;
+            else if (type === productGroupTypes.NEW) return sortFields.NEW;
+            return sortFields.POPULARITY;
+        }
+
         const {
             fullPath,
             params: { code: toCode = null, entityCode: toEntityCode = null, type: toType, pathMatch },
             query: {
                 page = DEFAULT_PAGE,
-                orderField = toType === productGroupTypes.SEARCH ? sortFields.RELEVANCE : sortFields.NEW,
+                orderField = setDefaultOrderField(toType),
                 orderDirection = sortDirections.DESC,
                 search_string: toSearchString = null,
             },
@@ -945,7 +957,7 @@ export default {
             params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },
             query: {
                 page: toPage = DEFAULT_PAGE,
-                orderField: toOrderField = sortFields.NEW,
+                orderField: toOrderField = this.setDefaultOrderField(toType),
                 orderDirection: toOrderDirection = sortDirections.DESC,
                 search_string: to_search_string = null,
             },
@@ -955,7 +967,7 @@ export default {
             params: { code: fromCode, entityCode: fromEntityCode, type: fromType, pathMatch: fromPathMatch },
             query: {
                 page: fromPage = DEFAULT_PAGE,
-                orderField: fromOrderField = sortFields.NEW,
+                orderField: fromOrderField = this.setDefaultOrderField(fromType),
                 orderDirection: fromOrderDirection = sortDirections.DESC,
                 search_string: from_search_string = null,
             },
