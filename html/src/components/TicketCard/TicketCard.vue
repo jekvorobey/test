@@ -28,6 +28,7 @@
                 class="ticket-card__btn"
                 :class="{ 'btn--transparent': inProcess }"
                 :disabled="!isAvaliable"
+                :freeBuy="freeBuy"
                 @click="onBtnClick"
             >
                 <v-spinner v-if="inProcess" width="24" height="24" show />
@@ -102,6 +103,11 @@ export default {
         },
 
         disabled: {
+            type: Boolean,
+            default: false,
+        },
+
+        freeBuy: {
             type: Boolean,
             default: false,
         },

@@ -1,7 +1,7 @@
 import { cartItemTypes } from '@enums/product';
 
 import hasSession from '@router/middleware/hasSession';
-import canUserBuy from '@router/middleware/canUserBuy';
+// import canUserBuy from '@router/middleware/canUserBuy'; // для routes.meta.middleware
 import isCartEmpty from '@router/middleware/isCartEmpty';
 import setUser from '@router/middleware/setUser';
 
@@ -27,7 +27,7 @@ export default {
 
             meta: {
                 hideDefaultHeader: true,
-                middleware: [hasSession, setUser, canUserBuy, isCartEmpty],
+                middleware: [hasSession, setUser, isCartEmpty],
             },
         },
     ],

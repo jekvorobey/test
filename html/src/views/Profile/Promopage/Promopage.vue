@@ -62,6 +62,7 @@
                     <catalog-product-card
                         class="promopage-view__panel-card"
                         v-bind="item"
+                        :freeBuy="item.freeBuy"
                         :offer-id="item.id"
                         @preview="onPreview(item.code)"
                     />

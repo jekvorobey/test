@@ -74,11 +74,17 @@
                 </info-row>
             </ul>
         </div>
+        <div class="cabinet-requisites-panel__controls">
+            <v-button class="cabinet-requisites-panel__save-btn" :disabled="saveDisabled" @click="onSave"
+                >Сохранить реквизиты</v-button
+            >
+        </div>
     </info-panel>
 </template>
 
 <script>
 import VInput from '@controls/VInput/VInput.vue';
+import VButton from '@controls/VButton/VButton.vue';
 
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
@@ -94,7 +100,7 @@ import { NAME as CABINET_MODULE, REQUISITES } from '@store/modules/Profile/modul
 import { UPDATE_REQUISITES } from '@store/modules/Profile/modules/Cabinet/actions';
 
 import { $dadata } from '@services';
-import { httpCodes, interval, modalName } from '@enums';
+import { httpCodes, modalName } from '@enums';
 import { genderType } from '@enums/profile';
 import { phoneMaskOptions } from '@settings';
 import validationMixin, { required, inn, rs, bik } from '@plugins/validation';
@@ -108,6 +114,7 @@ export default {
 
     components: {
         VInput,
+        VButton,
 
         InfoRow,
         InfoPanel,
@@ -178,6 +185,10 @@ export default {
         isTablet() {
             return this.$mq.tablet;
         },
+
+        saveDisabled() {
+            return this.$v.$invalid;
+        },
     },
 
     methods: {
@@ -240,20 +251,37 @@ export default {
             else this.resetBank();
         },
 
-        onSubmit() {
-            this.$v.$touch();
-            if (!this.$v.$invalid) this[UPDATE_REQUISITES]({ ...this.form });
+        async onSave() {
+            const state = {
+                title: 'Уведомление',
+                message: 'Реквизиты обновлены',
+                altBtn: {
+                    message: 'Перейти к покупкам',
+                    action: '/catalog',
+                },
+            };
+
+            try {
+                await this[UPDATE_REQUISITES]({ ...this.form });
+            } catch (e) {
+                state.message = 'Ошибка обновления. Данные не сохранены.';
+            }
+
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state,
+            });
         },
     },
 
     created() {
-        this.debounce_submit = _debounce(this.onSubmit, interval.TWO_SECONDS);
         const requisites = this[REQUISITES] || {};
         this.form = { ...requisites };
     },
 
     beforeMount() {
-        this.$watch('form', this.debounce_submit, {
+        this.$watch('form', () => this.$v.$touch(), {
             deep: true,
         });
     },
