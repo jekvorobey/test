@@ -106,11 +106,7 @@
             </div>
         </info-panel>
 
-        <cabinet-requisites-panel v-if="referralPartner" class="cabinet-view__panel" />
-
-        <div class="cabinet-view__controls">
-            <v-button class="cabinet-view__save-btn" @click="onSave">Сохранить</v-button>
-        </div>
+        <cabinet-requisites-panel v-if="!referralPartner" class="cabinet-view__panel" />
 
         <transition name="fade">
             <password-edit-modal v-if="$isServer || (hasPhone && isPasswordEditOpen)" />
@@ -334,21 +330,6 @@ export default {
 
         onOpenPasswordModal() {
             this[CHANGE_MODAL_STATE]({ name: modalName.profile.PASSWORD_EDIT, open: true });
-        },
-
-        onSave() {
-            this[CHANGE_MODAL_STATE]({
-                name: modalName.general.NOTIFICATION,
-                open: true,
-                state: {
-                    title: 'Уведомление',
-                    message: 'Данные профиля обновлены',
-                    altBtn: {
-                        message: 'Перейти к покупкам',
-                        action: '/catalog',
-                    },
-                },
-            });
         },
     },
 
