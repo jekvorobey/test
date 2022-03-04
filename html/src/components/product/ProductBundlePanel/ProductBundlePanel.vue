@@ -17,6 +17,7 @@
                     :rating="item.rating"
                     :offer-id="item.productId"
                     :show-controls="false"
+                    :freeBuy="item.freeBuy"
                 />
                 <package-product-card
                     v-else
@@ -63,7 +64,7 @@
                 </div>
 
                 <div class="product-bundle-panel__total-controls">
-                    <buy-button class="product-bundle-panel__btn" @click.prevent="onAddBundle">
+                    <buy-button class="product-bundle-panel__btn" :freeBuy="freeBuy" @click.prevent="onAddBundle">
                         Добавить в корзину
                     </buy-button>
                 </div>
@@ -155,6 +156,10 @@ export default {
 
         isTablet() {
             return this.$mq.tablet;
+        },
+
+        freeBuy() {
+            return this.items.length ? this.items.every((item) => item.freeBuy === true) : true;
         },
     },
 

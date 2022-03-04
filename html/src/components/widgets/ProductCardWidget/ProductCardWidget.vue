@@ -1,5 +1,5 @@
 <template>
-    <catalog-product-card v-bind="product" :offer-id="product.id" show-buy-btn />
+    <catalog-product-card v-bind="product" :offer-id="product.id" :freeBuy="product.freeBuy" show-buy-btn />
 </template>
 
 <script>
