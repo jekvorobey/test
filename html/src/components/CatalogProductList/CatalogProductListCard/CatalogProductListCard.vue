@@ -322,7 +322,7 @@ export default {
         },
 
         freeBuy() {
-            return this.item.freeBuy;
+            return !!this.item.freeBuy;
         },
     },
 
