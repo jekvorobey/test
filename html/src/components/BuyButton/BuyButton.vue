@@ -35,7 +35,7 @@ export const checkPermissions = (freeBuy) => {
     const canBuy = user && user[CAN_BUY];
     const status = user && user[STATUS];
 
-    if (!canBuy && !!freeBuy) {
+    if (!canBuy && !freeBuy) {
         if (status === userStatus.CREATED || status === userStatus.NEW) {
             $store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
                 name: modalName.general.NOTIFICATION,
