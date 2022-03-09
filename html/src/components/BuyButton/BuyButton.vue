@@ -15,12 +15,12 @@ import { NAME as AUTH_MODULE, USER, CAN_BUY, STATUS } from '@store/modules/Auth'
 import { modalName } from '@enums';
 import { userStatus } from '@enums/profile';
 
-export const checkPermissions = () => {
+export const checkPermissions = (freeBuy) => {
     const user = $store.state[AUTH_MODULE][USER];
     const canBuy = user && user[CAN_BUY];
     const status = user && user[STATUS];
-    // флага freeBuy нет, меняем условие перед тестированием
-    if (!canBuy) {
+
+    if (!canBuy && !freeBuy) {
         if (status === userStatus.CREATED || status === userStatus.NEW) {
             $store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
                 name: modalName.general.NOTIFICATION,
@@ -65,6 +65,11 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        freeBuy: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
@@ -81,7 +86,7 @@ export default {
         onBtnClick(e) {
             e.preventDefault();
             e.stopPropagation();
-            if (checkPermissions()) this.$emit('click', e);
+            if (checkPermissions(this.freeBuy)) this.$emit('click', e);
         },
     },
 };

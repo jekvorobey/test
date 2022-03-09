@@ -29,10 +29,6 @@
         cursor: pointer;
     }
 
-    &__password-text {
-        margin-bottom: calc(var(--gs) * 2);
-    }
-
     &__form {
         &-container {
             @media (--tablet) {

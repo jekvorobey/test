@@ -22,6 +22,7 @@
                         :price="item.price"
                         :old-price="item.oldPrice"
                         :href="item.url"
+                        :freeBuy="item.freeBuy"
                     />
                 </ul>
             </v-scroll>

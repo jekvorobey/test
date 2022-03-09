@@ -55,6 +55,7 @@
                         :badges="product.badges"
                         :rating="product.rating"
                         :show-buy-btn="product.stock.qty > 0"
+                        :freeBuy="product.freeBuy"
                         @add-item="onAddToCart(product)"
                         @preview="onPreview(product.code)"
                         @toggle-favorite-item="onToggleFavorite(product)"
