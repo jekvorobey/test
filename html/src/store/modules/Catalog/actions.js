@@ -1,9 +1,9 @@
 import _mergeWith from 'lodash/mergeWith';
 
-import { productGroupBase } from '@enums/product';
+import { productGroupBase, productGroupTypes } from '@enums/product';
 import { storeErrorHandler } from '@util/store';
 
-import { getCatalogItems, getCategories, getBanners, getFilters, getProductGroup } from '@api';
+import { getCatalogItems, getCategories, getBanners, getFilters, getProductGroup, getBrands } from '@api';
 import { SET_LOAD_PATH as M_SET_LOAD_PATH, APPLY_DATA, SET_PREVIOUS_CATALOG_FETCH_PAYLOAD } from './mutations';
 import { PREVIOUS_CATALOG_FETCH_PAYLOAD } from './index';
 
@@ -71,7 +71,21 @@ export default {
 
     async [FETCH_PRODUCT_GROUP](context, { type, entityCode, filter }) {
         try {
-            const data = await getProductGroup(type, entityCode || undefined, filter);
+            let data;
+            if (type === productGroupTypes.BRANDS) {
+                const brandsList = await getBrands();
+                const brand = brandsList.filter((brand) => brand.code === entityCode)[0];
+                data = {
+                    based: 'filters',
+                    code: entityCode,
+                    excluded_filters: ['brand'],
+                    filters: { brand: [entityCode] },
+                    name: brand.name,
+                    preview_photo: null,
+                };
+            } else {
+                data = await getProductGroup(type, entityCode || undefined, filter);
+            }
             return data;
         } catch (error) {
             storeErrorHandler(FETCH_PRODUCT_GROUP, true)(error);
