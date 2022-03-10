@@ -216,11 +216,11 @@ export default {
             const title = this.catalogTitle;
             const url = generateCategoryUrl(this.type, null, null, true);
             const image =
-                Array.isArray(this.items) && this.items.length > 0
+                Array.isArray(this.items) && this.items.length > 0 && this.type !== productGroupTypes.BRANDS
                     ? generateFileOriginalPath(this.items[0].preview_photo.id)
                     : null;
             const imageType =
-                Array.isArray(this.items) && this.items.length > 0
+                Array.isArray(this.items) && this.items.length > 0 && this.type !== productGroupTypes.BRANDS
                     ? getImageType(this.items[0].preview_photo.sourceExt)
                     : null;
 
