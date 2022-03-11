@@ -88,6 +88,8 @@ const main = {
             [cartErrors.BUNDLE_INACTIVE]: 'Некоторые бандлы стали неактивными',
             [cartErrors.BUNDLE_PRODUCT_STOCKS]:
                 'Суммарное количество товаров и товаров в бандлах превышает количество остатков по товару',
+            [cartErrors.PRODUCT_FOR_PROFESSIONAL]:
+                'Некоторые товары доступны для покупки только после модерации профиля пользователя',
             [cartErrors.BUNDLE_MASTERCLASS_STOCKS]:
                 'Суммарное количество одиночных билетов и билетов в бандлах превышает количество остатков билетов',
             [cartErrors.MASTERCLASS_STOCKS]: 'Некоторые билеты стали неактивными',
