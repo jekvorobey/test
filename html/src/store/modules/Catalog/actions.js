@@ -3,7 +3,7 @@ import _mergeWith from 'lodash/mergeWith';
 import { productGroupBase, productGroupTypes } from '@enums/product';
 import { storeErrorHandler } from '@util/store';
 
-import { getCatalogItems, getCategories, getBanners, getFilters, getProductGroup, getBrands } from '@api';
+import { getCatalogItems, getCategories, getBanners, getFilters, getProductGroup, getBrandsActive } from '@api';
 import { SET_LOAD_PATH as M_SET_LOAD_PATH, APPLY_DATA, SET_PREVIOUS_CATALOG_FETCH_PAYLOAD } from './mutations';
 import { PREVIOUS_CATALOG_FETCH_PAYLOAD } from './index';
 
@@ -73,8 +73,15 @@ export default {
         try {
             let data;
             if (type === productGroupTypes.BRANDS) {
-                const brandsList = await getBrands();
-                const brand = brandsList.filter((brand) => brand.code === entityCode)[0];
+                const brandsList = await getBrandsActive();
+                const brand = brandsList[0].values.filter((brand) => brand.code === entityCode)[0];
+                if (!brand) {
+                    const error = new Error();
+                    error.isCancel = false;
+                    error.message = 'Brand not found in active brands';
+                    error.status = 404;
+                    throw error;
+                }
                 data = {
                     based: 'filters',
                     code: entityCode,
