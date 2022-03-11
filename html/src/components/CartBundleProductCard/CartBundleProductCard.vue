@@ -1,5 +1,5 @@
 <template>
-    <div class="cart-bundle-product-card" :class="[{ 'cart-bundle-product-card--inactive': !isActive }]">
+    <div class="cart-bundle-product-card" :class="[{ 'cart-bundle-product-card--inactive': !isActive || !userCanBuy }]">
         <general-popup-panel
             popover-class="tooltip--white cart-bundle-product-card__panel"
             trigger="manual"
@@ -218,6 +218,11 @@ export default {
         isActive: {
             type: Boolean,
             default: false,
+        },
+
+        userCanBuy: {
+            type: Boolean,
+            default: true,
         },
     },
 
