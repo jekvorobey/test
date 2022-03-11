@@ -33,6 +33,7 @@
                     :max-count="product.stock && product.stock.qty"
                     :href="product.url"
                     :is-active="product.active"
+                    :user-has-limits-to-buy="product.userHasLimitsToBuy"
                     show-count
                     show-controls
                     @toggle-favorite-item="onToggleFavorite(product)"

@@ -1,7 +1,10 @@
 <template>
     <div
         class="cart-product-card"
-        :class="[{ 'cart-product-card--small': isSmall }, { 'cart-product-card--inactive': !isActive }]"
+        :class="[
+            { 'cart-product-card--small': isSmall },
+            { 'cart-product-card--inactive': !isActive || userHasLimitsToBuy },
+        ]"
     >
         <router-link class="cart-product-card__img" :to="href">
             <v-picture v-if="image && image.id">
@@ -169,6 +172,11 @@ export default {
         },
 
         isSmall: {
+            type: Boolean,
+            default: false,
+        },
+
+        userHasLimitsToBuy: {
             type: Boolean,
             default: false,
         },
