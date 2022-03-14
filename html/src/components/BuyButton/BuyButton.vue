@@ -30,12 +30,18 @@ export const checkSession = () => {
     return true;
 };
 
-export const checkPermissions = (freeBuy) => {
+export const checkPermissions = () => {
     const user = $store.state[AUTH_MODULE][USER];
-    const canBuy = user && user[CAN_BUY];
+    const hasSession = $store.state[AUTH_MODULE][HAS_SESSION];
     const status = user && user[STATUS];
 
-    if (!canBuy && !freeBuy) {
+    let canBuy = user && user[CAN_BUY];
+
+    if (!hasSession) {
+        canBuy = true;
+    }
+
+    if (!canBuy) {
         if (status === userStatus.CREATED || status === userStatus.NEW) {
             $store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
                 name: modalName.general.NOTIFICATION,
@@ -101,7 +107,7 @@ export default {
         onBtnClick(e) {
             e.preventDefault();
             e.stopPropagation();
-            if (checkPermissions(this.freeBuy)) this.$emit('click', e);
+            if (checkPermissions()) this.$emit('click', e);
         },
     },
 };
