@@ -226,9 +226,22 @@
                     >Отправить анонимно</v-check
                 >
 
-                <v-check id="termsAccepted" name="termsAccepted" v-model="order.terms_accepted" value="1"
-                    >Я согласен с <a href="/agreements/public-offer/" target="_blank">условиями оферты</a> и <a href="/agreements/personal-policy/" target="_blank">политикой конфиденциальности</a></v-check
-                >
+                <v-check id="termsAccepted" name="termsAccepted" v-model="order.terms_accepted" value="1">
+                    Я согласен с
+                    <router-link
+                        :to="{ name: 'Agreements', params: { page: agreementTypes.PUBLIC_OFFER } }"
+                        target="_blank"
+                    >
+                        условиями оферты
+                    </router-link>
+                    и
+                    <router-link
+                        :to="{ name: 'Agreements', params: { page: agreementTypes.PERSONAL_POLICY } }"
+                        target="_blank"
+                    >
+                        политикой конфиденциальности
+                    </router-link>
+                </v-check>
             </div>
             <div class="gift-card-modal__submit">
                 <v-button

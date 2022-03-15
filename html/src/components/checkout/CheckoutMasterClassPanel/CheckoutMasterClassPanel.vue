@@ -285,14 +285,14 @@
                         >
                             Я согласен с
                             <router-link
-                                :to="{ name: 'InfoPages', params: { type: agreementTypes.PUBLIC_OFFER } }"
+                                :to="{ name: 'Agreements', params: { page: agreementTypes.PUBLIC_OFFER } }"
                                 target="_blank"
                             >
                                 условиями оферты
                             </router-link>
                             и
                             <router-link
-                                :to="{ name: 'InfoPages', params: { type: agreementTypes.PERSONAL_POLICY } }"
+                                :to="{ name: 'Agreements', params: { page: agreementTypes.PERSONAL_POLICY } }"
                                 target="_blank"
                             >
                                 политикой конфиденциальности
