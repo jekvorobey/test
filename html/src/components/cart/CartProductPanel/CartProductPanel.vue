@@ -33,6 +33,7 @@
                     :max-count="product.stock && product.stock.qty"
                     :href="product.url"
                     :is-active="product.active"
+                    :user-can-buy="product.userCanBuy"
                     show-count
                     show-controls
                     @toggle-favorite-item="onToggleFavorite(product)"
@@ -49,6 +50,7 @@
                     :items="product.items"
                     :count="count"
                     :is-active="product.active"
+                    :user-can-buy="product.userCanBuy"
                     show-count
                     show-controls
                     @countChange="onAddCartBundleItem(product.id, $event.count)"

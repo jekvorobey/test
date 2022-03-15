@@ -202,13 +202,13 @@ export default {
 
     watch: {
         async [HAS_SESSION](value) {
+            await this[FETCH_CART_DATA]();
+
             if (value) {
                 await this[FETCH_USER]();
-                await this[FETCH_CART_DATA]();
                 await this[FETCH_FAVORITES_ALL]();
                 this.startUserDataTimer();
             } else {
-                this[CLEAR_CART_DATA]();
                 this[CLEAR_CHECKOUT_DATA]();
                 this.stopUserDataTimer();
             }
@@ -219,9 +219,11 @@ export default {
     async serverPrefetch() {
         try {
             await Promise.all([this[FETCH_COMMON_DATA](), this[CHECK_SESSION](true)]);
+
+            await this[FETCH_CART_DATA]();
+
             if (this[HAS_SESSION]) {
                 if (!this[USER]) await this[FETCH_USER]();
-                await this[FETCH_CART_DATA]();
                 await this[FETCH_FAVORITES_ALL]();
             } else return Promise.resolve();
         } catch (error) {
