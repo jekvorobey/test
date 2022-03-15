@@ -1,46 +1,37 @@
 <template>
-    <component :is="renderComponent" />
+    <info-page :landing="landing"></info-page>
 </template>
 
 <script>
-import Vacancies from './Vacancies.vue';
-import Feedback from './Feedback.vue';
-import DeliveryAndPayment from './DeliveryAndPayment.vue';
-import PurchaseReturns from './PurchaseReturns.vue';
-import Bonuses from './Bonuses.vue';
-import CertificateRules from './CertificateRules.vue';
+import InfoPage from './InfoPage.vue';
 
 import { mapState } from 'vuex';
-import { infoPages } from '@enums';
 import './InfoPages.css';
+import { getLanding } from '@api';
 
 export default {
     name: 'agreements',
+    components: {
+        InfoPage,
+    },
+    props: {
+        page: String,
+    },
+    data() {
+        return {
+            landing: {},
+        };
+    },
 
     computed: {
         ...mapState('route', {
             page: (state) => state.params.page,
         }),
-
-        renderComponent() {
-            const { page } = this;
-
-            switch (page) {
-                case infoPages.FEEDBACK:
-                    return Feedback;
-                case infoPages.DELIVERY_AND_PAYMENT:
-                    return DeliveryAndPayment;
-                case infoPages.PURCHASE_RETURNS:
-                    return PurchaseReturns;
-                case infoPages.BONUSES:
-                    return Bonuses;
-                case infoPages.CERTIFICATE_RULES:
-                    return CertificateRules;
-                case infoPages.VACANCIES:
-                default:
-                    return Vacancies;
-            }
-        },
+    },
+    beforeMount() {
+        getLanding(this.page).then((response) => {
+            this.landing = response;
+        });
     },
 };
 </script>
