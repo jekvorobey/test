@@ -23,6 +23,12 @@ export default {
             component: InfoPage,
         },
         {
+            name: 'InfoPagePreview',
+            path: `/pages/[hash]?draft=1`,
+            pathToRegexpOptions: { strict: true },
+            component: InfoPage,
+        },
+        {
             name: 'InfoPageStatic',
             path: `/:page(${infoPagesValues.join('|')})/`,
             pathToRegexpOptions: { strict: true },
