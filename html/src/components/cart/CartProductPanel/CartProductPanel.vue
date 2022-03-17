@@ -108,7 +108,20 @@ export default {
         ...mapGetters(CART_MODULE, [DELIVERY_INFO]),
 
         products() {
-            return this.items.map((i) => ({ ...i, p: { ...i.p, url: this.generateItemProductUrl(i.p) } }));
+            return this.items.map((item) => {
+                const price = item.p.price
+                    ? Object.assign(item.p.price, { isPriceHidden: item.p.isPriceHidden })
+                    : { isPriceHidden: item.p.isPriceHidden };
+
+                const oldPrice = item.p.oldPrice
+                    ? Object.assign(item.p.oldPrice, { isPriceHidden: item.p.isPriceHidden })
+                    : null;
+
+                return {
+                    ...item,
+                    p: { ...item.p, url: this.generateItemProductUrl(item.p), price, oldPrice },
+                };
+            });
         },
     },
 
