@@ -747,10 +747,11 @@ export function getMasterclass(code) {
     });
 }
 
-export function getLanding(page) {
+export function getLanding(page, draft) {
     return $http.get('/v1/content/pages', {
         params: {
             url: page,
+            draft: draft,
         },
     });
 }

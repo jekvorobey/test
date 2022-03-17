@@ -20,6 +20,7 @@ export default {
     mixins: [metaMixin],
     props: {
         page: String,
+        draft: Boolean,
     },
     data() {
         return {
@@ -29,10 +30,11 @@ export default {
     computed: {
         ...mapState('route', {
             page: (state) => state.params.page,
+            draft: (state) => state.params.draft,
         }),
     },
     beforeMount() {
-        getLanding(this.page).then((response) => {
+        getLanding(this.page, this.draft).then((response) => {
             this.landing = response;
         });
     },

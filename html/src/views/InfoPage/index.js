@@ -18,13 +18,7 @@ export default {
     routes: [
         {
             name: 'InfoPage',
-            path: `/pages/:page(.*)`,
-            pathToRegexpOptions: { strict: true },
-            component: InfoPage,
-        },
-        {
-            name: 'InfoPagePreview',
-            path: `/pages/[hash]?draft=1`,
+            path: `/pages/:page(.*)?draft=:draft?`,
             pathToRegexpOptions: { strict: true },
             component: InfoPage,
         },
