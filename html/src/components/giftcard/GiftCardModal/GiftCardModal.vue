@@ -623,9 +623,9 @@ export default {
                 this.todayLabel = 'Сейчас';
             }
         },
-        created() {
-            this.agreementTypes = agreementTypes;
-        },
+    },
+    created() {
+        this.agreementTypes = agreementTypes;
     },
 };
 </script>
