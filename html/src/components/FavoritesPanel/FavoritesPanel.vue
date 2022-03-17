@@ -25,7 +25,6 @@
                             :href="generateItemProductUrl(product)"
                             :inside-basket="product.insideBasket"
                             :is-load-button="product.isLoadButton"
-                            :freeBuy="product.freeBuy"
                             @add-item="onAddToCart(product)"
                             is-favorite
                         />

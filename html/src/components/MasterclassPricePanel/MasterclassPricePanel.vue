@@ -18,7 +18,6 @@
                 :class="{ 'btn--outline': !isTablet }"
                 @click.prevent="onBuyBtnClick"
                 :disabled="disabled"
-                :freeBuy="freeBuy"
             >
                 <slot />
             </buy-button>
@@ -65,11 +64,6 @@ export default {
         },
 
         disabled: {
-            type: Boolean,
-            default: false,
-        },
-
-        freeBuy: {
             type: Boolean,
             default: false,
         },
