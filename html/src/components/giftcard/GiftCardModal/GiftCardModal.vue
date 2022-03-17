@@ -278,7 +278,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { DELETE_ALL_ITEMS } from '@store/modules/Cart/actions';
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 
-import { modalName } from '@enums';
+import { modalName, agreementTypes } from '@enums';
 import './GiftCardModal.css';
 
 const NAME = modalName.TICKET_EDIT;
