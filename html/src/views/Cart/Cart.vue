@@ -409,6 +409,10 @@ export default {
         },
 
         cartHasOnlyNonPricedProducts() {
+            if (!this.isProduct) {
+                return false;
+            }
+
             if (Array.isArray(this.cartData.product.items) && this.cartData.product.items.length > 0) {
                 let only = true;
 
