@@ -12,8 +12,8 @@
                         :type="product.type"
                         :name="product.name"
                         :image="product.image"
-                        :price="product.price"
-                        :old-price="product.oldPrice"
+                        :price="modifiedPrice"
+                        :old-price="modifiedOldPrice"
                         :count="cartItem.count"
                         :max-count="product.stock && product.stock.qty"
                         show-count
@@ -22,8 +22,11 @@
                     />
                     <div class="add-to-cart-modal__panel" v-if="!isTablet">
                         <div class="add-to-cart-modal__panel-info">
-                            В корзине {{ $tc('cart.items', cartItemsCount) }} <br />на сумму
-                            <price v-bind="productItemsSum" />
+                            <template v-if="cartItemsCount.value > 0">
+                                В корзине {{ $tc('cart.items', cartItemsCount) }} <br />на сумму
+                                <price v-bind="productItemsSum" />
+                            </template>
+                            <template v-else>В корзине {{ $tc('cart.items', cartItemsCount) }}</template>
                         </div>
                         <v-button class="btn--outline add-to-cart-modal__panel-btn" @click="onClose">
                             Продолжить покупки
@@ -47,8 +50,11 @@
 
             <div class="add-to-cart-modal__panel" v-if="isTablet">
                 <div class="add-to-cart-modal__panel-info">
-                    В корзине {{ $tc('cart.items', cartItemsCount) }} на сумму
-                    <price v-bind="productItemsSum" />
+                    <template v-if="productItemsSum.value > 0">
+                        В корзине {{ $tc('cart.items', cartItemsCount) }} на сумму
+                        <price v-bind="productItemsSum" />
+                    </template>
+                    <template v-else>В корзине {{ $tc('cart.items', cartItemsCount) }}</template>
                 </div>
                 <v-link class="btn--outline add-to-cart-modal__panel-link" @click="onClose">Продолжить</v-link>
                 <v-button v-if="!isCart" class="add-to-cart-modal__panel-btn" to="/cart">Перейти в корзину</v-button>
@@ -145,6 +151,18 @@ export default {
 
         isCart() {
             return this.$route.name === 'Cart';
+        },
+
+        modifiedPrice() {
+            return this.product.price
+                ? Object.assign(this.product.price, { isPriceHidden: this.product.isPriceHidden })
+                : { isPriceHidden: this.product.isPriceHidden };
+        },
+
+        modifiedOldPrice() {
+            return this.product.oldPrice
+                ? Object.assign(this.product.oldPrice, { isPriceHidden: this.product.isPriceHidden })
+                : null;
         },
     },
 

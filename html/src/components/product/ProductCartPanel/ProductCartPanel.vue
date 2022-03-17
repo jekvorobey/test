@@ -22,7 +22,6 @@
                 @click="onAddToCart"
                 :disabled="disabled"
                 :loading="toCardAdding"
-                :freeBuy="freeBuy"
             >
                 <slot />
             </buy-button>
@@ -98,11 +97,6 @@ export default {
         },
 
         toCardAdding: {
-            type: Boolean,
-            default: false,
-        },
-
-        freeBuy: {
             type: Boolean,
             default: false,
         },

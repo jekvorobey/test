@@ -1,7 +1,7 @@
 <template>
     <div
         class="cart-product-card"
-        :class="[{ 'cart-product-card--small': isSmall }, { 'cart-product-card--inactive': !isActive || !userCanBuy }]"
+        :class="[{ 'cart-product-card--small': isSmall }, { 'cart-product-card--inactive': !isActive || (!userCanBuy && !noPrice) }]"
     >
         <router-link class="cart-product-card__img" :to="href">
             <v-picture v-if="image && image.id">
@@ -21,7 +21,12 @@
                 <v-counter min="1" :max="maxCount" :value="count" @input="debounce_countChange" :disabled="!isActive" />
             </div>
 
-            <div class="cart-product-card__body-prices">
+            <div
+                :class="{
+                    'cart-product-card__body-prices': true,
+                    'cart-product-card__body-prices--no-price': noPrice && !isMobile && !isTablet,
+                }"
+            >
                 <price tag="div" class="text-bold cart-product-card__body-price" v-bind="price" />
                 <price
                     tag="div"
@@ -224,6 +229,18 @@ export default {
         isTablet() {
             return this.$mq.tablet;
         },
+
+        isMobile() {
+            return this.$mq.mobile;
+        },
+
+        noPrice() {
+            if (this.price && typeof this.price.isPriceHidden !== 'undefined' && this.price.isPriceHidden === true) {
+                return true;
+            }
+
+            return false;
+        }
     },
 
     methods: {

@@ -5,7 +5,7 @@ import actions from './actions';
 import mutations from './mutations';
 import getters, { PROMOCODE_STATUS } from './getters';
 
-import { checkPermissions } from '@components/BuyButton/BuyButton.vue';
+import { checkPermissions } from '@util/order';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions.js';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 
