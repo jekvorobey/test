@@ -9,14 +9,8 @@ import { modalName } from '@enums';
 
 export function checkPermissions() {
     const user = $store.state[AUTH_MODULE][USER];
-    const hasSession = $store.state[AUTH_MODULE][HAS_SESSION];
     const status = user && user[STATUS];
-
-    let canBuy = user && user[CAN_BUY];
-
-    if (!hasSession) {
-        canBuy = true;
-    }
+    const canBuy = user && user[CAN_BUY];
 
     if (!canBuy) {
         if (status === userStatus.CREATED || status === userStatus.NEW) {
