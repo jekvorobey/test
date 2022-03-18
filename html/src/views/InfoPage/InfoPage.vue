@@ -30,7 +30,7 @@ export default {
     computed: {
         ...mapState('route', {
             page: (state) => state.params.page,
-            draft: (state) => state.params.draft,
+            draft: (state) => state.query.draft,
         }),
     },
     beforeMount() {

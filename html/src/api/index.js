@@ -747,7 +747,7 @@ export function getMasterclass(code) {
     });
 }
 
-export function getLanding(page, draft) {
+export function getLanding(page, draft = false) {
     return $http.get('/v1/content/pages', {
         params: {
             url: page,

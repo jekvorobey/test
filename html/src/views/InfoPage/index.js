@@ -18,7 +18,7 @@ export default {
     routes: [
         {
             name: 'InfoPage',
-            path: `/pages/:page(.*)?draft=:draft?`,
+            path: `/pages/:page(.*)`,
             pathToRegexpOptions: { strict: true },
             component: InfoPage,
         },
