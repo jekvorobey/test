@@ -14,6 +14,10 @@
             display: flex !important;
             align-items: center;
         }
+
+        @media (--tablet) {
+            display: none !important;
+        }
     }
 
     &__cart-btn {
@@ -44,8 +48,7 @@
             align-items: center;
         }
 
-        &:nth-child(1),
-        &:nth-child(2) {
+        &--item-wishlist {
             @media (--tablet) {
                 display: none;
             }
