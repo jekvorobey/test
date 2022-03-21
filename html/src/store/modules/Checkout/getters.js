@@ -70,6 +70,7 @@ export const SELECTED_CONFIRMATION_TYPE_ID = 'selectedConfirmationTypeID';
 export const CHECKOUT_STATUS = 'checkoutStatus';
 export const RECEIVE_METHOD_STATUS = 'receiveMethodStatus';
 export const ADDRESS_STATUS = 'addressStatus';
+export const PAYMENT_METHOD_STATUS = 'paymentMethodStatus';
 export const BONUS_STATUS = 'bonusStatus';
 export const CERTIFICATE_STATUS = 'certificateStatus';
 export const PROMOCODE_STATUS = 'promocodeStatus';

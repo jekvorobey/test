@@ -185,6 +185,7 @@
                         :key="method.id"
                         :selected="method.id === selectedPaymentMethodID"
                         readonly
+                        @cardClick="onSetPaymentMethod(method)"
                     >
                         <div class="checkout-product-panel__item-payment" v-if="method.type === 'card'">
                             <div class="text-bold checkout-product-panel__item-payment-title">
@@ -559,7 +560,7 @@ import {
     CHANGE_RECIPIENT,
     FETCH_CHECKOUT_DATA,
     SET_CITY_FIAS,
-    SET_SELECTED_PICKUP_POINT,
+    SET_SELECTED_PICKUP_POINT, SET_PAYMENT_METHOD,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -966,6 +967,8 @@ export default {
             ADD_ADDRESS,
             CHANGE_ADDRESS,
 
+            SET_PAYMENT_METHOD,
+
             ADD_BONUS,
             DELETE_BONUS,
 
@@ -1063,6 +1066,10 @@ export default {
 
         onSetReceiveMethod(method) {
             this[SET_RECEIVE_METHOD](method);
+        },
+
+        onSetPaymentMethod(method) {
+            this[SET_PAYMENT_METHOD](method);
         },
 
         onSetAgreement(value) {

@@ -25,10 +25,6 @@ export function getRedirects() {
     return $http.get('/v1/content/redirects');
 }
 
-export function sendFeedback(data) {
-    return $http.post('/v1/content/contacts/feedback', data);
-}
-
 // auth
 
 export function checkSession(force = false) {
@@ -578,11 +574,11 @@ export function getProductsHot(badge_id, limit) {
 }
 
 export function getProducts({
-    filter,
-    orderField = sortFields.POPULARITY,
-    orderDirection = sortDirections.DESC,
-    page = 1,
-}) {
+                                filter,
+                                orderField = sortFields.POPULARITY,
+                                orderDirection = sortDirections.DESC,
+                                page = 1,
+                            }) {
     return $http.get('/v1/catalog/products', {
         params: {
             filter,
@@ -599,12 +595,12 @@ export function getProducts({
 }
 
 export function getCatalogItems({
-    filter,
-    orderField = sortFields.POPULARITY,
-    orderDirection = sortDirections.DESC,
-    page = 1,
-    pagePath,
-}) {
+                                    filter,
+                                    orderField = sortFields.POPULARITY,
+                                    orderDirection = sortDirections.DESC,
+                                    page = 1,
+                                    pagePath,
+                                }) {
     if (catalogItemsCancelSource) {
         catalogItemsCancelSource.cancel(REQUEST_CANCEL_MESSAGE);
         catalogItemsCancelSource = axios.CancelToken.source();
@@ -703,6 +699,10 @@ export function getSetCatalog(data) {
 
 export function getBrands(data) {
     return $http.get('/v1/brands', data);
+}
+
+export function getBrandsActive(data) {
+    return $http.get('/v1/brands/active', data);
 }
 
 export function getProduct(code, offer_id, referrerCode) {
@@ -876,6 +876,10 @@ export function setAddress(data) {
 
 export function setPickupPoint(data) {
     return $http.post('/v1/checkout/pickup-point', data);
+}
+
+export function setPaymentMethod(data) {
+    return $http.post('/v1/checkout/payment-method', data);
 }
 
 export function deleteCertificate(data) {
