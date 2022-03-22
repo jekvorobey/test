@@ -229,14 +229,14 @@
                 <v-check id="termsAccepted" name="termsAccepted" v-model="order.terms_accepted" value="1">
                     Я согласен с
                     <router-link
-                        :to="{ name: 'Agreements', params: { page: agreementTypes.PUBLIC_OFFER } }"
+                        :to="{ name: 'InfoPageAgreement', params: { code: agreementTypes.PUBLIC_OFFER } }"
                         target="_blank"
                     >
                         условиями оферты
                     </router-link>
                     и
                     <router-link
-                        :to="{ name: 'Agreements', params: { page: agreementTypes.PERSONAL_POLICY } }"
+                        :to="{ name: 'InfoPageAgreement', params: { code: agreementTypes.PERSONAL_POLICY } }"
                         target="_blank"
                     >
                         политикой конфиденциальности

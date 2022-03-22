@@ -309,7 +309,6 @@ export const infoPages = Object.freeze({
     PURCHASE_RETURNS: 'purchase-returns',
     FEEDBACK: 'feedback',
     BONUSES: 'bonuses',
-    CERTIFICATE_RULES: 'razygryvaemcertificat-rules',
 });
 
 export const reviewOpinion = Object.freeze({
