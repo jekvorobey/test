@@ -1,5 +1,5 @@
-import hasSession from '@router/middleware/hasSession';
-import canUserBuy from '@router/middleware/canUserBuy';
+// import hasSession from '@router/middleware/hasSession'; // для routes.meta.middleware если hasSession обязателен
+// import canUserBuy from '@router/middleware/canUserBuy'; // для routes.meta.middleware если canBy обязателен
 import setUser from '@router/middleware/setUser';
 
 /**
@@ -24,7 +24,7 @@ export default {
 
             meta: {
                 hideDefaultHeader: true,
-                middleware: [hasSession, setUser, canUserBuy],
+                middleware: [setUser],
             },
         },
     ],

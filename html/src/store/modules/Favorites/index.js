@@ -3,7 +3,7 @@ import { sortFields } from '@enums/favorites';
 import { DEFAULT_PAGE } from '@constants';
 import { $store } from '@services';
 
-import { checkSession } from '@components/BuyButton/BuyButton.vue';
+import { checkSession } from '@util/profile';
 import actions, { ADD_FAVORITES_ITEM_BY_OFFER } from './actions';
 import mutations from './mutations';
 import getters from './getters';

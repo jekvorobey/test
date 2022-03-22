@@ -25,6 +25,10 @@ export function getRedirects() {
     return $http.get('/v1/content/redirects');
 }
 
+export function sendFeedback(data) {
+    return $http.post('/v1/content/contacts/feedback', data);
+}
+
 // auth
 
 export function checkSession(force = false) {
@@ -739,6 +743,14 @@ export function getMasterclass(code) {
     return $http.get('/v1/public-events/detail', {
         params: {
             code,
+        },
+    });
+}
+
+export function getLanding(page) {
+    return $http.get('/v1/content/pages', {
+        params: {
+            url: page,
         },
     });
 }

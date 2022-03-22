@@ -1,6 +1,46 @@
-import { $context } from '@services';
+import { $context, $store } from '@services';
 import { orderStatus, deliveryStatus, filterField } from '@enums/order';
 import { dateToString } from '@util/index';
+import { CAN_BUY, HAS_SESSION, NAME as AUTH_MODULE, STATUS, USER } from '@store/modules/Auth';
+import { userStatus } from '@enums/profile';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+import { modalName } from '@enums';
+
+export function checkPermissions() {
+    const user = $store.state[AUTH_MODULE][USER];
+    const status = user && user[STATUS];
+    const canBuy = user && user[CAN_BUY];
+
+    if (!canBuy) {
+        if (status === userStatus.CREATED || status === userStatus.NEW) {
+            $store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state: {
+                    title: 'Уведомление',
+                    message:
+                        'Ваш профессиональный статус не подтвержден. Заполните недостающую информацию в Личном кабинете.',
+                    btnMessage: 'Заполнить',
+                    href: '/profile',
+                },
+            });
+        } else {
+            $store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
+                name: modalName.general.NOTIFICATION,
+                open: true,
+                state: {
+                    title: 'Уведомление',
+                    message: 'Статус вашего профиля не подтверждён',
+                },
+            });
+        }
+
+        return false;
+    }
+
+    return true;
+}
 
 export function getDeliveryStatusColorClass(status) {
     if (status === deliveryStatus.STATUS_DONE) return 'status-color-success';

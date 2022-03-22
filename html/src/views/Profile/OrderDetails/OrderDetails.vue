@@ -100,6 +100,7 @@
                     </template>
 
                     <v-button
+                        v-if="order.can_repeat"
                         class="btn--outline order-details-view__details-controls-btn"
                         @click.stop="onRepeatOrder(order)"
                         :disabled="isDisabled"

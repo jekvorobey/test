@@ -48,7 +48,7 @@
                 <p class="v-footer__rights" v-html="$t('footer.rights')" />
                 <self-router-link
                     class="v-footer__link"
-                    :to="{ name: 'Agreements', params: { type: agreementTypes.PERSONAL_POLICY } }"
+                    :to="{ name: 'Agreements', params: { page: agreementTypes.PERSONAL_POLICY } }"
                     target="_blank"
                     same-disabled
                 >
@@ -56,7 +56,7 @@
                 </self-router-link>
                 <self-router-link
                     class="v-footer__link"
-                    :to="{ name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER } }"
+                    :to="{ name: 'Agreements', params: { page: agreementTypes.PUBLIC_OFFER } }"
                     target="_blank"
                     same-disabled
                 >
@@ -101,7 +101,7 @@
         <div class="v-footer__container v-footer__container--mobile v-footer__col v-footer__mobile-links">
             <self-router-link
                 class="v-footer__link"
-                :to="{ name: 'Agreements', params: { type: agreementTypes.PERSONAL_POLICY } }"
+                :to="{ name: 'Agreements', params: { page: agreementTypes.PERSONAL_POLICY } }"
                 target="_blank"
                 same-disabled
             >
@@ -109,7 +109,7 @@
             </self-router-link>
             <self-router-link
                 class="v-footer__link"
-                :to="{ name: 'Agreements', params: { type: agreementTypes.PUBLIC_OFFER } }"
+                :to="{ name: 'Agreements', params: { page: agreementTypes.PUBLIC_OFFER } }"
                 target="_blank"
                 same-disabled
             >

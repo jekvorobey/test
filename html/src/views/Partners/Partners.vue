@@ -167,7 +167,7 @@
                     </v-button>
                 </div>
 
-                <form class="partners-view__feedback-form" @submit.prevent="onSubmit">
+                <form v-if="!formSent" class="partners-view__feedback-form" @submit.prevent="onSubmit">
                     <v-input v-model="form.name" placeholder="Вашe имя" :error="nameError">Имя и фамилия</v-input>
 
                     <v-input-mask v-model="form.phone" :options="maskOptions" :raw="false" :error="phoneError">
@@ -190,6 +190,9 @@
                         Заполнить заявку
                     </v-button>
                 </form>
+                <div v-else>
+                    Сообщение отправлено
+                </div>
             </div>
         </section>
     </section>
@@ -240,6 +243,7 @@ import '@images/sprites/ParthenerWork3.svg';
 import '@images/sprites/ParthenerWork4.svg';
 import '@images/sprites/ParthenerWork5.svg';
 import './Partners.css';
+import { sendFeedback } from '@api';
 
 export default {
     name: 'partners',
@@ -374,7 +378,7 @@ export default {
                     'Мы работаем с индивидуальными предпринимателями, обществами с ограниченной ответственностью и бизнесом других форм',
             },
         ],
-
+        formSent: false,
         form: {
             name: '',
             email: '',
@@ -386,11 +390,6 @@ export default {
     }),
 
     computed: {
-        mailTo() {
-            const { form } = this;
-            const subject = `${form.name}, ${form.phone}, ${form.email}`;
-            return `mailto:merchant@ibt.ru?subject=${subject}&body=${form.body}`;
-        },
 
         nameError() {
             if (this.$v.form.name.$dirty && !this.$v.form.name.required) {
@@ -443,6 +442,16 @@ export default {
         onSubmit(e) {
             this.$v.$touch();
             if (this.$v.$invalid) e.preventDefault();
+            this.sendFeedback();
+        },
+
+        sendFeedback() {
+            return sendFeedback({
+                page: 'partners',
+                ...this.form,
+            }).then(() => {
+                this.formSent = true;
+            });
         },
     },
 };

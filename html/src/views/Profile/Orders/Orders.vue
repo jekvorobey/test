@@ -196,7 +196,7 @@
                                 Отменить
                             </v-link>
                             <v-link
-                                v-else
+                                v-if="order.can_repeat"
                                 class="orders-view__table-td-link"
                                 tag="button"
                                 @click.stop="onRepeatOrder(order)"

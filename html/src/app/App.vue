@@ -92,7 +92,7 @@ import { CLEAR_CHECKOUT_DATA } from '@store/modules/Checkout/actions';
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { FETCH_FAVORITES_ALL } from '@store/modules/Favorites/actions';
 
-import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
+import { NAME as AUTH_MODULE, HAS_SESSION, USER } from '@store/modules/Auth';
 import { CHECK_SESSION, FETCH_USER, FETCH_UNREAD_MESSAGES } from '@store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -129,9 +129,6 @@ export default {
     computed: {
         ...mapState([SCROLL, IS_MENU_OPEN]),
         ...mapState(AUTH_MODULE, [HAS_SESSION, USER]),
-        ...mapState(AUTH_MODULE, {
-            [CAN_BUY]: (state) => (state[USER] && state[USER][CAN_BUY]) || false,
-        }),
 
         ...mapState('route', {
             hideDefaultHeader: (state) => state.meta.hideDefaultHeader,
@@ -147,7 +144,8 @@ export default {
             isNotificationOpen: (state) =>
                 state[MODALS][modalName.general.NOTIFICATION] && state[MODALS][modalName.general.NOTIFICATION].open,
             isAuthOpen: (state) => state[MODALS][modalName.general.AUTH] && state[MODALS][modalName.general.AUTH].open,
-            isHomeFirstOpen: (state) => state[MODALS][modalName.general.HOME_FIRST] && state[MODALS][modalName.general.HOME_FIRST].open,
+            isHomeFirstOpen: (state) =>
+                state[MODALS][modalName.general.HOME_FIRST] && state[MODALS][modalName.general.HOME_FIRST].open,
         }),
 
         isTabletLg() {
@@ -204,13 +202,13 @@ export default {
 
     watch: {
         async [HAS_SESSION](value) {
+            await this[FETCH_CART_DATA]();
+
             if (value) {
                 await this[FETCH_USER]();
-                if (this[CAN_BUY]) this[FETCH_CART_DATA]();
                 await this[FETCH_FAVORITES_ALL]();
                 this.startUserDataTimer();
             } else {
-                this[CLEAR_CART_DATA]();
                 this[CLEAR_CHECKOUT_DATA]();
                 this.stopUserDataTimer();
             }
@@ -221,9 +219,11 @@ export default {
     async serverPrefetch() {
         try {
             await Promise.all([this[FETCH_COMMON_DATA](), this[CHECK_SESSION](true)]);
+
+            await this[FETCH_CART_DATA]();
+
             if (this[HAS_SESSION]) {
                 if (!this[USER]) await this[FETCH_USER]();
-                if (this[CAN_BUY]) await this[FETCH_CART_DATA]();
                 await this[FETCH_FAVORITES_ALL]();
             } else return Promise.resolve();
         } catch (error) {
