@@ -187,7 +187,7 @@
                         readonly
                         @cardClick="onSetPaymentMethod(method)"
                     >
-                        <div class="checkout-product-panel__item-payment" v-if="method.type === 'card'">
+                        <div class="checkout-product-panel__item-payment" v-if="!method.is_postpaid">
                             <div class="text-bold checkout-product-panel__item-payment-title">
                                 {{ method.title }}
                             </div>
