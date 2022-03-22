@@ -149,8 +149,9 @@
                         :key="method.id"
                         :selected="method.id === selectedPaymentMethodID"
                         readonly
+                        @cardClick="onSetPaymentMethod(method)"
                     >
-                        <div class="checkout-master-class-panel__item-payment" v-if="method.type === 'card'">
+                        <div class="checkout-master-class-panel__item-payment" v-if="!method.is_postpaid">
                             <div class="text-bold checkout-master-class-panel__item-payment-title">
                                 {{ method.title }}
                             </div>
@@ -373,6 +374,7 @@ import {
     CHANGE_TICKET,
     ADD_CERTIFICATE,
     FETCH_CHECKOUT_DATA,
+    SET_PAYMENT_METHOD,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -548,6 +550,7 @@ export default {
             PROMOCODE_STATUS,
             TICKET_STATUS,
             CERTIFICATES,
+            SET_PAYMENT_METHOD,
         ]),
 
         ...mapState(CERTIFICATE_MODULE, [CERTIFICATE_TYPE, CERTIFICATE_DATA]),
@@ -737,6 +740,10 @@ export default {
 
         onSetAgreement(value) {
             this[SET_AGREEMENT](Number(value));
+        },
+
+        onSetPaymentMethod(method) {
+            this[SET_PAYMENT_METHOD](method);
         },
 
         scrollToError(element) {
