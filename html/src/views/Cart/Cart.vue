@@ -54,90 +54,92 @@
                                 {{ attentionMessage }}
                             </p>
 
-                            <p class="cart-view__main-panel-line">
-                                <span>
-                                    Сумма заказа:
-                                    <span v-if="showCartType" class="text-lowercase">
-                                        {{ activeTabItem && $t(`cart.summary.type.${activeTabItem.type}`) }}
-                                    </span>
-                                </span>
-                                <price v-bind="activeTabItem.summary.sum" />
-                            </p>
-
-                            <p
-                                class="cart-view__main-panel-line"
-                                v-for="discount in activeTabItem.summary.discounts"
-                                :key="discount.type"
-                            >
-                                <template v-if="discount.type === discountType.PRODUCT">
-                                    {{ $t(`cart.summary.discount.${discount.type}.${activeTabItem.type}`) }}
-                                </template>
-                                <template v-else>
-                                    {{ $t(`cart.summary.discount.${discount.type}`) }}
-                                </template>
-
-                                <span>-<price v-bind="discount.value" /></span>
-                            </p>
-
-                            <div class="cart-view__main-panel-total">
-                                <p class="text-bold cart-view__main-panel-line">
-                                    Итого <price v-bind="activeTabItem.summary.total" />
-                                </p>
-
-                                <p v-if="showBonus" class="text-grey text-sm cart-view__main-panel-line">
-                                    Будет начислено
+                            <template v-if="!cartHasOnlyNonPricedProducts">
+                                <p class="cart-view__main-panel-line">
                                     <span>
-                                        {{ `+ ${prepareBonus(activeTabItem.summary.bonusGet)}` }}&nbsp;бонусов
+                                        Сумма заказа:
+                                        <span v-if="showCartType" class="text-lowercase">
+                                            {{ activeTabItem && $t(`cart.summary.type.${activeTabItem.type}`) }}
+                                        </span>
                                     </span>
+                                    <price v-bind="activeTabItem.summary.sum" />
                                 </p>
-                            </div>
 
-                            <div v-if="!promocode" class="cart-view__main-panel-promo">
-                                <v-input
-                                    class="cart-view__main-panel-promo-input"
-                                    placeholder="Ваш промокод"
-                                    v-model="inputPromocode"
-                                    :error="promocodeError"
+                                <p
+                                    class="cart-view__main-panel-line"
+                                    v-for="discount in activeTabItem.summary.discounts"
+                                    :key="discount.type"
                                 >
-                                    <template v-slot:error="{ error }">
-                                        <transition name="slide-in-bottom" mode="out-in">
-                                            <div :key="error" v-if="error">{{ error }}</div>
-                                        </transition>
+                                    <template v-if="discount.type === discountType.PRODUCT">
+                                        {{ $t(`cart.summary.discount.${discount.type}.${activeTabItem.type}`) }}
                                     </template>
-                                </v-input>
+                                    <template v-else>
+                                        {{ $t(`cart.summary.discount.${discount.type}`) }}
+                                    </template>
 
-                                <v-button
-                                    class="btn--outline cart-view__main-panel-promo-btn"
-                                    @click="onAddPromocode"
-                                    :disabled="isLoad || isPromocodePending || !inputPromocode"
-                                >
-                                    <template v-if="!isPromocodePending">Применить</template>
-                                    <v-spinner v-else show height="24" width="24" />
-                                </v-button>
-                            </div>
-                            <div v-else class="cart-view__main-panel-promo cart-view__main-panel-promo--success">
-                                <div class="cart-view__main-panel-promo-icon">
-                                    <v-svg name="check" width="16" height="16" />
+                                    <span>-<price v-bind="discount.value" /></span>
+                                </p>
+
+                                <div class="cart-view__main-panel-total">
+                                    <p class="text-bold cart-view__main-panel-line">
+                                        Итого <price v-bind="activeTabItem.summary.total" />
+                                    </p>
+
+                                    <p v-if="showBonus" class="text-grey text-sm cart-view__main-panel-line">
+                                        Будет начислено
+                                        <span>
+                                            {{ `+ ${prepareBonus(activeTabItem.summary.bonusGet)}` }}&nbsp;бонусов
+                                        </span>
+                                    </p>
                                 </div>
 
-                                <div>
-                                    Промокод&nbsp;{{ promocode }}&nbsp;применён
-                                    <v-link
-                                        tag="button"
-                                        class="cart-view__main-panel-promo-link"
-                                        @click="onDeletePromocode"
-                                        :disabled="isLoad || isPromocodePending"
+                                <div v-if="!promocode" class="cart-view__main-panel-promo">
+                                    <v-input
+                                        class="cart-view__main-panel-promo-input"
+                                        placeholder="Ваш промокод"
+                                        v-model="inputPromocode"
+                                        :error="promocodeError"
                                     >
-                                        Отменить
-                                    </v-link>
+                                        <template v-slot:error="{ error }">
+                                            <transition name="slide-in-bottom" mode="out-in">
+                                                <div :key="error" v-if="error">{{ error }}</div>
+                                            </transition>
+                                        </template>
+                                    </v-input>
+
+                                    <v-button
+                                        class="btn--outline cart-view__main-panel-promo-btn"
+                                        @click="onAddPromocode"
+                                        :disabled="isLoad || isPromocodePending || !inputPromocode"
+                                    >
+                                        <template v-if="!isPromocodePending">Применить</template>
+                                        <v-spinner v-else show height="24" width="24" />
+                                    </v-button>
                                 </div>
-                            </div>
+                                <div v-else class="cart-view__main-panel-promo cart-view__main-panel-promo--success">
+                                    <div class="cart-view__main-panel-promo-icon">
+                                        <v-svg name="check" width="16" height="16" />
+                                    </div>
+
+                                    <div>
+                                        Промокод&nbsp;{{ promocode }}&nbsp;применён
+                                        <v-link
+                                            tag="button"
+                                            class="cart-view__main-panel-promo-link"
+                                            @click="onDeletePromocode"
+                                            :disabled="isLoad || isPromocodePending"
+                                        >
+                                            Отменить
+                                        </v-link>
+                                    </div>
+                                </div>
+                            </template>
 
                             <v-button
                                 class="cart-view__main-panel-submit"
                                 v-if="!isLoad"
                                 @click="loadCheckout"
-                                :disabled="isPromocodePending"
+                                :disabled="isPromocodePending || (cartHasOnlyNonPricedProducts && hasSession)"
                             >
                                 Оформить заказ
                             </v-button>
@@ -404,6 +406,26 @@ export default {
 
         showBonus() {
             return !this.referralPartner && this.activeTabItem.summary.bonusGet > 0;
+        },
+
+        cartHasOnlyNonPricedProducts() {
+            if (!this.isProduct) {
+                return false;
+            }
+
+            if (Array.isArray(this.cartData.product.items) && this.cartData.product.items.length > 0) {
+                let only = true;
+
+                this.cartData.product.items.forEach((item) => {
+                    if (item.p.isPriceHidden !== true) {
+                        only = false;
+                    }
+                });
+
+                return only;
+            }
+
+            return false;
         },
     },
 

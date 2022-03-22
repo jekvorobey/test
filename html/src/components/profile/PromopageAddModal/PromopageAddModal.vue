@@ -31,7 +31,6 @@
                         :image="item.image"
                         :price="item.price"
                         :old-price="item.oldPrice"
-                        :freeBuy="item.freeBuy"
                         @click.native="onSelectItem(item.productId)"
                     />
                 </ul>

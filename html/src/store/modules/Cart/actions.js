@@ -75,14 +75,20 @@ export default {
 
     async [DELETE_ALL_ITEMS]({ state, commit }, type) {
         try {
-            const params = state.cartData.product.items.map((item) => ({ quantity: item.count, ...item.p }));
-            const products = new ProductsBuilder().createForCart(params);
+            let products = null;
+
+            if (state.cartData.product && Array.isArray(state.cartData.product.items)) {
+                const params = state.cartData.product.items.map((item) => ({ quantity: item.count, ...item.p }));
+                products = new ProductsBuilder().createForCart(params);
+            }
 
             await deleteAllItems(type);
             const data = { ...state.cartData, [type]: undefined };
             commit(SET_CART_DATA, data);
 
-            seoEvents.remove(products);
+            if (products !== null) {
+                seoEvents.remove(products);
+            }
         } catch (error) {
             storeErrorHandler(DELETE_ALL_ITEMS)(error);
         }

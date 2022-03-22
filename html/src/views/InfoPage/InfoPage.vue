@@ -1,19 +1,23 @@
 <template>
-    <info-page :landing="landing"></info-page>
+    <div class="container info-pages-block">
+        <h1 class="info-pages-block__title">
+            {{ landing.name }}
+        </h1>
+
+        <div class="info-pages-block__content">
+            <div v-html="landing.content"></div>
+        </div>
+    </div>
 </template>
 
 <script>
-import InfoPage from './InfoPage.vue';
-
+import metaMixin from '@plugins/meta';
 import { mapState } from 'vuex';
-import './InfoPages.css';
 import { getLanding } from '@api';
 
 export default {
-    name: 'agreements',
-    components: {
-        InfoPage,
-    },
+    name: 'info-page',
+    mixins: [metaMixin],
     props: {
         page: String,
     },
@@ -22,7 +26,6 @@ export default {
             landing: {},
         };
     },
-
     computed: {
         ...mapState('route', {
             page: (state) => state.params.page,

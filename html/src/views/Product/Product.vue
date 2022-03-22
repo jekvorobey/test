@@ -179,7 +179,6 @@
                         :isPriceHidden="product.isPriceHidden"
                         :disabled="!canBuy || isProductToCartAdding"
                         :to-card-adding="isProductToCartAdding"
-                        :freeBuy="product.freeBuy"
                         item-prop
                         @cart="onBuyProduct"
                         @wishlist="onToggleFavorite(product.productId)"
@@ -307,7 +306,6 @@
                                 :rating="item.rating"
                                 :isSmall="isTabletLg"
                                 :show-buy-btn="item.stock.qty > 0"
-                                :freeBuy="item.freeBuy"
                             />
                         </li>
                     </ul>
@@ -649,7 +647,6 @@
                     :isPriceHidden="product.isPriceHidden"
                     :disabled="!canBuy || isProductToCartAdding"
                     :to-card-adding="isProductToCartAdding"
-                    :freeBuy="product.freeBuy"
                     @add-item="onBuyProduct"
                 >
                     {{ buyBtnText }}
@@ -667,7 +664,6 @@
                     :isPriceHidden="product.isPriceHidden"
                     :disabled="!canBuy || isProductToCartAdding"
                     :to-card-adding="isProductToCartAdding"
-                    :freeBuy="product.freeBuy"
                     @add-item="onBuyProduct"
                 >
                     {{ buyBtnText }}

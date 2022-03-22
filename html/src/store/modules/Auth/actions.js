@@ -90,6 +90,7 @@ export default {
     async [LOGOUT]({ dispatch, commit }) {
         try {
             await logout();
+            commit(SET_USER, null);
             dispatch(CHECK_SESSION, true);
         } catch (error) {
             commit(SET_HAS_SESSION, false);

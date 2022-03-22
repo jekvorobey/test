@@ -26,7 +26,6 @@
                 <buy-button
                     v-if="showBuyBtn"
                     class="btn--outline catalog-product-card__controls-btn"
-                    :freeBuy="freeBuy"
                     @click.prevent="onBuyButtonClick"
                 >
                     Купить
@@ -186,11 +185,6 @@ export default {
         showWishlistBtn: {
             type: Boolean,
             default: true,
-        },
-
-        freeBuy: {
-            type: Boolean,
-            default: false,
         },
     },
 
