@@ -705,6 +705,10 @@ export function getBrands(data) {
     return $http.get('/v1/brands', data);
 }
 
+export function getBrandsActive(data) {
+    return $http.get('/v1/brands/active', data);
+}
+
 export function getProduct(code, offer_id, referrerCode) {
     return $http.get('/v1/catalog/product-detail', {
         params: {
@@ -747,11 +751,11 @@ export function getMasterclass(code) {
     });
 }
 
-export function getLanding(page, draft = null) {
-    return $http.get('/v1/content/pages', {
+export function getLanding(code, draft = null) {
+    return $http.get('/v1/content/page', {
         params: {
-            url: page,
-            draft: draft,
+            code,
+            draft,
         },
     });
 }

@@ -73,7 +73,7 @@ export default {
                 {
                     id: 1,
                     name: this.$t('header.top.delivery'),
-                    to: { name: 'InfoPage', params: { page: infoPages.DELIVERY_AND_PAYMENT } },
+                    to: { name: 'DeliveryAndPayment' },
                     icon: 'delivery',
                 },
                 {
@@ -84,7 +84,7 @@ export default {
                 },
                 {
                     id: 3,
-                    to: { name: 'InfoPage', params: { page: infoPages.BONUSES } },
+                    to: { name: 'InfoPageStatic', params: { code: infoPages.BONUSES } },
                     name: this.$t('header.top.gifts'),
                     icon: 'gift',
                 },

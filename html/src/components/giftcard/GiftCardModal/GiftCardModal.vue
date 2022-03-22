@@ -229,14 +229,14 @@
                 <v-check id="termsAccepted" name="termsAccepted" v-model="order.terms_accepted" value="1">
                     Я согласен с
                     <router-link
-                        :to="{ name: 'Agreements', params: { page: agreementTypes.PUBLIC_OFFER } }"
+                        :to="{ name: 'InfoPageAgreement', params: { code: agreementTypes.PUBLIC_OFFER } }"
                         target="_blank"
                     >
                         условиями оферты
                     </router-link>
                     и
                     <router-link
-                        :to="{ name: 'Agreements', params: { page: agreementTypes.PERSONAL_POLICY } }"
+                        :to="{ name: 'InfoPageAgreement', params: { code: agreementTypes.PERSONAL_POLICY } }"
                         target="_blank"
                     >
                         политикой конфиденциальности
@@ -278,7 +278,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 import { DELETE_ALL_ITEMS } from '@store/modules/Cart/actions';
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 
-import { modalName } from '@enums';
+import { modalName, agreementTypes } from '@enums';
 import './GiftCardModal.css';
 
 const NAME = modalName.TICKET_EDIT;
@@ -623,6 +623,9 @@ export default {
                 this.todayLabel = 'Сейчас';
             }
         },
+    },
+    created() {
+        this.agreementTypes = agreementTypes;
     },
 };
 </script>

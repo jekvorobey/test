@@ -128,6 +128,15 @@
             }
         }
 
+        &-prices--no-price {
+            position: relative;
+            top: -10.5px;
+
+            svg {
+                width: 100%;
+            }
+        }
+
         &-price {
             font-size: 20px;
             line-height: 24px;
