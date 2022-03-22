@@ -34,7 +34,7 @@ export default {
         }),
     },
     beforeMount() {
-        getLanding(this.page, this.draft).then((response) => {
+        getLanding(this.page.replace(/\/+/, '').replace(/\/+$/, ''), this.draft).then((response) => {
             this.landing = response;
         });
     },
