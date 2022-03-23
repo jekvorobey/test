@@ -215,7 +215,7 @@ export default {
 
     data() {
         return {
-            socialDrivers: [socials.VKONTAKTE, socials.FACEBOOK, socials.GOOGLE],
+            socialDrivers: [socials.VKONTAKTE, socials.GOOGLE],
             files: [],
         };
     },

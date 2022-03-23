@@ -59,14 +59,13 @@ import { HELP_MENU } from '@store/getters';
 
 import '@images/sprites/socials/telegram.svg';
 import '@images/sprites/socials/telegram-hover.svg';
-import '@images/sprites/socials/whatsup-bw.svg';
-import '@images/sprites/socials/whatsup-hover.svg';
 import '@images/sprites/socials/viber.svg';
 import '@images/sprites/socials/viber-hover.svg';
 import '@images/sprites/socials/vkontakte.svg';
 import '@images/sprites/socials/vkontakte-hover.svg';
-import '@images/sprites/socials/facebook.svg';
-import '@images/sprites/socials/facebook-hover.svg';
+import '@images/sprites/socials/ok-rounded.svg';
+import '@images/sprites/socials/ok-rounded-hover.svg';
+
 import './HelpPanel.css';
 
 export default {
@@ -92,13 +91,6 @@ export default {
                     iconHover: 'telegram-hover',
                 },
                 {
-                    href: 'https://api.whatsapp.com/send/?phone=79162001869&text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!+%D0%9C%D0%B5%D0%BD%D1%8F+%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82',
-                    title: 'Связаться с нами в WhatsApp',
-                    hover: false,
-                    icon: 'whatsup-bw',
-                    iconHover: 'whatsup-hover',
-                },
-                {
                     href: 'viber://pa/?chatURI=ibtru',
                     title: 'Связаться с нами в Viber',
                     hover: false,
@@ -113,11 +105,11 @@ export default {
                     iconHover: 'vkontakte-hover',
                 },
                 {
-                    href: 'https://m.me/bessovestnotalantlivy',
-                    title: 'Связаться с нами в Facebook',
+                    href: 'https://ok.ru/group/62240588693625/messages',
+                    title: 'Связаться с нами в OK',
                     hover: false,
-                    icon: 'facebook',
-                    iconHover: 'facebook-hover',
+                    icon: 'ok-rounded',
+                    iconHover: 'ok-rounded-hover',
                 },
             ],
         };
