@@ -248,12 +248,12 @@
                             </v-button>
                         </info-row>
 
-                        <!-- 
+                        <!--
                         <info-row class="orders-view__list-item-row">
                             <v-link tag="button" @click.stop>
                                     Отменить
                             </v-link>
-                        </info-row> 
+                        </info-row>
                         -->
                     </template>
 
@@ -270,7 +270,12 @@
                         </info-row>
 
                         <info-row class="orders-view__list-item-row">
-                            <v-link tag="button" @click.stop="onRepeatOrder(order)" :disabled="isDisabled">
+                            <v-link
+                                v-if="order.can_repeat"
+                                tag="button"
+                                @click.stop="onRepeatOrder(order)"
+                                :disabled="isDisabled"
+                            >
                                 Повторить
                             </v-link>
                         </info-row>
