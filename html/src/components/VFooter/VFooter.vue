@@ -126,10 +126,9 @@ import VLink from '@controls/VLink/VLink.vue';
 import VAccordion from '@controls/VAccordion/VAccordion.vue';
 import SelfRouterLink from '@controls/VLink/SelfRouterLink.vue';
 
-import '@images/sprites/socials/facebook-bw.svg';
-import '@images/sprites/socials/instagram-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
-import '@images/sprites/socials/youtube-bw.svg';
+import '@images/sprites/socials/telegram-bw.svg';
+import '@images/sprites/socials/ok-bw.svg';
 
 import '@images/sprites/logo.svg';
 import '@images/sprites/logo-default.svg';
@@ -159,27 +158,21 @@ export default {
                 items: [
                     {
                         id: 1,
-                        icon: 'facebook-bw',
-                        name: this.$t('socials.facebook'),
-                        href: 'https://www.facebook.com/bessovestnotalantlivy',
-                    },
-                    {
-                        id: 2,
-                        icon: 'instagram-bw',
-                        name: this.$t('socials.instagram'),
-                        href: 'https://www.instagram.com/bessovestnotalantlivy/',
-                    },
-                    {
-                        id: 3,
                         icon: 'vkontakte-bw',
                         name: this.$t('socials.vkontakte'),
                         href: 'https://vk.com/bessovestnotalantlivy',
                     },
                     {
-                        id: 4,
-                        icon: 'youtube-bw',
-                        name: this.$t('socials.youtube'),
-                        href: 'https://www.youtube.com/channel/UCKFuumlKX2ucuyVojNFuSIw/',
+                        id: 2,
+                        icon: 'telegram-bw',
+                        name: this.$t('socials.telegram'),
+                        href: 'https://t.me/BessovestnoTalantlivy',
+                    },
+                    {
+                        id: 3,
+                        icon: 'ok-bw',
+                        name: this.$t('socials.ok'),
+                        href: 'https://ok.ru/group/62240588693625',
                     },
                 ],
             };

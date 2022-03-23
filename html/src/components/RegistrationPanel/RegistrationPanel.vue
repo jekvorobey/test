@@ -153,15 +153,6 @@
                         class="registration-panel__socials-item--vkontake"
                     />
                 </button>
-
-                <button class="registration-panel__socials-item" @click="onRegisterBySocial('facebook')">
-                    <v-svg
-                        name="facebook-bw"
-                        height="20"
-                        width="20"
-                        class="registration-panel__socials-item--facebook"
-                    />
-                </button>
             </div>
 
             <span class="registration-panel__socials-text">Или зарегистрируйтесь через соцсеть</span>
@@ -206,7 +197,6 @@ import { rawPhone } from '@util';
 import { phoneMaskOptions } from '@settings';
 import { modalName, authMode } from '@enums';
 import { verificationCodeType } from '@enums/auth';
-import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/google-bw.svg';
 
