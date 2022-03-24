@@ -138,7 +138,9 @@
             <div class="checkout-master-class-panel__item checkout-master-class-panel__item--payment">
                 <div class="container container--tablet checkout-master-class-panel__item-container">
                     <div class="checkout-master-class-panel__item-header">
-                        <h2 class="checkout-master-class-panel__item-header-hl">Способ оплаты</h2>
+                        <h2 class="checkout-master-class-panel__item-header-hl">
+                            Способ оплаты <v-spinner width="24" height="24" :show="isPaymentMethodPending" />
+                        </h2>
                     </div>
                 </div>
 
@@ -395,7 +397,7 @@ import {
     PROFESSIONS_MAP,
     CERTIFICATE_STATUS,
     CERTIFICATES,
-    RECEIVE_METHOD_STATUS,
+    RECEIVE_METHOD_STATUS, PAYMENT_METHOD_STATUS,
 } from '@store/modules/Checkout/getters';
 
 import { NAME as CERTIFICATE_MODULE, CERTIFICATE_TYPE, CERTIFICATE_DATA } from '@store/modules/Certificate';
@@ -648,6 +650,10 @@ export default {
         isTicketPending() {
             return this[TICKET_STATUS] === requestStatus.PENDING;
         },
+
+        isPaymentMethodPending() {
+            return this[PAYMENT_METHOD_STATUS] === requestStatus.PENDING;
+        },
     },
 
     methods: {
@@ -669,12 +675,10 @@ export default {
             ADD_PROMOCODE,
             DELETE_PROMOCODE,
             FETCH_CHECKOUT_DATA,
+            PAYMENT_METHOD_STATUS,
         ]),
 
-        ...mapActions(CERTIFICATE_MODULE, [
-            FETCH_CERTIFICATES,
-            ACTIVATE_CERTIFICATE,
-        ]),
+        ...mapActions(CERTIFICATE_MODULE, [FETCH_CERTIFICATES, ACTIVATE_CERTIFICATE]),
 
         formatPhoneNumber(phone) {
             return formatPhoneNumber(phone);

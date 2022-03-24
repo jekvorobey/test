@@ -175,7 +175,9 @@
             </div>
             <div class="checkout-product-panel__item checkout-product-panel__item--payment">
                 <div class="checkout-product-panel__item-header">
-                    <h2 class="checkout-product-panel__item-header-hl">Способ оплаты</h2>
+                    <h2 class="checkout-product-panel__item-header-hl">
+                        Способ оплаты <v-spinner width="24" height="24" :show="isPaymentMethodPending" />
+                    </h2>
                 </div>
 
                 <ul class="checkout-product-panel__item-list">
@@ -592,7 +594,7 @@ import {
     CERTIFICATE_STATUS,
     PROMOCODE_STATUS,
     RECEIVE_METHOD_STATUS,
-    CITY_FIAS,
+    CITY_FIAS, PAYMENT_METHOD_STATUS,
 } from '@store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -790,6 +792,7 @@ export default {
             CERTIFICATE_STATUS,
             PROMOCODE_STATUS,
             RECEIVE_METHOD_STATUS,
+            PAYMENT_METHOD_STATUS,
 
             CITY_FIAS,
         ]),
@@ -808,6 +811,10 @@ export default {
 
         isReceiveMethodPending() {
             return this[RECEIVE_METHOD_STATUS] === requestStatus.PENDING;
+        },
+
+        isPaymentMethodPending() {
+            return this[PAYMENT_METHOD_STATUS] === requestStatus.PENDING;
         },
 
         canDeliver() {

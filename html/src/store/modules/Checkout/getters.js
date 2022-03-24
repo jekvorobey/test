@@ -157,6 +157,7 @@ export default {
     [CHECKOUT_STATUS]: (state) => state[CHECKOUT_STATUS] || {},
     [RECEIVE_METHOD_STATUS]: (state) => state[CHECKOUT_STATUS][RECEIVE_METHOD_STATUS] || requestStatus.SUCCESS,
     [ADDRESS_STATUS]: (state) => state[CHECKOUT_STATUS][ADDRESS_STATUS] || requestStatus.SUCCESS,
+    [PAYMENT_METHOD_STATUS]: (state) => state[CHECKOUT_STATUS][PAYMENT_METHOD_STATUS] || requestStatus.SUCCESS,
     [BONUS_STATUS]: (state) => state[CHECKOUT_STATUS][BONUS_STATUS] || requestStatus.SUCCESS,
     [CERTIFICATE_STATUS]: (state) => state[CHECKOUT_STATUS][CERTIFICATE_STATUS] || requestStatus.SUCCESS,
     [PROMOCODE_STATUS]: (state) => state[CHECKOUT_STATUS][PROMOCODE_STATUS] || requestStatus.SUCCESS,
