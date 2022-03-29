@@ -39,11 +39,12 @@ export default {
         async fetchLanding(to, from, next) {
             const {
                 params: { code },
+                query: { draft },
             } = to;
 
             try {
                 this.$progress.start();
-                await this[FETCH_LANDING]({ code });
+                await this[FETCH_LANDING]({ code, draft });
                 this.$progress.finish();
                 next();
             } catch (error) {
@@ -61,6 +62,7 @@ export default {
 
         const {
             params: { code },
+            query: { draft },
         } = to;
 
         function proceed() {
@@ -72,7 +74,7 @@ export default {
                 else {
                     $progress.start();
                     $store
-                        .dispatch(`${INFO_PAGE_MODULE}/${FETCH_LANDING}`, { code })
+                        .dispatch(`${INFO_PAGE_MODULE}/${FETCH_LANDING}`, { code, draft })
                         .then(() => next(() => $progress.finish()))
                         .catch((thrown) => {
                             if (thrown && thrown.isCancel === true) return next();
