@@ -286,6 +286,12 @@ export default {
         },
     },
 
+    mounted() {
+        if (!this[HAS_PASSWORD]) {
+            this.onOpenPasswordModal();
+        }
+    },
+
     methods: {
         ...mapActions(AUTH_MODULE, [GET_SOCIAL_LINK, FETCH_USER]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
