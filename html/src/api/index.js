@@ -951,7 +951,7 @@ export function getCheckoutOrder(order_id) {
 // favorites
 
 export function getFavorites(pageNum, perPage, orderField, orderDirection) {
-    return $http.get('/v1/lk/favorites', {
+    return $http.get('/v1/favorites', {
         params: {
             pageNum,
             perPage,
@@ -962,7 +962,7 @@ export function getFavorites(pageNum, perPage, orderField, orderDirection) {
 }
 
 export function addFavoritesItem(id, byOffer = false) {
-    return $http.post(`/v1/lk/favorites/${id}`, null, {
+    return $http.post(`/v1/favorites/${id}`, null, {
         params: {
             byOffer: byOffer || undefined,
         },
@@ -970,15 +970,15 @@ export function addFavoritesItem(id, byOffer = false) {
 }
 
 export function deleteFavoritesItem(product_id) {
-    return $http.delete(`/v1/lk/favorites/${product_id}`);
+    return $http.delete(`/v1/favorites/${product_id}`);
 }
 
 export function deleteAllFavorites() {
-    return $http.delete('/v1/lk/favorites/all');
+    return $http.delete('/v1/favorites/all');
 }
 
 export function getFavoritesAll() {
-    return $http.get('/v1/lk/favorites/all');
+    return $http.get('/v1/favorites/all');
 }
 
 // documents
