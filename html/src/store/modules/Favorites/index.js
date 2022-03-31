@@ -3,7 +3,6 @@ import { sortFields } from '@enums/favorites';
 import { DEFAULT_PAGE } from '@constants';
 import { $store } from '@services';
 
-import { checkSession } from '@util/profile';
 import actions, { ADD_FAVORITES_ITEM_BY_OFFER } from './actions';
 import mutations from './mutations';
 import getters from './getters';
@@ -20,9 +19,7 @@ export const ACTIVE_PAGE = 'activePage';
 export const RANGE = 'range';
 
 function rrAddToFavourite(offerId) {
-    if (checkSession()) {
-        $store.dispatch(`${NAME}/${ADD_FAVORITES_ITEM_BY_OFFER}`, offerId);
-    }
+    $store.dispatch(`${NAME}/${ADD_FAVORITES_ITEM_BY_OFFER}`, offerId);
 }
 
 if (process.env.VUE_ENV === 'client') {
