@@ -7,6 +7,7 @@ import getters, {
     PROMOCODE_STATUS,
     ADDRESS_STATUS,
     TICKET_STATUS,
+    PAYMENT_METHOD_STATUS,
 } from './getters';
 
 import actions from './actions';
@@ -32,6 +33,7 @@ export default function createModule() {
                 [CERTIFICATE_STATUS]: requestStatus.SUCCESS,
                 [PROMOCODE_STATUS]: requestStatus.SUCCESS,
                 [ADDRESS_STATUS]: requestStatus.SUCCESS,
+                [PAYMENT_METHOD_STATUS]: requestStatus.SUCCESS,
                 [TICKET_STATUS]: requestStatus.SUCCESS,
             },
             [CHECKOUT_DATA]: null,
