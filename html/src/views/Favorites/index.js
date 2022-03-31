@@ -1,5 +1,3 @@
-import hasSession from '@router/middleware/hasSession';
-
 /**
  * @Module
  */
@@ -21,7 +19,6 @@ export default {
             component: FavoritesAsync,
 
             meta: {
-                middleware: [hasSession],
                 skipScroll: true,
             },
         },

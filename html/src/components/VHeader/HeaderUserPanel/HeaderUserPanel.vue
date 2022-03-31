@@ -8,18 +8,16 @@
             </profile-navigation-panel>
         </div>
 
-        <template v-if="hasSession">
-            <self-router-link
-                class="header-user-panel__item header-user-panel__item--wishlist"
-                :to="{ name: 'Favorites' }"
-                same-disabled
-            >
-                <v-svg :name="favoriteItemsIcon" width="24" height="24" />
-                <span class="text-bold header-user-panel__item-count" v-if="hasFavoriteItems">
-                    {{ favoriteItemsCount }}
-                </span>
-            </self-router-link>
-        </template>
+        <self-router-link
+            class="header-user-panel__item header-user-panel__item--wishlist"
+            :to="{ name: 'Favorites' }"
+            same-disabled
+        >
+            <v-svg :name="favoriteItemsIcon" width="24" height="24" />
+            <span class="text-bold header-user-panel__item-count" v-if="hasFavoriteItems">
+                {{ favoriteItemsCount }}
+            </span>
+        </self-router-link>
         <div class="header-user-panel__item header-user-panel__item-cart-controls" @click="onToCart">
             <cart-header-panel class="header-user-panel__item-cart">
                 <template v-if="productItemsSum.value > 0">
