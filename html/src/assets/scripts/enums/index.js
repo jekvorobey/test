@@ -47,6 +47,7 @@ export const modalName = Object.freeze({
 
     cart: {
         CLEAR_CART: 'clear-cart-modal',
+        CART_NON_PROF_WARNING: 'cart-non-prof-warning',
     },
 });
 

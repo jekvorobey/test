@@ -4,7 +4,7 @@
             Точная дата доставки будет рассчитана на следующем шаге оформления заказа
         </attention-panel>
 
-        <template v-if="userCanBeProfessional">
+        <template v-if="userProfessional">
             <transition-group
                 class="cart-product-panel__list"
                 tag="ul"
@@ -128,7 +128,7 @@
                 </div>
 
                 <transition-group
-                    v-if="filteredProducts.common.length > 0"
+                    v-if="filteredProducts.professional.length > 0"
                     class="cart-product-panel__list"
                     tag="ul"
                     name="cart-item"
@@ -230,6 +230,11 @@ export default {
                 return [];
             },
         },
+
+        userProfessional: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
@@ -273,20 +278,6 @@ export default {
             }
 
             return products;
-        },
-
-        userCanBeProfessional() {
-            let canBe = false;
-
-            if (this[HAS_SESSION]) {
-                this.products.forEach((product) => {
-                    if (product.p.isOnlyForProfessional === true && product.p.userCanBuy === true) {
-                        canBe = true;
-                    }
-                });
-            }
-
-            return canBe;
         },
     },
 

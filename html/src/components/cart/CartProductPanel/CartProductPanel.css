@@ -29,8 +29,12 @@
         }
     }
 
-    &__list-header {
+    &__list + &__list-header {
         padding: 40px calc(var(--gs) * 2) calc(var(--gs) * 2) calc(var(--gs) * 2);
+    }
+
+    &__list-header {
+        padding: 0 calc(var(--gs) * 2) calc(var(--gs) * 2) calc(var(--gs) * 2);
         margin-bottom: calc(var(--gs) * 2);
         border-bottom: 1px solid var(--cl-divider-grey);
     }
@@ -49,8 +53,12 @@
     }
 
     @media (--tablet-min) {
-        &__list-header {
+        &__list + &__list-header {
             padding: calc(var(--gs) * 7) 0 calc(var(--gs) * 2) 0;
+        }
+
+        &__list-header {
+            padding: 0 0 calc(var(--gs) * 2) 0;
             margin-bottom: calc(var(--gs) * 3);
             border-top: none;
         }
