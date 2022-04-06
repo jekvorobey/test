@@ -72,6 +72,7 @@ const main = {
         ok: 'Однокласники',
         youtube: 'Youtube',
         instagram: 'Instagram',
+        telegram: 'Телеграм',
     },
 
     validation: {

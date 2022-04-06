@@ -56,6 +56,13 @@ export function loginBySocial(driver, query) {
     });
 }
 
+export function loginBySignature({ userId, signature }) {
+    return $http.post('/v1/auth/loginBySignature', {
+        user_id: userId,
+        signature,
+    });
+}
+
 export function logout() {
     return $http.post('/v1/auth/logout');
 }
