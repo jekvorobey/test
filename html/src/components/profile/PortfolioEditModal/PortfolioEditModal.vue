@@ -270,6 +270,7 @@ export default {
             }
 
             this.onClose();
+            this.$emit('success-uploaded');
             this[CHANGE_MODAL_STATE]({
                 name: modalName.general.NOTIFICATION,
                 open: true,
