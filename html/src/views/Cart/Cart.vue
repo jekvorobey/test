@@ -631,6 +631,7 @@ export default {
                         open: true,
                         state: {
                             activeTab: authMode.LOGIN,
+                            registrationSuccessRedirect: false,
                         },
                     });
                 }

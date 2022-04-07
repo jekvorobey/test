@@ -23,6 +23,7 @@
                     <registration-panel
                         v-else-if="item.type === authMode.REGISTRATION"
                         :enteredPhone="enteredPhone"
+                        :finish-redirect-route="registrationSuccessRedirect"
                         @set-title="onSetTitle"
                         @change-tab="onChangeTab"
                         @input-phone="onInputPhone"
@@ -79,6 +80,7 @@ export default {
             title: null,
             showTabs: true,
             enteredPhone: null,
+            registrationSuccessRedirect: 'Cabinet',
         };
     },
 
@@ -128,6 +130,10 @@ export default {
 
     beforeMount() {
         this.activeTab = this.modalState.activeTab;
+
+        if (typeof this.modalState.registrationSuccessRedirect !== 'undefined') {
+            this.registrationSuccessRedirect = this.modalState.registrationSuccessRedirect;
+        }
     },
 };
 </script>
