@@ -184,6 +184,7 @@ import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import metaMixin from '@plugins/meta';
 
 import './InfoPage.css';
+import { convertObjectToMetaProperties } from '@util';
 
 export default {
     name: 'delivery-and-payment',
@@ -198,6 +199,10 @@ export default {
         const { pageTitle } = this;
         return {
             title: pageTitle,
+            meta: convertObjectToMetaProperties({
+                description:
+                    'Описание условий и способов оплат и доставок на маркетплейсе для мастеров бьюти-индустрии',
+            }),
         };
     },
 

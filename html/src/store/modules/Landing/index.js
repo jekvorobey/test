@@ -4,6 +4,7 @@ import getters from './getters';
 
 export const NAME = 'landing';
 export const RENDER_DATA = 'renderData';
+export const SEO = 'seo';
 
 export default function createModule() {
     return {
@@ -12,6 +13,7 @@ export default function createModule() {
         state: {
             renderData: [],
             load: false,
+            seo: {},
             banners: [],
             middleBanners: [],
             brands: [],

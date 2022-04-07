@@ -28,7 +28,7 @@ import {
     getBannersByCode,
     getProductGroups,
     getFrequentCategories,
-    getCatalogLatestSets,
+    getCatalogLatestSets, getSeoTags,
 } from '@api';
 
 import { storeErrorHandler } from '@util/store';
@@ -46,7 +46,7 @@ import {
     SET_LOAD,
     SET_BRANDS_SET,
     SET_FREQUENT_CATEGORIES,
-    SET_CATALOG_LATEST_SETS,
+    SET_CATALOG_LATEST_SETS, SET_SEO,
 } from './mutations';
 
 export const FETCH_LANDING_DATA = 'FETCH_LANDING_DATA';
@@ -60,6 +60,7 @@ export const FETCH_BRANDS = 'FETCH_BRANDS';
 export const FETCH_BANNERS_SET = 'FETCH_BANNERS_SET';
 export const FETCH_FREQUENT_CATEGOIRES = 'FETCH_FREQUENT_CATEGOIRES';
 export const FETCH_CATALOG_LATEST_SETS = 'FETCH_CATALOG_LATEST_SETS';
+export const FETCH_SEO = 'FETCH_SEO';
 
 export default {
     async [FETCH_BRANDS]({ commit }) {
@@ -380,6 +381,15 @@ export default {
         }
     },
 
+    async [FETCH_SEO]({ commit }) {
+        try {
+            const seoData = await getSeoTags({ code: 'main' });
+            commit(SET_SEO, seoData);
+        } catch (error) {
+            storeErrorHandler(FETCH_SEO)(error);
+        }
+    },
+
     [FETCH_LANDING_DATA]({ dispatch, commit }) {
         return Promise.all([
             dispatch(FETCH_BANNERS),
@@ -391,6 +401,7 @@ export default {
             dispatch(FETCH_BRANDS),
             dispatch(FETCH_NEW_PRODUCTS),
             dispatch(FETCH_BESTSELLER_PRODUCTS),
+            dispatch(FETCH_SEO),
             /*
              *
              */

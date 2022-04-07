@@ -714,7 +714,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import _debounce from 'lodash/debounce';
 import metaMixin from '@plugins/meta';
-import { saveToClipboard, getDate, pluralize, formatPhoneNumber } from '@util';
+import { saveToClipboard, getDate, pluralize, formatPhoneNumber, convertObjectToMetaProperties } from '@util';
 import { createNotFoundRoute } from '@util/router';
 import { generatePictureSourcePath, generateFileOriginalPath } from '@util/file';
 import { getInstagramUserNameFromUrl } from '@util/socials';
@@ -835,10 +835,14 @@ export default {
         FrisbuyProductContainer,
     },
 
-    metaInfo() {
-        const { title } = this[MASTERCLASS] || {};
+    metaInfo: function () {
+        const { title, description } = this.metaData;
+
         return {
             title,
+            meta: convertObjectToMetaProperties({
+                description,
+            }),
         };
     },
 
@@ -949,6 +953,30 @@ export default {
                 mobileSize
             );
             return { desktopImg, mobileImg, defaultImg };
+        },
+
+        metaData() {
+            let data = {
+                title: '',
+                description: '',
+            };
+
+            if (typeof this[MASTERCLASS].title !== 'undefined') {
+                data.title = this[MASTERCLASS].title;
+            }
+
+            if (
+                typeof this[MASTERCLASS].description !== 'undefined' &&
+                this[MASTERCLASS].description.content !== 'undefined' &&
+                this[MASTERCLASS].description.content !== null
+            ) {
+                data.description = this[MASTERCLASS].description.content
+                    .replace(/(<([^>]+)>)/gi, '')
+                    .replace(/\n/gi, '')
+                    .slice(0, 150);
+            }
+
+            return data;
         },
 
         descriptionGallery() {

@@ -228,6 +228,11 @@ export default {
         return {
             meta: [
                 {
+                    property: 'description',
+                    content:
+                        'Электронный подарочный сертификат — универсальный подарок на любой праздник, дающий доступ ко всем категориям товаров и услуг на сайте iBT.studio.',
+                },
+                {
                     property: 'og:title',
                     content: title,
                 },

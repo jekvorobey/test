@@ -29,7 +29,7 @@ import { $store, $progress, $logger } from '@services';
 import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 import { mapState, mapActions } from 'vuex';
 
-import { NAME as LANDING_MODULE, RENDER_DATA } from '@store/modules/Landing';
+import { NAME as LANDING_MODULE, RENDER_DATA, SEO } from '@store/modules/Landing';
 import { FETCH_LANDING_DATA, FETCH_LANDING_DATA_2 } from '@store/modules/Landing/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
@@ -57,12 +57,24 @@ export default {
 
     metaInfo() {
         return {
-            title: 'Бессовестно Талантливый - главная',
+            title: this.seo && this.seo.meta_title ? this.seo.meta_title : 'Бессовестно Талантливый - главная',
+            meta: [
+                {
+                    property: 'description',
+                    content:
+                        this.seo && this.seo.meta_description
+                            ? this.seo.meta_description
+                            : 'Бессовестно Талантливый - главная',
+                },
+            ],
         };
     },
 
     computed: {
         ...mapState(LANDING_MODULE, [RENDER_DATA]),
+        ...mapState(LANDING_MODULE, {
+            seo: SEO,
+        }),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
 
         isTabletLg() {
@@ -109,6 +121,7 @@ export default {
 
                 if (load) next();
                 else {
+                    console.log('load');
                     $progress.start();
                     $store
                         .dispatch(`${LANDING_MODULE}/${FETCH_LANDING_DATA}`)
