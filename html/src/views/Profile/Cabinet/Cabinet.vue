@@ -215,7 +215,7 @@ export default {
 
     data() {
         return {
-            socialDrivers: [socials.VKONTAKTE, socials.FACEBOOK, socials.GOOGLE],
+            socialDrivers: [socials.VKONTAKTE, socials.GOOGLE],
             files: [],
         };
     },
@@ -284,6 +284,12 @@ export default {
         userStatus() {
             return userStatus;
         },
+    },
+
+    mounted() {
+        if (!this[HAS_PASSWORD]) {
+            this.onOpenPasswordModal();
+        }
     },
 
     methods: {

@@ -183,9 +183,6 @@
                                         <network class="network" network="vk">
                                             <v-svg name="vkontakte-bw" width="24" height="24" />
                                         </network>
-                                        <network class="network" network="facebook">
-                                            <v-svg name="facebook-bw" width="24" height="24" />
-                                        </network>
                                     </div>
                                 </social-sharing>
 
@@ -397,9 +394,6 @@
                     <div :style="{ display: 'flex' }">
                         <network class="network" network="vk">
                             <v-svg name="vkontakte-bw" width="24" height="24" />
-                        </network>
-                        <network class="network" network="facebook">
-                            <v-svg name="facebook-bw" width="24" height="24" />
                         </network>
                     </div>
                 </social-sharing>
@@ -735,7 +729,6 @@ import { breakpoints, fileExtension, modalName, mediaType, httpCodes } from '@en
 import { cartItemTypes } from '@enums/product';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
-import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/telegram-bw.svg';
 import '@images/sprites/socials/ok-bw.svg';
 import '@images/sprites/socials/twitter-bw.svg';

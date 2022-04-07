@@ -58,7 +58,7 @@
                                 {{ attentionMessage }}
                             </p>
 
-                            <template v-if="!cartHasOnlyNonPricedProducts">
+                            <template v-if="isMasterClass || canOrderProducts">
                                 <p class="cart-view__main-panel-line">
                                     <span>
                                         Сумма заказа:
@@ -430,6 +430,11 @@ export default {
             return this[IS_PRODUCT](activeTabItem);
         },
 
+        isMasterClass() {
+            const { activeTabItem } = this;
+            return this[IS_MASTER_CLASS](activeTabItem);
+        },
+
         isPromocodePending() {
             return this[PROMOCODE_STATUS] === requestStatus.PENDING;
         },
@@ -442,24 +447,16 @@ export default {
             return !this.referralPartner && this.activeTabItem.summary.bonusGet > 0;
         },
 
-        cartHasOnlyNonPricedProducts() {
-            if (!this.isProduct) {
+        canOrderProducts() {
+            if (typeof this.cartData.product !== 'undefined' && this.cartData.product) {
+                return (
+                    this.cartData.product.items.filter((cartItem) => {
+                        return cartItem.p.userCanBuy === true;
+                    }).length > 0
+                );
+            } else {
                 return false;
             }
-
-            if (Array.isArray(this.cartData.product.items) && this.cartData.product.items.length > 0) {
-                let only = true;
-
-                this.cartData.product.items.forEach((item) => {
-                    if (item.p.isPriceHidden !== true) {
-                        only = false;
-                    }
-                });
-
-                return only;
-            }
-
-            return false;
         },
 
         userCanBeProfessional() {
@@ -610,7 +607,7 @@ export default {
 
                 if (hasSession) {
                     if (this.isProduct && !this.userCanBeProfessional && this.cartHaveProfessionalProducts) {
-                        if (this.cartHasOnlyNonPricedProducts) {
+                        if (!this.canOrderProducts) {
                             await this[FETCH_CABINET_DATA](this.$isServer);
 
                             this.$store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {

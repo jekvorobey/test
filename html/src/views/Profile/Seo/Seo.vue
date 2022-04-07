@@ -80,9 +80,6 @@
                             <network class="network" network="vk">
                                 <v-svg name="vkontakte-bw" width="24" height="24" />
                             </network>
-                            <network class="network" network="facebook">
-                                <v-svg name="facebook-bw" width="24" height="24" />
-                            </network>
                         </div>
                     </social-sharing>
                 </div>
@@ -145,7 +142,6 @@ import { registerModuleIfNotExists } from '@util/store';
 import { generatePictureSourcePath } from '@util/file';
 import { generateProductUrl, generateAbsoluteProductUrl, prepareProductImage } from '@util/catalog';
 import metaMixin from '@plugins/meta';
-import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/download.svg';
 import '@images/sprites/copy.svg';

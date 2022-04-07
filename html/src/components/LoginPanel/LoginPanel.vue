@@ -164,9 +164,6 @@
                 <button class="login-panel__socials-item" @click="onLoginBySocial('vkontakte')">
                     <v-svg name="vkontakte-bw" height="22" width="21" class="login-panel__socials-item--vkontake" />
                 </button>
-                <button class="login-panel__socials-item" @click="onLoginBySocial('facebook')">
-                    <v-svg name="facebook-bw" height="20" width="20" class="login_modal__socials-item--facebook" />
-                </button>
             </div>
             <span class="login-panel__socials-text">Войти через соцсеть</span>
         </div>
@@ -207,7 +204,6 @@ import { rawPhone } from '@util';
 import { phoneMaskOptions } from '@settings';
 import { modalName, authMode } from '@enums';
 import { verificationCodeType } from '@enums/auth';
-import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/google-bw.svg';
 import './LoginPanel.css';

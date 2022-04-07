@@ -117,9 +117,6 @@
                                 <network class="network" network="vk">
                                     <v-svg name="vkontakte-bw" width="24" height="24" />
                                 </network>
-                                <network class="network" network="facebook">
-                                    <v-svg name="facebook-bw" width="24" height="24" />
-                                </network>
                             </div>
                         </social-sharing>
                     </div>
