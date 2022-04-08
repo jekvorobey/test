@@ -355,6 +355,7 @@ export default {
             promocodeError: null,
             inputPromocode: null,
             isLoad: false,
+            isStartedCheckoutProcess: false,
         };
     },
 
@@ -490,7 +491,14 @@ export default {
 
     watch: {
         [HAS_SESSION](value) {
-            if (!value) this.$router.replace(cancelRoute.path);
+            if (!value) {
+                this.isStartedCheckoutProcess = false;
+                this.$router.replace(cancelRoute.path);
+            }
+
+            if (value && this.isStartedCheckoutProcess) {
+                this.loadCheckout();
+            }
         },
     },
 
@@ -593,6 +601,7 @@ export default {
 
         async onPortfolioEditModalSuccessUploaded() {
             await this[FETCH_CART_DATA](this.$isServer);
+            await this[FETCH_CABINET_DATA](this.$isServer);
 
             if (this.userCanBeProfessional) {
                 this.isLoad = true;
@@ -604,6 +613,8 @@ export default {
         async loadCheckout() {
             try {
                 const hasSession = this.$store.state[AUTH_MODULE][HAS_SESSION];
+
+                this.isStartedCheckoutProcess = true;
 
                 if (hasSession) {
                     if (this.isProduct && !this.userCanBeProfessional && this.cartHaveProfessionalProducts) {
@@ -621,6 +632,7 @@ export default {
                             });
                         }
                     } else {
+                        this.isStartedCheckoutProcess = false;
                         this.isLoad = true;
                         await this[CHECK_CART_DATA]();
                         this.$router.push({ name: 'Checkout', params: { type: this.activeTabItem.type } });
@@ -637,6 +649,7 @@ export default {
                 }
             } catch (error) {
                 this.isLoad = false;
+                this.isStartedCheckoutProcess = false;
             }
         },
     },
