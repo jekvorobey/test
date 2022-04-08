@@ -5,7 +5,7 @@
                 <h4 v-if="!isTablet" class="cart-non-prof-warning__header">Внимание</h4>
 
                 <div class="cart-non-prof-warning__main-text">
-                    <template v-if="user.status === userStatus.CONSIDERATION">
+                    <template v-if="portfolio.length > 0">
                         В вашей корзине находятся продукты для профессионалов, они доступны для покупки только после
                         модерации. Сейчас вы можете купить часть продуктов, либо подождать окончания модерации и
                         приобрести все продукты из своей корзины.
@@ -24,11 +24,7 @@
 
                 <div class="cart-non-prof-warning__actions">
                     <v-button @click="$emit('buy')">Купить сейчас</v-button>
-                    <v-button
-                        v-if="user.status !== userStatus.CONSIDERATION"
-                        class="btn--outline"
-                        @click="$emit('do-moderate')"
-                    >
+                    <v-button v-if="portfolio.length === 0" class="btn--outline" @click="$emit('do-moderate')">
                         Пройти модерацию
                     </v-button>
                 </div>
@@ -47,9 +43,14 @@ import VButton from '@controls/VButton/VButton.vue';
 import { NAME as AUTH_MODULE, USER } from '@store/modules/Auth';
 import { userStatus } from '@enums/profile';
 
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+
+import { NAME as CABINET_MODULE, PORTFOLIO } from '@store/modules/Profile/modules/Cabinet';
+
 import './CartNonProfWarning.css';
 
 const NAME = modalName.cart.CART_NON_PROF_WARNING;
+const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 
 export default {
     name: NAME,
@@ -69,6 +70,11 @@ export default {
         ...mapState(AUTH_MODULE, {
             user: (state) => state[USER],
         }),
+
+        ...mapState(CABINET_MODULE_PATH, {
+            portfolio: PORTFOLIO,
+        }),
+
         ...mapState(MODAL_MODULE, {
             modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
