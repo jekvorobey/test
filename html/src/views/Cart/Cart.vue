@@ -611,6 +611,8 @@ export default {
         },
 
         async loadCheckout() {
+            this.isLoad = true;
+
             try {
                 const hasSession = this.$store.state[AUTH_MODULE][HAS_SESSION];
 
@@ -618,9 +620,11 @@ export default {
 
                 if (hasSession) {
                     if (this.isProduct && !this.userCanBeProfessional && this.cartHaveProfessionalProducts) {
-                        if (!this.canOrderProducts) {
-                            await this[FETCH_CABINET_DATA](this.$isServer);
+                        await this[FETCH_CABINET_DATA](this.$isServer);
 
+                        this.isLoad = false;
+
+                        if (!this.canOrderProducts) {
                             this.$store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
                                 name: modalName.profile.PORTFOLIO_EDIT,
                                 open: true,
@@ -633,11 +637,11 @@ export default {
                         }
                     } else {
                         this.isStartedCheckoutProcess = false;
-                        this.isLoad = true;
                         await this[CHECK_CART_DATA]();
                         this.$router.push({ name: 'Checkout', params: { type: this.activeTabItem.type } });
                     }
                 } else {
+                    this.isLoad = false;
                     this.$store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
                         name: modalName.general.AUTH,
                         open: true,
