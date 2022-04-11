@@ -256,6 +256,11 @@ export default {
             type: [String, null],
             default: null,
         },
+
+        finishRedirectRoute: {
+            type: [String, Boolean],
+            default: 'Cabinet',
+        },
     },
 
     data() {
@@ -414,7 +419,18 @@ export default {
             try {
                 await this[REGISTER_BY_PASSWORD](this.password);
                 this.onClose();
-                this.$router.push({ name: 'Cabinet' });
+
+                if (this.finishRedirectRoute !== false) {
+                    let route = {
+                        name: 'Cabinet',
+                    };
+
+                    if (this.finishRedirectRoute !== true && this.finishRedirectRoute.length > 0) {
+                        route.name = this.finishRedirectRoute;
+                    }
+
+                    this.$router.push(route);
+                }
             } catch (error) {
                 return;
             }

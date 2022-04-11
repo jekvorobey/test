@@ -138,7 +138,9 @@
             <div class="checkout-master-class-panel__item checkout-master-class-panel__item--payment">
                 <div class="container container--tablet checkout-master-class-panel__item-container">
                     <div class="checkout-master-class-panel__item-header">
-                        <h2 class="checkout-master-class-panel__item-header-hl">Способ оплаты</h2>
+                        <h2 class="checkout-master-class-panel__item-header-hl">
+                            Способ оплаты <v-spinner width="24" height="24" :show="isPaymentMethodPending" />
+                        </h2>
                     </div>
                 </div>
 
@@ -149,8 +151,9 @@
                         :key="method.id"
                         :selected="method.id === selectedPaymentMethodID"
                         readonly
+                        @cardClick="onSetPaymentMethod(method)"
                     >
-                        <div class="checkout-master-class-panel__item-payment" v-if="method.type === 'card'">
+                        <div class="checkout-master-class-panel__item-payment" v-if="!method.is_postpaid">
                             <div class="text-bold checkout-master-class-panel__item-payment-title">
                                 {{ method.title }}
                             </div>
@@ -373,6 +376,7 @@ import {
     CHANGE_TICKET,
     ADD_CERTIFICATE,
     FETCH_CHECKOUT_DATA,
+    SET_PAYMENT_METHOD,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -393,7 +397,7 @@ import {
     PROFESSIONS_MAP,
     CERTIFICATE_STATUS,
     CERTIFICATES,
-    RECEIVE_METHOD_STATUS,
+    RECEIVE_METHOD_STATUS, PAYMENT_METHOD_STATUS,
 } from '@store/modules/Checkout/getters';
 
 import { NAME as CERTIFICATE_MODULE, CERTIFICATE_TYPE, CERTIFICATE_DATA } from '@store/modules/Certificate';
@@ -548,6 +552,7 @@ export default {
             PROMOCODE_STATUS,
             TICKET_STATUS,
             CERTIFICATES,
+            SET_PAYMENT_METHOD,
         ]),
 
         ...mapState(CERTIFICATE_MODULE, [CERTIFICATE_TYPE, CERTIFICATE_DATA]),
@@ -645,6 +650,10 @@ export default {
         isTicketPending() {
             return this[TICKET_STATUS] === requestStatus.PENDING;
         },
+
+        isPaymentMethodPending() {
+            return this[PAYMENT_METHOD_STATUS] === requestStatus.PENDING;
+        },
     },
 
     methods: {
@@ -666,12 +675,10 @@ export default {
             ADD_PROMOCODE,
             DELETE_PROMOCODE,
             FETCH_CHECKOUT_DATA,
+            PAYMENT_METHOD_STATUS,
         ]),
 
-        ...mapActions(CERTIFICATE_MODULE, [
-            FETCH_CERTIFICATES,
-            ACTIVATE_CERTIFICATE,
-        ]),
+        ...mapActions(CERTIFICATE_MODULE, [FETCH_CERTIFICATES, ACTIVATE_CERTIFICATE]),
 
         formatPhoneNumber(phone) {
             return formatPhoneNumber(phone);
@@ -737,6 +744,10 @@ export default {
 
         onSetAgreement(value) {
             this[SET_AGREEMENT](Number(value));
+        },
+
+        onSetPaymentMethod(method) {
+            this[SET_PAYMENT_METHOD](method);
         },
 
         scrollToError(element) {

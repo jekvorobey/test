@@ -228,6 +228,7 @@ import AboutMk3 from '@images/mock/AboutMk3.png';
 import AboutMk4 from '@images/mock/AboutMk4.png';
 import './AboutUs.css';
 import { sendFeedback } from '@api';
+import { convertObjectToMetaProperties } from '@util';
 
 export default {
     name: 'about-us',
@@ -261,8 +262,13 @@ export default {
 
     metaInfo() {
         const { pageTitle } = this;
+
         return {
             title: pageTitle,
+            meta: convertObjectToMetaProperties({
+                description:
+                    'Бессовестно Талантливый — масштабная инициатива, цель которой поддерживать мастеров индустрии красоты в стремлении становиться сильнее в своем ремесле.',
+            }),
         };
     },
 

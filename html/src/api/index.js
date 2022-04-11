@@ -485,6 +485,10 @@ export function getUnreadMesagesCount() {
     return $http.get('/v1/lk/messages/unread-count');
 }
 
+export function getSeoTags({ code }) {
+    return $http.get(`/v1/content/seo/${code}`);
+}
+
 export function getMessageThemes() {
     return $http.get('/v1/content/messages');
 }
@@ -712,6 +716,10 @@ export function getBrands(data) {
     return $http.get('/v1/brands', data);
 }
 
+export function getBrandsActive(data) {
+    return $http.get('/v1/brands/active', data);
+}
+
 export function getProduct(code, offer_id, referrerCode) {
     return $http.get('/v1/catalog/product-detail', {
         params: {
@@ -754,10 +762,11 @@ export function getMasterclass(code) {
     });
 }
 
-export function getLanding(code) {
+export function getLanding(code, draft = null) {
     return $http.get('/v1/content/page', {
         params: {
-            code: code,
+            code,
+            draft,
         },
     });
 }
@@ -891,6 +900,10 @@ export function setAddress(data) {
 
 export function setPickupPoint(data) {
     return $http.post('/v1/checkout/pickup-point', data);
+}
+
+export function setPaymentMethod(data) {
+    return $http.post('/v1/checkout/payment-method', data);
 }
 
 export function deleteCertificate(data) {

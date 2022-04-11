@@ -224,6 +224,8 @@ let compressionConf = null;
 let proxies = [];
 let cacheRoutes = [];
 let enable = [];
+let maxCoreUsage = 8;
+
 const baseConfig = '.env.json';
 const configFileName = process.env.CONFIG;
 try {
@@ -247,6 +249,8 @@ try {
     enable = env.ENABLE || [];
     proxies = env.PROXIES || [];
     cacheRoutes = env.CACHE_ROUTES || [];
+
+    maxCoreUsage = env.MAX_CORE_USAGE || 8;
 } catch (error) {
     logger.error(error);
 }
@@ -316,7 +320,12 @@ app.get('*', (req, res) => {
     return readyPromise.then(() => render(req, res, env));
 });
 
-const clusterWorkerSize = os.cpus().length;
+let clusterWorkerSize = os.cpus().length;
+
+if (clusterWorkerSize > maxCoreUsage) {
+    clusterWorkerSize = maxCoreUsage;
+}
+
 if (clusterWorkerSize > 1) {
     if (cluster.isMaster) {
         for (let i = 0; i < clusterWorkerSize; i++) {
