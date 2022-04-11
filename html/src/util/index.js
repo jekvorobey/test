@@ -373,6 +373,28 @@ export function calculateStepSize(range, targetSteps) {
     return magMsd * magPow;
 }
 
+/**
+ * @param object
+ * @returns {*[]}
+ */
+export function convertObjectToMetaProperties(object) {
+    const tags = [];
+    const fields = Object.keys(object);
+
+    for (const field of fields) {
+        let value = object[field];
+
+        if (typeof value !== 'undefined' && value !== null && String(value).length > 0) {
+            tags.push({
+                property: field,
+                content: String(value),
+            });
+        }
+    }
+
+    return tags;
+}
+
 export default {
     calculateStepSize,
     countCheckdigit,

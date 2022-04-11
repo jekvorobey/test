@@ -485,6 +485,10 @@ export function getUnreadMesagesCount() {
     return $http.get('/v1/lk/messages/unread-count');
 }
 
+export function getSeoTags({ code }) {
+    return $http.get(`/v1/content/seo/${code}`);
+}
+
 export function getMessageThemes() {
     return $http.get('/v1/content/messages');
 }

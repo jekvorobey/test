@@ -12,6 +12,7 @@ export const SET_LOAD = 'SET_LOAD';
 export const SET_BRANDS_SET = 'SET_BRANDS_SET';
 export const SET_FREQUENT_CATEGORIES = 'SET_FREQUENT_CATEGORIES';
 export const SET_CATALOG_LATEST_SETS = 'SET_CATALOG_LATEST_SETS';
+export const SET_SEO = 'SET_SEO';
 
 function generateUniqueId(existsIds = []) {
     const min = Math.ceil(1);
@@ -59,6 +60,10 @@ export default {
 
     [SET_FREQUENT_CATEGORIES](state, payload) {
         state.frequentCategories = payload;
+    },
+
+    [SET_SEO](state, payload) {
+        state.seo = payload;
     },
 
     [SET_LOAD](state, payload) {

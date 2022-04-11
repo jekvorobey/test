@@ -782,7 +782,7 @@ import {
     generateMasterclassUrl,
     prepareMasterclassSpeakers,
 } from '@util/catalog';
-import { pluralize } from '@util';
+import { convertObjectToMetaProperties } from '@util';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
 
@@ -910,32 +910,19 @@ export default {
 
     metaInfo() {
         const { metaData } = this;
-        const { title, url, image } = metaData;
+        const { title, description, url, image } = metaData;
 
         return {
             title,
-            meta: [
-                {
-                    property: 'og:title',
-                    content: title,
-                },
-                {
-                    property: 'og:type',
-                    content: 'website',
-                },
-                {
-                    property: 'og:url',
-                    content: url,
-                },
-                {
-                    property: 'og:image',
-                    content: image,
-                },
-                {
-                    property: 'og:image:url',
-                    content: image,
-                },
-            ],
+            meta: convertObjectToMetaProperties({
+                'description': description,
+                'og:title': title,
+                'og:description': description,
+                'og:type': 'website',
+                'og:url': url,
+                'og:image': image,
+                'og:image:url': image,
+            }),
         };
     },
 
@@ -1204,19 +1191,35 @@ export default {
         },
 
         metaData() {
+            let data = {
+                title: '',
+                description: '',
+                url: '',
+                image: '',
+                imageType: '',
+            };
+
             const { title, code, categoryCodes = [], media } = this[PRODUCT] || {};
-            const url =
+
+            if (
+                this.product &&
+                typeof this.product.description !== 'undefined' &&
+                typeof this.product.description.content !== 'undefined'
+            ) {
+                data.description = this.product.description.content.replace(/(<([^>]+)>)/gi, '').slice(0, 150);
+            }
+
+            data.title = title;
+            data.url =
                 categoryCodes &&
                 categoryCodes.length > 0 &&
                 generateAbsoluteProductUrl(categoryCodes[categoryCodes.length - 1].code, code);
 
-            const image = Array.isArray(media) && media.length > 0 ? generateFileOriginalPath(media[0].id) : null;
+            if (Array.isArray(media) && media.length > 0) {
+                data.image = generateFileOriginalPath(media[0].id);
+            }
 
-            return {
-                title,
-                url,
-                image,
-            };
+            return data;
         },
 
         socialSharing() {

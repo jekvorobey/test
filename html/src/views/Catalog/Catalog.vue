@@ -341,7 +341,7 @@ import {
     BREADCRUMBS,
 } from '@store/modules/Catalog/getters';
 
-import { pluralize } from '@util';
+import { convertObjectToMetaProperties, pluralize } from '@util';
 import {
     concatCatalogRoutePath,
     generateCategoryUrl,
@@ -395,45 +395,22 @@ export default {
     },
 
     metaInfo() {
-        const { catalogTitle, activePage, metaData } = this;
-        const { title, url, image, imageType } = metaData;
-        return {
-            title: activePage > 1 ? `${catalogTitle} – страница ${activePage}` : catalogTitle,
-            meta: [
-                {
-                    property: 'og:title',
-                    content: title,
-                },
-                {
-                    property: 'og:type',
-                    content: 'website',
-                },
-                {
-                    property: 'og:url',
-                    content: url,
-                },
-                {
-                    property: 'og:image',
-                    content: image,
-                },
-                {
-                    property: 'og:image:url',
-                    content: image,
-                },
+        const { activePage, metaData } = this;
+        const { title, description, url, image, imageType } = metaData;
 
-                {
-                    property: 'og:image:type',
-                    content: imageType,
-                },
-                {
-                    property: 'og:site_name',
-                    content: 'Бессовестно талантливый',
-                },
-                {
-                    property: 'og:description',
-                    content: 'Mаркетплейс для мастеров бьюти-индустрии',
-                },
-            ],
+        return {
+            title: activePage > 1 ? `${title} – страница ${activePage}` : title,
+            meta: convertObjectToMetaProperties({
+                description,
+                'og:title': title,
+                'og:type': 'website',
+                'og:url': url,
+                'og:image': image,
+                'og:image:url': image,
+                'og:image:type': imageType,
+                'og:site_name': 'Бессовестно талантливый',
+                'og:description': description || 'Mаркетплейс для мастеров бьюти-индустрии',
+            }),
         };
     },
 
@@ -500,21 +477,64 @@ export default {
         }),
 
         metaData() {
-            const title = this.catalogTitle;
-            const url = generateCategoryUrl(this.type, this.entityCode, this.categoryCode, true);
-            const image =
-                Array.isArray(this.items) && this.items.length > 0
-                    ? generateFileOriginalPath(this.items[0].image.id)
-                    : null;
-            const imageType =
-                Array.isArray(this.items) && this.items.length > 0 ? getImageType(this.items[0].image.sourceExt) : null;
-
-            return {
-                title,
-                url,
-                image,
-                imageType,
+            let data = {
+                title: '',
+                description: '',
+                url: '',
+                image: '',
+                imageType: '',
             };
+
+            data.title = this.catalogTitle;
+
+            if (
+                this.type === productGroupTypes.CATALOG &&
+                this.activeCategory &&
+                this.activeCategory.meta_title !== null
+            ) {
+                data.title = this.activeCategory.meta_title;
+            }
+
+            if (
+                this.type === productGroupTypes.CATALOG &&
+                this.activeCategory &&
+                this.activeCategory.meta_description !== null
+            ) {
+                data.description = this.activeCategory.meta_description;
+            }
+
+            if (!data.description && this.type === productGroupTypes.NEW) {
+                data.description = 'Новинки маркетплейса для мастеров бьюти-индустрии';
+            }
+
+            if (!data.description && this.type === productGroupTypes.SETS) {
+                data.description = this.catalogTitle;
+            }
+
+            data.url = generateCategoryUrl(this.type, this.entityCode, this.categoryCode, true);
+
+            let internalImage = null;
+
+            if (Array.isArray(this.items)) {
+                for (const item of this.items) {
+                    const { image } = item;
+
+                    if (typeof item.image !== 'undefined' && typeof item.image.id !== 'undefined') {
+                        internalImage = image;
+                        break;
+                    }
+                }
+            }
+
+            if (internalImage !== null) {
+                data.image = generateFileOriginalPath(internalImage.id);
+
+                if (typeof internalImage.sourceExt !== 'undefined') {
+                    data.imageType = getImageType(internalImage.sourceExt);
+                }
+            }
+
+            return data;
         },
 
         showRecentlyViewed() {
