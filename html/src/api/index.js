@@ -783,8 +783,12 @@ export function getCartData() {
     return $http.get('/v1/cart/data');
 }
 
-export function checkCartData() {
-    return $http.post('/v1/cart/check');
+export function checkCartData(type) {
+    return $http.post('/v1/cart/check', {
+        params: {
+            type,
+        },
+    });
 }
 
 export function deleteAllItems(type) {

@@ -202,9 +202,9 @@ export default {
         }
     },
 
-    async [CHECK_CART_DATA]({ commit }) {
+    async [CHECK_CART_DATA]({ commit }, type) {
         try {
-            await checkCartData();
+            await checkCartData(type);
         } catch (error) {
             const { data, status } = error;
             if (status === httpCodes.BAD_REQUEST) commit(SET_CART_DATA, data);
