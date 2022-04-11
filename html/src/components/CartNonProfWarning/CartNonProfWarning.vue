@@ -5,7 +5,7 @@
                 <h4 v-if="!isTablet" class="cart-non-prof-warning__header">Внимание</h4>
 
                 <div class="cart-non-prof-warning__main-text">
-                    <template v-if="portfolio.length > 0">
+                    <template v-if="isModerate">
                         В вашей корзине находятся продукты для профессионалов, они доступны для покупки только после
                         модерации. Сейчас вы можете купить часть продуктов, либо подождать окончания модерации и
                         приобрести все продукты из своей корзины.
@@ -24,7 +24,7 @@
 
                 <div class="cart-non-prof-warning__actions">
                     <v-button @click="$emit('buy')">Купить сейчас</v-button>
-                    <v-button v-if="portfolio.length === 0" class="btn--outline" @click="$emit('do-moderate')">
+                    <v-button v-if="!isModerate" class="btn--outline" @click="$emit('do-moderate')">
                         Пройти модерацию
                     </v-button>
                 </div>
@@ -45,7 +45,7 @@ import { userStatus } from '@enums/profile';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
 
-import { NAME as CABINET_MODULE, PORTFOLIO } from '@store/modules/Profile/modules/Cabinet';
+import { NAME as CABINET_MODULE, PORTFOLIO, CERTIFICATES } from '@store/modules/Profile/modules/Cabinet';
 
 import './CartNonProfWarning.css';
 
@@ -73,11 +73,16 @@ export default {
 
         ...mapState(CABINET_MODULE_PATH, {
             portfolio: PORTFOLIO,
+            certificates: CERTIFICATES,
         }),
 
         ...mapState(MODAL_MODULE, {
             modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
+
+        isModerate() {
+            return this.portfolio.length > 0 || this.certificates.length > 0;
+        },
 
         isTablet() {
             return this.$mq.tablet;
