@@ -785,9 +785,7 @@ export function getCartData() {
 
 export function checkCartData(type) {
     return $http.post('/v1/cart/check', {
-        params: {
-            type,
-        },
+        type,
     });
 }
 
