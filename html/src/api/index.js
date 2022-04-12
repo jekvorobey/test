@@ -63,6 +63,13 @@ export function loginBySignature({ userId, signature }) {
     });
 }
 
+export function loginByToken({ token, refresh }) {
+    return $http.post('/v1/auth/loginByToken', {
+        token,
+        refresh,
+    });
+}
+
 export function logout() {
     return $http.post('/v1/auth/logout');
 }
