@@ -490,7 +490,9 @@ export default {
     },
 
     watch: {
-        [HAS_SESSION](value) {
+        async [HAS_SESSION](value) {
+            await this[FETCH_CART_DATA](this.$isServer);
+
             if (!value) {
                 this.isStartedCheckoutProcess = false;
                 this.$router.replace(cancelRoute.path);
