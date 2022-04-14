@@ -711,7 +711,7 @@ export default {
 
                     [SELECTED_ADDRESS]: {
                         required,
-                        valid: (value) => value.geo_lat !== undefined && value.geo_lon !== undefined,
+                        valid: (value) => !!value && value.geo_lat !== undefined && value.geo_lon !== undefined,
                     },
                 };
         }
@@ -1072,7 +1072,15 @@ export default {
         },
 
         onSetReceiveMethod(method) {
-            this[SET_RECEIVE_METHOD](method);
+            if (typeof this.$v[SELECTED_RECIPIENT] !== 'undefined') {
+                this.$v[SELECTED_RECIPIENT].$touch();
+
+                if (!this.$v[SELECTED_RECIPIENT].$invalid) {
+                    this[SET_RECEIVE_METHOD](method);
+                }
+            } else {
+                this[SET_RECEIVE_METHOD](method);
+            }
         },
 
         onSetPaymentMethod(method) {
