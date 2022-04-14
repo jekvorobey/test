@@ -28,11 +28,13 @@
                             </transition>
                         </template>
                     </v-password>
+
                     <validation-tooltip
                         :tooltips="visualTooltips"
                         :validatedValue="newPassword"
                         :validations="$v.newPassword"
                     ></validation-tooltip>
+
                     <v-password
                         class="password-edit-modal__form-row"
                         v-model="newPassword"
@@ -46,11 +48,41 @@
                             </transition>
                         </template>
                     </v-password>
+
+                    <v-password
+                        v-if="!hasPassword"
+                        class="password-edit-modal__form-row"
+                        v-model="passwordRepeat"
+                        placeholder="Подтвердите ваш новый пароль"
+                        :error="passwordRepeatError"
+                    >
+                        Пароль ещё раз
+                        <template v-slot:error="{ error }">
+                            <transition name="slide-in-bottom" mode="out-in">
+                                <div :key="error" v-if="error">{{ error }}</div>
+                            </transition>
+                        </template>
+                    </v-password>
+
+                    <div v-if="!hasPassword" class="password-edit-modal__form-info text-grey">
+                        Нажимая кнопку «Подтвердить», вы соглашаетесь с условиями
+                        <a class="password-edit-modal__form-info-link" href="/agreements/public-offer" target="_blank"
+                            >оферты</a
+                        >
+                        и
+                        <a
+                            class="password-edit-modal__form-info-link"
+                            href="/agreements/personal-policy"
+                            target="_blank"
+                        >
+                            политикой конфиденциальности
+                        </a>
+                    </div>
                 </form>
             </div>
 
             <div class="password-edit-modal__submit">
-                <v-button class="password-edit-modal__submit-btn" @click="onSubmit">Принять</v-button>
+                <v-button class="password-edit-modal__submit-btn" @click="onSubmit">Подтвердить</v-button>
             </div>
         </template>
     </general-modal>
@@ -68,6 +100,7 @@ import validationMixin, {
     hasUpperCase,
     hasLowerCase,
     hasNumbers,
+    sameAs,
 } from '@plugins/validation';
 
 import { mapActions, mapState } from 'vuex';
@@ -124,6 +157,11 @@ export default {
                     hasLowerCase,
                     hasNumbers,
                 },
+
+                passwordRepeat: {
+                    required,
+                    sameAs: sameAs('newPassword'),
+                },
             };
     },
 
@@ -131,6 +169,7 @@ export default {
         return {
             oldPassword: null,
             newPassword: null,
+            passwordRepeat: null,
             visualTooltips: [
                 {
                     text: '8 символов',
@@ -172,6 +211,13 @@ export default {
                 if (!this.$v.newPassword.password)
                     return 'Как минимум 1 заглавная и строчная латинские буквы и 1 цифра';
                 if (!this.$v.newPassword.minLength) return 'Не менее 8 символов';
+            }
+        },
+
+        passwordRepeatError() {
+            if (this.$v.passwordRepeat.$dirty) {
+                if (!this.$v.passwordRepeat.required) return this.$t('validation.errors.required');
+                if (!this.$v.passwordRepeat.sameAs) return 'Не совпадает';
             }
         },
 
