@@ -50,6 +50,7 @@ export default {
         },
 
         onSetAddress(address) {
+            this.$emit('set-address', address);
             this[SET_ADDRESS](address);
         },
 

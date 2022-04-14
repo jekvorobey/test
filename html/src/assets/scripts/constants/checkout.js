@@ -1,0 +1,1 @@
+export const DEFAULT_TICKET_PROFESSIONAL_ID = 11;
