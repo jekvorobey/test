@@ -1,0 +1,30 @@
+.cart-non-prof-warning {
+    @media (--tablet-min) {
+        .container {
+            padding: 0;
+        }
+    }
+
+    &__main-text {
+        margin-top: calc(var(--gs) * 2);
+        margin-bottom: var(--gs);
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    &__second-text {
+        margin-bottom: calc(var(--gs) * 3);
+        color: var(--cl-grey);
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    &__actions {
+        display: flex;
+        flex-flow: column;
+
+        > .btn + .btn {
+            margin-top: calc(var(--gs) * 2);
+        }
+    }
+}

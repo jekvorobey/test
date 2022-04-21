@@ -202,7 +202,9 @@ export default {
 
     watch: {
         async [HAS_SESSION](value) {
-            await this[FETCH_CART_DATA]();
+            if (this.$route.name !== 'Cart') {
+                await this[FETCH_CART_DATA]();
+            }
 
             if (value) {
                 await this[FETCH_USER]();

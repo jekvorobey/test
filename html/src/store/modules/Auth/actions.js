@@ -15,6 +15,8 @@ import {
     getUserInfo,
     getUnreadMesagesCount,
     activateCustomer,
+    loginBySignature,
+    loginByToken,
 } from '@api';
 import { SET_HAS_SESSION, SET_USER, SET_UNREAD_MESSAGES } from './mutations';
 
@@ -23,6 +25,8 @@ export const CHECK_SESSION = 'CHECK_SESSION';
 export const LOGOUT = 'LOGOUT';
 export const LOGIN_BY_SOCIAL = 'LOGIN_BY_SOCIAL';
 export const LOGIN_BY_PASSWORD = 'LOGIN_BY_PASSWORD';
+export const LOGIN_BY_SIGNATURE = 'LOGIN_BY_SIGNATURE';
+export const LOGIN_BY_TOKEN = 'LOGIN_BY_TOKEN';
 
 export const GET_SOCIAL_LINK = 'GET_SOCIAL_LINK';
 export const REGISTER_BY_PASSWORD = 'REGISTER_BY_PASSWORD';
@@ -74,6 +78,32 @@ export default {
             dispatch(CHECK_SESSION, true);
         } catch (error) {
             storeErrorHandler(LOGIN_BY_PASSWORD, true)(error);
+        }
+    },
+
+    async [LOGIN_BY_SIGNATURE]({ dispatch }, { userId, signature }) {
+        try {
+            await loginBySignature({
+                userId,
+                signature,
+            });
+
+            dispatch(CHECK_SESSION);
+        } catch (error) {
+            storeErrorHandler(LOGIN_BY_SIGNATURE, true)(error);
+        }
+    },
+
+    async [LOGIN_BY_TOKEN]({ dispatch }, { token, refresh }) {
+        try {
+            await loginByToken({
+                token,
+                refresh,
+            });
+
+            dispatch(CHECK_SESSION);
+        } catch (error) {
+            storeErrorHandler(LOGIN_BY_TOKEN, true)(error);
         }
     },
 

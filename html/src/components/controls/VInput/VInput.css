@@ -86,6 +86,7 @@
     &__container {
         position: relative;
         display: flex;
+        flex-flow: column;
     }
 
     &__error {

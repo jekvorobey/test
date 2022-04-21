@@ -18,7 +18,11 @@
                         </template>
 
                         <template v-slot:panel="{ item: type }">
-                            <cart-product-panel :items="type.items" v-if="IS_PRODUCT(type)" />
+                            <cart-product-panel
+                                v-if="IS_PRODUCT(type)"
+                                :items="type.items"
+                                :user-professional="userCanBeProfessional"
+                            />
                             <cart-masterclass-panel :items="type.items" v-else-if="IS_MASTER_CLASS(type)" />
                         </template>
                     </v-tabs>
@@ -54,7 +58,7 @@
                                 {{ attentionMessage }}
                             </p>
 
-                            <template v-if="!cartHasOnlyNonPricedProducts">
+                            <template v-if="isMasterClass || canOrderProducts">
                                 <p class="cart-view__main-panel-line">
                                     <span>
                                         Сумма заказа:
@@ -139,7 +143,7 @@
                                 class="cart-view__main-panel-submit"
                                 v-if="!isLoad"
                                 @click="loadCheckout"
-                                :disabled="isPromocodePending || (cartHasOnlyNonPricedProducts && hasSession)"
+                                :disabled="isPromocodePending"
                             >
                                 Оформить заказ
                             </v-button>
@@ -185,7 +189,22 @@
         </section>
 
         <transition name="fade">
-            <clear-cart-modal v-if="isModalOpen" />
+            <clear-cart-modal v-if="isClearCartModalOpen" />
+        </transition>
+
+        <transition name="fade">
+            <cart-non-prof-warning
+                v-if="isCartNonProfWarningModalOpen"
+                @buy="onNonProfModalBuy"
+                @do-moderate="onNonProfModalDoModerate"
+            />
+        </transition>
+
+        <transition name="fade">
+            <portfolio-edit-modal
+                v-if="$isServer || isPortfolioEditModalOpen"
+                @success-uploaded="onPortfolioEditModalSuccessUploaded"
+            />
         </transition>
     </section>
 </template>
@@ -207,7 +226,13 @@ import CartMasterclassPanel from '@components/cart/CartMasterclassPanel/CartMast
 
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import ClearCartModal from '@components/ClearCartModal/ClearCartModal.vue';
+import CartNonProfWarning from '@components/CartNonProfWarning/CartNonProfWarning.vue';
+import PortfolioEditModal from '@components/profile/PortfolioEditModal/PortfolioEditModal.vue';
 import VTabs from '@controls/VTabs/VTabs.vue';
+
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import { NAME as CABINET_MODULE } from '@store/modules/Profile/modules/Cabinet';
+import { FETCH_CABINET_DATA } from '@store/modules/Profile/modules/Cabinet/actions';
 
 import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
 
@@ -254,6 +279,8 @@ import '@images/sprites/check.svg';
 import '@images/sprites/cart.svg';
 import './Cart.css';
 
+const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
+
 const sliderOptions = {
     spaceBetween: 24,
     slidesPerView: 4,
@@ -292,6 +319,8 @@ export default {
     mixins: [metaMixin],
 
     components: {
+        PortfolioEditModal,
+        CartNonProfWarning,
         VSvg,
         VButton,
         VLink,
@@ -326,6 +355,7 @@ export default {
             promocodeError: null,
             inputPromocode: null,
             isLoad: false,
+            isStartedCheckoutProcess: false,
         };
     },
 
@@ -349,8 +379,13 @@ export default {
             [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
         }),
         ...mapState(MODAL_MODULE, {
-            isModalOpen: (state) =>
+            isClearCartModalOpen: (state) =>
                 state[MODALS][modalName.cart.CLEAR_CART] && state[MODALS][modalName.cart.CLEAR_CART].open,
+            isCartNonProfWarningModalOpen: (state) =>
+                state[MODALS][modalName.cart.CART_NON_PROF_WARNING] &&
+                state[MODALS][modalName.cart.CART_NON_PROF_WARNING].open,
+            isPortfolioEditModalOpen: (state) =>
+                state[MODALS][modalName.profile.PORTFOLIO_EDIT] && state[MODALS][modalName.profile.PORTFOLIO_EDIT].open,
         }),
 
         errorStrings() {
@@ -396,6 +431,11 @@ export default {
             return this[IS_PRODUCT](activeTabItem);
         },
 
+        isMasterClass() {
+            const { activeTabItem } = this;
+            return this[IS_MASTER_CLASS](activeTabItem);
+        },
+
         isPromocodePending() {
             return this[PROMOCODE_STATUS] === requestStatus.PENDING;
         },
@@ -408,36 +448,66 @@ export default {
             return !this.referralPartner && this.activeTabItem.summary.bonusGet > 0;
         },
 
-        cartHasOnlyNonPricedProducts() {
-            if (!this.isProduct) {
+        canOrderProducts() {
+            if (typeof this.cartData.product !== 'undefined' && this.cartData.product) {
+                return (
+                    this.cartData.product.items.filter((cartItem) => {
+                        return cartItem.p.userCanBuy === true;
+                    }).length > 0
+                );
+            } else {
                 return false;
             }
+        },
 
-            if (Array.isArray(this.cartData.product.items) && this.cartData.product.items.length > 0) {
-                let only = true;
+        userCanBeProfessional() {
+            let canBe = false;
 
-                this.cartData.product.items.forEach((item) => {
-                    if (item.p.isPriceHidden !== true) {
-                        only = false;
+            if (this[HAS_SESSION] && typeof this.cartData.product !== 'undefined') {
+                this.cartData.product.items.forEach((product) => {
+                    if (product.p.isOnlyForProfessional === true && product.p.userCanBuy === true) {
+                        canBe = true;
                     }
                 });
-
-                return only;
             }
 
-            return false;
+            return canBe;
+        },
+
+        cartHaveProfessionalProducts() {
+            let have = false;
+
+            if (typeof this.cartData.product !== 'undefined') {
+                this.cartData.product.items.forEach((product) => {
+                    if (product.p.isOnlyForProfessional === true) {
+                        have = true;
+                    }
+                });
+            }
+
+            return have;
         },
     },
 
     watch: {
-        [HAS_SESSION](value) {
-            if (!value) this.$router.replace(cancelRoute.path);
+        async [HAS_SESSION](value) {
+            await this[FETCH_CART_DATA](this.$isServer);
+
+            if (!value) {
+                this.isStartedCheckoutProcess = false;
+                this.$router.replace(cancelRoute.path);
+            }
+
+            if (value && this.isStartedCheckoutProcess) {
+                this.loadCheckout();
+            }
         },
     },
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
+        ...mapActions(CABINET_MODULE_PATH, [FETCH_CABINET_DATA]),
         ...mapActions(CART_MODULE, [
             FETCH_CART_DATA,
             CHECK_CART_DATA,
@@ -502,25 +572,90 @@ export default {
             return preparePrice(value);
         },
 
+        async onNonProfModalBuy() {
+            this.$store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
+                name: modalName.cart.CART_NON_PROF_WARNING,
+                open: false,
+            });
+
+            try {
+                this.isLoad = true;
+                await this[CHECK_CART_DATA](this.activeTabItem.type);
+                this.$router.push({ name: 'Checkout', params: { type: this.activeTabItem.type } });
+            } catch (error) {
+                this.isLoad = false;
+            }
+        },
+
+        async onNonProfModalDoModerate() {
+            this.$store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
+                name: modalName.cart.CART_NON_PROF_WARNING,
+                open: false,
+            });
+
+            await this[FETCH_CABINET_DATA](this.$isServer);
+
+            this.$store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
+                name: modalName.profile.PORTFOLIO_EDIT,
+                open: true,
+            });
+        },
+
+        async onPortfolioEditModalSuccessUploaded() {
+            await this[FETCH_CART_DATA](this.$isServer);
+            await this[FETCH_CABINET_DATA](this.$isServer);
+
+            if (this.userCanBeProfessional) {
+                this.isLoad = true;
+                await this[CHECK_CART_DATA](this.activeTabItem.type);
+                this.$router.push({ name: 'Checkout', params: { type: this.activeTabItem.type } });
+            }
+        },
+
         async loadCheckout() {
+            this.isLoad = true;
+
             try {
                 const hasSession = this.$store.state[AUTH_MODULE][HAS_SESSION];
 
+                this.isStartedCheckoutProcess = true;
+
                 if (hasSession) {
-                    this.isLoad = true;
-                    await this[CHECK_CART_DATA]();
-                    this.$router.push({ name: 'Checkout', params: { type: this.activeTabItem.type } });
+                    if (this.isProduct && !this.userCanBeProfessional && this.cartHaveProfessionalProducts) {
+                        await this[FETCH_CABINET_DATA](this.$isServer);
+
+                        this.isLoad = false;
+
+                        if (!this.canOrderProducts) {
+                            this.$store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
+                                name: modalName.profile.PORTFOLIO_EDIT,
+                                open: true,
+                            });
+                        } else {
+                            this.$store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
+                                name: modalName.cart.CART_NON_PROF_WARNING,
+                                open: true,
+                            });
+                        }
+                    } else {
+                        this.isStartedCheckoutProcess = false;
+                        await this[CHECK_CART_DATA](this.activeTabItem.type);
+                        this.$router.push({ name: 'Checkout', params: { type: this.activeTabItem.type } });
+                    }
                 } else {
+                    this.isLoad = false;
                     this.$store.dispatch(`${MODAL_MODULE}/${CHANGE_MODAL_STATE}`, {
                         name: modalName.general.AUTH,
                         open: true,
                         state: {
                             activeTab: authMode.LOGIN,
+                            registrationSuccessRedirect: false,
                         },
                     });
                 }
             } catch (error) {
                 this.isLoad = false;
+                this.isStartedCheckoutProcess = false;
             }
         },
     },

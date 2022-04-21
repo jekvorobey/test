@@ -31,9 +31,9 @@
                         и предлагаем лучшие решения для ежедневной работы, образования и вдохновения.
                     </p>
                     <p class="about-us-view__top-content-text">
-                        Хештег #БессовестноТалантливый стал основой дружного быстрорастущего комьюнити — более 100 000
-                        упоминаний в&nbsp;Инстаграм медиаканала @bessovestnotalantlivy, одноименного университета
-                        и&nbsp;флагманского бутика в&nbsp;Москве, где&nbsp;также представлена часть партнерских брендов.
+                        Хештег #БессовестноТалантливый стал основой дружного быстрорастущего комьюнити — более 100&nbsp;000
+                        упоминаний в соцсетях медиаканала BessovestnoTalantlivy, одноименного университета и
+                        флагманского бутика в Москве, где также представлена часть партнерских брендов.
                     </p>
                     <p class="about-us-view__top-content-text">
                         Новый Бессовестно Талантливый проект — первый в России маркетплейс товаров и событий
@@ -119,8 +119,8 @@
                     </p>
 
                     <p class="about-us-view__mclass-content-text">
-                        Делайте свой выбор, изучив полную информацию о&nbsp;событии: описание и фото, видео и
-                        пользовательский контент, включая публикации из Инстаграм и отзывы покупателей на iBT.ru.
+                        Делайте свой выбор, изучив полную информацию о событии: описание и фото, видео и
+                        пользовательский контент, включая публикации из наших соцсетей и отзывы покупателей на iBT.ru.
                     </p>
 
                     <router-link class="about-us-view__mclass-content-link" to="/masterclasses">
@@ -228,6 +228,7 @@ import AboutMk3 from '@images/mock/AboutMk3.png';
 import AboutMk4 from '@images/mock/AboutMk4.png';
 import './AboutUs.css';
 import { sendFeedback } from '@api';
+import { convertObjectToMetaProperties } from '@util';
 
 export default {
     name: 'about-us',
@@ -261,8 +262,13 @@ export default {
 
     metaInfo() {
         const { pageTitle } = this;
+
         return {
             title: pageTitle,
+            meta: convertObjectToMetaProperties({
+                description:
+                    'Бессовестно Талантливый — масштабная инициатива, цель которой поддерживать мастеров индустрии красоты в стремлении становиться сильнее в своем ремесле.',
+            }),
         };
     },
 

@@ -1,7 +1,7 @@
 <template>
     <div
         class="cart-product-card"
-        :class="[{ 'cart-product-card--small': isSmall }, { 'cart-product-card--inactive': !isActive || (!userCanBuy && !noPrice) }]"
+        :class="[{ 'cart-product-card--small': isSmall }, { 'cart-product-card--inactive': !isActive }]"
     >
         <router-link class="cart-product-card__img" :to="href">
             <v-picture v-if="image && image.id">
@@ -240,7 +240,7 @@ export default {
             }
 
             return false;
-        }
+        },
     },
 
     methods: {

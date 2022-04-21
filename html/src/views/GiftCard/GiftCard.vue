@@ -117,9 +117,6 @@
                                 <network class="network" network="vk">
                                     <v-svg name="vkontakte-bw" width="24" height="24" />
                                 </network>
-                                <network class="network" network="facebook">
-                                    <v-svg name="facebook-bw" width="24" height="24" />
-                                </network>
                             </div>
                         </social-sharing>
                     </div>
@@ -230,6 +227,11 @@ export default {
 
         return {
             meta: [
+                {
+                    property: 'description',
+                    content:
+                        'Электронный подарочный сертификат — универсальный подарок на любой праздник, дающий доступ ко всем категориям товаров и услуг на сайте iBT.studio.',
+                },
                 {
                     property: 'og:title',
                     content: title,

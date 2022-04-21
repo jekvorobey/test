@@ -188,6 +188,7 @@ import Univesity3Md from '@images/mock/Univesity3Md.png';
 import '@images/sprites/home.svg';
 import './University.css';
 import { sendFeedback } from '@api';
+import { convertObjectToMetaProperties } from '@util';
 
 export default {
     name: 'university',
@@ -208,8 +209,13 @@ export default {
 
     metaInfo() {
         const { pageTitle } = this;
+
         return {
             title: pageTitle,
+            meta: convertObjectToMetaProperties({
+                description:
+                    'Профессиональный образовательный проект с инновационным подходом для мастеров бьюти-индустрии',
+            }),
         };
     },
 

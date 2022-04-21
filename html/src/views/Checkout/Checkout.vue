@@ -136,7 +136,7 @@
                                 @click="onCommit"
                                 :disabled="isCommit || isPromocodePending"
                             >
-                                Перейти к оплате
+                                {{ isPostPaidSelected ? 'Подтвердить заказ' : 'Перейти к оплате' }}
                             </v-button>
                         </div>
                     </template>
@@ -185,6 +185,8 @@ import {
     BONUS_PAYMENT,
     PROMOCODE_STATUS,
     CERTIFICATE_PAYMENT,
+    PAYMENT_METHODS,
+    SELECTED_PAYMENT_METHOD_ID,
 } from '@store/modules/Checkout/getters';
 
 import metaMixin from '@plugins/meta';
@@ -248,6 +250,8 @@ export default {
             PROMO_CODE,
             SUMMARY,
             RECEIVE_METHODS,
+            PAYMENT_METHODS,
+            SELECTED_PAYMENT_METHOD_ID,
             BONUS_PAYMENT,
             CERTIFICATE_PAYMENT,
             PROMOCODE_STATUS,
@@ -299,6 +303,14 @@ export default {
 
         showBonus() {
             return !this.referralPartner && this.summary.bonusGet > 0;
+        },
+
+        isPostPaidSelected() {
+            const paymentMethod = this[PAYMENT_METHODS].find(
+                (method) => method.id === this[SELECTED_PAYMENT_METHOD_ID]
+            );
+
+            return paymentMethod ? paymentMethod.is_postpaid : false;
         },
     },
 

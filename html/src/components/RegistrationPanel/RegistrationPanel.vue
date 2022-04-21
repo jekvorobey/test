@@ -153,15 +153,6 @@
                         class="registration-panel__socials-item--vkontake"
                     />
                 </button>
-
-                <button class="registration-panel__socials-item" @click="onRegisterBySocial('facebook')">
-                    <v-svg
-                        name="facebook-bw"
-                        height="20"
-                        width="20"
-                        class="registration-panel__socials-item--facebook"
-                    />
-                </button>
             </div>
 
             <span class="registration-panel__socials-text">Или зарегистрируйтесь через соцсеть</span>
@@ -206,7 +197,6 @@ import { rawPhone } from '@util';
 import { phoneMaskOptions } from '@settings';
 import { modalName, authMode } from '@enums';
 import { verificationCodeType } from '@enums/auth';
-import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/google-bw.svg';
 
@@ -265,6 +255,11 @@ export default {
         enteredPhone: {
             type: [String, null],
             default: null,
+        },
+
+        finishRedirectRoute: {
+            type: [String, Boolean],
+            default: 'Cabinet',
         },
     },
 
@@ -424,7 +419,18 @@ export default {
             try {
                 await this[REGISTER_BY_PASSWORD](this.password);
                 this.onClose();
-                this.$router.push({ name: 'Cabinet' });
+
+                if (this.finishRedirectRoute !== false) {
+                    let route = {
+                        name: 'Cabinet',
+                    };
+
+                    if (this.finishRedirectRoute !== true && this.finishRedirectRoute.length > 0) {
+                        route.name = this.finishRedirectRoute;
+                    }
+
+                    this.$router.push(route);
+                }
             } catch (error) {
                 return;
             }

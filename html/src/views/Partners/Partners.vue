@@ -244,6 +244,7 @@ import '@images/sprites/ParthenerWork4.svg';
 import '@images/sprites/ParthenerWork5.svg';
 import './Partners.css';
 import { sendFeedback } from '@api';
+import { convertObjectToMetaProperties } from '@util';
 
 export default {
     name: 'partners',
@@ -263,8 +264,13 @@ export default {
 
     metaInfo() {
         const { pageTitle } = this;
+
         return {
             title: pageTitle,
+            meta: convertObjectToMetaProperties({
+                description:
+                    'Первый в России маркетплейс для мастеров формирует на своей платформе уникальную для российского рынка коллекцию партнерских бьюти-брендов и афишу мероприятий.',
+            }),
         };
     },
 

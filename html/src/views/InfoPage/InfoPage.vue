@@ -12,6 +12,7 @@
 import metaMixin from '@plugins/meta';
 import { httpCodes } from '@enums';
 import { createNotFoundRoute } from '@util/router';
+import { convertObjectToMetaProperties } from '@util';
 import { $progress, $store } from '@services';
 import { LANDING, NAME as INFO_PAGE_MODULE } from '@store/modules/InfoPage';
 import { FETCH_LANDING } from '@store/modules/InfoPage/actions';
@@ -24,10 +25,13 @@ export default {
     name: 'info-page',
     mixins: [metaMixin],
     metaInfo() {
-        const { name, metaTitle } = this[LANDING];
+        const { name, metaTitle, metaDescription } = this[LANDING];
 
         return {
             title: metaTitle || name,
+            meta: convertObjectToMetaProperties({
+                description: metaDescription,
+            }),
         };
     },
     computed: {

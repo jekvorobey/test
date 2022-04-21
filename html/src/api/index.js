@@ -56,6 +56,20 @@ export function loginBySocial(driver, query) {
     });
 }
 
+export function loginBySignature({ userId, signature }) {
+    return $http.post('/v1/auth/loginBySignature', {
+        user_id: userId,
+        signature,
+    });
+}
+
+export function loginByToken({ token, refresh }) {
+    return $http.post('/v1/auth/loginByToken', {
+        token,
+        refresh,
+    });
+}
+
 export function logout() {
     return $http.post('/v1/auth/logout');
 }
@@ -478,6 +492,10 @@ export function getUnreadMesagesCount() {
     return $http.get('/v1/lk/messages/unread-count');
 }
 
+export function getSeoTags({ code }) {
+    return $http.get(`/v1/content/seo/${code}`);
+}
+
 export function getMessageThemes() {
     return $http.get('/v1/content/messages');
 }
@@ -772,8 +790,10 @@ export function getCartData() {
     return $http.get('/v1/cart/data');
 }
 
-export function checkCartData() {
-    return $http.post('/v1/cart/check');
+export function checkCartData(type) {
+    return $http.post('/v1/cart/check', {
+        type,
+    });
 }
 
 export function deleteAllItems(type) {
