@@ -22,6 +22,10 @@
         border-color: var(--cl-status-error);
     }
 
+    &--error &__left p {
+        color: var(--cl-status-error);
+    }
+
     &--selected &__right {
         .icon {
             opacity: 1;
