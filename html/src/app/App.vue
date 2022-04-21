@@ -252,15 +252,6 @@ export default {
         // скролл страницы до хеша при первой загрузке страницы
         if (this.$route.hash) setTimeout(this.scrollFix, 1);
         setTimeout(this.onCheckCitySelection, interval.TWO_SECONDS);
-
-        // если первое посещение сайта, то показать информер
-        if (!localStorage.isSecondStart) {
-            this[CHANGE_MODAL_STATE]({
-                name: modalName.general.HOME_FIRST,
-                open: true,
-                state: {},
-            });
-        }
     },
 
     beforeDestroy() {
