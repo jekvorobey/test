@@ -860,6 +860,8 @@ export default {
             } catch (thrown) {
                 if (thrown && thrown.isCancel === true) return;
                 this.$progress.fail();
+                if (thrown && thrown.status === httpCodes.NOT_FOUND) return next(createNotFoundRoute(to));
+                else next();
             }
         },
 
