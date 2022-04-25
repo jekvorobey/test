@@ -211,7 +211,17 @@ export default {
         onSubmit() {
             this.$v.$touch();
             if (this.$v.$invalid) return;
-            this.$emit('save', { ...this.form });
+
+            let recipient = { ...this.form };
+
+            if (this.strongFullNameValidation) {
+                recipient.name = recipient.name
+                    .split(' ')
+                    .filter((chunk) => chunk !== '')
+                    .join(' ');
+            }
+
+            this.$emit('save', recipient);
             this.onClose();
         },
 

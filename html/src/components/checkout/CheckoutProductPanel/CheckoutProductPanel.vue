@@ -84,11 +84,16 @@
                 <transition name="fade-in">
                     <checkout-address-panel
                         v-if="isDelivery"
+                        :error="addressError && addressError.length > 0"
                         @change-address="onChangeAddress"
                         @set-address="onSetAddress"
                     />
 
-                    <checkout-pickup-point-panel v-else @change-address="onChangePickupPoint" />
+                    <checkout-pickup-point-panel
+                        v-else
+                        :error="addressError && addressError.length > 0"
+                        @change-address="onChangePickupPoint"
+                    />
                 </transition>
 
                 <v-link
