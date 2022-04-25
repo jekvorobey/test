@@ -2,9 +2,15 @@
     padding: calc(var(--gs) * 3) 0;
 
     &__title {
+        font-weight: 500;
+
         @media (--tablet-min) {
             margin-bottom: 0;
         }
+    }
+
+    &__title--error {
+        color: var(--cl-red);
     }
 
     &__choice {

@@ -1,6 +1,14 @@
 <template>
     <div class="checkout-address-panel">
-        <h3 class="checkout-address-panel__title" v-if="!addresses || !addresses.length">Добавьте адрес</h3>
+        <h3
+            :class="{
+                'checkout-address-panel__title': true,
+                'checkout-address-panel__title--error': error,
+            }"
+            v-if="!addresses || !addresses.length"
+        >
+            Добавьте адрес
+        </h3>
         <ul class="checkout-address-panel__list" v-else>
             <checkout-option-card
                 class="checkout-address-panel__list-item"
@@ -36,6 +44,13 @@ export default {
 
     components: {
         CheckoutOptionCard,
+    },
+
+    props: {
+        error: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
