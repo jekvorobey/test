@@ -2,7 +2,8 @@
     <router-link
         tag="a"
         class="catalog-product-list-card"
-        :class="[{ 'catalog-product-list-card--small': isSmall }, orderClass]"
+        :class="[{ 'catalog-product-list-card--small': isSmall }]"
+        :style="componentStyle"
         :to="href"
         v-bind="itemPropSettings.itemListElement"
         @click.native.capture="onClick($event)"
@@ -316,8 +317,14 @@ export default {
                 : { isPriceHidden: this.item.isPriceHidden };
         },
 
-        orderClass() {
-            return `catalog-product-list__item--order-${this.mobileOrder}`;
+        componentStyle() {
+            let style = {};
+
+            if (this.$mq.mobile) {
+                style['order'] = this.mobileOrder;
+            }
+
+            return style;
         },
     },
 

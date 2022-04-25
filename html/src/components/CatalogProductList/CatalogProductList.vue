@@ -24,7 +24,7 @@
                 :item="item"
                 :referral-code="referralCode"
                 :position="index + 1"
-                :mobileOrder="calcMobileOrder(item, index)"
+                :mobile-order="calcMobileOrder(item, index)"
                 item-prop
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
@@ -41,7 +41,7 @@
                 :is="getComponent(item.type)"
                 :item="item"
                 :referral-code="referralCode"
-                :mobileOrder="calcMobileOrder(item, index)"
+                :mobile-order="calcMobileOrder(item, index)"
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
