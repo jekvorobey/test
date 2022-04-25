@@ -90,6 +90,10 @@ export const bik = bikValidation;
 export const rs = rsWithParams;
 
 export const fio = (value) => {
+    if (!value || typeof value !== 'string' || value.length === 0) {
+        return false;
+    }
+
     let chunks = value
         .trim()
         .split(' ')
