@@ -688,35 +688,38 @@ export default {
     },
 
     watch: {
-        [SELECTED_RECIPIENT]() {
-            if (
-                this[SELECTED_RECIPIENT] &&
-                typeof this[SELECTED_RECIPIENT].id !== 'undefined' &&
-                !this.$v[SELECTED_RECIPIENT].$invalid
-            ) {
-                this.masterClasses.forEach((masterclass) => {
-                    const { offerId, tickets } = masterclass;
+        [SELECTED_RECIPIENT]: {
+            immediate: true,
+            handler() {
+                if (
+                    this[SELECTED_RECIPIENT] &&
+                    typeof this[SELECTED_RECIPIENT].id !== 'undefined' &&
+                    !this.$v[SELECTED_RECIPIENT].$invalid
+                ) {
+                    this.masterClasses.forEach((masterclass) => {
+                        const { offerId, tickets } = masterclass;
 
-                    if (tickets.length === 0) {
-                        const fio = this[SELECTED_RECIPIENT].name.split(' ');
+                        if (tickets.length === 0) {
+                            const fio = this[SELECTED_RECIPIENT].name.split(' ');
 
-                        if (fio.length === 3) {
-                            this.onSaveTicket({
-                                ticket: {
-                                    id: this[SELECTED_RECIPIENT].id,
-                                    firstName: fio[1],
-                                    lastName: fio[0],
-                                    middleName: fio[2],
-                                    phone: this[SELECTED_RECIPIENT].phone,
-                                    email: this[SELECTED_RECIPIENT].email,
-                                    professionId: DEFAULT_TICKET_PROFESSIONAL_ID,
-                                },
-                                id: offerId,
-                            });
+                            if (fio.length === 3) {
+                                this.onSaveTicket({
+                                    ticket: {
+                                        id: this[SELECTED_RECIPIENT].id,
+                                        firstName: fio[1],
+                                        lastName: fio[0],
+                                        middleName: fio[2],
+                                        phone: this[SELECTED_RECIPIENT].phone,
+                                        email: this[SELECTED_RECIPIENT].email,
+                                        professionId: DEFAULT_TICKET_PROFESSIONAL_ID,
+                                    },
+                                    id: offerId,
+                                });
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }
+            },
         },
     },
 
