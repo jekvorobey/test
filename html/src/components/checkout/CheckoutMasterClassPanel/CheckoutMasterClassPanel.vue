@@ -14,12 +14,17 @@
                     :key="recipient.id"
                     :selected="selectedRecipient && isEqualObject(recipient, selectedRecipient)"
                     :show-check="recipients.length > 1"
+                    :error="recipientError && recipientError.length > 0"
                     @cardClick="onSetRecipient(recipient)"
                     @btnClick="onChangeRecipient(recipient, index)"
                 >
-                    <p>{{ recipient.name }}</p>
-                    <p>{{ formatPhoneNumber(recipient.phone) }}</p>
-                    <p>{{ recipient.email }}</p>
+                    <p v-if="recipient.name">{{ recipient.name }}</p>
+                    <p v-if="recipient.phone">{{ formatPhoneNumber(recipient.phone) }}</p>
+                    <p v-if="recipient.email">{{ recipient.email }}</p>
+
+                    <p v-if="recipientError">
+                        <span class="status-color-error">{{ recipientError }}</span>
+                    </p>
                 </checkout-option-card>
             </ul>
 
@@ -28,27 +33,11 @@
             </v-link>
         </div>
 
-        <attention-panel
-            class="checkout-master-class-panel__attention"
-            :class="{
-                'checkout-master-class-panel__attention--no-email':
-                    !selectedRecipient || !selectedRecipient.email || !selectedRecipient.name,
-            }"
-        >
-            <span
-                v-if="!selectedRecipient || !selectedRecipient.email || !selectedRecipient.name"
-                class="status-color-error"
-            >
-                <template v-if="!selectedRecipient">Укажите получателя</template>
-                <template v-else-if="!selectedRecipient.email">
-                    Укажите адрес электронной почты получателя для получения билетов
-                </template>
-                <template v-else-if="!selectedRecipient.name">Укажите ФИО получателя</template>
-            </span>
-            <span v-else>На указанный адрес электронной почты мы вышлем вам копии билетов</span>
+        <attention-panel class="checkout-master-class-panel__attention">
+            <span>На указанный адрес электронной почты мы вышлем вам копии билетов</span>
         </attention-panel>
 
-        <template v-if="selectedRecipient && selectedRecipient.email && selectedRecipient.name">
+        <template v-if="!$v.selectedRecipient.$invalid">
             <div class="checkout-master-class-panel__item">
                 <div class="container container--tablet checkout-master-class-panel__item-container">
                     <div class="checkout-master-class-panel__item-header" ref="events">
@@ -104,6 +93,7 @@
                             <p>{{ formatPhoneNumber(ticket.phone) }}</p>
                             <p>{{ ticket.email }}</p>
                         </checkout-option-card>
+
                         <checkout-option-card
                             v-if="tickets.length < count"
                             class="checkout-master-class-panel__item-card"
@@ -116,8 +106,6 @@
                             selected
                             readonly
                         >
-                            <p class="text-bold">Билет {{ tickets.length + 1 }}</p>
-                            <br />
                             <button
                                 class="checkout-master-class-panel__item-card-link text-grey"
                                 :class="{
@@ -126,7 +114,7 @@
                                 }"
                                 @click="onAddTicket(offerId)"
                             >
-                                Добавить данные участника
+                                Введите данные
                             </button>
                             <br />
                             <br />
@@ -331,6 +319,8 @@
         <transition name="fade">
             <checkout-recipient-modal
                 v-if="$isServer || isRecipientModalOpen"
+                :required-fields="['name', 'phone', 'email']"
+                :strong-full-name-validation="true"
                 @save="onSaveRecipient"
                 @close="onCloseRecipientModal"
             />
@@ -422,11 +412,12 @@ import { cartItemTypes } from '@enums/product';
 
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
 import { requestStatus, agreementTypes, fileExtension, modalName } from '@enums';
+import { DEFAULT_TICKET_PROFESSIONAL_ID } from '@constants/checkout';
 import { getPosition, formatPhoneNumber, getDate } from '@util';
 import { generateMasterclassUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
-import validationMixin, { required, minLength, email } from '@plugins/validation';
+import validationMixin, { required, minLength, email, nameRu, fio } from '@plugins/validation';
 
 import '@images/sprites/payment/bonus.svg';
 import '@images/sprites/payment/visa.svg';
@@ -468,6 +459,8 @@ export default {
             required,
             hasEmail: (value) => value && !!value.email,
             hasName: (value) => value && !!value.name,
+            nameRu: (value) => nameRu(value.name),
+            fio: (value) => fio(value.name),
         },
 
         [PUBLIC_EVENTS]: {
@@ -653,6 +646,80 @@ export default {
 
         isPaymentMethodPending() {
             return this[PAYMENT_METHOD_STATUS] === requestStatus.PENDING;
+        },
+
+        recipientError() {
+            if (!this.$v.selectedRecipient.$dirty) {
+                return null;
+            }
+
+            let message = '';
+
+            if (!this.$v.selectedRecipient.required) {
+                message = 'Пожалуйста, укажите получателя';
+            } else {
+                if (!this.$v.selectedRecipient.fio) {
+                    message = 'Пожалуйста, укажите полностью ФИО';
+                }
+
+                if (!this.$v.selectedRecipient.nameRu) {
+                    message = 'В имени должны быть только русские буквы, тире и пробелы';
+                }
+
+                if (!this.$v.selectedRecipient.hasName && !this.$v.selectedRecipient.hasEmail) {
+                    message = 'Пожалуйста, добавьте фамилию и имя, email';
+                } else {
+                    if (!this.$v.selectedRecipient.hasName) {
+                        message = 'Пожалуйста, добавьте фамилию и имя получателя';
+                    }
+
+                    if (!this.$v.selectedRecipient.hasEmail) {
+                        message = 'Пожалуйста, добавьте email';
+                    }
+                }
+            }
+
+            if (message.length > 0) {
+                return message;
+            }
+
+            return null;
+        },
+    },
+
+    watch: {
+        [SELECTED_RECIPIENT]: {
+            immediate: true,
+            handler() {
+                if (
+                    this[SELECTED_RECIPIENT] &&
+                    typeof this[SELECTED_RECIPIENT].id !== 'undefined' &&
+                    !this.$v[SELECTED_RECIPIENT].$invalid
+                ) {
+                    this.masterClasses.forEach((masterclass) => {
+                        const { offerId, tickets } = masterclass;
+
+                        if (tickets.length === 0) {
+                            const fio = this[SELECTED_RECIPIENT].name.split(' ');
+
+                            if (fio.length === 3) {
+                                this.onSaveTicket({
+                                    ticket: {
+                                        id: this[SELECTED_RECIPIENT].id,
+                                        firstName: fio[1],
+                                        lastName: fio[0],
+                                        middleName: fio[2],
+                                        phone: this[SELECTED_RECIPIENT].phone,
+                                        email: this[SELECTED_RECIPIENT].email,
+                                        professionId: DEFAULT_TICKET_PROFESSIONAL_ID,
+                                    },
+                                    id: offerId,
+                                });
+                            }
+                        }
+                    });
+                }
+            },
         },
     },
 

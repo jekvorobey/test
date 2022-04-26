@@ -1,5 +1,5 @@
 <template>
-    <li class="catalog-banner-list-card" :class="orderClass">
+    <li class="catalog-banner-list-card" :style="componentStyle">
         <div class="catalog-banner-list-card__img" v-once>
             <component
                 :is="bannerComponent"
@@ -273,8 +273,14 @@ export default {
             return this.item.url || '';
         },
 
-        orderClass() {
-            return `catalog-product-list__item--order-${this.mobileOrder}`;
+        componentStyle() {
+            let style = {};
+
+            if (this.$mq.mobile) {
+                style['order'] = this.mobileOrder;
+            }
+
+            return style;
         },
     },
 };

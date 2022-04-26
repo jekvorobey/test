@@ -1,6 +1,14 @@
 <template>
     <div class="checkout-address-panel">
-        <h3 class="checkout-address-panel__title" v-if="!addresses || !addresses.length">Добавьте адрес</h3>
+        <h3
+            :class="{
+                'checkout-address-panel__title': true,
+                'checkout-address-panel__title--error': error,
+            }"
+            v-if="!addresses || !addresses.length"
+        >
+            Добавьте адрес
+        </h3>
         <ul class="checkout-address-panel__list" v-else>
             <checkout-option-card
                 class="checkout-address-panel__list-item"
@@ -38,6 +46,13 @@ export default {
         CheckoutOptionCard,
     },
 
+    props: {
+        error: {
+            type: Boolean,
+            default: false,
+        },
+    },
+
     computed: {
         ...mapGetters(CHECKOUT_MODULE, [ADDRESSES, SELECTED_ADDRESS]),
     },
@@ -50,6 +65,7 @@ export default {
         },
 
         onSetAddress(address) {
+            this.$emit('set-address', address);
             this[SET_ADDRESS](address);
         },
 

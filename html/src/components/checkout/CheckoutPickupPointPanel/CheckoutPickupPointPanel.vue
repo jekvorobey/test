@@ -1,7 +1,14 @@
 <template>
     <div class="checkout-pickup-point-panel">
         <div v-if="!selectedPickupPoint" class="checkout-pickup-point-panel__choice">
-            <h3 class="checkout-pickup-point-panel__title">Выберите пункт выдачи заказов</h3>
+            <h3
+                :class="{
+                    'checkout-pickup-point-panel__title': true,
+                    'checkout-pickup-point-panel__title--error': error,
+                }"
+            >
+                Выберите пункт выдачи заказов
+            </h3>
             <v-button class="btn--outline" @click="onChangePickupPoint">Выбрать</v-button>
         </div>
         <div v-else class="checkout-pickup-point-panel__address">
@@ -64,6 +71,13 @@ export default {
 
     components: {
         VButton,
+    },
+
+    props: {
+        error: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {

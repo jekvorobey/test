@@ -14,16 +14,19 @@
                     <v-input
                         class="checkout-recipient-modal__form-row"
                         v-model="form.name"
-                        placeholder="Введите имя и фамилию"
+                        :placeholder="
+                            strongFullNameValidation ? 'Введите фамилию, имя и отчество' : 'Введите имя и фамилию'
+                        "
                         :error="nameError"
                     >
-                        Имя и Фамилия
+                        {{ strongFullNameValidation ? 'Фамилия, Имя и Отчество' : 'Имя и Фамилия' }}
                         <template v-slot:error="{ error }">
                             <transition name="slide-in-bottom" mode="out-in">
                                 <div :key="error" v-if="error">{{ error }}</div>
                             </transition>
                         </template>
                     </v-input>
+
                     <v-input-mask
                         class="checkout-recipient-modal__form-row"
                         v-model="form.phone"
@@ -39,6 +42,7 @@
                             </transition>
                         </template>
                     </v-input-mask>
+
                     <v-input class="checkout-recipient-modal__form-row" v-model="form.email" :error="emailError">
                         Email
                         <template v-slot:error="{ error }">
@@ -75,7 +79,7 @@ import { mapState, mapActions } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import validationMixin, { required, minLength, email } from '@plugins/validation';
+import validationMixin, { required, minLength, email, nameRu, fio } from '@plugins/validation';
 import { getRandomIntInclusive } from '@util';
 import { modalName } from '@enums';
 import { phoneMaskOptions } from '@settings';
@@ -96,21 +100,44 @@ export default {
         AttentionPanel,
     },
 
-    validations: {
-        form: {
-            name: {
-                required,
-            },
-
-            phone: {
-                required,
-                minLength: minLength(12),
-            },
-
-            email: {
-                email,
+    props: {
+        requiredFields: {
+            type: Array,
+            default() {
+                return ['name', 'phone'];
             },
         },
+
+        strongFullNameValidation: {
+            type: Boolean,
+            default: false,
+        },
+    },
+
+    validations() {
+        let validations = {
+            form: {
+                name: {},
+                phone: {},
+                email: {},
+            },
+        };
+
+        this.requiredFields.forEach((field) => {
+            if (typeof validations.form[field] !== 'undefined') {
+                validations.form[field]['required'] = required;
+            }
+        });
+
+        if (this.strongFullNameValidation) {
+            validations.form.name['nameRu'] = nameRu;
+            validations.form.name['fio'] = fio;
+        }
+
+        validations.form.phone['minLength'] = minLength(12);
+        validations.form.email['email'] = email;
+
+        return validations;
     },
 
     data() {
@@ -141,11 +168,33 @@ export default {
         },
 
         emailError() {
-            if (this.$v.form.email.$dirty && !this.$v.form.email.email) return this.$t('validation.errors.email');
+            if (this.$v.form.email.$dirty) {
+                if (typeof this.$v.form.email.required !== 'undefined' && !this.$v.form.email.required) {
+                    return this.$t('validation.errors.required');
+                }
+
+                if (typeof this.$v.form.email.email !== 'undefined' && !this.$v.form.email.email) {
+                    return this.$t('validation.errors.email');
+                }
+            }
+
+            return null;
         },
 
         nameError() {
-            if (this.$v.form.name.$dirty && !this.$v.form.name.required) return this.$t('validation.errors.required');
+            if (this.$v.form.name.$dirty) {
+                if (!this.$v.form.name.required) return this.$t('validation.errors.required');
+
+                if (typeof this.$v.form.name.nameRu !== 'undefined' && this.$v.form.name.nameRu === false) {
+                    return 'Только русские буквы, тире и пробелы';
+                }
+
+                if (typeof this.$v.form.name.fio !== 'undefined' && this.$v.form.name.fio === false) {
+                    return 'Введите ФИО';
+                }
+            }
+
+            return null;
         },
 
         phoneError() {
@@ -162,7 +211,17 @@ export default {
         onSubmit() {
             this.$v.$touch();
             if (this.$v.$invalid) return;
-            this.$emit('save', { ...this.form });
+
+            let recipient = { ...this.form };
+
+            if (this.strongFullNameValidation) {
+                recipient.name = recipient.name
+                    .split(' ')
+                    .filter((chunk) => chunk !== '')
+                    .join(' ');
+            }
+
+            this.$emit('save', recipient);
             this.onClose();
         },
 

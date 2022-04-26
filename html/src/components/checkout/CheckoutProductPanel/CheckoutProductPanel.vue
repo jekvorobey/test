@@ -28,19 +28,19 @@
                         @cardClick="onSetRecipient(recipient)"
                         @btnClick="onChangeRecipient(recipient, index)"
                     >
-                        <p>{{ recipient.name }}</p>
-                        <p>{{ formatPhoneNumber(recipient.phone) }}</p>
-                        <p>{{ recipient.email }}</p>
+                        <p v-if="recipient.name">{{ recipient.name }}</p>
+                        <p v-if="recipient.phone">{{ formatPhoneNumber(recipient.phone) }}</p>
+                        <p v-if="recipient.email">{{ recipient.email }}</p>
+
+                        <p v-if="recipientError">
+                            <span class="status-color-error">{{ recipientError }}</span>
+                        </p>
                     </checkout-option-card>
                 </ul>
 
                 <v-link class="checkout-product-panel__item-header-link" tag="button" @click="onAddRecipient">
                     <v-svg name="plus" width="24" height="24" />&nbsp;Добавить нового получателя
                 </v-link>
-
-                <div v-if="recipientError" class="checkout-product-panel__item-error">
-                    <span class="status-color-error">{{ recipientError }}</span>
-                </div>
             </div>
 
             <div class="checkout-product-panel__item checkout-product-panel__item--receive-method">
@@ -82,8 +82,18 @@
                 </div>
 
                 <transition name="fade-in">
-                    <checkout-address-panel v-if="isDelivery" @change-address="onChangeAddress" />
-                    <checkout-pickup-point-panel v-else @change-address="onChangePickupPoint" />
+                    <checkout-address-panel
+                        v-if="isDelivery"
+                        :error="addressError && addressError.length > 0"
+                        @change-address="onChangeAddress"
+                        @set-address="onSetAddress"
+                    />
+
+                    <checkout-pickup-point-panel
+                        v-else
+                        :error="addressError && addressError.length > 0"
+                        @change-address="onChangePickupPoint"
+                    />
                 </transition>
 
                 <v-link
@@ -711,7 +721,7 @@ export default {
 
                     [SELECTED_ADDRESS]: {
                         required,
-                        valid: (value) => value.geo_lat !== undefined && value.geo_lon !== undefined,
+                        valid: (value) => !!value && value.geo_lat !== undefined && value.geo_lon !== undefined,
                     },
                 };
         }
@@ -905,7 +915,7 @@ export default {
             }
 
             if (!this.$v.selectedRecipient.hasName) {
-                message = 'Пожалуйста, укажите ФИО получателя';
+                message = 'Пожалуйста, добавьте фамилию и имя получателя';
             }
 
             if (message.length > 0) {
@@ -1014,6 +1024,33 @@ export default {
             return !this.$v.$invalid;
         },
 
+        validateVitalFields() {
+            if (typeof this.$v[SELECTED_RECIPIENT] !== 'undefined') {
+                this.$v[SELECTED_RECIPIENT].$touch();
+
+                if (!this.$v[SELECTED_RECIPIENT].$invalid) {
+                    return true;
+                } else {
+                    this.scrollToErrorField();
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        },
+
+        async callCheckoutModificationMethod(action) {
+            let otherArguments = [];
+
+            for (let i = 1; i < arguments.length; i++) {
+                otherArguments.push(arguments[i]);
+            }
+
+            if (this.validateVitalFields()) {
+                await this[action](...otherArguments);
+            }
+        },
+
         scrollToErrorField() {
             if (this.recipientError) {
                 this.debounce_scrollToError(this.$refs.recipient);
@@ -1071,12 +1108,16 @@ export default {
             this[SET_CONFIRMATION_TYPE](value);
         },
 
+        onSetAddress() {
+            this.validateVitalFields();
+        },
+
         onSetReceiveMethod(method) {
-            this[SET_RECEIVE_METHOD](method);
+            this.callCheckoutModificationMethod(SET_RECEIVE_METHOD, method);
         },
 
         onSetPaymentMethod(method) {
-            this[SET_PAYMENT_METHOD](method);
+            this.callCheckoutModificationMethod(SET_PAYMENT_METHOD, method);
         },
 
         onSetAgreement(value) {
@@ -1235,7 +1276,7 @@ export default {
                 this.customCertAmount = this.maxCertificateDiscount;
             }
             try {
-                await this.ADD_CERTIFICATE(this.customCertAmount || 0);
+                await this.callCheckoutModificationMethod(ADD_CERTIFICATE, this.customCertAmount || 0);
                 this.isCertificateEdit = false;
                 this.isBonusEdit = false;
                 this.selectedPayTypeID = Number(this.customCertAmount || 0) === 0 ? null : 2; // certificate pay type - 2

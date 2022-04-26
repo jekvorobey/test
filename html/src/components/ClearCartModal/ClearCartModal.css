@@ -40,7 +40,7 @@
             position: sticky;
             bottom: 0;
             margin-top: auto;
-            padding: var(--gs) calc(var(--gs) * 2);
+            padding: calc(var(--gs) * 2) calc(var(--gs) * 3);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             background-color: var(--cl-white);
         }

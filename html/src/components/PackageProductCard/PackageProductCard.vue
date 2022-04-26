@@ -18,7 +18,7 @@
 
             <div class="package-product-card__body-count" v-if="showCount">{{ quantity }} шт</div>
             <div class="package-product-card__body-prices">
-                <price class="text-bold package-product-card__body-price" v-bind="price" />
+                <price class="text-bold package-product-card__body-price" v-bind="price" :empty-label="emptyLabel" />
                 <price
                     class="text-grey text-strike package-product-card__body-price--old"
                     v-if="oldPrice && oldPrice.value !== price.value"
@@ -86,6 +86,11 @@ export default {
         showCount: {
             type: Boolean,
             default: true,
+        },
+
+        emptyLabel: {
+            type: String,
+            default: null,
         },
     },
 

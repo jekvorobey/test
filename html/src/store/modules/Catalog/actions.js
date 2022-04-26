@@ -64,7 +64,7 @@ export default {
         try {
             return await getCatalogItems(payload);
         } catch (error) {
-            storeErrorHandler(FETCH_ITEMS)(error);
+            storeErrorHandler(FETCH_ITEMS, true)(error);
             return [];
         }
     },
