@@ -72,6 +72,11 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        emptyLabel: {
+            type: String,
+            default: null,
+        },
     },
 
     computed: {
@@ -87,7 +92,7 @@ export default {
 
         valueLabel() {
             const { isObject, alwaysNumber, value } = this;
-            if (!isObject) return value === 0 && !alwaysNumber ? 'Бесплатно' : preparePrice(value);
+            if (!isObject) return value === 0 && !alwaysNumber ? this.emptyLabel || 'Бесплатно' : preparePrice(value);
 
             return {
                 to: value.to && preparePrice(value.to),

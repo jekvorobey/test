@@ -187,6 +187,7 @@
                         :old-price="product.cost"
                         :count="product.qty"
                         :href="product.url"
+                        empty-label="Нет в наличии"
                     />
                 </ul>
             </div>
