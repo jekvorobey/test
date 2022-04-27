@@ -230,7 +230,13 @@ export default {
                 if (!this.existBank) return this.resetBank();
 
                 const suggestion = suggestions[0];
+
                 this.form.bank = suggestion.data.name.short;
+
+                if (!this.form.bank || this.form.bank.length === 0) {
+                    this.form.bank = suggestion.value;
+                }
+
                 this.form.correspondentAccount = suggestion.data.correspondent_account;
                 // this.form.address = suggestion.data.address.unrestricted_value;
                 this.form.payment_city = suggestion.data.payment_city;
