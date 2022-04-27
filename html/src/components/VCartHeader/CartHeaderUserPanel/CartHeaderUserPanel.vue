@@ -13,29 +13,27 @@
             <v-svg name="arrow-down" class="help-panel__icon-arrow" width="20" height="20" />
         </help-panel>
 
-        <template v-if="hasSession">
-            <div class="cart-header-user-panel__controls">
-                <profile-navigation-panel class="cart-header-user-panel__account">
-                    <button @click.prevent="onRegister" class="cart-header-user-panel__btn">
-                        <v-svg name="account-middle" width="24" height="24" />
-                    </button>
-                </profile-navigation-panel>
+        <div class="cart-header-user-panel__controls">
+            <profile-navigation-panel class="cart-header-user-panel__account" v-if="hasSession">
+                <button @click.prevent="onRegister" class="cart-header-user-panel__btn">
+                    <v-svg name="account-middle" width="24" height="24" />
+                </button>
+            </profile-navigation-panel>
 
-                <favorites-panel
-                    v-if="!hideFavorites"
-                    :all-favorites="allFavorites"
-                    :is-load-more="isLoadMore"
-                    @fetchFavorites="fetchFavorites"
-                >
-                    <button class="cart-header-user-panel__btn cart-header-user-panel__favorite" @click="onToFavorites">
-                        <v-svg :name="favoriteItemsIcon" width="24" height="24" />
-                        <span class="cart-header-user-panel__btn-count" v-if="hasFavoriteItems">
-                            {{ favoriteItemsCount }}
-                        </span>
-                    </button>
-                </favorites-panel>
-            </div>
-        </template>
+            <favorites-panel
+                v-if="!hideFavorites"
+                :all-favorites="allFavorites"
+                :is-load-more="isLoadMore"
+                @fetchFavorites="fetchFavorites"
+            >
+                <button class="cart-header-user-panel__btn cart-header-user-panel__favorite" @click="onToFavorites">
+                    <v-svg :name="favoriteItemsIcon" width="24" height="24" />
+                    <span class="cart-header-user-panel__btn-count" v-if="hasFavoriteItems">
+                        {{ favoriteItemsCount }}
+                    </span>
+                </button>
+            </favorites-panel>
+        </div>
     </div>
 </template>
 
