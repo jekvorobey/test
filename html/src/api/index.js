@@ -373,7 +373,7 @@ export function deleteProfilePromopageProductById(id) {
     return $http.delete(`/v1/lk/promo-page/products/by-id/${id}`);
 }
 
-export function changeProfileRequisites(name, address, inn, account, bank, bik, correspondentAccount) {
+export function changeProfileRequisites(name, address, inn, account, bank, bik, correspondentAccount, bankCity) {
     return $http.put('/v1/lk/profile/legal-info', {
         legal_info_company_name: name,
         legal_info_company_address: address,
@@ -381,6 +381,7 @@ export function changeProfileRequisites(name, address, inn, account, bank, bik, 
         legal_info_payment_account: account,
         legal_info_bik: bik,
         legal_info_bank: bank,
+        payment_city: bankCity,
         legal_info_bank_correspondent_account: correspondentAccount,
     });
 }

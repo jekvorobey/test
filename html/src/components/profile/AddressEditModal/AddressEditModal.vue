@@ -247,7 +247,7 @@ export default {
             },
 
             street: {
-                required,
+                //required,
             },
 
             house: {
