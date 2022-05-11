@@ -1204,7 +1204,8 @@ export default {
             if (
                 this.product &&
                 typeof this.product.description !== 'undefined' &&
-                typeof this.product.description.content !== 'undefined'
+                typeof this.product.description.content !== 'undefined' &&
+                this.product.description.content
             ) {
                 data.description = this.product.description.content.replace(/(<([^>]+)>)/gi, '').slice(0, 150);
             }
