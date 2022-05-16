@@ -25,6 +25,14 @@ export function getRedirects() {
     return $http.get('/v1/content/redirects');
 }
 
+export function getUrlShortenerRedirect(urlFrom) {
+    return $http.get('/v1/content/redirects/short-url', {
+        params: {
+            from: urlFrom
+        }
+    });
+}
+
 export function sendFeedback(data) {
     return $http.post('/v1/content/contacts/feedback', data);
 }
