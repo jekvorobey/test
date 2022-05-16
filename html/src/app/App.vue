@@ -18,6 +18,10 @@
         </transition>
 
         <transition name="fade-in">
+            <quick-variant-add-to-card-modal v-if="isQuickVariantAddToCardOpen" />
+        </transition>
+
+        <transition name="fade-in">
             <city-selection-modal v-if="isCitySelectionOpen" />
         </transition>
 
@@ -78,6 +82,7 @@ import AddToCartModal from '@components/AddToCartModal/AddToCartModal.vue';
 import NotificationModal from '@components/NotificationModal/NotificationModal.vue';
 import AuthModal from '@components/AuthModal/AuthModal.vue';
 import HomeFirstModal from '@components/HomeFirstModal/HomeFirstModal.vue';
+import QuickVariantAddToCardModal from '@components/QuickVariantAddToCartModal/QuickVariantAddToCardModal.vue';
 
 import { mapState, mapActions } from 'vuex';
 
@@ -118,6 +123,7 @@ export default {
         NotificationModal,
         AuthModal,
         HomeFirstModal,
+        QuickVariantAddToCardModal,
     },
 
     data() {
@@ -141,6 +147,9 @@ export default {
                 state[MODALS][modalName.general.QUICK_VIEW] && state[MODALS][modalName.general.QUICK_VIEW].open,
             isAddToCartOpen: (state) =>
                 state[MODALS][modalName.general.ADD_TO_CART] && state[MODALS][modalName.general.ADD_TO_CART].open,
+            isQuickVariantAddToCardOpen: (state) =>
+                state[MODALS][modalName.general.QUICK_VARIANT_ADD_TO_CARD] &&
+                state[MODALS][modalName.general.QUICK_VARIANT_ADD_TO_CARD].open,
             isNotificationOpen: (state) =>
                 state[MODALS][modalName.general.NOTIFICATION] && state[MODALS][modalName.general.NOTIFICATION].open,
             isAuthOpen: (state) => state[MODALS][modalName.general.AUTH] && state[MODALS][modalName.general.AUTH].open,
