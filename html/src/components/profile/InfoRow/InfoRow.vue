@@ -1,6 +1,6 @@
 <template>
     <li class="info-row">
-        <div v-if="name" class="text-grey info-row__name">{{ name }}</div>
+        <div v-if="name" class="text-grey info-row__name" v-html="name" />
         <div class="info-row__value">
             <slot>{{ value || '-' }}</slot>
         </div>

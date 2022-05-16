@@ -2,6 +2,7 @@
     <table class="v-table">
         <slot />
         <thead>
+            <slot name="thead-before" />
             <tr class="v-table__row v-table__row--head">
                 <th class="v-table__row-th" :key="key" v-for="key in columns">
                     <slot :name="`column-${key}`">
@@ -9,6 +10,7 @@
                     </slot>
                 </th>
             </tr>
+            <slot name="thead-after" />
         </thead>
         <tbody>
             <tr class="v-table__row" :key="item[keyField] || index" v-for="(item, index) in items">
