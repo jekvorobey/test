@@ -5,6 +5,7 @@ export const modalName = Object.freeze({
         QUICK_VIEW: 'quick-view-modal',
         ADD_TO_CART: 'add-to-cart-modal',
         QUICK_VARIANT_ADD_TO_CARD: 'quick-variant-add-to-card',
+        QUICK_MASTERCLASS_ADD_TO_CART: 'quick-masterclass-add-to-card',
         CITY_SELECTION: 'city-selection-modal',
         NOTIFICATION: 'notification-modal',
         AUTH: 'auth-modal',

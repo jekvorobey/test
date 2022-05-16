@@ -5,6 +5,12 @@
                 <slot />
             </v-picture>
             <v-svg v-else id="master-class-card-empty" name="logo" width="48" height="48" />
+
+            <div v-if="$mq.tablet" class="master-class-card__mobile-cart-btn" @click.prevent.stop="$emit('buy')">
+                <v-link tag="button">
+                    <v-svg name="cart" width="24" height="24" />
+                </v-link>
+            </div>
         </router-link>
         <div class="master-class-card__body">
             <div class="master-class-card__body-top">
@@ -47,6 +53,8 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import Price from '@components/Price/Price.vue';
 
 import '@images/sprites/logo.svg';
+import '@images/sprites/cart.svg';
+
 import './MasterClassCard.css';
 
 export default {
