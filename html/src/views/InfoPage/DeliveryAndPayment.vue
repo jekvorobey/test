@@ -88,21 +88,31 @@
                             <col width="10%" />
                             <col width="10%" />
                         </colgroup>
-                        <template v-slot:column-region>Регион</template>
-                        <template v-slot:column-deliverydo>Доставка до 5000 руб</template>
-                        <template v-slot:column-deliveryot>Доставка от 5000 руб</template>
-                        <template v-slot:column-pickupdo>Самовывоз до 5000 руб</template>
-                        <template v-slot:column-pickupot>Самовывоз от 5000 руб</template>
-                        <template v-slot:column-ot>От 10000</template>
+
+                        <template v-slot:thead-before>
+                            <tr class="v-table__row v-table__row--head">
+                                <th class="v-table__row-th">Регион</th>
+                                <th class="v-table__row-th" colspan="2">Курьером,&nbsp;₽</th>
+                                <th class="v-table__row-th" colspan="2">В пункт выдачи заказов (ПВЗ),&nbsp;₽</th>
+                                <th class="v-table__row-th">Любая доставка</th>
+                            </tr>
+                        </template>
+
+                        <template v-slot:column-region>&nbsp;</template>
+                        <template v-slot:column-deliverydo>до 5&nbsp;000&nbsp;₽</template>
+                        <template v-slot:column-deliveryot>от 5&nbsp;000&nbsp;₽</template>
+                        <template v-slot:column-pickupdo>до 5&nbsp;000&nbsp;₽</template>
+                        <template v-slot:column-pickupot>от 5&nbsp;000&nbsp;₽</template>
+                        <template v-slot:column-ot>от 10&nbsp;000&nbsp;₽</template>
                     </v-table>
                     <template v-else>
                         <div class="info-pages-block__card" v-for="item in items" :key="item.region">
                             <info-row name="Регион" :value="item.region" />
-                            <info-row name="Доставка до 5000 руб" :value="item.deliverydo" />
-                            <info-row name="Доставка от 5000 руб" :value="item.deliveryot" />
-                            <info-row name="Самовывоз до 5000 руб" :value="item.pickupdo" />
-                            <info-row name="Самовывоз от 5000 руб" :value="item.pickupot" />
-                            <info-row name="От 10000" :value="item.ot" />
+                            <info-row name="Курьером до 5&nbsp;000&nbsp;₽" :value="item.deliverydo" />
+                            <info-row name="Курьером от 5&nbsp;000&nbsp;₽" :value="item.deliveryot" />
+                            <info-row name="В пункт выдачи заказов (ПВЗ) до 5&nbsp;000&nbsp;₽" :value="item.pickupdo" />
+                            <info-row name="В пункт выдачи заказов (ПВЗ) от 5&nbsp;000&nbsp;₽" :value="item.pickupot" />
+                            <info-row name="Любая доставка от 10&nbsp;000&nbsp;₽" :value="item.ot" />
                         </div>
                     </template>
                 </div>
@@ -221,7 +231,7 @@ export default {
                     deliveryot: 299,
                     pickupdo: 199,
                     pickupot: 149,
-                    ot: 'Б/О',
+                    ot: 'Бесплатно',
                     timing: '1-2 дня',
                 },
                 {
@@ -230,7 +240,7 @@ export default {
                     deliveryot: 299,
                     pickupdo: 199,
                     pickupot: 149,
-                    ot: 'Б/О',
+                    ot: 'Бесплатно',
                     timing: '1-3 дня',
                 },
                 {
@@ -239,7 +249,7 @@ export default {
                     deliveryot: 299,
                     pickupdo: 199,
                     pickupot: 149,
-                    ot: 'Б/О',
+                    ot: 'Бесплатно',
                     timing: '2-3 дня',
                 },
                 {
@@ -248,7 +258,7 @@ export default {
                     deliveryot: 499,
                     pickupdo: 299,
                     pickupot: 199,
-                    ot: 'Б/О',
+                    ot: 'Бесплатно',
                     timing: '2-4 дня',
                 },
                 {
@@ -258,7 +268,7 @@ export default {
                     deliveryot: 499,
                     pickupdo: 299,
                     pickupot: 199,
-                    ot: 'Б/О',
+                    ot: 'Бесплатно',
                     timing: '4-7 дней',
                 },
                 {
@@ -267,7 +277,7 @@ export default {
                     deliveryot: 499,
                     pickupdo: 299,
                     pickupot: 199,
-                    ot: 'Б/О',
+                    ot: 'Бесплатно',
                     timing: '3-5 дня',
                 },
                 {
@@ -276,7 +286,7 @@ export default {
                     deliveryot: 499,
                     pickupdo: 299,
                     pickupot: 199,
-                    ot: 'Б/О',
+                    ot: 'Бесплатно',
                     timing: '3-5 дня',
                 },
                 {
@@ -285,7 +295,7 @@ export default {
                     deliveryot: 599,
                     pickupdo: 349,
                     pickupot: 249,
-                    ot: 'Б/О',
+                    ot: 'Бесплатно',
                     timing: '4-6 дней',
                 },
                 {
@@ -294,7 +304,7 @@ export default {
                     deliveryot: 599,
                     pickupdo: 349,
                     pickupot: 249,
-                    ot: 'Б/О',
+                    ot: 'Бесплатно',
                     timing: '5-7 дней',
                 },
                 {
@@ -303,7 +313,7 @@ export default {
                     deliveryot: 599,
                     pickupdo: 349,
                     pickupot: 249,
-                    ot: 'Б/О',
+                    ot: 'Бесплатно',
                     timing: '7-14 дней',
                 },
                 {
@@ -312,7 +322,7 @@ export default {
                     deliveryot: 799,
                     pickupdo: 649,
                     pickupot: 549,
-                    ot: 'Б/О',
+                    ot: 'Бесплатно',
                     timing: '7-14 дней',
                 },
             ],
