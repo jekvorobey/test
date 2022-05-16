@@ -70,7 +70,7 @@
             <section class="section">
                 <div :class="{ container: !isTablet }">
                     <h3 class="container container--tablet info-pages-block__subtitle">
-                        Сроки и стоимость доставки в зависимости от региона и суммы заказа
+                        Стоимость доставки в зависимости от региона и суммы заказа
                     </h3>
 
                     <v-table
@@ -81,8 +81,7 @@
                         :columns="columns"
                     >
                         <colgroup>
-                            <col width="40%" />
-                            <col width="10%" />
+                            <col width="50%" />
                             <col width="10%" />
                             <col width="10%" />
                             <col width="10%" />
@@ -95,7 +94,6 @@
                         <template v-slot:column-pickupdo>Самовывоз до 5000 руб</template>
                         <template v-slot:column-pickupot>Самовывоз от 5000 руб</template>
                         <template v-slot:column-ot>От 10000</template>
-                        <template v-slot:column-timing>Сроки</template>
                     </v-table>
                     <template v-else>
                         <div class="info-pages-block__card" v-for="item in items" :key="item.region">
@@ -105,9 +103,13 @@
                             <info-row name="Самовывоз до 5000 руб" :value="item.pickupdo" />
                             <info-row name="Самовывоз от 5000 руб" :value="item.pickupot" />
                             <info-row name="От 10000" :value="item.ot" />
-                            <info-row name="Сроки" :value="item.timing" />
                         </div>
                     </template>
+                </div>
+
+                <div class="container">
+                    <p><strong>Точные сроки доставки будут рассчитаны при оформлении заказа</strong></p>
+                    <br />
                 </div>
             </section>
 
@@ -211,7 +213,7 @@ export default {
 
     data() {
         return {
-            columns: ['region', 'deliverydo', 'deliveryot', 'pickupdo', 'pickupot', 'ot', 'timing'],
+            columns: ['region', 'deliverydo', 'deliveryot', 'pickupdo', 'pickupot', 'ot'],
             items: [
                 {
                     region: 'Москва',
