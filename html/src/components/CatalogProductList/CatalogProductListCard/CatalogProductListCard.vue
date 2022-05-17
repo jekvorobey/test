@@ -39,6 +39,16 @@
                         Быстрый&nbsp;просмотр
                     </v-link>
                 </div>
+
+                <div
+                    v-if="$mq.tablet"
+                    class="catalog-product-list-card__mobile-cart-btn"
+                    @click.prevent.stop="onBuyButtonClick"
+                >
+                    <v-link tag="button">
+                        <v-svg name="cart" width="24" height="24" />
+                    </v-link>
+                </div>
             </div>
 
             <div class="catalog-product-list-card__body">
@@ -121,6 +131,8 @@ import { generateAbsoluteProductUrl, generateProductUrl, prepareProductImage } f
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/logo.svg';
+import '@images/sprites/cart.svg';
+
 import './CatalogProductListCard.css';
 
 export default {
