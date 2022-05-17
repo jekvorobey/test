@@ -70,12 +70,7 @@
 
                 <div class="text-bold seo-view__panel-share">
                     Поделиться
-                    <social-sharing
-                        :url="item.link"
-                        :title="item.product_name"
-                        :description="item.description"
-                        inline-template
-                    >
+                    <social-sharing :url="item.link" :title="item.product_name" inline-template>
                         <div :style="{ display: 'flex' }">
                             <network class="network" network="vk">
                                 <v-svg name="vkontakte-bw" width="24" height="24" />
