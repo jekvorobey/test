@@ -189,6 +189,11 @@ export default {
         [HAS_SESSION](loggedIn) {
             if (!loggedIn) {
                 this.$router.push('/');
+            } else {
+                this.$router.replace({
+                    path: this.$route.path,
+                    query: { ...this.$route.query, page: 1 },
+                });
             }
         },
     },
