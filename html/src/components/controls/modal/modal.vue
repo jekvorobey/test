@@ -15,6 +15,12 @@
                 @mousedown="onPopupMouseDown"
                 @mouseup="onPopupMouseUp"
             >
+                <transition name="fade-in">
+                    <div v-show="loading" class="modal-loading">
+                        <v-spinner show />
+                    </div>
+                </transition>
+
                 <div class="modal-header popup__header">
                     <slot name="header">
                         <!-- Default header -->
@@ -49,6 +55,7 @@
 
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
 import '@images/sprites/cross.svg';
 import './modal.css';
@@ -56,6 +63,7 @@ import './modal.css';
 export default {
     name: 'modal',
     components: {
+        VSpinner,
         VSvg,
     },
     props: {
@@ -80,6 +88,10 @@ export default {
         closeBtnClass: {
             type: String,
             default: '',
+        },
+        loading: {
+            type: Boolean,
+            default: false,
         },
     },
     data() {

@@ -151,6 +151,7 @@
                             :to="item.url"
                             has-articles
                             is-small
+                            @buy="onBuyMasterclass(item)"
                         >
                             <template v-if="item.desktopImg">
                                 <source
@@ -313,6 +314,14 @@ import EmptyPlaceholderPanel from '@components/EmptyPlaceholderPanel/EmptyPlaceh
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { LOCALE, SCROLL } from '@store';
 
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import { IS_IN_CART } from '@store/modules/Cart/getters';
+import { ADD_MASTERCLASS_ITEM } from '@store/modules/Cart/actions';
+import { cartItemTypes } from '@enums/product';
+
 import { NAME as MASTERCLASSES_MODULE, ITEMS, ACTIVE_PAGE, RANGE } from '@store/modules/Masterclass';
 import {
     PAGES_COUNT,
@@ -331,7 +340,7 @@ import _debounce from 'lodash/debounce';
 import metaMixin from '@plugins/meta';
 import { $store, $progress, $logger } from '@services';
 import { MIN_SCROLL_VALUE, DEFAULT_PAGE } from '@constants';
-import { bannerType, fileExtension } from '@enums';
+import { bannerType, fileExtension, modalName } from '@enums';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { pluralize, getDate, convertObjectToMetaProperties } from '@util';
 import { generatePictureSourcePath, generateFileOriginalPath, getImageType } from '@util/file';
@@ -500,6 +509,9 @@ export default {
     computed: {
         ...mapState([LOCALE, SCROLL]),
         ...mapState(MASTERCLASSES_MODULE, [ITEMS, ACTIVE_PAGE, RANGE]),
+        ...mapGetters(CART_MODULE, {
+            isInCart: IS_IN_CART,
+        }),
         ...mapGetters(MASTERCLASSES_MODULE, [
             PAGES_COUNT,
             ROUTE_SEGMENTS,
@@ -635,7 +647,11 @@ export default {
     },
 
     methods: {
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(MASTERCLASSES_MODULE, [FETCH_MASTERCLASS_ITEMS]),
+        ...mapActions(CART_MODULE, {
+            addMasterclassItem: ADD_MASTERCLASS_ITEM,
+        }),
 
         onChangeFilter(filter, value, oldValue) {
             const { routeSegments } = this;
@@ -678,6 +694,31 @@ export default {
                     top: MIN_SCROLL_VALUE + 1,
                     behavior,
                 });
+        },
+
+        async onBuyMasterclass(masterclass) {
+            if (masterclass.ticketTypes.length > 1) {
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.QUICK_MASTERCLASS_ADD_TO_CART,
+                    open: true,
+                    state: { masterclass },
+                });
+            } else {
+                if (!this.isInCart(cartItemTypes.MASTERCLASS, masterclass.ticketTypes[0].offerId)) {
+                    try {
+                        await this.addMasterclassItem({
+                            offerId: masterclass.ticketTypes[0].offerId,
+                            count: 1,
+                        });
+
+                        this.$router.push({ name: 'Cart' });
+                    } catch (error) {
+                        console.error(error);
+                    }
+                } else {
+                    this.$router.push({ name: 'Cart' });
+                }
+            }
         },
 
         async fetchCatalog(to, from, showMore) {

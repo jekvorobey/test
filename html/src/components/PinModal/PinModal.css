@@ -1,0 +1,12 @@
+.pin-modal {
+    align-items: flex-end;
+
+    .modal-wrapper {
+        max-height: 70%;
+        height: auto;
+    }
+
+    .popup__body {
+        padding: calc(var(--gs) * 2) calc(var(--gs) * 2) calc(var(--gs) * 3) calc(var(--gs) * 2);
+    }
+}
