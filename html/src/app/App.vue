@@ -34,6 +34,10 @@
         </transition>
 
         <transition name="fade-in">
+            <snack-notification-modal v-if="isSnackNotificationOpen" />
+        </transition>
+
+        <transition name="fade-in">
             <auth-modal v-if="isAuthOpen" />
         </transition>
 
@@ -84,6 +88,7 @@ import CitySelectionModal from '@components/CitySelectionModal/CitySelectionModa
 import QuickViewModal from '@components/QuickViewModal/QuickViewModal.vue';
 import AddToCartModal from '@components/AddToCartModal/AddToCartModal.vue';
 import NotificationModal from '@components/NotificationModal/NotificationModal.vue';
+import SnackNotificationModal from '@components/SnackNotificationModal/SnackNotificationModal.vue';
 import AuthModal from '@components/AuthModal/AuthModal.vue';
 import HomeFirstModal from '@components/HomeFirstModal/HomeFirstModal.vue';
 import QuickVariantAddToCardModal from '@components/QuickVariantAddToCartModal/QuickVariantAddToCardModal.vue';
@@ -126,6 +131,7 @@ export default {
         QuickViewModal,
         AddToCartModal,
         NotificationModal,
+        SnackNotificationModal,
         AuthModal,
         HomeFirstModal,
         QuickVariantAddToCardModal,
@@ -161,6 +167,9 @@ export default {
                 state[MODALS][modalName.general.QUICK_MASTERCLASS_ADD_TO_CART].open,
             isNotificationOpen: (state) =>
                 state[MODALS][modalName.general.NOTIFICATION] && state[MODALS][modalName.general.NOTIFICATION].open,
+            isSnackNotificationOpen: (state) =>
+                state[MODALS][modalName.general.SNACK_NOTIFICATION] &&
+                state[MODALS][modalName.general.SNACK_NOTIFICATION].open,
             isAuthOpen: (state) => state[MODALS][modalName.general.AUTH] && state[MODALS][modalName.general.AUTH].open,
             isHomeFirstOpen: (state) =>
                 state[MODALS][modalName.general.HOME_FIRST] && state[MODALS][modalName.general.HOME_FIRST].open,

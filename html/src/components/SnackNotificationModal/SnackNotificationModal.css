@@ -1,0 +1,33 @@
+.snack-notification-modal {
+    &__inner {
+        width: 100%;
+    }
+
+    .popup__body {
+        padding: calc(var(--gs) * 2);
+    }
+
+    .popup__close {
+        display: none;
+    }
+
+    &--info .modal-container {
+        color: var(--cl-white);
+        background-color: var(--cl-black);
+    }
+
+    &--error .modal-container {
+        color: var(--cl-white);
+        background-color: var(--cl-red);
+    }
+
+    &--success {
+
+    }
+
+    &__message {
+        font-size: 22px;
+        font-weight: bold;
+        text-align: center;
+    }
+}
