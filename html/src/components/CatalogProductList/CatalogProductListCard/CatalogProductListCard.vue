@@ -46,7 +46,10 @@
                     @click.prevent.stop="onBuyButtonClick"
                 >
                     <v-link tag="button">
-                        <v-svg name="cart" width="24" height="24" />
+                        <transition name="fade-absolute">
+                            <v-svg v-if="inCart" name="cart-filled" key="cart-filled" width="24" height="24" />
+                            <v-svg v-else name="cart" key="cart" width="24" height="24" />
+                        </transition>
                     </v-link>
                 </div>
             </div>
@@ -132,6 +135,7 @@ import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/logo.svg';
 import '@images/sprites/cart.svg';
+import '@images/sprites/cart-filled.svg';
 
 import './CatalogProductListCard.css';
 
@@ -187,6 +191,11 @@ export default {
 
         mobileOrder: {
             type: Number,
+        },
+
+        inCart: {
+            type: Boolean,
+            default: false,
         },
     },
 

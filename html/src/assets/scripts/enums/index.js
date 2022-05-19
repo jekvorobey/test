@@ -8,6 +8,7 @@ export const modalName = Object.freeze({
         QUICK_MASTERCLASS_ADD_TO_CART: 'quick-masterclass-add-to-card',
         CITY_SELECTION: 'city-selection-modal',
         NOTIFICATION: 'notification-modal',
+        SNACK_NOTIFICATION: 'snack-notification-modal',
         AUTH: 'auth-modal',
         HOME_FIRST: 'home-first-modal',
     },

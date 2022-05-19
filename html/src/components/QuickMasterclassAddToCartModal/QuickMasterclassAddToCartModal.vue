@@ -116,7 +116,15 @@ export default {
                     this.isLoading = false;
 
                     this.onClose();
-                    this.$router.push({ name: 'Cart' });
+
+                    this[CHANGE_MODAL_STATE]({
+                        name: modalName.general.SNACK_NOTIFICATION,
+                        open: true,
+                        state: {
+                            closeTimeout: 1500,
+                            message: 'Билет добавлен в корзину',
+                        },
+                    });
                 } catch (error) {
                     console.error(error);
                 }

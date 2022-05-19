@@ -149,6 +149,12 @@
                             :address="item.nearestPlaceName"
                             :image="item.image"
                             :to="item.url"
+                            :in-cart="
+                                !!(
+                                    item.ticketTypes.length === 1 &&
+                                    isInCart(cartItemTypes.MASTERCLASS, item.ticketTypes[0].offerId)
+                                )
+                            "
                             has-articles
                             is-small
                             @buy="onBuyMasterclass(item)"
@@ -451,6 +457,7 @@ export default {
             filterModal: false,
 
             bannerType,
+            cartItemTypes,
 
             masterclassBanners: [
                 {
@@ -706,17 +713,36 @@ export default {
             } else {
                 if (!this.isInCart(cartItemTypes.MASTERCLASS, masterclass.ticketTypes[0].offerId)) {
                     try {
+                        this.$progress.start();
+
                         await this.addMasterclassItem({
                             offerId: masterclass.ticketTypes[0].offerId,
                             count: 1,
                         });
 
-                        this.$router.push({ name: 'Cart' });
+                        this.$progress.finish();
+
+                        this[CHANGE_MODAL_STATE]({
+                            name: modalName.general.SNACK_NOTIFICATION,
+                            open: true,
+                            state: {
+                                closeTimeout: 1500,
+                                message: 'Билет добавлен в корзину',
+                            },
+                        });
                     } catch (error) {
+                        this.$progress.fail();
                         console.error(error);
                     }
                 } else {
-                    this.$router.push({ name: 'Cart' });
+                    this[CHANGE_MODAL_STATE]({
+                        name: modalName.general.SNACK_NOTIFICATION,
+                        open: true,
+                        state: {
+                            closeTimeout: 1500,
+                            message: 'Билет уже добавлен в корзину',
+                        },
+                    });
                 }
             }
         },
