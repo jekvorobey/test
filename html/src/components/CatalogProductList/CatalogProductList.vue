@@ -25,6 +25,7 @@
                 :referral-code="referralCode"
                 :position="index + 1"
                 :mobile-order="calcMobileOrder(item, index)"
+                :in-cart="isInCart(cartItemTypes.PRODUCT, item.id)"
                 item-prop
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
@@ -42,6 +43,7 @@
                 :item="item"
                 :referral-code="referralCode"
                 :mobile-order="calcMobileOrder(item, index)"
+                :in-cart="isInCart(cartItemTypes.PRODUCT, item.id)"
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
@@ -109,6 +111,12 @@ export default {
     components: {
         CatalogBannerListCard,
         CatalogProductListCard,
+    },
+
+    data() {
+        return {
+            cartItemTypes,
+        };
     },
 
     computed: {
@@ -216,23 +224,40 @@ export default {
             const { referralCode } = this;
             const { code, type, stock, id, variantGroups } = item;
 
-            if (this.$mq.tablet && this.isInCart(cartItemTypes.PRODUCT, id)) {
-                this.$router.push({ name: 'Cart' });
+            if (this.$mq.tablet && this.isInCart(cartItemTypes.PRODUCT, id) && !variantGroups) {
+                this[CHANGE_MODAL_STATE]({
+                    name: modalName.general.SNACK_NOTIFICATION,
+                    open: true,
+                    state: {
+                        closeTimeout: 1500,
+                        message: 'Товар уже в корзине',
+                    },
+                });
             } else {
                 if (variantGroups) {
                     this.onPreview(code);
                 } else {
                     if (this.$mq.tablet) {
                         try {
+                            this.$progress.start();
                             await this.addToCart({
                                 offerId: id,
                                 storeId: stock && stock.storeId,
                                 type,
                                 referralCode,
                             });
+                            this.$progress.finish();
 
-                            this.$router.push({ name: 'Cart' });
+                            this[CHANGE_MODAL_STATE]({
+                                name: modalName.general.SNACK_NOTIFICATION,
+                                open: true,
+                                state: {
+                                    closeTimeout: 1500,
+                                    message: 'Товар добавлен в корзину',
+                                },
+                            });
                         } catch (error) {
+                            this.$progress.fail();
                             console.error(error);
                         }
                     } else {
