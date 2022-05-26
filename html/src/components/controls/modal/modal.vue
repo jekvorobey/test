@@ -6,6 +6,7 @@
             class="modal-wrapper"
             tabindex="0"
             @keydown="keyDown"
+            @scroll="onScroll"
             :class="{ 'modal-wrapper--fullscreen': type === 'fullscreen' }"
         >
             <div
@@ -121,6 +122,9 @@ export default {
                     e.preventDefault();
                     break;
             }
+        },
+        onScroll(event) {
+            this.$emit('scroll', event);
         },
     },
     mounted() {

@@ -3,8 +3,9 @@
         v-if="!$isServer && mounted"
         class="general-modal"
         v-bind="$attrs"
-        @close="$emit('close', $event)"
         :closeBtnClass="closeBtnClass"
+        @close="$emit('close', $event)"
+        @scroll="(event) => $emit('scroll', event)"
     >
         <template v-slot:body>
             <v-sticky v-if="isMobile" class="general-modal__sticky">
