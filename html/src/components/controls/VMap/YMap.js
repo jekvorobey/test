@@ -7,13 +7,16 @@ export default {
     provide() {
         let deleteMarkerWithTimeout;
         let rerender;
-        const deletedMarkers = [];
+        let deletedMarkers = [];
         let changedMarkers = [];
-        const deleteMarker = id => {
+        const deleteMarker = (id) => {
             if (!this.myMap.geoObjects) return;
             deletedMarkers.push(id);
             if (deleteMarkerWithTimeout) clearTimeout(deleteMarkerWithTimeout);
-            deleteMarkerWithTimeout = setTimeout(() => this.deleteMarkers(deletedMarkers), 10);
+            deleteMarkerWithTimeout = setTimeout(() => {
+                this.deleteMarkers(deletedMarkers);
+                deletedMarkers = [];
+            }, 0);
         };
 
         const addMarker = id => {
@@ -23,7 +26,7 @@ export default {
             rerender = setTimeout(() => {
                 this.setMarkers(changedMarkers);
                 changedMarkers = [];
-            }, 10);
+            }, 0);
         };
 
         const compareValues = ({ newVal, oldVal, id }) => {
