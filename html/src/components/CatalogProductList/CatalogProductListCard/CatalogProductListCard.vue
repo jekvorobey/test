@@ -40,6 +40,12 @@
                     </v-link>
                 </div>
 
+                <ul class="catalog-product-list-card__variants">
+                    <li v-for="variant in variantGroupsValue" :key="variant" class="catalog-product-list-card__variant">
+                        {{ variant }}
+                    </li>
+                </ul>
+
                 <div
                     v-if="$mq.tablet"
                     class="catalog-product-list-card__mobile-cart-btn"
@@ -78,12 +84,6 @@
                 <div class="link--sm catalog-product-list-card__link" v-bind="itemPropSettings.name">
                     {{ item.name }}
                 </div>
-
-                <ul class="catalog-product-list-card__variant">
-                    <li v-for="variant in variantGroupsValue" class="catalog-product-list-card__variant--item">
-                        {{ variant }}
-                    </li>
-                </ul>
 
                 <div class="catalog-product-list-card__rating" v-once>
                     <span
@@ -323,7 +323,8 @@ export default {
                 }
                 return accumulator;
             }, []);
-            return result;
+
+            return result.slice(0, 2);
         },
 
         modifiedPrice() {
