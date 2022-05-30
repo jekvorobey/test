@@ -1,0 +1,43 @@
+.quick-variant-add-to-card-modal {
+
+    &__inner {
+        position: relative;
+        width: 100%;
+        min-height: 100px;
+    }
+
+    &__characteristic {
+        width: 100%;
+        margin-bottom: calc(var(--gs) * 2);
+    }
+
+    &__characteristic-name {
+    }
+
+    &__options {
+    }
+
+    &__option {
+        margin: 0 var(--gs) var(--gs) 0;
+    }
+
+    &__buy-section {
+        display: flex;
+        flex-flow: row nowrap;
+        width: 100%;
+
+        .v-counter {
+            flex: 40% 0 0;
+            margin-right: var(--gs);
+            border: 1px solid #000;
+        }
+
+        .btn {
+            flex: 60% 0 1;
+        }
+    }
+
+    &__buy-section--hidden {
+        visibility: hidden;
+    }
+}

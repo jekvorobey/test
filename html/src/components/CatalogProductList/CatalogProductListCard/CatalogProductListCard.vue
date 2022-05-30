@@ -39,6 +39,19 @@
                         Быстрый&nbsp;просмотр
                     </v-link>
                 </div>
+
+                <div
+                    v-if="$mq.tablet"
+                    class="catalog-product-list-card__mobile-cart-btn"
+                    @click.prevent.stop="onBuyButtonClick"
+                >
+                    <v-link tag="button">
+                        <transition name="fade-absolute">
+                            <v-svg v-if="inCart" name="cart-filled" key="cart-filled" width="24" height="24" />
+                            <v-svg v-else name="cart" key="cart" width="24" height="24" />
+                        </transition>
+                    </v-link>
+                </div>
             </div>
 
             <div class="catalog-product-list-card__body">
@@ -121,6 +134,9 @@ import { generateAbsoluteProductUrl, generateProductUrl, prepareProductImage } f
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/logo.svg';
+import '@images/sprites/cart.svg';
+import '@images/sprites/cart-filled.svg';
+
 import './CatalogProductListCard.css';
 
 export default {
@@ -175,6 +191,11 @@ export default {
 
         mobileOrder: {
             type: Number,
+        },
+
+        inCart: {
+            type: Boolean,
+            default: false,
         },
     },
 

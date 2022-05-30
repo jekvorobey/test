@@ -18,11 +18,23 @@
         </transition>
 
         <transition name="fade-in">
+            <quick-variant-add-to-card-modal v-if="isQuickVariantAddToCardOpen" />
+        </transition>
+
+        <transition name="fade-in">
+            <quick-masterclass-add-to-cart-modal v-if="isQuickMasterclassAddToCardOpen" />
+        </transition>
+
+        <transition name="fade-in">
             <city-selection-modal v-if="isCitySelectionOpen" />
         </transition>
 
         <transition name="fade-in">
             <notification-modal v-if="isNotificationOpen" />
+        </transition>
+
+        <transition name="fade-in">
+            <snack-notification-modal v-if="isSnackNotificationOpen" />
         </transition>
 
         <transition name="fade-in">
@@ -76,8 +88,11 @@ import CitySelectionModal from '@components/CitySelectionModal/CitySelectionModa
 import QuickViewModal from '@components/QuickViewModal/QuickViewModal.vue';
 import AddToCartModal from '@components/AddToCartModal/AddToCartModal.vue';
 import NotificationModal from '@components/NotificationModal/NotificationModal.vue';
+import SnackNotificationModal from '@components/SnackNotificationModal/SnackNotificationModal.vue';
 import AuthModal from '@components/AuthModal/AuthModal.vue';
 import HomeFirstModal from '@components/HomeFirstModal/HomeFirstModal.vue';
+import QuickVariantAddToCardModal from '@components/QuickVariantAddToCartModal/QuickVariantAddToCardModal.vue';
+import QuickMasterclassAddToCartModal from '@components/QuickMasterclassAddToCartModal/QuickMasterclassAddToCartModal.vue';
 
 import { mapState, mapActions } from 'vuex';
 
@@ -116,8 +131,11 @@ export default {
         QuickViewModal,
         AddToCartModal,
         NotificationModal,
+        SnackNotificationModal,
         AuthModal,
         HomeFirstModal,
+        QuickVariantAddToCardModal,
+        QuickMasterclassAddToCartModal,
     },
 
     data() {
@@ -141,8 +159,17 @@ export default {
                 state[MODALS][modalName.general.QUICK_VIEW] && state[MODALS][modalName.general.QUICK_VIEW].open,
             isAddToCartOpen: (state) =>
                 state[MODALS][modalName.general.ADD_TO_CART] && state[MODALS][modalName.general.ADD_TO_CART].open,
+            isQuickVariantAddToCardOpen: (state) =>
+                state[MODALS][modalName.general.QUICK_VARIANT_ADD_TO_CARD] &&
+                state[MODALS][modalName.general.QUICK_VARIANT_ADD_TO_CARD].open,
+            isQuickMasterclassAddToCardOpen: (state) =>
+                state[MODALS][modalName.general.QUICK_MASTERCLASS_ADD_TO_CART] &&
+                state[MODALS][modalName.general.QUICK_MASTERCLASS_ADD_TO_CART].open,
             isNotificationOpen: (state) =>
                 state[MODALS][modalName.general.NOTIFICATION] && state[MODALS][modalName.general.NOTIFICATION].open,
+            isSnackNotificationOpen: (state) =>
+                state[MODALS][modalName.general.SNACK_NOTIFICATION] &&
+                state[MODALS][modalName.general.SNACK_NOTIFICATION].open,
             isAuthOpen: (state) => state[MODALS][modalName.general.AUTH] && state[MODALS][modalName.general.AUTH].open,
             isHomeFirstOpen: (state) =>
                 state[MODALS][modalName.general.HOME_FIRST] && state[MODALS][modalName.general.HOME_FIRST].open,
@@ -206,9 +233,10 @@ export default {
                 await this[FETCH_CART_DATA]();
             }
 
+            await this[FETCH_FAVORITES_ALL]();
+
             if (value) {
                 await this[FETCH_USER]();
-                await this[FETCH_FAVORITES_ALL]();
                 this.startUserDataTimer();
             } else {
                 this[CLEAR_CHECKOUT_DATA]();
@@ -223,10 +251,10 @@ export default {
             await Promise.all([this[FETCH_COMMON_DATA](), this[CHECK_SESSION](true)]);
 
             await this[FETCH_CART_DATA]();
+            await this[FETCH_FAVORITES_ALL]();
 
             if (this[HAS_SESSION]) {
                 if (!this[USER]) await this[FETCH_USER]();
-                await this[FETCH_FAVORITES_ALL]();
             } else return Promise.resolve();
         } catch (error) {
             return Promise.resolve();

@@ -5,6 +5,15 @@
                 <slot />
             </v-picture>
             <v-svg v-else id="master-class-card-empty" name="logo" width="48" height="48" />
+
+            <div v-if="$mq.tablet" class="master-class-card__mobile-cart-btn" @click.prevent.stop="$emit('buy')">
+                <v-link tag="button">
+                    <transition name="fade-absolute">
+                        <v-svg v-if="inCart" name="cart-filled" key="cart-filled" width="24" height="24" />
+                        <v-svg v-else name="cart" key="cart" width="24" height="24" />
+                    </transition>
+                </v-link>
+            </div>
         </router-link>
         <div class="master-class-card__body">
             <div class="master-class-card__body-top">
@@ -47,6 +56,9 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import Price from '@components/Price/Price.vue';
 
 import '@images/sprites/logo.svg';
+import '@images/sprites/cart.svg';
+import '@images/sprites/cart-filled.svg';
+
 import './MasterClassCard.css';
 
 export default {
@@ -101,6 +113,11 @@ export default {
         },
 
         isSmall: {
+            type: Boolean,
+            default: false,
+        },
+
+        inCart: {
             type: Boolean,
             default: false,
         },

@@ -45,6 +45,17 @@
         }
     }
 
+    &__mobile-cart-btn {
+        position: absolute;
+        bottom: 8px;
+        right: 12px;
+        z-index: 2;
+
+        .icon {
+            opacity: 1!important;
+        }
+    }
+
     &--small &__img {
         width: 100%;
         margin-right: 0;

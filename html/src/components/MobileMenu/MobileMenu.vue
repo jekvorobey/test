@@ -65,7 +65,7 @@
                                     />Личный кабинет
                                 </v-link>
                             </li>
-                            <li class="mobile-menu__menu-item" v-if="hasSession">
+                            <li class="mobile-menu__menu-item">
                                 <v-link
                                     class="mobile-menu__menu-link mobile-menu__menu-link--full"
                                     :to="{ name: 'Favorites' }"
@@ -176,7 +176,7 @@
                                 />Личный кабинет
                             </v-link>
                         </li>
-                        <li class="container mobile-menu__menu-item" v-if="hasSession">
+                        <li class="container mobile-menu__menu-item">
                             <v-link
                                 class="mobile-menu__menu-link mobile-menu__menu-link--full"
                                 :to="{ name: 'Favorites' }"
