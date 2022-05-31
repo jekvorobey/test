@@ -4,6 +4,7 @@
         :class="{
             'checkout-option-card--selected': selected,
             'checkout-option-card--error': error,
+            'checkout-option-card--disabled': disabled,
         }"
         @click.stop="onCardClick"
     >
@@ -66,15 +67,24 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     methods: {
         onCardClick() {
-            this.$emit('cardClick');
+            if (!this.disabled) {
+                this.$emit('cardClick');
+            }
         },
 
         onBtnClick() {
-            this.$emit('btnClick');
+            if (!this.disabled) {
+                this.$emit('btnClick');
+            }
         },
     },
 };

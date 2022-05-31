@@ -56,15 +56,18 @@
                         v-for="method in receiveMethods"
                         :key="method.id"
                         :selected="method.id === selectedReceiveMethodID"
+                        :disabled="!method.isAvailable"
                         readonly
                         @cardClick="onSetReceiveMethod(method)"
                     >
                         <p class="text-bold">{{ method.title }}</p>
                         <p>
-                            <price v-bind="method.price" />&nbsp;
-                            <price v-if="method.cost" class="text-grey text-sm text-strike" v-bind="method.cost" />
+                            <template v-if="method.price !== null"><price v-bind="method.price" />&nbsp;</template>
+                            <template v-if="method.cost">
+                                <price class="text-grey text-sm text-strike" v-bind="method.cost" />
+                            </template>
                         </p>
-                        <p class="text-grey text-sm">{{ method.description }}</p>
+                        <p v-if="method.description" class="text-grey text-sm">{{ method.description }}</p>
                     </checkout-option-card>
                 </ul>
             </div>
