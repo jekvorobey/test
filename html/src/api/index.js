@@ -875,12 +875,20 @@ export function deleteCartPromocode(data) {
 
 // checkout
 
-export function getCheckoutData(type) {
+export function getCheckoutData({ type, loadAllReceiveMethods = false }) {
     switch (type) {
         case cartItemTypes.MASTERCLASS:
             return $http.get('/v1/checkout-public-events/data');
         case cartItemTypes.PRODUCT:
-            return $http.get('/v1/checkout/data');
+            if (loadAllReceiveMethods) {
+                return $http.get('/v1/checkout/data', {
+                    params: {
+                        'input[isAllDeliveryMethods]': 1,
+                    },
+                });
+            } else {
+                return $http.get('/v1/checkout/data');
+            }
         default:
             return Promise.reject('Wrong cart type');
     }

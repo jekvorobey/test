@@ -8,6 +8,7 @@ import getters, {
     ADDRESS_STATUS,
     TICKET_STATUS,
     PAYMENT_METHOD_STATUS,
+    CHECKOUT_FIRST_LOADED,
 } from './getters';
 
 import actions from './actions';
@@ -36,6 +37,7 @@ export default function createModule() {
                 [PAYMENT_METHOD_STATUS]: requestStatus.SUCCESS,
                 [TICKET_STATUS]: requestStatus.SUCCESS,
             },
+            [CHECKOUT_FIRST_LOADED]: false,
             [CHECKOUT_DATA]: null,
             [CHECKOUT_TYPE]: null,
             [ORDER]: null,

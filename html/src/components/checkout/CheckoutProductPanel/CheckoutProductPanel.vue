@@ -57,6 +57,7 @@
                         :key="method.id"
                         :selected="method.id === selectedReceiveMethodID"
                         :disabled="!method.isAvailable"
+                        :loading="method.isAvailable && !method.isLoaded"
                         readonly
                         @cardClick="onSetReceiveMethod(method)"
                     >

@@ -29,6 +29,8 @@ export const PROFESSIONS_MAP = 'professionsMap';
 export const CERTIFICATES = 'certificates';
 export const BONUS = 'bonus';
 
+export const CHECKOUT_FIRST_LOADED = 'checkoutFirstLoaded';
+
 export const SUBSCRIBE = 'subscribe';
 export const AGREEMENT = 'agreement';
 export const CHECKOUT = 'checkout';

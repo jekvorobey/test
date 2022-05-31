@@ -1,3 +1,5 @@
+import { cartItemTypes } from '@enums/product';
+
 export const SET_DATA = 'SET_DATA';
 export const SET_TYPE = 'SET_TYPE';
 export const SET_STATUS = 'SET_STATUS';
@@ -33,7 +35,25 @@ export default {
     },
 
     [SET_DATA](state, payload = null) {
-        state.checkoutData = payload;
+        if (payload === null) {
+            state.checkoutData = payload;
+            state.checkoutFirstLoaded = false;
+        } else {
+            const { input } = payload;
+
+            if (typeof input !== 'undefined' && state.checkoutType === cartItemTypes.PRODUCT) {
+                state.checkoutData = Object.assign(payload, {
+                    input: {
+                        ...input,
+                        isAllDeliveryMethods: true,
+                    },
+                });
+            } else {
+                state.checkoutData = payload;
+            }
+
+            state.checkoutFirstLoaded = true;
+        }
     },
 
     [SET_PROFESSIONS](state, payload) {
