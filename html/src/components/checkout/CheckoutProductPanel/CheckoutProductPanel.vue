@@ -1325,7 +1325,12 @@ export default {
                 this.isVisibleActivateCert = false;
             }, 5000);
 
-            await this[FETCH_CHECKOUT_DATA](cartItemTypes.PRODUCT);
+            try {
+                await this[FETCH_CHECKOUT_DATA](cartItemTypes.PRODUCT);
+            } catch (error) {
+                console.error(error);
+            }
+
             this.fetchCards();
         },
 

@@ -372,7 +372,7 @@ export default {
             commit(SET_TYPE, type);
             commit(SET_DATA, data);
         } catch (error) {
-            storeErrorHandler(FETCH_CHECKOUT_DATA)(error);
+            storeErrorHandler(FETCH_CHECKOUT_DATA, true)(error);
         }
     },
 
