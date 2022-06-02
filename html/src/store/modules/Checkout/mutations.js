@@ -35,23 +35,11 @@ export default {
     },
 
     [SET_DATA](state, payload = null) {
+        state.checkoutData = payload;
+
         if (payload === null) {
-            state.checkoutData = payload;
             state.checkoutFirstLoaded = false;
         } else {
-            const { input } = payload;
-
-            if (typeof input !== 'undefined' && state.checkoutType === cartItemTypes.PRODUCT) {
-                state.checkoutData = Object.assign(payload, {
-                    input: {
-                        ...input,
-                        isAllDeliveryMethods: true,
-                    },
-                });
-            } else {
-                state.checkoutData = payload;
-            }
-
             state.checkoutFirstLoaded = true;
         }
     },

@@ -378,8 +378,8 @@ export default {
                 await this[FETCH_CHECKOUT_DATA](type);
                 this.$progress.finish();
             } catch (error) {
-                console.error(error);
                 this.$progress.fail();
+                throw new Error(error);
             }
         },
 
@@ -441,7 +441,10 @@ export default {
         seoEvents.checkout(products, 2);
 
         if (this.isProduct) {
-            this.fetchCheckout(this.checkoutType);
+            this.fetchCheckout(this.checkoutType).catch((error) => {
+                console.error(error);
+                this.fetchCheckout(this.checkoutType);
+            });
         }
     },
 
