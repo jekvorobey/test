@@ -885,6 +885,7 @@ export function getCheckoutData({ type, loadAllReceiveMethods = false }) {
                     params: {
                         'input[isAllDeliveryMethods]': 1,
                     },
+                    timeout: 60000,
                 });
             } else {
                 return $http.get('/v1/checkout/data');
@@ -921,7 +922,7 @@ export function setReceiveMethod(data) {
 }
 
 export function setAddress(data) {
-    return $http.post('/v1/checkout/address', data);
+    return $http.post('/v1/checkout/address', data, { timeout: 60000 });
 }
 
 export function setPickupPoint(data) {
