@@ -534,13 +534,12 @@ import CheckoutAddressPanel from '@components/checkout/CheckoutAddressPanel/Chec
 import CheckoutRecipientModal from '@components/checkout/CheckoutRecipientModal/CheckoutRecipientModal.vue';
 import AddressEditModal from '@components/profile/AddressEditModal/AddressEditModal.vue';
 
-import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { NAME as AUTH_MODULE, REFERRAL_PARTNER, USER, HAS_SESSION } from '@store/modules/Auth';
 import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
-import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 import { FETCH_CART_DATA } from '@store/modules/Cart/actions';
 
 import { ACTIVATE_CERTIFICATE, FETCH_CERTIFICATES } from '@store/modules/Certificate/actions';
@@ -557,8 +556,6 @@ import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import {
     SET_RECIPIENT,
     SET_RECEIVE_METHOD,
-    SET_ADDRESS,
-    SET_ADDRESS_NO_LK,
     SET_DELIVERY_TYPE,
     CHANGE_CHUNK_DATE,
     ADD_BONUS,
@@ -575,8 +572,8 @@ import {
     ADD_RECIPIENT,
     CHANGE_RECIPIENT,
     FETCH_CHECKOUT_DATA,
-    SET_CITY_FIAS,
-    SET_SELECTED_PICKUP_POINT, SET_PAYMENT_METHOD,
+    SET_SELECTED_PICKUP_POINT,
+    SET_PAYMENT_METHOD,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -584,7 +581,6 @@ import {
     SELECTED_RECIPIENT,
     SELECTED_RECEIVE_METHOD_ID,
     RECEIVE_METHODS,
-    ADDRESSES,
     SELECTED_ADDRESS,
     DELIVERY_TYPES,
     SELECTED_DELIVERY_TYPE,
@@ -608,7 +604,7 @@ import {
     CERTIFICATE_STATUS,
     PROMOCODE_STATUS,
     RECEIVE_METHOD_STATUS,
-    CITY_FIAS, PAYMENT_METHOD_STATUS,
+    PAYMENT_METHOD_STATUS,
 } from '@store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -627,9 +623,6 @@ import _debounce from 'lodash/debounce';
 import { orderBy as _orderBy } from 'lodash/collection';
 
 import { generateProductUrl } from '@util/catalog';
-
-import { $dadata } from '@services';
-import { suggestionTypes } from '@enums/suggestions';
 
 import '@images/sprites/payment/bonus.svg';
 import '@images/sprites/payment/visa.svg';
@@ -785,7 +778,6 @@ export default {
             CONFIRMATION_TYPES,
             SELECTED_CONFIRMATION_TYPE_ID,
 
-            ADDRESSES,
             SELECTED_ADDRESS,
 
             SELECTED_PICKUP_POINT,
@@ -807,8 +799,6 @@ export default {
             PROMOCODE_STATUS,
             RECEIVE_METHOD_STATUS,
             PAYMENT_METHOD_STATUS,
-
-            CITY_FIAS,
         ]),
 
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
@@ -983,12 +973,8 @@ export default {
             SET_SUBSCRIBE,
             SET_CONFIRMATION_TYPE,
 
-            SET_ADDRESS,
-            SET_ADDRESS_NO_LK,
             ADD_ADDRESS,
             CHANGE_ADDRESS,
-
-            SET_PAYMENT_METHOD,
 
             ADD_BONUS,
             DELETE_BONUS,
@@ -1005,9 +991,9 @@ export default {
 
             FETCH_CHECKOUT_DATA,
 
-            SET_CITY_FIAS,
-
             SET_SELECTED_PICKUP_POINT,
+
+            SET_PAYMENT_METHOD,
         ]),
 
         ...mapActions(CERTIFICATE_MODULE, [ACTIVATE_CERTIFICATE]),
@@ -1015,8 +1001,6 @@ export default {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
         ...mapActions(CART_MODULE, [FETCH_CART_DATA]),
-
-        ...mapActions(GEO_MODULE, [SET_SELECTED_CITY]),
 
         validate() {
             this.$v.$touch();
@@ -1384,83 +1368,16 @@ export default {
 
     async mounted() {
         this.debounce_scrollToError = _debounce(this.scrollToError, SCROLL_DEBOUNCE_TIME);
+
         this.fetchCards();
+
         if (this.maxAmountBonus > 0) {
             await this.onAddBonus(this.maxAmountBonus);
         } else {
             this.bonusAmount = this.maxAmountBonus;
         }
+
         this.customCertAmount = this.maxCertificateDiscount;
-
-        const { suggestions } = await $dadata.post('/suggest/address', {
-            query: this[SELECTED_CITY].name,
-            count: 1,
-            from_bound: {
-                value: suggestionTypes.CITY,
-            },
-            to_bound: {
-                value: suggestionTypes.SETTLEMENT,
-            },
-        });
-
-        const selectedCitySuggestion = suggestions[0];
-
-        if (selectedCitySuggestion) {
-            const {
-                city,
-                city_type,
-                city_fias_id,
-                settlement,
-                settlement_type,
-                settlement_fias_id,
-                geo_lat,
-                geo_lon,
-                region_fias_id,
-                region,
-                postal_code,
-            } = selectedCitySuggestion.data;
-
-            await this[SET_SELECTED_CITY]({
-                city: {
-                    name: settlement || city,
-                    type: settlement_type || city_type,
-                    fias_id: settlement_fias_id || city_fias_id,
-                    geo_lat: geo_lat,
-                    geo_lon: geo_lon,
-                    region_fias_id,
-                },
-                setCookie: true,
-            });
-
-            await this[SET_CITY_FIAS]({
-                city: settlement || city,
-                city_guid: settlement_fias_id || city_fias_id,
-                country_code: 'RU',
-                post_index: postal_code,
-                region: region,
-                region_guid: region_fias_id,
-            });
-
-            const addressByCity = this[ADDRESSES].find((item) => {
-                return item.city_guid === settlement_fias_id || item.city_guid === city_fias_id;
-            });
-
-            if (addressByCity !== undefined) {
-                await this[SET_ADDRESS](addressByCity);
-            } else {
-                await this[SET_ADDRESS_NO_LK]({
-                    city: settlement || city,
-                    city_guid: settlement_fias_id || city_fias_id,
-                    country_code: 'RU',
-                    post_index: postal_code,
-                    region: region,
-                    region_guid: region_fias_id,
-                });
-            }
-
-            // перезагружаем, если находимся в сессии
-            if (this[HAS_SESSION]) await this[FETCH_CART_DATA]();
-        }
     },
 };
 </script>

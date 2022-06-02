@@ -207,9 +207,8 @@ import { mapGetters, mapState, mapActions } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
+import { NAME as GEO_MODULE } from '@store/modules/Geolocation';
 import { SELECTED_CITY_COORDS } from '@store/modules/Geolocation/getters';
-import { SET_SELECTED_CITY } from '@store/modules/Geolocation/actions';
 
 import validationMixin, { required } from '@plugins/validation';
 import { $dadata, $logger } from '@services';
