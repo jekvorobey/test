@@ -1227,11 +1227,11 @@ export default {
         },
 
         async onAddBonus(value) {
-            if (this.bonusAmount != value) {
-                this.bonusAmount = value;
-            }
             try {
-                await this[ADD_BONUS](value || 0);
+                if (this.bonusAmount != value) {
+                    this.bonusAmount = value;
+                    await this[ADD_BONUS](value || 0);
+                }
                 this.isBonusEdit = false;
                 this.isCertificateEdit = false;
                 this.customCertAmount = null;
@@ -1374,7 +1374,7 @@ export default {
         if (this.maxAmountBonus > 0) {
             await this.onAddBonus(this.maxAmountBonus);
         } else {
-            this.bonusAmount = this.maxAmountBonus;
+            this.bonusAmount = 0;
         }
 
         this.customCertAmount = this.maxCertificateDiscount;
