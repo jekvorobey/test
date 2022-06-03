@@ -4,9 +4,14 @@
         :class="{
             'checkout-option-card--selected': selected,
             'checkout-option-card--error': error,
+            'checkout-option-card--disabled': disabled,
         }"
         @click.stop="onCardClick"
     >
+        <div v-if="loading" class="checkout-option-card__spinner">
+            <v-spinner show />
+        </div>
+
         <div class="checkout-option-card__left">
             <slot />
         </div>
@@ -29,6 +34,7 @@
 <script>
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
 import '@images/sprites/check-small.svg';
 import './CheckoutOptionCard.css';
@@ -37,6 +43,7 @@ export default {
     name: 'checkout-option-card',
 
     components: {
+        VSpinner,
         VSvg,
         VLink,
     },
@@ -66,15 +73,29 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
+
+        loading: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     methods: {
         onCardClick() {
-            this.$emit('cardClick');
+            if (!this.disabled && !this.loading) {
+                this.$emit('cardClick');
+            }
         },
 
         onBtnClick() {
-            this.$emit('btnClick');
+            if (!this.disabled && !this.loading) {
+                this.$emit('btnClick');
+            }
         },
     },
 };

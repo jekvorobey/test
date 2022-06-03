@@ -1,4 +1,5 @@
 .checkout-option-card {
+    position: relative;
     padding: calc(var(--gs) * 3);
     border: 1px solid var(--cl-divider-grey);
     width: calc(calc(100% / 2) - calc(var(--gs) * 3 / 2));
@@ -32,8 +33,27 @@
         }
     }
 
+    &--disabled {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+
     &:hover {
         cursor: pointer;
+    }
+
+    &__spinner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2;
+        background: rgba(0, 0, 0, 0.03);
+        backdrop-filter: blur(2px);
     }
 
     &__left {

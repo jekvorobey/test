@@ -371,6 +371,18 @@ export default {
             }
         },
 
+        async fetchCheckout(type) {
+            this.$progress.start();
+
+            try {
+                await this[FETCH_CHECKOUT_DATA](type);
+                this.$progress.finish();
+            } catch (error) {
+                this.$progress.fail();
+                throw new Error(error);
+            }
+        },
+
         prepareBonus(value) {
             return preparePrice(value);
         },
@@ -427,6 +439,13 @@ export default {
     mounted() {
         const products = new ProductsBuilder().createForCheckout(this.cartData.product.items);
         seoEvents.checkout(products, 2);
+
+        if (this.isProduct) {
+            this.fetchCheckout(this.checkoutType).catch((error) => {
+                console.error(error);
+                this.fetchCheckout(this.checkoutType);
+            });
+        }
     },
 
     beforeDestroy() {

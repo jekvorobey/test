@@ -27,6 +27,7 @@ import {
     CERTIFICATE_STATUS,
     PROMOCODE_STATUS,
     TICKET_STATUS,
+    CHECKOUT_FIRST_LOADED,
 } from './getters';
 
 import {
@@ -356,13 +357,22 @@ export default {
         }
     },
 
-    async [FETCH_CHECKOUT_DATA]({ commit }, type) {
+    async [FETCH_CHECKOUT_DATA]({ commit, state }, type) {
         try {
-            const data = await getCheckoutData(type);
+            let params = {
+                type,
+            };
+
+            if (state[CHECKOUT_FIRST_LOADED]) {
+                params['loadAllReceiveMethods'] = true;
+            }
+
+            let data = await getCheckoutData(params);
+
             commit(SET_TYPE, type);
             commit(SET_DATA, data);
         } catch (error) {
-            storeErrorHandler(FETCH_CHECKOUT_DATA)(error);
+            storeErrorHandler(FETCH_CHECKOUT_DATA, true)(error);
         }
     },
 
