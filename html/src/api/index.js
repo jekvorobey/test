@@ -875,24 +875,19 @@ export function deleteCartPromocode(data) {
 
 // checkout
 
-export function getCheckoutData({ type, loadAllReceiveMethods = false }) {
+export function getCheckoutData(type) {
     switch (type) {
         case cartItemTypes.MASTERCLASS:
             return $http.get('/v1/checkout-public-events/data');
         case cartItemTypes.PRODUCT:
-            if (loadAllReceiveMethods) {
-                return $http.get('/v1/checkout/data', {
-                    params: {
-                        'input[isAllDeliveryMethods]': 1,
-                    },
-                    timeout: 60000,
-                });
-            } else {
-                return $http.get('/v1/checkout/data');
-            }
+            return $http.get('/v1/checkout/data');
         default:
             return Promise.reject('Wrong cart type');
     }
+}
+
+export function getCheckoutReceiveMethods() {
+    return $http.get('/v1/checkout/load-receive-methods');
 }
 
 export function commitCheckoutData(type, data) {
