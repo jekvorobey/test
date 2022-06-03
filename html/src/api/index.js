@@ -895,6 +895,10 @@ export function getCheckoutData({ type, loadAllReceiveMethods = false }) {
     }
 }
 
+export function getCheckoutReceiveMethods() {
+    return $http.get('/v1/checkout/load-receive-methods');
+}
+
 export function commitCheckoutData(type, data) {
     switch (type) {
         case cartItemTypes.MASTERCLASS:
