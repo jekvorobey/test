@@ -1227,9 +1227,11 @@ export default {
         },
 
         async onAddBonus(value) {
+            if (this.bonusAmount != value) {
+                this.bonusAmount = value;
+            }
             try {
-                if (this.bonusAmount != value) {
-                    this.bonusAmount = value;
+                if (value != this[BONUS]) {
                     await this[ADD_BONUS](value || 0);
                 }
                 this.isBonusEdit = false;
