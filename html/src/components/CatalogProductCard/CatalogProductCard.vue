@@ -20,7 +20,8 @@
                     loading="lazy"
                 />
             </v-picture>
-            <v-svg v-else id="catalog-product-card-empty" name="logo" width="48" height="48" />
+
+            <no-photo-stub v-else />
 
             <div class="catalog-product-card__controls" v-if="showControls && !isTabletLg">
                 <buy-button
@@ -86,6 +87,7 @@ import Tag from '@components/Tag/Tag.vue';
 import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
+import NoPhotoStub from '@components/NoPhotoStub/NoPhotoStub.vue';
 
 import { mapGetters } from 'vuex';
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
@@ -102,6 +104,7 @@ export default {
     name: 'catalog-product-card',
 
     components: {
+        NoPhotoStub,
         VSvg,
         VLink,
         VRating,

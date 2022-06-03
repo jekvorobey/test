@@ -8,7 +8,7 @@
                     <img class="blur-up lazyload v-picture__img" :data-src="images.defaultImg" />
                 </slot>
             </v-picture>
-            <v-svg v-else id="package-product-card-empty" name="logo" width="48" height="48" />
+            <no-photo-stub />
         </router-link>
         <div class="package-product-card__body">
             <div class="package-product-card__body-info">
@@ -30,10 +30,9 @@
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
-
+import NoPhotoStub from '@components/NoPhotoStub/NoPhotoStub.vue';
 import Price from '@components/Price/Price.vue';
 
 import { fileExtension } from '@enums';
@@ -44,7 +43,7 @@ export default {
     name: 'package-product-card',
 
     components: {
-        VSvg,
+        NoPhotoStub,
         VLink,
         VPicture,
 

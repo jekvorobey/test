@@ -7,7 +7,7 @@
                         v-if="!currentGalleryImages || !currentGalleryImages.length"
                         class="quick-view-modal__gallery-item quick-view-modal__gallery-item--empty"
                     >
-                        <v-svg name="logo" width="56" height="56" />
+                        <no-photo-stub />
                     </li>
                     <li class="quick-view-modal__gallery-item" v-for="image in currentGalleryImages" :key="image.id">
                         <v-picture>
@@ -105,7 +105,6 @@
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 import VScroll from '@controls/VScroll/VScroll.vue';
 
@@ -115,6 +114,7 @@ import ProductDetailPanel from '@components/product/ProductDetailPanel/ProductDe
 import ProductDeliveryPanel from '@components/product/ProductDeliveryPanel/ProductDeliveryPanel.vue';
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
 import Tag from '@components/Tag/Tag.vue';
+import NoPhotoStub from '@components/NoPhotoStub/NoPhotoStub.vue';
 
 import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
 import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag.vue';
@@ -146,7 +146,6 @@ import { $retailRocket } from '@services';
 import { requestStatus, modalName } from '@enums';
 import { cartItemTypes } from '@enums/product';
 import { generateProductUrl, prepareProductImage } from '@util/catalog';
-import '@images/sprites/logo.svg';
 import './QuickViewModal.css';
 import { RetailRocketHelper } from '@services/RetailRocketService';
 
@@ -159,7 +158,7 @@ export default {
     name: NAME,
 
     components: {
-        VSvg,
+        NoPhotoStub,
         VPicture,
         VSpinner,
         VScroll,

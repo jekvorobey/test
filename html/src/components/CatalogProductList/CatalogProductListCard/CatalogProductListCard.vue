@@ -25,7 +25,8 @@
                         alt=""
                     />
                 </v-picture>
-                <v-svg v-else id="catalog-product-list-card-empty" name="logo" width="48" height="48" />
+
+                <no-photo-stub v-else />
 
                 <div v-if="!isTabletLg" class="catalog-product-list-card__controls" v-once>
                     <buy-button
@@ -123,6 +124,7 @@ import Tag from '@components/Tag/Tag.vue';
 import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
+import NoPhotoStub from '@components/NoPhotoStub/NoPhotoStub.vue';
 
 import { mapGetters } from 'vuex';
 
@@ -133,7 +135,6 @@ import { generateAbsoluteProductUrl, generateProductUrl, prepareProductImage } f
 
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
-import '@images/sprites/logo.svg';
 import '@images/sprites/cart.svg';
 import '@images/sprites/cart-filled.svg';
 
@@ -143,6 +144,7 @@ export default {
     name: 'catalog-product-list-card',
 
     components: {
+        NoPhotoStub,
         VSvg,
         VLink,
         VPicture,
