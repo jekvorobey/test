@@ -361,18 +361,9 @@ export default {
         }
     },
 
-    async [FETCH_CHECKOUT_DATA]({ commit, state }, type) {
+    async [FETCH_CHECKOUT_DATA]({ commit }, type) {
         try {
-            let params = {
-                type,
-            };
-
-            if (state[CHECKOUT_FIRST_LOADED]) {
-                params['loadAllReceiveMethods'] = true;
-            }
-
-            let data = await getCheckoutData(params);
-
+            const data = await getCheckoutData(type);
             commit(SET_TYPE, type);
             commit(SET_DATA, data);
         } catch (error) {
