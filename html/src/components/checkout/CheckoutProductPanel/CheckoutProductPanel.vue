@@ -57,7 +57,7 @@
                         :key="method.id"
                         :selected="method.id === selectedReceiveMethodID"
                         :disabled="!method.isAvailable"
-                        :loading="method.isAvailable && !method.isLoaded"
+                        :loading="method.isLoaded"
                         readonly
                         @cardClick="onSetReceiveMethod(method)"
                     >
@@ -147,7 +147,7 @@
                         <transition-group v-if="selectedDeliveryType" tag="ul" name="chunk-item">
                             <li
                                 class="checkout-product-panel__item checkout-product-panel__item--child"
-                                v-for="(chunkItem, index) in computedSelectedDeliveryType.items"
+                                v-for="chunkItem in computedSelectedDeliveryType.items"
                                 :key="chunkItem.id"
                             >
                                 <div class="checkout-product-panel__item-header">
