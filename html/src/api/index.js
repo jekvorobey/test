@@ -886,6 +886,10 @@ export function getCheckoutData(type) {
     }
 }
 
+export function getCheckoutReceiveMethods() {
+    return $http.get('/v1/checkout/load-receive-methods');
+}
+
 export function commitCheckoutData(type, data) {
     switch (type) {
         case cartItemTypes.MASTERCLASS:
@@ -913,7 +917,7 @@ export function setReceiveMethod(data) {
 }
 
 export function setAddress(data) {
-    return $http.post('/v1/checkout/address', data);
+    return $http.post('/v1/checkout/address', data, { timeout: 60000 });
 }
 
 export function setPickupPoint(data) {

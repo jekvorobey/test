@@ -1,3 +1,5 @@
+import { cartItemTypes } from '@enums/product';
+
 export const SET_DATA = 'SET_DATA';
 export const SET_TYPE = 'SET_TYPE';
 export const SET_STATUS = 'SET_STATUS';
@@ -34,6 +36,12 @@ export default {
 
     [SET_DATA](state, payload = null) {
         state.checkoutData = payload;
+
+        if (payload === null) {
+            state.checkoutFirstLoaded = false;
+        } else {
+            state.checkoutFirstLoaded = true;
+        }
     },
 
     [SET_PROFESSIONS](state, payload) {

@@ -894,8 +894,13 @@ export default {
                 this.isVisibleActivateCert = false
             }, 5000);
 
-            await this[FETCH_CHECKOUT_DATA](cartItemTypes.MASTERCLASS);
-            this.fetchCards()
+            try {
+                await this[FETCH_CHECKOUT_DATA](cartItemTypes.MASTERCLASS);
+            } catch (error) {
+                console.error(error);
+            }
+
+            this.fetchCards();
         },
 
         onEditCertificate() {
