@@ -887,7 +887,7 @@ export function getCheckoutData(type) {
 }
 
 export function getCheckoutReceiveMethods() {
-    return $http.get('/v1/checkout/load-receive-methods');
+    return $http.get('/v1/checkout/load-receive-methods', { timeout: 60000 });
 }
 
 export function commitCheckoutData(type, data) {
