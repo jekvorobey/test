@@ -15,6 +15,7 @@ import {
     email as emailRegx,
     referrerCode as referrerCodeRegx,
     nameRu as nameRuRegx,
+    productUrl as productUrlRegx,
 } from '@regex/validation';
 import { countCheckdigit } from '@util';
 
@@ -79,6 +80,7 @@ export const referrerCode = helpers.regex('referrerCode', referrerCodeRegx);
 export const password = helpers.regex('password', passwordRegx);
 export const tel = helpers.regex('tel', telRegx);
 export const email = helpers.regex('email', emailRegx);
+export const productUrl = helpers.regex('productUrl', productUrlRegx);
 export const inn = innValidation;
 export const required = r;
 export const sameAs = sa;

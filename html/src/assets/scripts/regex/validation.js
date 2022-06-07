@@ -43,4 +43,9 @@ export const date = /^(?:31(\.)(?:0?[13578]|1[02])\1|(?:29|30)(\.)(?:0?[,13-9]|1
  */
 export const email = /^(([^\s"(),.:;<>@[\]]+(\.[^\s"(),.:;<>@[\]]+)*)|(".+"))@(([^\s"(),.:;<>@[\]]+\.)+[^\s"(),.:;<>@[\]]{2,})$/i;
 
-export default { email, tel, date, kpp, password, nameEn, nameRu, nameAll, referrerCode };
+/**
+ * Ссылка на товар
+ */
+export const productUrl = /^http(s)?:\/\/[^/]+\/product\/([^/]+)\/?$/;
+
+export default { email, tel, date, kpp, password, nameEn, nameRu, nameAll, referrerCode, productUrl };

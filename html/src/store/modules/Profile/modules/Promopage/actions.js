@@ -63,8 +63,11 @@ export default {
         try {
             if (id) await addProfilePromopageProductById(id);
             else if (link) {
-                const code = link.split('/').slice(-1);
-                await addProfilePromopageProductByCode(code);
+                const match = link.match(/https?:\/\/[^/]+\/product\/([^/]+)\/?/);
+
+                if (match[1]) {
+                    await addProfilePromopageProductByCode(match[1]);
+                }
             }
             if (refresh) dispatch(FETCH_PROMOPAGE_DATA, {});
         } catch (error) {
@@ -76,6 +79,7 @@ export default {
     async [ADD_PRODUCTS]({ dispatch }, payload = {}) {
         try {
             const { links = [], refresh = false } = payload;
+
             const promises = links.map((i) => {
                 return dispatch(ADD_PRODUCT, { link: i.ref, bubbleOnError: false });
             });
