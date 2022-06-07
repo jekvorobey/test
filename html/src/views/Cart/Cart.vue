@@ -580,7 +580,6 @@ export default {
 
             try {
                 this.isLoad = true;
-                await this[CHECK_CART_DATA](this.activeTabItem.type);
                 this.$router.push({ name: 'Checkout', params: { type: this.activeTabItem.type } });
             } catch (error) {
                 this.isLoad = false;
@@ -607,7 +606,6 @@ export default {
 
             if (this.userCanBeProfessional) {
                 this.isLoad = true;
-                await this[CHECK_CART_DATA](this.activeTabItem.type);
                 this.$router.push({ name: 'Checkout', params: { type: this.activeTabItem.type } });
             }
         },
@@ -639,7 +637,6 @@ export default {
                         }
                     } else {
                         this.isStartedCheckoutProcess = false;
-                        await this[CHECK_CART_DATA](this.activeTabItem.type);
                         this.$router.push({ name: 'Checkout', params: { type: this.activeTabItem.type } });
                     }
                 } else {

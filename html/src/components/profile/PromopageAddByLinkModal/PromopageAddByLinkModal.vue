@@ -35,7 +35,7 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
-import validationMixin, { required } from '@plugins/validation';
+import validationMixin, { required, productUrl } from '@plugins/validation';
 
 import { mapActions, mapState } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -69,6 +69,7 @@ export default {
             $each: {
                 ref: {
                     required,
+                    productUrl,
                 },
             },
         },
@@ -104,6 +105,7 @@ export default {
 
         refError(ref) {
             if (ref.$dirty && !ref.required) return this.$t('validation.errors.required');
+            if (ref.$dirty && !ref.productUrl) return 'Не похоже на нашу ссылку';
         },
 
         onAddLink() {

@@ -177,6 +177,7 @@ import {
     COMMIT_DATA,
     CLEAR_CHECKOUT_DATA,
     FETCH_PROFESSIONS,
+    FETCH_CHECKOUT_RECEIVE_METHODS,
 } from '@store/modules/Checkout/actions';
 import {
     PROMO_CODE,
@@ -324,6 +325,7 @@ export default {
         ...mapActions(CHECKOUT_MODULE, [
             FETCH_CHECKOUT_DATA,
             CLEAR_CHECKOUT_DATA,
+            FETCH_CHECKOUT_RECEIVE_METHODS,
             ADD_PROMOCODE,
             DELETE_PROMOCODE,
             COMMIT_DATA,
@@ -368,6 +370,18 @@ export default {
             } catch (error) {
                 this.isCommit = false;
                 $logger.error(error);
+            }
+        },
+
+        async fetchReceiveMethods() {
+            this.$progress.start();
+
+            try {
+                await this[FETCH_CHECKOUT_RECEIVE_METHODS]();
+                this.$progress.finish();
+            } catch (error) {
+                this.$progress.fail();
+                throw new Error(error);
             }
         },
 
@@ -427,6 +441,13 @@ export default {
     mounted() {
         const products = new ProductsBuilder().createForCheckout(this.cartData.product.items);
         seoEvents.checkout(products, 2);
+
+        if (this.isProduct) {
+            this.fetchReceiveMethods().catch((error) => {
+                console.error(error);
+                this.fetchReceiveMethods();
+            });
+        }
     },
 
     beforeDestroy() {

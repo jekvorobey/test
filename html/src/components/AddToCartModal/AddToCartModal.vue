@@ -70,7 +70,6 @@ import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
 import Price from '@components/Price/Price.vue';
 
-import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
@@ -81,8 +80,8 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { NAME as CART_MODULE, CART_DATA, RELATIVE_PRODUCTS } from '@store/modules/Cart';
-import { ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS } from '@store/modules/Cart/actions';
+import { NAME as CART_MODULE, CART_DATA } from '@store/modules/Cart';
+import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 import { CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM } from '@store/modules/Cart/getters';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
@@ -90,7 +89,6 @@ import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
 
 import { modalName } from '@enums';
-import { getRandomIntInclusive } from '@util';
 import './AddToCartModal.css';
 
 const NAME = modalName.general.ADD_TO_CART;
@@ -106,7 +104,6 @@ export default {
         Price,
         GeneralModal,
         CartProductCard,
-        CatalogProductCard,
 
         RetailRocketContainer,
     },
@@ -121,7 +118,7 @@ export default {
         ...mapState(MODAL_MODULE, {
             modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
         }),
-        ...mapState(CART_MODULE, [CART_DATA, RELATIVE_PRODUCTS]),
+        ...mapState(CART_MODULE, [CART_DATA]),
         ...mapGetters(CART_MODULE, [CART_ITEMS_COUNT, PRODUCT_ITEMS_SUM]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapState(AUTH_MODULE, {
@@ -134,10 +131,6 @@ export default {
 
         header() {
             return 'Товар добавлен в корзину';
-        },
-
-        products() {
-            return this.isTablet ? this.relativeProducts.slice(0, 2) : this.relativeProducts.slice(0, 3);
         },
 
         isTablet() {
@@ -179,7 +172,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(CART_MODULE, [ADD_CART_ITEM, FETCH_RELATIVE_PRODUCTS]),
+        ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         onCountChange(count, product) {
@@ -219,7 +212,6 @@ export default {
 
             this.cartItem = data ? data.items.find((i) => i.p.id === offerId) : null;
             if (!this.cartItem) this[ADD_CART_ITEM]({ offerId, storeId, referrerCode: referralCode, cookieName });
-            this[FETCH_RELATIVE_PRODUCTS]({ page: getRandomIntInclusive(1, 4) });
         },
 
         onClose() {

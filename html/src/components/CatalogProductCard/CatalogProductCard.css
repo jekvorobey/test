@@ -195,12 +195,12 @@
 
     &__tags {
         position: absolute;
-        top: 20px;
-        left: 20px;
+        top: calc((var(--gs) + calc(var(--gs) / 2)) - 4px);
+        left: calc((var(--gs) + calc(var(--gs) / 2)) - 8px);
 
         @media (--tablet) {
-            top: 8px;
-            left: 12px;
+            top: var(--gs);
+            left: var(--gs);
         }
 
         &-item {
@@ -222,12 +222,12 @@
         opacity: 0;
         position: absolute;
         z-index: 2;
-        top: 20px;
-        right: 20px;
+        top: calc(var(--gs) + calc(var(--gs) / 2));
+        right: calc(var(--gs) + calc(var(--gs) / 2));
 
         @media (--tablet) {
-            top: 8px;
-            right: 12px;
+            top: var(--gs);
+            right: var(--gs);
         }
 
         @media (--tablet-lg) {

@@ -34,7 +34,7 @@ import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/Checkout
 import { mapGetters, mapActions } from 'vuex';
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import { SET_ADDRESS } from '@store/modules/Checkout/actions';
-import { SELECTED_PICKUP_POINT, ADDRESSES, SELECTED_ADDRESS } from '@store/modules/Checkout/getters';
+import { ADDRESSES, SELECTED_ADDRESS } from '@store/modules/Checkout/getters';
 
 import _isEqual from 'lodash/isEqual';
 import './CheckoutAddressPanel.css';
