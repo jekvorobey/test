@@ -40,6 +40,19 @@
                     </v-link>
                 </div>
 
+                <ul class="catalog-product-list-card__variants">
+                    <li
+                        v-for="(variant, i) in variantGroupsValue"
+                        :key="i"
+                        :class="{
+                            'catalog-product-list-card__variant': true,
+                            'catalog-product-list-card__variant--has-more': variant.length > maxVisibleVariantValues,
+                        }"
+                    >
+                        {{ variant.slice(0, maxVisibleVariantValues).join(' / ') }}
+                    </li>
+                </ul>
+
                 <div
                     v-if="$mq.tablet"
                     class="catalog-product-list-card__mobile-cart-btn"
@@ -78,12 +91,6 @@
                 <div class="link--sm catalog-product-list-card__link" v-bind="itemPropSettings.name">
                     {{ item.name }}
                 </div>
-
-                <ul class="catalog-product-list-card__variant">
-                    <li v-for="variant in variantGroupsValue" class="catalog-product-list-card__variant--item">
-                        {{ variant }}
-                    </li>
-                </ul>
 
                 <div class="catalog-product-list-card__rating" v-once>
                     <span
@@ -289,41 +296,64 @@ export default {
             return this.$mq.tabletLg;
         },
 
+        maxVisibleVariantValues() {
+            if (this.isTabletLg) {
+                return 2;
+            }
+
+            return 3;
+        },
+
         variantGroupsValue() {
             if (!this.item.variantGroups) return;
+
             const declensionVariants = {
-                Оттенок: ['оттенок', 'оттенка', 'оттенков'],
-                Цвет: ['цвет', 'цвета', 'цветов'],
-                Тон: ['тон', 'тона', 'тонов'],
+                'Оттенок': ['оттенок', 'оттенка', 'оттенков'], // eslint-disable-line
+                'Цвет': ['цвет', 'цвета', 'цветов'], // eslint-disable-line
+                'Тон': ['тон', 'тона', 'тонов'], // eslint-disable-line
+                'Размер': ['размер', 'размера', 'размеров'], // eslint-disable-line
             };
+
             const result = this.item.variantGroups.characteristics.reduce((accumulator, current) => {
                 const colorString = Object.keys(declensionVariants).reduce((acc, cur) => {
                     return current.name.toLocaleLowerCase().includes(cur.toLocaleLowerCase()) ? current.name : acc;
                 }, '');
+
+                let values;
+
                 if (typeof current.values[0] === 'number') {
                     const currentValuesSorted = current.values.sort((a, b) => a - b);
                     if (currentValuesSorted.length <= 3) {
-                        accumulator.push(
+                        values =
                             currentValuesSorted.join('/') +
-                                (current.measurement_unit ? ' ' + current.measurement_unit : '')
-                        );
+                            (current.measurement_unit ? ' ' + current.measurement_unit : '');
                     } else {
-                        accumulator.push(
-                            Math.min.apply(null, currentValuesSorted) + '–' + Math.max.apply(null, currentValuesSorted)
-                        );
+                        values =
+                            Math.min.apply(null, currentValuesSorted) + '–' + Math.max.apply(null, currentValuesSorted);
                     }
                 } else if (declensionVariants[colorString]) {
-                    accumulator.push(
-                        current.values.length +
+                    if (current.values.length > this.maxVisibleVariantValues) {
+                        values =
+                            current.values.length +
                             ' ' +
-                            this.declension(current.values.length, declensionVariants[colorString])
-                    );
+                            this.declension(current.values.length, declensionVariants[colorString]);
+                    } else {
+                        values = [...current.values].filter((item) => item.length > 0);
+                    }
                 } else {
-                    accumulator.push(current.values.join(' / '));
+                    values = [...current.values].filter((item) => item.length > 0);
                 }
+
+                if (!Array.isArray(values)) {
+                    values = [values];
+                }
+
+                accumulator.push(values);
+
                 return accumulator;
             }, []);
-            return result;
+
+            return result.slice(0, 2).filter((item) => item.length > 0);
         },
 
         modifiedPrice() {
