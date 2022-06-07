@@ -17,6 +17,7 @@ import {
     changeCity,
     changeCheckoutMasterclassTickets,
     getProfessions,
+    getCheckoutReceiveMethods,
 } from '@api';
 
 import {
@@ -27,7 +28,10 @@ import {
     CERTIFICATE_STATUS,
     PROMOCODE_STATUS,
     TICKET_STATUS,
+    CHECKOUT_FIRST_LOADED,
 } from './getters';
+
+import { CHECKOUT_DATA } from '@store/modules/Checkout/index';
 
 import {
     SET_CHECKOUT_ORDER,
@@ -82,6 +86,7 @@ export const CHANGE_ADDRESS = 'CHANGE_ADDRESS';
 
 export const FETCH_CHECKOUT_DATA = 'FETCH_CHECKOUT_DATA';
 export const CLEAR_CHECKOUT_DATA = 'CLEAR_CHECKOUT_DATA';
+export const FETCH_CHECKOUT_RECEIVE_METHODS = 'FETCH_CHECKOUT_RECEIVE_METHODS';
 export const CHANGE_CHUNK_DATE = 'CHANGE_CHUNK_DATE';
 export const COMMIT_DATA = 'COMMIT_DATA';
 
@@ -362,7 +367,23 @@ export default {
             commit(SET_TYPE, type);
             commit(SET_DATA, data);
         } catch (error) {
-            storeErrorHandler(FETCH_CHECKOUT_DATA)(error);
+            storeErrorHandler(FETCH_CHECKOUT_DATA, true)(error);
+        }
+    },
+
+    async [FETCH_CHECKOUT_RECEIVE_METHODS]({ commit, state }) {
+        try {
+            const data = await getCheckoutReceiveMethods();
+
+            commit(
+                SET_DATA,
+                Object.assign(state[CHECKOUT_DATA], {
+                    receiveMethods: data,
+                    test: data,
+                })
+            );
+        } catch (error) {
+            storeErrorHandler(FETCH_CHECKOUT_RECEIVE_METHODS, true)(error);
         }
     },
 
