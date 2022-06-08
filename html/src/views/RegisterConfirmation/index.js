@@ -1,40 +1,42 @@
-import { NAME as AUTH_MODULE } from '@store/modules/Auth';
-import { LOGIN_BY_SIGNATURE } from '@store/modules/Auth/actions';
-
 import { breakMiddleware } from '@util/router';
 import { httpCodes, injectionType } from '@enums';
+import { loginBySignature } from '@api';
+
+const RegisterConfirmationAsync = () =>
+    import(/* webpackChunkName: "register-confirmation-view" */ './RegisterConfirmation.vue');
 
 export default {
     routes: [
         {
             name: 'RegisterConfirmation',
-            path: '/user/:id/change-password/:signature',
-            component: {
-                render() {
-                    return {};
-                },
-            },
+            path: '/user/:id/change-password/:signature/',
+            component: RegisterConfirmationAsync,
+            props: true,
             meta: {
+                hideDefaultHeader: true,
+                hideDefaultFooter: true,
                 middleware: [
-                    async function ({ to, next, container }) {
+                    async function ({ to, next, container, nextMiddleware }) {
                         const appContext = container.get(injectionType.APPLICATION_CONTEXT);
-                        const store = container.get(injectionType.STORE);
 
-                        const {
-                            params: { id, signature },
-                        } = to;
+                        if (appContext.isServer) {
+                            const {
+                                params: { id, signature },
+                            } = to;
 
-                        try {
-                            await store.dispatch(`${AUTH_MODULE}/${LOGIN_BY_SIGNATURE}`, {
-                                userId: id,
-                                signature,
-                            });
+                            try {
+                                await loginBySignature({
+                                    userId: id,
+                                    signature,
+                                });
 
-                            return next({
-                                path: '/profile',
-                            });
-                        } catch (error) {
-                            return breakMiddleware(appContext, next, null, httpCodes.FORBIDDEN);
+                                nextMiddleware();
+                            } catch (error) {
+                                console.error(error);
+                                breakMiddleware(appContext, next, null, httpCodes.FORBIDDEN);
+                            }
+                        } else {
+                            nextMiddleware();
                         }
                     },
                 ],

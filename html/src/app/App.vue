@@ -10,7 +10,7 @@
             <router-view class="view" />
             <!-- </transition> -->
         </main>
-        <v-footer class="footer" />
+        <v-footer v-if="!hideDefaultFooter" class="footer" />
 
         <transition name="fade-in">
             <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
@@ -150,6 +150,7 @@ export default {
 
         ...mapState('route', {
             hideDefaultHeader: (state) => state.meta.hideDefaultHeader,
+            hideDefaultFooter: (state) => state.meta.hideDefaultFooter,
         }),
 
         ...mapState(MODAL_MODULE, {
