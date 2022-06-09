@@ -88,7 +88,7 @@ export default {
                 signature,
             });
 
-            dispatch(CHECK_SESSION);
+            await dispatch(CHECK_SESSION);
         } catch (error) {
             storeErrorHandler(LOGIN_BY_SIGNATURE, true)(error);
         }
