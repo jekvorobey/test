@@ -626,8 +626,8 @@ export default {
                 };
 
                 const mobileImg = i.image && {
-                    webp: generatePictureSourcePath(425, 320, i.image.id, fileExtension.image.WEBP),
-                    orig: generatePictureSourcePath(425, 320, i.image.id),
+                    webp: generatePictureSourcePath(400, 240, i.image.id, fileExtension.image.WEBP),
+                    orig: generatePictureSourcePath(400, 240, i.image.id),
                 };
 
                 const placeholderImg = i.image && generatePictureSourcePath(40, 24, i.image.id);
