@@ -103,8 +103,8 @@
                         </ul>
                         <div class="mobile-menu__menu-socials">
                             <p class="text-grey">Ежедневно с 9:00 до 21:00</p>
-                            <v-link class="mobile-menu__menu-socials-phone" href="tel:88007079070">
-                                8 800 707-90-70
+                            <v-link class="mobile-menu__menu-socials-phone" href="tel:+74951396428">
+                                +7 495 139-64-28
                             </v-link>
                             <p class="text-grey">Всегда отвечаем на ваши сообщения</p>
 
@@ -218,8 +218,8 @@
                     </ul>
                     <div class="container mobile-menu__menu-socials">
                         <p class="text-grey">Ежедневно с 9:00 до 21:00</p>
-                        <v-link class="mobile-menu__menu-socials-phone" href="tel:88007079070">
-                            8 800 707-90-70
+                        <v-link class="mobile-menu__menu-socials-phone" href="tel:+74951396428">
+                            +7 495 139-64-28
                         </v-link>
                         <p class="text-grey">Всегда отвечаем на ваши сообщения</p>
 
