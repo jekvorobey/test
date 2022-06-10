@@ -7,7 +7,7 @@
                 <div class="not-found-view__main-info">
                     <p>Если у вас возникли вопросы, обратитесь в службу поддержки:</p>
                     <p>
-                        <a class="text-bold" href="tel:88007079070">8 800 707-90-70</a>
+                        <a class="text-bold" href="tel:+74951396428">+7 495 139-64-28</a>
                         &nbsp;(звонок бесплатный)
                     </p>
                     Или напишите нам на почту <a href="mailto:support@ibt.ru">support@ibt.ru</a>
