@@ -54,6 +54,9 @@ export const orderPaymentStatus = Object.freeze({
 
     /* ошибка */
     ERROR: 5,
+
+    /* Ожидает оплаты */
+    WAITING: 6,
 });
 
 export const sortFields = Object.freeze({
@@ -64,7 +67,7 @@ export const sortFields = Object.freeze({
 export const deliveryStatus = Object.freeze({
     /** Предзаказ: ожидаем поступления товара*/
     STATUS_WAITING_TO_ARRIVE: 0,
-    
+
     // внутренние статусы [1, 20]
     /** создан */
     STATUS_CREATED: 1,

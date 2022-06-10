@@ -1,5 +1,5 @@
 <template>
-    <component :is="component" v-bind="componentAttrs" v-on="handlers">
+    <component ref="button" :is="component" v-bind="componentAttrs" v-on="handlers">
         <div class="btn__slot">
             <slot />
         </div>
@@ -97,6 +97,12 @@ export default {
             const handlers = {};
             keys.forEach((k) => (handlers[k] = (e) => this.$emit(k, e)));
             return handlers;
+        },
+    },
+
+    methods: {
+        click() {
+            this.$refs.button.click();
         },
     },
 };

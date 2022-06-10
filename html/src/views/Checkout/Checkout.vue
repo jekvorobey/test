@@ -136,7 +136,7 @@
                                 @click="onCommit"
                                 :disabled="isCommit || isPromocodePending"
                             >
-                                {{ isPostPaidSelected ? 'Подтвердить заказ' : 'Перейти к оплате' }}
+                                {{ checkoutCommitButtonText }}
                             </v-button>
                         </div>
                     </template>
@@ -192,7 +192,7 @@ import {
 
 import metaMixin from '@plugins/meta';
 import { httpCodes, requestStatus } from '@enums';
-import { discountType } from '@enums/checkout';
+import { discountType, paymentTypes } from '@enums/checkout';
 import { preparePrice } from '@util';
 import { generateThankPageUrl } from '@util/order';
 import { cartItemTypes } from '@enums/product';
@@ -312,6 +312,14 @@ export default {
             );
 
             return paymentMethod ? paymentMethod.is_postpaid : false;
+        },
+
+        checkoutCommitButtonText() {
+            if (this[SELECTED_PAYMENT_METHOD_ID] === paymentTypes.CREDIT) {
+                return 'Перейти к оформлению';
+            }
+
+            return this.isPostPaidSelected ? 'Подтвердить заказ' : 'Перейти к оплате';
         },
     },
 
