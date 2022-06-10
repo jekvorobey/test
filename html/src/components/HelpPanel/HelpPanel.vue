@@ -13,7 +13,7 @@
             <div class="help-panel__top">
                 <div class="text-grey">Ежедневно с 9:00 до 21:00</div>
                 <div class="text-bold help-panel__phone">
-                    <a href="tel:+74951396428" class="help-panel__phone-link">+7 495 139-64-28</a>
+                    <a href="tel:88007079070" class="help-panel__phone-link">8 800 707-90-70</a>
                 </div>
             </div>
             <div class="help-panel__controls" @click="onHide">
