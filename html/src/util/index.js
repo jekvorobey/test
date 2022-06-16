@@ -310,7 +310,11 @@ export function getPosition(el) {
  */
 export function getDate(string) {
     // Safari не умеет парсить даты вида yyyy-mm-dd, так что заменяем "-" на "/"
-    return new Date(string.replace(/-/g, '/'));
+    if (/^\d{4}-\d{2}-\d{2}$/.test(string)) {
+        return new Date(string.replace(/-/g, '/'));
+    } else {
+        return new Date(string);
+    }
 }
 
 /**
