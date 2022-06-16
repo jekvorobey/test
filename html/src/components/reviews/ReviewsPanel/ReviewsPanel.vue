@@ -75,15 +75,21 @@
                 </div>
             </template>
         </div>
+
         <create-review-panel v-else :code="code" :type="type" @create-review="onCreateReview" />
+
+        <transition name="fade-in">
+            <review-modal v-if="reviewModalIsOpen" />
+        </transition>
     </div>
 </template>
 
 <script>
-import VRange from '@controls/VRange/VRange.vue';
 import VRating from '@controls/VRating/VRating.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
+
+import ReviewModal from '@components/reviews/ReviewModal/ReviewModal.vue';
 
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import SessionCheckButton from '@components/SessionCheckButton/SessionCheckButton.vue';
@@ -93,7 +99,7 @@ import ReviewCard from '@components/reviews/ReviewCard/ReviewCard.vue';
 
 import { mapActions, mapState, mapGetters } from 'vuex';
 
-import { NAME as MODAL_MODULE } from '@store/modules/Modal';
+import { MODALS, NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as REVIEWS_MODULE, RANGE, REVIEWS, RATING, ACTIVE_PAGE } from '@store/modules/Reviews';
@@ -107,7 +113,6 @@ export default {
     name: 'reviews-panel',
 
     components: {
-        VRange,
         VRating,
         VSelect,
         VSpinner,
@@ -117,6 +122,8 @@ export default {
 
         ReviewCard,
         CreateReviewPanel,
+
+        ReviewModal,
     },
 
     props: {
@@ -164,6 +171,14 @@ export default {
     computed: {
         ...mapState(REVIEWS_MODULE, [REVIEWS, RANGE, ACTIVE_PAGE, RATING]),
         ...mapGetters(REVIEWS_MODULE, [PAGES_COUNT]),
+
+        ...mapState(MODAL_MODULE, {
+            reviewModalIsOpen: (state) => {
+                return state[MODALS][modalName.product.REVIEW] && state[MODALS][modalName.product.REVIEW].open
+                    ? state[MODALS][modalName.product.REVIEW].open
+                    : false;
+            },
+        }),
 
         isTablet() {
             return this.$mq.tablet;

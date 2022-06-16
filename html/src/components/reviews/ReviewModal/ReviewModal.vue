@@ -44,13 +44,6 @@ export default {
     },
 
     props: {
-        image: {
-            type: Object,
-            default() {
-                return {};
-            },
-        },
-
         name: {
             type: String,
             default: NAME,
@@ -62,10 +55,15 @@ export default {
             isOpen(state) {
                 return state[MODALS][this.name] && state[MODALS][this.name].open;
             },
+
             modalState(state) {
                 return (state[MODALS][this.name] && state[MODALS][this.name].state) || {};
             },
         }),
+
+        image() {
+            return this.modalState.image;
+        },
     },
 
     methods: {
