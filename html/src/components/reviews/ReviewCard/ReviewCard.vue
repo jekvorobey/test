@@ -80,9 +80,6 @@
                 </div>
             </div>
         </template>
-        <transition name="fade-in">
-            <review-modal :image="openedImage" />
-        </transition>
     </component>
 </template>
 
@@ -99,7 +96,7 @@ import { mapActions, mapState } from 'vuex';
 import { LOCALE } from '@store';
 import { NAME as REVIEWS_MODULE } from '@store/modules/Reviews';
 import { CHANGE_REVIEW_VOTE } from '@store/modules/Reviews/actions';
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { getDate } from '@util';
@@ -164,10 +161,6 @@ export default {
             type: String,
         },
 
-        locale: {
-            type: String,
-        },
-
         comment: {
             type: String,
             default: 'ru',
@@ -205,14 +198,6 @@ export default {
 
     computed: {
         ...mapState([LOCALE]),
-
-        ...mapState(MODAL_MODULE, {
-            reviewModalIsOpen: (state) => {
-                return state[MODALS][modalName.product.REVIEW] && state[MODALS][modalName.product.REVIEW].open
-                    ? state[MODALS][modalName.product.REVIEW].open
-                    : false;
-            },
-        }),
 
         computedDate() {
             const { date } = this;
@@ -256,8 +241,15 @@ export default {
         ...mapActions(REVIEWS_MODULE, [CHANGE_REVIEW_VOTE]),
 
         onShowReviewModal(id) {
-            this.openedImage = this.reviewImages.find((image) => image.id === id);
-            this[CHANGE_MODAL_STATE]({ name: this.reviewModalName, open: true });
+            const openedImage = this.reviewImages.find((image) => image.id === id);
+
+            this[CHANGE_MODAL_STATE]({
+                name: this.reviewModalName,
+                open: true,
+                state: {
+                    image: openedImage,
+                },
+            });
         },
 
         async onChangeVote(opinion) {
