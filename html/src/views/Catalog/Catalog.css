@@ -424,14 +424,5 @@
             padding-top: calc(var(--gs) * 4);
             border-top: 1px solid var(--cl-divider-grey);
         }
-
-        &-hl {
-            padding-top: calc(var(--gs) * 7);
-            border-top: 1px solid var(--cl-divider-grey);
-            @media (--tablet) {
-                padding-top: 0;
-                border-top: none;
-            }
-        }
     }
 }
