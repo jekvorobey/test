@@ -425,4 +425,8 @@
             border-top: 1px solid var(--cl-divider-grey);
         }
     }
+
+    &__seo-text {
+        white-space: pre-line;
+    }
 }
