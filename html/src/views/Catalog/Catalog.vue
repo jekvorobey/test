@@ -262,21 +262,15 @@
             </modal>
         </transition>
 
-        <!-- 62050
-        <section class="section catalog-view__section catalog-view__seo" v-if="activePage === 1 || isMounted">
+        <section
+            v-if="brandSeoDescription.length > 10 && activePage === 1"
+            class="section catalog-view__section catalog-view__seo"
+        >
             <div class="container catalog-view__seo-container">
-                <h2 class="catalog-view__section-hl catalog-view__seo-hl">Блок SEO текста</h2>
-                <v-expander class="catalog-view__seo-text" :min-height="80" has-mask>
-                    Помада L'Oreal Paris Color Riche — это первый матовый тинт для губ с ультранасыщенным цветом,
-                    который абсолютно не ощущается на губах. Выбери из 10 модных оттенков те, которые тебе по душе. Эта
-                    помада не оставит тебя равнодушной. Экспериментируй и наслаждайся, а Color Riche поможет тебе в
-                    этом. Мы заботимся о надёжных поставщиках, качестве товаров и безопасной оплате. А что делать вам?
-                    Просто наслаждаться покупками. Для экономии не нужен повод, поэтому мы каждый день даём вам скидки
-                    на популярные товары самых разных категорий.
-                    <template v-slot:btn="{ isExpanded }">{{ isExpanded ? 'Скрыть' : 'Показать больше' }}</template>
-                </v-expander>
+                <h2 class="catalog-view__section-hl catalog-view__seo-hl">О бренде {{ catalogTitle }}</h2>
+                <div class="catalog-view__seo-text" v-html="brandSeoDescription" />
             </div>
-        </section> -->
+        </section>
     </section>
 </template>
 
@@ -286,7 +280,6 @@ import VButton from '@controls/VButton/VButton.vue';
 import VPagination from '@controls/VPagination/VPagination.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
 import VSticky from '@controls/VSticky/VSticky.vue';
-//import VExpander from '@controls/VExpander/VExpander.vue';
 import VSidebar from '@controls/VSidebar/VSidebar.vue';
 import Modal from '@controls/modal/modal.vue';
 
@@ -379,7 +372,6 @@ export default {
         VPagination,
         VSticky,
         VSidebar,
-        //VExpander,
         Modal,
 
         Breadcrumbs,
@@ -706,6 +698,19 @@ export default {
             }
 
             return false;
+        },
+
+        brandSeoDescription() {
+            if (
+                this.isBrandPage &&
+                typeof this[PRODUCT_GROUP]['brand'] !== 'undefined' &&
+                typeof this[PRODUCT_GROUP]['brand']['description'] !== 'undefined' &&
+                this[PRODUCT_GROUP]['brand']['description'].length > 0
+            ) {
+                return this[PRODUCT_GROUP]['brand']['description'];
+            }
+
+            return '';
         },
     },
 

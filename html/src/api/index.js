@@ -736,6 +736,10 @@ export function getBrandsActive(data) {
     return $http.get('/v1/brands/active', data);
 }
 
+export function getBrand(code) {
+    return $http.get(`/v1/brands/${code}`);
+}
+
 export function getProduct(code, offer_id, referrerCode) {
     return $http.get('/v1/catalog/product-detail', {
         params: {
