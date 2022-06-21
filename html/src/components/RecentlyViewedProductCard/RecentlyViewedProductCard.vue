@@ -8,7 +8,7 @@
                 <source :data-srcset="images.mobile.orig" media="(max-width: 479px)" />
                 <img class="blur-up lazyload v-picture__img" :data-src="images.default" alt="" />
             </v-picture>
-            <v-svg v-else id="recently-viewed-product-card-empty" name="logo" width="48" height="48" />
+            <no-photo-stub v-else />
         </div>
         <div class="recently-viewed-product-card__body">
             <div class="recently-viewed-product-card__title">
@@ -19,19 +19,18 @@
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
+import NoPhotoStub from '@components/NoPhotoStub/NoPhotoStub.vue';
 
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 
-import '@images/sprites/logo.svg';
 import './RecentlyViewedProductCard.css';
 
 export default {
     name: 'recently-viewed-product-card',
     components: {
-        VSvg,
+        NoPhotoStub,
         VPicture,
     },
 

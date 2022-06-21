@@ -30,7 +30,7 @@
                                     v-if="!currentGalleryImages || currentGalleryImages.length === 0"
                                     class="product-view__header-gallery-item product-view__header-gallery-item--empty"
                                 >
-                                    <v-svg name="logo" width="56" height="56" />
+                                    <no-photo-stub />
                                 </div>
                                 <div
                                     class="product-view__header-gallery-item"
@@ -73,7 +73,7 @@
                                     v-if="!productImages.media || !productImages.media.length"
                                     class="swiper-slide product-view__header-gallery-item product-view__header-gallery-item--empty"
                                 >
-                                    <v-svg name="logo" width="56" height="56" />
+                                    <no-photo-stub />
                                 </div>
                                 <div
                                     class="swiper-slide product-view__header-gallery-item"
@@ -695,6 +695,7 @@ import GalleryModal from '@components/GalleryModal/GalleryModal.vue';
 import VSlider from '@controls/VSlider/VSlider.vue';
 import SocialSharing from 'vue-social-sharing';
 import VHtml from '@controls/VHtml/VHtml.vue';
+import NoPhotoStub from '@components/NoPhotoStub/NoPhotoStub.vue';
 
 import Tag from '@components/Tag/Tag.vue';
 
@@ -791,7 +792,6 @@ import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/arrow-small.svg';
 import '@images/sprites/wishlist-middle.svg';
-import '@images/sprites/logo.svg';
 import '@images/sprites/home.svg';
 
 import './Product.css';
@@ -867,6 +867,7 @@ export default {
     mixins: [metaMixin],
 
     components: {
+        NoPhotoStub,
         VSvg,
         VButton,
         VClamp,
