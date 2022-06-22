@@ -228,10 +228,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="checkout-product-panel__item-payment" v-if="isB2BSberbankPaymentMethod(method.id)">
-                            <div class="text-bold checkout-product-panel__item-payment-title">
-                                {{ method.title }}
-                            </div>
+                        <div class="checkout-product-panel__item-payment" v-else-if="isB2BSberbankPaymentMethod(method.id)">
                             <div class="checkout-product-panel__item-payment-list">
                                 <div class="checkout-product-panel__item-payment-list-item">
                                     <v-svg name="b2b-sberbank" width="251" height="60" />
