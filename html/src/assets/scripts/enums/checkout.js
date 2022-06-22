@@ -66,4 +66,5 @@ export const paymentTypes = Object.freeze({
     PREPAYMENT_ONLINE: 1,
     POST_PAYMENT: 2,
     CREDIT: 3,
+    B2B_SBERBANK: 4,
 });

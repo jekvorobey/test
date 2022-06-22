@@ -228,6 +228,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="checkout-product-panel__item-payment" v-if="isB2BSberbankPaymentMethod(method.id)">
+                            <div class="text-bold checkout-product-panel__item-payment-title">
+                                {{ method.title }}
+                            </div>
+                            <div class="checkout-product-panel__item-payment-list">
+                                <div class="checkout-product-panel__item-payment-list-item">
+                                    <v-svg name="b2b-sberbank" width="251" height="60" />
+                                </div>
+                            </div>
+                        </div>
                         <p class="text-bold" v-else>{{ method.title }}</p>
                     </checkout-option-card>
                 </ul>
@@ -633,6 +643,7 @@ import '@images/sprites/payment/mir.svg';
 import '@images/sprites/payment/apple.svg';
 import '@images/sprites/payment/google.svg';
 import '@images/sprites/payment/yandex.svg';
+import '@images/sprites/payment/b2b-sberbank.svg';
 import '@images/sprites/plus.svg';
 import '@images/sprites/edit.svg';
 import '@images/sprites/gift.svg';
@@ -1367,6 +1378,10 @@ export default {
 
         isShowCardsForPaymentMethod(methodId) {
             return methodId === paymentTypes.PREPAYMENT_ONLINE;
+        },
+
+        isB2BSberbankPaymentMethod(methodId) {
+            return methodId === paymentTypes.B2B_SBERBANK;
         },
     },
 
