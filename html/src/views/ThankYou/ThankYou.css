@@ -128,4 +128,8 @@
             }
         }
     }
+
+    &__redirect {
+        margin-top: calc(var(--gs) * 2);
+    }
 }

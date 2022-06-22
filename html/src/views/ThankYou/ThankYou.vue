@@ -68,6 +68,10 @@
                                 </info-row>
                             </ul>
 
+                            <div v-if="canCreditPayment" class="thank-you-view__redirect">
+                                <span>Через 5 секунд вы будете перенаправлены на страницу оформления рассрочки</span>
+                            </div>
+
                             <div class="thank-you-view__panel-controls">
                                 <v-button
                                     v-if="canContinuePayment"
@@ -75,6 +79,16 @@
                                     :href="order.payment_url"
                                 >
                                     Оплатить
+                                </v-button>
+
+                                <v-button
+                                    v-if="canCreditPayment && creditWidgetIsInitialized"
+                                    ref="buyCreditButton"
+                                    type="button"
+                                    class="thank-you-view__panel-btn"
+                                    id="buy-credit"
+                                >
+                                    Купить в кредит
                                 </v-button>
 
                                 <v-link
@@ -253,6 +267,12 @@ export default {
         };
     },
 
+    data() {
+        return {
+            creditWidgetIsInitialized: false,
+        };
+    },
+
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
@@ -268,6 +288,18 @@ export default {
             const { payment_status, payment_url } = order || {};
 
             return payment_status === orderPaymentStatus.NOT_PAID && payment_url;
+        },
+
+        canCreditPayment: function () {
+            const {
+                order: { orderCreditInfo },
+            } = this;
+
+            if (typeof orderCreditInfo !== 'undefined' && Array.isArray(orderCreditInfo.goods)) {
+                return true;
+            } else {
+                return false;
+            }
         },
 
         dates() {
@@ -484,6 +516,40 @@ export default {
             }
             return 'доставок';
         },
+
+        async initializeCreditPayment() {
+            if (typeof window.CLObject === 'undefined') {
+                await this.loadCreditWidget();
+            }
+
+            this.creditWidgetIsInitialized = true;
+
+            this.$nextTick(() => {
+                window.CLObject.create({
+                    ...this.order.orderCreditInfo,
+                    elm: 'buy-credit',
+                });
+
+                this.$refs.buyCreditButton.click();
+            });
+        },
+
+        loadCreditWidget() {
+            return new Promise((resolve, reject) => {
+                const scriptElement = document.createElement('script');
+
+                scriptElement.setAttribute('src', 'https://online.pp.credit/assets_widget/l-kredit.js');
+                scriptElement.onload = () => {
+                    if (typeof window.CLObject !== 'undefined') {
+                        return resolve();
+                    } else {
+                        return reject();
+                    }
+                };
+
+                document.querySelector('body').appendChild(scriptElement);
+            });
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -550,6 +616,12 @@ export default {
         if (!this.wasShown) {
             await purchase();
             $store.dispatch(`${THANKYOU_MODULE}/${SET_COMPLETED_ORDERS}`, this.id);
+        }
+
+        if (this.canCreditPayment) {
+            setTimeout(() => {
+                this.initializeCreditPayment();
+            }, 5000);
         }
     },
 };
