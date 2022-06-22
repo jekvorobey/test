@@ -203,7 +203,7 @@
                         readonly
                         @cardClick="onSetPaymentMethod(method)"
                     >
-                        <div class="checkout-product-panel__item-payment" v-if="!method.is_postpaid">
+                        <div class="checkout-product-panel__item-payment" v-if="isShowCardsForPaymentMethod(method.id)">
                             <div class="text-bold checkout-product-panel__item-payment-title">
                                 {{ method.title }}
                             </div>
@@ -543,6 +543,8 @@ import { NAME as GEO_MODULE, SELECTED_CITY } from '@store/modules/Geolocation';
 import { FETCH_CART_DATA } from '@store/modules/Cart/actions';
 
 import { ACTIVATE_CERTIFICATE, FETCH_CERTIFICATES } from '@store/modules/Certificate/actions';
+
+import { paymentTypes } from '@enums/checkout';
 
 import {
     ACTIVE_CERTIFICATES,
@@ -1361,6 +1363,10 @@ export default {
         },
         onToggleActivateCert() {
             this.isVisibleActivateCert = !this.isVisibleActivateCert;
+        },
+
+        isShowCardsForPaymentMethod(methodId) {
+            return methodId === paymentTypes.PREPAYMENT_ONLINE;
         },
     },
 

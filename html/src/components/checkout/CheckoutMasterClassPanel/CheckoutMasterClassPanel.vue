@@ -141,7 +141,7 @@
                         readonly
                         @cardClick="onSetPaymentMethod(method)"
                     >
-                        <div class="checkout-master-class-panel__item-payment" v-if="!method.is_postpaid">
+                        <div class="checkout-master-class-panel__item-payment" v-if="isShowCardsForPaymentMethod(method.id)">
                             <div class="text-bold checkout-master-class-panel__item-payment-title">
                                 {{ method.title }}
                             </div>
@@ -428,6 +428,7 @@ import '@images/sprites/payment/google.svg';
 import '@images/sprites/payment/yandex.svg';
 import '@images/sprites/plus.svg';
 import './CheckoutMasterClassPanel.css';
+import { paymentTypes } from '@enums/checkout';
 
 export default {
     name: 'checkout-master-class-panel',
@@ -915,6 +916,10 @@ export default {
         validate() {
             this.$v.$touch();
             return !this.$v.$invalid;
+        },
+
+        isShowCardsForPaymentMethod(methodId) {
+            return methodId === paymentTypes.PREPAYMENT_ONLINE;
         },
     },
 
