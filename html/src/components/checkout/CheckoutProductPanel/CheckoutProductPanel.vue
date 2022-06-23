@@ -229,7 +229,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="checkout-product-panel__item-payment" v-if="isCreditPaymentMethod(method.id)">
+                        <div class="checkout-product-panel__item-payment" v-else-if="isCreditPaymentMethod(method.id)">
                             <div class="text-bold checkout-product-panel__item-payment-title">
                                 {{ method.title }}
                             </div>
