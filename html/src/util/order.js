@@ -79,3 +79,20 @@ export function getOrderFilterDate(field) {
 export function generateThankPageUrl(orderId) {
     return `${$context.baseURL}/thank-you/${orderId}`;
 }
+
+export function loadCreditWidget() {
+    return new Promise((resolve, reject) => {
+        const scriptElement = document.createElement('script');
+
+        scriptElement.setAttribute('src', 'https://online.pp.credit/assets_widget/l-kredit.js');
+        scriptElement.onload = () => {
+            if (typeof window.CLObject !== 'undefined') {
+                return resolve();
+            } else {
+                return reject();
+            }
+        };
+
+        document.querySelector('body').appendChild(scriptElement);
+    });
+}

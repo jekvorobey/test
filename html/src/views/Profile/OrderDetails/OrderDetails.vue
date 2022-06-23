@@ -100,6 +100,16 @@
                     </template>
 
                     <v-button
+                        v-if="canCreditPayment"
+                        ref="buyCreditButton"
+                        id="buy-credit"
+                        class="order-details-view__details-controls-btn"
+                        :disabled="isDisabled"
+                    >
+                        Оплатить в кредит
+                    </v-button>
+
+                    <v-button
                         v-if="order.can_repeat"
                         class="btn--outline order-details-view__details-controls-btn"
                         @click.stop="onRepeatOrder(order)"
@@ -271,7 +281,12 @@ import { orderDateLocaleOptions } from '@settings/profile';
 import { toAddressString } from '@util/address';
 import { generateMasterclassUrl, generateTicketDownloadUrl, generateProductUrl } from '@util/catalog';
 import { generatePictureSourcePath } from '@util/file';
-import { getOrderStatusColorClass, getDeliveryStatusColorClass, generateThankPageUrl } from '@util/order';
+import {
+    getOrderStatusColorClass,
+    getDeliveryStatusColorClass,
+    generateThankPageUrl,
+    loadCreditWidget,
+} from '@util/order';
 import { orderStatus as orderStatusNames } from '@enums/order';
 import metaMixin from '@plugins/meta';
 import '@images/sprites/arrow-small.svg';
@@ -316,6 +331,7 @@ export default {
     data() {
         return {
             isDisabled: false,
+            creditWidgetIsInitialized: false,
         };
     },
 
@@ -394,6 +410,23 @@ export default {
         canPay() {
             const { payment_status = 3, payments = [] } = this[ORDER] || {};
             return payment_status === orderPaymentStatus.NOT_PAID && payments.length !== 0;
+        },
+
+        canCreditPayment: function () {
+            const {
+                order: { order_credit_info, payment_status },
+            } = this;
+
+            if (
+                typeof order_credit_info !== 'undefined' &&
+                order_credit_info &&
+                Array.isArray(order_credit_info.goods) &&
+                payment_status === orderPaymentStatus.WAITING
+            ) {
+                return true;
+            } else {
+                return false;
+            }
         },
 
         orderStatusClass() {
@@ -576,6 +609,21 @@ export default {
             const note = values && values.join(', ');
             return { ...p, note, url: generateProductUrl(category_code, code) };
         },
+
+        async initializeCreditPayment() {
+            if (typeof window.CLObject === 'undefined') {
+                await loadCreditWidget();
+            }
+
+            this.creditWidgetIsInitialized = true;
+
+            this.$nextTick(() => {
+                window.CLObject.create({
+                    ...this.order.order_credit_info,
+                    elm: 'buy-credit',
+                });
+            });
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -624,6 +672,12 @@ export default {
 
     created() {
         this.deliveryMethods = receiveMethods;
+    },
+
+    mounted() {
+        if (this.canCreditPayment) {
+            this.initializeCreditPayment();
+        }
     },
 };
 </script>
