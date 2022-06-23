@@ -6,6 +6,10 @@
             <h1 class="thank-you-view__hl">
                 {{ title }}
             </h1>
+
+            <h2 v-if="canCreditPayment" class="thank-you-view__redirect">
+                Через 5 секунд вы будете перенаправлены на страницу оформления рассрочки
+            </h2>
         </div>
 
         <div class="container thank-you-view__container">
@@ -67,10 +71,6 @@
                                     </ul>
                                 </info-row>
                             </ul>
-
-                            <div v-if="canCreditPayment" class="thank-you-view__redirect">
-                                <span>Через 5 секунд вы будете перенаправлены на страницу оформления рассрочки</span>
-                            </div>
 
                             <div class="thank-you-view__panel-controls">
                                 <v-button
