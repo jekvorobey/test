@@ -237,6 +237,7 @@ import { generatePictureSourcePath } from '@util/file';
 import { generateMasterclassUrl, generateProductUrl } from '@util/catalog';
 import metaMixin from '@plugins/meta';
 import './ThankYou.css';
+import { loadCreditWidget } from '@util/order';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
 
@@ -295,7 +296,7 @@ export default {
                 order: { orderCreditInfo },
             } = this;
 
-            if (typeof orderCreditInfo !== 'undefined' && Array.isArray(orderCreditInfo.goods)) {
+            if (typeof orderCreditInfo !== 'undefined' && orderCreditInfo && Array.isArray(orderCreditInfo.goods)) {
                 return true;
             } else {
                 return false;
@@ -519,7 +520,7 @@ export default {
 
         async initializeCreditPayment() {
             if (typeof window.CLObject === 'undefined') {
-                await this.loadCreditWidget();
+                await loadCreditWidget();
             }
 
             this.creditWidgetIsInitialized = true;
@@ -531,23 +532,6 @@ export default {
                 });
 
                 this.$refs.buyCreditButton.click();
-            });
-        },
-
-        loadCreditWidget() {
-            return new Promise((resolve, reject) => {
-                const scriptElement = document.createElement('script');
-
-                scriptElement.setAttribute('src', 'https://online.pp.credit/assets_widget/l-kredit.js');
-                scriptElement.onload = () => {
-                    if (typeof window.CLObject !== 'undefined') {
-                        return resolve();
-                    } else {
-                        return reject();
-                    }
-                };
-
-                document.querySelector('body').appendChild(scriptElement);
             });
         },
     },
