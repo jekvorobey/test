@@ -201,6 +201,7 @@
                         :key="method.id"
                         :selected="method.id === selectedPaymentMethodID"
                         readonly
+                        :disabled="!method.is_available"
                         @cardClick="onSetPaymentMethod(method)"
                     >
                         <div class="checkout-product-panel__item-payment" v-if="isShowCardsForPaymentMethod(method.id)">
@@ -226,6 +227,14 @@
                                 <div class="checkout-product-panel__item-payment-list-item">
                                     <v-svg name="yandex" width="56" height="24" />
                                 </div>
+                            </div>
+                        </div>
+                        <div class="checkout-product-panel__item-payment" v-if="isCreditPaymentMethod(method.id)">
+                            <div class="text-bold checkout-product-panel__item-payment-title">
+                                {{ method.title }}
+                            </div>
+                            <div class="checkout-product-panel__item-payment">
+                                Для оформления заявки на кредит потребуется паспорт
                             </div>
                         </div>
                         <div class="checkout-product-panel__item-payment" v-else-if="isB2BSberbankPaymentMethod(method.id)">
@@ -1115,6 +1124,10 @@ export default {
         },
 
         onSetPaymentMethod(method) {
+            if (!method.is_available) {
+                return;
+            }
+
             this.callCheckoutModificationMethod(SET_PAYMENT_METHOD, method);
         },
 
@@ -1375,6 +1388,10 @@ export default {
 
         isShowCardsForPaymentMethod(methodId) {
             return methodId === paymentTypes.PREPAYMENT_ONLINE;
+        },
+
+        isCreditPaymentMethod(methodId) {
+            return methodId === paymentTypes.CREDIT;
         },
 
         isB2BSberbankPaymentMethod(methodId) {

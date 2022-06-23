@@ -306,20 +306,16 @@ export default {
             return !this.referralPartner && this.summary.bonusGet > 0;
         },
 
-        isPostPaidSelected() {
-            const paymentMethod = this[PAYMENT_METHODS].find(
-                (method) => method.id === this[SELECTED_PAYMENT_METHOD_ID]
-            );
-
-            return paymentMethod ? paymentMethod.is_postpaid : false;
-        },
-
         checkoutCommitButtonText() {
             if (this[SELECTED_PAYMENT_METHOD_ID] === paymentTypes.CREDIT) {
                 return 'Перейти к оформлению';
             }
 
-            return this.isPostPaidSelected ? 'Подтвердить заказ' : 'Перейти к оплате';
+            if (this[SELECTED_PAYMENT_METHOD_ID] === paymentTypes.POST_PAYMENT) {
+                return 'Подтвердить заказ';
+            }
+
+            return 'Перейти к оплате';
         },
     },
 
