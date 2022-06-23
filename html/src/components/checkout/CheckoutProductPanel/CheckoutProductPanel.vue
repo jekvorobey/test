@@ -232,6 +232,7 @@
                         <div class="checkout-product-panel__item-payment" v-else-if="isCreditPaymentMethod(method.id)">
                             <div class="text-bold checkout-product-panel__item-payment-title">
                                 {{ method.title }}
+                                <span class="text-sm" v-if="!method.is_available">(от 10 000 ₽)</span>
                             </div>
                             <div class="checkout-product-panel__item-payment">
                                 Для оформления заявки на кредит потребуется паспорт
