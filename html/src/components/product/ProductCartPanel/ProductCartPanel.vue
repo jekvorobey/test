@@ -3,11 +3,7 @@
         <div class="product-cart-panel__info">
             <div class="product-cart-panel__info-prices" v-bind="itemPropSettings">
                 <price class="text-bold product-cart-panel__info-current" v-bind="modifiedPrice" item-prop />
-                <price
-                    v-if="oldPrice"
-                    class="text-grey text-strike product-cart-panel__info-old"
-                    v-bind="modifiedOldPrice"
-                />
+                <price v-if="oldPrice" class="text-grey product-cart-panel__info-old" v-bind="modifiedOldPrice" />
             </div>
             <div
                 v-if="!referralPartner && bonus > 0 && (!isPriceHidden || price || oldPrice)"
