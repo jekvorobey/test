@@ -236,7 +236,7 @@
                         </div>
 
                         <mobile-category-filter
-                            v-if="filterCategories && filterCategories.length > 1"
+                            v-if="showMobileFilterCategories"
                             class="catalog-view__modal-category-filter"
                             :categories="filterCategories"
                             :product-group-type="type"
@@ -674,6 +674,16 @@ export default {
             }
 
             return null;
+        },
+
+        showMobileFilterCategories() {
+            const { type } = this;
+
+            if (type === productGroupTypes.PROMO) {
+                return this.filterCategories && this.filterCategories.length > 0;
+            } else {
+                return this.filterCategories && this.filterCategories.length > 1;
+            }
         },
 
         isBrandPage() {
