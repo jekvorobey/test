@@ -88,9 +88,7 @@
         &-categories {
             margin-bottom: calc(var(--gs) * 4);
 
-            &-item {
-                text-transform: uppercase;
-            }
+            &-item {}
         }
 
         &-clear-btn {
