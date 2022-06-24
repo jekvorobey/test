@@ -8,7 +8,7 @@
             </h1>
 
             <h2 v-if="canCreditPayment" class="thank-you-view__redirect">
-                Через 5 секунд вы будете перенаправлены на страницу оформления рассрочки
+                Сейчас вы будете перенаправлены на страницу оформления рассрочки
             </h2>
         </div>
 
@@ -603,9 +603,7 @@ export default {
         }
 
         if (this.canCreditPayment) {
-            setTimeout(() => {
-                this.initializeCreditPayment();
-            }, 5000);
+            this.initializeCreditPayment();
         }
     },
 };
