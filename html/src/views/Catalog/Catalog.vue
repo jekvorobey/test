@@ -625,6 +625,12 @@ export default {
                     return searchTitle;
                 case productGroupTypes.CATALOG:
                     return activeCategory ? activeCategory.name : 'Все категории';
+                case productGroupTypes.PROMO:
+                    if (activeCategory && typeof this.$route.params.code !== 'undefined') {
+                        return activeCategory.name;
+                    } else {
+                        return productGroup && productGroup.name ? productGroup.name : 'Акция';
+                    }
                 default:
                     return activeCategory
                         ? activeCategory.name
