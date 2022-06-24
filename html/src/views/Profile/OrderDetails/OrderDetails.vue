@@ -413,6 +413,9 @@ export default {
         },
 
         canCreditPayment: function () {
+            /** @see https://bitrix24.ibt.ru/extranet/workgroups/group/21/tasks/task/view/6740/ */
+            return false;
+            /*
             const {
                 order: { order_credit_info, payment_status },
             } = this;
@@ -427,6 +430,7 @@ export default {
             } else {
                 return false;
             }
+            */
         },
 
         orderStatusClass() {
