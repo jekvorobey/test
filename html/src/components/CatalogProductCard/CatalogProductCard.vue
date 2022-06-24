@@ -42,7 +42,7 @@
             <div class="catalog-product-card__prices">
                 <price class="text-bold catalog-product-card__price" v-bind="modifiedPrice" has-articles />
                 <price
-                    class="text-sm text-grey text-strike catalog-product-card__price"
+                    class="text-sm text-grey catalog-product-card__price"
                     v-if="oldPrice"
                     v-bind="modifiedOldPrice"
                     has-articles
