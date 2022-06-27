@@ -128,4 +128,10 @@
             }
         }
     }
+
+    &__redirect {
+        margin-bottom: calc(var(--gs) * 3);
+        font-size: 1rem;
+        text-transform: uppercase;
+    }
 }

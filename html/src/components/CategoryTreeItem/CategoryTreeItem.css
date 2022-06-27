@@ -7,6 +7,8 @@
 
     &--root > &__label {
         padding-left: 0;
+        text-transform: uppercase;
+
         &::before {
             display: none !important;
         }
@@ -27,7 +29,7 @@
 
     &__label {
         position: relative;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 24px;
         padding-left: calc(var(--gs) * 1.5);
 

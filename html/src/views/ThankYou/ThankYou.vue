@@ -6,6 +6,10 @@
             <h1 class="thank-you-view__hl">
                 {{ title }}
             </h1>
+
+            <h2 v-if="canCreditPayment" class="thank-you-view__redirect">
+                Сейчас вы будете перенаправлены на страницу оформления рассрочки
+            </h2>
         </div>
 
         <div class="container thank-you-view__container">
@@ -75,6 +79,16 @@
                                     :href="order.payment_url"
                                 >
                                     Оплатить
+                                </v-button>
+
+                                <v-button
+                                    v-if="canCreditPayment && creditWidgetIsInitialized"
+                                    ref="buyCreditButton"
+                                    type="button"
+                                    class="thank-you-view__panel-btn"
+                                    id="buy-credit"
+                                >
+                                    Купить в кредит
                                 </v-button>
 
                                 <v-link
@@ -223,6 +237,7 @@ import { generatePictureSourcePath } from '@util/file';
 import { generateMasterclassUrl, generateProductUrl } from '@util/catalog';
 import metaMixin from '@plugins/meta';
 import './ThankYou.css';
+import { loadCreditWidget } from '@util/order';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
 
@@ -253,6 +268,12 @@ export default {
         };
     },
 
+    data() {
+        return {
+            creditWidgetIsInitialized: false,
+        };
+    },
+
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
@@ -268,6 +289,18 @@ export default {
             const { payment_status, payment_url } = order || {};
 
             return payment_status === orderPaymentStatus.NOT_PAID && payment_url;
+        },
+
+        canCreditPayment: function () {
+            const {
+                order: { orderCreditInfo },
+            } = this;
+
+            if (typeof orderCreditInfo !== 'undefined' && orderCreditInfo && Array.isArray(orderCreditInfo.goods)) {
+                return true;
+            } else {
+                return false;
+            }
         },
 
         dates() {
@@ -484,6 +517,23 @@ export default {
             }
             return 'доставок';
         },
+
+        async initializeCreditPayment() {
+            if (typeof window.CLObject === 'undefined') {
+                await loadCreditWidget();
+            }
+
+            this.creditWidgetIsInitialized = true;
+
+            this.$nextTick(() => {
+                window.CLObject.create({
+                    ...this.order.orderCreditInfo,
+                    elm: 'buy-credit',
+                });
+
+                this.$refs.buyCreditButton.click();
+            });
+        },
     },
 
     beforeRouteEnter(to, from, next) {
@@ -550,6 +600,10 @@ export default {
         if (!this.wasShown) {
             await purchase();
             $store.dispatch(`${THANKYOU_MODULE}/${SET_COMPLETED_ORDERS}`, this.id);
+        }
+
+        if (this.canCreditPayment) {
+            this.initializeCreditPayment();
         }
     },
 };

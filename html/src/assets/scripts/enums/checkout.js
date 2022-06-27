@@ -61,3 +61,10 @@ export const pointType = Object.freeze({
      */
     SERVICE_TERMINAL: 4,
 });
+
+export const paymentTypes = Object.freeze({
+    PREPAYMENT_ONLINE: 1,
+    POST_PAYMENT: 2,
+    CREDIT: 3,
+    B2B_SBERBANK: 4,
+});

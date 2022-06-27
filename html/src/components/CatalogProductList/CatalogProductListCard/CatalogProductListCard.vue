@@ -82,7 +82,7 @@
                         has-articles
                     />
                     <price
-                        class="text-sm text-grey text-strike catalog-product-list-card__price"
+                        class="text-sm text-grey catalog-product-list-card__price"
                         v-if="item.oldPrice && !isEqPrices(modifiedPrice, modifiedOldPrice)"
                         v-bind="concretePrice(modifiedOldPrice)"
                         has-articles

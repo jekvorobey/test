@@ -12,11 +12,7 @@
 
             <div>
                 <price class="text-bold product-price-panel__price" v-bind="modifiedPrice" />
-                <price
-                    v-if="oldPrice"
-                    class="text-grey text-sm text-strike product-price-panel__price"
-                    v-bind="modifiedOldPrice"
-                />
+                <price v-if="oldPrice" class="text-grey text-sm product-price-panel__price" v-bind="modifiedOldPrice" />
                 <div
                     v-if="bonus && (!isPriceHidden || price || oldPrice)"
                     class="text-grey text-sm product-price-panel__bonus"
