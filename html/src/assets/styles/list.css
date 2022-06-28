@@ -1,68 +1,20 @@
-ul {
-    &.list {
-        & > li {
-            line-height: inherit;
+.typo ul,
+ul.list {
+    & > li {
+        line-height: inherit;
 
-            &::before {
-                content: '';
-                background: var(--cl-global);
-                display: inline-block;
-                width: var(--gs);
-                height: var(--gs);
-                border-radius: 50%;
-                margin-right: var(--gs);
-            }
-
-            &:not(:last-child) {
-                margin-bottom: calc(var(--gs) / 2);
-            }
-
-            & ol,
-            & ul {
-                margin: var(--gs) 0;
-                padding-left: calc(var(--gs) * 2.5);
-            }
+        &::before {
+            content: '';
+            background: var(--cl-global);
+            display: inline-block;
+            width: var(--gs);
+            height: var(--gs);
+            border-radius: 50%;
+            margin-right: var(--gs);
         }
 
-        &--sm {
-            & > li {
-                padding-left: calc(var(--gs) * 1.5);
-                &::before {
-                    width: calc(var(--gs) / 2);
-                    height: calc(var(--gs) / 2);
-                    top: 7px;
-                    border-radius: 50%;
-                }
-            }
-        }
-
-        &--dashed {
-            & > li {
-                &::before {
-                    height: 2px;
-                    border-radius: 0;
-                    top: 12px;
-                }
-            }
-        }
-    }
-}
-
-ol {
-    &.list {
-        counter-reset: olCounter;
-
-        & > li,
-        ol > li {
-            &::before {
-                content: counter(olCounter) '.';
-                counter-increment: olCounter;
-                padding-right: calc(var(--gs) / 2);
-            }
-
-            &:not(:last-child) {
-                margin-bottom: calc(var(--gs) / 2);
-            }
+        &:not(:last-child) {
+            margin-bottom: calc(var(--gs) / 2);
         }
 
         & ol,
@@ -70,14 +22,60 @@ ol {
             margin: var(--gs) 0;
             padding-left: calc(var(--gs) * 2.5);
         }
+    }
 
-        &.list--lower-alpha {
-            & > li,
-            ol > li {
-                list-style-type: lower-alpha;
-                &::before {
-                    content: none;
-                }
+    &--sm {
+        & > li {
+            padding-left: calc(var(--gs) * 1.5);
+            &::before {
+                width: calc(var(--gs) / 2);
+                height: calc(var(--gs) / 2);
+                top: 7px;
+                border-radius: 50%;
+            }
+        }
+    }
+
+    &--dashed {
+        & > li {
+            &::before {
+                height: 2px;
+                border-radius: 0;
+                top: 12px;
+            }
+        }
+    }
+}
+
+.typo ol,
+ol.list {
+    counter-reset: olCounter;
+
+    & > li,
+    ol > li {
+        &::before {
+            content: counter(olCounter) '.';
+            counter-increment: olCounter;
+            padding-right: calc(var(--gs) / 2);
+        }
+
+        &:not(:last-child) {
+            margin-bottom: calc(var(--gs) / 2);
+        }
+    }
+
+    & ol,
+    & ul {
+        margin: var(--gs) 0;
+        padding-left: calc(var(--gs) * 2.5);
+    }
+
+    &.list--lower-alpha {
+        & > li,
+        ol > li {
+            list-style-type: lower-alpha;
+            &::before {
+                content: none;
             }
         }
     }
