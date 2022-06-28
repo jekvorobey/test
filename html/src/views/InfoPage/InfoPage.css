@@ -54,4 +54,11 @@
             margin-top: var(--gs);
         }
     }
+
+    &__content {
+        p {
+            line-height: 24px;
+            margin: var(--gs) 0;
+        }
+    }
 }
