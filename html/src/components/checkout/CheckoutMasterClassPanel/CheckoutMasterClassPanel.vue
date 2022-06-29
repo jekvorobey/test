@@ -145,7 +145,6 @@
                             <div class="text-bold checkout-master-class-panel__item-payment-title">
                                 {{ method.title }}
                             </div>
-
                             <div class="checkout-master-class-panel__item-payment-list">
                                 <div class="checkout-master-class-panel__item-payment-list-item">
                                     <v-svg name="visa" width="40" height="24" />
@@ -165,6 +164,15 @@
                                 <div class="checkout-master-class-panel__item-payment-list-item">
                                     <v-svg name="yandex" width="56" height="24" />
                                 </div>
+                            </div>
+                        </div>
+                        <div class="checkout-master-class-panel__item-payment" v-else-if="isCreditPaymentMethod(method.id)">
+                            <div class="text-bold checkout-master-class-panel__item-payment-title">
+                                {{ method.title }}
+                                <span class="text-sm" v-if="!method.is_available">(от 10 000 ₽)</span>
+                            </div>
+                            <div class="checkout-checkout-master-class-panel__item-payment">
+                                Для оформления заявки на кредит потребуется паспорт
                             </div>
                         </div>
                         <p class="text-bold" v-else>{{ method.title }}</p>
@@ -910,7 +918,7 @@ export default {
         },
 
         onToggleActivateCert() {
-            this.isVisibleActivateCert = !this.isVisibleActivateCert
+            this.isVisibleActivateCert = !this.isVisibleActivateCert;
         },
 
         validate() {
@@ -920,6 +928,10 @@ export default {
 
         isShowCardsForPaymentMethod(methodId) {
             return methodId === paymentTypes.PREPAYMENT_ONLINE;
+        },
+
+        isCreditPaymentMethod(methodId) {
+            return methodId === paymentTypes.CREDIT;
         },
     },
 
