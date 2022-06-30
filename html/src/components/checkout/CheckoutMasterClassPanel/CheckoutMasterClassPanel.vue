@@ -139,35 +139,15 @@
                         :key="method.id"
                         :selected="method.id === selectedPaymentMethodID"
                         readonly
+                        :disabled="!method.is_available"
                         @cardClick="onSetPaymentMethod(method)"
                     >
-                        <div class="checkout-master-class-panel__item-payment" v-if="isShowCardsForPaymentMethod(method.id)">
+                        <div class="checkout-master-class-panel__item-payment">
                             <div class="text-bold checkout-master-class-panel__item-payment-title">
                                 {{ method.title }}
                             </div>
-
-                            <div class="checkout-master-class-panel__item-payment-list">
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="visa" width="40" height="24" />
-                                </div>
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="mastercard" width="40" height="24" />
-                                </div>
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="mir" width="40" height="24" />
-                                </div>
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="apple" width="40" height="24" />
-                                </div>
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="google" width="40" height="24" />
-                                </div>
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="yandex" width="56" height="24" />
-                                </div>
-                            </div>
+                            {{ method.button_text }}
                         </div>
-                        <p class="text-bold" v-else>{{ method.title }}</p>
                     </checkout-option-card>
                 </ul>
 
@@ -916,10 +896,6 @@ export default {
         validate() {
             this.$v.$touch();
             return !this.$v.$invalid;
-        },
-
-        isShowCardsForPaymentMethod(methodId) {
-            return methodId === paymentTypes.PREPAYMENT_ONLINE;
         },
     },
 

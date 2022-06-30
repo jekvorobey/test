@@ -204,48 +204,12 @@
                         :disabled="!method.is_available"
                         @cardClick="onSetPaymentMethod(method)"
                     >
-                        <div class="checkout-product-panel__item-payment" v-if="isShowCardsForPaymentMethod(method.id)">
+                        <div class="checkout-product-panel__item-payment">
                             <div class="text-bold checkout-product-panel__item-payment-title">
                                 {{ method.title }}
                             </div>
-                            <div class="checkout-product-panel__item-payment-list">
-                                <div class="checkout-product-panel__item-payment-list-item">
-                                    <v-svg name="visa" width="40" height="24" />
-                                </div>
-                                <div class="checkout-product-panel__item-payment-list-item">
-                                    <v-svg name="mastercard" width="40" height="24" />
-                                </div>
-                                <div class="checkout-product-panel__item-payment-list-item">
-                                    <v-svg name="mir" width="40" height="24" />
-                                </div>
-                                <div class="checkout-product-panel__item-payment-list-item">
-                                    <v-svg name="apple" width="40" height="24" />
-                                </div>
-                                <div class="checkout-product-panel__item-payment-list-item">
-                                    <v-svg name="google" width="40" height="24" />
-                                </div>
-                                <div class="checkout-product-panel__item-payment-list-item">
-                                    <v-svg name="yandex" width="56" height="24" />
-                                </div>
-                            </div>
+                            {{ method.button_text }}
                         </div>
-                        <div class="checkout-product-panel__item-payment" v-else-if="isCreditPaymentMethod(method.id)">
-                            <div class="text-bold checkout-product-panel__item-payment-title">
-                                {{ method.title }}
-                                <span class="text-sm" v-if="!method.is_available">(от 10 000 ₽)</span>
-                            </div>
-                            <div class="checkout-product-panel__item-payment">
-                                Для оформления заявки на кредит потребуется паспорт
-                            </div>
-                        </div>
-                        <div class="checkout-product-panel__item-payment" v-else-if="isB2BSberbankPaymentMethod(method.id)">
-                            <div class="checkout-product-panel__item-payment-list">
-                                <div class="checkout-product-panel__item-payment-list-item">
-                                    <v-svg name="b2b-sberbank" width="251" height="60" />
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-bold" v-else>{{ method.title }}</p>
                     </checkout-option-card>
                 </ul>
 
@@ -1385,18 +1349,6 @@ export default {
         },
         onToggleActivateCert() {
             this.isVisibleActivateCert = !this.isVisibleActivateCert;
-        },
-
-        isShowCardsForPaymentMethod(methodId) {
-            return methodId === paymentTypes.PREPAYMENT_ONLINE;
-        },
-
-        isCreditPaymentMethod(methodId) {
-            return methodId === paymentTypes.CREDIT;
-        },
-
-        isB2BSberbankPaymentMethod(methodId) {
-            return methodId === paymentTypes.B2B_SBERBANK;
         },
     },
 
