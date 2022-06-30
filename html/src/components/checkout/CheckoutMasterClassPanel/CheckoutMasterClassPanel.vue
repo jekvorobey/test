@@ -138,6 +138,7 @@
                         v-for="method in paymentMethods"
                         :key="method.id"
                         :selected="method.id === selectedPaymentMethodID"
+                        :disabled="!method.is_available"
                         readonly
                         @cardClick="onSetPaymentMethod(method)"
                     >
@@ -823,6 +824,10 @@ export default {
         },
 
         onSetPaymentMethod(method) {
+            if (!method.is_available) {
+                return;
+            }
+
             this[SET_PAYMENT_METHOD](method);
         },
 
