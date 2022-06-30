@@ -143,9 +143,6 @@
                         @cardClick="onSetPaymentMethod(method)"
                     >
                         <div class="checkout-master-class-panel__item-payment">
-                            <div class="text-bold checkout-master-class-panel__item-payment-title">
-                                {{ method.title }}
-                            </div>
                             {{ method.button_text }}
                         </div>
                     </checkout-option-card>
