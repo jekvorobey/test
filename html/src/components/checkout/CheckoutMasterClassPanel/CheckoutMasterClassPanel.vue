@@ -375,7 +375,7 @@ import {
     CHANGE_TICKET,
     ADD_CERTIFICATE,
     FETCH_CHECKOUT_DATA,
-    SET_PAYMENT_METHOD,
+    SET_PAYMENT_METHOD, SET_PUBLIC_EVENT_PAYMENT_METHOD,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -752,7 +752,7 @@ export default {
             DELETE_PROMOCODE,
             FETCH_CHECKOUT_DATA,
             PAYMENT_METHOD_STATUS,
-            SET_PAYMENT_METHOD,
+            SET_PUBLIC_EVENT_PAYMENT_METHOD,
         ]),
 
         ...mapActions(CERTIFICATE_MODULE, [FETCH_CERTIFICATES, ACTIVATE_CERTIFICATE]),
