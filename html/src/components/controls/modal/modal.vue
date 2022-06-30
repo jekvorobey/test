@@ -13,8 +13,8 @@
                 class="modal-container popup"
                 :class="{ [`popup--${type}`]: type, [`popup--${name}`]: name }"
                 ref="popup"
-                @mousedown="onPopupMouseDown"
-                @mouseup="onPopupMouseUp"
+                @mouseenter="onPopupMouseEnter"
+                @mouseleave="onPopupMouseLeave"
             >
                 <transition name="fade-in">
                     <div v-show="loading" class="modal-loading">
@@ -102,10 +102,10 @@ export default {
         };
     },
     methods: {
-        onPopupMouseDown(e) {
+        onPopupMouseEnter() {
             this.clickInside = true;
         },
-        onPopupMouseUp(e) {
+        onPopupMouseLeave() {
             this.clickInside = false;
         },
         onClose(e) {
