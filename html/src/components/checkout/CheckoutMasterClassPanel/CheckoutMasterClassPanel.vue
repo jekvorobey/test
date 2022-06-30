@@ -555,7 +555,6 @@ export default {
             PROMOCODE_STATUS,
             TICKET_STATUS,
             CERTIFICATES,
-            SET_PAYMENT_METHOD,
         ]),
 
         ...mapState(CERTIFICATE_MODULE, [CERTIFICATE_TYPE, CERTIFICATE_DATA]),
@@ -753,6 +752,7 @@ export default {
             DELETE_PROMOCODE,
             FETCH_CHECKOUT_DATA,
             PAYMENT_METHOD_STATUS,
+            SET_PAYMENT_METHOD,
         ]),
 
         ...mapActions(CERTIFICATE_MODULE, [FETCH_CERTIFICATES, ACTIVATE_CERTIFICATE]),
