@@ -828,7 +828,7 @@ export default {
                 return;
             }
 
-            this[SET_PAYMENT_METHOD](method);
+            this[SET_PUBLIC_EVENT_PAYMENT_METHOD](method);
         },
 
         scrollToError(element) {
