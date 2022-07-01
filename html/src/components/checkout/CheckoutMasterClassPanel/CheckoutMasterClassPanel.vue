@@ -146,7 +146,7 @@
                                 {{ method.title }}
                             </div>
 
-                            <div class="checkout-master-class-panel__item-payment-list">
+                            <div class="checkout-master-class-panel__item-payment-list checkout-product-panel__item-payment-list--w-full">
                                 <div class="checkout-master-class-panel__item-payment-list-item">
                                     <v-svg name="visa" width="40" height="24" />
                                 </div>
@@ -155,12 +155,6 @@
                                 </div>
                                 <div class="checkout-master-class-panel__item-payment-list-item">
                                     <v-svg name="mir" width="40" height="24" />
-                                </div>
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="apple" width="40" height="24" />
-                                </div>
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="google" width="40" height="24" />
                                 </div>
                                 <div class="checkout-master-class-panel__item-payment-list-item">
                                     <v-svg name="yandex" width="56" height="24" />

@@ -390,6 +390,10 @@
                     }
                 }
             }
+
+            &-list--w-full {
+                width: 100%;
+            }
         }
 
         &-tickets {
