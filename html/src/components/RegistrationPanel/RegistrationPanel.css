@@ -41,6 +41,12 @@
                 flex-direction: column;
                 align-items: stretch;
             }
+
+            @media (--tablet-min) {
+                .v-input__container {
+                    flex-flow: row;
+                }
+            }
         }
 
         &-repeat {
