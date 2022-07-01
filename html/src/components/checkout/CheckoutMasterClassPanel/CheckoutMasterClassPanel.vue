@@ -138,6 +138,7 @@
                         v-for="method in paymentMethods"
                         :key="method.id"
                         :selected="method.id === selectedPaymentMethodID"
+                        :disabled="!method.is_available"
                         readonly
                         @cardClick="onSetPaymentMethod(method)"
                     >
@@ -159,6 +160,15 @@
                                 <div class="checkout-master-class-panel__item-payment-list-item">
                                     <v-svg name="yandex" width="56" height="24" />
                                 </div>
+                            </div>
+                        </div>
+                        <div class="checkout-master-class-panel__item-payment" v-else-if="isCreditPaymentMethod(method.id)">
+                            <div class="text-bold checkout-master-class-panel__item-payment-title">
+                                {{ method.title }}
+                                <span class="text-sm" v-if="!method.is_available">(от 10 000 ₽)</span>
+                            </div>
+                            <div class="checkout-checkout-master-class-panel__item-payment">
+                                Для оформления заявки на кредит потребуется паспорт
                             </div>
                         </div>
                         <p class="text-bold" v-else>{{ method.title }}</p>
@@ -360,7 +370,7 @@ import {
     CHANGE_TICKET,
     ADD_CERTIFICATE,
     FETCH_CHECKOUT_DATA,
-    SET_PAYMENT_METHOD,
+    SET_PAYMENT_METHOD, SET_PUBLIC_EVENT_PAYMENT_METHOD,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -540,7 +550,6 @@ export default {
             PROMOCODE_STATUS,
             TICKET_STATUS,
             CERTIFICATES,
-            SET_PAYMENT_METHOD,
         ]),
 
         ...mapState(CERTIFICATE_MODULE, [CERTIFICATE_TYPE, CERTIFICATE_DATA]),
@@ -738,6 +747,7 @@ export default {
             DELETE_PROMOCODE,
             FETCH_CHECKOUT_DATA,
             PAYMENT_METHOD_STATUS,
+            SET_PUBLIC_EVENT_PAYMENT_METHOD,
         ]),
 
         ...mapActions(CERTIFICATE_MODULE, [FETCH_CERTIFICATES, ACTIVATE_CERTIFICATE]),
@@ -809,7 +819,11 @@ export default {
         },
 
         onSetPaymentMethod(method) {
-            this[SET_PAYMENT_METHOD](method);
+            if (!method.is_available) {
+                return;
+            }
+
+            this[SET_PUBLIC_EVENT_PAYMENT_METHOD](method);
         },
 
         scrollToError(element) {
@@ -904,7 +918,7 @@ export default {
         },
 
         onToggleActivateCert() {
-            this.isVisibleActivateCert = !this.isVisibleActivateCert
+            this.isVisibleActivateCert = !this.isVisibleActivateCert;
         },
 
         validate() {
@@ -914,6 +928,10 @@ export default {
 
         isShowCardsForPaymentMethod(methodId) {
             return methodId === paymentTypes.PREPAYMENT_ONLINE;
+        },
+
+        isCreditPaymentMethod(methodId) {
+            return methodId === paymentTypes.CREDIT;
         },
     },
 

@@ -932,6 +932,10 @@ export function setPaymentMethod(data) {
     return $http.post('/v1/checkout/payment-method', data);
 }
 
+export function setPublicEventPaymentMethod(data) {
+    return $http.post('/v1/checkout-public-events/payment-method', data);
+}
+
 export function deleteCertificate(data) {
     return $http.post('/v1/checkout/remove-certificate', data);
 }
