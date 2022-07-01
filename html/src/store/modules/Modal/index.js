@@ -4,10 +4,10 @@ import { $store } from '@services';
 import actions, { CHANGE_MODAL_STATE } from './actions';
 import mutations from './mutations';
 import getters from './getters';
-import store from '@util/store';
 
 export const NAME = 'modal';
 export const MODALS = 'modals';
+export const MODALS_SHOW_COUNT = 'modalsShowCount';
 
 if (process.env.VUE_ENV === 'client') {
     function rrQuickView(offerId) {
@@ -27,6 +27,7 @@ export default function createModule() {
         namespaced: true,
         state: {
             [MODALS]: {},
+            [MODALS_SHOW_COUNT]: {},
         },
         actions,
         mutations,

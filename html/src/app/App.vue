@@ -38,6 +38,10 @@
         </transition>
 
         <transition name="fade-in">
+            <professional-disclaimer-modal v-if="isProfessionalDisclaimerOpen" />
+        </transition>
+
+        <transition name="fade-in">
             <auth-modal v-if="isAuthOpen" />
         </transition>
 
@@ -93,6 +97,7 @@ import AuthModal from '@components/AuthModal/AuthModal.vue';
 import HomeFirstModal from '@components/HomeFirstModal/HomeFirstModal.vue';
 import QuickVariantAddToCardModal from '@components/QuickVariantAddToCartModal/QuickVariantAddToCardModal.vue';
 import QuickMasterclassAddToCartModal from '@components/QuickMasterclassAddToCartModal/QuickMasterclassAddToCartModal.vue';
+import ProfessionalDisclaimerModal from '@components/ProfessionalDisclaimerModal/ProfessionalDisclaimerModal.vue';
 
 import { mapState, mapActions } from 'vuex';
 
@@ -111,7 +116,7 @@ import { NAME as AUTH_MODULE, HAS_SESSION, USER } from '@store/modules/Auth';
 import { CHECK_SESSION, FETCH_USER, FETCH_UNREAD_MESSAGES } from '@store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+import { CHANGE_MODAL_STATE, READ_MODAL_OPENING_HISTORY } from '@store/modules/Modal/actions';
 
 import { $cookie } from '@services';
 import { eventName, interval, modalName, cookieNames } from '@enums';
@@ -136,6 +141,7 @@ export default {
         HomeFirstModal,
         QuickVariantAddToCardModal,
         QuickMasterclassAddToCartModal,
+        ProfessionalDisclaimerModal,
     },
 
     data() {
@@ -174,6 +180,9 @@ export default {
             isAuthOpen: (state) => state[MODALS][modalName.general.AUTH] && state[MODALS][modalName.general.AUTH].open,
             isHomeFirstOpen: (state) =>
                 state[MODALS][modalName.general.HOME_FIRST] && state[MODALS][modalName.general.HOME_FIRST].open,
+            isProfessionalDisclaimerOpen: (state) =>
+                state[MODALS][modalName.general.PROFESSIONAL_DISCLAIMER] &&
+                state[MODALS][modalName.general.PROFESSIONAL_DISCLAIMER].open,
         }),
 
         isTabletLg() {
@@ -186,7 +195,7 @@ export default {
         ...mapActions(AUTH_MODULE, [CHECK_SESSION, FETCH_USER, FETCH_UNREAD_MESSAGES]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
         ...mapActions(CHECKOUT_MODULE, [CLEAR_CHECKOUT_DATA]),
-        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE, READ_MODAL_OPENING_HISTORY]),
         ...mapActions(FAVORITES_MODULE, [FETCH_FAVORITES_ALL]),
 
         onCheckUserData() {
@@ -269,6 +278,8 @@ export default {
             this[FETCH_UNREAD_MESSAGES]();
             this.startUserDataTimer();
         }
+
+        this[READ_MODAL_OPENING_HISTORY]();
     },
 
     mounted() {
