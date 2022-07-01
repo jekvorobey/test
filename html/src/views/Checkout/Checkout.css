@@ -277,5 +277,11 @@
                 width: 100%;
             }
         }
+
+        &-panel-preloader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     }
 }
