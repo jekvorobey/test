@@ -8,6 +8,10 @@
     }
 }
 
+.price__no-price-container {
+    cursor: pointer;
+}
+
 .price__no-price {
     width: 180px;
     height: 48px;

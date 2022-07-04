@@ -8,6 +8,7 @@ import {
     setAddress,
     setPickupPoint,
     setPaymentMethod,
+    setPublicEventPaymentMethod,
     changeBonus,
     addCertificate,
     deleteCertificate,
@@ -59,6 +60,7 @@ export const SET_RECEIVE_METHOD = 'SET_RECEIVE_METHOD';
 export const SET_DELIVERY_TYPE = 'SET_DELIVERY_TYPE';
 export const SET_PICKUP_POINT = 'SET_PICKUP_POINT';
 export const SET_PAYMENT_METHOD = 'SET_PAYMENT_METHOD';
+export const SET_PUBLIC_EVENT_PAYMENT_METHOD = 'SET_PUBLIC_EVENT_PAYMENT_METHOD';
 export const SET_AGREEMENT = 'SET_AGREEMENT';
 export const SET_SUBSCRIBE = 'SET_SUBSCRIBE';
 export const SET_CONFIRMATION_TYPE = 'SET_CONFIRMATION_TYPE';
@@ -178,6 +180,18 @@ export default {
         } catch (error) {
             commit(SET_STATUS, { name: PAYMENT_METHOD_STATUS, value: requestStatus.ERROR });
             storeErrorHandler(SET_PAYMENT_METHOD, true)(error);
+        }
+    },
+
+    async [SET_PUBLIC_EVENT_PAYMENT_METHOD]({ commit, state }, payload) {
+        try {
+            commit(SET_STATUS, { name: PAYMENT_METHOD_STATUS, value: requestStatus.PENDING });
+            const data = await setPublicEventPaymentMethod({ payment: payload, data: state.checkoutData });
+            commit(SET_STATUS, { name: PAYMENT_METHOD_STATUS, value: requestStatus.SUCCESS });
+            commit(SET_DATA, data);
+        } catch (error) {
+            commit(SET_STATUS, { name: PAYMENT_METHOD_STATUS, value: requestStatus.ERROR });
+            storeErrorHandler(SET_PUBLIC_EVENT_PAYMENT_METHOD, true)(error);
         }
     },
 

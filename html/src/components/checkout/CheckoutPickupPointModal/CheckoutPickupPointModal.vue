@@ -61,6 +61,10 @@
                         :marker-id="point.id"
                         :coords="point.map.coords"
                         :icon="markerIcon"
+                        :properties="{
+                            pointName: point.name,
+                            pointId: point.id,
+                        }"
                         cluster-name="default-cluster"
                     />
                 </yandex-map>
@@ -297,7 +301,10 @@ export default {
             activeTab: 0,
             page: 1,
 
+            yandexMapApi: null,
             debounce_search: null,
+
+            onMarkerClickInBalloonEvent: null,
         };
     },
 
@@ -310,6 +317,10 @@ export default {
         }),
 
         filteredPickupPoints() {
+            if (!this.yandexMapApi) {
+                return [];
+            }
+
             const points = this[PICKUP_POINTS] || [];
             const metroLines = this[METRO_LINES] || [];
             const filteredPoints = points.filter((p) => {
@@ -379,10 +390,25 @@ export default {
         },
 
         clusterOptions() {
+            let clusterOptions = {
+                preset: 'islands#blackClusterIcons',
+            };
+
+            if (this.yandexMapApi !== null) {
+                clusterOptions = {
+                    ...clusterOptions,
+                    clusterBalloonContentLayout: this.yandexMapApi.templateLayoutFactory.createClass(
+                        `<ul class="list ymap-pickup-balloon">
+                            {% for geoObject in properties.geoObjects %}
+                                <li><a href="#" data-point-id="{{ geoObject.properties.pointId }}" class="list_item">{{ geoObject.properties.pointName|raw }}</a></li>
+                            {% endfor %}
+                        </ul>`
+                    ),
+                };
+            }
+
             return {
-                'default-cluster': {
-                    preset: 'islands#blackClusterIcons',
-                },
+                'default-cluster': clusterOptions,
             };
         },
 
@@ -470,6 +496,10 @@ export default {
         },
 
         initHandler(e) {
+            if (typeof window.ymaps !== 'undefined') {
+                this.yandexMapApi = window.ymaps;
+            }
+
             e.geoObjects.events.add('click', (e) => {
                 // marker-4238 => 4238
                 // defaultPrevented === true if group of markers
@@ -492,8 +522,40 @@ export default {
 
     mounted() {
         setTimeout(() => (this.showMap = true), 400);
+
+        const thisComponent = this;
+        const delegateEvent = function (event) {
+            let t = event.target;
+            while (t && t !== this) {
+                if (t.matches('.ymap-pickup-balloon a')) {
+                    event.preventDefault();
+
+                    const { target } = event;
+
+                    const id = +target.getAttribute('data-point-id');
+                    const point = thisComponent.filteredPickupPoints.find((item) => item.id === id);
+
+                    if (point) {
+                        thisComponent.onShowPoint(point);
+                    }
+                }
+
+                t = t.parentNode;
+            }
+        };
+
+        this.onMarkerClickInBalloonEvent = delegateEvent;
+
+        document.addEventListener('click', delegateEvent);
+
         if (this.pickupPointTypes.length === 1) {
             this.selectedType = this.pickupPointTypes[0];
+        }
+    },
+
+    beforeDestroy() {
+        if (this.onMarkerClickInBalloonEvent !== null) {
+            document.removeEventListener('click', this.onMarkerClickInBalloonEvent);
         }
     },
 };

@@ -132,12 +132,17 @@
                             </div>
 
                             <v-button
+                                v-if="!isCommit"
                                 class="checkout-view__main-panel-submit"
                                 @click="onCommit"
-                                :disabled="isCommit || isPromocodePending"
+                                :disabled="isPromocodePending"
                             >
                                 {{ checkoutCommitButtonText }}
                             </v-button>
+
+                            <div v-else class="checkout-view__main-panel-preloader">
+                                <v-spinner height="30" width="30" show />
+                            </div>
                         </div>
                     </template>
                 </v-sticky>
@@ -443,10 +448,10 @@ export default {
     },
 
     mounted() {
-        const products = new ProductsBuilder().createForCheckout(this.cartData.product.items);
-        seoEvents.checkout(products, 2);
-
         if (this.isProduct) {
+            const products = new ProductsBuilder().createForCheckout(this.cartData.product.items);
+            seoEvents.checkout(products, 2);
+
             this.fetchReceiveMethods().catch((error) => {
                 console.error(error);
                 this.fetchReceiveMethods();

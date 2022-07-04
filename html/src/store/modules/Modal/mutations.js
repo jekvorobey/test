@@ -2,6 +2,7 @@ import Vue from 'vue';
 
 export const MUTATE_MODAL_STATE = 'MUTATE_MODAL_STATE';
 export const MUTATE_CLOSE_ALL = 'MUTATE_CLOSE_ALL';
+export const MUTATE_MODALS_SHOW_COUNT = 'MUTATE_MODALS_SHOW_COUNT';
 
 export default {
     [MUTATE_MODAL_STATE](state, { name, open, state: payloadState }) {
@@ -13,5 +14,9 @@ export default {
 
     [MUTATE_CLOSE_ALL](state) {
         for (const modalState of Object.values(state.modals)) modalState.open = false;
+    },
+
+    [MUTATE_MODALS_SHOW_COUNT](state, payload) {
+        state.modalsShowCount = payload;
     },
 };

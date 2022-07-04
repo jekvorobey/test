@@ -6,7 +6,7 @@
 
         <br />
 
-        <section class="section info-pages-block__content">
+        <section class="section info-pages-block__content typo">
             <div class="container">
                 <h3 class="info-pages-block__subtitle">Условия оплаты</h3>
                 <p>Заказы оформляются на условиях полной оплаты на сайте любым удобным способом:</p>
