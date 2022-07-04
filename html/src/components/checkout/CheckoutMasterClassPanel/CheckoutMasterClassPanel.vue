@@ -343,7 +343,7 @@ import {
     CHANGE_TICKET,
     ADD_CERTIFICATE,
     FETCH_CHECKOUT_DATA,
-    SET_PAYMENT_METHOD,
+    SET_PUBLIC_EVENT_PAYMENT_METHOD,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -523,7 +523,6 @@ export default {
             PROMOCODE_STATUS,
             TICKET_STATUS,
             CERTIFICATES,
-            SET_PAYMENT_METHOD,
         ]),
 
         ...mapState(CERTIFICATE_MODULE, [CERTIFICATE_TYPE, CERTIFICATE_DATA]),
@@ -721,6 +720,7 @@ export default {
             DELETE_PROMOCODE,
             FETCH_CHECKOUT_DATA,
             PAYMENT_METHOD_STATUS,
+            SET_PUBLIC_EVENT_PAYMENT_METHOD,
         ]),
 
         ...mapActions(CERTIFICATE_MODULE, [FETCH_CERTIFICATES, ACTIVATE_CERTIFICATE]),
@@ -792,7 +792,11 @@ export default {
         },
 
         onSetPaymentMethod(method) {
-            this[SET_PAYMENT_METHOD](method);
+            if (!method.is_available) {
+                return;
+            }
+
+            this[SET_PUBLIC_EVENT_PAYMENT_METHOD](method);
         },
 
         scrollToError(element) {
@@ -887,7 +891,7 @@ export default {
         },
 
         onToggleActivateCert() {
-            this.isVisibleActivateCert = !this.isVisibleActivateCert
+            this.isVisibleActivateCert = !this.isVisibleActivateCert;
         },
 
         validate() {
