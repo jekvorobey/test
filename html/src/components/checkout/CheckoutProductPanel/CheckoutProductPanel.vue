@@ -205,9 +205,9 @@
                         @cardClick="onSetPaymentMethod(method)"
                     >
                         <div v-html="method.button_text" class="checkout-product-panel__item-payment">
-                            <div v-if="method.deficiencyPrice && method.deficiencyPrice > 0" class="text-bold">
-                                Доберите еще {{ method.deficiencyPrice }} рублей
-                            </div>
+                        </div>
+                        <div v-if="method.deficiencyPrice && method.deficiencyPrice > 0" class="text-bold">
+                            Доберите еще {{ method.deficiencyPrice }} рублей
                         </div>
                     </checkout-option-card>
                 </ul>
