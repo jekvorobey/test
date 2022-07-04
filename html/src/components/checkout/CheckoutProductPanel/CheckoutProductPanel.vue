@@ -205,7 +205,7 @@
                         @cardClick="onSetPaymentMethod(method)"
                     >
                         <div class="checkout-product-panel__item-payment">
-                            {{ method.button_text }}
+                            {!! method.button_text !!}
                         </div>
                     </checkout-option-card>
                 </ul>
