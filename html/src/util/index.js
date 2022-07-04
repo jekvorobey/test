@@ -1,6 +1,7 @@
 import _isDate from 'lodash/isDate';
 import _isString from 'lodash/isString';
 import _isNaN from 'lodash/isNaN';
+import moment from 'moment';
 
 /**
  * Переводит переменную даты в строку.
@@ -309,12 +310,7 @@ export function getPosition(el) {
  * Parse date from string
  */
 export function getDate(string) {
-    // Safari не умеет парсить даты вида yyyy-mm-dd, так что заменяем "-" на "/"
-    if (/^\d{4}-\d{2}-\d{2}$/.test(string)) {
-        return new Date(string.replace(/-/g, '/'));
-    } else {
-        return new Date(string);
-    }
+    return moment(string).toDate();
 }
 
 /**
