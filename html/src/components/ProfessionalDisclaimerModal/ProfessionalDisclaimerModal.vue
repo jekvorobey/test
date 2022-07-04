@@ -20,7 +20,9 @@
                 </p>
                 <p class="professional-disclaimer-modal__message">
                     2. Отправь ссылку на свои работы в любой соц.сети или фото диплома, сертификата в&nbsp;<span
-                        class="fake-link"
+                        :class="{
+                            'fake-link': isAuth,
+                        }"
                         @click="goToProfile"
                         >личном кабинете</span
                     >
