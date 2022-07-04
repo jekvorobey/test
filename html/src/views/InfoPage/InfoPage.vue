@@ -4,7 +4,7 @@
             {{ landing.name }}
         </h1>
 
-        <div class="info-pages-block__content" v-html="landing.content"></div>
+        <div class="info-pages-block__content typo" v-html="landing.content"></div>
     </div>
 </template>
 

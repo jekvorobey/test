@@ -448,10 +448,10 @@ export default {
     },
 
     mounted() {
-        const products = new ProductsBuilder().createForCheckout(this.cartData.product.items);
-        seoEvents.checkout(products, 2);
-
         if (this.isProduct) {
+            const products = new ProductsBuilder().createForCheckout(this.cartData.product.items);
+            seoEvents.checkout(products, 2);
+
             this.fetchReceiveMethods().catch((error) => {
                 console.error(error);
                 this.fetchReceiveMethods();
