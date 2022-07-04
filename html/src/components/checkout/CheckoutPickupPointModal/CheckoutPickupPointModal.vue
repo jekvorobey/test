@@ -398,7 +398,7 @@ export default {
                 clusterOptions = {
                     ...clusterOptions,
                     clusterBalloonContentLayout: this.yandexMapApi.templateLayoutFactory.createClass(
-                        `<ul class="list ymap-pickup-balloon">
+                        `<ul class="ymap-pickup-balloon">
                             {% for geoObject in properties.geoObjects %}
                                 <li><a href="#" data-point-id="{{ geoObject.properties.pointId }}" class="list_item">{{ geoObject.properties.pointName|raw }}</a></li>
                             {% endfor %}
