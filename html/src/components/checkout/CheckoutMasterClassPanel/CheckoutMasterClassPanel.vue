@@ -142,11 +142,9 @@
                         :disabled="!method.is_available"
                         @cardClick="onSetPaymentMethod(method)"
                     >
-                        <div>
+                        <div v-html="method.button_text" class="checkout-master-class-panel__item-payment">
                             <div v-if="method.deficiencyPrice && method.deficiencyPrice > 0" class="text-bold">
                                 Доберите еще {{ method.deficiencyPrice }} рублей
-                            </div>
-                            <div v-if="!method.deficiencyPrice" v-html="method.button_text" class="checkout-master-class-panel__item-payment">
                             </div>
                         </div>
                     </checkout-option-card>
