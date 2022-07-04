@@ -6,6 +6,12 @@ const { VueLoaderPlugin } = require('vue-loader');
 const mode = process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
 const isProd = mode === 'production';
 
+const plugins = isProd
+    ? [new VueLoaderPlugin(), new webpack.optimize.ModuleConcatenationPlugin()]
+    : [new VueLoaderPlugin(), new FriendlyErrorsPlugin()];
+
+plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
+
 module.exports = {
     mode,
     devtool: isProd ? false : 'source-map',
@@ -146,7 +152,5 @@ module.exports = {
               modules: false,
           }
         : 'minimal',
-    plugins: isProd
-        ? [new VueLoaderPlugin(), new webpack.optimize.ModuleConcatenationPlugin()]
-        : [new VueLoaderPlugin(), new FriendlyErrorsPlugin()],
+    plugins: plugins,
 };

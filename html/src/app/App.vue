@@ -122,8 +122,12 @@ import { $cookie } from '@services';
 import { eventName, interval, modalName, cookieNames } from '@enums';
 import { SCROLL, IS_MENU_OPEN } from '@store';
 
+import moment from 'moment';
+
 Vue.use(SocialSharing);
 Vue.component('v-svg', VSvg);
+
+moment.locale('ru');
 
 export default {
     name: 'app',
