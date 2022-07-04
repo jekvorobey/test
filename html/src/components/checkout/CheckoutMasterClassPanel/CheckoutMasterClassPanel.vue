@@ -142,8 +142,7 @@
                         :disabled="!method.is_available"
                         @cardClick="onSetPaymentMethod(method)"
                     >
-                        <div class="checkout-master-class-panel__item-payment">
-                            {!! method.button_text !!}
+                        <div v-html="method.button_text" class="checkout-master-class-panel__item-payment">
                         </div>
                     </checkout-option-card>
                 </ul>
