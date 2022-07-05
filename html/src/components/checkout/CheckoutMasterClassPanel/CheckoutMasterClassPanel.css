@@ -150,6 +150,12 @@
             }
         }
 
+        &--sertificate {
+            @media(--tablet) {
+                padding: 0 calc(var(--gs) * 2);
+            }
+        }
+
         &--sertificate &-list {
             margin-bottom: 0;
         }
@@ -420,6 +426,10 @@
         }
 
         &-masterclass {
+            @media(--tablet) {
+                padding: 0 calc(var(--gs) * 2);
+            }
+
             .master-class-card__img {
                 @media (--tablet-min) {
                     width: 20%;

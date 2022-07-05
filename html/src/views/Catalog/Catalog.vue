@@ -309,7 +309,8 @@ import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+import { MODAL_SHOW_COUNT } from '@store/modules/Modal/getters';
+import { CHANGE_MODAL_STATE, SAVE_MODAL_OPENING_HISTORY } from '@store/modules/Modal/actions';
 
 import {
     NAME as CATALOG_MODULE,
@@ -347,7 +348,7 @@ import { generatePictureSourcePath, generateFileOriginalPath, getImageType } fro
 import { createNotFoundRoute } from '@util/router';
 import { productGroupTypes } from '@enums/product';
 import { sortFields } from '@enums/catalog';
-import { sortDirections, fileExtension, httpCodes, bannerType } from '@enums';
+import { sortDirections, fileExtension, httpCodes, bannerType, modalName } from '@enums';
 import { MIN_SCROLL_VALUE, DEFAULT_PAGE } from '@constants';
 import metaMixin from '@plugins/meta';
 
@@ -434,6 +435,7 @@ export default {
             showMore: false,
 
             bannerType: bannerType,
+            professionalDisclaimerInterval: null,
         };
     },
 
@@ -467,6 +469,13 @@ export default {
             entityCode: (state) => state.params.entityCode,
             searchQuery: (state) => state.query.search_string,
         }),
+        ...mapGetters(MODAL_MODULE, {
+            modalShowCount: MODAL_SHOW_COUNT,
+        }),
+
+        professionalDisclaimerModalShowCount() {
+            return this.modalShowCount(modalName.general.PROFESSIONAL_DISCLAIMER);
+        },
 
         metaData() {
             let data = {
@@ -750,13 +759,17 @@ export default {
                 }
             },
         },
+
+        professionalDisclaimerModalShowCount() {
+            this.runProfessionalDisclaimerModalInterval();
+        },
     },
 
     methods: {
         ...mapActions([FETCH_RECENTLY_VIEWED_PRODUCTS]),
         ...mapActions(CATALOG_MODULE, [FETCH_CATALOG_DATA, SET_LOAD_PATH, REFRESH_CATALOG_DATA]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
-        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE, SAVE_MODAL_OPENING_HISTORY]),
 
         scrollTo(options) {
             if (!this.$isServer) window.scrollTo(options);
@@ -890,6 +903,44 @@ export default {
             if (type === productGroupTypes.SEARCH) return sortFields.RELEVANCE;
             else if (type === productGroupTypes.NEW) return sortFields.NEW;
             return sortFields.POPULARITY;
+        },
+
+        runProfessionalDisclaimerModalInterval() {
+            clearInterval(this.professionalDisclaimerInterval);
+
+            if (this.professionalDisclaimerModalShowCount === 0) {
+                this.professionalDisclaimerInterval = setInterval(async () => {
+                    const priceHiddenItemIndex = this[ITEMS].findIndex((item) => item.isPriceHidden === true);
+
+                    if (priceHiddenItemIndex >= 0) {
+                        await this[CHANGE_MODAL_STATE]({
+                            name: modalName.general.PROFESSIONAL_DISCLAIMER,
+                            open: true,
+                            state: {},
+                        });
+                    }
+
+                    this.runProfessionalDisclaimerModalInterval();
+                }, 60000);
+            } else if (this.professionalDisclaimerModalShowCount === 1) {
+                this.professionalDisclaimerInterval = setInterval(async () => {
+                    const priceHiddenItemIndex = this[ITEMS].findIndex((item) => item.isPriceHidden === true);
+
+                    if (priceHiddenItemIndex >= 0) {
+                        await this[CHANGE_MODAL_STATE]({
+                            name: modalName.general.PROFESSIONAL_DISCLAIMER,
+                            open: true,
+                            state: {},
+                        });
+
+                        await this[SAVE_MODAL_OPENING_HISTORY]({
+                            name: modalName.general.PROFESSIONAL_DISCLAIMER,
+                        });
+                    }
+
+                    this.runProfessionalDisclaimerModalInterval();
+                }, 600000); // 10 min
+            }
         },
     },
 
@@ -1052,6 +1103,11 @@ export default {
 
     mounted() {
         this.isMounted = true;
+        this.runProfessionalDisclaimerModalInterval();
+    },
+
+    beforeDestroy() {
+        clearInterval(this.professionalDisclaimerInterval);
     },
 };
 </script>

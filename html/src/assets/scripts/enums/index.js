@@ -11,6 +11,7 @@ export const modalName = Object.freeze({
         SNACK_NOTIFICATION: 'snack-notification-modal',
         AUTH: 'auth-modal',
         HOME_FIRST: 'home-first-modal',
+        PROFESSIONAL_DISCLAIMER: 'professional-disclaimer-modal',
     },
 
     product: {

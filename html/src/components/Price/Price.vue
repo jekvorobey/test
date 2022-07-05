@@ -1,5 +1,5 @@
 <template>
-    <component class="price" :is="tag">
+    <component class="price" :is="tag" v-on="$listeners">
         <template v-if="isObject">
             <template v-if="valueLabel.from"
                 ><template v-if="hasArticles">от&nbsp;</template
@@ -10,7 +10,9 @@
                 ><span v-bind="itemPropSettings.value.to">{{ valueLabel.to }}</span>
             </template>
         </template>
-        <v-svg v-else-if="showHiddenPriceLabel" name="no-price" class="price__no-price" />
+        <div v-else-if="showHiddenPriceLabel" class="price__no-price-container" @click="onPriceLabelClick">
+            <v-svg name="no-price" class="price__no-price" />
+        </div>
         <span v-else v-bind="itemPropSettings.value">{{ valueLabel }}</span
         ><template v-if="currencySymbol"
             >&nbsp;<span class="price__currency" v-html="currencySymbol" v-bind="itemPropSettings.currency"
@@ -22,10 +24,13 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 
 import { preparePrice } from '@util';
-import { currencySymbol } from '@enums';
+import { currencySymbol, modalName } from '@enums';
 import './Price.css';
 
 import '@images/sprites/no-price.svg';
+import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+import { mapActions } from 'vuex';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 
 export default {
     components: {
@@ -141,6 +146,21 @@ export default {
                           : {},
                       currency: {},
                   };
+        },
+    },
+
+    methods: {
+        ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+
+        onPriceLabelClick(event) {
+            event.stopPropagation();
+            event.preventDefault();
+
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.PROFESSIONAL_DISCLAIMER,
+                open: true,
+                state: {},
+            });
         },
     },
 };

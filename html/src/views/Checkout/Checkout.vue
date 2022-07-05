@@ -132,12 +132,17 @@
                             </div>
 
                             <v-button
+                                v-if="!isCommit"
                                 class="checkout-view__main-panel-submit"
                                 @click="onCommit"
-                                :disabled="isCommit || isPromocodePending"
+                                :disabled="isPromocodePending"
                             >
                                 {{ checkoutCommitButtonText }}
                             </v-button>
+
+                            <div v-else class="checkout-view__main-panel-preloader">
+                                <v-spinner height="30" width="30" show />
+                            </div>
                         </div>
                     </template>
                 </v-sticky>
