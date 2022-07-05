@@ -138,40 +138,15 @@
                         v-for="method in paymentMethods"
                         :key="method.id"
                         :selected="method.id === selectedPaymentMethodID"
-                        :disabled="!method.is_available"
                         readonly
+                        :disabled="!method.is_available"
                         @cardClick="onSetPaymentMethod(method)"
                     >
-                        <div class="checkout-master-class-panel__item-payment" v-if="isShowCardsForPaymentMethod(method.id)">
-                            <div class="text-bold checkout-master-class-panel__item-payment-title">
-                                {{ method.title }}
-                            </div>
-
-                            <div class="checkout-master-class-panel__item-payment-list checkout-product-panel__item-payment-list--w-full">
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="visa" width="40" height="24" />
-                                </div>
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="mastercard" width="40" height="24" />
-                                </div>
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="mir" width="40" height="24" />
-                                </div>
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="yandex" width="56" height="24" />
-                                </div>
-                            </div>
+                        <div v-html="method.button_text" class="checkout-master-class-panel__item-payment">
                         </div>
-                        <div class="checkout-master-class-panel__item-payment" v-else-if="isCreditPaymentMethod(method.id)">
-                            <div class="text-bold checkout-master-class-panel__item-payment-title">
-                                {{ method.title }}
-                                <span class="text-sm" v-if="!method.is_available">(от 10 000 ₽)</span>
-                            </div>
-                            <div class="checkout-checkout-master-class-panel__item-payment">
-                                Для оформления заявки на кредит потребуется паспорт
-                            </div>
+                        <div v-if="method.deficiencyPrice && method.deficiencyPrice > 0" class="text-bold">
+                            Доберите еще {{ method.deficiencyPrice }} рублей
                         </div>
-                        <p class="text-bold" v-else>{{ method.title }}</p>
                     </checkout-option-card>
                 </ul>
 
@@ -370,7 +345,7 @@ import {
     CHANGE_TICKET,
     ADD_CERTIFICATE,
     FETCH_CHECKOUT_DATA,
-    SET_PAYMENT_METHOD, SET_PUBLIC_EVENT_PAYMENT_METHOD,
+    SET_PUBLIC_EVENT_PAYMENT_METHOD,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -924,14 +899,6 @@ export default {
         validate() {
             this.$v.$touch();
             return !this.$v.$invalid;
-        },
-
-        isShowCardsForPaymentMethod(methodId) {
-            return methodId === paymentTypes.PREPAYMENT_ONLINE;
-        },
-
-        isCreditPaymentMethod(methodId) {
-            return methodId === paymentTypes.CREDIT;
         },
     },
 
