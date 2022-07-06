@@ -28,6 +28,10 @@
         height: 100%;
 
         .catalog-banner-card__img {
+            &::before {
+                content: none;
+            }
+
             &::after {
                 content: '';
                 display: block;
