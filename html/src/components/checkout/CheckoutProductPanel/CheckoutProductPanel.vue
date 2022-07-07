@@ -205,8 +205,8 @@
                         @cardClick="onSetPaymentMethod(method)"
                     >
                         <div v-html="method.button_text" class="checkout-product-panel__item-payment"></div>
-                        <div v-if="method.deficiencyPrice && method.deficiencyPrice > 0">
-                            (Доберите еще {{ method.deficiencyPrice }} рублей)
+                        <div v-if="method.deficiency_price && method.deficiency_price > 0">
+                            {{ paymentMethodDeficiencyPriceTitle(method) }}
                         </div>
                     </checkout-option-card>
                 </ul>
@@ -592,7 +592,7 @@ import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import validationMixin, { required } from '@plugins/validation';
-import { formatPhoneNumber, getPosition, getDate } from '@util';
+import { formatPhoneNumber, getPosition, getDate, pluralize } from '@util';
 import { deliveryTypes, receiveMethods } from '@enums/checkout';
 import { requestStatus, modalName, agreementTypes, httpCodes } from '@enums';
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
@@ -1088,6 +1088,10 @@ export default {
 
         onSetReceiveMethod(method) {
             this.callCheckoutModificationMethod(SET_RECEIVE_METHOD, method);
+        },
+
+        paymentMethodDeficiencyPriceTitle(method) {
+            return `(Доберите еще ${method.deficiency_price} ${pluralize(method.deficiency_price, ['рубль', 'рубля', 'рублей'])})`;
         },
 
         onSetPaymentMethod(method) {

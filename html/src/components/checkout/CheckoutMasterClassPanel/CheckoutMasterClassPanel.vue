@@ -135,17 +135,16 @@
                 <ul class="container container--tablet checkout-master-class-panel__item-list">
                     <checkout-option-card
                         class="checkout-master-class-panel__item-card"
-                        v-for="method in paymentMethods"
+                        v-for="method in filteredPaymentMethods"
                         :key="method.id"
                         :selected="method.id === selectedPaymentMethodID"
                         readonly
                         :disabled="!method.is_available"
                         @cardClick="onSetPaymentMethod(method)"
                     >
-                        <div v-html="method.button_text" class="checkout-master-class-panel__item-payment">
-                        </div>
-                        <div v-if="method.deficiencyPrice && method.deficiencyPrice > 0" class="text-bold">
-                            Доберите еще {{ method.deficiencyPrice }} рублей
+                        <div v-html="method.button_text" class="checkout-master-class-panel__item-payment"></div>
+                        <div v-if="method.deficiency_price && method.deficiency_price > 0">
+                            {{ paymentMethodDeficiencyPriceTitle(method) }}
                         </div>
                     </checkout-option-card>
                 </ul>
@@ -330,6 +329,7 @@ import CheckoutTicketModal from '@components/checkout/CheckoutTicketModal/Checko
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
+import { pluralize } from '@util';
 
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import {
@@ -407,7 +407,6 @@ import '@images/sprites/payment/google.svg';
 import '@images/sprites/payment/yandex.svg';
 import '@images/sprites/plus.svg';
 import './CheckoutMasterClassPanel.css';
-import { paymentTypes } from '@enums/checkout';
 
 export default {
     name: 'checkout-master-class-panel',
@@ -623,6 +622,10 @@ export default {
             return this[TICKET_STATUS] === requestStatus.PENDING;
         },
 
+        filteredPaymentMethods() {
+            return this.paymentMethods.filter((paymentMethod) => !paymentMethod.is_hidden);
+        },
+
         isPaymentMethodPending() {
             return this[PAYMENT_METHOD_STATUS] === requestStatus.PENDING;
         },
@@ -791,6 +794,10 @@ export default {
 
         onSetAgreement(value) {
             this[SET_AGREEMENT](Number(value));
+        },
+
+        paymentMethodDeficiencyPriceTitle(method) {
+            return `(Доберите еще ${method.deficiency_price} ${pluralize(method.deficiency_price, ['рубль', 'рубля', 'рублей'])})`;
         },
 
         onSetPaymentMethod(method) {
