@@ -175,6 +175,11 @@
         }
     }
 
+    &__detail-link {
+         text-align: center;
+         border: none;
+    }
+
     &__mask {
         position: absolute;
         z-index: 1;
