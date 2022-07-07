@@ -197,7 +197,7 @@
                 <ul class="checkout-product-panel__item-list">
                     <checkout-option-card
                         class="checkout-product-panel__item-card"
-                        v-for="method in paymentMethods"
+                        v-for="method in filteredPaymentMethods"
                         :key="method.id"
                         :selected="method.id === selectedPaymentMethodID"
                         readonly
@@ -797,6 +797,10 @@ export default {
 
         isReceiveMethodPending() {
             return this[RECEIVE_METHOD_STATUS] === requestStatus.PENDING;
+        },
+
+        filteredPaymentMethods() {
+            return this.paymentMethods.filter((paymentMethod) => !paymentMethod.is_hidden);
         },
 
         isPaymentMethodPending() {
