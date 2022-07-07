@@ -73,6 +73,7 @@ const main = {
         youtube: 'Youtube',
         instagram: 'Instagram',
         telegram: 'Телеграм',
+        dzen: 'Дзен',
     },
 
     validation: {

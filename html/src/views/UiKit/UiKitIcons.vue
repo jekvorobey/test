@@ -98,6 +98,7 @@
             <v-svg name="telegram-bw" width="24" height="24" />
             <v-svg name="instagram-bw" width="24" height="24" />
             <v-svg name="viber-bw" width="24" height="24" />
+            <v-svg name="dzen-bw" width="24" height="24" />
         </p>
 
         <p>
@@ -186,6 +187,7 @@ import '@images/sprites/socials/instagram-bw.svg';
 import '@images/sprites/socials/facebook-bw.svg';
 import '@images/sprites/socials/telegram-bw.svg';
 import '@images/sprites/socials/vkontakte-bw.svg';
+import '@images/sprites/socials/dzen-bw.svg';
 
 import '@images/sprites/socials/youtube-color.svg';
 import '@images/sprites/socials/twitter-color.svg';
