@@ -27,7 +27,6 @@
                         :vendor-code="productPreview.vendorCode"
                         :rating="productPreview.rating"
                     />
-
                     <v-scroll class="quick-view-modal__detail-scroll">
                         <product-option-panel
                             class="quick-view-modal__detail-section quick-view-modal__detail-options"
@@ -85,6 +84,13 @@
                             @pickup-points="onPickupPoints"
                         />
                     </v-scroll>
+                    <router-link
+                        tag="a"
+                        :to="`/product/${productPreview.code}`"
+                        style="text-align: center; border: none"
+                    >
+                        Подробнее о товаре
+                    </router-link>
                 </div>
 
                 <div class="quick-view-modal__detail-tags">
