@@ -85,9 +85,9 @@
                         />
                     </v-scroll>
                     <router-link
+                        class="quick-view-modal__detail-link"
                         tag="a"
                         :to="`/product/${productPreview.code}`"
-                        style="text-align: center; border: none"
                     >
                         Подробнее о товаре
                     </router-link>
