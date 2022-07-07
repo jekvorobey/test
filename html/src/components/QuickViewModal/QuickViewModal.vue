@@ -84,7 +84,13 @@
                             @pickup-points="onPickupPoints"
                         />
                     </v-scroll>
-                    <a :href="`/product/${productPreview.code}`" style="text-align: center; border: none;">Подробнее о товаре</a>
+                    <router-link
+                        tag="a"
+                        :to="`/product/${productPreview.code}`"
+                        style="text-align: center; border: none"
+                    >
+                        Подробнее о товаре
+                    </router-link>
                 </div>
 
                 <div class="quick-view-modal__detail-tags">
