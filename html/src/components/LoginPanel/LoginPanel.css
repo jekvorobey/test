@@ -133,14 +133,16 @@
 
         @media (--tablet) {
             display: flex;
+            flex-direction: row-reverse;
             align-items: center;
             border-top: 1px solid var(--cl-divider-grey);
             background-color: var(--cl-white);
-            position: fixed;
+            position: static;
             bottom: 0;
             width: 100%;
             left: 0;
-            padding: calc(var(--gs) * 2);
+            padding: calc(var(--gs) * 2.5) 0;
+            margin-top: 20px;
         }
 
         &-btn {
