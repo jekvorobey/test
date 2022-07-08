@@ -7,6 +7,7 @@ import {
     getProductPickupPoints,
     getProductMasterclasses,
     getProductBundles,
+    addRecentlyViewedProducts,
 } from '@api';
 
 import {
@@ -100,6 +101,7 @@ export default {
             commit(SET_REFERRER_CODE, referrerCode);
             commit(SET_PRODUCT_BUNDLES, bundles);
 
+            if (data.id) await addRecentlyViewedProducts(data.id);
             if (!isSameGroup)
                 if (data.variantGroup) await dispatch(FETCH_PRODUCT_OPTIONS, data.variantGroup);
                 else commit(SET_PRODUCT_OPTIONS, null);
