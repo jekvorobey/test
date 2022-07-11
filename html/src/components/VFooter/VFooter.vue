@@ -129,6 +129,7 @@ import SelfRouterLink from '@controls/VLink/SelfRouterLink.vue';
 import '@images/sprites/socials/vkontakte-bw.svg';
 import '@images/sprites/socials/telegram-bw.svg';
 import '@images/sprites/socials/ok-bw.svg';
+import '@images/sprites/socials/dzen-bw.svg';
 
 import '@images/sprites/logo.svg';
 import '@images/sprites/logo-default.svg';
@@ -173,6 +174,12 @@ export default {
                         icon: 'ok-bw',
                         name: this.$t('socials.ok'),
                         href: 'https://ok.ru/group/62240588693625',
+                    },
+                    {
+                        id: 4,
+                        icon: 'dzen-bw',
+                        name: this.$t('socials.dzen'),
+                        href: 'https://zen.yandex.ru/bessovestnotalantlivy',
                     },
                 ],
             };

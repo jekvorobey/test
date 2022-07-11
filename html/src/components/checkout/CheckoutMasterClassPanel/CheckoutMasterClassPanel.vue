@@ -135,43 +135,17 @@
                 <ul class="container container--tablet checkout-master-class-panel__item-list">
                     <checkout-option-card
                         class="checkout-master-class-panel__item-card"
-                        v-for="method in paymentMethods"
+                        v-for="method in filteredPaymentMethods"
                         :key="method.id"
                         :selected="method.id === selectedPaymentMethodID"
-                        :disabled="!method.is_available"
                         readonly
+                        :disabled="!method.is_available"
                         @cardClick="onSetPaymentMethod(method)"
                     >
-                        <div class="checkout-master-class-panel__item-payment" v-if="isShowCardsForPaymentMethod(method.id)">
-                            <div class="text-bold checkout-master-class-panel__item-payment-title">
-                                {{ method.title }}
-                            </div>
-
-                            <div class="checkout-master-class-panel__item-payment-list checkout-product-panel__item-payment-list--w-full">
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="visa" width="40" height="24" />
-                                </div>
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="mastercard" width="40" height="24" />
-                                </div>
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="mir" width="40" height="24" />
-                                </div>
-                                <div class="checkout-master-class-panel__item-payment-list-item">
-                                    <v-svg name="yandex" width="56" height="24" />
-                                </div>
-                            </div>
+                        <div v-html="method.button_text" class="checkout-master-class-panel__item-payment"></div>
+                        <div v-if="method.deficiency_price && method.deficiency_price > 0">
+                            {{ paymentMethodDeficiencyPriceTitle(method) }}
                         </div>
-                        <div class="checkout-master-class-panel__item-payment" v-else-if="isCreditPaymentMethod(method.id)">
-                            <div class="text-bold checkout-master-class-panel__item-payment-title">
-                                {{ method.title }}
-                                <span class="text-sm" v-if="!method.is_available">(от 10 000 ₽)</span>
-                            </div>
-                            <div class="checkout-checkout-master-class-panel__item-payment">
-                                Для оформления заявки на кредит потребуется паспорт
-                            </div>
-                        </div>
-                        <p class="text-bold" v-else>{{ method.title }}</p>
                     </checkout-option-card>
                 </ul>
 
@@ -355,6 +329,7 @@ import CheckoutTicketModal from '@components/checkout/CheckoutTicketModal/Checko
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
+import { pluralize } from '@util';
 
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
 import {
@@ -370,7 +345,7 @@ import {
     CHANGE_TICKET,
     ADD_CERTIFICATE,
     FETCH_CHECKOUT_DATA,
-    SET_PAYMENT_METHOD, SET_PUBLIC_EVENT_PAYMENT_METHOD,
+    SET_PUBLIC_EVENT_PAYMENT_METHOD,
 } from '@store/modules/Checkout/actions';
 
 import {
@@ -432,7 +407,6 @@ import '@images/sprites/payment/google.svg';
 import '@images/sprites/payment/yandex.svg';
 import '@images/sprites/plus.svg';
 import './CheckoutMasterClassPanel.css';
-import { paymentTypes } from '@enums/checkout';
 
 export default {
     name: 'checkout-master-class-panel',
@@ -648,6 +622,10 @@ export default {
             return this[TICKET_STATUS] === requestStatus.PENDING;
         },
 
+        filteredPaymentMethods() {
+            return this.paymentMethods.filter((paymentMethod) => !paymentMethod.is_hidden);
+        },
+
         isPaymentMethodPending() {
             return this[PAYMENT_METHOD_STATUS] === requestStatus.PENDING;
         },
@@ -818,6 +796,10 @@ export default {
             this[SET_AGREEMENT](Number(value));
         },
 
+        paymentMethodDeficiencyPriceTitle(method) {
+            return `(Доберите еще ${method.deficiency_price} ${pluralize(method.deficiency_price, ['рубль', 'рубля', 'рублей'])})`;
+        },
+
         onSetPaymentMethod(method) {
             if (!method.is_available) {
                 return;
@@ -924,14 +906,6 @@ export default {
         validate() {
             this.$v.$touch();
             return !this.$v.$invalid;
-        },
-
-        isShowCardsForPaymentMethod(methodId) {
-            return methodId === paymentTypes.PREPAYMENT_ONLINE;
-        },
-
-        isCreditPaymentMethod(methodId) {
-            return methodId === paymentTypes.CREDIT;
         },
     },
 
