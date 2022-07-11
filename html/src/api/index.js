@@ -660,6 +660,19 @@ export function getRecentlyViewedProducts() {
     return $http.get('/v1/catalog/recently-viewed');
 }
 
+export function addRecentlyViewedProducts(offer_id) {
+    return $http.get('/v1/catalog/add-recently-viewed', {
+        params: {
+            offer_id
+        },
+        paramsSerializer(params) {
+            return qs.stringify(params, {
+                encode: false,
+            });
+        },
+    });
+}
+
 export function getFilters(appliedFilters, excludedFilters) {
     return $http.get('/v1/catalog/filter', {
         params: {
