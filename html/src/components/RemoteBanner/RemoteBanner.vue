@@ -104,10 +104,18 @@ export default {
 
     computed: {
         bannerComponent() {
+            if (!this.hasUrl) {
+                return 'div';
+            }
+
             return this.isExternal ? 'a' : 'router-link';
         },
 
         bannerProperties() {
+            if (!this.hasUrl) {
+                return {};
+            }
+
             if (this.isExternal) {
                 return {
                     href: this.banner.url,
@@ -156,6 +164,10 @@ export default {
 
         hasAdditionalText() {
             return Boolean(this.banner.additional_text);
+        },
+
+        hasUrl() {
+            return this.banner.url && this.banner.url.length > 0;
         },
     },
 

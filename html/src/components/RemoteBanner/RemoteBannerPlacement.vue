@@ -177,16 +177,18 @@ export default {
         },
 
         positionControls() {
-            const sliderElement = this.$refs.slider.$el;
-            const picture = sliderElement.querySelector('.remote-banner__img');
-            const controls = sliderElement.querySelector('.v-slider__controls');
+            if (this.banners.length > 1 && this.$refs.slider) {
+                const sliderElement = this.$refs.slider.$el;
+                const picture = sliderElement.querySelector('.remote-banner__img');
+                const controls = sliderElement.querySelector('.v-slider__controls');
 
-            if (picture && controls) {
-                const pictureHeight = picture.getBoundingClientRect().height;
-                const controlsHeight = controls.getBoundingClientRect().height;
+                if (picture && controls) {
+                    const pictureHeight = picture.getBoundingClientRect().height;
+                    const controlsHeight = controls.getBoundingClientRect().height;
 
-                if (pictureHeight !== 0) {
-                    controls.setAttribute('style', `top: ${pictureHeight - controlsHeight - 8}px`);
+                    if (pictureHeight !== 0) {
+                        controls.setAttribute('style', `top: ${pictureHeight - controlsHeight - 8}px`);
+                    }
                 }
             }
         },
