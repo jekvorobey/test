@@ -91,7 +91,9 @@ export default {
                 slidesPerView: 1,
                 grabCursor: true,
                 loop: false,
-                autoplay: false,
+                autoplay: {
+                    delay: 10000,
+                },
 
                 navigation: {
                     nextEl: '.swiper-button-next',

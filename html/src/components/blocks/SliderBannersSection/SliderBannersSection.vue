@@ -69,7 +69,9 @@ const sliderOptions = {
     slidesPerView: 1,
     grabCursor: true,
     // loop: true,
-    autoplay: false,
+    autoplay: {
+        delay: 10000,
+    },
 
     navigation: {
         nextEl: '.swiper-button-next',

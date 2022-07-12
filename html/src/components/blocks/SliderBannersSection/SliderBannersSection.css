@@ -88,7 +88,19 @@
         .v-slider__controls {
             left: 50%;
             bottom: var(--gs);
+            height: 44px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(3px);
+            border-radius: 22px;
             transform: translateX(-50%);
+
+            @media(--tablet-lg) {
+                height: 22px;
+            }
+
+            svg {
+                fill: white;
+            }
 
             .swiper-pagination {
                 position: relative;
@@ -98,13 +110,12 @@
             }
 
             .swiper-pagination-bullet {
-                background-color: var(--cl-black);
+                background: white;
                 opacity: 1;
                 margin: 0 var(--gs);
 
                 &-active {
                     opacity: 1;
-                    background-color: var(--cl-black);
                 }
             }
 
@@ -118,7 +129,6 @@
 
                 &:hover {
                     opacity: 0.8;
-                    background: var(--cl-white);
                     fill: var(--cl-global);
                 }
             }
