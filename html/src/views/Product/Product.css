@@ -515,6 +515,10 @@
             .icon {
                 margin-left: calc(var(--gs) * 2);
             }
+
+            .network{
+                cursor: pointer;
+            }
         }
     }
 

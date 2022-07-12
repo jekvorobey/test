@@ -260,6 +260,22 @@
                                 <network class="network" network="vk">
                                     <v-svg name="vkontakte-bw" width="24" height="24" />
                                 </network>
+                                <network class="network" network="odnoklassniki">
+                                    <v-svg name="ok-bw" width="24" height="24" />
+                                </network>
+                            </div>
+                        </social-sharing>
+                        <social-sharing v-if="isTablet" v-bind="socialSharing" inline-template>
+                            <div :style="{ display: 'flex' }">
+                                <network class="network" network="telegram">
+                                    <v-svg name="telegram-bw" width="24" height="24" />
+                                </network>
+                                <network class="network" network="whatsapp">
+                                    <v-svg name="whatsup-bw" width="24" height="24" />
+                                </network>
+                                <network class="network" network="viber">
+                                    <v-svg name="viber-bw" width="24" height="24" />
+                                </network>
                             </div>
                         </social-sharing>
                     </div>
@@ -786,6 +802,8 @@ import {
 import { convertObjectToMetaProperties } from '@util';
 
 import '@images/sprites/socials/vkontakte-bw.svg';
+import '@images/sprites/socials/viber-bw.svg';
+import '@images/sprites/socials/whatsup-bw.svg';
 
 import '@images/sprites/cart-empty.svg';
 import '@images/sprites/star-empty-small.svg';
@@ -1225,12 +1243,13 @@ export default {
         },
 
         socialSharing() {
-            const { metaData } = this;
-            const { title, url } = metaData;
+            const { url, title, description, image } = this.metaData;
 
             return {
                 url,
                 title,
+                description,
+                media: image,
             };
         },
 
