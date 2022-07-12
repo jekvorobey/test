@@ -1,10 +1,11 @@
 <template>
     <div class="history-panel">
+        <!--
         <div v-if="!isTabletLg" class="history-panel__list">
             <recently-viewed-product-card
                 class="history-panel__list-item"
                 v-for="item in items"
-                :key="item.id"
+                :key="'history-panel-'+ item.id"
                 :offer-id="item.id"
                 :product-id="item.productId"
                 :name="item.name"
@@ -13,6 +14,8 @@
             />
         </div>
         <v-slider v-else class="history-panel__slider" name="history" :options="sliderOptions">
+        -->
+        <v-slider class="history-panel__slider" name="history" :options="sliderOptions">
             <recently-viewed-product-card
                 class="swiper-slide"
                 v-for="item in items"
