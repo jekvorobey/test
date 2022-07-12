@@ -13,7 +13,7 @@ function getSpeakerString(speaker, withProfession = false) {
 
 export function generateAbsoluteProductUrl(categoryCode, code, refCode) {
     if (refCode) return `${$context.baseURL}/${productGroupTypes.CATALOG}/${categoryCode}/${code}/?refCode=${refCode}`;
-    return `${$context.baseURL}/${productGroupTypes.CATALOG}/${categoryCode}/${code}/`;
+    return `${$context.baseURL}/${productGroupTypes.PRODUCT}/${code}/`;
 }
 
 export function generateAbsoluteMasterclassUrl(code, refCode) {
