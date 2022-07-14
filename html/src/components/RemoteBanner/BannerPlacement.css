@@ -1,25 +1,43 @@
-.remote-banner-placement {
+.banner-placement {
+    display: flex;
     position: relative;
+    cursor: pointer;
+    border-bottom: none;
 
-    .v-slider__controls {
-        left: 50%;
-        bottom: auto;
-        height: 44px;
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(3px);
-        border-radius: 22px;
-        transform: translateX(-50%);
+    &__img {
+        display: flex;
+        height: auto;
+        width: 100%;
 
-        @media(--tablet-lg) {
-            height: 22px;
+        &::after {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+
+            /* чинит padding-bottom: 100% в FireFox для распорки */
+            @supports (-moz-user-select: none) {
+                margin-top: 100%;
+                padding-bottom: 0;
+            }
         }
 
-        svg {
-            fill: white;
+        &::before {
+            pointer-events: none;
+            content: '';
+            position: absolute;
+            display: block;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--cl-global);
+            opacity: 0.03;
         }
 
-        .swiper-pagination-bullet {
-            background: white;
+        .v-picture {
+            width: 100%;
+            height: 100%;
         }
     }
 }
