@@ -13,7 +13,7 @@
 
             <transition name="fade" mode="out-in">
                 <remote-banner-placement
-                    :type="bannerType.CATALOG_TOP"
+                    :type="bannerType.MK_TOP"
                     :desktop-size="[1224, 240]"
                     :tablet-size="[975, 305]"
                     :mobile-size="[767, 575]"

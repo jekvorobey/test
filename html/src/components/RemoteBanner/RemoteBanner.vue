@@ -1,6 +1,6 @@
 <template>
     <component v-if="banner" :is="bannerComponent" class="remote-banner" v-bind="bannerProperties">
-        <div class="remote-banner__img">
+        <div class="remote-banner__img" @click="isDescriptionOpen = !isDescriptionOpen">
             <v-picture :key="banner.id">
                 <template v-if="desktopImage">
                     <source
@@ -31,15 +31,6 @@
 
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImage.original" alt="" />
             </v-picture>
-
-            <button
-                v-if="hasAdditionalText"
-                type="button"
-                class="remote-banner__description-switcher"
-                @click="toggleDescription"
-            >
-                Полные условия
-            </button>
         </div>
 
         <transition
@@ -104,7 +95,7 @@ export default {
 
     computed: {
         bannerComponent() {
-            if (!this.hasUrl) {
+            if (this.hasAdditionalText) {
                 return 'div';
             }
 
@@ -112,7 +103,7 @@ export default {
         },
 
         bannerProperties() {
-            if (!this.hasUrl) {
+            if (this.hasAdditionalText) {
                 return {};
             }
 
@@ -164,10 +155,6 @@ export default {
 
         hasAdditionalText() {
             return Boolean(this.banner.additional_text);
-        },
-
-        hasUrl() {
-            return this.banner.url && this.banner.url.length > 0;
         },
     },
 
@@ -239,17 +226,6 @@ export default {
             requestAnimationFrame(() => {
                 element.style.height = 0;
             });
-        },
-
-        toggleDescription(event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            this.isDescriptionOpen = !this.isDescriptionOpen;
-        },
-
-        closeDescription() {
-            this.isDescriptionOpen = false;
         },
     },
 };
