@@ -89,6 +89,7 @@ export default {
                         type: bannerType.MAIN_TOP,
                         url: banner.url,
                         color: banner.color,
+                        controlsColor: banner.controls_color,
                         desktopImage: banner.desktopImage,
                         tabletImage: banner.tabletImage,
                         mobileImage: banner.mobileImage,

@@ -1,25 +1,46 @@
 .remote-banner-placement {
+    --remote-banner-placement-controls-color: #000000;
+
     position: relative;
 
     .v-slider__controls {
         left: 50%;
         bottom: auto;
-        height: 44px;
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(3px);
+        height: 37px;
+        background: rgba(0, 0, 0, 0.1);
         border-radius: 22px;
         transform: translateX(-50%);
+        transition: opacity var(--time);
 
         @media(--tablet-lg) {
             height: 22px;
         }
 
         svg {
-            fill: white;
+            fill: var(--remote-banner-placement-controls-color);
         }
 
         .swiper-pagination-bullet {
-            background: white;
+            background: var(--remote-banner-placement-controls-color);
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            &:hover {
+                background: transparent;
+            }
+        }
+    }
+
+    @media(--tablet-lg-min) {
+        .v-slider__controls {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        &:hover .v-slider__controls {
+            visibility: visible;
+            opacity: 1;
         }
     }
 }
