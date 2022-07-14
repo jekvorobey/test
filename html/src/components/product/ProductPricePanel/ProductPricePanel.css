@@ -35,6 +35,7 @@
     &__price {
         order: 0;
         margin-right: calc(var(--gs) * 2);
+        display: block;
     }
 
     &__bonus {
