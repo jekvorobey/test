@@ -281,10 +281,6 @@ export default {
   cursor: auto;
 }
 
-.remote-banner .remote-banner__img {
-  cursor: pointer;
-}
-
 .expand-enter-active,
 .expand-leave-active {
   transition: height 500ms ease-in-out;

@@ -3,8 +3,11 @@
 
     display: flex;
     position: relative;
-    cursor: pointer;
     border-bottom: none;
+
+    a& &__img {
+        cursor: pointer;
+    }
 
     &::before {
         pointer-events: none;

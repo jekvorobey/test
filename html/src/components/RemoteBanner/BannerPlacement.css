@@ -10,7 +10,7 @@
         background: rgba(0, 0, 0, 0.1);
         border-radius: 22px;
         transform: translateX(-50%);
-        transition: opacity var(--time);
+        transition: opacity var(--time), background-color var(--time);
 
         @media(--tablet-lg) {
             height: 22px;
@@ -34,13 +34,11 @@
 
     @media(--tablet-lg-min) {
         .v-slider__controls {
-            visibility: hidden;
-            opacity: 0;
+            background: transparent;
         }
 
         &:hover .v-slider__controls {
-            visibility: visible;
-            opacity: 1;
+            background: rgba(0, 0, 0, 0.1);
         }
     }
 }
