@@ -11,7 +11,9 @@
         <meta v-bind="itemPropSettings.position" />
         <div v-bind="itemPropSettings.item">
             <link v-bind="itemPropSettings.url" />
-            <div class="catalog-product-list-card__img">
+
+            <div class="catalog-product-list-card__img"
+                 :class="{'catalog-product-list-card__img-gray': this.isBuyButtonClicked && !inCart}">
                 <v-picture :key="item.image.id" v-if="images">
                     <source :data-srcset="images.desktop.webp" type="image/webp" media="(min-width: 480px)" />
                     <source :data-srcset="images.desktop.orig" media="(min-width: 480px)" />
@@ -59,6 +61,7 @@
                     class="catalog-product-list-card__mobile-cart-btn"
                     @click.prevent.stop="onBuyButtonClick"
                 >
+                    <v-spinner v-if="this.isBuyButtonClicked && !inCart" width="24" height="24" show/>
                     <v-link tag="button">
                         <transition name="fade-absolute">
                             <v-svg v-if="inCart" name="cart-filled" key="cart-filled" width="24" height="24" />
@@ -123,6 +126,7 @@
 </template>
 
 <script>
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
@@ -160,6 +164,12 @@ export default {
         Price,
         BuyButton,
         FavoritesButton,
+        VSpinner,
+    },
+    data(){
+        return{
+            isBuyButtonClicked: false,
+        }
     },
 
     props: {
@@ -383,6 +393,8 @@ export default {
 
     methods: {
         onBuyButtonClick() {
+            this.isBuyButtonClicked = true;
+
             this.$emit('add-item', {
                 id: this.item.id,
                 storeId: this.item.stock.storeId,

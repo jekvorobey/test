@@ -76,7 +76,11 @@
             display: flex;
         }
     }
-
+    &__img-gray{
+        &::before {
+             opacity: 0.15 !important;
+         }
+     }
     &__img {
         display: flex;
         position: relative;
