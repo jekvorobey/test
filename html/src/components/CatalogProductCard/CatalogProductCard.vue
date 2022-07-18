@@ -36,6 +36,15 @@
                     Быстрый&nbsp;просмотр
                 </v-link>
             </div>
+
+            <div v-else class="catalog-product-list-card__mobile-cart-btn" @click.prevent.stop="onBuyButtonClick">
+                <v-link tag="button">
+                    <transition name="fade-absolute">
+                        <v-svg v-if="inCart" name="cart-filled" key="cart-filled" width="24" height="24" />
+                        <v-svg v-else name="cart" key="cart" width="24" height="24" />
+                    </transition>
+                </v-link>
+            </div>
         </div>
 
         <div class="catalog-product-card__body">
@@ -115,6 +124,11 @@ export default {
         BuyButton,
         FavoritesButton,
     },
+    data(){
+        return{
+            isBuyButtonClicked: false,
+        }
+    },
 
     props: {
         offerId: {
@@ -188,6 +202,11 @@ export default {
         showWishlistBtn: {
             type: Boolean,
             default: true,
+        },
+
+        inCart: {
+            type: Boolean,
+            default: false,
         },
     },
 
