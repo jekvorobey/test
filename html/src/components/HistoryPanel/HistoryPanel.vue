@@ -25,6 +25,8 @@
                 :name="item.name"
                 :href="item.url"
                 :image="item.image"
+                :item="item"
+                @toggle-favorite-item="onToggleFavorite(item.productId)"
             />
         </v-slider>
     </div>
@@ -35,6 +37,9 @@ import RecentlyViewedProductCard from '@components/RecentlyViewedProductCard/Rec
 
 import { breakpoints } from '@enums';
 import './HistoryPanel.css';
+import {TOGGLE_FAVORITES_ITEM} from "@store/modules/Favorites/actions";
+import {mapActions} from "vuex";
+import {NAME as FAVORITES_MODULE} from "@store/modules/Favorites";
 
 const sliderOptions = {
     spaceBetween: 24,
@@ -92,6 +97,13 @@ export default {
 
         sliderOptions() {
             return sliderOptions;
+        },
+    },
+
+    methods: {
+        ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
+        onToggleFavorite(productId) {
+            this[TOGGLE_FAVORITES_ITEM](productId);
         },
     },
 };

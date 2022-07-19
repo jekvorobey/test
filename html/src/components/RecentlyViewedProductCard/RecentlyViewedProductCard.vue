@@ -11,9 +11,18 @@
             <no-photo-stub v-else />
         </div>
         <div class="recently-viewed-product-card__body">
+            <div class="catalog-product-list-card__prices">
+               13 000 $
+            </div>
             <div class="recently-viewed-product-card__title">
                 {{ name }}
             </div>
+            <favorites-button
+                    class="catalog-product-list-card__wishlist-btn"
+                    :class="{ 'catalog-product-list-card__wishlist-btn--active': inFavorites }"
+                    @click="onToggleFavorite"
+                    :is-active="inFavorites"
+            />
         </div>
     </router-link>
 </template>
@@ -26,12 +35,16 @@ import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 
 import './RecentlyViewedProductCard.css';
-
+import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
+import {mapGetters} from "vuex";
+import {NAME as FAVORITES_MODULE} from "@store/modules/Favorites";
+import {IS_IN_FAVORITES} from "@store/modules/Favorites/getters";
 export default {
     name: 'recently-viewed-product-card',
     components: {
         NoPhotoStub,
         VPicture,
+        FavoritesButton,
     },
 
     props: {
@@ -58,6 +71,11 @@ export default {
     },
 
     computed: {
+        ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+
+        inFavorites() {
+            return this[IS_IN_FAVORITES](this.productId);
+        },
         images() {
             const { image } = this;
 
@@ -77,6 +95,11 @@ export default {
                 };
 
             return null;
+        },
+    },
+    methods: {
+        onToggleFavorite() {
+            this.$emit('toggle-favorite-item', { productId: this.productId });
         },
     },
 };
