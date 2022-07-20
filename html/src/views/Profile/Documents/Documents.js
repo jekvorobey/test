@@ -2,8 +2,6 @@
  * @Module
  */
 
-import isUserReferral from '@router/middleware/isUserReferral';
-
 const DocumentsAsync = () => import(/* webpackChunkName: "documents-view" */ './Documents.vue');
 
 /**
@@ -19,10 +17,6 @@ export default {
             path: 'documents/',
             pathToRegexpOptions: { strict: true },
             component: DocumentsAsync,
-
-            meta: {
-                middleware: [isUserReferral],
-            },
         },
     ],
 };

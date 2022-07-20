@@ -70,6 +70,13 @@ function bikValidation(bik) {
     return bik.length === 9 && !/\D/.test(bik);
 }
 
+// КПП
+function kppValidation(kpp) {
+    if (!kpp) kpp = '';
+    if (kpp instanceof Number) kpp = kpp.toString();
+    return kpp.length === 9 && !/\D/.test(kpp);
+}
+
 // Создание пароля
 export const hasUpperCase = (password) => /[A-Z]/.test(password);
 export const hasLowerCase = (password) => /[a-z]/.test(password);
@@ -90,6 +97,7 @@ export const minValue = minv;
 export const maxValue = maxv;
 export const bik = bikValidation;
 export const rs = rsWithParams;
+export const kpp = kppValidation;
 
 export const fio = (value) => {
     if (!value || typeof value !== 'string' || value.length === 0) {

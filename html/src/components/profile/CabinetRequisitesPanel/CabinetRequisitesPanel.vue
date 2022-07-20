@@ -39,6 +39,15 @@
                         @input="onBikChange"
                     />
                 </info-row>
+                <info-row class="cabinet-requisites-panel__item" name="КПП">
+                    <v-input
+                        class="cabinet-requisites-panel__item-input"
+                        :value="$v.form.kpp.$model"
+                        :error="$v.form.kpp.$invalid"
+                        maxLength="9"
+                        :show-error="false"
+                    />
+                </info-row>
                 <info-row class="cabinet-requisites-panel__item" name="Банк">
                     <v-input
                         class="cabinet-requisites-panel__item-input"
@@ -103,7 +112,7 @@ import { $dadata } from '@services';
 import { httpCodes, modalName } from '@enums';
 import { genderType } from '@enums/profile';
 import { phoneMaskOptions } from '@settings';
-import validationMixin, { required, inn, rs, bik } from '@plugins/validation';
+import validationMixin, { required, inn, rs, bik, kpp } from '@plugins/validation';
 import './CabinetRequisitesPanel.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
@@ -153,6 +162,10 @@ export default {
                 bik,
             },
 
+            kpp: {
+                kpp,
+            },
+
             correspondentAccount: {
                 required,
             },
@@ -168,6 +181,7 @@ export default {
                 account: null,
                 bank: null,
                 bik: null,
+                kpp: null,
                 correspondentAccount: null,
                 payment_city: null,
             },
