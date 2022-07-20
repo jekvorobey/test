@@ -6,7 +6,9 @@
         :to="href"
         @click.native.capture="onClick($event)"
     >
-        <div class="catalog-product-card__img">
+        <div class="catalog-product-card__img"
+             :class="{'catalog-product-list-card__img-gray': this.isBuyButtonClicked && !inCart}"
+        >
             <v-picture :key="image.id" v-if="images">
                 <source :data-srcset="images.desktop.webp" type="image/webp" media="(min-width: 480px)" />
                 <source :data-srcset="images.desktop.orig" media="(min-width: 480px)" />
@@ -36,8 +38,12 @@
                     Быстрый&nbsp;просмотр
                 </v-link>
             </div>
-
-            <div v-else class="catalog-product-list-card__mobile-cart-btn" @click.prevent.stop="onBuyButtonClick">
+            <div
+                v-if="$mq.tablet"
+                class="catalog-product-list-card__mobile-cart-btn"
+                @click.prevent.stop="onBuyButtonClick"
+            >
+                <v-spinner v-if="this.isBuyButtonClicked && !inCart" width="24" height="24" show/>
                 <v-link tag="button">
                     <transition name="fade-absolute">
                         <v-svg v-if="inCart" name="cart-filled" key="cart-filled" width="24" height="24" />
@@ -91,6 +97,7 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VRating from '@controls/VRating/VRating.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
 import Tag from '@components/Tag/Tag.vue';
 import Price from '@components/Price/Price.vue';
@@ -108,6 +115,9 @@ import '@images/sprites/star-small.svg';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/logo.svg';
 import './CatalogProductCard.css';
+import '../CatalogProductList/CatalogProductListCard/CatalogProductListCard.css';
+import '@images/sprites/cart.svg';
+import '@images/sprites/cart-filled.svg';
 
 export default {
     name: 'catalog-product-card',
@@ -118,6 +128,7 @@ export default {
         VLink,
         VRating,
         VPicture,
+        VSpinner,
 
         Tag,
         Price,
@@ -243,6 +254,7 @@ export default {
 
     methods: {
         onBuyButtonClick() {
+            this.isBuyButtonClicked = true;
             this.$emit('add-item', { id: this.offerId, type: this.type });
         },
 
