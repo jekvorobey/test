@@ -1,6 +1,8 @@
 <template>
     <router-link tag="a" class="catalog-product-list-card recently-viewed-product-card" :to="href">
-        <div class="recently-viewed-product-card__img">
+        <div class="recently-viewed-product-card__img"
+             :class="{'catalog-product-list-card__img-gray': this.isBuyButtonClicked && !inCart}"
+        >
             <v-picture :key="image.id" v-if="images">
                 <source :data-srcset="images.desktop.webp" type="image/webp" media="(min-width: 480px)" />
                 <source :data-srcset="images.desktop.orig" media="(min-width: 480px)" />
@@ -39,8 +41,24 @@
 
         </div>
         <div class="recently-viewed-product-card__body">
-            <div class="catalog-product-list-card__prices">
-               13 000 $
+            <div class="catalog-product-list-card__prices" v-bind="itemPropSettings.offers">
+                <price
+                        class="text-bold catalog-product-list-card__price"
+                        v-if="item.price || item.isPriceHidden"
+                        v-bind="
+                            item.oldPrice && isEqPrices(modifiedPrice, modifiedOldPrice)
+                                ? concretePrice(modifiedPrice)
+                                : modifiedPrice
+                        "
+                        :item-prop="itemProp"
+                        has-articles
+                />
+                <price
+                        class="text-sm text-grey catalog-product-list-card__price"
+                        v-if="item.oldPrice && !isEqPrices(modifiedPrice, modifiedOldPrice)"
+                        v-bind="concretePrice(modifiedOldPrice)"
+                        has-articles
+                />
             </div>
             <div class="recently-viewed-product-card__title">
                 {{ name }}
@@ -62,6 +80,7 @@ import NoPhotoStub from '@components/NoPhotoStub/NoPhotoStub.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
+import Price from '@components/Price/Price.vue';
 
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
@@ -79,6 +98,7 @@ export default {
         BuyButton,
         FavoritesButton,
         VSpinner,
+        Price
     },
 
     data(){
@@ -126,6 +146,11 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        itemProp: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     computed: {
@@ -142,6 +167,65 @@ export default {
         showBuyBtn() {
             const { stock: { qty = 0 } = { qty: 0 } } = this.item;
             return qty > 0;
+        },
+
+        itemPropSettings() {
+            const { itemProp, item, position, absoluteHref } = this;
+            const { price } = item || {};
+
+            return itemProp && item
+                ? {
+                    itemListElement: {
+                        itemprop: 'itemListElement',
+                        itemscope: true,
+                        itemtype: 'https://schema.org/ListItem',
+                    },
+                    item: {
+                        itemprop: 'item',
+                        itemscope: true,
+                        itemtype: 'https://schema.org/Product',
+                    },
+                    name: {
+                        itemprop: 'name',
+                    },
+                    url: {
+                        itemprop: 'url',
+                        href: absoluteHref,
+                    },
+                    image: {
+                        itemprop: 'image',
+                    },
+                    position: {
+                        itemprop: 'position',
+                        content: position,
+                    },
+                    offers: {
+                        itemprop: 'offers',
+                        itemscope: true,
+                        itemtype:
+                            price && price.value instanceof Object
+                                ? 'https://schema.org/AggregateOffer'
+                                : 'https://schema.org/Offer',
+                    },
+                }
+                : {
+                    itemListElement: {},
+                    name: {},
+                    image: {},
+                    offers: {},
+                };
+        },
+
+        modifiedPrice() {
+            return this.item.price
+                ? Object.assign(this.item.price, { isPriceHidden: this.item.isPriceHidden })
+                : { isPriceHidden: this.item.isPriceHidden };
+        },
+
+        modifiedOldPrice() {
+            return this.item.oldPrice
+                ? Object.assign(this.item.oldPrice, { isPriceHidden: this.item.isPriceHidden })
+                : { isPriceHidden: this.item.isPriceHidden };
         },
 
         images() {
@@ -178,6 +262,58 @@ export default {
                 storeId: this.item.stock.storeId,
                 type: this.item.type,
             });
+        },
+
+        isEqPrices(price, oldPrice) {
+            if (
+                price.value &&
+                typeof price.value === 'object' &&
+                price.value.to !== null &&
+                price.value.from !== null
+            ) {
+                return false;
+            }
+            if (
+                oldPrice.value &&
+                typeof oldPrice.value === 'object' &&
+                oldPrice.value.to !== null &&
+                oldPrice.value.from !== null
+            ) {
+                return false;
+            }
+
+            let p1,
+                p2 = null;
+
+            if (price.value) {
+                p1 = typeof price.value === 'number' ? price.value : price.value.from || price.value.to;
+            }
+
+            if (oldPrice.value) {
+                p2 = typeof oldPrice.value === 'number' ? oldPrice.value : oldPrice.value.from || oldPrice.value.to;
+            }
+
+            return p1 === p2;
+        },
+
+        concretePrice(price) {
+            if (
+                price.value &&
+                typeof price.value === 'object' &&
+                price.value.from !== null &&
+                price.value.to !== null
+            ) {
+                return price;
+            }
+            return {
+                value:
+                    typeof price.value === 'number'
+                        ? price.value
+                        : price.value
+                        ? price.value.from || price.value.to
+                        : null,
+                isPriceHidden: price.isPriceHidden,
+            };
         },
 
         onPreview() {

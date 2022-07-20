@@ -26,6 +26,7 @@
                 :href="item.url"
                 :image="item.image"
                 :item="item"
+                item-prop
                 :in-cart="isInCart(cartItemTypes.PRODUCT, item.id)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
                 @preview="onPreview(item.code)"
