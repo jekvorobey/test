@@ -1,5 +1,5 @@
 <template>
-    <div class="v-counter">
+    <div class="v-counter" v-if="!isLoading">
         <button
             class="v-counter__btn"
             ref="decrement"
@@ -35,6 +35,9 @@
             </slot>
         </button>
     </div>
+    <div v-else>
+        <v-spinner width="30" height="30" show/>
+    </div>
 </template>
 
 <script>
@@ -43,7 +46,14 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import '@images/sprites/minus-small.svg';
 import '@images/sprites/plus-small.svg';
 import './VCounter.css';
-
+import {mapGetters, mapState} from "vuex";
+import {NAME as FAVORITES_MODULE} from "@store/modules/Favorites";
+import {IS_IN_FAVORITES} from "@store/modules/Favorites/getters";
+import {NAME as AUTH_MODULE, REFERRAL_PARTNER, USER} from "@store/modules/Auth";
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import {IS_ADDING_TO_BASKET} from "@store/modules/Cart";
+import {LOCALE, LOCALIZATIONS} from "@store";
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 const actionType = {
     DECREMENT: 'decrement',
     INCREMENT: 'increment',
@@ -58,6 +68,7 @@ export default {
 
     components: {
         VSvg,
+        VSpinner
     },
 
     model: {
@@ -109,6 +120,10 @@ export default {
     },
 
     computed: {
+        ...mapState(CART_MODULE, {
+            isLoading: (state) => state[IS_ADDING_TO_BASKET]
+        }),
+
         isMinDisabled() {
             const { disabled } = this;
             return disabled || Number(this.value_internal) === Number(this.min);

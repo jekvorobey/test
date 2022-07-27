@@ -26,6 +26,7 @@ export const CART_DATA = 'cartData';
 export const CART_STATUS = 'cartStatus';
 export const FEATURED_PRODUCTS = 'featuredProducts';
 export const RELATIVE_PRODUCTS = 'relativeProducts';
+export const IS_ADDING_TO_BASKET = 'isAddingToBasket';
 
 export default function createModule() {
     return {
@@ -39,6 +40,7 @@ export default function createModule() {
             [CART_DATA]: {},
             [RELATIVE_PRODUCTS]: [],
             [FEATURED_PRODUCTS]: [],
+            [IS_ADDING_TO_BASKET]: false,
         },
         actions,
         mutations,

@@ -259,7 +259,7 @@ export default {
     },
 
     created() {
-        this.debounce_countChange = _debounce(this.onCountChange, 200);
+        this.debounce_countChange = _debounce(this.onCountChange, 500);
     },
 };
 </script>
