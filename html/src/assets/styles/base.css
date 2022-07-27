@@ -14,7 +14,7 @@
 } */
 
 :focus {
-    outline: 1px solid var(--cl-gold);
+    outline: none;
 }
 
 .js-focus-visible :focus:not(.focus-visible) {
