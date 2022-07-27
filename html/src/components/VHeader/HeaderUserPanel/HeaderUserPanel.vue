@@ -26,7 +26,8 @@
                 </template>
                 <button class="header-user-panel__cart-btn">
                     <v-svg name="cart-middle" width="24" height="24" />
-                    <span class="text-bold header-user-panel__item-count">{{ cartItemsCount }}</span>
+                    <span v-if="cartItemsCount <= 99" class="text-bold header-user-panel__item-count">{{ cartItemsCount }}</span>
+                    <span v-else class="text-bold header-user-panel__item-count header-user-panel__item-count-small">99+</span>
                 </button>
             </cart-header-panel>
         </div>
