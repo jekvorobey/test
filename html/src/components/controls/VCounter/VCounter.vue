@@ -1,17 +1,17 @@
 <template>
-    <div class="v-counter" v-if="!isLoading">
+    <div class="v-counter">
         <button
             class="v-counter__btn"
             ref="decrement"
             type="button"
             @click="onBtnClick($event, 'decrement')"
-            :disabled="isMinDisabled"
+            :disabled="disableForMin"
         >
             <slot name="decrement">
                 <v-svg name="minus-small" width="16" height="16" />
             </slot>
         </button>
-        <input
+        <input v-if="!isAddingToBasket"
             ref="input"
             class="v-counter__input"
             type="number"
@@ -21,22 +21,20 @@
             :step="step"
             v-bind="$attrs"
             @change="onChange"
-            :disabled="disabled"
+            :disabled="disableForInput"
         />
+        <v-spinner v-else width="32" height="30" show class="v-counter__input-cart"/>
         <button
             class="v-counter__btn"
             ref="increment"
             type="button"
             @click="onBtnClick($event, 'increment')"
-            :disabled="isMaxDisabled"
+            :disabled="disableForMax"
         >
             <slot name="increment">
                 <v-svg name="plus-small" width="16" height="16" />
             </slot>
         </button>
-    </div>
-    <div v-else>
-        <v-spinner width="30" height="30" show/>
     </div>
 </template>
 
@@ -68,7 +66,7 @@ export default {
 
     components: {
         VSvg,
-        VSpinner
+        VSpinner,
     },
 
     model: {
@@ -121,7 +119,7 @@ export default {
 
     computed: {
         ...mapState(CART_MODULE, {
-            isLoading: (state) => state[IS_ADDING_TO_BASKET]
+            isAddingToBasket: (state) => state[IS_ADDING_TO_BASKET]
         }),
 
         isMinDisabled() {
@@ -132,6 +130,18 @@ export default {
         isMaxDisabled() {
             const { disabled } = this;
             return disabled || Number(this.value_internal) === Number(this.max);
+        },
+
+        disableForMin() {
+            return this.isMinDisabled || this.isAddingToBasket;
+        },
+
+        disableForMax() {
+            return this.isMaxDisabled || this.isAddingToBasket;
+        },
+
+        disableForInput() {
+            return this.disable || this.isAddingToBasket;
         },
     },
 
@@ -167,6 +177,7 @@ export default {
                         if (nextValue <= max) this.value_internal = nextValue;
                         break;
                 }
+                this.$forceUpdate();
                 this.$emit('input', this.value_internal);
             }
         },
