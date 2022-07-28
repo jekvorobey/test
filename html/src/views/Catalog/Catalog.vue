@@ -910,7 +910,12 @@ export default {
 
             if (this.professionalDisclaimerModalShowCount === 0) {
                 this.professionalDisclaimerInterval = setInterval(async () => {
-                    const priceHiddenItemIndex = this[ITEMS].findIndex((item) => item.isPriceHidden === true);
+                    const priceHiddenItemIndex = this[ITEMS].findIndex((item) => {
+                        return (
+                            item.isPriceHidden === true &&
+                            (item.price === null || item.price.value === null || item.price.value === 0)
+                        );
+                    });
 
                     if (priceHiddenItemIndex >= 0) {
                         await this[CHANGE_MODAL_STATE]({
@@ -924,7 +929,12 @@ export default {
                 }, 60000);
             } else if (this.professionalDisclaimerModalShowCount === 1) {
                 this.professionalDisclaimerInterval = setInterval(async () => {
-                    const priceHiddenItemIndex = this[ITEMS].findIndex((item) => item.isPriceHidden === true);
+                    const priceHiddenItemIndex = this[ITEMS].findIndex((item) => {
+                        return (
+                            item.isPriceHidden === true &&
+                            (item.price === null || item.price.value === null || item.price.value === 0)
+                        );
+                    });
 
                     if (priceHiddenItemIndex >= 0) {
                         await this[CHANGE_MODAL_STATE]({
