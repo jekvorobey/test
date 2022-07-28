@@ -301,8 +301,8 @@ export default {
                     lastName,
                     firstName,
                     middleName,
-                    birthday,
-                    gender,
+                    // birthday,
+                    // gender,
                 });
             } catch (error) {
                 if (error.status === httpCodes.FORBIDDEN) this[CHECK_SESSION](true);
