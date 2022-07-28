@@ -168,7 +168,7 @@
                 </div>
 
                 <form v-if="!formSent" class="partners-view__feedback-form" @submit.prevent="onSubmit">
-                    <v-input v-model="form.name" placeholder="Вашe имя" :error="nameError">Имя и фамилия</v-input>
+                    <v-input v-model="form.name" placeholder="Вашe имя" :error="nameError" customValid="fio">Имя и фамилия</v-input>
 
                     <v-input-mask v-model="form.phone" :options="maskOptions" :raw="false" :error="phoneError">
                         Номер телефона
@@ -186,7 +186,7 @@
                         Сообщение
                     </v-input>
 
-                    <v-button class="partners-view__feedback-form-submit-btn" :href="mailTo" @click="onSubmit">
+                    <v-button class="partners-view__feedback-form-submit-btn" @click="onSubmit">
                         Заполнить заявку
                     </v-button>
                 </form>
