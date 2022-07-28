@@ -30,6 +30,10 @@
             —
             <price class="product-delivery-panel__price" v-bind="method.cost" /><span class="text-grey">{{ formatDate(method.date) }}</span>
         </p>
+
+        <p class="text-bold">Бесплатно при заказе от 10 000
+            <span class="price__currency">₽</span>
+        </p>
     </div>
 </template>
 
