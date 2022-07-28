@@ -657,13 +657,26 @@ export function getCatalogItems({
 }
 
 export function getRecentlyViewedProducts() {
-    return $http.get('/v1/catalog/recently-viewed');
+    let timestamp = + new Date;
+    return $http.get('/v1/catalog/recently-viewed', {
+        params: {
+            timestamp,
+        },
+        paramsSerializer(params) {
+            return qs.stringify(params, {
+                encode: false,
+            });
+        },
+    });
+
 }
 
-export function addRecentlyViewedProducts(offer_id) {
+export function addRecentlyViewedProducts(product_id) {
+    let timestamp = + new Date;
     return $http.get('/v1/catalog/add-recently-viewed', {
         params: {
-            offer_id
+            product_id,
+            timestamp,
         },
         paramsSerializer(params) {
             return qs.stringify(params, {
@@ -754,11 +767,13 @@ export function getBrand(code) {
 }
 
 export function getProduct(code, offer_id, referrerCode) {
+    let timestamp = + new Date;
     return $http.get('/v1/catalog/product-detail', {
         params: {
             code,
             offer_id,
             referrerCode,
+            timestamp,
         },
     });
 }
