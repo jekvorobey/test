@@ -23,7 +23,7 @@
         padding-bottom: calc(var(--gs) * 6);
 
         .v-slider__controls {
-            bottom: calc(var(--gs) * 3);
+            bottom: calc(var(--gs) * 1.5);
             left: 50%;
             transform: translateX(-50%);
         }
