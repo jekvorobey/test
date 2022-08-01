@@ -68,6 +68,8 @@ import './VInput.css';
 const inputTypes = { text: 'text', number: 'number' };
 const validTags = ['input', 'textarea'];
 
+import {fioClean, noSymbols} from "@util/custom-validations";
+
 export default {
     name: 'v-input',
     inheritAttrs: false,
@@ -123,6 +125,11 @@ export default {
             type: [String, Boolean],
             default: null,
         },
+
+        customValid: {
+            type: String,
+            default: null,
+        },
     },
     data() {
         return {
@@ -167,7 +174,18 @@ export default {
                     else this.internal_value = value;
                 } else this.internal_value = value;
 
-                this.$emit('input', this.internal_value);
+                switch (this.customValid) {
+                    case 'fio':
+                        this.internal_value = fioClean(this.internal_value);
+                        this.$emit('input', this.internal_value);
+                        break;
+                    case 'no-symbols':
+                        this.internal_value = noSymbols(this.internal_value);
+                        this.$emit('input', this.internal_value);
+                        break;
+                    default:
+                        this.$emit('input', this.internal_value);
+                }
             };
             return handlers;
         },
