@@ -1,5 +1,5 @@
 <template>
-    <div class="v-password" :class="[{ 'is-disabled': $attrs.disabled }, { 'v-password--invalid': error }]">
+    <div class="v-password" :class="[{ 'is-disabled': $attrs.disabled }, { 'v-password--invalid': error || phoneError}]">
         <label class="v-password__label" :for="inputId">
             <slot />
         </label>
@@ -54,6 +54,10 @@ export default {
 
     props: {
         value: {},
+        phoneError: {
+            type: String,
+            required: false,
+        },
     },
 
     data() {
