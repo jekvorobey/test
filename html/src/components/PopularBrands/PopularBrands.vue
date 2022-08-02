@@ -27,8 +27,8 @@
                     {{ brand.name }}
                 </router-link>
             </li>
-            <li v-if="canShowAll" class="popular-brands__list-item">
-                <button class="popular-brands__list-btn" @click="onShowAll">Показать все</button>
+            <li class="popular-brands__list-item">
+                <button class="popular-brands__list-btn" @click="$router.push({ path: '/brands' })">Показать все</button>
             </li>
         </ul>
     </div>
@@ -84,22 +84,9 @@ export default {
         restBrands() {
             return this.items.filter((i) => !i.image);
         },
-
-        restCount() {
-            return this.restBrands.length;
-        },
-
-        canShowAll() {
-            const rest = this.restCount - this.count;
-            return rest > 0;
-        },
     },
 
     methods: {
-        onShowAll() {
-            this.count = this.restCount;
-        },
-
         generatePicturePath(image) {
             return image && generatePictureSourcePath(null, null, image.id);
         },
