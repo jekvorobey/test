@@ -88,7 +88,7 @@ export default {
     data() {
         return {
             isMounted: false,
-            isDescriptionOpen: false,
+            isDescriptionOpen: this.$route.query.isOpen === 'true',
             fileExtension,
         };
     },
