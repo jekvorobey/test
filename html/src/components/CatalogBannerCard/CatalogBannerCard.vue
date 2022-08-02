@@ -117,7 +117,7 @@ export default {
 
             if (isExternal)
                 return {
-                    href: url,
+                    href: url + '&isOpen=true',
                     target: '_blank',
                     rel: 'noopener noreferrer',
                 };
