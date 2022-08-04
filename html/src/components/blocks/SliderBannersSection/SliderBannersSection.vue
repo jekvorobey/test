@@ -2,7 +2,7 @@
     <section
         v-if="banners.length > 0"
         class="section slider-banners-section"
-        :style="{ 'background-color': sectionBackgroundColor }"
+        :style="[{ 'background-color': sectionBackgroundColor }, cssVariables]"
     >
         <v-slider
             v-model="currentSlideIndex"
@@ -99,6 +99,21 @@ export default {
                 return [];
             },
         },
+
+        desktopSize: {
+            type: Array,
+            default: () => [1224, 420],
+        },
+
+        tabletSize: {
+            type: Array,
+            default: () => [1024, 533],
+        },
+
+        mobileSize: {
+            type: Array,
+            default: () => [768, 653],
+        },
     },
 
     data() {
@@ -137,6 +152,24 @@ export default {
 
             return '#E6E6F0';
         },
+
+        bannerControlsColor() {
+            if (
+                this.currentImage &&
+                typeof this.currentImage.controlsColor !== 'undefined' &&
+                this.currentImage.controlsColor
+            ) {
+                return this.currentImage.controlsColor;
+            }
+
+            return '#000000';
+        },
+
+        cssVariables() {
+            return {
+                '--slider-banners-section-controls-color': this.bannerControlsColor,
+            };
+        },
     },
 
     methods: {
@@ -166,10 +199,25 @@ export default {
 
             if (image)
                 return {
-                    webp: generatePictureSourcePath(768, 653, image.id, fileExtension.image.WEBP),
-                    orig: generatePictureSourcePath(768, 653, image.id),
-                    retinaWebp: generatePictureSourcePath(1536, 1306, image.id, fileExtension.image.WEBP),
-                    retinaOrig: generatePictureSourcePath(1536, 1306, image.id, image.sourceExt),
+                    webp: generatePictureSourcePath(
+                        this.mobileSize[0],
+                        this.mobileSize[1],
+                        image.id,
+                        fileExtension.image.WEBP
+                    ),
+                    orig: generatePictureSourcePath(this.mobileSize[0], this.mobileSize[1], image.id),
+                    retinaWebp: generatePictureSourcePath(
+                        this.mobileSize[0] * 2,
+                        this.mobileSize[1] * 2,
+                        image.id,
+                        fileExtension.image.WEBP
+                    ),
+                    retinaOrig: generatePictureSourcePath(
+                        this.mobileSize[0] * 2,
+                        this.mobileSize[1] * 2,
+                        image.id,
+                        image.sourceExt
+                    ),
                 };
         },
 
@@ -197,13 +245,29 @@ export default {
                     retinaOrig: typeof imageRetina === 'string' ? imageRetina : undefined,
                 };
 
-            if (image)
+            if (image) {
                 return {
-                    webp: generatePictureSourcePath(1024, 533, image.id, fileExtension.image.WEBP),
-                    orig: generatePictureSourcePath(1024, 533, image.id),
-                    retinaWebp: generatePictureSourcePath(2048, 1066, image.id, fileExtension.image.WEBP),
-                    retinaOrig: generatePictureSourcePath(2048, 1066, image.id, image.sourceExt),
+                    webp: generatePictureSourcePath(
+                        this.tabletSize[0],
+                        this.tabletSize[1],
+                        image.id,
+                        fileExtension.image.WEBP
+                    ),
+                    orig: generatePictureSourcePath(this.tabletSize[0], this.tabletSize[1], image.id),
+                    retinaWebp: generatePictureSourcePath(
+                        this.tabletSize[0] * 2,
+                        this.tabletSize[1] * 2,
+                        image.id,
+                        fileExtension.image.WEBP
+                    ),
+                    retinaOrig: generatePictureSourcePath(
+                        this.tabletSize[0] * 2,
+                        this.tabletSize[1] * 2,
+                        image.id,
+                        image.sourceExt
+                    ),
                 };
+            }
         },
 
         desktopImage(banner) {
@@ -232,17 +296,37 @@ export default {
 
             if (image)
                 return {
-                    webp: generatePictureSourcePath(1224, 420, image.id, fileExtension.image.WEBP),
-                    orig: generatePictureSourcePath(1224, 420, image.id, image.sourceExt),
-                    retinaWebp: generatePictureSourcePath(2448, 840, image.id, fileExtension.image.WEBP),
-                    retinaOrig: generatePictureSourcePath(2448, 840, image.id, image.sourceExt),
+                    webp: generatePictureSourcePath(
+                        this.desktopSize[0],
+                        this.desktopSize[1],
+                        image.id,
+                        fileExtension.image.WEBP
+                    ),
+                    orig: generatePictureSourcePath(
+                        this.desktopSize[0],
+                        this.desktopSize[1],
+                        image.id,
+                        image.sourceExt
+                    ),
+                    retinaWebp: generatePictureSourcePath(
+                        this.desktopSize[0] * 2,
+                        this.desktopSize[1] * 2,
+                        image.id,
+                        fileExtension.image.WEBP
+                    ),
+                    retinaOrig: generatePictureSourcePath(
+                        this.desktopSize[0] * 2,
+                        this.desktopSize[1] * 2,
+                        image.id,
+                        image.sourceExt
+                    ),
                 };
         },
 
         defaultImage(banner) {
             const image = banner.desktopImage || banner.tabletImage || banner.mobileImage;
             if (typeof image === 'string') return image;
-            if (image) return generatePictureSourcePath(1224, 420, image.id);
+            if (image) return generatePictureSourcePath(this.desktopSize[0], this.desktopSize[1], image.id);
         },
 
         getImageWithRetina(image, type = 'jpg') {

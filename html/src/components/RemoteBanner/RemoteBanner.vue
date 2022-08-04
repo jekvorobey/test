@@ -1,6 +1,12 @@
 <template>
-    <component v-if="banner" :is="bannerComponent" class="remote-banner" v-bind="bannerProperties">
-        <div class="remote-banner__img" @click="isDescriptionOpen = !isDescriptionOpen">
+    <component
+        v-if="banner"
+        :is="bannerComponent"
+        class="remote-banner"
+        :style="cssVariables"
+        v-bind="bannerProperties"
+    >
+        <div class="remote-banner__img">
             <v-picture :key="banner.id">
                 <template v-if="desktopImage">
                     <source
@@ -31,6 +37,15 @@
 
                 <img class="blur-up lazyload v-picture__img" :data-src="defaultImage.original" alt="" />
             </v-picture>
+
+            <button
+                v-if="hasAdditionalText"
+                type="button"
+                class="remote-banner__description-switcher"
+                @click="toggleDescription"
+            >
+                Полные условия
+            </button>
         </div>
 
         <transition
@@ -41,7 +56,7 @@
             @leave="expandAnimationLeave"
         >
             <div v-if="isDescriptionOpen">
-                <div v-html="banner.additional_text"></div>
+                <div class="remote-banner__description" v-html="banner.additional_text"></div>
             </div>
         </transition>
     </component>
@@ -95,7 +110,7 @@ export default {
 
     computed: {
         bannerComponent() {
-            if (this.hasAdditionalText) {
+            if (!this.hasUrl) {
                 return 'div';
             }
 
@@ -103,7 +118,7 @@ export default {
         },
 
         bannerProperties() {
-            if (this.hasAdditionalText) {
+            if (!this.hasUrl) {
                 return {};
             }
 
@@ -155,6 +170,24 @@ export default {
 
         hasAdditionalText() {
             return Boolean(this.banner.additional_text);
+        },
+
+        hasUrl() {
+            return this.banner.url && this.banner.url.length > 0;
+        },
+
+        bannerControlsColor() {
+            if (typeof this.banner.controls_color !== 'undefined' && this.banner.controls_color) {
+                return this.banner.controls_color;
+            }
+
+            return '#000000';
+        },
+
+        cssVariables() {
+            return {
+                '--remote-banner-controls-color': this.bannerControlsColor,
+            };
         },
     },
 
@@ -227,6 +260,17 @@ export default {
                 element.style.height = 0;
             });
         },
+
+        toggleDescription(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            this.isDescriptionOpen = !this.isDescriptionOpen;
+        },
+
+        closeDescription() {
+            this.isDescriptionOpen = false;
+        },
     },
 };
 </script>
@@ -235,10 +279,6 @@ export default {
 .remote-banner {
   flex-flow: column;
   cursor: auto;
-}
-
-.remote-banner .remote-banner__img {
-  cursor: pointer;
 }
 
 .expand-enter-active,
