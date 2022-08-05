@@ -42,10 +42,12 @@
                 <info-row class="cabinet-requisites-panel__item" name="КПП">
                     <v-input
                         class="cabinet-requisites-panel__item-input"
+                        placeholder="Введите КПП"
                         :value="$v.form.kpp.$model"
                         :error="$v.form.kpp.$invalid"
                         maxLength="9"
                         :show-error="false"
+                        @input="onKppChange"
                     />
                 </info-row>
                 <info-row class="cabinet-requisites-panel__item" name="Банк">
@@ -263,6 +265,10 @@ export default {
             this.form.inn = value;
             if (!this.$v.form.inn.$invalid) this.findCompany(value);
             else this.resetCompany();
+        },
+
+        onKppChange(value) {
+            this.form.kpp = value;
         },
 
         onBikChange(value) {
